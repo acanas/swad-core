@@ -193,7 +193,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void);
 static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
-static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res);
+static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
 
 static unsigned Sta_GetTotalNumberOfUsersInPlatform (void);
 
@@ -426,7 +426,7 @@ void Sta_AskShowCrsHits (void)
 
          /***** Start frame *****/
          sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
-                  Gbl.CurrentCrs.Crs.ShortName);
+                  Gbl.CurrentCrs.Crs.ShrtName);
          Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
@@ -3201,7 +3201,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
                Ban.FullName,
                Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Ban.Img,
-               Ban.ShortName,
+               Ban.ShrtName,
                Ban.FullName);
 
       /* Draw bar proportional to number of clicks */
@@ -3369,7 +3369,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
 
 static void Sta_WriteInstitution (long InsCod)
   {
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Start cell *****/
    fprintf (Gbl.F.Out,"<td class=\"LOG LEFT_MIDDLE\"");
@@ -3676,7 +3676,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
          Act_LinkFormSubmit (Gbl.Title,"LOG",NULL);
          fprintf (Gbl.F.Out,"%s"
                             "</a>",
-                  Crs.ShortName);
+                  Crs.ShrtName);
         }
       else
          fprintf (Gbl.F.Out,"-");
@@ -3853,7 +3853,7 @@ void Sta_ShowUseOfPlatform (void)
       Sta_GetAndShowUsersStats,			// Sta_USERS
       Sta_GetAndShowUsersRanking,		// Sta_USERS_RANKING
       Sta_GetAndShowHierarchyStats,		// Sta_HIERARCHY
-      Sta_GetAndShowInstitutionsStats,		// Sta_INSTITUTIONS
+      Sta_GetAndShowInstitutionsStats,		// Sta_INSTITS
       Net_ShowWebAndSocialNetworksStats,	// Sta_SOCIAL_NETWORKS
       Sta_GetAndShowFileBrowsersStats,		// Sta_FOLDERS_AND_FILES
       Sta_GetAndShowOERsStats,			// Sta_OER
@@ -4953,7 +4953,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
    unsigned NumOrder;
    unsigned NumberLastRow;
    unsigned NumberThisRow;
-   struct Institution Ins;
+   struct Instit Ins;
    bool TRIsOpen = false;
 
    /***** Query database *****/
@@ -5033,10 +5033,10 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       /* Icon and name of this institution */
 	       Act_FormStart (ActSeeInsInf);
 	       Ins_PutParamInsCod (Ins.InsCod);
-	       Act_LinkFormSubmit (Ins.ShortName,The_ClassForm[Gbl.Prefs.Theme],NULL);
+	       Act_LinkFormSubmit (Ins.ShrtName,The_ClassForm[Gbl.Prefs.Theme],NULL);
 	       if (Gbl.Usrs.Listing.WithPhotos)
 		 {
-		  Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,
+		  Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,
 				40,NULL,true);
 	          fprintf (Gbl.F.Out,"&nbsp;");
 		 }
@@ -5066,7 +5066,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 /************************* Get total number of users *************************/
 /*****************************************************************************/
 
-static unsigned Sta_GetInsAndStat (struct Institution *Ins,MYSQL_RES *mysql_res)
+static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
    unsigned NumberThisRow;

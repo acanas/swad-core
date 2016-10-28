@@ -1218,7 +1218,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />%s %s</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
+               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -1552,7 +1552,7 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
+               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 

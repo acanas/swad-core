@@ -94,7 +94,7 @@ static void Ctr_PutParamOtherCtrCod (long CtrCod);
 static long Ctr_GetParamOtherCtrCod (void);
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
-static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName);
+static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
 static void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
@@ -224,7 +224,7 @@ void Ctr_DrawCentreLogoAndNameWithLink (struct Centre *Ctr,Act_Action_t Action,
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw centre logo *****/
-   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr->FullName);
@@ -303,7 +303,7 @@ static void Ctr_Configuration (bool PrintView)
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
       Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-                    Gbl.CurrentCtr.Ctr.ShortName,64,NULL,true);
+                    Gbl.CurrentCtr.Ctr.ShrtName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentCtr.Ctr.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -327,7 +327,7 @@ static void Ctr_Configuration (bool PrintView)
 		  (unsigned) (Gbl.CurrentCtr.Ctr.CtrCod % 100),
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
 		  (unsigned) Gbl.CurrentCtr.Ctr.CtrCod,
-		  Gbl.CurrentCtr.Ctr.ShortName,
+		  Gbl.CurrentCtr.Ctr.ShrtName,
 		  Gbl.CurrentCtr.Ctr.FullName,
 		  PrintView ? "CENTRE_PHOTO_PRINT" :
 			      "CENTRE_PHOTO_SHOW");
@@ -395,7 +395,7 @@ static void Ctr_Configuration (bool PrintView)
 		     Gbl.Inss.Lst[NumIns].InsCod,
 		     Gbl.Inss.Lst[NumIns].InsCod == Gbl.CurrentIns.Ins.InsCod ? " selected=\"selected\"" :
 										"",
-		     Gbl.Inss.Lst[NumIns].ShortName);
+		     Gbl.Inss.Lst[NumIns].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
 	 Act_FormEnd ();
 
@@ -454,13 +454,13 @@ static void Ctr_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,
-		  Gbl.CurrentCtr.Ctr.ShortName,
+		  Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,
+		  Gbl.CurrentCtr.Ctr.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else	// I can not edit centre short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShortName);
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentCtr.Ctr.ShrtName);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
@@ -576,7 +576,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Act_FormGoToStart (ActSeeDeg);
 	 Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
 	 sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-	          Gbl.CurrentCtr.Ctr.ShortName);
+	          Gbl.CurrentCtr.Ctr.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
@@ -842,7 +842,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 		      "%s"
 		      "</td>",
 	    TxtClassNormal,BgColor,
-	    Plc.ShortName);
+	    Plc.ShrtName);
 
    /***** Number of degrees *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -1003,7 +1003,7 @@ void Ctr_GetListCentres (long InsCod)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
          /* Get the short name of the centre (row[5]) */
-         strcpy (Ctr->ShortName,row[5]);
+         strcpy (Ctr->ShrtName,row[5]);
 
          /* Get the full name of the centre (row[6]) */
          strcpy (Ctr->FullName,row[6]);
@@ -1048,7 +1048,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->PlcCod = -1L;
    Ctr->Status = (Ctr_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
-   Ctr->ShortName[0] = '\0';
+   Ctr->ShrtName[0] = '\0';
    Ctr->FullName[0]  = '\0';
    Ctr->WWW[0]       = '\0';
    Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
@@ -1098,7 +1098,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the centre (row[4]) */
-         strcpy (Ctr->ShortName,row[4]);
+         strcpy (Ctr->ShrtName,row[4]);
 
          /* Get the full name of the centre (row[5]) */
          strcpy (Ctr->FullName,row[5]);
@@ -1170,7 +1170,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   Ctr->ShortName[0] = '\0';
+   Ctr->ShrtName[0] = '\0';
    if (Ctr->CtrCod > 0)
      {
       /***** Get the short name of a centre from database *****/
@@ -1181,7 +1181,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 	{
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Ctr->ShortName,row[0]);
+	 strcpy (Ctr->ShrtName,row[0]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1383,7 +1383,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ctr->FullName);
-      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShortName,20,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_CTR,Ctr->CtrCod,Ctr->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Place */
@@ -1406,7 +1406,7 @@ static void Ctr_ListCentresForEdition (void)
 		     Gbl.Plcs.Lst[NumPlc].PlcCod,
 		     (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
 			                                            "",
-		     Gbl.Plcs.Lst[NumPlc].ShortName);
+		     Gbl.Plcs.Lst[NumPlc].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
 	 Act_FormEnd ();
 	}
@@ -1415,7 +1415,7 @@ static void Ctr_ListCentresForEdition (void)
 	      NumPlc < Gbl.Plcs.Num;
 	      NumPlc++)
 	    if (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod)
-	       fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].ShortName);
+	       fprintf (Gbl.F.Out,"%s",Gbl.Plcs.Lst[NumPlc].ShrtName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre short name */
@@ -1428,12 +1428,12 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName,Gbl.Form.Id);
+		  Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ctr->ShortName);
+	 fprintf (Gbl.F.Out,"%s",Ctr->ShrtName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Centre full name */
@@ -1700,7 +1700,7 @@ void Ctr_ChangeCtrInsInConfig (void)
   {
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_moved_to_the_institution_Y;
-   struct Institution NewIns;
+   struct Instit NewIns;
 
    /***** Get parameter with institution code *****/
    NewIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
@@ -1712,11 +1712,11 @@ void Ctr_ChangeCtrInsInConfig (void)
       Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
       /***** Check if it already exists a centre with the same name in the new institution *****/
-      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.CurrentCtr.Ctr.ShortName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
+      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.CurrentCtr.Ctr.ShrtName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
-		  Gbl.CurrentCtr.Ctr.ShortName);
+		  Gbl.CurrentCtr.Ctr.ShrtName);
 	}
       else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.CurrentCtr.Ctr.FullName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
 	{
@@ -1816,12 +1816,12 @@ void Ctr_ChangeCentrePlace (void)
 void Ctr_RenameCentreShort (void)
   {
    Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
-   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHORT_NAME);
+   Ctr_RenameCentre (&Gbl.Ctrs.EditingCtr,Cns_SHRT_NAME);
   }
 
 void Ctr_RenameCentreShortInConfig (void)
   {
-   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_SHORT_NAME);
+   Ctr_RenameCentre (&Gbl.CurrentCtr.Ctr,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1843,7 +1843,7 @@ void Ctr_RenameCentreFullInConfig (void)
 /************************ Change the name of a centre ************************/
 /*****************************************************************************/
 
-static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFullName)
+static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_centre_X_empty;
    extern const char *Txt_The_centre_X_already_exists;
@@ -1856,13 +1856,13 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShortOrFullName_t ShortOrFu
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
    char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
 
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Ctr_MAX_LENGTH_CENTRE_SHORT_NAME;
-         CurrentCtrName = Ctr->ShortName;
+         MaxLength = Ctr_MAX_LENGTH_CENTRE_SHRT_NAME;
+         CurrentCtrName = Ctr->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -2059,7 +2059,7 @@ void Ctr_ChangeCtrStatus (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_The_status_of_the_centre_X_has_changed,
-            Ctr->ShortName);
+            Ctr->ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to centre changed *****/
@@ -2105,7 +2105,7 @@ static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
       Act_FormStart (ActSeeDeg);
       Ctr_PutParamCtrCod (Ctr->CtrCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShortName);
+      sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShrtName);
       Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -2355,7 +2355,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.ShortName);
+            Gbl.CurrentIns.Ins.ShrtName);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
@@ -2389,7 +2389,7 @@ static void Ctr_PutFormToCreateCentre (void)
                Gbl.Plcs.Lst[NumPlc].PlcCod,
                (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
         	                                              "",
-               Gbl.Plcs.Lst[NumPlc].ShortName);
+               Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -2399,7 +2399,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Ctr_MAX_LENGTH_CENTRE_SHORT_NAME,Ctr->ShortName);
+            Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,Ctr->ShrtName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2625,7 +2625,7 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       Lay_ShowAlert (Lay_ERROR,"Wrong place.");
 
    /* Get centre short name */
-   Par_GetParToText ("ShortName",Ctr->ShortName,Ctr_MAX_LENGTH_CENTRE_SHORT_NAME);
+   Par_GetParToText ("ShortName",Ctr->ShrtName,Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
 
    /* Get centre full name */
    Par_GetParToText ("FullName",Ctr->FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
@@ -2633,15 +2633,15 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
    /* Get centre WWW */
    Par_GetParToText ("WWW",Ctr->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Ctr->ShortName[0] && Ctr->FullName[0])	// If there's a centre name
+   if (Ctr->ShrtName[0] && Ctr->FullName[0])	// If there's a centre name
      {
       if (Ctr->WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr->ShortName,-1L,Gbl.CurrentIns.Ins.InsCod))
+         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr->ShrtName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
-                     Ctr->ShortName);
+                     Ctr->ShrtName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
          else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr->FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
@@ -2677,7 +2677,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
    char Query[512+
-              Ctr_MAX_LENGTH_CENTRE_SHORT_NAME+
+              Ctr_MAX_LENGTH_CENTRE_SHRT_NAME+
               Ctr_MAX_LENGTH_CENTRE_FULL_NAME+
               Cns_MAX_LENGTH_WWW];
 
@@ -2689,7 +2689,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
             Ctr->InsCod,Ctr->PlcCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Ctr->ShortName,Ctr->FullName,Ctr->WWW);
+            Ctr->ShrtName,Ctr->FullName,Ctr->WWW);
    Ctr->CtrCod = DB_QueryINSERTandReturnCode (Query,"can not create a new centre");
 
    /***** Write success message *****/

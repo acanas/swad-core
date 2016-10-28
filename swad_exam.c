@@ -906,7 +906,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    const char *StyleTitle  = "CONV_TIT";
    const char *StyleForm   = "CONV_NEG";
    const char *StyleNormal = "CONV";
-   struct Institution Ins;
+   struct Instit Ins;
    char StrExamDate[Cns_MAX_LENGTH_DATE+1];
    unsigned Year,Hour,Minute;
 
@@ -1481,7 +1481,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    extern const char *Txt_hours_ABBREVIATION;
    struct Course Crs;
    struct Degree Deg;
-   struct Institution Ins;
+   struct Instit Ins;
    char StrExamDate[Cns_MAX_LENGTH_DATE+1];
 
    if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT*8)) == NULL)

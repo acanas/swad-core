@@ -65,7 +65,7 @@ static void Dpt_GetParamDptOrderType (void);
 static void Dpt_PutIconToEditDpts (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
-static void Dpt_RenameDepartment (Cns_ShortOrFullName_t ShortOrFullName);
+static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
 static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
@@ -351,7 +351,7 @@ void Dpt_GetListDepartments (long InsCod)
             Lay_ShowErrorAndExit ("Wrong code of institution.");
 
          /* Get the short name of the department (row[2]) */
-         strcpy (Dpt->ShortName,row[2]);
+         strcpy (Dpt->ShrtName,row[2]);
 
          /* Get the full name of the department (row[3]) */
          strcpy (Dpt->FullName,row[3]);
@@ -385,13 +385,13 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
 
    /***** Clear data *****/
    Dpt->InsCod = -1L;
-   Dpt->ShortName[0] = Dpt->FullName[0] = Dpt->WWW[0] = '\0';
+   Dpt->ShrtName[0] = Dpt->FullName[0] = Dpt->WWW[0] = '\0';
    Dpt->NumTchs = 0;
 
    /***** Check if department code is correct *****/
    if (Dpt->DptCod == 0)
      {
-      strcpy (Dpt->ShortName,Txt_Another_department);
+      strcpy (Dpt->ShrtName,Txt_Another_department);
       strcpy (Dpt->FullName,Txt_Another_department);
      }
    else if (Dpt->DptCod > 0)
@@ -424,7 +424,7 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
          Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get the short name of the department (row[1]) */
-         strcpy (Dpt->ShortName,row[1]);
+         strcpy (Dpt->ShrtName,row[1]);
 
          /* Get the full name of the department (row[2]) */
          strcpy (Dpt->FullName,row[2]);
@@ -482,7 +482,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
    struct Department *Dpt;
-   struct Institution Ins;
+   struct Instit Ins;
    unsigned NumIns;
 
    Lay_StartRoundFrameTable (NULL,2,Txt_Departments);
@@ -539,7 +539,7 @@ static void Dpt_ListDepartmentsForEdition (void)
                   Gbl.Inss.Lst[NumIns].InsCod,
                   Gbl.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
                 	                                       "",
-                  Gbl.Inss.Lst[NumIns].ShortName);
+                  Gbl.Inss.Lst[NumIns].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -552,7 +552,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName,Gbl.Form.Id);
+               MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -688,7 +688,7 @@ void Dpt_ChangeDepartIns (void)
 
 void Dpt_RenameDepartShort (void)
   {
-   Dpt_RenameDepartment (Cns_SHORT_NAME);
+   Dpt_RenameDepartment (Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -704,7 +704,7 @@ void Dpt_RenameDepartFull (void)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-static void Dpt_RenameDepartment (Cns_ShortOrFullName_t ShortOrFullName)
+static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_department_X_empty;
    extern const char *Txt_The_department_X_already_exists;
@@ -719,13 +719,13 @@ static void Dpt_RenameDepartment (Cns_ShortOrFullName_t ShortOrFullName)
    char NewDptName[MAX_LENGTH_DEPARTMENT_FULL_NAME+1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = MAX_LENGTH_DEPARTMENT_SHORT_NAME;
-         CurrentDptName = Dpt->ShortName;
+         MaxLength = MAX_LENGTH_DEPARTMENT_SHRT_NAME;
+         CurrentDptName = Dpt->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -911,7 +911,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                Gbl.Inss.Lst[NumIns].InsCod,
                Gbl.Inss.Lst[NumIns].InsCod == Dpt->InsCod ? " selected=\"selected\"" :
         	                                            "",
-               Gbl.Inss.Lst[NumIns].ShortName);
+               Gbl.Inss.Lst[NumIns].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -921,7 +921,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            MAX_LENGTH_DEPARTMENT_SHORT_NAME,Dpt->ShortName);
+            MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName);
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -1008,7 +1008,7 @@ void Dpt_RecFormNewDpt (void)
    Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get department short name */
-   Par_GetParToText ("ShortName",Dpt->ShortName,MAX_LENGTH_DEPARTMENT_SHORT_NAME);
+   Par_GetParToText ("ShortName",Dpt->ShrtName,MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
    /* Get department full name */
    Par_GetParToText ("FullName",Dpt->FullName,MAX_LENGTH_DEPARTMENT_FULL_NAME);
@@ -1016,15 +1016,15 @@ void Dpt_RecFormNewDpt (void)
    /* Get department WWW */
    Par_GetParToText ("WWW",Dpt->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Dpt->ShortName[0] && Dpt->FullName[0])	// If there's a department name
+   if (Dpt->ShrtName[0] && Dpt->FullName[0])	// If there's a department name
      {
       if (Dpt->WWW[0])
         {
          /***** If name of department was in database... *****/
-         if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt->ShortName,-1L))
+         if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt->ShrtName,-1L))
            {
             sprintf (Gbl.Message,Txt_The_department_X_already_exists,
-                     Dpt->ShortName);
+                     Dpt->ShrtName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
          else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt->FullName,-1L))
@@ -1064,7 +1064,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
    /***** Create a new department *****/
    sprintf (Query,"INSERT INTO departments (InsCod,ShortName,FullName,WWW)"
                   " VALUES ('%ld','%s','%s','%s')",
-            Dpt->InsCod,Dpt->ShortName,Dpt->FullName,Dpt->WWW);
+            Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
    DB_QueryINSERT (Query,"can not create a new department");
 
    /***** Write success message *****/

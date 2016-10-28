@@ -98,14 +98,14 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
    if (InsCod > 0)
      {
       /***** Fill the list with the institutions I belong to (if not already filled) *****/
-      Usr_GetMyInstitutions ();
+      Usr_GetMyInstits ();
 
       /***** Check if the institution passed as parameter is any of my institutions *****/
       for (NumMyIns = 0;
-           NumMyIns < Gbl.Usrs.Me.MyInstitutions.Num;
+           NumMyIns < Gbl.Usrs.Me.MyInss.Num;
            NumMyIns++)
-         if (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod == InsCod)
-            return Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].MaxRole;
+         if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
+            return Gbl.Usrs.Me.MyInss.Inss[NumMyIns].MaxRole;
       return Rol__GUEST_;
      }
    return Rol_UNKNOWN;   // No degree
@@ -126,10 +126,10 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
 
       /***** Check if the centre passed as parameter is any of my centres *****/
       for (NumMyCtr = 0;
-           NumMyCtr < Gbl.Usrs.Me.MyCentres.Num;
+           NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
            NumMyCtr++)
-         if (Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].CtrCod == CtrCod)
-            return Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].MaxRole;
+         if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
+            return Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].MaxRole;
       return Rol__GUEST_;
      }
    return Rol_UNKNOWN;   // No centre
@@ -150,10 +150,10 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
 
       /***** Check if the degree passed as parameter is any of my degrees *****/
       for (NumMyDeg = 0;
-           NumMyDeg < Gbl.Usrs.Me.MyDegrees.Num;
+           NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
            NumMyDeg++)
-         if (Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].DegCod == DegCod)
-            return Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].MaxRole;
+         if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
+            return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
       return Rol__GUEST_;
      }
    return Rol_UNKNOWN;   // No degree
@@ -174,10 +174,10 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
 
       /***** Check if the course passed as parameter is any of my courses *****/
       for (NumMyCrs = 0;
-           NumMyCrs < Gbl.Usrs.Me.MyCourses.Num;
+           NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
            NumMyCrs++)
-         if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == CrsCod)
-            return Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].Role;
+         if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
+            return Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
       return Rol__GUEST_;
      }
    return Rol_UNKNOWN;   // No course

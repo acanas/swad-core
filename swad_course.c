@@ -104,7 +104,7 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
-static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName);
+static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
 
@@ -197,7 +197,7 @@ static void Crs_Configuration (bool PrintView)
 	       Gbl.CurrentDeg.Deg.WWW,
 	       Gbl.CurrentDeg.Deg.FullName);
    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                 Gbl.CurrentDeg.Deg.ShortName,64,NULL,true);
+                 Gbl.CurrentDeg.Deg.ShrtName,64,NULL,true);
    if (PutLink)
       fprintf (Gbl.F.Out,"</a>");
    fprintf (Gbl.F.Out,"<br />%s"
@@ -236,7 +236,7 @@ static void Crs_Configuration (bool PrintView)
 		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod,
 		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].DegCod == Gbl.CurrentDeg.Deg.DegCod ? " selected=\"selected\"" :
 										            "",
-		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShortName);
+		  Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Act_FormEnd ();
 
@@ -295,13 +295,13 @@ static void Crs_Configuration (bool PrintView)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Crs_MAX_LENGTH_COURSE_SHORT_NAME,
-	       Gbl.CurrentCrs.Crs.ShortName,
+	       Crs_MAX_LENGTH_COURSE_SHRT_NAME,
+	       Gbl.CurrentCrs.Crs.ShrtName,
 	       Gbl.Form.Id);
       Act_FormEnd ();
      }
    else	// I can not edit course short name
-      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.ShortName);
+      fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Crs.ShrtName);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -501,11 +501,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
    struct Country Cty;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
-   char InsFullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
+   char InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
    char CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
    char DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
    char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
@@ -628,7 +628,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeInsInf].ActCod,ActTxt),
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
-	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,20,NULL,true);
+	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
 	 strcpy (InsFullName,Ins.FullName);
          Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsFullName);
@@ -663,7 +663,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtrInf].ActCod,ActTxt),
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
-	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShortName,20,NULL,true);
+	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
 	    strcpy (CtrFullName,Ctr.FullName);
             Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrFullName);
@@ -698,7 +698,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeDegInf].ActCod,ActTxt),
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
-	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,NULL,true);
+	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
 	       strcpy (DegFullName,Deg.FullName);
                Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegFullName);
@@ -729,7 +729,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Lay_IndentDependingOnLevel (5,IsLastItemInLevel);
                   Act_FormStart (ActMyCrs);
 		  Crs_PutParamCrsCod (Crs.CrsCod);
-		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShortName);
+		  sprintf (Gbl.Title,Txt_Go_to_X,Crs.ShrtName);
 		  Act_LinkFormSubmit (Gbl.Title,
 		                      Highlight ? ClassHighlight :
         	                                  ClassNormal,NULL);
@@ -737,7 +737,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 			             " alt=\"%s\" title=\"%s\""
 			             " class=\"ICON20x20\" />",
 		           Gbl.Prefs.IconsURL,
-		           Crs.ShortName,
+		           Crs.ShrtName,
 		           Crs.FullName);
 	          strcpy (CrsFullName,Crs.FullName);
                   Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
@@ -1083,15 +1083,15 @@ void Crs_WriteSelectorMyCourses (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];
-   char DegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];
+   char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
+   char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME+1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
       Usr_GetMyCourses ();
 
    /***** Start form *****/
-   Act_FormGoToStart (Gbl.Usrs.Me.MyCourses.Num ? ActSeeCrsInf :
+   Act_FormGoToStart (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
                                                   ActSysReqSch);
 
    /***** Start of selector of courses *****/
@@ -1108,15 +1108,15 @@ void Crs_WriteSelectorMyCourses (void)
 	                 "</option>",
                Txt_Course);
 
-   if (Gbl.Usrs.Me.MyCourses.Num)
+   if (Gbl.Usrs.Me.MyCrss.Num)
      {
       /***** Write an option for each of my courses *****/
       for (NumMyCrs = 0, LastDegCod = -1L;
-           NumMyCrs < Gbl.Usrs.Me.MyCourses.Num;
+           NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
            NumMyCrs++)
         {
-	 CrsCod = Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod;
-	 DegCod = Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].DegCod;
+	 CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
+	 DegCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].DegCod;
 
          Crs_GetShortNamesByCod (CrsCod,CrsShortName,DegShortName);
 
@@ -1130,7 +1130,7 @@ void Crs_WriteSelectorMyCourses (void)
 	   }
 
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",
-                  Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod);
+                  Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
          if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
              CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
            {
@@ -1146,7 +1146,7 @@ void Crs_WriteSelectorMyCourses (void)
       if (!IBelongToCurrentCrs)
 	{
          /***** Blank option to separate *****/
-	 if (Gbl.Usrs.Me.MyCourses.Num)
+	 if (Gbl.Usrs.Me.MyCrss.Num)
             fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">"
         	               "------------"
         	               "</option>");
@@ -1154,7 +1154,7 @@ void Crs_WriteSelectorMyCourses (void)
          /***** Write an option with the current course *****/
          fprintf (Gbl.F.Out,"<option value=\"%ld\" selected=\"selected\">%s</option>",
                   Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.CurrentCrs.Crs.ShortName);
+                  Gbl.CurrentCrs.Crs.ShrtName);
 	}
      }
 
@@ -1177,7 +1177,7 @@ static void Crs_ListCourses (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
-   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShortName);
+   sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
    Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Crs_PutIconToEditCourses :
 				                  NULL);
 
@@ -1362,7 +1362,7 @@ static void Crs_ListCoursesForEdition (void)
 
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShortName);
+            Gbl.CurrentDeg.Deg.ShrtName);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
@@ -1480,12 +1480,12 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_SHORT_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName,
+		     Crs_MAX_LENGTH_COURSE_SHRT_NAME,Crs->ShrtName,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"%s",Crs->ShortName);
+	    fprintf (Gbl.F.Out,"%s",Crs->ShrtName);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Course full name */
@@ -1639,7 +1639,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShortName);
+            Gbl.CurrentDeg.Deg.ShrtName);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
    Crs_PutHeadCoursesForEdition ();
 
@@ -1681,7 +1681,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Crs_MAX_LENGTH_COURSE_SHORT_NAME,Crs->ShortName);
+            Crs_MAX_LENGTH_COURSE_SHRT_NAME,Crs->ShrtName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1868,16 +1868,16 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
    Deg_GetDataOfDegreeByCod (&Deg);
    if (Crs->Year <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
-      if (Crs->ShortName[0] &&
+      if (Crs->ShrtName[0] &&
 	  Crs->FullName[0])	// If there's a course name
 	{
 	 /***** If name of course was in database... *****/
-	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
+	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShrtName,-1L,
 	                                          Crs->DegCod,Crs->Year))
 	   {
             Gbl.Error = true;
 	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
-	             Crs->ShortName);
+	             Crs->ShrtName);
 	   }
 	 else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
 	                                               Crs->DegCod,Crs->Year))
@@ -1919,7 +1919,7 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
    Crs->Year = Deg_ConvStrToYear (YearStr);
 
    /* Get course short name */
-   Par_GetParToText ("ShortName",Crs->ShortName,Crs_MAX_LENGTH_COURSE_SHORT_NAME);
+   Par_GetParToText ("ShortName",Crs->ShrtName,Crs_MAX_LENGTH_COURSE_SHRT_NAME);
 
    /* Get course full name */
    Par_GetParToText ("FullName",Crs->FullName,Crs_MAX_LENGTH_COURSE_FULL_NAME);
@@ -1950,7 +1950,7 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
    char Query[512 +
-              Crs_MAX_LENGTH_COURSE_SHORT_NAME +
+              Crs_MAX_LENGTH_COURSE_SHRT_NAME +
               Crs_MAX_LENGTH_COURSE_FULL_NAME];
 
    /***** Insert new course into pending requests *****/
@@ -1961,7 +1961,7 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
             Crs->InstitutionalCrsCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Crs->ShortName,Crs->FullName);
+            Crs->ShrtName,Crs->FullName);
    Crs->CrsCod = DB_QueryINSERTandReturnCode (Query,"can not create a new course");
 
    /***** Create success message *****/
@@ -2027,7 +2027,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->Year = 0;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
-      Crs->ShortName[0] = '\0';
+      Crs->ShrtName[0] = '\0';
       Crs->FullName[0] = '\0';
       Crs->NumStds = 0;
       Crs->NumTchs = 0;
@@ -2056,7 +2056,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
       Crs->Year = 0;
       Crs->Status = (Crs_Status_t) 0;
       Crs->RequesterUsrCod = -1L;
-      Crs->ShortName[0] = '\0';
+      Crs->ShrtName[0] = '\0';
       Crs->FullName[0] = '\0';
       Crs->NumStds = 0;
       Crs->NumTchs = 0;
@@ -2099,8 +2099,8 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get the short name of the course (row[6]) *****/
-   strncpy (Crs->ShortName,row[6],Crs_MAX_LENGTH_COURSE_SHORT_NAME);
-   Crs->ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME] = '\0';
+   strncpy (Crs->ShrtName,row[6],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+   Crs->ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME] = '\0';
 
    /***** Get the full name of the course (row[7]) *****/
    strncpy (Crs->FullName,row[7],Crs_MAX_LENGTH_COURSE_FULL_NAME);
@@ -2319,11 +2319,11 @@ void Crs_ChangeInsCrsCodInConfig (void)
       Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,NewInstitutionalCrsCod);
 
       sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-	       Gbl.CurrentCrs.Crs.ShortName,NewInstitutionalCrsCod);
+	       Gbl.CurrentCrs.Crs.ShrtName,NewInstitutionalCrsCod);
      }
    else	// The same institutional code
       sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
-	       Gbl.CurrentCrs.Crs.ShortName);
+	       Gbl.CurrentCrs.Crs.ShrtName);
   }
 
 /*****************************************************************************/
@@ -2357,11 +2357,11 @@ void Crs_ChangeInsCrsCod (void)
         {
          Crs_UpdateInstitutionalCrsCod (Crs,NewInstitutionalCrsCod);
          sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
-                  Crs->ShortName,NewInstitutionalCrsCod);
+                  Crs->ShrtName,NewInstitutionalCrsCod);
         }
       else	// The same institutional code
          sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
-                  Crs->ShortName);
+                  Crs->ShrtName);
      }
    else
      {
@@ -2391,12 +2391,12 @@ void Crs_ChangeCrsDegInConfig (void)
       Deg_GetDataOfDegreeByCod (&NewDeg);
 
       /***** If name of course was in database in the new degree... *****/
-      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L,
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
                                                NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
-		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.ShortName);
+		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.ShrtName);
 	}
       else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
                                                     NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
@@ -2472,12 +2472,12 @@ void Crs_ChangeCrsYearInConfig (void)
    if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
      {
       /***** If name of course was in database in the new year... *****/
-      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShortName,-1L,
+      if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
                                                Gbl.CurrentCrs.Crs.DegCod,NewYear))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
-		  Gbl.CurrentCrs.Crs.ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
+		  Gbl.CurrentCrs.Crs.ShrtName,Txt_YEAR_OF_DEGREE[NewYear]);
 	}
       else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
                                                     Gbl.CurrentCrs.Crs.DegCod,NewYear))
@@ -2493,7 +2493,7 @@ void Crs_ChangeCrsYearInConfig (void)
 
 	 /***** Create message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
-		  Gbl.CurrentCrs.Crs.ShortName);
+		  Gbl.CurrentCrs.Crs.ShrtName);
 	}
      }
    else	// Year not valid
@@ -2539,12 +2539,12 @@ void Crs_ChangeCrsYear (void)
       if (NewYear <= Deg_MAX_YEARS_PER_DEGREE)	// If year is valid
         {
          /***** If name of course was in database in the new year... *****/
-         if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShortName,-1L,
+         if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShrtName,-1L,
                                                   Crs->DegCod,NewYear))
            {
             Gbl.Error = true;
             sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
-                     Crs->ShortName,Txt_YEAR_OF_DEGREE[NewYear]);
+                     Crs->ShrtName,Txt_YEAR_OF_DEGREE[NewYear]);
            }
          else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
                                                        Crs->DegCod,NewYear))
@@ -2560,7 +2560,7 @@ void Crs_ChangeCrsYear (void)
 
             /***** Create message to show the change made *****/
             sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
-                     Crs->ShortName);
+                     Crs->ShrtName);
            }
         }
       else	// Year not valid
@@ -2618,12 +2618,12 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 void Crs_RenameCourseShort (void)
   {
    Gbl.Degs.EditingCrs.CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
-   Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHORT_NAME);
+   Crs_RenameCourse (&Gbl.Degs.EditingCrs,Cns_SHRT_NAME);
   }
 
 void Crs_RenameCourseShortInConfig (void)
   {
-   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_SHORT_NAME);
+   Crs_RenameCourse (&Gbl.CurrentCrs.Crs,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2645,7 +2645,7 @@ void Crs_RenameCourseFullInConfig (void)
 /************************ Change the name of a course ************************/
 /*****************************************************************************/
 
-static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFullName)
+static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_course_X_empty;
    extern const char *Txt_The_course_X_already_exists;
@@ -2659,13 +2659,13 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShortOrFullName_t ShortOrFu
    char *CurrentCrsName = NULL;		// Initialized to avoid warning
    char NewCrsName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
 
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Crs_MAX_LENGTH_COURSE_SHORT_NAME;
-         CurrentCrsName = Crs->ShortName;
+         MaxLength = Crs_MAX_LENGTH_COURSE_SHRT_NAME;
+         CurrentCrsName = Crs->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -2770,7 +2770,7 @@ void Crs_ChangeCrsStatus (void)
 
    /***** Create message to show the change made *****/
    sprintf (Gbl.Message,Txt_The_status_of_the_course_X_has_changed,
-            Crs->ShortName);
+            Crs->ShrtName);
   }
 
 /*****************************************************************************/
@@ -2840,7 +2840,7 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs)
      {
       Act_FormStart (ActSeeCrsInf);
       Crs_PutParamCrsCod (Crs->CrsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShortName);
+      sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShrtName);
       Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
      }
@@ -2857,7 +2857,7 @@ static void Crs_PutButtonToRegisterInCrs (struct Course *Crs)
    Act_FormStart (ActReqSignUp);
    if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If the course is different to the current one...
       Crs_PutParamCrsCod (Crs->CrsCod);
-   sprintf (Gbl.Title,Txt_Register_me_in_X,Crs->ShortName);
+   sprintf (Gbl.Title,Txt_Register_me_in_X,Crs->ShrtName);
    Lay_PutCreateButtonInline (Gbl.Title);
    Act_FormEnd ();
   }
@@ -2877,7 +2877,7 @@ void Crs_ReqSelectOneOfMyCourses (void)
    /* Fill the list with the courses I belong to, if not filled */
    Usr_GetMyCourses ();
 
-   if (Gbl.Usrs.Me.MyCourses.Num)
+   if (Gbl.Usrs.Me.MyCrss.Num)
       /* Show my courses */
       Crs_WriteListMyCoursesToSelectOne ();
    else	// I am not enrolled in any course
@@ -3236,7 +3236,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    Deg_PutParamDegCod (Deg.DegCod);
    sprintf (Gbl.Title,Txt_Go_to_X,row[2]);
    Act_LinkFormSubmit (Gbl.Title,StyleNoBR,NULL);
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,"CENTER_TOP",true);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
    fprintf (Gbl.F.Out," %s (%s)"
                       "</a>",
             row[2],row[6]);

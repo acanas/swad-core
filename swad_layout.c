@@ -378,10 +378,10 @@ static void Lay_WritePageTitle (void)
      {
       fprintf (Gbl.F.Out,"%s &gt; %s",
 	       Cfg_PLATFORM_SHORT_NAME,
-	       Gbl.CurrentDeg.Deg.ShortName);
+	       Gbl.CurrentDeg.Deg.ShrtName);
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
          fprintf (Gbl.F.Out," &gt; %s",
-                  Gbl.CurrentCrs.Crs.ShortName);
+                  Gbl.CurrentCrs.Crs.ShrtName);
      }
    else
       fprintf (Gbl.F.Out,"%s: %s",
@@ -1575,7 +1575,7 @@ static void Lay_WriteFootFromHTMLFile (void)
 void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
                                 long InsCod,long DegCod,long CrsCod)
   {
-   struct Institution Ins;
+   struct Instit Ins;
    struct Degree Deg;
    struct Course Crs;
 
@@ -1601,7 +1601,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",Ins.WWW);
-      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShortName,40,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,40,NULL,true);
       if (!PrintView)
         fprintf (Gbl.F.Out,"</a>");
      }
@@ -1649,7 +1649,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"TIT_CLASSPHOTO\">",
                   Deg.WWW);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,40,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)
          fprintf (Gbl.F.Out,"</a>");
      }

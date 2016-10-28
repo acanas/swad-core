@@ -62,7 +62,7 @@ static void Plc_GetParamPlcOrderType (void);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
-static void Plc_RenamePlace (Cns_ShortOrFullName_t ShortOrFullName);
+static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod);
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
@@ -302,7 +302,7 @@ void Plc_GetListPlaces (void)
             Lay_ShowErrorAndExit ("Wrong code of place.");
 
          /* Get the short name of the place (row[1]) */
-         strcpy (Plc->ShortName,row[1]);
+         strcpy (Plc->ShrtName,row[1]);
 
          /* Get the full name of the place (row[2]) */
          strcpy (Plc->FullName,row[2]);
@@ -333,22 +333,22 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    unsigned long NumRows;
 
    /***** Clear data *****/
-   Plc->ShortName[0] = '\0';
+   Plc->ShrtName[0] = '\0';
    Plc->FullName[0] = '\0';
    Plc->NumCtrs = 0;
 
    /***** Check if place code is correct *****/
    if (Plc->PlcCod < 0)
      {
-      strncpy (Plc->ShortName,Txt_Place_unspecified,Plc_MAX_LENGTH_PLACE_SHORT_NAME);
-      Plc->ShortName[Plc_MAX_LENGTH_PLACE_SHORT_NAME] = '\0';
+      strncpy (Plc->ShrtName,Txt_Place_unspecified,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+      Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
       strncpy (Plc->FullName,Txt_Place_unspecified,Plc_MAX_LENGTH_PLACE_FULL_NAME);
       Plc->FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
      }
    else if (Plc->PlcCod == 0)
      {
-      strncpy (Plc->ShortName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_SHORT_NAME);
-      Plc->ShortName[Plc_MAX_LENGTH_PLACE_SHORT_NAME] = '\0';
+      strncpy (Plc->ShrtName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+      Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
       strncpy (Plc->FullName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_FULL_NAME);
       Plc->FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
      }
@@ -379,8 +379,8 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the place (row[0]) */
-         strncpy (Plc->ShortName,row[0],Plc_MAX_LENGTH_PLACE_SHORT_NAME);
-         Plc->ShortName[Plc_MAX_LENGTH_PLACE_SHORT_NAME] = '\0';
+         strncpy (Plc->ShrtName,row[0],Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+         Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
 
          /* Get the full name of the place (row[1]) */
          strncpy (Plc->FullName,row[1],Plc_MAX_LENGTH_PLACE_FULL_NAME);
@@ -461,7 +461,7 @@ static void Plc_ListPlacesForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName,Gbl.Form.Id);
+               Plc_MAX_LENGTH_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -554,7 +554,7 @@ void Plc_RemovePlace (void)
 
 void Plc_RenamePlaceShort (void)
   {
-   Plc_RenamePlace (Cns_SHORT_NAME);
+   Plc_RenamePlace (Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -570,7 +570,7 @@ void Plc_RenamePlaceFull (void)
 /************************ Change the name of a place *************************/
 /*****************************************************************************/
 
-static void Plc_RenamePlace (Cns_ShortOrFullName_t ShortOrFullName)
+static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty;
    extern const char *Txt_The_place_X_already_exists;
@@ -585,13 +585,13 @@ static void Plc_RenamePlace (Cns_ShortOrFullName_t ShortOrFullName)
    char NewPlcName[Plc_MAX_LENGTH_PLACE_FULL_NAME+1];
 
    Plc = &Gbl.Plcs.EditingPlc;
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Plc_MAX_LENGTH_PLACE_SHORT_NAME;
-         CurrentPlcName = Plc->ShortName;
+         MaxLength = Plc_MAX_LENGTH_PLACE_SHRT_NAME;
+         CurrentPlcName = Plc->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -711,7 +711,7 @@ static void Plc_PutFormToCreatePlace (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Plc_MAX_LENGTH_PLACE_SHORT_NAME,Plc->ShortName);
+            Plc_MAX_LENGTH_PLACE_SHRT_NAME,Plc->ShrtName);
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -776,18 +776,18 @@ void Plc_RecFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name */
-   Par_GetParToText ("ShortName",Plc->ShortName,Plc_MAX_LENGTH_PLACE_SHORT_NAME);
+   Par_GetParToText ("ShortName",Plc->ShrtName,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
 
    /* Get place full name */
    Par_GetParToText ("FullName",Plc->FullName,Plc_MAX_LENGTH_PLACE_FULL_NAME);
 
-   if (Plc->ShortName[0] && Plc->FullName[0])	// If there's a place name
+   if (Plc->ShrtName[0] && Plc->FullName[0])	// If there's a place name
      {
       /***** If name of place was in database... *****/
-      if (Plc_CheckIfPlaceNameExists ("ShortName",Plc->ShortName,-1L))
+      if (Plc_CheckIfPlaceNameExists ("ShortName",Plc->ShrtName,-1L))
         {
          sprintf (Gbl.Message,Txt_The_place_X_already_exists,
-                  Plc->ShortName);
+                  Plc->ShrtName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
       else if (Plc_CheckIfPlaceNameExists ("FullName",Plc->FullName,-1L))
@@ -818,7 +818,7 @@ static void Plc_CreatePlace (struct Place *Plc)
    /***** Create a new place *****/
    sprintf (Query,"INSERT INTO places (InsCod,ShortName,FullName)"
 	          " VALUES ('%ld','%s','%s')",
-            Gbl.CurrentIns.Ins.InsCod,Plc->ShortName,Plc->FullName);
+            Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
    DB_QueryINSERT (Query,"can not create place");
 
    /***** Write success message *****/

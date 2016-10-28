@@ -105,7 +105,7 @@ void For_PutAllHiddenParamsForum (void);
 void For_SetForumTypeAndRestrictAccess (void);
 void For_ShowForumList (void);
 void For_SetForumName (For_ForumType_t ForumType,
-                       struct Institution *Ins,
+                       struct Instit *Ins,
                        struct Centre *Ctr,
                        struct Degree *Deg,
                        struct Course *Crs,

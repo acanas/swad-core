@@ -515,7 +515,7 @@ static void Hld_ListHolidaysForEdition (void)
                   Gbl.Plcs.Lst[NumPlc].PlcCod,
                   Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
                 	                                       "",
-                  Gbl.Plcs.Lst[NumPlc].ShortName);
+                  Gbl.Plcs.Lst[NumPlc].ShrtName);
       fprintf (Gbl.F.Out,"</select>");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -952,7 +952,7 @@ static void Hld_PutFormToCreateHoliday (void)
                Gbl.Plcs.Lst[NumPlc].PlcCod,
                Gbl.Plcs.Lst[NumPlc].PlcCod == Hld->PlcCod ? " selected=\"selected\"" :
         	                                            "",
-               Gbl.Plcs.Lst[NumPlc].ShortName);
+               Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 

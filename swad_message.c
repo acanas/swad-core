@@ -846,12 +846,12 @@ void Msg_ReqDelAllRecMsgs (void)
          sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
-                  Gbl.Msg.FilterCrsShortName,Gbl.Msg.FilterContent);
+                  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
       else
          sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
-                  Gbl.Msg.FilterCrsShortName,Gbl.Msg.FilterContent);
+                  Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
      }
    else
      {
@@ -859,12 +859,12 @@ void Msg_ReqDelAllRecMsgs (void)
          sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
-                  Gbl.Msg.FilterCrsShortName);
+                  Gbl.Msg.FilterCrsShrtName);
       else
          sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
-                  Gbl.Msg.FilterCrsShortName);
+                  Gbl.Msg.FilterCrsShrtName);
      }
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
@@ -899,12 +899,12 @@ void Msg_ReqDelAllSntMsgs (void)
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
 					 Txt_any_user,
-               Gbl.Msg.FilterCrsShortName,Gbl.Msg.FilterContent);
+               Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
    else
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
 					 Txt_any_user,
-               Gbl.Msg.FilterCrsShortName);
+               Gbl.Msg.FilterCrsShrtName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
    /***** Form to remove sent messages *****/
@@ -997,10 +997,10 @@ void Msg_GetParamMsgsCrsCod (void)
       Crs.CrsCod = Gbl.Msg.FilterCrsCod;
       Crs_GetDataOfCourseByCod (&Crs);
 
-      strcpy (Gbl.Msg.FilterCrsShortName,Crs.ShortName);
+      strcpy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName);
      }
    else
-      strcpy (Gbl.Msg.FilterCrsShortName,Txt_any_course);
+      strcpy (Gbl.Msg.FilterCrsShrtName,Txt_any_course);
   }
 
 /*****************************************************************************/
@@ -2427,7 +2427,7 @@ void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages)
          if (Crs_GetDataOfCourseByCod (&Crs))
            {
             Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
-            strcpy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShortName,Crs.ShortName);
+            strcpy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName);
             Gbl.Msg.NumCourses++;
            }
      }
@@ -2468,7 +2468,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"",Gbl.Msg.Courses[NumOriginCrs].CrsCod);
       if (Gbl.Msg.Courses[NumOriginCrs].CrsCod == Gbl.Msg.FilterCrsCod)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
-      fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShortName);
+      fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
      }
    fprintf (Gbl.F.Out,"</select>"
 	              "</div>");
@@ -3112,7 +3112,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             Act_LinkFormSubmit (Gbl.Title,"MSG_AUT",NULL);
             fprintf (Gbl.F.Out,"%s</a>)"
         	               "</div>",
-        	     Crs.ShortName);
+        	     Crs.ShrtName);
             Act_FormEnd ();
            }
 	}

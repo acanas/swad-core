@@ -71,7 +71,7 @@ static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
-static void Mai_RenameMailDomain (Cns_ShortOrFullName_t ShortOrFullName);
+static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
@@ -548,7 +548,7 @@ void Mai_RemoveMailDomain (void)
 
 void Mai_RenameMailDomainShort (void)
   {
-   Mai_RenameMailDomain (Cns_SHORT_NAME);
+   Mai_RenameMailDomain (Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -561,10 +561,10 @@ void Mai_RenameMailDomainFull (void)
   }
 
 /*****************************************************************************/
-/************************ Change the name of a mail *************************/
+/************************* Change the name of a mail *************************/
 /*****************************************************************************/
 
-static void Mai_RenameMailDomain (Cns_ShortOrFullName_t ShortOrFullName)
+static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_mail_domain_X_empty;
    extern const char *Txt_The_mail_domain_X_already_exists;
@@ -579,9 +579,9 @@ static void Mai_RenameMailDomain (Cns_ShortOrFullName_t ShortOrFullName)
    char NewMaiName[Mai_MAX_LENGTH_MAIL_INFO+1];
 
    Mai = &Gbl.Mails.EditingMai;
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "Domain";
          FieldName = "Domain";
          MaxLength = Mai_MAX_LENGTH_MAIL_DOMAIN;

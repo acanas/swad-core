@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Ban_MAX_LENGTH_SHORT_NAME	 32
+#define Ban_MAX_LENGTH_SHRT_NAME	 32
 #define Ban_MAX_LENGTH_FULL_NAME	127
 #define Ban_MAX_LENGTH_IMAGE		255
 
@@ -41,7 +41,7 @@ struct Banner
   {
    long BanCod;
    bool Hidden;
-   char ShortName[Ban_MAX_LENGTH_SHORT_NAME+1];
+   char ShrtName[Ban_MAX_LENGTH_SHRT_NAME+1];
    char FullName[Ban_MAX_LENGTH_FULL_NAME+1];
    char Img[Ban_MAX_LENGTH_IMAGE+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];

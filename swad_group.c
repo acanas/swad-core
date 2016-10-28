@@ -191,7 +191,7 @@ static void Grp_EditGroupTypes (void)
    else	// No group types found in this course
      {
       sprintf (Gbl.Message,Txt_There_are_no_types_of_group_in_the_course_X,
-               Gbl.CurrentCrs.Crs.ShortName);
+               Gbl.CurrentCrs.Crs.ShrtName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
 
@@ -213,7 +213,7 @@ static void Grp_EditGroups (void)
    else	// There are group types, but there aren't groups
      {
       sprintf (Gbl.Message,Txt_No_groups_have_been_created_in_the_course_X,
-               Gbl.CurrentCrs.Crs.ShortName);
+               Gbl.CurrentCrs.Crs.ShrtName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
 

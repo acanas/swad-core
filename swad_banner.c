@@ -64,7 +64,7 @@ static void Ban_GetListBanners (const char *Query);
 static void Ban_ListBannersForEdition (void);
 static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (bool Hide);
-static void Ban_RenameBanner (Cns_ShortOrFullName_t ShortOrFullName);
+static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
 static void Ban_PutFormToCreateBanner (void);
 static void Ban_PutHeadBanners (void);
@@ -107,7 +107,7 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].FullName,
                Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShortName,
+               Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
    fprintf (Gbl.F.Out,"</table>");
 
@@ -204,7 +204,7 @@ static void Ban_GetListBanners (const char *Query)
             Ban->Hidden = (row[1][0] == 'Y');
 
 	    /* Get the short name of the banner (row[2]) */
-	    strcpy (Ban->ShortName,row[2]);
+	    strcpy (Ban->ShrtName,row[2]);
 
 	    /* Get the full name of the banner (row[3]) */
 	    strcpy (Ban->FullName,row[3]);
@@ -237,7 +237,7 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
 
    /***** Clear data *****/
    Ban->Hidden = false;
-   Ban->ShortName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
+   Ban->ShrtName[0] = Ban->FullName[0] = Ban->Img[0] = Ban->WWW[0] = '\0';
 
    /***** Check if banner code is correct *****/
    if (Ban->BanCod > 0)
@@ -257,7 +257,7 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
          Ban->Hidden = (row[0][0] == 'Y');
 
          /* Get the short name of the banner (row[1]) */
-         strcpy (Ban->ShortName,row[1]);
+         strcpy (Ban->ShrtName,row[1]);
 
          /* Get the full name of the banner (row[2]) */
          strcpy (Ban->FullName,row[2]);
@@ -355,7 +355,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName,Gbl.Form.Id);
+               Ban_MAX_LENGTH_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -444,7 +444,7 @@ void Ban_RemoveBanner (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Banner_X_removed,
-            Ban.ShortName);
+            Ban.ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
@@ -503,7 +503,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Hide ? Txt_The_banner_X_is_now_hidden :
 	                       Txt_The_banner_X_is_now_visible,
-	    Ban.ShortName);
+	    Ban.ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
@@ -516,7 +516,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
 
 void Ban_RenameBannerShort (void)
   {
-   Ban_RenameBanner (Cns_SHORT_NAME);
+   Ban_RenameBanner (Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -532,7 +532,7 @@ void Ban_RenameBannerFull (void)
 /*********************** Change the name of a banner *************************/
 /*****************************************************************************/
 
-static void Ban_RenameBanner (Cns_ShortOrFullName_t ShortOrFullName)
+static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_banner_X_empty;
    extern const char *Txt_The_banner_X_already_exists;
@@ -547,13 +547,13 @@ static void Ban_RenameBanner (Cns_ShortOrFullName_t ShortOrFullName)
    char NewBanName[Ban_MAX_LENGTH_FULL_NAME+1];
 
    Ban = &Gbl.Banners.EditingBan;
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Ban_MAX_LENGTH_SHORT_NAME;
-         CurrentBanName = Ban->ShortName;
+         MaxLength = Ban_MAX_LENGTH_SHRT_NAME;
+         CurrentBanName = Ban->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -752,7 +752,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Ban_MAX_LENGTH_SHORT_NAME,Ban->ShortName);
+            Ban_MAX_LENGTH_SHRT_NAME,Ban->ShrtName);
 
    /***** Banner full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -829,7 +829,7 @@ void Ban_RecFormNewBanner (void)
 
    /***** Get parameters from form *****/
    /* Get banner short name */
-   Par_GetParToText ("ShortName",Ban->ShortName,Ban_MAX_LENGTH_SHORT_NAME);
+   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_LENGTH_SHRT_NAME);
 
    /* Get banner full name */
    Par_GetParToText ("FullName",Ban->FullName,Ban_MAX_LENGTH_FULL_NAME);
@@ -840,13 +840,13 @@ void Ban_RecFormNewBanner (void)
    /* Get banner URL */
    Par_GetParToText ("WWW",Ban->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Ban->ShortName[0] && Ban->FullName[0])	// If there's a banner name
+   if (Ban->ShrtName[0] && Ban->FullName[0])	// If there's a banner name
      {
       /***** If name of banner was in database... *****/
-      if (Ban_CheckIfBannerNameExists ("ShortName",Ban->ShortName,-1L))
+      if (Ban_CheckIfBannerNameExists ("ShortName",Ban->ShrtName,-1L))
         {
          sprintf (Gbl.Message,Txt_The_banner_X_already_exists,
-                  Ban->ShortName);
+                  Ban->ShrtName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
       else if (Ban_CheckIfBannerNameExists ("FullName",Ban->FullName,-1L))
@@ -876,17 +876,17 @@ void Ban_RecFormNewBanner (void)
 static void Ban_CreateBanner (struct Banner *Ban)
   {
    extern const char *Txt_Created_new_banner_X;
-   char Query[256 + Ban_MAX_LENGTH_SHORT_NAME + Ban_MAX_LENGTH_FULL_NAME + Ban_MAX_LENGTH_IMAGE + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Ban_MAX_LENGTH_SHRT_NAME + Ban_MAX_LENGTH_FULL_NAME + Ban_MAX_LENGTH_IMAGE + Cns_MAX_LENGTH_WWW];
 
    /***** Create a new banner *****/
    sprintf (Query,"INSERT INTO banners (Hidden,ShortName,FullName,Img,WWW)"
 	          " VALUES ('N','%s','%s','%s','%s')",
-            Ban->ShortName,Ban->FullName,Ban->Img,Ban->WWW);
+            Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
    DB_QueryINSERT (Query,"can not create banner");
 
    /***** Write success message *****/
    sprintf (Gbl.Message,Txt_Created_new_banner_X,
-            Ban->ShortName);
+            Ban->ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
@@ -925,7 +925,7 @@ void Ban_WriteMenuWithBanners (void)
                          "</a>",
                Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
                Gbl.Banners.Lst[NumBan].Img,
-               Gbl.Banners.Lst[NumBan].ShortName,
+               Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");

@@ -88,7 +88,7 @@ static void Rec_PutParamUsrCodEncrypted (void);
 static void Rec_PutParamsWorks (void);
 static void Rec_PutParamsStudent (void);
 static void Rec_PutParamsMsgUsr (void);
-static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks);
+static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks);
 static void Rec_ShowPhoto (struct UsrData *UsrDat);
 static void Rec_ShowFullName (struct UsrData *UsrDat);
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks);
@@ -135,7 +135,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 static void Rec_ShowComments (struct UsrData *UsrDat,
                               bool ShowData,bool DataForm,
                               const char *ClassForm);
-static void Rec_ShowInstitution (struct Institution *Ins,
+static void Rec_ShowInstitution (struct Instit *Ins,
                                  bool ShowData,const char *ClassForm);
 static void Rec_ShowCentre (struct UsrData *UsrDat,
                             bool ShowData,const char *ClassForm);
@@ -1623,7 +1623,7 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
                       "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                 Gbl.CurrentDeg.Deg.ShortName,Rec_DEGREE_LOGO_SIZE,NULL,true);
+                 Gbl.CurrentDeg.Deg.ShrtName,Rec_DEGREE_LOGO_SIZE,NULL,true);
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"REC_HEAD CENTER_MIDDLE\">"
                       "%s<br />%s<br />%s"
@@ -2039,7 +2039,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			   ((TypeOfView == Rec_RECORD_LIST ||
 			     TypeOfView == Rec_RECORD_PRINT) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Initializations *****/
    switch (TypeOfView)
@@ -2416,7 +2416,7 @@ static void Rec_PutParamsMsgUsr (void)
 /*********************** Show institution in record card *********************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks)
+static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
   {
    /***** Institution logo *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"4\" class=\"REC_C1_TOP CENTER_MIDDLE\">");
@@ -2429,7 +2429,7 @@ static void Rec_ShowInstitutionInHead (struct Institution *Ins,bool PutFormLinks
 	 Ins_PutParamInsCod (Ins->InsCod);
 	 Act_LinkFormSubmit (Ins->FullName,NULL,NULL);
 	}
-      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,
+      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,
                     Rec_INSTITUTION_LOGO_SIZE,NULL,true);
       if (PutFormLinks)
 	{
@@ -3187,7 +3187,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 /************************** Show user's institution **************************/
 /*****************************************************************************/
 
-static void Rec_ShowInstitution (struct Institution *Ins,
+static void Rec_ShowInstitution (struct Instit *Ins,
                                  bool ShowData,const char *ClassForm)
   {
    extern const char *Txt_Institution;
@@ -3786,7 +3786,7 @@ void Rec_ChgCountryOfMyInstitution (void)
 
 void Rec_UpdateMyInstitution (void)
   {
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Get my institution *****/
    /* Get institution code */

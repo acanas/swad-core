@@ -44,7 +44,7 @@
 typedef enum
   {
    Sch_SEARCH_ALL			=  0,
-   Sch_SEARCH_INSTITUTIONS		=  1,
+   Sch_SEARCH_INSTITS			=  1,
    Sch_SEARCH_CENTRES			=  2,
    Sch_SEARCH_DEGREES			=  3,
    Sch_SEARCH_COURSES			=  4,

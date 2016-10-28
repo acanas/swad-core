@@ -148,22 +148,22 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
 	       case Sco_SCOPE_INS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Institution,
-			   Gbl.CurrentIns.Ins.ShortName);
+			   Gbl.CurrentIns.Ins.ShrtName);
 		  break;
 	       case Sco_SCOPE_CTR:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Centre,
-			   Gbl.CurrentCtr.Ctr.ShortName);
+			   Gbl.CurrentCtr.Ctr.ShrtName);
 		  break;
 	       case Sco_SCOPE_DEG:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Degree,
-			   Gbl.CurrentDeg.Deg.ShortName);
+			   Gbl.CurrentDeg.Deg.ShrtName);
 		  break;
 	       case Sco_SCOPE_CRS:
 		  fprintf (Gbl.F.Out,"%s: %s",
 			   Txt_Course,
-			   Gbl.CurrentCrs.Crs.ShortName);
+			   Gbl.CurrentCrs.Crs.ShrtName);
 		  break;
 	       default:
 		  Lay_ShowErrorAndExit ("Wrong scope.");

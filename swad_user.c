@@ -943,7 +943,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
 /**** Get all my countries (those of my courses) and store them in a list ****/
 /*****************************************************************************/
 
-void Usr_GetMyCountries (void)
+void Usr_GetMyCountrs (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -952,9 +952,9 @@ void Usr_GetMyCountries (void)
    long CtyCod;
 
    /***** If my countries are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCountries.Filled)
+   if (!Gbl.Usrs.Me.MyCtys.Filled)
      {
-      Gbl.Usrs.Me.MyCountries.Num = 0;
+      Gbl.Usrs.Me.MyCtys.Num = 0;
 
       /***** Get my institutions from database *****/
       if ((NumCtys = (unsigned) Usr_GetCtysFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,&mysql_res)) > 0) // Countries found
@@ -968,13 +968,13 @@ void Usr_GetMyCountries (void)
             /* Get country code */
             if ((CtyCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
               {
-               if (Gbl.Usrs.Me.MyCountries.Num == Cty_MAX_COUNTRIES_PER_USR)
+               if (Gbl.Usrs.Me.MyCtys.Num == Cty_MAX_COUNTRS_PER_USR)
                   Lay_ShowErrorAndExit ("Maximum number of countries of a user exceeded.");
 
-               Gbl.Usrs.Me.MyCountries.Ctys[Gbl.Usrs.Me.MyCountries.Num].CtyCod  = CtyCod;
-               Gbl.Usrs.Me.MyCountries.Ctys[Gbl.Usrs.Me.MyCountries.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].CtyCod  = CtyCod;
+               Gbl.Usrs.Me.MyCtys.Ctys[Gbl.Usrs.Me.MyCtys.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyCountries.Num++;
+               Gbl.Usrs.Me.MyCtys.Num++;
               }
            }
 
@@ -982,7 +982,7 @@ void Usr_GetMyCountries (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Set boolean that indicates that my institutions are yet filled *****/
-      Gbl.Usrs.Me.MyCountries.Filled = true;
+      Gbl.Usrs.Me.MyCtys.Filled = true;
      }
   }
 
@@ -990,7 +990,7 @@ void Usr_GetMyCountries (void)
 /** Get all my institutions (those of my courses) and store them in a list ***/
 /*****************************************************************************/
 
-void Usr_GetMyInstitutions (void)
+void Usr_GetMyInstits (void)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -999,9 +999,9 @@ void Usr_GetMyInstitutions (void)
    long InsCod;
 
    /***** If my institutions are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyInstitutions.Filled)
+   if (!Gbl.Usrs.Me.MyInss.Filled)
      {
-      Gbl.Usrs.Me.MyInstitutions.Num = 0;
+      Gbl.Usrs.Me.MyInss.Num = 0;
 
       /***** Get my institutions from database *****/
       if ((NumInss = (unsigned) Usr_GetInssFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Institutions found
@@ -1015,13 +1015,13 @@ void Usr_GetMyInstitutions (void)
             /* Get institution code */
             if ((InsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
               {
-               if (Gbl.Usrs.Me.MyInstitutions.Num == Ins_MAX_INSTITUTIONS_PER_USR)
+               if (Gbl.Usrs.Me.MyInss.Num == Ins_MAX_INSTITS_PER_USR)
                   Lay_ShowErrorAndExit ("Maximum number of institutions of a user exceeded.");
 
-               Gbl.Usrs.Me.MyInstitutions.Inss[Gbl.Usrs.Me.MyInstitutions.Num].InsCod  = InsCod;
-               Gbl.Usrs.Me.MyInstitutions.Inss[Gbl.Usrs.Me.MyInstitutions.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].InsCod  = InsCod;
+               Gbl.Usrs.Me.MyInss.Inss[Gbl.Usrs.Me.MyInss.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyInstitutions.Num++;
+               Gbl.Usrs.Me.MyInss.Num++;
               }
            }
 
@@ -1029,7 +1029,7 @@ void Usr_GetMyInstitutions (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Set boolean that indicates that my institutions are yet filled *****/
-      Gbl.Usrs.Me.MyInstitutions.Filled = true;
+      Gbl.Usrs.Me.MyInss.Filled = true;
      }
   }
 
@@ -1046,9 +1046,9 @@ void Usr_GetMyCentres (void)
    long CtrCod;
 
    /***** If my centres are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCentres.Filled)
+   if (!Gbl.Usrs.Me.MyCtrs.Filled)
      {
-      Gbl.Usrs.Me.MyCentres.Num = 0;
+      Gbl.Usrs.Me.MyCtrs.Num = 0;
 
       /***** Get my centres from database *****/
       if ((NumCtrs = (unsigned) Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Centres found
@@ -1062,13 +1062,13 @@ void Usr_GetMyCentres (void)
             /* Get centre code */
             if ((CtrCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
               {
-               if (Gbl.Usrs.Me.MyCentres.Num == Ctr_MAX_CENTRES_PER_USR)
+               if (Gbl.Usrs.Me.MyCtrs.Num == Ctr_MAX_CENTRES_PER_USR)
                   Lay_ShowErrorAndExit ("Maximum number of centres of a user exceeded.");
 
-               Gbl.Usrs.Me.MyCentres.Ctrs[Gbl.Usrs.Me.MyCentres.Num].CtrCod = CtrCod;
-               Gbl.Usrs.Me.MyCentres.Ctrs[Gbl.Usrs.Me.MyCentres.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].CtrCod = CtrCod;
+               Gbl.Usrs.Me.MyCtrs.Ctrs[Gbl.Usrs.Me.MyCtrs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyCentres.Num++;
+               Gbl.Usrs.Me.MyCtrs.Num++;
               }
            }
 
@@ -1076,7 +1076,7 @@ void Usr_GetMyCentres (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Set boolean that indicates that my centres are yet filled *****/
-      Gbl.Usrs.Me.MyCentres.Filled = true;
+      Gbl.Usrs.Me.MyCtrs.Filled = true;
      }
   }
 
@@ -1093,9 +1093,9 @@ void Usr_GetMyDegrees (void)
    long DegCod;
 
    /***** If my degrees are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyDegrees.Filled)
+   if (!Gbl.Usrs.Me.MyDegs.Filled)
      {
-      Gbl.Usrs.Me.MyDegrees.Num = 0;
+      Gbl.Usrs.Me.MyDegs.Num = 0;
 
       /***** Get my degrees from database *****/
       if ((NumDegs = (unsigned) Usr_GetDegsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,-1L,&mysql_res)) > 0) // Degrees found
@@ -1109,13 +1109,13 @@ void Usr_GetMyDegrees (void)
             /* Get degree code */
             if ((DegCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
               {
-               if (Gbl.Usrs.Me.MyDegrees.Num == Deg_MAX_DEGREES_PER_USR)
+               if (Gbl.Usrs.Me.MyDegs.Num == Deg_MAX_DEGREES_PER_USR)
                   Lay_ShowErrorAndExit ("Maximum number of degrees of a user exceeded.");
 
-               Gbl.Usrs.Me.MyDegrees.Degs[Gbl.Usrs.Me.MyDegrees.Num].DegCod  = DegCod;
-               Gbl.Usrs.Me.MyDegrees.Degs[Gbl.Usrs.Me.MyDegrees.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
+               Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].DegCod  = DegCod;
+               Gbl.Usrs.Me.MyDegs.Degs[Gbl.Usrs.Me.MyDegs.Num].MaxRole = Rol_ConvertUnsignedStrToRole (row[1]);
 
-               Gbl.Usrs.Me.MyDegrees.Num++;
+               Gbl.Usrs.Me.MyDegs.Num++;
               }
            }
 
@@ -1123,7 +1123,7 @@ void Usr_GetMyDegrees (void)
       DB_FreeMySQLResult (&mysql_res);
 
       /***** Set boolean that indicates that my degrees are yet filled *****/
-      Gbl.Usrs.Me.MyDegrees.Filled = true;
+      Gbl.Usrs.Me.MyDegs.Filled = true;
      }
   }
 
@@ -1141,9 +1141,9 @@ void Usr_GetMyCourses (void)
    long CrsCod;
 
    /***** If my courses are yet filled, there's nothing to do *****/
-   if (!Gbl.Usrs.Me.MyCourses.Filled)
+   if (!Gbl.Usrs.Me.MyCrss.Filled)
      {
-      Gbl.Usrs.Me.MyCourses.Num = 0;
+      Gbl.Usrs.Me.MyCrss.Num = 0;
 
       if (Gbl.Usrs.Me.Logged)
 	{
@@ -1181,13 +1181,13 @@ void Usr_GetMyCourses (void)
 	    /* Get course code */
 	    if ((CrsCod = Str_ConvertStrCodToLongCod (row[0])) > 0)
 	      {
-	       if (Gbl.Usrs.Me.MyCourses.Num == Crs_MAX_COURSES_PER_USR)
+	       if (Gbl.Usrs.Me.MyCrss.Num == Crs_MAX_COURSES_PER_USR)
 		  Lay_ShowErrorAndExit ("Maximum number of courses of a user exceeded.");
 
-	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].CrsCod = CrsCod;
-	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
-	       Gbl.Usrs.Me.MyCourses.Crss[Gbl.Usrs.Me.MyCourses.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
-	       Gbl.Usrs.Me.MyCourses.Num++;
+	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].CrsCod = CrsCod;
+	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].Role   = Rol_ConvertUnsignedStrToRole (row[1]);
+	       Gbl.Usrs.Me.MyCrss.Crss[Gbl.Usrs.Me.MyCrss.Num].DegCod = Str_ConvertStrCodToLongCod (row[2]);
+	       Gbl.Usrs.Me.MyCrss.Num++;
 	      }
 	   }
 
@@ -1196,7 +1196,63 @@ void Usr_GetMyCourses (void)
 	}
 
       /***** Set boolean that indicates that my courses are yet filled *****/
-      Gbl.Usrs.Me.MyCourses.Filled = true;
+      Gbl.Usrs.Me.MyCrss.Filled = true;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my countries ************************/
+/*****************************************************************************/
+
+void Usr_FreeMyCountrs (void)
+  {
+   if (Gbl.Usrs.Me.MyCtys.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCtys.Filled = false;
+      Gbl.Usrs.Me.MyCtys.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/********************* Free the list of my institutions **********************/
+/*****************************************************************************/
+
+void Usr_FreeMyInstits (void)
+  {
+   if (Gbl.Usrs.Me.MyInss.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyInss.Filled = false;
+      Gbl.Usrs.Me.MyInss.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my centres ************************/
+/*****************************************************************************/
+
+void Usr_FreeMyCentres (void)
+  {
+   if (Gbl.Usrs.Me.MyCtrs.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyCtrs.Filled = false;
+      Gbl.Usrs.Me.MyCtrs.Num    = 0;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Free the list of my degrees ************************/
+/*****************************************************************************/
+
+void Usr_FreeMyDegrees (void)
+  {
+   if (Gbl.Usrs.Me.MyDegs.Filled)
+     {
+      /***** Reset list *****/
+      Gbl.Usrs.Me.MyDegs.Filled = false;
+      Gbl.Usrs.Me.MyDegs.Num    = 0;
      }
   }
 
@@ -1206,11 +1262,11 @@ void Usr_GetMyCourses (void)
 
 void Usr_FreeMyCourses (void)
   {
-   if (Gbl.Usrs.Me.MyCourses.Filled)
+   if (Gbl.Usrs.Me.MyCrss.Filled)
      {
       /***** Reset list *****/
-      Gbl.Usrs.Me.MyCourses.Filled = false;
-      Gbl.Usrs.Me.MyCourses.Num    = 0;
+      Gbl.Usrs.Me.MyCrss.Filled = false;
+      Gbl.Usrs.Me.MyCrss.Num    = 0;
 
       /***** Remove temporary table with my courses *****/
       Usr_RemoveTemporaryTableMyCourses ();
@@ -1352,13 +1408,13 @@ bool Usr_CheckIfIBelongToCty (long CtyCod)
    unsigned NumMyCty;
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyCountries ();
+   Usr_GetMyCountrs ();
 
    /***** Check if the country passed as parameter is any of my countries *****/
    for (NumMyCty = 0;
-        NumMyCty < Gbl.Usrs.Me.MyCountries.Num;
+        NumMyCty < Gbl.Usrs.Me.MyCtys.Num;
         NumMyCty++)
-      if (Gbl.Usrs.Me.MyCountries.Ctys[NumMyCty].CtyCod == CtyCod)
+      if (Gbl.Usrs.Me.MyCtys.Ctys[NumMyCty].CtyCod == CtyCod)
          return true;
    return false;
   }
@@ -1372,13 +1428,13 @@ bool Usr_CheckIfIBelongToIns (long InsCod)
    unsigned NumMyIns;
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyInstitutions ();
+   Usr_GetMyInstits ();
 
    /***** Check if the institution passed as parameter is any of my institutions *****/
    for (NumMyIns = 0;
-        NumMyIns < Gbl.Usrs.Me.MyInstitutions.Num;
+        NumMyIns < Gbl.Usrs.Me.MyInss.Num;
         NumMyIns++)
-      if (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod == InsCod)
+      if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
          return true;
    return false;
   }
@@ -1396,9 +1452,9 @@ bool Usr_CheckIfIBelongToCtr (long CtrCod)
 
    /***** Check if the centre passed as parameter is any of my centres *****/
    for (NumMyCtr = 0;
-        NumMyCtr < Gbl.Usrs.Me.MyCentres.Num;
+        NumMyCtr < Gbl.Usrs.Me.MyCtrs.Num;
         NumMyCtr++)
-      if (Gbl.Usrs.Me.MyCentres.Ctrs[NumMyCtr].CtrCod == CtrCod)
+      if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
          return true;
    return false;
   }
@@ -1416,9 +1472,9 @@ bool Usr_CheckIfIBelongToDeg (long DegCod)
 
    /***** Check if the degree passed as parameter is any of my degrees *****/
    for (NumMyDeg = 0;
-        NumMyDeg < Gbl.Usrs.Me.MyDegrees.Num;
+        NumMyDeg < Gbl.Usrs.Me.MyDegs.Num;
         NumMyDeg++)
-      if (Gbl.Usrs.Me.MyDegrees.Degs[NumMyDeg].DegCod == DegCod)
+      if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
          return true;
    return false;
   }
@@ -1436,9 +1492,9 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
 
    /***** Check if the course passed as parameter is any of my courses *****/
    for (NumMyCrs = 0;
-        NumMyCrs < Gbl.Usrs.Me.MyCourses.Num;
+        NumMyCrs < Gbl.Usrs.Me.MyCrss.Num;
         NumMyCrs++)
-      if (Gbl.Usrs.Me.MyCourses.Crss[NumMyCrs].CrsCod == CrsCod)
+      if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
          return true;
 
    return false;
@@ -1550,16 +1606,22 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
    if (CtrCod > 0)
       sprintf (Query,"SELECT degrees.DegCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod=degrees.DegCod AND degrees.CtrCod='%ld'"
+                     " WHERE crs_usr.UsrCod='%ld'"
+                     " AND crs_usr.CrsCod=courses.CrsCod"
+                     " AND courses.DegCod=degrees.DegCod"
+                     " AND degrees.CtrCod='%ld'"
                      " GROUP BY degrees.DegCod ORDER BY degrees.ShortName",
                UsrCod,CtrCod);
    else
       sprintf (Query,"SELECT degrees.DegCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=courses.CrsCod AND courses.DegCod=degrees.DegCod"
+                     " WHERE crs_usr.UsrCod='%ld'"
+                     " AND crs_usr.CrsCod=courses.CrsCod"
+                     " AND courses.DegCod=degrees.DegCod"
                      " GROUP BY degrees.DegCod ORDER BY degrees.ShortName",
                UsrCod);
-   return DB_QuerySELECT (Query,mysql_res,"can not check the degrees a user belongs to");
+   return DB_QuerySELECT (Query,mysql_res,"can not check the degrees"
+	                                  " a user belongs to");
   }
 
 /*****************************************************************************/
@@ -2744,7 +2806,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2831,7 +2893,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Department Dpt;
 
@@ -2933,7 +2995,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT+1];
-   struct Institution Ins;
+   struct Instit Ins;
    bool ShowData = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM;
 
@@ -3047,7 +3109,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   struct Institution Ins;
+   struct Instit Ins;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
    bool ShowData = (ItsMe || UsrDat->Accepted ||
                     Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
@@ -3125,7 +3187,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
    char PhotoURL[PATH_MAX+1];
    bool ShowPhoto;
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Start row *****/
    fprintf (Gbl.F.Out,"<tr>");

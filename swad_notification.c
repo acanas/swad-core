@@ -306,7 +306,7 @@ void Ntf_ShowMyNotifications (void)
    bool AllNotifications;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
    struct UsrData UsrDat;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
@@ -556,13 +556,13 @@ void Ntf_ShowMyNotifications (void)
                fprintf (Gbl.F.Out,"<span class=\"%s\">",ClassAnchor);
 
             if (Crs.CrsCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShortName);
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Course,Crs.ShrtName);
             else if (Deg.DegCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShortName);
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Degree,Deg.ShrtName);
             else if (Ctr.CtrCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShortName);
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Centre,Ctr.ShrtName);
             else if (Ins.InsCod > 0)
-               fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShortName);
+               fprintf (Gbl.F.Out,"%s: %s",Txt_Institution,Ins.ShrtName);
             else
                fprintf (Gbl.F.Out,"-");
 
@@ -1542,7 +1542,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    Txt_Language_t ToUsrLanguage;
    struct UsrData FromUsrDat;
    Ntf_NotifyEvent_t NotifyEvent = (Ntf_NotifyEvent_t) 0;	// Initialized to avoid warning
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;

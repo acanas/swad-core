@@ -520,7 +520,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Start of section *****/
    fprintf (Gbl.F.Rep,"<section>"

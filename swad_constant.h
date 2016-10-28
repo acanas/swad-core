@@ -65,9 +65,9 @@ typedef enum
 // Related with names of centres, degrees, courses,...
 typedef enum
   {
-   Cns_SHORT_NAME,
+   Cns_SHRT_NAME,
    Cns_FULL_NAME,
-  } Cns_ShortOrFullName_t;
+  } Cns_ShrtOrFullName_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

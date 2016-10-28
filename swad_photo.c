@@ -1950,7 +1950,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
                                                           ((Pho_GetTimeAvgPhotoWasComputed (Degs.Lst[NumDeg].DegCod) >=
                                                           Gbl.StartExecutionTimeUTC - Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO) ? " disabled=\"disabled\"" :
                                                                 	                                                     ""),
-                  Degs.Lst[NumDeg].ShortName,
+                  Degs.Lst[NumDeg].ShrtName,
                   Txt_time,
                   StrEstimatedTimeToComputeAvgPhoto);
         }
@@ -2189,7 +2189,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 					       "DAT","CENTER_TOP");
 	 else	// Pho_DEGREES_PRINT
 	   {
-	    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShortName,20,"CENTER_TOP",true);
+	    Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,"CENTER_TOP",true);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	   }
 	 fprintf (Gbl.F.Out,"</td>");
@@ -2350,7 +2350,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    char PathRelAvgPhoto[PATH_MAX+1];
    char PhotoURL[PATH_MAX+1];
    char PhotoCaption[512];
-   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME+1];	// Short name of degree
+   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME+1];	// Short name of degree
    bool ShowDegPhoto;
    char IdCaption[Act_MAX_LENGTH_ID];
 
@@ -2362,8 +2362,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
 
    /***** Make a copy of the degree short name *****/
-   strncpy (CopyOfDegShortName,Deg->ShortName,Deg_MAX_LENGTH_DEGREE_SHORT_NAME);
-   CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHORT_NAME] = '\0';
+   strncpy (CopyOfDegShortName,Deg->ShrtName,Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+   CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
    Str_LimitLengthHTMLStr (CopyOfDegShortName,
                            SeeOrPrint == Pho_DEGREES_SEE ? 10 :
                         	                           15);
@@ -2403,7 +2403,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 	    sprintf (PhotoCaption,"%s<br />"
 				  "%d&nbsp;%s&nbsp;(%s)<br />"
 				  "%d&nbsp;%s&nbsp;(%d%%)",
-		     Deg->ShortName,
+		     Deg->ShrtName,
 		     NumStds,Txt_students_ABBREVIATION,Txt_SEX_PLURAL_abc[Sex],
 		     NumStdsWithPhoto,Txt_photos,
 		     NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
@@ -2430,7 +2430,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg\"",Gbl.Prefs.IconsURL);
    fprintf (Gbl.F.Out," alt=\"%s\""
 	              " style=\"width:%upx; height:%upx;\" />",
-            Deg->ShortName,
+            Deg->ShrtName,
             PhotoWidth,PhotoHeight);
 
    /***** Caption *****/

@@ -167,11 +167,11 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.MyPhotoExists = false;
    Gbl.Usrs.Me.NumAccWithoutPhoto = 0;
    Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = LONG_MAX;	// Initialized to a big value, so by default files are not shown as recent or new
-   Gbl.Usrs.Me.MyInstitutions.Filled = false;
-   Gbl.Usrs.Me.MyCentres.Filled = false;
-   Gbl.Usrs.Me.MyDegrees.Filled = false;
-   Gbl.Usrs.Me.MyCourses.Filled = false;
-   Gbl.Usrs.Me.MyCourses.Num = 0;
+   Gbl.Usrs.Me.MyInss.Filled = false;
+   Gbl.Usrs.Me.MyCtrs.Filled = false;
+   Gbl.Usrs.Me.MyDegs.Filled = false;
+   Gbl.Usrs.Me.MyCrss.Filled = false;
+   Gbl.Usrs.Me.MyCrss.Num = 0;
    Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An e-mail to confirm my e-mail address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
@@ -209,7 +209,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCty.Cty.CtyCod = -1L;
 
    Gbl.CurrentIns.Ins.InsCod = -1L;	// Unknown institution
-   Gbl.CurrentIns.Ins.ShortName[0] = '\0';
+   Gbl.CurrentIns.Ins.ShrtName[0] = '\0';
    Gbl.CurrentIns.Ins.FullName[0] = '\0';
    Gbl.CurrentIns.Ins.WWW[0] = '\0';
    Gbl.CurrentIns.Ins.NumCtrs = Gbl.CurrentIns.Ins.NumDpts = Gbl.CurrentIns.Ins.NumDegs = 0;
@@ -218,7 +218,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCtr.Ctr.CtrCod = -1L;
    Gbl.CurrentCtr.Ctr.InsCod = -1L;
    Gbl.CurrentCtr.Ctr.PlcCod = -1L;
-   Gbl.CurrentCtr.Ctr.ShortName[0] = '\0';
+   Gbl.CurrentCtr.Ctr.ShrtName[0] = '\0';
    Gbl.CurrentCtr.Ctr.FullName[0] = '\0';
    Gbl.CurrentCtr.Ctr.Degs.Num = 0;
    Gbl.CurrentCtr.Ctr.Degs.Lst = NULL;
@@ -227,10 +227,10 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentDegTyp.DegTyp.DegTypName[0] = '\0';
 
    Gbl.CurrentDeg.Deg.DegCod = -1L;
-   Gbl.CurrentDeg.Deg.ShortName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
+   Gbl.CurrentDeg.Deg.ShrtName[0] = Gbl.CurrentDeg.Deg.FullName[0] = '\0';
 
    Gbl.CurrentCrs.Crs.CrsCod = -1L;
-   Gbl.CurrentCrs.Crs.ShortName[0] = Gbl.CurrentCrs.Crs.FullName[0] = '\0';
+   Gbl.CurrentCrs.Crs.ShrtName[0] = Gbl.CurrentCrs.Crs.FullName[0] = '\0';
    Gbl.CurrentCrs.Info.ShowMsgMustBeRead = 0;
    Gbl.CurrentCrs.Notices.HighlightNotCod = -1L;	// No notice highlighted
 
@@ -239,7 +239,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Inss.SelectedOrderType = Ins_DEFAULT_ORDER_TYPE;
    Gbl.Inss.EditingIns.InsCod = -1L;
    Gbl.Inss.EditingIns.CtyCod = -1L;
-   Gbl.Inss.EditingIns.ShortName[0] = '\0';
+   Gbl.Inss.EditingIns.ShrtName[0] = '\0';
    Gbl.Inss.EditingIns.FullName[0] = '\0';
    Gbl.Inss.EditingIns.WWW[0] = '\0';
    Gbl.Inss.EditingIns.NumCtrs = Gbl.Inss.EditingIns.NumDpts = Gbl.Inss.EditingIns.NumDegs = 0;
@@ -260,7 +260,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
    Gbl.Ctrs.EditingCtr.InsCod = -1L;
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
-   Gbl.Ctrs.EditingCtr.ShortName[0] = '\0';
+   Gbl.Ctrs.EditingCtr.ShrtName[0] = '\0';
    Gbl.Ctrs.EditingCtr.FullName[0] = '\0';
    Gbl.Ctrs.EditingCtr.WWW[0] = '\0';
 
@@ -268,7 +268,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Dpts.Lst = NULL;
    Gbl.Dpts.SelectedOrderType = Dpt_DEFAULT_ORDER_TYPE;
    Gbl.Dpts.EditingDpt.DptCod = -1L;
-   Gbl.Dpts.EditingDpt.ShortName[0] = '\0';
+   Gbl.Dpts.EditingDpt.ShrtName[0] = '\0';
    Gbl.Dpts.EditingDpt.FullName[0] = '\0';
    Gbl.Dpts.EditingDpt.WWW[0] = '\0';
 
@@ -276,7 +276,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Plcs.Lst = NULL;
    Gbl.Plcs.SelectedOrderType = Plc_DEFAULT_ORDER_TYPE;
    Gbl.Plcs.EditingPlc.PlcCod = -1L;
-   Gbl.Plcs.EditingPlc.ShortName[0] = '\0';
+   Gbl.Plcs.EditingPlc.ShrtName[0] = '\0';
    Gbl.Plcs.EditingPlc.FullName[0] = '\0';
 
    Gbl.Hlds.LstIsRead = false;	// List is not read
@@ -298,7 +298,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingDegTyp.DegTypName[0] = '\0';
 
    Gbl.Degs.EditingDeg.DegCod       = -1L;
-   Gbl.Degs.EditingDeg.ShortName[0] = '\0';
+   Gbl.Degs.EditingDeg.ShrtName[0] = '\0';
    Gbl.Degs.EditingDeg.FullName[0]  = '\0';
    Gbl.Degs.EditingDeg.WWW[0]       = '\0';
    Gbl.Degs.EditingDeg.LstCrss      = NULL;
@@ -306,7 +306,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingCrs.CrsCod       = -1L;
    Gbl.Degs.EditingCrs.DegCod       = -1L;
    Gbl.Degs.EditingCrs.Year         = 0;
-   Gbl.Degs.EditingCrs.ShortName[0] = '\0';
+   Gbl.Degs.EditingCrs.ShrtName[0] = '\0';
    Gbl.Degs.EditingCrs.FullName[0]  = '\0';
 
    Gbl.CurrentCrs.Grps.NumGrps = 0;
@@ -361,7 +361,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Banners.Num = 0;
    Gbl.Banners.Lst = NULL;
    Gbl.Banners.EditingBan.BanCod = -1L;
-   Gbl.Banners.EditingBan.ShortName[0] = '\0';
+   Gbl.Banners.EditingBan.ShrtName[0] = '\0';
    Gbl.Banners.EditingBan.FullName[0] = '\0';
    Gbl.Banners.EditingBan.WWW[0] = '\0';
    Gbl.Banners.BanCodClicked = 0L;
@@ -369,7 +369,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Links.Num = 0;
    Gbl.Links.Lst = NULL;
    Gbl.Links.EditingLnk.LnkCod = -1L;
-   Gbl.Links.EditingLnk.ShortName[0] = '\0';
+   Gbl.Links.EditingLnk.ShrtName[0] = '\0';
    Gbl.Links.EditingLnk.FullName[0] = '\0';
    Gbl.Links.EditingLnk.WWW[0] = '\0';
 
@@ -439,6 +439,10 @@ void Gbl_Cleanup (void)
        !Gbl.HiddenParamsInsertedIntoDB)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();
+   Usr_FreeMyDegrees ();
+   Usr_FreeMyCentres ();
+   Usr_FreeMyInstits ();
+   Usr_FreeMyCountrs ();
    Usr_UsrDataDestructor (&Gbl.Usrs.Me.UsrDat);
    Usr_UsrDataDestructor (&Gbl.Usrs.Other.UsrDat);
    Rec_FreeListFields ();

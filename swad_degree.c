@@ -107,7 +107,7 @@ static void Deg_PutParamOtherDegCod (long DegCod);
 static long Deg_GetParamOtherDegCod (void);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName);
+static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
@@ -253,7 +253,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw degree logo *****/
-   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg->FullName);
@@ -317,7 +317,7 @@ static void Deg_Configuration (bool PrintView)
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.CurrentDeg.Deg.FullName);
       Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-                    Gbl.CurrentDeg.Deg.ShortName,64,NULL,true);
+                    Gbl.CurrentDeg.Deg.ShrtName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",
                Gbl.CurrentDeg.Deg.FullName);
       if (PutLink)
@@ -356,7 +356,7 @@ static void Deg_Configuration (bool PrintView)
 		     Gbl.Ctrs.Lst[NumCtr].CtrCod,
 		     Gbl.Ctrs.Lst[NumCtr].CtrCod == Gbl.CurrentCtr.Ctr.CtrCod ? " selected=\"selected\"" :
 										"",
-		     Gbl.Ctrs.Lst[NumCtr].ShortName);
+		     Gbl.Ctrs.Lst[NumCtr].ShrtName);
 	 fprintf (Gbl.F.Out,"</select>");
 	 Act_FormEnd ();
 
@@ -417,13 +417,13 @@ static void Deg_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,
-		  Gbl.CurrentDeg.Deg.ShortName,
+		  Deg_MAX_LENGTH_DEGREE_SHRT_NAME,
+		  Gbl.CurrentDeg.Deg.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else	// I can not edit degree short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShortName);
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.ShrtName);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
 
@@ -511,7 +511,7 @@ static void Deg_Configuration (bool PrintView)
 	 Act_FormGoToStart (ActSeeCrs);
 	 Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
 	 sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,
-	          Gbl.CurrentDeg.Deg.ShortName);
+	          Gbl.CurrentDeg.Deg.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod));
@@ -799,7 +799,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
       Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
-	       Gbl.CurrentIns.Ins.ShortName);
+	       Gbl.CurrentIns.Ins.ShrtName);
       Act_FormEnd ();
      }
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
@@ -828,7 +828,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
       Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn,NULL);
       fprintf (Gbl.F.Out,"%s</a>",
-	       Gbl.CurrentCtr.Ctr.ShortName);
+	       Gbl.CurrentCtr.Ctr.ShrtName);
       Act_FormEnd ();
      }
    else if (Gbl.CurrentIns.Ins.InsCod > 0)
@@ -856,7 +856,7 @@ void Deg_WriteHierarchyBreadcrumb (void)
       Act_FormGoToStart (ActSeeCrs);
       Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
       Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn,NULL);
-      strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShortName);
+      strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShrtName);
       Str_LimitLengthHTMLStr (DegreeShortName,
 			      Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
       fprintf (Gbl.F.Out,"%s</a>",
@@ -902,13 +902,13 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
        Gbl.CurrentDeg.Deg.DegCod > 0)
       Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-		    Gbl.CurrentDeg.Deg.ShortName,40,"TOP_LOGO",false);
+		    Gbl.CurrentDeg.Deg.ShrtName,40,"TOP_LOGO",false);
    else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-		    Gbl.CurrentCtr.Ctr.ShortName,40,"TOP_LOGO",false);
+		    Gbl.CurrentCtr.Ctr.ShrtName,40,"TOP_LOGO",false);
    else if (Gbl.CurrentIns.Ins.InsCod > 0)
       Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-		    Gbl.CurrentIns.Ins.ShortName,40,"TOP_LOGO",false);
+		    Gbl.CurrentIns.Ins.ShrtName,40,"TOP_LOGO",false);
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
    else
@@ -935,10 +935,10 @@ void Deg_WriteBigNameCtyInsCtrDegCrs (void)
 	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
 	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
 	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShortName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShortName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShortName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShortName :
+		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShrtName :
+	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShrtName :
+	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShrtName :
+	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShrtName :
 	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))));
    else	// No country specified ==> home page
       fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
@@ -1119,7 +1119,7 @@ static void Deg_ListDegreesForEdition (void)
 
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShortName);
+            Gbl.CurrentCtr.Ctr.ShrtName);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
    Deg_PutHeadDegreesForEdition ();
 
@@ -1158,7 +1158,7 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree logo */
       fprintf (Gbl.F.Out,"<td title=\"%s LEFT_MIDDLE\" style=\"width:25px;\">",
                Deg->FullName);
-      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShortName,20,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_DEG,Deg->DegCod,Deg->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree short name */
@@ -1171,11 +1171,11 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName,Gbl.Form.Id);
+		  Deg_MAX_LENGTH_DEGREE_SHRT_NAME,Deg->ShrtName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Deg->ShortName);
+	 fprintf (Gbl.F.Out,"%s",Deg->ShrtName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Degree full name */
@@ -1382,7 +1382,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShortName);
+            Gbl.CurrentCtr.Ctr.ShrtName);
    Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
 
    /***** Write heading *****/
@@ -1408,7 +1408,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Deg_MAX_LENGTH_DEGREE_SHORT_NAME,Deg->ShortName);
+            Deg_MAX_LENGTH_DEGREE_SHRT_NAME,Deg->ShrtName);
 
    /***** Degree full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1582,7 +1582,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
    char Query[512+
-              Deg_MAX_LENGTH_DEGREE_SHORT_NAME +
+              Deg_MAX_LENGTH_DEGREE_SHRT_NAME +
               Deg_MAX_LENGTH_DEGREE_FULL_NAME +
               Cns_MAX_LENGTH_WWW];
 
@@ -1592,7 +1592,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
                   " VALUES ('%ld','%ld','%u',"
                   "'%ld','%s','%s','%s')",
             Deg->CtrCod,Deg->DegTypCod,Status,
-            Gbl.Usrs.Me.UsrDat.UsrCod,Deg->ShortName,Deg->FullName,Deg->WWW);
+            Gbl.Usrs.Me.UsrDat.UsrCod,Deg->ShrtName,Deg->FullName,Deg->WWW);
    Deg->DegCod = DB_QueryINSERTandReturnCode (Query,"can not create a new degree");
 
    /***** Write success message *****/
@@ -1618,7 +1618,7 @@ static void Deg_ListDegrees (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShortName);
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
    Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Deg_PutIconToEditDegrees :
                                                   NULL);
 
@@ -1935,7 +1935,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
    Deg->CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
 
    /* Get degree short name */
-   Par_GetParToText ("ShortName",Deg->ShortName,Deg_MAX_LENGTH_DEGREE_SHORT_NAME);
+   Par_GetParToText ("ShortName",Deg->ShrtName,Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
 
    /* Get degree full name */
    Par_GetParToText ("FullName",Deg->FullName,Deg_MAX_LENGTH_DEGREE_FULL_NAME);
@@ -1947,15 +1947,15 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
    /* Get degree WWW */
    Par_GetParToText ("WWW",Deg->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Deg->ShortName[0] && Deg->FullName[0])	// If there's a degree name
+   if (Deg->ShrtName[0] && Deg->FullName[0])	// If there's a degree name
      {
       if (Deg->WWW[0])
 	{
 	 /***** If name of degree was in database... *****/
-	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Deg->ShortName,-1L,Deg->CtrCod))
+	 if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Deg->ShrtName,-1L,Deg->CtrCod))
 	   {
 	    sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
-		     Deg->ShortName);
+		     Deg->ShrtName);
 	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	   }
 	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Deg->FullName,-1L,Deg->CtrCod))
@@ -2079,7 +2079,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->DegTypCod = -1L;
       Deg->Status = (Deg_Status_t) 0;
       Deg->RequesterUsrCod = -1L;
-      Deg->ShortName[0] = '\0';
+      Deg->ShrtName[0] = '\0';
       Deg->FullName[0] = '\0';
       Deg->WWW[0] = '\0';
       Deg->LstCrss = NULL;
@@ -2108,7 +2108,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       Deg->DegTypCod = -1L;
       Deg->Status = (Deg_Status_t) 0;
       Deg->RequesterUsrCod = -1L;
-      Deg->ShortName[0] = '\0';
+      Deg->ShrtName[0] = '\0';
       Deg->FullName[0] = '\0';
       Deg->WWW[0] = '\0';
       Deg->LstCrss = NULL;
@@ -2147,7 +2147,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get degree short name (row[5]) *****/
-   strcpy (Deg->ShortName,row[5]);
+   strcpy (Deg->ShrtName,row[5]);
 
    /***** Get degree full name (row[6]) *****/
    strcpy (Deg->FullName,row[6]);
@@ -2166,7 +2166,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   Deg->ShortName[0] = '\0';
+   Deg->ShrtName[0] = '\0';
    if (Deg->DegCod > 0)
      {
       /***** Get the short name of a degree from database *****/
@@ -2177,7 +2177,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
 	{
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Deg->ShortName,row[0]);
+	 strcpy (Deg->ShrtName,row[0]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2321,12 +2321,12 @@ void Deg_RemoveDegreeCompletely (long DegCod)
 void Deg_RenameDegreeShort (void)
   {
    Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod ();
-   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHORT_NAME);
+   Deg_RenameDegree (&Gbl.Degs.EditingDeg,Cns_SHRT_NAME);
   }
 
 void Deg_RenameDegreeShortInConfig (void)
   {
-   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_SHORT_NAME);
+   Deg_RenameDegree (&Gbl.CurrentDeg.Deg,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2348,7 +2348,7 @@ void Deg_RenameDegreeFullInConfig (void)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFullName)
+static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_degree_X_empty;
    extern const char *Txt_The_degree_X_already_exists;
@@ -2361,13 +2361,13 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShortOrFullName_t ShortOrFu
    char *CurrentDegName = NULL;		// Initialized to avoid warning
    char NewDegName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
 
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Deg_MAX_LENGTH_DEGREE_SHORT_NAME;
-         CurrentDegName = Deg->ShortName;
+         MaxLength = Deg_MAX_LENGTH_DEGREE_SHRT_NAME;
+         CurrentDegName = Deg->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -2460,11 +2460,11 @@ void Deg_ChangeDegCtrInConfig (void)
       Ctr_GetDataOfCentreByCod (&NewCtr);
 
       /***** Check if it already exists a degree with the same name in the new centre *****/
-      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShortName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
+      if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShrtName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_degree_X_already_exists,
-		  Gbl.CurrentDeg.Deg.ShortName);
+		  Gbl.CurrentDeg.Deg.ShrtName);
 	}
       else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
@@ -2643,7 +2643,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_The_status_of_the_degree_X_has_changed,
-            Deg->ShortName);
+            Deg->ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to degree changed *****/
@@ -2689,7 +2689,7 @@ void Deg_PutButtonToGoToDeg (struct Degree *Deg)
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
       Act_FormStart (ActSeeCrs);
       Deg_PutParamDegCod (Deg->DegCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShortName);
+      sprintf (Gbl.Title,Txt_Go_to_X,Deg->ShrtName);
       Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -2835,7 +2835,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    MYSQL_ROW row;
    unsigned NumRow;
    unsigned NumRows;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
 

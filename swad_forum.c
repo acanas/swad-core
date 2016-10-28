@@ -1722,7 +1722,7 @@ void For_ShowForumList (void)
    For_GetParamsForum ();
 
    /***** Fill the list with the institutions I belong to *****/
-   Usr_GetMyInstitutions ();
+   Usr_GetMyInstits ();
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_Forums,NULL);
@@ -1784,15 +1784,15 @@ void For_ShowForumList (void)
          break;
       case For_ALL_MY_FORUMS:
          /***** Links to forums about the platform *****/
-         For_WriteLinksToPlatformForums ((Gbl.Usrs.Me.MyInstitutions.Num == 0),IsLastItemInLevel);
+         For_WriteLinksToPlatformForums ((Gbl.Usrs.Me.MyInss.Num == 0),IsLastItemInLevel);
 
          /***** Links to forums of users from my institutions, the degrees in each institution and the courses in each degree *****/
          for (NumMyIns = 0;
-              NumMyIns < Gbl.Usrs.Me.MyInstitutions.Num;
+              NumMyIns < Gbl.Usrs.Me.MyInss.Num;
               NumMyIns++)
            {
             /* Links to forums of this institution */
-            For_WriteLinksToInsForums (Gbl.Usrs.Me.MyInstitutions.Inss[NumMyIns].InsCod,(NumMyIns == Gbl.Usrs.Me.MyInstitutions.Num-1),IsLastItemInLevel);
+            For_WriteLinksToInsForums (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod,(NumMyIns == Gbl.Usrs.Me.MyInss.Num-1),IsLastItemInLevel);
 
             /* Get my centres in this institution from database */
             if ((NumCtrs = Usr_GetCtrsFromUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Forum.Ins.InsCod,&mysql_resCtr)) > 0) // Centres found in this institution
@@ -2149,7 +2149,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
 /*****************************************************************************/
 
 void For_SetForumName (For_ForumType_t ForumType,
-                       struct Institution *Ins,
+                       struct Instit *Ins,
                        struct Centre *Ctr,
                        struct Degree *Deg,
                        struct Course *Crs,
@@ -2163,34 +2163,34 @@ void For_SetForumName (For_ForumType_t ForumType,
    switch (ForumType)
      {
       case For_FORUM_COURSE_USRS:
-         strcpy (ForumName,Crs->ShortName);
+         strcpy (ForumName,Crs->ShrtName);
          break;
       case For_FORUM_COURSE_TCHS:
-         sprintf (ForumName,"%s%s",Crs->ShortName,
+         sprintf (ForumName,"%s%s",Crs->ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-         strcpy (ForumName,Deg->ShortName);
+         strcpy (ForumName,Deg->ShrtName);
          break;
       case For_FORUM_DEGREE_TCHS:
-         sprintf (ForumName,"%s%s",Deg->ShortName,
+         sprintf (ForumName,"%s%s",Deg->ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
-         strcpy (ForumName,Ctr->ShortName);
+         strcpy (ForumName,Ctr->ShrtName);
          break;
       case For_FORUM_CENTRE_TCHS:
-         sprintf (ForumName,"%s%s",Ctr->ShortName,
+         sprintf (ForumName,"%s%s",Ctr->ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-         strcpy (ForumName,Ins->ShortName);
+         strcpy (ForumName,Ins->ShrtName);
          break;
       case For_FORUM_INSTIT_TCHS:
-         sprintf (ForumName,"%s%s",Ins->ShortName,
+         sprintf (ForumName,"%s%s",Ins->ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;

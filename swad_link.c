@@ -63,7 +63,7 @@ static void Lnk_WriteListOfLinks (void);
 
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
-static void Lnk_RenameLink (Cns_ShortOrFullName_t ShortOrFullName);
+static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
@@ -155,7 +155,7 @@ static void Lnk_WriteListOfLinks (void)
 			 "</li>",
 	       Gbl.Links.Lst[NumLnk].WWW,
 	       Gbl.Links.Lst[NumLnk].FullName,
-	       Gbl.Links.Lst[NumLnk].ShortName);
+	       Gbl.Links.Lst[NumLnk].ShrtName);
 
    /***** List end *****/
    fprintf (Gbl.F.Out,"</ul>");
@@ -230,7 +230,7 @@ void Lnk_GetListLinks (void)
 	       Lay_ShowErrorAndExit ("Wrong code of institutional link.");
 
 	    /* Get the short name of the link (row[1]) */
-	    strcpy (Lnk->ShortName,row[1]);
+	    strcpy (Lnk->ShrtName,row[1]);
 
 	    /* Get the full name of the link (row[2]) */
 	    strcpy (Lnk->FullName,row[2]);
@@ -259,7 +259,7 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    unsigned long NumRows;
 
    /***** Clear data *****/
-   Lnk->ShortName[0] = Lnk->FullName[0] = Lnk->WWW[0] = '\0';
+   Lnk->ShrtName[0] = Lnk->FullName[0] = Lnk->WWW[0] = '\0';
 
    /***** Check if link code is correct *****/
    if (Lnk->LnkCod > 0)
@@ -275,7 +275,7 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the link (row[0]) */
-         strcpy (Lnk->ShortName,row[0]);
+         strcpy (Lnk->ShrtName,row[0]);
 
          /* Get the full name of the link (row[1]) */
          strcpy (Lnk->FullName,row[1]);
@@ -349,7 +349,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName,
+               Lnk_MAX_LENGTH_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -430,7 +430,7 @@ void Lnk_RemoveLink (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Link_X_removed,
-            Lnk.ShortName);
+            Lnk.ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
@@ -443,7 +443,7 @@ void Lnk_RemoveLink (void)
 
 void Lnk_RenameLinkShort (void)
   {
-   Lnk_RenameLink (Cns_SHORT_NAME);
+   Lnk_RenameLink (Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -459,7 +459,7 @@ void Lnk_RenameLinkFull (void)
 /************************ Change the name of a link **************************/
 /*****************************************************************************/
 
-static void Lnk_RenameLink (Cns_ShortOrFullName_t ShortOrFullName)
+static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty;
    extern const char *Txt_The_link_X_already_exists;
@@ -474,13 +474,13 @@ static void Lnk_RenameLink (Cns_ShortOrFullName_t ShortOrFullName)
    char NewLnkName[Lnk_MAX_LENGTH_LINK_FULL_NAME+1];
 
    Lnk = &Gbl.Links.EditingLnk;
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Lnk_MAX_LENGTH_LINK_SHORT_NAME;
-         CurrentLnkName = Lnk->ShortName;
+         MaxLength = Lnk_MAX_LENGTH_LINK_SHRT_NAME;
+         CurrentLnkName = Lnk->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
@@ -635,7 +635,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Lnk_MAX_LENGTH_LINK_SHORT_NAME,Lnk->ShortName);
+            Lnk_MAX_LENGTH_LINK_SHRT_NAME,Lnk->ShrtName);
 
    /***** Link full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -708,7 +708,7 @@ void Lnk_RecFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name */
-   Par_GetParToText ("ShortName",Lnk->ShortName,Lnk_MAX_LENGTH_LINK_SHORT_NAME);
+   Par_GetParToText ("ShortName",Lnk->ShrtName,Lnk_MAX_LENGTH_LINK_SHRT_NAME);
 
    /* Get link full name */
    Par_GetParToText ("FullName",Lnk->FullName,Lnk_MAX_LENGTH_LINK_FULL_NAME);
@@ -716,13 +716,13 @@ void Lnk_RecFormNewLink (void)
    /* Get link URL */
    Par_GetParToText ("WWW",Lnk->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Lnk->ShortName[0] && Lnk->FullName[0])	// If there's a link name
+   if (Lnk->ShrtName[0] && Lnk->FullName[0])	// If there's a link name
      {
       /***** If name of link was in database... *****/
-      if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk->ShortName,-1L))
+      if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk->ShrtName,-1L))
         {
          sprintf (Gbl.Message,Txt_The_link_X_already_exists,
-                  Lnk->ShortName);
+                  Lnk->ShrtName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
       else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
@@ -755,11 +755,11 @@ static void Lnk_CreateLink (struct Link *Lnk)
    /***** Create a new link *****/
    sprintf (Query,"INSERT INTO links (ShortName,FullName,WWW)"
                   " VALUES ('%s','%s','%s')",
-            Lnk->ShortName,Lnk->FullName,Lnk->WWW);
+            Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
    DB_QueryINSERT (Query,"can not create institutional link");
 
    /***** Write success message *****/
    sprintf (Gbl.Message,Txt_Created_new_link_X,
-            Lnk->ShortName);
+            Lnk->ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }

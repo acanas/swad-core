@@ -1178,8 +1178,8 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                if (ClassType == TT_THEORY_CLASS ||
                    ClassType == TT_PRACT_CLASS)
 		  fprintf (Gbl.F.Out,"%s<br />",
-		           Crs.ShortName[0] ? Crs.ShortName :
-			                      Txt_unknown_removed_course);
+		           Crs.ShrtName[0] ? Crs.ShrtName :
+			                     Txt_unknown_removed_course);
               }
 	    fprintf (Gbl.F.Out,"%s (%dh%s)",
 		     Txt_TIMETABLE_CLASS_TYPES[ClassType],

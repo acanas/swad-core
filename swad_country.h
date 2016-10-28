@@ -41,7 +41,7 @@
 #define Cty_MAX_LENGTH_COUNTRY_WWW	    255
 #define Cty_MAX_LENGTH_MAP_ATTRIBUTION	(4*1024)
 
-#define Cty_MAX_COUNTRIES_PER_USR	 10	// Used in list of my countries
+#define Cty_MAX_COUNTRS_PER_USR	 10	// Used in list of my countries
 
 struct Country
   {

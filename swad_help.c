@@ -105,7 +105,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
-       !Gbl.Usrs.Me.MyCourses.Num)
+       !Gbl.Usrs.Me.MyCrss.Num)
      {
       sprintf (Gbl.Message,"%s<br />%s<br />%s",
 	       Txt_You_are_not_enrolled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
@@ -130,7 +130,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	      {
 	       /* Request my removing from this course */
 	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
-			Gbl.CurrentCrs.Crs.ShortName);
+			Gbl.CurrentCrs.Crs.ShrtName);
 	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						    ActReqMdfOneStd,
 						    "BT_REMOVE",Txt_Remove_me);
@@ -140,14 +140,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    /* Request my registration in this course */
 	    sprintf (Gbl.Title,Txt_Register_me_in_X,
-		     Gbl.CurrentCrs.Crs.ShortName);
+		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqSignUp,
 						 "BT_CREATE",Txt_Sign_up);
 	   }
 	}
 
-      if (Gbl.Usrs.Me.MyCourses.Num)	// I am enrolled in some courses
+      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enrolled in some courses
 	{
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
 	     !Gbl.CurrentCrs.Crs.NumStds &&				// Current course has no students
@@ -155,7 +155,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   {
 	    /* Request students enrollment */
 	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,
-		     Gbl.CurrentCrs.Crs.ShortName);
+		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,
 						 "BT_CONFIRM",Txt_Register_students);
@@ -173,7 +173,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 /* Select a course */
 	 sprintf (Gbl.Title,Gbl.CurrentCrs.Crs.CrsCod > 0 ? Txt_Select_or_create_another_course_in_X :
 							    Txt_Select_or_create_one_course_in_X,
-		  Gbl.CurrentDeg.Deg.ShortName);
+		  Gbl.CurrentDeg.Deg.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCrs,
 				              "BT_CONFIRM",Txt_Courses);
@@ -183,7 +183,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 /* Select a degree */
 	 sprintf (Gbl.Title,Gbl.CurrentDeg.Deg.DegCod > 0 ? Txt_Select_or_create_another_degree_in_X :
 							    Txt_Select_or_create_one_degree_in_X,
-		  Gbl.CurrentCtr.Ctr.ShortName);
+		  Gbl.CurrentCtr.Ctr.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeDeg,
 				              "BT_CONFIRM",Txt_Degrees);
@@ -193,7 +193,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	 /* Select a centre */
 	 sprintf (Gbl.Title,Gbl.CurrentCtr.Ctr.CtrCod > 0 ? Txt_Select_or_create_another_centre_in_X :
 							    Txt_Select_or_create_one_centre_in_X,
-		  Gbl.CurrentIns.Ins.ShortName);
+		  Gbl.CurrentIns.Ins.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCtr,
 				              "BT_CONFIRM",Txt_Centres);

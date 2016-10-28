@@ -2796,7 +2796,7 @@ int swad__getNotifications (struct soap *soap,
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
    char PhotoURL[PATH_MAX+1];
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
@@ -2945,16 +2945,16 @@ int swad__getNotifications (struct soap *soap,
            }
          else if (Crs.CrsCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Course,Crs.ShortName);
+                     Txt_Course,Crs.ShrtName);
          else if (Deg.DegCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Degree,Deg.ShortName);
+                     Txt_Degree,Deg.ShrtName);
          else if (Ctr.CtrCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Centre,Ctr.ShortName);
+                     Txt_Centre,Ctr.ShrtName);
          else if (Ins.InsCod > 0)
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
-                     Txt_Institution,Ins.ShortName);
+                     Txt_Institution,Ins.ShrtName);
          else
             strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-");
 

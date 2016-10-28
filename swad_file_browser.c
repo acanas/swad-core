@@ -6570,7 +6570,7 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_file;
    extern const char *Txt_folder;
    extern const char *Txt_link;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
@@ -6590,49 +6590,49 @@ static void Brw_WriteCurrentClipboard (void)
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
-                  Txt_institution,Ins.ShortName);
+                  Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_SHARE_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
-                  Txt_institution,Ins.ShortName);
+                  Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_DOCUM_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
-                  Txt_centre,Ctr.ShortName);
+                  Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_SHARE_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
-                  Txt_centre,Ctr.ShortName);
+                  Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_DOCUM_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
-                  Txt_degree,Deg.ShortName);
+                  Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_SHARE_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
-                  Txt_degree,Deg.ShortName);
+                  Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_DOCUM_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
-                  Txt_course,Crs.ShortName);
+                  Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_DOCUM_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -6641,7 +6641,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_documents_management_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_TEACH_CRS:
@@ -6649,7 +6649,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_teachers_files_area,
-                  Txt_course,Crs.ShortName);
+                  Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_TEACH_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -6658,7 +6658,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_teachers_files_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_SHARE_CRS:
@@ -6666,7 +6666,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
-                  Txt_course,Crs.ShortName);
+                  Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_SHARE_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -6675,7 +6675,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_shared_files_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_ASSIG_USR:
@@ -6683,7 +6683,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_assignments_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_WORKS_USR:
@@ -6691,7 +6691,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_works_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
       case Brw_ADMI_ASSIG_CRS:
@@ -6702,7 +6702,7 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_assignments_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
@@ -6714,7 +6714,7 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_works_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_user[UsrDat.Sex],UsrDat.FullName);
          Usr_UsrDataDestructor (&UsrDat);
          break;
@@ -6723,7 +6723,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>",
                   Txt_marks_management_area,
-                  Txt_course,Crs.ShortName);
+                  Txt_course,Crs.ShrtName);
          break;
       case Brw_ADMI_MARKS_GRP:
          GrpDat.GrpCod = Gbl.FileBrowser.Clipboard.Cod;
@@ -6732,7 +6732,7 @@ static void Brw_WriteCurrentClipboard (void)
 	 Crs_GetDataOfCourseByCod (&Crs);
          fprintf (Gbl.F.Out,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_marks_management_area,
-                  Txt_course,Crs.ShortName,
+                  Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_BRIEF_USR:
@@ -7540,7 +7540,7 @@ static void Brw_PasteClipboard (void)
    extern const char *Txt_Links_copied;
    extern const char *Txt_Folders_copied;
    extern const char *Txt_You_can_not_paste_file_or_folder_here;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;

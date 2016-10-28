@@ -214,7 +214,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
 	Txt_all,						// Sch_SEARCH_ALL
-	Txt_institutions,					// Sch_SEARCH_INSTITUTIONS
+	Txt_institutions,					// Sch_SEARCH_INSTITS
 	Txt_centres,						// Sch_SEARCH_CENTRES
 	Txt_degrees,						// Sch_SEARCH_DEGREES
 	Txt_courses,						// Sch_SEARCH_COURSES
@@ -290,7 +290,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
    unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
      {
       0x1FF,	// Sch_SEARCH_ALL
-      0x1FF,	// Sch_SEARCH_INSTITUTIONS
+      0x1FF,	// Sch_SEARCH_INSTITS
       0x1FF,	// Sch_SEARCH_CENTRES
       0x1FF,	// Sch_SEARCH_DEGREES
       0x1FF,	// Sch_SEARCH_COURSES
@@ -614,7 +614,7 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
 	 break;
-      case Sch_SEARCH_INSTITUTIONS:
+      case Sch_SEARCH_INSTITS:
 	 NumResults = Sch_SearchInstitutionsInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_CENTRES:
@@ -669,7 +669,7 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
        Gbl.Scope.Current != Sco_SCOPE_DEG &&
        Gbl.Scope.Current != Sco_SCOPE_CRS)
       /***** Check user's permission *****/
-      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITUTIONS))
+      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_INSTITS))
 	 /***** Split institutions string into words *****/
 	 if (Sch_BuildSearchQuery (SearchQuery,"institutions.FullName",NULL,NULL))
 	   {

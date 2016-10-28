@@ -85,7 +85,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"\" rel=\"self\" type=\"application/rss+xml\" />\n");
 
    fprintf (FileRSS,"<title>%s: %s</title>\n",
-            Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
+            Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
             Cfg_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<description>%s</description>\n",
@@ -99,7 +99,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"<url>%s/swad112x32.png</url>\n",
             Gbl.Prefs.IconsURL);
    fprintf (FileRSS,"<title>%s: %s</title>\n",
-            Cfg_PLATFORM_SHORT_NAME,Crs->ShortName);
+            Cfg_PLATFORM_SHORT_NAME,Crs->ShrtName);
    fprintf (FileRSS,"<link>%s/?crs=%ld</link>\n",
             Cfg_URL_SWAD_CGI,Crs->CrsCod);
    fprintf (FileRSS,"<width>112</width>\n");

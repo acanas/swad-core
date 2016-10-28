@@ -1070,7 +1070,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    bool IAmTheAuthor = false;
    bool IAmASharerOfThisSocNot = false;
    bool IAmAFaverOfThisSocNot = false;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
@@ -1216,19 +1216,19 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	       case Soc_NOTE_INS_SHA_PUB_FILE:
 		  /* Write location (institution) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			   Txt_Institution,Ins.ShortName);
+			   Txt_Institution,Ins.ShrtName);
 		  break;
 	       case Soc_NOTE_CTR_DOC_PUB_FILE:
 	       case Soc_NOTE_CTR_SHA_PUB_FILE:
 		  /* Write location (centre) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			   Txt_Centre,Ctr.ShortName);
+			   Txt_Centre,Ctr.ShrtName);
 		  break;
 	       case Soc_NOTE_DEG_DOC_PUB_FILE:
 	       case Soc_NOTE_DEG_SHA_PUB_FILE:
 		  /* Write location (degree) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			   Txt_Degree,Deg.ShortName);
+			   Txt_Degree,Deg.ShrtName);
 		  break;
 	       case Soc_NOTE_CRS_DOC_PUB_FILE:
 	       case Soc_NOTE_CRS_SHA_PUB_FILE:
@@ -1236,7 +1236,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	       case Soc_NOTE_NOTICE:
 		  /* Write location (course) in hierarchy */
 		  fprintf (Gbl.F.Out,"<div class=\"DAT\">%s: %s</div>",
-			   Txt_Course,Crs.ShortName);
+			   Txt_Course,Crs.ShrtName);
 		  break;
 	       case Soc_NOTE_FORUM_POST:
 		  /* Write forum name */

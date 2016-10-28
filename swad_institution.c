@@ -68,28 +68,28 @@ static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
-static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns);
+static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrderType (void);
 static void Ins_ListInstitutionsForEdition (void);
-static bool Ins_CheckIfICanEdit (struct Institution *Ins);
+static bool Ins_CheckIfICanEdit (struct Instit *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
 static Ins_Status_t Ins_GetStatusBitsFromStatusTxt (Ins_StatusTxt_t StatusTxt);
 
 static void Ins_PutParamOtherInsCod (long InsCod);
 static long Ins_GetParamOtherInsCod (void);
 
-static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName);
+static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
-static void Ins_PutButtonToGoToIns (struct Institution *Ins);
+static void Ins_PutButtonToGoToIns (struct Instit *Ins);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
 static void Ins_RecFormRequestOrCreateIns (unsigned Status);
-static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status);
+static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status);
 
 /*****************************************************************************/
 /***************** List institutions with pending centres ********************/
@@ -106,7 +106,7 @@ void Ins_SeeInsWithPendingCtrs (void)
    MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
-   struct Institution Ins;
+   struct Instit Ins;
    const char *BgColor;
 
    /***** Get institutions with pending centres *****/
@@ -196,7 +196,7 @@ void Ins_SeeInsWithPendingCtrs (void)
 /********************** Draw institution logo with link **********************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size)
+void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size)
   {
    bool PutLink = !Gbl.Form.Inside;	// Don't put link to institution if already inside a form
 
@@ -219,7 +219,7 @@ void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size)
 /****************** Draw institution logo and name with link *****************/
 /*****************************************************************************/
 
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_t Action,
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo)
   {
    extern const char *Txt_Go_to_X;
@@ -233,7 +233,7 @@ void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_
    Act_LinkFormSubmit (Gbl.Title,ClassLink,NULL);
 
    /***** Draw institution logo *****/
-   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,ClassLogo,true);
+   Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,20,ClassLogo,true);
 
    /***** End link *****/
    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins->FullName);
@@ -301,7 +301,7 @@ static void Ins_Configuration (bool PrintView)
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
       Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-                    Gbl.CurrentIns.Ins.ShortName,64,NULL,true);
+                    Gbl.CurrentIns.Ins.ShrtName,64,NULL,true);
       fprintf (Gbl.F.Out,"<br />%s",Gbl.CurrentIns.Ins.FullName);
       if (PutLink)
 	 fprintf (Gbl.F.Out,"</a>");
@@ -370,7 +370,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,
+		  Ins_MAX_LENGTH_INSTIT_FULL_NAME,
 		  Gbl.CurrentIns.Ins.FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -398,13 +398,13 @@ static void Ins_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,
-		  Gbl.CurrentIns.Ins.ShortName,
+		  Ins_MAX_LENGTH_INSTIT_SHRT_NAME,
+		  Gbl.CurrentIns.Ins.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else	// I can not edit institution short name
-	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShortName);
+	 fprintf (Gbl.F.Out,"%s",Gbl.CurrentIns.Ins.ShrtName);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
@@ -505,7 +505,7 @@ static void Ins_Configuration (bool PrintView)
 	 Act_FormGoToStart (ActSeeCtr);
 	 Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
 	 sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-	          Gbl.CurrentIns.Ins.ShortName);
+	          Gbl.CurrentIns.Ins.ShrtName);
 	 Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
 	 fprintf (Gbl.F.Out,"%u</a>",
 		  Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod));
@@ -712,7 +712,7 @@ static void Ins_PutIconToEditInstitutions (void)
 /********************** List one institution for seeing **********************/
 /*****************************************************************************/
 
-static void Ins_ListOneInstitutionForSeeing (struct Institution *Ins,unsigned NumIns)
+static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
   {
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    const char *TxtClassNormal;
@@ -915,7 +915,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumIns;
-   struct Institution *Ins;
+   struct Instit *Ins;
 
    /***** Get institutions from database *****/
    switch (GetExtraData)
@@ -964,7 +964,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
       Gbl.Inss.Num = (unsigned) NumRows;
 
       /***** Create list with institutions *****/
-      if ((Gbl.Inss.Lst = (struct Institution *) calloc (NumRows,sizeof (struct Institution))) == NULL)
+      if ((Gbl.Inss.Lst = (struct Instit *) calloc (NumRows,sizeof (struct Instit))) == NULL)
           Lay_ShowErrorAndExit ("Not enough memory to store institutions.");
 
       /***** Get the institutions *****/
@@ -992,11 +992,11 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the institution (row[4]) */
-         strcpy (Ins->ShortName,row[4]);
+         strcpy (Ins->ShrtName,row[4]);
 
          /* Get the full name of the institution (row[5]) */
-         strncpy (Ins->FullName,row[5],Ins_MAX_LENGTH_INSTITUTION_FULL_NAME);
-         Ins->FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME] = '\0';
+         strncpy (Ins->FullName,row[5],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+         Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
 
          /* Get the URL of the institution (row[6]) */
          strcpy (Ins->WWW,row[6]);
@@ -1043,7 +1043,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 /************************* Get data of an institution ************************/
 /*****************************************************************************/
 
-bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
+bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
                                     Ins_GetExtraData_t GetExtraData)
   {
    char Query[256];
@@ -1055,7 +1055,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
    Ins->CtyCod = -1L;
    Ins->Status = (Ins_Status_t) 0;
    Ins->RequesterUsrCod = -1L;
-   Ins->ShortName[0] =
+   Ins->ShrtName[0] =
    Ins->FullName[0] =
    Ins->WWW[0] = '\0';
    Ins->NumUsrsWhoClaimToBelongToIns = 0;
@@ -1091,11 +1091,11 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
       Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get the short name of the institution (row[3]) */
-      strcpy (Ins->ShortName,row[3]);
+      strcpy (Ins->ShrtName,row[3]);
 
       /* Get the full name of the institution (row[4]) */
-      strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTITUTION_FULL_NAME);
-      Ins->FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME] = '\0';
+      strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+      Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
 
       /* Get the URL of the institution (row[5]) */
       strcpy (Ins->WWW,row[5]);
@@ -1132,13 +1132,13 @@ bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
 /*********** Get the short name of an institution from its code **************/
 /*****************************************************************************/
 
-void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
+void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
-   Ins->ShortName[0] = '\0';
+   Ins->ShrtName[0] = '\0';
    if (Ins->InsCod > 0)
      {
       /***** Get the short name of an institution from database *****/
@@ -1148,7 +1148,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins)
 	{
 	 /***** Get the short name of this institution *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Ins->ShortName,row[0]);
+	 strcpy (Ins->ShrtName,row[0]);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1247,7 +1247,7 @@ static void Ins_ListInstitutionsForEdition (void)
    extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
-   struct Institution *Ins;
+   struct Instit *Ins;
    char WWW[Ins_MAX_LENGTH_WWW_ON_SCREEN+1];
    struct UsrData UsrDat;
    bool ICanEdit;
@@ -1298,7 +1298,7 @@ static void Ins_ListInstitutionsForEdition (void)
       fprintf (Gbl.F.Out,"<td title=\"%s\" class=\"LEFT_MIDDLE\""
 	                 " style=\"width:25px;\">",
                Ins->FullName);
-      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShortName,20,NULL,true);
+      Log_DrawLogo (Sco_SCOPE_INS,Ins->InsCod,Ins->ShrtName,20,NULL,true);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution short name */
@@ -1311,12 +1311,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName,
+		  Ins_MAX_LENGTH_INSTIT_SHRT_NAME,Ins->ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
-	 fprintf (Gbl.F.Out,"%s",Ins->ShortName);
+	 fprintf (Gbl.F.Out,"%s",Ins->ShrtName);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Institution full name */
@@ -1329,7 +1329,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,
+		  Ins_MAX_LENGTH_INSTIT_FULL_NAME,
 		  Ins->FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1433,7 +1433,7 @@ static void Ins_ListInstitutionsForEdition (void)
 /************ Check if I can edit, remove, etc. an institution ***************/
 /*****************************************************************************/
 
-static bool Ins_CheckIfICanEdit (struct Institution *Ins)
+static bool Ins_CheckIfICanEdit (struct Instit *Ins)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||		// I am a superuser
                   ((Ins->Status & Ins_STATUS_BIT_PENDING) != 0 &&		// Institution is not yet activated
@@ -1533,7 +1533,7 @@ void Ins_RemoveInstitution (void)
    extern const char *Txt_To_remove_an_institution_you_must_first_remove_all_centres_and_users_in_the_institution;
    extern const char *Txt_Institution_X_removed;
    char Query[128];
-   struct Institution Ins;
+   struct Instit Ins;
    char PathIns[PATH_MAX+1];
 
    /***** Get institution code *****/
@@ -1589,12 +1589,12 @@ void Ins_RemoveInstitution (void)
 void Ins_RenameInsShort (void)
   {
    Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
-   Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHORT_NAME);
+   Ins_RenameInstitution (&Gbl.Inss.EditingIns,Cns_SHRT_NAME);
   }
 
 void Ins_RenameInsShortInConfig (void)
   {
-   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_SHORT_NAME);
+   Ins_RenameInstitution (&Gbl.CurrentIns.Ins,Cns_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1616,7 +1616,7 @@ void Ins_RenameInsFullInConfig (void)
 /******************** Change the name of an institution **********************/
 /*****************************************************************************/
 
-static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t ShortOrFullName)
+static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_institution_X_empty;
    extern const char *Txt_The_institution_X_already_exists;
@@ -1626,20 +1626,20 @@ static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
-   char NewInsName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
+   char NewInsName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
 
-   switch (ShortOrFullName)
+   switch (ShrtOrFullName)
      {
-      case Cns_SHORT_NAME:
+      case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME;
-         CurrentInsName = Ins->ShortName;
+         MaxLength = Ins_MAX_LENGTH_INSTIT_SHRT_NAME;
+         CurrentInsName = Ins->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Ins_MAX_LENGTH_INSTITUTION_FULL_NAME;
+         MaxLength = Ins_MAX_LENGTH_INSTIT_FULL_NAME;
          CurrentInsName = Ins->FullName;
          break;
      }
@@ -1695,7 +1695,7 @@ static void Ins_RenameInstitution (struct Institution *Ins,Cns_ShortOrFullName_t
 
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
   {
-   char Query[256+Ins_MAX_LENGTH_INSTITUTION_FULL_NAME];
+   char Query[256+Ins_MAX_LENGTH_INSTIT_FULL_NAME];
 
    /***** Get number of institutions in current country with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions"
@@ -1710,7 +1710,7 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
-   char Query[128+Ins_MAX_LENGTH_INSTITUTION_FULL_NAME];
+   char Query[128+Ins_MAX_LENGTH_INSTIT_FULL_NAME];
 
    /***** Update institution changing old name by new name */
    sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod='%ld'",
@@ -1738,11 +1738,11 @@ void Ins_ChangeInsCtyInConfig (void)
       Cty_GetDataOfCountryByCod (&NewCty,Cty_GET_BASIC_DATA);
 
       /***** Check if it already exists an institution with the same name in the new country *****/
-      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShortName,-1L,NewCty.CtyCod))
+      if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
-		  Gbl.CurrentIns.Ins.ShortName);
+		  Gbl.CurrentIns.Ins.ShrtName);
 	}
       else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
 	{
@@ -1804,7 +1804,7 @@ void Ins_ChangeInsWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Institution *Ins;
+   struct Instit *Ins;
    char NewWWW[Cns_MAX_LENGTH_WWW+1];
 
    Ins = &Gbl.Inss.EditingIns;
@@ -1889,7 +1889,7 @@ static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW
 void Ins_ChangeInsStatus (void)
   {
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
-   struct Institution *Ins;
+   struct Instit *Ins;
    char Query[256];
    char UnsignedNum[10+1];
    Ins_Status_t Status;
@@ -1920,7 +1920,7 @@ void Ins_ChangeInsStatus (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_The_status_of_the_institution_X_has_changed,
-            Ins->ShortName);
+            Ins->ShrtName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Put button to go to institution changed *****/
@@ -1956,7 +1956,7 @@ void Ins_ContEditAfterChgIns (void)
 /********************* Put button to go to institution ***********************/
 /*****************************************************************************/
 
-static void Ins_PutButtonToGoToIns (struct Institution *Ins)
+static void Ins_PutButtonToGoToIns (struct Instit *Ins)
   {
    extern const char *Txt_Go_to_X;
 
@@ -1966,7 +1966,7 @@ static void Ins_PutButtonToGoToIns (struct Institution *Ins)
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
       Act_FormStart (ActSeeCtr);
       Ins_PutParamInsCod (Ins->InsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ins->ShortName);
+      sprintf (Gbl.Title,Txt_Go_to_X,Ins->ShrtName);
       Lay_PutConfirmButtonInline (Gbl.Title);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -2009,7 +2009,7 @@ static void Ins_PutFormToCreateInstitution (void)
    extern const char *Txt_New_institution_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    extern const char *Txt_Create_institution;
-   struct Institution *Ins;
+   struct Instit *Ins;
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -2049,7 +2049,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\" />"
                       "</td>",
-            Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME,Ins->ShortName);
+            Ins_MAX_LENGTH_INSTIT_SHRT_NAME,Ins->ShrtName);
 
    /***** Institution full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2057,7 +2057,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\" />"
                       "</td>",
-            Ins_MAX_LENGTH_INSTITUTION_FULL_NAME,Ins->FullName);
+            Ins_MAX_LENGTH_INSTIT_FULL_NAME,Ins->FullName);
 
    /***** Institution WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2191,7 +2191,7 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_institution;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution;
-   struct Institution *Ins;
+   struct Instit *Ins;
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -2200,23 +2200,23 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
    Ins->CtyCod = Gbl.CurrentCty.Cty.CtyCod;
 
    /* Get institution short name */
-   Par_GetParToText ("ShortName",Ins->ShortName,Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME);
+   Par_GetParToText ("ShortName",Ins->ShrtName,Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
 
    /* Get institution full name */
-   Par_GetParToText ("FullName",Ins->FullName,Ins_MAX_LENGTH_INSTITUTION_FULL_NAME);
+   Par_GetParToText ("FullName",Ins->FullName,Ins_MAX_LENGTH_INSTIT_FULL_NAME);
 
    /* Get institution WWW */
    Par_GetParToText ("WWW",Ins->WWW,Cns_MAX_LENGTH_WWW);
 
-   if (Ins->ShortName[0] && Ins->FullName[0])	// If there's a institution name
+   if (Ins->ShrtName[0] && Ins->FullName[0])	// If there's a institution name
      {
       if (Ins->WWW[0])
         {
          /***** If name of institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins->ShortName,-1L,Gbl.CurrentCty.Cty.CtyCod))
+         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins->ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
             sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
-                     Ins->ShortName);
+                     Ins->ShrtName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
          else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins->FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
@@ -2242,12 +2242,12 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 /************************** Create a new institution *************************/
 /*****************************************************************************/
 
-static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
+static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
    char Query[512+
-              Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME+
-              Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+
+              Ins_MAX_LENGTH_INSTIT_SHRT_NAME+
+              Ins_MAX_LENGTH_INSTIT_FULL_NAME+
               Cns_MAX_LENGTH_WWW];
 
    /***** Create a new institution *****/
@@ -2258,7 +2258,7 @@ static void Ins_CreateInstitution (struct Institution *Ins,unsigned Status)
             Ins->CtyCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Ins->ShortName,Ins->FullName,Ins->WWW);
+            Ins->ShrtName,Ins->FullName,Ins->WWW);
    Ins->InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
 
    /***** Write success message *****/
@@ -2381,7 +2381,7 @@ unsigned Ins_ListInssFound (const char *Query)
    MYSQL_ROW row;
    unsigned NumInss;
    unsigned NumIns;
-   struct Institution Ins;
+   struct Instit Ins;
 
    /***** Query database *****/
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions")))

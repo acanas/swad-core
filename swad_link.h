@@ -31,13 +31,13 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Lnk_MAX_LENGTH_LINK_SHORT_NAME	 32
+#define Lnk_MAX_LENGTH_LINK_SHRT_NAME	32
 #define Lnk_MAX_LENGTH_LINK_FULL_NAME	127
 
 struct Link
   {
    long LnkCod;
-   char ShortName[Lnk_MAX_LENGTH_LINK_SHORT_NAME+1];
+   char ShrtName[Lnk_MAX_LENGTH_LINK_SHRT_NAME+1];
    char FullName[Lnk_MAX_LENGTH_LINK_FULL_NAME+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
   };

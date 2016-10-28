@@ -185,7 +185,7 @@ void Con_GetAndShowLastClicks (void)
    const char *ClassRow;
    time_t TimeDiff;
    struct Country Cty;
-   struct Institution Ins;
+   struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
 
@@ -315,9 +315,9 @@ void Con_GetAndShowLastClicks (void)
 			 "</tr>",
                ClassRow,Txt_ROLES_SINGUL_Abc[Rol_ConvertUnsignedStrToRole (row[3])][Usr_SEX_UNKNOWN],
                ClassRow,Cty.Name[Gbl.Prefs.Language],
-               ClassRow,Ins.ShortName,
-               ClassRow,Ctr.ShortName,
-               ClassRow,Deg.ShortName,
+               ClassRow,Ins.ShrtName,
+               ClassRow,Ctr.ShrtName,
+               ClassRow,Deg.ShrtName,
 	       ClassRow,row[8]);
      }
    fprintf (Gbl.F.Out,"</table>");
@@ -466,22 +466,22 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
       case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
             return;
-         strcpy (LocationName,Gbl.CurrentIns.Ins.ShortName);
+         strcpy (LocationName,Gbl.CurrentIns.Ins.ShrtName);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
          if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
             return;
-         strcpy (LocationName,Gbl.CurrentCtr.Ctr.ShortName);
+         strcpy (LocationName,Gbl.CurrentCtr.Ctr.ShrtName);
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
          if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
             return;
-         strcpy (LocationName,Gbl.CurrentDeg.Deg.ShortName);
+         strcpy (LocationName,Gbl.CurrentDeg.Deg.ShrtName);
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
             return;
-         strcpy (LocationName,Gbl.CurrentCrs.Crs.ShortName);
+         strcpy (LocationName,Gbl.CurrentCrs.Crs.ShrtName);
          break;
       default:
 	 return;
@@ -533,7 +533,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
-   char CourseName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];
+   char CourseName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
    struct ConnectedUsrs Usrs;
 
    if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
@@ -550,7 +550,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 
    /* Write total number of connected users belonging to the current course */
-   strcpy (CourseName,Gbl.CurrentCrs.Crs.ShortName);
+   strcpy (CourseName,Gbl.CurrentCrs.Crs.ShrtName);
    Str_LimitLengthHTMLStr (CourseName,12);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s",

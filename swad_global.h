@@ -187,8 +187,8 @@ struct Globals
    struct
      {
       unsigned Num;		// Number of institutions
-      struct Institution *Lst;	// List of institutions
-      struct Institution EditingIns;
+      struct Instit *Lst;	// List of institutions
+      struct Instit EditingIns;
       Ins_InssOrderType_t SelectedOrderType;
      } Inss;
    struct
@@ -309,8 +309,8 @@ struct Globals
               {
                long CtyCod;
                Rol_Role_t MaxRole;
-              } Ctys[Cty_MAX_COUNTRIES_PER_USR];
-           } MyCountries;
+              } Ctys[Cty_MAX_COUNTRS_PER_USR];
+           } MyCtys;
          struct
            {
             bool Filled;	// My institutions are already filled?
@@ -319,8 +319,8 @@ struct Globals
               {
                long InsCod;
                Rol_Role_t MaxRole;
-              } Inss[Ins_MAX_INSTITUTIONS_PER_USR];
-           } MyInstitutions;
+              } Inss[Ins_MAX_INSTITS_PER_USR];
+           } MyInss;
          struct
            {
             bool Filled;	// My centres are already filled?
@@ -330,7 +330,7 @@ struct Globals
                long CtrCod;
                Rol_Role_t MaxRole;
               } Ctrs[Ctr_MAX_CENTRES_PER_USR];
-           } MyCentres;
+           } MyCtrs;
          struct
            {
             bool Filled;	// My degrees are already filled?
@@ -340,7 +340,7 @@ struct Globals
                long DegCod;
                Rol_Role_t MaxRole;
               } Degs[Deg_MAX_DEGREES_PER_USR];
-           } MyDegrees;
+           } MyDegs;
          struct
            {
             bool Filled;	// My courses are already filled?
@@ -351,7 +351,7 @@ struct Globals
                Rol_Role_t Role;
                long DegCod;
               } Crss[Crs_MAX_COURSES_PER_USR];
-           } MyCourses;
+           } MyCrss;
 	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
@@ -414,7 +414,7 @@ struct Globals
      } CurrentCty;
    struct
      {
-      struct Institution Ins;
+      struct Instit Ins;
      } CurrentIns;
    struct
      {
@@ -573,7 +573,7 @@ struct Globals
      {
       For_WhichForums_t WhichForums;
       For_ForumType_t ForumType;
-      struct Institution Ins;
+      struct Instit Ins;
       struct Centre Ctr;
       struct Degree Deg;
       struct Course Crs;
@@ -590,10 +590,10 @@ struct Globals
       struct
         {
          long CrsCod;
-         char ShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];
+         char ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
         } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
       long FilterCrsCod; 		// Show only messages sent from this course code
-      char FilterCrsShortName[Crs_MAX_LENGTH_COURSE_SHORT_NAME+1];
+      char FilterCrsShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
       char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3+1];	// Show only messages from/to these users
       char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT+1];		// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)

@@ -50,19 +50,19 @@ typedef enum
    Ins_STATUS_REMOVED = 3,	// 1- (Status & Ins_STATUS_BIT_REMOVED)
   } Ins_StatusTxt_t;
 
-#define Ins_MAX_INSTITUTIONS_PER_USR	 10	// Used in list of my institutions
+#define Ins_MAX_INSTITS_PER_USR	 10	// Used in list of my institutions
 
-#define Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME	 32
-#define Ins_MAX_LENGTH_INSTITUTION_FULL_NAME   1024
+#define Ins_MAX_LENGTH_INSTIT_SHRT_NAME	32
+#define Ins_MAX_LENGTH_INSTIT_FULL_NAME	1024
 
-struct Institution
+struct Instit
   {
    long InsCod;
    long CtyCod;
    Ins_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
-   char ShortName[Ins_MAX_LENGTH_INSTITUTION_SHORT_NAME+1];
-   char FullName[Ins_MAX_LENGTH_INSTITUTION_FULL_NAME+1];
+   char ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME+1];
+   char FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumUsrsWhoClaimToBelongToIns;
    unsigned NumCtrs;
@@ -92,8 +92,8 @@ typedef enum
 
 void Ins_SeeInsWithPendingCtrs (void);
 
-void Ins_DrawInstitutionLogoWithLink (struct Institution *Ins,unsigned Size);
-void Ins_DrawInstitutionLogoAndNameWithLink (struct Institution *Ins,Act_Action_t Action,
+void Ins_DrawInstitutionLogoWithLink (struct Instit *Ins,unsigned Size);
+void Ins_DrawInstitutionLogoAndNameWithLink (struct Instit *Ins,Act_Action_t Action,
                                              const char *ClassLink,const char *ClassLogo);
 
 void Ins_ShowConfiguration (void);
@@ -102,9 +102,9 @@ void Ins_PrintConfiguration (void);
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
-bool Ins_GetDataOfInstitutionByCod (struct Institution *Ins,
+bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
                                     Ins_GetExtraData_t GetExtraData);
-void Ins_GetShortNameOfInstitutionByCod (struct Institution *Ins);
+void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins);
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
 void Ins_PutParamInsCod (long InsCod);

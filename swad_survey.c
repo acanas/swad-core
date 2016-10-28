@@ -553,19 +553,19 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 break;
       case Sco_SCOPE_INS:	// Institution
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Institution,Gbl.CurrentIns.Ins.ShortName);
+                  Txt_Institution,Gbl.CurrentIns.Ins.ShrtName);
 	 break;
       case Sco_SCOPE_CTR:	// Centre
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Centre,Gbl.CurrentCtr.Ctr.ShortName);
+                  Txt_Centre,Gbl.CurrentCtr.Ctr.ShrtName);
 	 break;
       case Sco_SCOPE_DEG:	// Degree
          fprintf (Gbl.F.Out,"%s %s",
-                  Txt_Degree,Gbl.CurrentDeg.Deg.ShortName);
+                  Txt_Degree,Gbl.CurrentDeg.Deg.ShrtName);
  	 break;
       case Sco_SCOPE_CRS:	// Course
 	 fprintf (Gbl.F.Out,"%s %s",
-	          Txt_Course,Gbl.CurrentCrs.Crs.ShortName);
+	          Txt_Course,Gbl.CurrentCrs.Crs.ShrtName);
 	 break;
      }
    fprintf (Gbl.F.Out,"</div>");
@@ -1978,7 +1978,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />%s %s</td>"
 	                 "</tr>",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
+               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 
       /***** List the groups for each group type *****/
       for (NumGrpTyp = 0;
@@ -2387,7 +2387,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
      }
    else
       fprintf (Gbl.F.Out,"%s %s",
-               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShortName);
+               Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 
    fprintf (Gbl.F.Out,"</div>");
 

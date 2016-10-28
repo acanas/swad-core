@@ -103,7 +103,7 @@ typedef enum
    Sta_USERS,			// Number of users
    Sta_USERS_RANKING,		// Users' ranking
    Sta_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
-   Sta_INSTITUTIONS,		// Number of users in each institution
+   Sta_INSTITS,			// Number of users in each institution
    Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
    Sta_OER,			// Number of OERs (Open Educational Resources)

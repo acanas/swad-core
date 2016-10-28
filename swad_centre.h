@@ -54,7 +54,7 @@ typedef enum
 
 #define Ctr_MAX_CENTRES_PER_USR	 10 // Used in list of my centres
 
-#define Ctr_MAX_LENGTH_CENTRE_SHORT_NAME	     32
+#define Ctr_MAX_LENGTH_CENTRE_SHRT_NAME	     32
 #define Ctr_MAX_LENGTH_CENTRE_FULL_NAME		    127
 #define Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION	(4*1024)
 
@@ -65,7 +65,7 @@ struct Centre
    long PlcCod;			// Place code
    Ctr_Status_t Status;		// Centre status
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
-   char ShortName[Ctr_MAX_LENGTH_CENTRE_SHORT_NAME+1];
+   char ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME+1];
    char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
    char WWW[Cns_MAX_LENGTH_WWW+1];
    unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre

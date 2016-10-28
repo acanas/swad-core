@@ -148,19 +148,21 @@
 // TODO: Cuando se crea una cuenta nueva, debería ponerse a 0 las estadísticas del perfil del usuario
 // TODO: Import ID, e-mail, Surname1, Surname2, Name from CSV, suggested by Javier Melero
 
-// TODO: Delete surveys of centre, institution or country on deletion of centre, institution or country
+// TODO: Remove columns DegCod,CrsCod from database table surveys
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.45.8 (2016-10-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.45.9 (2016-10-28)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad15.238.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.45.9:  Oct 28, 2016	Free lists of user's countries, institutions, centres and degrees.
+					Code refactoring related to hierarchy. (205994 lines)
         Version 16.45.8:  Oct 28, 2016	Remove surveys of a country when removing it. (205930 lines)
         Version 16.45.7:  Oct 28, 2016	Remove forums and surveys of an institution when removing it. (205927 lines)
         Version 16.45.6:  Oct 28, 2016	Remove forums and surveys of a centre when removing it. (205922 lines)

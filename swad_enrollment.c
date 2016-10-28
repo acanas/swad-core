@@ -910,7 +910,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		                                      Txt_Modify_user_in_the_course_X) :
 	                                     (ItsMe ? Txt_Register_me_in_X :
 		                                      Txt_Register_USER_in_the_course_X),
-	       Gbl.CurrentCrs.Crs.ShortName);
+	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
 			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
                (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
@@ -934,7 +934,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
 	      {
 	       sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShortName);
+			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
 				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
@@ -953,7 +953,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	     Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
 	   {
 	    sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShortName);
+		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
 			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
@@ -973,7 +973,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
 	 sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShortName);
+		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
 			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
@@ -1010,7 +1010,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
       sprintf (Gbl.Message,
 	       ItsMe ? Txt_Remove_me_from_the_course_X :
 		       Txt_Remove_USER_from_the_course_X,
-	       Gbl.CurrentCrs.Crs.ShortName);
+	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
 			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
@@ -1036,7 +1036,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       sprintf (Gbl.Message,
 			ItsMe ? Txt_Remove_me_as_an_administrator_of_the_degree_X :
 				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
-			Gbl.CurrentDeg.Deg.ShortName);
+			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
 				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
@@ -1057,7 +1057,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    sprintf (Gbl.Message,
 		     ItsMe ? Txt_Remove_me_as_an_administrator_of_the_centre_X :
 			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
-		     Gbl.CurrentCtr.Ctr.ShortName);
+		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
 			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
@@ -1079,7 +1079,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 sprintf (Gbl.Message,
 		  ItsMe ? Txt_Remove_me_as_an_administrator_of_the_institution_X :
 			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
-		  Gbl.CurrentIns.Ins.ShortName);
+		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
 			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
 		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
@@ -2677,7 +2677,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
             Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
             fprintf (Gbl.F.Out,"%s &gt; %s"
         	               "</a>",
-                     Deg.ShortName,Crs.ShortName);
+                     Deg.ShrtName,Crs.ShrtName);
             Act_FormEnd ();
             fprintf (Gbl.F.Out,"</td>");
 
