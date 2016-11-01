@@ -897,34 +897,37 @@ void Svy_GetListSurveys (void)
    if (ScopesAllowed & 1 << Sco_SCOPE_CRS)
      {
       if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
-	 sprintf (SubQuery[Scope],"%s("
-	                          "Scope='%s' AND Cod='%ld'%s"
-	                          " AND "
-	                          "(SvyCod NOT IN"
-	                          " (SELECT SvyCod FROM svy_grp)"
-	                          " OR"
-                                  " SvyCod IN"
-                                  " (SELECT svy_grp.SvyCod"
-                                  " FROM svy_grp,crs_grp_usr"
-                                  " WHERE crs_grp_usr.UsrCod='%ld'"
-                                  " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
-	                          ")",
+	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s("
+	                                  "Scope='%s' AND Cod='%ld'%s"
+	                                  " AND "
+	                                  "(SvyCod NOT IN"
+	                                  " (SELECT SvyCod FROM svy_grp)"
+	                                  " OR"
+                                          " SvyCod IN"
+                                          " (SELECT svy_grp.SvyCod"
+                                          " FROM svy_grp,crs_grp_usr"
+                                          " WHERE crs_grp_usr.UsrCod='%ld'"
+                                          " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
+	                                  ")",
 	          SubQueryFilled ? " OR " :
 	        	           "",
-		  Sco_ScopeDB[Scope],Cods[Sco_SCOPE_CRS],
+		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
 		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 						         " AND Hidden='N'",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
       else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod='%ld'%s)",
+	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod='%ld'%s)",
 	          SubQueryFilled ? " OR " :
 	        	           "",
-		  Sco_ScopeDB[Scope],Cods[Sco_SCOPE_CRS],
+		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
 		  (HiddenAllowed & 1 << Sco_SCOPE_CRS) ? "" :
 						         " AND Hidden='N'");
       SubQueryFilled = true;
      }
+   else
+      SubQuery[Sco_SCOPE_CRS][0] = '\0';
 
+   /* Build query */
    if (SubQueryFilled)
      {
       switch (Gbl.Svys.SelectedOrderType)
@@ -951,6 +954,7 @@ void Svy_GetListSurveys (void)
    else
       Lay_ShowErrorAndExit ("Can not get list of surveys.");
 
+   /* Make query */
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get surveys");
 
    if (NumRows) // Surveys found...
