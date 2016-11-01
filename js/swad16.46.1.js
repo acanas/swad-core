@@ -218,7 +218,7 @@ function setTZ (id) {
 // For example, if your time zone is GMT+2, -120 will be returned
 function setTZname (id) {
 	var FormTZname = document.getElementById(id);
-	var tz = jstz.determine();	// Determines the time zone of the browser client
+	var tz = jstz.determine();		// Determines the time zone of the browser client
 	FormTZname.value = tz.name();	// Returns the name of the time zone eg "Europe/Berlin"
 }
 
@@ -279,6 +279,7 @@ function setDateRange (d) {
 			break;
 		}
 	document.getElementById('StartMonth' ).options[Mon-1].selected = true;
+	adjustDateForm ('Start');	// Adjust date form correcting days in the month
 	document.getElementById('StartDay'   ).options[Day-1].selected = true;
 	document.getElementById('StartHour'  ).options[0    ].selected = true;
 	document.getElementById('StartMinute').options[0    ].selected = true;
@@ -292,6 +293,7 @@ function setDateRange (d) {
 			break;
 		}
 	document.getElementById('EndMonth' ).options[Mon-1].selected = true;
+	adjustDateForm ('End');		// Adjust date form correcting days in the month
 	document.getElementById('EndDay'   ).options[Day-1].selected = true;
 	document.getElementById('EndHour'  ).options[23   ].selected = true;
 	document.getElementById('EndMinute').options[59   ].selected = true;
