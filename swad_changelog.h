@@ -154,13 +154,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.46.2 (2016-11-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.46.3 (2016-11-03)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.46.3:  Nov 03, 2016	Fixed bug in creation of a new centre. (206041 lines)
         Version 16.46.2:  Nov 01, 2016	Fixed bugs in surveys. (206040 lines)
         Version 16.46.1:  Nov 01, 2016	Fixed bugs in javascript function to set a date range to a given day. (206035 lines)
         Version 16.46:    Oct 29, 2016	Fixed bugs in surveys.
