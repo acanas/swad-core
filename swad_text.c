@@ -4132,23 +4132,23 @@ const char *Txt_CENTRES_HELP_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Ordenar per nombre de professors"
+	 "Ordenar per n&ordm; d'usuaris"
 #elif L==2
-	 "Sortieren nach Anzahl der Lehrkr&auml;fte"
+	 "Nach Anzahl der Benutzer sortieren"
 #elif L==3
-	 "Sort by no. of teachers"
+	 "Sort by no. of users"
 #elif L==4
-	 "Ordenar por n&ordm; de profesores"
+	 "Ordenar por n&ordm; de usuarios"
 #elif L==5
-	 "Trier par nombre d'enseignants"
+	 "Trier par nombre d'utilisateurs"
 #elif L==6
-	 "Ordenar por n&ordm; de profesores"	// Okoteve traducción
+	 "Ordenar por n&ordm; de usuarios"	// Okoteve traducción
 #elif L==7
-	 "Ordina per numero di professori"
+	 "Ordina per numero di utenti"
 #elif L==8
-	 "Sortuj nie. nauczycieli"
+	 "Sortuj wedlug liczby uzytkownikow"
 #elif L==9
-	 "Classificar por n&ordm; de professores"
+	 "Classificar por n&ordm; de utilizadores"
 #endif
 	};
 
@@ -5331,7 +5331,7 @@ const char *Txt_COUNTRIES_HELP_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Ordenar por n&ordm; de usuarios"	// Necessita traduccio
+	 "Ordenar per n&ordm; d'usuaris"
 #elif L==2
 	 "Nach Anzahl der Benutzer sortieren"
 #elif L==3
