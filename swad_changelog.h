@@ -150,17 +150,20 @@
 
 // TODO: Remove columns DegCod,CrsCod from database table surveys
 
+// TODO: STATS > Figures > Folders and files --> statistics about documents and shared in institutions, centres and degrees
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.46.5 (2016-11-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.46.6 (2016-11-05)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.46.6:  Nov 05, 2016	Changes in texts related to public social activity statistics. (206045 lines)
         Version 16.46.5:  Nov 05, 2016	Changes in texts related to folders and files statistics. (206043 lines)
         Version 16.46.4:  Nov 03, 2016	Fixed text related to order of centres. (206042 lines)
         Version 16.46.3:  Nov 03, 2016	Fixed bug in creation of a new centre. (206041 lines)

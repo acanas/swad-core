@@ -37211,24 +37211,24 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 	 "Chamada para exame"
 #endif
 	 ,
-#if   L==1	// Soc_NOTE_SOCIAL_POST (not used)
-	"Comentari"
+#if   L==1	// Soc_NOTE_SOCIAL_POST
+	 "Missatge social"
 #elif L==2
-	"Kommentar"
+	 "Social Beitrag"
 #elif L==3
-	"Comment"
+	 "Social post"
 #elif L==4
-	"Comentario"
+	 "Mensaje social"
 #elif L==5
-	"Commentaire"
+	 "Message social"
 #elif L==6
-	"Comentario"	// Okoteve traducción
+	 "Mensaje social"	// Okoteve traducción
 #elif L==7
-	"Commento"
+	 "Post sociale"
 #elif L==8
-	"Komentarz"
+	 "Post spo&lstrok;ecznej"
 #elif L==9
-	"Coment&aacute;rio"
+	 "Post sociais"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_FORUM_POST
