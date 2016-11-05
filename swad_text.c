@@ -24591,13 +24591,13 @@ const char *Txt_No_of_BR_lines =
 	"N&ordm; de<br />linhas";
 #endif
 
-const char *Txt_No_of_messages =
+const char *Txt_No_of_posts =
 #if   L==1
 	"N&ordm; de mensajes";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten";
 #elif L==3
-	"No. of messages";
+	"No. of posts";
 #elif L==4
 	"N&ordm; de mensajes";
 #elif L==5
@@ -24605,7 +24605,7 @@ const char *Txt_No_of_messages =
 #elif L==6
 	"N&ordm; de mensajes";	// Okoteve traducción
 #elif L==7
-	"Numero di messaggi";
+	"Numero di post";
 #elif L==8
 	"Liczba wiadomosci";
 #elif L==9

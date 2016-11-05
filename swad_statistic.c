@@ -7247,7 +7247,7 @@ static void Sta_GetAndShowForumStats (void)
    extern const char *Txt_Forums;
    extern const char *Txt_No_of_forums;
    extern const char *Txt_No_of_threads;
-   extern const char *Txt_No_of_messages;
+   extern const char *Txt_No_of_posts;
    extern const char *Txt_Number_of_BR_notifications;
    extern const char *Txt_No_of_threads_BR_per_forum;
    extern const char *Txt_No_of_posts_BR_per_thread;
@@ -7301,7 +7301,7 @@ static void Sta_GetAndShowForumStats (void)
             Txt_Forums,
             Txt_No_of_forums,
             Txt_No_of_threads,
-            Txt_No_of_messages,
+            Txt_No_of_posts,
             Txt_Number_of_BR_notifications,
             Txt_No_of_threads_BR_per_forum,
             Txt_No_of_posts_BR_per_thread,
