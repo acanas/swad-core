@@ -9,32 +9,32 @@
     Copyright (C) 1999-2016 Antonio Cañas Vargas
 
     Català translation:
-	   Antonio Cañas Vargas
-	   Joan Lluís Díaz Rodríguez
+	Antonio Cañas Vargas
+	Joan Lluís Díaz Rodríguez
     German translation:
-	   Antonio Cañas Vargas
-	   Rafael Barranco-Droege
+	Antonio Cañas Vargas
+	Rafael Barranco-Droege
     English translation (finished):
-	   Antonio Cañas Vargas
+	Antonio Cañas Vargas
     Spanish translation (finished):
-	   Antonio Cañas Vargas
+	Antonio Cañas Vargas
     French translation:
-	   Antonio Cañas Vargas
+	Antonio Cañas Vargas
     Guarani translation:
-	   Antonio Cañas Vargas
+	Antonio Cañas Vargas
     Italian translation (finished):
-	   Antonio Cañas Vargas
-	   Nicola Comunale Rizzo
-	   Francisco Manuel Herrero Pérez
-	   Giuseppe Antonio Pagin
-	   Antonella Grande
+	Antonio Cañas Vargas
+	Nicola Comunale Rizzo
+	Francisco Manuel Herrero Pérez
+	Giuseppe Antonio Pagin
+	Antonella Grande
     Polish translation:
-	   Antonio Cañas Vargas
-	   Wojtek Kieca
-	   Tomasz Olechowski
-	   Mateusz Stanko
+	Antonio Cañas Vargas
+	Wojtek Kieca
+	Tomasz Olechowski
+	Mateusz Stanko
     Portuguese translation:
-	   Antonio Cañas Vargas
+	Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -206,11 +206,11 @@ const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
 	};
 
 /*****************************************************************************
-		     #   #  ###       #   # ##### #   # #
-		     ##  # #   #      #   #   #   ## ## #
-		     # # # #   #      #####   #   # # # #
-		     #  ## #   #      #   #   #   #   # #
-		     #   #  ###       #   #   #   #   # #####
+		  #   #  ###       #   # ##### #   # #
+		  ##  # #   #      #   #   #   ## ## #
+		  # # # #   #      #####   #   # # # #
+		  #  ## #   #      #   #   #   #   # #
+		  #   #  ###       #   #   #   #   # #####
 ******************************************************************************/
 /**** Don't use HTML entities like &oacute; when variable ends in NO_HTML ****/
 /****              Charset must be windows-1252 in this file              ****/
@@ -461,23 +461,23 @@ const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+T
 	{
 	"",
 	"Si no desitgeu rebre més avisos per correu,"
-	   " desactiveu la opció corresponent en les preferències del vostre perfil.",
+	" desactiveu la opció corresponent en les preferències del vostre perfil.",
 	"Wenn Sie nicht mehr erhalten möchten, E-Mail-Benachrichtigungen,"
-	   " Deaktivieren Sie die Option in den Einstellungen Ihres Profils.",
+	" Deaktivieren Sie die Option in den Einstellungen Ihres Profils.",
 	"If you no longer wish to receive e-mail notifications,"
-	   " uncheck the option in the preferences of your profile.",
+	" uncheck the option in the preferences of your profile.",
 	"Si no desea recibir más avisos por correo,"
-	   " desactive la opción correspondiente en las preferencias de su perfil.",
+	" desactive la opción correspondiente en las preferencias de su perfil.",
 	"Si vous ne souhaitez plus recevoir de notifications par e-mail,"
-	   " décochez l'option dans les préférences de votre profil.",
+	" décochez l'option dans les préférences de votre profil.",
 	"Si no desea recibir más avisos por correo,"
-	   " desactive la opción correspondiente en las preferencias de su perfil.",	// Okoteve traducción
+	" desactive la opción correspondiente en las preferencias de su perfil.",	// Okoteve traducción
 	"Se non desideri più ricevere notifiche via e-mail,"
-	   " deselezionare l'opzione nelle preferenze del tuo profilo.",
+	" deselezionare l'opzione nelle preferenze del tuo profilo.",
 	"Jesli nie chcesz otrzymywac powiadomien e-mail,"
-	   " usu&nacute; zaznaczenie opcje w ustawieniach swojego profilu.",
+	" usu&nacute; zaznaczenie opcje w ustawieniach swojego profilu.",
 	"Se já não desejar receber notificações por e-mail,"
-	   " desmarque a opção nas preferências do seu perfil.",
+	" desmarque a opção nas preferências do seu perfil.",
 	};
 
 const char *Txt_Institutions_NO_HTML =
@@ -2889,45 +2889,45 @@ const char *Txt_Assignment =
 #endif
 
 const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK] =
-	 {
+	{
 #if   L==1
-	   "No cal enviar treballs (fitxers)"
+	"No cal enviar treballs (fitxers)"
 #elif L==2
-	   "Keine Hausarbeiten vorgesehen (Dateien)"
+	"Keine Hausarbeiten vorgesehen (Dateien)"
 #elif L==3
-	   "No homework to be submitted (files)"
+	"No homework to be submitted (files)"
 #elif L==4
-	   "No hay que enviar trabajos (archivos)"
+	"No hay que enviar trabajos (archivos)"
 #elif L==5
-	   "Ne soumettez pas de travail (fichiers)"
+	"Ne soumettez pas de travail (fichiers)"
 #elif L==6
-	   "No hay que enviar trabajos (archivos)"	// Okoteve traducción
+	"No hay que enviar trabajos (archivos)"	// Okoteve traducción
 #elif L==7
-	   "Non ci sono lavori da presentare (files)"
+	"Non ci sono lavori da presentare (files)"
 #elif L==8
-	   "Nie ma pracy domowej, kt&oacute;re nalezy przedlozyc (pliki)"
+	"Nie ma pracy domowej, kt&oacute;re nalezy przedlozyc (pliki)"
 #elif L==9
-	   "N&atilde;o submeter trabalhos (arquivos)"
+	"N&atilde;o submeter trabalhos (arquivos)"
 #endif
-	   ,
+	,
 #if   L==1
-	   "Es obligatori enviar treballs (fitxers)"
+	"Es obligatori enviar treballs (fitxers)"
 #elif L==2
-	   "Hausarbeiten vorgesehen (files)"
+	"Hausarbeiten vorgesehen (files)"
 #elif L==3
-	   "It is mandatory to submit homework (files)"
+	"It is mandatory to submit homework (files)"
 #elif L==4
-	   "Es obligatorio enviar trabajos (archivos)"
+	"Es obligatorio enviar trabajos (archivos)"
 #elif L==5
-	   "Il est obligatoire de soumetter le travail (fichiers)"
+	"Il est obligatoire de soumetter le travail (fichiers)"
 #elif L==6
-	   "Es obligatorio enviar trabajos (archivos)"// Okoteve traducción
+	"Es obligatorio enviar trabajos (archivos)"// Okoteve traducción
 #elif L==7
-	   "E' obbligatorio presentare il lavoro (files)"
+	"E' obbligatorio presentare il lavoro (files)"
 #elif L==8
-	   "Jest to obowiazkowe do przedstawienia prac domowych (pliki)"
+	"Jest to obowiazkowe do przedstawienia prac domowych (pliki)"
 #elif L==9
-	   "&Eacute; obrigat&oacute;ria a apresenta&ccedil;&atilde;o de trabalhos (arquivos)"
+	"&Eacute; obrigat&oacute;ria a apresenta&ccedil;&atilde;o de trabalhos (arquivos)"
 #endif
 	};
 
@@ -3652,6 +3652,27 @@ const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 #elif L==9
 	"Antes de ir para qualquer outra op&ccedil;&atilde;o"
 	"voc&ecirc; deve criar sua senha.";
+#endif
+
+const char *Txt_Briefcases =
+#if   L==1
+	"Maletins";
+#elif L==2
+	"Aktentasche";
+#elif L==3
+	"Briefcases";
+#elif L==4
+	"Maletines";
+#elif L==5
+	"Porte-documents";
+#elif L==6
+	"Maletines";	// Okoteve traducción
+#elif L==7
+	"Penna USB";
+#elif L==8
+	"Briefcases";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"Pasta";
 #endif
 
 const char *Txt_Calculate =
@@ -13743,23 +13764,23 @@ const char *Txt_Guided_academic_assignments =
 
 const char *Txt_Happy_birthday =
 #if   L==1
-	   "Feli&ccedil; aniversari!";
+	"Feli&ccedil; aniversari!";
 #elif L==2
-	   "Gute zum Geburtstag!";
+	"Gute zum Geburtstag!";
 #elif L==3
-	   "Happy birthday!";
+	"Happy birthday!";
 #elif L==4
-	   "&iexcl;Feliz cumplea&ntilde;os!";
+	"&iexcl;Feliz cumplea&ntilde;os!";
 #elif L==5
-	   "Joyeux anniversaire!";
+	"Joyeux anniversaire!";
 #elif L==6
-	   "&iexcl;Feliz cumplea&ntilde;os!";	// Okoteve traducción
+	"&iexcl;Feliz cumplea&ntilde;os!";	// Okoteve traducción
 #elif L==7
-	   "Buon compleanno!";
+	"Buon compleanno!";
 #elif L==8
-	   "Wszystkiego najlepszego!";
+	"Wszystkiego najlepszego!";
 #elif L==9
-	   "Feliz anivers&aacute;rio!";
+	"Feliz anivers&aacute;rio!";
 #endif
 
 const char *Txt_HELP_email =
@@ -15397,106 +15418,106 @@ const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES] =
 	};
 
 const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES] =
-	 {
-	 NULL,
+	{
+	NULL,
 #if   L==1
-	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
+	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Necessita traduccio
 #elif L==2
-	   "Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)"
+	"Interner Editor, nur f&uuml;r Studienplan (Vorlesung und &Uuml;bungen)"
 #elif L==3
-	   "internal editor, only for syllabus (lectures and practicals)"
+	"internal editor, only for syllabus (lectures and practicals)"
 #elif L==4
-	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"
+	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"
 #elif L==5
-	   "&eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)"
+	"&eacute;diteur interne, que pour les plans (th&eacute;orie et pratique)"
 #elif L==6
-	   "editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Okoteve traducción
+	"editor integrado, solo para los temarios de teor&iacute;a y pr&aacute;cticas"// Okoteve traducción
 #elif L==7
-	   "editor interno, solo per programmi di teoria e di pratica"
+	"editor interno, solo per programmi di teoria e di pratica"
 #elif L==8
-	   "Wewnetrzny edytor, tylko program (wyklady i practicals)"
+	"Wewnetrzny edytor, tylko program (wyklady i practicals)"
 #elif L==9
-	   "interno editor, apenas para programas de teoria y pr&aacute;tica"
+	"interno editor, apenas para programas de teoria y pr&aacute;tica"
 #endif
-	   ,
+	,
 #if   L==1
-	   "editor de text sense format"
+	"editor de text sense format"
 #elif L==2
-	   "Plain Text Editor"
+	"Plain Text Editor"
 #elif L==3
-	   "plain text editor"
+	"plain text editor"
 #elif L==4
-	   "editor de texto sin formato"
+	"editor de texto sin formato"
 #elif L==5
-	   "&eacute;diteur de texte simple"
+	"&eacute;diteur de texte simple"
 #elif L==6
-	   "editor de texto sin formato"		// Okoteve traducción
+	"editor de texto sin formato"		// Okoteve traducción
 #elif L==7
-	   "editor di testo normale"
+	"editor di testo normale"
 #elif L==8
-	   "edytor tekstu zwyk&lstrok;y"
+	"edytor tekstu zwyk&lstrok;y"
 #elif L==9
-	   "editor de texto simples"
+	"editor de texto simples"
 #endif
-	   ,
+	,
 #if   L==1
-	   "editor de text enriquit"
+	"editor de text enriquit"
 #elif L==2
-	   "Rich Text Editor"
+	"Rich Text Editor"
 #elif L==3
-	   "rich text editor"
+	"rich text editor"
 #elif L==4
-	   "editor de texto enriquecido"
+	"editor de texto enriquecido"
 #elif L==5
-	   "&eacute;diteur de texte enrichi"
+	"&eacute;diteur de texte enrichi"
 #elif L==6
-	   "editor de texto enriquecido"	// Okoteve traducción
+	"editor de texto enriquecido"	// Okoteve traducción
 #elif L==7
-	   "editor di testo formattato"
+	"editor di testo formattato"
 #elif L==8
-	   "edytor tekstu sformatowany"
+	"edytor tekstu sformatowany"
 #elif L==9
-	   "editor de texto rico"
+	"editor de texto rico"
 #endif
-	   ,
+	,
 #if   L==1
-	   "env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Necessita traduccio
+	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Necessita traduccio
 #elif L==2
-	   "senden Sie eine HTML-Datei, oder als ZIP-Datei mit einer Datei index.html / index.htm und Bild-Dateien"
+	"senden Sie eine HTML-Datei, oder als ZIP-Datei mit einer Datei index.html / index.htm und Bild-Dateien"
 #elif L==3
-	   "send an HTML file, or a ZIP file containing a file index.html / index.htm and image files"
+	"send an HTML file, or a ZIP file containing a file index.html / index.htm and image files"
 #elif L==4
-	   "env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"
+	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"
 #elif L==5
-	   "envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d'images"
+	"envoyer un fichier HTML, ou un fichier ZIP contenant un fichier index.html / index.htm et les fichiers d'images"
 #elif L==6
-	   "env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Okoteve traducción
+	"env&iacute;e un archivo HTML, o bien un archivo ZIP que contenga un archivo index.html/index.htm y archivos con im&aacute;genes"// Okoteve traducción
 #elif L==7
-	   "inviare un file HTML, o un file ZIP contenente un file index.html / index.htm e file di immagine"
+	"inviare un file HTML, o un file ZIP contenente un file index.html / index.htm e file di immagine"
 #elif L==8
-	   "wyslac plik HTML lub plik ZIP zawierajacy plik index.html / index.htm i pliki graficzne"
+	"wyslac plik HTML lub plik ZIP zawierajacy plik index.html / index.htm i pliki graficzne"
 #elif L==9
-	   "enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
+	"enviar um arquivo HTML, ou um arquivo ZIP que cont&eacute;m um arquivo index.html / index.htm e limas da imagem"
 #endif
-	   ,
+	,
 #if   L==1
-	   "escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Necessita traduccio
+	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Necessita traduccio
 #elif L==2
-	   "Geben Sie die Adresse einer Web-Seite geleitet werden, der sich auf einem anderen Server"
+	"Geben Sie die Adresse einer Web-Seite geleitet werden, der sich auf einem anderen Server"
 #elif L==3
-	   "enter the address of a web page that is hosted on another server"
+	"enter the address of a web page that is hosted on another server"
 #elif L==4
-	   "escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"
+	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"
 #elif L==5
-	   "entrer l'adresse d'une page Web qui est h&eacute;berg&eacute;e sur un autre serveur"
+	"entrer l'adresse d'une page Web qui est h&eacute;berg&eacute;e sur un autre serveur"
 #elif L==6
-	   "escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Okoteve traducción
+	"escriba la direcci&oacute;n web de una p&aacute;gina que se encuentre alojada en otro servidor"	// Okoteve traducción
 #elif L==7
-	   "immettere l'indirizzo di una pagina web che &egrave; ospitata su un altro server"
+	"immettere l'indirizzo di una pagina web che &egrave; ospitata su un altro server"
 #elif L==8
-	   "wprowadzic adres strony internetowej, kt&oacute;ra znajduje sie na innym serwerze"
+	"wprowadzic adres strony internetowej, kt&oacute;ra znajduje sie na innym serwerze"
 #elif L==9
-	   "introduza o endere&ccedil;o de uma p&aacute;gina Web que est&aacute; hospedada em outro servidor"
+	"introduza o endere&ccedil;o de uma p&aacute;gina Web que est&aacute; hospedada em outro servidor"
 #endif
 	};
 
@@ -16528,165 +16549,165 @@ const char *Txt_License =
 #endif
 
 const char *Txt_LICENSES[Brw_NUM_LICENSES] =
-	 {
+	{
 #if   L==1
-	   "desconeguda / altra"
+	"desconeguda / altra"
 #elif L==2
-	   "Unbekannte / sonstige"
+	"Unbekannte / sonstige"
 #elif L==3
-	   "unknown / other"
+	"unknown / other"
 #elif L==4
-	   "desconocida / otra"
+	"desconocida / otra"
 #elif L==5
-	   "inconnue / autre"
+	"inconnue / autre"
 #elif L==6
-	   "desconocida / otra"			// Okoteve traducción
+	"desconocida / otra"			// Okoteve traducción
 #elif L==7
-	   "sconosciuta / altri"
+	"sconosciuta / altri"
 #elif L==8
-	   "nieznana / inny"
+	"nieznana / inny"
 #elif L==9
-	   "desconhecida / outra"
+	"desconhecida / outra"
 #endif
-	   ,
+	,
 #if   L==1
-	   "Tots els drets reservats"			// All Rights Reserved
+	"Tots els drets reservats"			// All Rights Reserved
 #elif L==2
-	   "Alle Rechte vorbehalten"			// All Rights Reserved
+	"Alle Rechte vorbehalten"			// All Rights Reserved
 #elif L==3
-	   "All rights reserved"			// All Rights Reserved
+	"All rights reserved"			// All Rights Reserved
 #elif L==4
-	   "Todos los derechos reservados"		// All Rights Reserved
+	"Todos los derechos reservados"		// All Rights Reserved
 #elif L==5
-	   "Tous droits r&eacute;serv&eacute;s"		// All Rights Reserved
+	"Tous droits r&eacute;serv&eacute;s"		// All Rights Reserved
 #elif L==6
-	   "Todos los derechos reservados"		// All Rights Reserved	// Okoteve traducción
+	"Todos los derechos reservados"		// All Rights Reserved	// Okoteve traducción
 #elif L==7
-	   "Tutti i diritti riservati"			// All Rights Reserved
+	"Tutti i diritti riservati"			// All Rights Reserved
 #elif L==8
-	   "Wszelkie prawa zastrze&zdot;one"		// All Rights Reserved
+	"Wszelkie prawa zastrze&zdot;one"		// All Rights Reserved
 #elif L==9
-	   "Todos os direitos reservados"		// All Rights Reserved
+	"Todos os direitos reservados"		// All Rights Reserved
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement"				// CC Attribution License
+	"CC Reconeixement"				// CC Attribution License
 #elif L==2
-	   "CC Namensnennung"				// CC Attribution License
+	"CC Namensnennung"				// CC Attribution License
 #elif L==3
-	   "CC Attribution"				// CC Attribution License
+	"CC Attribution"				// CC Attribution License
 #elif L==4
-	   "CC Reconocimiento"				// CC Attribution License
+	"CC Reconocimiento"				// CC Attribution License
 #elif L==5
-	   "CC Attribution"				// CC Attribution License
+	"CC Attribution"				// CC Attribution License
 #elif L==6
-	   "CC Reconocimiento"				// CC Attribution License	// Okoteve traducción
+	"CC Reconocimiento"				// CC Attribution License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione"				// CC Attribution License
+	"CC Attribuzione"				// CC Attribution License
 #elif L==8
-	   "CC Uznanie autorstwa"			// CC Attribution License
+	"CC Uznanie autorstwa"			// CC Attribution License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o"		// CC Attribution License
+	"CC Atribui&ccedil;&atilde;o"		// CC Attribution License
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement - Compartir igual"				// CC Attribution-ShareAlike License
+	"CC Reconeixement - Compartir igual"				// CC Attribution-ShareAlike License
 #elif L==2
-	   "CC Namensnennung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-ShareAlike License
+	"CC Namensnennung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-ShareAlike License
 #elif L==3
-	   "CC Attribution - Share Alike"				// CC Attribution-ShareAlike License
+	"CC Attribution - Share Alike"				// CC Attribution-ShareAlike License
 #elif L==4
-	   "CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License
+	"CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License
 #elif L==5
-	   "CC Attribution - Partage &agrave; l'Identique"		// CC Attribution-ShareAlike License
+	"CC Attribution - Partage &agrave; l'Identique"		// CC Attribution-ShareAlike License
 #elif L==6
-	   "CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License	// Okoteve traducción
+	"CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione - Condividi allo stesso modo"		// CC Attribution-ShareAlike License
+	"CC Attribuzione - Condividi allo stesso modo"		// CC Attribution-ShareAlike License
 #elif L==8
-	   "CC Uznanie autorstwa - Na tych samych warunkach"		// CC Attribution-ShareAlike License
+	"CC Uznanie autorstwa - Na tych samych warunkach"		// CC Attribution-ShareAlike License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o - Compartilha Igual"		// CC Attribution-ShareAlike License
+	"CC Atribui&ccedil;&atilde;o - Compartilha Igual"		// CC Attribution-ShareAlike License
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement - Sense obra derivada"				// CC Attribution-NoDerivs License
+	"CC Reconeixement - Sense obra derivada"				// CC Attribution-NoDerivs License
 #elif L==2
-	   "CC Namensnennung - Keine Bearbeitung"				// CC Attribution-NoDerivs License
+	"CC Namensnennung - Keine Bearbeitung"				// CC Attribution-NoDerivs License
 #elif L==3
-	   "CC Attribution - No Derivative Works"				// CC Attribution-NoDerivs License
+	"CC Attribution - No Derivative Works"				// CC Attribution-NoDerivs License
 #elif L==4
-	   "CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License
+	"CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License
 #elif L==5
-	   "CC Attribution - Pas de travaux d&eacute;riv&eacute;s"		// CC Attribution-NoDerivs License
+	"CC Attribution - Pas de travaux d&eacute;riv&eacute;s"		// CC Attribution-NoDerivs License
 #elif L==6
-	   "CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License	// Okoteve traducción
+	"CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione - Non opere derivate"				// CC Attribution-NoDerivs License
+	"CC Attribuzione - Non opere derivate"				// CC Attribution-NoDerivs License
 #elif L==8
-	   "CC Uznanie autorstwa - Bez utwor&oacute;w zale&zdot;nych"		// CC Attribution-NoDerivs License
+	"CC Uznanie autorstwa - Bez utwor&oacute;w zale&zdot;nych"		// CC Attribution-NoDerivs License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NoDerivs License
+	"CC Atribui&ccedil;&atilde;o - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NoDerivs License
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement - No comercial"			// CC Attribution-NonCommercial License
+	"CC Reconeixement - No comercial"			// CC Attribution-NonCommercial License
 #elif L==2
-	   "CC Namensnennung - Keine kommerzielle Nutzung"	// CC Attribution-NonCommercial License
+	"CC Namensnennung - Keine kommerzielle Nutzung"	// CC Attribution-NonCommercial License
 #elif L==3
-	   "CC Attribution - Noncommercial"			// CC Attribution-NonCommercial License
+	"CC Attribution - Noncommercial"			// CC Attribution-NonCommercial License
 #elif L==4
-	   "CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License
+	"CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License
 #elif L==5
-	   "CC Attribution - Pas d'Utilisation Commerciale"	// CC Attribution-NonCommercial License
+	"CC Attribution - Pas d'Utilisation Commerciale"	// CC Attribution-NonCommercial License
 #elif L==6
-	   "CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License	// Okoteve traducción
+	"CC Reconocimiento - No comercial"			// CC Attribution-NonCommercial License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione - Non commerciale"			// CC Attribution-NonCommercial License
+	"CC Attribuzione - Non commerciale"			// CC Attribution-NonCommercial License
 #elif L==8
-	   "CC Uznanie autorstwa - U&zdot;ycie niekomercyjne"	// CC Attribution-NonCommercial License
+	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne"	// CC Attribution-NonCommercial License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o - N&atilde;oComercial"	// CC Attribution-NonCommercial License
+	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial"	// CC Attribution-NonCommercial License
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement - No comercial - Compartir igual"						// CC Attribution-NonCommercial-ShareAlike License
+	"CC Reconeixement - No comercial - Compartir igual"						// CC Attribution-NonCommercial-ShareAlike License
 #elif L==2
-	   "CC Namensnennung - Keine kommerzielle Nutzung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-NonCommercial-ShareAlike License
+	"CC Namensnennung - Keine kommerzielle Nutzung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-NonCommercial-ShareAlike License
 #elif L==3
-	   "CC Attribution - Noncommercial - Share Alike"						// CC Attribution-NonCommercial-ShareAlike License
+	"CC Attribution - Noncommercial - Share Alike"						// CC Attribution-NonCommercial-ShareAlike License
 #elif L==4
-	   "CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License
+	"CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License
 #elif L==5
-	   "CC Attribution - Pas d'Utilisation Commerciale - Partage &agrave; l'Identique"		// CC Attribution-NonCommercial-ShareAlike License
+	"CC Attribution - Pas d'Utilisation Commerciale - Partage &agrave; l'Identique"		// CC Attribution-NonCommercial-ShareAlike License
 #elif L==6
-	   "CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License	// Okoteve traducción
+	"CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione - Non commerciale - Condividi allo stesso modo"				// CC Attribution-NonCommercial-ShareAlike License
+	"CC Attribuzione - Non commerciale - Condividi allo stesso modo"				// CC Attribution-NonCommercial-ShareAlike License
 #elif L==8
-	   "CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Na tych samych warunkach"		// CC Attribution-NonCommercial-ShareAlike License
+	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Na tych samych warunkach"		// CC Attribution-NonCommercial-ShareAlike License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Compartilha Igual"			// CC Attribution-NonCommercial-ShareAlike License
+	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Compartilha Igual"			// CC Attribution-NonCommercial-ShareAlike License
 #endif
-	   ,
+	,
 #if   L==1
-	   "CC Reconeixement - No comercial - Sense obra derivada"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Reconeixement - No comercial - Sense obra derivada"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==2
-	   "CC Namensnennung - Keine kommerzielle Nutzung - Keine Bearbeitung"				// CC Attribution-NonCommercial-NoDerivs License
+	"CC Namensnennung - Keine kommerzielle Nutzung - Keine Bearbeitung"				// CC Attribution-NonCommercial-NoDerivs License
 #elif L==3
-	   "CC Attribution - Noncommercial - No Derivative Works"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Attribution - Noncommercial - No Derivative Works"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==4
-	   "CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==5
-	   "CC Attribution - Pas d’Utilisation Commerciale - Pas de travaux d&eacute;riv&eacute;s"	// CC Attribution-NonCommercial-NoDerivs License
+	"CC Attribution - Pas d’Utilisation Commerciale - Pas de travaux d&eacute;riv&eacute;s"	// CC Attribution-NonCommercial-NoDerivs License
 #elif L==6
-	   "CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License	// Okoteve traducción
+	"CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License	// Okoteve traducción
 #elif L==7
-	   "CC Attribuzione - Non commerciale - Non opere derivate"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Attribuzione - Non commerciale - Non opere derivate"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==8
-	   "CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Bez utwor&oacute;w zale&zdot;nych"	// CC Attribution-NonCommercial-NoDerivs License
+	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Bez utwor&oacute;w zale&zdot;nych"	// CC Attribution-NonCommercial-NoDerivs License
 #elif L==9
-	   "CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NonCommercial-NoDerivs License
+	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NonCommercial-NoDerivs License
 #endif
 	};
 
@@ -29757,91 +29778,91 @@ const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY] =
 	};
 
 const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY] =	// Warning: it is very important to include %s in the following sentences
-	 {
+	{
 #if   L==1
-	   "A partir de ahora los estudiantes"
-	   " no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Necessita traduccio
+	"A partir de ahora los estudiantes"
+	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2
-	   "Von nun an k&ouml;nnen die Studenten"
-	   " nicht das Feld <strong>%s</strong> der Profile."
+	"Von nun an k&ouml;nnen die Studenten"
+	" nicht das Feld <strong>%s</strong> der Profile."
 #elif L==3
-	   "From now on students"
-	   " can not see the field <strong>%s</strong> of the records."
+	"From now on students"
+	" can not see the field <strong>%s</strong> of the records."
 #elif L==4
-	   "A partir de ahora los estudiantes"
-	   " no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."
+	"A partir de ahora los estudiantes"
+	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."
 #elif L==5
-	   "A partir de maintenant, les &eacute;tudiants"
-	   " ne peuvent pas voir le champ <strong>%s</strong> de les cartes."
+	"A partir de maintenant, les &eacute;tudiants"
+	" ne peuvent pas voir le champ <strong>%s</strong> de les cartes."
 #elif L==6
-	   "A partir de ahora los estudiantes"
-	   " no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Okoteve traducción
+	"A partir de ahora los estudiantes"
+	" no podr&aacute;n ver el campo <strong>%s</strong> de las fichas."// Okoteve traducción
 #elif L==7
-	   "Da ora in poi gli studenti"
-	   " non possono visualizzare il campo <strong>%s</strong> delle schede."
+	"Da ora in poi gli studenti"
+	" non possono visualizzare il campo <strong>%s</strong> delle schede."
 #elif L==8
-	   "Od teraz studenci"
-	   " nie widac pola <strong>%s</strong> zapis&oacute;w."
+	"Od teraz studenci"
+	" nie widac pola <strong>%s</strong> zapis&oacute;w."
 #elif L==9
-	   "De agora em diante,"
+	"De agora em diante,"
 		 " os alunos n&atilde;o podem ver o campo <strong>%s</strong> dos cart&otilde;es."
 #endif
-	   ,
+	,
 #if   L==1
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2
-	   "Von nun an k&ouml;nnen sich Studenten,"
-	   " aber nicht bearbeiten das Feld <strong>%s</strong> der Profile."
+	"Von nun an k&ouml;nnen sich Studenten,"
+	" aber nicht bearbeiten das Feld <strong>%s</strong> der Profile."
 #elif L==3
-	   "From now on students"
-	   " can view but not edit the field <strong>%s</strong> of the records."
+	"From now on students"
+	" can view but not edit the field <strong>%s</strong> of the records."
 #elif L==4
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."
 #elif L==5
-	   "A partir de maintenant, les &eacute;tudiants"
-	   " peuvent consulter mais pas modifier le champ <strong>%s</strong> de les cartes."
+	"A partir de maintenant, les &eacute;tudiants"
+	" peuvent consulter mais pas modifier le champ <strong>%s</strong> de les cartes."
 #elif L==6
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver pero no editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
 #elif L==7
-	   "Da ora in poi gli studenti"
-	   " possono visualizzare ma non modificare il campo <strong>%s</strong> delle schede."
+	"Da ora in poi gli studenti"
+	" possono visualizzare ma non modificare il campo <strong>%s</strong> delle schede."
 #elif L==8
-	   "Od teraz studenci"
-	   " moga przegladac, ale nie edytowa&cacute; pole <strong>%s</strong> zapis&oacute;w."
+	"Od teraz studenci"
+	" moga przegladac, ale nie edytowa&cacute; pole <strong>%s</strong> zapis&oacute;w."
 #elif L==9
-	   "De agora em diante,"
+	"De agora em diante,"
 		 " os alunos podem visualizar, mas n&atilde;o editar o campo <strong>%s</strong> dos cart&otilde;es."
 #endif
-	   ,
+	,
 #if   L==1
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Necessita traduccio
 #elif L==2
-	   "Von nun an k&ouml;nnen die Studenten"
-	   " anzuzeigen und zu bearbeiten das Feld <strong>%s</strong> der Profile."
+	"Von nun an k&ouml;nnen die Studenten"
+	" anzuzeigen und zu bearbeiten das Feld <strong>%s</strong> der Profile."
 #elif L==3
-	   "From now on students"
-	   " can view and edit the field <strong>%s</strong> of the records."
+	"From now on students"
+	" can view and edit the field <strong>%s</strong> of the records."
 #elif L==4
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."
 #elif L==5
-	   "A partir de maintenant,"
-	   " les &eacute;tudiants peuvent consulter et modifier le champ <strong>%s</strong> de les cartes."
+	"A partir de maintenant,"
+	" les &eacute;tudiants peuvent consulter et modifier le champ <strong>%s</strong> de les cartes."
 #elif L==6
-	   "A partir de ahora los estudiantes"
-	   " podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
+	"A partir de ahora los estudiantes"
+	" podr&aacute;n ver y editar el campo <strong>%s</strong> de las fichas."// Okoteve traducción
 #elif L==7
-	   "Da ora in poi"
-	   " gli studenti possono visualizzare e modificare il campo <strong>%s</strong> delle schede."
+	"Da ora in poi"
+	" gli studenti possono visualizzare e modificare il campo <strong>%s</strong> delle schede."
 #elif L==8
-	   "Od teraz studenci"
-	   " moga ogladac i edytowa&cacute; pola <strong>%s</strong> zapis&oacute;w."
+	"Od teraz studenci"
+	" moga ogladac i edytowa&cacute; pola <strong>%s</strong> zapis&oacute;w."
 #elif L==9
-	   "De agora em diante,"
+	"De agora em diante,"
 		 " os alunos podem visualizar e editar o campo <strong>%s</strong> dos cart&otilde;es."
 #endif
 	};
@@ -31714,650 +31735,650 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
-	   "Invitado/a"	// Necessita traduccio
+	"Invitado/a"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "Guest"
+	"Guest"
 #elif L==4
-	   "Invitado/a"
+	"Invitado/a"
 #elif L==5
-	   "Invit&eacute;/e"
+	"Invit&eacute;/e"
 #elif L==6
-	   "Invitado/a"	// Okoteve traducción
+	"Invitado/a"	// Okoteve traducción
 #elif L==7
-	   "Ospite"
+	"Ospite"
 #elif L==8
-	   "Go&sacute;&cacute;"
+	"Go&sacute;&cacute;"
 #elif L==9
-	   "Convidado/a"
+	"Convidado/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
-	   "Invitada"	// Necessita traduccio
+	"Invitada"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "Guest"
+	"Guest"
 #elif L==4
-	   "Invitada"
+	"Invitada"
 #elif L==5
-	   "Invit&eacute;e"
+	"Invit&eacute;e"
 #elif L==6
-	   "Invitada"	// Okoteve traducción
+	"Invitada"	// Okoteve traducción
 #elif L==7
-	   "Ospite"
+	"Ospite"
 #elif L==8
-	   "Opinia"
+	"Opinia"
 #elif L==9
-	   "Convidada"
+	"Convidada"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
-	   "Invitado"	// Necessita traduccio
+	"Invitado"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "Guest"
+	"Guest"
 #elif L==4
-	   "Invitado"
+	"Invitado"
 #elif L==5
-	   "Invit&eacute;"
+	"Invit&eacute;"
 #elif L==6
-	   "Invitado"	// Okoteve traducción
+	"Invitado"	// Okoteve traducción
 #elif L==7
-	   "Ospite"
+	"Ospite"
 #elif L==8
-	   "Opinia"
+	"Opinia"
 #elif L==9
-	   "Convidado"
+	"Convidado"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
-	   "Invitado/a"	// Necessita traduccio
+	"Invitado/a"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "Guest"
+	"Guest"
 #elif L==4
-	   "Invitado/a"
+	"Invitado/a"
 #elif L==5
-	   "Invit&eacute;/e"
+	"Invit&eacute;/e"
 #elif L==6
-	   "Invitado/a"	// Okoteve traducción
+	"Invitado/a"	// Okoteve traducción
 #elif L==7
-	   "Ospite"
+	"Ospite"
 #elif L==8
-	   "Opinie"
+	"Opinie"
 #elif L==9
-	   "Convidado/a"
+	"Convidado/a"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	   "Visitant"
+	"Visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitor"
+	"Visitor"
 #elif L==4
-	   "Visitante"
+	"Visitante"
 #elif L==5
-	   "Visiteur"
+	"Visiteur"
 #elif L==6
-	   "Visitante"	// Okoteve traducción
+	"Visitante"	// Okoteve traducción
 #elif L==7
-	   "Visitatore"
+	"Visitatore"
 #elif L==8
-	   "Go&sacute;&cacute;"
+	"Go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	   "Visitant"
+	"Visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitor"
+	"Visitor"
 #elif L==4
-	   "Visitante"
+	"Visitante"
 #elif L==5
-	   "Visiteur"
+	"Visiteur"
 #elif L==6
-	   "Visitante"	// Okoteve traducción
+	"Visitante"	// Okoteve traducción
 #elif L==7
-	   "Visitatore"
+	"Visitatore"
 #elif L==8
-	   "Go&sacute;&cacute;"
+	"Go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	   "Visitant"
+	"Visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitor"
+	"Visitor"
 #elif L==4
-	   "Visitante"
+	"Visitante"
 #elif L==5
-	   "Visiteur"
+	"Visiteur"
 #elif L==6
-	   "Visitante"	// Okoteve traducción
+	"Visitante"	// Okoteve traducción
 #elif L==7
-	   "Visitatore"
+	"Visitatore"
 #elif L==8
-	   "Go&sacute;&cacute;"
+	"Go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	   "Visitant"
+	"Visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitor"
+	"Visitor"
 #elif L==4
-	   "Visitante"
+	"Visitante"
 #elif L==5
-	   "Visiteur"
+	"Visiteur"
 #elif L==6
-	   "Visitante"	// Okoteve traducción
+	"Visitante"	// Okoteve traducción
 #elif L==7
-	   "Visitatore"
+	"Visitatore"
 #elif L==8
-	   "Go&sacute;&cacute;"
+	"Go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
-	   "Estudiant"
+	"Estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "Student"
+	"Student"
 #elif L==4
-	   "Estudiante"
+	"Estudiante"
 #elif L==5
-	   "&Eacute;tudiant/e"
+	"&Eacute;tudiant/e"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studente"
+	"Studente"
 #elif L==8
-	   "Student"
+	"Student"
 #elif L==9
-	   "Estudante"
+	"Estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
-	   "Estudiant"
+	"Estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "Student"
+	"Student"
 #elif L==4
-	   "Estudiante"
+	"Estudiante"
 #elif L==5
-	   "&Eacute;tudiante"
+	"&Eacute;tudiante"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studentessa"
+	"Studentessa"
 #elif L==8
-	   "Studentka"
+	"Studentka"
 #elif L==9
-	   "Estudante"
+	"Estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
-	   "Estudiant"
+	"Estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "Student"
+	"Student"
 #elif L==4
-	   "Estudiante"
+	"Estudiante"
 #elif L==5
-	   "&Eacute;tudiant"
+	"&Eacute;tudiant"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studente"
+	"Studente"
 #elif L==8
-	   "Student"
+	"Student"
 #elif L==9
-	   "Estudante"
+	"Estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
-	   "Estudiant"
+	"Estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "Student"
+	"Student"
 #elif L==4
-	   "Estudiante"
+	"Estudiante"
 #elif L==5
-	   "&Eacute;tudiant/e"
+	"&Eacute;tudiant/e"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studente"
+	"Studente"
 #elif L==8
-	   "Studenci"
+	"Studenci"
 #elif L==9
-	   "Estudante"
+	"Estudante"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
-	   "Professor/a"
+	"Professor/a"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teacher"
+	"Teacher"
 #elif L==4
-	   "Profesor/a"
+	"Profesor/a"
 #elif L==5
-	   "Enseignant/e"
+	"Enseignant/e"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professore/ssa"
+	"Professore/ssa"
 #elif L==8
-	   "Nauczyciel"
+	"Nauczyciel"
 #elif L==9
-	   "Professor/a"
+	"Professor/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
-	   "Professora"
+	"Professora"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teacher"
+	"Teacher"
 #elif L==4
-	   "Profesora"
+	"Profesora"
 #elif L==5
-	   "Enseignante"
+	"Enseignante"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professoressa"
+	"Professoressa"
 #elif L==8
-	   "Nauczycielka"
+	"Nauczycielka"
 #elif L==9
-	   "Professora"
+	"Professora"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
-	   "Professor"
+	"Professor"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teacher"
+	"Teacher"
 #elif L==4
-	   "Profesor"
+	"Profesor"
 #elif L==5
-	   "Enseignant"
+	"Enseignant"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professore"
+	"Professore"
 #elif L==8
-	   "Nauczyciel"
+	"Nauczyciel"
 #elif L==9
-	   "Professor"
+	"Professor"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
-	   "Professor/a"
+	"Professor/a"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teacher"
+	"Teacher"
 #elif L==4
-	   "Profesor/a"
+	"Profesor/a"
 #elif L==5
-	   "Enseignant/e"
+	"Enseignant/e"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professore/ssa"
+	"Professore/ssa"
 #elif L==8
-	   "Nauczyciele"
+	"Nauczyciele"
 #elif L==9
-	   "Professor/a"
+	"Professor/a"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	   "Administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"Administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "Administrator of degree"
+	"Administrator of degree"
 #elif L==4
-	   "Administrador/a de titulaci&oacute;n"
+	"Administrador/a de titulaci&oacute;n"
 #elif L==5
-	   "Administrateur/se d'&eacute;tude"
+	"Administrateur/se d'&eacute;tude"
 #elif L==6
-	   "Administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"Administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di laurea"
+	"Amministratore di laurea"
 #elif L==8
-	   "Administrator stopien"
+	"Administrator stopien"
 #elif L==9
-	   "Administrador/a de titula&ccedil;&atilde;o"
+	"Administrador/a de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
-	   "Administradora de titulaci&oacute;n"	// Necessita traduccio
+	"Administradora de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "Administrator of degree"
+	"Administrator of degree"
 #elif L==4
-	   "Administradora de titulaci&oacute;n"
+	"Administradora de titulaci&oacute;n"
 #elif L==5
-	   "Administrateuse d'&eacute;tude"
+	"Administrateuse d'&eacute;tude"
 #elif L==6
-	   "Administradora de titulaci&oacute;n"	// Okoteve traducción
+	"Administradora de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di laurea"
+	"Amministratore di laurea"
 #elif L==8
-	   "Administratorka stopien"
+	"Administratorka stopien"
 #elif L==9
-	   "Administradora de titula&ccedil;&atilde;o"
+	"Administradora de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	   "Administrador de titulaci&oacute;n"	// Necessita traduccio
+	"Administrador de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "Administrator of degree"
+	"Administrator of degree"
 #elif L==4
-	   "Administrador de titulaci&oacute;n"
+	"Administrador de titulaci&oacute;n"
 #elif L==5
-	   "Administrateur d'&eacute;tude"
+	"Administrateur d'&eacute;tude"
 #elif L==6
-	   "Administrador de titulaci&oacute;n"	// Okoteve traducción
+	"Administrador de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di laurea"
+	"Amministratore di laurea"
 #elif L==8
-	   "Administrator stopien"
+	"Administrator stopien"
 #elif L==9
-	   "Administrador de titula&ccedil;&atilde;o"
+	"Administrador de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	   "Administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"Administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "Administrator of degree"
+	"Administrator of degree"
 #elif L==4
-	   "Administrador/a de titulaci&oacute;n"
+	"Administrador/a de titulaci&oacute;n"
 #elif L==5
-	   "Administrateur/se d'&eacute;tude"
+	"Administrateur/se d'&eacute;tude"
 #elif L==6
-	   "Administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"Administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di laurea"
+	"Amministratore di laurea"
 #elif L==8
-	   "Administratorzy stopien"
+	"Administratorzy stopien"
 #elif L==9
-	   "Administrador/a de titula&ccedil;&atilde;o"
+	"Administrador/a de titula&ccedil;&atilde;o"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	   "Administrador/a de centro"	// Necessita traduccio
+	"Administrador/a de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "Administrator of centre"
+	"Administrator of centre"
 #elif L==4
-	   "Administrador/a de centro"
+	"Administrador/a de centro"
 #elif L==5
-	   "Administrateur/se de centre"
+	"Administrateur/se de centre"
 #elif L==6
-	   "Administrador/a de centro"	// Okoteve traducción
+	"Administrador/a de centro"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di centro"
+	"Amministratore di centro"
 #elif L==8
-	   "Administrator centrum"
+	"Administrator centrum"
 #elif L==9
-	   "Administrador/a de centro"
+	"Administrador/a de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
-	   "Administradora de centro"	// Necessita traduccio
+	"Administradora de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "Administrator of centre"
+	"Administrator of centre"
 #elif L==4
-	   "Administradora de centro"
+	"Administradora de centro"
 #elif L==5
-	   "Administrateuse de centre"
+	"Administrateuse de centre"
 #elif L==6
-	   "Administradora de centro"	// Okoteve traducción
+	"Administradora de centro"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di centro"
+	"Amministratore di centro"
 #elif L==8
-	   "Administratorka centrum"
+	"Administratorka centrum"
 #elif L==9
-	   "Administradora de centro"
+	"Administradora de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	   "Administrador de centro"	// Necessita traduccio
+	"Administrador de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "Administrator of centre"
+	"Administrator of centre"
 #elif L==4
-	   "Administrador de centro"
+	"Administrador de centro"
 #elif L==5
-	   "Administrateur de centre"
+	"Administrateur de centre"
 #elif L==6
-	   "Administrador de centro"	// Okoteve traducción
+	"Administrador de centro"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di centro"
+	"Amministratore di centro"
 #elif L==8
-	   "Administrator centrum"
+	"Administrator centrum"
 #elif L==9
-	   "Administrador de centro"
+	"Administrador de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	   "Administrador/a de centro"	// Necessita traduccio
+	"Administrador/a de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "Administrator of centre"
+	"Administrator of centre"
 #elif L==4
-	   "Administrador/a de centro"
+	"Administrador/a de centro"
 #elif L==5
-	   "Administrateur/se de centre"
+	"Administrateur/se de centre"
 #elif L==6
-	   "Administrador/a de centro"	// Okoteve traducción
+	"Administrador/a de centro"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di centro"
+	"Amministratore di centro"
 #elif L==8
-	   "Administratorzy centrum"
+	"Administratorzy centrum"
 #elif L==9
-	   "Administrador/a de centro"
+	"Administrador/a de centro"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	   "Administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"Administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "Administrator of institution"
+	"Administrator of institution"
 #elif L==4
-	   "Administrador/a de instituci&oacute;n"
+	"Administrador/a de instituci&oacute;n"
 #elif L==5
-	   "Administrateur/se d'&eacute;tablissement"
+	"Administrateur/se d'&eacute;tablissement"
 #elif L==6
-	   "Administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"Administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di istituzione"
+	"Amministratore di istituzione"
 #elif L==8
-	   "Administrator instytucji"
+	"Administrator instytucji"
 #elif L==9
-	   "Administrador/a de institu&ccedil;&atilde;o"
+	"Administrador/a de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
-	   "Administradora de instituci&oacute;n"	// Necessita traduccio
+	"Administradora de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "Administrator of institution"
+	"Administrator of institution"
 #elif L==4
-	   "Administradora de instituci&oacute;n"
+	"Administradora de instituci&oacute;n"
 #elif L==5
-	   "Administrateuse d'&eacute;tablissement"
+	"Administrateuse d'&eacute;tablissement"
 #elif L==6
-	   "Administradora de instituci&oacute;n"	// Okoteve traducción
+	"Administradora de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di istituzione"
+	"Amministratore di istituzione"
 #elif L==8
-	   "Administratorka instytucji"
+	"Administratorka instytucji"
 #elif L==9
-	   "Administradora de institu&ccedil;&atilde;o"
+	"Administradora de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	   "Administrador de instituci&oacute;n"	// Necessita traduccio
+	"Administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "Administrator of institution"
+	"Administrator of institution"
 #elif L==4
-	   "Administrador de instituci&oacute;n"
+	"Administrador de instituci&oacute;n"
 #elif L==5
-	   "Administrateur d'&eacute;tablissement"
+	"Administrateur d'&eacute;tablissement"
 #elif L==6
-	   "Administrador de instituci&oacute;n"	// Okoteve traducción
+	"Administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di istituzione"
+	"Amministratore di istituzione"
 #elif L==8
-	   "Administrator instytucji"
+	"Administrator instytucji"
 #elif L==9
-	   "Administrador de institu&ccedil;&atilde;o"
+	"Administrador de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	   "Administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"Administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "Administrator of institution"
+	"Administrator of institution"
 #elif L==4
-	   "Administrador/a de instituci&oacute;n"
+	"Administrador/a de instituci&oacute;n"
 #elif L==5
-	   "Administrateur/se d'&eacute;tablissement"
+	"Administrateur/se d'&eacute;tablissement"
 #elif L==6
-	   "Administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"Administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "Amministratore di istituzione"
+	"Amministratore di istituzione"
 #elif L==8
-	   "Administratorzy instytucji"
+	"Administratorzy instytucji"
 #elif L==9
-	   "Administrador/a de institu&ccedil;&atilde;o"
+	"Administrador/a de institu&ccedil;&atilde;o"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
-	   "Superusuari/&agrave;ria"
+	"Superusuari/&agrave;ria"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superuser"
+	"Superuser"
 #elif L==4
-	   "Superusuario/a"
+	"Superusuario/a"
 #elif L==5
-	   "Superutilisateur/se"
+	"Superutilisateur/se"
 #elif L==6
-	   "Superusuario/a"	// Okoteve traducción
+	"Superusuario/a"	// Okoteve traducción
 #elif L==7
-	   "Superutente"
+	"Superutente"
 #elif L==8
-	   "Superuzytkownik"
+	"Superuzytkownik"
 #elif L==9
-	   "Superutilizador/a"
+	"Superutilizador/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
-	   "Superusuaria"	// Necessita traduccio
+	"Superusuaria"	// Necessita traduccio
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superuser"
+	"Superuser"
 #elif L==4
-	   "Superusuaria"
+	"Superusuaria"
 #elif L==5
-	   "Superutilisateuse"
+	"Superutilisateuse"
 #elif L==6
-	   "Superusuaria"	// Okoteve traducción
+	"Superusuaria"	// Okoteve traducción
 #elif L==7
-	   "Superutente"
+	"Superutente"
 #elif L==8
-	   "Superuzytkownik"
+	"Superuzytkownik"
 #elif L==9
-	   "Superutilizadora"
+	"Superutilizadora"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
-	   "Superusuari"
+	"Superusuari"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superuser"
+	"Superuser"
 #elif L==4
-	   "Superusuario"
+	"Superusuario"
 #elif L==5
-	   "Superutilisateur"
+	"Superutilisateur"
 #elif L==6
-	   "Superusuario"	// Okoteve traducción
+	"Superusuario"	// Okoteve traducción
 #elif L==7
-	   "Superutente"
+	"Superutente"
 #elif L==8
-	   "Superuzytkownik"
+	"Superuzytkownik"
 #elif L==9
-	   "Superutilizador"
+	"Superutilizador"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
-	   "Superusuari/&agrave;ria"	// Necessita traduccio
+	"Superusuari/&agrave;ria"	// Necessita traduccio
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superuser"
+	"Superuser"
 #elif L==4
-	   "Superusuario/a"
+	"Superusuario/a"
 #elif L==5
-	   "Superutilisateur/se"
+	"Superutilisateur/se"
 #elif L==6
-	   "Superusuario/a"		// Okoteve traducción
+	"Superusuario/a"		// Okoteve traducción
 #elif L==7
-	   "Superutente"
+	"Superutente"
 #elif L==8
-	   "Superuzytkownicy"
+	"Superuzytkownicy"
 #elif L==9
-	   "Superutilizador/a"
+	"Superutilizador/a"
 #endif
 	 } };
 
@@ -32446,650 +32467,650 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
-	   "invitado/a"	// Necessita traduccio
+	"invitado/a"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "guest"
+	"guest"
 #elif L==4
-	   "invitado/a"
+	"invitado/a"
 #elif L==5
-	   "invit&eacute;/e"
+	"invit&eacute;/e"
 #elif L==6
-	   "invitado/a"	// Okoteve traducción
+	"invitado/a"	// Okoteve traducción
 #elif L==7
-	   "ospite"
+	"ospite"
 #elif L==8
-	   "go&sacute;&cacute;"
+	"go&sacute;&cacute;"
 #elif L==9
-	   "convidado/a"
+	"convidado/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
-	   "invitada"	// Necessita traduccio
+	"invitada"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "guest"
+	"guest"
 #elif L==4
-	   "invitada"
+	"invitada"
 #elif L==5
-	   "invit&eacute;e"
+	"invit&eacute;e"
 #elif L==6
-	   "invitada"	// Okoteve traducción
+	"invitada"	// Okoteve traducción
 #elif L==7
-	   "ospite"
+	"ospite"
 #elif L==8
-	   "goscinna"
+	"goscinna"
 #elif L==9
-	   "convidada"
+	"convidada"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
-	   "invitado"	// Necessita traduccio
+	"invitado"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "guest"
+	"guest"
 #elif L==4
-	   "invitado"
+	"invitado"
 #elif L==5
-	   "invit&eacute;"
+	"invit&eacute;"
 #elif L==6
-	   "invitado"	// Okoteve traducción
+	"invitado"	// Okoteve traducción
 #elif L==7
-	   "ospite"
+	"ospite"
 #elif L==8
-	   "goscinny"
+	"goscinny"
 #elif L==9
-	   "convidado"
+	"convidado"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
-	   "invitado/a"	// Necessita traduccio
+	"invitado/a"	// Necessita traduccio
 #elif L==2
-	   "Gast"
+	"Gast"
 #elif L==3
-	   "guest"
+	"guest"
 #elif L==4
-	   "invitado/a"
+	"invitado/a"
 #elif L==5
-	   "invit&eacute;/e"
+	"invit&eacute;/e"
 #elif L==6
-	   "invitado/a"	// Okoteve traducción
+	"invitado/a"	// Okoteve traducción
 #elif L==7
-	   "ospite"
+	"ospite"
 #elif L==8
-	   "goscinni"
+	"goscinni"
 #elif L==9
-	   "convidado/a"
+	"convidado/a"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	   "visitant"
+	"visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitor"
+	"visitor"
 #elif L==4
-	   "visitante"
+	"visitante"
 #elif L==5
-	   "visiteur"
+	"visiteur"
 #elif L==6
-	   "visitante"	// Okoteve traducción
+	"visitante"	// Okoteve traducción
 #elif L==7
-	   "visitatore"
+	"visitatore"
 #elif L==8
-	   "go&sacute;&cacute;"
+	"go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	   "visitant"
+	"visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitor"
+	"visitor"
 #elif L==4
-	   "visitante"
+	"visitante"
 #elif L==5
-	   "visiteur"
+	"visiteur"
 #elif L==6
-	   "visitante"	// Okoteve traducción
+	"visitante"	// Okoteve traducción
 #elif L==7
-	   "visitatore"
+	"visitatore"
 #elif L==8
-	   "go&sacute;&cacute;"
+	"go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	   "visitant"
+	"visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitor"
+	"visitor"
 #elif L==4
-	   "visitante"
+	"visitante"
 #elif L==5
-	   "visiteur"
+	"visiteur"
 #elif L==6
-	   "visitante"	// Okoteve traducción
+	"visitante"	// Okoteve traducción
 #elif L==7
-	   "visitatore"
+	"visitatore"
 #elif L==8
-	   "go&sacute;&cacute;"
+	"go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	   "visitant"
+	"visitant"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitor"
+	"visitor"
 #elif L==4
-	   "visitante"
+	"visitante"
 #elif L==5
-	   "visiteur"
+	"visiteur"
 #elif L==6
-	   "visitante"	// Okoteve traducción
+	"visitante"	// Okoteve traducción
 #elif L==7
-	   "visitatore"
+	"visitatore"
 #elif L==8
-	   "go&sacute;&cacute;"
+	"go&sacute;&cacute;"
 #elif L==9
-	   "Visitante"
+	"Visitante"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
-	   "estudiant"
+	"estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "student"
+	"student"
 #elif L==4
-	   "estudiante"
+	"estudiante"
 #elif L==5
-	   "&eacute;tudiant/e"
+	"&eacute;tudiant/e"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studente"
+	"studente"
 #elif L==8
-	   "student"
+	"student"
 #elif L==9
-	   "estudante"
+	"estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
-	   "estudiant"
+	"estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "student"
+	"student"
 #elif L==4
-	   "estudiante"
+	"estudiante"
 #elif L==5
-	   "&eacute;tudiante"
+	"&eacute;tudiante"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studentessa"
+	"studentessa"
 #elif L==8
-	   "studentka"
+	"studentka"
 #elif L==9
-	   "estudante"
+	"estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
-	   "estudiant"
+	"estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "student"
+	"student"
 #elif L==4
-	   "estudiante"
+	"estudiante"
 #elif L==5
-	   "&eacute;tudiant"
+	"&eacute;tudiant"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studente"
+	"studente"
 #elif L==8
-	   "student"
+	"student"
 #elif L==9
-	   "estudante"
+	"estudante"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
-	   "estudiant"
+	"estudiant"
 #elif L==2
-	   "Student"
+	"Student"
 #elif L==3
-	   "student"
+	"student"
 #elif L==4
-	   "estudiante"
+	"estudiante"
 #elif L==5
-	   "&eacute;tudiant/e"
+	"&eacute;tudiant/e"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studente/ssa"
+	"studente/ssa"
 #elif L==8
-	   "studenci"
+	"studenci"
 #elif L==9
-	   "estudante"
+	"estudante"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
-	   "professor/a"
+	"professor/a"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "teacher"
+	"teacher"
 #elif L==4
-	   "profesor/a"
+	"profesor/a"
 #elif L==5
-	   "enseignant/e"
+	"enseignant/e"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "Professore/ssa"
+	"Professore/ssa"
 #elif L==8
-	   "nauczyciel"
+	"nauczyciel"
 #elif L==9
-	   "professor/a"
+	"professor/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
-	   "professora"
+	"professora"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "teacher"
+	"teacher"
 #elif L==4
-	   "profesora"
+	"profesora"
 #elif L==5
-	   "enseignante"
+	"enseignante"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "Professoressa"
+	"Professoressa"
 #elif L==8
-	   "nauczycielka"
+	"nauczycielka"
 #elif L==9
-	   "professora"
+	"professora"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
-	   "professor"
+	"professor"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "teacher"
+	"teacher"
 #elif L==4
-	   "profesor"
+	"profesor"
 #elif L==5
-	   "enseignant"
+	"enseignant"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professore"
+	"professore"
 #elif L==8
-	   "nauczyciel"
+	"nauczyciel"
 #elif L==9
-	   "professor"
+	"professor"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
-	   "professor/a"
+	"professor/a"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "teacher"
+	"teacher"
 #elif L==4
-	   "profesor/a"
+	"profesor/a"
 #elif L==5
-	   "enseignant/e"
+	"enseignant/e"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professore/ssa"
+	"professore/ssa"
 #elif L==8
-	   "nauczyciele"
+	"nauczyciele"
 #elif L==9
-	   "professor/a"
+	"professor/a"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	   "administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "administrator of degree"
+	"administrator of degree"
 #elif L==4
-	   "administrador/a de titulaci&oacute;n"
+	"administrador/a de titulaci&oacute;n"
 #elif L==5
-	   "administrateur/se d'&eacute;tude"
+	"administrateur/se d'&eacute;tude"
 #elif L==6
-	   "administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di laurea"
+	"amministratore di laurea"
 #elif L==8
-	   "administrator stopien"
+	"administrator stopien"
 #elif L==9
-	   "administrador/a de titula&ccedil;&atilde;o"
+	"administrador/a de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
-	   "administradora de titulaci&oacute;n"	// Necessita traduccio
+	"administradora de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "administrator of degree"
+	"administrator of degree"
 #elif L==4
-	   "administradora de titulaci&oacute;n"
+	"administradora de titulaci&oacute;n"
 #elif L==5
-	   "administrateuse d'&eacute;tude"
+	"administrateuse d'&eacute;tude"
 #elif L==6
-	   "administradora de titulaci&oacute;n"	// Okoteve traducción
+	"administradora de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di laurea"
+	"amministratore di laurea"
 #elif L==8
-	   "administratorka stopien"
+	"administratorka stopien"
 #elif L==9
-	   "administradora de titula&ccedil;&atilde;o"
+	"administradora de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	   "administrador de titulaci&oacute;n"	// Necessita traduccio
+	"administrador de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "administrator of degree"
+	"administrator of degree"
 #elif L==4
-	   "administrador de titulaci&oacute;n"
+	"administrador de titulaci&oacute;n"
 #elif L==5
-	   "administrateur d'&eacute;tude"
+	"administrateur d'&eacute;tude"
 #elif L==6
-	   "administrador de titulaci&oacute;n"	// Okoteve traducción
+	"administrador de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di laurea"
+	"amministratore di laurea"
 #elif L==8
-	   "administrator stopien"
+	"administrator stopien"
 #elif L==9
-	   "administrador de titula&ccedil;&atilde;o"
+	"administrador de titula&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	   "administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"administrador/a de titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Studiengang"
+	"Administrator der Studiengang"
 #elif L==3
-	   "administrator of degree"
+	"administrator of degree"
 #elif L==4
-	   "administrador/a de titulaci&oacute;n"
+	"administrador/a de titulaci&oacute;n"
 #elif L==5
-	   "administrateur/se d'&eacute;tude"
+	"administrateur/se d'&eacute;tude"
 #elif L==6
-	   "administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"administrador/a de titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di laurea"
+	"amministratore di laurea"
 #elif L==8
-	   "administratorzy stopien"
+	"administratorzy stopien"
 #elif L==9
-	   "administrador/a de titula&ccedil;&atilde;o"
+	"administrador/a de titula&ccedil;&atilde;o"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	   "administrador/a de centro"	// Necessita traduccio
+	"administrador/a de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "administrator of centre"
+	"administrator of centre"
 #elif L==4
-	   "administrador/a de centro"
+	"administrador/a de centro"
 #elif L==5
-	   "administrateur/se de centre"
+	"administrateur/se de centre"
 #elif L==6
-	   "administrador/a de centro"	// Okoteve traducción
+	"administrador/a de centro"	// Okoteve traducción
 #elif L==7
-	   "amministratore di centro"
+	"amministratore di centro"
 #elif L==8
-	   "administrator centrum"
+	"administrator centrum"
 #elif L==9
-	   "administrador/a de centro"
+	"administrador/a de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
-	   "administradora de centro"	// Necessita traduccio
+	"administradora de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "administrator of centre"
+	"administrator of centre"
 #elif L==4
-	   "administradora de centro"
+	"administradora de centro"
 #elif L==5
-	   "administrateuse de centre"
+	"administrateuse de centre"
 #elif L==6
-	   "administradora de centro"	// Okoteve traducción
+	"administradora de centro"	// Okoteve traducción
 #elif L==7
-	   "amministratore di centro"
+	"amministratore di centro"
 #elif L==8
-	   "administratorka centrum"
+	"administratorka centrum"
 #elif L==9
-	   "administradora de centro"
+	"administradora de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	   "administrador de centro"	// Necessita traduccio
+	"administrador de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "administrator of centre"
+	"administrator of centre"
 #elif L==4
-	   "administrador de centro"
+	"administrador de centro"
 #elif L==5
-	   "administrateur de centre"
+	"administrateur de centre"
 #elif L==6
-	   "administrador de centro"	// Okoteve traducción
+	"administrador de centro"	// Okoteve traducción
 #elif L==7
-	   "amministratore di centro"
+	"amministratore di centro"
 #elif L==8
-	   "administrator centrum"
+	"administrator centrum"
 #elif L==9
-	   "administrador de centro"
+	"administrador de centro"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	   "administrador/a de centro"	// Necessita traduccio
+	"administrador/a de centro"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Lehrinstitut"
+	"Administrator der Lehrinstitut"
 #elif L==3
-	   "administrator of centre"
+	"administrator of centre"
 #elif L==4
-	   "administrador/a de centro"
+	"administrador/a de centro"
 #elif L==5
-	   "administrateur/se de centre"
+	"administrateur/se de centre"
 #elif L==6
-	   "administrador/a de centro"	// Okoteve traducción
+	"administrador/a de centro"	// Okoteve traducción
 #elif L==7
-	   "amministratore di centro"
+	"amministratore di centro"
 #elif L==8
-	   "administratorzy centrum"
+	"administratorzy centrum"
 #elif L==9
-	   "administrador/a de centro"
+	"administrador/a de centro"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	   "administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "administrator of institution"
+	"administrator of institution"
 #elif L==4
-	   "administrador/a de instituci&oacute;n"
+	"administrador/a de instituci&oacute;n"
 #elif L==5
-	   "administrateur/se d'&eacute;tablissement"
+	"administrateur/se d'&eacute;tablissement"
 #elif L==6
-	   "administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di istituzione"
+	"amministratore di istituzione"
 #elif L==8
-	   "administrator instytucji"
+	"administrator instytucji"
 #elif L==9
-	   "administrador/a de institu&ccedil;&atilde;o"
+	"administrador/a de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
-	   "administradora de instituci&oacute;n"	// Necessita traduccio
+	"administradora de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "administrator of institution"
+	"administrator of institution"
 #elif L==4
-	   "administradora de instituci&oacute;n"
+	"administradora de instituci&oacute;n"
 #elif L==5
-	   "administrateuse d'&eacute;tablissement"
+	"administrateuse d'&eacute;tablissement"
 #elif L==6
-	   "administradora de instituci&oacute;n"	// Okoteve traducción
+	"administradora de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di istituzione"
+	"amministratore di istituzione"
 #elif L==8
-	   "administratorka instytucji"
+	"administratorka instytucji"
 #elif L==9
-	   "administradora de institu&ccedil;&atilde;o"
+	"administradora de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	   "administrador de instituci&oacute;n"	// Necessita traduccio
+	"administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "administrator of institution"
+	"administrator of institution"
 #elif L==4
-	   "administrador de instituci&oacute;n"
+	"administrador de instituci&oacute;n"
 #elif L==5
-	   "administrateur d'&eacute;tablissement"
+	"administrateur d'&eacute;tablissement"
 #elif L==6
-	   "administrador de instituci&oacute;n"	// Okoteve traducción
+	"administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di istituzione"
+	"amministratore di istituzione"
 #elif L==8
-	   "administrator instytucji"
+	"administrator instytucji"
 #elif L==9
-	   "administrador de institu&ccedil;&atilde;o"
+	"administrador de institu&ccedil;&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	   "administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"administrador/a de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	   "Administrator der Hochschule"
+	"Administrator der Hochschule"
 #elif L==3
-	   "administrator of institution"
+	"administrator of institution"
 #elif L==4
-	   "administrador/a de instituci&oacute;n"
+	"administrador/a de instituci&oacute;n"
 #elif L==5
-	   "administrateur/se d'&eacute;tablissement"
+	"administrateur/se d'&eacute;tablissement"
 #elif L==6
-	   "administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"administrador/a de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	   "amministratore di istituzione"
+	"amministratore di istituzione"
 #elif L==8
-	   "administratorzy instytucji"
+	"administratorzy instytucji"
 #elif L==9
-	   "administrador/a de institu&ccedil;&atilde;o"
+	"administrador/a de institu&ccedil;&atilde;o"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
-	   "superusuari/&agrave;ria"
+	"superusuari/&agrave;ria"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superuser"
+	"superuser"
 #elif L==4
-	   "superusuario/a"
+	"superusuario/a"
 #elif L==5
-	   "superutilisateur/se"
+	"superutilisateur/se"
 #elif L==6
-	   "superusuario/a"	// Okoteve traducción
+	"superusuario/a"	// Okoteve traducción
 #elif L==7
-	   "superutente"
+	"superutente"
 #elif L==8
-	   "superuzytkownik"
+	"superuzytkownik"
 #elif L==9
-	   "superutilizador/a"
+	"superutilizador/a"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
-	   "superusuaria"		// Necessita traduccio
+	"superusuaria"		// Necessita traduccio
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superuser"
+	"superuser"
 #elif L==4
-	   "superusuaria"
+	"superusuaria"
 #elif L==5
-	   "superutilisateuse"
+	"superutilisateuse"
 #elif L==6
-	   "superusuaria"		// Okoteve traducción
+	"superusuaria"		// Okoteve traducción
 #elif L==7
-	   "superutente"
+	"superutente"
 #elif L==8
-	   "superuzytkowniczka"
+	"superuzytkowniczka"
 #elif L==9
-	   "superutilizadora"
+	"superutilizadora"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
-	   "superusuari"
+	"superusuari"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superuser"
+	"superuser"
 #elif L==4
-	   "superusuario"
+	"superusuario"
 #elif L==5
-	   "superutilisateur"
+	"superutilisateur"
 #elif L==6
-	   "superusuario"	// Okoteve traducción
+	"superusuario"	// Okoteve traducción
 #elif L==7
-	   "superutente"
+	"superutente"
 #elif L==8
-	   "superu&zdot;ytkownika"
+	"superu&zdot;ytkownika"
 #elif L==9
-	   "superutilizador"
+	"superutilizador"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
-	   "superusuari/&agrave;ria"
+	"superusuari/&agrave;ria"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superuser"
+	"superuser"
 #elif L==4
-	   "superusuario/a"
+	"superusuario/a"
 #elif L==5
-	   "superutilisateur/se"
+	"superutilisateur/se"
 #elif L==6
-	   "superusuario/a"	// Okoteve traducción
+	"superusuario/a"	// Okoteve traducción
 #elif L==7
-	   "superutente"
+	"superutente"
 #elif L==8
-	   "superuzytkownicy"
+	"superuzytkownicy"
 #elif L==9
-	   "superutilizador/a"
+	"superutilizador/a"
 #endif
 	 }
    };
@@ -33179,650 +33200,650 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
-	   "Convidats"
+	"Convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "Guests"
+	"Guests"
 #elif L==4
-	   "Invitados"
+	"Invitados"
 #elif L==5
-	   "Invit&eacute;s"
+	"Invit&eacute;s"
 #elif L==6
-	   "Invitados"	// Okoteve traducción
+	"Invitados"	// Okoteve traducción
 #elif L==7
-	   "Ospiti"
+	"Ospiti"
 #elif L==8
-	   "Zaproszenie"
+	"Zaproszenie"
 #elif L==9
-	   "Convidados"
+	"Convidados"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
-	   "Invitadas"	// Necessita traduccio
+	"Invitadas"	// Necessita traduccio
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "Guests"
+	"Guests"
 #elif L==4
-	   "Invitadas"
+	"Invitadas"
 #elif L==5
-	   "Invit&eacute;es"
+	"Invit&eacute;es"
 #elif L==6
-	   "Invitadas"	// Okoteve traducción
+	"Invitadas"	// Okoteve traducción
 #elif L==7
-	   "Ospiti"
+	"Ospiti"
 #elif L==8
-	   "Zaproszona"
+	"Zaproszona"
 #elif L==9
-	   "Convidadas"
+	"Convidadas"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
-	   "Convidats"
+	"Convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "Guests"
+	"Guests"
 #elif L==4
-	   "Invitados"
+	"Invitados"
 #elif L==5
-	   "Invit&eacute;s"
+	"Invit&eacute;s"
 #elif L==6
-	   "Invitados"	// Okoteve traducción
+	"Invitados"	// Okoteve traducción
 #elif L==7
-	   "Ospiti"
+	"Ospiti"
 #elif L==8
-	   "Zaproszony"
+	"Zaproszony"
 #elif L==9
-	   "Convidados"
+	"Convidados"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
-	   "Convidats"
+	"Convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "Guests"
+	"Guests"
 #elif L==4
-	   "Invitados"
+	"Invitados"
 #elif L==5
-	   "Invit&eacute;s"
+	"Invit&eacute;s"
 #elif L==6
-	   "Invitados"	// Okoteve traducción
+	"Invitados"	// Okoteve traducción
 #elif L==7
-	   "Ospiti"
+	"Ospiti"
 #elif L==8
-	   "Zaproszeni"
+	"Zaproszeni"
 #elif L==9
-	   "Convidados"
+	"Convidados"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	   "Visitants"
+	"Visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitors"
+	"Visitors"
 #elif L==4
-	   "Visitantes"
+	"Visitantes"
 #elif L==5
-	   "Visiteurs"
+	"Visiteurs"
 #elif L==6
-	   "Visitantes"	// Okoteve traducción
+	"Visitantes"	// Okoteve traducción
 #elif L==7
-	   "Visitatori"
+	"Visitatori"
 #elif L==8
-	   "Odwiedzaj&aogon;cy"
+	"Odwiedzaj&aogon;cy"
 #elif L==9
-	   "Visitantes"
+	"Visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	   "Visitants"
+	"Visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitors"
+	"Visitors"
 #elif L==4
-	   "Visitantes"
+	"Visitantes"
 #elif L==5
-	   "Visiteurs"
+	"Visiteurs"
 #elif L==6
-	   "Visitantes"	// Okoteve traducción
+	"Visitantes"	// Okoteve traducción
 #elif L==7
-	   "Visitatori"
+	"Visitatori"
 #elif L==8
-	   "Odwiedzaj&aogon;cy"
+	"Odwiedzaj&aogon;cy"
 #elif L==9
-	   "Visitantes"
+	"Visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	   "Visitants"
+	"Visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitors"
+	"Visitors"
 #elif L==4
-	   "Visitantes"
+	"Visitantes"
 #elif L==5
-	   "Visiteurs"
+	"Visiteurs"
 #elif L==6
-	   "Visitantes"	// Okoteve traducción
+	"Visitantes"	// Okoteve traducción
 #elif L==7
-	   "Visitatori"
+	"Visitatori"
 #elif L==8
-	   "Odwiedzaj&aogon;cy"
+	"Odwiedzaj&aogon;cy"
 #elif L==9
-	   "Visitantes"
+	"Visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	   "Visitants"
+	"Visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "Visitors"
+	"Visitors"
 #elif L==4
-	   "Visitantes"
+	"Visitantes"
 #elif L==5
-	   "Visiteurs"
+	"Visiteurs"
 #elif L==6
-	   "Visitantes"	// Okoteve traducción
+	"Visitantes"	// Okoteve traducción
 #elif L==7
-	   "Visitatori"
+	"Visitatori"
 #elif L==8
-	   "Odwiedzaj&aogon;cy"
+	"Odwiedzaj&aogon;cy"
 #elif L==9
-	   "Visitantes"
+	"Visitantes"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
-	   "Estudiants"
+	"Estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "Students"
+	"Students"
 #elif L==4
-	   "Estudiantes"
+	"Estudiantes"
 #elif L==5
-	   "&Eacute;tudiants"
+	"&Eacute;tudiants"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studenti"
+	"Studenti"
 #elif L==8
-	   "Studenci"
+	"Studenci"
 #elif L==9
-	   "Estudantes"
+	"Estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
-	   "Estudiants"
+	"Estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "Students"
+	"Students"
 #elif L==4
-	   "Estudiantes"
+	"Estudiantes"
 #elif L==5
-	   "&Eacute;tudiantes"
+	"&Eacute;tudiantes"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studentesse"
+	"Studentesse"
 #elif L==8
-	   "Studentki"
+	"Studentki"
 #elif L==9
-	   "Estudantes"
+	"Estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
-	   "Estudiants"
+	"Estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "Students"
+	"Students"
 #elif L==4
-	   "Estudiantes"
+	"Estudiantes"
 #elif L==5
-	   "&Eacute;tudiants"
+	"&Eacute;tudiants"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studenti"
+	"Studenti"
 #elif L==8
-	   "Studenci"
+	"Studenci"
 #elif L==9
-	   "Estudantes"
+	"Estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
-	   "Estudiants"
+	"Estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "Students"
+	"Students"
 #elif L==4
-	   "Estudiantes"
+	"Estudiantes"
 #elif L==5
-	   "&Eacute;tudiants"
+	"&Eacute;tudiants"
 #elif L==6
-	   "Temimbo'e"
+	"Temimbo'e"
 #elif L==7
-	   "Studenti"
+	"Studenti"
 #elif L==8
-	   "Studenci"
+	"Studenci"
 #elif L==9
-	   "Estudantes"
+	"Estudantes"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
-	   "Professors"
+	"Professors"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teachers"
+	"Teachers"
 #elif L==4
-	   "Profesores"
+	"Profesores"
 #elif L==5
-	   "Enseignants"
+	"Enseignants"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professori"
+	"Professori"
 #elif L==8
-	   "Nauczyciele"
+	"Nauczyciele"
 #elif L==9
-	   "Professores"
+	"Professores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
-	   "Professores"
+	"Professores"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teachers"
+	"Teachers"
 #elif L==4
-	   "Profesoras"
+	"Profesoras"
 #elif L==5
-	   "Enseignantes"
+	"Enseignantes"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professoresse"
+	"Professoresse"
 #elif L==8
-	   "Nauczycielki"
+	"Nauczycielki"
 #elif L==9
-	   "Professoras"
+	"Professoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
-	   "Professors"
+	"Professors"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teachers"
+	"Teachers"
 #elif L==4
-	   "Profesores"
+	"Profesores"
 #elif L==5
-	   "Enseignants"
+	"Enseignants"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professori"
+	"Professori"
 #elif L==8
-	   "Nauczyciele"
+	"Nauczyciele"
 #elif L==9
-	   "Professores"
+	"Professores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
-	   "Professors"
+	"Professors"
 #elif L==2
-	   "Lehrkraft"
+	"Lehrkraft"
 #elif L==3
-	   "Teachers"
+	"Teachers"
 #elif L==4
-	   "Profesores"
+	"Profesores"
 #elif L==5
-	   "Enseignants"
+	"Enseignants"
 #elif L==6
-	   "Mbo'eh&aacute;ra"
+	"Mbo'eh&aacute;ra"
 #elif L==7
-	   "Professori"
+	"Professori"
 #elif L==8
-	   "Nauczyciele"
+	"Nauczyciele"
 #elif L==9
-	   "Professores"
+	"Professores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_FEMALE
-	   "Administradoras"	// Necessita traduccio
+	"Administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradoras"
+	"Administradoras"
 #elif L==5
-	   "Administrateuses"
+	"Administrateuses"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorki"
+	"Administratorki"
 #elif L==9
-	   "Administradoras"
+	"Administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_MALE
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_ALL
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
-	   "Administradoras"	// Necessita traduccio
+	"Administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradoras"
+	"Administradoras"
 #elif L==5
-	   "Administrateuses"
+	"Administrateuses"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorki"
+	"Administratorki"
 #elif L==9
-	   "Administradoras"
+	"Administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
-	   "Administradoras"	// Necessita traduccio
+	"Administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradoras"
+	"Administradoras"
 #elif L==5
-	   "Administrateuses"
+	"Administrateuses"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorki"
+	"Administratorki"
 #elif L==9
-	   "Administradoras"
+	"Administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
-	   "Administradors"
+	"Administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "Administrators"
+	"Administrators"
 #elif L==4
-	   "Administradores"
+	"Administradores"
 #elif L==5
-	   "Administrateurs"
+	"Administrateurs"
 #elif L==6
-	   "&Ntilde;angarekoh&aacute;ra"
+	"&Ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "Amministratori"
+	"Amministratori"
 #elif L==8
-	   "Administratorzy"
+	"Administratorzy"
 #elif L==9
-	   "Administradores"
+	"Administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
-	   "Superusuaris"
+	"Superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superusers"
+	"Superusers"
 #elif L==4
-	   "Superusuarios"
+	"Superusuarios"
 #elif L==5
-	   "Superutilisateurs"
+	"Superutilisateurs"
 #elif L==6
-	   "Superusuarios"	// Okoteve traducción
+	"Superusuarios"	// Okoteve traducción
 #elif L==7
-	   "Superutenti"
+	"Superutenti"
 #elif L==8
-	   "Superu&zdot;ytkownika"
+	"Superu&zdot;ytkownika"
 #elif L==9
-	   "Superutilizadores"
+	"Superutilizadores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_FEMALE
-	   "Superusuarias"	// Necessita traduccio
+	"Superusuarias"	// Necessita traduccio
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superusers"
+	"Superusers"
 #elif L==4
-	   "Superusuarias"
+	"Superusuarias"
 #elif L==5
-	   "Superutilisateuses"
+	"Superutilisateuses"
 #elif L==6
-	   "Superusuarias"	// Okoteve traducción
+	"Superusuarias"	// Okoteve traducción
 #elif L==7
-	   "Superutenti"
+	"Superutenti"
 #elif L==8
-	   "Superuzytkowniczka"
+	"Superuzytkowniczka"
 #elif L==9
-	   "Superutilizadoras"
+	"Superutilizadoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_MALE
-	   "Superusuaris"
+	"Superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superusers"
+	"Superusers"
 #elif L==4
-	   "Superusuarios"
+	"Superusuarios"
 #elif L==5
-	   "Superutilisateurs"
+	"Superutilisateurs"
 #elif L==6
-	   "Superusuarios"	// Okoteve traducción
+	"Superusuarios"	// Okoteve traducción
 #elif L==7
-	   "Superutenti"
+	"Superutenti"
 #elif L==8
-	   "Superuzytkownik"
+	"Superuzytkownik"
 #elif L==9
-	   "Superutilizadores"
+	"Superutilizadores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
-	   "Superusuaris"
+	"Superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "Superusers"
+	"Superusers"
 #elif L==4
-	   "Superusuarios"
+	"Superusuarios"
 #elif L==5
-	   "Superutilisateurs"
+	"Superutilisateurs"
 #elif L==6
-	   "Superusuarios"	// Okoteve traducción
+	"Superusuarios"	// Okoteve traducción
 #elif L==7
-	   "Superutenti"
+	"Superutenti"
 #elif L==8
-	   "Superuzytkownicy"
+	"Superuzytkownicy"
 #elif L==9
-	   "Superutilizadores"
+	"Superutilizadores"
 #endif
 	 } };
 
@@ -33908,653 +33929,653 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9
 	"desconhecidos"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
-	   "convidats"
+	"convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "guests"
+	"guests"
 #elif L==4
-	   "invitados"
+	"invitados"
 #elif L==5
-	   "invit&eacute;s"
+	"invit&eacute;s"
 #elif L==6
-	   "invitados"	// Okoteve traducción
+	"invitados"	// Okoteve traducción
 #elif L==7
-	   "ospiti"
+	"ospiti"
 #elif L==8
-	   "zaproszenie"
+	"zaproszenie"
 #elif L==9
-	   "convidados"
+	"convidados"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
-	   "invitadas"	// Necessita traduccio
+	"invitadas"	// Necessita traduccio
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "guests"
+	"guests"
 #elif L==4
-	   "invitadas"
+	"invitadas"
 #elif L==5
-	   "invit&eacute;es"
+	"invit&eacute;es"
 #elif L==6
-	   "invitadas"	// Okoteve traducción
+	"invitadas"	// Okoteve traducción
 #elif L==7
-	   "ospiti"
+	"ospiti"
 #elif L==8
-	   "zaproszona"
+	"zaproszona"
 #elif L==9
-	   "convidadas"
+	"convidadas"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
-	   "convidats"
+	"convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "guests"
+	"guests"
 #elif L==4
-	   "invitados"
+	"invitados"
 #elif L==5
-	   "invit&eacute;s"
+	"invit&eacute;s"
 #elif L==6
-	   "invitados"	// Okoteve traducción
+	"invitados"	// Okoteve traducción
 #elif L==7
-	   "ospiti"
+	"ospiti"
 #elif L==8
-	   "zaproszony"
+	"zaproszony"
 #elif L==9
-	   "convidados"
+	"convidados"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
-	   "convidats"
+	"convidats"
 #elif L==2
-	   "Eingeladen"
+	"Eingeladen"
 #elif L==3
-	   "guests"
+	"guests"
 #elif L==4
-	   "invitados"
+	"invitados"
 #elif L==5
-	   "invit&eacute;s"
+	"invit&eacute;s"
 #elif L==6
-	   "invitados"	// Okoteve traducción
+	"invitados"	// Okoteve traducción
 #elif L==7
-	   "ospiti"
+	"ospiti"
 #elif L==8
-	   "zaproszeni"
+	"zaproszeni"
 #elif L==9
-	   "convidados"
+	"convidados"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	   "visitants"
+	"visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitors"
+	"visitors"
 #elif L==4
-	   "visitantes"
+	"visitantes"
 #elif L==5
-	   "visiteurs"
+	"visiteurs"
 #elif L==6
-	   "visitantes"	// Okoteve traducción
+	"visitantes"	// Okoteve traducción
 #elif L==7
-	   "visitatori"
+	"visitatori"
 #elif L==8
-	   "odwiedzaj&aogon;cy"
+	"odwiedzaj&aogon;cy"
 #elif L==9
-	   "visitantes"
+	"visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	   "visitants"
+	"visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitors"
+	"visitors"
 #elif L==4
-	   "visitantes"
+	"visitantes"
 #elif L==5
-	   "visiteurs"
+	"visiteurs"
 #elif L==6
-	   "visitantes"	// Okoteve traducción
+	"visitantes"	// Okoteve traducción
 #elif L==7
-	   "visitatori"
+	"visitatori"
 #elif L==8
-	   "odwiedzaj&aogon;cy"
+	"odwiedzaj&aogon;cy"
 #elif L==9
-	   "visitantes"
+	"visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	   "visitants"
+	"visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitors"
+	"visitors"
 #elif L==4
-	   "visitantes"
+	"visitantes"
 #elif L==5
-	   "visiteurs"
+	"visiteurs"
 #elif L==6
-	   "visitantes"	// Okoteve traducción
+	"visitantes"	// Okoteve traducción
 #elif L==7
-	   "visitatori"
+	"visitatori"
 #elif L==8
-	   "odwiedzaj&aogon;cy"
+	"odwiedzaj&aogon;cy"
 #elif L==9
-	   "visitantes"
+	"visitantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	   "visitants"
+	"visitants"
 #elif L==2
-	   "Besucher"
+	"Besucher"
 #elif L==3
-	   "visitors"
+	"visitors"
 #elif L==4
-	   "visitantes"
+	"visitantes"
 #elif L==5
-	   "visiteurs"
+	"visiteurs"
 #elif L==6
-	   "visitantes"	// Okoteve traducción
+	"visitantes"	// Okoteve traducción
 #elif L==7
-	   "visitatori"
+	"visitatori"
 #elif L==8
-	   "odwiedzaj&aogon;cy"
+	"odwiedzaj&aogon;cy"
 #elif L==9
-	   "visitantes"
+	"visitantes"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
-	   "estudiants"
+	"estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "students"
+	"students"
 #elif L==4
-	   "estudiantes"
+	"estudiantes"
 #elif L==5
-	   "&eacute;tudiants"
+	"&eacute;tudiants"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studenti"
+	"studenti"
 #elif L==8
-	   "studenci"
+	"studenci"
 #elif L==9
-	   "estudantes"
+	"estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
-	   "estudiants"
+	"estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "students"
+	"students"
 #elif L==4
-	   "estudiantes"
+	"estudiantes"
 #elif L==5
-	   "&eacute;tudiantes"
+	"&eacute;tudiantes"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studentesse"
+	"studentesse"
 #elif L==8
-	   "studenka"
+	"studenka"
 #elif L==9
-	   "estudantes"
+	"estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
-	   "estudiants"
+	"estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "students"
+	"students"
 #elif L==4
-	   "estudiantes"
+	"estudiantes"
 #elif L==5
-	   "&eacute;tudiants"
+	"&eacute;tudiants"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studenti"
+	"studenti"
 #elif L==8
-	   "studentci"
+	"studentci"
 #elif L==9
-	   "estudantes"
+	"estudantes"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
-	   "estudiants"
+	"estudiants"
 #elif L==2
-	   "Studenten"
+	"Studenten"
 #elif L==3
-	   "students"
+	"students"
 #elif L==4
-	   "estudiantes"
+	"estudiantes"
 #elif L==5
-	   "&eacute;tudiants"
+	"&eacute;tudiants"
 #elif L==6
-	   "temimbo'e"
+	"temimbo'e"
 #elif L==7
-	   "studenti"
+	"studenti"
 #elif L==8
-	   "studentci"
+	"studentci"
 #elif L==9
-	   "estudantes"
+	"estudantes"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
-	   "professors"
+	"professors"
 #elif L==2
-	   "Lehrkr&auml;fte"
+	"Lehrkr&auml;fte"
 #elif L==3
-	   "teachers"
+	"teachers"
 #elif L==4
-	   "profesores"
+	"profesores"
 #elif L==5
-	   "enseignants"
+	"enseignants"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professori"
+	"professori"
 #elif L==8
-	   "nauczyciele"
+	"nauczyciele"
 #elif L==9
-	   "professores"
+	"professores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
-	   "professores"
+	"professores"
 #elif L==2
-	   "Lehrkr&auml;fte"
+	"Lehrkr&auml;fte"
 #elif L==3
-	   "teachers"
+	"teachers"
 #elif L==4
-	   "profesoras"
+	"profesoras"
 #elif L==5
-	   "enseignantes"
+	"enseignantes"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professoresse"
+	"professoresse"
 #elif L==8
-	   "nauczycielki"
+	"nauczycielki"
 #elif L==9
-	   "professoras"
+	"professoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
-	   "professors"
+	"professors"
 #elif L==2
-	   "Lehrkr&auml;fte"
+	"Lehrkr&auml;fte"
 #elif L==3
-	   "teachers"
+	"teachers"
 #elif L==4
-	   "profesores"
+	"profesores"
 #elif L==5
-	   "enseignants"
+	"enseignants"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professori"
+	"professori"
 #elif L==8
-	   "nauczyciele"
+	"nauczyciele"
 #elif L==9
-	   "professores"
+	"professores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
-	   "professors"
+	"professors"
 #elif L==2
-	   "Lehrkr&auml;fte"
+	"Lehrkr&auml;fte"
 #elif L==3
-	   "teachers"
+	"teachers"
 #elif L==4
-	   "profesores"
+	"profesores"
 #elif L==5
-	   "enseignants"
+	"enseignants"
 #elif L==6
-	   "mbo'eh&aacute;ra"
+	"mbo'eh&aacute;ra"
 #elif L==7
-	   "professori"
+	"professori"
 #elif L==8
-	   "nauczyciele"
+	"nauczyciele"
 #elif L==9
-	   "professores"
+	"professores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
-	   "administradoras"	// Necessita traduccio
+	"administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradoras"
+	"administradoras"
 #elif L==5
-	   "administrateuses"
+	"administrateuses"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorki"
+	"administratorki"
 #elif L==9
-	   "administradoras"
+	"administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
-	   "administradoras"	// Necessita traduccio
+	"administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradoras"
+	"administradoras"
 #elif L==5
-	   "administrateuses"
+	"administrateuses"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorki"
+	"administratorki"
 #elif L==9
-	   "administradoras"
+	"administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
-	   "administradoras"	// Necessita traduccio
+	"administradoras"	// Necessita traduccio
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradoras"
+	"administradoras"
 #elif L==5
-	   "administrateuses"
+	"administrateuses"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorki"
+	"administratorki"
 #elif L==9
-	   "administradoras"
+	"administradoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	   "administradors"
+	"administradors"
 #elif L==2
-	   "Administratoren"
+	"Administratoren"
 #elif L==3
-	   "administrators"
+	"administrators"
 #elif L==4
-	   "administradores"
+	"administradores"
 #elif L==5
-	   "administrateurs"
+	"administrateurs"
 #elif L==6
-	   "&ntilde;angarekoh&aacute;ra"
+	"&ntilde;angarekoh&aacute;ra"
 #elif L==7
-	   "amministratori"
+	"amministratori"
 #elif L==8
-	   "administratorzy"
+	"administratorzy"
 #elif L==9
-	   "administradores"
+	"administradores"
 #endif
-	 },
-	 {
+	},
+	{
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
-	   "superusuaris"
+	"superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superusers"
+	"superusers"
 #elif L==4
-	   "superusuarios"
+	"superusuarios"
 #elif L==5
-	   "superutilisateurs"
+	"superutilisateurs"
 #elif L==6
-	   "superusuarios"		// Okoteve traducción
+	"superusuarios"		// Okoteve traducción
 #elif L==7
-	   "superutenti"
+	"superutenti"
 #elif L==8
-	   "superusers"			// Potrzebujesz tlumaczenie
+	"superusers"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "superutilizadores"
+	"superutilizadores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
-	   "superusuarias"		// Necessita traduccio
+	"superusuarias"		// Necessita traduccio
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superusers"
+	"superusers"
 #elif L==4
-	   "superusuarias"
+	"superusuarias"
 #elif L==5
-	   "superutilisateuses"
+	"superutilisateuses"
 #elif L==6
-	   "superusuarias"		// Okoteve traducción
+	"superusuarias"		// Okoteve traducción
 #elif L==7
-	   "superutenti"
+	"superutenti"
 #elif L==8
-	   "superusers"			// Potrzebujesz tlumaczenie
+	"superusers"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "superutilizadoras"
+	"superutilizadoras"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
-	   "superusuaris"
+	"superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superusers"
+	"superusers"
 #elif L==4
-	   "superusuarios"
+	"superusuarios"
 #elif L==5
-	   "superutilisateurs"
+	"superutilisateurs"
 #elif L==6
-	   "superusuarios"		// Okoteve traducción
+	"superusuarios"		// Okoteve traducción
 #elif L==7
-	   "superutenti"
+	"superutenti"
 #elif L==8
-	   "superusers"			// Potrzebujesz tlumaczenie
+	"superusers"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "superutilizadores"
+	"superutilizadores"
 #endif
-	   ,
+	,
 #if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
-	   "superusuaris"
+	"superusuaris"
 #elif L==2
-	   "Superuser"
+	"Superuser"
 #elif L==3
-	   "superusers"
+	"superusers"
 #elif L==4
-	   "superusuarios"
+	"superusuarios"
 #elif L==5
-	   "superutilisateurs"
+	"superutilisateurs"
 #elif L==6
-	   "superusuarios"		// Okoteve traducción
+	"superusuarios"		// Okoteve traducción
 #elif L==7
-	   "superutenti"
+	"superutenti"
 #elif L==8
-	   "superusers"			// Potrzebujesz tlumaczenie
+	"superusers"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "superutilizadores"
+	"superutilizadores"
 #endif
 	 } };
 
@@ -38121,223 +38142,223 @@ const char *Txt_STAT_COLOR_TYPES[Sta_NUM_COLOR_TYPES] =
 const char *Txt_STAT_COURSE_FILE_ZONES[Sta_NUM_STAT_CRS_FILE_ZONES] =	// Use &nbsp; instead of space
 	 {
 #if   L==1	// Brw_ADMI_DOCUM_CRS
-	   "Documents&nbsp;(ass.)"
+	 "Documents&nbsp;(ass.)"
 #elif L==2
-	   "Dokumente&nbsp;(Ver.)"
+	 "Dokumente&nbsp;(Ver.)"
 #elif L==3
-	   "Documents&nbsp;(crs.)"
+	 "Documents&nbsp;(crs.)"
 #elif L==4
-	   "Documentos&nbsp;(asg.)"
+	 "Documentos&nbsp;(asg.)"
 #elif L==5
-	   "Documents&nbsp;(mat.)"
+	 "Documents&nbsp;(mat.)"
 #elif L==6
-	   "Documentos&nbsp;(asg.)"		// Okoteve traducción
+	 "Documentos&nbsp;(asg.)"		// Okoteve traducción
 #elif L==7
-	   "Documenti&nbsp;(crs.)"
+	 "Documenti&nbsp;(crs.)"
 #elif L==8
-	   "Dokumenty&nbsp;(kurs)"
+	 "Dokumenty&nbsp;(kurs)"
 #elif L==9
-	   "Documentos&nbsp;(crs.)"
+	"Documentos&nbsp;(crs.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_DOCUM_GRP
-	   "Documents&nbsp;(grp.)"
+	"Documents&nbsp;(grp.)"
 #elif L==2
-	   "Dokumente&nbsp;(Grp.)"
+	"Dokumente&nbsp;(Grp.)"
 #elif L==3
-	   "Documents&nbsp;(grp.)"
+	"Documents&nbsp;(grp.)"
 #elif L==4
-	   "Documentos&nbsp;(grp.)"
+	"Documentos&nbsp;(grp.)"
 #elif L==5
-	   "Documents&nbsp;(grp.)"
+	"Documents&nbsp;(grp.)"
 #elif L==6
-	   "Documentos&nbsp;(grp.)"	// Okoteve traducción
+	"Documentos&nbsp;(grp.)"	// Okoteve traducción
 #elif L==7
-	   "Documenti&nbsp;(grp.)"
+	"Documenti&nbsp;(grp.)"
 #elif L==8
-	   "Dokumenty&nbsp;(grp.)"
+	"Dokumenty&nbsp;(grp.)"
 #elif L==9
-	   "Documentos&nbsp;(grp.)"
+	"Documentos&nbsp;(grp.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_TEACH_CRS
-	   "Professors&nbsp;(ass.)"
+	"Privats&nbsp;(ass.)"
 #elif L==2
-	   "Lehrkr&auml;fte&nbsp;(Ver.)"
+	"Private&nbsp;(Ver.)"
 #elif L==3
-	   "Teachers&nbsp;(crs.)"
+	"Private&nbsp;(crs.)"
 #elif L==4
-	   "Profesores&nbsp;(asg.)"
+	"Privados&nbsp;(asg.)"
 #elif L==5
-	   "Enseignants&nbsp;(mat.)"
+	"Priv&eacute;s&nbsp;(mat.)"
 #elif L==6
-	   "Profesores&nbsp;(asg.)"		// Okoteve traducción
+	"Privados&nbsp;(asg.)"	// Okoteve traducción
 #elif L==7
-	   "Professori&nbsp;(crs.)"
+	"Privati&nbsp;(crs.)"
 #elif L==8
-	   "Nauczycieli&nbsp;(kurs)"
+	"Prywatne&nbsp;(kurs)"
 #elif L==9
-	   "Professores&nbsp;(crs.)"
+	"Privadoss&nbsp;(crs.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_TEACH_GRP
-	   "Professors&nbsp;(grp.)"
+	"Privats&nbsp;(grp.)"
 #elif L==2
-	   "Lehrkr&auml;fte&nbsp;(Grp.)"
+	"Private&nbsp;(Grp.)"
 #elif L==3
-	   "Teachers&nbsp;(grp.)"
+	"Private&nbsp;(grp.)"
 #elif L==4
-	   "Profesores&nbsp;(grp.)"
+	"Privados&nbsp;(grp.)"
 #elif L==5
-	   "Enseignants&nbsp;(grp.)"
+	"Priv&eacute;s&nbsp;(grp.)"
 #elif L==6
-	   "Profesores&nbsp;(grp.)"	// Okoteve traducción
+	"Privados&nbsp;(grp.)"	// Okoteve traducción
 #elif L==7
-	   "Professori&nbsp;(grp.)"
+	"Privati&nbsp;(grp.)"
 #elif L==8
-	   "Nauczycieli&nbsp;(grp.)"
+	"Prywatne&nbsp;(grp)"
 #elif L==9
-	   "Professores&nbsp;(grp.)"
+	"Privadoss&nbsp;(grp.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_SHARE_CRS
-	   "Compartits&nbsp;(asg.)"
+	"Compartits&nbsp;(asg.)"
 #elif L==2
-	   "Freigegebene&nbsp;(Ver.)"
+	"Freigegebene&nbsp;(Ver.)"
 #elif L==3
-	   "Shared&nbsp;(crs.)"
+	"Shared&nbsp;(crs.)"
 #elif L==4
-	   "Compartidos&nbsp;(asg.)"
+	"Compartidos&nbsp;(asg.)"
 #elif L==5
-	   "Partag&eacute;s&nbsp;(mat.)"
+	"Partag&eacute;s&nbsp;(mat.)"
 #elif L==6
-	   "Compartidos&nbsp;(asg.)"	// Okoteve traducción
+	"Compartidos&nbsp;(asg.)"	// Okoteve traducción
 #elif L==7
-	   "Condivisi&nbsp;(crs.)"
+	"Condivisi&nbsp;(crs.)"
 #elif L==8
-	   "Wsp&oacute;lna&nbsp;(kurs)"
+	"Wsp&oacute;lna&nbsp;(kurs)"
 #elif L==9
-	   "Compartilhados&nbsp;(crs.)"
+	"Compartilhados&nbsp;(crs.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_SHARE_GRP
-	   "Compartits&nbsp;(grp.)"
+	"Compartits&nbsp;(grp.)"
 #elif L==2
-	   "Freigegebene&nbsp;(Grp.)"
+	"Freigegebene&nbsp;(Grp.)"
 #elif L==3
-	   "Shared&nbsp;(grp.)"
+	"Shared&nbsp;(grp.)"
 #elif L==4
-	   "Compartidos&nbsp;(grp.)"
+	"Compartidos&nbsp;(grp.)"
 #elif L==5
-	   "Partag&eacute;s&nbsp;(grp.)"
+	"Partag&eacute;s&nbsp;(grp.)"
 #elif L==6
-	   "Compartidos&nbsp;(grp.)"	// Okoteve traducción
+	"Compartidos&nbsp;(grp.)"	// Okoteve traducción
 #elif L==7
-	   "Condivisi&nbsp;(grp.)"
+	"Condivisi&nbsp;(grp.)"
 #elif L==8
-	   "Wsp&oacute;lna&nbsp;(grp.)"
+	"Wsp&oacute;lna&nbsp;(grp.)"
 #elif L==9
-	   "Compartilhados&nbsp;(grp.)"
+	"Compartilhados&nbsp;(grp.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_MARKS_CRS
-	   "Qualificacions&nbsp;(ass.)"
+	"Qualificacions&nbsp;(ass.)"
 #elif L==2
-	   "Bewertungen&nbsp;(Ver.)"
+	"Bewertungen&nbsp;(Ver.)"
 #elif L==3
-	   "Marks&nbsp;(crs.)"
+	"Marks&nbsp;(crs.)"
 #elif L==4
-	   "Calificaciones&nbsp;(asg.)"
+	"Calificaciones&nbsp;(asg.)"
 #elif L==5
-	   "Notes&nbsp;(mat.)"
+	"Notes&nbsp;(mat.)"
 #elif L==6
-	   "Calificaciones&nbsp;(asg.)"		// Okoteve traducción
+	"Calificaciones&nbsp;(asg.)"		// Okoteve traducción
 #elif L==7
-	   "Risultati&nbsp;(crs.)"
+	"Risultati&nbsp;(crs.)"
 #elif L==8
-	   "Marks&nbsp;(crs.)"			// Potrzebujesz tlumaczenie
+	"Marks&nbsp;(crs.)"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Notas&nbsp;(crs.)"
+	"Notas&nbsp;(crs.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_MARKS_GRP
-	   "Qualificacions&nbsp;(grp.)"
+	"Qualificacions&nbsp;(grp.)"
 #elif L==2
-	   "Bewertungen&nbsp;(Grp.)"
+	"Bewertungen&nbsp;(Grp.)"
 #elif L==3
-	   "Marks&nbsp;(grp.)"
+	"Marks&nbsp;(grp.)"
 #elif L==4
-	   "Calificaciones&nbsp;(grp.)"
+	"Calificaciones&nbsp;(grp.)"
 #elif L==5
-	   "Notes&nbsp;(grp.)"
+	"Notes&nbsp;(grp.)"
 #elif L==6
-	   "Calificaciones&nbsp;(grp.)"		// Okoteve traducción
+	"Calificaciones&nbsp;(grp.)"		// Okoteve traducción
 #elif L==7
-	   "Risultati&nbsp;(grp.)"
+	"Risultati&nbsp;(grp.)"
 #elif L==8
-	   "Marks&nbsp;(grp.)"			// Potrzebujesz tlumaczenie
+	"Marks&nbsp;(grp.)"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Notas&nbsp;(grp.)"
+	"Notas&nbsp;(grp.)"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_ASSIG_USR
-	   "Activitats"
+	"Activitats"
 #elif L==2
-	   "Aufgaben"
+	"Aufgaben"
 #elif L==3
-	   "Assignments"
+	"Assignments"
 #elif L==4
-	   "Actividades"
+	"Actividades"
 #elif L==5
-	   "Activit&eacute;s"
+	"Activit&eacute;s"
 #elif L==6
-	   "Tar&eacute;a"
+	"Tar&eacute;a"
 #elif L==7
-	   "Attivit&agrave;"
+	"Attivit&agrave;"
 #elif L==8
-	   "Zadania"
+	"Zadania"
 #elif L==9
-	   "Atividades"
+	"Atividades"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_ADMI_WORKS_USR
-	   "Treballs"
+	"Treballs"
 #elif L==2
-	   "Hausarbeiten"
+	"Hausarbeiten"
 #elif L==3
-	   "Homework"
+	"Homework"
 #elif L==4
-	   "Trabajos"
+	"Trabajos"
 #elif L==5
-	   "Travails"
+	"Travails"
 #elif L==6
-	   "Tembiapo"
+	"Tembiapo"
 #elif L==7
-	   "Lavori"
+	"Lavori"
 #elif L==8
-	   "Praca domowa"
+	"Praca domowa"
 #elif L==9
-	   "Trabalhos"
+	"Trabalhos"
 #endif
-	   ,
+	,
 #if   L==1	// Brw_UNKNOWN
-	   "Total"
+	"Total"
 #elif L==2
-	   "Gesamtzahl"
+	"Gesamtzahl"
 #elif L==3
-	   "Total"
+	"Total"
 #elif L==4
-	   "Total"
+	"Total"
 #elif L==5
-	   "Total"
+	"Total"
 #elif L==6
-	   "Total"		// Okoteve traducción
+	"Total"		// Okoteve traducción
 #elif L==7
-	   "Totale"
+	"Totale"
 #elif L==8
-	   "Ca&lstrok;kowity"
+	"Ca&lstrok;kowity"
 #elif L==9
-	   "Total"
+	"Total"
 #endif
 	};
 
@@ -40381,177 +40402,177 @@ const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS] =
 	};
 
 const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS] =	// Must be visible in 1024x768 without horizontal scroll bar
-	 {
-	 // TabUnk
-	   NULL,
-	   // TabSys
+	{
+	// TabUnk
+	NULL,
+	// TabSys
 #if   L==1
-	   "PLATAFORMA"
+	"PLATAFORMA"
 #elif L==2
-	   "PLATTFORM"
+	"PLATTFORM"
 #elif L==3
-	   "SYSTEM"
+	"SYSTEM"
 #elif L==4
-	   "PLATAFORMA"
+	"PLATAFORMA"
 #elif L==5
-	   "PLATE-FORME"
+	"PLATE-FORME"
 #elif L==6
-	   "YPYKATU"
+	"YPYKATU"
 #elif L==7
-	   "PIATTAFORMA"
+	"PIATTAFORMA"
 #elif L==8
-	   "SYSTEM"
+	"SYSTEM"
 #elif L==9
-	   "SISTEMA"
+	"SISTEMA"
 #endif
-	   ,
-	   // TabCty
+	,
+	// TabCty
 #if   L==1
-	   "PA&Iacute;S"
+	"PA&Iacute;S"
 #elif L==2
-	   "LAND"
+	"LAND"
 #elif L==3
-	   "COUNTRY"
+	"COUNTRY"
 #elif L==4
-	   "PA&Iacute;S"
+	"PA&Iacute;S"
 #elif L==5
-	   "PAYS"
+	"PAYS"
 #elif L==6
-	   "TET&Atilde;"
+	"TET&Atilde;"
 #elif L==7
-	   "PAESE"
+	"PAESE"
 #elif L==8
-	   "KRAJ"
+	"KRAJ"
 #elif L==9
-	   "PA&Iacute;S"
+	"PA&Iacute;S"
 #endif
-	   ,
-	   // TabIns
+	,
+	// TabIns
 #if   L==1
-	   "INSTITUCI&Oacute;"
+	"INSTITUCI&Oacute;"
 #elif L==2
-	   "HOCHSCHULE"
+	"HOCHSCHULE"
 #elif L==3
-	   "INSTITUTION"
+	"INSTITUTION"
 #elif L==4
-	   "INSTITUCI&Oacute;N"
+	"INSTITUCI&Oacute;N"
 #elif L==5
-	   "&Eacute;TABLISSEMENT"
+	"&Eacute;TABLISSEMENT"
 #elif L==6
-	   "MBO'EHAO"
+	"MBO'EHAO"
 #elif L==7
-	   "ISTITUZIONE"
+	"ISTITUZIONE"
 #elif L==8
-	   "INSTYTUCJI"
+	"INSTYTUCJI"
 #elif L==9
-	   "INSTITU&Ccedil;&Atilde;O"
+	"INSTITU&Ccedil;&Atilde;O"
 #endif
-	   ,
-	   // TabCtr
+	,
+	// TabCtr
 #if   L==1
-	   "CENTRE"
+	"CENTRE"
 #elif L==2
-	   "LEHRINSTITUT"
+	"LEHRINSTITUT"
 #elif L==3
-	   "CENTRE"
+	"CENTRE"
 #elif L==4
-	   "CENTRO"
+	"CENTRO"
 #elif L==5
-	   "CENTRE"
+	"CENTRE"
 #elif L==6
-	   "MBO'EHAO"
+	"MBO'EHAO"
 #elif L==7
-	   "CENTRO"
+	"CENTRO"
 #elif L==8
-	   "CENTRUM"
+	"CENTRUM"
 #elif L==9
-	   "CENTRO"
+	"CENTRO"
 #endif
-	   ,
-	   // TabDeg
+	,
+	// TabDeg
 #if   L==1
-	   "TITULACI&Oacute;"
+	"TITULACI&Oacute;"
 #elif L==2
-	   "STUDIENGANG"
+	"STUDIENGANG"
 #elif L==3
-	   "DEGREE"
+	"DEGREE"
 #elif L==4
-	   "TITULACI&Oacute;N"
+	"TITULACI&Oacute;N"
 #elif L==5
-	   "&Eacute;TUDE"
+	"&Eacute;TUDE"
 #elif L==6
-	   "ARANDUR&Atilde;"
+	"ARANDUR&Atilde;"
 #elif L==7
-	   "LAUREA"
+	"LAUREA"
 #elif L==8
-	   "STOPIEN"
+	"STOPIEN"
 #elif L==9
-	   "TITULA&Ccedil;&Atilde;O"
+	"TITULA&Ccedil;&Atilde;O"
 #endif
-	   ,
-	   // TabCrs
+	,
+	// TabCrs
 #if   L==1
-	   "ASSIGNATURA"
+	"ASSIGNATURA"
 #elif L==2
-	   "VERANSTALTUNG"
+	"VERANSTALTUNG"
 #elif L==3
-	   "COURSE"
+	"COURSE"
 #elif L==4
-	   "ASIGNATURA"
+	"ASIGNATURA"
 #elif L==5
-	   "MATI&Egrave;RE"
+	"MATI&Egrave;RE"
 #elif L==6
-	   "MBO'ESYRY"
+	"MBO'ESYRY"
 #elif L==7
-	   "CORSO"
+	"CORSO"
 #elif L==8
-	   "KURS"
+	"KURS"
 #elif L==9
-	   "DISCIPLINA"
+	"DISCIPLINA"
 #endif
-	   ,
-	   // TabAss
+	,
+	// TabAss
 #if   L==1
-	   "AVALUACI&Oacute;"
+	"AVALUACI&Oacute;"
 #elif L==2
-	   "BEWERTUNG"
+	"BEWERTUNG"
 #elif L==3
-	   "ASSESSMENT"
+	"ASSESSMENT"
 #elif L==4
-	   "EVALUACI&Oacute;N"
+	"EVALUACI&Oacute;N"
 #elif L==5
-	   "&Eacute;VALUATION"
+	"&Eacute;VALUATION"
 #elif L==6
-	   "MBOHEPY"
+	"MBOHEPY"
 #elif L==7
-	   "VALUTAZIONE"
+	"VALUTAZIONE"
 #elif L==8
-	   "OCENA"
+	"OCENA"
 #elif L==9
-	   "AVALIA&Ccedil;&Atilde;O"
+	"AVALIA&Ccedil;&Atilde;O"
 #endif
-	   ,
-	   // TabUsr
+	,
+	// TabUsr
 #if   L==1
-	   "USUARIS"
+	"USUARIS"
 #elif L==2
-	   "BENUTZER"
+	"BENUTZER"
 #elif L==3
-	   "USERS"
+	"USERS"
 #elif L==4
-	   "USUARIOS"
+	"USUARIOS"
 #elif L==5
-	   "UTILISATEURS"
+	"UTILISATEURS"
 #elif L==6
-	   "PURUH&Aacute;RA"
+	"PURUH&Aacute;RA"
 #elif L==7
-	   "UTENTI"
+	"UTENTI"
 #elif L==8
-	   "U&Zdot;YTKOWNICY"
+	"U&Zdot;YTKOWNICY"
 #elif L==9
-	   "UTILIZADORES"
+	"UTILIZADORES"
 #endif
-	   ,
+	,
 	 // TabSoc
 #if   L==1
 	 "SOCIAL"
@@ -40572,68 +40593,68 @@ const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS] =	// Must be visible in 1024x768 wi
 #elif L==9
 	 "SOCIAL"
 #endif
-	   ,
-	   // TabMsg
+	,
+	// TabMsg
 #if   L==1
-	   "MISSATGES"
+	"MISSATGES"
 #elif L==2
-	   "NACHRICHTEN"
+	"NACHRICHTEN"
 #elif L==3
-	   "MESSAGES"
+	"MESSAGES"
 #elif L==4
-	   "MENSAJES"
+	"MENSAJES"
 #elif L==5
-	   "MESSAGES"
+	"MESSAGES"
 #elif L==6
-	   "MARANDU"
+	"MARANDU"
 #elif L==7
-	   "MESSAGGI"
+	"MESSAGGI"
 #elif L==8
-	   "WIADOMO&Sacute;CY"
+	"WIADOMO&Sacute;CY"
 #elif L==9
-	   "MENSAGENS"
+	"MENSAGENS"
 #endif
-	   ,
-	   // TabSta
+	,
+	// TabSta
 #if   L==1
-	   "ESTAD&Iacute;STIQUES"
+	"ESTAD&Iacute;STIQUES"
 #elif L==2
-	   "STATISTIK"
+	"STATISTIK"
 #elif L==3
-	   "STATS"
+	"STATS"
 #elif L==4
-	   "ESTAD&Iacute;STICAS"
+	"ESTAD&Iacute;STICAS"
 #elif L==5
-	   "STATISTIQUES"
+	"STATISTIQUES"
 #elif L==6
-	   "PAPY'APOREKO"
+	"PAPY'APOREKO"
 #elif L==7
-	   "STATISTICHE"
+	"STATISTICHE"
 #elif L==8
-	   "STATYSTYKI"
+	"STATYSTYKI"
 #elif L==9
-	   "ESTAT&Iacute;STICAS"
+	"ESTAT&Iacute;STICAS"
 #endif
-	   ,
-	   // TabPrf
+	,
+	// TabPrf
 #if   L==1
-	   "PERFIL"
+	"PERFIL"
 #elif L==2
-	   "PROFIL"
+	"PROFIL"
 #elif L==3
-	   "PROFILE"
+	"PROFILE"
 #elif L==4
-	   "PERFIL"
+	"PERFIL"
 #elif L==5
-	   "PROFIL"
+	"PROFIL"
 #elif L==6
-	   "CHE"
+	"CHE"
 #elif L==7
-	   "PROFILO"
+	"PROFILO"
 #elif L==8
-	   "PROFIL"
+	"PROFIL"
 #elif L==9
-	   "PERFIL"
+	"PERFIL"
 #endif
 	};
 
@@ -47806,49 +47827,49 @@ const char *Txt_TST_Correct_ANSWER =
 #endif
 
 const char *Txt_TST_PLUGGABLE[Tst_NUM_OPTIONS_PLUGGABLE] =
-	 {
-	 // Tst_PLUGGABLE_UNKNOWN
-	   "",
-	   // Tst_PLUGGABLE_NO
+	{
+	// Tst_PLUGGABLE_UNKNOWN
+	"",
+	// Tst_PLUGGABLE_NO
 #if   L==1
-	   "Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
+	"Tests no visibles des de m&ograve;bils (SWADroid, TriSWADos)"
 #elif L==2
-	   "Tests nicht zum Download aus Handys (SWADroid, TriSWADos)"
+	"Tests nicht zum Download aus Handys (SWADroid, TriSWADos)"
 #elif L==3
-	   "Tests not downloadable from mobile phones (SWADroid, TriSWADos)"
+	"Tests not downloadable from mobile phones (SWADroid, TriSWADos)"
 #elif L==4
-	   "Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"
+	"Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"
 #elif L==5
-	   "Tests non t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos)"
+	"Tests non t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos)"
 #elif L==6
-	   "Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"	// Okoteve traducción
+	"Tests no visibles desde m&oacute;viles (SWADroid, TriSWADos)"	// Okoteve traducción
 #elif L==7
-	   "Test non scaricabili da cellulari (SWADroid, TriSWADos)"
+	"Test non scaricabili da cellulari (SWADroid, TriSWADos)"
 #elif L==8
-	   "Nie Testy pobrania z kom&oacute;rkowych (SWADroid, TriSWADos)"
+	"Nie Testy pobrania z kom&oacute;rkowych (SWADroid, TriSWADos)"
 #elif L==9
-	   "Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
+	"Testes n&atilde;o para download de celulares (SWADroid, TriSWADos)"
 #endif
-	   ,
-	   // Tst_PLUGGABLE_YES
+	,
+	// Tst_PLUGGABLE_YES
 #if   L==1
-	   "Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
+	"Tests visibles des de m&ograve;bils (SWADroid, TriSWADos), opci&oacute; recomanada"
 #elif L==2
-	   "Tests zum Download aus Handys (SWADroid, TriSWADos), empfohlene Option"
+	"Tests zum Download aus Handys (SWADroid, TriSWADos), empfohlene Option"
 #elif L==3
-	   "Tests downloadable from mobile phones (SWADroid, TriSWADos), recommended option"
+	"Tests downloadable from mobile phones (SWADroid, TriSWADos), recommended option"
 #elif L==4
-	   "Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"
+	"Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"
 #elif L==5
-	   "Tests t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos), option recommand&eacute;e"
+	"Tests t&eacute;l&eacute;chargeables &agrave; partir de mobiles (SWADroid, TriSWADos), option recommand&eacute;e"
 #elif L==6
-	   "Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"// Okoteve traducción
+	"Tests visibles desde m&oacute;viles (SWADroid, TriSWADos), opci&oacute;n recomendada"// Okoteve traducción
 #elif L==7
-	   "Test scaricabili da cellulari (SWADroid, TriSWADos), opzione consigliata"
+	"Test scaricabili da cellulari (SWADroid, TriSWADos), opzione consigliata"
 #elif L==8
-	   "Testy do pobrania z kom&oacute;rkowych (SWADroid, TriSWADos), zalecana opcja"
+	"Testy do pobrania z kom&oacute;rkowych (SWADroid, TriSWADos), zalecana opcja"
 #elif L==9
-	   "Testes para download de celulares (SWADroid, TriSWADos), op&ccedil;&atilde;o recomendada"
+	"Testes para download de celulares (SWADroid, TriSWADos), op&ccedil;&atilde;o recomendada"
 #endif
 	};
 
@@ -48080,216 +48101,216 @@ const char *Txt_TST_STR_FEEDBACK[Tst_NUM_TYPES_FEEDBACK] =
 	};
 
 const char *Txt_TST_STR_ORDER_FULL[Tst_NUM_TYPES_ORDER_QST] =
-	 {
+	{
 #if   L==1	// Tst_ORDER_STEM
-	   "Ordenar por enunciado de la pregunta"	// Necessita traduccio
+	"Ordenar por enunciado de la pregunta"	// Necessita traduccio
 #elif L==2
-	   "Sortieren nach Stammzellen in Frage"
+	"Sortieren nach Stammzellen in Frage"
 #elif L==3
-	   "Sort by stem of the question"
+	"Sort by stem of the question"
 #elif L==4
-	   "Ordenar por enunciado de la pregunta"
+	"Ordenar por enunciado de la pregunta"
 #elif L==5
-	   "Trier par question"
+	"Trier par question"
 #elif L==6
-	   "Ordenar por enunciado de la pregunta"	// Okoteve traducción
+	"Ordenar por enunciado de la pregunta"	// Okoteve traducción
 #elif L==7
-	   "Ordina per domanda"
+	"Ordina per domanda"
 #elif L==8
-	   "Sort by stem of the question"		// Potrzebujesz tlumaczenie
+	"Sort by stem of the question"		// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Classificar por formula&ccedil;&atilde;o da quest&atilde;o"
+	"Classificar por formula&ccedil;&atilde;o da quest&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Tst_ORDER_NUM_HITS
-	   "Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Necessita traduccio
+	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Necessita traduccio
 #elif L==2
-	   "Sortieren nach Anzahl der mal die Frage beantwortet wurde"
+	"Sortieren nach Anzahl der mal die Frage beantwortet wurde"
 #elif L==3
-	   "Sort by number of times the question has been answered"
+	"Sort by number of times the question has been answered"
 #elif L==4
-	   "Ordenar por n&ordm; de veces que se ha respondido la pregunta"
+	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"
 #elif L==5
-	   "Trier par nombre de fois qu'on a r&eacute;pondu &agrave; la question"
+	"Trier par nombre de fois qu'on a r&eacute;pondu &agrave; la question"
 #elif L==6
-	   "Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Okoteve traducción
+	"Ordenar por n&ordm; de veces que se ha respondido la pregunta"	// Okoteve traducción
 #elif L==7
-	   "Ordina per numero di volte che hai risposto alla domanda"
+	"Ordina per numero di volte che hai risposto alla domanda"
 #elif L==8
-	   "Sort by number of times the question has been answered"		// Potrzebujesz tlumaczenie
+	"Sort by number of times the question has been answered"		// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Classificar por n&uacute;mero de vezes que a quest&atilde;o foi respondida"
+	"Classificar por n&uacute;mero de vezes que a quest&atilde;o foi respondida"
 #endif
-	   ,
+	,
 #if   L==1	// TST_ORDER_AVERAGE_SCORE
-	   "Ordenar por puntuaci&oacute;n media"	// Necessita traduccio
+	"Ordenar por puntuaci&oacute;n media"	// Necessita traduccio
 #elif L==2
-	   "Sortieren nach Durchschnittsnote"
+	"Sortieren nach Durchschnittsnote"
 #elif L==3
-	   "Sort by average score"
+	"Sort by average score"
 #elif L==4
-	   "Ordenar por puntuaci&oacute;n media"
+	"Ordenar por puntuaci&oacute;n media"
 #elif L==5
-	   "Trier par note moyenne"
+	"Trier par note moyenne"
 #elif L==6
-	   "Ordenar por puntuaci&oacute;n media"	// Okoteve traducción
+	"Ordenar por puntuaci&oacute;n media"	// Okoteve traducción
 #elif L==7
-	   "Ordina per punteggio medio"
+	"Ordina per punteggio medio"
 #elif L==8
-	   "Sort by average score"			// Potrzebujesz tlumaczenie
+	"Sort by average score"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Classificar por pontua&ccedil;&atilde;o m&eacute;dia"
+	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia"
 #endif
 #if   L==1	// Tst_ORDER_NUM_HITS_NOT_BLANK
-	   "Ordenar por n&ordm; de veces que se ha respondido"
-	   " la pregunta (excluyendo respuestas en blanco)"	// Necessita traduccio
+	"Ordenar por n&ordm; de veces que se ha respondido"
+	" la pregunta (excluyendo respuestas en blanco)"	// Necessita traduccio
 #elif L==2
-	   "Sortieren nach Anzahl der mal"
-	   " die Frage beantwortet wurde (nicht leer)"
+	"Sortieren nach Anzahl der mal"
+	" die Frage beantwortet wurde (nicht leer)"
 #elif L==3
-	   "Sort by number of times the question"
-	   " has been answered (excluding blank answers)"
+	"Sort by number of times the question"
+	" has been answered (excluding blank answers)"
 #elif L==4
-	   "Ordenar por n&ordm; de veces que se ha respondido"
-	   " la pregunta (excluyendo respuestas en blanco)"
+	"Ordenar por n&ordm; de veces que se ha respondido"
+	" la pregunta (excluyendo respuestas en blanco)"
 #elif L==5
-	   "Trier par nombre de fois qu'on a r&eacute;pondu"
-	   " &agrave; la question (non vide)"
+	"Trier par nombre de fois qu'on a r&eacute;pondu"
+	" &agrave; la question (non vide)"
 #elif L==6
-	   "Ordenar por n&ordm; de veces que se ha respondido"
-	   " la pregunta (excluyendo respuestas en blanco)"	// Okoteve traducción
+	"Ordenar por n&ordm; de veces que se ha respondido"
+	" la pregunta (excluyendo respuestas en blanco)"	// Okoteve traducción
 #elif L==7
-	   "Ordina per numero di volte che hai risposto"
-	   " alla domanda (non vuoto)"
+	"Ordina per numero di volte che hai risposto"
+	" alla domanda (non vuoto)"
 #elif L==8
-	   "Sort by number of times the question"
-	   " has been answered (excluding blank answers)"	// Potrzebujesz tlumaczenie
+	"Sort by number of times the question"
+	" has been answered (excluding blank answers)"	// Potrzebujesz tlumaczenie
 #elif L==9
-		 "Classificar por n&uacute;mero de vezes"
-		 " que a quest&atilde;o foi respondida (n&atilde;o em branco)"
+	"Classificar por n&uacute;mero de vezes"
+	" que a quest&atilde;o foi respondida (n&atilde;o em branco)"
 #endif
-	   ,
+	,
 #if   L==1	// TST_ORDER_AVERAGE_SCORE_NOT_BLANK
-	   "Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Necessita traduccio
+	"Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Necessita traduccio
 #elif L==2
-	   "Sortieren nach Durchschnittsnote (nicht leer)"
+	"Sortieren nach Durchschnittsnote (nicht leer)"
 #elif L==3
-	   "Sort by average score (excluding blank answers)"
+	"Sort by average score (excluding blank answers)"
 #elif L==4
-	   "Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"
+	"Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"
 #elif L==5
-	   "Trier par note moyenne (non vide)"
+	"Trier par note moyenne (non vide)"
 #elif L==6
-	   "Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Okoteve traducción
+	"Ordenar por puntuaci&oacute;n media (excluyendo respuestas en blanco)"	// Okoteve traducción
 #elif L==7
-	   "Ordina per punteggio medio (non vuoto)"
+	"Ordina per punteggio medio (non vuoto)"
 #elif L==8
-	   "Sort by average score (excluding blank answers)"				// Potrzebujesz tlumaczenie
+	"Sort by average score (excluding blank answers)"				// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Classificar por pontua&ccedil;&atilde;o m&eacute;dia (n&atilde;o em branco)"
+	"Classificar por pontua&ccedil;&atilde;o m&eacute;dia (n&atilde;o em branco)"
 #endif
 	};
 
 const char *Txt_TST_STR_ORDER_SHORT[Tst_NUM_TYPES_ORDER_QST] =
-	 {
+	{
 #if   L==1	// Tst_ORDER_STEM
-	   "Pregunta"
+	"Pregunta"
 #elif L==2
-	   "Frage"
+	"Frage"
 #elif L==3
-	   "Question"
+	"Question"
 #elif L==4
-	   "Pregunta"
+	"Pregunta"
 #elif L==5
-	   "Question"
+	"Question"
 #elif L==6
-	   "Pregunta"	// Okoteve traducción
+	"Pregunta"	// Okoteve traducción
 #elif L==7
-	   "Domanda"
+	"Domanda"
 #elif L==8
-	   "Pytanie"
+	"Pytanie"
 #elif L==9
-	   "Quest&atilde;o"
+	"Quest&atilde;o"
 #endif
-	   ,
+	,
 #if   L==1	// Tst_ORDER_NUM_HITS
-	   "N&ordm;<br />resp."			// Necessita traduccio
+	"N&ordm;<br />resp."			// Necessita traduccio
 #elif L==2
-	   "Anzahl<br />Antw."
+	"Anzahl<br />Antw."
 #elif L==3
-	   "No.<br />ans."
+	"No.<br />ans."
 #elif L==4
-	   "N&ordm;<br />resp."
+	"N&ordm;<br />resp."
 #elif L==5
-	   "Nombre<br />r&eacute;p."
+	"Nombre<br />r&eacute;p."
 #elif L==6
-	   "N&ordm;<br />resp."			// Okoteve traducción
+	"N&ordm;<br />resp."			// Okoteve traducción
 #elif L==7
-	   "Num.<br />risp."
+	"Num.<br />risp."
 #elif L==8
-	   "No.<br />ans."			// Potrzebujesz tlumaczenie
+	"No.<br />ans."			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "N&ordm;<br />resp."
+	"N&ordm;<br />resp."
 #endif
-	   ,
+	,
 #if   L==1	// TST_ORDER_AVERAGE_SCORE
-	   "Puntuaci&oacute;n<br />media"	// Necessita traduccio
+	"Puntuaci&oacute;n<br />media"	// Necessita traduccio
 #elif L==2
-	   "Durchschnitt"
+	"Durchschnitt"
 #elif L==3
-	   "Average<br />score"
+	"Average<br />score"
 #elif L==4
-	   "Puntuaci&oacute;n<br />media"
+	"Puntuaci&oacute;n<br />media"
 #elif L==5
-	   "Note<br />moyenne"
+	"Note<br />moyenne"
 #elif L==6
-	   "Puntuaci&oacute;n<br />media"	// Okoteve traducción
+	"Puntuaci&oacute;n<br />media"	// Okoteve traducción
 #elif L==7
-	   "Punteggio<br />medio"
+	"Punteggio<br />medio"
 #elif L==8
-	   "Average<br />score"			// Potrzebujesz tlumaczenie
+	"Average<br />score"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Pontua&ccedil;&atilde;o<br />m&eacute;dia"
+	"Pontua&ccedil;&atilde;o<br />m&eacute;dia"
 #endif
-	   ,
+	,
 #if   L==1	// Tst_ORDER_NUM_HITS
-	   "N&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
+	"N&ordm;<br />resp.<br />no en<br />blanco"		// Necessita traduccio
 #elif L==2
-	   "Anzahl<br />Antw.<br />nicht<br />leer"
+	"Anzahl<br />Antw.<br />nicht<br />leer"
 #elif L==3
-	   "No.<br />ans.<br />not<br />blank"
+	"No.<br />ans.<br />not<br />blank"
 #elif L==4
-	   "N&ordm;<br />resp.<br />no en<br />blanco"
+	"N&ordm;<br />resp.<br />no en<br />blanco"
 #elif L==5
-	   "Nombre<br />r&eacute;p.<br />non<br />vide"
+	"Nombre<br />r&eacute;p.<br />non<br />vide"
 #elif L==6
-	   "N&ordm;<br />resp.<br />no en<br />blanco"		// Okoteve traducción
+	"N&ordm;<br />resp.<br />no en<br />blanco"		// Okoteve traducción
 #elif L==7
-	   "Num.<br />risp.<br />non<br />vuoto"
+	"Num.<br />risp.<br />non<br />vuoto"
 #elif L==8
-	   "No.<br />ans.<br />not<br />blank"			// Potrzebujesz tlumaczenie
+	"No.<br />ans.<br />not<br />blank"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "N&ordm;<br />resp.<br />n&atilde;o em<br />branco"
+	"N&ordm;<br />resp.<br />n&atilde;o em<br />branco"
 #endif
-	   ,
+	,
 #if   L==1	// TST_ORDER_AVERAGE_SCORE
-	   "Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Necessita traduccio
+	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Necessita traduccio
 #elif L==2
-	   "Durchschnitt<br />nicht<br />leer"
+	"Durchschnitt<br />nicht<br />leer"
 #elif L==3
-	   "Average<br />score<br />not<br />blank"
+	"Average<br />score<br />not<br />blank"
 #elif L==4
-	   "Puntuaci&oacute;n<br />media<br />no en<br />blanco"
+	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"
 #elif L==5
-	   "Note<br />moyenne<br />non<br />vide"
+	"Note<br />moyenne<br />non<br />vide"
 #elif L==6
-	   "Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Okoteve traducción
+	"Puntuaci&oacute;n<br />media<br />no en<br />blanco"	// Okoteve traducción
 #elif L==7
-	   "Punteggio<br />medio<br />non<br />vuoto"
+	"Punteggio<br />medio<br />non<br />vuoto"
 #elif L==8
-	   "Average<br />score<br />not<br />blank"			// Potrzebujesz tlumaczenie
+	"Average<br />score<br />not<br />blank"			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Pontua&ccedil;&atilde;o<br />m&eacute;dia<br />n&atilde;o em<br />branco"
+	"Pontua&ccedil;&atilde;o<br />m&eacute;dia<br />n&atilde;o em<br />branco"
 #endif
 	};
 
@@ -50159,46 +50180,25 @@ const char *Txt_View_works =
 	"Ver trabalhos";
 #endif
 
-const char *Txt_Virtual_pendrive_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Briefcase_of_THE_USER_X_has_been_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"Virtual pendrive of <strong>%s</strong> has been removed.";	// Need Übersetzung
+	"Briefcase of <strong>%s</strong> has been removed.";		// Need Übersetzung
 #elif L==3
-	"Virtual pendrive of <strong>%s</strong> has been removed.";
+	"Briefcase of <strong>%s</strong> has been removed.";
 #elif L==4
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";
 #elif L==5
-	"Virtual pendrive of <strong>%s</strong> has been removed.";	// Besoin de traduction
+	"Briefcase of <strong>%s</strong> has been removed.";		// Besoin de traduction
 #elif L==6
 	"Se ha eliminado el malet&iacute;n de <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"La penna USB de <strong>%s</strong> &egrave; stata rimossa.";
 #elif L==8
-	"Virtual pendrive of <strong>%s</strong> has been removed.";	// Potrzebujesz tlumaczenie
+	"Briefcase of <strong>%s</strong> has been removed.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"Virtual pendrive of <strong>%s</strong> has been removed.";	// Necessita de tradução
-#endif
-
-const char *Txt_Virtual_pendrives =
-#if   L==1
-	"Maletins";
-#elif L==2
-	"Aktentasche";
-#elif L==3
-	"Virtual pendrives";
-#elif L==4
-	"Maletines";
-#elif L==5
-	"Porte-documents";
-#elif L==6
-	"Maletines";		// Okoteve traducción
-#elif L==7
-	"Penna USB";
-#elif L==8
-	"Virtual pendrives";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"Pasta";
+	"Briefcase of <strong>%s</strong> has been removed.";		// Necessita de tradução
 #endif
 
 const char *Txt_Visible_by_BR_the_student =
@@ -50516,168 +50516,168 @@ const char *Txt_Welcome[Usr_NUM_SEXS] =
 	};
 
 const char *Txt_Welcome_X[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
-	 {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
-	   "Benvingut/da, %s."
+	"Benvingut/da, %s."
 #elif L==2
-	   "Willkommen, %s."
+	"Willkommen, %s."
 #elif L==3
-	   "Welcome, %s."
+	"Welcome, %s."
 #elif L==4
-	   "Bienvenido/a, %s."
+	"Bienvenido/a, %s."
 #elif L==5
-	   "Bienvenu(e), %s."
+	"Bienvenu(e), %s."
 #elif L==6
-	   "Bienvenido/a, %s."	// Okoteve traducción
+	"Bienvenido/a, %s."	// Okoteve traducción
 #elif L==7
-	   "Benvenuto/a, %s."
+	"Benvenuto/a, %s."
 #elif L==8
-	   "Witamy, %s."
+	"Witamy, %s."
 #elif L==9
-	   "Bem-vindo/a, %s."
+	"Bem-vindo/a, %s."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_FEMALE
-	   "Benvinguda, %s."
+	"Benvinguda, %s."
 #elif L==2
-	   "Willkommen, %s."
+	"Willkommen, %s."
 #elif L==3
-	   "Welcome, %s."
+	"Welcome, %s."
 #elif L==4
-	   "Bienvenida, %s."
+	"Bienvenida, %s."
 #elif L==5
-	   "Bienvenue, %s."
+	"Bienvenue, %s."
 #elif L==6
-	   "Bienvenida, %s."	// Okoteve traducción
+	"Bienvenida, %s."	// Okoteve traducción
 #elif L==7
-	   "Benvenuta, %s."
+	"Benvenuta, %s."
 #elif L==8
-	   "Witamy, %s."
+	"Witamy, %s."
 #elif L==9
-	   "Bem-vinda, %s."
+	"Bem-vinda, %s."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_MALE
-	   "Benvingut, %s."
+	"Benvingut, %s."
 #elif L==2
-	   "Willkommen, %s."
+	"Willkommen, %s."
 #elif L==3
-	   "Welcome, %s."
+	"Welcome, %s."
 #elif L==4
-	   "Bienvenido, %s."
+	"Bienvenido, %s."
 #elif L==5
-	   "Bienvenu, %s."
+	"Bienvenu, %s."
 #elif L==6
-	   "Bienvenido, %s."	// Okoteve traducción
+	"Bienvenido, %s."	// Okoteve traducción
 #elif L==7
-	   "Benvenuto, %s."
+	"Benvenuto, %s."
 #elif L==8
-	   "Witamy, %s."
+	"Witamy, %s."
 #elif L==9
-	   "Bem-vindo, %s."
+	"Bem-vindo, %s."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_ALL
-	   "Benvingut/da, %s."
+	"Benvingut/da, %s."
 #elif L==2
-	   "Willkommen, %s."
+	"Willkommen, %s."
 #elif L==3
-	   "Welcome, %s."
+	"Welcome, %s."
 #elif L==4
-	   "Bienvenido/a, %s."
+	"Bienvenido/a, %s."
 #elif L==5
-	   "Bienvenu(e), %s."
+	"Bienvenu(e), %s."
 #elif L==6
-	   "Bienvenido/a, %s."	// Okoteve traducción
+	"Bienvenido/a, %s."	// Okoteve traducción
 #elif L==7
-	   "Benvenuto/a, %s."
+	"Benvenuto/a, %s."
 #elif L==8
-	   "Witamy, %s."
+	"Witamy, %s."
 #elif L==9
-	   "Bem-vindo/a, %s."
+	"Bem-vindo/a, %s."
 #endif
 	};
 
 const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS] =	// Warning: it is very important to include %s in the following sentences
-	 {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
-	   "Benvingut/da, %s, i feli&ccedil; aniversari!"
+	"Benvingut/da, %s, i feli&ccedil; aniversari!"
 #elif L==2
-	   "Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, und alles Gute zum Geburtstag!"
 #elif L==3
-	   "Welcome, %s, and happy birthday!"
+	"Welcome, %s, and happy birthday!"
 #elif L==4
-	   "Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
 #elif L==5
-	   "Bienvenu(e), %s, et joyeux anniversaire!"
+	"Bienvenu(e), %s, et joyeux anniversaire!"
 #elif L==6
-	   "Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7
-	   "Benvenuto/a, %s, e buon compleanno!"
+	"Benvenuto/a, %s, e buon compleanno!"
 #elif L==8
-	   "Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, i wszystkiego najlepszego!"
 #elif L==9
-	   "Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_FEMALE
-	   "Benvinguda, %s, i feli&ccedil; aniversari!"
+	"Benvinguda, %s, i feli&ccedil; aniversari!"
 #elif L==2
-	   "Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, und alles Gute zum Geburtstag!"
 #elif L==3
-	   "Welcome, %s, and happy birthday!"
+	"Welcome, %s, and happy birthday!"
 #elif L==4
-	   "Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"
 #elif L==5
-	   "Bienvenue, %s, et joyeux anniversaire!"
+	"Bienvenue, %s, et joyeux anniversaire!"
 #elif L==6
-	   "Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenida, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7
-	   "Benvenuta, %s, e buon compleanno!"
+	"Benvenuta, %s, e buon compleanno!"
 #elif L==8
-	   "Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, i wszystkiego najlepszego!"
 #elif L==9
-	   "Bem-vinda, %s, e feliz anivers&aacute;rio!"
+	"Bem-vinda, %s, e feliz anivers&aacute;rio!"
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_MALE
-	   "Benvingut, %s, i feli&ccedil; aniversari!"
+	"Benvingut, %s, i feli&ccedil; aniversari!"
 #elif L==2
-	   "Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, und alles Gute zum Geburtstag!"
 #elif L==3
-	   "Welcome, %s, and happy birthday!"
+	"Welcome, %s, and happy birthday!"
 #elif L==4
-	   "Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"
 #elif L==5
-	   "Bienvenu, %s, et joyeux anniversaire!"
+	"Bienvenu, %s, et joyeux anniversaire!"
 #elif L==6
-	   "Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7
-	   "Benvenuto, %s, e buon compleanno!"
+	"Benvenuto, %s, e buon compleanno!"
 #elif L==8
-	   "Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, i wszystkiego najlepszego!"
 #elif L==9
-	   "Bem-vindo, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo, %s, e feliz anivers&aacute;rio!"
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_ALL
-	   "Benvingut/da, %s, i feli&ccedil; aniversari!"
+	"Benvingut/da, %s, i feli&ccedil; aniversari!"
 #elif L==2
-	   "Willkommen, %s, und alles Gute zum Geburtstag!"
+	"Willkommen, %s, und alles Gute zum Geburtstag!"
 #elif L==3
-	   "Welcome, %s, and happy birthday!"
+	"Welcome, %s, and happy birthday!"
 #elif L==4
-	   "Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
+	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"
 #elif L==5
-	   "Bienvenu(e), %s, et joyeux anniversaire!"
+	"Bienvenu(e), %s, et joyeux anniversaire!"
 #elif L==6
-	   "Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
+	"Bienvenido/a, %s, &iexcl;y feliz cumplea&ntilde;os!"// Okoteve traducción
 #elif L==7
-	   "Benvenuto/a, %s, e buon compleanno!"
+	"Benvenuto/a, %s, e buon compleanno!"
 #elif L==8
-	   "Witamy, %s, i wszystkiego najlepszego!"
+	"Witamy, %s, i wszystkiego najlepszego!"
 #elif L==9
-	   "Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
+	"Bem-vindo/a, %s, e feliz anivers&aacute;rio!"
 #endif
 	};
 
@@ -51521,85 +51521,85 @@ const char *Txt_You_are_LOGGED_as_X =	// Warning: it is very important to includ
 #endif
 
 const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
-	 {
+	{
 #if   L==1	// Usr_SEX_UNKNOWN
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
 #elif L==2
-	   "Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	   "You are not enrolled in any course."
+	"You are not enrolled in any course."
 #elif L==4
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
-	   "Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7
-	   "Non ti sei iscritto/a ad alcun corso."
+	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	   "You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
+	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_FEMALE
-	   "Usted no est&aacute; inscrita en ninguna asignatura."	// Necessita traduccio
+	"Usted no est&aacute; inscrita en ninguna asignatura."	// Necessita traduccio
 #elif L==2
-	   "Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	   "You are not enrolled in any course."
+	"You are not enrolled in any course."
 #elif L==4
-	   "Usted no est&aacute; inscrita en ninguna asignatura."
+	"Usted no est&aacute; inscrita en ninguna asignatura."
 #elif L==5
-	   "Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	   "Usted no est&aacute; inscrita en ninguna asignatura."	// Okoteve traducción
+	"Usted no est&aacute; inscrita en ninguna asignatura."	// Okoteve traducción
 #elif L==7
-	   "Non ti sei iscritta ad alcun corso."
+	"Non ti sei iscritta ad alcun corso."
 #elif L==8
-	   "You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
+	"Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_MALE
-	   "Usted no est&aacute; inscrito en ninguna asignatura."	// Necessita traduccio
+	"Usted no est&aacute; inscrito en ninguna asignatura."	// Necessita traduccio
 #elif L==2
-	   "Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	   "You are not enrolled in any course."
+	"You are not enrolled in any course."
 #elif L==4
-	   "Usted no est&aacute; inscrito en ninguna asignatura."
+	"Usted no est&aacute; inscrito en ninguna asignatura."
 #elif L==5
-	   "Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	   "Usted no est&aacute; inscrito en ninguna asignatura."	// Okoteve traducción
+	"Usted no est&aacute; inscrito en ninguna asignatura."	// Okoteve traducción
 #elif L==7
-	   "Non ti sei iscritto ad alcun corso."
+	"Non ti sei iscritto ad alcun corso."
 #elif L==8
-	   "You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
+	"Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
 #endif
-	   ,
+	,
 #if   L==1	// Usr_SEX_ALL
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
 #elif L==2
-	   "Sie sind zu keiner Kurs eingeschrieben."
+	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	   "You are not enrolled in any course."
+	"You are not enrolled in any course."
 #elif L==4
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
-	   "Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
+	"Vous n'&ecirc;tes pas inscrit &agrave; une mati&egrave;re."
 #elif L==6
-	   "Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
+	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Okoteve traducción
 #elif L==7
-	   "Non ti sei iscritto/a ad alcun corso."
+	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	   "You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
-	   "Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
+	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
 	};
 

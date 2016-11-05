@@ -5219,7 +5219,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
   {
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
-   extern const char *Txt_Virtual_pendrives;
+   extern const char *Txt_Briefcases;
    static const Brw_FileBrowser_t StatCrsFileZones[Sta_NUM_STAT_CRS_FILE_ZONES] =
      {
       Brw_ADMI_DOCUM_CRS,
@@ -5252,7 +5252,7 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    Sta_WriteStatsExpTreesTableHead ();
 
    /***** Write size of briefcases *****/
-   Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRIEF_USR,Txt_Virtual_pendrives);
+   Sta_WriteRowStatsFileBrowsers (Brw_ADMI_BRIEF_USR,Txt_Briefcases);
 
    /***** End table *****/
    Lay_EndRoundFrameTable ();

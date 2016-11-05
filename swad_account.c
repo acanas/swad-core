@@ -941,7 +941,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    extern const char *Txt_THE_USER_X_has_been_removed_from_all_his_her_courses;
    extern const char *Txt_THE_USER_X_has_been_removed_as_administrator;
    extern const char *Txt_Messages_of_THE_USER_X_have_been_deleted;
-   extern const char *Txt_Virtual_pendrive_of_THE_USER_X_has_been_removed;
+   extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
    char Query[1024];
@@ -1004,7 +1004,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Acc_RemoveUsrBriefcase (UsrDat);
    if (QuietOrVerbose == Cns_VERBOSE)
      {
-      sprintf (Gbl.Message,Txt_Virtual_pendrive_of_THE_USER_X_has_been_removed,
+      sprintf (Gbl.Message,Txt_Briefcase_of_THE_USER_X_has_been_removed,
                UsrDat->FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
