@@ -66,6 +66,7 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Not_PutIconsNotices (void);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod,bool ICanEdit);
@@ -395,11 +396,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 	 /***** Start frame *****/
 	 sprintf (StrWidth,"%upx",
 	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
+	 Gbl.CurrentCrs.Notices.ICanEdit = ICanEdit;
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
-			      ICanEdit ? Not_PutIconToAddNewNotice :
-					 NULL);
+			      Not_PutIconsNotices);
          if (!NumNotices)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
 	}
@@ -481,6 +482,21 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 	                   -1L,Gbl.CurrentCrs.Crs.CrsCod,
 	                   Gbl.Usrs.Me.UsrDat.UsrCod);
      }
+  }
+
+/*****************************************************************************/
+/***************** Put conteextual icons in list of notices ******************/
+/*****************************************************************************/
+
+static void Not_PutIconsNotices (void)
+  {
+   /***** Put icon to add a new notice *****/
+   if (Gbl.CurrentCrs.Notices.ICanEdit)
+      Not_PutIconToAddNewNotice ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_NOTICES;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

@@ -156,13 +156,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.47 (2016-11-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.47.1 (2016-11-06)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.47.1:  Nov 06, 2016	Icon in list of notices to show figure (statistics). (206129 lines)
+Copy icon/pie64x64.gif to icon directory
+
         Version 16.47:    Nov 06, 2016	New functions to put a contextual icon to show a figure (statistics). (206113 lines)
         Version 16.46.10: Nov 06, 2016	Code refactoring in statistics. (206080 lines)
         Version 16.46.9:  Nov 06, 2016	Fixed bug in figures (statistics). (206064 lines)
