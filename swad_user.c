@@ -178,6 +178,8 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
+static void Usr_PutIconsListStds (void);
+
 static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
 static void Usr_PutIconToPrintTchs (void);
@@ -6877,11 +6879,7 @@ void Usr_SeeStudents (void)
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs ? Usr_PutIconToPrintStds :
-												   NULL) :
-			    ((Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER) ? Usr_PutIconToShowStdsAllData :
-								       NULL));
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Usr_PutIconsListStds);
 
       /***** Form to select range of students *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -7116,6 +7114,27 @@ void Usr_SeeTeachers (void)
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TEACHER);
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in list of students *******************/
+/*****************************************************************************/
+
+static void Usr_PutIconsListStds (void)
+  {
+   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+     {
+      if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+         /***** Put icon to print students *****/
+	 Usr_PutIconToPrintStds ();
+     }
+   else if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+      /***** Put icon to show all data of students *****/
+      Usr_PutIconToShowStdsAllData ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_USERS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
