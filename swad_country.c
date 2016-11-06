@@ -66,6 +66,8 @@ extern struct Globals Gbl;
 static void Cty_Configuration (bool PrintView);
 static void Cty_PutIconToPrint (void);
 
+static bool Cty_CheckIfICanEditNotices (void);
+
 static void Cty_PutIconsCountries (void);
 static void Cty_PutIconToEditCountries (void);
 
@@ -257,7 +259,7 @@ static void Cty_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Map attribution */
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM && !PrintView)
+	 if (!PrintView && Cty_CheckIfICanEditNotices ())
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
@@ -689,13 +691,22 @@ void Cty_ListCountries2 (void)
   }
 
 /*****************************************************************************/
+/********************** Check if I can edit countries ************************/
+/*****************************************************************************/
+
+static bool Cty_CheckIfICanEditNotices (void)
+  {
+   return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+  }
+
+/*****************************************************************************/
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
 static void Cty_PutIconsCountries (void)
   {
    /***** Put icon to edit countries *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (Cty_CheckIfICanEditNotices ())
       Cty_PutIconToEditCountries ();
 
    /***** Put icon to show a figure *****/
