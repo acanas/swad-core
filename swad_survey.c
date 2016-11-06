@@ -92,6 +92,7 @@ struct SurveyQuestion
 
 static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst);
 static bool Svy_CheckIfICanCreateSvy (void);
+static void Svy_PutIconsListSurveys (void);
 static void Svy_PutIconToCreateNewSvy (void);
 static void Svy_PutButtonToCreateNewSvy (void);
 static void Svy_PutParamsToCreateNewSvy (void);
@@ -191,7 +192,6 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    tSvysOrderType Order;
    struct Pagination Pagination;
    unsigned NumSvy;
-   bool ICanEdit = Svy_CheckIfICanCreateSvy ();
 
    /***** Get number of groups in current course *****/
    if (!Gbl.CurrentCrs.Grps.NumGrps)
@@ -211,9 +211,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Surveys,
-                        ICanEdit ? Svy_PutIconToCreateNewSvy :
-                                   NULL);
+   Lay_StartRoundFrame ("100%",Txt_Surveys,Svy_PutIconsListSurveys);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -269,7 +267,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
 
    /***** Button to create a new survey *****/
-   if (ICanEdit)
+   if (Svy_CheckIfICanCreateSvy ())
       Svy_PutButtonToCreateNewSvy ();
 
    /***** End frame *****/
@@ -284,7 +282,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
   }
 
 /*****************************************************************************/
-/***************** Put form to select which groups to show *******************/
+/******************* Check if I can create a new survey **********************/
 /*****************************************************************************/
 
 static bool Svy_CheckIfICanCreateSvy (void)
@@ -294,13 +292,32 @@ static bool Svy_CheckIfICanCreateSvy (void)
       case Rol_TEACHER:
          return (Gbl.CurrentCrs.Crs.CrsCod > 0);
       case Rol_DEG_ADM:
-         return (Gbl.CurrentDeg.Deg.DegCod > 0);
+         return (Gbl.CurrentDeg.Deg.DegCod > 0);	// Always true
+      case Rol_CTR_ADM:
+         return (Gbl.CurrentCtr.Ctr.CtrCod > 0);	// Always true
+      case Rol_INS_ADM:
+         return (Gbl.CurrentIns.Ins.InsCod > 0);	// Always true
       case Rol_SYS_ADM:
          return true;
       default:
          return false;
      }
    return false;
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of surveys *******************/
+/*****************************************************************************/
+
+static void Svy_PutIconsListSurveys (void)
+  {
+   /***** Put icon to create a new survey *****/
+   if (Svy_CheckIfICanCreateSvy ())
+      Svy_PutIconToCreateNewSvy ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_SURVEYS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
