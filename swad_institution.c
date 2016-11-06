@@ -67,6 +67,7 @@ static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
+static void Ins_PutIconsInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
@@ -657,12 +658,10 @@ static void Ins_ListInstitutions (void)
    extern const char *Txt_Create_another_institution;
    extern const char *Txt_Create_institution;
    unsigned NumIns;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Ins_PutIconToEditInstitutions :
-                                                  NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsInstitutions);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
@@ -683,7 +682,7 @@ static void Ins_ListInstitutions (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions);
 
    /***** Button to create institution *****/
-   if (ICanEdit)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
      {
       Act_FormStart (ActEdiIns);
       Lay_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
@@ -692,6 +691,21 @@ static void Ins_ListInstitutions (void)
      }
 
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in list of institutions ****************/
+/*****************************************************************************/
+
+static void Ins_PutIconsInstitutions (void)
+  {
+   /***** Put icon to edit countries *****/
+   if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
+      Ins_PutIconToEditInstitutions ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_INSTITS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

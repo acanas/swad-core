@@ -3874,6 +3874,8 @@ static void Sta_PutParamsToShowFigure (void)
       Gbl.Scope.Current = Sco_SCOPE_CTR;
    else if (Gbl.CurrentIns.Ins.InsCod > 0)
       Gbl.Scope.Current = Sco_SCOPE_INS;
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTY;
    else
       Gbl.Scope.Current = Sco_SCOPE_SYS;
 
