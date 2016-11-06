@@ -438,7 +438,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                         " ORDER BY N DESC,Web");
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+         sprintf (Query,"SELECT usr_webs.Web,"
+                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
@@ -451,7 +452,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+         sprintf (Query,"SELECT usr_webs.Web,"
+                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_webs"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
@@ -463,7 +465,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+         sprintf (Query,"SELECT usr_webs.Web,"
+                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM degrees,courses,crs_usr,usr_webs"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
@@ -474,7 +477,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+         sprintf (Query,"SELECT usr_webs.Web,"
+                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM courses,crs_usr,usr_webs"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -484,7 +488,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT usr_webs.Web,COUNT(DISTINCT usr_webs.UsrCod) AS N"
+         sprintf (Query,"SELECT usr_webs.Web,"
+                        "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM crs_usr,usr_webs"
                         " WHERE crs_usr.CrsCod='%ld'"
                         " AND crs_usr.UsrCod=usr_webs.UsrCod"
@@ -558,7 +563,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  NumUsrs,
-		  NumUsrsTotalInPlatform ? 100.0 * (float) NumUsrs / (float) NumUsrsTotalInPlatform :
+		  NumUsrsTotalInPlatform ? 100.0 *
+			                   (float) NumUsrs /
+			                   (float) NumUsrsTotalInPlatform :
 			                   0.0);
 	}
      }

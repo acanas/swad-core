@@ -156,13 +156,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.46.7 (2016-11-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.46.9 (2016-11-06)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.46.9:  Nov 06, 2016	Fixed bug in figures (statistics). (206064 lines)
+        Version 16.46.8:  Nov 05, 2016	Changes in texts related to notifications. (206047 lines)
         Version 16.46.7:  Nov 05, 2016	Changes in text related to forum statistics. (206046 lines)
         Version 16.46.6:  Nov 05, 2016	Changes in texts related to public social activity statistics. (206045 lines)
         Version 16.46.5:  Nov 05, 2016	Changes in texts related to folders and files statistics. (206043 lines)

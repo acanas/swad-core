@@ -758,7 +758,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	"",
 	"Nova resposta en un fòrum",
 	"Neue Antwort in einem Forum",
-	"New response in a forum",
+	"New reply in a forum",
 	"Nueva respuesta en un foro",
 	"Nouvelle réponse dans un forum",
 	"Nueva respuesta en un foro",		// Okoteve traducción
@@ -26189,7 +26189,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==2
 	 "Neue Antworten auf meine Beitr&auml;ge in den Foren"
 #elif L==3
-	 "New responses to my posts in forums"
+	 "New replies to my posts in forums"
 #elif L==4
 	 "Nuevas respuestas a mis mensajes en foros"
 #elif L==5

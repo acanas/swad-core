@@ -161,7 +161,8 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
                                  unsigned Divisor);
 
 void Sta_ReqUseOfPlatform (void);
-void Pho_PutHiddenParamFigureType (void);
+void Sta_PutHiddenParamFigureType (void);
+void Sta_PutHiddenParamScopeSta (void);
 void Sta_ShowUseOfPlatform (void);
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role);
 

@@ -2056,7 +2056,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);
-      Sco_PutParamScope ("ScopeSta",Gbl.Scope.Current);
+      Sta_PutHiddenParamScopeSta ();
      }
 
    fprintf (Gbl.F.Out,"%s: ",Txt_Color_of_the_graphic);
@@ -3837,9 +3837,18 @@ void Sta_ReqUseOfPlatform (void)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-void Pho_PutHiddenParamFigureType (void)
+void Sta_PutHiddenParamFigureType (void)
   {
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Gbl.Stat.FigureType);
+  }
+
+/*****************************************************************************/
+/********* Put hidden parameter for the type of figure (statistic) ***********/
+/*****************************************************************************/
+
+void Sta_PutHiddenParamScopeSta (void)
+  {
+   Sco_PutParamScope ("ScopeSta",Gbl.Scope.Current);
   }
 
 /*****************************************************************************/
@@ -3848,7 +3857,7 @@ void Pho_PutHiddenParamFigureType (void)
 
 void Sta_ShowUseOfPlatform (void)
   {
-   void (*Sta_Function[Sta_NUM_FIGURES])(void) =	// Array of pointers to functions
+   static void (*Sta_Function[Sta_NUM_FIGURES])(void) =	// Array of pointers to functions
      {
       Sta_GetAndShowUsersStats,			// Sta_USERS
       Sta_GetAndShowUsersRanking,		// Sta_USERS_RANKING
@@ -3877,7 +3886,7 @@ void Sta_ShowUseOfPlatform (void)
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
 
-   /***** Get the type of stat of use ******/
+   /***** Get the type of figure ******/
    Par_GetParToText ("FigureType",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
       Lay_ShowErrorAndExit ("Type of stat is missing.");
