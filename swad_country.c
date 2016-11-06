@@ -66,6 +66,7 @@ extern struct Globals Gbl;
 static void Cty_Configuration (bool PrintView);
 static void Cty_PutIconToPrint (void);
 
+static void Cty_PutIconsCountries (void);
 static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
@@ -512,9 +513,7 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Cty_PutIconToEditCountries :
-                                                                NULL);
+   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsCountries);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
@@ -687,6 +686,21 @@ void Cty_ListCountries2 (void)
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of countries *****************/
+/*****************************************************************************/
+
+static void Cty_PutIconsCountries (void)
+  {
+   /***** Put icon to edit countries *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      Cty_PutIconToEditCountries ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

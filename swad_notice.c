@@ -485,7 +485,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
   }
 
 /*****************************************************************************/
-/***************** Put conteextual icons in list of notices ******************/
+/****************** Put contextual icons in list of notices ******************/
 /*****************************************************************************/
 
 static void Not_PutIconsNotices (void)
