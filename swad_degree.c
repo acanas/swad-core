@@ -99,7 +99,7 @@ static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_CreateDegree (struct Degree *Deg,unsigned Status);
 
 static void Deg_ListDegrees (void);
-static bool Deg_CheckIfICanEditDegrees (void);
+static bool Deg_CheckIfICanCreateDegrees (void);
 static void Deg_PutIconsListDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
@@ -1641,7 +1641,7 @@ static void Deg_ListDegrees (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees);
 
    /***** Button to create degree *****/
-   if (Deg_CheckIfICanEditDegrees ())
+   if (Deg_CheckIfICanCreateDegrees ())
      {
       Act_FormStart (ActEdiDeg);
       Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
@@ -1654,10 +1654,10 @@ static void Deg_ListDegrees (void)
   }
 
 /*****************************************************************************/
-/*********************** Check if I can edit degrees *************************/
+/********************** Check if I can create degrees ************************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfICanEditDegrees (void)
+static bool Deg_CheckIfICanCreateDegrees (void)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
   }
@@ -1669,7 +1669,7 @@ static bool Deg_CheckIfICanEditDegrees (void)
 static void Deg_PutIconsListDegrees (void)
   {
    /***** Put icon to edit degrees *****/
-   if (Deg_CheckIfICanEditDegrees ())
+   if (Deg_CheckIfICanCreateDegrees ())
       Deg_PutIconToEditDegrees ();
 
    /***** Put icon to show a figure *****/

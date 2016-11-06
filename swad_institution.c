@@ -67,7 +67,7 @@ static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
-static bool Ins_CheckIfICanEditInstitutions (void);
+static bool Ins_CheckIfICanCreateInstitutions (void);
 static void Ins_PutIconsListInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
@@ -683,7 +683,7 @@ static void Ins_ListInstitutions (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions);
 
    /***** Button to create institution *****/
-   if (Ins_CheckIfICanEditInstitutions ())
+   if (Ins_CheckIfICanCreateInstitutions ())
      {
       Act_FormStart (ActEdiIns);
       Lay_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
@@ -695,10 +695,10 @@ static void Ins_ListInstitutions (void)
   }
 
 /*****************************************************************************/
-/******************** Check if I can edit institutions ***********************/
+/******************* Check if I can create institutions **********************/
 /*****************************************************************************/
 
-static bool Ins_CheckIfICanEditInstitutions (void)
+static bool Ins_CheckIfICanCreateInstitutions (void)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
   }
@@ -710,7 +710,7 @@ static bool Ins_CheckIfICanEditInstitutions (void)
 static void Ins_PutIconsListInstitutions (void)
   {
    /***** Put icon to edit institutions *****/
-   if (Ins_CheckIfICanEditInstitutions ())
+   if (Ins_CheckIfICanCreateInstitutions ())
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/

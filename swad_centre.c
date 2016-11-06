@@ -80,7 +80,7 @@ static void Ctr_PutIconsToPrintAndUpload (void);
 static void Ctr_PutIconToChangePhoto (void);
 
 static void Ctr_ListCentres (void);
-static bool Ctr_CheckIfICanEditCentres (void);
+static bool Ctr_CheckIfICanCreateCentres (void);
 static void Ctr_PutIconsListCentres (void);
 static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
@@ -760,7 +760,7 @@ static void Ctr_ListCentres (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_centres);
 
    /***** Button to create centre *****/
-   if (Ctr_CheckIfICanEditCentres ())
+   if (Ctr_CheckIfICanCreateCentres ())
      {
       Act_FormStart (ActEdiCtr);
       Lay_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
@@ -773,10 +773,10 @@ static void Ctr_ListCentres (void)
   }
 
 /*****************************************************************************/
-/*********************** Check if I can edit centres *************************/
+/********************** Check if I can create centres ************************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfICanEditCentres (void)
+static bool Ctr_CheckIfICanCreateCentres (void)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
   }
@@ -788,7 +788,7 @@ static bool Ctr_CheckIfICanEditCentres (void)
 static void Ctr_PutIconsListCentres (void)
   {
    /***** Put icon to edit centres *****/
-   if (Ctr_CheckIfICanEditCentres ())
+   if (Ctr_CheckIfICanCreateCentres ())
       Ctr_PutIconToEditCentres ();
 
    /***** Put icon to show a figure *****/

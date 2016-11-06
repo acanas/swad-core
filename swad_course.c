@@ -79,6 +79,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void);
 
 static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses);
 static void Crs_ListCourses (void);
+static bool Crs_CheckIfICanCreateCourses (void);
+static void Crs_PutIconsListCourses (void);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
@@ -1174,12 +1176,10 @@ static void Crs_ListCourses (void)
    extern const char *Txt_Create_another_course;
    extern const char *Txt_Create_course;
    unsigned Year;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Crs_PutIconToEditCourses :
-				                  NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Crs_PutIconsListCourses);
 
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
@@ -1202,7 +1202,7 @@ static void Crs_ListCourses (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_courses);
 
    /***** Button to create course *****/
-   if (ICanEdit)
+   if (Crs_CheckIfICanCreateCourses ())
      {
       Act_FormStart (ActEdiCrs);
       Lay_PutConfirmButton (Gbl.CurrentDeg.NumCrss ? Txt_Create_another_course :
@@ -1212,6 +1212,30 @@ static void Crs_ListCourses (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Check if I can create courses ************************/
+/*****************************************************************************/
+
+static bool Crs_CheckIfICanCreateCourses (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of courses *******************/
+/*****************************************************************************/
+
+static void Crs_PutIconsListCourses (void)
+  {
+   /***** Put icon to edit courses *****/
+   if (Crs_CheckIfICanCreateCourses ())
+      Crs_PutIconToEditCourses ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
