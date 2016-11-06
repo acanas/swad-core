@@ -90,7 +90,7 @@ static void Deg_PutIconsToPrintAndUpload (void);
 static void Deg_WriteSelectorOfDegree (void);
 
 static void Deg_ListDegreesForEdition (void);
-static bool Deg_CheckIfICanEdit (struct Degree *Deg);
+static bool Deg_CheckIfICanEditADegree (struct Degree *Deg);
 static Deg_StatusTxt_t Deg_GetStatusTxtFromStatusBits (Deg_Status_t Status);
 static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt);
 static void Deg_PutFormToCreateDegree (void);
@@ -99,6 +99,8 @@ static void Deg_PutHeadDegreesForEdition (void);
 static void Deg_CreateDegree (struct Degree *Deg,unsigned Status);
 
 static void Deg_ListDegrees (void);
+static bool Deg_CheckIfICanEditDegrees (void);
+static void Deg_PutIconsListDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
@@ -1132,7 +1134,7 @@ static void Deg_ListDegreesForEdition (void)
 
       NumCrss = Crs_GetNumCrssInDeg (Deg->DegCod);
 
-      ICanEdit = Deg_CheckIfICanEdit (Deg);
+      ICanEdit = Deg_CheckIfICanEditADegree (Deg);
 
       /* Put icon to remove degree */
       fprintf (Gbl.F.Out,"<tr>"
@@ -1307,7 +1309,7 @@ static void Deg_ListDegreesForEdition (void)
 /************** Check if I can edit, remove, etc. a degree *******************/
 /*****************************************************************************/
 
-static bool Deg_CheckIfICanEdit (struct Degree *Deg)
+static bool Deg_CheckIfICanEditADegree (struct Degree *Deg)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM ||		// I am a centre administrator or higher
                   ((Deg->Status & Deg_STATUS_BIT_PENDING) != 0 &&		// Degree is not yet activated
@@ -1615,12 +1617,10 @@ static void Deg_ListDegrees (void)
    extern const char *Txt_Create_another_degree;
    extern const char *Txt_Create_degree;
    unsigned NumDeg;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Deg_PutIconToEditDegrees :
-                                                  NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees);
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
@@ -1641,7 +1641,7 @@ static void Deg_ListDegrees (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees);
 
    /***** Button to create degree *****/
-   if (ICanEdit)
+   if (Deg_CheckIfICanEditDegrees ())
      {
       Act_FormStart (ActEdiDeg);
       Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_degree :
@@ -1651,6 +1651,30 @@ static void Deg_ListDegrees (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*********************** Check if I can edit degrees *************************/
+/*****************************************************************************/
+
+static bool Deg_CheckIfICanEditDegrees (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of degrees *******************/
+/*****************************************************************************/
+
+static void Deg_PutIconsListDegrees (void)
+  {
+   /***** Put icon to edit degrees *****/
+   if (Deg_CheckIfICanEditDegrees ())
+      Deg_PutIconToEditDegrees ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
