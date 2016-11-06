@@ -67,8 +67,7 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /*****************************************************************************/
 
 static bool Not_CheckIfICanEditNotices (void);
-
-static void Not_PutIconsNotices (void);
+static void Not_PutIconsListNotices (void);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
 static void Not_GetDataAndShowNotice (long NotCod);
@@ -219,16 +218,6 @@ void Not_ListFullNotices (void)
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES);
-  }
-
-/*****************************************************************************/
-/*********************** Check if I can edit notices *************************/
-/*****************************************************************************/
-
-static bool Not_CheckIfICanEditNotices (void)
-  {
-   return (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-	   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -404,7 +393,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
-			      Not_PutIconsNotices);
+			      Not_PutIconsListNotices);
          if (!NumNotices)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
 	}
@@ -488,10 +477,20 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   }
 
 /*****************************************************************************/
+/*********************** Check if I can edit notices *************************/
+/*****************************************************************************/
+
+static bool Not_CheckIfICanEditNotices (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	          Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+  }
+
+/*****************************************************************************/
 /****************** Put contextual icons in list of notices ******************/
 /*****************************************************************************/
 
-static void Not_PutIconsNotices (void)
+static void Not_PutIconsListNotices (void)
   {
    /***** Put icon to add a new notice *****/
    if (Not_CheckIfICanEditNotices ())

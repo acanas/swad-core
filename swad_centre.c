@@ -80,13 +80,15 @@ static void Ctr_PutIconsToPrintAndUpload (void);
 static void Ctr_PutIconToChangePhoto (void);
 
 static void Ctr_ListCentres (void);
-static void Ctr_PutIconToEditFrames (void);
+static bool Ctr_CheckIfICanEditCentres (void);
+static void Ctr_PutIconsListCentres (void);
+static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrderType (void);
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
 static void Ctr_ListCentresForEdition (void);
-static bool Ctr_CheckIfICanEdit (struct Centre *Ctr);
+static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr);
 static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
@@ -734,12 +736,10 @@ static void Ctr_ListCentres (void)
    extern const char *Txt_Create_another_centre;
    extern const char *Txt_Create_centre;
    unsigned NumCtr;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,ICanEdit ? Ctr_PutIconToEditFrames :
-                                                  NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsListCentres);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
@@ -760,7 +760,7 @@ static void Ctr_ListCentres (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_centres);
 
    /***** Button to create centre *****/
-   if (ICanEdit)
+   if (Ctr_CheckIfICanEditCentres ())
      {
       Act_FormStart (ActEdiCtr);
       Lay_PutConfirmButton (Gbl.Ctrs.Num ? Txt_Create_another_centre :
@@ -773,10 +773,34 @@ static void Ctr_ListCentres (void)
   }
 
 /*****************************************************************************/
+/*********************** Check if I can edit centres *************************/
+/*****************************************************************************/
+
+static bool Ctr_CheckIfICanEditCentres (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of centres *******************/
+/*****************************************************************************/
+
+static void Ctr_PutIconsListCentres (void)
+  {
+   /***** Put icon to edit centres *****/
+   if (Ctr_CheckIfICanEditCentres ())
+      Ctr_PutIconToEditCentres ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_HIERARCHY;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
 /********************** Put link (form) to edit centres **********************/
 /*****************************************************************************/
 
-static void Ctr_PutIconToEditFrames (void)
+static void Ctr_PutIconToEditCentres (void)
   {
    extern const char *Txt_Edit;
 
@@ -1354,7 +1378,7 @@ static void Ctr_ListCentresForEdition (void)
      {
       Ctr = &Gbl.Ctrs.Lst[NumCtr];
 
-      ICanEdit = Ctr_CheckIfICanEdit (Ctr);
+      ICanEdit = Ctr_CheckIfICanEditACentre (Ctr);
 
       /* Put icon to remove centre */
       fprintf (Gbl.F.Out,"<tr>"
@@ -1545,9 +1569,9 @@ static void Ctr_ListCentresForEdition (void)
 /************** Check if I can edit, remove, etc. a centre *******************/
 /*****************************************************************************/
 
-static bool Ctr_CheckIfICanEdit (struct Centre *Ctr)
+static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||		// I am an institution administrator or higher
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||			// I am an institution administrator or higher
                   ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&		// Centre is not yet activated
                    Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));		// I am the requester
   }

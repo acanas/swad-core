@@ -68,7 +68,7 @@ static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanEditInstitutions (void);
-static void Ins_PutIconsInstitutions (void);
+static void Ins_PutIconsListInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
@@ -662,7 +662,7 @@ static void Ins_ListInstitutions (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsInstitutions);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
@@ -700,16 +700,16 @@ static void Ins_ListInstitutions (void)
 
 static bool Ins_CheckIfICanEditInstitutions (void)
   {
-   return (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
   }
 
 /*****************************************************************************/
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
-static void Ins_PutIconsInstitutions (void)
+static void Ins_PutIconsListInstitutions (void)
   {
-   /***** Put icon to edit countries *****/
+   /***** Put icon to edit institutions *****/
    if (Ins_CheckIfICanEditInstitutions ())
       Ins_PutIconToEditInstitutions ();
 

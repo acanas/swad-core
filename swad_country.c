@@ -68,7 +68,7 @@ static void Cty_PutIconToPrint (void);
 
 static bool Cty_CheckIfICanEditCountries (void);
 
-static void Cty_PutIconsCountries (void);
+static void Cty_PutIconsListCountries (void);
 static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
@@ -515,7 +515,7 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsCountries);
+   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsListCountries);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
@@ -696,14 +696,14 @@ void Cty_ListCountries2 (void)
 
 static bool Cty_CheckIfICanEditCountries (void)
   {
-   return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
 /***************** Put contextual icons in list of countries *****************/
 /*****************************************************************************/
 
-static void Cty_PutIconsCountries (void)
+static void Cty_PutIconsListCountries (void)
   {
    /***** Put icon to edit countries *****/
    if (Cty_CheckIfICanEditCountries ())
