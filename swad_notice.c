@@ -66,17 +66,18 @@ const unsigned Not_MaxCharsURLOnScreen[Not_NUM_TYPES_LISTING] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static bool Not_CheckIfICanEditNotices (void);
+
 static void Not_PutIconsNotices (void);
 static void Not_PutIconToAddNewNotice (void);
 static void Not_PutButtonToAddNewNotice (void);
-static void Not_GetDataAndShowNotice (long NotCod,bool ICanEdit);
+static void Not_GetDataAndShowNotice (long NotCod);
 static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long NotCod,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
-                             Not_Status_t Status,
-                             bool ICanEdit);
+                             Not_Status_t Status);
 static long Not_InsertNoticeInDB (const char *Content);
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
 static long Not_GetParamNotCod (void);
@@ -124,8 +125,7 @@ void Not_ShowFormNotice (void)
    Act_FormEnd ();
 
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES,
-                    true);	// I can create a new notice ==> I can edit notices
+   Not_ShowNotices (Not_LIST_FULL_NOTICES);
   }
 
 /*****************************************************************************/
@@ -213,15 +213,22 @@ void Not_ListNoticesAfterRemoval (void)
 
 void Not_ListFullNotices (void)
   {
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
-
    /***** Show highlighted notice *****/
    if (Gbl.CurrentCrs.Notices.HighlightNotCod > 0)
-      Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.HighlightNotCod,ICanEdit);
+      Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.HighlightNotCod);
 
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES,ICanEdit);
+   Not_ShowNotices (Not_LIST_FULL_NOTICES);
+  }
+
+/*****************************************************************************/
+/*********************** Check if I can edit notices *************************/
+/*****************************************************************************/
+
+static bool Not_CheckIfICanEditNotices (void)
+  {
+   return (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -287,14 +294,12 @@ void Not_RequestRemNotice (void)
    Act_FormStart (ActRemNot);
    Not_PutHiddenParamNotCod (NotCod);
    Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_notice);
-   Not_GetDataAndShowNotice (NotCod,
-                             false);	// Do not edit this notice
+   Not_GetDataAndShowNotice (NotCod);
    Lay_PutRemoveButton (Txt_Remove);
    Act_FormEnd ();
 
    /***** Show all notices *****/
-   Not_ShowNotices (Not_LIST_FULL_NOTICES,
-                    true);	// I can remove notices ==> I can edit notices
+   Not_ShowNotices (Not_LIST_FULL_NOTICES);
   }
 
 /*****************************************************************************/
@@ -348,7 +353,7 @@ void Not_GetNotCodToHighlight (void)
 /***************************** Show the notices ******************************/
 /*****************************************************************************/
 
-void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
+void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   {
    extern const char *Txt_All_notices;
    extern const char *Txt_Notices;
@@ -396,7 +401,6 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 	 /***** Start frame *****/
 	 sprintf (StrWidth,"%upx",
 	          Not_ContainerWidth[Not_LIST_FULL_NOTICES] + 50);
-	 Gbl.CurrentCrs.Notices.ICanEdit = ICanEdit;
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
@@ -438,8 +442,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 	 /* Draw the notice */
 	 Not_DrawANotice (TypeNoticesListing,
 	                  NotCod,
-	                  TimeUTC,Content,UsrCod,Status,
-	                  ICanEdit);
+	                  TimeUTC,Content,UsrCod,Status);
 	}
 
       switch (TypeNoticesListing)
@@ -466,7 +469,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 	    break;
 	 case Not_LIST_FULL_NOTICES:
 	    /***** Button to add new notice *****/
-	    if (ICanEdit)
+	    if (Not_CheckIfICanEditNotices ())
 	       Not_PutButtonToAddNewNotice ();
 
 	    /***** End frame *****/
@@ -491,7 +494,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing,bool ICanEdit)
 static void Not_PutIconsNotices (void)
   {
    /***** Put icon to add a new notice *****/
-   if (Gbl.CurrentCrs.Notices.ICanEdit)
+   if (Not_CheckIfICanEditNotices ())
       Not_PutIconToAddNewNotice ();
 
    /***** Put icon to show a figure *****/
@@ -530,7 +533,7 @@ static void Not_PutButtonToAddNewNotice (void)
 /******************** Get data of a notice and show it ***********************/
 /*****************************************************************************/
 
-static void Not_GetDataAndShowNotice (long NotCod,bool ICanEdit)
+static void Not_GetDataAndShowNotice (long NotCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -571,8 +574,7 @@ static void Not_GetDataAndShowNotice (long NotCod,bool ICanEdit)
       /***** Draw the notice *****/
       Not_DrawANotice (Not_LIST_FULL_NOTICES,
 		       NotCod,
-		       TimeUTC,Content,UsrCod,Status,
-		       ICanEdit);
+		       TimeUTC,Content,UsrCod,Status);
      }
 
    /***** Free structure that stores the query result *****/
@@ -588,8 +590,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              time_t TimeUTC,
                              const char *Content,
                              long UsrCod,
-                             Not_Status_t Status,
-                             bool ICanEdit)
+                             Not_Status_t Status)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_NOTICE_Active_SINGULAR;
@@ -631,7 +632,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /* Write symbol to indicate if notice is obsolete or active */
    if (TypeNoticesListing == Not_LIST_FULL_NOTICES)
      {
-      if (ICanEdit)
+      if (Not_CheckIfICanEditNotices ())
 	{
 	 /* Form to remove notice */
 	 Act_FormStart (ActReqRemNot);

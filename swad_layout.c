@@ -947,8 +947,7 @@ static void Lay_ShowLeftColumn (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
-      Not_ShowNotices (Not_LIST_BRIEF_NOTICES,
-                       false);	// Nobody can not edit notices here
+      Not_ShowNotices (Not_LIST_BRIEF_NOTICES);
       fprintf (Gbl.F.Out,"</div>");
      }
 

@@ -463,7 +463,6 @@ struct Globals
       struct
         {
          long HighlightNotCod;	// Notice code of a notice to be highlighted
-         bool ICanEdit;
         } Notices;
      } CurrentCrs;
    struct
