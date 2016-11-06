@@ -2722,7 +2722,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabSta ******************************************************************
    // Actions in menu:
    /* ActSeeAllSvy	*/{ 966, 0,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqUseOfPlatform		,"pie64x64.gif"		},
+   /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
    /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
    /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
    /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
@@ -2748,7 +2748,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
    /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
 
-   /* ActSeeUseGbl	*/{  84,-1,TabUnk,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ShowUseOfPlatform		,NULL},
+   /* ActSeeUseGbl	*/{  84,-1,TabUnk,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ShowFigures		,NULL},
    /* ActPrnPhoDeg	*/{ 448,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Pho_PrintPhotoDegree  		,NULL},
    /* ActCalPhoDeg	*/{ 444,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_CalcPhotoDegree		,NULL},
    /* ActSeeAccGbl	*/{  79,-1,TabUnk,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeGblAccesses		,NULL},

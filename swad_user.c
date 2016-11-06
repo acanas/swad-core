@@ -5232,8 +5232,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
            }
          break;
       case ActSeeUseGbl:
-         Sta_PutHiddenParamScopeSta ();
-         Sta_PutHiddenParamFigureType ();
+         Sta_PutHiddenParamFigures ();
          break;
       case ActSeePhoDeg:
          Pho_PutHiddenParamTypeOfAvg ();

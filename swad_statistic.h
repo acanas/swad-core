@@ -160,10 +160,11 @@ void Sta_ComputeMaxAndTotalHits (struct Sta_Hits *Hits,
                                  MYSQL_RES *mysql_res,unsigned Field,
                                  unsigned Divisor);
 
-void Sta_ReqUseOfPlatform (void);
-void Sta_PutHiddenParamFigureType (void);
-void Sta_PutHiddenParamScopeSta (void);
-void Sta_ShowUseOfPlatform (void);
+void Sta_ReqShowFigures (void);
+void Sta_PutIconToShowFigure (void);
+void Sta_PutHiddenParamFigures (void);
+void Sta_ShowFigures (void);
+
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role);
 
 void Sta_WriteParamsDatesSeeAccesses (void);

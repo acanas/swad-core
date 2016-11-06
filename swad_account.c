@@ -79,7 +79,7 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
 
 static void Acc_PutLinkToRemoveMyAccount (void);
-static void Acc_PutLinkToRemoveMyAccountParams (void);
+static void Acc_PutParamsToRemoveMyAccount (void);
 
 static void Acc_PrintAccountSeparator (void);
 
@@ -503,13 +503,13 @@ static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   Lay_PutContextualLink (ActReqRemMyAcc,Acc_PutLinkToRemoveMyAccountParams,
+   Lay_PutContextualLink (ActReqRemMyAcc,Acc_PutParamsToRemoveMyAccount,
                           "remove-on64x64.png",
                           Txt_Remove_account,Txt_Remove_account,
                           NULL);
   }
 
-static void Acc_PutLinkToRemoveMyAccountParams (void)
+static void Acc_PutParamsToRemoveMyAccount (void)
   {
    Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
    Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);

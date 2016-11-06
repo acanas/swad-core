@@ -279,7 +279,7 @@ void Cal_DrawCalendar (void)
   }
 
 /*****************************************************************************/
-/************************ Draw an academic calendar **************************/
+/************************ Put icon to print calendar *************************/
 /*****************************************************************************/
 
 static void Cal_PutIconToPrintCalendar (void)
@@ -291,4 +291,3 @@ static void Cal_PutIconToPrintCalendar (void)
                           Txt_Print,NULL,
                           NULL);
   }
-

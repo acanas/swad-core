@@ -178,6 +178,10 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
 
 static void Sta_DrawBarNumHits (char Color,float HitsNum,float HitsMax,float HitsTotal,unsigned MaxBarWidth);
 
+static void Sta_PutParamsToShowFigure (void);
+static void Sta_PutHiddenParamFigureType (void);
+static void Sta_PutHiddenParamScopeSta (void);
+
 static void Sta_GetAndShowHierarchyStats (void);
 static void Sta_WriteHeadDegsCrssInSWAD (void);
 static void Sta_GetAndShowNumCtysInSWAD (void);
@@ -397,7 +401,14 @@ void Sta_AskShowCrsHits (void)
    extern const char *Txt_results_per_page;
    extern const char *Txt_Show_hits;
    extern const char *Txt_No_teachers_or_students_found;
-   static unsigned long RowsPerPage[] = {10,20,30,40,50,100,500,1000,5000,10000,50000,100000};
+   static unsigned long RowsPerPage[] =
+     {
+      10,20,30,40,50,
+      100,500,
+      1000,5000,
+      10000,50000,
+      100000
+     };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    unsigned NumTotalUsrs;
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
@@ -3777,7 +3788,7 @@ void Sta_WriteParamsDatesSeeAccesses (void)
 /************************** Show use of the platform *************************/
 /*****************************************************************************/
 
-void Sta_ReqUseOfPlatform (void)
+void Sta_ReqShowFigures (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistic;
@@ -3834,10 +3845,56 @@ void Sta_ReqUseOfPlatform (void)
   }
 
 /*****************************************************************************/
+/************************* Put icon to show a figure *************************/
+/*****************************************************************************/
+// Gbl.Stat.FigureType must be set to the desired figure before calling this function
+
+void Sta_PutIconToShowFigure (void)
+  {
+   extern const char *Txt_Show_statistic;
+
+   Lay_PutContextualLink (ActSeeUseGbl,Sta_PutParamsToShowFigure,
+                          "pie64x64.gif",
+                          Txt_Show_statistic,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
+/************* Put hidden parameters for figures (statistics) ****************/
+/*****************************************************************************/
+// Gbl.Stat.FigureType must be set to the desired figure before calling this function
+
+static void Sta_PutParamsToShowFigure (void)
+  {
+   if      (Gbl.CurrentCrs.Crs.CrsCod > 0)
+      Gbl.Scope.Current = Sco_SCOPE_CRS;
+   else if (Gbl.CurrentDeg.Deg.DegCod > 0)
+      Gbl.Scope.Current = Sco_SCOPE_DEG;
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+      Gbl.Scope.Current = Sco_SCOPE_CTR;
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)
+      Gbl.Scope.Current = Sco_SCOPE_INS;
+   else
+      Gbl.Scope.Current = Sco_SCOPE_SYS;
+
+   Sta_PutHiddenParamFigures ();
+  }
+
+/*****************************************************************************/
+/************* Put hidden parameters for figures (statistics) ****************/
+/*****************************************************************************/
+
+void Sta_PutHiddenParamFigures (void)
+  {
+   Sta_PutHiddenParamScopeSta ();
+   Sta_PutHiddenParamFigureType ();
+  }
+
+/*****************************************************************************/
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-void Sta_PutHiddenParamFigureType (void)
+static void Sta_PutHiddenParamFigureType (void)
   {
    Par_PutHiddenParamUnsigned ("FigureType",(unsigned) Gbl.Stat.FigureType);
   }
@@ -3846,7 +3903,7 @@ void Sta_PutHiddenParamFigureType (void)
 /********* Put hidden parameter for the type of figure (statistic) ***********/
 /*****************************************************************************/
 
-void Sta_PutHiddenParamScopeSta (void)
+static void Sta_PutHiddenParamScopeSta (void)
   {
    Sco_PutParamScope ("ScopeSta",Gbl.Scope.Current);
   }
@@ -3855,7 +3912,7 @@ void Sta_PutHiddenParamScopeSta (void)
 /************************** Show use of the platform *************************/
 /*****************************************************************************/
 
-void Sta_ShowUseOfPlatform (void)
+void Sta_ShowFigures (void)
   {
    static void (*Sta_Function[Sta_NUM_FIGURES])(void) =	// Array of pointers to functions
      {
@@ -3895,7 +3952,7 @@ void Sta_ShowUseOfPlatform (void)
    Gbl.Stat.FigureType = (Sta_FigureType_t) UnsignedNum;
 
    /***** Show again the form to see use of the platform *****/
-   Sta_ReqUseOfPlatform ();
+   Sta_ReqShowFigures ();
 
    /***** Show the stat of use selected by user *****/
    Sta_Function[Gbl.Stat.FigureType] ();
