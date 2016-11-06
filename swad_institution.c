@@ -67,6 +67,7 @@ static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconsToPrintAndUpload (void);
 
 static void Ins_ListInstitutions (void);
+static bool Ins_CheckIfICanEditInstitutions (void);
 static void Ins_PutIconsInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
@@ -682,7 +683,7 @@ static void Ins_ListInstitutions (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions);
 
    /***** Button to create institution *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
+   if (Ins_CheckIfICanEditInstitutions ())
      {
       Act_FormStart (ActEdiIns);
       Lay_PutConfirmButton (Gbl.Inss.Num ? Txt_Create_another_institution :
@@ -694,13 +695,22 @@ static void Ins_ListInstitutions (void)
   }
 
 /*****************************************************************************/
+/******************** Check if I can edit institutions ***********************/
+/*****************************************************************************/
+
+static bool Ins_CheckIfICanEditInstitutions (void)
+  {
+   return (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+  }
+
+/*****************************************************************************/
 /*************** Put contextual icons in list of institutions ****************/
 /*****************************************************************************/
 
 static void Ins_PutIconsInstitutions (void)
   {
    /***** Put icon to edit countries *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_)
+   if (Ins_CheckIfICanEditInstitutions ())
       Ins_PutIconToEditInstitutions ();
 
    /***** Put icon to show a figure *****/

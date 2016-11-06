@@ -66,7 +66,7 @@ extern struct Globals Gbl;
 static void Cty_Configuration (bool PrintView);
 static void Cty_PutIconToPrint (void);
 
-static bool Cty_CheckIfICanEditNotices (void);
+static bool Cty_CheckIfICanEditCountries (void);
 
 static void Cty_PutIconsCountries (void);
 static void Cty_PutIconToEditCountries (void);
@@ -259,7 +259,7 @@ static void Cty_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"</div>");
 
 	 /* Map attribution */
-	 if (!PrintView && Cty_CheckIfICanEditNotices ())
+	 if (!PrintView && Cty_CheckIfICanEditCountries ())
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
@@ -694,7 +694,7 @@ void Cty_ListCountries2 (void)
 /********************** Check if I can edit countries ************************/
 /*****************************************************************************/
 
-static bool Cty_CheckIfICanEditNotices (void)
+static bool Cty_CheckIfICanEditCountries (void)
   {
    return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
@@ -706,7 +706,7 @@ static bool Cty_CheckIfICanEditNotices (void)
 static void Cty_PutIconsCountries (void)
   {
    /***** Put icon to edit countries *****/
-   if (Cty_CheckIfICanEditNotices ())
+   if (Cty_CheckIfICanEditCountries ())
       Cty_PutIconToEditCountries ();
 
    /***** Put icon to show a figure *****/
