@@ -38977,23 +38977,23 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #endif
 	 ,
 #if   L==1				// Sta_NOTIFY_EVENTS
-	 "Notificacions"
+	"Notificacions enviades per correu"
 #elif L==2
-	 "Anmeldungen"
+	"Anmeldungen per E-Mail gesendet"
 #elif L==3
-	 "Notifications"
+	"Notifications sent by e-mail"
 #elif L==4
-	 "Notificaciones"
+	"Notificaciones enviadas por correo"
 #elif L==5
-	 "Notifications"
+	"Notifications envoy&eacute;es par courriel"
 #elif L==6
-	 "Momarandu"
+	"Notificaciones enviadas por correo"	// Okoteve traducción
 #elif L==7
-	 "Notifiche"
+	"Notifiche inviate via e-mail"
 #elif L==8
-	 "Powiadomienia"
+	"Powiadomienia wysy&lstrok;ane przez e-mail"
 #elif L==9
-	 "Notifica&ccedil;&otilde;es"
+	"Notifica&ccedil;&otilde;es enviadas por e-mail"
 #endif
 	 ,
 #if   L==1				// Sta_NOTICES
