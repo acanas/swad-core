@@ -528,6 +528,7 @@ struct Globals
       unsigned Level;
       bool ICanRemoveFileOrFolder;	// Can I remove a file or folder?
       bool ICanEditFileOrFolder;	// Can I modify (rename, create inside, etc.) a file or folder?
+      Brw_IconViewEdit_t IconViewEdit;
       struct
         {
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser

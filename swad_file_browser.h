@@ -100,6 +100,13 @@ typedef enum	// Don't change these values! They are stored in database as number
   } Brw_License_t;
 #define Brw_LICENSE_DEFAULT Brw_LICENSE_ALL_RIGHTS_RESERVED
 
+typedef enum
+  {
+   Brw_ICON_NONE = 0,
+   Brw_ICON_VIEW = 1,
+   Brw_ICON_EDIT = 2
+  } Brw_IconViewEdit_t;
+
 struct FileMetadata
   {
    long FilCod;
