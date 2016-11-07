@@ -240,6 +240,12 @@ const char *The_ClassFormBold[The_NUM_THEMES] =
   };
 
 /*****************************************************************************/
+/****************************** Private prototypes ***************************/
+/*****************************************************************************/
+
+static void The_PutIconsTheme (void);
+
+/*****************************************************************************/
 /************************ Put icons to select a theme ***********************/
 /*****************************************************************************/
 
@@ -248,8 +254,9 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrameTable (NULL,0,Txt_Theme_SKIN);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)
@@ -271,8 +278,20 @@ void The_PutIconsToSelectTheme (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in theme preference ******************/
+/*****************************************************************************/
+
+static void The_PutIconsTheme (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_THEMES;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

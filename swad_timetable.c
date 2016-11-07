@@ -276,8 +276,8 @@ void TT_ShowClassTimeTable (void)
 
       /***** Show form to change first day of week *****/
       Cal_ShowFormToSelFirstDayOfWeek (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActChgCrsTT1stDay :
-	                                                                                     ActChgMyTT1stDay,
-	                                         "ICON25x25");
+	                                                                           ActChgMyTT1stDay,
+	                               "ICON25x25");
      }
 
    /***** Show the time table *****/
