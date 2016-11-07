@@ -156,13 +156,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.47.13 (2016-11-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.47.14 (2016-11-07)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.47.14: Nov 07, 2016	Icon in list of assignments to show figure (statistics). (206314 lines)
         Version 16.47.13: Nov 07, 2016	Icon in list of guests to show figure (statistics). (206295 lines)
         Version 16.47.12: Nov 07, 2016	Icon in list of teachers to show figure (statistics). (206278 lines)
         Version 16.47.11: Nov 07, 2016	Icon in list of students to show figure (statistics). (206262 lines)

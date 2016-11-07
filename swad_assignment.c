@@ -63,6 +63,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_ShowAllAssignments (void);
+static bool Asg_CheckIfICanCreateAssignments (void);
+static void Asg_PutIconsListAssignments (void);
 static void Asg_PutIconToCreateNewAsg (void);
 static void Asg_PutButtonToCreateNewAsg (void);
 static void Asg_PutParamsToCreateNewAsg (void);
@@ -119,8 +121,6 @@ static void Asg_ShowAllAssignments (void)
    tAsgsOrderType Order;
    struct Pagination Pagination;
    unsigned NumAsg;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Get list of assignments *****/
    Asg_GetListAssignments ();
@@ -136,9 +136,7 @@ static void Asg_ShowAllAssignments (void)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Assignments,
-                        ICanEdit ? Asg_PutIconToCreateNewAsg :
-                                   NULL);
+   Lay_StartRoundFrame ("100%",Txt_Assignments,Asg_PutIconsListAssignments);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -195,7 +193,7 @@ static void Asg_ShowAllAssignments (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_assignments);
 
    /***** Button to create a new assignment *****/
-   if (ICanEdit)
+   if (Asg_CheckIfICanCreateAssignments ())
       Asg_PutButtonToCreateNewAsg ();
 
    /***** End frame *****/
@@ -207,6 +205,31 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Free list of assignments *****/
    Asg_FreeListAssignments ();
+  }
+
+/*****************************************************************************/
+/******************** Check if I can create assignments **********************/
+/*****************************************************************************/
+
+static bool Asg_CheckIfICanCreateAssignments (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in list of assignments *****************/
+/*****************************************************************************/
+
+static void Asg_PutIconsListAssignments (void)
+  {
+   /***** Put icon to create a new assignment *****/
+   if (Asg_CheckIfICanCreateAssignments ())
+      Asg_PutIconToCreateNewAsg ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_ASSIGNMENTS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
