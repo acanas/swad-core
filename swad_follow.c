@@ -66,6 +66,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Fol_PutIconsWhoToFollow (void);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
 static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
@@ -223,7 +224,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconToUpdateWhoToFollow);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -265,6 +266,20 @@ void Fol_SuggestWhoToFollow (void)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in "who to follow" ******************/
+/*****************************************************************************/
+
+static void Fol_PutIconsWhoToFollow (void)
+  {
+   /***** Put icon to update who to follow *****/
+   Fol_PutIconToUpdateWhoToFollow ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_FOLLOW;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

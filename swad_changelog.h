@@ -156,13 +156,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.47.17 (2016-11-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.47.18 (2016-11-07)"
 #define CSS_FILE		"swad16.32.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.47.18: Nov 07, 2016	Icon in "who to follow" to show figure (statistics). (206350 lines)
         Version 16.47.17: Nov 07, 2016	Icon in public activity to show figure (statistics). (206337 lines)
         Version 16.47.16: Nov 07, 2016	Icon in file browser to show figure (statistics). (206326 lines)
         Version 16.47.15: Nov 07, 2016	Icon in file browser to show figure (statistics). (206313 lines)
