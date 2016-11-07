@@ -256,6 +256,8 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Ntf_PutIconsNotif (void);
+
 static void Ntf_WriteFormAllNotifications (bool AllNotifications);
 static bool Ntf_GetAllNotificationsFromForm (void);
 
@@ -272,7 +274,6 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     unsigned NumEvents,unsigned NumMails);
 
-static void Ntf_PutIconsNotif (void);
 static void Ntf_GetParamsNotifyEvents (void);
 static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void);
 static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
@@ -370,8 +371,9 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Notifications);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                         "<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -612,7 +614,8 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndRoundFrame ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -628,6 +631,17 @@ void Ntf_ShowMyNotifications (void)
 
    /***** Reset to 0 the number of new notifications *****/
    Ntf_UpdateMyLastAccessToNotifications ();
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in notifications ********************/
+/*****************************************************************************/
+
+static void Ntf_PutIconsNotif (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_NOTIFY_EVENTS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1927,17 +1941,6 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/************* Put contextual icons in notifications preference **************/
-/*****************************************************************************/
-
-static void Ntf_PutIconsNotif (void)
-  {
-   /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_NOTIFY_EVENTS;
-   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
