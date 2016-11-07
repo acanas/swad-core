@@ -147,6 +147,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight);
+static void Soc_PutIconsTimeline (void);
 static void Soc_InsertNewPubsInTimeline (const char *Query);
 static void Soc_ShowOldPubsInTimeline (const char *Query);
 
@@ -851,7 +852,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,NULL);
+   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline);
 
    /***** Form to write a new post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
@@ -911,6 +912,17 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* Put contextual icons in timeline **********************/
+/*****************************************************************************/
+
+static void Soc_PutIconsTimeline (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_SOCIAL_ACTIVITY;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
