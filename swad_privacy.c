@@ -61,6 +61,8 @@ const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Pri_PutIconsPrivacy (void);
+
 static void Pri_PutFormVisibility (const char *TxtLabel,
                                    Act_Action_t Action,const char *ParamName,
                                    Pri_Visibility_t CurrentVisibilityInDB,
@@ -99,7 +101,8 @@ void Pri_EditMyPrivacy (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Privacy);
+   Lay_StartRoundFrame (NULL,Txt_Privacy,Pri_PutIconsPrivacy);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,
@@ -126,7 +129,19 @@ void Pri_EditMyPrivacy (void)
                           (1 << Pri_VISIBILITY_SYSTEM));
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in menu preference ******************/
+/*****************************************************************************/
+
+static void Pri_PutIconsPrivacy (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_PRIVACY;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
