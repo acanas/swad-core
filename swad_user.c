@@ -178,6 +178,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void);
 static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
+static void Usr_PutIconsListGsts (void);
 static void Usr_PutIconsListStds (void);
 static void Usr_PutIconsListTchs (void);
 
@@ -6733,10 +6734,7 @@ void Usr_SeeGuests (void)
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs ? Usr_PutIconToPrintGsts :
-				                                                                                NULL) :
-								       Usr_PutIconToShowGstsAllData);
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts);
 
       /***** Form to select range of guests *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -7111,6 +7109,27 @@ void Usr_SeeTeachers (void)
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TEACHER);
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icons in list of guests ********************/
+/*****************************************************************************/
+
+static void Usr_PutIconsListGsts (void)
+  {
+   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+     {
+      if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+         /***** Put icon to print guests *****/
+	 Usr_PutIconToPrintGsts ();
+     }
+   else
+      /***** Put icon to show all data of guests *****/
+      Usr_PutIconToShowGstsAllData ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_USERS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
