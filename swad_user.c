@@ -2208,8 +2208,8 @@ void Usr_ChkUsrAndGetUsrData (void)
       /***** Check user and get user's data *****/
       if (Gbl.Action.Act == ActCreUsrAcc)
 	{
-	 /***** Create new account and login *****/
-	 if (Acc_CreateNewAccountAndLogIn ())			// User logged in
+	 /***** Create my new account and login *****/
+	 if (Acc_CreateMyNewAccountAndLogIn ())		// User logged in
 	   {
 	    Gbl.Usrs.Me.Logged = true;
 	    Usr_SetUsrRoleAndPrefs ();
@@ -2229,7 +2229,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 /***** Check user and get user's data *****/
 	 if (Gbl.Session.IsOpen)
 	   {
-	    if (Usr_ChkUsrAndGetUsrDataFromSession ())		// User logged in
+	    if (Usr_ChkUsrAndGetUsrDataFromSession ())	// User logged in
 	      {
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetUsrRoleAndPrefs ();

@@ -64,7 +64,7 @@ void Prf_GetUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 void Prf_CalculateFigures (void);
 bool Prf_GetAndStoreAllUsrFigures (long UsrCod,struct UsrFigures *UsrFigures);
 
-void Prf_CreateNewUsrFigures (long UsrCod);
+void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount);
 void Prf_RemoveUsrFigures (long UsrCod);
 void Prf_IncrementNumClicksUsr (long UsrCod);
 void Prf_IncrementNumFileViewsUsr (long UsrCod);

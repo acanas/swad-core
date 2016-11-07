@@ -26,6 +26,7 @@
 /*****************************************************************************/
 
 #include <linux/stddef.h>	// For NULL
+#include <string.h>		// For string functions
 
 #include "swad_config.h"
 #include "swad_database.h"
@@ -86,7 +87,8 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod);
 static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod);
 
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures);
-static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures);
+static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+                                  bool CreatingMyOwnAccount);
 static bool Prf_CheckIfUsrFiguresExists (long UsrCod);
 
 static void Prf_GetAndShowRankingFigure (const char *FieldName);
@@ -860,7 +862,7 @@ static void Prf_GetFirstClickFromLogAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -892,7 +894,7 @@ static void Prf_GetNumClicksAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
    }
 
@@ -922,7 +924,7 @@ static void Prf_GetNumFileViewsAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
    }
 
@@ -952,7 +954,7 @@ static void Prf_GetNumForPstAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
    }
 
@@ -982,7 +984,7 @@ static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 	 DB_QueryUPDATE (Query,"can not update user's figures");
 	}
       else			// User entry does not exist
-	 Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+	 Prf_CreateUsrFigures (UsrCod,&UsrFigures,false);
      }
   }
 
@@ -990,15 +992,19 @@ static void Prf_GetNumMsgSntAndStoreAsUsrFigure (long UsrCod)
 /******************* Create user's figures for a new user ********************/
 /*****************************************************************************/
 
-void Prf_CreateNewUsrFigures (long UsrCod)
+void Prf_CreateNewUsrFigures (long UsrCod,bool CreatingMyOwnAccount)
   {
    struct UsrFigures UsrFigures;
 
    /***** Reset user's figures *****/
    Prf_ResetUsrFigures (&UsrFigures);
+   UsrFigures.NumClicks    = 0;	// set number of clicks to 0
+   UsrFigures.NumFileViews = 0;	// set number of file views to 0
+   UsrFigures.NumForPst    = 0;	// set number of forum posts to 0
+   UsrFigures.NumMsgSnt    = 0;	// set number of messages sent to 0
 
    /***** Create user's figures *****/
-   Prf_CreateUsrFigures (UsrCod,&UsrFigures);
+   Prf_CreateUsrFigures (UsrCod,&UsrFigures,CreatingMyOwnAccount);
   }
 
 /*****************************************************************************/
@@ -1008,31 +1014,39 @@ void Prf_CreateNewUsrFigures (long UsrCod)
 static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
   {
    UsrFigures->FirstClickTimeUTC = (time_t) 0;	// unknown first click time or user never logged
-   UsrFigures->NumDays      = -1;		// not applicable
-   UsrFigures->NumClicks    = -1L;		// unknown number of clicks
-   UsrFigures->NumFileViews = -1L;		// unknown number of file views
-   UsrFigures->NumForPst    = -1L;		// unknown number of forum posts
-   UsrFigures->NumMsgSnt    = -1L;		// unknown number of messages sent
+   UsrFigures->NumDays      = -1;	// not applicable
+   UsrFigures->NumClicks    = -1L;	// unknown number of clicks
+   UsrFigures->NumFileViews = -1L;	// unknown number of file views
+   UsrFigures->NumForPst    = -1L;	// unknown number of forum posts
+   UsrFigures->NumMsgSnt    = -1L;	// unknown number of messages sent
   }
 
 /*****************************************************************************/
 /***** Get number of messages sent by a user and store in user's figures *****/
 /*****************************************************************************/
 
-static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures)
+static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
+                                  bool CreatingMyOwnAccount)
   {
    char Query[512];
+   char SubQueryFirstClickTime[64];
+
+   if (CreatingMyOwnAccount)
+      strcpy (SubQueryFirstClickTime,"NOW()");	// This is the first click
+   else
+      sprintf (SubQueryFirstClickTime,"FROM_UNIXTIME('%ld')",
+	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
 
    /***** Create user's figures *****/
    sprintf (Query,"INSERT INTO usr_figures"
 	          "(UsrCod,FirstClickTime,NumClicks,NumFileViews,NumForPst,NumMsgSnt)"
-		  " VALUES ('%ld',FROM_UNIXTIME('%ld'),'%ld','%ld','%ld','%ld')",
+		  " VALUES ('%ld',%s,'%ld','%ld','%ld','%ld')",
 	    UsrCod,
-	    (long) UsrFigures->FirstClickTimeUTC,	//   0 ==> unknown first click time or user never logged
-	    UsrFigures->NumClicks,			// -1L ==> unknown number of clicks
-	    UsrFigures->NumFileViews,			// -1L ==> unknown number of file views
-	    UsrFigures->NumForPst,			// -1L ==> unknown number of forum posts
-	    UsrFigures->NumMsgSnt);			// -1L ==> unknown number of messages sent
+	    SubQueryFirstClickTime,
+	    UsrFigures->NumClicks,	// -1L ==> unknown number of clicks
+	    UsrFigures->NumFileViews,	// -1L ==> unknown number of file views
+	    UsrFigures->NumForPst,	// -1L ==> unknown number of forum posts
+	    UsrFigures->NumMsgSnt);	// -1L ==> unknown number of messages sent
    DB_QueryINSERT (Query,"can not create user's figures");
   }
 

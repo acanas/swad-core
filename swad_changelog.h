@@ -156,13 +156,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.48.12 (2016-11-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.49 (2016-11-08)"
 #define CSS_FILE		"swad16.48.4.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.49:    Nov 08, 2016	Set some user's figures to 0 when creating an account. (206555 lines)
         Version 16.48.12: Nov 07, 2016	Icon in my webs / social networks to show figure (statistics). (206537 lines)
         Version 16.48.11: Nov 07, 2016	Changes in order of figures (statistics). (206523 lines)
         Version 16.48.10: Nov 07, 2016	Changes in text related to notifications stats. (206522 lines)

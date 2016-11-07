@@ -538,7 +538,7 @@ static void Acc_PrintAccountSeparator (void)
 // Return true if no error and user can be logged in
 // Return false on error
 
-bool Acc_CreateNewAccountAndLogIn (void)
+bool Acc_CreateMyNewAccountAndLogIn (void)
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
@@ -554,7 +554,8 @@ bool Acc_CreateNewAccountAndLogIn (void)
       strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
 
       /***** User does not exist in the platform, so create him/her! *****/
-      Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat);
+      Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
+                        true);	// I am creating my own account
 
       /***** Save nickname *****/
       Nck_UpdateMyNick (NewNicknameWithoutArroba);
@@ -678,7 +679,7 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 // UsrDat->UsrCod must be <= 0
 // UsrDat->UsrDat.IDs must contain a list of IDs for the new user
 
-void Acc_CreateNewUsr (struct UsrData *UsrDat)
+void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
   {
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -754,7 +755,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat)
    Fil_CreateDirIfNotExists (PathRelUsr);
 
    /***** Create user's figures *****/
-   Prf_CreateNewUsrFigures (UsrDat->UsrCod);
+   Prf_CreateNewUsrFigures (UsrDat->UsrCod,CreatingMyOwnAccount);
   }
 
 /*****************************************************************************/

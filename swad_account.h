@@ -57,8 +57,8 @@ void Acc_CheckIfEmptyAccountExists (void);
 
 void Acc_ShowFormGoToRequestNewAccount (void);
 void Acc_ShowFormChangeMyAccount (void);
-bool Acc_CreateNewAccountAndLogIn (void);
-void Acc_CreateNewUsr (struct UsrData *UsrDat);
+bool Acc_CreateMyNewAccountAndLogIn (void);
+void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount);
 void Acc_AfterCreationNewAccount (void);
 
 void Acc_GetUsrCodAndRemUsrGbl (void);

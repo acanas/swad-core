@@ -1654,7 +1654,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    unsigned long NumRow;
    unsigned long NumRows;
    unsigned long NumMsg = 0;		// Initialized to avoid warning
-   unsigned NumUnreadMsgs;
+   unsigned NumUnreadMsgs = 0;		// Initialized to avoid warning
    struct Pagination Pagination;
    long MsgCod;
    static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
@@ -2798,7 +2798,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Message;
    struct UsrData UsrDat;
-   const char *Title;
+   const char *Title = NULL;	// Initialized to avoid warning
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
    long CrsCod;

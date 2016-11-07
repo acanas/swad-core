@@ -672,7 +672,7 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 
 int swad__createAccount (struct soap *soap,
                          char *userNickname,char *userEmail,char *userPassword,char *appKey,	// input
-                         struct swad__createAccountOutput *createAccountOut)					// output
+                         struct swad__createAccountOutput *createAccountOut)			// output
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
@@ -714,7 +714,8 @@ int swad__createAccount (struct soap *soap,
    strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
 
    /***** User does not exist in the platform, so create him/her! *****/
-   Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat);
+   Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
+                     true);	// I am creating my own account
 
    /***** Save nickname *****/
    Nck_UpdateMyNick (NewNicknameWithoutArroba);

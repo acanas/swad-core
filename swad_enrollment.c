@@ -1630,9 +1630,10 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
       // Reset user's data
       Usr_ResetUsrDataExceptUsrCodAndIDs (UsrDat);	// It's necessary, because the same struct UsrDat was used for former user
 
-      // User does not exist in database;list of IDs is initialized
+      // User does not exist in database; list of IDs is initialized
       UsrDat->IDs.List[0].Confirmed = true;	// If he/she is a new user ==> his/her ID will be stored as confirmed in database
-      Acc_CreateNewUsr (UsrDat);
+      Acc_CreateNewUsr (UsrDat,
+                        false);	// I am NOT creating my own account
      }
 
    /***** Register user in current course in database *****/
@@ -3496,7 +3497,8 @@ void Enr_CreateNewUsr (void)
 
       /***** Create user *****/
       Gbl.Usrs.Other.UsrDat.IDs.List[0].Confirmed = true;	// User's ID will be stored as confirmed
-      Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat);
+      Acc_CreateNewUsr (&Gbl.Usrs.Other.UsrDat,
+                        false);	// I am NOT creating my own account
 
       /***** Register user in current course in database *****/
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
