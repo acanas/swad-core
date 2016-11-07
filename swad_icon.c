@@ -61,6 +61,12 @@ const char *Ico_IconSetNames[Ico_NUM_ICON_SETS] =
   };
 
 /*****************************************************************************/
+/***************************** Private prototypes ****************************/
+/*****************************************************************************/
+
+static void Ico_PutIconsIconSet (void);
+
+/*****************************************************************************/
 /************************ Put icons to select a IconSet **********************/
 /*****************************************************************************/
 
@@ -69,8 +75,9 @@ void Ico_PutIconsToSelectIconSet (void)
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   Lay_StartRoundFrameTable (NULL,0,Txt_Icons);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Icons,Ico_PutIconsIconSet);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
@@ -92,8 +99,20 @@ void Ico_PutIconsToSelectIconSet (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in icon-set preference *****************/
+/*****************************************************************************/
+
+static void Ico_PutIconsIconSet (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_ICON_SETS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
