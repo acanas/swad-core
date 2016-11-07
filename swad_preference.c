@@ -55,6 +55,8 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
+static void Pre_PutIconsLanguage (void);
+
 static void Pre_PutIconsToSelectSideCols (void);
 static void Pre_UpdateSideColsOnUsrDataTable (void);
 
@@ -70,7 +72,7 @@ void Pre_EditPrefs (void)
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_StartRoundFrame (NULL,Txt_Language,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage);
    fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>");
@@ -114,6 +116,17 @@ void Pre_EditPrefs (void)
       /***** Automatic e-mail to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
      }
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in language preference *****************/
+/*****************************************************************************/
+
+static void Pre_PutIconsLanguage (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_LANGUAGES;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
