@@ -59,7 +59,7 @@ const bool Cal_DayIsValidAsFirstDayOfWeek[7] =
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon);
+static void Cal_PutIconsFirstDayOfWeek (void);
 
 static unsigned Cal_GetParamFirstDayOfWeek (void);
 
@@ -73,33 +73,34 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
   {
    extern const char *Txt_Calendar;
 
-   Lay_StartRoundFrameTable (NULL,0,Txt_Calendar);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40");
-   Lay_EndRoundFrameTable ();
+   Lay_StartRoundFrame (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek);
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40B");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*********** Put contextual icons in first-day-of-week preference ************/
+/*****************************************************************************/
+
+static void Cal_PutIconsFirstDayOfWeek (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_FIRST_DAY_OF_WEEK;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
 /************** Show form to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Cal_ShowIntegratedFormToSelFirstDayOfWeek (Act_Action_t Action)
-  {
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
-   Cal_ShowFormToSelFirstDayOfWeek (Action,"ICON25x25");
-   fprintf (Gbl.F.Out,"</table>");
-  }
-
-/*****************************************************************************/
-/******** Show form in calendar to select the first day of the week **********/
-/*****************************************************************************/
-
-static void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon)
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon)
   {
    extern const char *Txt_First_day_of_the_week;
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (FirstDayOfWeek = 0;	// Monday
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
@@ -121,7 +122,8 @@ static void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *Cla
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
         }
-   fprintf (Gbl.F.Out,"</tr>");
+   fprintf (Gbl.F.Out,"</tr>"
+                      "</table>");
   }
 
 /*****************************************************************************/
@@ -249,7 +251,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowIntegratedFormToSelFirstDayOfWeek (ActChgCal1stDay);
+      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,"ICON25x25");
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"

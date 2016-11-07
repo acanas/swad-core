@@ -44,7 +44,7 @@
 /*****************************************************************************/
 
 void Cal_PutIconsToSelectFirstDayOfWeek (void);
-void Cal_ShowIntegratedFormToSelFirstDayOfWeek (Act_Action_t Action);
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon);
 void Cal_ChangeFirstDayOfWeek (void);
 
 void Cal_DrawCurrentMonth (void);
