@@ -276,6 +276,17 @@ static unsigned For_GetNumPstsInThr (long ThrCod);
 static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject);
+
+static void For_PutIconsForums (void);
+
+static void For_WriteNumPsts (unsigned NumPsts);
+static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
+                                bool LastPst,char *LastSubject,
+                                bool NewPst,bool ICanModerateForum);
+static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
+                            char *Subject,char *Content,struct Image *Image);
+static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
+
 static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
 static void For_PutFormWhichForums (void);
@@ -304,13 +315,6 @@ static void For_WriteThrSubject (long ThrCod);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
-static void For_WriteNumPsts (unsigned NumPsts);
-static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
-                                bool LastPst,char *LastSubject,
-                                bool NewPst,bool ICanModerateForum);
-static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char *Subject,char *Content,struct Image *Image);
-static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 
 /*****************************************************************************/
 /****************************** Enable a forum post **************************/
@@ -968,7 +972,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Thread,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -1110,6 +1114,17 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/********************** Put contextual icons in forums ***********************/
+/*****************************************************************************/
+
+static void For_PutIconsForums (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_FORUMS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1725,7 +1740,7 @@ void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Forums,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2576,7 +2591,7 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Forum,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forum,For_PutIconsForums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
