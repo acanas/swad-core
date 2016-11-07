@@ -39,6 +39,7 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+#define Msg_NUM_TYPES_OF_MSGS 2
 typedef enum
   {
    Msg_MESSAGES_RECEIVED,
@@ -89,9 +90,9 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus);
 unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus);
 
 void Msg_PutHiddenParamsMsgsFilters (void);
-void Msg_GetDistinctCoursesInMyMessages (Msg_TypeOfMessages_t TypeOfMessages);
-void Msg_ShowFormSelectCourseSentOrRecMsgs (Msg_TypeOfMessages_t TypeOfMessages);
-void Msg_ShowFormToFilterMsgs (Msg_TypeOfMessages_t TypeOfMessages);
+void Msg_GetDistinctCoursesInMyMessages (void);
+void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
+void Msg_ShowFormToFilterMsgs (void);
 void Msg_GetMsgSubject (long MsgCod,char *Subject);
 void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,
                           unsigned MaxChars,bool GetContent);

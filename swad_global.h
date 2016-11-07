@@ -585,6 +585,8 @@ struct Globals
      } Forum;
    struct
      {
+      Msg_TypeOfMessages_t TypeOfMessages;
+      unsigned NumMsgs;
       int MsgId;
       char Subject[Cns_MAX_BYTES_SUBJECT+1];
       unsigned NumCourses;
