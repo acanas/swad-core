@@ -3934,13 +3934,13 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowNoticesStats,		// Sta_NOTICES
       Sta_GetAndShowMsgsStats,			// Sta_MESSAGES
       Sta_GetAndShowSurveysStats,		// Sta_SURVEYS
-      Sta_GetAndShowNumUsrsPerPrivacy,		// Sta_PRIVACY
       Sta_GetAndShowNumUsrsPerLanguage,		// Sta_LANGUAGES
       Sta_GetAndShowNumUsrsPerFirstDayOfWeek,	// Sta_FIRST_DAY_OF_WEEK
-      Sta_GetAndShowNumUsrsPerTheme,		// Sta_THEMES
       Sta_GetAndShowNumUsrsPerIconSet,		// Sta_ICON_SETS
+      Sta_GetAndShowNumUsrsPerTheme,		// Sta_THEMES
       Sta_GetAndShowNumUsrsPerMenu,		// Sta_MENUS
       Sta_GetAndShowNumUsrsPerSideColumns,	// Sta_SIDE_COLUMNS
+      Sta_GetAndShowNumUsrsPerPrivacy,		// Sta_PRIVACY
      };
    char UnsignedStr[10+1];
    unsigned UnsignedNum;

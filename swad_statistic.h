@@ -44,7 +44,7 @@ typedef enum
    Sta_TEACHERS        =  5,
    Sta_STUDENTS        =  6,
    Sta_VISITORS        =  7,
-   Sta_GUESTS         =  8,
+   Sta_GUESTS          =  8,
    Sta_UNKNOWN_USRS    =  9,
    Sta_ME              = 10,
   } Sta_Role_t;
@@ -116,13 +116,13 @@ typedef enum
    Sta_NOTICES,			// Number of notices
    Sta_MESSAGES,		// Number of users' (sent and received) messages
    Sta_SURVEYS,			// Number of surveys
-   Sta_PRIVACY,			// Number of users per privacity
    Sta_LANGUAGES,		// Number of users per language
    Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
-   Sta_THEMES,			// Number of users per theme
    Sta_ICON_SETS,		// Number of users per icon set
+   Sta_THEMES,			// Number of users per theme
    Sta_MENUS,			// Number of users per menu
    Sta_SIDE_COLUMNS,		// Number of users per layout of columns
+   Sta_PRIVACY,			// Number of users per privacity
   } Sta_FigureType_t;
 
 #define Sta_NUM_COLOR_TYPES 3

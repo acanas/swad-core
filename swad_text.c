@@ -39056,26 +39056,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Inqu&eacute;ritos"
 #endif
 	 ,
-#if   L==1				// Sta_PRIVACY
-	"Privacitat"
-#elif L==2
-	"Geheimhaltung"
-#elif L==3
-	"Privacy"
-#elif L==4
-	"Privacidad"
-#elif L==5
-	"Privacit&eacute;"
-#elif L==6
-	"Privacidad"	// Okoteve traducción
-#elif L==7
-	"Privatezza"
-#elif L==8
-	"Prywatno&sacute;&cacute;"
-#elif L==9
-	"Privacidade"
-#endif
-	 ,
 #if   L==1				// Sta_LANGUAGES
 	 "Idioma"
 #elif L==2
@@ -39116,6 +39096,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Calend&aacute;rio"
 #endif
 	 ,
+#if   L==1				// Sta_ICON_SETS
+	 "Icones"
+#elif L==2
+	 "Symbole"
+#elif L==3
+	 "Icons"
+#elif L==4
+	 "Iconos"
+#elif L==5
+	 "Ic&ocirc;nes"
+#elif L==6
+	 "Iconos"		// Okoteve traducción
+#elif L==7
+	 "Icone"
+#elif L==8
+	 "Ikony"
+#elif L==9
+	 "&Iacute;cones"
+#endif
+	 ,
 #if   L==1				// Sta_THEMES
 	 "Tema (colors)"
 #elif L==2
@@ -39134,26 +39134,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Temat"
 #elif L==9
 	 "Skin"
-#endif
-	 ,
-#if   L==1				// Sta_ICON_SETS
-	 "Icones"
-#elif L==2
-	 "Symbole"
-#elif L==3
-	 "Icons"
-#elif L==4
-	 "Iconos"
-#elif L==5
-	 "Ic&ocirc;nes"
-#elif L==6
-	 "Iconos"	// Okoteve traducción
-#elif L==7
-	 "Icone"
-#elif L==8
-	 "Ikony"
-#elif L==9
-	 "&Iacute;cones"
 #endif
 	 ,
 #if   L==1				// Sta_MENUS
@@ -39194,6 +39174,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Kolumny"
 #elif L==9
 	 "Colunas"
+#endif
+	 ,
+#if   L==1				// Sta_PRIVACY
+	"Privacitat"
+#elif L==2
+	"Geheimhaltung"
+#elif L==3
+	"Privacy"
+#elif L==4
+	"Privacidad"
+#elif L==5
+	"Privacit&eacute;"
+#elif L==6
+	"Privacidad"	// Okoteve traducción
+#elif L==7
+	"Privatezza"
+#elif L==8
+	"Prywatno&sacute;&cacute;"
+#elif L==9
+	"Privacidade"
 #endif
 	};
 
