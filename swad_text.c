@@ -38816,26 +38816,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Institu&ccedil;&otilde;es"
 #endif
 	 ,
-#if   L==1				// Sta_SOCIAL_NETWORKS
-	 "Webs / xarxes socials"
-#elif L==2
-	 "Webs / Social Networks"
-#elif L==3
-	 "Webs / social networks"
-#elif L==4
-	 "Webs / redes sociales"
-#elif L==5
-	 "Webs / r&eacute;seaux sociaux"
-#elif L==6
-	 "Webs / redes sociales"	// Okoteve traducción
-#elif L==7
-	 "Webs / reti sociali"
-#elif L==8
-	 "Webs / sieci spo&lstrok;eczne"
-#elif L==9
-	 "Webs / redes sociais"
-#endif
-	 ,
 #if   L==1				// Sta_FOLDERS_AND_FILES
 	 "Carpetes i fitxers"
 #elif L==2
@@ -39054,6 +39034,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Badania"
 #elif L==9
 	 "Inqu&eacute;ritos"
+#endif
+	 ,
+#if   L==1				// Sta_SOCIAL_NETWORKS
+	 "Webs / xarxes socials"
+#elif L==2
+	 "Webs / Social Networks"
+#elif L==3
+	 "Webs / social networks"
+#elif L==4
+	 "Webs / redes sociales"
+#elif L==5
+	 "Webs / r&eacute;seaux sociaux"
+#elif L==6
+	 "Webs / redes sociales"	// Okoteve traducción
+#elif L==7
+	 "Webs / reti sociali"
+#elif L==8
+	 "Webs / sieci spo&lstrok;eczne"
+#elif L==9
+	 "Webs / redes sociais"
 #endif
 	 ,
 #if   L==1				// Sta_LANGUAGES

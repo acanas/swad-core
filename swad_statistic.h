@@ -104,7 +104,6 @@ typedef enum
    Sta_USERS_RANKING,		// Users' ranking
    Sta_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
    Sta_INSTITS,			// Number of users in each institution
-   Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
    Sta_OER,			// Number of OERs (Open Educational Resources)
    Sta_ASSIGNMENTS,		// Number of assignments
@@ -116,6 +115,7 @@ typedef enum
    Sta_NOTICES,			// Number of notices
    Sta_MESSAGES,		// Number of users' (sent and received) messages
    Sta_SURVEYS,			// Number of surveys
+   Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_LANGUAGES,		// Number of users per language
    Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
    Sta_ICON_SETS,		// Number of users per icon set

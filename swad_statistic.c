@@ -3922,7 +3922,6 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowUsersRanking,		// Sta_USERS_RANKING
       Sta_GetAndShowHierarchyStats,		// Sta_HIERARCHY
       Sta_GetAndShowInstitutionsStats,		// Sta_INSTITS
-      Net_ShowWebAndSocialNetworksStats,	// Sta_SOCIAL_NETWORKS
       Sta_GetAndShowFileBrowsersStats,		// Sta_FOLDERS_AND_FILES
       Sta_GetAndShowOERsStats,			// Sta_OER
       Sta_GetAndShowAssignmentsStats,		// Sta_ASSIGNMENTS
@@ -3934,6 +3933,7 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowNoticesStats,		// Sta_NOTICES
       Sta_GetAndShowMsgsStats,			// Sta_MESSAGES
       Sta_GetAndShowSurveysStats,		// Sta_SURVEYS
+      Net_ShowWebAndSocialNetworksStats,	// Sta_SOCIAL_NETWORKS
       Sta_GetAndShowNumUsrsPerLanguage,		// Sta_LANGUAGES
       Sta_GetAndShowNumUsrsPerFirstDayOfWeek,	// Sta_FIRST_DAY_OF_WEEK
       Sta_GetAndShowNumUsrsPerIconSet,		// Sta_ICON_SETS

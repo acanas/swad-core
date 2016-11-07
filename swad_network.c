@@ -186,6 +186,9 @@ const char *Net_WebsAndSocialNetworksTitle[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
 
 static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title);
+
+static void Net_PutIconsWebsSocialNetworks (void);
+
 static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 /*****************************************************************************/
@@ -292,7 +295,9 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Webs_social_networks);
+   Lay_StartRoundFrame (NULL,Txt_Webs_social_networks,
+                        Net_PutIconsWebsSocialNetworks);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
@@ -348,7 +353,19 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      }
 
    /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/************** Put contextual icons in my web / social networks *************/
+/*****************************************************************************/
+
+static void Net_PutIconsWebsSocialNetworks (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_SOCIAL_NETWORKS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
