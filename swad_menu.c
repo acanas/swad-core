@@ -195,6 +195,12 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 	};
 
 /*****************************************************************************/
+/****************************** Private prototypes ***************************/
+/*****************************************************************************/
+
+static void Mnu_PutIconsMenu (void);
+
+/*****************************************************************************/
 /******* When I change to another tab, go to the first option allowed ********/
 /*****************************************************************************/
 
@@ -305,8 +311,9 @@ void Mnu_PutIconsToSelectMenu (void)
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
-   Lay_StartRoundFrameTable (NULL,0,Txt_Menu);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Menu,Mnu_PutIconsMenu);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
@@ -326,8 +333,20 @@ void Mnu_PutIconsToSelectMenu (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/****************** Put contextual icons in menu preference ******************/
+/*****************************************************************************/
+
+static void Mnu_PutIconsMenu (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_MENUS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/

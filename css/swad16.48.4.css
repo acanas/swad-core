@@ -1972,16 +1972,14 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PREF_OFF
 	{
 	box-sizing:border-box;
-	height:42px;
-	padding:0;
+	height:44px;
 	text-align:center;
 	vertical-align:middle;
 	}
 .PREF_ON
 	{
 	box-sizing:border-box;
-	height:42px;
-	padding:0;
+	height:44px;
 	text-align:center;
 	vertical-align:middle;
 	border:solid 1px;
@@ -1989,8 +1987,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-color:#DDECF1;
 	}
 
-.LOG			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
-.LOG_R			{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
+.LOG	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
+.LOG_R	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
 /******************************** Image uploading ****************************/
 .IMG_UPLOAD_CONTAINER
