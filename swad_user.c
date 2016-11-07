@@ -179,6 +179,7 @@ static void Usr_PutLinkToSeeAdmins (void);
 static void Usr_PutLinkToSeeGuests (void);
 
 static void Usr_PutIconsListStds (void);
+static void Usr_PutIconsListTchs (void);
 
 static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
@@ -7032,11 +7033,7 @@ void Usr_SeeTeachers (void)
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs,NULL))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-			   (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ? Usr_PutIconToPrintTchs :
-				                                                                                NULL) :
-			    ((Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM) ? Usr_PutIconToShowTchsAllData :
-								       NULL));
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs);
 
       /***** Form to select scope *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -7131,6 +7128,27 @@ static void Usr_PutIconsListStds (void)
    else if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
       /***** Put icon to show all data of students *****/
       Usr_PutIconToShowStdsAllData ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_USERS;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in list of teachers *******************/
+/*****************************************************************************/
+
+static void Usr_PutIconsListTchs (void)
+  {
+   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+     {
+      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+         /***** Put icon to print teachers *****/
+	 Usr_PutIconToPrintTchs ();
+     }
+   else if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+      /***** Put icon to show all data of teachers *****/
+      Usr_PutIconToShowTchsAllData ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_USERS;
