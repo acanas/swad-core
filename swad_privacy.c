@@ -134,7 +134,7 @@ void Pri_EditMyPrivacy (void)
   }
 
 /*****************************************************************************/
-/****************** Put contextual icons in menu preference ******************/
+/***************** Put contextual icons in privacy preference ****************/
 /*****************************************************************************/
 
 static void Pri_PutIconsPrivacy (void)

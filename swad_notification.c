@@ -271,6 +271,8 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
 static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     unsigned NumEvents,unsigned NumMails);
+
+static void Ntf_PutIconsNotif (void);
 static void Ntf_GetParamsNotifyEvents (void);
 static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void);
 static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
@@ -1863,11 +1865,11 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif);
+
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,NULL);
 
    /***** Warning if I can not receive e-mail notifications *****/
    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
@@ -1917,11 +1919,25 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 
    fprintf (Gbl.F.Out,"</table>");
 
-   /***** Button to save changes and end frame *****/
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Save_changes);
+   /***** Button to save changes *****/
+   Lay_PutConfirmButton (Txt_Save_changes);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/************* Put contextual icons in notifications preference **************/
+/*****************************************************************************/
+
+static void Ntf_PutIconsNotif (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_NOTIFY_EVENTS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
