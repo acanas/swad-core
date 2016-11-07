@@ -159,7 +159,8 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotBlank);
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst);
 static void Tst_UpdateLastAccTst (void);
-static void Tst_PutIconsToEditAndConfig (void);
+static bool Tst_CheckIfICanEditTests (void);
+static void Tst_PutIconsTests (void);
 static void Tst_PutButtonToAddQuestion (void);
 static long Tst_GetParamTagCode (void);
 static bool Tst_CheckIfCurrentCrsHasTestTags (void);
@@ -281,8 +282,6 @@ void Tst_ShowFormAskTst (void)
    extern const char *Txt_No_test_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
@@ -302,8 +301,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Take_a_test,ICanEdit ? Tst_PutIconsToEditAndConfig :
-	                                                NULL);
+   Lay_StartRoundFrame (NULL,Txt_Take_a_test,Tst_PutIconsTests);
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
@@ -350,7 +348,7 @@ void Tst_ShowFormAskTst (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_test_questions);
 
       /***** Button to create a new question *****/
-      if (ICanEdit)
+      if (Tst_CheckIfICanEditTests ())
          Tst_PutButtonToAddQuestion ();
      }
 
@@ -1250,7 +1248,7 @@ void Tst_ShowFormAskEditTsts (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsToEditAndConfig);
+   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsTests);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1291,35 +1289,52 @@ void Tst_ShowFormAskEditTsts (void)
   }
 
 /*****************************************************************************/
-/****************** Put icons to edit and configure tests ********************/
+/************************* Check if I can edit tests *************************/
 /*****************************************************************************/
 
-static void Tst_PutIconsToEditAndConfig (void)
+static bool Tst_CheckIfICanEditTests (void)
+  {
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+  }
+
+/*****************************************************************************/
+/********************* Put contextual icons in tests *************************/
+/*****************************************************************************/
+
+static void Tst_PutIconsTests (void)
   {
    extern const char *Txt_Edit;
    extern const char *Txt_New_question;
    extern const char *Txt_Configure;
 
-   /***** Put form to edit existing test questions *****/
-   if (Gbl.Action.Act != ActEdiTstQst)
-      Lay_PutContextualLink (ActEdiTstQst,NULL,
-                             "edit64x64.png",
-			     Txt_Edit,NULL,
-		             NULL);
+   if (Tst_CheckIfICanEditTests ())
+     {
+      /***** Put form to edit existing test questions *****/
+      if (Gbl.Action.Act != ActEdiTstQst)
+	 Lay_PutContextualLink (ActEdiTstQst,NULL,
+				"edit64x64.png",
+				Txt_Edit,NULL,
+				NULL);
 
-   /***** Put form to create a new test question *****/
-   if (Gbl.Action.Act != ActEdiOneTstQst)
-      Lay_PutContextualLink (ActEdiOneTstQst,NULL,
-                             "plus64x64.png",
-			     Txt_New_question,NULL,
-		             NULL);
+      /***** Put form to create a new test question *****/
+      if (Gbl.Action.Act != ActEdiOneTstQst)
+	 Lay_PutContextualLink (ActEdiOneTstQst,NULL,
+				"plus64x64.png",
+				Txt_New_question,NULL,
+				NULL);
 
-   /***** Put form to go to test configuration *****/
-   if (Gbl.Action.Act != ActCfgTst)
-      Lay_PutContextualLink (ActCfgTst,NULL,
-                             "config64x64.gif",
-			     Txt_Configure,NULL,
-		             NULL);
+      /***** Put form to go to test configuration *****/
+      if (Gbl.Action.Act != ActCfgTst)
+	 Lay_PutContextualLink (ActCfgTst,NULL,
+				"config64x64.gif",
+				Txt_Configure,NULL,
+				NULL);
+     }
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_TESTS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -1796,7 +1811,7 @@ static void Tst_ShowFormConfigTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsToEditAndConfig);
+   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsTests);
 
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
@@ -2647,7 +2662,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsToEditAndConfig);
+   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsTests);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
