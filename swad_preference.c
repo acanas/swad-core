@@ -58,6 +58,7 @@ extern struct Globals Gbl;
 static void Pre_PutIconsLanguage (void);
 
 static void Pre_PutIconsToSelectSideCols (void);
+static void Pre_PutIconsSideColumns (void);
 static void Pre_UpdateSideColsOnUsrDataTable (void);
 
 /*****************************************************************************/
@@ -379,8 +380,9 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrameTable (NULL,0,Txt_Columns);
-   fprintf (Gbl.F.Out,"<tr>");
+   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns);
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+                      "<tr>");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
@@ -401,8 +403,20 @@ static void Pre_PutIconsToSelectSideCols (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
      }
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</tr>"
+	              "</table>");
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/************* Put contextual icons in side-columns preference ***************/
+/*****************************************************************************/
+
+static void Pre_PutIconsSideColumns (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_SIDE_COLUMNS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
