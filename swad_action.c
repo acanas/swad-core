@@ -1295,42 +1295,42 @@ Statistics:
        1111. ActReqStaCrs		Request statistics of courses
        1112. ActReqAccGbl		Request query of clicks to the complete platform
        1113. ActReqMyUsgRep		Request my usage report
+       1114. ActMFUAct			Show most frequently used actions
 
-       1114. ActSeeOneSvy		Show one survey
-       1115. ActAnsSvy			Answer a survey
-       1116. ActFrmNewSvy		Form to create a new survey
-       1117. ActEdiOneSvy		Edit one survey
-       1118. ActNewSvy			Create new survey
-       1119. ActChgSvy			Modify data of an existing survey
-       1120. ActReqRemSvy		Request the removal of a survey
-       1121. ActRemSvy			Remove survey
-       1122. ActReqRstSvy		Request the reset of answers of a survey
-       1123. ActRstSvy			Reset answers of survey
-       1124. ActHidSvy			Hide survey
-       1125. ActShoSvy			Show survey
-       1126. ActEdiOneSvyQst		Edit a new question for a survey
-       1127. ActRcvSvyQst		Receive a question of a survey
-       1128. ActReqRemSvyQst		Request the removal of a question of a survey
-       1129. ActRemSvyQst		Confirm the removal of a question of a survey
-       1130. ActSeeUseGbl		Show use of the platform
-       1131. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
-       1132. ActCalPhoDeg		Compute the average photos of the students of each degree
-       1133. ActSeeAccGbl		Query clicks to the complete platform
-       1134. ActReqAccCrs		Request query of clicks in the course
-       1135. ActSeeAccCrs		Query clicks to current course
-       1136. ActSeeAllStaCrs		Show statistics of courses
-       1137. ActSeeMyUsgRep		Show my usage report
+       1115. ActSeeOneSvy		Show one survey
+       1116. ActAnsSvy			Answer a survey
+       1117. ActFrmNewSvy		Form to create a new survey
+       1118. ActEdiOneSvy		Edit one survey
+       1119. ActNewSvy			Create new survey
+       1120. ActChgSvy			Modify data of an existing survey
+       1121. ActReqRemSvy		Request the removal of a survey
+       1122. ActRemSvy			Remove survey
+       1123. ActReqRstSvy		Request the reset of answers of a survey
+       1124. ActRstSvy			Reset answers of survey
+       1125. ActHidSvy			Hide survey
+       1126. ActShoSvy			Show survey
+       1127. ActEdiOneSvyQst		Edit a new question for a survey
+       1128. ActRcvSvyQst		Receive a question of a survey
+       1129. ActReqRemSvyQst		Request the removal of a question of a survey
+       1130. ActRemSvyQst		Confirm the removal of a question of a survey
+       1131. ActSeeUseGbl		Show use of the platform
+       1132. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
+       1133. ActCalPhoDeg		Compute the average photos of the students of each degree
+       1134. ActSeeAccGbl		Query clicks to the complete platform
+       1135. ActReqAccCrs		Request query of clicks in the course
+       1136. ActSeeAccCrs		Query clicks to current course
+       1137. ActSeeAllStaCrs		Show statistics of courses
+       1138. ActSeeMyUsgRep		Show my usage report
 Profile:
-       1138. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
-       1139. ActFrmRolSes		Show form to log out and to change current role in this session
-       1140. ActMyCrs			Select one of my courses
-       1141. ActSeeMyTT			Show the timetable of all courses of the logged user
-       1142. ActSeeMyAgd		Show my agenda (personal organizer)
-       1143. ActFrmMyAcc		Show form to the creation or change of user's account
-       1144. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1145. ActEdiPrf			Show forms to edit preferences
-       1146. ActAdmBrf			Show the briefcase of private archives
-       1147. ActMFUAct			Show most frequently used actions
+       1139. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
+       1140. ActFrmRolSes		Show form to log out and to change current role in this session
+       1141. ActMyCrs			Select one of my courses
+       1142. ActSeeMyTT			Show the timetable of all courses of the logged user
+       1143. ActSeeMyAgd		Show my agenda (personal organizer)
+       1144. ActFrmMyAcc		Show form to the creation or change of user's account
+       1145. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1146. ActEdiPrf			Show forms to edit preferences
+       1147. ActAdmBrf			Show the briefcase of private archives
 
        1148. ActReqSndNewPwd		Show form to send a new password via e-mail
        1149. ActSndNewPwd		Send a new password via e-mail
@@ -2727,6 +2727,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
    /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
    /* ActReqMyUsgRep	*/{1586, 5,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
+   /* ActMFUAct		*/{ 993, 6,TabSta,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
    /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
@@ -2769,7 +2770,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
    /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
-   /* ActMFUAct		*/{ 993, 9,TabPrf,ActMFUAct		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
    /* ActReqSndNewPwd	*/{ 665,-1,TabUnk,ActFrmLogIn		,0x000,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ShowFormSendNewPwd		,NULL},

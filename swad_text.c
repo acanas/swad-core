@@ -168,7 +168,7 @@ const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1+Txt_NUM_LANGUAG
 const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
 	{
 	"",
-	"Voleu canviar el vostre idioma a catal&agrave;?",
+	"Voleu canviar el seu idioma a catal&agrave;?",
 	"Wollen Sie Ihre Sprache auf Deutsch umstellen?",
 	"Do you want to change your language to English?",
 	"&iquest;Desea cambiar su idioma a espa&ntilde;ol?",
@@ -461,7 +461,7 @@ const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+T
 	{
 	"",
 	"Si no desitgeu rebre més avisos per correu,"
-	" desactiveu la opció corresponent en les preferències del vostre perfil.",
+	" desactiveu la opció corresponent en les preferències del seu perfil.",
 	"Wenn Sie nicht mehr erhalten möchten, E-Mail-Benachrichtigungen,"
 	" Deaktivieren Sie die Option in den Einstellungen Ihres Profils.",
 	"If you no longer wish to receive e-mail notifications,"
@@ -881,7 +881,7 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 #if   L==1
 	"Se li ha assignat la següent contrasenya per entrar a %s: %s\n"
 	"Si desitja activar aquesta nova contrasenya,"
-	" ha de entrar a %s amb el vostre ID (DNI/cédula), sobrenom o e-mail"
+	" ha de entrar a %s amb el seu ID (DNI/cédula), sobrenom o e-mail"
 	" i aquesta nova contrasenya abans de %u dies."
 	" Un cop hagi entrat, pot canviar la contrasenya per una altra.\n"
 	"Si no accedeix amb aquesta nova contrasenya,"
@@ -890,7 +890,7 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 	" es deu a que algú que coneix el vostre ID (DNI/cédula), el vostre sobrenom o el vostre e-mail"
 	" ha sol&middot;licitat l'enviament de una nova contrasenya per a vostè.\n"
 	"Aquesta nova contrasenya se ha enviat només a la adreça de correu %s,"
-	" que és la que apareix a la vostra fitxa.\n\n";
+	" que és la que apareix a la seva fitxa.\n\n";
 #elif L==2
 	"The following password has been assigned to you to log in %s: %s\n"
 	"If you want to activate the new password,"
@@ -3567,7 +3567,7 @@ const char *Txt_Banners =
 const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID =
 #if   L==1
 	"Abans de crear un compte nou,"
-	" comprovi si ja li han inscrit amb el vostre ID";
+	" comprovi si ja li han inscrit amb el seu ID";
 #elif L==2
 	"Bevor ein neues Benutzerkonto erstellen,"
 	" wenn Sie bereits mit Ihrer ID registriert worden sind";
@@ -3597,7 +3597,7 @@ const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_reg
 const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 #if   L==1
 	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de crear el vostre sobrenom.";
+	" ha de crear el seu sobrenom.";
 #elif L==2
 	"Bevor ich auf jede andere Option"
 	" m&uuml;ssen Sie Ihr Benutzernamen erstellen.";
@@ -3627,7 +3627,7 @@ const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname =
 const char *Txt_Before_going_to_any_other_option_you_must_create_your_password =
 #if   L==1
 	"Abans d'accedir a qualsevol altra opci&oacute;"
-	" ha de crear la vostra contrasenya.";
+	" ha de crear la seva contrasenya.";
 #elif L==2
 	"Bevor ich auf jede andere Option"
 	" m&uuml;ssen Sie Ihr Passwort erstellen.";
@@ -4995,11 +4995,11 @@ const char *Txt_Confirm_my_enrollment =
 
 const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_ =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"Enhorabona! Ha creat el vostre compte @%s."
-	" Ara %s li demanar&agrave; algunes dades per completar el vostre perfil."
-	" Despr&eacute;s podr&agrave; sol&middot;licitar la vostra inscripci&oacute; en assignatures."
+	"Enhorabona! Ha creat el seu compte @%s."
+	" Ara %s li demanar&agrave; algunes dades per completar el seu perfil."
+	" Despr&eacute;s podr&agrave; sol&middot;licitar la seva inscripci&oacute; en assignatures."
 	" Si no hi ha una assignatura,"
-	" vost&egrave; pot crear abans de sol&middot;licitar la vostra inscripci&oacute; en ella"
+	" vost&egrave; pot crear abans de sol&middot;licitar la seva inscripci&oacute; en ella"
 	" (el mateix &eacute;s aplicable a institucions, centres i titulacions).";
 #elif L==2
 	"Herzlichen Gl&uuml;ckwunsch! Du hast Dein Benutzerkonto <strong>@%s</strong> erstellt."
@@ -5457,25 +5457,25 @@ const char *Txt_Country =
 	"Pa&iacute;s";
 #endif
 
-const char *Txt_Country_of_the_institution =
+const char *Txt_Country_of_your_institution =
 #if   L==1
-	"Pa&iacute;s de la instituci&oacute;";
+	"Pa&iacute;s de la seva instituci&oacute;";
 #elif L==2
-	"Land der Hochschule";
+	"Land Ihrer Hochschule";
 #elif L==3
-	"Country of the institution";
+	"Country of your institution";
 #elif L==4
-	"Pa&iacute;s de la instituci&oacute;n";
+	"Pa&iacute;s de su instituci&oacute;n";
 #elif L==5
-	"Pays du &eacute;tablissement";
+	"Pays de votre &eacute;tablissement";
 #elif L==6
 	"Tet&atilde; mbo'ehao";
 #elif L==7
-	"Paese della istituzione";
+	"Paese della vostra istituzione";
 #elif L==8
-	"Kraj instytucji";
+	"Kraj swojej instytucji";
 #elif L==9
-	"Pa&iacute;s da institu&ccedil;&atilde;o";
+	"Pa&iacute;s da sua institu&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Country_unspecified =
@@ -9255,7 +9255,7 @@ const char *Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_ =	// 
 
 const char *Txt_Do_you_really_want_to_remove_your_photo =
 #if   L==1
-	"De veres voleu eliminar la vostra foto?";
+	"De veres voleu eliminar la seva foto?";
 #elif L==2
 	"Wollen Sie die Ihr Foto zu entfernen?";
 #elif L==3
@@ -12690,7 +12690,7 @@ const char *Txt_FOLLOWS_YOU =
 
 const char *Txt_For_security_enter_your_password =
 #if   L==1
-	"Per a m&eacute;s seguretat, introdueixi la vostra contrasenya";
+	"Per a m&eacute;s seguretat, introdueixi la seva contrasenya";
 #elif L==2
 	"Aus Sicherheitsgr&uuml;nden geben Sie Ihr Passwort";
 #elif L==3
@@ -13025,27 +13025,6 @@ const char *Txt_Frequent_ACTIONS =	// Check that this sentence fits within the a
 	"Cz&eogon;ste";
 #elif L==9
 	"Freq&uuml;entes";
-#endif
-
-const char *Txt_Frequent_actions =
-#if   L==1
-	"Accions freq&uuml;ents";
-#elif L==2
-	"H&auml;ufige Handlungen";
-#elif L==3
-	"Frequent actions";
-#elif L==4
-	"Acciones frecuentes";
-#elif L==5
-	"Frequent actions";
-#elif L==6
-	"Acciones frecuentes";	// Okoteve traducción
-#elif L==7
-	"Azioni frequenti";
-#elif L==8
-	"Cz&eogon;ste dzia&lstrok;ania";
-#elif L==9
-	"A&ccedil;&otilde;es freq&uuml;entes";
 #endif
 
 const char *Txt_from =
@@ -14697,8 +14676,8 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 
 const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them =
 #if   L==1
-	"Si no trobes la vostra instituci&oacute;, el vostre centre,"
-	" la vostra titulaci&oacute; o les seves assignatures, pot crear-los.";
+	"Si no trobes la seva instituci&oacute;, el seu centre,"
+	" la seva titulaci&oacute; o les seves assignatures, pot crear-los.";
 #elif L==2
 	"Wenn Sie Ihre Institution, Ihre Zentrum, Ihr Studium"
 	" oder Ihre Kurse nicht finden k&oacute;nnen, k&oacute;nnen Sie sie erstellen.";
@@ -19173,6 +19152,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Relat&oacute;rio"
 #endif
+	,
+	// ActMFUAct
+#if   L==1
+	"Freq&uuml;ents"
+#elif L==2
+	"H&auml;ufige"
+#elif L==3
+	"Frequent"
+#elif L==4
+	"Frecuentes"
+#elif L==5
+	"Frequent"
+#elif L==6
+	"Frecuentes"	// Okoteve traducción
+#elif L==7
+	"Frequenti"
+#elif L==8
+	"Cz&eogon;ste"
+#elif L==9
+	"Freq&uuml;entes"
+#endif
 	},
 	{
 	// TabPrf *****************************************************
@@ -19363,27 +19363,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Teczka"
 #elif L==9
 	"Pasta"
-#endif
-	,
-	// ActMFUAct
-#if   L==1
-	"Freq&uuml;ents"
-#elif L==2
-	"H&auml;ufige"
-#elif L==3
-	"Frequent"
-#elif L==4
-	"Frecuentes"
-#elif L==5
-	"Frequent"
-#elif L==6
-	"Frecuentes"	// Okoteve traducción
-#elif L==7
-	"Frequenti"
-#elif L==8
-	"Cz&eogon;ste"
-#elif L==9
-	"Freq&uuml;entes"
 #endif
 	}
 };
@@ -21046,6 +21025,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Relat&oacute;rio sobre o meu uso da plataforma"
 #endif
+	,
+	// ActMFUAct
+#if   L==1
+	"Acc&eacute;s directe a les meves accions m&eacute;s freq&uuml;ents"
+#elif L==2
+	"Direkter Zugriff auf meine h&auml;ufige Aktionen"
+#elif L==3
+	"Direct access to my most frequent actions"
+#elif L==4
+	"Acceso directo a mis acciones m&aacute;s frecuentes"
+#elif L==5
+	"Acc&egrave;s direct &agrave; mes actions les plus fr&eacute;quentes"
+#elif L==6
+	"Acceso directo a mis acciones m&aacute;s frecuentes"// Okoteve traducción
+#elif L==7
+	"Accesso diretto alle mie azioni pi&ugrave; frequenti"
+#elif L==8
+	"Bezpo&sacute;redni dost&eogon;p do najcz&eogon;stszych dzia&lstrok;a&nacute;"
+#elif L==9
+	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
+#endif
 	},
 	{
 	// TabPrf *****************************************************
@@ -21236,27 +21236,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pendrive wirtualne"
 #elif L==9
 	"Pasta"
-#endif
-	,
-	// ActMFUAct
-#if   L==1
-	"Acc&eacute;s directe a les meves accions m&eacute;s freq&uuml;ents"
-#elif L==2
-	"Direkter Zugriff auf meine h&auml;ufige Aktionen"
-#elif L==3
-	"Direct access to my most frequent actions"
-#elif L==4
-	"Acceso directo a mis acciones m&aacute;s frecuentes"
-#elif L==5
-	"Acc&egrave;s direct &agrave; mes actions les plus fr&eacute;quentes"
-#elif L==6
-	"Acceso directo a mis acciones m&aacute;s frecuentes"// Okoteve traducción
-#elif L==7
-	"Accesso diretto alle mie azioni pi&ugrave; frequenti"
-#elif L==8
-	"Bezpo&sacute;redni dost&eogon;p do najcz&eogon;stszych dzia&lstrok;a&nacute;"
-#elif L==9
-	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	}
 };
@@ -23059,6 +23038,27 @@ const char *Txt_my_documents =
 	"moje dokumenty";
 #elif L==9
 	"meus documentos";
+#endif
+
+const char *Txt_My_frequent_actions =
+#if   L==1
+	"Les meves accions freq&uuml;ents";
+#elif L==2
+	"Meine h&auml;ufigen Handlungen";
+#elif L==3
+	"My frequent actions";
+#elif L==4
+	"Mis acciones frecuentes";
+#elif L==5
+	"Mes actions fr&eacute;quentes";
+#elif L==6
+	"Mis acciones frecuentes";	// Okoteve traducción
+#elif L==7
+	"Le mie azioni frequenti";
+#elif L==8
+	"Moi cz&eogon;ste dzia&lstrok;ania";
+#elif L==9
+	"Minhas a&ccedil;&otilde;es freq&uuml;entes";
 #endif
 
 const char *Txt_My_groups =
@@ -28346,7 +28346,7 @@ const char *Txt_PLACES_ORDER[2] =
 
 const char *Txt_Please_check_and_confirm_your_email_address =
 #if   L==1
-	"Si us plau, comproveu i confirmeu la vostra adre&ccedil;a de correu.";
+	"Si us plau, comproveu i confirmeu la seva adre&ccedil;a de correu.";
 #elif L==2
 	"Bitte &uuml;berpr&uuml;fen Sie und Ihre E-Mail-Adresse best&auml;tigen.";
 #elif L==3
@@ -28367,7 +28367,7 @@ const char *Txt_Please_check_and_confirm_your_email_address =
 
 const char *Txt_Please_enter_your_ID =
 #if   L==1
-	"Si us plau, escriviu el vostre ID (DNI/c&egrave;dula).";
+	"Si us plau, escriviu el seu ID (DNI/c&egrave;dula).";
 #elif L==2
 	"Bitte geben Sie Ihre Ausweis-Nr. &auml;nder.";
 #elif L==3
@@ -28388,7 +28388,7 @@ const char *Txt_Please_enter_your_ID =
 
 const char *Txt_Please_fill_in_your_centre_and_department =
 #if   L==1
-	"Si us plau, ompli el vostre centre i department.";
+	"Si us plau, ompli el seu centre i department.";
 #elif L==2
 	"Bitte geben Sie Ihre Zentrum und Abteilung zu f&uuml;llen.";
 #elif L==3
@@ -28409,7 +28409,7 @@ const char *Txt_Please_fill_in_your_centre_and_department =
 
 const char *Txt_Please_fill_in_your_email_address =
 #if   L==1
-	"Si us plau, ompli la vostra adre&ccedil;a de correu.";
+	"Si us plau, ompli la seva adre&ccedil;a de correu.";
 #elif L==2
 	"Bitte geben Sie Ihre E-Mail-Adresse ein.";
 #elif L==3
@@ -28430,7 +28430,7 @@ const char *Txt_Please_fill_in_your_email_address =
 
 const char *Txt_Please_fill_in_your_ID =
 #if   L==1
-	"Si us plau, ompli el vostre ID (DNI/c&egrave;dula)."
+	"Si us plau, ompli el seu ID (DNI/c&egrave;dula)."
 	" &Eacute;s una dada opcional,"
 	" per&ograve; &eacute;s recomanable que l'ompli"
         " perqu&egrave; facilita el proc&eacute;s d'inscripci&oacute;"
@@ -28486,7 +28486,7 @@ const char *Txt_Please_fill_in_your_ID =
 
 const char *Txt_Please_fill_in_your_institution =
 #if   L==1
-	"Si us plau, ompli la vostra instituci&oacute;.";
+	"Si us plau, ompli la seva instituci&oacute;.";
 #elif L==2
 	"Bitte geben Sie Ihre Einrichtung zu f&uuml;llen.";
 #elif L==3
@@ -28507,8 +28507,8 @@ const char *Txt_Please_fill_in_your_institution =
 
 const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality =
 #if   L==1
-	"Si us plau, ompli la vostra fitxa,"
-	" incloent el vostre pais (nacionalitat).";
+	"Si us plau, ompli la seva fitxa,"
+	" incloent el seu pais (nacionalitat).";
 #elif L==2
 	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
 	" einschlie&szlig;lich Ihrem Land (Nationalit&auml;t).";
@@ -28536,8 +28536,8 @@ const char *Txt_Please_fill_in_your_record_card_including_your_country_nationali
 
 const char *Txt_Please_fill_in_your_record_card_including_your_name =
 #if   L==1
-	"Si us plau, ompli la vostra fitxa,"
-	" incloent el vostre nom i cognom(s).";
+	"Si us plau, ompli la seva fitxa,"
+	" incloent el seu nom i cognom(s).";
 #elif L==2
 	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
 	" mit Ihrem Namen.";
@@ -28566,7 +28566,7 @@ const char *Txt_Please_fill_in_your_record_card_including_your_name =
 
 const char *Txt_Please_fill_in_your_record_card_including_your_sex =
 #if   L==1
-	"Si us plau, ompli la vostra fitxa,"
+	"Si us plau, ompli la seva fitxa,"
 	" incloent el sexe.";
 #elif L==2
 	"Bitte geben Sie Ihre Karteikarte zu f&uuml;llen,"
@@ -28617,7 +28617,7 @@ const char *Txt_Please_review_your_privacy_preferences =
 
 const char *Txt_Please_select_the_country_of_your_institution =
 #if   L==1
-	"Si us plau, seleccioneu el pa&iacute;s de la vostra instituci&oacute;.";
+	"Si us plau, seleccioneu el pa&iacute;s de la seva instituci&oacute;.";
 #elif L==2
 	"Bitte w&auml;hlen Sie das Land Ihrer Einrichtung aus";
 #elif L==3
@@ -35720,7 +35720,7 @@ const char *Txt_Select_or_create_one_institution_in_X =	// Warning: it is very i
 
 const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here =
 #if   L==1
-	"Seleccioneu un o m&eacute;s fitxers del vostre ordinador<br />"
+	"Seleccioneu un o m&eacute;s fitxers del seu ordinador<br />"
 	"o arrossegueu i deixeu-los anar aqu&iacute;";
 #elif L==2
 	"W&auml;hlen Sie eine oder mehrere Dateien von Ihrem Computer<br />"
@@ -46895,7 +46895,7 @@ const char *Txt_this_field_is_filled_in_the_records_of_X_students =	// Warning: 
 
 const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists =
 #if   L==1
-	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el vostre compte de l'usuari.";
+	"Aquest enlla&ccedil; romandr&agrave; actiu mentre existeixi el seu compte de l'usuari.";
 #elif L==2
 	"Diese Verbindung bleibt aktiv, solange das Konto Ihres Benutzers vorhanden.";
 #elif L==3
@@ -52704,7 +52704,7 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them =
 #if   L==1
 	"Podeu cercar assignatures, seleccionar-les"
-	" i sol&middot;licitar la vostra inscripci&oacute; en elles.";
+	" i sol&middot;licitar la seva inscripci&oacute; en elles.";
 #elif L==2
 	"Sie k&ouml;nnen f&uuml;r Kurse zu suchen, w&auml;hlen Sie sie aus"
 	" und fordern Sie Ihre Anmeldung in ihnen.";
@@ -53039,7 +53039,7 @@ const char *Txt_You_have_not_confirmed_the_action =
 
 const char *Txt_You_have_not_entered_your_password_correctly =
 #if   L==1
-	"No ha introdu&iuml;t correctament la vostra contrasenya.";
+	"No ha introdu&iuml;t correctament la seva contrasenya.";
 #elif L==2
 	"Sie haben Ihr Passwort nicht korrekt eingegeben wurde.";
 #elif L==3
@@ -53237,7 +53237,7 @@ const char *Txt_You_must_enter_the_range_of_floating_point_values_allowed_as_ans
 
 const char *Txt_You_must_enter_your_nick_email_or_ID =
 #if   L==1
-	"Ha d'escriure el vostre @sobrenom, correu o ID (DNI/c&egrave;dula).";
+	"Ha d'escriure el seu @sobrenom, correu o ID (DNI/c&egrave;dula).";
 #elif L==2
 	"Bitte geben Sie Ihre @Benutzername, E-mail oder Ausweis-Nr.";
 #elif L==3
@@ -54591,7 +54591,7 @@ const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accept
 	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"
 	" en l'assignatura <strong>%s</strong> ha estat realitzada."
 	" La petici&oacute; ser&agrave; revisada per un professor o un administrador."
-	" Vost&egrave; rebr&agrave; una notificaci&oacute; quan s'accepti la vostra inscripci&oacute;.";
+	" Vost&egrave; rebr&agrave; una notificaci&oacute; quan s'accepti la seva inscripci&oacute;.";
 #elif L==2
 	"Sein Antrag auf Registrierung als <strong>%s</strong>"
 	" in Kurs <strong>%s</strong> gemacht wurde."

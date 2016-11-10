@@ -205,7 +205,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
-   extern const char *Txt_Frequent_actions;
+   extern const char *Txt_My_frequent_actions;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
@@ -216,7 +216,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[128+6+128+1];
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Frequent_actions,NULL);
+   Lay_StartRoundFrame (NULL,Txt_My_frequent_actions,NULL);
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions_big\">");
 
    /***** Write list of frequently used actions *****/
@@ -263,7 +263,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_Frequent_actions;
+   extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
    extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
    unsigned NumAct;
@@ -277,7 +277,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    /***** Start div and link *****/
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
    Act_FormStart (ActMFUAct);
-   Act_LinkFormSubmit (Txt_Frequent_actions,"MFU_ACT",NULL);
+   Act_LinkFormSubmit (Txt_My_frequent_actions,"MFU_ACT",NULL);
    fprintf (Gbl.F.Out," %s"
 	              "</a>",
 	    Txt_Frequent_ACTIONS);

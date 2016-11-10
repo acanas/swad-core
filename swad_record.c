@@ -3510,7 +3510,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    extern const char *Txt_Please_fill_in_your_centre_and_department;
    extern const char *Txt_Institution_centre_and_department;
    extern const char *Txt_Institution;
-   extern const char *Txt_Country_of_the_institution;
+   extern const char *Txt_Country_of_your_institution;
    extern const char *Txt_Another_institution;
    extern const char *Txt_Centre;
    extern const char *Txt_Another_centre;
@@ -3546,7 +3546,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 		      "%s:"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-            ClassForm,Txt_Country_of_the_institution,
+            ClassForm,Txt_Country_of_your_institution,
             COL2_WIDTH);
 
    /* If list of countries is empty, try to get it */
