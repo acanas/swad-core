@@ -52731,73 +52731,73 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollme
 	" e solicitar a sua inscri&ccedil;&atilde;o nos mesmos.";
 #endif
 
-const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
+const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y =	// Warning: it is very important to include two %u in the following sentences
 #if   L==1
-	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Necessita traduccio
 #elif L==2
-	"You can send a file with an image in <em>png</em> format,"
+	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";			// Need Übersetzung
 #elif L==3
-	"You can send a file with an image in <em>png</em> format,"
+	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";
 #elif L==4
-	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";
 #elif L==5
-	"You can send a file with an image in <em>png</em> format,"
+	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";			// Besoin de traduction
 #elif L==6
-	"Puede enviar un archivo con una imagen en formato <em>png</em>,"
+	"Puede enviar un archivo con una imagen en formato <em>PNG</em>,"
 	" fondo transparente y tama&ntilde;o %u&times;%u p&iacute;xeles.";	// Okoteve traducción
 #elif L==7
-	"Puoi inviare un file con un'immagine in formato <em>png</em>,"
+	"Puoi inviare un file con un'immagine in formato <em>PNG</em>,"
 	" sfondo trasparente e di dimensione %u&times;%u pixel.";
 #elif L==8
-	"You can send a file with an image in <em>png</em> format,"
+	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"You can send a file with an image in <em>png</em> format,"
+	"You can send a file with an image in <em>PNG</em> format,"
 	" transparent background and size %u&times;%u pixels.";			// Necessita de tradução
 #endif
 
-const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_ =
+const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_ =
 #if   L==1
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>.<br />"
-	"La imagen debe contener al menos un rostro en posici&oacute;n frontal,"
-	" y con el fondo blanco o muy claro.";				// Necessita traduccio
+	"Podeu enviar un arxiu amb una imatge en format <em>JPEG</em>.<br />"
+	"La imatge ha de contenir almenys un rostre en posici&oacute; vertical i frontal,"
+	" i amb el fons blanc o molt clar.";
 #elif L==2
-	"You can send a file with an image in <em>jpg</em> format.<br />"
-	"The image must contain at least one face in front position,"
-	" and the background must be white or very light.";		// Need Übersetzung
+	"Sie k&ouml;nnen eine Datei mit einem Bild im <em>JPEG</em>-Format senden.<br />"
+	"Das Bild muss mindestens eine Fl&auml;che in vertikaler und frontaler Position enthalten,"
+	" und der Hintergrund muss wei&szlig; oder sehr hell sein.";
 #elif L==3
-	"You can send a file with an image in <em>jpg</em> format.<br />"
-	"The image must contain at least one face in front position,"
+	"You can send a file with an image in <em>JPEG</em> format.<br />"
+	"The image must contain at least one face in vertical and frontal position,"
 	" and the background must be white or very light.";
 #elif L==4
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>.<br />"
-	"La imagen debe contener al menos un rostro en posici&oacute;n frontal,"
+	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
+	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
 	" y con el fondo blanco o muy claro.";
 #elif L==5
-	"You can send a file with an image in <em>jpg</em> format.<br />"
-	"The image must contain at least one face in front position,"
-	" and the background must be white or very light.";		// Besoin de traduction
+	"Vous pouvez envoyer un fichier avec une image au format JPEG.<br />"
+	"L'image doit contenir au moins un visage en position verticale et frontale,"
+	" et le fond doit &ecirc;tre blanc ou tr&egrave;s clair.";
 #elif L==6
-	"Puede enviar un archivo con una imagen en formato <em>jpg</em>.<br />"
-	"La imagen debe contener al menos un rostro en posici&oacute;n frontal,"
+	"Puede enviar un archivo con una imagen en formato <em>JPEG</em>.<br />"
+	"La imagen debe contener al menos un rostro en posici&oacute;n vertical y frontal,"
 	" y con el fondo blanco o muy claro.";				// Okoteve traducción
 #elif L==7
-	"Puoi inviare un file con un'immagine in formato <em>jpg</em>.<br />"
-	"L'immagine deve contenere almeno un viso in posizione frontale,"
+	"&Egrave; possibile inviare un file in un'immagine con formato <em>JPEG</em>.<br />"
+	"L'immagine deve contenere almeno una faccia in posizione verticale e frontale,"
 	" e lo sfondo deve essere bianco o molto chiaro.";
 #elif L==8
-	"You can send a file with an image in <em>jpg</em> format.<br />"
-	"The image must contain at least one face in front position,"
-	" and the background must be white or very light.";		// Potrzebujesz tlumaczenie
+	"Mo&zdot;esz wys&lstrok;a&cacute; plik obrazu w formacie <em>JPEG</em>.<br />"
+	"Obraz musi zawiera&cacute; co najmniej jedn&aogon; twarz w pozycji pionowej jak i czo&lstrok;owego,"
+	" a t&lstrok;o musi by&cacute; bia&lstrok;y lub bardzo jasnym.";
 #elif L==9
-	"You can send a file with an image in <em>jpg</em> format.<br />"
-	"The image must contain at least one face in front position,"
-	" and the background must be white or very light.";		// Necessita de tradução
+	"Voc&ecirc; pode enviar um arquivo em uma imagem com formato <em>JPEG</em>.<br />"
+	"A imagem deve conter pelo menos um rosto na posi&ccedil;&atilde;o vertical e frontal,"
+	" eo fundo deve ser branco ou muito claro.";
 #endif
 
 const char *Txt_You_dont_follow_any_user =

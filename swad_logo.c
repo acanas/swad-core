@@ -229,7 +229,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Remove_logo;
    extern const char *Txt_Logo;
-   extern const char *Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y;
+   extern const char *Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y;
    extern const char *Txt_File_with_the_logo;
    long Cod;
    const char *Folder;
@@ -286,7 +286,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Lay_StartRoundFrame (NULL,Txt_Logo,NULL);
 
    /***** Write help message *****/
-   sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_png_format_transparent_background_and_size_X_Y,
+   sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,
 	    64,64);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 

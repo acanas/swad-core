@@ -303,7 +303,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
-   extern const char *Txt_You_can_send_a_file_with_an_image_in_jpg_format_;
+   extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -327,7 +327,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    /***** Show current photo and help message *****/
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,
                      "PHOTO186x248",Pho_NO_ZOOM,false);
-   Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_jpg_format_);
+   Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
