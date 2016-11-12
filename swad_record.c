@@ -2271,7 +2271,7 @@ static void Rec_PutIconsCommands (void)
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
-      fprintf (Gbl.F.Out,"<div class=\"REC_SHORTCUTS\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
 
       /***** Button to edit my record card *****/
       if (ItsMe)
