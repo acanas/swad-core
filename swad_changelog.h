@@ -156,13 +156,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.50 (2016-11-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.50.1 (2016-11-12)"
 #define CSS_FILE		"swad16.48.4.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.50.1:  Nov 12, 2016	Minor corrections in some messages. (206559 lines)
         Version 16.50:    Nov 10, 2016	My frequent actions are moved from PROFILE tab to STATS tab.
 					Some messages translated. (206558 lines)
         Version 16.49.1:  Nov 10, 2016	Message translated. (206556 lines)

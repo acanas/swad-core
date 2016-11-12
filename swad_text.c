@@ -18691,7 +18691,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2
 	"Andere"
 #elif L==3
-	"Other"
+	"Others"
 #elif L==4
 	"Otros"
 #elif L==5
@@ -54484,12 +54484,12 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==2
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	"It's very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname, or a known word.";				// Need Übersetzung
 #elif L==3
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	"It's very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname, or a known word.";
 #elif L==4
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
@@ -54499,7 +54499,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==5
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	"It's very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname, or a known word.";				// Besoin de traduction
 #elif L==6
 	"La contrase&ntilde;a debe tener al menos %u caracteres"
@@ -54509,7 +54509,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==7
 	"La tua password deve essere almeno di %u caratteri"
 	" e non pu&ograve; contenere spazi."
-	"E' molto importante non usare solo"
+	" E' molto importante non usare solo"
 	" tasti numerici, o un nome o cognome, o una parola conosciuta.";
 #elif L==8
 	"Your password must be at least %u characters"
@@ -54519,7 +54519,7 @@ const char *Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_
 #elif L==9
 	"Your password must be at least %u characters"
 	" and can not contain spaces."
-	"It's very important not to use only"
+	" It's very important not to use only"
 	" numeric digits, or a name or surname, or a known word.";				// Necessita de tradução
 #endif
 
