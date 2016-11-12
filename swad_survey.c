@@ -183,6 +183,7 @@ void Svy_SeeAllSurveys (void)
 
 static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
   {
+   extern const char *Hlp_STATS_Surveys;
    extern const char *Txt_Surveys;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
@@ -211,7 +212,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Surveys,Svy_PutIconsListSurveys,NULL);
+   Lay_StartRoundFrame ("100%",Txt_Surveys,
+                        Svy_PutIconsListSurveys,Hlp_STATS_Surveys);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -401,6 +403,7 @@ void Svy_SeeOneSurvey (void)
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                                bool ShowOnlyThisSvyComplete)
   {
+   extern const char *Hlp_STATS_Surveys;
    extern const char *Txt_Survey;
    extern const char *Txt_Today;
    extern const char *Txt_View_survey;
@@ -421,11 +424,15 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start frame *****/
    if (ShowOnlyThisSvyComplete)
-      Lay_StartRoundFrameTable (NULL,2,Txt_Survey);
+      Lay_StartRoundFrame (NULL,Txt_Survey,NULL,Hlp_STATS_Surveys);
 
    /***** Get data of this survey *****/
    Svy.SvyCod = SvyCod;
    Svy_GetDataOfSurveyByCod (&Svy);
+
+   /***** Start table *****/
+   if (ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Start date/time *****/
    UniqueId++;
@@ -639,9 +646,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	                   SvyCod,Svy.Cod,
 	                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** End frame *****/
    if (ShowOnlyThisSvyComplete)
-      Lay_EndRoundFrameTable ();
+     {
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+     }
   }
 
 /*****************************************************************************/
@@ -1765,6 +1777,8 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
 
 void Svy_RequestCreatOrEditSvy (void)
   {
+   extern const char *Hlp_STATS_Surveys_new_survey;
+   extern const char *Hlp_STATS_Surveys_edit_survey;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
@@ -1829,9 +1843,14 @@ void Svy_RequestCreatOrEditSvy (void)
 	                          ActChgSvy);
    Svy_PutParams ();
 
-   /***** Start frame and table *****/
-   Lay_StartRoundFrameTable (NULL,2,ItsANewSurvey ? Txt_New_survey :
-	                                            Txt_Edit_survey);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,ItsANewSurvey ? Txt_New_survey :
+	                                     Txt_Edit_survey,
+	                NULL,ItsANewSurvey ? Hlp_STATS_Surveys_new_survey :
+	                                     Hlp_STATS_Surveys_edit_survey);
+
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Scope of the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2577,6 +2596,7 @@ void Svy_RequestEditQuestion (void)
 
 static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,char *Txt)
   {
+   extern const char *Hlp_STATS_Surveys_questions;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
@@ -2651,7 +2671,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
       Lay_StartRoundFrame (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,NULL);
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,NULL);
+      Lay_StartRoundFrame (NULL,Txt_New_question,
+                           NULL,Hlp_STATS_Surveys_questions);
 
    /***** Start form *****/
    Act_FormStart (ActRcvSvyQst);
@@ -2660,7 +2681,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2705,6 +2726,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	              "<td></td>"
                       "<td class=\"LEFT_TOP\">"
                       "<table class=\"CELLS_PAD_2\">");
+
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -3146,6 +3168,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
+   extern const char *Hlp_STATS_Surveys_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -3175,7 +3198,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    Lay_StartRoundFrame (NULL,Txt_Questions,
                         Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                NULL,
-                        NULL);
+                        Hlp_STATS_Surveys_questions);
 
    if (NumQsts)
      {

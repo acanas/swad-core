@@ -37,6 +37,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+const char *Hlp_STATS_Surveys =
+   "https://github.com/acanas/swad-core/wiki/STATS.Surveys";
+const char *Hlp_STATS_Surveys_new_survey =
+   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#new-survey";
+const char *Hlp_STATS_Surveys_edit_survey =
+   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#edit-survey";
+const char *Hlp_STATS_Surveys_questions =
+   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#questions";
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/
