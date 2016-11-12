@@ -393,7 +393,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
-			      Not_PutIconsListNotices);
+			      Not_PutIconsListNotices,NULL);
          if (!NumNotices)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
 	}

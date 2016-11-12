@@ -295,7 +295,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Ctr_PutIconsToPrintAndUpload);
+	                                         Ctr_PutIconsToPrintAndUpload,
+	                   NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -739,7 +740,7 @@ static void Ctr_ListCentres (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsListCentres);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsListCentres,NULL);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
@@ -2180,7 +2181,7 @@ void Ctr_RequestPhoto (void)
    Act_FormStart (ActRecCtrPho);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Photo,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Photo,NULL,NULL);
 
    /***** Write help message *****/
    sprintf (Gbl.Message,"%s: %s<br />"

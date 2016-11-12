@@ -116,7 +116,8 @@ void Ann_ShowAllAnnouncements (void)
    /***** Start frame *****/
    Lay_StartRoundFrame ("550px",Txt_Announcements,
                         ICanEdit ? Ann_PutIconToAddNewAnnouncement :
-				   NULL);
+				   NULL,
+		        NULL);
 
    if (!NumAnnouncements)
       Lay_ShowAlert (Lay_INFO,Txt_No_announcements);

@@ -97,7 +97,8 @@ void Lay_PutRemoveButtonInline (const char *Text);
 void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,
                                const char *Title);
 void Lay_StartRoundFrame (const char *Width,const char *Title,
-                          void (*FunctionToDrawContextualIcons) (void));
+                          void (*FunctionToDrawContextualIcons) (void),
+                          const char *HelpLink);
 void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable (void);
 void Lay_EndRoundFrame (void);

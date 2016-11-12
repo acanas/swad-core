@@ -137,7 +137,7 @@ void Dup_ListDuplicateUsrs (void)
    unsigned NumInformants;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL,NULL);
 
    /***** Build query *****/
    sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
@@ -254,7 +254,7 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL,NULL);
 
    /***** Build query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&

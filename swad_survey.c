@@ -211,7 +211,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Surveys,Svy_PutIconsListSurveys);
+   Lay_StartRoundFrame ("100%",Txt_Surveys,Svy_PutIconsListSurveys,NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -2648,10 +2648,10 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 
       sprintf (Gbl.Title,"%s %u",
                Txt_Question,SvyQst->QstInd + 1);	// Question index may be 0, 1, 2, 3,...
-      Lay_StartRoundFrame (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst);
+      Lay_StartRoundFrame (NULL,Gbl.Title,Svy_PutIconToRemoveOneQst,NULL);
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL);
+      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,NULL);
 
    /***** Start form *****/
    Act_FormStart (ActRcvSvyQst);
@@ -3174,7 +3174,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    Gbl.Svys.SvyCodToEdit = Svy->SvyCod;
    Lay_StartRoundFrame (NULL,Txt_Questions,
                         Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
-                                               NULL);
+                                               NULL,
+                        NULL);
 
    if (NumQsts)
      {

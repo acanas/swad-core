@@ -509,7 +509,7 @@ void ID_ShowFormOthIDs (void)
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_ID,NULL);
+         Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);

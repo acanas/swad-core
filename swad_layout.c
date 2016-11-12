@@ -1239,7 +1239,7 @@ void Lay_WriteTitle (const char *Title)
 void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,
                                const char *Title)
   {
-   Lay_StartRoundFrame (Width,Title,NULL);
+   Lay_StartRoundFrame (Width,Title,NULL,NULL);
 
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE");
    if (CellPadding)
@@ -1248,7 +1248,8 @@ void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,
   }
 
 void Lay_StartRoundFrame (const char *Width,const char *Title,
-                          void (*FunctionToDrawContextualIcons) (void))
+                          void (*FunctionToDrawContextualIcons) (void),
+                          const char *HelpLink)
   {
    extern const char *Txt_Help;
 
@@ -1266,17 +1267,15 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,
       FunctionToDrawContextualIcons ();
       fprintf (Gbl.F.Out,"</div>");
      }
-   // if (HelpLink)
-   //  {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS_RIGHT\">");
-
-      fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\">",
-	       "https://github.com/acanas/swad-core/wiki/User%20guide");
+   if (HelpLink)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS_RIGHT\">"
+                         "<a href=\"%s\" target=\"_blank\">",
+	       HelpLink);
       Lay_PutIconWithText ("help64x64.png",Txt_Help,NULL);
-      fprintf (Gbl.F.Out,"</a>");
-
-      fprintf (Gbl.F.Out,"</div>");
-   //  }
+      fprintf (Gbl.F.Out,"</a>"
+                         "</div>");
+     }
    fprintf (Gbl.F.Out,"</div>");
 
    if (Title)

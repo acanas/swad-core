@@ -6258,7 +6258,8 @@ void Usr_ListDataAdms (void)
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Start frame with list of administrators *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],NULL);
+   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
+                        NULL,NULL);
 
    /***** Form to select range of administrators *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -6734,7 +6735,8 @@ void Usr_SeeGuests (void)
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],Usr_PutIconsListGsts);
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+                           Usr_PutIconsListGsts,NULL);
 
       /***** Form to select range of guests *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -6878,7 +6880,8 @@ void Usr_SeeStudents (void)
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Usr_PutIconsListStds);
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+                           Usr_PutIconsListStds,NULL);
 
       /***** Form to select range of students *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -7031,7 +7034,8 @@ void Usr_SeeTeachers (void)
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs,NULL))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],Usr_PutIconsListTchs);
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+                           Usr_PutIconsListTchs,NULL);
 
       /***** Form to select scope *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -7279,7 +7283,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
@@ -7321,7 +7325,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
@@ -7377,7 +7381,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL);
+      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||

@@ -101,7 +101,7 @@ void Pri_EditMyPrivacy (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_Privacy,Pri_PutIconsPrivacy);
+   Lay_StartRoundFrame (NULL,Txt_Privacy,Pri_PutIconsPrivacy,NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    /***** Edit photo visibility *****/

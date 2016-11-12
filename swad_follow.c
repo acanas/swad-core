@@ -224,7 +224,7 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,NULL);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);

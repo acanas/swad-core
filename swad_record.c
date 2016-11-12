@@ -1259,7 +1259,8 @@ static void Rec_ShowRecordOneTchCrs (void)
 
    /* Office hours */
    Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
-   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+                        NULL,NULL);
    TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
 
@@ -1360,7 +1361,8 @@ void Rec_ListRecordsTchs (void)
             if (ShowOfficeHours)
               {
                Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
-	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],NULL);
+	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+	                            NULL,NULL);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Lay_EndRoundFrame ();
               }
@@ -2072,7 +2074,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Lay_StartRoundFrame (StrRecordWidth,NULL,Rec_PutIconsCommands);
+   Lay_StartRoundFrame (StrRecordWidth,NULL,Rec_PutIconsCommands,NULL);
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");

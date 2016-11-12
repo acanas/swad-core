@@ -244,7 +244,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,NULL);
 
    /***** Help text *****/
    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
@@ -804,7 +804,7 @@ void Pwd_ShowFormOthPwd (void)
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Password,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);

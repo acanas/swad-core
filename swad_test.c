@@ -301,7 +301,7 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Take_a_test,Tst_PutIconsTests);
+   Lay_StartRoundFrame (NULL,Txt_Take_a_test,Tst_PutIconsTests,NULL);
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
@@ -411,7 +411,7 @@ void Tst_ShowNewTestExam (void)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
 	    /***** Start frame *****/
-	    Lay_StartRoundFrame (NULL,Txt_Test,NULL);
+	    Lay_StartRoundFrame (NULL,Txt_Test,NULL,NULL);
 	    Lay_WriteHeaderClassPhoto (false,false,
 				       Gbl.CurrentIns.Ins.InsCod,
 				       Gbl.CurrentDeg.Deg.DegCod,
@@ -506,7 +506,7 @@ void Tst_AssessTestExam (void)
 	 TstCod = Tst_CreateTestExamInDB ();
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL);
+	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,NULL);
 	 Lay_WriteHeaderClassPhoto (false,false,
 				    Gbl.CurrentIns.Ins.InsCod,
 				    Gbl.CurrentDeg.Deg.DegCod,
@@ -653,7 +653,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Test,NULL);
+      Lay_StartRoundFrame (NULL,Txt_Test,NULL,NULL);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentDeg.Deg.DegCod,
@@ -1248,7 +1248,7 @@ void Tst_ShowFormAskEditTsts (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsTests);
+   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsTests,NULL);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1811,7 +1811,7 @@ static void Tst_ShowFormConfigTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsTests);
+   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsTests,NULL);
 
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
@@ -2662,7 +2662,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsTests);
+   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsTests,NULL);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
@@ -4445,10 +4445,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemoveOneQst);
+      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemoveOneQst,NULL);
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL);
+      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,NULL);
 
    /***** Start form *****/
    Act_FormStart (ActRcvTstQst);
@@ -6856,7 +6856,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
       if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
          /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Exams,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Exams,NULL,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
@@ -7474,7 +7474,7 @@ void Tst_ShowOneExam (void)
    Tst_GetExamQuestionsFromDB (TstCod);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,NULL);
    Lay_WriteHeaderClassPhoto (false,false,
                               Gbl.CurrentIns.Ins.InsCod,
                               Gbl.CurrentDeg.Deg.DegCod,

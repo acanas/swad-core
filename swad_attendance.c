@@ -208,7 +208,8 @@ static void Att_ShowAllAttEvents (void)
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Events,
 			ICanEdit ? Att_PutIconToCreateNewAttEvent :
-				   NULL);
+				   NULL,
+		        NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -2598,7 +2599,8 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
 	 /***** Draw a class photo with students of the course *****/
 	 /* Start frame */
-	 Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],NULL);
+	 Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+	                      NULL,NULL);
 
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt);
@@ -3129,7 +3131,8 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
    Lay_StartRoundFrame (NULL,Txt_Attendance,
                          (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
                         ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
-                        	                                    NULL));
+                        	                                    NULL),
+                        NULL);
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
             PutButtonShowDetails ? "FRAME_TABLE_MARGIN" :
         	                   "FRAME_TABLE");

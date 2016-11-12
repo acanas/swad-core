@@ -103,7 +103,8 @@ void Mai_SeeMailDomains (void)
    /***** Table head *****/
    Lay_StartRoundFrame (NULL,Txt_Mail_domains_allowed_for_notifications,
                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
-                                                                NULL);
+                                                                NULL,
+                        NULL);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
 	              "<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
@@ -1122,7 +1123,7 @@ void Mai_ShowFormOthEmail (void)
       if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
 	 /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Email,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
 
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1524,7 +1525,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
    Act_FormStart (ActFrmMyAcc);
 
    /***** Frame with button to go to account *****/
-   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL,NULL);
    Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Check);
 

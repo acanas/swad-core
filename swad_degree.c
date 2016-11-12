@@ -309,7 +309,8 @@ static void Deg_Configuration (bool PrintView)
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Deg_PutIconsToPrintAndUpload);
+	                                         Deg_PutIconsToPrintAndUpload,
+	                   NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -1620,7 +1621,7 @@ static void Deg_ListDegrees (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees,NULL);
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {

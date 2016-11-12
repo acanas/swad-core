@@ -136,7 +136,8 @@ static void Asg_ShowAllAssignments (void)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Assignments,Asg_PutIconsListAssignments);
+   Lay_StartRoundFrame ("100%",Txt_Assignments,
+                        Asg_PutIconsListAssignments,NULL);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)

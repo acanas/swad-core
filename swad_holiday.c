@@ -94,7 +94,8 @@ void Hld_SeeHolidays (void)
       /***** Table head *****/
       Lay_StartRoundFrame (NULL,Txt_Holidays,
                            Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
-                        	                                   NULL);
+                        	                                   NULL,
+                           NULL);
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Hld_ORDER_BY_PLACE;

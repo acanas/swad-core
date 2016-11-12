@@ -311,7 +311,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Photo,
                         ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
-                                Pho_PutIconToRequestRemoveOtherUsrPhoto);
+                                Pho_PutIconToRequestRemoveOtherUsrPhoto,
+                        NULL);
 
    /***** Start form *****/
    if (ItsMe)
@@ -425,7 +426,8 @@ void Pho_ReqRemoveMyPhoto (void)
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveMyPhoto);
+      Lay_StartRoundFrame (NULL,Txt_Photo,
+                           Pho_PutIconToRequestRemoveMyPhoto,NULL);
 
       /***** Show current photo and help message *****/
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
@@ -490,7 +492,8 @@ void Pho_ReqRemoveUsrPhoto (void)
 	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
 	   {
 	    /***** Start frame *****/
-	    Lay_StartRoundFrame (NULL,Txt_Photo,Pho_PutIconToRequestRemoveOtherUsrPhoto);
+	    Lay_StartRoundFrame (NULL,Txt_Photo,
+	                         Pho_PutIconToRequestRemoveOtherUsrPhoto,NULL);
 
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
@@ -2037,7 +2040,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Degrees,
                         SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
-                                                        NULL);
+                                                        NULL,
+                        NULL);
 
    if (NumRows)	// Degrees with students found
      {
@@ -2129,7 +2133,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Degrees,
                         SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
-                                                        NULL);
+                                                        NULL,
+                        NULL);
 
    if (NumRows)	// Degrees with students found
      {

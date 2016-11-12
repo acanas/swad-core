@@ -73,7 +73,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
   {
    extern const char *Txt_Calendar;
 
-   Lay_StartRoundFrame (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek);
+   Lay_StartRoundFrame (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,NULL);
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40B");
    Lay_EndRoundFrame ();
   }
@@ -242,7 +242,8 @@ void Cal_DrawCalendar (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                      Cal_PutIconToPrintCalendar);
+	                                      Cal_PutIconToPrintCalendar,
+	                NULL);
    Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,

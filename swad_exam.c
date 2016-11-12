@@ -554,7 +554,8 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 			 Gbl.ExamAnnouncements.HighlightDate[0]) ? Txt_All_announcements_of_exam :
 								   Txt_Announcements_of_exam,
 			ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
-				   NULL);
+				   NULL,
+		        NULL);
 
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
@@ -932,7 +933,8 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    Gbl.ExamAnnouncements.ExaCodToEdit = ExaCod;	// Used as parameter in contextual links
    Lay_StartRoundFrame ("625px",NULL,
                         TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
-                                                                      NULL);
+                                                                      NULL,
+                        NULL);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {

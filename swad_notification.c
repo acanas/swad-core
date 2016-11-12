@@ -371,7 +371,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Table start *****/
-      Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif);
+      Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,NULL);
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\" style=\"margin:0 auto;\">"
                          "<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
@@ -1880,7 +1880,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif);
+   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,NULL);
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);

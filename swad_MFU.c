@@ -216,7 +216,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    char TabMenuStr[128+6+128+1];
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_My_frequent_actions,NULL);
+   Lay_StartRoundFrame (NULL,Txt_My_frequent_actions,NULL,NULL);
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions_big\">");
 
    /***** Write list of frequently used actions *****/

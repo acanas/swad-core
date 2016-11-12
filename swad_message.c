@@ -202,7 +202,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    Lay_StartRoundFrame (NULL,
 			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 						Txt_New_message,
-			NULL);
+			NULL,NULL);
 
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
@@ -1716,7 +1716,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    /***** Start frame with messages *****/
    Lay_StartRoundFrame ("97%",
                         Msg_WriteNumMsgs (NumUnreadMsgs),
-                        Msg_PutIconsListMsgs);
+                        Msg_PutIconsListMsgs,NULL);
 
    if (Gbl.Msg.NumMsgs)		// If there are messages...
      {

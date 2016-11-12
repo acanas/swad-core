@@ -103,7 +103,7 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParamsIndicators ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL,NULL);
 
    /***** Form to update indicators *****/
    /* Start form */

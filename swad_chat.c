@@ -116,7 +116,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    Usr_GetMyDegrees ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL,NULL);
    fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
                       "<ul class=\"LIST_LEFT\">");
 

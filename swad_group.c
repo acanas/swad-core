@@ -243,7 +243,8 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
-                                   NULL);
+                                   NULL,
+                        NULL);
 
    /***** Start form to update the students listed
           depending on the groups selected *****/
@@ -1570,7 +1571,8 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_My_groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
-                                   NULL);
+                                   NULL,
+                        NULL);
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {

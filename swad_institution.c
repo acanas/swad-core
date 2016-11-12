@@ -293,7 +293,8 @@ static void Ins_Configuration (bool PrintView)
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Ins_PutIconsToPrintAndUpload);
+	                                         Ins_PutIconsToPrintAndUpload,
+	                   NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -662,7 +663,7 @@ static void Ins_ListInstitutions (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions,NULL);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {

@@ -401,7 +401,8 @@ void Inf_ShowInfo (void)
      {
       Lay_StartRoundFrame ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			   ICanEdit ? Inf_PutIconToEditInfo :
-				      NULL);
+				      NULL,
+		           NULL);
       Lay_ShowAlert (Lay_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
@@ -996,7 +997,8 @@ static void Inf_ShowPage (const char *URL)
    /***** Start of frame *****/
    Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                         ICanEdit ? Inf_PutIconToEditInfo :
-                        	   NULL);
+                        	   NULL,
+                        NULL);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -1733,7 +1735,8 @@ static bool Inf_CheckAndShowPlainTxt (void)
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
-                        	      NULL);
+                        	      NULL,
+                           NULL);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1805,7 +1808,8 @@ static bool Inf_CheckAndShowRichTxt (void)
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
-                        	      NULL);
+                        	      NULL,
+                           NULL);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1979,7 +1983,8 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+                        NULL,NULL);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -2018,7 +2023,8 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
-   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],NULL);
+   Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
+                        NULL,NULL);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)

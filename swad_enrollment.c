@@ -351,7 +351,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_Remove_me_from_this_course;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrollment,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Enrollment,NULL,NULL);
 
    /***** Show message *****/
    sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_,
@@ -609,7 +609,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    Lay_StartRoundFrame (NULL,
                         Role == Rol_STUDENT ? Txt_Admin_several_students :
 	                                      Txt_Admin_several_teachers,
-	                NULL);
+	                NULL,NULL);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -698,7 +698,7 @@ void Enr_AskRemoveOldUsrs (void)
    Act_FormStart (ActRemOldUsr);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL,NULL);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
@@ -2125,7 +2125,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL);
+   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL,NULL);
 
    /***** Selection of scope and roles *****/
    /* Start form */
@@ -2913,7 +2913,7 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
    extern const char *Txt_Admin_one_user;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Admin_one_user,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Admin_one_user,NULL,NULL);
 
    /***** Write form to request another user's ID *****/
    Enr_WriteFormToReqAnotherUsrID ( Role == Rol_STUDENT ? ActReqMdfStd :

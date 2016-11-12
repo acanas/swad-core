@@ -189,7 +189,8 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                      Crs_PutIconToPrint);
+	                                      Crs_PutIconToPrint,
+	                NULL);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -538,7 +539,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL);
+   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<ul class=\"LIST_LEFT\">");
 
@@ -1179,7 +1180,7 @@ static void Crs_ListCourses (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Crs_PutIconsListCourses);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Crs_PutIconsListCourses,NULL);
 
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
@@ -3337,7 +3338,7 @@ void Crs_AskRemoveOldCrss (void)
    Act_FormStart (ActRemOldCrs);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL,NULL);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",

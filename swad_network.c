@@ -296,7 +296,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
    /***** Start table *****/
    Lay_StartRoundFrame (NULL,Txt_Webs_social_networks,
-                        Net_PutIconsWebsSocialNetworks);
+                        Net_PutIconsWebsSocialNetworks,NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;

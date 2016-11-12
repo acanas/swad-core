@@ -85,7 +85,8 @@ void Lnk_SeeLinks (void)
      {
       Lay_StartRoundFrame (NULL,Txt_Links,
                            Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
-                        	                                   NULL);
+                        	                                   NULL,
+                           NULL);
       Lnk_WriteListOfLinks ();
       Lay_EndRoundFrame ();
      }

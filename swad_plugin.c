@@ -93,7 +93,8 @@ void Plg_ListPlugins (void)
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_Plugins,
                         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
-                                                                NULL);
+                                                                NULL,
+                        NULL);
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"

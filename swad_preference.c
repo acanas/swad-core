@@ -73,7 +73,7 @@ void Pre_EditPrefs (void)
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage);
+   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage,NULL);
    fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>");
@@ -380,7 +380,7 @@ static void Pre_PutIconsToSelectSideCols (void)
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns);
+   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns,NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (SideCols = 0;

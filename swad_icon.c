@@ -75,7 +75,7 @@ void Ico_PutIconsToSelectIconSet (void)
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   Lay_StartRoundFrame (NULL,Txt_Icons,Ico_PutIconsIconSet);
+   Lay_StartRoundFrame (NULL,Txt_Icons,Ico_PutIconsIconSet,NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (IconSet = (Ico_IconSet_t) 0;

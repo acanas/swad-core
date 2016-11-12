@@ -283,7 +283,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    Act_FormStart (ActionRec);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Logo,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Logo,NULL,NULL);
 
    /***** Write help message *****/
    sprintf (Gbl.Message,Txt_You_can_send_a_file_with_an_image_in_PNG_format_transparent_background_and_size_X_Y,

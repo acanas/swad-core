@@ -254,7 +254,7 @@ void The_PutIconsToSelectTheme (void)
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme);
+   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme,NULL);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (Theme = (The_Theme_t) 0;

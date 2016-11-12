@@ -141,7 +141,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    extern const char *Txt_Check;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL);
+   Lay_StartRoundFrame (NULL,Title,NULL,NULL);
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -391,7 +391,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);

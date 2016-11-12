@@ -227,7 +227,8 @@ static void Cty_Configuration (bool PrintView)
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Cty_PutIconToPrint);
+	                                         Cty_PutIconToPrint,
+	                   NULL);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
@@ -515,7 +516,7 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsListCountries);
+   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsListCountries,NULL);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;

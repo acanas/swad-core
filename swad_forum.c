@@ -972,7 +972,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums);
+   Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums,NULL);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -1740,7 +1740,7 @@ void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums);
+   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,NULL);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2591,7 +2591,7 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Forum,For_PutIconsForums);
+   Lay_StartRoundFrame (NULL,Txt_Forum,For_PutIconsForums,NULL);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -3807,7 +3807,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_StartRoundFrame (NULL,
                         IsReply ? Txt_New_message :
         	                  Txt_New_thread,
-        	        NULL);
+        	        NULL,NULL);
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a message of an existing thread

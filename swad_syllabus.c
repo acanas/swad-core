@@ -237,7 +237,8 @@ bool Syl_CheckAndEditSyllabus (void)
       PutIconToEdit = ICanEdit && !Gbl.Syllabus.EditionIsActive;
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			   PutIconToEdit ? Inf_PutIconToEditInfo :
-					   NULL);
+					   NULL,
+			   NULL);
 
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_1\">");
 

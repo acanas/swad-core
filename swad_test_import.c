@@ -135,7 +135,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    extern const char *Txt_XML_file;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,NULL);
 
    /***** Write help message *****/
    Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);

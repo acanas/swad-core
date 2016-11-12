@@ -438,7 +438,7 @@ void Sta_AskShowCrsHits (void)
          /***** Start frame *****/
          sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
                   Gbl.CurrentCrs.Crs.ShrtName);
-         Lay_StartRoundFrame (NULL,Gbl.Title,NULL);
+         Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
@@ -609,7 +609,7 @@ void Sta_AskShowGblHits (void)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<section id=\"stat_form\">");
-   Lay_StartRoundFrame (NULL,Txt_Statistics_of_all_visits,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Statistics_of_all_visits,NULL,NULL);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Start and end dates for the search *****/
@@ -1360,9 +1360,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       /* Write start of table frame */
       fprintf (Gbl.F.Out,"<section id=\"stat_results\">");
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
-	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks,NULL);
+	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks,
+	                      NULL,NULL);
       else
-	 Lay_StartRoundFrame (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],NULL);
+	 Lay_StartRoundFrame (NULL,Txt_STAT_TYPE_COUNT_CAPS[Gbl.Stat.CountType],
+	                      NULL,NULL);
 
       fprintf (Gbl.F.Out,"<table");
       if (Sta_CellPadding[Gbl.Stat.ClicksGroupedBy])
@@ -3801,7 +3803,7 @@ void Sta_ReqShowFigures (void)
    Act_FormStart (ActSeeUseGbl);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Statistic,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Statistic,NULL,NULL);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
@@ -4712,7 +4714,7 @@ static void Sta_GetAndShowInstitutionsStats (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Form to select type of list used to display degree photos *****/
-   Lay_StartRoundFrame (NULL,Txt_Institutions,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Institutions,NULL,NULL);
    Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
    Lay_EndRoundFrame ();
 
