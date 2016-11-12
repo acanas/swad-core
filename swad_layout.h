@@ -94,8 +94,10 @@ void Lay_PutConfirmButtonInline (const char *Text);
 void Lay_PutRemoveButton (const char *Text);
 void Lay_PutRemoveButtonInline (const char *Text);
 
-void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,const char *Title);
-void Lay_StartRoundFrame (const char *Width,const char *Title,void (*FunctionToDrawContextualIcons) (void));
+void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,
+                               const char *Title);
+void Lay_StartRoundFrame (const char *Width,const char *Title,
+                          void (*FunctionToDrawContextualIcons) (void));
 void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable (void);
 void Lay_EndRoundFrame (void);

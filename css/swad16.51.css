@@ -1339,8 +1339,18 @@ a:hover						/* Default ==> underlined */
 	}
 .FRAME_ICONS
 	{
-	display:table;
+	box-sizing:border-box;
 	height:20px;
+	text-align:left;
+	}
+.FRAME_ICONS_LEFT
+	{
+	display:inline-block;
+	}
+.FRAME_ICONS_RIGHT
+	{
+	display:inline-block;
+	float:right;
 	}
 .FRAME_TABLE
 	{

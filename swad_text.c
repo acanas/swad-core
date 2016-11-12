@@ -13762,6 +13762,27 @@ const char *Txt_Happy_birthday =
 	"Feliz anivers&aacute;rio!";
 #endif
 
+const char *Txt_Help =
+#if   L==1
+	"Ajuda";
+#elif L==2
+	"Hilfe";
+#elif L==3
+	"Help";
+#elif L==4
+	"Ayuda";
+#elif L==5
+	"Aide";
+#elif L==6
+	"Pytyv&otilde;";
+#elif L==7
+	"Aiuto";
+#elif L==8
+	"Pomoc";
+#elif L==9
+	"Ajuda";
+#endif
+
 const char *Txt_HELP_email =
 #if   L==1
 	"Exemple: garcia@exemplemail.com";
