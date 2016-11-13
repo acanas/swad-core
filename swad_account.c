@@ -386,12 +386,13 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
 void Acc_ShowFormGoToRequestNewAccount (void)
   {
+   extern const char *Hlp_PROFILE_Sign_up;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_a_new_account;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_PROFILE_Sign_up);
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);
