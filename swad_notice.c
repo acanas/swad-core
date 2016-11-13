@@ -87,6 +87,7 @@ static long Not_GetParamNotCod (void);
 
 void Not_ShowFormNotice (void)
   {
+   extern const char *Hlp_MESSAGES_Notices;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
@@ -102,7 +103,8 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_notice);
+   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -344,6 +346,7 @@ void Not_GetNotCodToHighlight (void)
 
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
   {
+   extern const char *Hlp_MESSAGES_Notices;
    extern const char *Txt_All_notices;
    extern const char *Txt_Notices;
    extern const char *Txt_No_notices;
@@ -393,7 +396,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 Lay_StartRoundFrame (StrWidth,
 	                      Gbl.CurrentCrs.Notices.HighlightNotCod > 0 ? Txt_All_notices :
 	                	                                           Txt_Notices,
-			      Not_PutIconsListNotices,NULL);
+			      Not_PutIconsListNotices,Hlp_MESSAGES_Notices);
          if (!NumNotices)
 	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
 	}

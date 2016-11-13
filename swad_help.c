@@ -104,6 +104,10 @@ const char *Hlp_SOCIAL_Profiles_who_to_follow       = WIKI "SOCIAL.Profiles#who-
 
 const char *Hlp_SOCIAL_Forums = WIKI "SOCIAL.Forums";
 
+/***** MESSAGES tab *****/
+
+const char *Hlp_MESSAGES_Notices = WIKI "MESSAGES.Notices";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";
