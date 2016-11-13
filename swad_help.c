@@ -47,6 +47,11 @@ const char *Hlp_SYSTEM_Countries =
 const char *Hlp_COUNTRY_Institutions =
    "https://github.com/acanas/swad-core/wiki/COUNTRY.Institutions";
 
+/***** INSTITUTION tab *****/
+
+const char *Hlp_INSTITUTION_Centres =
+   "https://github.com/acanas/swad-core/wiki/INSTITUTION.Centres";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys =

@@ -156,14 +156,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.54.13 (2016-11-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.54.14 (2016-11-13)"
 #define CSS_FILE		"swad16.51.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
-        Version 16.54.13: Nov 13, 2016	Contextual help on institutions. (? lines)
+        Version 16.54.14: Nov 13, 2016	Contextual help on centres. (206817 lines)
+        Version 16.54.13: Nov 13, 2016	Contextual help on institutions. (206811 lines)
         Version 16.54.12: Nov 13, 2016	Contextual help on countries. (206805 lines)
         Version 16.54.11: Nov 13, 2016	Contextual help on my webs / social networks. (206799 lines)
         Version 16.54.10: Nov 13, 2016	Contextual help on my institution, centre and department. (206795 lines)

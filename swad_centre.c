@@ -732,6 +732,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
 
 static void Ctr_ListCentres (void)
   {
+   extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
    extern const char *Txt_No_centres;
    extern const char *Txt_Create_another_centre;
@@ -740,7 +741,8 @@ static void Ctr_ListCentres (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsListCentres,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        Ctr_PutIconsListCentres,Hlp_INSTITUTION_Centres);
 
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
