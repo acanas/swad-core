@@ -95,6 +95,10 @@ const char *Hlp_USERS_Groups = WIKI "USERS.Groups";
 
 const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
 
+/***** SOCIAL tab *****/
+
+const char *Hlp_SOCIAL_Activity = WIKI "SOCIAL.Activity";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";

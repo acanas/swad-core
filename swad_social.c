@@ -841,6 +841,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight)
   {
+   extern const char *Hlp_SOCIAL_Activity;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
@@ -852,7 +853,8 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,Soc_PutIconsTimeline,NULL);
+   Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,
+                        Soc_PutIconsTimeline,Hlp_SOCIAL_Activity);
 
    /***** Form to write a new post *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
