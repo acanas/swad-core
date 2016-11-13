@@ -49,6 +49,23 @@ const char *Hlp_STATS_Surveys_questions =
 const char *Hlp_PROFILE_Photo =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
 
+const char *Hlp_PROFILE_Preferences_language =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#language";
+const char *Hlp_PROFILE_Preferences_calendar =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#calendar";
+const char *Hlp_PROFILE_Preferences_icons =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#icons";
+const char *Hlp_PROFILE_Preferences_theme =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#theme";
+const char *Hlp_PROFILE_Preferences_menu =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#menu";
+const char *Hlp_PROFILE_Preferences_columns =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#columns";
+const char *Hlp_PROFILE_Preferences_privacy =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#privacy";
+const char *Hlp_PROFILE_Preferences_notifications =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#notifications";
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/

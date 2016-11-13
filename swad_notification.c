@@ -1871,6 +1871,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 
 void Ntf_PutFormChangeNotifSentByEMail (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_notifications;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
@@ -1880,7 +1881,9 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Notifications,Ntf_PutIconsNotif,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Notifications,
+                        Ntf_PutIconsNotif,
+                        Hlp_PROFILE_Preferences_notifications);
 
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);

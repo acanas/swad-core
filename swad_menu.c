@@ -307,11 +307,13 @@ void Mnu_WriteMenuThisTab (void)
 
 void Mnu_PutIconsToSelectMenu (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_menu;
    extern const char *Txt_Menu;
    extern const char *Txt_MENU_NAMES[Mnu_NUM_MENUS];
    Mnu_Menu_t Menu;
 
-   Lay_StartRoundFrame (NULL,Txt_Menu,Mnu_PutIconsMenu,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Menu,
+                        Mnu_PutIconsMenu,Hlp_PROFILE_Preferences_menu);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (Menu = (Mnu_Menu_t) 0;

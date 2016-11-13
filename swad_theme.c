@@ -251,10 +251,12 @@ static void The_PutIconsTheme (void);
 
 void The_PutIconsToSelectTheme (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_theme;
    extern const char *Txt_Theme_SKIN;
    The_Theme_t Theme;
 
-   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,The_PutIconsTheme,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,
+                        The_PutIconsTheme,Hlp_PROFILE_Preferences_theme);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (Theme = (The_Theme_t) 0;

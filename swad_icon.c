@@ -72,10 +72,12 @@ static void Ico_PutIconsIconSet (void);
 
 void Ico_PutIconsToSelectIconSet (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_icons;
    extern const char *Txt_Icons;
    Ico_IconSet_t IconSet;
 
-   Lay_StartRoundFrame (NULL,Txt_Icons,Ico_PutIconsIconSet,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Icons,
+                        Ico_PutIconsIconSet,Hlp_PROFILE_Preferences_icons);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (IconSet = (Ico_IconSet_t) 0;

@@ -89,6 +89,7 @@ void Pri_PutLinkToChangeMyPrivacy (void)
 
 void Pri_EditMyPrivacy (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_privacy;
    extern const char *Txt_Please_review_your_privacy_preferences;
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
@@ -101,7 +102,8 @@ void Pri_EditMyPrivacy (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_Privacy,Pri_PutIconsPrivacy,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Privacy,
+                        Pri_PutIconsPrivacy,Hlp_PROFILE_Preferences_privacy);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 
    /***** Edit photo visibility *****/

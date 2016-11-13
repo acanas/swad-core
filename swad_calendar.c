@@ -71,9 +71,12 @@ static void Cal_PutIconToPrintCalendar (void);
 
 void Cal_PutIconsToSelectFirstDayOfWeek (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_calendar;
    extern const char *Txt_Calendar;
 
-   Lay_StartRoundFrame (NULL,Txt_Calendar,Cal_PutIconsFirstDayOfWeek,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Calendar,
+                        Cal_PutIconsFirstDayOfWeek,
+                        Hlp_PROFILE_Preferences_calendar);
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40B");
    Lay_EndRoundFrame ();
   }

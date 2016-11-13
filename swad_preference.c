@@ -67,13 +67,15 @@ static void Pre_UpdateSideColsOnUsrDataTable (void);
 
 void Pre_EditPrefs (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_language;
    extern const char *Txt_Language;
 
    /***** Language, first day of week *****/
    fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
                       "<tr>"
                       "<td>");
-   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Language,
+                        Pre_PutIconsLanguage,Hlp_PROFILE_Preferences_language);
    fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>");
@@ -376,11 +378,14 @@ Txt_Language_t Pre_GetParamLanguage (void)
 
 static void Pre_PutIconsToSelectSideCols (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_columns;
    extern const char *Txt_Columns;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
    unsigned SideCols;
 
-   Lay_StartRoundFrame (NULL,Txt_Columns,Pre_PutIconsSideColumns,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Columns,
+                        Pre_PutIconsSideColumns,
+                        Hlp_PROFILE_Preferences_columns);
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>");
    for (SideCols = 0;
