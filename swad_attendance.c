@@ -183,6 +183,7 @@ void Att_SeeAttEvents (void)
 
 static void Att_ShowAllAttEvents (void)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Events;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
@@ -209,7 +210,7 @@ static void Att_ShowAllAttEvents (void)
    Lay_StartRoundFrame ("100%",Txt_Events,
 			ICanEdit ? Att_PutIconToCreateNewAttEvent :
 				   NULL,
-		        NULL);
+		        Hlp_USERS_Attendance);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1057,6 +1058,7 @@ static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Valu
 
 void Att_RequestCreatOrEditAttEvent (void)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
@@ -1111,8 +1113,10 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,ItsANewAttEvent ? Txt_New_event :
-                                                      Txt_Edit_event);
+   Lay_StartRoundFrame (NULL,ItsANewAttEvent ? Txt_New_event :
+                                               Txt_Edit_event,
+                        NULL,Hlp_USERS_Attendance);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1810,6 +1814,7 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
 
 void Att_SeeOneAttEvent (void)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Event;
    struct AttendanceEvent Att;
 
@@ -1824,7 +1829,8 @@ void Att_SeeOneAttEvent (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Event);
+   Lay_StartRoundFrame (NULL,Txt_Event,NULL,Hlp_USERS_Attendance);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
    Lay_EndRoundFrameTable ();
@@ -1851,6 +1857,7 @@ void Att_SeeOneAttEvent (void)
 
 static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1868,8 +1875,9 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /***** List students' data *****/
    /* Header */
-   Lay_StartRoundFrameTable (NULL,2,NULL);
-   fprintf (Gbl.F.Out,"<tr>"
+   Lay_StartRoundFrame (NULL,NULL,NULL,Hlp_USERS_Attendance);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                      "<tr>"
 		      "<th></th>"
 		      "<th></th>"
 		      "<th></th>");
@@ -1910,6 +1918,7 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
 static void Att_ListAttStudents (struct AttendanceEvent *Att)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Attendance;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
@@ -1939,8 +1948,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /***** List students' data *****/
       /* Header */
-      Lay_StartRoundFrameTable (NULL,2,Txt_Attendance);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                         "<tr>"
                          "<th></th>"
                          "<th></th>"
                          "<th></th>");
@@ -3004,6 +3014,7 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
@@ -3025,7 +3036,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Events);
+   Lay_StartRoundFrame (NULL,Txt_Events,NULL,Hlp_USERS_Attendance);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3114,6 +3126,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          unsigned NumStdsInList,
                                          long *LstSelectedUsrCods)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Attendance;
    extern const char *Txt_Number_of_students;
    struct UsrData UsrDat;
@@ -3132,7 +3145,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                          (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
                         ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
                         	                                    NULL),
-                        NULL);
+                        Hlp_USERS_Attendance);
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
             PutButtonShowDetails ? "FRAME_TABLE_MARGIN" :
         	                   "FRAME_TABLE");
@@ -3338,6 +3351,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 
 static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods)
   {
+   extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Details;
    struct UsrData UsrDat;
    unsigned NumStd;
@@ -3346,7 +3360,8 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Details);
+   Lay_StartRoundFrame (NULL,Txt_Details,NULL,Hlp_USERS_Attendance);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;
