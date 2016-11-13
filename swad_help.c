@@ -100,6 +100,7 @@ const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
 const char *Hlp_SOCIAL_Activity = WIKI "SOCIAL.Activity";
 
 const char *Hlp_SOCIAL_Profiles_view_public_profile = WIKI "SOCIAL.Profiles#view-public-profile";
+const char *Hlp_SOCIAL_Profiles_who_to_follow       = WIKI "SOCIAL.Profiles#who-to-follow";
 
 /***** STATS tab *****/
 

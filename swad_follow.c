@@ -101,6 +101,7 @@ void Fol_PutLinkWhoToFollow (void)
 
 void Fol_SuggestWhoToFollow (void)
   {
+   extern const char *Hlp_SOCIAL_Profiles_who_to_follow;
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
@@ -224,7 +225,9 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,Fol_PutIconsWhoToFollow,NULL);
+      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,
+                           Fol_PutIconsWhoToFollow,
+                           Hlp_SOCIAL_Profiles_who_to_follow);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
