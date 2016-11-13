@@ -353,7 +353,7 @@ static void Plg_ListPluginsForEdition (void)
    unsigned NumPlg;
    struct Plugin *Plg;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Plugins);
+   Lay_StartRoundFrameTable (NULL,Txt_Plugins,NULL,NULL,2);
 
    /***** Table head *****/
    Plg_PutHeadPlugins ();
@@ -841,7 +841,7 @@ static void Plg_PutFormToCreatePlugin (void)
    Act_FormStart (ActNewPlg);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_plugin);
+   Lay_StartRoundFrameTable (NULL,Txt_New_plugin,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

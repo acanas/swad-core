@@ -315,7 +315,7 @@ static void Lnk_ListLinksForEdition (void)
    unsigned NumLnk;
    struct Link *Lnk;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Links);
+   Lay_StartRoundFrameTable (NULL,Txt_Links,NULL,NULL,2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -620,7 +620,7 @@ static void Lnk_PutFormToCreateLink (void)
    Act_FormStart (ActNewLnk);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_link);
+   Lay_StartRoundFrameTable (NULL,Txt_New_link,NULL,NULL,2);
 
    /***** Write heading *****/
    Lnk_PutHeadLinks ();

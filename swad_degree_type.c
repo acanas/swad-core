@@ -274,7 +274,7 @@ static void DT_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_degree);
+   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,NULL,NULL,2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -340,7 +340,7 @@ static void DT_PutFormToCreateDegreeType (void)
    Act_FormStart (ActNewDegTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_type_of_degree);
+   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

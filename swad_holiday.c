@@ -471,7 +471,7 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Holidays);
+   Lay_StartRoundFrameTable (NULL,Txt_Holidays,NULL,NULL,2);
 
    /***** Table head *****/
    Hld_PutHeadHolidays ();
@@ -912,7 +912,7 @@ static void Hld_PutFormToCreateHoliday (void)
    Act_FormStart (ActNewHld);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_holiday);
+   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

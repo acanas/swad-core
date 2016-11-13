@@ -2044,7 +2044,7 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("95%",0,NULL);
+      Lay_StartRoundFrameTable ("95%",NULL,NULL,NULL,0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

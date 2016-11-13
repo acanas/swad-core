@@ -1377,7 +1377,7 @@ static void Ctr_ListCentresForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -2389,7 +2389,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.ShrtName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
@@ -2872,7 +2872,7 @@ unsigned Ctr_ListCtrsFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCtrs,(NumCtrs == 1) ? Txt_centre :
 	                                Txt_centres);
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
       Ctr_PutHeadCentresForSeeing (false);	// Order not selectable
 
       /***** List the centres (one row per centre) *****/

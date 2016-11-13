@@ -11464,7 +11464,7 @@ unsigned Brw_ListDocsFound (const char *Query,
       sprintf (Gbl.Title,"%u %s",
                NumDocs,(NumDocs == 1) ? TitleSingular :
         	                        TitlePlural);
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"

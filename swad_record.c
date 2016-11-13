@@ -166,7 +166,7 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
-      Lay_StartRoundFrameTable (NULL,2,Txt_Record_fields);
+      Lay_StartRoundFrameTable (NULL,Txt_Record_fields,NULL,NULL,2);
       Rec_ListFieldsRecordsForEdition ();
       Lay_EndRoundFrameTable ();
      }
@@ -337,7 +337,7 @@ void Rec_ShowFormCreateRecordField (void)
    Act_FormStart (ActNewFie);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_New_record_field);
+   Lay_StartRoundFrameTable (NULL,Txt_New_record_field,NULL,NULL,0);
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
@@ -1615,7 +1615,7 @@ static void Rec_ShowCrsRecord (Rec_RecordViewType_t TypeOfView,struct UsrData *U
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
-   Lay_StartRoundFrameTable (StrRecordWidth,2,NULL);
+   Lay_StartRoundFrameTable (StrRecordWidth,NULL,NULL,NULL,2);
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"

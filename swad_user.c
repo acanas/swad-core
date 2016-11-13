@@ -6145,7 +6145,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
 		                                                 Txt_users[Sex]) :
 		                               ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                                                 Txt_ROLES_PLURAL_abc[Role][Sex]));
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;

@@ -4757,7 +4757,8 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",2,Txt_Institutions_by_number_of_centres);
+   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_centres,
+                             NULL,NULL,2);
 
    /***** Get institutions ordered by number of centres *****/
    switch (Gbl.Scope.Current)
@@ -4808,7 +4809,8 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",2,Txt_Institutions_by_number_of_degrees);
+   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_degrees,
+                             NULL,NULL,2);
 
    /***** Get institutions ordered by number of degrees *****/
    switch (Gbl.Scope.Current)
@@ -4862,7 +4864,8 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",2,Txt_Institutions_by_number_of_courses);
+   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_courses,
+                             NULL,NULL,2);
 
    /***** Get institutions ordered by number of courses *****/
    switch (Gbl.Scope.Current)
@@ -4919,7 +4922,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",2,Txt_Institutions_by_number_of_users_in_courses);
+   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_users_in_courses,
+                             NULL,NULL,2);
 
    /***** Get institutions ordered by number of users in courses *****/
    switch (Gbl.Scope.Current)
@@ -4980,7 +4984,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
    char Query[1024];
 
    /****** Institutions ordered by number of centres ******/
-   Lay_StartRoundFrameTable ("95%",2,Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them);
+   Lay_StartRoundFrameTable ("95%",Txt_Institutions_by_number_of_users_who_claim_to_belong_to_them,
+                             NULL,NULL,2);
 
    /***** Get institutions ordered by number of users who claim to belong to them *****/
    switch (Gbl.Scope.Current)

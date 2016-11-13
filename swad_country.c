@@ -1440,7 +1440,7 @@ static void Cty_ListCountriesForEdition (void)
    struct Country *Cty;
    Txt_Language_t Lan;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Countries);
+   Lay_StartRoundFrameTable (NULL,Txt_Countries,NULL,NULL,2);
 
    /***** Table head *****/
    Cty_PutHeadCountries ();
@@ -1833,7 +1833,7 @@ static void Cty_PutFormToCreateCountry (void)
    Act_FormStart (ActNewCty);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_country);
+   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,NULL,2);
 
    /***** Write heading *****/
    Cty_PutHeadCountries ();

@@ -254,7 +254,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    if (NumRows > 0) // If not empty chat rooms found
      {
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Rooms_with_users);
+      Lay_StartRoundFrameTable (NULL,Txt_Rooms_with_users,NULL,NULL,2);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<th class=\"CENTER_MIDDLE LIGHT_BLUE\">"
 	                 "%s"

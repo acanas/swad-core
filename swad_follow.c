@@ -551,7 +551,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowingUsrDat);
 
 	 /***** Start listing *****/
-	 Lay_StartRoundFrameTable ("560px",2,Txt_Following);
+	 Lay_StartRoundFrameTable ("560px",Txt_Following,NULL,NULL,2);
 
 	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;
@@ -634,7 +634,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 	 Usr_UsrDataConstructor (&FollowerUsrDat);
 
 	 /***** Start listing *****/
-	 Lay_StartRoundFrameTable ("560px",2,Txt_Followers);
+	 Lay_StartRoundFrameTable ("560px",Txt_Followers,NULL,NULL,2);
 
 	 for (NumUsr = 0;
 	      NumUsr < NumUsrs;

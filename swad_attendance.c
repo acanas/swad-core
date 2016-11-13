@@ -1213,7 +1213,7 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
 	                 "</td>"
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",0,NULL);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,NULL,0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

@@ -486,7 +486,7 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Departments);
+   Lay_StartRoundFrameTable (NULL,Txt_Departments,NULL,NULL,2);
 
    /***** Table head *****/
    Dpt_PutHeadDepartments ();
@@ -875,7 +875,7 @@ static void Dpt_PutFormToCreateDepartment (void)
    Act_FormStart (ActNewDpt);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_department);
+   Lay_StartRoundFrameTable (NULL,Txt_New_department,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

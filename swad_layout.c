@@ -1224,10 +1224,12 @@ void Lay_PutRemoveButtonInline (const char *Text)
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8
 
-void Lay_StartRoundFrameTable (const char *Width,unsigned CellPadding,
-                               const char *Title)
+void Lay_StartRoundFrameTable (const char *Width,const char *Title,
+                               void (*FunctionToDrawContextualIcons) (void),
+                               const char *HelpLink,
+                               unsigned CellPadding)
   {
-   Lay_StartRoundFrame (Width,Title,NULL,NULL);
+   Lay_StartRoundFrame (Width,Title,FunctionToDrawContextualIcons,HelpLink);
 
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE");
    if (CellPadding)
@@ -1680,7 +1682,7 @@ void Lay_AdvertisementMobile (void)
       fprintf (Gbl.F.Out,"<div style=\"margin-top:25px;\">");
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,8,NULL);
+      Lay_StartRoundFrameTable (NULL,NULL,NULL,NULL,8);
 
       /***** Show advertisement *****/
       fprintf (Gbl.F.Out,"<tr>"

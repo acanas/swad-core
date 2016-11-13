@@ -207,8 +207,10 @@ void Acc_CheckIfEmptyAccountExists (void)
       if (NumUsrs)
 	{
 	 /***** Start frame and write message with number of accounts found *****/
-	 Lay_StartRoundFrameTable (NULL,5,(NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
-							   Txt_Do_you_think_you_are_one_of_these_users);
+	 Lay_StartRoundFrameTable (NULL,
+	                           (NumUsrs == 1) ? Txt_Do_you_think_you_are_this_user :
+					            Txt_Do_you_think_you_are_one_of_these_users,
+			           NULL,NULL,5);
 
 	 /***** Initialize structure with user's data *****/
 	 Usr_UsrDataConstructor (&UsrDat);

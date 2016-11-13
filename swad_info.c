@@ -1067,7 +1067,7 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Form to choice between alternatives *****/
    /* Start of table */
-   Lay_StartRoundFrameTable (NULL,4,Txt_Source_of_information);
+   Lay_StartRoundFrameTable (NULL,Txt_Source_of_information,NULL,NULL,4);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;

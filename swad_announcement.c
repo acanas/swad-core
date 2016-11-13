@@ -442,7 +442,7 @@ void Ann_ShowFormAnnouncement (void)
    Act_FormStart (ActRcvAnn);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_announcement);
+   Lay_StartRoundFrameTable (NULL,Txt_New_announcement,NULL,NULL,2);
 
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<tr>"

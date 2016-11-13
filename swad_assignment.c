@@ -1114,8 +1114,10 @@ void Asg_RequestCreatOrEditAsg (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,ItsANewAssignment ? Txt_New_assignment :
-                                                        Txt_Edit_assignment);
+   Lay_StartRoundFrameTable (NULL,
+                             ItsANewAssignment ? Txt_New_assignment :
+                                                 Txt_Edit_assignment,
+                             NULL,NULL,2);
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1203,7 +1205,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",0,NULL);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,NULL,0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

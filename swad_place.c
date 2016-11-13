@@ -422,7 +422,7 @@ static void Plc_ListPlacesForEdition (void)
    unsigned NumPlc;
    struct Place *Plc;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Places);
+   Lay_StartRoundFrameTable (NULL,Txt_Places,NULL,NULL,2);
 
    /***** Table head *****/
    Plc_PutHeadPlaces ();
@@ -691,7 +691,7 @@ static void Plc_PutFormToCreatePlace (void)
    Act_FormStart (ActNewPlc);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_place);
+   Lay_StartRoundFrameTable (NULL,Txt_New_place,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

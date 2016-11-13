@@ -3739,7 +3739,7 @@ void Msg_ListBannedUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table with list of users *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Banned_users);
+      Lay_StartRoundFrameTable (NULL,Txt_Banned_users,NULL,NULL,2);
 
       /***** List users *****/
       for (NumUsr = 1;

@@ -1129,7 +1129,7 @@ static void Deg_ListDegreesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -1392,7 +1392,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
@@ -3010,7 +3010,7 @@ unsigned Deg_ListDegsFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumDegs,(NumDegs == 1) ? Txt_degree :
         	                        Txt_degrees);
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees (one row per degree) *****/

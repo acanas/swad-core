@@ -429,7 +429,8 @@ static void Mai_ListMailDomainsForEdition (void)
    unsigned NumMai;
    struct Mail *Mai;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Mail_domains_allowed_for_notifications);
+   Lay_StartRoundFrameTable (NULL,Txt_Mail_domains_allowed_for_notifications,
+                             NULL,NULL,2);
 
    /***** Table head *****/
    Mai_PutHeadMailDomains ();
@@ -683,7 +684,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_mail_domain);
+   Lay_StartRoundFrameTable (NULL,Txt_New_mail_domain,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -847,7 +848,9 @@ void Mai_ListEMails (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
          /***** Start of the frame used to list the e-mails *****/
-         Lay_StartRoundFrameTable (NULL,0,Txt_Students_who_have_accepted_and_who_have_e_mail);
+         Lay_StartRoundFrameTable (NULL,
+                                   Txt_Students_who_have_accepted_and_who_have_e_mail,
+                                   NULL,NULL,0);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT_SMALL LEFT_MIDDLE\">");
 

@@ -1394,7 +1394,7 @@ static void Crs_ListCoursesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
+   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,NULL,2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1671,7 +1671,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Message);
+   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,NULL,2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Disabled icon to remove course *****/
@@ -3040,7 +3040,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if ((NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a user")))
      {
       /* Start frame and table */
-      Lay_StartRoundFrameTable ("100%",2,NULL);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,NULL,2);
 
       /* Heading row */
       sprintf (Gbl.Title,Txt_USER_in_COURSE,
@@ -3125,7 +3125,7 @@ unsigned Crs_ListCrssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumCrss,(NumCrss == 1) ? Txt_course :
 	                                Txt_courses);
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
       /* Heading row */
       fprintf (Gbl.F.Out,"<tr>"

@@ -301,7 +301,7 @@ static void Ban_ListBannersForEdition (void)
    unsigned NumBan;
    struct Banner *Ban;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_Banners);
+   Lay_StartRoundFrameTable (NULL,Txt_Banners,NULL,NULL,2);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();
@@ -735,7 +735,7 @@ static void Ban_PutFormToCreateBanner (void)
    Act_FormStart (ActNewBan);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_banner);
+   Lay_StartRoundFrameTable (NULL,Txt_New_banner,NULL,NULL,2);
 
    /***** Write heading *****/
    Ban_PutHeadBanners ();

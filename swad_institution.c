@@ -1292,7 +1292,7 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -2057,7 +2057,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_institution_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
@@ -2424,7 +2424,7 @@ unsigned Ins_ListInssFound (const char *Query)
       sprintf (Gbl.Title,"%u %s",
                NumInss,NumInss == 1 ? Txt_institution :
 				      Txt_institutions);
-      Lay_StartRoundFrameTable (NULL,2,Gbl.Title);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
       /***** List the institutions (one row per centre) *****/
