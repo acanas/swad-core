@@ -3792,6 +3792,7 @@ void Sta_WriteParamsDatesSeeAccesses (void)
 
 void Sta_ReqShowFigures (void)
   {
+   extern const char *Hlp_STATS_Figures;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistic;
    extern const char *Txt_Scope;
@@ -3803,7 +3804,7 @@ void Sta_ReqShowFigures (void)
    Act_FormStart (ActSeeUseGbl);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Statistic,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Statistic,NULL,Hlp_STATS_Figures);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
@@ -3968,6 +3969,7 @@ void Sta_ShowFigures (void)
 
 static void Sta_GetAndShowUsersStats (void)
   {
+   extern const char *Hlp_STATS_Figures_users;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
@@ -3975,7 +3977,9 @@ static void Sta_GetAndShowUsersStats (void)
    extern const char *Txt_Average_number_of_users_belonging_to_a_course;
 
    /***** Number of users *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS],
+                        NULL,Hlp_STATS_Figures_users);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"RIGHT_MIDDLE\">"
@@ -4012,6 +4016,7 @@ static void Sta_GetAndShowUsersStats (void)
 
 static void Sta_GetAndShowUsersRanking (void)
   {
+   extern const char *Hlp_STATS_Figures_ranking;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Clicks;
    extern const char *Txt_Clicks_per_day;
@@ -4020,7 +4025,9 @@ static void Sta_GetAndShowUsersRanking (void)
    extern const char *Txt_Messages;
    extern const char *Txt_Followers;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_USERS_RANKING],
+                        NULL,Hlp_STATS_Figures_ranking);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -4082,9 +4089,12 @@ static void Sta_GetAndShowUsersRanking (void)
 
 static void Sta_GetAndShowHierarchyStats (void)
   {
+   extern const char *Hlp_STATS_Figures_hierarchy;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_HIERARCHY],
+                        NULL,Hlp_STATS_Figures_hierarchy);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Sta_WriteHeadDegsCrssInSWAD ();
    Sta_GetAndShowNumCtysInSWAD ();
    Sta_GetAndShowNumInssInSWAD ();
@@ -4707,6 +4717,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
 
 static void Sta_GetAndShowInstitutionsStats (void)
   {
+   extern const char *Hlp_STATS_Figures_institutions;
    extern const char *Txt_Institutions;
 
    /***** Get and update type of list, number of columns in class photo
@@ -4714,7 +4725,8 @@ static void Sta_GetAndShowInstitutionsStats (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Form to select type of list used to display degree photos *****/
-   Lay_StartRoundFrame (NULL,Txt_Institutions,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Institutions,
+                        NULL,Hlp_STATS_Figures_institutions);
    Usr_ShowFormsToSelectUsrListType (ActSeeUseGbl);
    Lay_EndRoundFrame ();
 
@@ -5287,6 +5299,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
 
 static void Sta_GetAndShowFileBrowsersStats (void)
   {
+   extern const char *Hlp_STATS_Figures_folders_and_files;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_STAT_COURSE_FILE_ZONES[];
    extern const char *Txt_Briefcases;
@@ -5307,7 +5320,9 @@ static void Sta_GetAndShowFileBrowsersStats (void)
    unsigned NumStat;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FOLDERS_AND_FILES]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLDERS_AND_FILES],
+                        NULL,Hlp_STATS_Figures_folders_and_files);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    Sta_WriteStatsExpTreesTableHead ();
@@ -6363,6 +6378,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 
 static void Sta_GetAndShowOERsStats (void)
   {
+   extern const char *Hlp_STATS_Figures_open_educational_resources_oer;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_License;
    extern const char *Txt_No_of_private_files;
@@ -6372,7 +6388,9 @@ static void Sta_GetAndShowOERsStats (void)
    unsigned long NumFiles[2];
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_OER]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_OER],
+                        NULL,Hlp_STATS_Figures_open_educational_resources_oer);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6543,6 +6561,7 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
 
 static void Sta_GetAndShowAssignmentsStats (void)
   {
+   extern const char *Hlp_STATS_Figures_assignments;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_assignments;
    extern const char *Txt_Number_of_BR_courses_with_BR_assignments;
@@ -6560,7 +6579,9 @@ static void Sta_GetAndShowAssignmentsStats (void)
          NumAssignmentsPerCourse = (float) NumAssignments / (float) NumCoursesWithAssignments;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_ASSIGNMENTS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ASSIGNMENTS],
+                        NULL,Hlp_STATS_Figures_assignments);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6612,6 +6633,7 @@ static void Sta_GetAndShowAssignmentsStats (void)
 
 static void Sta_GetAndShowTestsStats (void)
   {
+   extern const char *Hlp_STATS_Figures_tests;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type_of_BR_answers;
    extern const char *Txt_Number_of_BR_courses_BR_with_test_BR_questions;
@@ -6628,7 +6650,9 @@ static void Sta_GetAndShowTestsStats (void)
    struct Tst_Stats Stats;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_TESTS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_TESTS],
+                        NULL,Hlp_STATS_Figures_tests);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -6779,6 +6803,7 @@ static void Sta_GetAndShowTestsStats (void)
 
 static void Sta_GetAndShowSocialActivityStats (void)
   {
+   extern const char *Hlp_STATS_Figures_public_activity;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_No_of_social_posts;
@@ -6795,7 +6820,9 @@ static void Sta_GetAndShowSocialActivityStats (void)
    unsigned NumUsrs;
    unsigned NumUsrsTotal;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY],
+                        NULL,Hlp_STATS_Figures_public_activity);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7056,6 +7083,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
 static void Sta_GetAndShowFollowStats (void)
   {
+   extern const char *Hlp_STATS_Figures_followed_followers;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Users;
    extern const char *Txt_No_of_users;
@@ -7076,7 +7104,9 @@ static void Sta_GetAndShowFollowStats (void)
    unsigned NumUsrs;
    float Average;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FOLLOW],
+                        NULL,Hlp_STATS_Figures_followed_followers);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7312,6 +7342,7 @@ static void Sta_GetAndShowFollowStats (void)
 
 static void Sta_GetAndShowForumStats (void)
   {
+   extern const char *Hlp_STATS_Figures_forums;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Scope;
    extern const char *Txt_Forums;
@@ -7331,7 +7362,9 @@ static void Sta_GetAndShowForumStats (void)
    StatsForum.NumUsrsToBeNotifiedByEMail = 0;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FORUMS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FORUMS],
+                        NULL,Hlp_STATS_Figures_forums);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7663,6 +7696,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
 
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
   {
+   extern const char *Hlp_STATS_Figures_notifications;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Event;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
@@ -7683,7 +7717,9 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    unsigned NumMailsTotal = 0;
    unsigned NumMails[Ntf_NUM_NOTIFY_EVENTS];
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTIFY_EVENTS],
+                        NULL,Hlp_STATS_Figures_notifications);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -7993,6 +8029,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
 static void Sta_GetAndShowNoticesStats (void)
   {
+   extern const char *Hlp_STATS_Figures_notices;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_NOTICE_Active_BR_notices;
    extern const char *Txt_NOTICE_Obsolete_BR_notices;
@@ -8021,7 +8058,9 @@ static void Sta_GetAndShowNoticesStats (void)
    NumTotalNotifications += NumNotif;
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_NOTICES],
+                        NULL,Hlp_STATS_Figures_notices);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8081,6 +8120,7 @@ static void Sta_GetAndShowNoticesStats (void)
 
 static void Sta_GetAndShowMsgsStats (void)
   {
+   extern const char *Hlp_STATS_Figures_messages;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Messages;
    extern const char *Txt_MSGS_Not_deleted;
@@ -8102,7 +8142,9 @@ static void Sta_GetAndShowMsgsStats (void)
    NumMsgsReceivedAndNotified = Msg_GetNumMsgsReceived (Gbl.Scope.Current,Msg_STATUS_NOTIFIED);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MESSAGES],
+                        NULL,Hlp_STATS_Figures_messages);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8183,6 +8225,7 @@ static void Sta_GetAndShowMsgsStats (void)
 
 static void Sta_GetAndShowSurveysStats (void)
   {
+   extern const char *Hlp_STATS_Figures_surveys;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Number_of_BR_surveys;
    extern const char *Txt_Number_of_BR_courses_with_BR_surveys;
@@ -8205,7 +8248,9 @@ static void Sta_GetAndShowSurveysStats (void)
      }
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SURVEYS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SURVEYS],
+                        NULL,Hlp_STATS_Figures_surveys);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write table heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8265,11 +8310,14 @@ static void Sta_GetAndShowSurveysStats (void)
 
 static void Sta_GetAndShowNumUsrsPerPrivacy (void)
   {
+   extern const char *Hlp_STATS_Figures_privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_PRIVACY],
+                        NULL,Hlp_STATS_Figures_privacy);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Privacy for photo *****/
    Sta_GetAndShowNumUsrsPerPrivacyForAnObject (Txt_Photo,"PhotoVisibility");
@@ -8422,6 +8470,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 
 static void Sta_GetAndShowNumUsrsPerLanguage (void)
   {
+   extern const char *Hlp_STATS_Figures_language;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
@@ -8433,7 +8482,9 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
    unsigned NumUsrs[1+Txt_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_LANGUAGES],
+                        NULL,Hlp_STATS_Figures_language);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8559,6 +8610,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
+   extern const char *Hlp_STATS_Figures_calendar;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Calendar;
    extern const char *Txt_First_day_of_the_week;
@@ -8570,7 +8622,9 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
    unsigned NumUsrs[7];	// 7: seven days in a week
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_FIRST_DAY_OF_WEEK],
+                        NULL,Hlp_STATS_Figures_calendar);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8697,6 +8751,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
 static void Sta_GetAndShowNumUsrsPerTheme (void)
   {
+   extern const char *Hlp_STATS_Figures_theme;
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *The_ThemeNames[The_NUM_THEMES];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
@@ -8708,7 +8763,9 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
    unsigned NumUsrs[The_NUM_THEMES];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_THEMES]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_THEMES],
+                        NULL,Hlp_STATS_Figures_theme);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8833,6 +8890,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 
 static void Sta_GetAndShowNumUsrsPerIconSet (void)
   {
+   extern const char *Hlp_STATS_Figures_icons;
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Ico_IconSetNames[Ico_NUM_ICON_SETS];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
@@ -8844,7 +8902,9 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
    unsigned NumUsrs[Ico_NUM_ICON_SETS];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_ICON_SETS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_ICON_SETS],
+                        NULL,Hlp_STATS_Figures_icons);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8972,6 +9032,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 
 static void Sta_GetAndShowNumUsrsPerMenu (void)
   {
+   extern const char *Hlp_STATS_Figures_menu;
    extern const char *Mnu_MenuIcons[Mnu_NUM_MENUS];
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Menu;
@@ -8983,7 +9044,9 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
    unsigned NumUsrs[Mnu_NUM_MENUS];
    unsigned NumUsrsTotal = 0;
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_MENUS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_MENUS],
+                        NULL,Hlp_STATS_Figures_menu);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -9108,6 +9171,7 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
 
 static void Sta_GetAndShowNumUsrsPerSideColumns (void)
   {
+   extern const char *Hlp_STATS_Figures_columns;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Columns;
    extern const char *Txt_No_of_users;
@@ -9118,7 +9182,9 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
    unsigned NumUsrsTotal = 0;
    extern const char *Txt_LAYOUT_SIDE_COLUMNS[4];
 
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SIDE_COLUMNS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SIDE_COLUMNS],
+                        NULL,Hlp_STATS_Figures_columns);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

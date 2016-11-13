@@ -115,6 +115,31 @@ const char *Hlp_STATS_Surveys_new_survey  = WIKI "STATS.Surveys#new-survey";
 const char *Hlp_STATS_Surveys_edit_survey = WIKI "STATS.Surveys#edit-survey";
 const char *Hlp_STATS_Surveys_questions   = WIKI "STATS.Surveys#questions";
 
+const char *Hlp_STATS_Figures                                = WIKI "STATS.Figures";
+const char *Hlp_STATS_Figures_users                          = WIKI "STATS.Figures#users";
+const char *Hlp_STATS_Figures_ranking                        = WIKI "STATS.Figures#ranking";
+const char *Hlp_STATS_Figures_hierarchy                      = WIKI "STATS.Figures#hierarchy";
+const char *Hlp_STATS_Figures_institutions                   = WIKI "STATS.Figures#institutions";
+const char *Hlp_STATS_Figures_folders_and_files              = WIKI "STATS.Figures#folders-and-files";
+const char *Hlp_STATS_Figures_open_educational_resources_oer = WIKI "STATS.Figures#open-educational-resources-oer";
+const char *Hlp_STATS_Figures_assignments                    = WIKI "STATS.Figures#assignments";
+const char *Hlp_STATS_Figures_tests                          = WIKI "STATS.Figures#tests";
+const char *Hlp_STATS_Figures_public_activity                = WIKI "STATS.Figures#public-activity";
+const char *Hlp_STATS_Figures_followed_followers             = WIKI "STATS.Figures#followed--followers";
+const char *Hlp_STATS_Figures_forums                         = WIKI "STATS.Figures#forums";
+const char *Hlp_STATS_Figures_notifications                  = WIKI "STATS.Figures#notifications";
+const char *Hlp_STATS_Figures_notices                        = WIKI "STATS.Figures#notices";
+const char *Hlp_STATS_Figures_messages                       = WIKI "STATS.Figures#messages";
+const char *Hlp_STATS_Figures_surveys                        = WIKI "STATS.Figures#surveys";
+const char *Hlp_STATS_Figures_webs_social_networks           = WIKI "STATS.Figures#webs--social-networks";
+const char *Hlp_STATS_Figures_language                       = WIKI "STATS.Figures#language";
+const char *Hlp_STATS_Figures_calendar                       = WIKI "STATS.Figures#calendar";
+const char *Hlp_STATS_Figures_icons                          = WIKI "STATS.Figures#icons";
+const char *Hlp_STATS_Figures_theme                          = WIKI "STATS.Figures#theme";
+const char *Hlp_STATS_Figures_menu                           = WIKI "STATS.Figures#menu";
+const char *Hlp_STATS_Figures_columns                        = WIKI "STATS.Figures#columns";
+const char *Hlp_STATS_Figures_privacy                        = WIKI "STATS.Figures#privacy";
+
 /***** PROFILE tab *****/
 
 const char *Hlp_PROFILE_Log_in       = WIKI "PROFILE.Log%20in";

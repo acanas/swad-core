@@ -430,6 +430,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
 
 void Net_ShowWebAndSocialNetworksStats (void)
   {
+   extern const char *Hlp_STATS_Figures_webs_social_networks;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Web_social_network;
    extern const char *Txt_No_of_users;
@@ -523,7 +524,9 @@ void Net_ShowWebAndSocialNetworksStats (void)
                                         "can not get number of users with webs / social networks");
 
    /***** Number of users *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS]);
+   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],
+                        NULL,Hlp_STATS_Figures_webs_social_networks);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\">"
