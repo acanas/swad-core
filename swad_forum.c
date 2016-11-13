@@ -936,10 +936,11 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 
 static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
   {
+   extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Thread;
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
-   extern const char *Txt_Messages;
+   extern const char *Txt_Posts;
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
    char Query[1024];
@@ -972,7 +973,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums,Hlp_SOCIAL_Forums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -1059,7 +1060,8 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
 
       /***** Show posts from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Messages);
+      Lay_StartRoundFrame (NULL,Txt_Posts,NULL,Hlp_SOCIAL_Forums);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1714,6 +1716,7 @@ void For_SetForumTypeAndRestrictAccess (void)
 
 void For_ShowForumList (void)
   {
+   extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forums;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
    bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
@@ -1740,7 +1743,7 @@ void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,Hlp_SOCIAL_Forums);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
@@ -2485,6 +2488,7 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
 void For_ShowForumThrs (void)
   {
+   extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forum;
    extern const char *Txt_Threads;
    extern const char *Txt_MSG_Subject;
@@ -2591,7 +2595,7 @@ void For_ShowForumThrs (void)
 
    /***** Header whith the name of this forum, the number of threads, and the total number of posts *****/
    /* Table start */
-   Lay_StartRoundFrame (NULL,Txt_Forum,For_PutIconsForums,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forum,For_PutIconsForums,Hlp_SOCIAL_Forums);
 
    /* Put a form to select which forums */
    For_PutFormWhichForums ();
@@ -2619,7 +2623,8 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Threads);
+      Lay_StartRoundFrame (NULL,Txt_Threads,NULL,Hlp_SOCIAL_Forums);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3796,6 +3801,7 @@ void For_ShowForumLevel2 (long ThrCod)
 
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
   {
+   extern const char *Hlp_SOCIAL_Forums;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_message;
    extern const char *Txt_New_thread;
@@ -3807,7 +3813,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Lay_StartRoundFrame (NULL,
                         IsReply ? Txt_New_message :
         	                  Txt_New_thread,
-        	        NULL,NULL);
+        	        NULL,Hlp_SOCIAL_Forums);
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a message of an existing thread
