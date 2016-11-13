@@ -193,7 +193,7 @@ static void Crs_Configuration (bool PrintView)
 	                NULL);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",

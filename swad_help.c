@@ -45,6 +45,7 @@ const char *Hlp_SYSTEM_Countries = WIKI "SYSTEM.Countries";
 
 /***** COUNTRY tab *****/
 
+const char *Hlp_COUNTRY_Information  = WIKI "COUNTRY.Information";
 const char *Hlp_COUNTRY_Institutions = WIKI "COUNTRY.Institutions";
 
 /***** INSTITUTION tab *****/

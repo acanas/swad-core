@@ -1398,10 +1398,9 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 /********** Title of country,institution,centre,degree,course ************/
 .TITLE_LOCATION
 	{
-	font-size:25pt;
-	font-weight:bold;
 	color:#808080;
-	text-align:center;
+	font-size:20pt;
+	font-weight:bold;
 	}
 
 /******************************* Map of country ******************************/

@@ -208,6 +208,7 @@ void Cty_PrintConfiguration (void)
 
 static void Cty_Configuration (bool PrintView)
   {
+   extern const char *Hlp_COUNTRY_Information;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
@@ -226,12 +227,14 @@ static void Cty_Configuration (bool PrintView)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Cty_PutIconToPrint,
-	                   NULL);
+      Lay_StartRoundFrame (NULL,NULL,
+                           PrintView ? NULL :
+	                               Cty_PutIconToPrint,
+	                   PrintView ? NULL :
+	                	       Hlp_COUNTRY_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"TITLE_LOCATION\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -1230,9 +1233,10 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    switch (GetExtraData)
      {
       case Cty_GET_BASIC_DATA:
-         sprintf (Query,"SELECT Alpha2,Name_%s"
+         sprintf (Query,"SELECT Alpha2,Name_%s,WWW_%s"
                         " FROM countries"
 			" WHERE CtyCod='%03ld'",
+                  Txt_STR_LANG_ID[Gbl.Prefs.Language],
                   Txt_STR_LANG_ID[Gbl.Prefs.Language],
                   Cty->CtyCod);
          break;
@@ -1287,11 +1291,12 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       switch (GetExtraData)
 	{
 	 case Cty_GET_BASIC_DATA:
-	    /* Get the name of the country in current language */
+	    /* Get name and WWW of the country in current language */
 	    strcpy (Cty->Name[Gbl.Prefs.Language],row[1]);
+	    strcpy (Cty->WWW [Gbl.Prefs.Language],row[2]);
 	    break;
 	 case Cty_GET_EXTRA_DATA:
-	    /* Get the name of the country in several languages */
+	    /* Get name and WWW of the country in several languages */
 	    for (Lan = (Txt_Language_t) 1;
 		 Lan <= Txt_NUM_LANGUAGES;
 		 Lan++)
