@@ -1457,6 +1457,7 @@ static void Brw_GetSelectedGroupData (struct GroupData *GrpDat,bool AbortOnError
 static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat);
 static void Brw_ShowFileBrowser (void);
 static void Brw_PutIconsFileBrowser (void);
+static void Brw_PutIconShowFigure (void);
 static void Brw_PutButtonToShowEdit (void);
 static void Brw_WriteTopBeforeShowingFileBrowser (void);
 static void Brw_UpdateLastAccess (void);
@@ -3122,6 +3123,7 @@ static void Brw_ShowFileBrowserNormal (void)
 
 static void Brw_ShowFileBrowsersAsgWrkCrs (void)
   {
+   extern const char *Hlp_ASSESSMENT_Works;
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
@@ -3174,7 +3176,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable ("100%",0,Txt_Assignments_and_other_works);
+      Lay_StartRoundFrame ("100%",Txt_Assignments_and_other_works,
+                           Brw_PutIconShowFigure,Hlp_ASSESSMENT_Works);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
@@ -3474,6 +3478,19 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
 
 static void Brw_ShowFileBrowser (void)
   {
+   extern const char *Hlp_INSTITUTION_Documents;
+   extern const char *Hlp_INSTITUTION_Shared;
+   extern const char *Hlp_CENTRE_Documents;
+   extern const char *Hlp_CENTRE_Shared;
+   extern const char *Hlp_DEGREE_Documents;
+   extern const char *Hlp_DEGREE_Shared;
+   extern const char *Hlp_COURSE_Documents;
+   extern const char *Hlp_COURSE_Private;
+   extern const char *Hlp_COURSE_Shared;
+   extern const char *Hlp_ASSESSMENT_Works;
+   extern const char *Hlp_ASSESSMENT_Marks;
+   extern const char *Hlp_PROFILE_Briefcase;
+
    extern const char *Txt_Documents_area;
    extern const char *Txt_Documents_management_area;
    extern const char *Txt_Teachers_files_area;
@@ -3483,7 +3500,9 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Txt_Assignments_area;
    extern const char *Txt_Works_area;
    extern const char *Txt_Temporary_private_storage_area;
+
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
+   const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    struct Brw_NumObjects Removed;
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
@@ -3516,6 +3535,35 @@ static void Brw_ShowFileBrowser (void)
    Brw_TitleOfFileBrowser[Brw_ADMI_SHARE_INS] = Txt_Shared_files_area;			// Brw_ADMI_SHARE_INS
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_CRS] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_CRS
    Brw_TitleOfFileBrowser[Brw_ADMI_TEACH_GRP] = Txt_Teachers_files_area;		// Brw_ADMI_TEACH_GRP
+
+   /***** Set help link of file browser *****/
+   Brw_HelpOfFileBrowser[Brw_UNKNOWN       ] = NULL;				// Brw_UNKNOWN
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_CRS] = Hlp_COURSE_Documents;		// Brw_SHOW_DOCUM_CRS
+   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_CRS] = Hlp_ASSESSMENT_Marks;		// Brw_SHOW_MARKS_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_CRS] = Hlp_COURSE_Documents;		// Brw_ADMI_DOCUM_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_CRS] = Hlp_COURSE_Shared;		// Brw_ADMI_SHARE_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_GRP] = Hlp_COURSE_Shared;		// Brw_ADMI_SHARE_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_USR] = Hlp_ASSESSMENT_Works;		// Brw_ADMI_WORKS_USR
+   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_CRS] = NULL;				// Brw_ADMI_WORKS_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_CRS] = Hlp_ASSESSMENT_Marks;		// Brw_ADMI_MARKS_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_BRIEF_USR] = Hlp_PROFILE_Briefcase;		// Brw_ADMI_BRIEF_USR
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_GRP] = Hlp_COURSE_Documents;		// Brw_SHOW_DOCUM_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_GRP] = Hlp_COURSE_Documents;		// Brw_ADMI_DOCUM_GRP
+   Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_GRP] = Hlp_ASSESSMENT_Marks;		// Brw_SHOW_MARKS_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_GRP] = Hlp_ASSESSMENT_Marks;		// Brw_ADMI_MARKS_GRP
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_USR] = Hlp_ASSESSMENT_Works;		// Brw_ADMI_ASSIG_USR
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_CRS] = NULL;				// Brw_ADMI_ASSIG_CRS
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_DEG] = Hlp_DEGREE_Documents;		// Brw_SHOW_DOCUM_DEG
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_DEG] = Hlp_DEGREE_Documents;		// Brw_ADMI_DOCUM_DEG
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_CTR] = Hlp_CENTRE_Documents;		// Brw_SHOW_DOCUM_CTR
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_CTR] = Hlp_CENTRE_Documents;		// Brw_ADMI_DOCUM_CTR
+   Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_INS] = Hlp_INSTITUTION_Documents;	// Brw_SHOW_DOCUM_INS
+   Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_INS] = Hlp_INSTITUTION_Documents;	// Brw_ADMI_DOCUM_INS
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_DEG] = Hlp_DEGREE_Shared;		// Brw_ADMI_SHARE_DEG
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_CTR] = Hlp_CENTRE_Shared;		// Brw_ADMI_SHARE_CTR
+   Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_INS] = Hlp_INSTITUTION_Shared;		// Brw_ADMI_SHARE_INS
+   Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_CRS] = Hlp_COURSE_Private;		// Brw_ADMI_TEACH_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_TEACH_GRP] = Hlp_COURSE_Private;		// Brw_ADMI_TEACH_GRP
 
    /***** Set contextual icon in frame *****/
    Gbl.FileBrowser.IconViewEdit = Brw_ICON_NONE;
@@ -3585,7 +3633,8 @@ static void Brw_ShowFileBrowser (void)
    Gbl.FileBrowser.Id++;
    fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
    Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
-                        Brw_PutIconsFileBrowser,NULL);
+                        Brw_PutIconsFileBrowser,
+                        Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type]);
 
    /***** Subtitle *****/
    Brw_WriteSubtitleOfFileBrowser ();
@@ -3639,6 +3688,13 @@ static void Brw_PutIconsFileBrowser (void)
      }
 
    /***** Put icon to show a figure *****/
+   if (Gbl.FileBrowser.Type != Brw_ADMI_WORKS_CRS &&
+       Gbl.FileBrowser.Type != Brw_ADMI_ASSIG_CRS)
+     Brw_PutIconShowFigure ();
+  }
+
+static void Brw_PutIconShowFigure (void)
+  {
    Gbl.Stat.FigureType = Sta_FOLDERS_AND_FILES;
    Sta_PutIconToShowFigure ();
   }

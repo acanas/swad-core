@@ -54,19 +54,37 @@ const char *Hlp_COUNTRY_Institutions = WIKI "COUNTRY.Institutions";
 const char *Hlp_INSTITUTION_Information = WIKI "INSTITUTION.Information";
 const char *Hlp_INSTITUTION_Centres     = WIKI "INSTITUTION.Centres";
 
+const char *Hlp_INSTITUTION_Documents = WIKI "INSTITUTION.Documents";
+const char *Hlp_INSTITUTION_Shared    = WIKI "INSTITUTION.Shared";
+
 /***** CENTRE tab *****/
 
 const char *Hlp_CENTRE_Information = WIKI "CENTRE.Information";
 const char *Hlp_CENTRE_Degrees     = WIKI "CENTRE.Degrees";
+
+const char *Hlp_CENTRE_Documents = WIKI "CENTRE.Documents";
+const char *Hlp_CENTRE_Shared    = WIKI "CENTRE.Shared";
 
 /***** DEGREE tab *****/
 
 const char *Hlp_DEGREE_Information = WIKI "DEGREE.Information";
 const char *Hlp_DEGREE_Courses     = WIKI "DEGREE.Courses";
 
+const char *Hlp_DEGREE_Documents = WIKI "DEGREE.Documents";
+const char *Hlp_DEGREE_Shared    = WIKI "DEGREE.Shared";
+
 /***** COURSE tab *****/
 
 const char *Hlp_COURSE_Information = WIKI "COURSE.Information";
+
+const char *Hlp_COURSE_Documents = WIKI "COURSE.Documents";
+const char *Hlp_COURSE_Private   = WIKI "COURSE.Private";
+const char *Hlp_COURSE_Shared    = WIKI "COURSE.Shared";
+
+/***** ASSESSMENT tab *****/
+
+const char *Hlp_ASSESSMENT_Works = WIKI "ASSESSMENT.Works";
+const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
 
 /***** STATS tab *****/
 
@@ -98,6 +116,8 @@ const char *Hlp_PROFILE_Preferences_menu          = WIKI "PROFILE.Preferences#me
 const char *Hlp_PROFILE_Preferences_columns       = WIKI "PROFILE.Preferences#columns";
 const char *Hlp_PROFILE_Preferences_privacy       = WIKI "PROFILE.Preferences#privacy";
 const char *Hlp_PROFILE_Preferences_notifications = WIKI "PROFILE.Preferences#notifications";
+
+const char *Hlp_PROFILE_Briefcase = WIKI "PROFILE.Briefcase";
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
