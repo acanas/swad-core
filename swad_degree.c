@@ -291,6 +291,7 @@ void Deg_PrintConfiguration (void)
 
 static void Deg_Configuration (bool PrintView)
   {
+   extern const char *Hlp_DEGREE_Information;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Centre;
    extern const char *Txt_Degree;
@@ -308,9 +309,11 @@ static void Deg_Configuration (bool PrintView)
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                         Deg_PutIconsToPrintAndUpload,
-	                   NULL);
+      Lay_StartRoundFrame (NULL,NULL,
+                           PrintView ? NULL :
+	                               Deg_PutIconsToPrintAndUpload,
+                           PrintView ? NULL :
+	                               Hlp_DEGREE_Information);
 
       /***** Title *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
