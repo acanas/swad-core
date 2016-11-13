@@ -152,6 +152,7 @@ void Crs_PrintConfiguration (void)
 
 static void Crs_Configuration (bool PrintView)
   {
+   extern const char *Hlp_COURSE_Information;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
@@ -188,9 +189,11 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                      Crs_PutIconToPrint,
-	                NULL);
+   Lay_StartRoundFrame (NULL,NULL,
+                        PrintView ? NULL :
+	                            Crs_PutIconToPrint,
+	                PrintView ? NULL :
+	                            Hlp_COURSE_Information);
 
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");

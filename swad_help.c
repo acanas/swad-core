@@ -63,6 +63,10 @@ const char *Hlp_CENTRE_Degrees     = WIKI "CENTRE.Degrees";
 const char *Hlp_DEGREE_Information = WIKI "DEGREE.Information";
 const char *Hlp_DEGREE_Courses     = WIKI "DEGREE.Courses";
 
+/***** COURSE tab *****/
+
+const char *Hlp_COURSE_Information = WIKI "COURSE.Information";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";
