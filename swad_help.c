@@ -50,6 +50,9 @@ const char *Hlp_STATS_Surveys_questions =
 
 /***** PROFILE tab *****/
 
+const char *Hlp_PROFILE_Log_in =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Log%20in";
+
 const char *Hlp_PROFILE_Account =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Account";
 const char *Hlp_PROFILE_Password =

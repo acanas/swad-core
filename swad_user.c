@@ -1736,6 +1736,7 @@ void Usr_PutLinkToLogin (void)
 
 void Usr_WriteFormLogin (void)
   {
+   extern const char *Hlp_PROFILE_Log_in;
    extern const char *Txt_Log_in;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
@@ -1754,10 +1755,11 @@ void Usr_WriteFormLogin (void)
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActAutUsrInt);
-   Lay_StartRoundFrameTable (NULL,2,Txt_Log_in);
+   Lay_StartRoundFrame (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in);
 
    /***** User's ID/nickname and password *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	              "<tr>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/user64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
