@@ -286,6 +286,7 @@ struct Globals
          Rol_Role_t LoggedRole;
          Rol_Role_t LoggedRoleBeforeCloseSession;
          Rol_Role_t MaxRole;
+         bool RoleHasChanged;	// Set when I have changed my role
 	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or e-mail entered in the user's login
          char LoginPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
          char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];

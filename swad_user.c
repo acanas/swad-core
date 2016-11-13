@@ -2696,12 +2696,15 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
 void Usr_ShowFormsLogoutAndRole (void)
   {
+   extern const char *Hlp_PROFILE_Session_role;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Log_out;
+   extern const char *Txt_Role;
    extern const char *Txt_You_are_LOGGED_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Role;
+   extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumAvailableRoles;
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -2712,13 +2715,20 @@ void Usr_ShowFormsLogoutAndRole (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Write message with my new logged role *****/
-   sprintf (Gbl.Message,Txt_You_are_LOGGED_as_X,
-            Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
-            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   if (Gbl.Usrs.Me.RoleHasChanged)
+     {
+      sprintf (Gbl.Message,Txt_You_are_LOGGED_as_X,
+	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
+	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+     }
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Role,NULL,Hlp_PROFILE_Session_role);
 
    /***** Put a form to change my role *****/
-   if (Rol_GetNumAvailableRoles () > 1)
+   NumAvailableRoles = Rol_GetNumAvailableRoles ();
+   if (NumAvailableRoles > 1)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	                 "%s: ",
@@ -2726,6 +2736,15 @@ void Usr_ShowFormsLogoutAndRole (void)
       Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
      }
+   else
+      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
+	                 "%s: <span class=\"DAT_N_BOLD\">%s</span>"
+                         "</div>",
+               Txt_Role,
+               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

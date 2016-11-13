@@ -259,7 +259,7 @@ void Pwd_ShowFormSendNewPwd (void)
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
-   /***** Send button and end table *****/
+   /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
 
    /***** End form *****/

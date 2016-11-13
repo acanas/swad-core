@@ -56,6 +56,8 @@ const char *Hlp_PROFILE_Sign_up =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Sign%20up";
 const char *Hlp_PROFILE_Account =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Account";
+const char *Hlp_PROFILE_Session_role =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Session#role";
 const char *Hlp_PROFILE_Password =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Password";
 

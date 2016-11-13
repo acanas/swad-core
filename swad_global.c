@@ -160,6 +160,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.LoggedRole                   =
    Gbl.Usrs.Me.LoggedRoleBeforeCloseSession =
    Gbl.Usrs.Me.MaxRole                      = Rol_UNKNOWN;
+   Gbl.Usrs.Me.RoleHasChanged = false;
    Gbl.Usrs.Me.IBelongToCurrentIns = false;
    Gbl.Usrs.Me.IBelongToCurrentCtr = false;
    Gbl.Usrs.Me.IBelongToCurrentDeg = false;

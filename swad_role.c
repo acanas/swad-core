@@ -330,8 +330,10 @@ void Rol_ChangeMyRole (void)
       if (!(Gbl.Usrs.Me.AvailableRoles & (1 << UnsignedNum)))
          return;
 
-      /* New role is correct and is allowed for me, so change my logged user type */
+      /* New role is correct and is allowed for me,
+         so change my logged user type */
       Gbl.Usrs.Me.LoggedRole = (Rol_Role_t) UnsignedNum;
+      Gbl.Usrs.Me.RoleHasChanged = true;
 
       /* Update logged role in session */
       Ses_UpdateSessionDataInDB ();
