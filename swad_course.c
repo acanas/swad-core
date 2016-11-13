@@ -498,6 +498,7 @@ static void Crs_PutIconToPrint (void)
 static void Crs_WriteListMyCoursesToSelectOne (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern const char *Hlp_PROFILE_Courses;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormDark[The_NUM_THEMES];
    extern const char *Txt_My_courses;
@@ -539,7 +540,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_My_courses,NULL,Hlp_PROFILE_Courses);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<ul class=\"LIST_LEFT\">");
 
