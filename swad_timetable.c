@@ -741,7 +741,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
    DB_FreeMySQLResult (&mysql_res);
 
    if (TimeTableIsIncomplete)
-      Lay_WriteTitle (Txt_Incomplete_timetable_for_lack_of_space);
+      Lay_ShowAlert (Lay_INFO,Txt_Incomplete_timetable_for_lack_of_space);
   }
 
 /*****************************************************************************/

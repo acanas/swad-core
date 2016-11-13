@@ -69,7 +69,6 @@ typedef enum
 /*****************************************************************************/
 
 void Lay_WriteStartOfPage (void);
-void Lay_WriteTitle (const char *Title);
 
 void Lay_PutContextualLink (Act_Action_t NextAction,
                             void (*FuncParams) (),

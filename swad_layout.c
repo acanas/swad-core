@@ -1220,18 +1220,6 @@ void Lay_PutRemoveButtonInline (const char *Text)
   }
 
 /*****************************************************************************/
-/************ Write a centered message with the title of a table *************/
-/*****************************************************************************/
-
-void Lay_WriteTitle (const char *Title)
-  {
-   fprintf (Gbl.F.Out,"<div class=\"TIT\">"
-	              "%s"
-	              "</div>",
-	    Title);
-  }
-
-/*****************************************************************************/
 /****************** Start and end a table with rounded frame *****************/
 /*****************************************************************************/
 // CellPadding must be 0, 1, 2, 4 or 8

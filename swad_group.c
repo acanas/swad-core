@@ -227,6 +227,7 @@ static void Grp_EditGroups (void)
 
 static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
@@ -244,7 +245,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Lay_StartRoundFrame (NULL,Txt_Groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL,
-                        NULL);
+                        Hlp_USERS_Groups);
 
    /***** Start form to update the students listed
           depending on the groups selected *****/
@@ -1123,6 +1124,7 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
 
 static void Grp_ListGroupTypesForEdition (void)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Types_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -1135,7 +1137,8 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Types_of_group);
+   Lay_StartRoundFrame (NULL,Txt_Types_of_group,NULL,Hlp_USERS_Groups);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1296,6 +1299,7 @@ static void Grp_WriteHeadingGroupTypes (void)
 
 static void Grp_ListGroupsForEdition (void)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
@@ -1309,7 +1313,8 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Groups);
+   Lay_StartRoundFrame (NULL,Txt_Groups,NULL,Hlp_USERS_Groups);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1546,6 +1551,7 @@ void Grp_ReqRegisterInGrps (void)
 
 void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_My_groups;
    extern const char *Txt_Change_my_groups;
    extern const char *Txt_Enroll_in_groups;
@@ -1572,7 +1578,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    Lay_StartRoundFrame (NULL,Txt_My_groups,
                         ICanEdit ? Grp_PutIconToEditGroups :
                                    NULL,
-                        NULL);
+                        Hlp_USERS_Groups);
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1747,6 +1753,7 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_Groups;
    unsigned NumGrpTyp;
 
@@ -1754,7 +1761,8 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,0,Txt_Groups);
+   Lay_StartRoundFrame (NULL,Txt_Groups,NULL,Hlp_USERS_Groups);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -2064,6 +2072,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_New_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2077,7 +2086,8 @@ static void Grp_PutFormToCreateGroupType (void)
    Act_FormStart (ActNewGrpTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_type_of_group);
+   Lay_StartRoundFrame (NULL,Txt_New_type_of_group,NULL,Hlp_USERS_Groups);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2174,6 +2184,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (void)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
@@ -2184,7 +2195,8 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStart (ActNewGrp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_New_group);
+   Lay_StartRoundFrame (NULL,Txt_New_group,NULL,Hlp_USERS_Groups);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();

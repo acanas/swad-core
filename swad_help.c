@@ -89,6 +89,10 @@ const char *Hlp_ASSESSMENT_Tests = WIKI "ASSESSMENT.Tests";
 
 const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
 
+/***** USERS tab *****/
+
+const char *Hlp_USERS_Groups = WIKI "USERS.Groups";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";

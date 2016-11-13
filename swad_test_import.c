@@ -509,11 +509,11 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    Lay_StartRoundFrame (NULL,Txt_Imported_questions,NULL,Hlp_ASSESSMENT_Tests);
 
    /***** Print XML tree *****/
-   Lay_WriteTitle (Txt_XML_file_content);
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"padding-bottom:20px;\">"
-	              "<textarea cols=\"60\" rows=\"5\""
-	              " spellcheck=\"false\" readonly>");
+	              "<textarea title=\"%s\" cols=\"60\" rows=\"5\""
+	              " spellcheck=\"false\" readonly>",
+	    Txt_XML_file_content);
    XML_PrintTree (RootElem);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</div>");

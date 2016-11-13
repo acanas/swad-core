@@ -3340,14 +3340,12 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
 static void Rec_WriteLinkToDataProtectionClause (void)
   {
    extern const char *Txt_DATA_PROTECTION_CLAUSE;
-   char Title[1024];
 
-   sprintf (Title,"<div class=\"CENTER_MIDDLE\">"
-	          "<a href=\"%s/%s/\" target=\"_blank\">%s</a>"
-	          "</div>",
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<a class=\"TIT\" href=\"%s/%s/\" target=\"_blank\">%s</a>"
+	              "</div>",
             Cfg_URL_SWAD_PUBLIC,Cfg_DATA_PROTECTION_FOLDER,
             Txt_DATA_PROTECTION_CLAUSE);
-   Lay_WriteTitle (Title);
   }
 
 /*****************************************************************************/
