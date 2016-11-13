@@ -3510,6 +3510,7 @@ void Rec_PutLinkToChangeMyInsCtrDpt (void)
 
 void Rec_ShowFormMyInsCtrDpt (void)
   {
+   extern const char *Hlp_PROFILE_Institution;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Please_select_the_country_of_your_institution;
    extern const char *Txt_Please_fill_in_your_institution;
@@ -3542,12 +3543,14 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable ("800px",2,
-                             IAmTeacher ? Txt_Institution_centre_and_department :
-	                                  Txt_Institution);
+   Lay_StartRoundFrame ("800px",
+                        IAmTeacher ? Txt_Institution_centre_and_department :
+	                             Txt_Institution,
+	                NULL,Hlp_PROFILE_Institution);
 
    /***** Country *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	              "<tr>"
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"
