@@ -1613,6 +1613,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
 
 static void Deg_ListDegrees (void)
   {
+   extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_No_degrees;
    extern const char *Txt_Create_another_degree;
@@ -1621,7 +1622,8 @@ static void Deg_ListDegrees (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsListDegrees,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        Deg_PutIconsListDegrees,Hlp_CENTRE_Degrees);
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
