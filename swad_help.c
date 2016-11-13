@@ -46,6 +46,9 @@ const char *Hlp_STATS_Surveys_edit_survey =
 const char *Hlp_STATS_Surveys_questions =
    "https://github.com/acanas/swad-core/wiki/STATS.Surveys#questions";
 
+const char *Hlp_PROFILE_Photo =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
+
 /*****************************************************************************/
 /***************************** Private constants *****************************/
 /*****************************************************************************/

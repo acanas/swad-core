@@ -301,6 +301,7 @@ static void Pho_ReqOtherUsrPhoto (void)
 
 static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
   {
+   extern const char *Hlp_PROFILE_Photo;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Photo;
    extern const char *Txt_You_can_send_a_file_with_an_image_in_JPEG_format_;
@@ -312,7 +313,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    Lay_StartRoundFrame (NULL,Txt_Photo,
                         ItsMe ? Pho_PutIconToRequestRemoveMyPhoto :
                                 Pho_PutIconToRequestRemoveOtherUsrPhoto,
-                        NULL);
+                        Hlp_PROFILE_Photo);
 
    /***** Start form *****/
    if (ItsMe)
@@ -417,6 +418,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 
 void Pho_ReqRemoveMyPhoto (void)
   {
+   extern const char *Hlp_PROFILE_Photo;
    extern const char *Txt_Photo;
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
@@ -427,7 +429,7 @@ void Pho_ReqRemoveMyPhoto (void)
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_Photo,
-                           Pho_PutIconToRequestRemoveMyPhoto,NULL);
+                           Pho_PutIconToRequestRemoveMyPhoto,Hlp_PROFILE_Photo);
 
       /***** Show current photo and help message *****/
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
