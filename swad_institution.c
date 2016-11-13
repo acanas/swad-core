@@ -655,6 +655,7 @@ void Ins_ShowInssOfCurrentCty (void)
 
 static void Ins_ListInstitutions (void)
   {
+   extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_No_institutions;
    extern const char *Txt_Create_another_institution;
@@ -663,7 +664,8 @@ static void Ins_ListInstitutions (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconsListInstitutions,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        Ins_PutIconsListInstitutions,Hlp_COUNTRY_Institutions);
 
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
