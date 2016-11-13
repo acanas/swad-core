@@ -2006,6 +2006,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern const char *Hlp_PROFILE_Record;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2074,10 +2075,13 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Lay_StartRoundFrame (StrRecordWidth,NULL,Rec_PutIconsCommands,NULL);
+   Lay_StartRoundFrame (StrRecordWidth,NULL,
+                        Rec_PutIconsCommands,
+                        TypeOfView == Rec_FORM_MY_COMMON_RECORD ? Hlp_PROFILE_Record :
+                                                                  NULL);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");

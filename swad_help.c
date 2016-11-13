@@ -64,6 +64,8 @@ const char *Hlp_PROFILE_Password =
 const char *Hlp_PROFILE_Courses =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Courses";
 
+const char *Hlp_PROFILE_Record =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Record";
 const char *Hlp_PROFILE_Photo =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
 
