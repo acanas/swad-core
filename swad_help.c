@@ -140,6 +140,8 @@ const char *Hlp_STATS_Figures_menu                           = WIKI "STATS.Figur
 const char *Hlp_STATS_Figures_columns                        = WIKI "STATS.Figures#columns";
 const char *Hlp_STATS_Figures_privacy                        = WIKI "STATS.Figures#privacy";
 
+const char *Hlp_STATS_Report = WIKI "STATS.Report";
+
 const char *Hlp_STATS_Frequent = WIKI "STATS.Frequent";
 
 /***** PROFILE tab *****/

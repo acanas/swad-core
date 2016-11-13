@@ -146,6 +146,7 @@ static void Rep_RemoveUsrReportsFromDB (long UsrCod);
 
 void Rep_ReqMyUsageReport (void)
   {
+   extern const char *Hlp_STATS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Generate_report;
 
@@ -154,7 +155,7 @@ void Rep_ReqMyUsageReport (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Report);
 
    /***** Header *****/
    Req_TitleReport (NULL);	// NULL means do not write date
@@ -187,7 +188,6 @@ void Rep_ShowMyUsageReport (void)
 
 static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
   {
-   extern const char *Txt_Report_of_use_of_PLATFORM;
    bool GetUsrFiguresAgain;
 
    /***** Get current date-time *****/
@@ -252,13 +252,14 @@ static void Rep_CreateMyUsageReport (struct Rep_Report *Report)
 
 static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
   {
+   extern const char *Hlp_STATS_Report;
    extern const char *Txt_Report_of_use_of_PLATFORM;
    extern const char *Txt_Report;
    extern const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exists;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Report_of_use_of_PLATFORM,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Report);
 
    /***** Header *****/
    Req_TitleReport (&Report->CurrentTimeUTC);
