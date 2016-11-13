@@ -500,6 +500,7 @@ void Cty_ListCountries1 (void)
 
 void Cty_ListCountries2 (void)
   {
+   extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_Countries;
    extern const char *Txt_COUNTRIES_HELP_ORDER[2];
    extern const char *Txt_COUNTRIES_ORDER[2];
@@ -516,7 +517,8 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconsListCountries,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Countries,
+                        Cty_PutIconsListCountries,Hlp_SYSTEM_Countries);
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
                       "<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
