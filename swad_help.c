@@ -55,7 +55,8 @@ const char *Hlp_INSTITUTION_Centres     = WIKI "INSTITUTION.Centres";
 
 /***** CENTRE tab *****/
 
-const char *Hlp_CENTRE_Degrees = WIKI "CENTRE.Degrees";
+const char *Hlp_CENTRE_Information = WIKI "CENTRE.Information";
+const char *Hlp_CENTRE_Degrees     = WIKI "CENTRE.Degrees";
 
 /***** DEGREE tab *****/
 
