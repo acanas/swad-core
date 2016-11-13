@@ -1956,6 +1956,7 @@ void Usr_WriteLoggedUsrHead (void)
   {
    extern const char *The_ClassUsr[The_NUM_THEMES];
    extern const char *The_ClassHead[The_NUM_THEMES];
+   extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
@@ -1963,9 +1964,15 @@ void Usr_WriteLoggedUsrHead (void)
 
    /***** User's type *****/
    if (Rol_GetNumAvailableRoles () == 1)
-      fprintf (Gbl.F.Out,"<span class=\"%s\">%s:&nbsp;</span>",
-               The_ClassUsr[Gbl.Prefs.Theme],
+     {
+      Act_FormStart (ActFrmRolSes);
+      Act_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
+      fprintf (Gbl.F.Out,"%s</a>",
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"<span class=\"%s\">:&nbsp;</span>",
+               The_ClassUsr[Gbl.Prefs.Theme]);
+     }
    else
      {
       Rol_PutFormToChangeMyRole (true);
@@ -2704,7 +2711,6 @@ void Usr_ShowFormsLogoutAndRole (void)
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumAvailableRoles;
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -2727,8 +2733,13 @@ void Usr_ShowFormsLogoutAndRole (void)
    Lay_StartRoundFrame (NULL,Txt_Role,NULL,Hlp_PROFILE_Session_role);
 
    /***** Put a form to change my role *****/
-   NumAvailableRoles = Rol_GetNumAvailableRoles ();
-   if (NumAvailableRoles > 1)
+   if (Rol_GetNumAvailableRoles () == 1)
+      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
+	                 "%s: <span class=\"DAT_N_BOLD\">%s</span>"
+                         "</div>",
+               Txt_Role,
+               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
+   else
      {
       fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	                 "%s: ",
@@ -2736,12 +2747,6 @@ void Usr_ShowFormsLogoutAndRole (void)
       Rol_PutFormToChangeMyRole (false);
       fprintf (Gbl.F.Out,"</div>");
      }
-   else
-      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
-	                 "%s: <span class=\"DAT_N_BOLD\">%s</span>"
-                         "</div>",
-               Txt_Role,
-               Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
