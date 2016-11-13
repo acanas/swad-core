@@ -37,6 +37,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+/***** STATS tab *****/
+
 const char *Hlp_STATS_Surveys =
    "https://github.com/acanas/swad-core/wiki/STATS.Surveys";
 const char *Hlp_STATS_Surveys_new_survey =
@@ -45,6 +47,11 @@ const char *Hlp_STATS_Surveys_edit_survey =
    "https://github.com/acanas/swad-core/wiki/STATS.Surveys#edit-survey";
 const char *Hlp_STATS_Surveys_questions =
    "https://github.com/acanas/swad-core/wiki/STATS.Surveys#questions";
+
+/***** PROFILE tab *****/
+
+const char *Hlp_PROFILE_Account =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Account";
 
 const char *Hlp_PROFILE_Photo =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";

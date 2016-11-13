@@ -408,6 +408,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
 void Acc_ShowFormChangeMyAccount (void)
   {
+   extern const char *Hlp_PROFILE_Account;
    extern const char *Txt_Before_going_to_any_other_option_you_must_fill_your_nickname;
    extern const char *Txt_Please_fill_in_your_email_address;
    extern const char *Txt_Please_fill_in_your_ID;
@@ -449,7 +450,8 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_User_account);
+   Lay_StartRoundFrame (NULL,Txt_User_account,NULL,Hlp_PROFILE_Account);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /***** Nickname *****/
    if (IMustFillNickname)
