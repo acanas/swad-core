@@ -136,12 +136,13 @@ void Acc_ShowFormMyAccount (void)
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
+   extern const char *Hlp_PROFILE_Sign_up;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_Check;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Title,NULL,Hlp_PROFILE_Sign_up);
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -321,6 +322,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
+   extern const char *Hlp_PROFILE_Sign_up;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_a_new_account;
    extern const char *Txt_Nickname;
@@ -332,14 +334,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable (NULL,2,Txt_Create_a_new_account);
+   Lay_StartRoundFrame (NULL,Txt_Create_a_new_account,NULL,Hlp_PROFILE_Sign_up);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
       sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+                      "<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
