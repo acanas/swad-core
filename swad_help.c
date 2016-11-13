@@ -68,6 +68,8 @@ const char *Hlp_PROFILE_Record =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Record";
 const char *Hlp_PROFILE_Institution =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Institution";
+const char *Hlp_PROFILE_Webs =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Webs";
 const char *Hlp_PROFILE_Photo =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
 
