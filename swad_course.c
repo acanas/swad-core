@@ -1173,6 +1173,7 @@ void Crs_WriteSelectorMyCourses (void)
 
 static void Crs_ListCourses (void)
   {
+   extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_No_courses;
    extern const char *Txt_Create_another_course;
@@ -1181,7 +1182,8 @@ static void Crs_ListCourses (void)
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Crs_PutIconsListCourses,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        Crs_PutIconsListCourses,Hlp_DEGREE_Courses);
 
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {

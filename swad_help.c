@@ -57,6 +57,11 @@ const char *Hlp_INSTITUTION_Centres =
 const char *Hlp_CENTRE_Degrees =
    "https://github.com/acanas/swad-core/wiki/CENTRE.Degrees";
 
+/***** DEGREE tab *****/
+
+const char *Hlp_DEGREE_Courses =
+   "https://github.com/acanas/swad-core/wiki/DEGREE.Courses";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys =
