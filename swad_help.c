@@ -42,6 +42,7 @@
 /***** SYSTEM tab *****/
 
 const char *Hlp_SYSTEM_Countries = WIKI "SYSTEM.Countries";
+const char *Hlp_SYSTEM_Pending   = WIKI "SYSTEM.Pending";
 
 /***** COUNTRY tab *****/
 

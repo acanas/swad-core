@@ -99,6 +99,7 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status);
 
 void Ins_SeeInsWithPendingCtrs (void)
   {
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Institutions_with_pending_centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Centres_ABBREVIATION;
@@ -139,8 +140,10 @@ void Ins_SeeInsWithPendingCtrs (void)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Institutions_with_pending_centres);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Institutions_with_pending_centres,
+                           NULL,Hlp_SYSTEM_Pending);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	                 "<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"

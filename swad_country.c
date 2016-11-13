@@ -92,6 +92,7 @@ static void Cty_CreateCountry (struct Country *Cty);
 
 void Cty_SeeCtyWithPendingInss (void)
   {
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
@@ -126,8 +127,10 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Countries_with_pending_institutions);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Countries_with_pending_institutions,
+                           NULL,Hlp_SYSTEM_Pending);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	                 "<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"

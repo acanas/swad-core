@@ -113,6 +113,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status);
 
 void Ctr_SeeCtrWithPendingDegs (void)
   {
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Txt_Centres_with_pending_degrees;
    extern const char *Txt_Centre;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -153,8 +154,10 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Centres_with_pending_degrees);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Centres_with_pending_degrees,
+                           NULL,Hlp_SYSTEM_Pending);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	                 "<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"

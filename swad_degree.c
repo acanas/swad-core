@@ -139,6 +139,7 @@ void Deg_SeePending (void)
 
 void Deg_SeeDegWithPendingCrss (void)
   {
+   extern const char *Hlp_SYSTEM_Pending;
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
@@ -182,8 +183,10 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Degrees_with_pending_courses);
-      fprintf (Gbl.F.Out,"<tr>"
+      Lay_StartRoundFrame (NULL,Txt_Degrees_with_pending_courses,
+                           NULL,Hlp_SYSTEM_Pending);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	                 "<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
