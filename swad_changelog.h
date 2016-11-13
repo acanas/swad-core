@@ -156,13 +156,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.55 (2016-11-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.56 (2016-11-13)"
 #define CSS_FILE		"swad16.51.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*.h sql/swad*.sql | tail -1
 /*
+        Version 16.56:    Nov 13, 2016	Contextual help on tests.
+					Change in layout of test import. (206935 lines)
         Version 16.55:    Nov 13, 2016	Contextual help on file zones. (206912 lines)
         Version 16.54.23: Nov 13, 2016	Contextual help on pending institutions, centres, degrees and courses. (206846 lines)
         Version 16.54.22: Nov 13, 2016	Contextual help on course information. (206832 lines)

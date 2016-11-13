@@ -275,6 +275,7 @@ static void Tst_GetExamQuestionsFromDB (long TstCod);
 
 void Tst_ShowFormAskTst (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Take_a_test;
    extern const char *Txt_No_of_questions;
@@ -301,7 +302,8 @@ void Tst_ShowFormAskTst (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Take_a_test,Tst_PutIconsTests,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Take_a_test,
+                        Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Get tags *****/
    if ((NumRows = Tst_GetEnabledTagsFromThisCrs (&mysql_res)) != 0)
@@ -380,6 +382,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
 
 void Tst_ShowNewTestExam (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    extern const char *Txt_Test;
@@ -411,7 +414,7 @@ void Tst_ShowNewTestExam (void)
 	       Tst_UpdateMyNumAccessTst (NumAccessesTst);
 
 	    /***** Start frame *****/
-	    Lay_StartRoundFrame (NULL,Txt_Test,NULL,NULL);
+	    Lay_StartRoundFrame (NULL,Txt_Test,NULL,Hlp_ASSESSMENT_Tests);
 	    Lay_WriteHeaderClassPhoto (false,false,
 				       Gbl.CurrentIns.Ins.InsCod,
 				       Gbl.CurrentDeg.Deg.DegCod,
@@ -471,6 +474,7 @@ void Tst_ShowNewTestExam (void)
 
 void Tst_AssessTestExam (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test_result;
    extern const char *Txt_Test_No_X_that_you_make_in_this_course;
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
@@ -506,7 +510,7 @@ void Tst_AssessTestExam (void)
 	 TstCod = Tst_CreateTestExamInDB ();
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,NULL);
+	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
 	 Lay_WriteHeaderClassPhoto (false,false,
 				    Gbl.CurrentIns.Ins.InsCod,
 				    Gbl.CurrentDeg.Deg.DegCod,
@@ -612,6 +616,7 @@ static void Tst_ShowTstTotalMark (double TotalScore)
 
 static bool Tst_CheckIfNextTstAllowed (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
    extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until;
    extern const char *Txt_Today;
@@ -653,7 +658,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Test,NULL,NULL);
+      Lay_StartRoundFrame (NULL,Txt_Test,NULL,Hlp_ASSESSMENT_Tests);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentDeg.Deg.DegCod,
@@ -1236,6 +1241,7 @@ void Tst_SetIniEndDates (void)
 
 void Tst_ShowFormAskEditTsts (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_List_edit_questions;
    extern const char *Txt_Show_questions;
@@ -1248,7 +1254,8 @@ void Tst_ShowFormAskEditTsts (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,Tst_PutIconsTests,NULL);
+   Lay_StartRoundFrame (NULL,Txt_List_edit_questions,
+                        Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Get tags already present in the table of questions *****/
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
@@ -1689,6 +1696,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
 static void Tst_ShowFormEditTags (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_No_test_questions;
    extern const char *Txt_Tags;
    MYSQL_RES *mysql_res;
@@ -1700,7 +1708,8 @@ static void Tst_ShowFormEditTags (void)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Tags);
+      Lay_StartRoundFrame (NULL,Txt_Tags,NULL,Hlp_ASSESSMENT_Tests);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
       /***** Show tags *****/
       for (NumRow = 0;
@@ -1792,6 +1801,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
 
 static void Tst_ShowFormConfigTst (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Configure_tests;
    extern const char *Txt_Plugins;
@@ -1811,7 +1821,8 @@ static void Tst_ShowFormConfigTst (void)
    Tst_GetConfigTstFromDB ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Configure_tests,Tst_PutIconsTests,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Configure_tests,
+                        Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Start form *****/
    Act_FormStart (ActRcvCfgTst);
@@ -2640,6 +2651,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 
 static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Code;
@@ -2662,7 +2674,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
    double TotalScoreThisQst;
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Questions,Tst_PutIconsTests,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Questions,
+                        Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Write the heading *****/
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
@@ -4408,6 +4421,7 @@ void Tst_ShowFormEditOneQst (void)
 
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Question_code_X;
    extern const char *Txt_New_question;
@@ -4445,10 +4459,11 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
      {
       sprintf (Title,Txt_Question_code_X,Gbl.Test.QstCod);
-      Lay_StartRoundFrame (NULL,Title,Tst_PutIconToRemoveOneQst,NULL);
+      Lay_StartRoundFrame (NULL,Title,
+                           Tst_PutIconToRemoveOneQst,Hlp_ASSESSMENT_Tests);
      }
    else
-      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,NULL);
+      Lay_StartRoundFrame (NULL,Txt_New_question,NULL,Hlp_ASSESSMENT_Tests);
 
    /***** Start form *****/
    Act_FormStart (ActRcvTstQst);
@@ -6917,6 +6932,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
 
 void Tst_SelDatesToSeeMyExams (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Exams;
    extern const char *Txt_See_exams;
 
@@ -6924,7 +6940,8 @@ void Tst_SelDatesToSeeMyExams (void)
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
+   Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
@@ -6979,6 +6996,7 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
 
 void Tst_ShowUsrsExams (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Exams;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
@@ -6993,7 +7011,8 @@ void Tst_ShowUsrsExams (void)
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())				// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
+      Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7079,13 +7098,15 @@ static void Tst_ShowHeaderTestResults (void)
 
 void Tst_ShowMyExams (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Exams;
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Exams);
+   Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    Tst_ShowHeaderTestResults ();
 
    /***** List my results in test exams *****/
@@ -7424,6 +7445,7 @@ static long Tst_GetParamTstCod (void)
 
 void Tst_ShowOneExam (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
@@ -7474,7 +7496,7 @@ void Tst_ShowOneExam (void)
    Tst_GetExamQuestionsFromDB (TstCod);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
    Lay_WriteHeaderClassPhoto (false,false,
                               Gbl.CurrentIns.Ins.InsCod,
                               Gbl.CurrentDeg.Deg.DegCod,

@@ -72,7 +72,6 @@ static Tst_AnswerType_t TsI_ConvertFromStrAnsTypXMLToAnsTyp (const char *StrAnsT
 static bool TsI_CheckIfQuestionExistsInDB (void);
 static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem);
 static void TsI_WriteHeadingListImportedQst (void);
-static void TsI_WriteEndingListImportedQst (void);
 static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                                      struct XMLElement *FeedbackElem,
                                      bool QuestionExists);
@@ -129,13 +128,14 @@ void TsI_PutFormToImportQuestions (void)
 
 void TsI_ShowFormImportQstsFromXML (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Import_questions;
    extern const char *Txt_You_need_an_XML_file_containing_a_list_of_questions;
    extern const char *Txt_XML_file;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,Hlp_ASSESSMENT_Tests);
 
    /***** Write help message *****/
    Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
@@ -485,6 +485,7 @@ static void TsI_ReadQuestionsFromXMLFileAndStoreInDB (const char *FileNameXML)
 
 static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
   {
+   extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_XML_file_content;
    extern const char *Txt_Imported_questions;
    struct XMLElement *RootElem;
@@ -504,9 +505,13 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    /***** Allocate and get XML tree *****/
    XML_GetTree (XMLBuffer,&RootElem);
 
+   /***** Table start *****/
+   Lay_StartRoundFrame (NULL,Txt_Imported_questions,NULL,Hlp_ASSESSMENT_Tests);
+
    /***** Print XML tree *****/
    Lay_WriteTitle (Txt_XML_file_content);
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"padding-bottom:20px;\">"
 	              "<textarea cols=\"60\" rows=\"5\""
 	              " spellcheck=\"false\" readonly>");
    XML_PrintTree (RootElem);
@@ -521,148 +526,151 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       if (strcmp (TestElem->TagName,"test"))	// <test> must be at level 1
          TestElem = NULL;
      }
-   if (!TestElem)
-      Lay_ShowErrorAndExit ("Root element &lt;test&gt; not found.");
-
-   /* Current element is <test> */
-
-   /***** Write heading of list of imported questions *****/
-   Lay_WriteTitle (Txt_Imported_questions);
-   TsI_WriteHeadingListImportedQst ();
-
-   /***** For each question... *****/
-   for (QuestionElem = TestElem->FirstChild;
-	QuestionElem != NULL;
-	QuestionElem = QuestionElem->NextBrother)
+   if (TestElem)
      {
-      if (!strcmp (QuestionElem->TagName,"question"))
-        {
-         /***** Create test question *****/
-         Tst_QstConstructor ();
+      /* Current element is <test> */
 
-         /* Get type of questions (in mandatory attribute "type") */
-         AnswerTypeFound = false;
-         for (Attribute = QuestionElem->FirstAttribute;
-              Attribute != NULL;
-              Attribute = Attribute->Next)
-            if (!strcmp (Attribute->AttributeName,"type"))
-              {
-               Gbl.Test.AnswerType = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
-               AnswerTypeFound = true;
-               break;	// Only first attribute "type"
-              }
-         if (!AnswerTypeFound)
-            Lay_ShowErrorAndExit ("Wrong type of answer.");
+      /***** Write heading of list of imported questions *****/
+      TsI_WriteHeadingListImportedQst ();
 
-         /* Get tags */
-         for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
-              TagsElem != NULL;
-              TagsElem = TagsElem->NextBrother)
-            if (!strcmp (TagsElem->TagName,"tags"))
-              {
-               for (TagElem = TagsElem->FirstChild;
-                    TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
-                    TagElem = TagElem->NextBrother)
-                  if (!strcmp (TagElem->TagName,"tag"))
-                    {
-                     if (TagElem->Content)
-                       {
-                        strncpy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],TagElem->Content,Tst_MAX_BYTES_TAG);
-                        Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num][Tst_MAX_BYTES_TAG] = '\0';
-                        Gbl.Test.Tags.Num++;
-                       }
-                    }
-               break;	// Only first element "tags"
-              }
+      /***** For each question... *****/
+      for (QuestionElem = TestElem->FirstChild;
+	   QuestionElem != NULL;
+	   QuestionElem = QuestionElem->NextBrother)
+	{
+	 if (!strcmp (QuestionElem->TagName,"question"))
+	   {
+	    /***** Create test question *****/
+	    Tst_QstConstructor ();
 
-         /* Get stem (mandatory) */
-         for (StemElem = QuestionElem->FirstChild;
-              StemElem != NULL;
-              StemElem = StemElem->NextBrother)
-            if (!strcmp (StemElem->TagName,"stem"))
-              {
-               if (StemElem->Content)
-                 {
-        	  /* Convert stem from text to HTML (in database stem is stored in HTML) */
-        	  strncpy (Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
-        	  Stem[Cns_MAX_BYTES_TEXT] = '\0';
-                  Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-                                    Stem,Cns_MAX_BYTES_TEXT,true);
+	    /* Get type of questions (in mandatory attribute "type") */
+	    AnswerTypeFound = false;
+	    for (Attribute = QuestionElem->FirstAttribute;
+		 Attribute != NULL;
+		 Attribute = Attribute->Next)
+	       if (!strcmp (Attribute->AttributeName,"type"))
+		 {
+		  Gbl.Test.AnswerType = TsI_ConvertFromStrAnsTypXMLToAnsTyp (Attribute->Content);
+		  AnswerTypeFound = true;
+		  break;	// Only first attribute "type"
+		 }
+	    if (!AnswerTypeFound)
+	       Lay_ShowErrorAndExit ("Wrong type of answer.");
 
-                  Gbl.Test.Stem.Text   = Stem;
-                  Gbl.Test.Stem.Length = strlen (Stem);
-                 }
-               break;	// Only first element "stem"
-              }
+	    /* Get tags */
+	    for (TagsElem = QuestionElem->FirstChild, Gbl.Test.Tags.Num = 0;
+		 TagsElem != NULL;
+		 TagsElem = TagsElem->NextBrother)
+	       if (!strcmp (TagsElem->TagName,"tags"))
+		 {
+		  for (TagElem = TagsElem->FirstChild;
+		       TagElem != NULL && Gbl.Test.Tags.Num < Tst_MAX_TAGS_PER_QUESTION;
+		       TagElem = TagElem->NextBrother)
+		     if (!strcmp (TagElem->TagName,"tag"))
+		       {
+			if (TagElem->Content)
+			  {
+			   strncpy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],TagElem->Content,Tst_MAX_BYTES_TAG);
+			   Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num][Tst_MAX_BYTES_TAG] = '\0';
+			   Gbl.Test.Tags.Num++;
+			  }
+		       }
+		  break;	// Only first element "tags"
+		 }
 
-         /* Get feedback (optional) */
-         for (FeedbackElem = QuestionElem->FirstChild;
-              FeedbackElem != NULL;
-              FeedbackElem = FeedbackElem->NextBrother)
-            if (!strcmp (FeedbackElem->TagName,"feedback"))
-              {
-               if (FeedbackElem->Content)
-                 {
-        	  /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-        	  strncpy (Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
-        	  Feedback[Cns_MAX_BYTES_TEXT] = '\0';
-                  Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
-                                    Feedback,Cns_MAX_BYTES_TEXT,true);
+	    /* Get stem (mandatory) */
+	    for (StemElem = QuestionElem->FirstChild;
+		 StemElem != NULL;
+		 StemElem = StemElem->NextBrother)
+	       if (!strcmp (StemElem->TagName,"stem"))
+		 {
+		  if (StemElem->Content)
+		    {
+		     /* Convert stem from text to HTML (in database stem is stored in HTML) */
+		     strncpy (Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
+		     Stem[Cns_MAX_BYTES_TEXT] = '\0';
+		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+				       Stem,Cns_MAX_BYTES_TEXT,true);
 
-                  Gbl.Test.Feedback.Text   = Feedback;
-                  Gbl.Test.Feedback.Length = strlen (Feedback);
-                 }
-               break;	// Only first element "feedback"
-              }
+		     Gbl.Test.Stem.Text   = Stem;
+		     Gbl.Test.Stem.Length = strlen (Stem);
+		    }
+		  break;	// Only first element "stem"
+		 }
 
-         /* Get shuffle. By default, shuffle is false. */
-         Gbl.Test.Shuffle = false;
-         for (AnswerElem = QuestionElem->FirstChild;
-              AnswerElem != NULL;
-              AnswerElem = AnswerElem->NextBrother)
-            if (!strcmp (AnswerElem->TagName,"answer"))
-              {
-               if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
-                   Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
-                  /* Get whether shuffle answers (in attribute "shuffle") */
-                  for (Attribute = AnswerElem->FirstAttribute;
-                       Attribute != NULL;
-                       Attribute = Attribute->Next)
-                     if (!strcmp (Attribute->AttributeName,"shuffle"))
-                       {
-                        Gbl.Test.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
-                        break;	// Only first attribute "shuffle"
-                       }
-               break;	// Only first element "answer"
-              }
+	    /* Get feedback (optional) */
+	    for (FeedbackElem = QuestionElem->FirstChild;
+		 FeedbackElem != NULL;
+		 FeedbackElem = FeedbackElem->NextBrother)
+	       if (!strcmp (FeedbackElem->TagName,"feedback"))
+		 {
+		  if (FeedbackElem->Content)
+		    {
+		     /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
+		     strncpy (Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
+		     Feedback[Cns_MAX_BYTES_TEXT] = '\0';
+		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
+				       Feedback,Cns_MAX_BYTES_TEXT,true);
 
-         /* Get answer (mandatory) */
-         TsI_GetAnswerFromXML (AnswerElem);
+		     Gbl.Test.Feedback.Text   = Feedback;
+		     Gbl.Test.Feedback.Length = strlen (Feedback);
+		    }
+		  break;	// Only first element "feedback"
+		 }
 
-         /* Make sure that tags, text and answer are not empty */
-         if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
-           {
-            /* Check if question already exists in database */
-            QuestionExists = TsI_CheckIfQuestionExistsInDB ();
+	    /* Get shuffle. By default, shuffle is false. */
+	    Gbl.Test.Shuffle = false;
+	    for (AnswerElem = QuestionElem->FirstChild;
+		 AnswerElem != NULL;
+		 AnswerElem = AnswerElem->NextBrother)
+	       if (!strcmp (AnswerElem->TagName,"answer"))
+		 {
+		  if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||
+		      Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
+		     /* Get whether shuffle answers (in attribute "shuffle") */
+		     for (Attribute = AnswerElem->FirstAttribute;
+			  Attribute != NULL;
+			  Attribute = Attribute->Next)
+			if (!strcmp (Attribute->AttributeName,"shuffle"))
+			  {
+			   Gbl.Test.Shuffle = XML_GetAttributteYesNoFromXMLTree (Attribute);
+			   break;	// Only first attribute "shuffle"
+			  }
+		  break;	// Only first element "answer"
+		 }
 
-            /* Write row with this imported question */
-            TsI_WriteRowImportedQst (StemElem,FeedbackElem,QuestionExists);
+	    /* Get answer (mandatory) */
+	    TsI_GetAnswerFromXML (AnswerElem);
 
-            /***** If a new question ==> insert question, tags and answer in the database *****/
-            if (!QuestionExists)
-              {
-               Gbl.Test.QstCod = -1L;
-               Tst_InsertOrUpdateQstTagsAnsIntoDB ();
-              }
-           }
+	    /* Make sure that tags, text and answer are not empty */
+	    if (Tst_CheckIfQstFormatIsCorrectAndCountNumOptions ())
+	      {
+	       /* Check if question already exists in database */
+	       QuestionExists = TsI_CheckIfQuestionExistsInDB ();
 
-	 /***** Destroy test question *****/
-	 Tst_QstDestructor ();
-        }
+	       /* Write row with this imported question */
+	       TsI_WriteRowImportedQst (StemElem,FeedbackElem,QuestionExists);
+
+	       /***** If a new question ==> insert question, tags and answer in the database *****/
+	       if (!QuestionExists)
+		 {
+		  Gbl.Test.QstCod = -1L;
+		  Tst_InsertOrUpdateQstTagsAnsIntoDB ();
+		 }
+	      }
+
+	    /***** Destroy test question *****/
+	    Tst_QstDestructor ();
+	   }
+	}
+
+      fprintf (Gbl.F.Out,"</table>");
      }
+   else	// TestElem not found
+      Lay_ShowAlert (Lay_ERROR,"Root element &lt;test&gt; not found.");
 
-   /***** Write ending of list of imported questions *****/
-   TsI_WriteEndingListImportedQst ();
+   /***** End table *****/
+   Lay_EndRoundFrame ();
 
    /***** Free XML tree *****/
    XML_FreeTree (RootElem);
@@ -956,11 +964,9 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Shuffle;
    extern const char *Txt_Question;
 
-   /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,2,NULL);
-
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<tr>"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+	              "<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
@@ -983,16 +989,6 @@ static void TsI_WriteHeadingListImportedQst (void)
             Txt_Type,
             Txt_Shuffle,
             Txt_Question);
-  }
-
-/*****************************************************************************/
-/*************** Write end of list of imported test questions ****************/
-/*****************************************************************************/
-
-static void TsI_WriteEndingListImportedQst (void)
-  {
-   /***** End table *****/
-   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
