@@ -51520,25 +51520,25 @@ const char *Txt_You_already_answered_this_survey_before =
 	"Voc&ecirc; j&aacute; respondeu a esso inqu&eacute;rito antes.";
 #endif
 
-const char *Txt_You_are_LOGGED_as_X =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"Ets identificat com a <strong>%s</strong>.";
+	"Vost&egrave; est&agrave; ara %s com a <strong>%s</strong>.";
 #elif L==2
-	"Sie sind %s als <strong>%s</strong>.";			// German translator doesn't understand this
+	"Sie sind nun %s als <strong>%s</strong>.";
 #elif L==3
-	"You are %s as <strong>%s</strong>.";
+	"You are now %s as <strong>%s</strong>.";
 #elif L==4
-	"Usted est&aacute; %s como <strong>%s</strong>.";
+	"Usted est&aacute; ahora %s como <strong>%s</strong>.";
 #elif L==5
-	"Vous &ecirc;tes %s comme <strong>%s</strong>.";
+	"Vous &ecirc;tes maintenant %s en tant que <strong>%s</strong>.";
 #elif L==6
-	"Usted est&aacute; %s como <strong>%s</strong>.";	// Okoteve traducción
+	"Usted est&aacute; ahora %s como <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
-	"Sei %s come <strong>%s</strong>.";
+	"Sei ora %s come <strong>%s</strong>.";
 #elif L==8
-	"You are %s as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+	"Jeste&sacute; teraz %s jako <strong>%s</strong>.";
 #elif L==9
-	"Voc&ecirc; est&aacute; %s como <strong>%s</strong>.";
+	"Agora voc&ecirc; est&aacute; %s como <strong>%s</strong>.";
 #endif
 
 const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =

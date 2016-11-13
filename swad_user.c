@@ -2707,7 +2707,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Log_out;
    extern const char *Txt_Role;
-   extern const char *Txt_You_are_LOGGED_as_X;
+   extern const char *Txt_You_are_now_LOGGED_IN_as_X;
    extern const char *Txt_logged[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -2723,7 +2723,7 @@ void Usr_ShowFormsLogoutAndRole (void)
    /***** Write message with my new logged role *****/
    if (Gbl.Usrs.Me.RoleHasChanged)
      {
-      sprintf (Gbl.Message,Txt_You_are_LOGGED_as_X,
+      sprintf (Gbl.Message,Txt_You_are_now_LOGGED_IN_as_X,
 	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
