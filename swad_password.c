@@ -234,6 +234,7 @@ static void Pwd_PutLinkToSendNewPasswdParams (void)
 
 void Pwd_ShowFormSendNewPwd (void)
   {
+   extern const char *Hlp_PROFILE_Password;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_If_you_have_forgotten_your_password_;
    extern const char *Txt_Forgotten_password;
@@ -244,7 +245,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Act_FormStart (ActSndNewPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,Hlp_PROFILE_Password);
 
    /***** Help text *****/
    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
@@ -661,6 +662,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
 
 void Pwd_ShowFormChgPwd (void)
   {
+   extern const char *Hlp_PROFILE_Password;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Before_going_to_any_other_option_you_must_create_your_password;
    extern const char *Txt_Your_password_is_not_secure_enough;
@@ -684,7 +686,8 @@ void Pwd_ShowFormChgPwd (void)
    Act_FormStart (ActChgPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,2,Txt_Password);
+   Lay_StartRoundFrame (NULL,Txt_Password,NULL,Hlp_PROFILE_Password);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
 
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...

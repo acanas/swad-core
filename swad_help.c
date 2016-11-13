@@ -52,6 +52,8 @@ const char *Hlp_STATS_Surveys_questions =
 
 const char *Hlp_PROFILE_Account =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Account";
+const char *Hlp_PROFILE_Password =
+   "https://github.com/acanas/swad-core/wiki/PROFILE.Password";
 
 const char *Hlp_PROFILE_Photo =
    "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
