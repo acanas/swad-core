@@ -50,7 +50,8 @@ const char *Hlp_COUNTRY_Institutions = WIKI "COUNTRY.Institutions";
 
 /***** INSTITUTION tab *****/
 
-const char *Hlp_INSTITUTION_Centres = WIKI "INSTITUTION.Centres";
+const char *Hlp_INSTITUTION_Information = WIKI "INSTITUTION.Information";
+const char *Hlp_INSTITUTION_Centres     = WIKI "INSTITUTION.Centres";
 
 /***** CENTRE tab *****/
 
