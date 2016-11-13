@@ -37,83 +37,58 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+#define WIKI "https://github.com/acanas/swad-core/wiki/"
+
 /***** SYSTEM tab *****/
 
-const char *Hlp_SYSTEM_Countries =
-   "https://github.com/acanas/swad-core/wiki/SYSTEM.Countries";
+const char *Hlp_SYSTEM_Countries = WIKI "SYSTEM.Countries";
 
 /***** COUNTRY tab *****/
 
-const char *Hlp_COUNTRY_Institutions =
-   "https://github.com/acanas/swad-core/wiki/COUNTRY.Institutions";
+const char *Hlp_COUNTRY_Institutions = WIKI "COUNTRY.Institutions";
 
 /***** INSTITUTION tab *****/
 
-const char *Hlp_INSTITUTION_Centres =
-   "https://github.com/acanas/swad-core/wiki/INSTITUTION.Centres";
+const char *Hlp_INSTITUTION_Centres = WIKI "INSTITUTION.Centres";
 
 /***** CENTRE tab *****/
 
-const char *Hlp_CENTRE_Degrees =
-   "https://github.com/acanas/swad-core/wiki/CENTRE.Degrees";
+const char *Hlp_CENTRE_Degrees = WIKI "CENTRE.Degrees";
 
 /***** DEGREE tab *****/
 
-const char *Hlp_DEGREE_Courses =
-   "https://github.com/acanas/swad-core/wiki/DEGREE.Courses";
+const char *Hlp_DEGREE_Courses = WIKI "DEGREE.Courses";
 
 /***** STATS tab *****/
 
-const char *Hlp_STATS_Surveys =
-   "https://github.com/acanas/swad-core/wiki/STATS.Surveys";
-const char *Hlp_STATS_Surveys_new_survey =
-   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#new-survey";
-const char *Hlp_STATS_Surveys_edit_survey =
-   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#edit-survey";
-const char *Hlp_STATS_Surveys_questions =
-   "https://github.com/acanas/swad-core/wiki/STATS.Surveys#questions";
+const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";
+const char *Hlp_STATS_Surveys_new_survey  = WIKI "STATS.Surveys#new-survey";
+const char *Hlp_STATS_Surveys_edit_survey = WIKI "STATS.Surveys#edit-survey";
+const char *Hlp_STATS_Surveys_questions   = WIKI "STATS.Surveys#questions";
 
 /***** PROFILE tab *****/
 
-const char *Hlp_PROFILE_Log_in =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Log%20in";
-const char *Hlp_PROFILE_Sign_up =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Sign%20up";
-const char *Hlp_PROFILE_Account =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Account";
-const char *Hlp_PROFILE_Session_role =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Session#role";
-const char *Hlp_PROFILE_Password =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Password";
+const char *Hlp_PROFILE_Log_in       = WIKI "PROFILE.Log%20in";
+const char *Hlp_PROFILE_Sign_up      = WIKI "PROFILE.Sign%20up";
+const char *Hlp_PROFILE_Account      = WIKI "PROFILE.Account";
+const char *Hlp_PROFILE_Session_role = WIKI "PROFILE.Session#role";
+const char *Hlp_PROFILE_Password     = WIKI "PROFILE.Password";
 
-const char *Hlp_PROFILE_Courses =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Courses";
+const char *Hlp_PROFILE_Courses = WIKI "PROFILE.Courses";
 
-const char *Hlp_PROFILE_Record =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Record";
-const char *Hlp_PROFILE_Institution =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Institution";
-const char *Hlp_PROFILE_Webs =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Webs";
-const char *Hlp_PROFILE_Photo =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Photo";
+const char *Hlp_PROFILE_Record      = WIKI "PROFILE.Record";
+const char *Hlp_PROFILE_Institution = WIKI "PROFILE.Institution";
+const char *Hlp_PROFILE_Webs        = WIKI "PROFILE.Webs";
+const char *Hlp_PROFILE_Photo       = WIKI "PROFILE.Photo";
 
-const char *Hlp_PROFILE_Preferences_language =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#language";
-const char *Hlp_PROFILE_Preferences_calendar =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#calendar";
-const char *Hlp_PROFILE_Preferences_icons =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#icons";
-const char *Hlp_PROFILE_Preferences_theme =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#theme";
-const char *Hlp_PROFILE_Preferences_menu =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#menu";
-const char *Hlp_PROFILE_Preferences_columns =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#columns";
-const char *Hlp_PROFILE_Preferences_privacy =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#privacy";
-const char *Hlp_PROFILE_Preferences_notifications =
-   "https://github.com/acanas/swad-core/wiki/PROFILE.Preferences#notifications";
+const char *Hlp_PROFILE_Preferences_language      = WIKI "PROFILE.Preferences#language";
+const char *Hlp_PROFILE_Preferences_calendar      = WIKI "PROFILE.Preferences#calendar";
+const char *Hlp_PROFILE_Preferences_icons         = WIKI "PROFILE.Preferences#icons";
+const char *Hlp_PROFILE_Preferences_theme         = WIKI "PROFILE.Preferences#theme";
+const char *Hlp_PROFILE_Preferences_menu          = WIKI "PROFILE.Preferences#menu";
+const char *Hlp_PROFILE_Preferences_columns       = WIKI "PROFILE.Preferences#columns";
+const char *Hlp_PROFILE_Preferences_privacy       = WIKI "PROFILE.Preferences#privacy";
+const char *Hlp_PROFILE_Preferences_notifications = WIKI "PROFILE.Preferences#notifications";
 
 /*****************************************************************************/
 /***************************** Private constants *****************************/
