@@ -159,6 +159,7 @@ void Prf_RequestUserProfile (void)
 
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
   {
+   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
    extern const char *Txt_View_public_profile;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Nickname;
@@ -168,7 +169,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
    Act_FormStart (ActSeePubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_View_public_profile,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_View_public_profile,NULL,Hlp_SOCIAL_Profiles_view_public_profile);
 
    /***** Form to request user's @nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
