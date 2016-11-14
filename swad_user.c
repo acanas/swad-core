@@ -2573,7 +2573,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
       	 Gbl.CurrentCrs.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastCrs;
 
 	 /* Initialize again current course, degree, centre... */
-      	 Hie_InitCurrentCourse ();
+      	 Hie_InitHierarchy ();
 
 	 /* Get again my role in this course */
       	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);

@@ -1357,7 +1357,7 @@ int swad__getCourseInfo (struct soap *soap,
    strcpy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc]);
 
    /***** Set paths *****/
-   Hie_InitCurrentCourse ();
+   Hie_InitHierarchy ();
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
@@ -4606,7 +4606,7 @@ int swad__getFile (struct soap *soap,
      }
 
    /***** Set paths *****/
-   Hie_InitCurrentCourse ();
+   Hie_InitHierarchy ();
    Brw_SetFullPathInTree (FileMetadata.PathInTreeUntilFilFolLnk,
                           FileMetadata.FilFolLnkName);
    Brw_InitializeFileBrowser ();

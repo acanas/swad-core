@@ -646,7 +646,7 @@ void Ins_ShowInssOfCurrentCty (void)
       Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
 
       /***** Write menu to select country *****/
-      Hie_WriteMenuAllCourses ();
+      Hie_WriteMenuHierarchy ();
 
       /***** List institutions *****/
       Ins_ListInstitutions ();
@@ -1792,7 +1792,7 @@ void Ins_ChangeInsCtyInConfig (void)
          Gbl.CurrentCty.Cty.CtyCod = NewCty.CtyCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-	 Hie_InitCurrentCourse ();
+	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,

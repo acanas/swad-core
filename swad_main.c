@@ -114,7 +114,7 @@ int main (int argc, char *argv[])
      {
       Par_CreateListOfParams ();
       Par_GetMainParameters ();
-      Hie_InitCurrentCourse ();
+      Hie_InitHierarchy ();
 
       if (!Gbl.WebService.IsWebService)
 	{

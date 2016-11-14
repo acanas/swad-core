@@ -659,7 +659,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       Deg_GetListDegsOfCurrentCtr ();
 
       /***** Write menu to select country, institution and centre *****/
-      Hie_WriteMenuAllCourses ();
+      Hie_WriteMenuHierarchy ();
 
       /***** Show list of degrees *****/
       Deg_ListDegrees ();
@@ -2080,7 +2080,7 @@ void Deg_ChangeDegCtrInConfig (void)
 	 Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-	 Hie_InitCurrentCourse ();
+	 Hie_InitHierarchy ();
 
 	 /***** Create message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,

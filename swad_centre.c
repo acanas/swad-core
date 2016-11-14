@@ -722,7 +722,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Write menu to select country and institution *****/
-      Hie_WriteMenuAllCourses ();
+      Hie_WriteMenuHierarchy ();
 
       /***** List centres *****/
       Ctr_ListCentres ();
@@ -1765,7 +1765,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 	 Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-	 Hie_InitCurrentCourse ();
+	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
