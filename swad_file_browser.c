@@ -5489,47 +5489,37 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
 static void Brw_PutIconCopy (const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    extern const char *Txt_Copy_FOLDER_FILE_OR_LINK_X;
-   extern const char *Txt_Copy_not_allowed;
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.ICanEditFileOrFolder)
+   /***** Form to copy into the clipboard *****/
+   Act_FormStart (Brw_ActCopy[Gbl.FileBrowser.Type]);
+   switch (Gbl.FileBrowser.Type)
      {
-      /***** Form to copy into the clipboard *****/
-      Act_FormStart (Brw_ActCopy[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-            Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
-        }
-      Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
-      sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
-      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20B\" />",
-               Gbl.Prefs.IconsURL,
-               Gbl.Title,
-               Gbl.Title);
-      Act_FormEnd ();
+      case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_TEACH_GRP:
+      case Brw_ADMI_SHARE_GRP:
+      case Brw_ADMI_MARKS_GRP:
+	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	 break;
+      case Brw_ADMI_ASSIG_CRS:
+      case Brw_ADMI_WORKS_CRS:
+	 Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
+	 break;
+      default:
+	 break;
      }
-   else
-      fprintf (Gbl.F.Out,"<img src=\"%s/copy_off16x16.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO20x20B\" />",
-               Gbl.Prefs.IconsURL,
-               Txt_Copy_not_allowed,
-               Txt_Copy_not_allowed);
+   Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+   sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
+		      " alt=\"%s\" title=\"%s\""
+		      " class=\"ICO20x20B\" />",
+	    Gbl.Prefs.IconsURL,
+	    Gbl.Title,
+	    Gbl.Title);
+   Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</td>");
   }
 
