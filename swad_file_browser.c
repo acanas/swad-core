@@ -5182,7 +5182,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
    fprintf (Gbl.F.Out,"<tr>");
 
    /****** If current action allows file administration... ******/
-   Gbl.FileBrowser.ICanRemoveFileOrFolder =
    Gbl.FileBrowser.ICanEditFileOrFolder   = false;
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type] &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
@@ -5195,9 +5194,6 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,
 
       /* Check if I can modify (remove, rename, etc.) this file or folder */
       Gbl.FileBrowser.ICanEditFileOrFolder   = Brw_CheckIfICanEditFileOrFolder (Level);
-      Gbl.FileBrowser.ICanRemoveFileOrFolder = (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR &&
-	                                        Level != 0) ? true :
-	                                                      Gbl.FileBrowser.ICanEditFileOrFolder;
 
       /* Put icons to remove, copy and paste */
       Brw_PutIconsRemoveCopyPaste (Level,FileType,PathInTree,FileName,FileNameToShow);
@@ -5385,7 +5381,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this file?
+   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this file?
      {
       /***** Form to remove a file *****/
       Act_FormStart (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
@@ -5430,7 +5426,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
 
-   if (Gbl.FileBrowser.ICanRemoveFileOrFolder)	// Can I remove this folder?
+   if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I remove this folder?
      {
       /***** Form to remove a folder *****/
       Act_FormStart (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
@@ -5985,6 +5981,10 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
             case Brw_ADMI_WORKS_CRS:
 	       Usr_PutHiddenParUsrCodAll (Brw_ActRenameFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
                Usr_PutParamOtherUsrCodEncrypted ();
+
+               fprintf (Gbl.F.Out,"<strong>%ld</strong>",
+                        Gbl.FileBrowser.Asg.AsgCod);	// TODO: Remove this!!!!!!!!!!!!!!!
+
                break;
             default:
                break;
@@ -11116,7 +11116,7 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
          return Brw_CheckIfICanModifySharedFileOrFolder ();
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
-         return (Gbl.FileBrowser.Asg.AsgCod < 0 ||	// If folder does not correspond to any assignment
+         return (Gbl.FileBrowser.Asg.AsgCod <= 0 ||	// If folder does not correspond to any assignment
                  (!Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
                    Gbl.FileBrowser.Asg.IBelongToCrsOrGrps &&	// If I can do this assignment
                   ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Gbl.FileBrowser.Asg.Open) ||
@@ -11146,7 +11146,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
          return (Level != 0 &&
-                 (Gbl.FileBrowser.Asg.AsgCod < 0 ||	// If folder does not correspond to any assignment
+                 (Gbl.FileBrowser.Asg.AsgCod <= 0 ||	// If folder does not correspond to any assignment
                   (!Gbl.FileBrowser.Asg.Hidden &&	// If assignment is visible (not hidden)
                     Gbl.FileBrowser.Asg.IBelongToCrsOrGrps &&	// If I can do this assignment
                    ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Gbl.FileBrowser.Asg.Open) ||

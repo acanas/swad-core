@@ -719,10 +719,17 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Clear data *****/
+   /***** Clear all assignment data *****/
+   Asg->AsgCod = -1L;
+   Asg->Hidden = false;
+   Asg->UsrCod = -1L;
    Asg->TimeUTC[Asg_START_TIME] =
    Asg->TimeUTC[Asg_END_TIME  ] = (time_t) 0;
+   Asg->Open = false;
    Asg->Title[0] = '\0';
+   Asg->SendWork = false;
+   Asg->Folder[0] = '\0';
+   Asg->IBelongToCrsOrGrps = false;
 
    /***** Get data of assignment from database *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignment data");
@@ -759,17 +766,6 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
 
       /* Can I do this assignment? */
       Asg->IBelongToCrsOrGrps = Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (Asg->AsgCod);
-     }
-   else
-     {
-      /* Initialize to empty assignment */
-      Asg->AsgCod = -1L;
-      Asg->Hidden = false;
-      Asg->Open = false;
-      Asg->Title[0] = '\0';
-      Asg->SendWork = false;
-      Asg->Folder[0] = '\0';
-      Asg->IBelongToCrsOrGrps = false;
      }
 
    /***** Free structure that stores the query result *****/

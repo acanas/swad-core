@@ -527,8 +527,7 @@ struct Globals
       char FilFolLnkName[NAME_MAX+1];
       Brw_FileType_t FileType;
       unsigned Level;
-      bool ICanRemoveFileOrFolder;	// Can I remove a file or folder?
-      bool ICanEditFileOrFolder;	// Can I modify (rename, create inside, etc.) a file or folder?
+      bool ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
       Brw_IconViewEdit_t IconViewEdit;
       struct
         {
