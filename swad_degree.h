@@ -98,10 +98,7 @@ void Deg_DrawDegreeLogoAndNameWithLink (struct Degree *Deg,Act_Action_t Action,
 void Deg_ShowConfiguration (void);
 void Deg_PrintConfiguration (void);
 
-void Deg_WriteMenuAllCourses (void);
-void Deg_WriteHierarchyBreadcrumb (void);
-void Deg_WriteBigNameCtyInsCtrDegCrs (void);
-void Deg_InitCurrentCourse (void);
+void Deg_WriteSelectorOfDegree (void);
 
 void Deg_ShowDegsOfCurrentCtr (void);
 
@@ -148,8 +145,6 @@ unsigned Deg_GetNumDegsInIns (long InsCod);
 unsigned Deg_GetNumDegsInCtr (long CtrCod);
 unsigned Deg_GetNumDegsWithCrss (const char *SubQuery);
 unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery);
-
-void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan);
 
 unsigned Deg_ListDegsFound (const char *Query);
 

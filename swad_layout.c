@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_exam.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_logo.h"
 #include "swad_MFU.h"
 #include "swad_notice.h"
@@ -853,7 +854,7 @@ static void Lay_WritePageTopHeading (void)
    /* 2nd. row, 2nd. column: degree and course */
    fprintf (Gbl.F.Out,"<div id=\"head_row_2_hierarchy\">");
    Lay_WriteBreadcrumb ();
-   Deg_WriteBigNameCtyInsCtrDegCrs ();
+   Hie_WriteBigNameCtyInsCtrDegCrs ();
    fprintf (Gbl.F.Out,"</div>");
 
    /* 2nd. row, 3rd. column */
@@ -879,7 +880,7 @@ static void Lay_WritePageTopHeading (void)
 static void Lay_WriteBreadcrumb (void)
   {
    fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
-   Deg_WriteHierarchyBreadcrumb ();
+   Hie_WriteHierarchyBreadcrumb ();
    Crs_WriteSelectorMyCourses ();
    fprintf (Gbl.F.Out,"</div>");
   }

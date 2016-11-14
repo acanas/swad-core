@@ -41,6 +41,7 @@
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_indicator.h"
 #include "swad_info.h"
 #include "swad_logo.h"
@@ -77,17 +78,12 @@ typedef enum
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD	20	// Adjust depending on the size of the style used for the degree on the page head
-#define Deg_MAX_LENGTH_SHORT_NAME_COURSE_ON_PAGE_HEAD	20	// Adjust depending on the size of the style used for the degree on the page head
-
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
-
-static void Deg_WriteSelectorOfDegree (void);
 
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEditADegree (struct Degree *Deg);
@@ -585,103 +581,10 @@ static void Deg_PutIconsToPrintAndUpload (void)
   }
 
 /*****************************************************************************/
-/*** Write menu to select country, institution, centre, degree and course ****/
-/*****************************************************************************/
-
-void Deg_WriteMenuAllCourses (void)
-  {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Degree;
-   extern const char *Txt_Course;
-
-   /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	              " style=\"margin:0 auto 12px auto;\">");
-
-   /***** Write a 1st selector
-          with all the countries *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Country);
-   Cty_WriteSelectorOfCountry ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
-
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
-     {
-      /***** Write a 2nd selector
-             with the institutions of selected country *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s RIGHT_MIDDLE\">"
-                         "%s:"
-                         "</td>"
-                         "<td class=\"LEFT_MIDDLE\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_Institution);
-      Ins_WriteSelectorOfInstitution ();
-      fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>");
-
-      if (Gbl.CurrentIns.Ins.InsCod > 0)
-        {
-         /***** Write a 3rd selector
-                with all the centres of selected institution *****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s RIGHT_MIDDLE\">"
-                            "%s:"
-                            "</td>"
-                            "<td class=\"LEFT_MIDDLE\">",
-                  The_ClassForm[Gbl.Prefs.Theme],Txt_Centre);
-         Ctr_WriteSelectorOfCentre ();
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-           {
-            /***** Write a 4th selector
-                   with all the degrees of selected centre *****/
-            fprintf (Gbl.F.Out,"<tr>"
-                               "<td class=\"%s RIGHT_MIDDLE\">"
-                               "%s:"
-                               "</td>"
-                               "<td class=\"LEFT_MIDDLE\">",
-                     The_ClassForm[Gbl.Prefs.Theme],Txt_Degree);
-            Deg_WriteSelectorOfDegree ();
-            fprintf (Gbl.F.Out,"</td>"
-        	               "</tr>");
-
-	    if (Gbl.CurrentDeg.Deg.DegCod > 0)
-	      {
-	       /***** Write a 5th selector
-		      with all the courses of selected degree *****/
-	       fprintf (Gbl.F.Out,"<tr>"
-				  "<td class=\"%s RIGHT_MIDDLE\">"
-				  "%s:"
-				  "</td>"
-				  "<td class=\"LEFT_MIDDLE\">",
-			The_ClassForm[Gbl.Prefs.Theme],Txt_Course);
-	       Crs_WriteSelectorOfCourse ();
-	       fprintf (Gbl.F.Out,"</td>"
-				  "</tr>");
-	      }
-           }
-        }
-     }
-
-   /***** End of table *****/
-   fprintf (Gbl.F.Out,"</table>");
-  }
-
-/*****************************************************************************/
 /*************************** Write selector of degree ************************/
 /*****************************************************************************/
 
-static void Deg_WriteSelectorOfDegree (void)
+void Deg_WriteSelectorOfDegree (void)
   {
    extern const char *Txt_Degree;
    char Query[512];
@@ -744,341 +647,6 @@ static void Deg_WriteSelectorOfDegree (void)
   }
 
 /*****************************************************************************/
-/************* Write hierarchy breadcrumb in the top of the page *************/
-/*****************************************************************************/
-
-void Deg_WriteHierarchyBreadcrumb (void)
-  {
-   extern const char *The_ClassBreadcrumb[The_NUM_THEMES];
-   extern const char *Txt_System;
-   extern const char *Txt_Country;
-   extern const char *Txt_Institution;
-   extern const char *Txt_Centre;
-   extern const char *Txt_Degree;
-   char DegreeShortName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
-   char ClassOn[64];
-   char ClassSemiOff[64];
-   char ClassOff[64];
-
-   /***** CSS classes *****/
-   strcpy (ClassOn,The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-   sprintf (ClassSemiOff,"BC_SEMIOFF %s",The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-   sprintf (ClassOff,"BC_OFF %s",The_ClassBreadcrumb[Gbl.Prefs.Theme]);
-
-   /***** Form to go to the system *****/
-   Act_FormGoToStart (ActMnu);
-   Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) TabSys);
-   Act_LinkFormSubmit (Txt_System,ClassOn,NULL);
-   fprintf (Gbl.F.Out,"%s</a>",Txt_System);
-   Act_FormEnd ();
-
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)		// Country selected...
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
-
-      /***** Form to go to see institutions of this country *****/
-      Act_FormGoToStart (ActSeeIns);
-      Cty_PutParamCtyCod (Gbl.CurrentCty.Cty.CtyCod);
-      Act_LinkFormSubmit (Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],ClassOn,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",
-               Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-      Act_FormEnd ();
-     }
-   else
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
-
-      /***** Form to go to select countries *****/
-      Act_FormGoToStart (ActSeeCty);
-      Act_LinkFormSubmit (Txt_Country,ClassSemiOff,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Country);
-      Act_FormEnd ();
-     }
-
-   if (Gbl.CurrentIns.Ins.InsCod > 0)		// Institution selected...
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
-
-      /***** Form to see centres of this institution *****/
-      Act_FormGoToStart (ActSeeCtr);
-      Ins_PutParamInsCod (Gbl.CurrentIns.Ins.InsCod);
-      Act_LinkFormSubmit (Gbl.CurrentIns.Ins.FullName,ClassOn,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",
-	       Gbl.CurrentIns.Ins.ShrtName);
-      Act_FormEnd ();
-     }
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
-
-      /***** Form to go to select institutions *****/
-      Act_FormGoToStart (ActSeeIns);
-      Act_LinkFormSubmit (Txt_Institution,ClassSemiOff,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Institution);
-      Act_FormEnd ();
-     }
-   else
-      /***** Separator and hidden institution *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
-	       ClassOff,Txt_Institution);
-
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected...
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
-
-      /***** Form to see degrees of this centre *****/
-      Act_FormGoToStart (ActSeeDeg);
-      Ctr_PutParamCtrCod (Gbl.CurrentCtr.Ctr.CtrCod);
-      Act_LinkFormSubmit (Gbl.CurrentCtr.Ctr.FullName,ClassOn,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",
-	       Gbl.CurrentCtr.Ctr.ShrtName);
-      Act_FormEnd ();
-     }
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
-
-      /***** Form to go to select centres *****/
-      Act_FormGoToStart (ActSeeCtr);
-      Act_LinkFormSubmit (Txt_Centre,ClassSemiOff,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Centre);
-      Act_FormEnd ();
-     }
-   else
-      /***** Separator and hidden centre *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
-	       ClassOff,Txt_Centre);
-
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected...
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassOn);
-
-      /***** Form to go to see courses of this degree *****/
-      Act_FormGoToStart (ActSeeCrs);
-      Deg_PutParamDegCod (Gbl.CurrentDeg.Deg.DegCod);
-      Act_LinkFormSubmit (Gbl.CurrentDeg.Deg.FullName,ClassOn,NULL);
-      strcpy (DegreeShortName,Gbl.CurrentDeg.Deg.ShrtName);
-      Str_LimitLengthHTMLStr (DegreeShortName,
-			      Deg_MAX_LENGTH_SHORT_NAME_DEGREE_ON_PAGE_HEAD);
-      fprintf (Gbl.F.Out,"%s</a>",
-	       DegreeShortName);
-      Act_FormEnd ();
-     }
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      /***** Separator *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",ClassSemiOff);
-
-      /***** Form to go to select degrees *****/
-      Act_FormGoToStart (ActSeeDeg);
-      Act_LinkFormSubmit (Txt_Degree,ClassSemiOff,NULL);
-      fprintf (Gbl.F.Out,"%s</a>",Txt_Degree);
-      Act_FormEnd ();
-     }
-   else
-      /***** Separator and hidden degree *****/
-      fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; %s</span>",
-	       ClassOff,Txt_Degree);
-
-   /***** Separator *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\"> &gt; </span>",
-	     (Gbl.CurrentCrs.Crs.CrsCod > 0) ? ClassOn :
-            ((Gbl.CurrentDeg.Deg.DegCod > 0) ? ClassSemiOff :
-		                               ClassOff));
-  }
-
-/*****************************************************************************/
-/*************** Write course full name in the top of the page ***************/
-/*****************************************************************************/
-
-void Deg_WriteBigNameCtyInsCtrDegCrs (void)
-  {
-   extern const char *The_ClassCourse[The_NUM_THEMES];
-   extern const char *Txt_TAGLINE;
-
-   fprintf (Gbl.F.Out,"<h1 id=\"main_title\" class=\"%s\">",
-	    The_ClassCourse[Gbl.Prefs.Theme]);
-
-   /***** Logo *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 ||
-       Gbl.CurrentDeg.Deg.DegCod > 0)
-      Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-		    Gbl.CurrentDeg.Deg.ShrtName,40,"TOP_LOGO",false);
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-      Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-		    Gbl.CurrentCtr.Ctr.ShrtName,40,"TOP_LOGO",false);
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)
-      Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-		    Gbl.CurrentIns.Ins.ShrtName,40,"TOP_LOGO",false);
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-      Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
-   else
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"TOP_LOGO\" />",
-               Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
-               Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
-
-   /***** Text *****/
-   fprintf (Gbl.F.Out,"<div id=\"big_name_container\">");
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s"	// Full name
-			 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "	// To separate
-			 "</div>"
-			 "<div id=\"big_short_name\">"
-			 "%s"	// Short name
-			 "</div>",
-		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.FullName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.FullName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.FullName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.FullName :
-	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))),
-		(Gbl.CurrentCrs.Crs.CrsCod > 0) ? Gbl.CurrentCrs.Crs.ShrtName :
-	       ((Gbl.CurrentDeg.Deg.DegCod > 0) ? Gbl.CurrentDeg.Deg.ShrtName :
-	       ((Gbl.CurrentCtr.Ctr.CtrCod > 0) ? Gbl.CurrentCtr.Ctr.ShrtName :
-	       ((Gbl.CurrentIns.Ins.InsCod > 0) ? Gbl.CurrentIns.Ins.ShrtName :
-	                                          Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]))));
-   else	// No country specified ==> home page
-      fprintf (Gbl.F.Out,"<div id=\"big_full_name\">"
-			 "%s: %s"	// Full name
-			 "</div>"
-			 "<div class=\"NOT_SHOWN\">"
-			 " / "		// To separate
-			 "</div>"
-			 "<div id=\"big_short_name\">"
-			 "%s"		// Short name
-			 "</div>",
-	       Cfg_PLATFORM_SHORT_NAME,Txt_TAGLINE,
-	       Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</div>"
-	              "</h1>");
-  }
-
-/*****************************************************************************/
-/**************** Initialize values related to current course ****************/
-/*****************************************************************************/
-
-void Deg_InitCurrentCourse (void)
-  {
-   /***** If numerical course code is available, get course data *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-     {
-      if (Crs_GetDataOfCourseByCod (&Gbl.CurrentCrs.Crs))		// Course found
-         Gbl.CurrentDeg.Deg.DegCod = Gbl.CurrentCrs.Crs.DegCod;
-      else
-        {
-         Gbl.CurrentIns.Ins.InsCod =
-         Gbl.CurrentCtr.Ctr.CtrCod =
-         Gbl.CurrentDeg.Deg.DegCod =
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;
-        }
-     }
-
-   /***** If numerical degree code is available, get degree data *****/
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
-     {
-      if (Deg_GetDataOfDegreeByCod (&Gbl.CurrentDeg.Deg))	// Degree found
-	{
-	 Gbl.CurrentCtr.Ctr.CtrCod          = Gbl.CurrentDeg.Deg.CtrCod;
-         Gbl.CurrentDegTyp.DegTyp.DegTypCod = Gbl.CurrentDeg.Deg.DegTypCod;
-         Gbl.CurrentIns.Ins.InsCod = Deg_GetInsCodOfDegreeByCod (Gbl.CurrentDeg.Deg.DegCod);
-
-         /***** Degree type is available, so get degree type data *****/
-         if (!DT_GetDataOfDegreeTypeByCod (&Gbl.CurrentDegTyp.DegTyp))	// Degree type not found
-           {
-	    Gbl.CurrentIns.Ins.InsCod =
-	    Gbl.CurrentCtr.Ctr.CtrCod =
-	    Gbl.CurrentDeg.Deg.DegTypCod =
-	    Gbl.CurrentDeg.Deg.DegCod =
-	    Gbl.CurrentCrs.Crs.CrsCod = -1L;
-           }
-	}
-      else
-        {
-         Gbl.CurrentIns.Ins.InsCod =
-         Gbl.CurrentCtr.Ctr.CtrCod =
-         Gbl.CurrentDeg.Deg.DegCod =
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;
-        }
-     }
-
-   /***** If centre code is available, get centre data *****/
-   if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      if (Ctr_GetDataOfCentreByCod (&Gbl.CurrentCtr.Ctr))	// Centre found
-         Gbl.CurrentIns.Ins.InsCod = Gbl.CurrentCtr.Ctr.InsCod;
-      else
-         Gbl.CurrentCtr.Ctr.CtrCod = -1L;
-     }
-
-   /***** If numerical institution code is available, get institution data *****/
-   if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      if (Ins_GetDataOfInstitutionByCod (&Gbl.CurrentIns.Ins,Ins_GET_BASIC_DATA))	// Institution found
-	 Gbl.CurrentCty.Cty.CtyCod = Gbl.CurrentIns.Ins.CtyCod;
-      else
-        {
-         Gbl.CurrentCty.Cty.CtyCod =
-         Gbl.CurrentIns.Ins.InsCod =
-         Gbl.CurrentCtr.Ctr.CtrCod =
-         Gbl.CurrentDeg.Deg.DegCod =
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;
-        }
-     }
-
-   /***** If numerical country code is available, get country data *****/
-   if (Gbl.CurrentCty.Cty.CtyCod > 0)
-     {
-      if (!Cty_GetDataOfCountryByCod (&Gbl.CurrentCty.Cty,Cty_GET_BASIC_DATA))	// Country not found
-        {
-         Gbl.CurrentCty.Cty.CtyCod =
-         Gbl.CurrentIns.Ins.InsCod =
-         Gbl.CurrentCtr.Ctr.CtrCod =
-         Gbl.CurrentDeg.Deg.DegCod =
-         Gbl.CurrentCrs.Crs.CrsCod = -1L;
-        }
-     }
-
-   /***** Initialize default fields for edition to current values *****/
-   Gbl.Inss.EditingIns.CtyCod    = Gbl.CurrentCty.Cty.CtyCod;
-   Gbl.Ctrs.EditingCtr.InsCod    =
-   Gbl.Dpts.EditingDpt.InsCod    = Gbl.CurrentIns.Ins.InsCod;
-   Gbl.Degs.EditingDeg.CtrCod    = Gbl.CurrentCtr.Ctr.CtrCod;
-   Gbl.Degs.EditingDeg.DegTypCod = Gbl.CurrentDegTyp.DegTyp.DegTypCod;
-
-   /***** Initialize paths *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-     {
-      /***** Paths of course directories *****/
-      sprintf (Gbl.CurrentCrs.PathPriv,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-      sprintf (Gbl.CurrentCrs.PathRelPubl,"%s/%s/%ld",
-	       Cfg_PATH_SWAD_PUBLIC ,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-      sprintf (Gbl.CurrentCrs.PathURLPubl,"%s/%s/%ld",
-	       Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_CRS,Gbl.CurrentCrs.Crs.CrsCod);
-
-      /***** If any of the course directories does not exist, create it *****/
-      if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathPriv))
-	 Fil_CreateDirIfNotExists (Gbl.CurrentCrs.PathPriv);
-      if (!Fil_CheckIfPathExists (Gbl.CurrentCrs.PathRelPubl))
-	 Fil_CreateDirIfNotExists (Gbl.CurrentCrs.PathRelPubl);
-
-      /***** Count number of groups in current course (used only in some actions) *****/
-      Gbl.CurrentCrs.Grps.NumGrps = Grp_CountNumGrpsInCurrentCrs ();
-     }
-  }
-
-/*****************************************************************************/
 /************* Show the degrees belonging to the current centre **************/
 /*****************************************************************************/
 
@@ -1091,7 +659,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
       Deg_GetListDegsOfCurrentCtr ();
 
       /***** Write menu to select country, institution and centre *****/
-      Deg_WriteMenuAllCourses ();
+      Hie_WriteMenuAllCourses ();
 
       /***** Show list of degrees *****/
       Deg_ListDegrees ();
@@ -2512,7 +2080,7 @@ void Deg_ChangeDegCtrInConfig (void)
 	 Gbl.CurrentCtr.Ctr.CtrCod = NewCtr.CtrCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-	 Deg_InitCurrentCourse ();
+	 Hie_InitCurrentCourse ();
 
 	 /***** Create message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
@@ -2858,7 +2426,7 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
 /***** Write institutions, centres and degrees administrated by an admin *****/
 /*****************************************************************************/
 
-void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
+void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_all_degrees;

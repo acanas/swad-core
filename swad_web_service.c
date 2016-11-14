@@ -105,6 +105,7 @@ cp -f /home/acanas/swad/swad/swad /var/www/cgi-bin/
 #include "swad_database.h"
 #include "swad_file_browser.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_ID.h"
 #include "swad_notice.h"
 #include "swad_notification.h"
@@ -1356,7 +1357,7 @@ int swad__getCourseInfo (struct soap *soap,
    strcpy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc]);
 
    /***** Set paths *****/
-   Deg_InitCurrentCourse ();
+   Hie_InitCurrentCourse ();
 
    /***** Get info text *****/
    getCourseInfo->infoTxt = NULL;
@@ -4605,7 +4606,7 @@ int swad__getFile (struct soap *soap,
      }
 
    /***** Set paths *****/
-   Deg_InitCurrentCourse ();
+   Hie_InitCurrentCourse ();
    Brw_SetFullPathInTree (FileMetadata.PathInTreeUntilFilFolLnk,
                           FileMetadata.FilFolLnkName);
    Brw_InitializeFileBrowser ();

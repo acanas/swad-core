@@ -34,8 +34,8 @@
 #include "swad_config.h"
 #include "swad_connected.h"
 #include "swad_database.h"
-#include "swad_degree.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_MFU.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
@@ -114,7 +114,7 @@ int main (int argc, char *argv[])
      {
       Par_CreateListOfParams ();
       Par_GetMainParameters ();
-      Deg_InitCurrentCourse ();
+      Hie_InitCurrentCourse ();
 
       if (!Gbl.WebService.IsWebService)
 	{

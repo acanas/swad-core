@@ -51047,27 +51047,6 @@ const char *Txt_Write_a_message =
 	"Escrever uma mensagem";
 #endif
 
-const char *Txt_Write_a_message_to_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Escriu un missatge a %s";
-#elif L==2
-	"Schreiben Sie %s eine Nachricht";
-#elif L==3
-	"Write a message to %s";
-#elif L==4
-	"Escribir un mensaje a %s";
-#elif L==5
-	"&Eacute;crire un message &agrave; %s";
-#elif L==6
-	"Escribir un mensaje a %s";		// Okoteve traducción
-#elif L==7
-	"Scrivi un messaggio a %s";
-#elif L==8
-	"Napisz wiadomo&sacute;&cacute; do %s";
-#elif L==9
-	"Escrever uma mensagem para %s";
-#endif
-
 const char *Txt_Wrong_file_type =
 #if   L==1
 	"Tipus d'arxiu incorrecte.";

@@ -46,6 +46,7 @@
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_ID.h"
 #include "swad_MFU.h"
 #include "swad_nickname.h"
@@ -2572,7 +2573,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
       	 Gbl.CurrentCrs.Crs.CrsCod = Gbl.Usrs.Me.UsrLast.LastCrs;
 
 	 /* Initialize again current course, degree, centre... */
-      	 Deg_InitCurrentCourse ();
+      	 Hie_InitCurrentCourse ();
 
 	 /* Get again my role in this course */
       	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3250,7 +3251,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
 	              "</tr>");
 
    /***** Write degrees which are administrated by this administrator *****/
-   Deg_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
+   Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
                                     Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
                                 	                          Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
   }

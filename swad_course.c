@@ -39,6 +39,7 @@
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_indicator.h"
 #include "swad_logo.h"
 #include "swad_notification.h"
@@ -970,7 +971,7 @@ void Crs_ShowCrssOfCurrentDeg (void)
       Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
 
       /***** Write menu to select country, institution, centre and degree *****/
-      Deg_WriteMenuAllCourses ();
+      Hie_WriteMenuAllCourses ();
 
       /***** Show list of courses *****/
       Crs_ListCourses ();
@@ -2444,7 +2445,7 @@ void Crs_ChangeCrsDegInConfig (void)
 	 Gbl.CurrentDeg.Deg.DegCod = NewDeg.DegCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-      	 Deg_InitCurrentCourse ();
+      	 Hie_InitCurrentCourse ();
 
 	 /***** Create message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,

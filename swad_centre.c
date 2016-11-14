@@ -37,6 +37,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_help.h"
+#include "swad_hierarchy.h"
 #include "swad_institution.h"
 #include "swad_logo.h"
 #include "swad_parameter.h"
@@ -721,7 +722,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Write menu to select country and institution *****/
-      Deg_WriteMenuAllCourses ();
+      Hie_WriteMenuAllCourses ();
 
       /***** List centres *****/
       Ctr_ListCentres ();
@@ -1764,7 +1765,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 	 Gbl.CurrentIns.Ins.InsCod = NewIns.InsCod;
 
 	 /***** Initialize again current course, degree, centre... *****/
-	 Deg_InitCurrentCourse ();
+	 Hie_InitCurrentCourse ();
 
 	 /***** Write message to show the change made *****/
 	 sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
