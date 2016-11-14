@@ -1283,6 +1283,15 @@ a:hover						/* Default ==> underlined */
 	overflow:hidden;
 	}
 
+/******************************* Copy source *********************************/
+.COPY_SRC
+	{
+	text-align:center;
+	vertical-align:middle;
+	color:#404040;
+	font-size:13pt;
+	}
+
 /*********************************** Icons ***********************************/
 .ICO20x15	{width:20px; height:15px; vertical-align:middle;}
 .ICO20x20	{width:20px; height:20px; vertical-align:middle;}
