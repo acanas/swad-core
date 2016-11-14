@@ -140,7 +140,7 @@ struct FileMetadata
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES	"sha"
-#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be "doc"
+#define Brw_INTERNAL_NAME_ROOT_FOLDER_DOWNLOAD		"descarga"		// TODO: It should be Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_TEACHERS		"tch"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED		"comun"			// TODO: It should be "sha"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS	"actividades"		// TODO: It should be "asg"

@@ -1538,7 +1538,9 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
                                           long MyUsrCod,long WorksUsrCod);
 static void Brw_PasteClipboard (void);
 static unsigned Brw_NumLevelsInPath (const char *Path);
-static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
+static bool Brw_PasteTreeIntoFolder (unsigned Level,
+                                     const char *PathOrg,
+                                     const char *PathDstInTree,
                                      struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod);
 static void Brw_PutFormToCreateAFolder (const char *FileNameToShow);
@@ -5191,7 +5193,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type] &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
-      if (Gbl.FileBrowser.Clipboard.IsThisTree)
+      if (Gbl.FileBrowser.Clipboard.IsThisTree &&
+	  Level != 0)	// Never copy root folder
 	 // If path in the clipboard is equal to complete path in tree...
 	 // ...or is the start of complete path in tree...
          if (Str_Path1BeginsByPath2 (Gbl.FileBrowser.Priv.FullPathInTree,Gbl.FileBrowser.Clipboard.Path))
@@ -7695,7 +7698,9 @@ static void Brw_PasteClipboard (void)
       /***** Paste tree (path in clipboard) into folder *****/
       Brw_CalcSizeOfDir (Gbl.FileBrowser.Priv.PathRootFolder);
       Brw_SetMaxQuota ();
-      if (Brw_PasteTreeIntoFolder (PathOrg,Gbl.FileBrowser.Priv.FullPathInTree,
+      if (Brw_PasteTreeIntoFolder (Gbl.FileBrowser.Clipboard.Level,
+	                           PathOrg,
+                                   Gbl.FileBrowser.Priv.FullPathInTree,
 	                           &Pasted,
 	                           &FirstFilCod))
         {
@@ -7770,11 +7775,13 @@ static unsigned Brw_NumLevelsInPath (const char *Path)
   }
 
 /*****************************************************************************/
-/*********** Copy a source file o tree in the destination folder *************/
+/********** Copy a source file or tree in the destination folder *************/
 /*****************************************************************************/
 // Return true if the copy has been made successfully, and false if not
 
-static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTree,
+static bool Brw_PasteTreeIntoFolder (unsigned Level,
+                                     const char *PathOrg,
+                                     const char *PathDstInTree,
                                      struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod)
   {
@@ -7826,14 +7833,20 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
    Brw_LimitLengthFileNameToShow (FileType,FileNameOrg,FileNameToShow);
 
    /***** Construct the name of the destination file or folder *****/
-   sprintf (PathDstInTreeWithFile,"%s/%s",PathDstInTree,FileNameOrg);
+   if (Level == 0)	// Origin of copy is the root folder,
+			// for example "sha"
+			// ==> do not copy root folder into destination
+      strcpy (PathDstInTreeWithFile,PathDstInTree);
+   else			// Origin of copy is a file or folder inside the root folder
+			// for example "sha/folder1/file1"
+      sprintf (PathDstInTreeWithFile,"%s/%s",PathDstInTree,FileNameOrg);
 
    /***** Construct the relative path of the destination file or folder *****/
    sprintf (PathDstWithFile,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,PathDstInTreeWithFile);
 
    /***** Update and check number of levels *****/
    // The number of levels is counted starting on the root folder raíz, not included.
-   // Example:	If PathDstInTreeWithFile is "maletin/1/2/3/4/FileNameOrg", then NumLevls=5
+   // Example:	If PathDstInTreeWithFile is "root-folder/1/2/3/4/FileNameOrg", then NumLevls=5
    if ((NumLevls = Brw_NumLevelsInPath (PathDstInTreeWithFile)) > Gbl.FileBrowser.Size.NumLevls)
       Gbl.FileBrowser.Size.NumLevls = NumLevls;
    if (Brw_CheckIfQuotaExceded ())
@@ -7970,7 +7983,10 @@ static bool Brw_PasteTreeIntoFolder (const char *PathOrg,const char *PathDstInTr
 		   strcmp (FileList[NumFile]->d_name,".."))	// Skip directories "." and ".."
 		 {
 		  sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFile]->d_name);
-		  if (!Brw_PasteTreeIntoFolder (PathInFolderOrg,PathDstInTreeWithFile,
+		  /* Recursive call to this function */
+		  if (!Brw_PasteTreeIntoFolder (Level + 1,
+			                        PathInFolderOrg,
+		                                PathDstInTreeWithFile,
 						Pasted,
 						FirstFilCod))
 		     CopyIsGoingSuccessful = false;
