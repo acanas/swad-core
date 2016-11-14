@@ -157,13 +157,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.62.1 (2016-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 16.62.2 (2016-11-14)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.62.2:  Nov 14, 2016	Changes message related to clipboard.
+					Fixed minor bug when copying all files inside root folder. (207157 lines)
         Version 16.62.1:  Nov 14, 2016	Code refactoring in clipboard. (207151 lines)
         Version 16.62:    Nov 14, 2016	Copy of all files inside root folder is now allowed (root folder not copied). (207165 lines)
         Version 16.61.8:  Nov 14, 2016	Code refactoring in clipboard. (207148 lines)

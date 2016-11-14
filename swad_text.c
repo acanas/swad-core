@@ -2153,25 +2153,25 @@ const char *Txt_all_degrees =
 	"all degrees";			// Necessita de tradução
 #endif
 
-const char *Txt_all_files =
+const char *Txt_all_files_inside_the_root_folder =
 #if   L==1
-	"tots els fitxers";
+	"tots els arxius dins de la carpeta arrel";
 #elif L==2
-	"alle Dateien";
+	"alle Dateien im Stammordner";
 #elif L==3
-	"all files";
+	"all files inside the root folder";
 #elif L==4
-	"todos los archivos";
+	"todos los archivos dentro de la carpeta ra&iacute;z";
 #elif L==5
-	"tous les fichiers";
+	"tous les fichiers dans le r&eacute;pertoire racine";
 #elif L==6
-	"todos los archivos";	// Okoteve traducción
+	"todos los archivos dentro de la carpeta ra&iacute;z";	// Okoteve traducción
 #elif L==7
-	"tutti i file";
+	"tutti i file all'interno della cartella principale";
 #elif L==8
-	"wszystkich plik&oacute;w";
+	"wszystkie pliki znajduj&aogon;ce si&eogon; w folderze g&lstrok;&oacute;wnym";
 #elif L==9
-	"todos os arquivos";
+	"todos os arquivos dentro do diret&oacute;rio raiz";
 #endif
 
 const char *Txt_All_groups =

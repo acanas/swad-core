@@ -6600,11 +6600,11 @@ static void Brw_WriteCurrentClipboard (void)
    extern const char *Txt_course;
    extern const char *Txt_group;
    extern const char *Txt_user[Usr_NUM_SEXS];
-   extern const char *Txt_all_files;
    extern const char *Txt_file_folder;
    extern const char *Txt_file;
    extern const char *Txt_folder;
    extern const char *Txt_link;
+   extern const char *Txt_all_files_inside_the_root_folder;
    struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -6782,8 +6782,9 @@ static void Brw_WriteCurrentClipboard (void)
          break;
      }
 
-   if (Gbl.FileBrowser.Clipboard.Level)			// Is the root folder?
+   if (Gbl.FileBrowser.Clipboard.Level)		// Is the root folder?
      {
+      // Not the root folder
       Brw_GetFileNameToShow (Gbl.FileBrowser.Clipboard.FileBrowser,
                              Gbl.FileBrowser.Clipboard.Level,
                              Gbl.FileBrowser.Clipboard.FileType,
@@ -6792,12 +6793,13 @@ static void Brw_WriteCurrentClipboard (void)
       sprintf (Gbl.Message,"%s: %s, %s <strong>%s</strong>.",
                Txt_Copy_source,TxtClipboardZone,
                TxtFileType[Gbl.FileBrowser.Clipboard.FileType],
-               FileNameToShow);		// It's not the root folder
+               FileNameToShow);
      }
    else
+      // The root folder
       sprintf (Gbl.Message,"%s: %s, %s.",
                Txt_Copy_source,TxtClipboardZone,
-               Txt_all_files);		// It's the root folder
+               Txt_all_files_inside_the_root_folder);
 
    Lay_ShowAlert (Lay_CLIPBOARD,Gbl.Message);
   }
@@ -7761,7 +7763,7 @@ static unsigned Brw_NumLevelsInPath (const char *Path)
 /*****************************************************************************/
 // Return true if the copy has been made successfully, and false if not
 
-static bool Brw_PasteTreeIntoFolder (unsigned Level,
+static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
                                      const char *PathOrg,
                                      const char *PathDstInTree,
                                      struct Brw_NumObjects *Pasted,
@@ -7815,9 +7817,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned Level,
    Brw_LimitLengthFileNameToShow (FileType,FileNameOrg,FileNameToShow);
 
    /***** Construct the name of the destination file or folder *****/
-   if (Level == 0)	// Origin of copy is the root folder,
+   if (LevelOrg == 0)	// Origin of copy is the root folder,
 			// for example "sha"
-			// ==> do not copy root folder into destination
+			// ==> do not copy the root folder itself into destination
       strcpy (PathDstInTreeWithFile,PathDstInTree);
    else			// Origin of copy is a file or folder inside the root folder
 			// for example "sha/folder1/file1"
@@ -7966,7 +7968,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned Level,
 		 {
 		  sprintf (PathInFolderOrg,"%s/%s",PathOrg,FileList[NumFile]->d_name);
 		  /* Recursive call to this function */
-		  if (!Brw_PasteTreeIntoFolder (Level + 1,
+		  if (!Brw_PasteTreeIntoFolder (LevelOrg + 1,
 			                        PathInFolderOrg,
 		                                PathDstInTreeWithFile,
 						Pasted,
@@ -7980,7 +7982,9 @@ static bool Brw_PasteTreeIntoFolder (unsigned Level,
 	 else
 	    Lay_ShowErrorAndExit ("Error while scanning directory.");
 
-	 if (CopyIsGoingSuccessful)
+	 if (CopyIsGoingSuccessful &&
+	     LevelOrg != 0)	// When copying all files inside root folder,
+				// do not count the root folder itself
 	    (Pasted->NumFolds)++;
 	}
      }
