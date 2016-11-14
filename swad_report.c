@@ -1192,7 +1192,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
                                    struct Rep_Report *Report)
   {
-   char Query[512];
+   char Query[1024];
    char SubQueryCrs[128];
    char SubQueryRol[128];
    MYSQL_RES *mysql_res;
@@ -1266,7 +1266,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
          fprintf (Gbl.F.Rep,"%04u&nbsp;",Year);
 
          /* Draw bar proportional to number of hits */
-         Rep_DrawBarNumHits (Year == LastYear ? Report->Hits.Num :
+         Rep_DrawBarNumHits (Year == ReadYear ? Report->Hits.Num :
                         	                0,
                              Report->Hits.Max,Rep_MAX_BAR_WIDTH);
          fprintf (Gbl.F.Rep,"<br />");

@@ -280,11 +280,13 @@ void Not_RequestRemNotice (void)
    /***** Get the code of the notice to remove *****/
    NotCod = Not_GetParamNotCod ();
 
-   /***** Form to ask for confirmation to remove this notice *****/
-   Act_FormStart (ActRemNot);
-   Not_PutHiddenParamNotCod (NotCod);
+   /***** Ask for confirmation to remove this notice *****/
    Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_notice);
    Not_GetDataAndShowNotice (NotCod);
+
+   /***** Form to remove this notice *****/
+   Act_FormStart (ActRemNot);
+   Not_PutHiddenParamNotCod (NotCod);
    Lay_PutRemoveButton (Txt_Remove);
    Act_FormEnd ();
 

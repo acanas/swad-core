@@ -145,7 +145,6 @@
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
 // TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
 
-// TODO: Cuando se crea una cuenta nueva, debería ponerse a 0 las estadísticas del perfil del usuario
 // TODO: Import ID, e-mail, Surname1, Surname2, Name from CSV, suggested by Javier Melero
 
 // TODO: Remove columns DegCod,CrsCod from database table surveys
@@ -156,13 +155,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.59 (2016-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 16.59.2 (2016-11-14)"
 #define CSS_FILE		"swad16.59.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.59.2:  Nov 14, 2016	Fix bug in user's usage report. (207077 lines)
+        Version 16.59.1:  Nov 14, 2016	Fix bug in deletion of a notice, reported by Javier Fernández Baldomero and others. (207076 lines)
         Version 16.59:    Nov 14, 2016	Changes in layout of contextual help icon.
 					Changes in CSS. (207075 lines)
         Version 16.58:    Nov 14, 2016	Code refactoring related to layout of frames and tables. (207062 lines)
