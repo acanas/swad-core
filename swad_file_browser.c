@@ -6825,24 +6825,22 @@ static bool Brw_GetMyClipboard (void)
    unsigned NumRows;
    unsigned UnsignedNum;
 
+   /***** Clear clipboard data *****/
+   Gbl.FileBrowser.Clipboard.FileBrowser = Brw_UNKNOWN;
+   Gbl.FileBrowser.Clipboard.Cod         = -1L;
+   Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
+   Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
+   Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
+   Gbl.FileBrowser.Clipboard.FileName[0] = '\0';
+   Gbl.FileBrowser.Clipboard.Level       = 0;
+
    /***** Get my current clipboard from database *****/
    sprintf (Query,"SELECT FileBrowser,Cod,WorksUsrCod,FileType,Path"
 	          " FROM clipboard WHERE UsrCod='%ld'",
             Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get source of copy from clipboard");
+   NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get source of copy from clipboard");
 
-   /***** Depending on the number of rows of the result... *****/
-   if (NumRows == 0)
-     {
-      /***** Clear clipboard data *****/
-      Gbl.FileBrowser.Clipboard.FileBrowser = Brw_UNKNOWN;
-      Gbl.FileBrowser.Clipboard.Cod         = -1L;
-      Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
-      Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
-      Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
-      Gbl.FileBrowser.Clipboard.FileName[0] = '\0';
-     }
-   else if (NumRows == 1)
+   if (NumRows == 1)
      {
       /***** Get clipboard data *****/
       row = mysql_fetch_row (mysql_res);
@@ -6874,24 +6872,15 @@ static bool Brw_GetMyClipboard (void)
             (number of slashes in full path, including file or folder) */
          Brw_SetClipboardLevel ();
         }
-      else
-        {
-         Gbl.FileBrowser.Clipboard.FileBrowser = Brw_UNKNOWN;
-	 Gbl.FileBrowser.Clipboard.Cod         = -1L;
-         Gbl.FileBrowser.Clipboard.WorksUsrCod = -1L;
-         Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
-         Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
-         Gbl.FileBrowser.Clipboard.FileName[0] = '\0';
-         Gbl.FileBrowser.Clipboard.Level       = 0;
-        }
      }
-   else
-      Lay_ShowErrorAndExit ("Error when getting source of copy.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return (bool) (NumRows != 0);
+   if (NumRows > 1)
+      Lay_ShowErrorAndExit ("Error when getting source of copy.");
+
+   return (bool) (NumRows == 1);
   }
 
 /*****************************************************************************/

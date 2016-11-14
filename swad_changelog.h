@@ -157,13 +157,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.61.6 (2016-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 16.61.7 (2016-11-14)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.61.7:  Nov 14, 2016	Code refactoring in clipboard. (207155 lines)
         Version 16.61.6:  Nov 14, 2016	Code refactoring in clipboard. (207167 lines)
         Version 16.61.5:  Nov 14, 2016	New alert type: clipboard. (207161 lines)
         Version 16.61.4:  Nov 14, 2016	Copy source is displayed as an alert. (207158 lines)
