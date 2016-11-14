@@ -1510,7 +1510,6 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
-static inline void Brw_GetAndWriteClipboard (void);
 static void Brw_WriteCurrentClipboard (void);
 
 static bool Brw_GetMyClipboard (void);
@@ -3776,7 +3775,8 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
 
    /***** If browser is editable, get and write current clipboard *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
-      Brw_GetAndWriteClipboard ();
+      if (Brw_GetMyClipboard ())
+	 Brw_WriteCurrentClipboard ();
   }
 
 /*****************************************************************************/
@@ -6576,16 +6576,6 @@ void Brw_CopyFromFileBrowser (void)
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
-  }
-
-/*****************************************************************************/
-/**************** Get the path of my clipboard and write it ******************/
-/*****************************************************************************/
-
-static inline void Brw_GetAndWriteClipboard (void)
-  {
-   if (Brw_GetMyClipboard ())
-      Brw_WriteCurrentClipboard ();
   }
 
 /*****************************************************************************/
