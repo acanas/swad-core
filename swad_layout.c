@@ -1425,10 +1425,11 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
   {
    static const char *MsgIcons[Lay_NUM_ALERT_TYPES] =
      {
-      "info",
-      "success",
-      "warning",
-      "error",
+      "info16x16.gif",
+      "success16x16.gif",
+      "warning16x16.gif",
+      "error16x16.gif",
+      "copy_on16x16.gif",
      };
 
    /****** If start of page is not written yet, do it now ******/
@@ -1438,7 +1439,7 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
    if (Message)
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
 	                 "<div class=\"ALERT\""
-	                 " style=\"background-image:url('%s/%s16x16.gif');\">"
+	                 " style=\"background-image:url('%s/%s');\">"
                          "%s"
 			 "</div>"
 			 "</div>",

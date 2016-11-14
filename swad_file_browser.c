@@ -6802,17 +6802,17 @@ static void Brw_WriteCurrentClipboard (void)
                              Gbl.FileBrowser.Clipboard.FileType,
                              Gbl.FileBrowser.Clipboard.FileName,FileNameToShow);
 
-      sprintf (Gbl.Message,"%s: %s, %s <strong>%s</strong>",
+      sprintf (Gbl.Message,"%s: %s, %s <strong>%s</strong>.",
                Txt_Copy_source,ClipboardZone,
                TxtFileType[Gbl.FileBrowser.Clipboard.FileType],
                FileNameToShow);		// It's not the root folder
      }
    else
-      sprintf (Gbl.Message,"%s: %s, %s",
+      sprintf (Gbl.Message,"%s: %s, %s.",
                Txt_Copy_source,ClipboardZone,
                Txt_all_files);		// It's the root folder
 
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   Lay_ShowAlert (Lay_CLIPBOARD,Gbl.Message);
   }
 
 /*****************************************************************************/

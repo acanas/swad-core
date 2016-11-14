@@ -47,13 +47,14 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Lay_NUM_ALERT_TYPES 4
+#define Lay_NUM_ALERT_TYPES 5
 typedef enum
   {
-   Lay_INFO    = 0,
-   Lay_SUCCESS = 1,
-   Lay_WARNING = 2,
-   Lay_ERROR   = 3,
+   Lay_INFO      = 0,
+   Lay_SUCCESS   = 1,
+   Lay_WARNING   = 2,
+   Lay_ERROR     = 3,
+   Lay_CLIPBOARD = 4,
   } Lay_AlertType_t;
 
 typedef enum
