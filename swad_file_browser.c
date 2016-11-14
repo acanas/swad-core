@@ -5313,28 +5313,43 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
                                          const char *PathInTree,const char *FileName,const char *FileNameToShow)
   {
    /***** Icon to remove folder, file or link *****/
-   if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
-      /* Icon to remove a folder */
-      Brw_PutIconRemoveDir (PathInTree,FileName,FileNameToShow);
-   else	// File or link
-      /* Icon to remove a file or link */
-      Brw_PutIconRemoveFile (PathInTree,FileName,FileNameToShow);
+   switch (Gbl.FileBrowser.FileType)
+     {
+      case Brw_IS_FILE:
+      case Brw_IS_LINK:
+	 /* Icon to remove a file or link */
+	 Brw_PutIconRemoveFile (PathInTree,FileName,FileNameToShow);
+         break;
+      case Brw_IS_FOLDER:
+	 /* Icon to remove a folder */
+	 Brw_PutIconRemoveDir (PathInTree,FileName,FileNameToShow);
+         break;
+      default:
+	 break;
+     }
 
    /***** Icon to copy *****/
    Brw_PutIconCopy (PathInTree,FileName,FileNameToShow);
 
    /***** Icon to paste *****/
-   if (Gbl.FileBrowser.FileType == Brw_IS_FOLDER)
+   switch (Gbl.FileBrowser.FileType)
      {
-      if (Brw_CheckIfCanPasteIn (Level))
-         /* Icon to paste active */
-         Brw_PutIconPasteOn (PathInTree,FileName,FileNameToShow);
-      else
-         /* Icon to paste inactive */
-         Brw_PutIconPasteOff ();
+      case Brw_IS_FILE:
+      case Brw_IS_LINK:
+         /* File or link. Can't paste in a file or link */
+         fprintf (Gbl.F.Out,"<td class=\"BM%u\"></td>",Gbl.RowEvenOdd);
+         break;
+      case Brw_IS_FOLDER:
+	 if (Brw_CheckIfCanPasteIn (Level))
+	    /* Icon to paste active */
+	    Brw_PutIconPasteOn (PathInTree,FileName,FileNameToShow);
+	 else
+	    /* Icon to paste inactive */
+	    Brw_PutIconPasteOff ();
+         break;
+      default:
+	 break;
      }
-   else	// File or link. Can't paste in a file or link.
-      fprintf (Gbl.F.Out,"<td class=\"BM%u\"></td>",Gbl.RowEvenOdd);
   }
 
 /*****************************************************************************/
