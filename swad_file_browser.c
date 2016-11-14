@@ -1512,7 +1512,9 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
 static inline void Brw_GetAndWriteClipboard (void);
 static void Brw_WriteCurrentClipboard (void);
+
 static bool Brw_GetMyClipboard (void);
+static void Brw_SetClipboardLevel (void);
 static bool Brw_CheckIfClipboardIsInThisTree (void);
 static void Brw_AddPathToClipboards (void);
 static void Brw_UpdatePathInClipboard (void);
@@ -6617,9 +6619,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct Course Crs;
    struct GroupData GrpDat;
    struct UsrData UsrDat;
-   unsigned LevelClipboard;
-   const char *Ptr;
-   char ClipboardZone[1024];
+   char TxtClipboardZone[1024];
    char FileNameToShow[NAME_MAX+1];
    const char *TxtFileType[Brw_NUM_FILE_TYPES] =
      {
@@ -6634,49 +6634,49 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_DOCUM_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
                   Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_SHARE_INS:
 	 Ins.InsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ins_GetDataOfInstitutionByCod (&Ins,false);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
                   Txt_institution,Ins.ShrtName);
          break;
       case Brw_ADMI_DOCUM_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
                   Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_SHARE_CTR:
 	 Ctr.CtrCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Ctr_GetDataOfCentreByCod (&Ctr);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
                   Txt_centre,Ctr.ShrtName);
          break;
       case Brw_ADMI_DOCUM_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
                   Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_SHARE_DEG:
 	 Deg.DegCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Deg_GetDataOfDegreeByCod (&Deg);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
                   Txt_degree,Deg.ShrtName);
          break;
       case Brw_ADMI_DOCUM_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_documents_management_area,
                   Txt_course,Crs.ShrtName);
          break;
@@ -6685,7 +6685,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_documents_management_area,
                   Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
@@ -6693,7 +6693,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_TEACH_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_teachers_files_area,
                   Txt_course,Crs.ShrtName);
          break;
@@ -6702,7 +6702,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_teachers_files_area,
                   Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
@@ -6710,7 +6710,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_SHARE_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_shared_files_area,
                   Txt_course,Crs.ShrtName);
          break;
@@ -6719,7 +6719,7 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_shared_files_area,
                   Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
@@ -6727,7 +6727,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_ASSIG_USR:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_assignments_area,
                   Txt_course,Crs.ShrtName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
@@ -6735,7 +6735,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_WORKS_USR:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_works_area,
                   Txt_course,Crs.ShrtName,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
@@ -6746,7 +6746,7 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_assignments_area,
                   Txt_course,Crs.ShrtName,
                   Txt_user[UsrDat.Sex],UsrDat.FullName);
@@ -6758,7 +6758,7 @@ static void Brw_WriteCurrentClipboard (void)
          Usr_UsrDataConstructor (&UsrDat);
          UsrDat.UsrCod = Gbl.FileBrowser.Clipboard.WorksUsrCod;
          Usr_GetAllUsrDataFromUsrCod (&UsrDat);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s</strong>",
                   Txt_works_area,
                   Txt_course,Crs.ShrtName,
                   Txt_user[UsrDat.Sex],UsrDat.FullName);
@@ -6767,7 +6767,7 @@ static void Brw_WriteCurrentClipboard (void)
       case Brw_ADMI_MARKS_CRS:
 	 Crs.CrsCod = Gbl.FileBrowser.Clipboard.Cod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_marks_management_area,
                   Txt_course,Crs.ShrtName);
          break;
@@ -6776,13 +6776,13 @@ static void Brw_WriteCurrentClipboard (void)
          Grp_GetDataOfGroupByCod (&GrpDat);
 	 Crs.CrsCod = GrpDat.CrsCod;
 	 Crs_GetDataOfCourseByCod (&Crs);
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>, %s <strong>%s %s</strong>",
                   Txt_marks_management_area,
                   Txt_course,Crs.ShrtName,
                   Txt_group,GrpDat.GrpTypName,GrpDat.GrpName);
          break;
       case Brw_ADMI_BRIEF_USR:
-         sprintf (ClipboardZone,"%s, %s <strong>%s</strong>",
+         sprintf (TxtClipboardZone,"%s, %s <strong>%s</strong>",
                   Txt_temporary_private_storage_area,
                   Txt_user[Gbl.Usrs.Me.UsrDat.Sex],Gbl.Usrs.Me.UsrDat.FullName);
          break;
@@ -6790,26 +6790,21 @@ static void Brw_WriteCurrentClipboard (void)
          break;
      }
 
-   // LevelClipboard == number-of-slashes-in-full-path-including-file-or-folder
-   for (LevelClipboard = 0, Ptr = Gbl.FileBrowser.Clipboard.Path;
-	*Ptr;
-	Ptr++)
-      if (*Ptr == '/')
-         LevelClipboard++;
-   if (LevelClipboard)			// Is the root folder?
+   if (Gbl.FileBrowser.Clipboard.Level)			// Is the root folder?
      {
-      Brw_GetFileNameToShow (Gbl.FileBrowser.Clipboard.FileBrowser,LevelClipboard,
+      Brw_GetFileNameToShow (Gbl.FileBrowser.Clipboard.FileBrowser,
+                             Gbl.FileBrowser.Clipboard.Level,
                              Gbl.FileBrowser.Clipboard.FileType,
                              Gbl.FileBrowser.Clipboard.FileName,FileNameToShow);
 
       sprintf (Gbl.Message,"%s: %s, %s <strong>%s</strong>.",
-               Txt_Copy_source,ClipboardZone,
+               Txt_Copy_source,TxtClipboardZone,
                TxtFileType[Gbl.FileBrowser.Clipboard.FileType],
                FileNameToShow);		// It's not the root folder
      }
    else
       sprintf (Gbl.Message,"%s: %s, %s.",
-               Txt_Copy_source,ClipboardZone,
+               Txt_Copy_source,TxtClipboardZone,
                Txt_all_files);		// It's the root folder
 
    Lay_ShowAlert (Lay_CLIPBOARD,Gbl.Message);
@@ -6874,6 +6869,10 @@ static bool Brw_GetMyClipboard (void)
          Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.Path,
                                                PathUntilFileName,
                                                Gbl.FileBrowser.Clipboard.FileName);
+
+         /* Set clipboard level
+            (number of slashes in full path, including file or folder) */
+         Brw_SetClipboardLevel ();
         }
       else
         {
@@ -6883,6 +6882,7 @@ static bool Brw_GetMyClipboard (void)
          Gbl.FileBrowser.Clipboard.FileType    = Brw_IS_UNKNOWN;
          Gbl.FileBrowser.Clipboard.Path[0]     = '\0';
          Gbl.FileBrowser.Clipboard.FileName[0] = '\0';
+         Gbl.FileBrowser.Clipboard.Level       = 0;
         }
      }
    else
@@ -6892,6 +6892,23 @@ static bool Brw_GetMyClipboard (void)
    DB_FreeMySQLResult (&mysql_res);
 
    return (bool) (NumRows != 0);
+  }
+
+/*****************************************************************************/
+/**************************** Set clipboard level ****************************/
+/*****************************************************************************/
+
+static void Brw_SetClipboardLevel (void)
+  {
+   const char *Ptr;
+
+   /***** Compute level = number of slashes in full path, including file or folder *****/
+   for (Gbl.FileBrowser.Clipboard.Level = 0,
+	Ptr = Gbl.FileBrowser.Clipboard.Path;
+	*Ptr;
+	Ptr++)
+      if (*Ptr == '/')
+         Gbl.FileBrowser.Clipboard.Level++;
   }
 
 /*****************************************************************************/

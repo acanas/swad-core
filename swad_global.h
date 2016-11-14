@@ -536,6 +536,7 @@ struct Globals
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
          char Path[PATH_MAX+1];		// Complete path in the file browser
          char FileName[NAME_MAX+1];	// File name, last part of complete path in the file browser
+         unsigned Level;
          Brw_FileType_t FileType;	// Folder, file or link
          bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
          bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
