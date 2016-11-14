@@ -686,8 +686,7 @@ void Pwd_ShowFormChgPwd (void)
    Act_FormStart (ActChgPwd);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Password,NULL,Hlp_PROFILE_Password);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Password,NULL,Hlp_PROFILE_Password,2);
 
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...

@@ -304,11 +304,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /* Form to remove announcement */
       Act_FormStart (ActRemAnn);
       Ann_PutHiddenParamAnnCod (AnnCod);
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
         	         "<input type=\"image\""
 	                 " src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON20x20\" />"
+			 " class=\"ICO20x20\" />"
 			 "</div>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Remove,
@@ -321,11 +321,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	 case Ann_ACTIVE_ANNOUNCEMENT:
 	    Act_FormStart (ActHidAnn);
 	    Ann_PutHiddenParamAnnCod (AnnCod);
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 			       "<input type=\"image\""
 			       " src=\"%s/eye-on64x64.png\""
 			       " alt=%s\" title=\"%s\""
-			       " class=\"ICON20x20\" />"
+			       " class=\"ICO20x20\" />"
 			       "</div>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_NOTICE_Active_Mark_as_obsolete,
@@ -334,11 +334,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
 	    Act_FormStart (ActRevAnn);
 	    Ann_PutHiddenParamAnnCod (AnnCod);
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 			       "<input type=\"image\""
 			       " src=\"%s/eye-slash-on64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON20x20\" />"
+			       " class=\"ICO20x20\" />"
 			       "</div>",
 		     Gbl.Prefs.IconsURL,
 		     Txt_NOTICE_Obsolete_Mark_as_active,
@@ -384,7 +384,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/remove-on64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON20x20\" />"
+			 " class=\"ICO20x20\" />"
 			 " %s</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_Do_not_show_again,

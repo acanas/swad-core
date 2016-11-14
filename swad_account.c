@@ -336,15 +336,15 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrame (NULL,Txt_Create_a_new_account,NULL,Hlp_PROFILE_Sign_up);
+   Lay_StartRoundFrameTable (NULL,Txt_Create_a_new_account,
+                             NULL,Hlp_PROFILE_Sign_up,2);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
       sprintf (NewNicknameWithArroba,"@%s",NewNicknameWithoutArroba);
    else
       NewNicknameWithArroba[0] = '\0';
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                      "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
@@ -456,8 +456,7 @@ void Acc_ShowFormChangeMyAccount (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_User_account,NULL,Hlp_PROFILE_Account);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_User_account,NULL,Hlp_PROFILE_Account,2);
 
    /***** Nickname *****/
    if (IMustFillNickname)

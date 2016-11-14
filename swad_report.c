@@ -269,7 +269,7 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
                       "<a href=\"%s\" class=\"FILENAME\""
 		      " title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/report64x64.png\" alt=\"%s\""
-	              " class=\"ICON64x64\" /><br />"
+	              " class=\"ICO64x64\" /><br />"
                       "%s"
 		      "</a>"
 		      "</div>",

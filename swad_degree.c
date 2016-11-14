@@ -183,10 +183,9 @@ void Deg_SeeDegWithPendingCrss (void)
    if ((NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees with pending courses")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrame (NULL,Txt_Degrees_with_pending_courses,
-                           NULL,Hlp_SYSTEM_Pending);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	                 "<tr>"
+      Lay_StartRoundFrameTable (NULL,Txt_Degrees_with_pending_courses,
+                                NULL,Hlp_SYSTEM_Pending,2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -319,7 +318,7 @@ static void Deg_Configuration (bool PrintView)
 	                               Hlp_DEGREE_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -334,7 +333,7 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -1634,7 +1633,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/
@@ -1742,7 +1741,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 		      "<td class=\"CENTER_MIDDLE %s\">"
 		      "<img src=\"%s/%s16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />"
+		      " class=\"ICO20x20\" />"
 		      "</td>",
 	    BgColor,
 	    Gbl.Prefs.IconsURL,
@@ -2912,7 +2911,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
                             "<td class=\"RIGHT_TOP COLOR%u\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"ICON25x25\" />"
+                            " class=\"ICO25x25\" />"
                             "</td>",
                   Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
                   NumRow == NumRows ? "subend" :
@@ -2932,7 +2931,7 @@ void Deg_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
 	    case Sco_SCOPE_SYS:	// System
 	       fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON20x20\" />"
+                                  " class=\"ICO20x20\" />"
                                   "&nbsp;%s",
                      Gbl.Prefs.IconsURL,
                      Txt_all_degrees,

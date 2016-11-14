@@ -196,7 +196,7 @@ static void Crs_Configuration (bool PrintView)
 	                            Hlp_COURSE_Information);
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
    if (PutLink)
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                 " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -211,7 +211,7 @@ static void Crs_Configuration (bool PrintView)
             Gbl.CurrentCrs.Crs.FullName);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -460,7 +460,7 @@ static void Crs_Configuration (bool PrintView)
       Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
                          "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
-                         " class=\"ICON20x20\" />",
+                         " class=\"ICO20x20\" />",
                Gbl.Title,
                Gbl.Prefs.IconsURL,
                (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
@@ -559,7 +559,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                   ClassNormal,NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/sys64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />&nbsp;%s</a>",
+                      " class=\"ICO20x20\" />&nbsp;%s</a>",
 	    Gbl.Prefs.IconsURL,
 	    Txt_System,
 	    Txt_System,
@@ -597,7 +597,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
       /* Country map */
       fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s/%s.png\""
 	                 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\" />&nbsp;%s</a>",
+                         " class=\"ICO20x20\" />&nbsp;%s</a>",
 	       Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_COUNTRIES,
 	       Cty.Alpha2,
 	       Cty.Alpha2,
@@ -742,7 +742,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                                  ClassNormal,NULL);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICON20x20\" />",
+			             " class=\"ICO20x20\" />",
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShrtName,
 		           Crs.FullName);
@@ -761,7 +761,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 				     "<img src=\"%s/rss16x16.gif\""
 				     " alt=\"RSS\" title=\"RSS\""
-				     " class=\"ICON20x20\" />"
+				     " class=\"ICO20x20\" />"
 				     "</a>",
 			   Gbl.Prefs.IconsURL);
 
@@ -1191,7 +1191,7 @@ static void Crs_ListCourses (void)
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/
@@ -1306,7 +1306,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			    "<td class=\"CENTER_MIDDLE %s\">"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />"
+			    " class=\"ICO20x20\" />"
 			    "</td>",
 		  BgColor,
 		  Gbl.Prefs.IconsURL,
@@ -3241,7 +3241,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       fprintf (Gbl.F.Out,"<td class=\"BT %s\">"
 	                 "<img src=\"%s/%s16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20\" />"
+	                 " class=\"ICO20x20\" />"
 	                 "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,

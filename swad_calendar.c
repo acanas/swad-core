@@ -77,7 +77,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Lay_StartRoundFrame (NULL,Txt_Calendar,
                         Cal_PutIconsFirstDayOfWeek,
                         Hlp_PROFILE_Preferences_calendar);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICON40x40B");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICO40x40B");
    Lay_EndRoundFrame ();
   }
 
@@ -255,7 +255,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,"ICON25x25");
+      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,"ICO25x25");
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"

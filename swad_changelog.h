@@ -156,13 +156,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.57.3 (2016-11-13)"
-#define CSS_FILE		"swad16.51.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.59 (2016-11-14)"
+#define CSS_FILE		"swad16.59.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.59:    Nov 14, 2016	Changes in layout of contextual help icon.
+					Changes in CSS. (207075 lines)
+        Version 16.58:    Nov 14, 2016	Code refactoring related to layout of frames and tables. (207062 lines)
         Version 16.57.3:  Nov 13, 2016	Code refactoring related to layout of frames and tables. (207119 lines)
         Version 16.57.2:  Nov 13, 2016	Contextual help on usage report. (207102 lines)
         Version 16.57.1:  Nov 13, 2016	Contextual help on frequent actions. (207099 lines)

@@ -393,7 +393,7 @@ void Sch_PutMagnifyingGlassButton (const char *Icon)
    /***** Send button *****/
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />",
+	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,
 	    Icon,
             Txt_Search,

@@ -92,12 +92,11 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Lay_StartRoundFrame (NULL,Txt_Holidays,
-                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
-                        	                                   NULL,
-                           NULL);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartRoundFrameTable (NULL,Txt_Holidays,
+                                Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
+                        	                                        NULL,
+                                NULL,2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Hld_ORDER_BY_PLACE;
 	   Order <= Hld_ORDER_BY_START_DATE;
 	   Order++)
@@ -166,7 +165,6 @@ void Hld_SeeHolidays (void)
 	}
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 
       /***** Free list of holidays *****/

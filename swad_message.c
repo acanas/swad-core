@@ -2842,7 +2842,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	              "<td class=\"%s CENTER_TOP\" style=\"width:20px;\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />",
+                      " class=\"ICO20x20\" />",
             Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED ? (Open ? "BG_MSG_BLUE" :
         	                                                      "BG_MSG_GREEN") :
                                                               "BG_MSG_BLUE",
@@ -3236,7 +3236,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Deleted ? "msg-fwd-del" :
@@ -3387,7 +3387,7 @@ static void Msg_WriteMsgTo (long MsgCod)
                             "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                             "<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />"
+                            " class=\"ICO20x20\" />"
                             "</td>",
                   Gbl.Prefs.IconsURL,
                   OpenByDst ? (Deleted ? "msg-open-del"   :
@@ -3561,7 +3561,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/open_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" style=\"margin-left:12px;\" />",
+	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_permitted_click_to_ban_him,
             Txt_Sender_permitted_click_to_ban_him);
@@ -3583,7 +3583,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
 	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />",
+	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
@@ -3762,7 +3762,7 @@ void Msg_ListBannedUsrs (void)
             fprintf (Gbl.F.Out,"<input type=\"image\""
         	               " src=\"%s/closed_on16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON20x20\" />",
+        	               " class=\"ICO20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Sender_banned_click_to_unban_him,
                      Txt_Sender_banned_click_to_unban_him);

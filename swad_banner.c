@@ -86,10 +86,9 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Frame head *****/
-   Lay_StartRoundFrame (NULL,Txt_Banners,Ban_PutFormToEditBanners,NULL);
+   Lay_StartRoundFrameTable (NULL,Txt_Banners,Ban_PutFormToEditBanners,NULL,2);
 
    /***** Write all the banners *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
    for (NumBan = 0;
 	NumBan < Gbl.Banners.Num;
 	NumBan++)
@@ -109,10 +108,9 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].Img,
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
-   fprintf (Gbl.F.Out,"</table>");
 
    /***** Frame end *****/
-   Lay_EndRoundFrame ();
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of banners *****/
    Ban_FreeListBanners ();
@@ -328,7 +326,7 @@ static void Ban_ListBannersForEdition (void)
 	                           ActHidBan);
       Ban_PutParamBanCod (Ban->BanCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                Ban->Hidden ? "eye-slash-on64x64.png" :
         	             "eye-on64x64.png",

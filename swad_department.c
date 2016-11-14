@@ -96,12 +96,11 @@ void Dpt_SeeDepts (void)
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
 
       /***** Table head *****/
-      Lay_StartRoundFrame (NULL,Txt_Departments,
-                           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
-                        	                                   NULL,
-                           NULL);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartRoundFrameTable (NULL,Txt_Departments,
+                                Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
+                        	                                        NULL,
+                                NULL,2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
 	   Order++)
@@ -180,8 +179,7 @@ void Dpt_SeeDepts (void)
 					  Rol_TEACHER) - NumTchsInsWithDpt);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
-      Lay_EndRoundFrame ();
+      Lay_EndRoundFrameTable ();
 
       /***** Free list of departments *****/
       Dpt_FreeListDepartments ();

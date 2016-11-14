@@ -272,7 +272,7 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** List the groups for each group type *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
    for (NumGrpTyp = 0;
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
@@ -1137,8 +1137,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Lay_StartRoundFrame (NULL,Txt_Types_of_group,NULL,Hlp_USERS_Groups);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Types_of_group,NULL,Hlp_USERS_Groups,2);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1221,7 +1220,7 @@ static void Grp_ListGroupTypesForEdition (void)
                          "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\" />"
+                         " class=\"ICO20x20\" />"
                          "</td>"
 	                 "<td class=\"LEFT_MIDDLE\">",
                Gbl.Prefs.IconsURL,
@@ -1313,8 +1312,7 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrame (NULL,Txt_Groups,NULL,Hlp_USERS_Groups);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,Hlp_USERS_Groups,2);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1349,7 +1347,7 @@ static void Grp_ListGroupsForEdition (void)
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->Open ? "open" :
                 	      "closed",
@@ -1369,7 +1367,7 @@ static void Grp_ListGroupsForEdition (void)
                   Grp->GrpName);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Grp->FileZones ? "folder-yes" :
                 	           "folder-no",
@@ -1431,6 +1429,7 @@ static void Grp_ListGroupsForEdition (void)
         }
      }
 
+   /***** End table *****/
    Lay_EndRoundFrameTable ();
   }
 
@@ -1587,7 +1586,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	 Act_FormStart (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
@@ -1761,8 +1760,7 @@ void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_Groups,NULL,Hlp_USERS_Groups);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,Hlp_USERS_Groups,0);
 
    /***** List to select the groups the user belongs to *****/
    for (NumGrpTyp = 0;
@@ -2015,7 +2013,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"\" style=\"width:15px;\">"
 	              "<img src=\"%s/%s_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
+	              " class=\"ICO20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             Grp->Open ? "open" :
@@ -2086,8 +2084,8 @@ static void Grp_PutFormToCreateGroupType (void)
    Act_FormStart (ActNewGrpTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_New_type_of_group,NULL,Hlp_USERS_Groups);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,
+                             NULL,Hlp_USERS_Groups,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
@@ -2146,7 +2144,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
             Gbl.Prefs.IconsURL,
@@ -2195,8 +2193,7 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStart (ActNewGrp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrame (NULL,Txt_New_group,NULL,Hlp_USERS_Groups);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,Hlp_USERS_Groups,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();
@@ -2209,12 +2206,12 @@ static void Grp_PutFormToCreateGroup (void)
                       "<td class=\"BM\">"
                       "<img src=\"%s/closed_off16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/folder-no_off16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>",
             Gbl.Prefs.IconsURL,
             Txt_Group_closed,

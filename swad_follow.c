@@ -225,16 +225,14 @@ void Fol_SuggestWhoToFollow (void)
    if (NumUsrs)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame ("560px",Txt_Who_to_follow,
-                           Fol_PutIconsWhoToFollow,
-                           Hlp_SOCIAL_Profiles_who_to_follow);
+      Lay_StartRoundFrameTable ("560px",Txt_Who_to_follow,
+                                Fol_PutIconsWhoToFollow,
+                                Hlp_SOCIAL_Profiles_who_to_follow,2);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Start listing *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
-
+      /***** List users *****/
       for (NumUsr = 0;
 	   NumUsr < NumUsrs;
 	   NumUsr++)
@@ -255,14 +253,11 @@ void Fol_SuggestWhoToFollow (void)
 	    fprintf (Gbl.F.Out,"</tr>");
 	}
 
-      /***** End listing *****/
-      fprintf (Gbl.F.Out,"</table>");
-
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Lay_EndRoundFrameTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
@@ -403,11 +398,11 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Following_unfollow,"REC_DAT_BOLD",NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/following64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON40x40\" />"
+			    " class=\"ICO40x40\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -419,11 +414,11 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,"REC_DAT_BOLD",NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+	 fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 			    " style=\"display:inline;\" >"
 			    "<img src=\"%s/follow64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON40x40\" />"
+			    " class=\"ICO40x40\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -717,10 +712,10 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
    if (!Gbl.Usrs.Me.Logged ||				// Not logged
        Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)	// It's me
       /* Inactive icon to follow/unfollow */
-      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIDDEN\">"
+      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIDDEN\">"
 			 "<img src=\"%s/usr64x64.gif\""
 			 " alt=\"\""
-			 " class=\"ICON25x25\" />"
+			 " class=\"ICO25x25\" />"
 			 "</div>",
 	       Gbl.Prefs.IconsURL);
    else
@@ -732,10 +727,10 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 Act_FormStart (ActUnfUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Following_unfollow,NULL,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
+	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
 			    "<img src=\"%s/following64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON25x25\" />"
+			    " class=\"ICO25x25\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
@@ -748,10 +743,10 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
 	 Act_FormStart (ActFolUsr);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 Act_LinkFormSubmit (Txt_Follow,NULL,NULL);
-	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICON ICON_HIGHLIGHT\">"
+	 fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
 			    "<img src=\"%s/follow64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON25x25\" />"
+			    " class=\"ICO25x25\" />"
 			    "</div>"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,

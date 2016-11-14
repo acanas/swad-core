@@ -93,12 +93,11 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Lay_StartRoundFrame (NULL,Txt_Places,
-                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
-                        	                                   NULL,
-                           NULL);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartRoundFrameTable (NULL,Txt_Places,
+                                Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
+                        	                                        NULL,
+                                NULL,2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
@@ -171,7 +170,6 @@ void Plc_SeePlaces (void)
 	       NumCtrsWithPlc);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
       Lay_EndRoundFrameTable ();
 
       /***** Free list of places *****/

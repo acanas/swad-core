@@ -222,7 +222,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
@@ -432,7 +432,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
    /***** Start date/time *****/
    UniqueId++;
@@ -1844,13 +1844,11 @@ void Svy_RequestCreatOrEditSvy (void)
    Svy_PutParams ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,ItsANewSurvey ? Txt_New_survey :
-	                                     Txt_Edit_survey,
-	                NULL,ItsANewSurvey ? Hlp_STATS_Surveys_new_survey :
-	                                     Hlp_STATS_Surveys_edit_survey);
-
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,ItsANewSurvey ? Txt_New_survey :
+	                                          Txt_Edit_survey,
+	                     NULL,ItsANewSurvey ? Hlp_STATS_Surveys_new_survey :
+	                                          Hlp_STATS_Surveys_edit_survey,
+	                     2);
 
    /***** Scope of the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2681,7 +2679,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3210,7 +3208,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	}
 
       /***** Write the heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
                          "<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
@@ -3261,7 +3259,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
             Svy_PutParamQstCod (SvyQst->QstCod);
             fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON20x20\" />",
+        	               " class=\"ICO20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_Edit_question,
                      Txt_Edit_question);

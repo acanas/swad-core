@@ -140,10 +140,9 @@ void Ins_SeeInsWithPendingCtrs (void)
    if ((NumInss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get institutions with pending centres")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrame (NULL,Txt_Institutions_with_pending_centres,
-                           NULL,Hlp_SYSTEM_Pending);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	                 "<tr>"
+      Lay_StartRoundFrameTable (NULL,Txt_Institutions_with_pending_centres,
+                                NULL,Hlp_SYSTEM_Pending,2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -188,6 +187,7 @@ void Ins_SeeInsWithPendingCtrs (void)
          Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
         }
 
+      /***** End table *****/
       Lay_EndRoundFrameTable ();
      }
    else
@@ -303,7 +303,7 @@ static void Ins_Configuration (bool PrintView)
 	                               Hlp_INSTITUTION_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -317,7 +317,7 @@ static void Ins_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       /***** Country *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -676,7 +676,7 @@ static void Ins_ListInstitutions (void)
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
       /***** Write all the institutions and their nuber of users *****/

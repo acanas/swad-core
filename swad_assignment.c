@@ -146,7 +146,7 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Asg_ORDER_BY_START_DATE;
 	   Order <= Asg_ORDER_BY_END_DATE;
@@ -348,7 +348,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Send work? */
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP COLOR%u\">"
                       "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+                      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
                       "<br />%s"
                       "</td>",
             (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
@@ -484,7 +484,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
                   Asg->Folder);
          fprintf (Gbl.F.Out,"<input type=\"image\""
                             " src=\"%s/folder-open-plus16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
+                            " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -492,7 +492,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
         }
       else				// I can't send files to this assignment folder
          fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />",
+                            " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Folder,Txt_Folder);
 

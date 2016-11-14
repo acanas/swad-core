@@ -127,10 +127,9 @@ void Cty_SeeCtyWithPendingInss (void)
    if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries with pending institutions")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrame (NULL,Txt_Countries_with_pending_institutions,
-                           NULL,Hlp_SYSTEM_Pending);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	                 "<tr>"
+      Lay_StartRoundFrameTable (NULL,Txt_Countries_with_pending_institutions,
+                                NULL,Hlp_SYSTEM_Pending,2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -237,7 +236,7 @@ static void Cty_Configuration (bool PrintView)
 	                	       Hlp_COUNTRY_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -290,7 +289,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -523,10 +522,9 @@ void Cty_ListCountries2 (void)
    const char *BgColor;
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Countries,
-                        Cty_PutIconsListCountries,Hlp_SYSTEM_Countries);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                      "<tr>");
+   Lay_StartRoundFrameTable (NULL,Txt_Countries,
+                             Cty_PutIconsListCountries,Hlp_SYSTEM_Countries,2);
+   fprintf (Gbl.F.Out,"<tr>");
    for (Order = Cty_ORDER_BY_COUNTRY;
 	Order <= Cty_ORDER_BY_NUM_USRS;
 	Order++)

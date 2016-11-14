@@ -3176,9 +3176,8 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       Brw_WriteTopBeforeShowingFileBrowser ();
 
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrame ("100%",Txt_Assignments_and_other_works,
-                           Brw_PutIconShowFigure,Hlp_ASSESSMENT_Works);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE\">");
+      Lay_StartRoundFrameTable ("100%",Txt_Assignments_and_other_works,
+                                Brw_PutIconShowFigure,Hlp_ASSESSMENT_Works,0);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
@@ -3309,7 +3308,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
          fprintf (Gbl.F.Out,"<li class=\"%s\">"
                             "<img src=\"%s/%s20x20.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"ICON25x25\""
+                            " class=\"ICO25x25\""
                             " style=\"margin-left:6px;\" />"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
@@ -5410,7 +5409,7 @@ static void Brw_PutIconRemoveFile (Brw_FileType_t FileType,
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5455,7 +5454,7 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5502,7 +5501,7 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
       sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                Gbl.Title,
                Gbl.Title);
@@ -5511,7 +5510,7 @@ static void Brw_PutIconCopy (Brw_FileType_t FileType,
    else
       fprintf (Gbl.F.Out,"<img src=\"%s/copy_off16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                Txt_Copy_not_allowed,
                Txt_Copy_not_allowed);
@@ -5550,7 +5549,7 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
    sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20B\" />",
+	              " class=\"ICO20x20B\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -5569,7 +5568,7 @@ static void Brw_PutIconPasteOff (void)
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/paste_off16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20B\" />"
+	              " class=\"ICO20x20B\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
             Txt_Copy_not_allowed,
@@ -5598,7 +5597,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
       case Brw_EXPAND_TREE_NOTHING:
          fprintf (Gbl.F.Out,"<img src=\"%s/tr16x16.gif\""
                             " alt=\"\" title=\"\""
-                            " class=\"ICON20x20B\" />",
+                            " class=\"ICO20x20B\" />",
                   Gbl.Prefs.IconsURL);
          break;
       case Brw_EXPAND_TREE_PLUS:
@@ -5627,7 +5626,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20B\" />",
+                            " class=\"ICO20x20B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -5660,7 +5659,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20B\" />",
+                            " class=\"ICO20x20B\" />",
                   Gbl.Prefs.IconsURL,
                   Gbl.Title,
                   Gbl.Title);
@@ -5689,7 +5688,7 @@ static void Brw_IndentDependingOnLevel (unsigned Level)
       fprintf (Gbl.F.Out,"<td style=\"width:20px;\">"
 	                 "<img src=\"%s/tr16x16.gif\""
 	                 " alt=\"\" title=\"\""
-	                 " class=\"ICON20x20B\" />"
+	                 " class=\"ICO20x20B\" />"
 	                 "</td>",
                Gbl.Prefs.IconsURL);
   }
@@ -5718,7 +5717,7 @@ static void Brw_PutIconShow (unsigned Level,Brw_FileType_t FileType,
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20B\" />",
+	              " class=\"ICO20x20B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
@@ -5752,7 +5751,7 @@ static void Brw_PutIconHide (unsigned Level,Brw_FileType_t FileType,
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20B\" />",
+	              " class=\"ICO20x20B\" />",
             Gbl.Prefs.IconsURL,
             Brw_CheckIfAnyUpperLevelIsHidden (Level) ? "off" :
         	                                       "on",
@@ -5820,7 +5819,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/folder-%s-plus16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
         	                                      "open",
@@ -5831,7 +5830,7 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
    else	// I can't create a new file or folder
       fprintf (Gbl.F.Out,"<img src=\"%s/folder-%s16x16.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20B\" />",
+	                 " class=\"ICO20x20B\" />",
                Gbl.Prefs.IconsURL,
                (ExpandTree == Brw_EXPAND_TREE_PLUS) ? "closed" :
         	                                      "open",
@@ -5854,7 +5853,7 @@ static void Brw_PutIconNewFileOrFolder (void)
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	              "<img src=\"%s/star16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20B\" />"
+	              " class=\"ICO20x20B\" />"
 	              "</td>",
             Gbl.RowEvenOdd,Gbl.Prefs.IconsURL,
             Txt_New_FILE_OR_FOLDER,
@@ -5945,8 +5944,8 @@ static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *F
 	 fprintf (Gbl.F.Out,"xxx%ux%u.gif\" alt=\"\"",
 	          Size,Size);
      }
-   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"ICON20x20\"/>" :
-	                             " class=\"ICON40x40\"/>");
+   fprintf (Gbl.F.Out,(Size == 16) ? " class=\"ICO20x20\"/>" :
+	                             " class=\"ICO40x40\"/>");
   }
 
 /*****************************************************************************/
@@ -6067,7 +6066,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,Brw_FileType_t FileT
       if (IsPublic)
          fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/open_on16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Public_open_educational_resource_OER_for_everyone,
                   Txt_Public_open_educational_resource_OER_for_everyone);
@@ -6175,7 +6174,7 @@ static void Brw_WriteDatesAssignment (void)
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/arrow%s16x12.gif\""
                          " alt=\"\" title=\"\""
-                         " class=\"ICON20x15B\" />"
+                         " class=\"ICO20x15B\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,
                Gbl.FileBrowser.Asg.Open ? "green" :
@@ -9850,7 +9849,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/grades32x32.gif\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON40x40\" />"
+			 " class=\"ICO40x40\" />"
 			 "</a>",
 	       FileNameToShow,Gbl.Prefs.IconsURL,
 	       Gbl.Title,Gbl.Title);
@@ -9868,7 +9867,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
       fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;"
 			 "<img src=\"%s/download64x64.png\""
 			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICON40x40\" />"
+			 " class=\"ICO40x40\" />"
 			 "</a>",
 	       FileNameToShow,
 	       Gbl.Prefs.IconsURL,
@@ -11765,7 +11764,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 	 /* Icon with folder */
 	 fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />",
+			    " class=\"ICO20x20\" />",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Folder,Txt_Folder);
       else

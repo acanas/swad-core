@@ -965,7 +965,7 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Question;
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
 	              "<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -1029,7 +1029,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 	              "<td class=\"BT%u CENTER_TOP\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
@@ -1091,7 +1091,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
       if (Gbl.Test.Shuffle)
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   QuestionExists ? "ok_off" :
                 	           "ok_on",
@@ -1159,7 +1159,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             if (Gbl.Test.Answer.Options[NumOpt].Correct)
                fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON20x20\" />",
+        	                  " class=\"ICO20x20\" />",
                         Gbl.Prefs.IconsURL,
                         QuestionExists ? "ok_off" :
                                          "ok_on",

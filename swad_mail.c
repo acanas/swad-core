@@ -101,12 +101,11 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Table head *****/
-   Lay_StartRoundFrame (NULL,Txt_Mail_domains_allowed_for_notifications,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
-                                                                NULL,
-                        NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	              "<tr>");
+   Lay_StartRoundFrameTable (NULL,Txt_Mail_domains_allowed_for_notifications,
+                             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
+                                                                     NULL,
+                             NULL,2);
+   fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
 	Order++)
@@ -147,8 +146,7 @@ void Mai_SeeMailDomains (void)
                Gbl.Mails.Lst[NumMai].NumUsrs);
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of mail domains *****/
    Mai_FreeListMailDomains ();
@@ -1236,7 +1234,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 sprintf (Gbl.Title,Txt_Email_X_confirmed,row[0]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />",
+			    " class=\"ICO20x20\" />",
 		  Gbl.Prefs.IconsURL,
 		  Gbl.Title,Gbl.Title);
 	}

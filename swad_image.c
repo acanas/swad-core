@@ -215,7 +215,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
    fprintf (Gbl.F.Out,"<label class=\"IMG_UPLOAD_BUTTON\">"
 	              "<img src=\"%s/photo64x64.gif\""
 	              " alt=\"%s\" title=\"%s (%s)\""
-	              " class=\"IMG_UPLOAD_ICON\" />"
+	              " class=\"IMG_UPLOAD_ICO\" />"
 	              "<input type=\"file\" name=\"%s\" accept=\"image/*\""
 	              " class=\"IMG_UPLOAD_FILE\""
 	              " onchange=\"imageUploadOnSelectFile (this,'%s');\" />"

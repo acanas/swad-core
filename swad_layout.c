@@ -1048,11 +1048,10 @@ void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
 
 void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
   {
-   // margin is used because this form link may be placed after another one
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img src=\"%s/%s\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />",
+	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,Icon,
             Alt,Text ? Text : Alt);
    if (Text)
@@ -1069,13 +1068,13 @@ void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
 
 void Lay_PutCalculateIcon (const char *Alt)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""	// TODO: change name and resolution to refresh64x64.png
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />"
+		      " class=\"ICO20x20\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""	// TODO: change name and resolution to refreshing64x64.gif
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" style=\"display:none;\" />"	// Animated icon hidden
+		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
 		      "</div>"
 		      "</a>",
 	    Gbl.Form.Num,Gbl.Prefs.IconsURL,Alt,Alt,
@@ -1089,14 +1088,14 @@ void Lay_PutCalculateIcon (const char *Alt)
 
 void Lay_PutCalculateIconWithText (const char *Alt,const char *Text)
   {
-   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 	              " style=\"margin:0 6px 0 0; display:inline;\">"
 	              "<img id=\"update_%d\" src=\"%s/recycle16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />"
+		      " class=\"ICO20x20\" />"
 		      "<img id=\"updating_%d\" src=\"%s/working16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" style=\"display:none;\" />"	// Animated icon hidden
+		      " class=\"ICO20x20\" style=\"display:none;\" />"	// Animated icon hidden
 		      "&nbsp;%s"
 		      "</div>"
 		      "</a>",
@@ -1115,7 +1114,7 @@ void Lay_PutIconRemovalNotAllowed (void)
 
    fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />",
+		      " class=\"ICO20x20\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Removal_not_allowed,
 	    Txt_Removal_not_allowed);
@@ -1127,7 +1126,7 @@ void Lay_PutIconBRemovalNotAllowed (void)
 
    fprintf (Gbl.F.Out,"<img src=\"%s/remove-off64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20B\" />",
+		      " class=\"ICO20x20B\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Removal_not_allowed,
 	    Txt_Removal_not_allowed);
@@ -1143,7 +1142,7 @@ void Lay_PutIconRemove (void)
 
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20\" />",
+		      " class=\"ICO20x20\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);
@@ -1155,7 +1154,7 @@ void Lay_PutIconBRemove (void)
 
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICON20x20B\" />",
+		      " class=\"ICO20x20B\" />",
 	    Gbl.Prefs.IconsURL,
 	    Txt_Remove,
 	    Txt_Remove);
@@ -1231,7 +1230,7 @@ void Lay_StartRoundFrameTable (const char *Width,const char *Title,
   {
    Lay_StartRoundFrame (Width,Title,FunctionToDrawContextualIcons,HelpLink);
 
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL");
    if (CellPadding)
       fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
    fprintf (Gbl.F.Out,"\">");
@@ -1250,26 +1249,30 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,
        fprintf (Gbl.F.Out," style=\"box-sizing:border-box; width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
-   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
    if (FunctionToDrawContextualIcons)
      {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS_LEFT\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_LEFT\">");
       FunctionToDrawContextualIcons ();
       fprintf (Gbl.F.Out,"</div>");
      }
    if (HelpLink)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS_RIGHT\">"
-                         "<a href=\"%s\" target=\"_blank\">",
-	       HelpLink);
-      Lay_PutIconWithText ("help64x64.png",Txt_Help,NULL);
-      fprintf (Gbl.F.Out,"</a>"
-                         "</div>");
-     }
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_RIGHT\">"
+                         "<a href=\"%s\" target=\"_blank\">"
+                         "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
+	                 "<img src=\"%s/help64x64.png\""
+	                 " alt=\"%s\" title=\"%s\""
+	                 " class=\"ICO20x20\" />"
+                         "</div>"
+                         "</a>"
+                         "</div>",
+	       HelpLink,
+               Gbl.Prefs.IconsURL,
+               Txt_Help,Txt_Help);
    fprintf (Gbl.F.Out,"</div>");
 
    if (Title)
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">"
 	                 "%s"
 	                 "</div>",
 	       Title);
@@ -1285,7 +1288,7 @@ void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding)
    if (Width)
        fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
    fprintf (Gbl.F.Out,">"
-                      "<table class=\"FRAME_TABLE");
+                      "<table class=\"FRAME_TBL");
    if (CellPadding)
       fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
    fprintf (Gbl.F.Out,"\">");
@@ -1722,7 +1725,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 	i++)
       fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	                 " alt=\"\" title=\"\""
-                         " class=\"ICON25x25\" />",
+                         " class=\"ICO25x25\" />",
 		  Gbl.Prefs.IconsURL,
 		  IsLastItemInLevel[i] ? "tr" :
 		                         "subleft");
@@ -1730,7 +1733,7 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
    /***** Level *****/
    fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
 	              " alt=\"\" title=\"\""
-                      " class=\"ICON25x25\" />",
+                      " class=\"ICO25x25\" />",
 	    Gbl.Prefs.IconsURL,
 	    IsLastItemInLevel[Level] ? "subend" :
 				       "submid");

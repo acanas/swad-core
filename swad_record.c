@@ -1448,7 +1448,7 @@ static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListU
 	              " onclick=\"document.getElementById('%s').submit();\" />"
                       "<img src=\"%s/clock64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "<span class=\"%s\">&nbsp;%s</span>"
                       "</div>",
             Gbl.Form.Id,
@@ -2075,13 +2075,11 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
-   Lay_StartRoundFrame (StrRecordWidth,NULL,
-                        Rec_PutIconsCommands,
-                        TypeOfView == Rec_FORM_MY_COMMON_RECORD ? Hlp_PROFILE_Record :
-                                                                  NULL);
-
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (StrRecordWidth,NULL,
+                             Rec_PutIconsCommands,
+                             TypeOfView == Rec_FORM_MY_COMMON_RECORD ? Hlp_PROFILE_Record :
+                                                                       NULL,
+                             2);
 
    /***** Institution and user's photo *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2113,7 +2111,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       /***** Show e-mail and user's ID *****/
       if (ShowIDRows)
 	{
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 	 Rec_ShowEmail (UsrDat,ClassForm);
 	 Rec_ShowUsrIDs (UsrDat,ClassForm);
          fprintf (Gbl.F.Out,"</table>");
@@ -2141,7 +2139,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
             break;
         }
 
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       if (ShowIDRows)
 	{
@@ -2243,11 +2241,8 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
 			 "</tr>");
      }
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-
    /***** End frame *****/
-   Lay_EndRoundFrame ();
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
@@ -2277,7 +2272,7 @@ static void Rec_PutIconsCommands (void)
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICONS\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
 
       /***** Button to edit my record card *****/
       if (ItsMe)
@@ -2797,7 +2792,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out," />"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />"
+			    " class=\"ICO20x20\" />"
 			    "%s",
 		  Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
 		  Txt_SEX_SINGULAR_Abc[Sex],
@@ -3541,14 +3536,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
-   Lay_StartRoundFrame ("800px",
-                        IAmTeacher ? Txt_Institution_centre_and_department :
-	                             Txt_Institution,
-	                NULL,Hlp_PROFILE_Institution);
+   Lay_StartRoundFrameTable ("800px",
+                             IAmTeacher ? Txt_Institution_centre_and_department :
+	                                  Txt_Institution,
+	                     NULL,Hlp_PROFILE_Institution,2);
 
    /***** Country *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	              "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"%s RIGHT_MIDDLE\">"
 		      "%s:"
 		      "</td>"

@@ -515,7 +515,7 @@ void ID_ShowFormOthIDs (void)
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form with the user's ID *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 	 fprintf (Gbl.F.Out,"</table>");
@@ -602,7 +602,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 sprintf (Gbl.Title,Txt_ID_X_confirmed,UsrDat->IDs.List[NumID].ID);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ok_green16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />",
+			    " class=\"ICO20x20\" />",
 		  Gbl.Prefs.IconsURL,
 		  Gbl.Title,Gbl.Title);
 	}

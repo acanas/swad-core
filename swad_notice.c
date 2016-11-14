@@ -103,8 +103,7 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices,2);
 
    /***** Message body *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -454,7 +453,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	    fprintf (Gbl.F.Out,"\" target=\"_blank\">"
 			       "<img src=\"%s/rss16x16.gif\""
 			       " alt=\"RSS\" title=\"RSS\""
-			       " class=\"ICON20x20\" />"
+			       " class=\"ICO20x20\" />"
 			       "</a>"
 			       "</div>",
 		     Gbl.Prefs.IconsURL);
@@ -639,11 +638,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	 /* Form to remove notice */
 	 Act_FormStart (ActReqRemNot);
 	 Not_PutHiddenParamNotCod (NotCod);
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
         	            "<input type=\"image\""
 	                    " src=\"%s/remove-on64x64.png\""
 			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICON20x20\" />"
+			    " class=\"ICO20x20\" />"
         	            "</div>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Remove,
@@ -656,11 +655,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_ACTIVE_NOTICE:
                Act_FormStart (ActHidNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
         	                  "<input type=\"image\""
         	                  " src=\"%s/eye-on64x64.png\""
         	                  " alt=%s\" title=\"%s\""
-        	                  " class=\"ICON20x20\" />"
+        	                  " class=\"ICO20x20\" />"
         	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Active_Mark_as_obsolete,
@@ -669,11 +668,11 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
             case Not_OBSOLETE_NOTICE:
                Act_FormStart (ActRevNot);
                Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICON_HIGHLIGHT\">"
+               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
         	                  "<input type=\"image\""
         	                  " src=\"%s/eye-slash-on64x64.png\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON20x20\" />"
+        	                  " class=\"ICO20x20\" />"
         	                  "</div>",
                         Gbl.Prefs.IconsURL,
                         Txt_NOTICE_Obsolete_Mark_as_active,
@@ -690,7 +689,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/eye-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON20x20\" />"
+                                  " class=\"ICO20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Active_SINGULAR,
                         Gbl.Prefs.IconsURL,
@@ -701,7 +700,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                fprintf (Gbl.F.Out,"<span title=\"%s\">"
                                   "<img src=\"%s/eye-slash-off64x64.png\""
                                   " alt=\"%s\" title=\"%s\""
-                                  " class=\"ICON20x20\" />"
+                                  " class=\"ICO20x20\" />"
                                   "</span>",
                         Txt_NOTICE_Obsolete_SINGULAR,
                         Gbl.Prefs.IconsURL,
@@ -748,7 +747,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON40x40\" />"
+	                 " class=\"ICO40x40\" />"
 	                 "</a>",
 	       Gbl.Prefs.IconsURL,
 	       Txt_See_full_notice,

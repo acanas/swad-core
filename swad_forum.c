@@ -995,7 +995,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
 
    fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" /> ",
+                      " class=\"ICO20x20\" /> ",
             Gbl.Prefs.IconsURL,
             Thr.NumUnreadPosts ? "msg-unread" :
         	                 "msg-open",
@@ -1060,8 +1060,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
          Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
 
       /***** Show posts from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrame (NULL,Txt_Posts,NULL,Hlp_SOCIAL_Forums);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      Lay_StartRoundFrameTable (NULL,Txt_Posts,NULL,Hlp_SOCIAL_Forums,2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1199,7 +1198,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 	              "<td class=\"%s CENTER_TOP\" style=\"width:30px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "</td>",
             NewPst ? "MSG_TIT_BG_NEW" :
         	     "MSG_TIT_BG",
@@ -1266,7 +1265,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                   PstNum);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Enabled ? "eye" :
                 	    "eye-slash",
@@ -1282,7 +1281,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
          fprintf (Gbl.F.Out,"<span title=\"%s\">"
                             "<img src=\"%s/%s-off64x64.png\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />"
+                            " class=\"ICO20x20\" />"
                             "</span>",
                   Gbl.Title,
                   Gbl.Prefs.IconsURL,
@@ -1925,7 +1924,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
    Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/forum64x64.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
+	              " class=\"ICO20x20\" />"
                       "&nbsp;%s"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -2129,7 +2128,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_GLOBAL_TCHS:
          sprintf (Icon,"<img src=\"%s/forum64x64.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON20x20\" />",
+                       " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2137,7 +2136,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_SWAD_TCHS:
          sprintf (Icon,"<img src=\"%s/swad64x64.gif\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON20x20\" />",
+                       " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2152,7 +2151,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
       case For_FORUM_COURSE_TCHS:
          sprintf (Icon,"<img src=\"%s/dot64x64.png\""
                        " alt=\"%s\" title=\"%s\""
-                       " class=\"ICON20x20\" />",
+                       " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
@@ -2271,7 +2270,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
       if (For_CheckIfThrBelongsToForum (Gbl.Forum.ThreadToMove,ForumType))
          fprintf (Gbl.F.Out,"<img src=\"%s/paste_off16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Copy_not_allowed,Txt_Copy_not_allowed);
       else
@@ -2282,7 +2281,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
          For_PutHiddenParamThrCod (Gbl.Forum.ThreadToMove);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Paste_thread,
                   Txt_Paste_thread);
@@ -2623,8 +2622,7 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Start table *****/
-      Lay_StartRoundFrame (NULL,Txt_Threads,NULL,Hlp_SOCIAL_Forums);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      Lay_StartRoundFrameTable (NULL,Txt_Threads,NULL,Hlp_SOCIAL_Forums,2);
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3412,7 +3410,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\" style=\"width:30px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20\" />",
+	                 " class=\"ICO20x20\" />",
                BgColor,
 	       Gbl.Prefs.IconsURL,
                Thr.NumUnreadPosts ? "msg-unread" :
@@ -3443,7 +3441,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          For_PutHiddenParamThrCod (Thr.ThrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   Txt_Move_thread,
                   Txt_Move_thread);

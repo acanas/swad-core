@@ -154,10 +154,9 @@ void Ctr_SeeCtrWithPendingDegs (void)
    if ((NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres with pending degrees")))
      {
       /***** Write heading *****/
-      Lay_StartRoundFrame (NULL,Txt_Centres_with_pending_degrees,
-                           NULL,Hlp_SYSTEM_Pending);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	                 "<tr>"
+      Lay_StartRoundFrameTable (NULL,Txt_Centres_with_pending_degrees,
+                                NULL,Hlp_SYSTEM_Pending,2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -305,7 +304,7 @@ static void Ctr_Configuration (bool PrintView)
 	                               Hlp_CENTRE_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TABLE_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
 	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
@@ -373,7 +372,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       /***** Institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -753,7 +752,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/

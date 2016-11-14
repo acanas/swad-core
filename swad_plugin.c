@@ -91,14 +91,13 @@ void Plg_ListPlugins (void)
    Plg_GetListPlugins ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,Txt_Plugins,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
-                                                                NULL,
-                        NULL);
+   Lay_StartRoundFrameTable (NULL,Txt_Plugins,
+                             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Plg_PutIconToEditPlugins :
+                                                                     NULL,
+                             NULL,2);
 
    /***** Write table heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                      "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
                       "<th style=\"width:40px;\">"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -123,7 +122,7 @@ void Plg_ListPlugins (void)
                          "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON40x40\" />"
+                         " class=\"ICO40x40\" />"
                          "</a>"
                          "</td>"
                          "<td class=\"DAT LEFT_MIDDLE\">"
@@ -140,8 +139,7 @@ void Plg_ListPlugins (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
+   Lay_EndRoundFrameTable ();
 
    /***** Free list of plugins *****/
    Plg_FreeListPlugins ();
@@ -385,7 +383,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:45px;\">"
                          "<img src=\"%s/%s/%s24x24.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON40x40\" />"
+                         " class=\"ICO40x40\" />"
                          "</td>",
                Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_PLUGINS,
                Gbl.Plugins.Lst[NumPlg].Logo,

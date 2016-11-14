@@ -197,11 +197,10 @@ static void DT_ListDegreeTypesForSeeing (void)
    const char *BgColor;
 
    /***** Write heading *****/
-   Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
-                        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
-                                                                NULL,
-                        NULL);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
+                             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
+                                                                     NULL,
+                             NULL,2);
    DT_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
@@ -218,7 +217,7 @@ static void DT_ListDegreeTypesForSeeing (void)
                          "<td class=\"%s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\" />"
+                         " class=\"ICO20x20\" />"
                          "</td>",
                BgColor,
                Gbl.Prefs.IconsURL,

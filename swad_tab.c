@@ -119,7 +119,7 @@ void Tab_DrawTabs (void)
 	   {
 	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
 	    if (NumTab != Gbl.Action.Tab)
-	       fprintf (Gbl.F.Out," class=\"ICON_HIGHLIGHT\"");
+	       fprintf (Gbl.F.Out," class=\"ICO_HIGHLIGHT\"");
 	    fprintf (Gbl.F.Out,">");
 	    Act_FormStart (ActMnu);
 	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
@@ -128,7 +128,7 @@ void Tab_DrawTabs (void)
 			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
+			       " class=\"ICO40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>"
 			       "</a>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
@@ -141,10 +141,10 @@ void Tab_DrawTabs (void)
 	    Act_FormEnd ();
 	   }
 	 else
-	    fprintf (Gbl.F.Out,"<div class=\"ICON_HIDDEN\">"
+	    fprintf (Gbl.F.Out,"<div class=\"ICO_HIDDEN\">"
 			       "<img src=\"%s/%s/%s\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON40x40\" style=\"margin:3px;\" />"
+			       " class=\"ICO40x40\" style=\"margin:3px;\" />"
 			       "<div class=\"TAB_TXT %s\">%s</div>",
 		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		     Tab_TabIcons[NumTab],

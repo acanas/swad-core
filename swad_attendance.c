@@ -219,7 +219,7 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Att_ORDER_BY_START_DATE;
 	   Order <= Att_ORDER_BY_END_DATE;
@@ -1113,10 +1113,9 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrame (NULL,ItsANewAttEvent ? Txt_New_event :
-                                               Txt_Edit_event,
-                        NULL,Hlp_USERS_Attendance);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,ItsANewAttEvent ? Txt_New_event :
+                                                    Txt_Edit_event,
+                             NULL,Hlp_USERS_Attendance,2);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1829,8 +1828,7 @@ void Att_SeeOneAttEvent (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
-   Lay_StartRoundFrame (NULL,Txt_Event,NULL,Hlp_USERS_Attendance);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Event,NULL,Hlp_USERS_Attendance,2);
    Att.AttCod = Gbl.AttEvents.AttCod;
    Att_ShowOneAttEvent (&Att,true);
    Lay_EndRoundFrameTable ();
@@ -1875,9 +1873,8 @@ static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att)
 
    /***** List students' data *****/
    /* Header */
-   Lay_StartRoundFrame (NULL,NULL,NULL,Hlp_USERS_Attendance);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                      "<tr>"
+   Lay_StartRoundFrameTable (NULL,NULL,NULL,Hlp_USERS_Attendance,2);
+   fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th></th>"
 		      "<th></th>");
@@ -1948,9 +1945,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 
       /***** List students' data *****/
       /* Header */
-      Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-                         "<tr>"
+      Lay_StartRoundFrameTable (NULL,Txt_Attendance,
+                                NULL,Hlp_USERS_Attendance,2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th></th>"
                          "<th></th>");
@@ -2024,7 +2021,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%u\">"
 	              "<img src=\"%s/%s16x16.gif\""
-	              " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+	              " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	              "</td>",
             Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
@@ -3036,8 +3033,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Events,NULL,Hlp_USERS_Attendance);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Events,NULL,Hlp_USERS_Attendance,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3147,8 +3143,8 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                         	                                    NULL),
                         Hlp_USERS_Attendance);
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
-            PutButtonShowDetails ? "FRAME_TABLE_MARGIN" :
-        	                   "FRAME_TABLE");
+            PutButtonShowDetails ? "FRAME_TBL_MARGIN" :
+        	                   "FRAME_TBL");
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3319,7 +3315,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 
 	 fprintf (Gbl.F.Out,"<td class=\"BM%u\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-	                    " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+	                    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "</td>",
 		  Gbl.RowEvenOdd,
 		  Gbl.Prefs.IconsURL,
@@ -3360,8 +3356,7 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Details,NULL,Hlp_USERS_Attendance);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Details,NULL,Hlp_USERS_Attendance,2);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;
@@ -3476,7 +3471,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
 	                    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
 			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s');"

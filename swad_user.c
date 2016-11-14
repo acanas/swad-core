@@ -1755,15 +1755,14 @@ void Usr_WriteFormLogin (void)
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActAutUsrInt);
-   Lay_StartRoundFrame (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in);
+   Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in,2);
 
    /***** User's ID/nickname and password *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">"
-	              "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/user64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
+	              " class=\"ICO20x20\" />"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
@@ -1775,7 +1774,7 @@ void Usr_WriteFormLogin (void)
 		      "<td class=\"BM\">"
                       "<img src=\"%s/key64x64.gif\""
                       " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
+	              " class=\"ICO20x20\" />"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
 		      "<input type=\"password\" name=\"UsrPwd\""
@@ -1795,15 +1794,7 @@ void Usr_WriteFormLogin (void)
             Txt_password);
 
    /***** Send button and form end *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"CENTER_MIDDLE\">"
-                      "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
-                      "%s"
-                      "</button>"
-                      "</td>"
-	              "</tr>",
-	              Txt_Log_in);
-   Lay_EndRoundFrameTable ();
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Log_in);
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
@@ -1841,7 +1832,7 @@ void Usr_WelcomeUsr (void)
                   Usr_InsertMyBirthday ();
                   fprintf (Gbl.F.Out,"<img src=\"%s/%s/cake128x128.gif\""
                 	             " alt=\"%s\" title=\"%s\""
-                                     " class=\"ICON160x160\" />",
+                                     " class=\"ICO160x160\" />",
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
@@ -1938,7 +1929,7 @@ void Usr_PutFormLogIn (void)
    Act_LinkFormSubmit (Txt_Log_in,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/login-green64x64.png\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -2014,7 +2005,7 @@ void Usr_PutFormLogOut (void)
    Act_LinkFormSubmit (Txt_Log_out,The_ClassHead[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/logout-red64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       "<span id=\"login_txt\">&nbsp;%s</span>"
                       "</a>",
             Gbl.Prefs.IconsURL,
@@ -2864,7 +2855,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    fprintf (Gbl.F.Out,"\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />"
+	              " class=\"ICO20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
@@ -5218,7 +5209,7 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
                                                     NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
                       " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
                       " %s</a>",
             Gbl.Prefs.IconsURL,
             Usr_IconsClassPhotoOrList[ListType],

@@ -250,12 +250,12 @@ static void Net_ShowAWebOrSocialNet (const char *URL,
                                      const char *Icon,const char *Title)
   {
    /***** Write link and icon *****/
-   fprintf (Gbl.F.Out,"<div class=\"ICON_HIGHLIGHT\""
+   fprintf (Gbl.F.Out,"<div class=\"ICO_HIGHLIGHT\""
 		      " style=\"display:inline;\">"
 		      "<a href=\"%s\" target=\"_blank\" title=\"%s\">"
 		      "<img src=\"%s/%s\""
 		      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICON20x20\" />"
+                      " class=\"ICO20x20\" />"
 		      "</a>"
 		      "</div>",
 	    URL,Title,
@@ -331,7 +331,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 "<td class=\"%s LEFT_MIDDLE\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
-                         " class=\"ICON20x20\""
+                         " class=\"ICO20x20\""
 			 " style=\"margin-right:12px;\" />"
 			 "%s:</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
@@ -524,9 +524,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
                                         "can not get number of users with webs / social networks");
 
    /***** Number of users *****/
-   Lay_StartRoundFrame (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],
-                        NULL,Hlp_STATS_Figures_webs_social_networks);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_NETWORKS],
+                             NULL,Hlp_STATS_Figures_webs_social_networks,2);
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\">"
@@ -569,7 +568,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "<img src=\"%s/%s\""
 			    " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\""
+                            " class=\"ICO20x20\""
 			    " style=\"margin-right:12px;\" />"
 			    "%s</td>"
 			    "<td class=\"DAT RIGHT_MIDDLE\">"

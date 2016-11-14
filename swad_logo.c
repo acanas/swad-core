@@ -155,7 +155,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
 			Gbl.Prefs.IconsURL,Icon[Scope]);
 	    fprintf (Gbl.F.Out,"\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON%ux%u",
+			       " class=\"ICO%ux%u",
 		     AltText,AltText,
 		     Size,Size);
 	    if (Class)

@@ -427,7 +427,7 @@ void Tst_ShowNewTestExam (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
+	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
 	    fprintf (Gbl.F.Out,"</table>");
 
@@ -525,7 +525,7 @@ void Tst_AssessTestExam (void)
 	   }
 
 	 /***** Write answers and solutions *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
 	 Tst_ShowTstResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 fprintf (Gbl.F.Out,"</table>");
 
@@ -1662,7 +1662,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
             fprintf (Gbl.F.Out,"eye-off64x64.png\" alt=\"%s\" title=\"%s",
                      Txt_Tag_allowed,
                      Txt_Tag_allowed);
-         fprintf (Gbl.F.Out,"\" class=\"ICON20x20\" />"
+         fprintf (Gbl.F.Out,"\" class=\"ICO20x20\" />"
                             "</td>");
         }
       fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
@@ -1708,8 +1708,7 @@ static void Tst_ShowFormEditTags (void)
    if ((NumRows = Tst_GetAllTagsFromCurrentCrs (&mysql_res)))
      {
       /***** Start table *****/
-      Lay_StartRoundFrame (NULL,Txt_Tags,NULL,Hlp_ASSESSMENT_Tests);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      Lay_StartRoundFrameTable (NULL,Txt_Tags,NULL,Hlp_ASSESSMENT_Tests,2);
 
       /***** Show tags *****/
       for (NumRow = 0;
@@ -1765,7 +1764,7 @@ static void Tst_PutIconEnable (long TagCod,const char *TagTxt)
    sprintf (Gbl.Title,Txt_Tag_X_not_allowed_Click_to_allow_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />",
+	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -1787,7 +1786,7 @@ static void Tst_PutIconDisable (long TagCod,const char *TagTxt)
    sprintf (Gbl.Title,Txt_Tag_X_allowed_Click_to_disable_it,TagTxt);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICON20x20\" />",
+	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,
             Gbl.Title,
             Gbl.Title);
@@ -2678,7 +2677,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                         Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE_MARGIN CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
 	              "<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -2785,7 +2784,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICON20x20\" />",
+	                 " class=\"ICO20x20\" />",
                Gbl.Prefs.IconsURL,
                Txt_Edit_question,
                Txt_Edit_question);
@@ -3071,7 +3070,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             if (row[6][0] == 'Y')
                fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICON20x20\" />",
+        	                  " class=\"ICO20x20\" />",
                         Gbl.Prefs.IconsURL,
                         Txt_TEST_Correct_answer,
                         Txt_TEST_Correct_answer);
@@ -3534,7 +3533,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
       if (AnswersUsr[Indexes[NumOpt]] == true)	// This answer has been selected by the user
          fprintf (Gbl.F.Out,"<img src=\"%s/%s16x16.gif\""
                             " alt=\"%s\" title=\"%s\""
-                            " class=\"ICON20x20\" />",
+                            " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_EACH_GOOD_BAD ||
                    Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK) ?
@@ -3553,7 +3552,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
          if (Gbl.Test.Answer.Options[Indexes[NumOpt]].Correct)
             fprintf (Gbl.F.Out,"<img src=\"%s/ok_on16x16.gif\""
         	               " alt=\"%s\" title=\"%s\""
-        	               " class=\"ICON20x20\" />",
+        	               " class=\"ICO20x20\" />",
                      Gbl.Prefs.IconsURL,
                      Txt_TEST_Correct_answer,
                      Txt_TEST_Correct_answer);
@@ -4742,7 +4741,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
       fprintf (Gbl.F.Out," onclick=\"toggleAnswer('%u'); return false;\" />"
                          "<img src=\"%s/expand64x64.png\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                 "</a>",
                NumOpt,Gbl.Prefs.IconsURL,
 	       Gbl.Title,Gbl.Title);
@@ -4754,7 +4753,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	 fprintf (Gbl.F.Out," style=\"display:none;\"");	// Hide icon
       fprintf (Gbl.F.Out," onclick=\"toggleAnswer(%u); return false;\" />"
                          "<img src=\"%s/contract64x64.png\""
-			 " alt=\"%s\" title=\"%s\" class=\"ICON20x20\" />"
+			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                 "</a>",
                NumOpt,Gbl.Prefs.IconsURL,
 	       Gbl.Title,Gbl.Title);
@@ -6940,8 +6939,7 @@ void Tst_SelDatesToSeeMyExams (void)
    Act_FormStart (ActSeeMyTstExa);
 
    /***** Starting and ending dates in the search *****/
-   Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
@@ -7008,11 +7006,10 @@ void Tst_ShowUsrsExams (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Check the number of users whose tests results will be shown *****/
-   if (Usr_CountNumUsrsInListOfSelectedUsrs ())				// If some users are selected...
+   if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+      Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7105,8 +7102,7 @@ void Tst_ShowMyExams (void)
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrame (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_2\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
    Tst_ShowHeaderTestResults ();
 
    /***** List my results in test exams *****/
@@ -7279,7 +7275,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file64x64.gif\""
 			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICON20x20B\" />",
+			       " class=\"ICO20x20B\" />",
 		     Gbl.Prefs.IconsURL,
 		     Txt_See_exam,
 		     Txt_See_exam);
@@ -7503,7 +7499,7 @@ void Tst_ShowOneExam (void)
                               Gbl.CurrentCrs.Crs.CrsCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TABLE CELLS_PAD_10\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
 
    /***** Header row *****/
    /* Get data of the user who made the exam */

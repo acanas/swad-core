@@ -674,7 +674,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
 	 Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-			    " alt=\"%s\" title=\"%s\" class=\"ICON40x40\" />"
+			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
 			    "</a>",
 		  Gbl.Prefs.IconsURL,
 		  Txt_Connected_users,Txt_Connected_users);

@@ -710,7 +710,7 @@ a:hover						/* Default ==> underlined */
 	opacity:1;
 	transform:scale(1.25,1.25);
 	}
-#main_horizontal .MENU_ICON
+#main_horizontal .MENU_ICO
 	{
 	box-sizing:border-box;
 	padding:32px 0 0 0;
@@ -769,7 +769,7 @@ a:hover						/* Default ==> underlined */
 		opacity:1;
 		transform:scale(1.2,1.2);
 		}
-	#main_vertical .MENU_ICON
+	#main_vertical .MENU_ICO
 		{
 		box-sizing:border-box;
 		padding:32px 0 0 0;
@@ -825,7 +825,7 @@ a:hover						/* Default ==> underlined */
 		{
 		opacity:1;
 		}
-	#main_vertical .MENU_ICON
+	#main_vertical .MENU_ICO
 		{
 		display:table-cell;
 		height:42px;
@@ -1269,7 +1269,7 @@ a:hover						/* Default ==> underlined */
 	box-sizing:border-box;
 	max-width:90%;
 	margin:8px auto 0 auto;
-	background-color:#FFF9E0;
+	background-color:#FFF9EA;
 	background-position:12px 12px;
 	background-size:20px 20px;
 	background-repeat:no-repeat;
@@ -1284,14 +1284,14 @@ a:hover						/* Default ==> underlined */
 	}
 
 /*********************************** Icons ***********************************/
-.ICON20x15B	{width:20px; height:15px; vertical-align:middle; display:block;}
-.ICON20x20	{width:20px; height:20px; vertical-align:middle;}
-.ICON20x20B	{width:20px; height:20px; vertical-align:middle; display:block;}
-.ICON25x25	{width:25px; height:25px; vertical-align:middle;}
-.ICON40x40	{width:40px; height:40px; vertical-align:middle;}
-.ICON40x40B	{width:40px; height:40px; vertical-align:middle; display:block;}
-.ICON64x64	{width:64px; height:64px; vertical-align:middle;}
-.ICON160x160	{width:160px; height:160px; vertical-align:middle;}
+.ICO20x15B	{width:20px; height:15px; vertical-align:middle; display:block;}
+.ICO20x20	{width:20px; height:20px; vertical-align:middle;}
+.ICO20x20B	{width:20px; height:20px; vertical-align:middle; display:block;}
+.ICO25x25	{width:25px; height:25px; vertical-align:middle;}
+.ICO40x40	{width:40px; height:40px; vertical-align:middle;}
+.ICO40x40B	{width:40px; height:40px; vertical-align:middle; display:block;}
+.ICO64x64	{width:64px; height:64px; vertical-align:middle;}
+.ICO160x160	{width:160px; height:160px; vertical-align:middle;}
 .BANNER		{width:150px; height:50px;}
 .BANNER_SMALL	{width:75px; height:25px;}
 
@@ -1337,33 +1337,33 @@ a:hover						/* Default ==> underlined */
 	text-align:center;
 	overflow:hidden;
 	}
-.FRAME_ICONS
+.FRAME_ICO
 	{
 	box-sizing:border-box;
 	height:20px;
 	text-align:left;
 	}
-.FRAME_ICONS_LEFT
+.FRAME_ICO_LEFT
 	{
 	display:inline-block;
 	}
-.FRAME_ICONS_RIGHT
+.FRAME_ICO_RIGHT
 	{
 	display:inline-block;
 	float:right;
 	}
-.FRAME_TABLE
+.FRAME_TBL
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-.FRAME_TABLE_MARGIN
+.FRAME_TBL_MARGIN
 	{
 	box-sizing:border-box;
 	width:100%;
 	margin-bottom:20px;
 	}
-.FRAME_TABLE_TITLE
+.FRAME_TBL_TITLE
 	{
 	display:table;
 	box-sizing:border-box;
@@ -1561,15 +1561,24 @@ a:hover img.CENTRE_PHOTO_SHOW
 .YELLOW_TITLE		{color:#BD4815; font-size:18pt;}
 
 /**************************** Icon highlighting ******************************/
-.ICON_HIDDEN
+.ICO_HIDDEN
 	{
 	opacity:0.2;
 	}
-.ICON_HIGHLIGHT
+.ICO_HIGHLIGHT
 	{
 	opacity:0.67;
 	}
-.ICON_HIGHLIGHT:hover
+.ICO_HIGHLIGHT:hover
+	{
+	opacity:1;
+	}
+
+.HLP_HIGHLIGHT
+	{
+	opacity:0.33;
+	}
+.HLP_HIGHLIGHT:hover
 	{
 	opacity:1;
 	}
@@ -2005,7 +2014,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	cursor:pointer;
 	}
-.IMG_UPLOAD_ICON
+.IMG_UPLOAD_ICO
 	{
 	width:20px;
 	height:20px;
@@ -2123,7 +2132,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:480px;
 	vertical-align:top;
 	}
-.SOCIAL_ICONS_FAV_SHA_REM	/* Container for fav, share and remove */
+.SOCIAL_ICOS_FAV_SHA_REM	/* Container for fav, share and remove */
 	{
 	padding-bottom:10px;
 	}
@@ -2157,42 +2166,42 @@ a:hover img.CENTRE_PHOTO_SHOW
 	box-sizing:border-box;
 	width:440px;
 	}
-.SOCIAL_ICON_COMMENT
+.SOCIAL_ICO_COMMENT
 	{
 	display:inline-block;
 	padding-bottom:10px;
 	}
-.SOCIAL_ICON_COMMENT_DISABLED
+.SOCIAL_ICO_COMMENT_DISABLED
 	{
 	display:inline-block;
 	padding-bottom:10px;
 	opacity:0.1;
 	}
-.SOCIAL_ICON_FAV
+.SOCIAL_ICO_FAV
 	{
 	display:inline-block;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_SHARE
+.SOCIAL_ICO_SHARE
 	{
 	display:inline-block;
 	padding-left:20px;
 	vertical-align:bottom;
 	}
-.SOCIAL_ICON_FAV_DISABLED
+.SOCIAL_ICO_FAV_DISABLED
 	{
 	display:inline-block;
 	vertical-align:bottom;
 	opacity:0.1;
 	}
-.SOCIAL_ICON_SHARE_DISABLED
+.SOCIAL_ICO_SHARE_DISABLED
 	{
 	display:inline-block;
 	padding-left:20px;
 	vertical-align:bottom;
 	opacity:0.1;
 	}
-.SOCIAL_ICON_REMOVE
+.SOCIAL_ICO_REMOVE
 	{
 	display:inline-block;
 	vertical-align:bottom;
@@ -2534,7 +2543,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:bottom;
 	}
-.FOLLOW_USR_ICON
+.FOLLOW_USR_ICO
 	{
 	padding:4px;
 	}
