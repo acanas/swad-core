@@ -1513,7 +1513,6 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 static void Brw_WriteCurrentClipboard (void);
 
 static bool Brw_GetMyClipboard (void);
-static void Brw_SetClipboardLevel (void);
 static bool Brw_CheckIfClipboardIsInThisTree (void);
 static void Brw_AddPathToClipboards (void);
 static void Brw_UpdatePathInClipboard (void);
@@ -6863,7 +6862,7 @@ static bool Brw_GetMyClipboard (void)
 
          /* Set clipboard level
             (number of slashes in full path, including file or folder) */
-         Brw_SetClipboardLevel ();
+         Gbl.FileBrowser.Clipboard.Level = Brw_NumLevelsInPath (Gbl.FileBrowser.Clipboard.Path);
         }
      }
 
@@ -6874,23 +6873,6 @@ static bool Brw_GetMyClipboard (void)
       Lay_ShowErrorAndExit ("Error when getting source of copy.");
 
    return (bool) (NumRows == 1);
-  }
-
-/*****************************************************************************/
-/**************************** Set clipboard level ****************************/
-/*****************************************************************************/
-
-static void Brw_SetClipboardLevel (void)
-  {
-   const char *Ptr;
-
-   /***** Compute level = number of slashes in full path, including file or folder *****/
-   for (Gbl.FileBrowser.Clipboard.Level = 0,
-	Ptr = Gbl.FileBrowser.Clipboard.Path;
-	*Ptr;
-	Ptr++)
-      if (*Ptr == '/')
-         Gbl.FileBrowser.Clipboard.Level++;
   }
 
 /*****************************************************************************/
