@@ -1389,13 +1389,14 @@ static void Crs_EditCourses (void)
 
 static void Crs_ListCoursesForEdition (void)
   {
+   extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    unsigned Year;
 
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,Hlp_DEGREE_Courses,2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1651,6 +1652,7 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
 
 static void Crs_PutFormToCreateCourse (void)
   {
+   extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_New_course_of_DEGREE_X;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
@@ -1672,7 +1674,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Write heading *****/
    sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
             Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,Hlp_DEGREE_Courses,2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Disabled icon to remove course *****/
