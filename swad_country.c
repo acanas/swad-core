@@ -1432,13 +1432,14 @@ void Cty_FreeListCountries (void)
 
 static void Cty_ListCountriesForEdition (void)
   {
+   extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_Countries;
    extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
    Txt_Language_t Lan;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Countries,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Countries,NULL,Hlp_SYSTEM_Countries,2);
 
    /***** Table head *****/
    Cty_PutHeadCountries ();
@@ -1818,6 +1819,7 @@ void Cty_ChangeCtyMapAttribution (void)
 
 static void Cty_PutFormToCreateCountry (void)
   {
+   extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_New_country;
    extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
@@ -1831,7 +1833,7 @@ static void Cty_PutFormToCreateCountry (void)
    Act_FormStart (ActNewCty);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,Hlp_SYSTEM_Countries,2);
 
    /***** Write heading *****/
    Cty_PutHeadCountries ();
