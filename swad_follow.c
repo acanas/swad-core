@@ -786,13 +786,13 @@ void Fol_FollowUsr (void)
 		     Gbl.Usrs.Other.UsrDat.UsrCod);
 	    DB_QueryREPLACE (Query,"can not follow user");
 
-	    /***** This follow must be notified by e-mail? *****/
+	    /***** This follow must be notified by email? *****/
             CreateNotif = (Gbl.Usrs.Other.UsrDat.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
             NotifyByEmail = CreateNotif &&
         	            (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_FOLLOWER));
 
             /***** Create notification for this followed.
-                   If this followed wants to receive notifications by e-mail, activate the sending of a notification *****/
+                   If this followed wants to receive notifications by email, activate the sending of a notification *****/
             if (CreateNotif)
                Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_FOLLOWER,&Gbl.Usrs.Other.UsrDat,Gbl.Usrs.Me.UsrDat.UsrCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :

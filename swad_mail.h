@@ -1,4 +1,4 @@
-// swad_mail.h: all the stuff related to e-mail
+// swad_mail.h: all the stuff related to email
 
 #ifndef _SWAD_MAI
 #define _SWAD_MAI
@@ -69,7 +69,7 @@ void Mai_RenameMailDomainShort (void);
 void Mai_RenameMailDomainFull (void);
 void Mai_RecFormNewMailDomain (void);
 
-void Mai_ListEMails (void); // Creates an e-mail message to students
+void Mai_ListEmails (void); // Creates an email message to students
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);

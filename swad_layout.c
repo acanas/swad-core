@@ -1478,7 +1478,7 @@ static void Lay_WriteAboutZone (void)
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>"
 		      "</div>",
 	    Txt_Questions_and_problems,
-	    Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
+	    Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_EMAIL);
 
    /***** About and time to generate and send page *****/
    fprintf (Gbl.F.Out,"<div>");
@@ -1511,7 +1511,7 @@ void Lay_RefreshNotifsAndConnected (void)
 
    // Sometimes, someone must do this work, so who best than processes that refresh via AJAX?
    if (!(Gbl.PID % 11))		// Do this only one of   11 times (  11 is prime)
-      Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by e-mail
+      Ntf_SendPendingNotifByEMailToAllUsrs ();	// Send pending notifications by email
    else if (!(Gbl.PID % 1013))	// Do this only one of 1013 times (1013 is prime)
       Brw_RemoveExpiredExpandedFolders ();	// Remove old expanded folders (from all users)
    else if (!(Gbl.PID % 1019))	// Do this only one of 1019 times (1019 is prime)

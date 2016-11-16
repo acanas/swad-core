@@ -116,7 +116,7 @@ void Pre_EditPrefs (void)
       /***** Form to set my preferences on privacy *****/
       Pri_EditMyPrivacy ();
 
-      /***** Automatic e-mail to notify of new events *****/
+      /***** Automatic email to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
      }
   }

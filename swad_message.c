@@ -422,7 +422,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    if (PutColspan)
       Colspan = Usr_GetColumnsForSelectUsrs ();
 
-   /***** Textarea with users' @nicknames, e-mails or IDs *****/
+   /***** Textarea with users' @nicknames, emails or IDs *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<th class=\"LEFT_MIDDLE LIGHT_BLUE\"");
    if (PutColspan)
@@ -606,8 +606,8 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_You_can_not_send_a_message_to_so_many_recipients_;
    extern const char *Txt_You_must_select_one_ore_more_recipients;
    extern const char *Txt_message_not_sent_to_X;
-   extern const char *Txt_message_sent_to_X_notified_by_e_mail;
-   extern const char *Txt_message_sent_to_X_not_notified_by_e_mail;
+   extern const char *Txt_message_sent_to_X_notified_by_email;
+   extern const char *Txt_message_sent_to_X_not_notified_by_email;
    extern const char *Txt_Error_getting_data_from_a_recipient;
    extern const char *Txt_Do_not_reload_this_page_because_the_message_will_be_sent_again_;
    extern const char *Txt_The_message_has_not_been_sent_to_any_recipient;
@@ -688,7 +688,7 @@ void Msg_RecMsgFromUsr (void)
    /***** Allocate space to store a list of recipients with the following format:
 	  "FirstName Surname1 Surname2; FirstName Surname1 Surname2; FirstName Surname1 Surname2" *****/
    if ((ListUsrsDst = (char *) malloc (((Usr_MAX_BYTES_NAME+1)*3+1)*NumRecipients)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store e-mail addresses of recipients.");
+      Lay_ShowErrorAndExit ("Not enough memory to store email addresses of recipients.");
    ListUsrsDst[0] = '\0';
 
    /***** Initialize structure with user's data *****/
@@ -739,7 +739,7 @@ void Msg_RecMsgFromUsr (void)
             Replied = (IsReply &&
         	       UsrDstData.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 
-            /***** This received message must be notified by e-mail? *****/
+            /***** This received message must be notified by email? *****/
             CreateNotif = (UsrDstData.Prefs.NotifNtfEvents & (1 << Ntf_EVENT_MESSAGE));
             NotifyByEmail = CreateNotif &&
         	            (UsrDstData.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
@@ -750,15 +750,16 @@ void Msg_RecMsgFromUsr (void)
             Msg_InsertReceivedMsgIntoDB (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
 
             /***** Create notification for this recipient.
-                   If this recipient wants to receive notifications by e-mail, activate the sending of a notification *****/
+                   If this recipient wants to receive notifications by -mail,
+                   activate the sending of a notification *****/
             if (CreateNotif)
                Ntf_StoreNotifyEventToOneUser (Ntf_EVENT_MESSAGE,&UsrDstData,NewMsgCod,
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 
             /***** Show an alert indicating that the message has been sent successfully *****/
-            sprintf (Gbl.Message,NotifyByEmail ? Txt_message_sent_to_X_notified_by_e_mail :
-                                                 Txt_message_sent_to_X_not_notified_by_e_mail,
+            sprintf (Gbl.Message,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
+                                                 Txt_message_sent_to_X_not_notified_by_email,
                      UsrDstData.FullName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 

@@ -1049,15 +1049,15 @@ Users:
 	879. ActChgPwdStd		Change the password of another user
 	880. ActChgPwdTch		Change the password of another user
 
-	881. ActFrmMaiOth		Show form to the change of the e-mail of another user
-	882. ActFrmMaiStd		Show form to the change of the e-mail of another user
-	883. ActFrmMaiTch		Show form to the change of the e-mail of another user
-	884. ActRemMaiOth		Remove one of the e-mail of another user
-	885. ActRemMaiStd		Remove one of the e-mail of another user
-	886. ActRemMaiTch		Remove one of the e-mail of another user
-	887. ActNewMaiOth		Create a new user's e-mail for another user
-	888. ActNewMaiStd		Create a new user's e-mail for another user
-	889. ActNewMaiTch		Create a new user's e-mail for another user
+	881. ActFrmMaiOth		Show form to the change of the email of another user
+	882. ActFrmMaiStd		Show form to the change of the email of another user
+	883. ActFrmMaiTch		Show form to the change of the email of another user
+	884. ActRemMaiOth		Remove one of the email of another user
+	885. ActRemMaiStd		Remove one of the email of another user
+	886. ActRemMaiTch		Remove one of the email of another user
+	887. ActNewMaiOth		Create a new user's email for another user
+	888. ActNewMaiStd		Create a new user's email for another user
+	889. ActNewMaiTch		Create a new user's email for another user
 
 	890. ActRemStdCrs		Remove a student from the current course
 	891. ActRemTchCrs		Remove a teacher from the current course
@@ -1258,7 +1258,7 @@ Messages:
        1075. ActReqMsgUsr		Write message to several users
        1076. ActSeeRcvMsg		Show the messages received from other users (link in menu)
        1077. ActSeeSntMsg		Show the messages sent to other users
-       1078. ActMaiStd			Send an e-mail to students
+       1078. ActMaiStd			Send an email to students
        1079. ActWriAnn			Show form to create a new global announcement
        1080. ActRcvAnn			Receive and create a new global announcement
        1081. ActHidAnn			Hide a global announcement that was active
@@ -1332,8 +1332,8 @@ Profile:
        1146. ActEdiPrf			Show forms to edit preferences
        1147. ActAdmBrf			Show the briefcase of private archives
 
-       1148. ActReqSndNewPwd		Show form to send a new password via e-mail
-       1149. ActSndNewPwd		Send a new password via e-mail
+       1148. ActReqSndNewPwd		Show form to send a new password via email
+       1149. ActSndNewPwd		Send a new password via email
        1150. ActLogOut			Close session
 
        1151. ActAutUsrInt		Authentify user internally (directly from the platform)
@@ -1348,9 +1348,9 @@ Profile:
        1159. ActNewIDMe			Create a new user's ID for me
        1160. ActRemOldNic		Remove one of my old nicknames
        1161. ActChgNic			Change my nickname
-       1162. ActRemMaiMe		Remove one of my old e-mails
-       1163. ActNewMaiMe		Change my e-mail address
-       1164. ActCnfMai			Confirm e-mail address
+       1162. ActRemMaiMe		Remove one of my old emails
+       1163. ActNewMaiMe		Change my email address
+       1164. ActCnfMai			Confirm email address
        1165. ActFrmChgMyPwd		Show form to the change of the password
        1166. ActChgPwd			Change the password
        1167. ActReqRemMyAcc		Request the removal of my account
@@ -1390,7 +1390,7 @@ Profile:
        1195. ActShoRgtCol		Show right side column
        1196. ActChgIco			Change icon set
        1197. ActChgMnu			Change menu
-       1198. ActChgNtfPrf		Change whether to notify by e-mail new messages
+       1198. ActChgNtfPrf		Change whether to notify by email new messages
        1199. ActPrnUsrQR		Show my QR code ready to print
 
        1200. ActPrnMyTT			Show the timetable listo to impresión of all my courses
@@ -2682,7 +2682,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
    /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
    /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
-   /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ListEMails			,"email64x64.gif"	},
+   /* ActMaiStd		*/{ 100, 6,TabMsg,ActMaiStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_ListEmails			,"email64x64.gif"	},
 
    // Actions not in menu:
    /* ActWriAnn		*/{1237,-1,TabUnk,ActSeeAnn		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ShowFormAnnouncement	,NULL},
@@ -4848,7 +4848,7 @@ void Act_AdjustCurrentAction (void)
          return;
         }
 
-   /***** If I have no nickname or e-mail in database,
+   /***** If I have no nickname or email in database,
           the only action possible is show a form to change my account *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0] ||
        !Gbl.Usrs.Me.UsrDat.Email[0])

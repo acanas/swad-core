@@ -1361,7 +1361,7 @@ void Asg_RecFormAssignment (void)
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
 
-      /***** Notify by e-mail about the new assignment *****/
+      /***** Notify by email about the new assignment *****/
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.AsgCod)))
 	 Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
@@ -1822,7 +1822,7 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
    if (sscanf (row[0],"%u",&NumAssignments) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of assignments.");
 
-   /***** Get number of notifications by e-mail *****/
+   /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)

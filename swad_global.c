@@ -173,7 +173,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.MyDegs.Filled = false;
    Gbl.Usrs.Me.MyCrss.Filled = false;
    Gbl.Usrs.Me.MyCrss.Num = 0;
-   Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An e-mail to confirm my e-mail address has not just been sent
+   Gbl.Usrs.Me.ConfirmEmailJustSent = false;	// An email to confirm my email address has not just been sent
 
    Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
    Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';

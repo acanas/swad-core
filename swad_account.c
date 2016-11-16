@@ -360,7 +360,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
             Txt_HELP_nickname,
             NewNicknameWithArroba);
 
-   /***** E-mail *****/
+   /***** Email *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
@@ -425,26 +425,26 @@ void Acc_ShowFormChangeMyAccount (void)
    bool IShouldConfirmEmail = false;
    bool IShouldFillID       = false;
 
-   /***** Get current user's nickname and e-mail address
-          It's necessary because current nickname or e-mail could be just updated *****/
+   /***** Get current user's nickname and email address
+          It's necessary because current nickname or email could be just updated *****/
    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.Nickname);
    Mai_GetEmailFromUsrCod (&Gbl.Usrs.Me.UsrDat);
 
-   /***** Check nickname, e-mail and ID *****/
+   /***** Check nickname, email and ID *****/
    if (!Gbl.Usrs.Me.UsrDat.Nickname[0])
       IMustFillNickname = true;
    else if (!Gbl.Usrs.Me.UsrDat.Email[0])
       IMustFillEmail = true;
    else
      {
-      if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// E-mail not yet confirmed
-	  !Gbl.Usrs.Me.ConfirmEmailJustSent)		// Do not ask for e-mail confirmation when confirmation e-mail is just sent
+      if (!Gbl.Usrs.Me.UsrDat.EmailConfirmed &&		// Email not yet confirmed
+	  !Gbl.Usrs.Me.ConfirmEmailJustSent)		// Do not ask for email confirmation when confirmation email is just sent
 	 IShouldConfirmEmail = true;
       if (!Gbl.Usrs.Me.UsrDat.IDs.Num)
 	 IShouldFillID = true;
      }
 
-   /***** Show alert to report that confirmation e-mail has been sent *****/
+   /***** Show alert to report that confirmation email has been sent *****/
    if (Gbl.Usrs.Me.ConfirmEmailJustSent)
       Mai_ShowMsgConfirmEmailHasBeenSent ();
 
@@ -472,7 +472,7 @@ void Acc_ShowFormChangeMyAccount (void)
    /***** Separator *****/
    Acc_PrintAccountSeparator ();
 
-   /***** E-mail *****/
+   /***** Email *****/
    if (IMustFillEmail || IShouldConfirmEmail)
      {
       fprintf (Gbl.F.Out,"<tr>"
@@ -568,10 +568,10 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
       Nck_UpdateMyNick (NewNicknameWithoutArroba);
       strcpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba);
 
-      /***** Save e-mail *****/
+      /***** Save email *****/
       if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
 	{
-	 /* E-mail updated sucessfully */
+	 /* Email updated sucessfully */
 	 strcpy (Gbl.Usrs.Me.UsrDat.Email,NewEmail);
 	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
 	}
@@ -640,17 +640,17 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
-   /***** Step 2/3: Get new e-mail from form *****/
+   /***** Step 2/3: Get new email from form *****/
    Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
 
-   if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
+   if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
-      /* Check if the new e-mail matches
-         any of the confirmed e-mails of other users */
+      /* Check if the new email matches
+         any of the confirmed emails of other users */
       sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
 		     " WHERE E_mail='%s' AND Confirmed='Y'",
 	       NewEmail);
-      if (DB_QueryCOUNT (Query,"can not check if e-mail already existed"))	// An e-mail of another user is the same that my e-mail
+      if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
 	{
 	 Error = true;
 	 sprintf (Gbl.Message,Txt_The_email_address_X_had_been_registered_by_another_user,
@@ -658,7 +658,7 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
 	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 	}
      }
-   else	// New e-mail is not valid
+   else	// New email is not valid
      {
       Error = true;
       sprintf (Gbl.Message,Txt_The_email_address_entered_X_is_not_valid,
@@ -1118,14 +1118,14 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's nicknames");
 
-   /***** Remove user's e-mails *****/
+   /***** Remove user's emails *****/
    sprintf (Query,"DELETE FROM pending_emails WHERE UsrCod='%ld'",
 	    UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove pending user's e-mails");
+   DB_QueryDELETE (Query,"can not remove pending user's emails");
 
    sprintf (Query,"DELETE FROM usr_emails WHERE UsrCod='%ld'",
 	    UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove user's e-mails");
+   DB_QueryDELETE (Query,"can not remove user's emails");
 
    /***** Remove user's IDs *****/
    sprintf (Query,"DELETE FROM usr_IDs WHERE UsrCod='%ld'",

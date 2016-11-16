@@ -2783,7 +2783,7 @@ void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
   }
 
 /*****************************************************************************/
-/********************** Get mailbox from e-mail address **********************/
+/********************** Get mailbox from email address ***********************/
 /*****************************************************************************/
 
 void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength)

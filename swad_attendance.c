@@ -1792,7 +1792,7 @@ unsigned Att_GetNumAttEvents (Sco_Scope_t Scope,unsigned *NumNotif)
    if (sscanf (row[0],"%u",&NumAttEvents) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of attendance events.");
 
-   /***** Get number of notifications by e-mail *****/
+   /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)

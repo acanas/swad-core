@@ -7688,7 +7688,7 @@ static void Sta_WriteForumTotalStats (struct Sta_StatsForum *StatsForum)
   }
 
 /*****************************************************************************/
-/****** Get and show number of users who want to be notified by e-mail *******/
+/****** Get and show number of users who want to be notified by email ********/
 /*****************************************************************************/
 
 static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
@@ -7700,7 +7700,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    extern const char *Txt_Number_of_BR_events;
-   extern const char *Txt_Number_of_BR_e_mails;
+   extern const char *Txt_Number_of_BR_emails;
    extern const char *Txt_Total;
    Ntf_NotifyEvent_t NotifyEvent;
    char Query[1024];
@@ -7740,13 +7740,14 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
             Txt_No_of_users,
             Txt_PERCENT_of_users,
             Txt_Number_of_BR_events,
-            Txt_Number_of_BR_e_mails);
+            Txt_Number_of_BR_emails);
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
                                                          Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
 
-   /***** Get total number of users who want to be notified by e-mail on some event, from database *****/
+   /***** Get total number of users who want to be
+          notified by email on some event, from database *****/
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
@@ -7807,14 +7808,14 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of users who want to be notified by e-mail on some event");
+   NumUsrsTotalWhoWantToBeNotifiedByEMailAboutSomeEvent = (unsigned) DB_QueryCOUNT (Query,"can not get the total number of users who want to be notified by email on some event");
 
    /***** For each notify event... *****/
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      /***** Get the number of users who want to be notified by e-mail on this event, from database *****/
+      /***** Get the number of users who want to be notified by email on this event, from database *****/
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
@@ -7876,9 +7877,9 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	    Lay_ShowErrorAndExit ("Wrong scope.");
 	    break;
         }
-      NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who want to be notified by e-mail on an event");
+      NumUsrs[NotifyEvent] = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users who want to be notified by email on an event");
 
-      /***** Get number of notifications by e-mail from database *****/
+      /***** Get number of notifications by email from database *****/
       switch (Gbl.Scope.Current)
         {
          case Sco_SCOPE_SYS:
@@ -7932,7 +7933,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	    Lay_ShowErrorAndExit ("Wrong scope.");
 	    break;
         }
-      DB_QuerySELECT (Query,&mysql_res,"can not get the number of notifications by e-mail");
+      DB_QuerySELECT (Query,&mysql_res,"can not get the number of notifications by email");
 
       row = mysql_fetch_row (mysql_res);
 
@@ -7940,7 +7941,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       if (row[0])
         {
          if (sscanf (row[0],"%u",&NumEvents[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of notifications by e-mail.");
+            Lay_ShowErrorAndExit ("Error when getting the number of notifications by email.");
         }
       else
          NumEvents[NotifyEvent] = 0;
@@ -7949,7 +7950,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       if (row[1])
         {
          if (sscanf (row[1],"%u",&NumMails[NotifyEvent]) != 1)
-            Lay_ShowErrorAndExit ("Error when getting the number of e-mails to notify events3.");
+            Lay_ShowErrorAndExit ("Error when getting the number of emails to notify events3.");
         }
       else
          NumMails[NotifyEvent] = 0;
@@ -7962,7 +7963,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       NumMailsTotal += NumMails[NotifyEvent];
      }
 
-   /***** Write number of users who want to be notified by e-mail on each event *****/
+   /***** Write number of users who want to be notified by email on each event *****/
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++) // 0 is reserved for Ntf_EVENT_UNKNOWN
@@ -7991,7 +7992,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
                NumEvents[NotifyEvent],
                NumMails[NotifyEvent]);
 
-   /***** Write total number of users who want to be notified by e-mail on some event *****/
+   /***** Write total number of users who want to be notified by email on some event *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"DAT_N_LINE_TOP LEFT_MIDDLE\">"
                       "%s"

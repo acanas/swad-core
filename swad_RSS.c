@@ -93,7 +93,7 @@ void RSS_UpdateRSSFileForACrs (struct Course *Crs)
    fprintf (FileRSS,"<language>%s</language>\n",
             Cfg_RSS_LANGUAGE);
    fprintf (FileRSS,"<webMaster>%s (%s)</webMaster>\n",
-            Cfg_PLATFORM_RESPONSIBLE_E_MAIL,Cfg_PLATFORM_RESPONSIBLE_NAME);
+            Cfg_PLATFORM_RESPONSIBLE_EMAIL,Cfg_PLATFORM_RESPONSIBLE_NAME);
 
    fprintf (FileRSS,"<image>\n");
    fprintf (FileRSS,"<url>%s/swad112x32.png</url>\n",

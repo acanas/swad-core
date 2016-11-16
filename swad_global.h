@@ -287,7 +287,7 @@ struct Globals
          Rol_Role_t LoggedRoleBeforeCloseSession;
          Rol_Role_t MaxRole;
          bool RoleHasChanged;	// Set when I have changed my role
-	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or e-mail entered in the user's login
+	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or email entered in the user's login
          char LoginPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
          char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
          char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
@@ -301,7 +301,7 @@ struct Globals
          unsigned NumAccWithoutPhoto;
          char PhotoURL[PATH_MAX+1];
          time_t TimeLastAccToThisFileBrowser;
-         bool ConfirmEmailJustSent;	// An e-mail to confirm my e-mail address has just been sent
+         bool ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
          struct
            {
             bool Filled;	// My institutions are already filled?

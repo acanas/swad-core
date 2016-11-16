@@ -3196,13 +3196,13 @@ static void Soc_CreateNotifToAuthor (long AuthorCod,long PubCod,
    UsrDat.UsrCod = AuthorCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
      {
-      /***** This fav must be notified by e-mail? *****/
+      /***** This fav must be notified by email? *****/
       CreateNotif = (UsrDat.Prefs.NotifNtfEvents & (1 << NotifyEvent));
       NotifyByEmail = CreateNotif &&
 		      (UsrDat.Prefs.EmailNtfEvents & (1 << NotifyEvent));
 
       /***** Create notification for the author of the post.
-	     If this author wants to receive notifications by e-mail,
+	     If this author wants to receive notifications by email,
 	     activate the sending of a notification *****/
       if (CreateNotif)
 	 Ntf_StoreNotifyEventToOneUser (NotifyEvent,&UsrDat,PubCod,

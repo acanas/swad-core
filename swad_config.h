@@ -66,10 +66,10 @@
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"		// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"	// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"openswad.org"			// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"				// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"		// E-mail address from where automatic e-mails will be sent
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"	// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"openswad.org"			// SMTP server for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"				// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"		// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"			// Database host
 #define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES			// Default language
 #define Cfg_LOG_START_YEAR			2012				// Year when the log started in the database
@@ -83,7 +83,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -107,10 +107,10 @@
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"Antonio Cañas Vargas"			// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"webmaster@openswad.org"		// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"mail.openswad.org"			// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// E-mail address from where automatic e-mails will be sent
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"webmaster@openswad.org"		// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"mail.openswad.org"			// SMTP server for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"465"					// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_FROM		"acanas@openswad.org"			// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
 #define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_EN				// Default language
 #define Cfg_LOG_START_YEAR			2012					// Year when the log started in the database
@@ -124,7 +124,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 /* Google Analytics without cookies.
  * This code comes from http://stackoverflow.com/a/19995629
@@ -165,10 +165,10 @@
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"UGR"					// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"swad@ugr.es"				// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// E-mail address from where automatic e-mails will be sent
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"swad@ugr.es"				// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
 #define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
 #define Cfg_LOG_START_YEAR			2005					// Year when the log started in the database
@@ -182,7 +182,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
@@ -220,10 +220,10 @@
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"ATC - UGR"				// Main responsible for the platform
-#define Cfg_PLATFORM_RESPONSIBLE_E_MAIL		"swad@ugr.es"				// Main responsible for the platform
-#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic e-mails
-#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// E-mail address from where automatic e-mails will be sent
+#define Cfg_PLATFORM_RESPONSIBLE_EMAIL		"swad@ugr.es"				// Main responsible for the platform
+#define Cfg_AUTOMATIC_EMAIL_SMTP_SERVER		"smtp.ugr.es"				// SMTP server for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_SMTP_PORT		"587"					// SMTP port for sending automatic emails
+#define Cfg_AUTOMATIC_EMAIL_FROM		"swad@ugr.es"				// Email address from where automatic emails will be sent
 #define Cfg_DATABASE_HOST			"localhost"				// Database host
 #define Cfg_DEFAULT_LANGUAGE			Txt_LANGUAGE_ES				// Default language
 #define Cfg_LOG_START_YEAR			2016					// Year when the log started in the database
@@ -237,7 +237,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by e-mail
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -248,7 +248,7 @@
 #define Cfg_DATABASE_USER		"swad"				// Database user
 
 /* Email */
-#define Cfg_AUTOMATIC_EMAIL_PASSWORD	DONT_PUBLISH_SMTP_PASSWORD	// E-mail user's password for automatic e-mails
+#define Cfg_AUTOMATIC_EMAIL_PASSWORD	DONT_PUBLISH_SMTP_PASSWORD	// Email user's password for automatic emails
 
 /* About SWAD */
 #define Cfg_ABOUT_SWAD_URL		"http://openswad.org/info/"
@@ -436,8 +436,8 @@
 #define Cfg_COMMAND_DEGREE_PHOTO_MEDIAN			"./foto_mediana"
 #define Cfg_COMMAND_DEGREE_PHOTO_AVERAGE		"./foto_promedio"
 
-/* Command to send automatic e-mails, programmed by Antonio F. Díaz-García and Antonio Cañas-Vargas */
-#define Cfg_COMMAND_SEND_AUTOMATIC_E_MAIL		"./swad_smtp.py"
+/* Command to send automatic emails, programmed by Antonio F. Díaz-García and Antonio Cañas-Vargas */
+#define Cfg_COMMAND_SEND_AUTOMATIC_EMAIL		"./swad_smtp.py"
 
 /*****************************************************************************/
 /******************************** Time periods *******************************/

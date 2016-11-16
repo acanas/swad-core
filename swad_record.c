@@ -2108,7 +2108,7 @@ void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\">");
 
-      /***** Show e-mail and user's ID *****/
+      /***** Show email and user's ID *****/
       if (ShowIDRows)
 	{
          fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
@@ -2571,7 +2571,7 @@ static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/***************************** Show user's e-mail ****************************/
+/***************************** Show user's email *****************************/
 /*****************************************************************************/
 
 static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)

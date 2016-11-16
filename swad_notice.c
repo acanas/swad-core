@@ -153,7 +153,7 @@ void Not_ReceiveNotice (void)
    /***** Write message of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Notice_created);
 
-   /***** Notify by e-mail about the new notice *****/
+   /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
@@ -901,7 +901,7 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
    if (sscanf (row[0],"%u",&NumNotices) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of notices.");
 
-   /***** Get number of notifications by e-mail *****/
+   /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)
@@ -987,7 +987,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    if (sscanf (row[0],"%u",&NumNotices) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of deleted notices.");
 
-   /***** Get number of notifications by e-mail *****/
+   /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)

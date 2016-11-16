@@ -210,7 +210,7 @@ void Pwd_ActChgMyPwd2 (void)
   }
 
 /*****************************************************************************/
-/*************** Show form to send a new password by e-mail ******************/
+/*************** Show form to send a new password by email *******************/
 /*****************************************************************************/
 
 void Pwd_PutLinkToSendNewPasswd (void)
@@ -229,7 +229,7 @@ static void Pwd_PutLinkToSendNewPasswdParams (void)
   }
 
 /*****************************************************************************/
-/*************** Show form to send a new password by e-mail ******************/
+/*************** Show form to send a new password by email *******************/
 /*****************************************************************************/
 
 void Pwd_ShowFormSendNewPwd (void)
@@ -267,7 +267,7 @@ void Pwd_ShowFormSendNewPwd (void)
   }
 
 /*****************************************************************************/
-/*********************** Send a new password by e-mail ***********************/
+/*********************** Send a new password by email ************************/
 /*****************************************************************************/
 
 void Pwd_ChkIdLoginAndSendNewPwd (void)
@@ -304,7 +304,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	 ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	}
      }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an e-mail
+   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) > 0)
 	{
@@ -314,7 +314,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	 ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
         }
      }
-   else									// 3: It's not a nickname nor e-mail
+   else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
@@ -334,7 +334,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	}
      }
 
-   /***** Send a new password via e-mail when user exists *****/
+   /***** Send a new password via email when user exists *****/
    if (ListUsrCods.NumUsrs)
      {
       if (ListUsrCods.NumUsrs == 1)
@@ -358,7 +358,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 		  Lay_ShowAlert (Lay_ERROR,Gbl.Message);
 		  break;
 	      }
-	 else	// I have no e-mail address
+	 else	// I have no email address
 	    /***** Help message *****/
 	    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 	}
@@ -382,7 +382,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
   }
 
 /*****************************************************************************/
-/*********************** Send a new password by e-mail ***********************/
+/*********************** Send a new password by email ************************/
 /*****************************************************************************/
 // Gbl.Usrs.Me.UsrDat must be filled
 // Return code returned by command
@@ -391,7 +391,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
    extern const char *Txt_New_password_NO_HTML[1+Txt_NUM_LANGUAGES];
-   char Command[2048]; // Command to execute for sending an e-mail
+   char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -415,9 +415,9 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
 
    fclose (Gbl.Msg.FileMail);
 
-   /***** Call the script to send an e-mail *****/
+   /***** Call the script to send an email *****/
    sprintf (Command,"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-	    Cfg_COMMAND_SEND_AUTOMATIC_E_MAIL,
+	    Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
 	    Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
 	    Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
 	    Cfg_AUTOMATIC_EMAIL_FROM,
@@ -428,7 +428,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
 	    Gbl.Msg.FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running script to send e-mail.");
+      Lay_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
    unlink (Gbl.Msg.FileNameMail);

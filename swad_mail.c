@@ -1,4 +1,4 @@
-// swad_mail.c: all the stuff related to e-mail
+// swad_mail.c: all the stuff related to email
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -88,9 +88,9 @@ static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_E
 
 void Mai_SeeMailDomains (void)
   {
-   extern const char *Txt_Mail_domains_allowed_for_notifications;
-   extern const char *Txt_MAIL_DOMAIN_HELP_ORDER[3];
-   extern const char *Txt_MAIL_DOMAIN_ORDER[3];
+   extern const char *Txt_Email_domains_allowed_for_notifications;
+   extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
+   extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    Mai_MailDomainsOrderType_t Order;
    unsigned NumMai;
 
@@ -101,7 +101,7 @@ void Mai_SeeMailDomains (void)
    Mai_GetListMailDomainsAllowedForNotif ();
 
    /***** Table head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Mail_domains_allowed_for_notifications,
+   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                      NULL,
                              NULL,2);
@@ -113,10 +113,10 @@ void Mai_SeeMailDomains (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       Act_FormStart (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_MAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
+      Act_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Mails.SelectedOrderType)
          fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_MAIL_DOMAIN_ORDER[Order]);
+      fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Order]);
       if (Order == Gbl.Mails.SelectedOrderType)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
@@ -188,14 +188,14 @@ static void Mai_PutIconToEditMailDomains (void)
 
 void Mai_EditMailDomains (void)
   {
-   extern const char *Txt_There_are_no_mail_domains;
+   extern const char *Txt_There_are_no_email_domains;
 
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
 
    if (!Gbl.Mails.Num)
       /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_mail_domains);
+      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_email_domains);
 
    /***** Put a form to create a new mail *****/
    Mai_PutFormToCreateMailDomain ();
@@ -310,14 +310,14 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
   }
 
 /*****************************************************************************/
-/************ Check if user can receive notifications via e-mail *************/
+/************ Check if user can receive notifications via email **************/
 /*****************************************************************************/
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
   {
    char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   /***** Check #1: is my e-mail address confirmed? *****/
+   /***** Check #1: is my email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
       return false;
 
@@ -341,7 +341,7 @@ static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain)
   }
 
 /*****************************************************************************/
-/***************** Show warning about notifications via e-mail ***************/
+/***************** Show warning about notifications via email ****************/
 /*****************************************************************************/
 
 void Mai_WriteWarningEmailNotifications (void)
@@ -423,11 +423,11 @@ void Mai_FreeListMailDomains (void)
 
 static void Mai_ListMailDomainsForEdition (void)
   {
-   extern const char *Txt_Mail_domains_allowed_for_notifications;
+   extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Mail_domains_allowed_for_notifications,
+   Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              NULL,NULL,2);
 
    /***** Table head *****/
@@ -518,7 +518,7 @@ long Mai_GetParamMaiCod (void)
 
 void Mai_RemoveMailDomain (void)
   {
-   extern const char *Txt_Mail_domain_X_removed;
+   extern const char *Txt_Email_domain_X_removed;
    char Query[512];
    struct Mail Mai;
 
@@ -534,7 +534,7 @@ void Mai_RemoveMailDomain (void)
    DB_QueryDELETE (Query,"can not remove a mail domain");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Mail_domain_X_removed,
+   sprintf (Gbl.Message,Txt_Email_domain_X_removed,
             Mai.Domain);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
@@ -566,10 +566,10 @@ void Mai_RenameMailDomainFull (void)
 
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
   {
-   extern const char *Txt_You_can_not_leave_the_name_of_the_mail_domain_X_empty;
-   extern const char *Txt_The_mail_domain_X_already_exists;
-   extern const char *Txt_The_mail_domain_X_has_been_renamed_as_Y;
-   extern const char *Txt_The_mail_domain_X_has_not_changed;
+   extern const char *Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty;
+   extern const char *Txt_The_email_domain_X_already_exists;
+   extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
+   extern const char *Txt_The_email_domain_X_has_not_changed;
    char Query[512];
    struct Mail *Mai;
    const char *ParamName = NULL;	// Initialized to avoid warning
@@ -609,7 +609,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewMaiName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_mail_domain_X_empty,
+      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
                CurrentMaiName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
@@ -621,7 +621,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If mail was in database... *****/
          if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai->MaiCod))
            {
-            sprintf (Gbl.Message,Txt_The_mail_domain_X_already_exists,
+            sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
                      NewMaiName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
@@ -633,14 +633,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
             DB_QueryUPDATE (Query,"can not update the name of a mail domain");
 
             /***** Write message to show the change made *****/
-            sprintf (Gbl.Message,Txt_The_mail_domain_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Message,Txt_The_email_domain_X_has_been_renamed_as_Y,
                      CurrentMaiName,NewMaiName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_mail_domain_X_has_not_changed,
+         sprintf (Gbl.Message,Txt_The_email_domain_X_has_not_changed,
                   CurrentMaiName);
          Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
@@ -671,9 +671,9 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
-   extern const char *Txt_New_mail_domain;
-   extern const char *Txt_MAIL_DOMAIN_ORDER[3];
-   extern const char *Txt_Create_mail_domain;
+   extern const char *Txt_New_email_domain;
+   extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
+   extern const char *Txt_Create_email_domain;
    struct Mail *Mai;
 
    Mai = &Gbl.Mails.EditingMai;
@@ -682,7 +682,7 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_mail_domain,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,NULL,NULL,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -693,8 +693,8 @@ static void Mai_PutFormToCreateMailDomain (void)
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
-            Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
+            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
+            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ]);
 
    /***** Mail domain *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -715,7 +715,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_mail_domain);
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_email_domain);
 
    /***** End of form *****/
    Act_FormEnd ();
@@ -728,7 +728,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 static void Mai_PutHeadMailDomains (void)
   {
    extern const char *Txt_Code;
-   extern const char *Txt_MAIL_DOMAIN_ORDER[3];
+   extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -746,9 +746,9 @@ static void Mai_PutHeadMailDomains (void)
                       "</th>"
                       "</tr>",
             Txt_Code,
-            Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
-            Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ],
-            Txt_MAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
+            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_DOMAIN],
+            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_INFO  ],
+            Txt_EMAIL_DOMAIN_ORDER[Mai_ORDER_BY_USERS ]);
   }
 
 /*****************************************************************************/
@@ -757,8 +757,8 @@ static void Mai_PutHeadMailDomains (void)
 
 void Mai_RecFormNewMailDomain (void)
   {
-   extern const char *Txt_The_mail_domain_X_already_exists;
-   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_mail_domain;
+   extern const char *Txt_The_email_domain_X_already_exists;
+   extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain;
    struct Mail *Mai;
 
    Mai = &Gbl.Mails.EditingMai;
@@ -775,13 +775,13 @@ void Mai_RecFormNewMailDomain (void)
       /***** If name of mail was in database... *****/
       if (Mai_CheckIfMailDomainNameExists ("Domain",Mai->Domain,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_mail_domain_X_already_exists,
+         sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
                   Mai->Domain);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
       else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_mail_domain_X_already_exists,
+         sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
                   Mai->Info);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
@@ -789,7 +789,7 @@ void Mai_RecFormNewMailDomain (void)
          Mai_CreateMailDomain (Mai);
      }
    else	// If there is not a mail name
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_mail_domain);
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -801,7 +801,7 @@ void Mai_RecFormNewMailDomain (void)
 
 static void Mai_CreateMailDomain (struct Mail *Mai)
   {
-   extern const char *Txt_Created_new_mail_domain_X;
+   extern const char *Txt_Created_new_email_domain_X;
    char Query[1024];
 
    /***** Create a new mail *****/
@@ -810,24 +810,24 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
    DB_QueryINSERT (Query,"can not create mail domain");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_mail_domain_X,
+   sprintf (Gbl.Message,Txt_Created_new_email_domain_X,
             Mai->Domain);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
-/***** List the e-mails of all the students to creates an e-mail message *****/
+/****** List the emails of all the students to creates an email message ******/
 /*****************************************************************************/
 
 #define Mai_MAX_LENGTH_STR_ADDR (32*5000)
 
-void Mai_ListEMails (void)
+void Mai_ListEmails (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
-   extern const char *Txt_Students_who_have_accepted_and_who_have_e_mail;
-   extern const char *Txt_X_students_who_have_e_mail;
-   extern const char *Txt_X_students_who_have_accepted_and_who_have_e_mail;
-   extern const char *Txt_Create_e_mail_message;
+   extern const char *Txt_Students_who_have_accepted_and_who_have_email;
+   extern const char *Txt_X_students_who_have_email;
+   extern const char *Txt_X_students_who_have_accepted_and_who_have_email;
+   extern const char *Txt_Create_email_message;
    unsigned NumUsr;
    unsigned NumStdsWithEmail = 0;
    unsigned NumAcceptedStdsWithEmail = 0;
@@ -845,9 +845,9 @@ void Mai_ListEMails (void)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
-         /***** Start of the frame used to list the e-mails *****/
+         /***** Start of the frame used to list the emails *****/
          Lay_StartRoundFrameTable (NULL,
-                                   Txt_Students_who_have_accepted_and_who_have_e_mail,
+                                   Txt_Students_who_have_accepted_and_who_have_email,
                                    NULL,NULL,0);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT_SMALL LEFT_MIDDLE\">");
@@ -855,7 +855,7 @@ void Mai_ListEMails (void)
          /***** Initialize structure with user's data *****/
          Usr_UsrDataConstructor (&UsrDat);
 
-         /***** List the students' e-mail addresses *****/
+         /***** List the students' email addresses *****/
          for (NumUsr = 0;
               NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
               NumUsr++)
@@ -863,13 +863,13 @@ void Mai_ListEMails (void)
 	    /* Copy user's basic data from list */
 	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
 
-	    /* Get user's e-mail */
+	    /* Get user's email */
             Mai_GetEmailFromUsrCod (&UsrDat);
 
 	    if (UsrDat.Email[0])
 	      {
 	       NumStdsWithEmail++;
-	       if (UsrDat.Accepted) // If student has e-mail and has accepted
+	       if (UsrDat.Accepted) // If student has email and has accepted
 		 {
 		  if (NumAcceptedStdsWithEmail > 0)
 		    {
@@ -878,13 +878,13 @@ void Mai_ListEMails (void)
 		     if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
 			strcat (StrAddresses,",");
 		     else
-			Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
+			Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		    }
 		  LengthStrAddr += strlen (UsrDat.Email);
 		  if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
 		     strcat (StrAddresses,UsrDat.Email);
 		  else
-		     Lay_ShowErrorAndExit ("The space allocated to store e-mail addresses is full.");
+		     Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 
 		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
 			   UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
@@ -899,10 +899,10 @@ void Mai_ListEMails (void)
          /***** Free memory used for user's data *****/
          Usr_UsrDataDestructor (&UsrDat);
 
-         /***** Show a message with the number of students with e-mail ****/
+         /***** Show a message with the number of students with email ****/
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_e_mail,
+         fprintf (Gbl.F.Out,Txt_X_students_who_have_email,
                   NumStdsWithEmail,
                   ((float) NumStdsWithEmail /
                    (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
@@ -910,10 +910,10 @@ void Mai_ListEMails (void)
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
-         /***** Show a message with the number of students who have accepted and have e-mail ****/
+         /***** Show a message with the number of students who have accepted and have email ****/
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"DAT CENTER_MIDDLE\">");
-         fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_e_mail,
+         fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_email,
                   NumAcceptedStdsWithEmail,
                   ((float) NumAcceptedStdsWithEmail /
                    (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
@@ -921,10 +921,10 @@ void Mai_ListEMails (void)
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
-         /***** End of the frame used to list the e-mails *****/
+         /***** End of the frame used to list the emails *****/
          Lay_EndRoundFrameTable ();
 
-         /***** Icon to open the client e-mail program *****/
+         /***** Icon to open the client email program *****/
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
                             "<a href=\"mailto:%s?subject=%s&cc=%s&bcc=%s\""
                             " title=\"%s\" class=\"%s\">",
@@ -932,11 +932,11 @@ void Mai_ListEMails (void)
 	          Gbl.CurrentCrs.Crs.FullName,
 	          Gbl.Usrs.Me.UsrDat.Email,
 	          StrAddresses,
-                  Txt_Create_e_mail_message,
+                  Txt_Create_email_message,
                   The_ClassFormBold[Gbl.Prefs.Theme]);
          Lay_PutIconWithText ("editnewmsg16x16.gif",
-                              Txt_Create_e_mail_message,
-                              Txt_Create_e_mail_message);
+                              Txt_Create_email_message,
+                              Txt_Create_email_message);
          fprintf (Gbl.F.Out,"</a>"
                             "</div>");
         }
@@ -952,7 +952,7 @@ void Mai_ListEMails (void)
   }
 
 /*****************************************************************************/
-/**************** Check whether an e-mail address if valid *******************/
+/**************** Check whether an email address if valid ********************/
 /*****************************************************************************/
 
 bool Mai_CheckIfEmailIsValid (const char *Email)
@@ -963,13 +963,13 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
    unsigned Pos;
    bool ArrobaFound = false;
 
-   /***** An e-mail address must have a number of characters
+   /***** An email address must have a number of characters
           5 <= Length <= Mai_MAX_BYTES_USR_EMAIL *****/
    if (Length < 5 ||
        Length > Usr_MAX_BYTES_USR_EMAIL)
       return false;
 
-   /***** An e-mail address can have digits, letters, '.', '-' and '_';
+   /***** An email address can have digits, letters, '.', '-' and '_';
           and must have one and only '@' (not in any position) *****/
    for (Ptr = Email, Pos = 0;
         *Ptr;
@@ -1000,7 +1000,7 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
   }
 
 /*****************************************************************************/
-/********** Get e-mail address of a user from his/her user's code ************/
+/********** Get email address of a user from his/her user's code *************/
 /*****************************************************************************/
 
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
@@ -1015,7 +1015,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
 	          " WHERE UsrCod='%ld' ORDER BY CreatTime DESC LIMIT 1",
 	    UsrDat->UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get e-mail address");
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get email address");
 
    if (NumRows == 0)
      {
@@ -1027,7 +1027,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
      {
       row = mysql_fetch_row (mysql_res);
 
-      /* Get e-mail */
+      /* Get email */
       strcpy (UsrDat->Email,row[0]);
 
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
@@ -1042,9 +1042,9 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/************* Get user's code of a user from his/her e-mail *****************/
+/************* Get user's code of a user from his/her email ******************/
 /*****************************************************************************/
-// Returns -1L if e-mail not found
+// Returns -1L if email not found
 
 long Mai_GetUsrCodFromEmail (const char *Email)
   {
@@ -1065,7 +1065,7 @@ long Mai_GetUsrCodFromEmail (const char *Email)
 		  Email);
 	 NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
 	 if (NumUsrs == 0)
-	    /* User not found for this e-mail ==> set user's code to void */
+	    /* User not found for this email ==> set user's code to void */
 	    UsrCod = -1L;
 	 else if (NumUsrs == 1)	// One user found
 	   {
@@ -1075,8 +1075,8 @@ long Mai_GetUsrCodFromEmail (const char *Email)
 	    /* Get user's code */
 	    UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 	   }
-	 else	// NumRows > 1 ==> impossible, an e-mail can not be reapeated
-	    Lay_ShowErrorAndExit ("Internal error: e-mail is repeated in database.");
+	 else	// NumRows > 1 ==> impossible, an email can not be reapeated
+	    Lay_ShowErrorAndExit ("Internal error: email is repeated in database.");
 
 	 /***** Free structure that stores the query result *****/
 	 DB_FreeMySQLResult (&mysql_res);
@@ -1086,7 +1086,7 @@ long Mai_GetUsrCodFromEmail (const char *Email)
   }
 
 /*****************************************************************************/
-/********** Put a link to the action used to change user's e-mail ************/
+/********** Put a link to the action used to change user's email *************/
 /*****************************************************************************/
 
 void Mai_PutLinkToChangeOtherUsrEmail (void)
@@ -1110,7 +1110,7 @@ void Mai_PutLinkToChangeOtherUsrEmail (void)
   }
 
 /*****************************************************************************/
-/*********** Show form to the change the e-mail of another user **************/
+/*********** Show form to the change the email of another user ***************/
 /*****************************************************************************/
 
 void Mai_ShowFormOthEmail (void)
@@ -1129,7 +1129,7 @@ void Mai_ShowFormOthEmail (void)
 	 /***** Show user's record *****/
 	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
-	 /***** Form with the user's e-mail *****/
+	 /***** Form with the user's email *****/
 	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
 	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
                                      (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
@@ -1146,7 +1146,7 @@ void Mai_ShowFormOthEmail (void)
   }
 
 /*****************************************************************************/
-/*********************** Show form to change my e-mail ***********************/
+/*********************** Show form to change my email ************************/
 /*****************************************************************************/
 
 void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
@@ -1168,19 +1168,19 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumEmail;
    bool Confirmed;
 
-   /***** Get my e-mails *****/
+   /***** Get my emails *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
                   " WHERE UsrCod='%ld'"
                   " ORDER BY CreatTime DESC",
             UsrDat->UsrCod);
-   NumEmails = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get old e-mail addresses of a user");
+   NumEmails = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get old email addresses of a user");
 
-   /***** List my e-mails *****/
+   /***** List my emails *****/
    for (NumEmail = 1;
 	NumEmail <= NumEmails;
 	NumEmail++)
      {
-      /* Get e-mail */
+      /* Get email */
       row = mysql_fetch_row (mysql_res);
       Confirmed = (row[1][0] == 'Y');
 
@@ -1207,7 +1207,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 			    "<div class=\"FORM_ACCOUNT\">");
 	}
 
-      /* Form to remove e-mail */
+      /* Form to remove email */
       if (ItsMe)
 	 Act_FormStart (ActRemMaiMe);
       else
@@ -1222,13 +1222,13 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Lay_PutIconRemove ();
       Act_FormEnd ();
 
-      /* E-mail */
+      /* Email */
       fprintf (Gbl.F.Out,"<span class=\"%s\">%s</span>",
 	       NumEmail == 1 ? "USR_ID" :
 		               "DAT",
                row[0]);
 
-      /* E-mail confirmed? */
+      /* Email confirmed? */
       if (Confirmed)
 	{
 	 sprintf (Gbl.Title,Txt_Email_X_confirmed,row[0]);
@@ -1241,7 +1241,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Form to change user's e-mail */
+      /* Form to change user's email */
       if (NumEmail > 1 || (ItsMe && !Confirmed))
 	{
 	 if (ItsMe)
@@ -1254,7 +1254,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
-		  row[0]);	// E-mail
+		  row[0]);	// Email
          Lay_PutConfirmButtonInline ((ItsMe && NumEmail == 1) ? Txt_Confirm_email :
 			                                        Txt_Use_this_email);
 	 Act_FormEnd ();
@@ -1265,15 +1265,15 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 			 "</tr>");
      }
 
-   /***** Form to enter new e-mail *****/
+   /***** Form to enter new email *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"%s RIGHT_MIDDLE\">"
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
-            NumEmails ? Txt_New_email :	// A new e-mail
-        	        Txt_Email);	// The first e-mail
+            NumEmails ? Txt_New_email :	// A new email
+        	        Txt_Email);	// The first email
    if (ItsMe)
       Act_FormStart (ActNewMaiMe);
    else
@@ -1289,20 +1289,20 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
-   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an e-mail address
-        	                          Txt_Save);		// User has no e-mail address yet
+   Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
+        	                          Txt_Save);		// User has no email address yet
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
   }
 
 /*****************************************************************************/
-/******************* Remove one of my user's e-mails *************************/
+/******************** Remove one of my user's emails *************************/
 /*****************************************************************************/
 
 void Mai_RemoveMyUsrEmail (void)
   {
-   /***** Remove user's e-mail *****/
+   /***** Remove user's email *****/
    Mai_RemoveEmail (&Gbl.Usrs.Me.UsrDat);
 
    /***** Show my account again *****/
@@ -1320,7 +1320,7 @@ void Mai_RemoveOtherUsrEmail (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      /***** Remove user's e-mail *****/
+      /***** Remove user's email *****/
       Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
@@ -1331,7 +1331,7 @@ void Mai_RemoveOtherUsrEmail (void)
   }
 
 /*****************************************************************************/
-/************************** Remove e-mail address ****************************/
+/************************** Remove email address *****************************/
 /*****************************************************************************/
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat)
@@ -1342,17 +1342,17 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 
    if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
      {
-      /***** Get new e-mail from form *****/
+      /***** Get new email from form *****/
       Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
 
-      /***** Remove one of user's old e-mail addresses *****/
+      /***** Remove one of user's old email addresses *****/
       Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
 
       /***** Show message *****/
       sprintf (Gbl.Message,Txt_Email_X_removed,Email);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-      /***** Update list of e-mails *****/
+      /***** Update list of emails *****/
       Mai_GetEmailFromUsrCod (UsrDat);
      }
    else
@@ -1360,27 +1360,27 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/*************** Remove an old e-mail address from database ******************/
+/*************** Remove an old email address from database *******************/
 /*****************************************************************************/
 
 static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email)
   {
    char Query[1024];
 
-   /***** Remove an old e-mail address *****/
+   /***** Remove an old email address *****/
    sprintf (Query,"DELETE FROM usr_emails"
                   " WHERE UsrCod='%ld' AND E_mail='%s'",
             UsrCod,Email);
-   DB_QueryREPLACE (Query,"can not remove an old e-mail address");
+   DB_QueryREPLACE (Query,"can not remove an old email address");
   }
 
 /*****************************************************************************/
-/************************* New user's e-mail for me **************************/
+/************************* New user's email for me ***************************/
 /*****************************************************************************/
 
 void May_NewMyUsrEmail (void)
   {
-   /***** Remove user's e-mail *****/
+   /***** Remove user's email *****/
    Mai_NewUsrEmail (&Gbl.Usrs.Me.UsrDat,true);	// It's me
 
    /***** Show my account again *****/
@@ -1388,7 +1388,7 @@ void May_NewMyUsrEmail (void)
   }
 
 /*****************************************************************************/
-/******************** New user's e-mail for another user *********************/
+/********************* New user's email for another user *********************/
 /*****************************************************************************/
 
 void Mai_NewOtherUsrEmail (void)
@@ -1410,7 +1410,7 @@ void Mai_NewOtherUsrEmail (void)
   }
 
 /*****************************************************************************/
-/************************* Update my e-mail address **************************/
+/************************* Update my email address ***************************/
 /*****************************************************************************/
 
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
@@ -1424,12 +1424,12 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 
    if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
      {
-      /***** Get new e-mail from form *****/
+      /***** Get new email from form *****/
       Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
 
-      if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
+      if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
 	{
-	 /***** Check if new e-mail exists in database *****/
+	 /***** Check if new email exists in database *****/
 	 if (UsrDat->EmailConfirmed &&
 	     !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 	   {
@@ -1441,12 +1441,12 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
 	      {
-	       /***** E-mail updated sucessfully *****/
+	       /***** Email updated sucessfully *****/
 	       sprintf (Gbl.Message,Txt_The_email_address_X_has_been_registered_successfully,
 			NewEmail);
 	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-	       /***** Update list of e-mails *****/
+	       /***** Update list of emails *****/
 	       Mai_GetEmailFromUsrCod (UsrDat);
 
 	       /***** Send message via email
@@ -1462,7 +1462,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	      }
 	   }
 	}
-      else	// New e-mail is not valid
+      else	// New email is not valid
 	{
 	 sprintf (Gbl.Message,Txt_The_email_address_entered_X_is_not_valid,
 		  NewEmail);
@@ -1474,46 +1474,46 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
   }
 
 /*****************************************************************************/
-/************************ Update e-mail in database **************************/
+/************************ Update email in database ***************************/
 /*****************************************************************************/
-// Return true if e-mail is successfully updated
-// Return false if e-mail can not be updated beacuse it is registered by another user
+// Return true if email is successfully updated
+// Return false if email can not be updated beacuse it is registered by another user
 
 bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
   {
    char Query[1024];
 
-   /***** Check if the new e-mail matches any of the confirmed e-mails of other users *****/
+   /***** Check if the new email matches any of the confirmed emails of other users *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='Y'"
 		  " AND UsrCod<>'%ld'",
 	    NewEmail,UsrDat->UsrCod);
-   if (DB_QueryCOUNT (Query,"can not check if e-mail already existed"))	// An e-mail of another user is the same that my e-mail
+   if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
       return false;	// Don't update
 
-   /***** Delete e-mail (not confirmed) for other users *****/
+   /***** Delete email (not confirmed) for other users *****/
    sprintf (Query,"DELETE FROM pending_emails"
                   " WHERE E_mail='%s' AND UsrCod<>'%ld'",
 	    NewEmail,UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove pending e-mail for other users");
+   DB_QueryDELETE (Query,"can not remove pending email for other users");
 
    sprintf (Query,"DELETE FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='N'"
 		  " AND UsrCod<>'%ld'",
 	    NewEmail,UsrDat->UsrCod);
-   DB_QueryDELETE (Query,"can not remove not confirmed e-mail for other users");
+   DB_QueryDELETE (Query,"can not remove not confirmed email for other users");
 
-   /***** Update e-mail in database *****/
+   /***** Update email in database *****/
    sprintf (Query,"REPLACE INTO usr_emails"
                   " (UsrCod,E_mail,CreatTime) VALUES ('%ld','%s',NOW())",
             UsrDat->UsrCod,NewEmail);
-   DB_QueryREPLACE (Query,"can not update e-mail");
+   DB_QueryREPLACE (Query,"can not update email");
 
    return true;	// Successfully updated
   }
 
 /*****************************************************************************/
-/********** Put button to go to check and confirm my e-mail address **********/
+/********** Put button to go to check and confirm my email address ***********/
 /*****************************************************************************/
 
 void Mai_PutButtonToCheckEmailAddress (void)
@@ -1535,7 +1535,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
   }
 
 /*****************************************************************************/
-/************** Send mail message to confirm my e-mail address ***************/
+/************** Send mail message to confirm my email address ****************/
 /*****************************************************************************/
 // Return true on success
 // Return false on error
@@ -1546,7 +1546,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
    extern const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_HTML;
    extern const char *Txt_Confirmation_of_your_email_NO_HTML;
    extern const char *Txt_There_was_a_problem_sending_an_email_automatically;
-   char Command[2048]; // Command to execute for sending an e-mail
+   char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Create temporary file for mail content *****/
@@ -1571,9 +1571,9 @@ bool Mai_SendMailMsgToConfirmEmail (void)
 
    fclose (Gbl.Msg.FileMail);
 
-   /***** Call the script to send an e-mail *****/
+   /***** Call the script to send an email *****/
    sprintf (Command,"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-            Cfg_COMMAND_SEND_AUTOMATIC_E_MAIL,
+            Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
             Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
 	    Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
             Cfg_AUTOMATIC_EMAIL_FROM,
@@ -1583,7 +1583,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
             Gbl.Msg.FileNameMail);
    ReturnCode = system (Command);
    if (ReturnCode == -1)
-      Lay_ShowErrorAndExit ("Error when running script to send e-mail.");
+      Lay_ShowErrorAndExit ("Error when running script to send email.");
 
    /***** Remove temporary file *****/
    unlink (Gbl.Msg.FileNameMail);
@@ -1608,7 +1608,7 @@ bool Mai_SendMailMsgToConfirmEmail (void)
   }
 
 /*****************************************************************************/
-/******* Show alert to report that confirmation e-mail has been sent *********/
+/******* Show alert to report that confirmation email has been sent **********/
 /*****************************************************************************/
 
 void Mai_ShowMsgConfirmEmailHasBeenSent (void)
@@ -1628,7 +1628,7 @@ static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_E
   {
    char Query[512+Mai_LENGTH_EMAIL_CONFIRM_KEY];
 
-   /***** Remove expired pending e-mails from database *****/
+   /***** Remove expired pending emails from database *****/
    sprintf (Query,"DELETE FROM pending_emails"
                   " WHERE DateAndTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS);
@@ -1644,7 +1644,7 @@ static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_E
   }
 
 /*****************************************************************************/
-/************************* Confirm my e-mail address *************************/
+/************************* Confirm my email address **************************/
 /*****************************************************************************/
 
 void Mai_ConfirmEmail (void)
@@ -1665,17 +1665,17 @@ void Mai_ConfirmEmail (void)
    /***** Get parameter Key *****/
    Par_GetParToText ("key",MailKey,Mai_LENGTH_EMAIL_CONFIRM_KEY);
 
-   /***** Get user's code and e-mail from key *****/
+   /***** Get user's code and email from key *****/
    sprintf (Query,"SELECT UsrCod,E_mail FROM pending_emails"
                   " WHERE MailKey='%s'",MailKey);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and e-mail from key"))
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email from key"))
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get user's code */
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get user's e-mail */
+      /* Get user's email */
       strcpy (Email,row[1]);
 
       KeyIsCorrect = true;
@@ -1689,18 +1689,18 @@ void Mai_ConfirmEmail (void)
       /***** Delete this key *****/
       sprintf (Query,"DELETE FROM pending_emails"
                      " WHERE MailKey='%s'",MailKey);
-      DB_QueryDELETE (Query,"can not remove an e-mail key");
+      DB_QueryDELETE (Query,"can not remove an email key");
 
-      /***** Check user's code and e-mail
-             and get if e-mail is already confirmed *****/
+      /***** Check user's code and email
+             and get if email is already confirmed *****/
       sprintf (Query,"SELECT Confirmed FROM usr_emails"
 		     " WHERE UsrCod='%ld' AND E_mail='%s'",
 	       UsrCod,Email);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and e-mail"))
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email"))
 	{
          Confirmed = (row[0][0] == 'Y');
 
-         /***** Confirm e-mail *****/
+         /***** Confirm email *****/
          if (Confirmed)
 	    sprintf (Gbl.Message,Txt_Email_X_has_already_been_confirmed_before,
 		     Email);
@@ -1710,7 +1710,7 @@ void Mai_ConfirmEmail (void)
 			   " WHERE usr_emails.UsrCod='%ld'"
 			   " AND usr_emails.E_mail='%s'",
 		     UsrCod,Email);
-	    DB_QueryUPDATE (Query,"can not confirm e-mail");
+	    DB_QueryUPDATE (Query,"can not confirm email");
 	    sprintf (Gbl.Message,Txt_The_email_X_has_been_confirmed,Email);
 	    strcat (Gbl.Message,".");
            }
@@ -1738,11 +1738,11 @@ void Mai_CreateFileNameMail (void)
    sprintf (Gbl.Msg.FileNameMail,"%s/%s/%s_mail.txt",
             Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT,Gbl.UniqueNameEncrypted);
    if ((Gbl.Msg.FileMail = fopen (Gbl.Msg.FileNameMail,"wb")) == NULL)
-      Lay_ShowErrorAndExit ("Can not open file to send e-mail.");
+      Lay_ShowErrorAndExit ("Can not open file to send email.");
   }
 
 /*****************************************************************************/
-/************ Write a welcome note heading the automatic e-mail **************/
+/************ Write a welcome note heading the automatic email ***************/
 /*****************************************************************************/
 
 void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
@@ -1757,7 +1757,7 @@ void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/****************** Write a foot note in the automatic e-mail ****************/
+/****************** Write a foot note in the automatic email *****************/
 /*****************************************************************************/
 
 void Mai_WriteFootNoteEMail (Txt_Language_t Language)
@@ -1773,7 +1773,7 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
   }
 
 /*****************************************************************************/
-/**************** Check if I can see another user's e-mail *******************/
+/**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
 bool Mai_ICanSeeEmail (struct UsrData *UsrDat)
@@ -1783,31 +1783,31 @@ bool Mai_ICanSeeEmail (struct UsrData *UsrDat)
    if (ItsMe)
       return true;
 
-   /* Check if I have permission to see another user's e-mail */
+   /* Check if I have permission to see another user's email */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STUDENT:
 	 /* If I am a student of current course,
-	    I only can see the user's e-mail of teachers from current course */
+	    I only can see the user's email of teachers from current course */
 	 return (UsrDat->Accepted &&
 	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
       case Rol_TEACHER:
 	 /* If I am a teacher of current course,
-	    I only can see the user's e-mail of students or teachers from current course */
+	    I only can see the user's email of students or teachers from current course */
 	 return (UsrDat->Accepted &&
 	         (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
 	          UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
-	    I only can see the user's e-mail of users from current degree */
+	    I only can see the user's email of users from current degree */
 	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current centre,
-	    I only can see the user's e-mail of users from current centre */
+	    I only can see the user's email of users from current centre */
 	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
-	    I only can see the user's e-mail of users from current institution */
+	    I only can see the user's email of users from current institution */
 	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
       case Rol_SYS_ADM:
 	 return true;

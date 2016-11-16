@@ -2207,7 +2207,7 @@ void Svy_RecFormSurvey (void)
    else
       Svy_RequestCreatOrEditSvy ();
 
-   /***** Notify by e-mail about the new survey *****/
+   /***** Notify by email about the new survey *****/
    if (NewSvy.Scope == Sco_SCOPE_CRS)	// Notify only the surveys for a course, not for a degree or global
      {
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewSvy.SvyCod)))
@@ -3939,7 +3939,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
    if (sscanf (row[0],"%u",&NumSurveys) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of surveys.");
 
-   /***** Get number of notifications by e-mail *****/
+   /***** Get number of notifications by email *****/
    if (row[1])
      {
       if (sscanf (row[1],"%u",NumNotif) != 1)

@@ -590,7 +590,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
-   /* Get on which events I want to be notified by e-mail */
+   /* Get on which events I want to be notified by email */
    if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
@@ -612,7 +612,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Get nickname and e-mail *****/
+   /***** Get nickname and email *****/
    Nck_GetNicknameFromUsrCod (UsrDat->UsrCod,UsrDat->Nickname);
    Mai_GetEmailFromUsrCod (UsrDat);
   }
@@ -1848,7 +1848,7 @@ void Usr_WelcomeUsr (void)
          else
             Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
-         /***** Warning to confirm my e-mail address *****/
+         /***** Warning to confirm my email address *****/
          if (Gbl.Usrs.Me.UsrDat.Email[0] &&
              !Gbl.Usrs.Me.UsrDat.EmailConfirmed)
             Mai_PutButtonToCheckEmailAddress ();
@@ -2033,7 +2033,7 @@ void Usr_GetParamUsrIdLogin (void)
 
 static void Usr_GetParamOtherUsrIDNickOrEMail (void)
   {
-   /***** Get parameter with the plain user's ID, @nick or e-mail of another user *****/
+   /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParToText ("OtherUsrIDNickOrEMail",Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,Usr_MAX_BYTES_USR_LOGIN);
 
    // If it's a user's ID (if does not contain '@')
@@ -2049,7 +2049,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
 /******* Get parameter user's identificator of other user from a form ********/
 /******* and get user's data                                          ********/
 /*****************************************************************************/
-// Returns the number of users for a given ID, @nick or e-mail
+// Returns the number of users for a given ID, @nick or email
 
 unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods)
   {
@@ -2060,10 +2060,10 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
    ListUsrCods->NumUsrs = 0;
    ListUsrCods->Lst = NULL;
 
-   /***** Get parameter with the plain user's ID, @nick or e-mail of another user *****/
+   /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Usr_GetParamOtherUsrIDNickOrEMail ();
 
-   /***** Check if it's an ID, a nickname or an e-mail address *****/
+   /***** Check if it's an ID, a nickname or an email address *****/
    if (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0])
      {
       if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
@@ -2075,7 +2075,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	   }
 	}
-      else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an e-mail
+      else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail))		// 2: It's an email
 	{
 	 if ((Gbl.Usrs.Other.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail)) > 0)
 	   {
@@ -2084,7 +2084,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	    ListUsrCods->Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
 	   }
 	}
-      else											// 3: It's not a nickname nor e-mail
+      else											// 3: It's not a nickname nor email
 	{
 	 // Users' IDs are always stored internally in capitals and without leading zeros
 	 Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
@@ -2100,7 +2100,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	    /* Check if user's ID exists in database */
 	    ID_GetListUsrCodsFromUsrID (&Gbl.Usrs.Other.UsrDat,NULL,ListUsrCods,false);
 	   }
-	 else	// Not a valid user's nickname, e-mail or ID
+	 else	// Not a valid user's nickname, email or ID
 	    Wrong = true;
 	}
      }
@@ -2109,7 +2109,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 
    if (Wrong)
      {
-      /***** String is not a valid user's nickname, e-mail or ID *****/
+      /***** String is not a valid user's nickname, email or ID *****/
       sprintf (Gbl.Message,Txt_The_ID_nickname_or_email_X_is_not_valid,
 	       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -2247,7 +2247,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       PutFormLogin = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrInt)	// Login using @nickname, e-mail or ID from form
+	 else if (Gbl.Action.Act == ActAutUsrInt)	// Login using @nickname, email or ID from form
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
 	      {
@@ -2349,7 +2349,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
       return false;
      }
 
-   /***** Check if user has typed his user's ID, his nickname or his e-mail address *****/
+   /***** Check if user has typed his user's ID, his nickname or his email address *****/
    if (Nck_CheckIfNickWithArrobaIsValid (Gbl.Usrs.Me.UsrIdLogin))	// 1: It's a nickname
      {
       // User is trying to log using his/her nickname
@@ -2359,16 +2359,16 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 return false;
 	}
      }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an e-mail
+   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
-      // User is trying to log using his/her e-mail
+      // User is trying to log using his/her email
       if ((Gbl.Usrs.Me.UsrDat.UsrCod = Mai_GetUsrCodFromEmail (Gbl.Usrs.Me.UsrIdLogin)) <= 0)
 	{
 	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
 	}
      }
-   else									// 3: It's not a nickname nor e-mail
+   else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
@@ -2437,7 +2437,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	    return false;
 	   }
 	}
-      else	// String is not a valid user's nickname, e-mail or ID
+      else	// String is not a valid user's nickname, email or ID
 	{
 	 Usr_ShowAlertUsrDoesNotExistsOrWrongPassword ();
 	 return false;
@@ -3289,7 +3289,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
   }
 
 /*****************************************************************************/
-/**************************** Write user's e-mail ****************************/
+/**************************** Write user's email *****************************/
 /*****************************************************************************/
 
 static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
@@ -4843,7 +4843,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    extern const char *Txt_There_is_no_user_with_nickname_X;
    extern const char *Txt_There_is_no_user_with_email_X;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
-   extern const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X;
+   extern const char *Txt_There_is_no_user_with_ID_nick_or_email_X;
    extern const char *Txt_The_ID_nickname_or_email_X_is_not_valid;
    size_t LengthSelectedUsrsCods;
    size_t LengthUsrCod;
@@ -4902,7 +4902,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  Error = true;
 		 }
 	      }
-	    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))	// 2: It's an e-mail
+	    else if (Mai_CheckIfEmailIsValid (UsrIDNickOrEmail))	// 2: It's an email
 	      {
 	       if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrIDNickOrEmail)) > 0)
 		 {
@@ -4921,7 +4921,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  Error = true;
 		 }
 	      }
-            else							// 3: It's not a nickname nor e-mail
+            else							// 3: It's not a nickname nor email
               {
                // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
@@ -4953,14 +4953,14 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     if (WriteErrorMsgs)
 		       {
-			sprintf (Gbl.Message,Txt_There_is_no_user_with_ID_nick_or_e_mail_X,
+			sprintf (Gbl.Message,Txt_There_is_no_user_with_ID_nick_or_email_X,
 				 UsrIDNickOrEmail);
 			Lay_ShowAlert (Lay_ERROR,Gbl.Message);
 		       }
 		     Error = true;
 		    }
 		 }
-	       else	// String is not a valid user's nickname, e-mail or ID
+	       else	// String is not a valid user's nickname, email or ID
 		 {
 		  if (WriteErrorMsgs)
 		    {

@@ -534,7 +534,7 @@ static void Rep_WriteSectionUsrInfo (void)
             Txt_Name,
             Gbl.Usrs.Me.UsrDat.FullName);
 
-   /***** User's e-mail *****/
+   /***** User's email *****/
    fprintf (Gbl.F.Rep,"<li>%s: %s</li>",
             Txt_Email,
             Gbl.Usrs.Me.UsrDat.Email);

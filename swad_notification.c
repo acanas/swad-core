@@ -1,4 +1,4 @@
-// swad_notification.c: notifications about events, sent by e-mail
+// swad_notification.c: notifications about events, sent by email
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -1165,7 +1165,7 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 /********** Get a list with user's codes of all users to be notified *********/
 /********** about an event, and notify them                          *********/
 /*****************************************************************************/
-// Return the number of users notified by e-mail
+// Return the number of users notified by email
 
 unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
   {
@@ -1468,7 +1468,7 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
   }
 
 /*****************************************************************************/
-/***************** Send all pending notifications by e-mail ******************/
+/***************** Send all pending notifications by email *******************/
 /*****************************************************************************/
 
 void Ntf_SendPendingNotifByEMailToAllUsrs (void)
@@ -1533,7 +1533,7 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
   }
 
 /*****************************************************************************/
-/************ Send pending notifications of one user by e-mail ***************/
+/************ Send pending notifications of one user by email ****************/
 /*****************************************************************************/
 
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
@@ -1563,7 +1563,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    long Cod;
    For_ForumType_t ForumType = (For_ForumType_t) 0;	// Initialized to avoid warning
    char ForumName[512];
-   char Command[2048]; // Command to execute for sending an e-mail
+   char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
 
    /***** Return 0 notifications and 0 mails when error *****/
@@ -1712,9 +1712,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 fclose (Gbl.Msg.FileMail);
 
-	 /***** Call the command to send an e-mail *****/
+	 /***** Call the command to send an email *****/
 	 sprintf (Command,"%s \"%s\" \"%s\" \"%s\" \"%s\" \"%s\" \"[%s] %s\" \"%s\"",
-		  Cfg_COMMAND_SEND_AUTOMATIC_E_MAIL,
+		  Cfg_COMMAND_SEND_AUTOMATIC_EMAIL,
 		  Cfg_AUTOMATIC_EMAIL_SMTP_SERVER,
 		  Cfg_AUTOMATIC_EMAIL_SMTP_PORT,
 		  Cfg_AUTOMATIC_EMAIL_FROM,
@@ -1725,7 +1725,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		  Gbl.Msg.FileNameMail);
 	 ReturnCode = system (Command);
 	 if (ReturnCode == -1)
-	    Lay_ShowErrorAndExit ("Error when running script to send e-mail.");
+	    Lay_ShowErrorAndExit ("Error when running script to send email.");
 
 	 /***** Remove temporary file *****/
 	 unlink (Gbl.Msg.FileNameMail);
@@ -1773,20 +1773,20 @@ Ntf_NotifyEvent_t Ntf_GetNotifyEventFromDB (const char *Str)
   }
 
 /*****************************************************************************/
-/******** Show an alert with the number of users notified by e-mail **********/
+/******** Show an alert with the number of users notified by email ***********/
 /*****************************************************************************/
 
 void Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (unsigned NumUsrsToBeNotifiedByEMail)
   {
-   extern const char *Txt_No_of_users_who_will_be_notified_by_e_mail;
+   extern const char *Txt_No_of_users_who_will_be_notified_by_email;
 
    sprintf (Gbl.Message,"%s: %u",
-            Txt_No_of_users_who_will_be_notified_by_e_mail,NumUsrsToBeNotifiedByEMail);
+            Txt_No_of_users_who_will_be_notified_by_email,NumUsrsToBeNotifiedByEMail);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
   }
 
 /*****************************************************************************/
-/************* Get number of events notified and e-mails sent ****************/
+/************* Get number of events notified and emails sent *****************/
 /*****************************************************************************/
 
 static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
@@ -1798,20 +1798,20 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Get number of notifications sent by e-mail from database *****/
+   /***** Get number of notifications sent by email from database *****/
    sprintf (Query,"SELECT NumEvents,NumMails FROM sta_notif"
                   " WHERE DegCod='%ld' AND CrsCod='%ld' AND NotifyEvent='%u'",
             DegCod,CrsCod,(unsigned) NotifyEvent);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of notifications sent by e-mail");
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of notifications sent by email");
 
    /***** Get number of rows *****/
    if (NumRows)
      {
       row = mysql_fetch_row (mysql_res);
       if (sscanf (row[0],"%u",NumEvents) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by e-mail.");
+         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
       if (sscanf (row[1],"%u",NumMails) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by e-mail.");
+         Lay_ShowErrorAndExit ("Error when getting number of notifications sent by email.");
      }
    else
       *NumEvents = *NumMails = 0;
@@ -1821,7 +1821,7 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
   }
 
 /*****************************************************************************/
-/******************** Update number of notify e-mails sent *******************/
+/******************** Update number of notify emails sent ********************/
 /*****************************************************************************/
 
 static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
@@ -1864,7 +1864,7 @@ void Ntf_MarkAllNotifAsSeen (void)
   }
 
 /*****************************************************************************/
-/*** Activate the sending of e-mail to notify me that I have new messages ****/
+/*** Activate the sending of email to notify me that I have new messages *****/
 /*****************************************************************************/
 
 void Ntf_PutFormChangeNotifSentByEMail (void)
@@ -1874,7 +1874,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    extern const char *Txt_Save_changes;
    extern const char *Txt_Notifications;
    extern const char *Txt_Create_BR_notification;
-   extern const char *Txt_Notify_me_BR_by_e_mail;
+   extern const char *Txt_Notify_me_BR_by_email;
    extern const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS];
    Ntf_NotifyEvent_t NotifyEvent;
 
@@ -1886,7 +1886,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
    /***** Start form *****/
    Act_FormStart (ActChgNtfPrf);
 
-   /***** Warning if I can not receive e-mail notifications *****/
+   /***** Warning if I can not receive email notifications *****/
    if (!Mai_CheckIfUsrCanReceiveEmailNotif (&Gbl.Usrs.Me.UsrDat))
       Mai_WriteWarningEmailNotifications ();
 
@@ -1902,9 +1902,9 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
                       "</th>"
 	              "</tr>",
 	    Txt_Create_BR_notification,
-	    Txt_Notify_me_BR_by_e_mail);
+	    Txt_Notify_me_BR_by_email);
 
-   /***** Checkbox to activate the sending of e-mail to notify me about events *****/
+   /***** Checkbox to activate the sending of email to notify me about events *****/
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
@@ -1945,7 +1945,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
   }
 
 /*****************************************************************************/
-/** Get parameter with the sending of e-mail to notify me that I have msgs. **/
+/** Get parameter with the sending of email to notify me that I have msgs. ***/
 /*****************************************************************************/
 
 static void Ntf_GetParamsNotifyEvents (void)
@@ -1974,7 +1974,7 @@ static void Ntf_GetParamsNotifyEvents (void)
   }
 
 /*****************************************************************************/
-/**** Change my preference about sending me notify e-mails about events ******/
+/***** Change my preference about sending me notify emails about events ******/
 /*****************************************************************************/
 
 void Ntf_ChangeNotifyEvents (void)

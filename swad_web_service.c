@@ -722,10 +722,10 @@ int swad__createAccount (struct soap *soap,
    Nck_UpdateMyNick (NewNicknameWithoutArroba);
    strcpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba);
 
-   /***** Save e-mail *****/
+   /***** Save email *****/
    if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,userEmail))
      {
-      /* E-mail updated sucessfully */
+      /* Email updated sucessfully */
       strcpy (Gbl.Usrs.Me.UsrDat.Email,userEmail);
       Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
      }
@@ -769,17 +769,17 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
    else        // New nickname is not valid
       return Svc_CHECK_NEW_ACCOUNT_NICKNAME_NOT_VALID;
 
-   /***** Step 2/3: Check new e-mail *****/
-   if (Mai_CheckIfEmailIsValid (NewEmail))	// New e-mail is valid
+   /***** Step 2/3: Check new email *****/
+   if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
-      /***** Check if the new e-mail matches any of the confirmed e-mails of other users *****/
+      /***** Check if the new email matches any of the confirmed emails of other users *****/
       sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
 		     " WHERE E_mail='%s' AND Confirmed='Y'",
 	       NewEmail);
-      if (DB_QueryCOUNT (Query,"can not check if e-mail already existed"))	// An e-mail of another user is the same that my e-mail
+      if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
 	 return Svc_CHECK_NEW_ACCOUNT_EMAIL_REGISTERED_BY_ANOTHER_USER;
      }
-   else	// New e-mail is not valid
+   else	// New email is not valid
       return Svc_CHECK_NEW_ACCOUNT_EMAIL_NOT_VALID;
 
    /***** Step 3/3: Check new password *****/
@@ -837,7 +837,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    if ((ReturnCode = Svc_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
-   /***** Check if user's e-mail, @nickname or ID are valid *****/
+   /***** Check if user's email, @nickname or ID are valid *****/
    strncpy (UsrIDNickOrEmail,userID,255);
    UsrIDNickOrEmail[255] = '\0';
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
@@ -852,9 +852,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 		     " AND usr_data.Password='%s'",
 	       UsrIDNickOrEmail,userPassword);
      }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an e-mail
+   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
-      /* User has typed an e-mail */
+      /* User has typed an email */
       // TODO: Get only if email confirmed?
       sprintf (Query,"SELECT usr_emails.UsrCod"
 	             " FROM usr_emails,usr_data"
@@ -863,7 +863,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 		     " AND usr_data.Password='%s'",
 	       UsrIDNickOrEmail,userPassword);
      }
-   else									// 3: It's not a nickname nor e-mail
+   else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
@@ -878,7 +878,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 			" AND usr_data.Password='%s'",
 		  UsrIDNickOrEmail,userPassword);
 	}
-      else	// String is not a valid user's nickname, e-mail or ID
+      else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (Gbl.soap,
 				     "Bad log in",
 				     "User's ID or nickname don't exist or password is wrong");
@@ -1098,7 +1098,7 @@ int swad__loginBySessionKey (struct soap *soap,
   }
 
 /*****************************************************************************/
-/*********************** Send a new password by e-mail ***********************/
+/*********************** Send a new password by email ************************/
 /*****************************************************************************/
 
 int swad__getNewPassword (struct soap *soap,
@@ -1124,7 +1124,7 @@ int swad__getNewPassword (struct soap *soap,
    if ((ReturnCode = Svc_GetPlgCodFromAppKey ((const char *) appKey)) != SOAP_OK)
       return ReturnCode;
 
-   /***** Check if user's e-mail, @nickname or ID are valid *****/
+   /***** Check if user's email, @nickname or ID are valid *****/
    strncpy (UsrIDNickOrEmail,userID,255);
    UsrIDNickOrEmail[255] = '\0';
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
@@ -1137,16 +1137,16 @@ int swad__getNewPassword (struct soap *soap,
 		     " WHERE Nickname='%s'",
 	       UsrIDNickOrEmail);
      }
-   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an e-mail
+   else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
-      /* User has typed an e-mail */
+      /* User has typed an email */
       // TODO: Get only if email confirmed?
       sprintf (Query,"SELECT UsrCod"
 	             " FROM usr_emails"
 		     " WHERE E_mail='%s'",
 	       UsrIDNickOrEmail);
      }
-   else									// 3: It's not a nickname nor e-mail
+   else									// 3: It's not a nickname nor email
      {
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDNickOrEmail);
@@ -1160,10 +1160,10 @@ int swad__getNewPassword (struct soap *soap,
 			" WHERE UsrID='%s'",
 		  UsrIDNickOrEmail);
 	}
-      else	// String is not a valid user's nickname, e-mail or ID
+      else	// String is not a valid user's nickname, email or ID
 	 return soap_receiver_fault (Gbl.soap,
 				     "Bad log in",
-				     "User's e-mail, nickname or ID don't exist");
+				     "User's email, nickname or ID don't exist");
      }
 
    /***** Get user's data from database *****/
@@ -3285,7 +3285,7 @@ int swad__sendMessage (struct soap *soap,
                /* Get recipient data */
                if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
         	 {
-                  /* This received message must be notified by e-mail? */
+                  /* This received message must be notified by email? */
                   NotifyByEmail = ((Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod) &&
                                    (Gbl.Usrs.Other.UsrDat.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE)));
 
@@ -3356,7 +3356,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
    DB_QueryINSERT (Query,"can not create received message");
 
    /***** Create notification for this recipient.
-          If this recipient wants to receive notifications by e-mail, activate the sending of a notification *****/
+          If this recipient wants to receive notifications by email, activate the sending of a notification *****/
    sprintf (Query,"INSERT INTO notif (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
                   " VALUES ('%u','%ld','%ld','-1','-1','-1','%ld',NOW(),'%u')",
             (unsigned) Ntf_EVENT_MESSAGE,

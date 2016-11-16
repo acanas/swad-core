@@ -195,7 +195,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
       DB_QueryUPDATE (Query,"can not modify user's role in course");
 
       /***** Create notification for this user.
-	     If this user wants to receive notifications by e-mail,
+	     If this user wants to receive notifications by email,
 	     activate the sending of a notification *****/
       Enr_NotifyAfterEnrollment (UsrDat,NewRole);
 
@@ -258,7 +258,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    UsrDat->Roles |= NewRole;
 
    /***** Create notification for this user.
-	  If this user wants to receive notifications by e-mail,
+	  If this user wants to receive notifications by email,
 	  activate the sending of a notification *****/
    Enr_NotifyAfterEnrollment (UsrDat,NewRole);
 
@@ -314,7 +314,7 @@ static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole
   }
 
 /*****************************************************************************/
-/****** Write a form to request another user's ID, @nickname or e-mail *******/
+/****** Write a form to request another user's ID, @nickname or email *******/
 /*****************************************************************************/
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
@@ -323,7 +323,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
    extern const char *Txt_nick_email_or_ID;
    extern const char *Txt_Continue;
 
-   /***** Form to request user's ID, @nickname or e-mail address *****/
+   /***** Form to request user's ID, @nickname or email address *****/
    Act_FormStart (NextAction);
    fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
                       "%s: "
@@ -1368,7 +1368,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	       ListUsrCods.NumUsrs = 0;
 	       ListUsrCods.Lst = NULL;
 
-	       /* Check if string is a user's ID, user's nickname or user's e-mail address */
+	       /* Check if string is a user's ID, user's nickname or user's email address */
 	       if (Nck_CheckIfNickWithArrobaIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 		 {
 		  if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
@@ -1378,7 +1378,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		     ListUsrCods.Lst[0] = UsrDat.UsrCod;
 		    }
 		 }
-	       else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an e-mail
+	       else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))	// 2: It's an email
 		 {
 		  if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
 		    {
@@ -1489,7 +1489,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	    ListUsrCods.NumUsrs = 0;
 	    ListUsrCods.Lst = NULL;
 
-	    /* Check if the string is a user's ID, a user's nickname or a user's e-mail address */
+	    /* Check if the string is a user's ID, a user's nickname or a user's email address */
 	    if (Nck_CheckIfNickWithArrobaIsValid (UsrDat.UsrIDNickOrEmail))	// 1: It's a nickname
 	      {
 	       if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.UsrIDNickOrEmail)) > 0)
@@ -1499,7 +1499,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		  ListUsrCods.Lst[0] = UsrDat.UsrCod;
 		 }
 	      }
-	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an e-mail
+	    else if (Mai_CheckIfEmailIsValid (UsrDat.UsrIDNickOrEmail))		// 2: It's an email
 	      {
 	       if ((UsrDat.UsrCod = Mai_GetUsrCodFromEmail (UsrDat.UsrIDNickOrEmail)) > 0)
 		 {
@@ -1863,7 +1863,7 @@ void Enr_SignUpInCrs (void)
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-      /***** Notify teachers or admins by e-mail about the new enrollment request *****/
+      /***** Notify teachers or admins by email about the new enrollment request *****/
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
       if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_TEACHER)
@@ -2905,7 +2905,7 @@ static bool Enr_CheckIfICanAdminOtherUsrs (void)
   }
 
 /*****************************************************************************/
-/****** Write a form to request another user's ID, @nickname or e-mail *******/
+/****** Write a form to request another user's ID, @nickname or email ********/
 /*****************************************************************************/
 
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
@@ -3104,7 +3104,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
-      Mai_PutLinkToChangeOtherUsrEmail ();	// Put link (form) to change user's e-mail
+      Mai_PutLinkToChangeOtherUsrEmail ();	// Put link (form) to change user's email
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
      }
    if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))

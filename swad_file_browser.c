@@ -3399,7 +3399,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,", %s",UsrDat->FirstName);
    fprintf (Gbl.F.Out,"</a>");
 
-   /***** Show user's e-mail *****/
+   /***** Show user's email *****/
    if (UsrDat->Email[0])
      {
       fprintf (Gbl.F.Out,"<br />"
@@ -3464,7 +3464,7 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
    /***** Legal notice *****/
    sprintf (Gbl.Message,Txt_Disclaimer_the_files_hosted_here_,
             Cfg_PLATFORM_SHORT_NAME,
-            Cfg_PLATFORM_RESPONSIBLE_E_MAIL);
+            Cfg_PLATFORM_RESPONSIBLE_EMAIL);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
   }
 

@@ -1,4 +1,4 @@
-// swad_notification.h: notifications about events, sent by e-mail
+// swad_notification.h: notifications about events, sent by email
 
 #ifndef _SWAD_NTF
 #define _SWAD_NTF

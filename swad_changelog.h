@@ -145,7 +145,7 @@
 // TODO: Writing a message to several recipients: include message to indicate that list of nicknames must be comma separated
 // TODO: When requesting inscription, I can not click in the photo of my record. Change the form?
 
-// TODO: Import ID, e-mail, Surname1, Surname2, Name from CSV, suggested by Javier Melero
+// TODO: Import ID, email, Surname1, Surname2, Name from CSV, suggested by Javier Melero
 
 // TODO: Remove columns DegCod,CrsCod from database table surveys
 
@@ -153,19 +153,29 @@
 
 // TODO: When an assignment has the same name or the same folder as another existing assignment, after error the fields are empty!
 
+// TODO: Remove all files inside the root folder (except the root folder itself) just as made with copy-paste?
+
+// TODO: Cuando se seleccionan varios alumnos para sus trabajos y después se vuelve atrás y se vuelven a ver, salen los estudiantes duplicados ==> comprobar cada uno de los que se muestra si ya se ha mostrado para no hacerlo de nuevo
+
+// TODO: Comprobar que cuando se da de baja un estudiante y luego se vuelve a dar de alta se han eliminado sus trabajos (Javier dice que no se eliminan)
+
+// TODO: Hay un problema cuando se eliminan usuarios de una asignatura: quedan sus trabajos sin eliminar para siempre, ocupando espacio
+// TODO: Se elimina un único estudiante de la asignatura. ¿Se eliminan sus trabajos? Si no, habría que cambiar el mensaje "eliminando sus trabajos...".
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.62.2 (2016-11-14)"
+#define Log_PLATFORM_VERSION	"SWAD 16.63 (2016-11-16)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.62.2:  Nov 14, 2016	Changes message related to clipboard.
-					Fixed minor bug when copying all files inside root folder. (207157 lines)
+        Version 16.63:    Nov 16, 2016	"e-mail" changed to "email", except in database fields. (? lines)
+        Version 16.62.2:  Nov 14, 2016	Changed message related to clipboard.
+					Fixed minor bug when copying all files inside root folder. (207158 lines)
         Version 16.62.1:  Nov 14, 2016	Code refactoring in clipboard. (207151 lines)
         Version 16.62:    Nov 14, 2016	Copy of all files inside root folder is now allowed (root folder not copied). (207165 lines)
         Version 16.61.8:  Nov 14, 2016	Code refactoring in clipboard. (207148 lines)
@@ -427,15 +437,15 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1587','es','N','Move
         Version 16.21.3:  Oct 12, 2016	Changes in layout of file browser. (205266 lines)
         Version 16.21.2:  Oct 12, 2016	Unused code removed from actions. (205263 lines)
         Version 16.21.1:  Oct 12, 2016	Code refactoring in actions. (205280 lines)
-        Version 16.21:    Oct 12, 2016	Code refactoring related with warning about e-mail notifications.
-					Notification mail is sent only if e-mail is confirmed. (205278 lines)
+        Version 16.21:    Oct 12, 2016	Code refactoring related with warning about email notifications.
+					Notification mail is sent only if email is confirmed. (205278 lines)
         Version 16.20:    Oct 11, 2016	New button to edit/view file browser. (205241 lines)
         Version 16.19.3:  Oct 11, 2016	Code optimization in file browser. (205210 lines)
         Version 16.19.2:  Oct 11, 2016	Code optimization in file browser. (205198 lines)
-        Version 16.19.1:  Oct 10, 2016	Message to report that confirmation e-mail has been sent. (205203 lines)
-        Version 16.19:    Oct 10, 2016	Warning in User > Session to confirm user's e-mail address.
+        Version 16.19.1:  Oct 10, 2016	Message to report that confirmation email has been sent. (205203 lines)
+        Version 16.19:    Oct 10, 2016	Warning in User > Session to confirm user's email address.
 					Changes in form to edit user's account. (205194 lines)
-        Version 16.18.1:  Oct 10, 2016	Warning in User > Account to confirm user's e-mail address. (205116 lines)
+        Version 16.18.1:  Oct 10, 2016	Warning in User > Account to confirm user's email address. (205116 lines)
         Version 16.18:    Oct 09, 2016	Removed external authentication (previously used at University of Granada). (205092 lines)
 					4 changes necessary in database:
 DROP TABLE IF EXISTS imported_groups;
@@ -599,7 +609,7 @@ ALTER TABLE msg_content_deleted CHANGE COLUMN ImageURL ImageURL VARCHAR(255) NOT
         Version 15.247:   Jul 26, 2016	In listings of users, show institution logo with link to institution. (204093 lines)
         Version 15.246.2: Jul 26, 2016	List of users in web service use the list filled instead of querying database a second time to get all user's data.
                                         Code refactoring in copying of user's data in web service. (204089 lines)
-        Version 15.246.1: Jul 26, 2016	Attendance of users and e-mail to users use the list filled instead of querying database a second time to get all user's data. (204093 lines)
+        Version 15.246.1: Jul 26, 2016	Attendance of users and email to users use the list filled instead of querying database a second time to get all user's data. (204093 lines)
         Version 15.246:   Jul 26, 2016	Classphoto of users uses the list filled instead of querying database a second time to get all user's data.
                                         Origin place is removed from classphoto. (204094 lines)
         Version 15.245.5: Jul 26, 2016	Fixed bug in user's data. (204116 lines)
@@ -609,7 +619,7 @@ ALTER TABLE msg_content_deleted CHANGE COLUMN ImageURL ImageURL VARCHAR(255) NOT
         Version 15.245.1: Jul 25, 2016	Code refactoring in building of queries to get/search users. (204081 lines)
         Version 15.245:   Jul 25, 2016	List of users is filled with user's name and user's institution.
 					Search of users uses the list filled instead of querying database a second time to get all user's data. (204192 lines)
-        Version 15.244:   Jul 25, 2016	Removed e-mail column from some lists of users (usually it's not necessary). (203969 lines)
+        Version 15.244:   Jul 25, 2016	Removed email column from some lists of users (usually it's not necessary). (203969 lines)
         Version 15.243.2: Jul 24, 2016	Guests now have permission to write messages. (203963 lines)
         Version 15.243.1: Jul 21, 2016	Fixed bugs in web service. (203962 lines)
         Version 15.243:   Jul 20, 2016	Fixed bug in web service (getNotifications).
@@ -646,7 +656,7 @@ DROP TABLE IF EXISTS notif_backup,sta_notif_backup,usr_data_backup;
         Version 15.238:   Jul 01, 2016	Hidden fields in in selectors of class photo / list with message subject and content. (203274 lines)
         Version 15.237.3: Jul 01, 2016	Fixed bug in messages. (203257 lines)
         Version 15.237.2: Jul 01, 2016	Fixed minor problem in textarea for message content. (203261 lines)
-        Version 15.237.1: Jul 01, 2016	Code refactoring in function to send e-mail to students. (203254 lines)
+        Version 15.237.1: Jul 01, 2016	Code refactoring in function to send email to students. (203254 lines)
         Version 15.237:   Jul 01, 2016	The form "Show more recipients" now have a hidden field with the content. (203243 lines)
         Version 15.236:   Jun 30, 2016	The form "Show more recipients" now have a hidden field with the subject. (? lines)
         Version 15.235.1: Jun 30, 2016	Minor change in icon to download files. (203206 lines)
@@ -897,9 +907,9 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1570','es','N','Conf
         Version 15.202.4: Apr 23, 2016	Code refactoring in record card. (200926 lines)
         Version 15.202.3: Apr 23, 2016	Code refactoring in record card. (200911 lines)
         Version 15.202.2: Apr 23, 2016	Code refactoring in record card. (200899 lines)
-        Version 15.202.1: Apr 23, 2016	Code refactoring related to showing user's e-mail. (200887 lines)
+        Version 15.202.1: Apr 23, 2016	Code refactoring related to showing user's email. (200887 lines)
         Version 15.202:   Apr 23, 2016	User's IDs are show in green or red.
-					Code refactoring and bug fixing related to showing user's ID and e-mail. (200908 lines)
+					Code refactoring and bug fixing related to showing user's ID and email. (200908 lines)
         Version 15.201.9: Apr 22, 2016	Code refactoring in record card.
 					Changes in layout of record cards. (200895 lines)
         Version 15.201.8: Apr 22, 2016	Code refactoring in record card.
@@ -2139,8 +2149,8 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1484','es','N','Camb
         Version 15.40.1:  Nov 19, 2015	Changes in behaviour of links to countries, institutions, centres and degrees. (187288 lines)
         Version 15.40:    Nov 17, 2015	Changes in statistics of number of users.
 					Changes in listing of countries. (187275 lines)
-        Version 15.39.1:  Nov 16, 2015	User' e-mail can be removed even if it is the unique. (187236 lines)
-        Version 15.39:    Nov 16, 2015	Administrators can edit another user' e-mails. (187268 lines)
+        Version 15.39.1:  Nov 16, 2015	User' email can be removed even if it is the unique. (187236 lines)
+        Version 15.39:    Nov 16, 2015	Administrators can edit another user' emails. (187268 lines)
 					9 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1475','es','N','Solicitar edici&oacute;n dir. correo invitado');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1476','es','N','Solicitar edici&oacute;n dir. correo estudiante');
@@ -3412,7 +3422,7 @@ Copy the new swad_smtp.py into swad cgi directory
 					Changes in admin of one user for students. (167497 lines)
         Version 14.5.2:   Oct 11, 2014  One message translated.
 					Minor code refactoring. (167396 lines)
-        Version 14.5.1:   Oct 08, 2014  Minor changes related to messages in automatic e-mails. (167374 lines)
+        Version 14.5.1:   Oct 08, 2014  Minor changes related to messages in automatic emails. (167374 lines)
         Version 14.5:     Oct 07, 2014  Fixed issues related with charset. (167368 lines)
         Version 14.4.2:   Oct 07, 2014  Changes in upload of files. (167354 lines)
         Version 14.4.1:   Oct 07, 2014  Changes in upload of files. (167351 lines)
@@ -3902,7 +3912,7 @@ UPDATE log SET Role=Role+1 WHERE Role>='1' AND Role<='4';
 DELETE FROM actions WHERE ActCod='1164';
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1162';
 
-	Version 13.43:    Jan 29, 2014	A new account must be created with a @nick, an e-mail and an ID. (161513 lines)
+	Version 13.43:    Jan 29, 2014	A new account must be created with a @nick, an email and an ID. (161513 lines)
 	Version 13.42.3:  Jan 28, 2014	Changes related to user importation. (161385 lines)
 	Version 13.42.2:  Jan 27, 2014	The number of user's IDs for a user is now limited. (161386 lines)
 	Version 13.42.1:  Jan 26, 2014	Some messages translated. (161348 lines)
@@ -4209,7 +4219,7 @@ Add swad_banner.o to list of object files
 CREATE TABLE IF NOT EXISTS banners (BanCod INT NOT NULL AUTO_INCREMENT,ShortName VARCHAR(32) NOT NULL,FullName VARCHAR(255) NOT NULL,WWW VARCHAR(255) NOT NULL,UNIQUE INDEX(BanCod));
 
 	Version 13.6:     Oct 20, 2013	A teacher/admin can register another user in groups. (155736 lines)
-	Version 13.5:     Oct 17, 2013	Register / remove several users using nicknames or e-mails, not only IDs. (155339 lines)
+	Version 13.5:     Oct 17, 2013	Register / remove several users using nicknames or emails, not only IDs. (155339 lines)
 	Version 13.4.8:   Oct 16, 2013	Fixed bug in searching of documents. (155326 lines)
 	Version 13.4.7:   Oct 16, 2013	Creating ZIP is permitted for all users. (155305 lines)
 	Version 13.4.6:   Oct 16, 2013	Create ZIP only if full size is less than a limit. (155281 lines)
@@ -4261,7 +4271,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1123','es','N','Desc
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1111','es','N','Descargar arch. doc. asg.');
 
 	Version 13.2.2:   Oct 09, 2013	User's QR code is moved to user's account.
-					New QR code for confirmed e-mail. (154443 lines)
+					New QR code for confirmed email. (154443 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1021';
 
@@ -4362,11 +4372,11 @@ UPDATE IP_prefs SET IconSet='nuvola';
 	Version 12.67.6:  Sep 17, 2013	Changes in layout. (153199 lines)
 	Version 12.67.5:  Sep 15, 2013	Changes in layout. (153161 lines)
 	Version 12.67.4:  Sep 14, 2013	Changes in layout. (153175 lines)
-	Version 12.67.3:  Sep 14, 2013	Fixed bug in form to enter ID, @nick or e-mail. (153198 lines)
+	Version 12.67.3:  Sep 14, 2013	Fixed bug in form to enter ID, @nick or email. (153198 lines)
 	Version 12.67.2:  Sep 14, 2013	Fixed bug in statistics. (153198 lines)
 	Version 12.67.1:  Sep 14, 2013	Changes in nickname form.
 					Several messages translated. (153197 lines)
-	Version 12.67:    Sep 13, 2013	Nickname and e-mail are allowed to create, remove, change a user. (153137 lines)
+	Version 12.67:    Sep 13, 2013	Nickname and email are allowed to create, remove, change a user. (153137 lines)
 	Version 12.66.1:  Sep 12, 2013	User's encrypted code is used instead user's ID when possible. (153107 lines)
 	Version 12.66:    Sep 11, 2013	User's code instead of user's ID in log tables. (153015 lines)
 					4 slow changes necessary in database (may spend many minutes or even hours depending on the size of log tables):
@@ -4382,18 +4392,18 @@ UPDATE log,usr_data SET log.UsrCod=usr_data.UsrCod WHERE log.UsrCod='-1' AND log
 	Version 12.65:   Sep 04, 2013	When a user logs in and no course is selected, use last visited course.
 					Clear list of user's courses when he/she logs out. (152890 lines)
 	Version 12.64.6: Jul 17, 2013	Fixed bug in mail domains.
-					Changes in e-mail form in user's account. (152848 lines)
+					Changes in email form in user's account. (152848 lines)
 	Version 12.64.5: Jun 29, 2013	Fixed bug in web service, reported by Juan Miguel Boyero Corral.
 					New MIME type allowed. (152811 lines)
-	Version 12.64.4: Jun 11, 2013	Users can log in web service with e-mail. (152706 lines)
+	Version 12.64.4: Jun 11, 2013	Users can log in web service with email. (152706 lines)
 	Version 12.64.3: Jun 11, 2013	Fixed bug in nicknames, reported by Juan Miguel Boyero Corral. (152704 lines)
 	Version 12.64.2: Jun 11, 2013	Several messages translated to spanish and english. (152715 lines)
-	Version 12.64.1: Jun 11, 2013	New button to confirm e-mail. (152335 lines)
-	Version 12.64:   Jun 11, 2013	Users can login with e-mail.
-					Messages can be sent with e-mail.
-					Fixed bug when changing the e-mail, reported by Francisco A. Ocaña Lara. (152361 lines)
+	Version 12.64.1: Jun 11, 2013	New button to confirm email. (152335 lines)
+	Version 12.64:   Jun 11, 2013	Users can login with email.
+					Messages can be sent with email.
+					Fixed bug when changing the email, reported by Francisco A. Ocaña Lara. (152361 lines)
 	Version 12.63.12:Jun 10, 2013	Changes in user's record card.
-					E-mail field removed from user's data table. (152320 lines)
+					Email field removed from user's data table. (152320 lines)
 					4 changes necessary in database:
 DROP TABLE IF EXISTS usr_data_copy;
 CREATE TABLE usr_data_copy LIKE usr_data;
@@ -4406,18 +4416,18 @@ ALTER TABLE usr_data DROP COLUMN E_mail;
 ALTER TABLE usr_data DROP COLUMN Nickname;
 
 	Version 12.63.10:Jun 06, 2013	Changes in user's record card. (152251 lines)
-	Version 12.63.9: May 29, 2013	E-mail address is no longer filled in user's record card, only in account.
-					Nickname and e-mail are shown in record card after user's ID. (152189 lines)
+	Version 12.63.9: May 29, 2013	Email address is no longer filled in user's record card, only in account.
+					Nickname and email are shown in record card after user's ID. (152189 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1091','es','N','Confirmar direcci&oacute;n de correo');
 
-	Version 12.63.8: May 29, 2013	E-mail address can be confirmed. (152163 lines)
-	Version 12.63.7: May 29, 2013	E-mail address can be confirmed. (152117 lines)
-	Version 12.63.6: May 28, 2013	E-mail address can be confirmed. (152109 lines)
+	Version 12.63.8: May 29, 2013	Email address can be confirmed. (152163 lines)
+	Version 12.63.7: May 29, 2013	Email address can be confirmed. (152117 lines)
+	Version 12.63.6: May 28, 2013	Email address can be confirmed. (152109 lines)
 					1 change necessary in database:
 CREATE TABLE IF NOT EXISTS pending_emails (UsrCod INT NOT NULL,E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,MailKey CHAR(43) COLLATE latin1_bin NOT NULL,DateAndTime DATETIME NOT NULL,INDEX(UsrCod),UNIQUE INDEX(MailKey));
 
-	Version 12.63.5: May 27, 2013	E-mail address can be confirmed. (152061 lines)
+	Version 12.63.5: May 27, 2013	Email address can be confirmed. (152061 lines)
 					1 change necessary in database:
 ALTER TABLE usr_emails ADD COLUMN Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER CreatTime;
 
@@ -4427,13 +4437,13 @@ ALTER TABLE usr_emails ADD COLUMN Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N' A
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1089','es','N','Eliminar apodo');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1090','es','N','Eliminar direcci&oacute;n de correo');
 
-	Version 12.63.2: May 23, 2013	Changing user's e-mail. (151732 lines)
+	Version 12.63.2: May 23, 2013	Changing user's email. (151732 lines)
 					3 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1086','es','N','Ver datos arch. calif. asg.');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1087','es','N','Ver datos arch. calif. grp.');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1088','es','N','Cambiar mi direcci&oacute;n de correo');
 
-	Version 12.63.1: May 22, 2013	Changing user's e-mail. (151625 lines)
+	Version 12.63.1: May 22, 2013	Changing user's email. (151625 lines)
 	Version 12.63:   May 21, 2013	Option "Nickname" is changed to option "User's account". (151396 lines)
 					1 change necessary in database:
 RENAME TABLE nicknames TO usr_nicknames;
@@ -5105,7 +5115,7 @@ mv swad_data_protection.html data_protection/index.html
 
 	Version 11.72.6: Jul 11, 2012	The word "DNI" is changed to "ID (DNI/c&eacute;dula/pasaporte) in Spanish. (134447 lines)
 	Version 11.72.5: Jul 09, 2012	The data protection clause is moved to an external file. (134445 lines)
-	Version 11.72.4: Jul 09, 2012	Changes in configuration related with automatic sending of e-mail. (134601 lines)
+	Version 11.72.4: Jul 09, 2012	Changes in configuration related with automatic sending of email. (134601 lines)
 	Version 11.72.3: Jul 08, 2012	New statistics of forums of centres. (134595 lines)
 	Version 11.72.2: Jul 08, 2012	Fixed bug in forums. (134592 lines)
 	Version 11.72.1: Jul 08, 2012	Fixed bug in list of countries. (134591 lines)
@@ -5278,7 +5288,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 11.30.7: Jan 15, 2012	Several messages translated (still 39 messages to be translated). (125168 lines)
 	Version 11.30.6: Jan 14, 2012	Several messages translated (still 53 messages to be translated).
 					Other minor changes. (124913 lines)
-	Version 11.30.5: Jan 14, 2012	Pending notifications are sent by e-mail on refresh actions. (124802 lines)
+	Version 11.30.5: Jan 14, 2012	Pending notifications are sent by email on refresh actions. (124802 lines)
 	Version 11.30.4: Jan 14, 2012	When a user is removed from a course or from a group, it is better not to set notifications as inaccessible because the user can be enrolled again. (124802 lines)
 	Version 11.30.3: Jan 14, 2012	When a course is removed, the notifications in that course are set as removed.
 					When a user is removed from a course or from a group, the notifications inaccessible are set as inaccessible. (124842 lines)

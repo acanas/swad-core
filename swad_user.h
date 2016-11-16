@@ -54,7 +54,7 @@
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
 #define Usr_MAX_BYTES_USR_EMAIL			127
-#define Usr_MAX_LENGTH_USR_LOGIN		127	// @nick, e-mail or ID
+#define Usr_MAX_LENGTH_USR_LOGIN		127	// @nick, email or ID
 #define Usr_MAX_BYTES_USR_LOGIN			127
 
 #define Usr_MAX_LENGTH_USR_NAME_OR_SURNAME	 32
@@ -113,7 +113,7 @@ struct UsrData
   {
    long UsrCod;
    char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
-   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or e-mail
+   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;

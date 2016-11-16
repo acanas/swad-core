@@ -306,7 +306,7 @@ void Exa_ReceiveExamAnnouncement (void)
    Lay_ShowAlert (Lay_SUCCESS,NewExamAnnouncement ? Txt_Created_new_announcement_of_exam :
                                                     Txt_The_announcement_of_exam_has_been_successfully_updated);
 
-   /***** Notify by e-mail about the new exam announcement *****/
+   /***** Notify by email about the new exam announcement *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,ExaCod)))
       Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (ExaCod,NumUsrsToBeNotifiedByEMail);
    Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
