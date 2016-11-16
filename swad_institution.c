@@ -1278,6 +1278,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
+   extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
@@ -1293,7 +1294,7 @@ static void Ins_ListInstitutionsForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_COUNTRY_Institutions,2);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -2040,6 +2041,7 @@ void Ins_RemoveLogo (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
+   extern const char *Hlp_COUNTRY_Institutions;
    extern const char *Txt_New_institution_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    extern const char *Txt_Create_institution;
@@ -2058,7 +2060,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_institution_of_COUNTRY_X,
             Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_COUNTRY_Institutions,2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
