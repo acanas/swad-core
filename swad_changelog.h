@@ -166,14 +166,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.63 (2016-11-16)"
+#define Log_PLATFORM_VERSION	"SWAD 16.63.2 (2016-11-16)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.63.1:  Nov 16, 2016	Contextual help on edition of courses. (? lines)
+        Version 16.63.2:  Nov 16, 2016	Contextual help on edition of degrees. (207171 lines)
+        Version 16.63.1:  Nov 16, 2016	Contextual help on edition of courses. (207168 lines)
         Version 16.63:    Nov 16, 2016	"e-mail" changed to "email", except in database fields. (207164 lines)
         Version 16.62.2:  Nov 14, 2016	Changed message related to clipboard.
 					Fixed minor bug when copying all files inside root folder. (207158 lines)

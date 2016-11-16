@@ -678,6 +678,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
+   extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    unsigned NumDeg;
@@ -696,7 +697,7 @@ static void Deg_ListDegreesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_CENTRE_Degrees,2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -938,6 +939,7 @@ static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt)
 
 static void Deg_PutFormToCreateDegree (void)
   {
+   extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_New_degree_of_CENTRE_X;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    extern const char *Txt_Create_degree;
@@ -959,7 +961,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_CENTRE_Degrees,2);
 
    /***** Write heading *****/
    Deg_PutHeadDegreesForEdition ();
