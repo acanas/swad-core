@@ -1360,6 +1360,7 @@ void Ctr_WriteSelectorOfCentre (void)
 
 static void Ctr_ListCentresForEdition (void)
   {
+   extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -1377,7 +1378,7 @@ static void Ctr_ListCentresForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_INSTITUTION_Centres,2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -2369,6 +2370,7 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 
 static void Ctr_PutFormToCreateCentre (void)
   {
+   extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_New_centre_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
@@ -2389,7 +2391,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Start of frame *****/
    sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_INSTITUTION_Centres,2);
 
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
