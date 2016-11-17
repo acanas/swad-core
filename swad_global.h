@@ -401,7 +401,7 @@ struct Globals
    struct
      {
       struct UsrData *UsrDat;
-      Rec_RecordViewType_t TypeOfView;
+      Rec_SharedRecordViewType_t TypeOfView;
      } Record;
    struct
      {

@@ -809,7 +809,7 @@ void Pwd_ShowFormOthPwd (void)
          Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);
 
 	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form to change password *****/
 	 /* Start form */

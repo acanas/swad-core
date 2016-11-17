@@ -512,7 +512,7 @@ void ID_ShowFormOthIDs (void)
          Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
 
 	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form with the user's ID *****/
 	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
@@ -692,7 +692,7 @@ void ID_RemoveOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -807,7 +807,7 @@ void ID_NewOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -1014,7 +1014,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
          Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

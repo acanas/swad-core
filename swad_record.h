@@ -32,7 +32,7 @@
 #include "swad_user.h"
 
 /*****************************************************************************/
-/***************************** Public constants ******************************/
+/*********************** Public constants and types **************************/
 /*****************************************************************************/
 
 #define Rec_RECORD_WIDTH	560
@@ -45,24 +45,31 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Rec_SHARED_NUM_VIEW_TYPES 9
 typedef enum
   {
-   Rec_FORM_SIGN_UP,
+   Rec_SHA_SIGN_UP_FORM,
 
-   Rec_FORM_MY_COMMON_RECORD,
-   Rec_MY_COMMON_RECORD_CHECK,
+   Rec_SHA_MY_RECORD_FORM,
+   Rec_SHA_MY_RECORD_CHECK,
 
-   Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,
-   Rec_FORM_NEW_RECORD_OTHER_NEW_USR,
-   Rec_CHECK_OTHER_USR_COMMON_RECORD,
+   Rec_SHA_OTHER_EXISTING_USR_FORM,
+   Rec_SHA_OTHER_NEW_USR_FORM,
+   Rec_SHA_OTHER_USR_CHECK,
 
-   Rec_FORM_MY_COURSE_RECORD_AS_STUDENT,
-   Rec_CHECK_MY_COURSE_RECORD_AS_STUDENT,
+   Rec_SHA_RECORD_LIST,
+   Rec_SHA_RECORD_PRINT,
+   Rec_SHA_RECORD_PUBLIC,
+  } Rec_SharedRecordViewType_t;
 
-   Rec_RECORD_LIST,
-   Rec_RECORD_PRINT,
-   Rec_RECORD_PUBLIC,
-  } Rec_RecordViewType_t;
+#define Rec_COURSE_NUM_VIEW_TYPES 4
+typedef enum
+  {
+   Rec_CRS_MY_RECORD_AS_STUDENT_FORM,
+   Rec_CRS_MY_RECORD_AS_STUDENT_CHECK,
+   Rec_CRS_RECORD_LIST,
+   Rec_CRS_RECORD_PRINT,
+  } Rec_CourseRecordViewType_t;
 
 typedef enum {
    Rec_RECORD_USERS_UNKNOWN,
@@ -140,7 +147,7 @@ void Rec_ShowFormMyCommRecord (void);
 void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat);
 void Rec_ShowMyCommonRecordUpd (void);
 void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat);
-void Rec_ShowSharedUsrRecord (Rec_RecordViewType_t TypeOfView,
+void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat);
 
 void Rec_UpdateMyRecord (void);

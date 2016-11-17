@@ -6715,6 +6715,7 @@ static void Usr_PutLinkToSeeGuests (void)
 
 void Usr_SeeGuests (void)
   {
+   extern const char *Hlp_USERS_Others_guests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -6754,7 +6755,7 @@ void Usr_SeeGuests (void)
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                           Usr_PutIconsListGsts,NULL);
+                           Usr_PutIconsListGsts,Hlp_USERS_Others_guests);
 
       /***** Form to select range of guests *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -6839,6 +6840,7 @@ void Usr_SeeGuests (void)
 
 void Usr_SeeStudents (void)
   {
+   extern const char *Hlp_USERS_Students;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -6899,7 +6901,7 @@ void Usr_SeeStudents (void)
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-                           Usr_PutIconsListStds,NULL);
+                           Usr_PutIconsListStds,Hlp_USERS_Students);
 
       /***** Form to select range of students *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -7007,6 +7009,7 @@ void Usr_SeeStudents (void)
 
 void Usr_SeeTeachers (void)
   {
+   extern const char *Hlp_USERS_Teachers;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -7053,7 +7056,7 @@ void Usr_SeeTeachers (void)
      {
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-                           Usr_PutIconsListTchs,NULL);
+                           Usr_PutIconsListTchs,Hlp_USERS_Teachers);
 
       /***** Form to select scope *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");

@@ -93,6 +93,14 @@ const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
 
 const char *Hlp_USERS_Groups = WIKI "USERS.Groups";
 
+const char *Hlp_USERS_Students                    = WIKI "USERS.Students";
+const char *Hlp_USERS_Students_shared_record_card = WIKI "USERS.Students#shared-record-card";
+const char *Hlp_USERS_Students_course_record_card = WIKI "USERS.Students#course-record-card";
+
+const char *Hlp_USERS_Teachers = WIKI "USERS.Teachers";
+
+const char *Hlp_USERS_Others_guests = WIKI "USERS.Others#guests";
+
 const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
 
 /***** SOCIAL tab *****/

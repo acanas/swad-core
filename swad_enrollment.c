@@ -3112,7 +3112,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
-   Rec_ShowSharedUsrRecord (Rec_FORM_MODIFY_RECORD_OTHER_EXISTING_USR,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,&Gbl.Usrs.Other.UsrDat);
   }
 
 /*****************************************************************************/

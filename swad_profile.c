@@ -283,7 +283,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	}
 
       /***** Common record *****/
-      Rec_ShowSharedUsrRecord (Rec_RECORD_PUBLIC,UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat);
 
       /***** Show details of user's profile *****/
       Prf_ShowDetailsUserProfile (UsrDat);
