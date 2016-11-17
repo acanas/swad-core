@@ -146,11 +146,12 @@ const char *Hlp_STATS_Frequent = WIKI "STATS.Frequent";
 
 /***** PROFILE tab *****/
 
-const char *Hlp_PROFILE_Log_in       = WIKI "PROFILE.Log%20in";
-const char *Hlp_PROFILE_Sign_up      = WIKI "PROFILE.Sign%20up";
-const char *Hlp_PROFILE_Account      = WIKI "PROFILE.Account";
-const char *Hlp_PROFILE_Session_role = WIKI "PROFILE.Session#role";
-const char *Hlp_PROFILE_Password     = WIKI "PROFILE.Password";
+const char *Hlp_PROFILE_Log_in        = WIKI "PROFILE.Log%20in";
+const char *Hlp_PROFILE_Sign_up       = WIKI "PROFILE.Sign%20up";
+const char *Hlp_PROFILE_Account       = WIKI "PROFILE.Account";
+const char *Hlp_PROFILE_Account_email = WIKI "PROFILE.Account#email";
+const char *Hlp_PROFILE_Session_role  = WIKI "PROFILE.Session#role";
+const char *Hlp_PROFILE_Password      = WIKI "PROFILE.Password";
 
 const char *Hlp_PROFILE_Courses = WIKI "PROFILE.Courses";
 

@@ -1518,6 +1518,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
 
 void Mai_PutButtonToCheckEmailAddress (void)
   {
+   extern const char *Hlp_PROFILE_Account_email;
    extern const char *Txt_Email_unconfirmed;
    extern const char *Txt_Please_check_and_confirm_your_email_address;
    extern const char *Txt_Check;
@@ -1526,7 +1527,8 @@ void Mai_PutButtonToCheckEmailAddress (void)
    Act_FormStart (ActFrmMyAcc);
 
    /***** Frame with button to go to account *****/
-   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,
+                        NULL,Hlp_PROFILE_Account_email);
    Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Check);
 
