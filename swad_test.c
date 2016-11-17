@@ -6848,7 +6848,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Exams;
    extern const char *Txt_Users;
-   extern const char *Txt_See_exams;
+   extern const char *Txt_View_exams;
    unsigned NumTotalUsrs;
 
    /***** Get and update type of list,
@@ -6902,7 +6902,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
          fprintf (Gbl.F.Out,"</table>");
 
          /***** Send button *****/
-	 Lay_PutConfirmButton (Txt_See_exams);
+	 Lay_PutConfirmButton (Txt_View_exams);
 
          /***** End form *****/
          Act_FormEnd ();
@@ -6933,7 +6933,7 @@ void Tst_SelDatesToSeeMyExams (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Exams;
-   extern const char *Txt_See_exams;
+   extern const char *Txt_View_exams;
 
    /***** Start form *****/
    Act_FormStart (ActSeeMyTstExa);
@@ -6943,7 +6943,7 @@ void Tst_SelDatesToSeeMyExams (void)
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_See_exams);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_exams);
 
    /***** End form *****/
    Act_FormEnd ();

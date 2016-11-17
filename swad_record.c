@@ -2291,8 +2291,8 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_works;
-   extern const char *Txt_See_exams;
-   extern const char *Txt_Attendance;
+   extern const char *Txt_View_exams;
+   extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
@@ -2364,12 +2364,12 @@ static void Rec_PutIconsCommands (void)
 	 if (ItsMe)
 	    Lay_PutContextualLink (ActSeeMyTstExa,NULL,
 			           "file64x64.gif",
-			           Txt_See_exams,NULL,
+			           Txt_View_exams,NULL,
 		                   NULL);
 	 else
 	    Lay_PutContextualLink (ActSeeUsrTstExa,Rec_PutParamsStudent,
 			           "file64x64.gif",
-			           Txt_See_exams,NULL,
+			           Txt_View_exams,NULL,
 		                   NULL);
 
 	 /***** Button to view user's attendance *****/
@@ -2381,13 +2381,13 @@ static void Rec_PutIconsCommands (void)
 	       // As student, I can see my attendance
 	       Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
 			              "rollcall64x64.gif",
-			              Txt_Attendance,NULL,
+			              Txt_View_attendance,NULL,
 		                      NULL);
 	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
 	       // As teacher, I can see attendance of the student
 	       Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
 			              "rollcall64x64.gif",
-			              Txt_Attendance,NULL,
+			              Txt_View_attendance,NULL,
 		                      NULL);
 	   }
 	}

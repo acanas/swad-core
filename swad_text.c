@@ -35382,27 +35382,6 @@ const char *Txt_See_exam =
 	"Veja exame";
 #endif
 
-const char *Txt_See_exams =
-#if   L==1
-	"Veure ex&agrave;mens";
-#elif L==2
-	"Siehe Pr&uuml;fungen";
-#elif L==3
-	"See exams";
-#elif L==4
-	"Ver ex&aacute;menes";
-#elif L==5
-	"Voir examens";
-#elif L==6
-	"Ver ex&aacute;menes";	// Okoteve traducción
-#elif L==7
-	"Vedi esami";
-#elif L==8
-	"Wiadomo&sacute;ci egzaminy";
-#elif L==9
-	"Veja exames";
-#endif
-
 const char *Txt_See_full_notice =
 #if   L==1
 	"Veure avís complet";
@@ -50054,6 +50033,27 @@ const char *Txt_View_all_recipients =
 	"Ver todos os estinat&aacute;rios";
 #endif
 
+const char *Txt_View_attendance =
+#if   L==1
+	"Veure assist&egrave;ncia";
+#elif L==2
+	"Siehe Anwesenheit";
+#elif L==3
+	"View attendance";
+#elif L==4
+	"Ver asistencia";
+#elif L==5
+	"Voir pr&eacute;sence";
+#elif L==6
+	"Ver asistencia";	// Okoteve traducción
+#elif L==7
+	"Vedi presenza";
+#elif L==8
+	"Wiadomo&sacute;ci bytno&sacute;&cacute;";
+#elif L==9
+	"Veja presen&ccedil;a";
+#endif
+
 const char *Txt_View_data_of_FILE_OR_LINK_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Veure dades de %s";
@@ -50094,6 +50094,27 @@ const char *Txt_View_event =
 	"View event";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Ver evento";
+#endif
+
+const char *Txt_View_exams =
+#if   L==1
+	"Veure ex&agrave;mens";
+#elif L==2
+	"Siehe Pr&uuml;fungen";
+#elif L==3
+	"View exams";
+#elif L==4
+	"Ver ex&aacute;menes";
+#elif L==5
+	"Voir examens";
+#elif L==6
+	"Ver ex&aacute;menes";	// Okoteve traducción
+#elif L==7
+	"Vedi esami";
+#elif L==8
+	"Wiadomo&sacute;ci egzaminy";
+#elif L==9
+	"Veja exames";
 #endif
 
 const char *Txt_View_in_a_new_window =
