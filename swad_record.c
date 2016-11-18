@@ -1224,6 +1224,7 @@ void Rec_GetUsrAndShowRecordOneTchCrs (void)
 
 static void Rec_ShowRecordOneTchCrs (void)
   {
+   extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    char Width[10+2+1];
 
@@ -1263,7 +1264,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    /* Office hours */
    Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
    Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        NULL,NULL);
+                        NULL,Hlp_USERS_Teachers_timetable);
    TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
 
@@ -1276,6 +1277,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 
 void Rec_ListRecordsTchs (void)
   {
+   extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_You_must_select_one_ore_more_teachers;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsrs = 0;
@@ -1365,7 +1367,7 @@ void Rec_ListRecordsTchs (void)
               {
                Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
 	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-	                            NULL,NULL);
+	                            NULL,Hlp_USERS_Teachers_timetable);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Lay_EndRoundFrame ();
               }
@@ -2020,6 +2022,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_PROFILE_Record;
    extern const char *Hlp_USERS_Students_shared_record_card;
+   extern const char *Hlp_USERS_Teachers_shared_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Save_changes;
    extern const char *Txt_Register;
@@ -2045,7 +2048,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       NULL,					// Rol__GUEST_
       NULL,					// Rol_VISITOR
       Hlp_USERS_Students_shared_record_card,	// Rol_STUDENT
-      NULL,					// Rol_TEACHER
+      Hlp_USERS_Teachers_shared_record_card,	// Rol_TEACHER
       NULL,					// Rol_DEG_ADM
       NULL,					// Rol_CTR_ADM
       NULL,					// Rol_INS_ADM
