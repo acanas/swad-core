@@ -101,7 +101,8 @@ const char *Hlp_USERS_Teachers                    = WIKI "USERS.Teachers";
 const char *Hlp_USERS_Teachers_shared_record_card = WIKI "USERS.Teachers#shared-record-card";
 const char *Hlp_USERS_Teachers_timetable          = WIKI "USERS.Teachers#timetable";
 
-const char *Hlp_USERS_Others_guests = WIKI "USERS.Others#guests";
+const char *Hlp_USERS_Others_administrators = WIKI "USERS.Others#administrators";
+const char *Hlp_USERS_Others_guests         = WIKI "USERS.Others#guests";
 
 const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
 

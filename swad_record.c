@@ -2021,6 +2021,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_PROFILE_Record;
+   extern const char *Hlp_USERS_Others_guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -2045,7 +2046,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {
       NULL,					// Rol_UNKNOWN
-      NULL,					// Rol__GUEST_
+      Hlp_USERS_Others_guests,			// Rol__GUEST_
       NULL,					// Rol_VISITOR
       Hlp_USERS_Students_shared_record_card,	// Rol_STUDENT
       Hlp_USERS_Teachers_shared_record_card,	// Rol_TEACHER
@@ -2826,7 +2827,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	 fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
 	 if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
-	 fprintf (Gbl.F.Out," />"
+	 fprintf (Gbl.F.Out," required=\"required\" />"
 			    "<img src=\"%s/%s16x16.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />"
@@ -2877,7 +2878,8 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\" />",
+			 " class=\"REC_C2_BOT_INPUT\""
+                         " required=\"required\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 	       UsrDat->Surname1);
    else if (UsrDat->Surname1[0])
@@ -2937,8 +2939,9 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (DataForm)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
-			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\" />",
+                         " maxlength=\"%u\" value=\"%s\""
+			 " class=\"REC_C2_BOT_INPUT\""
+                         " required=\"required\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 	       UsrDat->FirstName);
    else if (UsrDat->FirstName[0])
@@ -2977,8 +2980,9 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
 
    /***** Selector of country *****/
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" class=\"REC_C2_BOT_INPUT\">"
-		      "<option value=\"-1\">%s</option>"
+   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" class=\"REC_C2_BOT_INPUT\""
+	              " required=\"required\">"
+		      "<option value=\"\">%s</option>"
 		      "<option value=\"0\"",
 	    Txt_Country);
    if (UsrDat->CtyCod == 0)

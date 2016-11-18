@@ -162,17 +162,21 @@
 // TODO: Hay un problema cuando se eliminan usuarios de una asignatura: quedan sus trabajos sin eliminar para siempre, ocupando espacio
 // TODO: Se elimina un único estudiante de la asignatura. ¿Se eliminan sus trabajos? Si no, habría que cambiar el mensaje "eliminando sus trabajos...".
 
+// TODO: Los administradores deberían ver el DNI de los usuarios no confirmados?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.3 (2016-11-17)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.5 (2016-11-17)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.64.5:  Nov 17, 2016	Input fields required in record card. (207268 lines)
+        Version 16.64.4:  Nov 17, 2016	Contextual help on guests and administrators. (207264 lines)
         Version 16.64.3:  Nov 17, 2016	Contextual help on teachers. (207259 lines)
         Version 16.64.2:  Nov 17, 2016	Code refactoring in record cards. (207253 lines)
         Version 16.64.1:  Nov 17, 2016	Changes in texts related to record cards. (207252 lines)

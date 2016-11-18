@@ -6208,6 +6208,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
 
 void Usr_ListDataAdms (void)
   {
+   extern const char *Hlp_USERS_Others_administrators;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -6277,7 +6278,7 @@ void Usr_ListDataAdms (void)
 
    /***** Start frame with list of administrators *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-                        NULL,NULL);
+                        NULL,Hlp_USERS_Others_administrators);
 
    /***** Form to select range of administrators *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
