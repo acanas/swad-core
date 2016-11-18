@@ -1781,7 +1781,7 @@ void Enr_ReqSignUpInCrs (void)
    else if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
 	    Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
       /***** Show form to modify only the user's role or the user's data *****/
-      Rec_ShowFormSignUpWithMyCommonRecord ();
+      Rec_ShowFormSignUpWithMySharedRecord ();
    else
       Lay_ShowErrorAndExit ("You must be logged to sign up in a course.");        // This never should happen
   }
@@ -1960,7 +1960,7 @@ void Enr_AskIfRejectSignUp (void)
          sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+         Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
          /* Remove inscription request because it has not sense */
          Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -1977,7 +1977,7 @@ void Enr_AskIfRejectSignUp (void)
                      Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
                      Gbl.CurrentCrs.Crs.FullName);
             Lay_ShowAlert (Lay_INFO,Gbl.Message);
-            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+            Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
             /* Button to confirm rejection */
             Act_FormStart (ActRejSignUp);
@@ -2017,7 +2017,7 @@ void Enr_RejectSignUp (void)
          sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-         Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+         Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
         }
 
       /* Remove inscription request */
@@ -3080,7 +3080,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	 sprintf (Gbl.Message,Txt_The_user_is_new_does_not_exists_yet_in_X,
 		  Cfg_PLATFORM_SHORT_NAME);
 	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
-	 Rec_ShowFormOtherNewCommonRecord (&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat);
 	}
       else        // User's ID is not valid
 	{
@@ -3167,7 +3167,7 @@ static void Enr_AddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                                Cod,InsCtrDegName);
 
             /***** Show user's record *****/
-            Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+            Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
            }
          else
             Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -3423,14 +3423,14 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
                Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+               Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
               }
             else
               {
                sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
                         InsCtrDegName);
                Lay_ShowAlert (Lay_INFO,Gbl.Message);
-               Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+               Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
                Act_FormStart (Enr_ActNewAdm[Scope]);
                Usr_PutParamOtherUsrCodEncrypted ();
@@ -3517,7 +3517,7 @@ void Enr_CreateNewUsr (void)
 	}
 
       /***** Show user's record *****/
-      Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
      }
    else        // User's ID not valid
      {
@@ -3588,7 +3588,7 @@ void Enr_ModifyUsr (void)
 		       }
 
 		     /***** Show user's record *****/
-		     Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+		     Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 		    }
 		  else
 		     Error = true;
@@ -3700,7 +3700,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
 	       Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
-      Rec_ShowCommonRecordUnmodifiable (UsrDat);
+      Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdCrs :
@@ -3804,7 +3804,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
                InsCtrDegName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
-      Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       Act_FormStart (Enr_ActRemAdm[Scope]);
       Usr_PutParamOtherUsrCodEncrypted ();

@@ -890,7 +890,7 @@ void Acc_AskIfRemoveMyAccount (void)
 
    Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
-   Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
 
    Act_FormStart (ActRemMyAcc);
 
@@ -912,7 +912,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
-      Rec_ShowCommonRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       Act_FormStart (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted ();

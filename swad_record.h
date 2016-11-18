@@ -142,11 +142,11 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbo
 void Rec_AllocMemFieldsRecordsCrs (void);
 void Rec_FreeMemFieldsRecordsCrs (void);
 
-void Rec_ShowFormSignUpWithMyCommonRecord (void);
-void Rec_ShowFormMyCommRecord (void);
-void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat);
-void Rec_ShowMyCommonRecordUpd (void);
-void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat);
+void Rec_ShowFormSignUpWithMySharedRecord (void);
+void Rec_ShowFormMySharedRecord (void);
+void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat);
+void Rec_ShowMySharedRecordUpd (void);
+void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat);
 

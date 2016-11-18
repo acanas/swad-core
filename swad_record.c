@@ -996,7 +996,7 @@ void Rec_ListRecordsGsts (void)
 	    fprintf (Gbl.F.Out,"page-break-before:always;");
 	 fprintf (Gbl.F.Out,"\">");
 
-	 /* Common record */
+	 /* Shared record */
 	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
 
 	 fprintf (Gbl.F.Out,"</div>");
@@ -1059,7 +1059,7 @@ static void Rec_ShowRecordOneStdCrs (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Common record *****/
+   /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /***** Record of the student in the course *****/
@@ -1174,7 +1174,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                fprintf (Gbl.F.Out,"page-break-before:always;");
             fprintf (Gbl.F.Out,"\">");
 
-            /* Common record */
+            /* Shared record */
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat);
 
             /* Record of the student in the course */
@@ -1257,7 +1257,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"margin-bottom:12px;\">");
 
-   /* Common record */
+   /* Shared record */
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /* Office hours */
@@ -1357,7 +1357,7 @@ void Rec_ListRecordsTchs (void)
                fprintf (Gbl.F.Out,"page-break-before:always;");
             fprintf (Gbl.F.Out,"\">");
 
-            /* Common record */
+            /* Shared record */
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
 
             /* Office hours */
@@ -1539,7 +1539,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
   }
 
 /*****************************************************************************/
-/**************************** Show record common *****************************/
+/************************* Show shared record card ***************************/
 /*****************************************************************************/
 // Show form or only data depending on TypeOfView
 
@@ -1873,7 +1873,7 @@ static void Rec_ShowMyCrsRecordUpdated (void)
    /***** Write mensaje of success *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
-   /***** Common record *****/
+   /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
 
    /***** Show updated user's record *****/
@@ -1920,10 +1920,10 @@ void Rec_FreeMemFieldsRecordsCrs (void)
   }
 
 /*****************************************************************************/
-/************ Show form to sign up and edit my common record *****************/
+/*********** Show form to sign up and edit my shared record card *************/
 /*****************************************************************************/
 
-void Rec_ShowFormSignUpWithMyCommonRecord (void)
+void Rec_ShowFormSignUpWithMySharedRecord (void)
   {
    extern const char *Txt_Sign_up;
 
@@ -1935,10 +1935,10 @@ void Rec_ShowFormSignUpWithMyCommonRecord (void)
   }
 
 /*****************************************************************************/
-/******************* Show form to edit my common record **********************/
+/***************** Show form to edit my shared record card *******************/
 /*****************************************************************************/
 
-void Rec_ShowFormMyCommRecord (void)
+void Rec_ShowFormMySharedRecord (void)
   {
    extern const char *Txt_Please_fill_in_your_record_card_including_your_country_nationality;
    extern const char *Txt_Please_fill_in_your_record_card_including_your_sex;
@@ -1970,7 +1970,7 @@ void Rec_ShowFormMyCommRecord (void)
 /*************** Show form to edit the record of a new user ******************/
 /*****************************************************************************/
 
-void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
+void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat)
   {
    /***** Show the form *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat);
@@ -1980,7 +1980,7 @@ void Rec_ShowFormOtherNewCommonRecord (struct UsrData *UsrDat)
 /*********************** Show my record after update *************************/
 /*****************************************************************************/
 
-void Rec_ShowMyCommonRecordUpd (void)
+void Rec_ShowMySharedRecordUpd (void)
   {
    extern const char *Txt_Your_personal_data_have_been_updated;
 
@@ -1995,7 +1995,7 @@ void Rec_ShowMyCommonRecordUpd (void)
 /********************** Show user's record for check *************************/
 /*****************************************************************************/
 
-void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
+void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
   {
    /***** Get password, user type and user's data from database *****/
    Usr_GetAllUsrDataFromUsrCod (UsrDat);
@@ -2010,7 +2010,7 @@ void Rec_ShowCommonRecordUnmodifiable (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/**************************** Show record common *****************************/
+/************************** Show shared record card **************************/
 /*****************************************************************************/
 // Show form or only data depending on TypeOfView
 
@@ -3447,7 +3447,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
   }
 
 /*****************************************************************************/
-/*************** Get data fields of common record from form ******************/
+/*************** Get data fields of shared record from form ******************/
 /*****************************************************************************/
 
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)

@@ -2767,7 +2767,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
    /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"date64x64.gif"	},
    /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
-   /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMyCommRecord	,"card64x64.gif"	},
+   /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
    /* ActAdmBrf		*/{  23, 8,TabPrf,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,"pendrive64x64.gif"	},
 
@@ -2801,7 +2801,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemMyAcc	*/{1430,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AskIfRemoveMyAccount	,NULL},
    /* ActRemMyAcc	*/{1431,-1,TabUnk,ActFrmMyAcc		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_RemoveMyAccount		,NULL},
 
-   /* ActChgMyData	*/{ 298,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMyCommonRecordUpd	,NULL},
+   /* ActChgMyData	*/{ 298,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rec_UpdateMyRecord		,Rec_ShowMySharedRecordUpd	,NULL},
 
    /* ActReqMyPho	*/{  30,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ReqMyPhotoWithContextLinks	,NULL},
    /* ActDetMyPho	*/{ 693,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Pho_RecMyPhotoDetFaces		,NULL},
