@@ -2118,7 +2118,7 @@ mysql> DESCRIBE surveys;
                    "Title VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
                    "UNIQUE INDEX(SvyCod),"
-	           "INDEX(Scope,Cod)");
+	           "INDEX(Scope,Cod))");
 
    /***** Table svy_answers *****/
 /*

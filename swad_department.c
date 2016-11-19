@@ -918,7 +918,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName);
 
@@ -926,7 +927,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
 
@@ -934,7 +936,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\" />"
+                      " class=\"INPUT_WWW\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Dpt->WWW);
