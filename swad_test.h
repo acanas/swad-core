@@ -74,7 +74,9 @@ typedef enum
 struct Tst_Config
   {
    Tst_Pluggable_t Pluggable;
-   unsigned Min,Def,Max;
+   unsigned Min;	// Minimum number of questions
+   unsigned Def;	// Default number of questions
+   unsigned Max;	// Maximum number of questions
    unsigned long MinTimeNxtTstPerQst;
    Tst_Feedback_t FeedbackType;
   };

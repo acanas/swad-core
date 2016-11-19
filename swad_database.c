@@ -2276,18 +2276,18 @@ mysql> DESCRIBE tst_answers;
    /***** Table tst_config *****/
 /*
 mysql> DESCRIBE tst_config;
-+---------------------+--------------------------------------------------------------+------+-----+---------+-------+
-| Field               | Type                                                         | Null | Key | Default | Extra |
-+---------------------+--------------------------------------------------------------+------+-----+---------+-------+
-| CrsCod              | int(11)                                                      | NO   | PRI | -1      |       |
-| Pluggable           | enum('N','Y')                                                | NO   |     | N       |       |
-| Min                 | int(11)                                                      | NO   |     | NULL    |       |
-| Def                 | int(11)                                                      | NO   |     | NULL    |       |
-| Max                 | int(11)                                                      | NO   |     | NULL    |       |
-| MinTimeNxtTstPerQst | int(11)                                                      | NO   |     | 0       |       |
-| Feedback            | enum('nothing','total_result','each_result','each_good_bad') | NO   |     | NULL    |       |
-+---------------------+--------------------------------------------------------------+------+-----+---------+-------+
-7 rows in set (0.00 sec)
++---------------------+------------------------------------------------------------------------------+------+-----+---------+-------+
+| Field               | Type                                                                         | Null | Key | Default | Extra |
++---------------------+------------------------------------------------------------------------------+------+-----+---------+-------+
+| CrsCod              | int(11)                                                                      | NO   | PRI | -1      |       |
+| Pluggable           | enum('unknown','N','Y')                                                      | NO   |     | unknown |       |
+| Min                 | int(11)                                                                      | NO   |     | NULL    |       |
+| Def                 | int(11)                                                                      | NO   |     | NULL    |       |
+| Max                 | int(11)                                                                      | NO   |     | NULL    |       |
+| MinTimeNxtTstPerQst | int(11)                                                                      | NO   |     | 0       |       |
+| Feedback            | enum('nothing','total_result','each_result','each_good_bad','full_feedback') | NO   |     | NULL    |       |
++---------------------+------------------------------------------------------------------------------+------+-----+---------+-------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_config ("
                    "CrsCod INT NOT NULL DEFAULT -1,"

@@ -1866,7 +1866,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NumQstMin\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      " size=\"3\" maxlength=\"3\" value=\"%u\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             Txt_minimum,Gbl.Test.Config.Min);
@@ -1878,7 +1879,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NumQstDef\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      " size=\"3\" maxlength=\"3\" value=\"%u\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             Txt_default,Gbl.Test.Config.Def);
@@ -1890,7 +1892,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NumQstMax\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\" />"
+                      " size=\"3\" maxlength=\"3\" value=\"%u\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>"
                       "</table>"
@@ -1905,7 +1908,8 @@ static void Tst_ShowFormConfigTst (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"MinTimeNxtTstPerQst\""
-                      " size=\"7\" maxlength=\"7\" value=\"%lu\" />"
+                      " size=\"7\" maxlength=\"7\" value=\"%lu\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -2139,14 +2143,15 @@ void Tst_ReceiveConfigTst (void)
    Gbl.Test.Config.FeedbackType = Tst_GetFeedbackTypeFromForm ();
 
    /***** Update database *****/
-   sprintf (Query,"REPLACE INTO tst_config (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
+   sprintf (Query,"REPLACE INTO tst_config"
+	          " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
                   " VALUES ('%ld','%s','%u','%u','%u','%lu','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Tst_PluggableDB[Gbl.Test.Config.Pluggable],
             Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
             Gbl.Test.Config.MinTimeNxtTstPerQst,
             Tst_FeedbackDB[Gbl.Test.Config.FeedbackType]);
-   DB_QueryREPLACE (Query,"can not save configuration of test");
+   DB_QueryREPLACE (Query,"can not save configuration of tests");
 
    /***** Show confirmation message *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_The_test_configuration_has_been_updated);
