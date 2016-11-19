@@ -2083,7 +2083,8 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTIT_SHRT_NAME,Ins->ShrtName);
 
@@ -2091,7 +2092,8 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Ins_MAX_LENGTH_INSTIT_FULL_NAME,Ins->FullName);
 
@@ -2099,7 +2101,8 @@ static void Ins_PutFormToCreateInstitution (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\" />"
+                      " class=\"INPUT_WWW\""
+                      " required=\"required\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Ins->WWW);
 
