@@ -353,7 +353,8 @@ static void DT_PutFormToCreateDegreeType (void)
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"DegTypName\""
-                      " size=\"25\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"25\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                      "</td>",
             Deg_MAX_LENGTH_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
 
