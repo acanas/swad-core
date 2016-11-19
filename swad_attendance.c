@@ -1124,7 +1124,8 @@ void Att_RequestCreatOrEditAttEvent (void)
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<input type=\"text\" name=\"Title\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
