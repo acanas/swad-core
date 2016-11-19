@@ -4559,7 +4559,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                       "</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Stem\" class=\"STEM\" rows=\"5\">"
+                      "<textarea name=\"Stem\" class=\"STEM\" rows=\"5\""
+                      " required=\"required\">"
                       "%s"
                       "</textarea><br />",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -4628,7 +4629,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Gbl.Test.Answer.Integer);
    if (Gbl.Test.AnswerType != Tst_ANS_INT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /></td>"
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "</td>"
 	              "</tr>");
 
    /* Floating point answer */
@@ -4642,14 +4644,16 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
             Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[0]);
    if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /> %s "
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              " %s "
 	              "<input type=\"text\" name=\"AnsFloatMax\""
 	              " size=\"11\" maxlength=\"%u\" value=\"%lg\"",
             Txt_Real_number_between_A_and_B_2,
             Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[1]);
    if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," /></td>"
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "</td>"
 	              "</tr>");
 
    /* T/F answer */
@@ -4665,13 +4669,17 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />%s&nbsp;<input type=\"radio\" name=\"AnsTF\" value=\"F\"",
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "%s&nbsp;"
+	              "<input type=\"radio\" name=\"AnsTF\" value=\"F\"",
 	    Txt_TF_QST[0]);
    if (Gbl.Test.Answer.TF == 'F')
       fprintf (Gbl.F.Out," checked=\"checked\"");
    if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />%s</td>"
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "%s"
+	              "</td>"
 	              "</tr>"
 	              "</table>"
 	              "</td>"
@@ -4711,27 +4719,35 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       if (Gbl.Test.Answer.Options[NumOpt].Text)
 	 if (Gbl.Test.Answer.Options[NumOpt].Text[0])
 	    AnswerHasContent = true;
-      DisplayRightColumn = NumOpt == 0 || AnswerHasContent;
+      DisplayRightColumn = NumOpt < 2 ||	// Display at least the two first options
+	                   AnswerHasContent;
 
       /***** Left column: selectors *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"TEST_EDI_ANS_LEFT_COL COLOR%u\">"
-	                 "<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
-	       Gbl.RowEvenOdd,
+	                 "<td class=\"TEST_EDI_ANS_LEFT_COL COLOR%u\">",
+	       Gbl.RowEvenOdd);
+
+      /* Radio selector for unique choice answers */
+      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnsUni\" value=\"%u\"",
 	       NumOpt);
       if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       if (Gbl.Test.Answer.Options[NumOpt].Correct)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "<input type=\"checkbox\" name=\"AnsMulti\" value=\"%u\"",
+      if (NumOpt < 2)	// First or second options required
+         fprintf (Gbl.F.Out," required=\"required\"");
+      fprintf (Gbl.F.Out," />");
+
+      /* Checkbox for multiple choice answers */
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"AnsMulti\" value=\"%u\"",
 	       NumOpt);
       if (Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       if (Gbl.Test.Answer.Options[NumOpt].Correct)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />"
-	                 "</td>");
+      fprintf (Gbl.F.Out," />");
+
+      fprintf (Gbl.F.Out,"</td>");
 
       /***** Center column: letter of the answer and expand / contract icon *****/
       fprintf (Gbl.F.Out,"<td class=\"%s TEST_EDI_ANS_CENTER_COL COLOR%u\">"
@@ -4779,6 +4795,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	                 " class=\"ANS_STR\" rows=\"5\"",NumOpt);
       if (OptionsDisabled)
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
+      if (NumOpt == 0)	// First textarea required
+         fprintf (Gbl.F.Out," required=\"required\"");
       fprintf (Gbl.F.Out,">");
       if (AnswerHasContent)
          fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Text);
