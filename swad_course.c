@@ -1713,7 +1713,8 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_SHRT_NAME,Crs->ShrtName);
 
@@ -1721,7 +1722,8 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
 

@@ -170,13 +170,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.11 (2016-11-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.12 (2016-11-18)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.64.12: Nov 18, 2016	Input fields required in edition of course. (207298 lines)
         Version 16.64.11: Nov 18, 2016	Input fields required in edition of degree. (207295 lines)
         Version 16.64.10: Nov 18, 2016	Input fields required in edition of centre. (207290 lines)
         Version 16.64.9:  Nov 18, 2016	Input fields required in edition of institution. (207286 lines)
