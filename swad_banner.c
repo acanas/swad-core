@@ -748,7 +748,8 @@ static void Ban_PutFormToCreateBanner (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Ban_MAX_LENGTH_SHRT_NAME,Ban->ShrtName);
 
@@ -756,14 +757,16 @@ static void Ban_PutFormToCreateBanner (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Ban_MAX_LENGTH_FULL_NAME,Ban->FullName);
 
    /***** Banner image *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"Img\""
-                      " size=\"12\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"12\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>",
             Ban_MAX_LENGTH_IMAGE,Ban->Img);
 
@@ -771,7 +774,8 @@ static void Ban_PutFormToCreateBanner (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\" />"
+                      " class=\"INPUT_WWW\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Ban->WWW);
