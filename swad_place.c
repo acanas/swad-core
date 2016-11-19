@@ -708,7 +708,8 @@ static void Plc_PutFormToCreatePlace (void)
                       "<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Plc_MAX_LENGTH_PLACE_SHRT_NAME,Plc->ShrtName);
 
@@ -716,7 +717,8 @@ static void Plc_PutFormToCreatePlace (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>"
                       "<td></td>"
                       "</tr>",
