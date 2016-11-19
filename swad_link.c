@@ -634,7 +634,8 @@ static void Lnk_PutFormToCreateLink (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_SHRT_NAME,Lnk->ShrtName);
 
@@ -642,7 +643,8 @@ static void Lnk_PutFormToCreateLink (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName);
 
@@ -650,7 +652,8 @@ static void Lnk_PutFormToCreateLink (void)
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\" />"
+                      " class=\"INPUT_WWW\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             Cns_MAX_LENGTH_WWW,Lnk->WWW);
