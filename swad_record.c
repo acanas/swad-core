@@ -352,14 +352,16 @@ void Rec_ShowFormCreateRecordField (void)
    /***** Field name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FieldName\""
-                      " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\" />"
+                      " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>",
             Rec_MAX_LENGTH_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
 
    /***** Number of lines in form ******/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"NumLines\""
-	              " size=\"2\" maxlength=\"2\" value=\"%u\" />"
+	              " size=\"2\" maxlength=\"2\" value=\"%u\""
+	              " required=\"required\" />"
 	              "</td>",
             Gbl.CurrentCrs.Records.Field.NumLines);
 
