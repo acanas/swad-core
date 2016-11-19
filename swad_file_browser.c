@@ -8333,7 +8333,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewLinkURL\""
-                      " size=\"40\" maxlength=\"%u\" value=\"\" />"
+                      " size=\"40\" maxlength=\"%u\" value=\"\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL,

@@ -170,13 +170,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.19 (2016-11-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.20 (2016-11-19)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.64.20: Nov 19, 2016	Input field required in new link form. (207316 lines)
         Version 16.64.19: Nov 19, 2016	Input field required in new folder form. (207314 lines)
         Version 16.64.18: Nov 19, 2016	Input field required in search form. (207312 lines)
         Version 16.64.17: Nov 19, 2016	Input field required in new attendance event form. (207310 lines)
