@@ -351,7 +351,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewNick\""
                       " size=\"25\" maxlength=\"%u\""
-                      " placeholder=\"%s\" value=\"%s\" />"
+                      " placeholder=\"%s\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -368,7 +369,8 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewEmail\""
                       " size=\"25\" maxlength=\"%u\""
-                      " placeholder=\"%s\" value=\"%s\" />"
+                      " placeholder=\"%s\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
