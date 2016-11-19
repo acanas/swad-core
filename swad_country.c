@@ -1850,12 +1850,14 @@ static void Cty_PutFormToCreateCountry (void)
             1 + Txt_NUM_LANGUAGES);
    if (Cty->CtyCod > 0)
       fprintf (Gbl.F.Out,"%03ld",Cty->CtyCod);
-   fprintf (Gbl.F.Out,"\" /></td>");
+   fprintf (Gbl.F.Out,"\" required=\"required\" />"
+	              "</td>");
 
    /***** Alphabetic country code with 2 letters (ISO 3166-1) *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" class=\"RIGHT_TOP\">"
                       "<input type=\"text\" name=\"Alpha2\""
-                      " size=\"2\" maxlength=\"2\" value=\"%s\" />"
+                      " size=\"2\" maxlength=\"2\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>",
             1 + Txt_NUM_LANGUAGES,Cty->Alpha2);
 
@@ -1891,7 +1893,8 @@ static void Cty_PutFormToCreateCountry (void)
       /* Name */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"text\" name=\"Name_%s\""
-                         " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                         " size=\"15\" maxlength=\"%u\" value=\"%s\""
+                         " required=\"required\" />"
                          "</td>",
                Txt_STR_LANG_ID[Lan],
                Cty_MAX_BYTES_COUNTRY_NAME,

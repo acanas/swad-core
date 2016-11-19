@@ -168,13 +168,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.7 (2016-11-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.8 (2016-11-18)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.64.8:  Nov 18, 2016	Input fields required in edition of country. (207282 lines)
         Version 16.64.7:  Nov 18, 2016	Input fields required in new account form.
 					Input fields required in password forms. (207278 lines)
         Version 16.64.6:  Nov 17, 2016	Input fields required in log in form. (207270 lines)
