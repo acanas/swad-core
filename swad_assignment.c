@@ -1122,7 +1122,8 @@ void Asg_RequestCreatOrEditAsg (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"Title\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
