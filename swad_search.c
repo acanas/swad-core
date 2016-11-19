@@ -379,7 +379,8 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    if (!Gbl.Search.Str[0])
       fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
 	       Txt_Search);
-   fprintf (Gbl.F.Out," style=\"margin:0;\" />");
+   fprintf (Gbl.F.Out," style=\"margin:0;\""
+	              " required=\"required\" />");
   }
 
 /*****************************************************************************/
