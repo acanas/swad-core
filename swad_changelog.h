@@ -170,24 +170,25 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.12 (2016-11-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.13 (2016-11-19)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.64.12: Nov 18, 2016	Input fields required in edition of course. (207298 lines)
-        Version 16.64.11: Nov 18, 2016	Input fields required in edition of degree. (207295 lines)
-        Version 16.64.10: Nov 18, 2016	Input fields required in edition of centre. (207290 lines)
-        Version 16.64.9:  Nov 18, 2016	Input fields required in edition of institution. (207286 lines)
-        Version 16.64.8:  Nov 18, 2016	Input fields required in edition of country. (207282 lines)
-        Version 16.64.7:  Nov 18, 2016	Input fields required in new account form.
+        Version 16.64.13: Nov 19, 2016	Input fields required in edition of groups. (207302 lines)
+        Version 16.64.12: Nov 19, 2016	Input fields required in edition of course. (207298 lines)
+        Version 16.64.11: Nov 19, 2016	Input fields required in edition of degree. (207295 lines)
+        Version 16.64.10: Nov 19, 2016	Input fields required in edition of centre. (207290 lines)
+        Version 16.64.9:  Nov 19, 2016	Input fields required in edition of institution. (207286 lines)
+        Version 16.64.8:  Nov 19, 2016	Input fields required in edition of country. (207282 lines)
+        Version 16.64.7:  Nov 19, 2016	Input fields required in new account form.
 					Input fields required in password forms. (207278 lines)
-        Version 16.64.6:  Nov 17, 2016	Input fields required in log in form. (207270 lines)
-        Version 16.64.5:  Nov 17, 2016	Input fields required in record card form. (207268 lines)
-        Version 16.64.4:  Nov 17, 2016	Contextual help on guests and administrators. (207264 lines)
-        Version 16.64.3:  Nov 17, 2016	Contextual help on teachers. (207259 lines)
+        Version 16.64.6:  Nov 18, 2016	Input fields required in log in form. (207270 lines)
+        Version 16.64.5:  Nov 18, 2016	Input fields required in record card form. (207268 lines)
+        Version 16.64.4:  Nov 18, 2016	Contextual help on guests and administrators. (207264 lines)
+        Version 16.64.3:  Nov 18, 2016	Contextual help on teachers. (207259 lines)
         Version 16.64.2:  Nov 17, 2016	Code refactoring in record cards. (207253 lines)
         Version 16.64.1:  Nov 17, 2016	Changes in texts related to record cards. (207252 lines)
         Version 16.64:    Nov 17, 2016	Contextual help on students.
