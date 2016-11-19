@@ -984,7 +984,8 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_SHORT_NAME\" />"
+                      " class=\"INPUT_SHORT_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_SHRT_NAME,Deg->ShrtName);
 
@@ -992,7 +993,8 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FullName\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_FULL_NAME\" />"
+                      " class=\"INPUT_FULL_NAME\""
+                      " required=\"required\" />"
                       "</td>",
             Deg_MAX_LENGTH_DEGREE_FULL_NAME,Deg->FullName);
 
@@ -1017,7 +1019,8 @@ static void Deg_PutFormToCreateDegree (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
-                      " class=\"INPUT_WWW\" />"
+                      " class=\"INPUT_WWW\""
+                      " required=\"required\" />"
                       "</td>",
             Cns_MAX_LENGTH_WWW,Deg->WWW);
 
