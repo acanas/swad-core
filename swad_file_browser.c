@@ -8086,7 +8086,8 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 	              "%s: "
 	              "</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
-                      " size=\"30\" maxlength=\"40\" value=\"\" />",
+                      " size=\"30\" maxlength=\"40\" value=\"\""
+                      " required=\"required\" />",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Folder);
 
    /* Button to send and end frame *****/
