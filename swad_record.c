@@ -2023,7 +2023,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_PROFILE_Record;
-   extern const char *Hlp_USERS_Others_guests;
+   extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -2048,7 +2048,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {
       NULL,					// Rol_UNKNOWN
-      Hlp_USERS_Others_guests,			// Rol__GUEST_
+      Hlp_USERS_Guests,			// Rol__GUEST_
       NULL,					// Rol_VISITOR
       Hlp_USERS_Students_shared_record_card,	// Rol_STUDENT
       Hlp_USERS_Teachers_shared_record_card,	// Rol_TEACHER

@@ -6209,7 +6209,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
 
 void Usr_ListDataAdms (void)
   {
-   extern const char *Hlp_USERS_Others_administrators;
+   extern const char *Hlp_USERS_Administrators;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -6233,20 +6233,20 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	{
 	 /* Put link to remove old users */
 	 Usr_PutLinkToSeeGuests ();
+
+	 /* Put link to list possible duplicate users */
+	 Dup_PutLinkToListDupUsrs ();
+	}
 
       /* Put link to go to admin one user */
       Enr_PutLinkToAdminOneUsr (ActReqMdfOneOth);
 
       if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	{
-	 /* Put link to list possible duplicate users */
-	 Dup_PutLinkToListDupUsrs ();
-
 	 /* Put link to remove old users */
 	 Enr_PutLinkToRemOldUsrs ();
-	}
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -6279,7 +6279,7 @@ void Usr_ListDataAdms (void)
 
    /***** Start frame with list of administrators *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
-                        NULL,Hlp_USERS_Others_administrators);
+                        NULL,Hlp_USERS_Administrators);
 
    /***** Form to select range of administrators *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -6717,7 +6717,7 @@ static void Usr_PutLinkToSeeGuests (void)
 
 void Usr_SeeGuests (void)
   {
-   extern const char *Hlp_USERS_Others_guests;
+   extern const char *Hlp_USERS_Guests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
@@ -6757,7 +6757,7 @@ void Usr_SeeGuests (void)
 
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                           Usr_PutIconsListGsts,Hlp_USERS_Others_guests);
+                           Usr_PutIconsListGsts,Hlp_USERS_Guests);
 
       /***** Form to select range of guests *****/
       switch (Gbl.Usrs.Me.LoggedRole)
