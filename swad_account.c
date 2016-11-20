@@ -367,7 +367,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "%s:"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NewEmail\""
+                      "<input type=\"email\" name=\"NewEmail\""
                       " size=\"25\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"

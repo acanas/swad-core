@@ -1286,7 +1286,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-	              "<input type=\"text\" name=\"NewEmail\""
+	              "<input type=\"email\" name=\"NewEmail\""
 	              " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
