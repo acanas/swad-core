@@ -237,7 +237,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
             Txt_Image_title_attribution,Txt_optional,
             ClassImgTitURL,Img_MAX_BYTES_TITLE);
    fprintf (Gbl.F.Out,"<br />"
-                      "<input type=\"text\" name=\"%s\""
+                      "<input type=\"url\" name=\"%s\""
                       " placeholder=\"%s (%s)\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\" />",
             ParamUploadImg.URL,

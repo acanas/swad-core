@@ -571,7 +571,7 @@ static void Dpt_ListDepartmentsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgDptWWW);
       Dpt_PutParamDptCod (Dpt->DptCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
@@ -934,7 +934,7 @@ static void Dpt_PutFormToCreateDepartment (void)
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\""
+                      "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"

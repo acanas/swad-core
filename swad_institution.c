@@ -433,7 +433,7 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /* Form to change institution WWW */
 	 Act_FormStart (ActChgInsWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1379,7 +1379,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
 	 Act_FormStart (ActChgInsWWW);
 	 Ins_PutParamOtherInsCod (Ins->InsCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -2099,7 +2099,7 @@ static void Ins_PutFormToCreateInstitution (void)
 
    /***** Institution WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\""
+                      "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"

@@ -446,7 +446,7 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /* Form to change degree WWW */
 	 Act_FormStart (ActChgDegWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -810,7 +810,7 @@ static void Deg_ListDegreesForEdition (void)
 	{
 	 Act_FormStart (ActChgDegWWW);
 	 Deg_PutParamOtherDegCod (Deg->DegCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1017,7 +1017,7 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\""
+                      "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"

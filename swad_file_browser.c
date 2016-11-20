@@ -8332,7 +8332,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 	              "</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NewLinkURL\""
+                      "<input type=\"url\" name=\"NewLinkURL\""
                       " size=\"40\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
                       "</td>"

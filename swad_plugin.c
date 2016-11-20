@@ -438,7 +438,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgPlgURL);
       Plg_PutParamPlgCod (Plg->PlgCod);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
+      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
                Cns_MAX_LENGTH_WWW,Plg->URL,Gbl.Form.Id);
@@ -903,7 +903,7 @@ static void Plg_PutFormToCreatePlugin (void)
 
    /***** Plugin URL *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<input type=\"text\" name=\"URL\""
+                      "<input type=\"url\" name=\"URL\""
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",

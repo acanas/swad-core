@@ -1253,7 +1253,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
                       "%s:"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"InfoSrcURL\""
+                      "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
    if ((FileURL = fopen (PathFile,"rb")) == NULL)

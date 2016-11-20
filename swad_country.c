@@ -1527,7 +1527,7 @@ static void Cty_ListCountriesForEdition (void)
          Act_FormStart (ActChgCtyWWW);
          Cty_PutParamOtherCtyCod (Cty->CtyCod);
          Par_PutHiddenParamUnsigned ("Lan",(unsigned) Lan);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+         fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
                             " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1902,7 +1902,7 @@ static void Cty_PutFormToCreateCountry (void)
 
       /* WWW */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                         "<input type=\"text\" name=\"WWW_%s\""
+                         "<input type=\"url\" name=\"WWW_%s\""
                          " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\" />"
 			 "</td>"

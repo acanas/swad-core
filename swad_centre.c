@@ -488,7 +488,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /* Form to change centre WWW */
 	 Act_FormStart (ActChgCtrWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -1494,7 +1494,7 @@ static void Ctr_ListCentresForEdition (void)
 	{
 	 Act_FormStart (ActChgCtrWWW);
 	 Ctr_PutParamOtherCtrCod (Ctr->CtrCod);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -2448,7 +2448,7 @@ static void Ctr_PutFormToCreateCentre (void)
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"WWW\""
+                      "<input type=\"url\" name=\"WWW\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
