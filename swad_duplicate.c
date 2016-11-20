@@ -125,6 +125,7 @@ void Dup_PutLinkToListDupUsrs (void)
 
 void Dup_ListDuplicateUsrs (void)
   {
+   extern const char *Hlp_USERS_Duplicates_possibly_duplicate_users;
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
@@ -137,7 +138,8 @@ void Dup_ListDuplicateUsrs (void)
    unsigned NumInformants;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,
+                        NULL,Hlp_USERS_Duplicates_possibly_duplicate_users);
 
    /***** Build query *****/
    sprintf (Query,"SELECT UsrCod,COUNT(*) AS N,MIN(UNIX_TIMESTAMP(InformTime)) AS T"
@@ -244,7 +246,8 @@ void Dup_GetUsrCodAndListSimilarUsrs (void)
 
 static void Dup_ListSimilarUsrs (void)
   {
-   extern const char *Txt_Possibly_duplicate_users;
+   extern const char *Hlp_USERS_Duplicates_possibly_similar_users;
+   extern const char *Txt_Similar_users;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct UsrData UsrDat;
    char Query[512];
@@ -254,7 +257,8 @@ static void Dup_ListSimilarUsrs (void)
    unsigned NumUsr;
 
    /***** Start frame with list of possible duplicate users *****/
-   Lay_StartRoundFrame (NULL,Txt_Possibly_duplicate_users,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Similar_users,
+                        NULL,Hlp_USERS_Duplicates_possibly_similar_users);
 
    /***** Build query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&

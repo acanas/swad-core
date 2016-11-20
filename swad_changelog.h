@@ -172,14 +172,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.65.2 (2016-11-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.65.3 (2016-11-20)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.65.2:  Nov 20, 2016	Changed order of links in USERS > Others. (207371 lines)
+        Version 16.65.3:  Nov 20, 2016	Contextual help on duplicated users. (207378 lines)
+        Version 16.65.2:  Nov 20, 2016	Changed order of links in other users. (207371 lines)
         Version 16.65.1:  Nov 20, 2016	Changes in help of administrators and guests. (207370 lines)
         Version 16.65:    Nov 20, 2016	Changes in selector of my courses. (207369 lines)
         Version 16.64.34: Nov 20, 2016	Input fields for URLs are changed from text to url. (207376 lines)
