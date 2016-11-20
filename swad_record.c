@@ -3118,7 +3118,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalPhone\""
+	 fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"LocalPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
@@ -3180,7 +3180,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyPhone\""
+	 fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"FamilyPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
@@ -3788,7 +3788,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
                ClassForm,Txt_Phone,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OfficePhone\""
+      fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",

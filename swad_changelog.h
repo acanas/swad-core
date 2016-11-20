@@ -170,13 +170,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.64.31 (2016-11-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.64.32 (2016-11-20)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.64.32: Nov 20, 2016	Input fields for phone numbers are changed from text to tel. (207374 lines)
         Version 16.64.31: Nov 19, 2016	Input field required in new holiday form. (207373 lines)
         Version 16.64.30: Nov 19, 2016	Input fields required in new place form. (207371 lines)
         Version 16.64.29: Nov 19, 2016	Input fields required in new department form. (207368 lines)
