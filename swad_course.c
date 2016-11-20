@@ -1087,7 +1087,6 @@ void Crs_WriteSelectorMyCourses (void)
   {
    extern const char *Txt_Course;
    unsigned NumMyCrs;
-   bool IBelongToCurrentCrs = false;
    long CrsCod;
    long DegCod;
    long LastDegCod;
@@ -1100,7 +1099,7 @@ void Crs_WriteSelectorMyCourses (void)
 
    /***** Start form *****/
    Act_FormGoToStart (Gbl.Usrs.Me.MyCrss.Num ? ActSeeCrsInf :
-                                                  ActSysReqSch);
+                                               ActSysReqSch);
 
    /***** Start of selector of courses *****/
    fprintf (Gbl.F.Out,"<select name=\"crs\""
@@ -1109,12 +1108,12 @@ void Crs_WriteSelectorMyCourses (void)
             Gbl.Form.Id);
 
    /***** Write an option when no course selected *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\""
-	                 " selected=\"selected\">"
-	                 "%s"
-	                 "</option>",
-               Txt_Course);
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// No course selected
+      fprintf (Gbl.F.Out,"<option value=\"-1\""
+	                 " disabled=\"disabled\" selected=\"selected\">"
+			 "%s"
+			 "</option>",
+	       Txt_Course);
 
    if (Gbl.Usrs.Me.MyCrss.Num)
      {
@@ -1130,41 +1129,33 @@ void Crs_WriteSelectorMyCourses (void)
 
 	 if (DegCod != LastDegCod)
 	   {
-	    fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">"
-		               "--- %s ---"
-		               "</option>",
-		     DegShortName);
+	    if (LastDegCod > 0)
+	       fprintf (Gbl.F.Out,"</optgroup>");
+	    fprintf (Gbl.F.Out,"<optgroup label=\"%s\">",DegShortName);
 	    LastDegCod = DegCod;
 	   }
 
          fprintf (Gbl.F.Out,"<option value=\"%ld\"",
                   Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
-         if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-             CrsCod == Gbl.CurrentCrs.Crs.CrsCod)
-           {
+         if (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)	// Course selected
             fprintf (Gbl.F.Out," selected=\"selected\"");
-            IBelongToCurrentCrs = true;
-           }
          fprintf (Gbl.F.Out,">%s</option>",CrsShortName);
         }
+
+      if (LastDegCod > 0)
+	 fprintf (Gbl.F.Out,"</optgroup>");
      }
 
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-     {
-      if (!IBelongToCurrentCrs)
-	{
-         /***** Blank option to separate *****/
-	 if (Gbl.Usrs.Me.MyCrss.Num)
-            fprintf (Gbl.F.Out,"<option value=\"-1\" disabled=\"disabled\">"
-        	               "------------"
-        	               "</option>");
-
-         /***** Write an option with the current course *****/
-         fprintf (Gbl.F.Out,"<option value=\"%ld\" selected=\"selected\">%s</option>",
-                  Gbl.CurrentCrs.Crs.CrsCod,
-                  Gbl.CurrentCrs.Crs.ShrtName);
-	}
-     }
+   /***** Write an option with the current course
+          when I don't belong to it *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+       !Gbl.Usrs.Me.IBelongToCurrentCrs)	// I do not belong to it
+      fprintf (Gbl.F.Out,"<option value=\"%ld\""
+	                 " disabled=\"disabled\" selected=\"selected\">"
+			 "%s"
+			 "</option>",
+	       Gbl.CurrentCrs.Crs.CrsCod,
+	       Gbl.CurrentCrs.Crs.ShrtName);
 
    /***** End form *****/
    fprintf (Gbl.F.Out,"</select>");

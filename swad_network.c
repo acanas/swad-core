@@ -343,7 +343,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_COL2_WIDTH);
       Act_FormStart (ActChgMyNet);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"URL\""
+      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
 			 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       Cns_MAX_LENGTH_URL,URL,
