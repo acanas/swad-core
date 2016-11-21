@@ -110,6 +110,9 @@ const char *Hlp_USERS_Duplicates_possibly_similar_users   = WIKI "USERS.Duplicat
 
 const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
 
+const char *Hlp_USERS_Connected             = WIKI "USERS.Connected";
+const char *Hlp_USERS_Connected_last_clicks = WIKI "USERS.Connected#last-clicks";
+
 /***** SOCIAL tab *****/
 
 const char *Hlp_SOCIAL_Activity = WIKI "SOCIAL.Activity";

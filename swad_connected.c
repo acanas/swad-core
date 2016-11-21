@@ -75,6 +75,7 @@ static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds);
 
 void Con_ShowConnectedUsrs (void)
   {
+   extern const char *Hlp_USERS_Connected;
    extern const char *Txt_Connected_users;
    extern const char *Txt_MONTHS_SMALL_SHORT[12];
 
@@ -98,7 +99,8 @@ void Con_ShowConnectedUsrs (void)
             Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Con_PutIconToUpdateConnected,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,
+                        Con_PutIconToUpdateConnected,Hlp_USERS_Connected);
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
@@ -147,15 +149,20 @@ void Con_PutLinkToLastClicks (void)
 
 void Con_ShowLastClicks (void)
   {
+   extern const char *Hlp_USERS_Connected_last_clicks;
    extern const char *Txt_Last_clicks_in_real_time;
 
-   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time,NULL,NULL);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Last_clicks_in_real_time,
+                        NULL,Hlp_USERS_Connected_last_clicks);
 
+   /***** Get and show last clicks *****/
    fprintf (Gbl.F.Out,"<div id=\"lastclicks\""	// Used for AJAX based refresh
 	              " class=\"CENTER_MIDDLE\">");
    Con_GetAndShowLastClicks ();
    fprintf (Gbl.F.Out,"</div>");		// Used for AJAX based refresh
 
+   /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
