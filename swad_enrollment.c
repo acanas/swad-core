@@ -2082,6 +2082,7 @@ void Enr_UpdateEnrollmentRequests (void)
 
 static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
   {
+   extern const char *Hlp_USERS_Requests;
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Enrollment_requests;
@@ -2126,7 +2127,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL,NULL);
+   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL,Hlp_USERS_Requests);
 
    /***** Selection of scope and roles *****/
    /* Start form */
