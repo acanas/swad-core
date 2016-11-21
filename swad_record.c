@@ -2369,12 +2369,12 @@ static void Rec_PutIconsCommands (void)
 	 /***** Button to view user's test exams *****/
 	 if (ItsMe)
 	    Lay_PutContextualLink (ActSeeMyTstExa,NULL,
-			           "file64x64.gif",
+			           "exam64x64.png",
 			           Txt_View_exams,NULL,
 		                   NULL);
 	 else
 	    Lay_PutContextualLink (ActSeeUsrTstExa,Rec_PutParamsStudent,
-			           "file64x64.gif",
+			           "exam64x64.png",
 			           Txt_View_exams,NULL,
 		                   NULL);
 
@@ -2386,13 +2386,13 @@ static void Rec_PutIconsCommands (void)
 	    if (IAmLoggedAsStudent)
 	       // As student, I can see my attendance
 	       Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
-			              "rollcall64x64.gif",
+			              "rollcall64x64.png",
 			              Txt_View_attendance,NULL,
 		                      NULL);
 	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
 	       // As teacher, I can see attendance of the student
 	       Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
-			              "rollcall64x64.gif",
+			              "rollcall64x64.png",
 			              Txt_View_attendance,NULL,
 		                      NULL);
 	   }

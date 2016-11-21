@@ -1588,7 +1588,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
       "forum64x64.gif",		// Soc_NOTE_FORUM_POST
 
       /* Messages tab */
-      "note64x64.gif",		// Soc_NOTE_NOTICE
+      "notice64x64.png",	// Soc_NOTE_NOTICE
 
       /* Statistics tab */
 

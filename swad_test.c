@@ -370,7 +370,7 @@ static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
    extern const char *Txt_Results_tests;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (Action,NULL,"file64x64.gif",
+   Lay_PutContextualLink (Action,NULL,"exam64x64.png",
 	                  Txt_Results_tests,Txt_Results_tests,
 		          NULL);
    fprintf (Gbl.F.Out,"</div>");
@@ -7296,7 +7296,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	    Act_FormStart (Gbl.Action.Act == ActSeeMyTstExa ? ActSeeOneTstExaMe :
 						              ActSeeOneTstExaOth);
 	    Tst_PutParamTstCod (TstCod);
-	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/file64x64.gif\""
+	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/exam64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO20x20B\" />",
 		     Gbl.Prefs.IconsURL,

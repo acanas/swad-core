@@ -168,17 +168,35 @@
 
 // TODO: Change forms to change my webs / social networks to one unique form with a "Save changes" button
 
+// TODO: Change "Results tests" to "View exams" ?
+// TODO: Change "See exam" to "View exam" ?
+// TODO: Change "Test result" to "Exam" ?
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.65.3 (2016-11-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.66 (2016-11-21)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.66:    Nov 21, 2016	Change icons for attendance.
+					Change icons for announcements.
+					Change icons for notices.
+					Change icon for exam. (207394 lines)
+Copy icon/rollcall64x64.png to public icons directory
+Copy icon/iconset/awesome/action64x64/rollcall64x64.png to public icons directory
+Copy icon/iconset/nuvola/action64x64/rollcall64x64.png to public icons directory
+Copy icon/iconset/awesome/action64x64/announcement64x64.png to public icons directory
+Copy icon/iconset/nuvola/action64x64/announcement64x64.png to public icons directory
+Copy icon/notice64x64.png to public icons directory
+Copy icon/iconset/awesome/action64x64/notice64x64.png to public icons directory
+Copy icon/iconset/nuvola/action64x64/notice64x64.png to public icons directory
+Copy icon/exam64x64.png to public icons directory
+
         Version 16.65.3:  Nov 20, 2016	Contextual help on duplicated users. (207378 lines)
         Version 16.65.2:  Nov 20, 2016	Changed order of links in other users. (207371 lines)
         Version 16.65.1:  Nov 20, 2016	Changes in help of administrators and guests. (207370 lines)

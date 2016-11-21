@@ -2295,7 +2295,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstStd		*/{ 678, 1,TabUsr,ActLstStd		,0x1F8,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_SeeStudents		,"usrs64x64.gif"	},
    /* ActLstTch		*/{ 679, 2,TabUsr,ActLstTch		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_SeeTeachers		,"tch64x64.gif"		},
    /* ActLstOth		*/{1186, 3,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListDataAdms		,"adm64x64.gif"		},
-   /* ActSeeAtt		*/{ 861, 4,TabUsr,ActSeeAtt		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_SeeAttEvents		,"rollcall64x64.gif"	},
+   /* ActSeeAtt		*/{ 861, 4,TabUsr,ActSeeAtt		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_SeeAttEvents		,"rollcall64x64.png"	},
    /* ActReqSignUp	*/{1054, 5,TabUsr,ActReqSignUp		,0x000,0x006,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqSignUpInCrs		,"enrollmentrequest64x64.gif"},
    /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ShowEnrollmentRequests	,"enrollmentrequest64x64.gif"},
    /* ActLstCon		*/{ 995, 7,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Con_ShowConnectedUsrs		,"userplugged64x64.gif"	},
@@ -2677,8 +2677,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabMsg ******************************************************************
    // Actions in menu:
    /* ActSeeNtf         */{ 990, 0,TabMsg,ActSeeNtf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_ShowMyNotifications	,"bell64x64.gif"	},
-   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ShowAllAnnouncements	,"note64x64.gif"	},
-   /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Not_ListFullNotices		,"note64x64.gif"	},
+   /* ActSeeAnn		*/{1235, 1,TabMsg,ActSeeAnn		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_ShowAllAnnouncements	,"announcement64x64.png"},
+   /* ActSeeAllNot	*/{ 762, 2,TabMsg,ActSeeAllNot		,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Not_ListFullNotices		,"notice64x64.png"	},
    /* ActReqMsgUsr	*/{  26, 3,TabMsg,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_FormMsgUsrs		,"editnewmsg64x64.gif"	},
    /* ActSeeRcvMsg	*/{   3, 4,TabMsg,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowRecMsgs		,"recmsg64x64.gif"	},
    /* ActSeeSntMsg	*/{  70, 5,TabMsg,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ShowSntMsgs		,"sntmsg64x64.gif"	},
