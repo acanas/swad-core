@@ -31,9 +31,9 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Tst_SCORE_MAX				 10	// Maximum score of a test (10 in Spain). Must be unsigned!
+#define Tst_SCORE_MAX				 10	// Maximum score of a test (10 in Spain). Must be unsigned! // TODO: Make this configurable by teachers
 
-#define Tst_MAX_QUESTIONS_PER_EXAM		100	// Absolute maximum number of questions in a test exam
+#define Tst_MAX_QUESTIONS_PER_TEST		100	// Absolute maximum number of questions in a test
 #define Tst_MAX_TAGS_PER_QUESTION		  5
 #define Tst_MAX_TAG_LENGTH			255
 #define Tst_MAX_BYTES_TAG			(Tst_MAX_TAG_LENGTH*Str_MAX_CHARACTER)
@@ -122,8 +122,8 @@ struct Tst_Stats
 /*****************************************************************************/
 
 void Tst_ShowFormAskTst (void);
-void Tst_ShowNewTestExam (void);
-void Tst_AssessTestExam (void);
+void Tst_ShowNewTest (void);
+void Tst_AssessTest (void);
 void Tst_WriteQstStem (const char *Stem,const char *ClassStem);
 void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback);
 
@@ -163,14 +163,14 @@ void Tst_FreeTagsList (void);
 
 void Tst_GetTestStats (Tst_AnswerType_t AnsType,struct Tst_Stats *Stats);
 
-void Tst_SelUsrsToSeeUsrsExams (void);
-void Tst_SelDatesToSeeMyExams (void);
-void Tst_ShowUsrsExams (void);
-void Tst_ShowMyExams (void);
-void Tst_ShowOneExam (void);
-void Tst_RemoveExamsMadeByUsrInAllCrss (long UsrCod);
-void Tst_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod);
-void Tst_RemoveCrsExams (long CrsCod);
+void Tst_SelUsrsToSeeUsrsTestResults (void);
+void Tst_SelDatesToSeeMyTestResults (void);
+void Tst_ShowUsrsTestResults (void);
+void Tst_ShowMyTestResults (void);
+void Tst_ShowOneTestResult (void);
+void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod);
+void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod);
+void Tst_RemoveCrsTestResults (long CrsCod);
 
 void Tst_RemoveCrsTests (long CrsCod);
 

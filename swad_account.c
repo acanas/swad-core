@@ -1019,8 +1019,8 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
-   /***** Remove exams made by user in all courses *****/
-   Tst_RemoveExamsMadeByUsrInAllCrss (UsrDat->UsrCod);
+   /***** Remove test results made by user in all courses *****/
+   Tst_RemoveTestResultsMadeByUsrInAllCrss (UsrDat->UsrCod);
 
    /***** Remove user's notifications *****/
    Ntf_RemoveUsrNtfs (UsrDat->UsrCod);

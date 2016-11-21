@@ -2297,7 +2297,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_works;
-   extern const char *Txt_View_exams;
+   extern const char *Txt_View_test_results;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
@@ -2368,14 +2368,14 @@ static void Rec_PutIconsCommands (void)
 
 	 /***** Button to view user's test exams *****/
 	 if (ItsMe)
-	    Lay_PutContextualLink (ActSeeMyTstExa,NULL,
+	    Lay_PutContextualLink (ActSeeMyTstRes,NULL,
 			           "exam64x64.png",
-			           Txt_View_exams,NULL,
+			           Txt_View_test_results,NULL,
 		                   NULL);
 	 else
-	    Lay_PutContextualLink (ActSeeUsrTstExa,Rec_PutParamsStudent,
+	    Lay_PutContextualLink (ActSeeUsrTstRes,Rec_PutParamsStudent,
 			           "exam64x64.png",
-			           Txt_View_exams,NULL,
+			           Txt_View_test_results,NULL,
 		                   NULL);
 
 	 /***** Button to view user's attendance *****/

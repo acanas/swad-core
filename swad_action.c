@@ -821,12 +821,12 @@ Assessment:
 	673. ActDisableTag		Disable a tag
 	674. ActRenTag			Rename a tag
 	675. ActRcvCfgTst		Receive configuration of test
-	676. ActReqSeeMyTstExa		Select range of dates to see my results of test exams
-	677. ActSeeMyTstExa		Show my test results
-	678. ActReqSeeUsrTstExa		Select users and range of dates to see results of test exams
-	679. ActSeeUsrTstExa		Show test results of several users
-	680. ActSeeOneTstExaMe		Show one test exam of me as student
-	681. ActSeeOneTstExaOth		Show one test exam of other user
+	676. ActReqSeeMyTstRes		Select range of dates to see my test results
+	677. ActSeeMyTstRes		Show my test results
+	678. ActReqSeeUsrTstRes		Select users and range of dates to see test results
+	679. ActSeeUsrTstRes		Show test results of several users
+	680. ActSeeOneTstResMe		Show one test result of me as student
+	681. ActSeeOneTstResOth		Show one test result of other user
 
 	682. ActPrnCal			Show print view of the academic calendar of the course
 	683. ActChgCal1stDay		Change first day of week and show academic calendar of the course
@@ -2191,8 +2191,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDatWrkCrs	*/{1046,-1,TabUnk,ActReqAsgWrkCrs	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ChgFileMetadata		,NULL},
    /* ActDowWrkCrs      */{1120,-1,TabUnk,ActReqAsgWrkCrs	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_DOWNLD_FILE,Brw_DownloadFile		,NULL				,NULL},
 
-   /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowNewTestExam		,NULL},
-   /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_AssessTestExam		,NULL},
+   /* ActSeeTst		*/{  29,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowNewTest		,NULL},
+   /* ActAssTst		*/{  98,-1,TabUnk,ActReqTst		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_AssessTest			,NULL},
 
    /* ActEdiTstQst	*/{ 104,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_ShowFormAskEditTsts	,NULL},
    /* ActEdiOneTstQst	*/{ 105,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormEditOneQst		,NULL},
@@ -2210,12 +2210,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenTag		*/{ 143,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_RenameTag			,NULL},
    /* ActRcvCfgTst	*/{ 454,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ReceiveConfigTst		,NULL},
 
-   /* ActReqSeeMyTstExa	*/{1083,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelDatesToSeeMyExams	,NULL},
-   /* ActSeeMyTstExa	*/{1084,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowMyExams		,NULL},
-   /* ActSeeOneTstExaMe	*/{1085,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneExam		,NULL},
-   /* ActReqSeeUsrTstExa*/{1080,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsExams	,NULL},
-   /* ActSeeUsrTstExa	*/{1081,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsExams		,NULL},
-   /* ActSeeOneTstExaOth*/{1082,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneExam		,NULL},
+   /* ActReqSeeMyTstRes	*/{1083,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelDatesToSeeMyTestResults	,NULL},
+   /* ActSeeMyTstRes	*/{1084,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowMyTestResults		,NULL},
+   /* ActSeeOneTstResMe	*/{1085,-1,TabUnk,ActReqTst		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
+   /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
+   /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsTestResults	,NULL},
+   /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
 
    /* ActPrnCal		*/{  71,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_DrawCalendar		,NULL},
    /* ActChgCal1stDay	*/{1485,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
@@ -3948,12 +3948,12 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActAutUsrChgLan,	// #1077
 	ActSeeDocCrs,		// #1078
 	ActSeeMrkCrs,		// #1079
-	ActReqSeeUsrTstExa,	// #1080
-	ActSeeUsrTstExa,	// #1081
-	ActSeeOneTstExaOth,	// #1082
-	ActReqSeeMyTstExa,	// #1083
-	ActSeeMyTstExa,		// #1084
-	ActSeeOneTstExaMe,	// #1085
+	ActReqSeeUsrTstRes,	// #1080
+	ActSeeUsrTstRes,	// #1081
+	ActSeeOneTstResOth,	// #1082
+	ActReqSeeMyTstRes,	// #1083
+	ActSeeMyTstRes,		// #1084
+	ActSeeOneTstResMe,	// #1085
 	ActReqDatSeeMrkCrs,	// #1086
 	ActReqDatSeeMrkGrp,	// #1087
 	ActNewMaiMe,		// #1088

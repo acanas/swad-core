@@ -85,7 +85,7 @@ const char *Tst_PluggableDB[Tst_NUM_OPTIONS_PLUGGABLE] =
    "Y",
   };
 
-// Feedback to students in exams
+// Feedback to students in tests
 const char *Tst_FeedbackDB[Tst_NUM_TYPES_FEEDBACK] =
   {
    "nothing",		// No feedback
@@ -139,7 +139,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action);
+static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action);
 
 static void Tst_GetQuestionsAndAnswersFromForm (void);
 static void Tst_ShowTstTotalMark (double TotalScore);
@@ -148,8 +148,8 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus);
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst);
 static unsigned Tst_GetNumAccessesTst (void);
 static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res);
-static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
-static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
+static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore);
+static void Tst_WriteQstAndAnsTest (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
                                        const char *ClassContainer,
@@ -178,29 +178,29 @@ static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
 static void Tst_CheckAndCorrectNumbersQst (void);
 static void Tst_ShowFormAnswerTypes (unsigned NumCols);
 static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res);
-static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res);
+static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res);
 static void Tst_ListOneQstToEdit (void);
 static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res);
 static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *mysql_res);
 
 static void Tst_WriteAnswersOfAQstEdit (long QstCod);
-static void Tst_WriteAnswersOfAQstSeeExam (unsigned NumQst,long QstCod,bool Shuffle);
-static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
+static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle);
+static void Tst_WriteAnswersOfAQstAssessTest (unsigned NumQst,long QstCod,
                                               double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_WriteFormAnsTF (unsigned NumQst);
-static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                       double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle);
-static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle);
+static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteTextAnsSeeExam (unsigned NumQst);
-static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTextAnsViewTest (unsigned NumQst);
+static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteIntAnsSeeExam (unsigned NumQst);
-static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteIntAnsViewTest (unsigned NumQst);
+static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank);
-static void Tst_WriteFloatAnsSeeExam (unsigned NumQst);
-static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteFloatAnsViewTest (unsigned NumQst);
+static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                          double *ScoreThisQst,bool *AnswerIsNotBlank);
 static void Tst_WriteHeadUserCorrect (void);
 static void Tst_WriteScoreStart (unsigned ColSpan);
@@ -255,19 +255,19 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
 static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
 static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsType);
 
-static long Tst_CreateTestExamInDB (void);
-static void Tst_StoreScoreOfTestExamInDB (long TstCod,
+static long Tst_CreateTestResultInDB (void);
+static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score);
 static void Tst_ShowHeaderTestResults (void);
-static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat);
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams);
+static void Tst_ShowTestResults (struct UsrData *UsrDat);
+static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults);
 static void Tst_PutParamTstCod (long TstCod);
 static long Tst_GetParamTstCod (void);
-static void Tst_ShowExamTstResult (time_t TstTimeUTC);
-static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                     unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
-static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
-static void Tst_GetExamQuestionsFromDB (long TstCod);
+static void Tst_ShowTestResult (time_t TstTimeUTC);
+static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
+                                           unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score);
+static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score);
+static void Tst_GetTestResultQuestionsFromDB (long TstCod);
 
 /*****************************************************************************/
 /*************** Show form to generate a self-assessment test ****************/
@@ -279,7 +279,7 @@ void Tst_ShowFormAskTst (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Take_a_test;
    extern const char *Txt_No_of_questions;
-   extern const char *Txt_Generate_exam;
+   extern const char *Txt_Generate_test;
    extern const char *Txt_No_test_questions;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
@@ -287,15 +287,15 @@ void Tst_ShowFormAskTst (void)
    /***** Read test configuration from database *****/
    Tst_GetConfigTstFromDB ();
 
-   /***** Put link to view tests results (exams) *****/
+   /***** Put link to view tests results *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STUDENT:
-         Tst_PutFormToSeeResultsOfUsersTests (ActReqSeeMyTstExa);
+         Tst_PutFormToViewResultsOfUsersTests (ActReqSeeMyTstRes);
          break;
       case Rol_TEACHER:
       case Rol_SYS_ADM:
-         Tst_PutFormToSeeResultsOfUsersTests (ActReqSeeUsrTstExa);
+         Tst_PutFormToViewResultsOfUsersTests (ActReqSeeUsrTstRes);
 	 break;
       default:
 	 break;
@@ -340,7 +340,7 @@ void Tst_ShowFormAskTst (void)
                             "</table>");
 
          /***** Send button *****/
-         Lay_PutConfirmButton (Txt_Generate_exam);
+         Lay_PutConfirmButton (Txt_Generate_test);
          Act_FormEnd ();
         }
      }
@@ -365,13 +365,13 @@ void Tst_ShowFormAskTst (void)
 /*************** Write a form to go to result of users' tests ****************/
 /*****************************************************************************/
 
-static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
+static void Tst_PutFormToViewResultsOfUsersTests (Act_Action_t Action)
   {
-   extern const char *Txt_Results_tests;
+   extern const char *Txt_Test_results;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (Action,NULL,"exam64x64.png",
-	                  Txt_Results_tests,Txt_Results_tests,
+	                  Txt_Test_results,Txt_Test_results,
 		          NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -380,14 +380,14 @@ static void Tst_PutFormToSeeResultsOfUsersTests (Act_Action_t Action)
 /********************** Generate self-assessment test ************************/
 /*****************************************************************************/
 
-void Tst_ShowNewTestExam (void)
+void Tst_ShowNewTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    extern const char *Txt_Test;
-   extern const char *Txt_Allow_teachers_to_consult_this_exam;
-   extern const char *Txt_Done_assess_exam;
+   extern const char *Txt_Allow_teachers_to_consult_this_test;
+   extern const char *Txt_Done_assess_test;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
    unsigned NumAccessesTst;
@@ -401,7 +401,7 @@ void Tst_ShowNewTestExam (void)
       if (Tst_GetParamsTst ())					// Get parameters from form
         {
          /***** Get questions *****/
-         if ((NumRows = Tst_GetQuestionsForExam (&mysql_res)) == 0)	// Query database
+         if ((NumRows = Tst_GetQuestionsForTest (&mysql_res)) == 0)	// Query database
            {
             Lay_ShowAlert (Lay_INFO,Txt_No_questions_found_matching_your_search_criteria);
             Tst_ShowFormAskTst ();					// Show the form again
@@ -431,7 +431,7 @@ void Tst_ShowNewTestExam (void)
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
 	    fprintf (Gbl.F.Out,"</table>");
 
-	    /***** Exam will be saved? *****/
+	    /***** Test result will be saved? *****/
 	    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
 		               " style=\"margin-top:20px;\">"
 			       "<input type=\"checkbox\" name=\"Save\" value=\"Y\"",
@@ -440,10 +440,10 @@ void Tst_ShowNewTestExam (void)
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	    fprintf (Gbl.F.Out," />%s"
 			       "</div>",
-		     Txt_Allow_teachers_to_consult_this_exam);
+		     Txt_Allow_teachers_to_consult_this_test);
 
             /***** End form *****/
-            Lay_PutConfirmButton (Txt_Done_assess_exam);
+            Lay_PutConfirmButton (Txt_Done_assess_test);
             Act_FormEnd ();
 
             /***** End frame *****/
@@ -469,10 +469,10 @@ void Tst_ShowNewTestExam (void)
   }
 
 /*****************************************************************************/
-/****************************** Assess a test exam ***************************/
+/******************************** Assess a test ******************************/
 /*****************************************************************************/
 
-void Tst_AssessTestExam (void)
+void Tst_AssessTest (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test_result;
@@ -499,15 +499,15 @@ void Tst_AssessTestExam (void)
          /* Get number of questions */
          Tst_GetParamNumQst ();
 
-         /***** Get if exam must be saved *****/
+         /***** Get if test must be saved *****/
 	 Par_GetParToText ("Save",YN,1);
 	 Gbl.Test.AllowTeachers = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
-	 /***** Get questions and answers from form to assess an exam *****/
+	 /***** Get questions and answers from form to assess a test *****/
 	 Tst_GetQuestionsAndAnswersFromForm ();
 
-	 /***** Create new test exam in database to store the result *****/
-	 TstCod = Tst_CreateTestExamInDB ();
+	 /***** Create new test in database to store the result *****/
+	 TstCod = Tst_CreateTestResultInDB ();
 
 	 /***** Start frame *****/
 	 Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
@@ -526,7 +526,7 @@ void Tst_AssessTestExam (void)
 
 	 /***** Write answers and solutions *****/
 	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
-	 Tst_ShowTstResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
+	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 fprintf (Gbl.F.Out,"</table>");
 
 	 /***** Write total mark of test *****/
@@ -537,7 +537,7 @@ void Tst_AssessTestExam (void)
 	 Lay_EndRoundFrame ();
 
 	 /***** Store test result in database *****/
-	 Tst_StoreScoreOfTestExamInDB (TstCod,
+	 Tst_StoreScoreOfTestResultInDB (TstCod,
 				       NumQstsNotBlank,TotalScore);
 
          /***** Set test status *****/
@@ -557,7 +557,7 @@ void Tst_AssessTestExam (void)
   }
 
 /*****************************************************************************/
-/********** Get questions and answers from form to assess an exam ************/
+/*********** Get questions and answers from form to assess a test ************/
 /*****************************************************************************/
 
 static void Tst_GetQuestionsAndAnswersFromForm (void)
@@ -588,7 +588,7 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
   }
 
 /*****************************************************************************/
-/************************ Show total mark of a test exam *********************/
+/************************** Show total mark of a test ************************/
 /*****************************************************************************/
 
 static void Tst_ShowTstTotalMark (double TotalScore)
@@ -808,17 +808,17 @@ static void Tst_ShowTestQuestionsWhenSeeing (MYSQL_RES *mysql_res)
       if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
          Lay_ShowErrorAndExit ("Wrong code of question.");
 
-      Tst_WriteQstAndAnsExam (NumQst,QstCod,row,
+      Tst_WriteQstAndAnsTest (NumQst,QstCod,row,
 	                      &ScoreThisQst,		// Not used here
 	                      &AnswerIsNotBlank);	// Not used here
      }
   }
 
 /*****************************************************************************/
-/************************ Show test tags in this exam ************************/
+/******************** Show test tags in this test result *********************/
 /*****************************************************************************/
 
-static void Tst_ShowTstTagsPresentInAnExam (long TstCod)
+static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
   {
    extern const char *Txt_no_tags;
    char Query[512];
@@ -827,7 +827,7 @@ static void Tst_ShowTstTagsPresentInAnExam (long TstCod)
    unsigned long NumRows;
    unsigned long NumRow;
 
-   /***** Get all tags of questions in this test exam *****/
+   /***** Get all tags of questions in this test *****/
    sprintf (Query,"SELECT tst_tags.TagTxt FROM"
 	          " (SELECT DISTINCT(tst_question_tags.TagCod)"
 	          " FROM tst_question_tags,tst_exam_questions"
@@ -837,7 +837,7 @@ static void Tst_ShowTstTagsPresentInAnExam (long TstCod)
 	          " WHERE TagsCods.TagCod=tst_tags.TagCod"
 	          " ORDER BY tst_tags.TagTxt",
             TstCod);
-   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tags present in a test exam")))
+   if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tags present in a test result")))
      {
       /***** Write the tags *****/
       fprintf (Gbl.F.Out,"<ul>");
@@ -863,7 +863,7 @@ static void Tst_ShowTstTagsPresentInAnExam (long TstCod)
 /******************* Show the result of assessing a test *********************/
 /*****************************************************************************/
 
-static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore)
+static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,double *TotalScore)
   {
    extern const char *Txt_Question_removed;
    MYSQL_RES *mysql_res;
@@ -907,14 +907,14 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
 	 if ((QstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
 	    Lay_ShowErrorAndExit ("Wrong code of question.");
 
-	 /***** Write questions and answers *****/
-	 Tst_WriteQstAndAnsExam (NumQst,QstCod,row,
+	 /***** Write question and answers *****/
+	 Tst_WriteQstAndAnsTest (NumQst,QstCod,row,
 				 &ScoreThisQst,&AnswerIsNotBlank);
 
-	 /***** Store exam questions in database *****/
-	 Tst_StoreOneExamQstInDB (TstCod,QstCod,
-				  NumQst,	// 0, 1, 2, 3...
-				  ScoreThisQst);
+	 /***** Store test result question in database *****/
+	 Tst_StoreOneTestResultQstInDB (TstCod,QstCod,
+				        NumQst,	// 0, 1, 2, 3...
+				        ScoreThisQst);
 
 	 /***** Compute total score *****/
 	 *TotalScore += ScoreThisQst;
@@ -944,10 +944,10 @@ static void Tst_ShowTstResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank,
   }
 
 /*****************************************************************************/
-/******** Write a row of a test exam, with one question and its answer *******/
+/********** Write a row of a test, with one question and its answer **********/
 /*****************************************************************************/
 
-static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
+static void Tst_WriteQstAndAnsTest (unsigned NumQst,long QstCod,MYSQL_ROW row,
                                     double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
@@ -994,10 +994,10 @@ static void Tst_WriteQstAndAnsExam (unsigned NumQst,long QstCod,MYSQL_ROW row,
                   "TEST_IMG_SHOW_STEM");
 
    if (Gbl.Action.Act == ActSeeTst)
-      Tst_WriteAnswersOfAQstSeeExam (NumQst,QstCod,(row[3][0] == 'Y'));
-   else	// Assessing exam / Viewing old exam
+      Tst_WriteAnswersOfAQstViewTest (NumQst,QstCod,(row[3][0] == 'Y'));
+   else	// Assessing test / Viewing old test result
      {
-      Tst_WriteAnswersOfAQstAssessExam (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
+      Tst_WriteAnswersOfAQstAssessTest (NumQst,QstCod,ScoreThisQst,AnswerIsNotBlank);
 
       /* Write question feedback (row[5]) */
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
@@ -1859,7 +1859,7 @@ static void Tst_ShowFormConfigTst (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_No_of_questions);
 
-   /* Minimum number of questions in a test exam */
+   /* Minimum number of questions in a test */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT RIGHT_MIDDLE\">"
 	              "%s"
@@ -1872,7 +1872,7 @@ static void Tst_ShowFormConfigTst (void)
                       "</tr>",
             Txt_minimum,Gbl.Test.Config.Min);
 
-   /* Default number of questions in a test exam */
+   /* Default number of questions in a test */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT RIGHT_MIDDLE\">"
 	              "%s"
@@ -1885,7 +1885,7 @@ static void Tst_ShowFormConfigTst (void)
                       "</tr>",
             Txt_default,Gbl.Test.Config.Def);
 
-   /* Maximum number of questions in a test exam */
+   /* Maximum number of questions in a test */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT RIGHT_MIDDLE\">"
 	              "%s"
@@ -1901,7 +1901,7 @@ static void Tst_ShowFormConfigTst (void)
                       "</tr>",
             Txt_maximum,Gbl.Test.Config.Max);
 
-   /***** Minimum time between test exams per question *****/
+   /***** Minimum time between consecutive tests, per question *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
@@ -2029,7 +2029,7 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
    /***** Check and correct numbers *****/
    Tst_CheckAndCorrectNumbersQst ();
 
-   /***** Get minimum time between test exams per question (row[4]) *****/
+   /***** Get minimum time between consecutive tests, per question (row[4]) *****/
    if (sscanf (row[4],"%ld",&LongNum) == 1)
       Gbl.Test.Config.MinTimeNxtTstPerQst = (LongNum < 1L) ? 0UL :
 	                                                     (unsigned long) LongNum;
@@ -2132,7 +2132,7 @@ void Tst_ReceiveConfigTst (void)
    /* Check and correct numbers */
    Tst_CheckAndCorrectNumbersQst ();
 
-   /***** Get minimum time between test exams per question *****/
+   /***** Get minimum time between consecutive tests, per question *****/
    Par_GetParToText ("MinTimeNxtTstPerQst",IntStr,1+10);
    if (sscanf (IntStr,"%ld",&LongNum) != 1)
       Lay_ShowErrorAndExit ("Minimum time per question between two test is missing.");
@@ -2211,14 +2211,14 @@ static void Tst_CheckAndCorrectNumbersQst (void)
    /***** Check if minimum is correct *****/
    if (Gbl.Test.Config.Min < 1)
       Gbl.Test.Config.Min = 1;
-   else if (Gbl.Test.Config.Min > Tst_MAX_QUESTIONS_PER_EXAM)
-      Gbl.Test.Config.Min = Tst_MAX_QUESTIONS_PER_EXAM;
+   else if (Gbl.Test.Config.Min > Tst_MAX_QUESTIONS_PER_TEST)
+      Gbl.Test.Config.Min = Tst_MAX_QUESTIONS_PER_TEST;
 
    /***** Check if maximum is correct *****/
    if (Gbl.Test.Config.Max < 1)
       Gbl.Test.Config.Max = 1;
-   else if (Gbl.Test.Config.Max > Tst_MAX_QUESTIONS_PER_EXAM)
-      Gbl.Test.Config.Max = Tst_MAX_QUESTIONS_PER_EXAM;
+   else if (Gbl.Test.Config.Max > Tst_MAX_QUESTIONS_PER_TEST)
+      Gbl.Test.Config.Max = Tst_MAX_QUESTIONS_PER_TEST;
 
    /***** Check if minimum is lower than maximum *****/
    if (Gbl.Test.Config.Min > Gbl.Test.Config.Max)
@@ -2486,7 +2486,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
 /********* Get from the database several test questions to list them *********/
 /*****************************************************************************/
 
-static unsigned long Tst_GetQuestionsForExam (MYSQL_RES **mysql_res)
+static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
   {
    char Query[MAX_LENGTH_QUERY_TEST+1];
    long LengthQuery;
@@ -3121,10 +3121,10 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
   }
 
 /*****************************************************************************/
-/**************** Write answers of a question when seeing an exam ************/
+/************** Write answers of a question when viewing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersOfAQstSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
+static void Tst_WriteAnswersOfAQstViewTest (unsigned NumQst,long QstCod,bool Shuffle)
   {
    /***** Write parameter with question code *****/
    Tst_WriteParamQstCod (NumQst,QstCod);
@@ -3133,20 +3133,20 @@ static void Tst_WriteAnswersOfAQstSeeExam (unsigned NumQst,long QstCod,bool Shuf
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsSeeExam (NumQst);
+         Tst_WriteIntAnsViewTest (NumQst);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsSeeExam (NumQst);
+         Tst_WriteFloatAnsViewTest (NumQst);
          break;
       case Tst_ANS_TRUE_FALSE:
          Tst_WriteFormAnsTF (NumQst);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsSeeExam (NumQst,QstCod,Shuffle);
+         Tst_WriteChoiceAnsViewTest (NumQst,QstCod,Shuffle);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsSeeExam (NumQst);
+         Tst_WriteTextAnsViewTest (NumQst);
          break;
       default:
          break;
@@ -3154,10 +3154,10 @@ static void Tst_WriteAnswersOfAQstSeeExam (unsigned NumQst,long QstCod,bool Shuf
   }
 
 /*****************************************************************************/
-/************* Write answers of a question when assessing an exam ************/
+/************* Write answers of a question when assessing a test *************/
 /*****************************************************************************/
 
-static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
+static void Tst_WriteAnswersOfAQstAssessTest (unsigned NumQst,long QstCod,
                                               double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_RES *mysql_res;
@@ -3177,20 +3177,20 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
    switch (Gbl.Test.AnswerType)
      {
       case Tst_ANS_INT:
-         Tst_WriteIntAnsAssessExam (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteIntAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_FLOAT:
-         Tst_WriteFloatAnsAssessExam (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteFloatAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TRUE_FALSE:
-         Tst_WriteTFAnsAssessExam (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTFAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
-         Tst_WriteChoiceAnsAssessExam (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteChoiceAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       case Tst_ANS_TEXT:
-         Tst_WriteTextAnsAssessExam (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
+         Tst_WriteTextAnsAssessTest (NumQst,mysql_res,ScoreThisQst,AnswerIsNotBlank);
          break;
       default:
          break;
@@ -3201,7 +3201,7 @@ static void Tst_WriteAnswersOfAQstAssessExam (unsigned NumQst,long QstCod,
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when seeing an exam ****************/
+/************** Write false / true answer when viewing a test ****************/
 /*****************************************************************************/
 
 static void Tst_WriteFormAnsTF (unsigned NumQst)
@@ -3220,7 +3220,7 @@ static void Tst_WriteFormAnsTF (unsigned NumQst)
   }
 
 /*****************************************************************************/
-/************** Write false / true answer when seeing an exam ****************/
+/************** Write false / true answer when viewing a test ****************/
 /*****************************************************************************/
 
 void Tst_WriteAnsTF (char AnsTF)
@@ -3242,10 +3242,10 @@ void Tst_WriteAnsTF (char AnsTF)
   }
 
 /*****************************************************************************/
-/************* Write false / true answer when assessing an exam **************/
+/************** Write false / true answer when assessing a test **************/
 /*****************************************************************************/
 
-static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTFAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                       double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -3327,10 +3327,10 @@ static void Tst_WriteTFAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/******** Write single or multiple choice answer when seeing an exam *********/
+/******** Write single or multiple choice answer when viewing a test *********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
+static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle)
   {
    unsigned NumOpt;
    MYSQL_RES *mysql_res;
@@ -3375,7 +3375,7 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
       else
          ErrorInIndex = true;
       if (ErrorInIndex)
-         Lay_ShowErrorAndExit ("Wrong index of answer when showing an exam.");
+         Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
 
       /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
       strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
@@ -3423,10 +3423,10 @@ static void Tst_WriteChoiceAnsSeeExam (unsigned NumQst,long QstCod,bool Shuffle)
   }
 
 /*****************************************************************************/
-/******* Write single or multiple choice answer when assessing an exam *******/
+/******* Write single or multiple choice answer when assessing a test ********/
 /*****************************************************************************/
 
-static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                           double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    extern const char *Txt_TEST_User_answer;
@@ -3498,7 +3498,7 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,StrOneIndex,10);
       if (sscanf (StrOneIndex,"%u",&(Indexes[NumOpt])) != 1)
-         Lay_ShowErrorAndExit ("Wrong index of answer when assessing an exam.");
+         Lay_ShowErrorAndExit ("Wrong index of answer when assessing a test.");
      }
 
    /***** Get the user's answers for this question from string *****/
@@ -3661,10 +3661,10 @@ static void Tst_WriteChoiceAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/******************** Write text answer when seeing an exam ******************/
+/******************** Write text answer when viewing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsSeeExam (unsigned NumQst)
+static void Tst_WriteTextAnsViewTest (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
@@ -3673,10 +3673,10 @@ static void Tst_WriteTextAnsSeeExam (unsigned NumQst)
   }
 
 /*****************************************************************************/
-/***************** Write text answer when assessing an exam ******************/
+/***************** Write text answer when assessing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                         double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    unsigned NumOpt;
@@ -3843,10 +3843,10 @@ static void Tst_WriteTextAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/****************** Write integer answer when seeing an exam *****************/
+/****************** Write integer answer when viewing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsSeeExam (unsigned NumQst)
+static void Tst_WriteIntAnsViewTest (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
@@ -3855,10 +3855,10 @@ static void Tst_WriteIntAnsSeeExam (unsigned NumQst)
   }
 
 /*****************************************************************************/
-/**************** Write integer answer when assessing an exam ****************/
+/**************** Write integer answer when assessing a test *****************/
 /*****************************************************************************/
 
-static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteIntAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                        double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -3955,10 +3955,10 @@ static void Tst_WriteIntAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
   }
 
 /*****************************************************************************/
-/****************** Write float answer when seeing an exam *******************/
+/****************** Write float answer when viewing a test *******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsSeeExam (unsigned NumQst)
+static void Tst_WriteFloatAnsViewTest (unsigned NumQst)
   {
    /***** Write input field for the answer *****/
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
@@ -3967,10 +3967,10 @@ static void Tst_WriteFloatAnsSeeExam (unsigned NumQst)
   }
 
 /*****************************************************************************/
-/***************** Write float answer when assessing an exam *****************/
+/***************** Write float answer when assessing a test ******************/
 /*****************************************************************************/
 
-static void Tst_WriteFloatAnsAssessExam (unsigned NumQst,MYSQL_RES *mysql_res,
+static void Tst_WriteFloatAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
                                          double *ScoreThisQst,bool *AnswerIsNotBlank)
   {
    MYSQL_ROW row;
@@ -4286,7 +4286,7 @@ static unsigned Tst_GetAndCheckParamNumTst (void)
    char IntStr[1+10+1];
    int IntNum;
 
-   /***** Get number of test exam *****/
+   /***** Get number of test *****/
    Par_GetParToText ("NumTst",IntStr,10);
    if (!IntStr[0])
       Lay_ShowErrorAndExit ("Number of test is missing.");
@@ -6863,15 +6863,15 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
   }
 
 /*****************************************************************************/
-/******* Select users and dates to show their results in test exams **********/
+/************ Select users and dates to show their test results **************/
 /*****************************************************************************/
 
-void Tst_SelUsrsToSeeUsrsExams (void)
+void Tst_SelUsrsToSeeUsrsTestResults (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Exams;
+   extern const char *Txt_Test_results;
    extern const char *Txt_Users;
-   extern const char *Txt_View_exams;
+   extern const char *Txt_View_test_results;
    unsigned NumTotalUsrs;
 
    /***** Get and update type of list,
@@ -6880,7 +6880,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstExa);
+   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
 
    /***** Get and order lists of users from this course *****/
    Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
@@ -6893,13 +6893,13 @@ void Tst_SelUsrsToSeeUsrsExams (void)
       if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
          /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Exams,NULL,NULL);
+         Lay_StartRoundFrame (NULL,Txt_Test_results,NULL,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
-	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstExa);
+	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstRes);
 
          /***** Start form *****/
-         Act_FormStart (ActSeeUsrTstExa);
+         Act_FormStart (ActSeeUsrTstRes);
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
@@ -6925,7 +6925,7 @@ void Tst_SelUsrsToSeeUsrsExams (void)
          fprintf (Gbl.F.Out,"</table>");
 
          /***** Send button *****/
-	 Lay_PutConfirmButton (Txt_View_exams);
+	 Lay_PutConfirmButton (Txt_View_test_results);
 
          /***** End form *****/
          Act_FormEnd ();
@@ -6949,24 +6949,24 @@ void Tst_SelUsrsToSeeUsrsExams (void)
   }
 
 /*****************************************************************************/
-/************** Select dates to show my results in test exams ****************/
+/******************* Select dates to show my test results ********************/
 /*****************************************************************************/
 
-void Tst_SelDatesToSeeMyExams (void)
+void Tst_SelDatesToSeeMyTestResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Exams;
-   extern const char *Txt_View_exams;
+   extern const char *Txt_Test_results;
+   extern const char *Txt_View_test_results;
 
    /***** Start form *****/
-   Act_FormStart (ActSeeMyTstExa);
+   Act_FormStart (ActSeeMyTstRes);
 
    /***** Starting and ending dates in the search *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_exams);
+   Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_test_results);
 
    /***** End form *****/
    Act_FormEnd ();
@@ -6976,31 +6976,32 @@ void Tst_SelDatesToSeeMyExams (void)
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-static long Tst_CreateTestExamInDB (void)
+static long Tst_CreateTestResultInDB (void)
   {
    char Query[256];
 
-   /***** Insert new tag into tst_tags table *****/
-   sprintf (Query,"INSERT INTO tst_exams (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
+   /***** Insert new test result into table *****/
+   sprintf (Query,"INSERT INTO tst_exams"
+	          " (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
                   " VALUES ('%ld','%ld','%c',NOW(),'%u')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Test.AllowTeachers ? 'Y' :
         	                     'N',
             Gbl.Test.NumQsts);
-   return DB_QueryINSERTandReturnCode (Query,"can not create new test exam");
+   return DB_QueryINSERTandReturnCode (Query,"can not create new test result");
   }
 
 /*****************************************************************************/
 /********************* Store test result in database *************************/
 /*****************************************************************************/
 
-static void Tst_StoreScoreOfTestExamInDB (long TstCod,
+static void Tst_StoreScoreOfTestResultInDB (long TstCod,
                                           unsigned NumQstsNotBlank,double Score)
   {
    char Query[256];
 
-   /***** Update score in test exam *****/
+   /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    sprintf (Query,"UPDATE tst_exams"
 	          " SET NumQstsNotBlank='%u',Score='%lf'"
@@ -7008,17 +7009,17 @@ static void Tst_StoreScoreOfTestExamInDB (long TstCod,
             NumQstsNotBlank,Score,
             TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryUPDATE (Query,"can not update result of test exam");
+   DB_QueryUPDATE (Query,"can not update result of test result");
   }
 
 /*****************************************************************************/
-/*************** Show results in test exams for several users ****************/
+/******************** Show test results for several users ********************/
 /*****************************************************************************/
 
-void Tst_ShowUsrsExams (void)
+void Tst_ShowUsrsTestResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Exams;
+   extern const char *Txt_Test_results;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
 
@@ -7032,7 +7033,7 @@ void Tst_ShowUsrsExams (void)
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7045,8 +7046,8 @@ void Tst_ShowUsrsExams (void)
 	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
 	                                    Gbl.CurrentCrs.Crs.CrsCod,
 	                                    false))
-	       /***** Show the result of test exams *****/
-	       Tst_ShowResultsOfTestExams (&Gbl.Usrs.Other.UsrDat);
+	       /***** Show test results *****/
+	       Tst_ShowTestResults (&Gbl.Usrs.Other.UsrDat);
 	}
 
       /***** End of the table *****/
@@ -7057,7 +7058,7 @@ void Tst_ShowUsrsExams (void)
       // ...write warning alert
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
       // ...and show again the form
-      Tst_SelUsrsToSeeUsrsExams ();
+      Tst_SelUsrsToSeeUsrsTestResults ();
      }
 
    /***** Free memory used by list of selected users' codes *****/
@@ -7065,7 +7066,7 @@ void Tst_ShowUsrsExams (void)
   }
 
 /*****************************************************************************/
-/************************ Show my results in test exams **********************/
+/*********************** Show header of my test results **********************/
 /*****************************************************************************/
 
 static void Tst_ShowHeaderTestResults (void)
@@ -7113,55 +7114,55 @@ static void Tst_ShowHeaderTestResults (void)
   }
 
 /*****************************************************************************/
-/************************ Show my results in test exams **********************/
+/***************************** Show my test results **************************/
 /*****************************************************************************/
 
-void Tst_ShowMyExams (void)
+void Tst_ShowMyTestResults (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
-   extern const char *Txt_Exams;
+   extern const char *Txt_Test_results;
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Exams,NULL,Hlp_ASSESSMENT_Tests,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
    Tst_ShowHeaderTestResults ();
 
-   /***** List my results in test exams *****/
+   /***** List my test results *****/
    Tst_GetConfigTstFromDB ();	// To get feedback type
-   Tst_ShowResultsOfTestExams (&Gbl.Usrs.Me.UsrDat);
+   Tst_ShowTestResults (&Gbl.Usrs.Me.UsrDat);
 
    /***** End of the table *****/
    Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/
-/****** Show the results of test exams of a user in the current course *******/
+/*********** Show the test results of a user in the current course ***********/
 /*****************************************************************************/
 
-static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
+static void Tst_ShowTestResults (struct UsrData *UsrDat)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_Visible_exams;
-   extern const char *Txt_See_exam;
+   extern const char *Txt_Visible_tests;
+   extern const char *Txt_View_test;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumExams;
-   unsigned NumExam;
+   unsigned NumTestResults;
+   unsigned NumTest;
    static unsigned UniqueId = 0;
    long TstCod;
-   unsigned NumQstsInThisExam;
-   unsigned NumQstsNotBlankInThisExam;
+   unsigned NumQstsInThisTest;
+   unsigned NumQstsNotBlankInThisTest;
    unsigned NumTotalQsts = 0;
    unsigned NumTotalQstsNotBlank = 0;
-   double ScoreInThisExam;
-   double TotalScoreOfAllExams = 0.0;
-   unsigned NumExamsVisibleByTchs = 0;
+   double ScoreInThisTest;
+   double TotalScoreOfAllTests = 0.0;
+   unsigned NumTestResultsVisibleByTchs = 0;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    bool IAmATeacher = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
-   bool ICanViewExam;
+   bool ICanViewTest;
    bool ICanViewScore;
    time_t TimeUTC;
    char *ClassDat;
@@ -7179,34 +7180,34 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
             UsrDat->UsrCod,
             (long) Gbl.DateRange.TimeUTC[0],
             (long) Gbl.DateRange.TimeUTC[1]);
-   NumExams = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
+   NumTestResults = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test exams of a user");
 
    /***** Show user's data *****/
    fprintf (Gbl.F.Out,"<tr>");
-   Tst_ShowDataUsr (UsrDat,NumExams);
+   Tst_ShowDataUsr (UsrDat,NumTestResults);
 
-   /***** Get and print exams results *****/
-   if (NumExams)
+   /***** Get and print test results *****/
+   if (NumTestResults)
      {
-      for (NumExam = 0;
-           NumExam < NumExams;
-           NumExam++)
+      for (NumTest = 0;
+           NumTest < NumTestResults;
+           NumTest++)
         {
          row = mysql_fetch_row (mysql_res);
 
          /* Get test code (row[0]) */
 	 if ((TstCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
-	    Lay_ShowErrorAndExit ("Wrong code of test exam.");
+	    Lay_ShowErrorAndExit ("Wrong code of test result.");
 
-	 /* Get if teachers are allowed to see this test exam (row[1]) */
+	 /* Get if teachers are allowed to see this test result (row[1]) */
 	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
 	                                     "DAT_LIGHT";
-	 ICanViewExam = ItsMe || Gbl.Test.AllowTeachers;
-	 ICanViewScore = ICanViewExam && (IAmATeacher ||
+	 ICanViewTest = ItsMe || Gbl.Test.AllowTeachers;
+	 ICanViewScore = ICanViewTest && (IAmATeacher ||
 	                                  Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 
-         if (NumExam)
+         if (NumTest)
             fprintf (Gbl.F.Out,"<tr>");
 
          /* Write date and time (row[2] holds UTC date-time) */
@@ -7221,53 +7222,53 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	          UniqueId,(long) TimeUTC,Txt_Today);
 
          /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisExam) == 1)
+         if (sscanf (row[3],"%u",&NumQstsInThisTest) == 1)
            {
             if (Gbl.Test.AllowTeachers)
-               NumTotalQsts += NumQstsInThisExam;
+               NumTotalQsts += NumQstsInThisTest;
            }
          else
-            NumQstsInThisExam = 0;
+            NumQstsInThisTest = 0;
 
          /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisExam) == 1)
+         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) == 1)
            {
             if (Gbl.Test.AllowTeachers)
-               NumTotalQstsNotBlank += NumQstsNotBlankInThisExam;
+               NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
            }
          else
-            NumQstsNotBlankInThisExam = 0;
+            NumQstsNotBlankInThisTest = 0;
 
          /* Get score (row[5]) */
 	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisExam) == 1)
+         if (sscanf (row[5],"%lf",&ScoreInThisTest) == 1)
            {
             if (Gbl.Test.AllowTeachers)
-               TotalScoreOfAllExams += ScoreInThisExam;
+               TotalScoreOfAllTests += ScoreInThisTest;
            }
          else
-            ScoreInThisExam = 0.0;
+            ScoreInThisTest = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
 
          /* Write number of questions */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
 	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewExam)
-	    fprintf (Gbl.F.Out,"%u",NumQstsInThisExam);
+	 if (ICanViewTest)
+	    fprintf (Gbl.F.Out,"%u",NumQstsInThisTest);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write number of questions not blank */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
 	          ClassDat,Gbl.RowEvenOdd);
-	 if (ICanViewExam)
-	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisExam);
+	 if (ICanViewTest)
+	    fprintf (Gbl.F.Out,"%u",NumQstsNotBlankInThisTest);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Write score */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
 	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
-	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisExam);
+	    fprintf (Gbl.F.Out,"%.2lf",ScoreInThisTest);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write average score per question */
@@ -7275,7 +7276,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisExam ? ScoreInThisExam / (double) NumQstsInThisExam :
+		     NumQstsInThisTest ? ScoreInThisTest / (double) NumQstsInThisTest :
 			                 0.0);
 	 fprintf (Gbl.F.Out,"</td>");
 
@@ -7284,35 +7285,35 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	          ClassDat,Gbl.RowEvenOdd);
 	 if (ICanViewScore)
 	    fprintf (Gbl.F.Out,"%.2lf",
-		     NumQstsInThisExam ? ScoreInThisExam * Tst_SCORE_MAX / (double) NumQstsInThisExam :
+		     NumQstsInThisTest ? ScoreInThisTest * Tst_SCORE_MAX / (double) NumQstsInThisTest :
 			                 0.0);
 	 fprintf (Gbl.F.Out,"</td>");
 
-	 /* Link to show this exam */
+	 /* Link to show this result */
 	 fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 		  Gbl.RowEvenOdd);
-	 if (ICanViewExam)
+	 if (ICanViewTest)
 	   {
-	    Act_FormStart (Gbl.Action.Act == ActSeeMyTstExa ? ActSeeOneTstExaMe :
-						              ActSeeOneTstExaOth);
+	    Act_FormStart (Gbl.Action.Act == ActSeeMyTstRes ? ActSeeOneTstResMe :
+						              ActSeeOneTstResOth);
 	    Tst_PutParamTstCod (TstCod);
 	    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/exam64x64.png\""
 			       " alt=\"%s\" title=\"%s\""
 			       " class=\"ICO20x20B\" />",
 		     Gbl.Prefs.IconsURL,
-		     Txt_See_exam,
-		     Txt_See_exam);
+		     Txt_View_test,
+		     Txt_View_test);
 	    Act_FormEnd ();
 	   }
 	 fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
 	 if (Gbl.Test.AllowTeachers)
-            NumExamsVisibleByTchs++;
+            NumTestResultsVisibleByTchs++;
         }
 
       /***** Write totals for this user *****/
-      ICanViewScore = NumExamsVisibleByTchs && (IAmATeacher ||
+      ICanViewScore = NumTestResultsVisibleByTchs && (IAmATeacher ||
 	                                        Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 
       fprintf (Gbl.F.Out,"<tr>"
@@ -7320,19 +7321,19 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 			 "%s: %u"
 			 "</td>",
 	       Gbl.RowEvenOdd,
-	       Txt_Visible_exams,NumExamsVisibleByTchs);
+	       Txt_Visible_tests,NumTestResultsVisibleByTchs);
 
       /* Write total number of questions */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      if (NumExamsVisibleByTchs)
+      if (NumTestResultsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQsts);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write total number of questions not blank */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      if (NumExamsVisibleByTchs)
+      if (NumTestResultsVisibleByTchs)
          fprintf (Gbl.F.Out,"%u",NumTotalQstsNotBlank);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -7340,7 +7341,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
-         fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllExams);
+         fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllTests);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write average score per question */
@@ -7348,7 +7349,7 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
-                  NumTotalQsts ? TotalScoreOfAllExams / (double) NumTotalQsts :
+                  NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
                 	         0.0);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -7357,7 +7358,8 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 	       Gbl.RowEvenOdd);
       if (ICanViewScore)
          fprintf (Gbl.F.Out,"%.2lf",
-                  NumTotalQsts ? TotalScoreOfAllExams * Tst_SCORE_MAX / (double) NumTotalQsts :
+                  NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
+                	         (double) NumTotalQsts :
                 	         0.0);
       fprintf (Gbl.F.Out,"</td>");
 
@@ -7393,15 +7395,15 @@ static void Tst_ShowResultsOfTestExams (struct UsrData *UsrDat)
 /******************** Show a row with the data of a user *********************/
 /*****************************************************************************/
 
-static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
+static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
   {
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
 
    /***** Show user's photo and name *****/
    fprintf (Gbl.F.Out,"<td ");
-   if (NumExams)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
+   if (NumTestResults)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -7412,8 +7414,8 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
 
    /***** Start form to go to user's record card *****/
    fprintf (Gbl.F.Out,"<td ");
-   if (NumExams)
-      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumExams + 1);
+   if (NumTestResults)
+      fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
@@ -7437,7 +7439,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumExams)
   }
 
 /*****************************************************************************/
-/***************** Write parameter with code of test exam ********************/
+/******************** Write parameter with code of test **********************/
 /*****************************************************************************/
 
 static void Tst_PutParamTstCod (long TstCod)
@@ -7446,23 +7448,23 @@ static void Tst_PutParamTstCod (long TstCod)
   }
 
 /*****************************************************************************/
-/****************** Get parameter with code of test exam *********************/
+/********************* Get parameter with code of test ***********************/
 /*****************************************************************************/
 
 static long Tst_GetParamTstCod (void)
   {
    char LongStr[1+10+1];
 
-   /***** Get parameter with code of test exam *****/
+   /***** Get parameter with code of test *****/
    Par_GetParToText ("TstCod",LongStr,1+10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
-/******************* Show one test exam of another user **********************/
+/******************* Show one test result of another user ********************/
 /*****************************************************************************/
 
-void Tst_ShowOneExam (void)
+void Tst_ShowOneTestResult (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test_result;
@@ -7475,26 +7477,26 @@ void Tst_ShowOneExam (void)
    extern const char *Txt_out_of_PART_OF_A_SCORE;
    extern const char *Txt_Tags;
    long TstCod;
-   time_t TstTimeUTC = 0;	// Test exam UTC date-time, initialized to avoid warning
+   time_t TstTimeUTC = 0;	// Test result UTC date-time, initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
    bool ICanViewScore;
 
-   /***** Get the code of the test exam *****/
+   /***** Get the code of the test *****/
    if ((TstCod = Tst_GetParamTstCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of test exam is missing.");
+      Lay_ShowErrorAndExit ("Code of test is missing.");
 
-   /***** Get exam data and check if I can view this test exam) *****/
-   Tst_GetExamDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
+   /***** Get test result data and check if I can view this test result) *****/
+   Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
    Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
    ICanViewScore = true;
    switch (Gbl.Action.Act)
      {
-      case ActSeeOneTstExaMe:
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)		// The exam is not mine
-	    Lay_ShowErrorAndExit ("You can not view this test exam.");
+      case ActSeeOneTstResMe:
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)		// The test result is not mine
+	    Lay_ShowErrorAndExit ("You can not view this test result.");
 	 if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
 	   {
 	    // Students only can view score if feedback type allows it
@@ -7502,17 +7504,17 @@ void Tst_ShowOneExam (void)
             ICanViewScore = (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
 	   }
 	 break;
-      case ActSeeOneTstExaOth:
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&	// The exam is not mine
-	     !Gbl.Test.AllowTeachers)						// I am not allowed to see this exam
-	    Lay_ShowErrorAndExit ("You can not view this test exam.");
+      case ActSeeOneTstResOth:
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&	// The test is not mine
+	     !Gbl.Test.AllowTeachers)						// I am not allowed to view this test result
+	    Lay_ShowErrorAndExit ("You can not view this test result.");
 	 break;
       default:	// Not applicable here
 	 return;
      }
 
-   /***** Get questions and user's answers of the test exam from database *****/
-   Tst_GetExamQuestionsFromDB (TstCod);
+   /***** Get questions and user's answers of the test result from database *****/
+   Tst_GetTestResultQuestionsFromDB (TstCod);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
@@ -7525,7 +7527,7 @@ void Tst_ShowOneExam (void)
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
 
    /***** Header row *****/
-   /* Get data of the user who made the exam */
+   /* Get data of the user who made the test */
    if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
       Lay_ShowErrorAndExit ("User does not exists.");
 
@@ -7553,14 +7555,14 @@ void Tst_ShowOneExam (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* Exam date */
+   /* Test date */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
-	              "<td id=\"exam\" class=\"DAT LEFT_TOP\">"
+	              "<td id=\"test\" class=\"DAT LEFT_TOP\">"
 		      "<script type=\"text/javascript\">"
-		      "writeLocalDateHMSFromUTC('exam',%ld,'&nbsp;','%s');"
+		      "writeLocalDateHMSFromUTC('test',%ld,'&nbsp;','%s');"
 		      "</script>"
                       "</td>"
 	              "</tr>",
@@ -7596,19 +7598,19 @@ void Tst_ShowOneExam (void)
 	              "</tr>",
 	    Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
 
-   /* Tags present in this exam */
+   /* Tags present in this test */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"DAT_N RIGHT_TOP\">"
                       "%s:"
                       "</td>"
 	              "<td class=\"DAT LEFT_TOP\">",
             Txt_Tags);
-   Tst_ShowTstTagsPresentInAnExam (TstCod);
+   Tst_ShowTstTagsPresentInATestResult (TstCod);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Write answers and solutions *****/
-   Tst_ShowExamTstResult (TstTimeUTC);
+   Tst_ShowTestResult (TstTimeUTC);
 
    /***** Write total mark of test *****/
    if (ICanViewScore)
@@ -7622,10 +7624,10 @@ void Tst_ShowOneExam (void)
   }
 
 /*****************************************************************************/
-/********************* Show the result of a test exam ************************/
+/************************* Show the result of a test *************************/
 /*****************************************************************************/
 
-static void Tst_ShowExamTstResult (time_t TstTimeUTC)
+static void Tst_ShowTestResult (time_t TstTimeUTC)
   {
    extern const char *Txt_Question_modified;
    extern const char *Txt_Question_removed;
@@ -7663,7 +7665,8 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	 row[10] NumHitsNotBlank
 	 row[11] Score
 	 */
-	 /***** If this question has been edited later than test exam time ==> don't show question ****/
+	 /***** If this question has been edited later than test time
+	        ==> don't show question ****/
 	 EditTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 	 ThisQuestionHasBeenEdited = false;
 	 // if (TstTimeUTC)
@@ -7689,7 +7692,7 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
 	       Lay_ShowErrorAndExit ("Wrong code of question.");
 
 	    /***** Write questions and answers *****/
-	    Tst_WriteQstAndAnsExam (NumQst,QstCod,row,
+	    Tst_WriteQstAndAnsTest (NumQst,QstCod,row,
 				    &ScoreThisQst,	// Not used here
 				    &AnswerIsNotBlank);	// Not used here
 	   }
@@ -7713,11 +7716,11 @@ static void Tst_ShowExamTstResult (time_t TstTimeUTC)
   }
 
 /*****************************************************************************/
-/************ Get data of a test exam using its test exam code ***************/
+/********* Get data of a test result using its test result code **************/
 /*****************************************************************************/
 
-static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
-                                     unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
+static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
+                                           unsigned *NumQsts,unsigned *NumQstsNotBlank,double *Score)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -7731,14 +7734,14 @@ static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
                   " WHERE TstCod='%ld' AND CrsCod='%ld'",
             TstCod,
             Gbl.CurrentCrs.Crs.CrsCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a test exam of a user") == 1)
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a test result of a user") == 1)
      {
       row = mysql_fetch_row (mysql_res);
 
       /* Get user code (row[0]) */
       Gbl.Usrs.Other.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get if teachers are allowed to see this test exam (row[1]) */
+      /* Get if teachers are allowed to see this test result (row[1]) */
       Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 
       /* Get date-time (row[2] holds UTC date-time) */
@@ -7764,10 +7767,10 @@ static void Tst_GetExamDataByTstCod (long TstCod,time_t *TstTimeUTC,
   }
 
 /*****************************************************************************/
-/************** Store user's answers of an exam into database ****************/
+/************ Store user's answers of an test result into database ***********/
 /*****************************************************************************/
 
-static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
+static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
   {
    char Query[256+Tst_MAX_SIZE_INDEXES_ONE_QST+Tst_MAX_SIZE_ANSWERS_ONE_QST];
    char Indexes[Tst_MAX_SIZE_INDEXES_ONE_QST+1];
@@ -7789,26 +7792,26 @@ static void Tst_StoreOneExamQstInDB (long TstCod,long QstCod,unsigned NumQst,dou
 	    Indexes,
 	    Answers);
    Str_SetDecimalPointToLocal ();	// Return to local system
-   DB_QueryINSERT (Query,"can not insert a question of an exam");
+   DB_QueryINSERT (Query,"can not insert a question of a test result");
   }
 
 /*****************************************************************************/
-/************* Get the questions of a test exam from database ****************/
+/************ Get the questions of a test result from database ***************/
 /*****************************************************************************/
 
-static void Tst_GetExamQuestionsFromDB (long TstCod)
+static void Tst_GetTestResultQuestionsFromDB (long TstCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
 
-   /***** Get questions of a test exam from database *****/
+   /***** Get questions of a test result from database *****/
    sprintf (Query,"SELECT QstCod,Indexes,Answers"
 	          " FROM tst_exam_questions"
                   " WHERE TstCod='%ld' ORDER BY QstInd",
             TstCod);
-   Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get questions of a test exam");
+   Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get questions of a test result");
 
    /***** Get questions codes *****/
    for (NumQst = 0;
@@ -7840,70 +7843,70 @@ static void Tst_GetExamQuestionsFromDB (long TstCod)
   }
 
 /*****************************************************************************/
-/********************** Remove test exams made by a user *********************/
+/********************** Remove test results made by a user ********************/
 /*****************************************************************************/
 
-void Tst_RemoveExamsMadeByUsrInAllCrss (long UsrCod)
+void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod)
   {
    char Query[512];
 
-   /***** Remove exams made by the specified user *****/
+   /***** Remove test results made by the specified user *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.UsrCod='%ld'"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             UsrCod);
-   DB_QueryDELETE (Query,"can not remove exams made by a user");
+   DB_QueryDELETE (Query,"can not remove test results made by a user");
 
    sprintf (Query,"DELETE FROM tst_exams"
 	          " WHERE UsrCod='%ld'",
 	    UsrCod);
-   DB_QueryDELETE (Query,"can not remove exams made by a user");
+   DB_QueryDELETE (Query,"can not remove test results made by a user");
   }
 
 /*****************************************************************************/
-/*************** Remove test exams made by a user in a course ****************/
+/************** Remove test results made by a user in a course ***************/
 /*****************************************************************************/
 
-void Tst_RemoveExamsMadeByUsrInCrs (long UsrCod,long CrsCod)
+void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod)
   {
    char Query[512];
 
-   /***** Remove exams made by the specified user *****/
+   /***** Remove test results made by the specified user *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.CrsCod='%ld' AND tst_exams.UsrCod='%ld'"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove exams made by a user in a course");
+   DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
 
    sprintf (Query,"DELETE FROM tst_exams"
 	          " WHERE CrsCod='%ld' AND UsrCod='%ld'",
 	    CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove exams made by a user in a course");
+   DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
   }
 
 /*****************************************************************************/
-/******************* Remove all test exams made in a course ******************/
+/****************** Remove all test results made in a course *****************/
 /*****************************************************************************/
 
-void Tst_RemoveCrsExams (long CrsCod)
+void Tst_RemoveCrsTestResults (long CrsCod)
   {
    char Query[512];
 
-   /***** Remove questions of exams made in the course *****/
+   /***** Remove questions of test results made in the course *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
                   " WHERE tst_exams.CrsCod='%ld'"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             CrsCod);
-   DB_QueryDELETE (Query,"can not remove exams made in a course");
+   DB_QueryDELETE (Query,"can not remove test results made in a course");
 
-   /***** Remove exams made in the course *****/
+   /***** Remove test results made in the course *****/
    sprintf (Query,"DELETE FROM tst_exams"
 	          " WHERE CrsCod='%ld'",
 	    CrsCod);
-   DB_QueryDELETE (Query,"can not remove exams made in a course");
+   DB_QueryDELETE (Query,"can not remove test results made in a course");
   }
 
 /*****************************************************************************/

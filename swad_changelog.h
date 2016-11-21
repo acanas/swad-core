@@ -168,21 +168,19 @@
 
 // TODO: Change forms to change my webs / social networks to one unique form with a "Save changes" button
 
-// TODO: Change "Results tests" to "View exams" ?
-// TODO: Change "See exam" to "View exam" ?
-// TODO: Change "Test result" to "Exam" ?
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.66 (2016-11-21)"
+#define Log_PLATFORM_VERSION	"SWAD 16.67 (2016-11-21)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.67:    Nov 21, 2016	Refactoring in tests.
+					"Test exam" is now called "Test result". (207336 lines)
         Version 16.66:    Nov 21, 2016	Change icons for attendance.
 					Change icons for announcements.
 					Change icons for notices.

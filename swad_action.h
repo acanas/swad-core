@@ -832,12 +832,12 @@ typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indica
 #define ActRenTag		(ActRcvRchTxtCrsLnk+115)
 #define ActRcvCfgTst		(ActRcvRchTxtCrsLnk+116)
 
-#define ActReqSeeMyTstExa	(ActRcvRchTxtCrsLnk+117)
-#define ActSeeMyTstExa		(ActRcvRchTxtCrsLnk+118)
-#define ActSeeOneTstExaMe	(ActRcvRchTxtCrsLnk+119)
-#define ActReqSeeUsrTstExa	(ActRcvRchTxtCrsLnk+120)
-#define ActSeeUsrTstExa		(ActRcvRchTxtCrsLnk+121)
-#define ActSeeOneTstExaOth	(ActRcvRchTxtCrsLnk+122)
+#define ActReqSeeMyTstRes	(ActRcvRchTxtCrsLnk+117)
+#define ActSeeMyTstRes		(ActRcvRchTxtCrsLnk+118)
+#define ActSeeOneTstResMe	(ActRcvRchTxtCrsLnk+119)
+#define ActReqSeeUsrTstRes	(ActRcvRchTxtCrsLnk+120)
+#define ActSeeUsrTstRes		(ActRcvRchTxtCrsLnk+121)
+#define ActSeeOneTstResOth	(ActRcvRchTxtCrsLnk+122)
 
 #define ActPrnCal		(ActRcvRchTxtCrsLnk+123)
 #define ActChgCal1stDay		(ActRcvRchTxtCrsLnk+124)

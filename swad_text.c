@@ -2279,25 +2279,25 @@ const char *Txt_All_types_of_answers =		// Answers of a test
 	"Todos os tipos de respostas";
 #endif
 
-const char *Txt_Allow_teachers_to_consult_this_exam =
+const char *Txt_Allow_teachers_to_consult_this_test =
 #if   L==1
-	"Permetre als professors consultar aquest examen";
+	"Permetre als professors consultar aquest test";
 #elif L==2
-	"Erm&ouml;glichen es den Lehrern, diese Pr&uuml;fung zu konsultieren";
+	"Erm&ouml;glichen es den Lehrern, diese Test zu konsultieren";
 #elif L==3
-	"Allow teachers to consult this exam";
+	"Allow teachers to consult this test";
 #elif L==4
-	"Permitir a los profesores consultar este examen";
+	"Permitir a los profesores consultar este test";
 #elif L==5
-	"Permitir a los profesores consultar este examen";
+	"Permettre aux enseignants de consulter ce test";
 #elif L==6
-	"Permitir a los profesores consultar este examen";
+	"Permitir a los profesores consultar este test";	// Okoteve traducción
 #elif L==7
-	"Lasciare gli insegnanti di consultare questo esame";
+	"Lasciare gli insegnanti di consultare questo test";
 #elif L==8
-	"Pozwalaj&aogon; nauczycielom skonsultowa&cacute; ten egzamin";
+	"Pozwalaj&aogon; nauczycielom skonsultowa&cacute; ten test";
 #elif L==9
-	"Permitir que os professores de consultar este exame";
+	"Permitir que os professores de consultar este teste";
 #endif
 
 const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
@@ -9568,25 +9568,25 @@ const char *Txt_Done =
 	"Feito";
 #endif
 
-const char *Txt_Done_assess_exam =
+const char *Txt_Done_assess_test =
 #if   L==1
-	"He acabat; corregir examen";
+	"He acabat; corregir test";
 #elif L==2
-	"Geschehen; beurteilen Pr&uuml;fung";
+	"Geschehen; beurteilen Test";
 #elif L==3
-	"Done; assess exam";
+	"Done; assess test";
 #elif L==4
-	"He terminado; corregir examen";
+	"He terminado; corregir test";
 #elif L==5
-	"Fait; corriger l'examen";
+	"Fait; corriger test";
 #elif L==6
-	"He terminado; corregir examen";	// Okoteve traducción
+	"He terminado; corregir test";	// Okoteve traducción
 #elif L==7
-	"Finito; correggere l'esame";
+	"Finito; correggere test";
 #elif L==8
-	"Sporz&aogon;dzono; oceny egzaminu";
+	"Sporz&aogon;dzono; oceny test";
 #elif L==9
-	"Feito; corrigir exame";
+	"Feito; corrigir teste";
 #endif
 
 const char *Txt_Download =	// As a verb
@@ -10986,27 +10986,6 @@ const char *Txt_Exam =
 	"Exame";
 #endif
 
-const char *Txt_exam =
-#if   L==1
-	"ex&agrave;men";
-#elif L==2
-	"Pr&uuml;fung";
-#elif L==3
-	"exam";
-#elif L==4
-	"examen";
-#elif L==5
-	"examen";
-#elif L==6
-	"kuaara'&atilde;";
-#elif L==7
-	"esame";
-#elif L==8
-	"egzamin";
-#elif L==9
-	"exame";
-#endif
-
 const char *Txt_EXAM_ANNOUNCEMENT =
 #if   L==1
 	"CONVOCAT&Ograve;RIA D'EXAMEN";
@@ -11320,48 +11299,6 @@ const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in th
 	"Egzamin z %s";
 #elif L==9
 	"Exam of %s";		// Necessita de tradução
-#endif
-
-const char *Txt_Exams =
-#if   L==1
-	"Ex&agrave;mens";
-#elif L==2
-	"Pr&uuml;fungen";
-#elif L==3
-	"Exams";
-#elif L==4
-	"Ex&aacute;menes";
-#elif L==5
-	"Examens";
-#elif L==6
-	"Ex&aacute;menes";	// Okoteve traducción
-#elif L==7
-	"Esami";
-#elif L==8
-	"Egzaminy";
-#elif L==9
-	"Exames";
-#endif
-
-const char *Txt_exams =
-#if   L==1
-	"ex&agrave;mens";
-#elif L==2
-	"Pr&uuml;fungen";
-#elif L==3
-	"exams";
-#elif L==4
-	"ex&aacute;menes";
-#elif L==5
-	"examens";
-#elif L==6
-	"ex&aacute;menes";	// Okoteve traducción
-#elif L==7
-	"esami";
-#elif L==8
-	"egzaminy";
-#elif L==9
-	"exames";
 #endif
 
 const char *Txt_Existing_question =
@@ -13489,27 +13426,6 @@ const char *Txt_general_topics =
 	"temas gerais";
 #endif
 
-const char *Txt_Generate_exam =
-#if   L==1
-	"Generar examen";
-#elif L==2
-	"Generieren Pr&uuml;fung";
-#elif L==3
-	"Generate exam";
-#elif L==4
-	"Generar examen";
-#elif L==5
-	"G&eacute;n&eacute;rer l'examen";
-#elif L==6
-	"Generar examen";	// Okoteve traducción
-#elif L==7
-	"Crea esame";
-#elif L==8
-	"Wygeneruj egzamin";
-#elif L==9
-	"Gerar teste";
-#endif
-
 const char *Txt_Generate_report =
 #if   L==1
 	"Generar informe";
@@ -13529,6 +13445,27 @@ const char *Txt_Generate_report =
 	"Wygeneruj raport";
 #elif L==9
 	"Gerar relat&oacute;rio";
+#endif
+
+const char *Txt_Generate_test =
+#if   L==1
+	"Generar test";
+#elif L==2
+	"Generieren Test";
+#elif L==3
+	"Generate test";
+#elif L==4
+	"Generar test";
+#elif L==5
+	"G&eacute;n&eacute;rer test";
+#elif L==6
+	"Generar test";	// Okoteve traducción
+#elif L==7
+	"Crea test";
+#elif L==8
+	"Wygeneruj test";
+#elif L==9
+	"Gerar teste";
 #endif
 
 const char *Txt_Get_a_new_password =
@@ -31406,27 +31343,6 @@ const char *Txt_results_per_page =
 	"resultados por p&aacute;gina";
 #endif
 
-const char *Txt_Results_tests =
-#if   L==1
-	"Resultats tests";
-#elif L==2
-	"Ergebnisse Tests";
-#elif L==3
-	"Results tests";
-#elif L==4
-	"Resultados tests";
-#elif L==5
-	"R&eacute;sultats tests";
-#elif L==6
-	"Resultados tests";			// Okoteve traducción
-#elif L==7
-	"Risultati test";
-#elif L==8
-	"Wyniki test&oacute;w";
-#elif L==9
-	"Resultados testes";
-#endif
-
 const char *Txt_Retype_new_password =
 #if   L==1
 	"Reescriviu la nova contrasenya";
@@ -35359,27 +35275,6 @@ const char *Txt_Search_courses =
 	"Szukaj kurs&oacute;w";
 #elif L==9
 	"Procurar disciplinas";
-#endif
-
-const char *Txt_See_exam =
-#if   L==1
-	"Veure ex&agrave;men";
-#elif L==2
-	"Siehe Pr&uuml;fung";
-#elif L==3
-	"See exam";
-#elif L==4
-	"Ver examen";
-#elif L==5
-	"Voir examen";
-#elif L==6
-	"Ver examen";	// Okoteve traducción
-#elif L==7
-	"Vedi esame";
-#elif L==8
-	"Wiadomo&sacute;ci egzamin";
-#elif L==9
-	"Veja exame";
 #endif
 
 const char *Txt_See_full_notice =
@@ -41216,7 +41111,7 @@ const char *Txt_Test_No_X_that_you_make_in_this_course =	// Warning: it is very 
 
 const char *Txt_Test_result =
 #if   L==1
-	"Resultado del test";	// Necessita traduccio
+	"Resultat del test";
 #elif L==2
 	"Testergebnis";
 #elif L==3
@@ -41230,9 +41125,30 @@ const char *Txt_Test_result =
 #elif L==7
 	"Risultato del test";
 #elif L==8
-	"Test result";		// Potrzebujesz tlumaczenie
+	"Wynik testu";
 #elif L==9
 	"Resultado do teste";
+#endif
+
+const char *Txt_Test_results =
+#if   L==1
+	"Resultats de tests";
+#elif L==2
+	"Testergebnisse";
+#elif L==3
+	"Test results";
+#elif L==4
+	"Resultados de tests";
+#elif L==5
+	"R&eacute;sultats des tests";
+#elif L==6
+	"Resultados de tests";	// Okoteve traducción
+#elif L==7
+	"Risultati dei test";
+#elif L==8
+	"Wyniki test&oacute;w";
+#elif L==9
+	"Resultados dos testes";
 #endif
 
 const char *Txt_Text =
@@ -50096,27 +50012,6 @@ const char *Txt_View_event =
 	"Ver evento";
 #endif
 
-const char *Txt_View_exams =
-#if   L==1
-	"Veure ex&agrave;mens";
-#elif L==2
-	"Siehe Pr&uuml;fungen";
-#elif L==3
-	"View exams";
-#elif L==4
-	"Ver ex&aacute;menes";
-#elif L==5
-	"Voir examens";
-#elif L==6
-	"Ver ex&aacute;menes";	// Okoteve traducción
-#elif L==7
-	"Vedi esami";
-#elif L==8
-	"Wiadomo&sacute;ci egzaminy";
-#elif L==9
-	"Veja exames";
-#endif
-
 const char *Txt_View_in_a_new_window =
 #if   L==1
 	"Mostrar en una finestra nova";
@@ -50222,6 +50117,48 @@ const char *Txt_View_survey_results =
 	"Ver resultados";
 #endif
 
+const char *Txt_View_test =
+#if   L==1
+	"Veure test";
+#elif L==2
+	"Siehe Test";
+#elif L==3
+	"View test";
+#elif L==4
+	"Ver test";
+#elif L==5
+	"Voir test";
+#elif L==6
+	"Ver test";	// Okoteve traducción
+#elif L==7
+	"Vedi test";
+#elif L==8
+	"Wiadomo&sacute;ci test";
+#elif L==9
+	"Veja teste";
+#endif
+
+const char *Txt_View_test_results =
+#if   L==1
+	"Veure resultats de tests";
+#elif L==2
+	"Siehe Testergebnisse";
+#elif L==3
+	"View test results";
+#elif L==4
+	"Ver resultados de tests";
+#elif L==5
+	"Voir r&eacute;sultats de tests";
+#elif L==6
+	"Ver resultados de tests";	// Okoteve traducción
+#elif L==7
+	"Vedi risultati dei test";
+#elif L==8
+	"Zobacz wyniki test&oacute;w";
+#elif L==9
+	"Ver resultados de testes";
+#endif
+
 const char *Txt_View_works =
 #if   L==1
 	"Veure treballs";
@@ -50306,25 +50243,25 @@ const char *Txt_Visible_MALE_PLURAL =
 	"Vis&iacute;veis";
 #endif
 
-const char *Txt_Visible_exams =
+const char *Txt_Visible_tests =
 #if   L==1
-	"Ex&agrave;mens visibles";
+	"Tests visibles";
 #elif L==2
-	"Visible Pr%uuml;fungen";
+	"Sichtbare Pr%uuml;fungen";
 #elif L==3
-	"Visible exams";
+	"Visible tests";
 #elif L==4
-	"Ex&aacute;menes visibles";
+	"Tests visibles";
 #elif L==5
-	"Examens visibles";
+	"Tests visibles";
 #elif L==6
-	"Ex&aacute;menes visibles";	// Okoteve traducción
+	"Tests visibles";	// Okoteve traducción
 #elif L==7
-	"Esami visibili";
+	"Test visibili";
 #elif L==8
-	"Widoczne egzaminy";
+	"Widoczne testy";
 #elif L==9
-	"Exames vis&iacute;veis";
+	"Testes vis&iacute;veis";
 #endif
 
 const char *Txt_Visible_survey =
