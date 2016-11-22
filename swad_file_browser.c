@@ -1450,7 +1450,6 @@ static bool Brw_CheckIfQuotaExceded (void);
 
 static void Brw_ShowFileBrowserNormal (void);
 static void Brw_ShowFileBrowsersAsgWrkCrs (void);
-static void Brw_PutLinkZIPAsgWrk (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
@@ -3131,8 +3130,9 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    /***** Check the number of users whose works will be shown *****/
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
-      /***** Put link to download / create zip file *****/
-      Brw_PutLinkZIPAsgWrk ();
+      /***** Create the zip file and put a link to download it *****/
+      if (Gbl.FileBrowser.ZIP.CreateZIP)
+	 ZIP_CreateZIPAsgWrk ();
 
       /***** Write top before showing file browser *****/
       Brw_WriteTopBeforeShowingFileBrowser ();
@@ -3187,23 +3187,6 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
-  }
-
-/*****************************************************************************/
-/******** Put link to download / create zip file in assigments / works *******/
-/*****************************************************************************/
-
-static void Brw_PutLinkZIPAsgWrk (void)
-  {
-   if (Gbl.FileBrowser.ZIP.CreateZIP)
-     {
-      /* Create the zip file and put a link to download it */
-      ZIP_CreateZIPAsgWrk ();
-     }
-   else
-      /***** Button to create a zip file
-	     with all the works of the selected users *****/
-      ZIP_PutButtonToCreateZIPAsgWrk ();
   }
 
 /*****************************************************************************/
@@ -3726,10 +3709,22 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /* Put checkbox to show the full tree */
    Brw_PutCheckboxFullTree ();
 
-   /* Put link to remove old files */
-   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR &&
-       Gbl.Action.Act != ActReqRemOldBrf)
-      Brw_PutLinkToAskRemOldFiles ();
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_ASSIG_CRS:
+      case Brw_ADMI_WORKS_CRS:
+	 /* Put link to create a zip file with all the works of the selected users */
+	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
+	    ZIP_PutLinkToCreateZIPAsgWrk ();
+         break;
+      case Brw_ADMI_BRIEF_USR:
+	 /* Put link to remove old files */
+	 if (Gbl.Action.Act != ActReqRemOldBrf)
+	    Brw_PutLinkToAskRemOldFiles ();
+         break;
+      default:
+         break;
+     }
 
    fprintf (Gbl.F.Out,"</div>");
 

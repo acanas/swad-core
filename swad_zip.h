@@ -43,7 +43,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void ZIP_PutButtonToCreateZIPAsgWrk (void);
+void ZIP_PutLinkToCreateZIPAsgWrk (void);
 bool ZIP_GetCreateZIPFromForm (void);
 void ZIP_CreateZIPAsgWrk (void);
 

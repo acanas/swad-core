@@ -102,7 +102,7 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void ZIP_PutButtonToCreateZIPAsgWrkParams (void);
+static void ZIP_PutLinkToCreateZIPAsgWrkParams (void);
 
 static void ZIP_CreateTmpDirForCompression (void);
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat);
@@ -113,22 +113,20 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
                                        off_t FileSize,unsigned long long UncompressedSize);
 
 /*****************************************************************************/
-/********* Put button to create ZIP file of assignments and works ************/
+/*********** Put link to create ZIP file of assignments and works ************/
 /*****************************************************************************/
 
-void ZIP_PutButtonToCreateZIPAsgWrk (void)
+void ZIP_PutLinkToCreateZIPAsgWrk (void)
   {
    extern const char *Txt_Create_ZIP_file;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutButtonToCreateZIPAsgWrkParams,
+   Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutLinkToCreateZIPAsgWrkParams,
                           "download64x64.png",
                           Txt_Create_ZIP_file,Txt_Create_ZIP_file,
 		          NULL);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
-static void ZIP_PutButtonToCreateZIPAsgWrkParams (void)
+static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
   {
    Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
    if (Gbl.FileBrowser.FullTree)
