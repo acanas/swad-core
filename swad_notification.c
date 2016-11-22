@@ -284,6 +284,7 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void);
 
 void Ntf_ShowMyNotifications (void)
   {
+   extern const char *Hlp_MESSAGES_Notifications;
    extern const char *Txt_Change_preferences;
    extern const char *Txt_Mark_all_notifications_as_read;
    extern const char *Txt_Notifications;
@@ -371,7 +372,8 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Notifications,Ntf_PutIconsNotif,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Notifications,
+                                Ntf_PutIconsNotif,Hlp_MESSAGES_Notifications,2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"

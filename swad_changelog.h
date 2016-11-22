@@ -172,13 +172,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.67.2 (2016-11-21)"
+#define Log_PLATFORM_VERSION	"SWAD 16.67.3 (2016-11-22)"
 #define CSS_FILE		"swad16.60.1.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.67.3:  Nov 22, 2016	Contextual help on notifications. (207355 lines)
         Version 16.67.2:  Nov 21, 2016	Contextual help on sign up in a course and enrollment requests. (207351 lines)
         Version 16.67.1:  Nov 21, 2016	Contextual help on connected users and last clicks in real time. (207346 lines)
         Version 16.67:    Nov 21, 2016	Refactoring in tests.

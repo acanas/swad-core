@@ -127,6 +127,8 @@ const char *Hlp_SOCIAL_Forums = WIKI "SOCIAL.Forums";
 
 /***** MESSAGES tab *****/
 
+const char *Hlp_MESSAGES_Notifications = WIKI "MESSAGES.Notifications";
+
 const char *Hlp_MESSAGES_Notices = WIKI "MESSAGES.Notices";
 
 /***** STATS tab *****/
