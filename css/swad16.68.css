@@ -1559,16 +1559,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BLUE_TITLE		{color:#4D88A1; font-size:18pt;}
 .YELLOW_TITLE		{color:#BD4815; font-size:18pt;}
 
-/**************************** Icon highlighting ******************************/
+/*********************** Icon and checkbox highlighting **********************/
 .ICO_HIDDEN
 	{
 	opacity:0.2;
 	}
-.ICO_HIGHLIGHT
+.ICO_HIGHLIGHT, .CHECKBOX_UNCHECKED
 	{
 	opacity:0.67;
 	}
-.ICO_HIGHLIGHT:hover
+.ICO_HIGHLIGHT:hover, .CHECKBOX_CHECKED
 	{
 	opacity:1;
 	}

@@ -17256,6 +17256,27 @@ const char *Txt_Mandatory_enrollment =		// (to a type of group)
 	"Inscri&ccedil;&atilde;o obrigat&oacute;ria?";
 #endif
 
+const char *Txt_Mark_all_NOTIFICATIONS_as_read =
+#if   L==1
+	"Marca totes com llegides";
+#elif L==2
+	"Markieren Sie alle als gelesen";
+#elif L==3
+	"Mark all as read";
+#elif L==4
+	"Marcar todas como le&iacute;das";
+#elif L==5
+	"Marquer tous comme lus";
+#elif L==6
+	"Marcar todas como le&iacute;das";	// Okoteve traducción
+#elif L==7
+	"Segnare tutte come gi&grave; letti";
+#elif L==8
+	"Oznacz wszystko jako czytasz";
+#elif L==9
+	"Marcar todas como lidas";
+#endif
+
 const char *Txt_Mark_all_notifications_as_read =
 #if   L==1
 	"Marca totes les notificacions com llegides";
@@ -36460,6 +36481,27 @@ const char *Txt_Show_all_files =
 	"Poka&zdot; wszystkie pliki";
 #elif L==9
 	"Mostrar todos os arquivos";
+#endif
+
+const char *Txt_Show_all_NOTIFICATIONS =
+#if   L==1
+	"Mostrar tots";
+#elif L==2
+	"Alle anzeigen";
+#elif L==3
+	"Show all";
+#elif L==4
+	"Mostrar todas";
+#elif L==5
+	"Afficher tous";
+#elif L==6
+	"Mostrar todas";	// Okoteve traducción
+#elif L==7
+	"Mostra tutti";
+#elif L==8
+	"Poka&zdot; wszystkie";
+#elif L==9
+	"Mostrar todas";
 #endif
 
 const char *Txt_Show_all_notifications =

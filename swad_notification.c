@@ -286,7 +286,9 @@ void Ntf_ShowMyNotifications (void)
   {
    extern const char *Hlp_MESSAGES_Notifications;
    extern const char *Txt_Change_preferences;
+   extern const char *Txt_Preferences;
    extern const char *Txt_Mark_all_notifications_as_read;
+   extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Notifications;
    extern const char *Txt_Date;
    extern const char *Txt_Event;
@@ -342,24 +344,28 @@ void Ntf_ShowMyNotifications (void)
             Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
    NumNotifications = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
 
-   /***** Buttons to change preferences and to mark all notifications as seen *****/
+   /***** Links to mark all notifications as read
+          and to change preferences *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   // Put form to change notification preferences
-   Lay_PutContextualLink (ActEdiPrf,NULL,
-                          "heart64x64.gif",
-			  Txt_Change_preferences,Txt_Change_preferences,
-                          NULL);
-   if (NumNotifications)
-      // Put form to change notification preferences
-      Lay_PutContextualLink (ActMrkNtfSee,NULL,
-                             "eye-on64x64.png",
-			     Txt_Mark_all_notifications_as_read,
-			     Txt_Mark_all_notifications_as_read,
-                             NULL);
-   fprintf (Gbl.F.Out,"</div>");
 
    /***** Write form to show all notifications *****/
    Ntf_WriteFormAllNotifications (AllNotifications);
+
+   if (NumNotifications)
+      /* Put form to change notification preferences */
+      Lay_PutContextualLink (ActMrkNtfSee,NULL,
+                             "eye-on64x64.png",
+			     Txt_Mark_all_notifications_as_read,
+			     Txt_Mark_all_NOTIFICATIONS_as_read,
+                             NULL);
+
+   /* Put form to change notification preferences */
+   Lay_PutContextualLink (ActEdiPrf,NULL,
+                          "heart64x64.gif",
+			  Txt_Change_preferences,Txt_Preferences,
+                          NULL);
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
@@ -650,24 +656,33 @@ static void Ntf_PutIconsNotif (void)
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Show_all_notifications;
+   extern const char *Txt_Show_all_NOTIFICATIONS;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
    Act_FormStart (ActSeeNtf);
 
-   /***** End form *****/
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
+            AllNotifications ? "CHECKBOX_CHECKED" :
+        	               "CHECKBOX_UNCHECKED",
+            The_ClassFormBold[Gbl.Prefs.Theme],
+            Txt_Show_all_notifications);
+
+   /****** Checkbox and text *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"All\" value=\"Y\"");
    if (AllNotifications)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       " %s",
-            Gbl.Form.Id,
-            Txt_Show_all_notifications);
-   Act_FormEnd ();
+            Gbl.Form.Id,Txt_Show_all_NOTIFICATIONS);
+
+   /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");
+
+   /***** End form *****/
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
