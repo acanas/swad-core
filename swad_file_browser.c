@@ -1450,6 +1450,7 @@ static bool Brw_CheckIfQuotaExceded (void);
 
 static void Brw_ShowFileBrowserNormal (void);
 static void Brw_ShowFileBrowsersAsgWrkCrs (void);
+static void Brw_PutLinkZIPAsgWrk (void);
 static void Brw_ShowFileBrowsersAsgWrkUsr (void);
 
 static void Brw_FormToChangeCrsGrpZone (void);
@@ -3126,50 +3127,12 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
-   struct UsrData UsrDat;
 
    /***** Check the number of users whose works will be shown *****/
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
-      if (Gbl.FileBrowser.ZIP.CreateZIP)
-	{
-	 /***** Create zip file
-	        with the assignments and works
-	        of the selected users *****/
-	 /* Create temporary directory
-	    for the compression of assignments and works */
-	 ZIP_CreateTmpDirForCompression ();
-
-	 /* Initialize structure with user's data */
-	 Usr_UsrDataConstructor (&UsrDat);
-
-	 /* Create temporary directory for each selected user
-	    inside the directory used for compression */
-	 Ptr = Gbl.Usrs.Select.All;
-	 while (*Ptr)
-	   {
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
-	                                       Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-	    Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
-
-
-	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
-	       if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
-	                                       Gbl.CurrentCrs.Crs.CrsCod,
-	                                       false))
-		  ZIP_CreateDirCompressionUsr (&UsrDat);
-	   }
-
-	 /* Free memory used for user's data */
-	 Usr_UsrDataDestructor (&UsrDat);
-
-	 /* Create the zip file and put a link to download it */
-         ZIP_CreateZIPAsgWrk ();
-	}
-      else
-	 /***** Button to create a zip file
-	        with all the works of the selected users *****/
-	 ZIP_PutButtonToCreateZIPAsgWrk ();
+      /***** Put link to download / create zip file *****/
+      Brw_PutLinkZIPAsgWrk ();
 
       /***** Write top before showing file browser *****/
       Brw_WriteTopBeforeShowingFileBrowser ();
@@ -3224,6 +3187,23 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
+  }
+
+/*****************************************************************************/
+/******** Put link to download / create zip file in assigments / works *******/
+/*****************************************************************************/
+
+static void Brw_PutLinkZIPAsgWrk (void)
+  {
+   if (Gbl.FileBrowser.ZIP.CreateZIP)
+     {
+      /* Create the zip file and put a link to download it */
+      ZIP_CreateZIPAsgWrk ();
+     }
+   else
+      /***** Button to create a zip file
+	     with all the works of the selected users *****/
+      ZIP_PutButtonToCreateZIPAsgWrk ();
   }
 
 /*****************************************************************************/

@@ -46,8 +46,6 @@
 void ZIP_PutButtonToCreateZIPAsgWrk (void);
 bool ZIP_GetCreateZIPFromForm (void);
 void ZIP_CreateZIPAsgWrk (void);
-void ZIP_CreateTmpDirForCompression (void);
-void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat);
 
 void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *FileName);
 void ZIP_CompressFileTree (void);

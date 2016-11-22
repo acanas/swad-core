@@ -104,6 +104,9 @@ extern struct Globals Gbl;
 
 static void ZIP_PutButtonToCreateZIPAsgWrkParams (void);
 
+static void ZIP_CreateTmpDirForCompression (void);
+static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat);
+
 static void ZIP_CompressFolderIntoZIP (void);
 static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,const char *PathInTree);
 static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
@@ -153,6 +156,8 @@ bool ZIP_GetCreateZIPFromForm (void)
 void ZIP_CreateZIPAsgWrk (void)
   {
    extern const char *Txt_works_ZIP_FILE_NAME;
+   struct UsrData UsrDat;
+   const char *Ptr;
    char StrZip[100+PATH_MAX*2+1];
    char Path[PATH_MAX+1];
    int Result;
@@ -161,6 +166,36 @@ void ZIP_CreateZIPAsgWrk (void)
    struct stat FileStatus;
    char URLWithSpaces[PATH_MAX+1];
    char URL[PATH_MAX+1];
+
+   /***** Create zip file
+	  with the assignments and works
+	  of the selected users *****/
+   /* Create temporary directory
+      for the compression of assignments and works */
+   ZIP_CreateTmpDirForCompression ();
+
+   /* Initialize structure with user's data */
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /* Create temporary directory for each selected user
+      inside the directory used for compression */
+   Ptr = Gbl.Usrs.Select.All;
+   while (*Ptr)
+     {
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+					 Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
+
+
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get user's data from database
+	 if (Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
+					 Gbl.CurrentCrs.Crs.CrsCod,
+					 false))
+	    ZIP_CreateDirCompressionUsr (&UsrDat);
+     }
+
+   /* Free memory used for user's data */
+   Usr_UsrDataDestructor (&UsrDat);
 
    /***** Create a temporary public directory
           used to download the zip file *****/
@@ -220,7 +255,7 @@ void ZIP_CreateZIPAsgWrk (void)
 /********* Create temporary directory to put the works to compress ***********/
 /*****************************************************************************/
 
-void ZIP_CreateTmpDirForCompression (void)
+static void ZIP_CreateTmpDirForCompression (void)
   {
    char PathZipPriv[PATH_MAX+1];
    char PathDirTmp[PATH_MAX+1];
@@ -247,7 +282,7 @@ void ZIP_CreateTmpDirForCompression (void)
 /**************** in the temporary directory of compression ******************/
 /*****************************************************************************/
 
-void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
+static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
    char FullNameAndUsrID[(Usr_MAX_BYTES_NAME+1)*3+
                          ID_MAX_LENGTH_USR_ID+1+
