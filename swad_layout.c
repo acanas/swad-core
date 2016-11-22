@@ -1002,7 +1002,7 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
-/***************** Show an icon with a link in contextual menu ***************/
+/**************** Show an icon with a link in contextual menu ****************/
 /*****************************************************************************/
 
 void Lay_PutContextualLink (Act_Action_t NextAction,
@@ -1013,19 +1013,75 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
 
+   /***** Separator *****/
    if (Text)
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens
 
+   /***** Start form *****/
    Act_FormStart (NextAction);
    if (FuncParams)
       FuncParams ();
+
+   /***** Put icon with link *****/
    Lay_PutIconLink (Icon,Title,Text,
                     Text ? The_ClassFormBold[Gbl.Prefs.Theme] :
                 	   NULL,
                     OnSubmit);
+
+   /***** End form *****/
    Act_FormEnd ();
 
+   /***** Separator *****/
+   if (Text)
+      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
+  }
+
+/*****************************************************************************/
+/******************** Show a checkbox in contextual menu *********************/
+/*****************************************************************************/
+
+void Lay_PutContextualCheckbox (Act_Action_t NextAction,
+                                const char *CheckboxName,bool Checked,
+                                const char *Title,const char *Text)
+  {
+   extern const char *The_ClassFormBold[The_NUM_THEMES];
+
+   /***** Separator *****/
+   if (Text)
+      fprintf (Gbl.F.Out," ");	// This space is necessary to enable
+				// jumping to the next line on narrow screens
+
+   /***** Start form *****/
+   Act_FormStart (NextAction);
+
+   /***** Start container *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
+            Checked ? "CHECKBOX_CHECKED" :
+        	      "CHECKBOX_UNCHECKED",
+            The_ClassFormBold[Gbl.Prefs.Theme],
+            Title);
+
+   /****** Checkbox and text *****/
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"Y\"",
+            CheckboxName);
+   if (Checked)
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+            Gbl.Form.Id);
+   if (Text)
+      if (Text[0])
+	 fprintf (Gbl.F.Out,"&nbsp;%s",
+		  Text);
+
+   /***** End container *****/
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** Separator *****/
    if (Text)
       fprintf (Gbl.F.Out," ");	// This space is necessary to enable
 				// jumping to the next line on narrow screens

@@ -656,33 +656,12 @@ static void Ntf_PutIconsNotif (void)
 
 static void Ntf_WriteFormAllNotifications (bool AllNotifications)
   {
-   extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Show_all_notifications;
    extern const char *Txt_Show_all_NOTIFICATIONS;
 
-   /***** Start form *****/
-   Act_FormStart (ActSeeNtf);
-
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
-            AllNotifications ? "CHECKBOX_CHECKED" :
-        	               "CHECKBOX_UNCHECKED",
-            The_ClassFormBold[Gbl.Prefs.Theme],
-            Txt_Show_all_notifications);
-
-   /****** Checkbox and text *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"All\" value=\"Y\"");
-   if (AllNotifications)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      " %s",
-            Gbl.Form.Id,Txt_Show_all_NOTIFICATIONS);
-
-   /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
-
-   /***** End form *****/
-   Act_FormEnd ();
+   Lay_PutContextualCheckbox (ActSeeNtf,"All",AllNotifications,
+                              Txt_Show_all_notifications,
+                              Txt_Show_all_NOTIFICATIONS);
   }
 
 /*****************************************************************************/
