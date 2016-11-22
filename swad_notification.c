@@ -344,11 +344,10 @@ void Ntf_ShowMyNotifications (void)
             Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
    NumNotifications = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
 
-   /***** Links to mark all notifications as read
-          and to change preferences *****/
+   /***** Contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /***** Write form to show all notifications *****/
+   /* Write form to show all notifications */
    Ntf_WriteFormAllNotifications (AllNotifications);
 
    if (NumNotifications)
@@ -659,7 +658,8 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    extern const char *Txt_Show_all_notifications;
    extern const char *Txt_Show_all_NOTIFICATIONS;
 
-   Lay_PutContextualCheckbox (ActSeeNtf,"All",AllNotifications,
+   Lay_PutContextualCheckbox (ActSeeNtf,NULL,
+                              "All",AllNotifications,
                               Txt_Show_all_notifications,
                               Txt_Show_all_NOTIFICATIONS);
   }

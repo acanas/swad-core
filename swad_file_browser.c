@@ -1470,6 +1470,7 @@ static void Brw_StoreSizeOfFileTreeInDB (void);
 static void Brw_PutParamsContextualLink (void);
 
 static void Brw_WriteFormFullTree (void);
+static void Brw_PutParamsFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
@@ -4668,13 +4669,18 @@ static void Brw_PutParamsContextualLink (void)
 
 static void Brw_WriteFormFullTree (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_all_files;
 
-   /***** Start form depending on type of tree *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
-   Act_FormStart (Brw_ActSeeAdm[Gbl.FileBrowser.Type]);
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
+                              Brw_PutParamsFullTree,
+                              "FullTree",Gbl.FileBrowser.FullTree,
+                              Txt_Show_all_files,Txt_Show_all_files);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Brw_PutParamsFullTree (void)
+  {
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_SHOW_DOCUM_INS:
@@ -4709,17 +4715,6 @@ static void Brw_WriteFormFullTree (void)
       default:
 	 break;
      }
-
-   /***** End form *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"FullTree\" value=\"Y\"");
-   if (Gbl.FileBrowser.FullTree)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      " %s",
-            Gbl.Form.Id,
-            Txt_Show_all_files);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

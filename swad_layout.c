@@ -1043,6 +1043,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
 /*****************************************************************************/
 
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
+                                void (*FuncParams) (),
                                 const char *CheckboxName,bool Checked,
                                 const char *Title,const char *Text)
   {
@@ -1055,6 +1056,8 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 
    /***** Start form *****/
    Act_FormStart (NextAction);
+   if (FuncParams)
+      FuncParams ();
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
