@@ -1469,7 +1469,7 @@ static void Brw_StoreSizeOfFileTreeInDB (void);
 
 static void Brw_PutParamsContextualLink (void);
 
-static void Brw_WriteFormFullTree (void);
+static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
 static bool Brw_GetFullTreeFromForm (void);
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
@@ -1582,7 +1582,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
-static void Brw_PutFormToAskRemOldFiles (void);
+static void Brw_PutLinkToAskRemOldFiles (void);
 static void Brw_RemoveOldFilesInBrowser (unsigned Months,struct Brw_NumObjects *Removed);
 static void Brw_ScanDirRemovingOldFiles (unsigned Level,const char *Path,
                                          const char *PathInTree,
@@ -3741,13 +3741,17 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    Brw_UpdateLastAccess ();
 
    /***** Write contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put checkbox to show the full tree */
+   Brw_PutCheckboxFullTree ();
+
+   /* Put link to remove old files */
    if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR &&
        Gbl.Action.Act != ActReqRemOldBrf)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Brw_PutFormToAskRemOldFiles ();
-      fprintf (Gbl.F.Out,"</div>");
-     }
+      Brw_PutLinkToAskRemOldFiles ();
+
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Initialize hidden levels *****/
    switch (Gbl.FileBrowser.Type)
@@ -3771,9 +3775,6 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
       default:
 	 break;
      }
-
-   /***** Write form to show the full tree *****/
-   Brw_WriteFormFullTree ();
 
    /***** If browser is editable, get and write current clipboard *****/
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type])
@@ -4667,16 +4668,14 @@ static void Brw_PutParamsContextualLink (void)
 /************** Write a form to select whether show full tree ****************/
 /*****************************************************************************/
 
-static void Brw_WriteFormFullTree (void)
+static void Brw_PutCheckboxFullTree (void)
   {
    extern const char *Txt_Show_all_files;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParamsFullTree,
                               "FullTree",Gbl.FileBrowser.FullTree,
                               Txt_Show_all_files,Txt_Show_all_files);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Brw_PutParamsFullTree (void)
@@ -11811,7 +11810,7 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
 /***************** Write a form (link) to remove old files *******************/
 /*****************************************************************************/
 
-static void Brw_PutFormToAskRemOldFiles (void)
+static void Brw_PutLinkToAskRemOldFiles (void)
   {
    extern const char *Txt_Remove_old_files;
 
