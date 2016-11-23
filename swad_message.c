@@ -1687,7 +1687,12 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Msg_MakeFilterFromToSubquery (FilterFromToSubquery);
    Msg_GetDistinctCoursesInMyMessages ();
 
-   /***** Form to see messages again *****/
+   /***** Filter messages *****/
+   /* Start frame with messages */
+   Lay_StartRoundFrame (NULL,"Filter",	// TODO: Need translation!!!!
+                        NULL,Help[Gbl.Msg.TypeOfMessages]);
+
+   /* Form to see messages again */
    Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
    Msg_ShowFormSelectCourseSentOrRecMsgs ();
    Msg_ShowFormToFilterMsgs ();
@@ -1706,6 +1711,10 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    Act_FormEnd ();
 
+   /* End frame */
+   Lay_EndRoundFrame ();
+
+   /***** Get nnumber of unread messages *****/
    switch (Gbl.Msg.TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
