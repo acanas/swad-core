@@ -1648,7 +1648,9 @@ void Msg_ShowRecMsgs (void)
 static void Msg_ShowSentOrReceivedMessages (void)
   {
    extern const char *Hlp_MESSAGES_Received;
+   extern const char *Hlp_MESSAGES_Received_filter;
    extern const char *Hlp_MESSAGES_Sent;
+   extern const char *Hlp_MESSAGES_Sent_filter;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
@@ -1676,6 +1678,11 @@ static void Msg_ShowSentOrReceivedMessages (void)
      {
       Hlp_MESSAGES_Received,
       Hlp_MESSAGES_Sent
+     };
+   const char *HelpFilter[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      Hlp_MESSAGES_Received_filter,
+      Hlp_MESSAGES_Sent_filter
      };
 
    /***** Get the page number *****/
@@ -1713,7 +1720,8 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    /***** Filter messages *****/
    /* Start frame with filter */
-   Lay_StartRoundFrame (NULL,Txt_Filter,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Filter,
+                        NULL,HelpFilter[Gbl.Msg.TypeOfMessages]);
 
    /* Form to see messages again */
    Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);

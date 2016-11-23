@@ -131,9 +131,11 @@ const char *Hlp_MESSAGES_Notifications = WIKI "MESSAGES.Notifications";
 
 const char *Hlp_MESSAGES_Notices = WIKI "MESSAGES.Notices";
 
-const char *Hlp_MESSAGES_Write    = WIKI "MESSAGES.Write";
-const char *Hlp_MESSAGES_Received = WIKI "MESSAGES.Received";
-const char *Hlp_MESSAGES_Sent     = WIKI "MESSAGES.Sent";
+const char *Hlp_MESSAGES_Write           = WIKI "MESSAGES.Write";
+const char *Hlp_MESSAGES_Received        = WIKI "MESSAGES.Received";
+const char *Hlp_MESSAGES_Received_filter = WIKI "MESSAGES.Received#filter";
+const char *Hlp_MESSAGES_Sent            = WIKI "MESSAGES.Sent";
+const char *Hlp_MESSAGES_Sent_filter     = WIKI "MESSAGES.Sent#filter";
 
 /***** STATS tab *****/
 
