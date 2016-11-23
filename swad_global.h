@@ -125,6 +125,7 @@ struct Globals
       bool HTMLStartWritten;	// Used to avoid writing more than once the HTML head
       bool DivsEndWritten;	// Used to avoid writing more than once the HTML end
       bool HTMLEndWritten;	// Used to avoid writing more than once the HTML end
+      unsigned FrameNested;
      } Layout;
    struct
      {

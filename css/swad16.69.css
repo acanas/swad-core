@@ -1363,16 +1363,23 @@ a:hover						/* Default ==> underlined */
 	width:100%;
 	margin-bottom:20px;
 	}
-.FRAME_TBL_TITLE
+.FRAME_TITLE
 	{
 	display:table;
 	box-sizing:border-box;
 	width:100%;
 	margin:0 auto;
 	padding:0 12px 12px 12px;
-	color:#808080;
+	}
+.FRAME_TITLE_BIG
+	{
+	color:#606060;
 	font-size:20pt;
-	font-weight:bold;
+	}
+.FRAME_TITLE_SMALL
+	{
+	color:#808080;
+	font-size:18pt;
 	}
 
 /* Apply only to the first level of th and td */

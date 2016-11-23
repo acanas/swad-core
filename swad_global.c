@@ -424,6 +424,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.ColorRows[1] = "COLOR1";	// Lighter
 
    Gbl.WebService.Function = Svc_unknown;
+
+   Gbl.Layout.FrameNested = 0;
   }
 
 /*****************************************************************************/

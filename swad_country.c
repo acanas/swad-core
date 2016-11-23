@@ -236,10 +236,10 @@ static void Cty_Configuration (bool PrintView)
 	                	       Hlp_COUNTRY_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
+	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
 		  Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language],
 		  Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);

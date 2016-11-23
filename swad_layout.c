@@ -1332,10 +1332,14 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,
    fprintf (Gbl.F.Out,"</div>");
 
    if (Title)
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE %s\">"
 	                 "%s"
 	                 "</div>",
+	       Gbl.Layout.FrameNested ? "FRAME_TITLE_SMALL" :
+		                        "FRAME_TITLE_BIG",
 	       Title);
+
+   Gbl.Layout.FrameNested++;
   }
 
 // CellPadding must be 0, 1, 2, 4 or 8
@@ -1363,6 +1367,8 @@ void Lay_EndRoundFrameTable (void)
 
 void Lay_EndRoundFrame (void)
   {
+   Gbl.Layout.FrameNested--;
+
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
   }

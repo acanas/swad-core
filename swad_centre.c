@@ -305,10 +305,10 @@ static void Ctr_Configuration (bool PrintView)
 	                               Hlp_CENTRE_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
+	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.CurrentCtr.Ctr.FullName);
       Log_DrawLogo (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,

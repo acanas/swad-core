@@ -304,10 +304,10 @@ static void Ins_Configuration (bool PrintView)
 	                               Hlp_INSTITUTION_Information);
 
       /***** Title *****/
-      fprintf (Gbl.F.Out,"<div class=\"FRAME_TBL_TITLE CENTER_MIDDLE\">");
+      fprintf (Gbl.F.Out,"<div class=\"FRAME_TITLE FRAME_TITLE_BIG\">");
       if (PutLink)
 	 fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-	                    " class=\"TITLE_LOCATION\" title=\"%s\">",
+	                    " class=\"FRAME_TITLE_BIG\" title=\"%s\">",
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.CurrentIns.Ins.FullName);
       Log_DrawLogo (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
