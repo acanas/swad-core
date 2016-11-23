@@ -1717,9 +1717,12 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    /* Form to see messages again */
    Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
+
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Msg_ShowFormSelectCourseSentOrRecMsgs ();
    if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
       Msg_ShowFormToShowOnlyUnreadMessages ();
+   fprintf (Gbl.F.Out,"</div>");
    Msg_ShowFormToFilterMsgs ();
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -2506,7 +2509,6 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
      };
 
    /***** Course selection *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
@@ -2526,8 +2528,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</select>");
   }
 
 /*****************************************************************************/
@@ -2547,42 +2548,36 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+	              "<tr>");
 
    /***** Authors/recipients of the message *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FilterFromTo\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>"
-                      "</tr>",
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3,Gbl.Msg.FilterFromTo);
 
    /***** Authors/recipients of the message *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"FilterContent\""
-                      " size=\"40\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>"
-                      "</tr>",
+                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message,
             Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   fprintf (Gbl.F.Out,"</tr>"
+                      "</table>");
   }
 
 /*****************************************************************************/
@@ -2592,16 +2587,17 @@ void Msg_ShowFormToFilterMsgs (void)
 static void Msg_ShowFormToShowOnlyUnreadMessages (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Show_only_unread_messages;
+   extern const char *Txt_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-                      "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\" value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+	              " name=\"OnlyUnreadMsgs\" value=\"Y\"");
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," /> %s</div>",
-            Txt_Show_only_unread_messages);
+   fprintf (Gbl.F.Out," />"
+	              "<span class=\"%s\">%s</span>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_only_unread_messages);
   }
 
 /*****************************************************************************/

@@ -27193,6 +27193,27 @@ const char *Txt_only_teachers =
 	", professores";
 #endif
 
+const char *Txt_only_unread_messages =
+#if   L==1
+	"nom&eacute;s els missatges no llegits";
+#elif L==2
+	"nur ungelesene Nachrichten";
+#elif L==3
+	"only unread messages";
+#elif L==4
+	"&uacute;nicamente los mensajes no le&iacute;dos";
+#elif L==5
+	"uniquement les messages non lus";
+#elif L==6
+	"&uacute;nicamente los mensajes no le&iacute;dos";	// Okoteve traducción
+#elif L==7
+	"solo i messaggi non letti";
+#elif L==8
+	"only unread messages";					// Potrzebujesz tlumaczenie
+#elif L==9
+	"apenas mensagens n&atilde;o lidas";
+#endif
+
 const char *Txt_open_document =
 #if   L==1
 	"document obert";
@@ -36734,27 +36755,6 @@ const char *Txt_Show_office_hours =
 	"Poka&zdot; godzin pracy biura";
 #elif L==9
 	"Mostrar hor&aacute;rios tutor";
-#endif
-
-const char *Txt_Show_only_unread_messages =
-#if   L==1
-	"Mostrar nom&eacute;s els missatges no llegits";
-#elif L==2
-	"Zeige nur ungelesene Nachrichten";
-#elif L==3
-	"Show only unread messages";
-#elif L==4
-	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";
-#elif L==5
-	"Afficher uniquement les messages non lus";
-#elif L==6
-	"Mostrar &uacute;nicamente los mensajes no le&iacute;dos";	// Okoteve traducción
-#elif L==7
-	"Mostra solo i messaggi non letti";
-#elif L==8
-	"Show only unread messages";					// Potrzebujesz tlumaczenie
-#elif L==9
-	"Mostrar apenas mensagens n&atilde;o lidas";
 #endif
 
 const char *Txt_Show_previous_X_clicks =	// Warning: it is very important to include %lu in the following sentences
