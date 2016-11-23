@@ -172,13 +172,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.68.7 (2016-11-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.68.8 (2016-11-23)"
 #define CSS_FILE		"swad16.68.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.68.8:  Nov 23, 2016	Changes in layout of messages received / sent. (207462 lines)
         Version 16.68.7:  Nov 23, 2016	Changes in layout of messages received / sent. (207463 lines)
         Version 16.68.6:  Nov 23, 2016	Contextual help on messages. (207455 lines)
         Version 16.68.5:  Nov 22, 2016	Code refactoring and change in layout of file browser and contextual links. (207443 lines)

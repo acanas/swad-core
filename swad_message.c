@@ -1687,37 +1687,11 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Msg_MakeFilterFromToSubquery (FilterFromToSubquery);
    Msg_GetDistinctCoursesInMyMessages ();
 
-   /***** Filter messages *****/
-   /* Start frame with messages */
-   Lay_StartRoundFrame (NULL,"Filter",	// TODO: Need translation!!!!
-                        NULL,Help[Gbl.Msg.TypeOfMessages]);
-
-   /* Form to see messages again */
-   Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
-   Msg_ShowFormSelectCourseSentOrRecMsgs ();
-   Msg_ShowFormToFilterMsgs ();
-   if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
-     {
-      Msg_GetParamOnlyUnreadMsgs ();
-      Msg_ShowFormToShowOnlyUnreadMessages ();
-     }
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_messages,
-                               The_ClassFormBold[Gbl.Prefs.Theme],
-                               NULL);
-   Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
-   fprintf (Gbl.F.Out,"</div>");
-
-   Act_FormEnd ();
-
-   /* End frame */
-   Lay_EndRoundFrame ();
-
-   /***** Get nnumber of unread messages *****/
+   /***** Get number of unread messages *****/
    switch (Gbl.Msg.TypeOfMessages)
      {
       case Msg_MESSAGES_RECEIVED:
+         Msg_GetParamOnlyUnreadMsgs ();
          NumUnreadMsgs = Msg_GetNumUnreadMsgs (Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
          break;
       case Msg_MESSAGES_SENT:
@@ -1735,6 +1709,31 @@ static void Msg_ShowSentOrReceivedMessages (void)
    Lay_StartRoundFrame ("97%",
                         Msg_WriteNumMsgs (NumUnreadMsgs),
                         Msg_PutIconsListMsgs,Help[Gbl.Msg.TypeOfMessages]);
+
+   /***** Filter messages *****/
+   /* Start frame with filter */
+   Lay_StartRoundFrame (NULL,"Filter",	// TODO: Need translation!!!!
+                        NULL,NULL);
+
+   /* Form to see messages again */
+   Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
+   Msg_ShowFormSelectCourseSentOrRecMsgs ();
+   if (Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED)
+      Msg_ShowFormToShowOnlyUnreadMessages ();
+   Msg_ShowFormToFilterMsgs ();
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Act_LinkFormSubmitAnimated (Txt_Update_messages,
+                               The_ClassFormBold[Gbl.Prefs.Theme],
+                               NULL);
+   Lay_PutCalculateIconWithText (Txt_Update_messages,Txt_Update_messages);
+   fprintf (Gbl.F.Out,"</div>");
+
+   Act_FormEnd ();
+
+   /* End frame */
+   Lay_EndRoundFrame ();
+
 
    if (Gbl.Msg.NumMsgs)		// If there are messages...
      {
