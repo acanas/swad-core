@@ -131,6 +131,10 @@ const char *Hlp_MESSAGES_Notifications = WIKI "MESSAGES.Notifications";
 
 const char *Hlp_MESSAGES_Notices = WIKI "MESSAGES.Notices";
 
+const char *Hlp_MESSAGES_Write    = WIKI "MESSAGES.Write";
+const char *Hlp_MESSAGES_Received = WIKI "MESSAGES.Received";
+const char *Hlp_MESSAGES_Sent     = WIKI "MESSAGES.Sent";
+
 /***** STATS tab *****/
 
 const char *Hlp_STATS_Surveys             = WIKI "STATS.Surveys";

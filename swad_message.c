@@ -164,6 +164,7 @@ void Msg_FormMsgUsrs (void)
 
 static void Msg_PutFormMsgUsrs (char *Content)
   {
+   extern const char *Hlp_MESSAGES_Write;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Reply_message;
    extern const char *Txt_New_message;
@@ -202,7 +203,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    Lay_StartRoundFrame (NULL,
 			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
 						Txt_New_message,
-			NULL,NULL);
+			NULL,Hlp_MESSAGES_Write);
 
    if (Gbl.Msg.ShowOnlyOneRecipient)
       /***** Form to show several potential recipients *****/
@@ -1646,6 +1647,8 @@ void Msg_ShowRecMsgs (void)
 
 static void Msg_ShowSentOrReceivedMessages (void)
   {
+   extern const char *Hlp_MESSAGES_Received;
+   extern const char *Hlp_MESSAGES_Sent;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
@@ -1658,15 +1661,20 @@ static void Msg_ShowSentOrReceivedMessages (void)
    unsigned NumUnreadMsgs = 0;		// Initialized to avoid warning
    struct Pagination Pagination;
    long MsgCod;
+   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      ActSeeRcvMsg,
+      ActSeeSntMsg
+     };
    static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
      {
       Pag_MESSAGES_RECEIVED,
       Pag_MESSAGES_SENT
      };
-   static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
+   const char *Help[Msg_NUM_TYPES_OF_MSGS] =
      {
-      ActSeeRcvMsg,
-      ActSeeSntMsg
+      Hlp_MESSAGES_Received,
+      Hlp_MESSAGES_Sent
      };
 
    /***** Get the page number *****/
@@ -1717,7 +1725,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    /***** Start frame with messages *****/
    Lay_StartRoundFrame ("97%",
                         Msg_WriteNumMsgs (NumUnreadMsgs),
-                        Msg_PutIconsListMsgs,NULL);
+                        Msg_PutIconsListMsgs,Help[Gbl.Msg.TypeOfMessages]);
 
    if (Gbl.Msg.NumMsgs)		// If there are messages...
      {
