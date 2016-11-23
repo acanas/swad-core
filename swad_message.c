@@ -1650,6 +1650,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *Hlp_MESSAGES_Received;
    extern const char *Hlp_MESSAGES_Sent;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
+   extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
@@ -1712,8 +1713,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
    /***** Filter messages *****/
    /* Start frame with filter */
-   Lay_StartRoundFrame (NULL,"Filter",	// TODO: Need translation!!!!
-                        NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Filter,NULL,NULL);
 
    /* Form to see messages again */
    Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
@@ -2557,7 +2557,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "%s: "
                       "</label>"
                       "<input type=\"text\" name=\"FilterFromTo\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
@@ -2569,7 +2569,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "%s: "
                       "</label>"
                       "<input type=\"text\" name=\"FilterContent\""
-                      " size=\"15\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message,

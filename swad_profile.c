@@ -351,7 +351,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_public_FILES;
-   extern const char *Txt_From_TIME;
+   extern const char *Txt_TIME_Since;
    extern const char *Txt_day;
    extern const char *Txt_days;
    extern const char *Txt_Today;
@@ -434,7 +434,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    /* Time since first click */
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/clock64x64.gif');\">",
-	    Txt_From_TIME,
+	    Txt_TIME_Since,
             Gbl.Prefs.IconsURL);
    if (UsrFigures.FirstClickTimeUTC)
      {

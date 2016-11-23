@@ -12351,6 +12351,27 @@ const char *Txt_Files_works =
 	"Arquivos trabalhos";
 #endif
 
+const char *Txt_Filter =	// As a noun
+#if   L==1
+	"Filtre";
+#elif L==2
+	"Filter";
+#elif L==3
+	"Filter";
+#elif L==4
+	"Filtro";
+#elif L==5
+	"Filtre";
+#elif L==6
+	"Ayga";
+#elif L==7
+	"Filtro";
+#elif L==8
+	"Filtr";
+#elif L==9
+	"Filtro";
+#endif
+
 const char *Txt_First_day_of_the_week =
 #if   L==1
 	"Primer dia de la setmana";
@@ -13151,27 +13172,6 @@ const char *Txt_from =
 	"z";
 #elif L==9
 	"de";
-#endif
-
-const char *Txt_From_TIME =
-#if   L==1
-	"Des de";
-#elif L==2
-	"Vom";
-#elif L==3
-	"From";
-#elif L==4
-	"Desde";
-#elif L==5
-	"Depuis";
-#elif L==6
-	"Desde";	// Okoteve traducción
-#elif L==7
-	"Da";
-#elif L==8
-	"Od";
-#elif L==9
-	"Desde";
 #endif
 
 const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y =	// Warning: it is very important to include %s and %u (in this order) in the following sentences
@@ -35784,7 +35784,7 @@ const char *Txt_Send =
 #elif L==5
 	"Envoyer";
 #elif L==6
-	"Enviar";	// Okoteve traducción
+	"Mondo";
 #elif L==7
 	"Invia";
 #elif L==8
