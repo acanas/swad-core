@@ -2592,6 +2592,10 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	  and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+			NULL,NULL);
+
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
 
@@ -2606,10 +2610,6 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Usr_GetListsSelectedUsrsCods ();
 
 	 /***** Draw a class photo with students of the course *****/
-	 /* Start frame */
-	 Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-	                      NULL,NULL);
-
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqLstStdAtt);
 
@@ -2628,15 +2628,15 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 /* End form */
 	 Act_FormEnd ();
 
-	 /* End frame */
-	 Lay_EndRoundFrame ();
-
          /***** Free memory used by list of selected users' codes *****/
 	 Usr_FreeListsSelectedUsrsCods ();
 	}
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STUDENT);
