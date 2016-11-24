@@ -6889,6 +6889,10 @@ void Usr_SeeStudents (void)
                        Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+			Usr_PutIconsListStds,Hlp_USERS_Students);
+
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
@@ -6900,10 +6904,6 @@ void Usr_SeeStudents (void)
      {
       /***** Get list of selected users *****/
       Usr_GetListsSelectedUsrsCods ();
-
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-                           Usr_PutIconsListStds,Hlp_USERS_Students);
 
       /***** Form to select range of students *****/
       switch (Gbl.Usrs.Me.LoggedRole)
@@ -6993,10 +6993,10 @@ void Usr_SeeStudents (void)
 	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)		// I am a teacher in current course
 	    Enr_PutButtonToEnrollStudents ();
 	}
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STUDENT);
