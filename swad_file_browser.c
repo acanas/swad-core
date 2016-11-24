@@ -3039,7 +3039,7 @@ static bool Brw_CheckIfQuotaExceded (void)
 void Brw_AskEditWorksCrs (void)
   {
    extern const char *Txt_Users;
-   extern const char *Txt_View_works;
+   extern const char *Txt_View_homework;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -3048,6 +3048,9 @@ void Brw_AskEditWorksCrs (void)
           number of columns in class photo
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
+
+   /***** Draw class photos to select users *****/
+   Lay_StartRoundFrame (NULL,Txt_Users,NULL,NULL);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
@@ -3062,9 +3065,6 @@ void Brw_AskEditWorksCrs (void)
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
 	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
-         /***** Draw class photos to select users *****/
-         Lay_StartRoundFrame (NULL,Txt_Users,NULL,NULL);
-
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
 
@@ -3080,17 +3080,17 @@ void Brw_AskEditWorksCrs (void)
          fprintf (Gbl.F.Out,"</table>");
 
          /* Send button */
-	 Lay_PutConfirmButton (Txt_View_works);
+	 Lay_PutConfirmButton (Txt_View_homework);
 
          /* End form */
          Act_FormEnd ();
-
-         /* End frame */
-         Lay_EndRoundFrame ();
         }
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TEACHER);

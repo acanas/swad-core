@@ -2297,7 +2297,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
-   extern const char *Txt_View_works;
+   extern const char *Txt_View_homework;
    extern const char *Txt_View_test_results;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
@@ -2359,12 +2359,12 @@ static void Rec_PutIconsCommands (void)
 	 if (ItsMe)	// I am a student
 	    Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,
 			           "folder64x64.gif",
-			           Txt_View_works,NULL,
+			           Txt_View_homework,NULL,
 		                   NULL);
 	 else		// I am a teacher or superuser
 	    Lay_PutContextualLink (ActAdmAsgWrkCrs,Rec_PutParamsWorks,
 			           "folder64x64.gif",
-			           Txt_View_works,NULL,
+			           Txt_View_homework,NULL,
 		                   NULL);
 
 	 /***** Button to view user's test exams *****/

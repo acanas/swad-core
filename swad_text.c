@@ -50201,7 +50201,7 @@ const char *Txt_View_test_results =
 	"Ver resultados de testes";
 #endif
 
-const char *Txt_View_works =
+const char *Txt_View_homework =
 #if   L==1
 	"Veure treballs";
 #elif L==2
