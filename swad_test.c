@@ -7161,9 +7161,9 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
    double TotalScoreOfAllTests = 0.0;
    unsigned NumTestResultsVisibleByTchs = 0;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   bool IAmATeacher = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    bool ICanViewTest;
    bool ICanViewScore;
+   bool ICanViewTotalScore;
    time_t TimeUTC;
    char *ClassDat;
 
@@ -7203,9 +7203,31 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	 Gbl.Test.AllowTeachers = (row[1][0] == 'Y');
 	 ClassDat = Gbl.Test.AllowTeachers ? "DAT" :
 	                                     "DAT_LIGHT";
-	 ICanViewTest = ItsMe || Gbl.Test.AllowTeachers;
-	 ICanViewScore = ICanViewTest && (IAmATeacher ||
-	                                  Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
+
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STUDENT:
+	       ICanViewTest  = ItsMe;
+	       ICanViewScore = ItsMe &&
+		               Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
+	       break;
+	    case Rol_TEACHER:
+	    case Rol_DEG_ADM:
+	    case Rol_CTR_ADM:
+	    case Rol_INS_ADM:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe ||
+	                       Gbl.Test.AllowTeachers;
+	       break;
+	    case Rol_SYS_ADM:
+	       ICanViewTest  =
+	       ICanViewScore = true;
+	       break;
+	    default:
+	       ICanViewTest  =
+	       ICanViewScore = false;
+               break;
+	   }
 
          if (NumTest)
             fprintf (Gbl.F.Out,"<tr>");
@@ -7222,33 +7244,24 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	          UniqueId,(long) TimeUTC,Txt_Today);
 
          /* Get number of questions (row[3]) */
-         if (sscanf (row[3],"%u",&NumQstsInThisTest) == 1)
-           {
-            if (Gbl.Test.AllowTeachers)
-               NumTotalQsts += NumQstsInThisTest;
-           }
-         else
+         if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
             NumQstsInThisTest = 0;
+	 if (Gbl.Test.AllowTeachers)
+	    NumTotalQsts += NumQstsInThisTest;
 
          /* Get number of questions not blank (row[4]) */
-         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) == 1)
-           {
-            if (Gbl.Test.AllowTeachers)
-               NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
-           }
-         else
+         if (sscanf (row[4],"%u",&NumQstsNotBlankInThisTest) != 1)
             NumQstsNotBlankInThisTest = 0;
+	 if (Gbl.Test.AllowTeachers)
+	    NumTotalQstsNotBlank += NumQstsNotBlankInThisTest;
 
          /* Get score (row[5]) */
 	 Str_SetDecimalPointToUS ();		// To get the decimal point as a dot
-         if (sscanf (row[5],"%lf",&ScoreInThisTest) == 1)
-           {
-            if (Gbl.Test.AllowTeachers)
-               TotalScoreOfAllTests += ScoreInThisTest;
-           }
-         else
+         if (sscanf (row[5],"%lf",&ScoreInThisTest) != 1)
             ScoreInThisTest = 0.0;
          Str_SetDecimalPointToLocal ();	// Return to local system
+	 if (Gbl.Test.AllowTeachers)
+	    TotalScoreOfAllTests += ScoreInThisTest;
 
          /* Write number of questions */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP COLOR%u\">",
@@ -7313,8 +7326,26 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
         }
 
       /***** Write totals for this user *****/
-      ICanViewScore = NumTestResultsVisibleByTchs && (IAmATeacher ||
-	                                        Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
+      switch (Gbl.Usrs.Me.LoggedRole)
+	{
+	 case Rol_STUDENT:
+	    ICanViewTotalScore = ItsMe &&
+	                         Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
+	    break;
+	 case Rol_TEACHER:
+	 case Rol_DEG_ADM:
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	    ICanViewTotalScore = ItsMe ||
+	                         NumTestResultsVisibleByTchs;
+	    break;
+	 case Rol_SYS_ADM:
+	    ICanViewTotalScore = true;
+	    break;
+	 default:
+	    ICanViewTotalScore = false;
+	    break;
+	}
 
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">"
@@ -7340,14 +7371,14 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
       /* Write total score */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      if (ICanViewScore)
+      if (ICanViewTotalScore)
          fprintf (Gbl.F.Out,"%.2lf",TotalScoreOfAllTests);
       fprintf (Gbl.F.Out,"</td>");
 
       /* Write average score per question */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      if (ICanViewScore)
+      if (ICanViewTotalScore)
          fprintf (Gbl.F.Out,"%.2lf",
                   NumTotalQsts ? TotalScoreOfAllTests / (double) NumTotalQsts :
                 	         0.0);
@@ -7356,7 +7387,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
       /* Write score over Tst_SCORE_MAX */
       fprintf (Gbl.F.Out,"<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      if (ICanViewScore)
+      if (ICanViewTotalScore)
          fprintf (Gbl.F.Out,"%.2lf",
                   NumTotalQsts ? TotalScoreOfAllTests * Tst_SCORE_MAX /
                 	         (double) NumTotalQsts :
@@ -7482,145 +7513,176 @@ void Tst_ShowOneTestResult (void)
    double TotalScore;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
+   bool ItsMe;
+   bool ICanViewTest;
    bool ICanViewScore;
 
    /***** Get the code of the test *****/
    if ((TstCod = Tst_GetParamTstCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of test is missing.");
 
-   /***** Get test result data and check if I can view this test result) *****/
+   /***** Get test result data *****/
    Tst_GetTestResultDataByTstCod (TstCod,&TstTimeUTC,&Gbl.Test.NumQsts,&NumQstsNotBlank,&TotalScore);
    Gbl.Test.Config.FeedbackType = Tst_FEEDBACK_FULL_FEEDBACK;   // Initialize feedback to maximum
-   ICanViewScore = true;
-   switch (Gbl.Action.Act)
+
+   /***** Check if I can view this test result *****/
+   ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case ActSeeOneTstResMe:
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)		// The test result is not mine
-	    Lay_ShowErrorAndExit ("You can not view this test result.");
-	 if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
+      case Rol_STUDENT:
+	 ICanViewTest = ItsMe;
+	 if (ItsMe)
 	   {
-	    // Students only can view score if feedback type allows it
-            Tst_GetConfigTstFromDB ();	// To get feedback type
-            ICanViewScore = (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING);
+	    Tst_GetConfigTstFromDB ();	// To get feedback type
+	    ICanViewScore = Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
+	   }
+	 else
+	    ICanViewScore = false;
+	 break;
+      case Rol_TEACHER:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+	 switch (Gbl.Action.Act)
+	   {
+	    case ActSeeOneTstResMe:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe;
+	       break;
+	    case ActSeeOneTstResOth:
+	       ICanViewTest  =
+	       ICanViewScore = ItsMe ||
+			       Gbl.Test.AllowTeachers;
+	       break;
+	    default:
+	       ICanViewTest  =
+	       ICanViewScore = false;
+	       break;
 	   }
 	 break;
-      case ActSeeOneTstResOth:
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod &&	// The test is not mine
-	     !Gbl.Test.AllowTeachers)						// I am not allowed to view this test result
-	    Lay_ShowErrorAndExit ("You can not view this test result.");
+      case Rol_SYS_ADM:
+	 ICanViewTest  =
+	 ICanViewScore = true;
 	 break;
-      default:	// Not applicable here
-	 return;
+      default:
+	 ICanViewTest  =
+	 ICanViewScore = false;
+	 break;
      }
 
-   /***** Get questions and user's answers of the test result from database *****/
-   Tst_GetTestResultQuestionsFromDB (TstCod);
+   if (ICanViewTest)	// I am allowed to view this test result
+     {
+      /***** Get questions and user's answers of the test result from database *****/
+      Tst_GetTestResultQuestionsFromDB (TstCod);
 
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
-   Lay_WriteHeaderClassPhoto (false,false,
-                              Gbl.CurrentIns.Ins.InsCod,
-                              Gbl.CurrentDeg.Deg.DegCod,
-                              Gbl.CurrentCrs.Crs.CrsCod);
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
+      Lay_WriteHeaderClassPhoto (false,false,
+				 Gbl.CurrentIns.Ins.InsCod,
+				 Gbl.CurrentDeg.Deg.DegCod,
+				 Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
 
-   /***** Header row *****/
-   /* Get data of the user who made the test */
-   if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
-      Lay_ShowErrorAndExit ("User does not exists.");
+      /***** Header row *****/
+      /* Get data of the user who made the test */
+      if (!Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
+	 Lay_ShowErrorAndExit ("User does not exists.");
 
-   /* User */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-	              "<td class=\"DAT LEFT_TOP\">",
-            Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
-   ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat);
-   fprintf (Gbl.F.Out," %s",
-            Gbl.Usrs.Other.UsrDat.Surname1);
-   if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+      /* User */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
+      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat);
       fprintf (Gbl.F.Out," %s",
-	       Gbl.Usrs.Other.UsrDat.Surname2);
-   if (Gbl.Usrs.Other.UsrDat.FirstName[0])
-      fprintf (Gbl.F.Out,", %s",
-	       Gbl.Usrs.Other.UsrDat.FirstName);
-   fprintf (Gbl.F.Out,"<br />");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
-                	                                NULL,
-                     "PHOTO45x60",Pho_ZOOM,false);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+	       Gbl.Usrs.Other.UsrDat.Surname1);
+      if (Gbl.Usrs.Other.UsrDat.Surname2[0])
+	 fprintf (Gbl.F.Out," %s",
+		  Gbl.Usrs.Other.UsrDat.Surname2);
+      if (Gbl.Usrs.Other.UsrDat.FirstName[0])
+	 fprintf (Gbl.F.Out,", %s",
+		  Gbl.Usrs.Other.UsrDat.FirstName);
+      fprintf (Gbl.F.Out,"<br />");
+      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+      Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
+							   NULL,
+			"PHOTO45x60",Pho_ZOOM,false);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-   /* Test date */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-	              "<td id=\"test\" class=\"DAT LEFT_TOP\">"
-		      "<script type=\"text/javascript\">"
-		      "writeLocalDateHMSFromUTC('test',%ld,'&nbsp;','%s');"
-		      "</script>"
-                      "</td>"
-	              "</tr>",
-            Txt_Date,TstTimeUTC,Txt_Today);
+      /* Test date */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td id=\"test\" class=\"DAT LEFT_TOP\">"
+			 "<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('test',%ld,'&nbsp;','%s');"
+			 "</script>"
+			 "</td>"
+			 "</tr>",
+	       Txt_Date,TstTimeUTC,Txt_Today);
 
-   /* Number of questions */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-	              "<td class=\"DAT LEFT_TOP\">"
-	              "%u (%u %s)"
-                      "</td>"
-	              "</tr>",
-            Txt_Questions,
-            Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
+      /* Number of questions */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">"
+			 "%u (%u %s)"
+			 "</td>"
+			 "</tr>",
+	       Txt_Questions,
+	       Gbl.Test.NumQsts,NumQstsNotBlank,Txt_non_blank_QUESTIONS);
 
-   /* Score */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-	              "<td class=\"DAT LEFT_TOP\">",
-            Txt_Score);
-   if (ICanViewScore)
-      fprintf (Gbl.F.Out,"%.2lf (%.2lf",
-	       TotalScore,
-	       Gbl.Test.NumQsts ? TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts :
-		                  0.0);
-   else
-      fprintf (Gbl.F.Out,"? (?");	// No feedback
-   fprintf (Gbl.F.Out," %s %u)</td>"
-	              "</tr>",
-	    Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
+      /* Score */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_Score);
+      if (ICanViewScore)
+	 fprintf (Gbl.F.Out,"%.2lf (%.2lf",
+		  TotalScore,
+		  Gbl.Test.NumQsts ? TotalScore * Tst_SCORE_MAX / (double) Gbl.Test.NumQsts :
+				     0.0);
+      else
+	 fprintf (Gbl.F.Out,"? (?");	// No feedback
+      fprintf (Gbl.F.Out," %s %u)</td>"
+			 "</tr>",
+	       Txt_out_of_PART_OF_A_SCORE,Tst_SCORE_MAX);
 
-   /* Tags present in this test */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT_N RIGHT_TOP\">"
-                      "%s:"
-                      "</td>"
-	              "<td class=\"DAT LEFT_TOP\">",
-            Txt_Tags);
-   Tst_ShowTstTagsPresentInATestResult (TstCod);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+      /* Tags present in this test */
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<td class=\"DAT_N RIGHT_TOP\">"
+			 "%s:"
+			 "</td>"
+			 "<td class=\"DAT LEFT_TOP\">",
+	       Txt_Tags);
+      Tst_ShowTstTagsPresentInATestResult (TstCod);
+      fprintf (Gbl.F.Out,"</td>"
+			 "</tr>");
 
-   /***** Write answers and solutions *****/
-   Tst_ShowTestResult (TstTimeUTC);
+      /***** Write answers and solutions *****/
+      Tst_ShowTestResult (TstTimeUTC);
 
-   /***** Write total mark of test *****/
-   if (ICanViewScore)
-      Tst_ShowTstTotalMark (TotalScore);
+      /***** Write total mark of test *****/
+      if (ICanViewScore)
+	 Tst_ShowTstTotalMark (TotalScore);
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
 
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+     }
+   else	// I am not allowed to view this test result
+      Lay_ShowErrorAndExit ("You can not view this test result.");
   }
 
 /*****************************************************************************/
