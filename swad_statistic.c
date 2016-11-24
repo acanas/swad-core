@@ -419,6 +419,11 @@ void Sta_AskShowCrsHits (void)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
+	    Gbl.CurrentCrs.Crs.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+
    /***** Show form to select the grupos *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
 
@@ -434,11 +439,6 @@ void Sta_AskShowCrsHits (void)
         {
          /***** Get lists of selected users *****/
          Usr_GetListsSelectedUsrsCods ();
-
-         /***** Start frame *****/
-         sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
-                  Gbl.CurrentCrs.Crs.ShrtName);
-         Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
 
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
@@ -549,9 +549,6 @@ void Sta_AskShowCrsHits (void)
          /***** End form *****/
          Act_FormEnd ();
 
-	 /***** End frame *****/
-         Lay_EndRoundFrame ();
-
          /* Free memory used by list of selected users' codes */
          Usr_FreeListsSelectedUsrsCods ();
         }
@@ -559,11 +556,14 @@ void Sta_AskShowCrsHits (void)
    else	// No teachers nor students found
       Lay_ShowAlert (Lay_WARNING,Txt_No_teachers_or_students_found);
 
-   /* Free memory used by the lists */
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Free memory used by the lists *****/
    Usr_FreeUsrsList (Rol_TEACHER);
    Usr_FreeUsrsList (Rol_STUDENT);
 
-   /* Free memory for list of selected groups */
+   /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
   }
 
