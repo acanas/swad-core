@@ -1365,14 +1365,6 @@ void Lay_EndRoundFrameTable (void)
    Lay_EndRoundFrame ();
   }
 
-void Lay_EndRoundFrame (void)
-  {
-   Gbl.Layout.FrameNested--;
-
-   fprintf (Gbl.F.Out,"</div>"
-		      "</div>");
-  }
-
 void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"</table>");
@@ -1399,6 +1391,13 @@ void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton)
  	       Lay_PutRemoveButton (TxtButton);
 	       break;
           }
+
+   Lay_EndRoundFrame ();
+  }
+
+void Lay_EndRoundFrame (void)
+  {
+   Gbl.Layout.FrameNested--;
 
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");

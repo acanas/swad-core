@@ -107,9 +107,9 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,
                           const char *HelpLink);
 void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding);
 void Lay_EndRoundFrameTable (void);
-void Lay_EndRoundFrame (void);
 void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton);
 void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
+void Lay_EndRoundFrame (void);
 
 void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);
