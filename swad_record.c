@@ -2080,11 +2080,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 			    (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
 			    UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
    bool ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-			     TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
+			     TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
 			    (UsrDat->Roles & (1 << Rol_TEACHER))) ||		// He/she (me, really) is a teacher in any course
 			   ((TypeOfView == Rec_SHA_RECORD_LIST ||
 			     TypeOfView == Rec_SHA_RECORD_PRINT) &&
-			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER)));	// He/she is a teacher in the current course
+			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
    struct Instit Ins;
 
    /***** Initializations *****/

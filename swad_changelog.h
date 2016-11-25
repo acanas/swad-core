@@ -176,13 +176,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.71 (2016-11-25)"
+#define Log_PLATFORM_VERSION	"SWAD 16.71.2 (2016-11-25)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.71.2:  Nov 25, 2016	Fix bug in shared record card. (207569 lines)
         Version 16.71.1:  Nov 25, 2016	Contextual help on test results. (207568 lines)
         Version 16.71:    Nov 25, 2016	Fixed bugs and changes in layout related with selection of groups. (207560 lines)
         Version 16.70.5:  Nov 24, 2016	Changes in layout of attendance list. (207549 lines)
