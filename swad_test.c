@@ -6868,6 +6868,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
 
 void Tst_SelUsrsToSeeUsrsTestResults (void)
   {
+   extern const char *Hlp_ASSESSMENT_Tests_test_results;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Test_results;
    extern const char *Txt_Users;
@@ -6889,7 +6890,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Test_results,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Test_results,
+                        NULL,Hlp_ASSESSMENT_Tests_test_results);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
@@ -6957,7 +6959,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
 void Tst_SelDatesToSeeMyTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_test_results;
    extern const char *Txt_Test_results;
    extern const char *Txt_View_test_results;
 
@@ -6965,7 +6967,8 @@ void Tst_SelDatesToSeeMyTestResults (void)
    Act_FormStart (ActSeeMyTstRes);
 
    /***** Starting and ending dates in the search *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Test_results,
+                             NULL,Hlp_ASSESSMENT_Tests_test_results,2);
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
 
    /***** Send button and end frame *****/
@@ -7021,7 +7024,7 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
 
 void Tst_ShowUsrsTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_test_results;
    extern const char *Txt_Test_results;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
@@ -7036,7 +7039,8 @@ void Tst_ShowUsrsTestResults (void)
    if (Usr_CountNumUsrsInListOfSelectedUsrs ())	// If some users are selected...
      {
       /***** Header of the table with the list of users *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Test_results,
+                                NULL,Hlp_ASSESSMENT_Tests_test_results,2);
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
@@ -7122,14 +7126,15 @@ static void Tst_ShowHeaderTestResults (void)
 
 void Tst_ShowMyTestResults (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_test_results;
    extern const char *Txt_Test_results;
 
    /***** Get starting and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
    /***** Header of the table with the list of users *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Test_results,NULL,Hlp_ASSESSMENT_Tests,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Test_results,
+                             NULL,Hlp_ASSESSMENT_Tests_test_results,2);
    Tst_ShowHeaderTestResults ();
 
    /***** List my test results *****/
@@ -7500,7 +7505,7 @@ static long Tst_GetParamTstCod (void)
 
 void Tst_ShowOneTestResult (void)
   {
-   extern const char *Hlp_ASSESSMENT_Tests;
+   extern const char *Hlp_ASSESSMENT_Tests_test_results;
    extern const char *Txt_Test_result;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Date;
@@ -7579,7 +7584,8 @@ void Tst_ShowOneTestResult (void)
       Tst_GetTestResultQuestionsFromDB (TstCod);
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Test_result,NULL,Hlp_ASSESSMENT_Tests);
+      Lay_StartRoundFrame (NULL,Txt_Test_result,
+                           NULL,Hlp_ASSESSMENT_Tests_test_results);
       Lay_WriteHeaderClassPhoto (false,false,
 				 Gbl.CurrentIns.Ins.InsCod,
 				 Gbl.CurrentDeg.Deg.DegCod,

@@ -170,7 +170,7 @@
 
 // TODO: In USERS > Attendance > Select event, if the list of users is big, the user should be requested to see big list in the same way that it is made in other options
 
-// TODO: Check help on ASSESSMENT > Tests > Test results
+// TODO: List only confirmed emails to send a message with MESSAGES > Email ?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -183,6 +183,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.71.1:  Nov 25, 2016	Contextual help on test results. (207568 lines)
         Version 16.71:    Nov 25, 2016	Fixed bugs and changes in layout related with selection of groups. (207560 lines)
         Version 16.70.5:  Nov 24, 2016	Changes in layout of attendance list. (207549 lines)
         Version 16.70.4:  Nov 24, 2016	Changes in layout of students' list. (207547 lines)

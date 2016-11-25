@@ -171,7 +171,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
    char YN[1+1];
-   unsigned NumUsrsInCrs;
+   unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
 

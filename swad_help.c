@@ -85,7 +85,8 @@ const char *Hlp_COURSE_Shared    = WIKI "COURSE.Shared";
 
 const char *Hlp_ASSESSMENT_Works = WIKI "ASSESSMENT.Works";
 
-const char *Hlp_ASSESSMENT_Tests = WIKI "ASSESSMENT.Tests";
+const char *Hlp_ASSESSMENT_Tests              = WIKI "ASSESSMENT.Tests";
+const char *Hlp_ASSESSMENT_Tests_test_results = WIKI "ASSESSMENT.Tests#test-results";
 
 const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
 
