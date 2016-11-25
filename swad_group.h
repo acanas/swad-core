@@ -120,8 +120,9 @@ typedef enum
 
 void Grp_WriteNamesOfSelectedGrps (void);
 void Grp_ReqEditGroups (void);
-void Grp_PutParamsCodGrps (void);
+
 void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction);
+void Grp_PutParamsCodGrps (void);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
 void Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy (void);
 void Grp_FreeListCodSelectedGrps (void);

@@ -5810,15 +5810,13 @@ void Usr_ListAllDataStds (void)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
-   /***** Get list of groups types and groups in current course *****/
-   Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
-
-   /***** Get groups to show *****/
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
    /***** Get scope *****/
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeUsr");
+
+   /***** Get groups to show *****/
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /****** Get and order list of students in current course ******/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
@@ -6889,6 +6887,13 @@ void Usr_SeeStudents (void)
                        Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
+   /***** Get groups to show ******/
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order list of students *****/
+   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
+
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 			Usr_PutIconsListStds,Hlp_USERS_Students);
@@ -6896,9 +6901,6 @@ void Usr_SeeStudents (void)
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
-
-   /***** Get and order list of students *****/
-   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
      {

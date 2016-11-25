@@ -837,27 +837,29 @@ void Mai_ListEmails (void)
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
 
-   /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
    Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+
+   /***** Start of the frame used to list the emails *****/
+   Lay_StartRoundFrame (NULL,
+			Txt_Students_who_have_accepted_and_who_have_email,
+			NULL,NULL);
+
+   /***** Form to select groups *****/
+   Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
         {
-         /***** Start of the frame used to list the emails *****/
-         Lay_StartRoundFrameTable (NULL,
-                                   Txt_Students_who_have_accepted_and_who_have_email,
-                                   NULL,NULL,0);
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT_SMALL LEFT_MIDDLE\">");
-
          /***** Initialize structure with user's data *****/
          Usr_UsrDataConstructor (&UsrDat);
 
          /***** List the students' email addresses *****/
+         fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL LEFT_MIDDLE\">");
          for (NumUsr = 0;
               NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
               NumUsr++)
@@ -895,36 +897,28 @@ void Mai_ListEmails (void)
 		 }
 	      }
            }
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</div>");
 
          /***** Free memory used for user's data *****/
          Usr_UsrDataDestructor (&UsrDat);
 
          /***** Show a message with the number of students with email ****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT CENTER_MIDDLE\">");
+         fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_email,
                   NumStdsWithEmail,
                   ((float) NumStdsWithEmail /
                    (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
                   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
+         fprintf (Gbl.F.Out,"</div>");
 
          /***** Show a message with the number of students who have accepted and have email ****/
-         fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"DAT CENTER_MIDDLE\">");
+         fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
          fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_email,
                   NumAcceptedStdsWithEmail,
                   ((float) NumAcceptedStdsWithEmail /
                    (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
                   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
-         fprintf (Gbl.F.Out,"</td>"
-                            "</tr>");
-
-         /***** End of the frame used to list the emails *****/
-         Lay_EndRoundFrameTable ();
+         fprintf (Gbl.F.Out,"</div>");
 
          /***** Icon to open the client email program *****/
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">"
@@ -945,6 +939,9 @@ void Mai_ListEmails (void)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+
+   /***** End of the frame used to list the emails *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STUDENT);

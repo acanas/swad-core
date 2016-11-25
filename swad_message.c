@@ -173,9 +173,7 @@ static void Msg_PutFormMsgUsrs (char *Content)
    char YN[1+1];
    unsigned NumUsrsInCrs;
    bool ShowUsrsInCrs = false;
-   bool GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&		// Show list of potential recipients
-	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
-	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool GetUsrsInCrs;
 
    Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs =
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -199,6 +197,27 @@ static void Msg_PutFormMsgUsrs (char *Content)
    else
       Gbl.Msg.ShowOnlyOneRecipient = false;
 
+   GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&	// Show list of potential recipients
+	          (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
+	           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+
+   if (GetUsrsInCrs)
+     {
+      /***** Get and update type of list,
+	     number of columns in class photo
+	     and preference about view photos *****/
+      Usr_GetAndUpdatePrefsAboutUsrList ();
+
+      /***** Get groups to show ******/
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+      /***** Get and order lists of users from this course *****/
+      Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+      NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+		     Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+     }
+
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
 			Gbl.Msg.Reply.IsReply ? Txt_Reply_message :
@@ -213,19 +232,9 @@ static void Msg_PutFormMsgUsrs (char *Content)
       /***** Get list of users belonging to the current course *****/
       if (GetUsrsInCrs)
 	{
-	 /***** Get and update type of list,
-		number of columns in class photo
-		and preference about view photos *****/
-	 Usr_GetAndUpdatePrefsAboutUsrList ();
-
 	 /***** Form to select groups *****/
 	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
 
-	 /***** Get and order lists of users from this course *****/
-	 Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-	 Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-	 NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-			Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 	 if (NumUsrsInCrs)
 	   {
 	    /***** Form to select type of list used for select several users *****/

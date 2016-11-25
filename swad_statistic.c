@@ -419,19 +419,22 @@ void Sta_AskShowCrsHits (void)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
-   /***** Start frame *****/
-   sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
-	    Gbl.CurrentCrs.Crs.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
-
-   /***** Show form to select the grupos *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
    Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
+	    Gbl.CurrentCrs.Crs.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+
+   /***** Show form to select the groups *****/
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
 
    if (NumTotalUsrs)
      {

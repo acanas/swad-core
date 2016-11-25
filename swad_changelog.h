@@ -168,17 +168,22 @@
 
 // TODO: Change forms to change my webs / social networks to one unique form with a "Save changes" button
 
+// TODO: In USERS > Attendance > Select event, if the list of users is big, the user should be requested to see big list in the same way that it is made in other options
+
+// TODO: Check help on ASSESSMENT > Tests > Test results
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.70.5 (2016-11-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.71 (2016-11-25)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.71:    Nov 25, 2016	Fixed bugs and changes in layout related with selection of groups. (207560 lines)
         Version 16.70.5:  Nov 24, 2016	Changes in layout of attendance list. (207549 lines)
         Version 16.70.4:  Nov 24, 2016	Changes in layout of students' list. (207547 lines)
         Version 16.70.3:  Nov 24, 2016	Changes in layout of selection of students to view homework. (207547 lines)

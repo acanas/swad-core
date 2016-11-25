@@ -61,7 +61,6 @@ extern struct Globals Gbl;
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
-static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction);
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
@@ -225,7 +224,7 @@ static void Grp_EditGroups (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -235,70 +234,75 @@ static void Grp_ShowFormSeveralGrps (Act_Action_t NextAction)
    extern const char *Txt_Update_students;
    extern const char *Txt_Update_students_according_to_selected_groups;
    unsigned NumGrpTyp;
-   bool ICanEdit = !Gbl.Form.Inside &&
-	           (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool ICanEdit;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   if (Gbl.CurrentCrs.Grps.NumGrps)
+     {
+      ICanEdit = !Gbl.Form.Inside &&
+	         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Groups,
-                        ICanEdit ? Grp_PutIconToEditGroups :
-                                   NULL,
-                        Hlp_USERS_Groups);
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
-   /***** Start form to update the students listed
-          depending on the groups selected *****/
-   Act_FormStart (NextAction);
-   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Usr_PutParamColsClassPhoto ();
-   Usr_PutParamListWithPhotos ();
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Txt_Groups,
+			   ICanEdit ? Grp_PutIconToEditGroups :
+				      NULL,
+			   Hlp_USERS_Groups);
 
-   /***** Put parameters needed depending on the action *****/
-   Usr_PutExtraParamsUsrList (NextAction);
+      /***** Start form to update the students listed
+	     depending on the groups selected *****/
+      Act_FormStart (NextAction);
+      Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+      Usr_PutParamColsClassPhoto ();
+      Usr_PutParamListWithPhotos ();
 
-   /***** Select all groups *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-                      "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
-   if (Gbl.Usrs.ClassPhoto.AllGroups)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
-	              " %s"
-	              "</div>",
-            Txt_All_groups);
+      /***** Put parameters needed depending on the action *****/
+      Usr_PutExtraParamsUsrList (NextAction);
 
-   /***** Get list of groups types and groups in this course *****/
-   Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+      /***** Select all groups *****/
+      fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
+			 "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
+	       The_ClassForm[Gbl.Prefs.Theme]);
+      if (Gbl.Usrs.ClassPhoto.AllGroups)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
+			 " %s"
+			 "</div>",
+	       Txt_All_groups);
 
-   /***** List the groups for each group type *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
-   for (NumGrpTyp = 0;
-	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
-	NumGrpTyp++)
-      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
-         Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
-   fprintf (Gbl.F.Out,"</table>");
+      /***** Get list of groups types and groups in this course *****/
+      Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
-   /***** Free list of groups types and groups in this course *****/
-   Grp_FreeListGrpTypesAndGrps ();
+      /***** List the groups for each group type *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      for (NumGrpTyp = 0;
+	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
+	   NumGrpTyp++)
+	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
+	    Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+      fprintf (Gbl.F.Out,"</table>");
 
-   /***** Submit button *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"padding-top:12px;\">");
-   Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,
-                               The_ClassFormBold[Gbl.Prefs.Theme],
-                               "CopyMessageToHiddenFields()");
-   Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,
-                                 Txt_Update_students);
-   fprintf (Gbl.F.Out,"</div>");
+      /***** Free list of groups types and groups in this course *****/
+      Grp_FreeListGrpTypesAndGrps ();
 
-   /***** End form *****/
-   Act_FormEnd ();
+      /***** Submit button *****/
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+			 " style=\"padding-top:12px;\">");
+      Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,
+				  The_ClassFormBold[Gbl.Prefs.Theme],
+				  "CopyMessageToHiddenFields()");
+      Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,
+				    Txt_Update_students);
+      fprintf (Gbl.F.Out,"</div>");
 
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
-   fprintf (Gbl.F.Out,"</div>");
+      /***** End form *****/
+      Act_FormEnd ();
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
   }
 
 /*****************************************************************************/
@@ -332,20 +336,6 @@ void Grp_PutParamsCodGrps (void)
   }
 
 /*****************************************************************************/
-/**************** Show a form to select one or several groups ****************/
-/*****************************************************************************/
-
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
-  {
-   /***** Get groups to show ******/
-   Grp_GetParCodsSeveralGrpsToShowUsrs ();
-
-   /***** Show form *****/
-   if (Gbl.CurrentCrs.Grps.NumGrps)
-      Grp_ShowFormSeveralGrps (NextAction);
-  }
-
-/*****************************************************************************/
 /**************** Get parameters related to groups selected ******************/
 /*****************************************************************************/
 // Returns number of groups in current course
@@ -371,7 +361,6 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
    Par_GetParToText ("AllGroups",YN,1);
    Gbl.Usrs.ClassPhoto.AllGroups = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
-   /***** Count number of groups in current course *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
       /***** Allocate memory for the list of group codes *****/
@@ -451,7 +440,6 @@ void Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy (void)
    /***** Set default for number of groups selected by me *****/
    Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
 
-   /***** Count number of groups in current course *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
       /***** Allocate memory for the list of group codes *****/

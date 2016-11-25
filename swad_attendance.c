@@ -1925,11 +1925,17 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    unsigned NumStd;
    struct UsrData UsrDat;
 
-   /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
    Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
+
+   /***** Form to select groups *****/
+   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
@@ -1945,10 +1951,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Grp_PutParamsCodGrps ();
 
       /***** List students' data *****/
-      /* Header */
-      Lay_StartRoundFrameTable (NULL,Txt_Attendance,
-                                NULL,Hlp_USERS_Attendance,2);
-      fprintf (Gbl.F.Out,"<tr>"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+                         "<tr>"
                          "<th></th>"
                          "<th></th>"
                          "<th></th>");
@@ -1982,8 +1986,10 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
          Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
         }
 
-      /* Send button and end frame */
-      Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
+      fprintf (Gbl.F.Out,"</table>");
+
+      /* Send button */
+      Lay_PutConfirmButton (Txt_Save);
 
       /***** End form *****/
       Act_FormEnd ();
@@ -1993,6 +1999,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STUDENT);
@@ -2592,15 +2601,18 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	  and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order lists of users from current course *****/
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 			NULL,NULL);
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
-
-   /***** Get and order lists of users from current course *****/
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {

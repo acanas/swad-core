@@ -6879,8 +6879,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
-   /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
    Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
@@ -6888,13 +6888,16 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Test_results,NULL,NULL);
+
+   /***** Show form to select the groups *****/
+   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
+
    if (NumTotalUsrs)
      {
       if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
-         /***** Start frame *****/
-         Lay_StartRoundFrame (NULL,Txt_Test_results,NULL,NULL);
-
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqSeeUsrTstRes);
 
@@ -6929,13 +6932,13 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
          /***** End form *****/
          Act_FormEnd ();
-
-         /***** End frame *****/
-         Lay_EndRoundFrame ();
         }
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TEACHER);

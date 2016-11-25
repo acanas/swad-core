@@ -3040,6 +3040,7 @@ void Brw_AskEditWorksCrs (void)
   {
    extern const char *Txt_Users;
    extern const char *Txt_View_homework;
+   unsigned NumTotalUsrs;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -3049,21 +3050,24 @@ void Brw_AskEditWorksCrs (void)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
+   /***** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
+   /***** Get and order lists of users from this course *****/
+   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+
    /***** Draw class photos to select users *****/
    Lay_StartRoundFrame (NULL,Txt_Users,NULL,NULL);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
 
-   /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs ||
-       Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (NumTotalUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	                        Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
