@@ -825,6 +825,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 
 void Mai_ListEmails (void)
   {
+   extern const char *Hlp_MESSAGES_Email;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Students_who_have_accepted_and_who_have_email;
    extern const char *Txt_X_students_who_have_email;
@@ -846,7 +847,7 @@ void Mai_ListEmails (void)
    /***** Start of the frame used to list the emails *****/
    Lay_StartRoundFrame (NULL,
 			Txt_Students_who_have_accepted_and_who_have_email,
-			NULL,NULL);
+			NULL,Hlp_MESSAGES_Email);
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);

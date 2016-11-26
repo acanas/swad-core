@@ -75,6 +75,7 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
 
 void Ann_ShowAllAnnouncements (void)
   {
+   extern const char *Hlp_MESSAGES_Announcements;
    extern const char *Txt_Announcements;
    extern const char *Txt_No_announcements;
    char Query[256];
@@ -117,7 +118,7 @@ void Ann_ShowAllAnnouncements (void)
    Lay_StartRoundFrame ("550px",Txt_Announcements,
                         ICanEdit ? Ann_PutIconToAddNewAnnouncement :
 				   NULL,
-		        NULL);
+		        Hlp_MESSAGES_Announcements);
 
    if (!NumAnnouncements)
       Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
@@ -431,6 +432,7 @@ static long Ann_GetParamAnnCod (void)
 
 void Ann_ShowFormAnnouncement (void)
   {
+   extern const char *Hlp_MESSAGES_Announcements;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
@@ -442,7 +444,8 @@ void Ann_ShowFormAnnouncement (void)
    Act_FormStart (ActRcvAnn);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_announcement,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_announcement,
+                             NULL,Hlp_MESSAGES_Announcements,2);
 
    /***** Message subject and body *****/
    fprintf (Gbl.F.Out,"<tr>"
