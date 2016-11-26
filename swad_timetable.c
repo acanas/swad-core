@@ -116,6 +116,7 @@ bool TimeTableHoursChecked[TT_HOURS_PER_DAY*2];
 static void TT_ShowTimeTableGrpsSelected (void);
 static void TT_GetParamsTimeTable (void);
 static void TT_PutContextualIcons (void);
+static void TT_PutFormToSelectWhichGroupsToShow (void);
 
 static void TT_PutIconToViewCrsTT (void);
 static void TT_PutIconToViewMyTT (void);
@@ -230,12 +231,6 @@ void TT_ShowClassTimeTable (void)
       Hlp_PROFILE_Timetable,	// TT_MY_TIMETABLE
       NULL,			// TT_TUTOR_TIMETABLE
      };
-   Act_Action_t ActSeeTT[TT_NUM_TIMETABLE_TYPES] =
-     {
-      ActSeeCrsTT,	// TT_COURSE_TIMETABLE
-      ActSeeMyTT,	// TT_MY_TIMETABLE
-      ActUnk,		// TT_TUTOR_TIMETABLE
-     };
    Act_Action_t ActChgTT1stDay[TT_NUM_TIMETABLE_TYPES] =
      {
       ActChgCrsTT1stDay,// TT_COURSE_TIMETABLE
@@ -292,11 +287,7 @@ void TT_ShowClassTimeTable (void)
      {
       /***** Select whether show only my groups or all groups *****/
       if (Gbl.CurrentCrs.Grps.NumGrps)
-	{
-	 Act_FormStart (ActSeeTT[Gbl.TimeTable.Type]);
-	 Grp_ShowSelectorWhichGrps ();
-	 Act_FormEnd ();
-	}
+         TT_PutFormToSelectWhichGroupsToShow ();
 
       /***** Show form to change first day of week *****/
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
@@ -339,6 +330,24 @@ static void TT_PutContextualIcons (void)
 			     "print64x64.png",
 			     Txt_Print,NULL,
 		             NULL);
+  }
+
+/*****************************************************************************/
+/***************** Put form to select which groups to show *******************/
+/*****************************************************************************/
+
+static void TT_PutFormToSelectWhichGroupsToShow (void)
+  {
+   Act_Action_t ActSeeTT[TT_NUM_TIMETABLE_TYPES] =
+     {
+      ActSeeCrsTT,	// TT_COURSE_TIMETABLE
+      ActSeeMyTT,	// TT_MY_TIMETABLE
+      ActUnk,		// TT_TUTOR_TIMETABLE
+     };
+
+   Act_FormStart (ActSeeTT[Gbl.TimeTable.Type]);
+   Grp_ShowSelectorWhichGrps ();
+   Act_FormEnd ();
   }
 
 /*****************************************************************************/
