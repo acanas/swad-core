@@ -24402,27 +24402,6 @@ const char *Txt_No_notices =
 	"N&atilde;o h&aacute; avisos.";
 #endif
 
-const char *Txt_No_notifications_for_you =
-#if   L==1
-	"No tiene notificaciones.";	// Necessita traduccio
-#elif L==2
-	"Keine Anmeldungen f&uuml;r Sie.";
-#elif L==3
-	"No notifications for you.";
-#elif L==4
-	"No tiene notificaciones.";
-#elif L==5
-	"Il n'y a pas de notifications pour vous.";
-#elif L==6
-	"No tiene notificaciones.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono notifiche per te.";
-#elif L==8
-	"Brak powiadomienia dla Ciebie.";
-#elif L==9
-	"N&atilde;o h&aacute; notifica&ccedil;&otilde;es para voc&ecirc;.";
-#endif
-
 const char *Txt_No_of_files =
 #if   L==1
 	"Nombre d'arxius";
@@ -53014,6 +52993,48 @@ const char *Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_inf
 #elif L==9
 	"You have eliminated the confirmation"
 	" that you have read this information.";	// Necessita de tradução
+#endif
+
+const char *Txt_You_have_no_notifications =
+#if   L==1
+	"No tens notificacions.";
+#elif L==2
+	"Sie haben keine Benachrichtigungen.";
+#elif L==3
+	"You have no notifications.";
+#elif L==4
+	"No tiene notificaciones.";
+#elif L==5
+	"Vous n'avez aucune notification.";
+#elif L==6
+	"No tiene notificaciones.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono notifiche.";
+#elif L==8
+	"Nie masz &zdot;adnych powiadomie&nacute;.";
+#elif L==9
+	"Voc&ecirc; n&atilde;o tem notifica&ccedil;&otilde;es.";
+#endif
+
+const char *Txt_You_have_no_unread_notifications =
+#if   L==1
+	"No tens notificacions sense llegir.";
+#elif L==2
+	"Sie haben keine ungelesenen Benachrichtigungen.";
+#elif L==3
+	"You have no unread notifications.";
+#elif L==4
+	"No tiene notificaciones sin leer.";
+#elif L==5
+	"Vous n'avez aucune notification non lue.";
+#elif L==6
+	"No tiene notificaciones sin leer.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono notifiche non lette.";
+#elif L==8
+	"Nie masz nieprzeczytanych powiadomie&nacute;.";
+#elif L==9
+	"Voc&ecirc; n&atilde;o tem notifica&ccedil;&otilde;es n&atilde;o lidas.";
 #endif
 
 const char *Txt_You_have_not_banned_any_sender =

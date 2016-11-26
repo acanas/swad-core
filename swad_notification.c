@@ -302,7 +302,8 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Txt_Centre;
    extern const char *Txt_Institution;
    extern const char *Txt_NOTIFICATION_STATUS[Ntf_NUM_STATUS_TXT];
-   extern const char *Txt_No_notifications_for_you;
+   extern const char *Txt_You_have_no_notifications;
+   extern const char *Txt_You_have_no_unread_notifications;
    char Query[512];
    char SubQuery[128];
    MYSQL_RES *mysql_res;
@@ -366,6 +367,10 @@ void Ntf_ShowMyNotifications (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Notifications,
+                        Ntf_PutIconsNotif,Hlp_MESSAGES_Notifications);
+
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
      {
@@ -376,10 +381,9 @@ void Ntf_ShowMyNotifications (void)
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
-      /***** Table start *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Notifications,
-                                Ntf_PutIconsNotif,Hlp_MESSAGES_Notifications,2);
-      fprintf (Gbl.F.Out,"<tr>"
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+                         "<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -620,7 +624,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -629,7 +633,11 @@ void Ntf_ShowMyNotifications (void)
       free ((void *) SummaryStr);
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_notifications_for_you);
+      Lay_ShowAlert (Lay_INFO,AllNotifications ? Txt_You_have_no_notifications :
+	                                         Txt_You_have_no_unread_notifications);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
