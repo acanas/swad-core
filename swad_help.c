@@ -81,6 +81,8 @@ const char *Hlp_COURSE_Documents = WIKI "COURSE.Documents";
 const char *Hlp_COURSE_Private   = WIKI "COURSE.Private";
 const char *Hlp_COURSE_Shared    = WIKI "COURSE.Shared";
 
+const char *Hlp_COURSE_Timetable = WIKI "COURSE.Timetable";
+
 /***** ASSESSMENT tab *****/
 
 const char *Hlp_ASSESSMENT_Works = WIKI "ASSESSMENT.Works";

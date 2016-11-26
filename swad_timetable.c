@@ -222,11 +222,12 @@ static void TT_GetParamsTimeTable (void)
 
 void TT_ShowClassTimeTable (void)
   {
+   extern const char *Hlp_COURSE_Timetable;
    extern const char *Hlp_PROFILE_Timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    const char *Help[TT_NUM_TIMETABLE_TYPES] =
      {
-      NULL,			// TT_COURSE_TIMETABLE
+      Hlp_COURSE_Timetable,	// TT_COURSE_TIMETABLE
       Hlp_PROFILE_Timetable,	// TT_MY_TIMETABLE
       NULL,			// TT_TUTOR_TIMETABLE
      };
@@ -343,12 +344,13 @@ static void TT_ShowSelectorWhichGrps (Act_Action_t Action)
 
 void TT_EditCrsTimeTable (void)
   {
+   extern const char *Hlp_COURSE_Timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Editable time table *****/
    Gbl.TimeTable.Type = TT_COURSE_TIMETABLE;
    Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        TT_PutIconToViewCrsTT,NULL);
+                        TT_PutIconToViewCrsTT,Hlp_COURSE_Timetable);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
