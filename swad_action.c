@@ -2840,8 +2840,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,QR_PrintQRCode			,NULL},
 
    /* ActPrnMyTT	*/{ 409,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiTut		*/{  65,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowMyTutTimeTable		,NULL},
-   /* ActChgTut		*/{  48,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowMyTutTimeTable		,NULL},
+   /* ActEdiTut		*/{  65,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditMyTutTimeTable		,NULL},
+   /* ActChgTut		*/{  48,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditMyTutTimeTable		,NULL},
    /* ActChgMyTT1stDay	*/{1487,-1,TabUnk,ActSeeMyTT		,0x1FF,0x1FF,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
    /* ActReqRemFilBrf	*/{ 286,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_AskRemFileFromTree		,NULL},

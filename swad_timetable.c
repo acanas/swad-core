@@ -222,7 +222,14 @@ static void TT_GetParamsTimeTable (void)
 
 void TT_ShowClassTimeTable (void)
   {
+   extern const char *Hlp_PROFILE_Timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
+   const char *Help[TT_NUM_TIMETABLE_TYPES] =
+     {
+      NULL,			// TT_COURSE_TIMETABLE
+      Hlp_PROFILE_Timetable,	// TT_MY_TIMETABLE
+      NULL,			// TT_TUTOR_TIMETABLE
+     };
    bool PrintView = (Gbl.Action.Act == ActPrnCrsTT ||
 	             Gbl.Action.Act == ActPrnMyTT);;
 
@@ -259,7 +266,7 @@ void TT_ShowClassTimeTable (void)
                          Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                          Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
                                                                        NULL,
-                        NULL);
+                        Help[Gbl.TimeTable.Type]);
 
    /***** Start time table drawing *****/
    if (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE)
@@ -350,14 +357,15 @@ void TT_EditCrsTimeTable (void)
 /********************* Show tutor timetable for edition **********************/
 /*****************************************************************************/
 
-void TT_ShowMyTutTimeTable (void)
+void TT_EditMyTutTimeTable (void)
   {
+   extern const char *Hlp_PROFILE_Timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
 
    /***** Time table *****/
    Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
    Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        TT_PutIconToViewMyTT,NULL);
+                        TT_PutIconToViewMyTT,Hlp_PROFILE_Timetable);
    TT_ShowTimeTable (Gbl.Usrs.Me.UsrDat.UsrCod);
    Lay_EndRoundFrame ();
   }
@@ -372,7 +380,7 @@ static void TT_PutIconToViewCrsTT (void)
 
    /***** Link (form) to see course timetable *****/
    Lay_PutContextualLink (ActSeeCrsTT,NULL,
-                          "clock64x64.gif",
+                          "eye-on64x64.png",
                           Txt_Show_timetable,NULL,
 		          NULL);
   }
@@ -387,7 +395,7 @@ static void TT_PutIconToViewMyTT (void)
 
    /***** Link (form) to see my timetable *****/
    Lay_PutContextualLink (ActSeeMyTT,NULL,
-                          "clock64x64.gif",
+                          "eye-on64x64.png",
                           Txt_Show_timetable,NULL,
 		          NULL);
   }

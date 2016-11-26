@@ -66,7 +66,7 @@ typedef enum
 
 void TT_ShowClassTimeTable (void);
 void TT_EditCrsTimeTable (void);
-void TT_ShowMyTutTimeTable (void);
+void TT_EditMyTutTimeTable (void);
 void TT_ShowTimeTable (long UsrCod);
 
 #endif

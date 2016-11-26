@@ -185,6 +185,8 @@ const char *Hlp_PROFILE_Password      = WIKI "PROFILE.Password";
 
 const char *Hlp_PROFILE_Courses = WIKI "PROFILE.Courses";
 
+const char *Hlp_PROFILE_Timetable = WIKI "PROFILE.Timetable";
+
 const char *Hlp_PROFILE_Record      = WIKI "PROFILE.Record";
 const char *Hlp_PROFILE_Institution = WIKI "PROFILE.Institution";
 const char *Hlp_PROFILE_Webs        = WIKI "PROFILE.Webs";

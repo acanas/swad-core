@@ -351,7 +351,7 @@ void Ntf_ShowMyNotifications (void)
    /* Write form to show all notifications */
    Ntf_WriteFormAllNotifications (AllNotifications);
 
-   if (NumNotifications)
+   if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
       /* Put form to change notification preferences */
       Lay_PutContextualLink (ActMrkNtfSee,NULL,
                              "eye-on64x64.png",
