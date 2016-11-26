@@ -178,13 +178,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.71.5 (2016-11-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.71.6 (2016-11-26)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.71.6:  Nov 26, 2016	Selector "Only my groups"/"All groups" only of the course has groups.
+					Code refactoring in timetable. (207619 lines)
         Version 16.71.5:  Nov 26, 2016	Contextual help on course timetable. (207611 lines)
         Version 16.71.4:  Nov 26, 2016	Contextual help on user's timetable. (207607 lines)
         Version 16.71.3:  Nov 26, 2016	Change in layout of notifications. (207597 lines)
