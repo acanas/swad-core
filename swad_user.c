@@ -187,8 +187,11 @@ static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
 static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
+static void Usr_PutLinkToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
+static void Usr_PutLinkToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
+static void Usr_PutLinkToShowTchsAllData (void);
 static void Usr_ShowGstsAllDataParams (void);
 static void Usr_ShowStdsAllDataParams (void);
 static void Usr_ShowTchsAllDataParams (void);
@@ -5255,6 +5258,8 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
            }
          break;
       case ActSeeUseGbl:
+	 /* Used in selector of "Class photo"/"List"
+	    in STATS > Figures > Institutions */
          Sta_PutHiddenParamFigures ();
          break;
       case ActSeePhoDeg:
@@ -6790,18 +6795,24 @@ void Usr_SeeGuests (void)
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
 
-         /***** Draw a class photo with students of the course *****/
+         /***** Draw a class photo with guests *****/
+         switch (Gbl.Usrs.Me.ListType)
+           {
+            case Usr_CLASS_PHOTO:
+	       Lay_WriteHeaderClassPhoto (false,true,
+					  (Gbl.Scope.Current == Sco_SCOPE_CTR ||
+					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
+										 -1L,
+					  -1L,
+					  -1L);
+	       break;
+            case Usr_LIST:
+               Usr_PutLinkToShowGstsAllData ();
+               break;
+           }
+
          /* Start form */
 	 Act_FormStart (ActSeeRecSevGst);
-	 Grp_PutParamsCodGrps ();
-
-         if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Sco_SCOPE_CTR ||
-					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                      -1L,
-				       -1L,
-				       -1L);
 
          /* Start table */
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
@@ -6940,25 +6951,32 @@ void Usr_SeeStudents (void)
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
 
          /***** Draw a class photo with students of the course *****/
+         switch (Gbl.Usrs.Me.ListType)
+           {
+            case Usr_CLASS_PHOTO:
+	       Lay_WriteHeaderClassPhoto (false,true,
+					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					   Gbl.Scope.Current == Sco_SCOPE_DEG ||
+					   Gbl.Scope.Current == Sco_SCOPE_CTR ||
+					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
+										 -1L,
+					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					   Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
+										 -1L,
+					   Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+										 -1L);
+	       break;
+            case Usr_LIST:
+               Usr_PutLinkToShowStdsAllData ();
+               break;
+           }
+
          /* Start form */
          if (ICanViewRecords)
            {
 	    Act_FormStart (ActSeeRecSevStd);
 	    Grp_PutParamsCodGrps ();
            }
-
-         if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					Gbl.Scope.Current == Sco_SCOPE_DEG ||
-					Gbl.Scope.Current == Sco_SCOPE_CTR ||
-					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                      -1L,
-				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                      -1L,
-					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                      -1L);
 
          /* Start table */
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
@@ -7087,22 +7105,30 @@ void Usr_SeeTeachers (void)
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
 
          /***** Draw a class photo with teachers of the course *****/
+         switch (Gbl.Usrs.Me.ListType)
+           {
+            case Usr_CLASS_PHOTO:
+	       Lay_WriteHeaderClassPhoto (false,true,
+					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					   Gbl.Scope.Current == Sco_SCOPE_DEG ||
+					   Gbl.Scope.Current == Sco_SCOPE_CTR ||
+					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
+										 -1L,
+					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					   Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
+										 -1L,
+					   Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+										 -1L);
+	       break;
+            case Usr_LIST:
+               if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
+                  Usr_PutLinkToShowTchsAllData ();
+               break;
+           }
+
          /* Start form */
          if (ICanViewRecords)
             Act_FormStart (ActSeeRecSevTch);
-
-         if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
-	    Lay_WriteHeaderClassPhoto (false,true,
-				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					Gbl.Scope.Current == Sco_SCOPE_DEG ||
-					Gbl.Scope.Current == Sco_SCOPE_CTR ||
-					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-					                                      -1L,
-				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-					                                      -1L,
-					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
-					                                      -1L);
 
          /* Start table */
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
@@ -7244,6 +7270,10 @@ static void Usr_PutIconToPrintTchs (void)
 		          NULL);
   }
 
+/*****************************************************************************/
+/**************** Functions used to list all data of users *******************/
+/*****************************************************************************/
+
 static void Usr_PutIconToShowGstsAllData (void)
   {
    extern const char *Txt_Show_all_data;
@@ -7251,6 +7281,16 @@ static void Usr_PutIconToShowGstsAllData (void)
    Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
+		          NULL);
+  }
+
+static void Usr_PutLinkToShowGstsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
+			  "table64x64.gif",
+			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
   }
 
@@ -7264,6 +7304,16 @@ static void Usr_PutIconToShowStdsAllData (void)
 		          NULL);
   }
 
+static void Usr_PutLinkToShowStdsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
+			  "table64x64.gif",
+			  Txt_Show_all_data,Txt_Show_all_data,
+		          NULL);
+  }
+
 static void Usr_PutIconToShowTchsAllData (void)
   {
    extern const char *Txt_Show_all_data;
@@ -7271,6 +7321,16 @@ static void Usr_PutIconToShowTchsAllData (void)
    Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
+		          NULL);
+  }
+
+static void Usr_PutLinkToShowTchsAllData (void)
+  {
+   extern const char *Txt_Show_all_data;
+
+   Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
+			  "table64x64.gif",
+			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
   }
 

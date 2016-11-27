@@ -3868,18 +3868,9 @@ void Sta_PutIconToShowFigure (void)
 
 static void Sta_PutParamsToShowFigure (void)
   {
-   if      (Gbl.CurrentCrs.Crs.CrsCod > 0)
-      Gbl.Scope.Current = Sco_SCOPE_CRS;
-   else if (Gbl.CurrentDeg.Deg.DegCod > 0)
-      Gbl.Scope.Current = Sco_SCOPE_DEG;
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTR;
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)
-      Gbl.Scope.Current = Sco_SCOPE_INS;
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-      Gbl.Scope.Current = Sco_SCOPE_CTY;
-   else
-      Gbl.Scope.Current = Sco_SCOPE_SYS;
+   /***** Set default scope (used only if Gbl.Scope.Current is unknown) *****/
+   Gbl.Scope.Default = Sco_SCOPE_CRS;
+   Sco_AdjustScope ();
 
    Sta_PutHiddenParamFigures ();
   }

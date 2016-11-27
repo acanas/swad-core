@@ -57,6 +57,8 @@ typedef enum
 void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange);
 void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope);
 void Sco_GetScope (const char *ParamName);
+void Sco_AdjustScope (void);
+
 void Sco_SetScopesForListingGuests (void);
 void Sco_SetScopesForListingStudents (void);
 

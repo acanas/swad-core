@@ -178,14 +178,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.71.9 (2016-11-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.72 (2016-11-27)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.71.9:  Nov 26, 2016	Fixed bug in list of students, reported by Javier Fernández Baldomero. (207641 lines)
+        Version 16.72:    Nov 27, 2016	Link to show all users' data.
+					Code refactoring in scopes. (207698 lines)
+        Version 16.71.9:  Nov 27, 2016	Fixed bug in list of students, reported by Javier Fernández Baldomero. (207641 lines)
         Version 16.71.8:  Nov 26, 2016	Contextual help on email to students.
 					Contextual help on global announcements. (207634 lines)
         Version 16.71.7:  Nov 26, 2016	Code refactoring in timetable. (207626 lines)

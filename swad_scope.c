@@ -177,7 +177,7 @@ void Sco_PutSelectorScope (const char *ParamName,bool SendOnChange)
   }
 
 /*****************************************************************************/
-/************* Put hidden parameter with location range  *********************/
+/********************** Put hidden parameter scope ***************************/
 /*****************************************************************************/
 
 void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
@@ -186,7 +186,7 @@ void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/************************* Get users range for listing ***********************/
+/*************************** Get parameter scope *****************************/
 /*****************************************************************************/
 
 void Sco_GetScope (const char *ParamName)
@@ -195,7 +195,20 @@ void Sco_GetScope (const char *ParamName)
 
    /***** Get parameter location range if exists *****/
    Par_GetParToText (ParamName,UnsignedStr,10);
-   if ((Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr)) == Sco_SCOPE_UNK)
+   Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr);
+
+   /***** Adjust scope avoiding impossible or forbidden scopes *****/
+   Sco_AdjustScope ();
+  }
+
+/*****************************************************************************/
+/*********** Adjust scope avoiding impossible or forbidden scopes ************/
+/*****************************************************************************/
+
+void Sco_AdjustScope (void)
+  {
+   /***** Is scope is unknow, use default scope *****/
+   if (Gbl.Scope.Current == Sco_SCOPE_UNK)
       Gbl.Scope.Current = Gbl.Scope.Default;
 
    /***** Avoid impossible scopes *****/
@@ -237,11 +250,11 @@ void Sco_SetScopesForListingGuests (void)
 	 Gbl.Scope.Default = Sco_SCOPE_INS;
 	 break;
       case Rol_SYS_ADM:
-	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS    |
-	                     1 << Sco_SCOPE_CTY     |
+	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
+	                     1 << Sco_SCOPE_CTY |
 		             1 << Sco_SCOPE_INS |
 		             1 << Sco_SCOPE_CTR;
-	 Gbl.Scope.Default = Sco_SCOPE_INS;
+	 Gbl.Scope.Default = Sco_SCOPE_SYS;
 	 break;
       default:
       	 Gbl.Scope.Allowed = 0;
