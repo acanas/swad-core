@@ -3737,7 +3737,11 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       /* Filter the user answer */
       strcpy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst]);
-      Str_ReplaceSeveralSpacesForOne (TextAnsUsr);	// Join several spaces into one in answer
+
+      /* In order to compare student answer to stored answer,
+	 the text answers are stored avoiding two or more consecurive spaces */
+      Str_ReplaceSeveralSpacesForOne (TextAnsUsr);
+
       Str_ConvertToComparable (TextAnsUsr);
 
       for (NumOpt = 0;
@@ -4419,8 +4423,8 @@ void Tst_ShowFormEditOneQst (void)
 /*****************************************************************************/
 
 // This function may be called from three places:
-// 1. Pressing edition of question in the menu
-// 2. Pressing button to edit question in a listing of existing questions
+// 1. By clicking "New question" icon
+// 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
@@ -5341,7 +5345,10 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
             /* Get answer */
             sprintf (AnsStr,"AnsStr%u",NumOpt);
 	    Par_GetParToHTML (AnsStr,Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-            Str_ReplaceSeveralSpacesForOne (Gbl.Test.Answer.Options[NumOpt].Text);	// Join several spaces into one in answer
+	    if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
+	       /* In order to compare student answer to stored answer,
+	          the text answers are stored avoiding two or more consecurive spaces */
+               Str_ReplaceSeveralSpacesForOne (Gbl.Test.Answer.Options[NumOpt].Text);
 
             /* Get feedback */
             sprintf (FbStr,"FbStr%u",NumOpt);
