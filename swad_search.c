@@ -197,6 +197,7 @@ void Sch_ReqCrsSearch (void)
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope)
   {
+   extern const char *Hlp_Search;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
@@ -231,7 +232,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (Action);
-   Lay_StartRoundFrame (NULL,Txt_Search,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Search,NULL,Hlp_Search);
 
    /***** Scope (whole platform, current country, current institution,
                  current centre, current degree or current course) *****/

@@ -39,6 +39,8 @@
 
 #define WIKI "https://github.com/acanas/swad-core/wiki/"
 
+const char *Hlp_Search = WIKI "Search";
+
 /***** SYSTEM tab *****/
 
 const char *Hlp_SYSTEM_Countries = WIKI "SYSTEM.Countries";
