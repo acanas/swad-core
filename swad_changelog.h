@@ -176,13 +176,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.73.2 (2016-11-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.73.3 (2016-11-27)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.73.3:  Nov 27, 2016	Better contextual help on attendance. (207746 lines)
         Version 16.73.2:  Nov 27, 2016	Contextual help on assignments. (207725 lines)
         Version 16.73.1:  Nov 27, 2016	Contextual help on search. (? lines)
         Version 16.73:    Nov 27, 2016	Changes in teacher's record card. (207711 lines)

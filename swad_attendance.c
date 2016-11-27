@@ -128,7 +128,9 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          long *LstSelectedUsrCods);
 static void Att_WriteTableHeadSeveralAttEvents (void);
 static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *UsrDat);
-static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods);
+static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
+                                              unsigned NumStdsInList,
+                                              long *LstSelectedUsrCods);
 static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 /*****************************************************************************/
@@ -1058,7 +1060,8 @@ static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Valu
 
 void Att_RequestCreatOrEditAttEvent (void)
   {
-   extern const char *Hlp_USERS_Attendance;
+   extern const char *Hlp_USERS_Attendance_new_event;
+   extern const char *Hlp_USERS_Attendance_edit_event;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_event;
    extern const char *Txt_Edit_event;
@@ -1113,9 +1116,13 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
-   Lay_StartRoundFrameTable (NULL,ItsANewAttEvent ? Txt_New_event :
-                                                    Txt_Edit_event,
-                             NULL,Hlp_USERS_Attendance,2);
+   Lay_StartRoundFrameTable (NULL,
+                             ItsANewAttEvent ? Txt_New_event :
+                                               Txt_Edit_event,
+                             NULL,
+                             ItsANewAttEvent ? Hlp_USERS_Attendance_new_event :
+                        	               Hlp_USERS_Attendance_edit_event,
+                             2);
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2590,6 +2597,7 @@ void Att_RemoveUsrsAbsentWithoutCommentsFromAttEvent (long AttCod)
 
 void Usr_ReqListStdsAttendanceCrs (void)
   {
+   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Show_list;
 
@@ -2609,7 +2617,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-			NULL,NULL);
+			NULL,Hlp_USERS_Attendance_attendance_list);
 
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
@@ -2711,7 +2719,7 @@ static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
    /***** Show details or put button to show details *****/
    if (Gbl.AttEvents.ShowDetails)
-      Att_ListStdsWithAttEventsDetails (1,&Gbl.Usrs.Me.UsrDat.UsrCod);
+      Att_ListStdsWithAttEventsDetails (TypeOfView,1,&Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Free memory for list of attendance events selected *****/
    free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -2786,7 +2794,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
 
       /***** Show details or put button to show details *****/
       if (Gbl.AttEvents.ShowDetails)
-	 Att_ListStdsWithAttEventsDetails (NumStdsInList,LstSelectedUsrCods);
+	 Att_ListStdsWithAttEventsDetails (TypeOfView,NumStdsInList,LstSelectedUsrCods);
 
       /***** Free memory for list of attendance events selected *****/
       free ((void *) Gbl.AttEvents.StrAttCodsSelected);
@@ -3024,7 +3032,7 @@ static void Att_PutButtonToShowDetails (void)
 
 static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
   {
-   extern const char *Hlp_USERS_Attendance;
+   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Events;
    extern const char *Txt_Event;
@@ -3046,7 +3054,10 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Events,NULL,Hlp_USERS_Attendance,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Events,NULL,
+                             TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                            Hlp_USERS_Attendance_attendance_list,
+                             2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3135,7 +3146,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                                          unsigned NumStdsInList,
                                          long *LstSelectedUsrCods)
   {
-   extern const char *Hlp_USERS_Attendance;
+   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Attendance;
    extern const char *Txt_Number_of_students;
    struct UsrData UsrDat;
@@ -3154,7 +3165,8 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                          (TypeOfView == Att_NORMAL_VIEW_ONLY_ME)  ? Att_PutIconToPrintMyList :
                         ((TypeOfView == Att_NORMAL_VIEW_STUDENTS) ? Att_PutIconToPrintStdsList :
                         	                                    NULL),
-                        Hlp_USERS_Attendance);
+                        TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                       Hlp_USERS_Attendance_attendance_list);
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
             PutButtonShowDetails ? "FRAME_TBL_MARGIN" :
         	                   "FRAME_TBL");
@@ -3358,9 +3370,11 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
 /**************** List the students with details and comments ****************/
 /*****************************************************************************/
 
-static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSelectedUsrCods)
+static void Att_ListStdsWithAttEventsDetails (Att_TypeOfView_t TypeOfView,
+                                              unsigned NumStdsInList,
+                                              long *LstSelectedUsrCods)
   {
-   extern const char *Hlp_USERS_Attendance;
+   extern const char *Hlp_USERS_Attendance_attendance_list;
    extern const char *Txt_Details;
    struct UsrData UsrDat;
    unsigned NumStd;
@@ -3369,7 +3383,10 @@ static void Att_ListStdsWithAttEventsDetails (unsigned NumStdsInList,long *LstSe
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Details,NULL,Hlp_USERS_Attendance,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Details,NULL,
+                             TypeOfView == Att_PRINT_VIEW ? NULL :
+                        	                            Hlp_USERS_Attendance_attendance_list,
+                             2);
 
    /***** List students with attendance details *****/
    for (NumStd = 0, Gbl.RowEvenOdd = 0;

@@ -117,7 +117,10 @@ const char *Hlp_USERS_Guests = WIKI "USERS.Guests";
 const char *Hlp_USERS_Duplicates_possibly_duplicate_users = WIKI "USERS.Duplicates#possibly-duplicate-users";
 const char *Hlp_USERS_Duplicates_possibly_similar_users   = WIKI "USERS.Duplicates#similar-users";
 
-const char *Hlp_USERS_Attendance = WIKI "USERS.Attendance";
+const char *Hlp_USERS_Attendance                 = WIKI "USERS.Attendance";
+const char *Hlp_USERS_Attendance_new_event       = WIKI "USERS.Attendance#new-event";
+const char *Hlp_USERS_Attendance_edit_event      = WIKI "USERS.Attendance#edit-event";
+const char *Hlp_USERS_Attendance_attendance_list = WIKI "USERS.Attendance#attendance-list";
 
 const char *Hlp_USERS_Signup   = WIKI "USERS.Sign up";
 const char *Hlp_USERS_Requests = WIKI "USERS.Requests";
