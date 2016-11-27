@@ -2981,7 +2981,6 @@ void Svy_ReceiveQst (void)
       Svy_AllocateTextChoiceAnswer (&SvyQst,NumAns);
       sprintf (AnsStr,"AnsStr%u",NumAns);
       Par_GetParToHTML (AnsStr,SvyQst.AnsChoice[NumAns].Text,Svy_MAX_BYTES_ANSWER);
-      Str_ReplaceSeveralSpacesForOne (SvyQst.AnsChoice[NumAns].Text);	// Join several spaces into one in answer
      }
 
    /***** Make sure that stem and answer are not empty *****/
