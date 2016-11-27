@@ -5814,9 +5814,16 @@ void Usr_ListAllDataStds (void)
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get groups to show *****/
+   /***** If the scope is the current course... *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+     {
+      /* Get list of groups types and groups in current course
+         This is necessary to show columns with group selection */
+      Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
+
+      /* Get groups to show */
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
+     }
 
    /****** Get and order list of students in current course ******/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
