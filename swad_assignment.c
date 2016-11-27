@@ -111,6 +111,7 @@ void Asg_SeeAssignments (void)
 
 static void Asg_ShowAllAssignments (void)
   {
+   extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
@@ -137,7 +138,7 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Assignments,
-                        Asg_PutIconsListAssignments,NULL);
+                        Asg_PutIconsListAssignments,Hlp_ASSESSMENT_Assignments);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -1054,6 +1055,8 @@ static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Va
 
 void Asg_RequestCreatOrEditAsg (void)
   {
+   extern const char *Hlp_ASSESSMENT_Assignments_new_assignment;
+   extern const char *Hlp_ASSESSMENT_Assignments_edit_assignment;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_assignment;
    extern const char *Txt_Edit_assignment;
@@ -1113,7 +1116,10 @@ void Asg_RequestCreatOrEditAsg (void)
    Lay_StartRoundFrameTable (NULL,
                              ItsANewAssignment ? Txt_New_assignment :
                                                  Txt_Edit_assignment,
-                             NULL,NULL,2);
+                             NULL,
+                             ItsANewAssignment ? Hlp_ASSESSMENT_Assignments_new_assignment :
+                        	                 Hlp_ASSESSMENT_Assignments_edit_assignment,
+                             2);
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1184,6 +1190,7 @@ void Asg_RequestCreatOrEditAsg (void)
 
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
   {
+   extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_The_whole_course;
@@ -1202,7 +1209,7 @@ static void Asg_ShowLstGrpsToEditAssignment (long AsgCod)
                          "<td class=\"LEFT_TOP\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Groups);
-      Lay_StartRoundFrameTable ("100%",NULL,NULL,NULL,0);
+      Lay_StartRoundFrameTable ("100%",NULL,NULL,Hlp_USERS_Groups,0);
 
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"

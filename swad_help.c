@@ -87,6 +87,10 @@ const char *Hlp_COURSE_Timetable = WIKI "COURSE.Timetable";
 
 /***** ASSESSMENT tab *****/
 
+const char *Hlp_ASSESSMENT_Assignments                 = WIKI "ASSESSMENT.Assignments";
+const char *Hlp_ASSESSMENT_Assignments_new_assignment  = WIKI "ASSESSMENT.Assignments#new-assignment";
+const char *Hlp_ASSESSMENT_Assignments_edit_assignment = WIKI "ASSESSMENT.Assignments#edit-assignment";
+
 const char *Hlp_ASSESSMENT_Works = WIKI "ASSESSMENT.Works";
 
 const char *Hlp_ASSESSMENT_Tests              = WIKI "ASSESSMENT.Tests";
