@@ -78,7 +78,10 @@ static void Rec_ShowRecordOneTchCrs (void);
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_GetParamRecordsPerPage (void);
-static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods);
+static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours);
+static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours);
+static void Rec_PutParamsShowOfficeHoursOneTch (void);
+static void Rec_PutParamsShowOfficeHoursSeveralTchs (void);
 static bool Rec_GetParamShowOfficeHours (void);
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor);
@@ -1229,6 +1232,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    char Width[10+2+1];
+   bool ShowOfficeHours;
 
    /***** Width for office hours *****/
    sprintf (Width,"%upx",Rec_RECORD_WIDTH);
@@ -1241,11 +1245,14 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
+   /***** Get if I want to see teachers' office hours in teachers' records *****/
+   ShowOfficeHours = Rec_GetParamShowOfficeHours ();
+
    /***** Show contextual menu *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Show office hours? */
-   Rec_WriteFormShowOfficeHours (true,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Rec_WriteFormShowOfficeHoursOneTch (ShowOfficeHours);
 
    /* Link to print view */
    Act_FormStart (ActPrnRecSevTch);
@@ -1264,11 +1271,14 @@ static void Rec_ShowRecordOneTchCrs (void)
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
    /* Office hours */
-   Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
-   Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        NULL,Hlp_USERS_Teachers_timetable);
-   TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
-   Lay_EndRoundFrame ();
+   if (ShowOfficeHours)
+     {
+      Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
+      Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
+			   NULL,Hlp_USERS_Teachers_timetable);
+      TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
+      Lay_EndRoundFrame ();
+     }
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -1320,7 +1330,7 @@ void Rec_ListRecordsTchs (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Show office hours? */
-      Rec_WriteFormShowOfficeHours (ShowOfficeHours,Gbl.Usrs.Select.All);
+      Rec_WriteFormShowOfficeHoursSeveralTchs (ShowOfficeHours);
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevTch);
@@ -1433,38 +1443,39 @@ static void Rec_GetParamRecordsPerPage (void)
   }
 
 /*****************************************************************************/
-/************** Write a form to select whether show full tree ****************/
+/*********** Write a form to select whether show all office hours ************/
 /*****************************************************************************/
 
-static void Rec_WriteFormShowOfficeHours (bool ShowOfficeHours,const char *ListUsrCods)
+static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Show_office_hours;
 
-   /***** Start form *****/
-   Act_FormStart (ActSeeRecSevTch);
-   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,ListUsrCods);
-   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+   Lay_PutContextualCheckbox (ActSeeRecOneTch,Rec_PutParamsShowOfficeHoursOneTch,
+                              "ShowOfficeHours",ShowOfficeHours,
+                              Txt_Show_office_hours,
+                              Txt_Show_office_hours);
+  }
 
-   /***** End form *****/
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 6px; display:inline;\">"
-                      "<input type=\"checkbox\" name=\"ShowOfficeHours\" value=\"Y\"");
-   if (ShowOfficeHours)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\""
-	              " onclick=\"document.getElementById('%s').submit();\" />"
-                      "<img src=\"%s/clock64x64.gif\""
-                      " alt=\"%s\" title=\"%s\""
-                      " class=\"ICO20x20\" />"
-                      "<span class=\"%s\">&nbsp;%s</span>"
-                      "</div>",
-            Gbl.Form.Id,
-            Gbl.Prefs.IconsURL,
-            Txt_Show_office_hours,
-            Txt_Show_office_hours,
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Show_office_hours);
-   Act_FormEnd ();
+static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
+  {
+   extern const char *Txt_Show_office_hours;
+
+   Lay_PutContextualCheckbox (ActSeeRecSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
+                              "ShowOfficeHours",ShowOfficeHours,
+                              Txt_Show_office_hours,
+                              Txt_Show_office_hours);
+  }
+
+static void Rec_PutParamsShowOfficeHoursOneTch (void)
+  {
+   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
+  }
+
+static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
+  {
+   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Select.All);
+   Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
 /*****************************************************************************/
