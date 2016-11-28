@@ -75,6 +75,7 @@ static void Lnk_CreateLink (struct Link *Lnk);
 
 void Lnk_SeeLinks (void)
   {
+   extern const char *Hlp_SYSTEM_Links;
    extern const char *Txt_Links;
 
    /***** Get list of links *****/
@@ -86,7 +87,7 @@ void Lnk_SeeLinks (void)
       Lay_StartRoundFrame (NULL,Txt_Links,
                            Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
                         	                                   NULL,
-                           NULL);
+                           Hlp_SYSTEM_Links);
       Lnk_WriteListOfLinks ();
       Lay_EndRoundFrame ();
      }
@@ -311,11 +312,12 @@ void Lnk_FreeListLinks (void)
 
 static void Lnk_ListLinksForEdition (void)
   {
+   extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_Links;
    unsigned NumLnk;
    struct Link *Lnk;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Links,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Links,NULL,Hlp_SYSTEM_Links_edit,2);
 
    /***** Table head *****/
    Lnk_PutHeadLinks ();
@@ -610,6 +612,7 @@ void Lnk_ChangeLinkWWW (void)
 
 static void Lnk_PutFormToCreateLink (void)
   {
+   extern const char *Hlp_SYSTEM_Links_edit;
    extern const char *Txt_New_link;
    extern const char *Txt_Create_link;
    struct Link *Lnk;
@@ -620,7 +623,7 @@ static void Lnk_PutFormToCreateLink (void)
    Act_FormStart (ActNewLnk);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_link,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_link,NULL,Hlp_SYSTEM_Links_edit,2);
 
    /***** Write heading *****/
    Lnk_PutHeadLinks ();

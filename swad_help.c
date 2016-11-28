@@ -58,6 +58,9 @@ const char *Hlp_SYSTEM_Domains_edit = WIKI "SYSTEM.Domains#edit";
 const char *Hlp_SYSTEM_Banners      = WIKI "SYSTEM.Banners";
 const char *Hlp_SYSTEM_Banners_edit = WIKI "SYSTEM.Banners#edit";
 
+const char *Hlp_SYSTEM_Links      = WIKI "SYSTEM.Links";
+const char *Hlp_SYSTEM_Links_edit = WIKI "SYSTEM.Links#edit";
+
 /***** COUNTRY tab *****/
 
 const char *Hlp_COUNTRY_Information  = WIKI "COUNTRY.Information";
