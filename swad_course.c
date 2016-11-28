@@ -3328,6 +3328,7 @@ void Crs_UpdateCrsLast (void)
 
 void Crs_AskRemoveOldCrss (void)
   {
+   extern const char *Hlp_SYSTEM_Old;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_courses;
    extern const char *Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2;
@@ -3340,7 +3341,7 @@ void Crs_AskRemoveOldCrss (void)
    Act_FormStart (ActRemOldCrs);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL,Hlp_SYSTEM_Old);
 
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",

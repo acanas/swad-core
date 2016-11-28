@@ -44,7 +44,10 @@ const char *Hlp_Search = WIKI "Search";
 /***** SYSTEM tab *****/
 
 const char *Hlp_SYSTEM_Countries = WIKI "SYSTEM.Countries";
-const char *Hlp_SYSTEM_Pending   = WIKI "SYSTEM.Pending";
+
+const char *Hlp_SYSTEM_Pending = WIKI "SYSTEM.Pending";
+
+const char *Hlp_SYSTEM_Old = WIKI "SYSTEM.Old";
 
 /***** COUNTRY tab *****/
 
