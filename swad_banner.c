@@ -76,6 +76,7 @@ static void Ban_CreateBanner (struct Banner *Ban);
 
 void Ban_SeeBanners (void)
   {
+   extern const char *Hlp_SYSTEM_Banners;
    extern const char *Txt_Banners;
    unsigned NumBan;
 
@@ -86,7 +87,8 @@ void Ban_SeeBanners (void)
 	               " ORDER BY ShortName");
 
    /***** Frame head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Banners,Ban_PutFormToEditBanners,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Banners,
+                             Ban_PutFormToEditBanners,Hlp_SYSTEM_Banners,2);
 
    /***** Write all the banners *****/
    for (NumBan = 0;
@@ -293,13 +295,14 @@ void Ban_FreeListBanners (void)
 
 static void Ban_ListBannersForEdition (void)
   {
+   extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_Banners;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
    unsigned NumBan;
    struct Banner *Ban;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Banners,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Banners,NULL,Hlp_SYSTEM_Banners_edit,2);
 
    /***** Table head *****/
    Ban_PutHeadBanners ();
@@ -723,6 +726,7 @@ void Ban_ChangeBannerWWW (void)
 
 static void Ban_PutFormToCreateBanner (void)
   {
+   extern const char *Hlp_SYSTEM_Banners_edit;
    extern const char *Txt_New_banner;
    extern const char *Txt_Create_banner;
    struct Banner *Ban;
@@ -733,7 +737,8 @@ static void Ban_PutFormToCreateBanner (void)
    Act_FormStart (ActNewBan);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_banner,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_banner,
+                             NULL,Hlp_SYSTEM_Banners_edit,2);
 
    /***** Write heading *****/
    Ban_PutHeadBanners ();
