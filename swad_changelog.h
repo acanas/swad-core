@@ -176,13 +176,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.74.1 (2016-11-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.75 (2016-11-28)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.75:    Nov 28, 2016	New option to show my location. (207947 lines)
         Version 16.74.1:  Nov 28, 2016	Changed icon to show places. (207807 lines)
 Copy icon/mapmarker64x64.png to public icons directory
 Copy icon/iconset/awesome/action64x64/mapmarker64x64.png to public icons directory
