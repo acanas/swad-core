@@ -88,6 +88,7 @@ static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_E
 
 void Mai_SeeMailDomains (void)
   {
+   extern const char *Hlp_SYSTEM_Domains;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
@@ -104,7 +105,7 @@ void Mai_SeeMailDomains (void)
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                      NULL,
-                             NULL,2);
+                             Hlp_SYSTEM_Domains,2);
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
@@ -423,12 +424,13 @@ void Mai_FreeListMailDomains (void)
 
 static void Mai_ListMailDomainsForEdition (void)
   {
+   extern const char *Hlp_SYSTEM_Domains_edit;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
 
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
-                             NULL,NULL,2);
+                             NULL,Hlp_SYSTEM_Domains_edit,2);
 
    /***** Table head *****/
    Mai_PutHeadMailDomains ();
@@ -671,6 +673,7 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
+   extern const char *Hlp_SYSTEM_Domains_edit;
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
@@ -682,7 +685,8 @@ static void Mai_PutFormToCreateMailDomain (void)
    Act_FormStart (ActNewMai);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,
+                             NULL,Hlp_SYSTEM_Domains_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
