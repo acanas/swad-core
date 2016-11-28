@@ -77,6 +77,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt);
 
 void Dpt_SeeDepts (void)
   {
+   extern const char *Hlp_INSTITUTION_Departments;
    extern const char *Txt_Departments;
    extern const char *Txt_DEPARTMENTS_HELP_ORDER[2];
    extern const char *Txt_DEPARTMENTS_ORDER[2];
@@ -99,7 +100,7 @@ void Dpt_SeeDepts (void)
       Lay_StartRoundFrameTable (NULL,Txt_Departments,
                                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Dpt_PutIconToEditDpts :
                         	                                        NULL,
-                                NULL,2);
+                                Hlp_INSTITUTION_Departments,2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dpt_ORDER_BY_DEPARTMENT;
 	   Order <= Dpt_ORDER_BY_NUM_TCHS;
@@ -477,6 +478,7 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
 
 static void Dpt_ListDepartmentsForEdition (void)
   {
+   extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_Departments;
    extern const char *Txt_Another_institution;
    unsigned NumDpt;
@@ -484,7 +486,8 @@ static void Dpt_ListDepartmentsForEdition (void)
    struct Instit Ins;
    unsigned NumIns;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Departments,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Departments,
+                             NULL,Hlp_INSTITUTION_Departments_edit,2);
 
    /***** Table head *****/
    Dpt_PutHeadDepartments ();
@@ -857,6 +860,7 @@ void Dpt_ChangeDptWWW (void)
 
 static void Dpt_PutFormToCreateDepartment (void)
   {
+   extern const char *Hlp_INSTITUTION_Departments_edit;
    extern const char *Txt_New_department;
    extern const char *Txt_Institution;
    extern const char *Txt_Short_name;
@@ -873,7 +877,8 @@ static void Dpt_PutFormToCreateDepartment (void)
    Act_FormStart (ActNewDpt);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_department,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_department,
+                             NULL,Hlp_INSTITUTION_Departments_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

@@ -69,7 +69,11 @@ const char *Hlp_COUNTRY_Institutions = WIKI "COUNTRY.Institutions";
 /***** INSTITUTION tab *****/
 
 const char *Hlp_INSTITUTION_Information = WIKI "INSTITUTION.Information";
+
 const char *Hlp_INSTITUTION_Centres     = WIKI "INSTITUTION.Centres";
+
+const char *Hlp_INSTITUTION_Departments      = WIKI "INSTITUTION.Departments";
+const char *Hlp_INSTITUTION_Departments_edit = WIKI "INSTITUTION.Departments#edit";
 
 const char *Hlp_INSTITUTION_Documents = WIKI "INSTITUTION.Documents";
 const char *Hlp_INSTITUTION_Shared    = WIKI "INSTITUTION.Shared";
