@@ -75,6 +75,9 @@ const char *Hlp_INSTITUTION_Centres     = WIKI "INSTITUTION.Centres";
 const char *Hlp_INSTITUTION_Departments      = WIKI "INSTITUTION.Departments";
 const char *Hlp_INSTITUTION_Departments_edit = WIKI "INSTITUTION.Departments#edit";
 
+const char *Hlp_INSTITUTION_Places      = WIKI "INSTITUTION.Places";
+const char *Hlp_INSTITUTION_Places_edit = WIKI "INSTITUTION.Places#edit";
+
 const char *Hlp_INSTITUTION_Documents = WIKI "INSTITUTION.Documents";
 const char *Hlp_INSTITUTION_Shared    = WIKI "INSTITUTION.Shared";
 

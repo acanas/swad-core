@@ -74,6 +74,7 @@ static void Plc_CreatePlace (struct Place *Plc);
 
 void Plc_SeePlaces (void)
   {
+   extern const char *Hlp_INSTITUTION_Places;
    extern const char *Txt_Places;
    extern const char *Txt_PLACES_HELP_ORDER[2];
    extern const char *Txt_PLACES_ORDER[2];
@@ -96,7 +97,7 @@ void Plc_SeePlaces (void)
       Lay_StartRoundFrameTable (NULL,Txt_Places,
                                 Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
                         	                                        NULL,
-                                NULL,2);
+                                Hlp_INSTITUTION_Places,2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
@@ -416,11 +417,13 @@ void Plc_FreeListPlaces (void)
 
 static void Plc_ListPlacesForEdition (void)
   {
+   extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_Places;
    unsigned NumPlc;
    struct Place *Plc;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Places,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Places,
+                             NULL,Hlp_INSTITUTION_Places_edit,2);
 
    /***** Table head *****/
    Plc_PutHeadPlaces ();
@@ -677,6 +680,7 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 
 static void Plc_PutFormToCreatePlace (void)
   {
+   extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_New_place;
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
@@ -689,7 +693,8 @@ static void Plc_PutFormToCreatePlace (void)
    Act_FormStart (ActNewPlc);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_place,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_place,
+                             NULL,Hlp_INSTITUTION_Places_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
