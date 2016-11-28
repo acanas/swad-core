@@ -190,6 +190,7 @@ static void DT_EditDegreeTypes (void)
 
 static void DT_ListDegreeTypesForSeeing (void)
   {
+   extern const char *Hlp_SYSTEM_Studies;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_TYPES_OF_DEGREE_With_degrees;
    extern const char *Txt_TYPES_OF_DEGREE_Without_degrees;
@@ -200,7 +201,7 @@ static void DT_ListDegreeTypesForSeeing (void)
    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
                                                                      NULL,
-                             NULL,2);
+                             Hlp_SYSTEM_Studies,2);
    DT_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
@@ -269,11 +270,13 @@ static void DT_PutIconToEditDegTypes (void)
 
 static void DT_ListDegreeTypesForEdition (void)
   {
+   extern const char *Hlp_SYSTEM_Studies_edit;
    extern const char *Txt_Types_of_degree;
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
+                             NULL,Hlp_SYSTEM_Studies_edit,2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -331,6 +334,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
 static void DT_PutFormToCreateDegreeType (void)
   {
+   extern const char *Hlp_SYSTEM_Studies_edit;
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Type_of_degree;
    extern const char *Txt_Create_type_of_degree;
@@ -339,7 +343,8 @@ static void DT_PutFormToCreateDegreeType (void)
    Act_FormStart (ActNewDegTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,
+                             NULL,Hlp_SYSTEM_Studies_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
