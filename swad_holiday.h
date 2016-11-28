@@ -76,7 +76,7 @@ void Hld_SeeHolidays (void);
 void Hld_EditHolidays (void);
 void Hld_GetListHolidays (void);
 void Hld_FreeListHolidays (void);
-void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
+
 long Hld_GetParamHldCod (void);
 void Hld_RemoveHoliday (void);
 void Hld_ChangeHolidayPlace (void);

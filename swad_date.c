@@ -1074,6 +1074,7 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Month = DateSrc->Month;
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
+   strcpy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD);
   }
 
 /*****************************************************************************/

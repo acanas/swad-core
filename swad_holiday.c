@@ -59,6 +59,9 @@ extern struct Globals Gbl;
 
 static void Hld_GetParamHldOrderType (void);
 static void Hld_PutIconToEditHlds (void);
+
+static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
+
 static Hld_HolidayType_t Hld_GetParamHldType (void);
 static Hld_HolidayType_t Hld_GetTypeOfHoliday (const char *UnsignedStr);
 static void Hld_ListHolidaysForEdition (void);
@@ -74,6 +77,7 @@ static void Hld_CreateHoliday (struct Holiday *Hld);
 
 void Hld_SeeHolidays (void)
   {
+   extern const char *Hlp_INSTITUTION_Holidays;
    extern const char *Txt_Holidays;
    extern const char *Txt_HOLIDAYS_HELP_ORDER[2];
    extern const char *Txt_HOLIDAYS_ORDER[2];
@@ -95,7 +99,7 @@ void Hld_SeeHolidays (void)
       Lay_StartRoundFrameTable (NULL,Txt_Holidays,
                                 Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
                         	                                        NULL,
-                                NULL,2);
+                                Hlp_INSTITUTION_Holidays,2);
       fprintf (Gbl.F.Out,"<tr>");
       for (Order = Hld_ORDER_BY_PLACE;
 	   Order <= Hld_ORDER_BY_START_DATE;
@@ -147,7 +151,6 @@ void Hld_SeeHolidays (void)
 	 switch (Gbl.Hlds.Lst[NumHld].HldTyp)
 	   {
 	    case Hld_HOLIDAY:
-	       fprintf (Gbl.F.Out,"-");
 	       break;
 	    case Hld_NON_SCHOOL_PERIOD:
 	       fprintf (Gbl.F.Out,"%04u-%02u-%02u",
@@ -318,9 +321,19 @@ void Hld_GetListHolidays (void)
 	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[4])))
 	       Lay_ShowErrorAndExit ("Wrong start date.");
 
-	    /* Get end date (row[5] holds the end date in YYYYMMDD format) */
-	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
-	       Lay_ShowErrorAndExit ("Wrong end date.");
+	    /* Set / get end date */
+	    switch (Hld->HldTyp)
+	      {
+	       case Hld_HOLIDAY:		// Only one day
+		  /* Set end date = start date */
+		  Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+		  break;
+	       case Hld_NON_SCHOOL_PERIOD:	// One or more days
+	          /* Get end date (row[5] holds the end date in YYYYMMDD format) */
+		  if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[5])))
+	             Lay_ShowErrorAndExit ("Wrong end date.");
+		  break;
+	      }
 
 	    /* Get the name of the holiday/non school period (row[6]) */
 	    strcpy (Hld->Name,row[6]);
@@ -335,10 +348,10 @@ void Hld_GetListHolidays (void)
   }
 
 /*****************************************************************************/
-/**************************** Get holiday full name **************************/
+/************************* Get holiday data by code **************************/
 /*****************************************************************************/
 
-void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
+static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -398,9 +411,19 @@ void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
       if (!(Dat_GetDateFromYYYYMMDD (&(Hld->StartDate),row[3])))
 	 Lay_ShowErrorAndExit ("Wrong start date.");
 
-      /* Get end date (row[4] holds the end date in YYYYMMDD format) */
-      if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
-	 Lay_ShowErrorAndExit ("Wrong end date.");
+      /* Set / get end date */
+      switch (Hld->HldTyp)
+	{
+	 case Hld_HOLIDAY:		// Only one day
+	    /* Assign end date = start date */
+	    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+	    break;
+	 case Hld_NON_SCHOOL_PERIOD:	// One or more days
+	    /* Get end date (row[4] holds the end date in YYYYMMDD format) */
+	    if (!(Dat_GetDateFromYYYYMMDD (&(Hld->EndDate),row[4])))
+	       Lay_ShowErrorAndExit ("Wrong end date.");
+	    break;
+	}
 
       /* Get the name of the holiday/non school period (row[5]) */
       strcpy (Hld->Name,row[5]);
@@ -461,6 +484,7 @@ void Hld_FreeListHolidays (void)
 
 static void Hld_ListHolidaysForEdition (void)
   {
+   extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_Holidays;
    extern const char *Txt_All_places;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
@@ -469,7 +493,8 @@ static void Hld_ListHolidaysForEdition (void)
    struct Holiday *Hld;
    Hld_HolidayType_t HolidayType;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Holidays,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Holidays,
+                             NULL,Hlp_INSTITUTION_Holidays_edit,2);
 
    /***** Table head *****/
    Hld_PutHeadHolidays ();
@@ -680,7 +705,7 @@ void Hld_ChangeHolidayPlace (void)
 void Hld_ChangeHolidayType (void)
   {
    extern const char *Txt_The_type_of_the_holiday_X_has_changed;
-   char Query[512];
+   char Query[256];
    struct Holiday *Hld;
 
    Hld = &Gbl.Hlds.EditingHld;
@@ -696,23 +721,10 @@ void Hld_ChangeHolidayType (void)
    Hld->HldTyp = Hld_GetParamHldType ();
 
    /***** Update holiday/no school period in database *****/
-   switch (Hld->HldTyp)
-     {
-      case Hld_HOLIDAY:
-         Hld->EndDate.Day = Hld->EndDate.Month = Hld->EndDate.Year = 0;
-         sprintf (Query,"UPDATE holidays SET HldTyp='%u',EndDate='00000000'"
-                        " WHERE HldCod='%ld'",
-                  (unsigned) Hld_HOLIDAY,Hld->HldCod);
-         break;
-      case Hld_NON_SCHOOL_PERIOD:
-         Hld->EndDate.Day   = Hld->StartDate.Day;
-         Hld->EndDate.Month = Hld->StartDate.Month;
-         Hld->EndDate.Year  = Hld->StartDate.Year;
-         sprintf (Query,"UPDATE holidays SET HldTyp='%u',EndDate=StartDate"
-                        " WHERE HldCod='%ld'",
-                  (unsigned) Hld_NON_SCHOOL_PERIOD,Hld->HldCod);
-         break;
-     }
+   Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
+   sprintf (Query,"UPDATE holidays SET HldTyp='%u',EndDate=StartDate"
+		  " WHERE HldCod='%ld'",
+	    (unsigned) Hld->HldTyp,Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
@@ -752,7 +764,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    char Query[512];
    struct Holiday *Hld;
    struct Date NewDate;
-   struct Date *PtrDate;
+   struct Date *PtrDate = NULL;	// Initialized to avoid warning
    const char *StrStartOrEndDate;
    char StrDate[11];
 
@@ -773,30 +785,26 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
          PtrDate = &(Hld->StartDate);
          Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
                               &(NewDate.Day),&(NewDate.Month),&(NewDate.Year));
-         if (NewDate.Day == 0 || NewDate.Month == 0 || NewDate.Year == 0)
-           {
-            NewDate.Day   = Gbl.Now.Date.Day;
-            NewDate.Month = Gbl.Now.Date.Month;
-            NewDate.Year  = Gbl.Now.Date.Year;
-           }
+         if (NewDate.Day   == 0 ||
+             NewDate.Month == 0 ||
+             NewDate.Year  == 0)
+            Dat_AssignDate (&NewDate,&Gbl.Now.Date);
          break;
-      default:	// HLD_END_DATE
+      case HLD_END_DATE:
          StrStartOrEndDate = "EndDate";
          PtrDate = &(Hld->EndDate);
          switch (Hld->HldTyp)
            {
             case Hld_HOLIDAY:
-               NewDate.Day = NewDate.Month = NewDate.Year = 0;
+               Dat_AssignDate (&NewDate,&Hld->StartDate);
                break;
             case Hld_NON_SCHOOL_PERIOD:
                Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
                                     &(NewDate.Day),&(NewDate.Month),&(NewDate.Year));
-               if (NewDate.Day == 0 || NewDate.Month == 0 || NewDate.Year == 0)
-                 {
-                  NewDate.Day   = Gbl.Now.Date.Day;
-                  NewDate.Month = Gbl.Now.Date.Month;
-                  NewDate.Year  = Gbl.Now.Date.Year;
-                 }
+               if (NewDate.Day   == 0 ||
+        	   NewDate.Month == 0 ||
+        	   NewDate.Year  == 0)
+        	  Dat_AssignDate (&NewDate,&Gbl.Now.Date);
                break;
            }
          break;
@@ -891,6 +899,7 @@ void Hld_RenameHoliday (void)
 
 static void Hld_PutFormToCreateHoliday (void)
   {
+   extern const char *Hlp_INSTITUTION_Holidays_edit;
    extern const char *Txt_All_places;
    extern const char *Txt_New_holiday;
    extern const char *Txt_Place;
@@ -910,7 +919,8 @@ static void Hld_PutFormToCreateHoliday (void)
    Act_FormStart (ActNewHld);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_holiday,
+                             NULL,Hlp_INSTITUTION_Holidays_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1066,35 +1076,31 @@ void Hld_RecFormNewHoliday (void)
    /***** Get start date *****/
    Dat_GetDateFromForm ("StartDay","StartMonth","StartYear",
                         &(Hld->StartDate.Day),&(Hld->StartDate.Month),&(Hld->StartDate.Year));
+   if (Hld->StartDate.Day   == 0 ||
+       Hld->StartDate.Month == 0 ||
+       Hld->StartDate.Year  == 0)
+      Dat_AssignDate (&Hld->StartDate,&Gbl.Now.Date);
 
-   /***** Get end date *****/
-   Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
-                        &(Hld->EndDate.Day),&(Hld->EndDate.Month),&(Hld->EndDate.Year));
-
-   /***** Get holiday name *****/
-   Par_GetParToText ("Name",Hld->Name,Hld_MAX_LENGTH_HOLIDAY_NAME);
-
-   /***** Adjust dates *****/
-   if (Hld->StartDate.Day == 0 || Hld->StartDate.Month == 0 || Hld->StartDate.Year == 0)
-     {
-      Hld->StartDate.Day   = Gbl.Now.Date.Day;
-      Hld->StartDate.Month = Gbl.Now.Date.Month;
-      Hld->StartDate.Year  = Gbl.Now.Date.Year;
-     }
+   /***** Set end date *****/
    switch (Hld->HldTyp)
      {
       case Hld_HOLIDAY:
-         Hld->EndDate.Day = Hld->EndDate.Month = Hld->EndDate.Year = 0;
+	 /* Set end date = start date (ignore end date from form) */
+	 Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
          break;
       case Hld_NON_SCHOOL_PERIOD:
-         if (Hld->EndDate.Day == 0 || Hld->EndDate.Month == 0 || Hld->EndDate.Year == 0)
-           {
-            Hld->EndDate.Day   = Gbl.Now.Date.Day;
-            Hld->EndDate.Month = Gbl.Now.Date.Month;
-            Hld->EndDate.Year  = Gbl.Now.Date.Year;
-           }
+	 /* Get end date from form */
+	 Dat_GetDateFromForm ("EndDay","EndMonth","EndYear",
+			      &(Hld->EndDate.Day),&(Hld->EndDate.Month),&(Hld->EndDate.Year));
+	 if (Hld->EndDate.Day   == 0 ||
+             Hld->EndDate.Month == 0 ||
+             Hld->EndDate.Year  == 0)
+            Dat_AssignDate (&Hld->EndDate,&Gbl.Now.Date);
          break;
      }
+
+   /***** Get holiday name *****/
+   Par_GetParToText ("Name",Hld->Name,Hld_MAX_LENGTH_HOLIDAY_NAME);
 
    /***** Create the new holiday or write warning message *****/
    if (Hld->Name[0])	// If there's a holiday name
