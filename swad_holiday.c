@@ -632,7 +632,7 @@ long Hld_GetParamHldCod (void)
 void Hld_RemoveHoliday (void)
   {
    extern const char *Txt_Holiday_X_removed;
-   char Query[512];
+   char Query[128];
    struct Holiday Hld;
 
    /***** Get holiday code *****/

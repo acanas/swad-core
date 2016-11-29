@@ -1297,6 +1297,26 @@ mysql> DESCRIBE links;
                    "WWW VARCHAR(255) NOT NULL,"
                    "UNIQUE INDEX(LnkCod))");
 
+   /***** Table locations *****/
+/*
+mysql> DESCRIBE locations;
++-----------+--------------+------+-----+---------+----------------+
+| Field     | Type         | Null | Key | Default | Extra          |
++-----------+--------------+------+-----+---------+----------------+
+| LocCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
+| StartDate | date         | NO   |     | NULL    |                |
+| EndDate   | date         | NO   |     | NULL    |                |
+| Location  | varchar(255) | NO   |     | NULL    |                |
++-----------+--------------+------+-----+---------+----------------+
+4 rows in set (0,01 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS locations ("
+                   "LocCod INT NOT NULL AUTO_INCREMENT,"
+                   "StartDate DATE NOT NULL,"
+                   "EndDate DATE NOT NULL,"
+                   "Location VARCHAR(255) NOT NULL,"
+                   "UNIQUE INDEX (LocCod))");
+
    /***** Table log_banners *****/
 /*
 mysql> DESCRIBE log_banners;

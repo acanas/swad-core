@@ -176,13 +176,24 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.75 (2016-11-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.76 (2016-11-29)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.76:    Nov 29, 2016	New form to create location. Not finished. (208936 lines)
+					8 changes necessary in database:
+CREATE TABLE IF NOT EXISTS locations (LocCod INT NOT NULL AUTO_INCREMENT,StartDate DATE NOT NULL,EndDate DATE NOT NULL,Location VARCHAR(255) NOT NULL,UNIQUE INDEX(LocCod));
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1602','es','N','Ver mis ubicaciones');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1603','es','N','Editar mis ubicaciones');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1604','es','N','Solicitar creaci&oacute;n de ubicaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1605','es','N','Eliminar ubicaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1606','es','N','Cambiar fecha inicial de ubicaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1607','es','N','Cambiar fecha final de ubicaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1608','es','N','Renombrar ubicaci&oacute;n');
+
         Version 16.75:    Nov 28, 2016	New option to show my location. (207947 lines)
         Version 16.74.1:  Nov 28, 2016	Changed icon to show places. (207807 lines)
 Copy icon/mapmarker64x64.png to public icons directory

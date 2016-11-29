@@ -6296,6 +6296,27 @@ const char *Txt_Create_link =
 	"Criar liga&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_location =
+#if   L==1
+	"Crear ubicaci&oacute;";
+#elif L==2
+	"Standort eingeben";
+#elif L==3
+	"Create location";
+#elif L==4
+	"Crear ubicaci&oacute;n";
+#elif L==5
+	"Cr&eacute;er emplacement";
+#elif L==6
+	"Crear ubicaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Crea posizione";
+#elif L==8
+	"Tworzenie lokalizacj&eogon;";
+#elif L==9
+	"Criar localiza&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Create_notice =
 #if   L==1
 	"Crear av&iacute;s";
@@ -6819,6 +6840,27 @@ const char *Txt_Created_new_link_X =	// Warning: it is very important to include
 	"Utworzono nowy link <strong>%s</strong>.";
 #elif L==9
 	"Criado nova liga&ccedil;&atilde;o <strong>%s</strong>.";
+#endif
+
+const char *Txt_Created_new_location =
+#if   L==1
+	"Creada nova ubicaci&oacute;.";
+#elif L==2
+	"Neuer Standort eingegeben.";
+#elif L==3
+	"Created new location.";
+#elif L==4
+	"Creada nueva ubicaci&oacute;n.";
+#elif L==5
+	"Cr&eacute;&eacute; nouvel emplacement.";
+#elif L==6
+	"Creada nueva ubicaci&oacute;n.";	// Okoteve traducción
+#elif L==7
+	"Creata nuova posizione.";
+#elif L==8
+	"Utworzono nowe lokacja.";
+#elif L==9
+	"Criado nova localiza&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_Created_new_place_X =	// Warning: it is very important to include %s in the following sentences
@@ -17049,24 +17091,152 @@ const char *Txt_Local_address =
 
 const char *Txt_Location =
 #if   L==1
-	"Lloc";
+	"Ubicaci&oacute;";
 #elif L==2
 	"Standort";
 #elif L==3
 	"Location";
 #elif L==4
-	"Sitio";
+	"Ubicaci&oacute;n";
 #elif L==5
 	"Emplacement";
 #elif L==6
-	"Sitio";	// Okoteve traducción
+	"Ubicaci&oacute;n";	// Okoteve traducción
 #elif L==7
-	"Locazione";
+	"Posizione";
 #elif L==8
-	"Lokalizacja";
+	"Lokacja";
 #elif L==9
-	"Site";
+	"Localiza&ccedil;&atilde;o";
 #endif
+
+const char *Txt_Location_removed =
+#if   L==1
+	"Ubicaci&oacute; eliminada.";
+#elif L==2
+	"Standort entfernt.";
+#elif L==3
+	"Location removed.";
+#elif L==4
+	"Ubicaci&oacute;n eliminada.";
+#elif L==5
+	"Emplacement supprim&eacute;.";
+#elif L==6
+	"Ubicaci&oacute;n eliminada.";	// Okoteve traducción
+#elif L==7
+	"Posizione rimossa.";
+#elif L==8
+	"Lokacja usuniete.";
+#elif L==9
+	"Localiza&ccedil;&atilde;o removida.";
+#endif
+
+const char *Txt_Locations =
+#if   L==1
+	"Ubicacions";
+#elif L==2
+	"Standorte";
+#elif L==3
+	"Locations";
+#elif L==4
+	"Ubicaciones";
+#elif L==5
+	"Emplacements";
+#elif L==6
+	"Ubicaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Posizioni";
+#elif L==8
+	"Lokalizacje";
+#elif L==9
+	"Localiza&ccedil;&otilde;es";
+#endif
+
+const char *Txt_LOCATIONS_HELP_ORDER[2] =
+   {
+#if   L==1
+	 "Ordenar por fecha inicial"	// Necessita traduccio
+#elif L==2
+	 "Sortieren nach Startdatum"
+#elif L==3
+	 "Sort by start date"
+#elif L==4
+	 "Ordenar por fecha inicial"
+#elif L==5
+	 "Trier par date initiale"
+#elif L==6
+	 "Ordenar por fecha inicial"	// Okoteve traducción
+#elif L==7
+	 "Ordina per data iniziale"
+#elif L==8
+	 "Sortuj wedlug daty rozpoczecia"
+#elif L==9
+	 "Classificar por data de in&iacute;cio"
+#endif
+	 ,
+#if   L==1
+	 "Ordenar por fecha final"	// Necessita traduccio
+#elif L==2
+	 "Sortieren nach Enddatum"
+#elif L==3
+	 "Sort by end date"
+#elif L==4
+	 "Ordenar por fecha final"
+#elif L==5
+	 "Trier par date finale"
+#elif L==6
+	 "Ordenar por fecha final"	// Okoteve traducción
+#elif L==7
+	 "Ordina per data finale"
+#elif L==8
+	 "Sortuj wedlug daty koncowa"
+#elif L==9
+	 "Classificar por data final"
+#endif
+	};
+
+const char *Txt_LOCATIONS_ORDER[2] =
+   {
+#if   L==1
+	 "Data inicial"
+#elif L==2
+	 "Startdatum"
+#elif L==3
+	 "Start date"
+#elif L==4
+	 "Fecha inicial"
+#elif L==5
+	 "Date initiale"
+#elif L==6
+	 "Fecha inicial"	// Okoteve traducción
+#elif L==7
+	 "Data iniziale"
+#elif L==8
+	 "Data rozpoczecia"
+#elif L==9
+	 "Data de in&iacute;cio"
+#endif
+	 ,
+#if   L==1
+	"Data final"
+#elif L==2
+	"Enddatum"
+#elif L==3
+	"End date"
+#elif L==4
+	"Fecha final"
+#elif L==5
+	"Date finale"
+#elif L==6
+	"Fecha final"	// Okoteve traducción
+#elif L==7
+	"Data finale"
+#elif L==8
+	"Data koncowa"
+#elif L==9
+	"Data final"
+#endif
+	};
 
 const char *Txt_LOG_More_info =
 #if   L==1
@@ -23500,6 +23670,27 @@ const char *Txt_New_link =
 	"Nowy link";
 #elif L==9
 	"Nova liga&ccedil;&atilde;o";
+#endif
+
+const char *Txt_New_location =
+#if   L==1
+	"Nova ubicaci&oacute;";
+#elif L==2
+	"Neue Standort";
+#elif L==3
+	"New location";
+#elif L==4
+	"Nueva ubicaci&oacute;n";
+#elif L==5
+	"Nouvel emplacement";
+#elif L==6
+	"Nueva ubicaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Nuova posizione";
+#elif L==8
+	"Nowe lokacja";
+#elif L==9
+	"Nova localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_New_message =
@@ -42096,6 +42287,27 @@ const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y =	// Warning: it is v
 	"The date of the holiday <strong>%s</strong> has changed to <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_date_of_the_location_has_changed_to_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"La fecha de la festividad ha cambiado a <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"The date of the location has changed to <strong>%s</strong>.";	// Need Übersetzung
+#elif L==3
+	"The date of the location has changed to <strong>%s</strong>.";
+#elif L==4
+	"La fecha de la ubicaci&oacute;n ha cambiado a <strong>%s</strong>.";
+#elif L==5
+	"The date of the location has changed to <strong>%s</strong>.";	// Besoin de traduction
+#elif L==6
+	"La fecha de la ubicaci&oacute;n ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"La data delle posizione &egrave; cambiata a <strong>%s</strong>.";
+#elif L==8
+	"The date of the location has changed to <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"The date of the location has changed to <strong>%s</strong>.";	// Necessita de tradução
+#endif
+
 const char *Txt_The_date_range_must_be_less_than_or_equal_to_X_days =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"El rango de fechas debe ser menor o igual a %u d&iacute;as.";	// Necessita traduccio
@@ -43119,6 +43331,27 @@ const char *Txt_The_institution_X_already_exists =	// Warning: it is very import
 	"The institution <strong>%s</strong> already exists.";	// Necessita de tradução
 #endif
 
+const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
+#if   L==1
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
+#elif L==2
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
+#elif L==3
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";
+#elif L==4
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
+#elif L==5
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
+#elif L==6
+	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"L'istituzione <strong>%s</strong> &egrave; stata rinominata <strong>%s</strong>.";
+#elif L==8
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
+#elif L==9
+	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Necessita de tradução
+#endif
+
 const char *Txt_The_institution_of_the_centre_has_changed =
 #if   L==1
 	"La instituci&oacute;n del centro ha cambiado.";	// Necessita traduccio
@@ -43345,6 +43578,48 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 	"The list of %u users is too large to be displayed.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"The list of %u users is too large to be displayed.";		// Necessita de tradução
+#endif
+
+const char *Txt_The_location_has_changed_to_X =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"La ubicaci&oacute; ha canviat a <strong>%s</strong>.";
+#elif L==2
+	"Der Standort wurde in <strong>%s</strong> ge&auml;ndert.";
+#elif L==3
+	"The location has changed to <strong>%s</strong>.";
+#elif L==4
+	"La ubicaci&oacute;n ha cambiado a <strong>%s</strong>.";
+#elif L==5
+	"L'emplacement a chang&eacute; en <strong>%s</strong>.";
+#elif L==6
+	"La ubicaci&oacute;n ha cambiado a <strong>%s</strong>.";	// Okoteve traducción
+#elif L==7
+	"La posizione &egrave; cambiato a <strong>%s</strong>.";
+#elif L==8
+	"Zmieniona na miejscu <strong>%s</strong>.";
+#elif L==9
+	"A localiza&ccedil;&atilde;o mudou para <strong>%s</strong>.";
+#endif
+
+const char *Txt_The_location_has_not_changed =
+#if   L==1
+	"La ubicaci&oacute; no ha canviat.";
+#elif L==2
+	"Der Standort wurde nicht ge&auml;ndert.";
+#elif L==3
+	"The location has not changed.";
+#elif L==4
+	"La ubicaci&oacute;n no ha cambiado.";
+#elif L==5
+	"L'emplacement n'a pas chang&eacute;.";
+#elif L==6
+	"La ubicaci&oacute;n no ha cambiado.";	// Okoteve traducción
+#elif L==7
+	"La posizione non &egrave; cambiato.";
+#elif L==8
+	"Miejsca nie uleg&lstrok;a zmianie.";
+#elif L==9
+	"A localiza&ccedil;&atilde;o n&atilde;o foi alterado.";
 #endif
 
 const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit =
@@ -43780,27 +44055,6 @@ const char *Txt_The_name_of_the_holiday_X_has_not_changed =	// Warning: it is ve
 	"The name of the holiday <strong>%s</strong> has not changed.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"The name of the holiday <strong>%s</strong> has not changed.";		// Necessita de tradução
-#endif
-
-const char *Txt_The_institution_X_has_been_renamed_as_Y =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Necessita traduccio
-#elif L==2
-	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Need Übersetzung
-#elif L==3
-	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";
-#elif L==4
-	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";
-#elif L==5
-	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Besoin de traduction
-#elif L==6
-	"La instituci&oacute;n <strong>%s</strong> ha pasado a denominarse <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"L'istituzione <strong>%s</strong> &egrave; stata rinominata <strong>%s</strong>.";
-#elif L==8
-	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Potrzebujesz tlumaczenie
-#elif L==9
-	"The institution <strong>%s</strong> has been renamed as <strong>%s</strong>.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_name_of_the_institution_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
@@ -46378,6 +46632,27 @@ const char *Txt_There_are_no_links =
 	"There are no links.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"There are no links.";		// Necessita de tradução
+#endif
+
+const char *Txt_There_are_no_locations =
+#if   L==1
+	"No hi ha ubicacions.";
+#elif L==2
+	"Es gibt keine Standorte.";
+#elif L==3
+	"There are no locations.";
+#elif L==4
+	"No existen ubicaciones.";
+#elif L==5
+	"Il n'y a pas d'emplacements.";
+#elif L==6
+	"No existen ubicaciones.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono posizioni.";
+#elif L==8
+	"Brak lokalizacje.";
+#elif L==9
+	"N&atilde;o existem localiza&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_There_are_no_places =
@@ -51894,6 +52169,27 @@ const char *Txt_You_can_not_leave_the_IP_address_empty =
 	"You can not leave the IP address empty.";		// Necessita de tradução
 #endif
 
+const char *Txt_You_can_not_leave_the_location_empty =
+#if   L==1
+	"No es pot deixar la ubicaci&oacute; buido.";
+#elif L==2
+	"Sie k&ouml;nnen den Standort nicht leer lassen.";
+#elif L==3
+	"You can not leave the location empty.";
+#elif L==4
+	"No puede dejar la ubicaci&oacute;n vac&iacute;a.";
+#elif L==5
+	"Vous ne pouvez pas laisser l'emplacement vide.";
+#elif L==6
+	"No puede dejar la ubicaci&oacute;n vac&iacute;a.";	// Okoteve traducción
+#elif L==7
+	"Non puoi lasciare la posizione vuota.";
+#elif L==8
+	"Nie mo&zdot;na pozostawi&cacute; miejsca pustego.";
+#elif L==9
+	"Voc&ecirc; n&atilde;o pode deixar a localiza&ccedil;&atilde;o vazia.";
+#endif
+
 const char *Txt_You_can_not_leave_the_logo_empty =
 #if   L==1
 	"No puede dejar el logo vac&iacute;o.";		// Necessita traduccio
@@ -52095,6 +52391,36 @@ const char *Txt_You_can_not_leave_the_name_of_the_department_X_empty =	// Warnin
 	" of the department <strong>%s</strong> empty.";	// Necessita de tradução
 #endif
 
+const char *Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"No puede dejar el nombre "
+	"del dominio de correo <strong>%s</strong> vac&iacute;o.";	// Necessita traduccio
+#elif L==2
+	"You can not leave the name"
+	" of the email domain <strong>%s</strong> empty.";		// Need Übersetzung
+#elif L==3
+	"You can not leave the name"
+	" of the email domain <strong>%s</strong> empty.";
+#elif L==4
+	"No puede dejar el nombre"
+	" del dominio de correo <strong>%s</strong> vac&iacute;o.";
+#elif L==5
+	"You can not leave the name"
+	" of the email domain <strong>%s</strong> empty.";		// Besoin de traduction
+#elif L==6
+	"No puede dejar el nombre"
+	" del dominio de correo <strong>%s</strong> vac&iacute;o.";	// Okoteve traducción
+#elif L==7
+	"Non puoi lasciare il nome"
+	" del campo mail <strong>%s</strong> vuoto.";
+#elif L==8
+	"You can not leave the name"
+	" of the email domain <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"You can not leave the name"
+	" of the email domain <strong>%s</strong> empty.";		// Necessita de tradução
+#endif
+
 const char *Txt_You_can_not_leave_the_name_of_the_field_X_empty =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"No puede dejar el nombre"
@@ -52243,36 +52569,6 @@ const char *Txt_You_can_not_leave_the_name_of_the_link_X_empty =	// Warning: it 
 #elif L==9
 	"You can not leave the name"
 	" of the link <strong>%s</strong> empty.";		// Necessita de tradução
-#endif
-
-const char *Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"No puede dejar el nombre "
-	"del dominio de correo <strong>%s</strong> vac&iacute;o.";	// Necessita traduccio
-#elif L==2
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";		// Need Übersetzung
-#elif L==3
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";
-#elif L==4
-	"No puede dejar el nombre"
-	" del dominio de correo <strong>%s</strong> vac&iacute;o.";
-#elif L==5
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";		// Besoin de traduction
-#elif L==6
-	"No puede dejar el nombre"
-	" del dominio de correo <strong>%s</strong> vac&iacute;o.";	// Okoteve traducción
-#elif L==7
-	"Non puoi lasciare il nome"
-	" del campo mail <strong>%s</strong> vuoto.";
-#elif L==8
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"You can not leave the name"
-	" of the email domain <strong>%s</strong> empty.";		// Necessita de tradução
 #endif
 
 const char *Txt_You_can_not_leave_the_name_of_the_place_X_empty =	// Warning: it is very important to include %s in the following sentences
@@ -53794,6 +54090,27 @@ const char *Txt_You_must_specify_the_name_of_the_new_type_of_group =
 	"You must specify the name of the new type of group.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"You must specify the name of the new type of group.";	// Necessita de tradução
+#endif
+
+const char *Txt_You_must_specify_the_new_location =
+#if   L==1
+	"Cal especificar la nova ubicaci&oacute;.";
+#elif L==2
+	"Sie m&uuml;ssen den neuen Speicherort angeben.";
+#elif L==3
+	"You must specify the new location.";
+#elif L==4
+	"Debe especificar la nueva ubicaci&oacute;n.";
+#elif L==5
+	"Vous devez sp&eacute;cifier le nouvel emplacement.";
+#elif L==6
+	"Debe especificar la nueva ubicaci&oacute;n.";	// Okoteve traducción
+#elif L==7
+	"Devi specificare la nuova posizione.";
+#elif L==8
+	"Musisz poda&cacute; nazw&eogon; nowej lokalizacji.";
+#elif L==9
+	"Voc&ecirc; deve especificar a nova localiza&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_banner =

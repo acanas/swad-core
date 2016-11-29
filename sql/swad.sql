@@ -598,6 +598,15 @@ CREATE TABLE IF NOT EXISTS links (
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(LnkCod));
 --
+-- Table locations: stores the teachers' locations
+--
+CREATE TABLE IF NOT EXISTS locations (
+	LocCod INT NOT NULL AUTO_INCREMENT,
+	StartDate DATE NOT NULL,
+	EndDate DATE NOT NULL,
+	Location VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(LocCod));
+--
 -- Table log_banners: stores the log of clicked banners
 --
 CREATE TABLE IF NOT EXISTS log_banners (

@@ -53,6 +53,7 @@
 #include "swad_institution.h"
 #include "swad_layout.h"
 #include "swad_link.h"
+#include "swad_location.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_message.h"
@@ -354,6 +355,14 @@ struct Globals
                long DegCod;
               } Crss[Crs_MAX_COURSES_PER_USR];
            } MyCrss;
+	 struct
+	   {
+	    bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+	    unsigned Num;		// Number of locations
+	    struct Location *Lst;	// List of locations
+	    struct Location EditingLoc;
+	    Loc_OrderType_t SelectedOrderType;
+	   } Locs;
 	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me
 	 unsigned NumFollowing;	// Number of users I follow
