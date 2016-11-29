@@ -172,17 +172,23 @@
 
 // TODO: List only confirmed emails to send a message with MESSAGES > Email ?
 
+// TODO: When activating folders in groups, go to section for that type of group
+// TODO: I can not remove a folder inside assignments (see swad.ugr.es -> EC -> assignment acanas)
+// TODO: When teacher sees "No hay estudiantes", put a button to add students
+// TODO: When admin sees "No hay profesores", put a button to add teachers
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.76 (2016-11-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.77 (2016-11-29)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.77:    Nov 29, 2016	Changes in location. Not finished. (209483 lines)
         Version 16.76:    Nov 29, 2016	New form to create location. Not finished. (208936 lines)
 					8 changes necessary in database:
 CREATE TABLE IF NOT EXISTS locations (LocCod INT NOT NULL AUTO_INCREMENT,StartDate DATE NOT NULL,EndDate DATE NOT NULL,Location VARCHAR(255) NOT NULL,UNIQUE INDEX(LocCod));

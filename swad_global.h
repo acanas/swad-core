@@ -357,11 +357,11 @@ struct Globals
            } MyCrss;
 	 struct
 	   {
-	    bool LstIsRead;		// Is the list already read from database, or it needs to be read?
-	    unsigned Num;		// Number of locations
-	    struct Location *Lst;	// List of locations
-	    struct Location EditingLoc;
-	    Loc_OrderType_t SelectedOrderType;
+            bool LstIsRead;	// Is the list already read from database, or it needs to be read?
+            unsigned Num;	// Number of locations
+            long *LstLocCods;	// List of location codes
+            Loc_Order_t SelectedOrderType;
+            long LocCodToEdit;	// Used as parameter in contextual links
 	   } Locs;
 	 Usr_ShowUsrsType_t ListType;	// My preference about user's list type
 	 unsigned NumFollowers;	// Number of users who follow me

@@ -28,33 +28,51 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
-#include "swad_place.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Loc_MAX_LENGTH_LOCATION	255
+#define Loc_MAX_LENGTH_ASSIGNMENT_TITLE	255
 
+#define Loc_MAX_LENGTH_FOLDER 32
+
+#define Loc_NUM_TYPES_SEND_WORK 2
 typedef enum
   {
-   LOC_START_DATE,
-   LOC_END_DATE
-  } Loc_StartOrEndDate_t;
+   Loc_DO_NOT_SEND_WORK = 0,
+   Loc_SEND_WORK        = 1,
+  } Loc_SendWork_t;
+
+#define Loc_NUM_DATES 2
+typedef enum
+  {
+   Loc_START_TIME = 0,
+   Loc_END_TIME   = 1,
+  } Loc_StartOrEndTime_t;
 
 struct Location
   {
    long LocCod;
-   struct Date StartDate;
-   struct Date EndDate;
-   char Location[Loc_MAX_LENGTH_LOCATION+1];
+   bool Hidden;
+   long UsrCod;
+   time_t TimeUTC[Loc_NUM_DATES];
+   bool Open;
+   char Title[Loc_MAX_LENGTH_ASSIGNMENT_TITLE+1];
+   Loc_SendWork_t SendWork;
+   char Folder[Loc_MAX_LENGTH_FOLDER+1];
+   bool IBelongToCrsOrGrps;	// I can do this location
+				// (it is associated to no groups
+				// or, if associated to groups,
+				// I belong to any of the groups)
   };
 
 typedef enum
   {
    Loc_ORDER_BY_START_DATE = 0,
    Loc_ORDER_BY_END_DATE   = 1,
-  } Loc_OrderType_t;
+  } Loc_Order_t;
 
 #define Loc_DEFAULT_ORDER_TYPE Loc_ORDER_BY_START_DATE
 
@@ -63,15 +81,24 @@ typedef enum
 /*****************************************************************************/
 
 void Loc_SeeLocations (void);
-void Loc_EditLocations (void);
+void Loc_PutHiddenParamLocOrderType (void);
+void Loc_RequestCreatOrEditLoc (void);
 void Loc_GetListLocations (void);
+void Loc_GetDataOfLocationByCod (struct Location *Loc);
 void Loc_FreeListLocations (void);
 
+void Loc_GetNotifLocation (char *SummaryStr,char **ContentStr,long LocCod,unsigned MaxChars,bool GetContent);
+
 long Loc_GetParamLocCod (void);
+void Loc_AskRemLocation (void);
 void Loc_RemoveLocation (void);
-void Loc_ChangeStartDate (void);
-void Loc_ChangeEndDate (void);
-void Loc_RenameLocation (void);
-void Loc_RecFormNewLocation (void);
+void Loc_HideLocation (void);
+void Loc_ShowLocation (void);
+void Loc_RecFormLocation (void);
+void Loc_RemoveCrsLocations (long CrsCod);
+unsigned Loc_GetNumLocationsInCrs(long CrsCod);
+
+unsigned Loc_GetNumCoursesWithLocations (Sco_Scope_t Scope);
+unsigned Loc_GetNumLocations (Sco_Scope_t Scope,unsigned *NumNotif);
 
 #endif

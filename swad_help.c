@@ -227,8 +227,9 @@ const char *Hlp_PROFILE_Courses = WIKI "PROFILE.Courses";
 
 const char *Hlp_PROFILE_Timetable = WIKI "PROFILE.Timetable";
 
-const char *Hlp_PROFILE_Location      = WIKI "PROFILE.Location";
-const char *Hlp_PROFILE_Location_edit = WIKI "PROFILE.Location#edit";
+const char *Hlp_PROFILE_Location               = WIKI "PROFILE.Location";
+const char *Hlp_PROFILE_Location_new_location  = WIKI "PROFILE.Location#new-location";
+const char *Hlp_PROFILE_Location_edit_location = WIKI "PROFILE.Location#edit-location";
 
 const char *Hlp_PROFILE_Record      = WIKI "PROFILE.Record";
 const char *Hlp_PROFILE_Institution = WIKI "PROFILE.Institution";
