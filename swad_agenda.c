@@ -62,59 +62,59 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Loc_ShowAllLocations (void);
-static bool Loc_CheckIfICanCreateLocations (void);
-static void Loc_PutIconsListLocations (void);
-static void Loc_PutIconToCreateNewLoc (void);
-static void Loc_PutButtonToCreateNewLoc (void);
-static void Loc_PutParamsToCreateNewLoc (void);
-static void Loc_ShowOneLocation (long LocCod);
-static void Loc_WriteLocAuthor (struct Location *Loc);
-static void Loc_GetParamLocOrderType (void);
+static void Agd_ShowAllEvents (void);
+static bool Agd_CheckIfICanCreateEvents (void);
+static void Agd_PutIconsListEvents (void);
+static void Agd_PutIconToCreateNewEvent (void);
+static void Agd_PutButtonToCreateNewEvent (void);
+static void Agd_PutParamsToCreateNewEvent (void);
+static void Agd_ShowOneEvent (long AgdCod);
+static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
+static void Agd_GetParamEventOrderType (void);
 
-static void Loc_PutFormsToRemEditOneLoc (long LocCod,bool Hidden);
-static void Loc_PutParams (void);
-static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query);
-static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt);
-static void Loc_PutParamLocCod (long LocCod);
-static bool Loc_CheckIfSimilarLocationExists (const char *Field,const char *Value,long LocCod);
-static void Loc_CreateLocation (struct Location *Loc,const char *Txt);
-static void Loc_UpdateLocation (struct Location *Loc,const char *Txt);
+static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden);
+static void Agd_PutParams (void);
+static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query);
+static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt);
+static void Agd_PutParamAgdCod (long AgdCod);
+static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,long AgdCod);
+static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
+static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 
 /*****************************************************************************/
-/************************* List all the locations ****************************/
+/**************************** List all the events ****************************/
 /*****************************************************************************/
 
-void Loc_SeeLocations (void)
+void Agd_SeeEvents (void)
   {
    /***** Get parameters *****/
-   Loc_GetParamLocOrderType ();
+   Agd_GetParamEventOrderType ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
-   /***** Show all the locations *****/
-   Loc_ShowAllLocations ();
+   /***** Show all the events *****/
+   Agd_ShowAllEvents ();
   }
 
 /*****************************************************************************/
-/************************* Show all the locations ****************************/
+/************************** Show all the events ******************************/
 /*****************************************************************************/
 
-static void Loc_ShowAllLocations (void)
+static void Agd_ShowAllEvents (void)
   {
-   extern const char *Hlp_PROFILE_Location;
+   extern const char *Hlp_PROFILE_Agenda;
    extern const char *Txt_Agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Event;
    extern const char *Txt_Location;
-   extern const char *Txt_No_locations;
+   extern const char *Txt_No_events;
    Loc_Order_t Order;
    struct Pagination Pagination;
    unsigned NumLoc;
 
-   /***** Get list of locations *****/
-   Loc_GetListLocations ();
+   /***** Get list of events *****/
+   Agd_GetListEvents ();
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Usrs.Me.Locs.Num;
@@ -128,7 +128,7 @@ static void Loc_ShowAllLocations (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Agenda,
-                        Loc_PutIconsListLocations,Hlp_PROFILE_Location);
+                        Agd_PutIconsListEvents,Hlp_PROFILE_Agenda);
 
    if (Gbl.Usrs.Me.Locs.Num)
      {
@@ -164,21 +164,21 @@ static void Loc_ShowAllLocations (void)
 	       Txt_Event,
 	       Txt_Location);
 
-      /***** Write all the locations *****/
+      /***** Write all the events *****/
       for (NumLoc = Pagination.FirstItemVisible;
 	   NumLoc <= Pagination.LastItemVisible;
 	   NumLoc++)
-	 Loc_ShowOneLocation (Gbl.Usrs.Me.Locs.LstLocCods[NumLoc - 1]);
+	 Agd_ShowOneEvent (Gbl.Usrs.Me.Locs.LstLocCods[NumLoc - 1]);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
      }
-   else	// No locations created
-      Lay_ShowAlert (Lay_INFO,Txt_No_locations);
+   else	// No events created
+      Lay_ShowAlert (Lay_INFO,Txt_No_events);
 
-   /***** Button to create a new location *****/
-   if (Loc_CheckIfICanCreateLocations ())
-      Loc_PutButtonToCreateNewLoc ();
+   /***** Button to create a new event *****/
+   if (Agd_CheckIfICanCreateEvents ())
+      Agd_PutButtonToCreateNewEvent ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -187,87 +187,87 @@ static void Loc_ShowAllLocations (void)
    if (Pagination.MoreThanOnePage)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
-   /***** Free list of locations *****/
-   Loc_FreeListLocations ();
+   /***** Free list of events *****/
+   Agd_FreeListEvents ();
   }
 
 /*****************************************************************************/
-/********************* Check if I can create locations ***********************/
+/********************** Check if I can create events *************************/
 /*****************************************************************************/
 
-static bool Loc_CheckIfICanCreateLocations (void)
+static bool Agd_CheckIfICanCreateEvents (void)
   {
    return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
-/**************** Put contextual icons in list of locations ******************/
+/****************** Put contextual icons in list of events *******************/
 /*****************************************************************************/
 
-static void Loc_PutIconsListLocations (void)
+static void Agd_PutIconsListEvents (void)
   {
-   /***** Put icon to create a new location *****/
-   if (Loc_CheckIfICanCreateLocations ())
-      Loc_PutIconToCreateNewLoc ();
+   /***** Put icon to create a new event *****/
+   if (Agd_CheckIfICanCreateEvents ())
+      Agd_PutIconToCreateNewEvent ();
   }
 
 /*****************************************************************************/
-/******************** Put icon to create a new location **********************/
+/********************** Put icon to create a new event ***********************/
 /*****************************************************************************/
 
-static void Loc_PutIconToCreateNewLoc (void)
+static void Agd_PutIconToCreateNewEvent (void)
   {
    extern const char *Txt_New_event;
 
-   /***** Put form to create a new location *****/
-   Lay_PutContextualLink (ActFrmNewLoc,Loc_PutParamsToCreateNewLoc,
+   /***** Put form to create a new event *****/
+   Lay_PutContextualLink (ActFrmNewLoc,Agd_PutParamsToCreateNewEvent,
                           "plus64x64.png",
                           Txt_New_event,NULL,
                           NULL);
   }
 
 /*****************************************************************************/
-/******************* Put button to create a new location *********************/
+/********************* Put button to create a new event **********************/
 /*****************************************************************************/
 
-static void Loc_PutButtonToCreateNewLoc (void)
+static void Agd_PutButtonToCreateNewEvent (void)
   {
    extern const char *Txt_New_event;
 
    Act_FormStart (ActFrmNewLoc);
-   Loc_PutParamsToCreateNewLoc ();
+   Agd_PutParamsToCreateNewEvent ();
    Lay_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
   }
 
 /*****************************************************************************/
-/****************** Put parameters to create a new location ******************/
+/******************** Put parameters to create a new event *******************/
 /*****************************************************************************/
 
-static void Loc_PutParamsToCreateNewLoc (void)
+static void Agd_PutParamsToCreateNewEvent (void)
   {
-   Loc_PutHiddenParamLocOrderType ();
+   Agd_PutHiddenParamEventsOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
-/**************************** Show one location ******************************/
+/******************************* Show one event ******************************/
 /*****************************************************************************/
 
-static void Loc_ShowOneLocation (long LocCod)
+static void Agd_ShowOneEvent (long AgdCod)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
-   struct Location Loc;
+   struct AgendaEvent AgdEvent;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
-   /***** Get data of this location *****/
-   Loc.LocCod = LocCod;
-   Loc_GetDataOfLocationByCod (&Loc);
+   /***** Get data of this event *****/
+   AgdEvent.AgdCod = AgdCod;
+   Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Write first row of data of this location *****/
+   /***** Write first row of data of this event *****/
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
@@ -277,12 +277,12 @@ static void Loc_ShowOneLocation (long LocCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            Loc.Hidden ? (Loc.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Loc.Open ? "DATE_GREEN" :
-                                     "DATE_RED"),
+            AgdEvent.Hidden ? (AgdEvent.Open ? "DATE_GREEN_LIGHT" :
+        	                               "DATE_RED_LIGHT") :
+                              (AgdEvent.Open ? "DATE_GREEN" :
+                                               "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Loc.TimeUTC[Loc_START_TIME],Txt_Today);
+            UniqueId,AgdEvent.TimeUTC[Loc_START_TIME],Txt_Today);
 
    /* End date/time */
    UniqueId++;
@@ -292,54 +292,54 @@ static void Loc_ShowOneLocation (long LocCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            Loc.Hidden ? (Loc.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Loc.Open ? "DATE_GREEN" :
-                                     "DATE_RED"),
+            AgdEvent.Hidden ? (AgdEvent.Open ? "DATE_GREEN_LIGHT" :
+        	                               "DATE_RED_LIGHT") :
+                              (AgdEvent.Open ? "DATE_GREEN" :
+                                               "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Loc.TimeUTC[Loc_END_TIME],Txt_Today);
+            UniqueId,AgdEvent.TimeUTC[Loc_END_TIME],Txt_Today);
 
    /* Event */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
                       "<div class=\"%s\">%s</div>"
                       "</td>",
             Gbl.RowEvenOdd,
-            Loc.Hidden ? "ASG_TITLE_LIGHT" :
-        	         "ASG_TITLE",
-            Loc.Event);
+            AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+        	              "ASG_TITLE",
+            AgdEvent.Event);
 
-   /* Location */
+   /* Event */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
                       "<div class=\"%s\">%s</div>"
                       "</td>"
 	              "</tr>",
             Gbl.RowEvenOdd,
-            Loc.Hidden ? "ASG_TITLE_LIGHT" :
-        	         "ASG_TITLE",
-            Loc.Location);
+            AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+        	              "ASG_TITLE",
+            AgdEvent.Location);
 
-   /***** Write second row of data of this location *****/
+   /***** Write second row of data of this event *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 
-   /* Author of the location */
-   Loc_WriteLocAuthor (&Loc);
+   /* Author of the event */
+   Agd_WriteEventAuthor (&AgdEvent);
 
-   /* Forms to remove/edit this location */
+   /* Forms to remove/edit this event */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
       case Rol_SYS_ADM:
-         Loc_PutFormsToRemEditOneLoc (Loc.LocCod,Loc.Hidden);
+         Agd_PutFormsToRemEditOneEvent (AgdEvent.AgdCod,AgdEvent.Hidden);
          break;
       default:
          break;
      }
    fprintf (Gbl.F.Out,"</td>");
 
-   /* Text of the location */
-   Loc_GetLocationTxtFromDB (Loc.LocCod,Txt);
+   /* Text of the event */
+   Agd_GetEventTxtFromDB (AgdEvent.AgdCod,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -351,18 +351,18 @@ static void Loc_ShowOneLocation (long LocCod)
                       "</p>"
                       "</td>"
                       "</tr>",
-            Loc.Hidden ? "DAT_LIGHT" :
-        	         "DAT",
+            AgdEvent.Hidden ? "DAT_LIGHT" :
+        	              "DAT",
             Txt);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
-/********************** Write the author of a location ***********************/
+/*********************** Write the author of an event ************************/
 /*****************************************************************************/
 
-static void Loc_WriteLocAuthor (struct Location *Loc)
+static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent)
   {
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
@@ -374,7 +374,7 @@ static void Loc_WriteLocAuthor (struct Location *Loc)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Get data of author *****/
-   UsrDat.UsrCod = Loc->UsrCod;
+   UsrDat.UsrCod = AgdEvent->UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
@@ -394,8 +394,8 @@ static void Loc_WriteLocAuthor (struct Location *Loc)
    Str_LimitLengthHTMLStr (FirstName,9);
    Str_LimitLengthHTMLStr (Surnames,9);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
-            Loc->Hidden ? "MSG_AUT_LIGHT" :
-        	          "MSG_AUT",
+            AgdEvent->Hidden ? "MSG_AUT_LIGHT" :
+        	               "MSG_AUT",
             FirstName,Surnames);
 
    /***** Free memory used for user's data *****/
@@ -403,10 +403,10 @@ static void Loc_WriteLocAuthor (struct Location *Loc)
   }
 
 /*****************************************************************************/
-/******** Get parameter with the type or order in list of locations **********/
+/********* Get parameter with the type or order in list of events ************/
 /*****************************************************************************/
 
-static void Loc_GetParamLocOrderType (void)
+static void Agd_GetParamEventOrderType (void)
   {
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
@@ -419,19 +419,19 @@ static void Loc_GetParamLocOrderType (void)
   }
 
 /*****************************************************************************/
-/**** Put a hidden parameter with the type of order in list of locations *****/
+/****** Put a hidden parameter with the type of order in list of events ******/
 /*****************************************************************************/
 
-void Loc_PutHiddenParamLocOrderType (void)
+void Agd_PutHiddenParamEventsOrderType (void)
   {
    Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Usrs.Me.Locs.SelectedOrderType);
   }
 
 /*****************************************************************************/
-/****************** Put a link (form) to edit one location *******************/
+/******************* Put a link (form) to edit one event *********************/
 /*****************************************************************************/
 
-static void Loc_PutFormsToRemEditOneLoc (long LocCod,bool Hidden)
+static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
   {
    extern const char *Txt_Remove;
    extern const char *Txt_Show;
@@ -440,28 +440,28 @@ static void Loc_PutFormsToRemEditOneLoc (long LocCod,bool Hidden)
 
    fprintf (Gbl.F.Out,"<div>");
 
-   Gbl.Usrs.Me.Locs.LocCodToEdit = LocCod;	// Used as parameter in contextual links
+   Gbl.Usrs.Me.Locs.LocCodToEdit = AgdCod;	// Used as parameter in contextual links
 
-   /***** Put form to remove location *****/
-   Lay_PutContextualLink (ActReqRemLoc,Loc_PutParams,
+   /***** Put form to remove event *****/
+   Lay_PutContextualLink (ActReqRemLoc,Agd_PutParams,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
                           NULL);
 
-   /***** Put form to hide/show location *****/
+   /***** Put form to hide/show event *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoLoc,Loc_PutParams,
+      Lay_PutContextualLink (ActShoLoc,Agd_PutParams,
                              "eye-slash-on64x64.png",
 			     Txt_Show,NULL,
                              NULL);
    else
-      Lay_PutContextualLink (ActHidLoc,Loc_PutParams,
+      Lay_PutContextualLink (ActHidLoc,Agd_PutParams,
                              "eye-on64x64.png",
 			     Txt_Hide,NULL,
                              NULL);
 
-   /***** Put form to edit location *****/
-   Lay_PutContextualLink (ActEdiOneLoc,Loc_PutParams,
+   /***** Put form to edit event *****/
+   Lay_PutContextualLink (ActEdiOneLoc,Agd_PutParams,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
@@ -470,22 +470,22 @@ static void Loc_PutFormsToRemEditOneLoc (long LocCod,bool Hidden)
   }
 
 /*****************************************************************************/
-/********************* Params used to edit a location ************************/
+/********************** Params used to edit an event *************************/
 /*****************************************************************************/
 
-static void Loc_PutParams (void)
+static void Agd_PutParams (void)
   {
-   Loc_PutParamLocCod (Gbl.Usrs.Me.Locs.LocCodToEdit);
-   Loc_PutHiddenParamLocOrderType ();
+   Agd_PutParamAgdCod (Gbl.Usrs.Me.Locs.LocCodToEdit);
+   Agd_PutHiddenParamEventsOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
-/************************* List all the locations ****************************/
+/*************************** List all the events *****************************/
 /*****************************************************************************/
 
-void Loc_GetListLocations (void)
+void Agd_GetListEvents (void)
   {
    char HiddenSubQuery[256];
    char OrderBySubQuery[256];
@@ -496,9 +496,9 @@ void Loc_GetListLocations (void)
    unsigned NumLoc;
 
    if (Gbl.Usrs.Me.Locs.LstIsRead)
-      Loc_FreeListLocations ();
+      Agd_FreeListEvents ();
 
-   /***** Get list of locations from database *****/
+   /***** Get list of events from database *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
@@ -518,30 +518,30 @@ void Loc_GetListLocations (void)
          sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Location DESC,Event DESC");
          break;
      }
-   sprintf (Query,"SELECT LocCod"
+   sprintf (Query,"SELECT AgdCod"
 		  " FROM locations"
 		  " WHERE UsrCod='%ld'%s"
 		  " ORDER BY %s",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,HiddenSubQuery,OrderBySubQuery);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get locations");
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
 
-   if (NumRows) // Locations found...
+   if (NumRows) // Events found...
      {
       Gbl.Usrs.Me.Locs.Num = (unsigned) NumRows;
 
-      /***** Create list of locations *****/
+      /***** Create list of events *****/
       if ((Gbl.Usrs.Me.Locs.LstLocCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store list of locations.");
+          Lay_ShowErrorAndExit ("Not enough memory to store list of agenda events.");
 
-      /***** Get the locations codes *****/
+      /***** Get the events codes *****/
       for (NumLoc = 0;
 	   NumLoc < Gbl.Usrs.Me.Locs.Num;
 	   NumLoc++)
         {
-         /* Get next location code */
+         /* Get next event code */
          row = mysql_fetch_row (mysql_res);
          if ((Gbl.Usrs.Me.Locs.LstLocCods[NumLoc] = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong location code.");
+            Lay_ShowErrorAndExit ("Error: wrong event code.");
         }
      }
    else
@@ -554,78 +554,78 @@ void Loc_GetListLocations (void)
   }
 
 /*****************************************************************************/
-/******************** Get location data using its code ***********************/
+/*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-void Loc_GetDataOfLocationByCod (struct Location *Loc)
+void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
   {
    char Query[1024];
 
    /***** Build query *****/
-   sprintf (Query,"SELECT LocCod,UsrCod,Hidden,"
+   sprintf (Query,"SELECT AgdCod,UsrCod,Hidden,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
                   "Location,Event"
                   " FROM locations"
-                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Get data of location *****/
-   Loc_GetDataOfLocation (Loc,Query);
+   /***** Get data of event *****/
+   Agd_GetDataOfEvent (AgdEvent,Query);
   }
 
 /*****************************************************************************/
-/*************************** Get location data *******************************/
+/****************************** Get event data *******************************/
 /*****************************************************************************/
 
-static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
+static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Clear all location data *****/
-   Loc->LocCod = -1L;
-   Loc->UsrCod = -1L;
-   Loc->Hidden = false;
-   Loc->TimeUTC[Loc_START_TIME] =
-   Loc->TimeUTC[Loc_END_TIME  ] = (time_t) 0;
-   Loc->Open = false;
-   Loc->Location[0] = '\0';
-   Loc->Event[0]    = '\0';
+   /***** Clear all event data *****/
+   AgdEvent->AgdCod = -1L;
+   AgdEvent->UsrCod = -1L;
+   AgdEvent->Hidden = false;
+   AgdEvent->TimeUTC[Loc_START_TIME] =
+   AgdEvent->TimeUTC[Loc_END_TIME  ] = (time_t) 0;
+   AgdEvent->Open = false;
+   AgdEvent->Event[0]    = '\0';
+   AgdEvent->Location[0] = '\0';
 
-   /***** Get data of location from database *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get location data");
+   /***** Get data of event from database *****/
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda event data");
 
-   if (NumRows) // Location found...
+   if (NumRows) // Event found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the location (row[0]) */
-      Loc->LocCod = Str_ConvertStrCodToLongCod (row[0]);
+      /* Get code of the event (row[0]) */
+      AgdEvent->AgdCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get author of the location (row[1]) */
-      Loc->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+      /* Get author of the event (row[1]) */
+      AgdEvent->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get whether the location is hidden or not (row[2]) */
-      Loc->Hidden = (row[2][0] == 'Y');
+      /* Get whether the event is hidden or not (row[2]) */
+      AgdEvent->Hidden = (row[2][0] == 'Y');
 
       /* Get start date (row[3] holds the start UTC time) */
-      Loc->TimeUTC[Loc_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      AgdEvent->TimeUTC[Loc_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date   (row[4] holds the end   UTC time) */
-      Loc->TimeUTC[Loc_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      AgdEvent->TimeUTC[Loc_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the location is open or closed (row(5)) */
-      Loc->Open = (row[5][0] == '1');
+      /* Get whether the event is open or closed (row(5)) */
+      AgdEvent->Open = (row[5][0] == '1');
 
-      /* Get the location (row[6]) */
-      strcpy (Loc->Location,row[6]);
+      /* Get the event (row[6]) */
+      strcpy (AgdEvent->Location,row[6]);
 
       /* Get the event (row[7]) */
-      strcpy (Loc->Event,row[7]);
+      strcpy (AgdEvent->Event,row[7]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -633,14 +633,14 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
   }
 
 /*****************************************************************************/
-/************************** Free list of locations ***************************/
+/*************************** Free list of events *****************************/
 /*****************************************************************************/
 
-void Loc_FreeListLocations (void)
+void Agd_FreeListEvents (void)
   {
    if (Gbl.Usrs.Me.Locs.LstIsRead && Gbl.Usrs.Me.Locs.LstLocCods)
      {
-      /***** Free memory used by the list of locations *****/
+      /***** Free memory used by the list of events *****/
       free ((void *) Gbl.Usrs.Me.Locs.LstLocCods);
       Gbl.Usrs.Me.Locs.LstLocCods = NULL;
       Gbl.Usrs.Me.Locs.Num = 0;
@@ -649,21 +649,21 @@ void Loc_FreeListLocations (void)
   }
 
 /*****************************************************************************/
-/********************* Get location text from database ***********************/
+/*********************** Get event text from database ************************/
 /*****************************************************************************/
 
-static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt)
+static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
-   /***** Get text of location from database *****/
+   /***** Get text of event from database *****/
    sprintf (Query,"SELECT Txt FROM locations"
-	          " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get location text");
+	          " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get event text");
 
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
@@ -679,263 +679,248 @@ static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt)
    DB_FreeMySQLResult (&mysql_res);
 
    if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Error when getting location text.");
+      Lay_ShowErrorAndExit ("Error when getting event text.");
   }
 
 /*****************************************************************************/
-/****************** Write parameter with code of location ********************/
+/******************* Write parameter with code of event **********************/
 /*****************************************************************************/
 
-static void Loc_PutParamLocCod (long LocCod)
+static void Agd_PutParamAgdCod (long AgdCod)
   {
-   Par_PutHiddenParamLong ("LocCod",LocCod);
+   Par_PutHiddenParamLong ("AgdCod",AgdCod);
   }
 
 /*****************************************************************************/
-/******************* Get parameter with code of location *********************/
+/******************** Get parameter with code of event ***********************/
 /*****************************************************************************/
 
-long Loc_GetParamLocCod (void)
+long Agd_GetParamAgdCod (void)
   {
    char LongStr[1+10+1];
 
-   /***** Get parameter with code of location *****/
-   Par_GetParToText ("LocCod",LongStr,1+10);
+   /***** Get parameter with code of event *****/
+   Par_GetParToText ("AgdCod",LongStr,1+10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
-/************* Ask for confirmation of removing of a location ****************/
+/************** Ask for confirmation of removing of an event *****************/
 /*****************************************************************************/
 
-void Loc_AskRemLocation (void)
+void Agd_AskRemEvent (void)
   {
-   extern const char *Txt_Do_you_really_want_to_remove_the_location_X;
-   extern const char *Txt_Remove_location;
-   struct Location Loc;
+   extern const char *Txt_Do_you_really_want_to_remove_the_event_X;
+   extern const char *Txt_Remove_event;
+   struct AgendaEvent AgdEvent;
 
    /***** Get parameters *****/
-   Loc_GetParamLocOrderType ();
+   Agd_GetParamEventOrderType ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
-   /***** Get location code *****/
-   if ((Loc.LocCod = Loc_GetParamLocCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of location is missing.");
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
 
-   /***** Get data of the location from database *****/
-   Loc_GetDataOfLocationByCod (&Loc);
+   /***** Get data of the event from database *****/
+   Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemLoc);
-   Loc_PutParamLocCod (Loc.LocCod);
-   Loc_PutHiddenParamLocOrderType ();
+   Agd_PutParamAgdCod (AgdEvent.AgdCod);
+   Agd_PutHiddenParamEventsOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_location_X,
-            Loc.Event);
+   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
+            AgdEvent.Event);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_location);
+   Lay_PutRemoveButton (Txt_Remove_event);
    Act_FormEnd ();
 
-   /***** Show locations again *****/
-   Loc_SeeLocations ();
+   /***** Show events again *****/
+   Agd_SeeEvents ();
   }
 
 /*****************************************************************************/
-/***************************** Remove a location *****************************/
+/****************************** Remove an event ******************************/
 /*****************************************************************************/
 
-void Loc_RemoveLocation (void)
+void Agd_RemoveEvent (void)
   {
    extern const char *Txt_Location_X_removed;
    char Query[512];
-   struct Location Loc;
+   struct AgendaEvent AgdEvent;
 
-   /***** Get location code *****/
-   if ((Loc.LocCod = Loc_GetParamLocCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of location is missing.");
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
 
-   /***** Get data of the location from database *****/
-   Loc_GetDataOfLocationByCod (&Loc);	// Inside this function, the course is checked to be the current one
+   /***** Get data of the event from database *****/
+   Agd_GetDataOfEventByCod (&AgdEvent);	// Inside this function, the course is checked to be the current one
 
-   /***** Remove location *****/
+   /***** Remove event *****/
    sprintf (Query,"DELETE FROM locations"
-                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryDELETE (Query,"can not remove location");
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryDELETE (Query,"can not remove event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_removed,Loc.Event);
+   sprintf (Gbl.Message,Txt_Location_X_removed,AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-   /***** Show locations again *****/
-   Loc_SeeLocations ();
+   /***** Show events again *****/
+   Agd_SeeEvents ();
   }
 
 /*****************************************************************************/
-/****************************** Hide a location ******************************/
+/******************************* Hide an event *******************************/
 /*****************************************************************************/
 
-void Loc_HideLocation (void)
+void Agd_HideEvent (void)
   {
    extern const char *Txt_Event_X_is_now_hidden;
    char Query[512];
-   struct Location Loc;
+   struct AgendaEvent AgdEvent;
 
-   /***** Get location code *****/
-   if ((Loc.LocCod = Loc_GetParamLocCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of location is missing.");
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
 
-   /***** Get data of the location from database *****/
-   Loc_GetDataOfLocationByCod (&Loc);
+   /***** Get data of the event from database *****/
+   Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Hide location *****/
+   /***** Hide event *****/
    sprintf (Query,"UPDATE locations SET Hidden='Y'"
-                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not hide location");
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not hide event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,Loc.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-   /***** Show locations again *****/
-   Loc_SeeLocations ();
+   /***** Show events again *****/
+   Agd_SeeEvents ();
   }
 
 /*****************************************************************************/
-/****************************** Show a location ******************************/
+/******************************* Show an event *******************************/
 /*****************************************************************************/
 
-void Loc_ShowLocation (void)
+void Agd_ShowEvent (void)
   {
    extern const char *Txt_Event_X_is_now_visible;
    char Query[512];
-   struct Location Loc;
+   struct AgendaEvent AgdEvent;
 
-   /***** Get location code *****/
-   if ((Loc.LocCod = Loc_GetParamLocCod ()) == -1L)
-      Lay_ShowErrorAndExit ("Code of location is missing.");
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
 
-   /***** Get data of the location from database *****/
-   Loc_GetDataOfLocationByCod (&Loc);
+   /***** Get data of the event from database *****/
+   Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Hide location *****/
+   /***** Hide event *****/
    sprintf (Query,"UPDATE locations SET Hidden='N'"
-                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not show location");
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not show event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,Loc.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-   /***** Show locations again *****/
-   Loc_SeeLocations ();
+   /***** Show events again *****/
+   Agd_SeeEvents ();
   }
 
 /*****************************************************************************/
-/********* Check if the title or the folder of a location exists *************/
+/*********** Check if the title or the folder of an event exists *************/
 /*****************************************************************************/
 
-static bool Loc_CheckIfSimilarLocationExists (const char *Field,const char *Value,long LocCod)
+static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,long AgdCod)
   {
    char Query[512];
 
-   /***** Get number of locations with a field value from database *****/
+   /***** Get number of events with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM locations"
-	          " WHERE UsrCod='%ld' AND %s='%s' AND LocCod<>'%ld'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Field,Value,LocCod);
-   return (DB_QueryCOUNT (Query,"can not get similar locations") != 0);
+	          " WHERE UsrCod='%ld' AND %s='%s' AND AgdCod<>'%ld'",
+            Gbl.Usrs.Me.UsrDat.UsrCod,Field,Value,AgdCod);
+   return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
   }
 
 /*****************************************************************************/
-/******************* Put a form to create a new location *********************/
+/******************** Put a form to create a new event ***********************/
 /*****************************************************************************/
 
-void Loc_RequestCreatOrEditLoc (void)
+void Agd_RequestCreatOrEditEvent (void)
   {
-   extern const char *Hlp_PROFILE_Location_new_location;
-   extern const char *Hlp_PROFILE_Location_edit_location;
+   extern const char *Hlp_PROFILE_Agenda_new_event;
+   extern const char *Hlp_PROFILE_Agenda_edit_event;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_event;
-   extern const char *Txt_Edit_location;
+   extern const char *Txt_Edit_event;
    extern const char *Txt_Location;
    extern const char *Txt_Event;
    extern const char *Txt_Description;
    extern const char *Txt_Create_event;
    extern const char *Txt_Save;
-   struct Location Loc;
-   bool ItsANewLocation;
+   struct AgendaEvent AgdEvent;
+   bool ItsANewEvent;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get parameters *****/
-   Loc_GetParamLocOrderType ();
+   Agd_GetParamEventOrderType ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
-   /***** Get the code of the location *****/
-   ItsANewLocation = ((Loc.LocCod = Loc_GetParamLocCod ()) == -1L);
+   /***** Get the code of the event *****/
+   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
-   /***** Get from the database the data of the location *****/
-   if (ItsANewLocation)
+   /***** Get from the database the data of the event *****/
+   if (ItsANewEvent)
      {
-      /* Initialize to empty location */
-      Loc.LocCod = -1L;
-      Loc.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Loc.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Loc.TimeUTC[Loc_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      Loc.Open = true;
-      Loc.Location[0] = '\0';
-      Loc.Event[0]    = '\0';
+      /* Initialize to empty event */
+      AgdEvent.AgdCod = -1L;
+      AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      AgdEvent.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
+      AgdEvent.TimeUTC[Loc_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      AgdEvent.Open = true;
+      AgdEvent.Event[0]    = '\0';
+      AgdEvent.Location[0] = '\0';
      }
    else
      {
-      /* Get data of the location from database */
-      Loc_GetDataOfLocationByCod (&Loc);
+      /* Get data of the event from database */
+      Agd_GetDataOfEventByCod (&AgdEvent);
 
-      /* Get text of the location from database */
-      Loc_GetLocationTxtFromDB (Loc.LocCod,Txt);
+      /* Get text of the event from database */
+      Agd_GetEventTxtFromDB (AgdEvent.AgdCod,Txt);
      }
 
    /***** Start form *****/
-   if (ItsANewLocation)
+   if (ItsANewEvent)
       Act_FormStart (ActNewLoc);
    else
      {
       Act_FormStart (ActChgLoc);
-      Loc_PutParamLocCod (Loc.LocCod);
+      Agd_PutParamAgdCod (AgdEvent.AgdCod);
      }
-   Loc_PutHiddenParamLocOrderType ();
+   Agd_PutHiddenParamEventsOrderType ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,
-                             ItsANewLocation ? Txt_New_event :
-                                               Txt_Edit_location,
+                             ItsANewEvent ? Txt_New_event :
+                                            Txt_Edit_event,
                              NULL,
-                             ItsANewLocation ? Hlp_PROFILE_Location_new_location :
-                        	               Hlp_PROFILE_Location_edit_location,
+                             ItsANewEvent ? Hlp_PROFILE_Agenda_new_event :
+                        	            Hlp_PROFILE_Agenda_edit_event,
                              2);
-
-   /***** Location *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Location\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Location,
-            Loc_MAX_LENGTH_LOCATION,Loc.Location);
 
    /***** Event *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -950,10 +935,25 @@ void Loc_RequestCreatOrEditLoc (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Event,
-            Loc_MAX_LENGTH_EVENT,Loc.Event);
+            Loc_MAX_LENGTH_EVENT,AgdEvent.Event);
+
+   /***** Location *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\" name=\"Location\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Location,
+            Loc_MAX_LENGTH_LOCATION,AgdEvent.Location);
 
    /***** Start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Loc.TimeUTC);
+   Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC);
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -964,54 +964,54 @@ void Loc_RequestCreatOrEditLoc (void)
                       "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Description);
-   if (!ItsANewLocation)
+   if (!ItsANewEvent)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
                       "</td>"
                       "</tr>");
 
-   /***** New location *****/
-   if (ItsANewLocation)
+   /***** New event *****/
+   if (ItsANewEvent)
       Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
    else
       Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();
 
-   /***** Show current locations, if any *****/
-   Loc_ShowAllLocations ();
+   /***** Show current events, if any *****/
+   Agd_ShowAllEvents ();
   }
 
 /*****************************************************************************/
-/******************** Receive form to create a new location ******************/
+/********************* Receive form to create a new event ********************/
 /*****************************************************************************/
 
-void Loc_RecFormLocation (void)
+void Agd_RecFormEvent (void)
   {
-   extern const char *Txt_Already_existed_a_location_with_the_title_X;
-   extern const char *Txt_You_must_specify_the_title_of_the_location;
-   extern const char *Txt_Created_new_location_X;
+   extern const char *Txt_Already_existed_an_event_with_the_title_X;
+   extern const char *Txt_You_must_specify_the_title_of_the_event;
+   extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct Location OldLoc;
-   struct Location NewLoc;
-   bool ItsANewLocation;
-   bool NewLocationIsCorrect = true;
+   struct AgendaEvent OldLoc;
+   struct AgendaEvent NewLoc;
+   bool ItsANewEvent;
+   bool NewEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
-   /***** Get the code of the location *****/
-   ItsANewLocation = ((NewLoc.LocCod = Loc_GetParamLocCod ()) == -1L);
+   /***** Get the code of the event *****/
+   ItsANewEvent = ((NewLoc.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
-   if (!ItsANewLocation)
+   if (!ItsANewEvent)
      {
-      /* Get data of the old (current) location from database */
-      OldLoc.LocCod = NewLoc.LocCod;
-      Loc_GetDataOfLocationByCod (&OldLoc);
+      /* Get data of the old (current) event from database */
+      OldLoc.AgdCod = NewLoc.AgdCod;
+      Agd_GetDataOfEventByCod (&OldLoc);
      }
 
    /***** Get start/end date-times *****/
    NewLoc.TimeUTC[Loc_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
    NewLoc.TimeUTC[Loc_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
-   /***** Get location *****/
+   /***** Get event *****/
    Par_GetParToText ("Location",NewLoc.Location,Loc_MAX_LENGTH_LOCATION);
 
    /***** Get event *****/
@@ -1026,45 +1026,45 @@ void Loc_RecFormLocation (void)
    if (NewLoc.TimeUTC[Loc_END_TIME] == 0)
       NewLoc.TimeUTC[Loc_END_TIME] = NewLoc.TimeUTC[Loc_START_TIME] + 2*60*60;	// +2 hours
 
-   /***** Check if location is correct *****/
-   if (!NewLoc.Location[0])	// If there is no location
+   /***** Check if event is correct *****/
+   if (!NewLoc.Location[0])	// If there is no event
      {
-      NewLocationIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_location);
+      NewEventIsCorrect = false;
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Check if event is correct *****/
    if (NewLoc.Event[0])	// If there's event
      {
-      /* If title of location was in database... */
-      if (Loc_CheckIfSimilarLocationExists ("Event",NewLoc.Event,NewLoc.LocCod))
+      /* If title of event was in database... */
+      if (Agd_CheckIfSimilarEventExists ("Event",NewLoc.Event,NewLoc.AgdCod))
         {
-         NewLocationIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_a_location_with_the_title_X,
+         NewEventIsCorrect = false;
+         sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
                   NewLoc.Event);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
    else	// If there is no event
      {
-      NewLocationIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_location);
+      NewEventIsCorrect = false;
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
-   /***** Create a new location or update an existing one *****/
-   if (NewLocationIsCorrect)
+   /***** Create a new event or update an existing one *****/
+   if (NewEventIsCorrect)
      {
-      if (ItsANewLocation)
+      if (ItsANewEvent)
 	{
-         Loc_CreateLocation (&NewLoc,Txt);	// Add new location to database
+         Agd_CreateEvent (&NewLoc,Txt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_location_X,NewLoc.Event);
+	 sprintf (Gbl.Message,Txt_Created_new_event_X,NewLoc.Event);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
         {
-	 Loc_UpdateLocation (&NewLoc,Txt);
+	 Agd_UpdateEvent (&NewLoc,Txt);
 
 	 /***** Write success message *****/
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
@@ -1073,98 +1073,98 @@ void Loc_RecFormLocation (void)
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
 
-      /***** Show locations again *****/
-      Loc_SeeLocations ();
+      /***** Show events again *****/
+      Agd_SeeEvents ();
      }
    else
       // TODO: The form should be filled with partial data, now is always empty
-      Loc_RequestCreatOrEditLoc ();
+      Agd_RequestCreatOrEditEvent ();
   }
 
 /*****************************************************************************/
-/************************* Create a new location *****************************/
+/************************** Create a new event *******************************/
 /*****************************************************************************/
 
-static void Loc_CreateLocation (struct Location *Loc,const char *Txt)
+static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
-   /***** Create a new location *****/
+   /***** Create a new event *****/
    sprintf (Query,"INSERT INTO locations"
 	          " (UsrCod,StartTime,EndTime,Location,Event,Txt)"
                   " VALUES"
                   " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Loc->TimeUTC[Loc_START_TIME],
-            Loc->TimeUTC[Loc_END_TIME  ],
-            Loc->Location,
-            Loc->Event,
+            AgdEvent->TimeUTC[Loc_START_TIME],
+            AgdEvent->TimeUTC[Loc_END_TIME  ],
+            AgdEvent->Location,
+            AgdEvent->Event,
             Txt);
-   Loc->LocCod = DB_QueryINSERTandReturnCode (Query,"can not create new location");
+   AgdEvent->AgdCod = DB_QueryINSERTandReturnCode (Query,"can not create new event");
   }
 
 /*****************************************************************************/
-/********************** Update an existing location **************************/
+/************************ Update an existing event ***************************/
 /*****************************************************************************/
 
-static void Loc_UpdateLocation (struct Location *Loc,const char *Txt)
+static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
-   /***** Update the data of the location *****/
+   /***** Update the data of the event *****/
    sprintf (Query,"UPDATE locations SET "
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "Location='%s',Event='%s',Txt='%s'"
-                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
-            Loc->TimeUTC[Loc_START_TIME],
-            Loc->TimeUTC[Loc_END_TIME  ],
-            Loc->Location,Loc->Event,Txt,
-            Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update location");
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent->TimeUTC[Loc_START_TIME],
+            AgdEvent->TimeUTC[Loc_END_TIME  ],
+            AgdEvent->Location,AgdEvent->Event,Txt,
+            AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not update event");
   }
 
 /*****************************************************************************/
-/******************** Remove all the locations of a user *********************/
+/********************** Remove all the events of a user **********************/
 /*****************************************************************************/
 
-void Loc_RemoveUsrLocations (long UsrCod)
+void Agd_RemoveUsrEvents (long UsrCod)
   {
    char Query[128];
 
-   /***** Remove locations *****/
+   /***** Remove events *****/
    sprintf (Query,"DELETE FROM locations WHERE UsrCod='%ld'",UsrCod);
-   DB_QueryDELETE (Query,"can not remove all the locations of a user");
+   DB_QueryDELETE (Query,"can not remove all the events of a user");
   }
 
 /*****************************************************************************/
-/******************* Get number of locations from a user *********************/
+/********************* Get number of events from a user **********************/
 /*****************************************************************************/
 
-unsigned Loc_GetNumLocationsFromUsr (long UsrCod)
+unsigned Agd_GetNumEventsFromUsr (long UsrCod)
   {
    char Query[128];
 
-   /***** Get number of locations in a course from database *****/
+   /***** Get number of events in a course from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM locations WHERE UsrCod='%ld'",
             UsrCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of locations from user");
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of events from user");
   }
 
 /*****************************************************************************/
-/******************** Get number of users with locations *********************/
+/********************** Get number of users with events **********************/
 /*****************************************************************************/
-// Returns the number of users with locations in a given scope
+// Returns the number of users with events in a given scope
 
-unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope)
+unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
 
-   /***** Get number of courses with locations from database *****/
+   /***** Get number of courses with events from database *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
@@ -1225,12 +1225,12 @@ unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope)
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of users with locations");
+   DB_QuerySELECT (Query,&mysql_res,"can not get number of users with events");
 
    /***** Get number of users *****/
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumUsrs) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of users with locations.");
+      Lay_ShowErrorAndExit ("Error when getting number of users with events.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1239,18 +1239,18 @@ unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/************************* Get number of locations ***************************/
+/*************************** Get number of events ****************************/
 /*****************************************************************************/
-// Returns the number of locations in a given scope
+// Returns the number of events in a given scope
 
-unsigned Loc_GetNumLocations (Sco_Scope_t Scope)
+unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumLocations;
+   unsigned NumEvents;
 
-   /***** Get number of locations from database *****/
+   /***** Get number of events from database *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
@@ -1307,15 +1307,15 @@ unsigned Loc_GetNumLocations (Sco_Scope_t Scope)
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of locations");
+   DB_QuerySELECT (Query,&mysql_res,"can not get number of events");
 
-   /***** Get number of locations *****/
+   /***** Get number of events *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumLocations) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of locations.");
+   if (sscanf (row[0],"%u",&NumEvents) != 1)
+      Lay_ShowErrorAndExit ("Error when getting number of events.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumLocations;
+   return NumEvents;
   }

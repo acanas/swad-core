@@ -53,15 +53,15 @@ typedef enum
    Loc_END_TIME   = 1,
   } Loc_StartOrEndTime_t;
 
-struct Location
+struct AgendaEvent
   {
-   long LocCod;
+   long AgdCod;
    bool Hidden;
    long UsrCod;
    time_t TimeUTC[Loc_NUM_DATES];
    bool Open;
-   char Location[Loc_MAX_LENGTH_LOCATION+1];
    char Event[Loc_MAX_LENGTH_EVENT+1];
+   char Location[Loc_MAX_LENGTH_LOCATION+1];
   };
 
 typedef enum
@@ -76,23 +76,23 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Loc_SeeLocations (void);
-void Loc_PutHiddenParamLocOrderType (void);
-void Loc_RequestCreatOrEditLoc (void);
-void Loc_GetListLocations (void);
-void Loc_GetDataOfLocationByCod (struct Location *Loc);
-void Loc_FreeListLocations (void);
+void Agd_SeeEvents (void);
+void Agd_PutHiddenParamEventsOrderType (void);
+void Agd_RequestCreatOrEditEvent (void);
+void Agd_GetListEvents (void);
+void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
+void Agd_FreeListEvents (void);
 
-long Loc_GetParamLocCod (void);
-void Loc_AskRemLocation (void);
-void Loc_RemoveLocation (void);
-void Loc_HideLocation (void);
-void Loc_ShowLocation (void);
-void Loc_RecFormLocation (void);
-void Loc_RemoveUsrLocations (long UsrCod);
-unsigned Loc_GetNumLocationsFromUsr (long UsrCod);
+long Agd_GetParamAgdCod (void);
+void Agd_AskRemEvent (void);
+void Agd_RemoveEvent (void);
+void Agd_HideEvent (void);
+void Agd_ShowEvent (void);
+void Agd_RecFormEvent (void);
+void Agd_RemoveUsrEvents (long UsrCod);
+unsigned Agd_GetNumEventsFromUsr (long UsrCod);
 
-unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope);
-unsigned Loc_GetNumLocations (Sco_Scope_t Scope);
+unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope);
+unsigned Agd_GetNumEvents (Sco_Scope_t Scope);
 
 #endif

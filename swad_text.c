@@ -2342,27 +2342,6 @@ const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1 =
 	"C&oacute;d.<br />alfab&eacute;tico<br />ISO 3166-1";
 #endif
 
-const char *Txt_Already_existed_a_location_with_the_title_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Ja existia una ubicaci&oacute; amb el t&iacute;tol <strong>%s</strong>.";
-#elif L==2
-	"Es gibt bereits einen Standort mit dem Namen <strong>%s</strong>.";
-#elif L==3
-	"Already existed a location with the title <strong>%s</strong>.";
-#elif L==4
-	"Ya exist&iacute;a una ubicaci&oacute;n con el t&iacute;tulo <strong>%s</strong>.";
-#elif L==5
-	"Il existe d&eacute;j&agrave; un emplacement du titre <strong>%s</strong>.";
-#elif L==6
-	"Ya exist&iacute;a una ubicaci&oacute;n con el t&iacute;tulo <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Esiste gi&agrave; una posizione con il titolo <strong>%s</strong>.";
-#elif L==8
-	"Istniala juz lokalizacj&eogon; z tytulu <strong>%s</strong>.";
-#elif L==9
-	"J&aacute; existe uma localiza&ccedil;&atilde;o com o t&iacute;tulo <strong>%s</strong>.";
-#endif
-
 const char *Txt_Already_existed_an_assignment_with_the_folder_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ja existia una activitat amb la carpeta <strong>%s</strong>.";
@@ -6863,27 +6842,6 @@ const char *Txt_Created_new_link_X =	// Warning: it is very important to include
 	"Criado nova liga&ccedil;&atilde;o <strong>%s</strong>.";
 #endif
 
-const char *Txt_Created_new_location_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Creada nova ubicaci&oacute; <strong>%s</strong>.";
-#elif L==2
-	"Neuer Standort <strong>%s</strong> eingegeben.";
-#elif L==3
-	"Created new location <strong>%s</strong>.";
-#elif L==4
-	"Creada nueva ubicaci&oacute;n <strong>%s</strong>.";
-#elif L==5
-	"Cr&eacute;&eacute; nouvel emplacement <strong>%s</strong>.";
-#elif L==6
-	"Creada nueva ubicaci&oacute;n <strong>%s</strong>.";	// Okoteve traducción
-#elif L==7
-	"Creata nuova posizione <strong>%s</strong>.";
-#elif L==8
-	"Utworzono nowe lokacja <strong>%s</strong>.";
-#elif L==9
-	"Criado nova localiza&ccedil;&atilde;o <strong>%s</strong>.";
-#endif
-
 const char *Txt_Created_new_place_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Creado nuevo lugar <strong>%s</strong>.";	// Necessita traduccio
@@ -9193,27 +9151,6 @@ const char *Txt_Do_you_really_want_to_remove_the_group_X_Y_students_ =	// Warnin
 	"Doing so will remove %u students from that group.";			// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_location_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"&iquest;De veres voleu eliminar la ubicaci&oacute; <strong>%s</strong>?";
-#elif L==2
-	"Wollen Sie die Standort <strong>%s</strong> wirklich entfernen?";
-#elif L==3
-	"Do you really want to remove the location <strong>%s</strong>?";
-#elif L==4
-	"&iquest;Realmente desea eliminar la ubicaci&oacute;n <strong>%s</strong>?";
-#elif L==5
-	"Voulez-vous vraiment supprimer l'emplacement <strong>%s</strong>?";
-#elif L==6
-	"&iquest;Realmente desea eliminar la ubicaci&oacute;n <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7
-	"Vuoi realmente rimuovere la posizione <strong>%s</strong>?";
-#elif L==8
-	"Czy na pewno chcesz usunac lokacja <strong>%s</strong>?";
-#elif L==9
-	"Voc&ecirc; realmente deseja remover a localiza&ccedil;&atilde;o <strong>%s</strong>?";
-#endif
-
 const char *Txt_Do_you_really_want_to_remove_the_photo_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"De veres voleu eliminar la foto de <strong>%s</strong>?";
@@ -9860,27 +9797,6 @@ const char *Txt_Edit_event =
 	"Edytuj wydarzenie";
 #elif L==9
 	"Editar evento";
-#endif
-
-const char *Txt_Edit_location =
-#if   L==1
-	"Editar ubicaci&oacute;";
-#elif L==2
-	"Aufgabe Standort";
-#elif L==3
-	"Edit location";
-#elif L==4
-	"Editar ubicaci&oacute;n";
-#elif L==5
-	"&Eacute;diter emplacement";
-#elif L==6
-	"Editar ubicaci&oacute;n";	// Okoteve traducción
-#elif L==7
-	"Editare posizione";
-#elif L==8
-	"Edytuj lokacja";
-#elif L==9
-	"Editar localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Edit_my_institution =
@@ -24572,27 +24488,6 @@ const char *Txt_No_institutions =
 	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
 #endif
 
-const char *Txt_No_locations =
-#if   L==1
-	"No hi ha ubicacions.";
-#elif L==2
-	"Es gibt keine Standorte.";
-#elif L==3
-	"No locations.";
-#elif L==4
-	"No existen ubicaciones.";
-#elif L==5
-	"Il n'y a pas d'emplacements.";
-#elif L==6
-	"No existen ubicaciones.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono posizioni.";
-#elif L==8
-	"Brak lokalizacje.";
-#elif L==9
-	"N&atilde;o existem localiza&ccedil;&otilde;es.";
-#endif
-
 const char *Txt_No_BR_msgs =
 #if   L==1
 	"N&ordm;<br />mens.";	// Necessita traduccio
@@ -30806,27 +30701,6 @@ const char *Txt_Remove_link =
 	"Usu&nacute; link";
 #elif L==9
 	"Remover liga&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Remove_location =
-#if   L==1
-	"Eliminar ubicaci&oacute;";
-#elif L==2
-	"Entfernen Standort";
-#elif L==3
-	"Remove location";
-#elif L==4
-	"Eliminar ubicaci&oacute;n";
-#elif L==5
-	"Supprimer emplacement";
-#elif L==6
-	"Eliminar ubicaci&oacute;n";	// Okoteve traducción
-#elif L==7
-	"Rimuovere posizione";
-#elif L==8
-	"Usu&nacute; lokacja";
-#elif L==9
-	"Remover localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Remove_logo =
@@ -54339,27 +54213,6 @@ const char *Txt_You_must_specify_the_title_of_the_event =
 	"You must specify the title of the event.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; deve especificar o t&iacute;tulo do evento.";
-#endif
-
-const char *Txt_You_must_specify_the_title_of_the_location =
-#if   L==1
-	"Cal especificar el t&iacute;tol de la ubicaci&oacute;.";
-#elif L==2
-	"Sie m&uuml;ssen den Titel des Standorts angeben.";
-#elif L==3
-	"You must specify the title of the location.";
-#elif L==4
-	"Debe especificar el t&iacute;tulo de la ubicaci&oacute;n.";
-#elif L==5
-	"Vous devez sp&eacute;cifier le titre du emplacement.";
-#elif L==6
-	"Debe especificar el t&iacute;tulo de la ubicaci&oacute;n.";	// Okoteve traducción
-#elif L==7
-	"&Egrave; necessario specificare il titolo della posizione.";
-#elif L==8
-	"Musisz poda&cacute; tytu&lstrok; lokalizacji.";
-#elif L==9
-	"Voc&ecirc; deve especificar o t&iacute;tulo da localiza&ccedil;&atilde;o.";
 #endif
 
 const char *Txt_You_must_specify_the_title_of_the_survey =
