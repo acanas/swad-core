@@ -19536,7 +19536,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// ActSeeMyAgd
+	// ActSeeMyLoc
 #if   L==1
 	"Agenda"
 #elif L==2
@@ -19555,27 +19555,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pami&eogon;tnik"
 #elif L==9
 	"Agenda"
-#endif
-	,
-	// ActSeeMyLoc
-#if   L==1
-	"Ubicaci&oacute;"
-#elif L==2
-	"Standort"
-#elif L==3
-	"Location"
-#elif L==4
-	"Ubicaci&oacute;n"
-#elif L==5
-	"Emplacement"
-#elif L==6
-	"Ubicaci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"Posizione"
-#elif L==8
-	"Lokacja"
-#elif L==9
-	"Localiza&ccedil;&atilde;o"
 #endif
 	,
 	// ActFrmMyAcc
@@ -21430,7 +21409,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	// ActSeeMyAgd
+	// ActSeeMyLoc
 #if   L==1
 	"Agenda"
 #elif L==2
@@ -21449,27 +21428,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pami&eogon;tnik"
 #elif L==9
 	"Agenda"
-#endif
-	,
-	// ActSeeMyLoc
-#if   L==1
-	"La meva ubicaci&oacute;"
-#elif L==2
-	"Mein Standort"
-#elif L==3
-	"My location"
-#elif L==4
-	"Mi ubicaci&oacute;n"
-#elif L==5
-	"Mon emplacement"
-#elif L==6
-	"Mi ubicaci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"La mia posizione"
-#elif L==8
-	"Moja lokacja"
-#elif L==9
-	"Minha localiza&ccedil;&atilde;o"
 #endif
 	,
 	// ActFrmMyAcc

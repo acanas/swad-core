@@ -39,7 +39,7 @@ OBJS = swad_account.o swad_action.o swad_agenda.o swad_announcement.o \
        swad_help.o swad_hierarchy.o swad_holiday.o \
        swad_icon.o swad_ID.o swad_image.o swad_indicator.o \
        swad_info.o swad_institution.o \
-       swad_layout.o swad_link.o swad_location.o swad_logo.o \
+       swad_layout.o swad_link.o swad_logo.o \
        swad_mail.o swad_main.o swad_mark.o swad_menu.o swad_message.o \
        swad_MFU.o \
        swad_network.o swad_nickname.o swad_notice.o swad_notification.o \

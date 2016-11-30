@@ -32,6 +32,7 @@
 #include <sys/time.h>		// For tz
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_agenda.h"
 #include "swad_assignment.h"
 #include "swad_attendance.h"
 #include "swad_banner.h"
@@ -53,7 +54,6 @@
 #include "swad_institution.h"
 #include "swad_layout.h"
 #include "swad_link.h"
-#include "swad_location.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_message.h"

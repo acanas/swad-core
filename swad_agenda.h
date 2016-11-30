@@ -24,25 +24,75 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 /*****************************************************************************/
-/********************************** Headers **********************************/
+/********************************* Headers ***********************************/
 /*****************************************************************************/
 
-// #include <stdlib.h>		// For malloc
-
-// #include "swad_user.h"
-
-/*****************************************************************************/
-/****************************** Public constants *****************************/
-/*****************************************************************************/
+#include "swad_date.h"
+#include "swad_user.h"
 
 /*****************************************************************************/
-/******************************** Public types *******************************/
+/************************** Public types and constants ***********************/
 /*****************************************************************************/
 
+#define Loc_MAX_LENGTH_LOCATION	255
+#define Loc_MAX_LENGTH_EVENT	255
+
+#define Loc_MAX_LENGTH_FOLDER 32
+
+#define Loc_NUM_TYPES_SEND_WORK 2
+typedef enum
+  {
+   Loc_DO_NOT_SEND_WORK = 0,
+   Loc_SEND_WORK        = 1,
+  } Loc_SendWork_t;
+
+#define Loc_NUM_DATES 2
+typedef enum
+  {
+   Loc_START_TIME = 0,
+   Loc_END_TIME   = 1,
+  } Loc_StartOrEndTime_t;
+
+struct Location
+  {
+   long LocCod;
+   bool Hidden;
+   long UsrCod;
+   time_t TimeUTC[Loc_NUM_DATES];
+   bool Open;
+   char Location[Loc_MAX_LENGTH_LOCATION+1];
+   char Event[Loc_MAX_LENGTH_EVENT+1];
+  };
+
+typedef enum
+  {
+   Loc_ORDER_BY_START_DATE = 0,
+   Loc_ORDER_BY_END_DATE   = 1,
+  } Loc_Order_t;
+
+#define Loc_DEFAULT_ORDER_TYPE Loc_ORDER_BY_START_DATE
+
 /*****************************************************************************/
-/****************************** Public prototypes ****************************/
+/***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Agd_ShowMyAgenda (void);
+void Loc_SeeLocations (void);
+void Loc_PutHiddenParamLocOrderType (void);
+void Loc_RequestCreatOrEditLoc (void);
+void Loc_GetListLocations (void);
+void Loc_GetDataOfLocationByCod (struct Location *Loc);
+void Loc_FreeListLocations (void);
+
+long Loc_GetParamLocCod (void);
+void Loc_AskRemLocation (void);
+void Loc_RemoveLocation (void);
+void Loc_HideLocation (void);
+void Loc_ShowLocation (void);
+void Loc_RecFormLocation (void);
+void Loc_RemoveUsrLocations (long UsrCod);
+unsigned Loc_GetNumLocationsFromUsr (long UsrCod);
+
+unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope);
+unsigned Loc_GetNumLocations (Sco_Scope_t Scope);
 
 #endif

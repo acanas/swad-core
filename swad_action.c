@@ -49,7 +49,6 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
-#include "swad_location.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_MFU.h"
@@ -1327,8 +1326,7 @@ Profile:
        1140. ActFrmRolSes		Show form to log out and to change current role in this session
        1141. ActMyCrs			Select one of my courses
        1142. ActSeeMyTT			Show the timetable of all courses of the logged user
-       1143. ActSeeMyAgd		Show my agenda (personal organizer)
-       1144. ActSeeMyLoc		Show my locations
+       1144. ActSeeMyLoc		Show my agenda (personal organizer)
        1145. ActFrmMyAcc		Show form to the creation or change of user's account
        1146. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
        1147. ActEdiPrf			Show forms to edit preferences
@@ -2776,8 +2774,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeMyAgd	*/{1581, 4,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"date64x64.gif"	},
-   /* ActSeeMyLoc	*/{1602, 5,TabPrf,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Loc_SeeLocations		,"mapmarker64x64.png"	},
+   /* ActSeeMyLoc	*/{1602, 5,TabPrf,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Loc_SeeLocations		,"date64x64.gif"	},
    /* ActFrmMyAcc	*/{  36, 6,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 7,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 8,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
@@ -4473,7 +4470,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLstDupUsr,		// #1578
 	ActLstSimUsr,		// #1579
 	ActRemDupUsr,		// #1580
-	ActSeeMyAgd,		// #1581
+	-1,			// #1581 (obsolete action)
 	ActSeeMyUsgRep,		// #1582
 	-1,			// #1583 (obsolete action)
 	ActChkUsrAcc,		// #1584
