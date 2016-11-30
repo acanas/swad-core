@@ -17193,7 +17193,7 @@ const char *Txt_Location =
 #elif L==9
 	"Localiza&ccedil;&atilde;o";
 #endif
-
+/*
 const char *Txt_Location_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"La ubicaci&oacute; <strong>%s</strong> ara est&agrave; oculta.";
@@ -17214,7 +17214,8 @@ const char *Txt_Location_X_is_now_hidden =	// Warning: it is very important to i
 #elif L==9
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> &eacute; agora oculta.";
 #endif
-
+*/
+/*
 const char *Txt_Location_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"La ubicaci&oacute; <strong>%s</strong> ara est&agrave; visible.";
@@ -17235,7 +17236,7 @@ const char *Txt_Location_X_is_now_visible =	// Warning: it is very important to 
 #elif L==9
 	"A localiza&ccedil;&atilde;o <strong>%s</strong> &eacute; agora vis&iacute;vel.";
 #endif
-
+*/
 const char *Txt_Location_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ubicaci&oacute; <strong>%s</strong> eliminada.";
@@ -43726,7 +43727,7 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 #elif L==9
 	"The list of %u users is too large to be displayed.";		// Necessita de tradução
 #endif
-
+/*
 const char *Txt_The_location_has_been_modified =
 #if   L==1
 	"La ubicaci&oacute; s'ha modificat.";
@@ -43747,7 +43748,7 @@ const char *Txt_The_location_has_been_modified =
 #elif L==9
 	"A localiza&ccedil;&atilde;o foi modificada.";
 #endif
-
+*/
 const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit =
 #if   L==1
 	"El l&iacute;mite inferior del intervalo de respuestas correctas"

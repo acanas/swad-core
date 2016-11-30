@@ -785,7 +785,7 @@ void Loc_RemoveLocation (void)
 
 void Loc_HideLocation (void)
   {
-   extern const char *Txt_Location_X_is_now_hidden;
+   extern const char *Txt_Event_X_is_now_hidden;
    char Query[512];
    struct Location Loc;
 
@@ -803,7 +803,7 @@ void Loc_HideLocation (void)
    DB_QueryUPDATE (Query,"can not hide location");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_is_now_hidden,Loc.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,Loc.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show locations again *****/
@@ -816,7 +816,7 @@ void Loc_HideLocation (void)
 
 void Loc_ShowLocation (void)
   {
-   extern const char *Txt_Location_X_is_now_visible;
+   extern const char *Txt_Event_X_is_now_visible;
    char Query[512];
    struct Location Loc;
 
@@ -834,7 +834,7 @@ void Loc_ShowLocation (void)
    DB_QueryUPDATE (Query,"can not show location");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_is_now_visible,Loc.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,Loc.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show locations again *****/
@@ -994,7 +994,7 @@ void Loc_RecFormLocation (void)
    extern const char *Txt_Already_existed_a_location_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_location;
    extern const char *Txt_Created_new_location_X;
-   extern const char *Txt_The_location_has_been_modified;
+   extern const char *Txt_The_event_has_been_modified;
    struct Location OldLoc;
    struct Location NewLoc;
    bool ItsANewLocation;
@@ -1071,7 +1071,7 @@ void Loc_RecFormLocation (void)
 	 Loc_UpdateLocation (&NewLoc,Txt);
 
 	 /***** Write success message *****/
-	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_location_has_been_modified);
+	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
         }
 
       /* Free memory for list of selected groups */
