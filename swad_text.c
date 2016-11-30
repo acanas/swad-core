@@ -6337,28 +6337,7 @@ const char *Txt_Create_link =
 #elif L==9
 	"Criar liga&ccedil;&atilde;o";
 #endif
-/*
-const char *Txt_Create_location =
-#if   L==1
-	"Crear ubicaci&oacute;";
-#elif L==2
-	"Standort eingeben";
-#elif L==3
-	"Create location";
-#elif L==4
-	"Crear ubicaci&oacute;n";
-#elif L==5
-	"Cr&eacute;er emplacement";
-#elif L==6
-	"Crear ubicaci&oacute;n";	// Okoteve traducción
-#elif L==7
-	"Crea posizione";
-#elif L==8
-	"Tworzenie lokalizacj&eogon;";
-#elif L==9
-	"Criar localiza&ccedil;&atilde;o";
-#endif
-*/
+
 const char *Txt_Create_notice =
 #if   L==1
 	"Crear av&iacute;s";
@@ -17193,50 +17172,7 @@ const char *Txt_Location =
 #elif L==9
 	"Localiza&ccedil;&atilde;o";
 #endif
-/*
-const char *Txt_Location_X_is_now_hidden =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"La ubicaci&oacute; <strong>%s</strong> ara est&agrave; oculta.";
-#elif L==2
-	"Die Standort <strong>%s</strong> ist jetzt ausgeblendet.";
-#elif L==3
-	"Location <strong>%s</strong> is now hidden.";
-#elif L==4
-	"La ubicaci&oacute;n <strong>%s</strong> ahora est&aacute; oculta.";
-#elif L==5
-	"L'emplacement <strong>%s</strong> est maintenant cach&eacute;e.";
-#elif L==6
-	"La ubicaci&oacute;n <strong>%s</strong> ahora est&aacute; oculta.";	// Okoteve traducción
-#elif L==7
-	"La posizione <strong>%s</strong> &egrave; ora nascosta.";
-#elif L==8
-	"Lokacja <strong>%s</strong> jest ukryte.";
-#elif L==9
-	"A localiza&ccedil;&atilde;o <strong>%s</strong> &eacute; agora oculta.";
-#endif
-*/
-/*
-const char *Txt_Location_X_is_now_visible =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"La ubicaci&oacute; <strong>%s</strong> ara est&agrave; visible.";
-#elif L==2
-	"Die Standort <strong>%s</strong> ist jetzt sichtbar.";
-#elif L==3
-	"Location <strong>%s</strong> is now visible.";
-#elif L==4
-	"La ubicaci&oacute;n <strong>%s</strong> ahora est&aacute; visible.";
-#elif L==5
-	"L'emplacement <strong>%s</strong> est maintenant visible.";
-#elif L==6
-	"La ubicaci&oacute;n <strong>%s</strong> ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7
-	"La posizione <strong>%s</strong> &egrave; ora visibile.";
-#elif L==8
-	"Lokacja <strong>%s</strong> jest teraz widoczny.";
-#elif L==9
-	"A localiza&ccedil;&atilde;o <strong>%s</strong> &eacute; agora vis&iacute;vel.";
-#endif
-*/
+
 const char *Txt_Location_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ubicaci&oacute; <strong>%s</strong> eliminada.";
@@ -23756,28 +23692,7 @@ const char *Txt_New_link =
 #elif L==9
 	"Nova liga&ccedil;&atilde;o";
 #endif
-/*
-const char *Txt_New_location =
-#if   L==1
-	"Nova ubicaci&oacute;";
-#elif L==2
-	"Neue Standort";
-#elif L==3
-	"New location";
-#elif L==4
-	"Nueva ubicaci&oacute;n";
-#elif L==5
-	"Nouvel emplacement";
-#elif L==6
-	"Nueva ubicaci&oacute;n";	// Okoteve traducción
-#elif L==7
-	"Nuova posizione";
-#elif L==8
-	"Nowe lokacja";
-#elif L==9
-	"Nova localiza&ccedil;&atilde;o";
-#endif
-*/
+
 const char *Txt_New_message =
 #if   L==1
 	"Nou missatge";
@@ -43685,28 +43600,7 @@ const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed =	// Warning: i
 #elif L==9
 	"The list of %u users is too large to be displayed.";		// Necessita de tradução
 #endif
-/*
-const char *Txt_The_location_has_been_modified =
-#if   L==1
-	"La ubicaci&oacute; s'ha modificat.";
-#elif L==2
-	"Die Standort wurde ge&auml;ndert.";
-#elif L==3
-	"The location has been modified.";
-#elif L==4
-	"La ubicaci&oacute;n ha sido modificada.";
-#elif L==5
-	"L'emplacement a &eacute;t&eacute; modifi&eacute;.";
-#elif L==6
-	"La ubicaci&oacute;n ha sido modificada.";	// Okoteve traducción
-#elif L==7
-	"La posizione &egrave; stata modificata.";
-#elif L==8
-	"Lokalizacja zosta&lstrok;a zmodyfikowana.";
-#elif L==9
-	"A localiza&ccedil;&atilde;o foi modificada.";
-#endif
-*/
+
 const char *Txt_The_lower_limit_of_correct_answers_must_be_less_than_or_equal_to_the_upper_limit =
 #if   L==1
 	"El l&iacute;mite inferior del intervalo de respuestas correctas"

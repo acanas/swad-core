@@ -106,8 +106,8 @@ static void Loc_ShowAllLocations (void)
    extern const char *Txt_Agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
-   extern const char *Txt_Location;
    extern const char *Txt_Event;
+   extern const char *Txt_Location;
    extern const char *Txt_No_locations;
    Loc_Order_t Order;
    struct Pagination Pagination;
@@ -161,8 +161,8 @@ static void Loc_ShowAllLocations (void)
 			 "%s"
 			 "</th>"
 			 "</tr>",
-	       Txt_Location,
-	       Txt_Event);
+	       Txt_Event,
+	       Txt_Location);
 
       /***** Write all the locations *****/
       for (NumLoc = Pagination.FirstItemVisible;
@@ -299,24 +299,24 @@ static void Loc_ShowOneLocation (long LocCod)
             Gbl.RowEvenOdd,
             UniqueId,Loc.TimeUTC[Loc_END_TIME],Txt_Today);
 
-   /* Location */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
-                      "<div class=\"%s\">%s</div>",
-            Gbl.RowEvenOdd,
-            Loc.Hidden ? "ASG_TITLE_LIGHT" :
-        	         "ASG_TITLE",
-            Loc.Location);
-   fprintf (Gbl.F.Out,"</td>");
-
    /* Event */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
-                      "<div class=\"%s\">%s</div>",
+                      "<div class=\"%s\">%s</div>"
+                      "</td>",
             Gbl.RowEvenOdd,
             Loc.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
             Loc.Event);
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>");
+
+   /* Location */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
+                      "<div class=\"%s\">%s</div>"
+                      "</td>"
+	              "</tr>",
+            Gbl.RowEvenOdd,
+            Loc.Hidden ? "ASG_TITLE_LIGHT" :
+        	         "ASG_TITLE",
+            Loc.Location);
 
    /***** Write second row of data of this location *****/
    fprintf (Gbl.F.Out,"<tr>"
