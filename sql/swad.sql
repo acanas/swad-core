@@ -602,10 +602,15 @@ CREATE TABLE IF NOT EXISTS links (
 --
 CREATE TABLE IF NOT EXISTS locations (
 	LocCod INT NOT NULL AUTO_INCREMENT,
-	StartDate DATE NOT NULL,
-	EndDate DATE NOT NULL,
-	Location VARCHAR(255) NOT NULL,
-	UNIQUE INDEX(LocCod));
+	UsrCod INT NOT NULL,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	NumNotif INT NOT NULL DEFAULT 0,
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Title VARCHAR(255) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(LocCod),
+	INDEX(UsrCod,Hidden));
 --
 -- Table log_banners: stores the log of clicked banners
 --

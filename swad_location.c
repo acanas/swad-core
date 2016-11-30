@@ -78,10 +78,8 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query);
 static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt);
 static void Loc_PutParamLocCod (long LocCod);
 static bool Loc_CheckIfSimilarLocationExists (const char *Field,const char *Value,long LocCod);
-static void Loc_UpdateNumUsrsNotifiedByEMailAboutLocation (long LocCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void Loc_CreateLocation (struct Location *Loc,const char *Txt);
 static void Loc_UpdateLocation (struct Location *Loc,const char *Txt);
-static bool Loc_CheckIfIBelongToCrsThisLocation (long LocCod);
 
 /*****************************************************************************/
 /************************* List all the locations ****************************/
@@ -109,8 +107,6 @@ static void Loc_ShowAllLocations (void)
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Location;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
    extern const char *Txt_No_locations;
    Loc_Order_t Order;
    struct Pagination Pagination;
@@ -160,16 +156,8 @@ static void Loc_ShowAllLocations (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>"
 			 "</tr>",
-	       Txt_Location,
-	       Txt_Upload_files_QUESTION,
-	       Txt_Folder);
+	       Txt_Location);
 
       /***** Write all the locations *****/
       for (NumLoc = Pagination.FirstItemVisible;
@@ -270,9 +258,6 @@ static void Loc_PutParamsToCreateNewLoc (void)
 static void Loc_ShowOneLocation (long LocCod)
   {
    extern const char *Txt_Today;
-   extern const char *Txt_ASSIGNMENT_TYPES[Loc_NUM_TYPES_SEND_WORK];
-   extern const char *Txt_Yes;
-   extern const char *Txt_No;
    static unsigned UniqueId = 0;
    struct Location Loc;
    char Txt[Cns_MAX_BYTES_TEXT+1];
@@ -320,24 +305,8 @@ static void Loc_ShowOneLocation (long LocCod)
             Loc.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
             Loc.Title);
-   fprintf (Gbl.F.Out,"</td>");
-
-   /* Send work? */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP COLOR%u\">"
-                      "<img src=\"%s/%s16x16.gif\""
-                      " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
-                      "<br />%s"
-                      "</td>",
-            (Loc.SendWork == Loc_SEND_WORK) ? "DAT_N" :
-        	                              "DAT",
-            Gbl.RowEvenOdd,
-            Gbl.Prefs.IconsURL,
-            (Loc.SendWork == Loc_SEND_WORK) ? "file_on" :
-        	                              "file_off",
-            Txt_ASSIGNMENT_TYPES[Loc.SendWork],
-            Txt_ASSIGNMENT_TYPES[Loc.SendWork],
-            (Loc.SendWork == Loc_SEND_WORK) ? Txt_Yes :
-        	                              Txt_No);
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /***** Write second row of data of this location *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -377,11 +346,6 @@ static void Loc_ShowOneLocation (long LocCod)
             Txt);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-
-   /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Ntf_EVENT_ASSIGNMENT,
-	               LocCod,Gbl.CurrentCrs.Crs.CrsCod,
-	               Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
@@ -546,9 +510,9 @@ void Loc_GetListLocations (void)
      }
    sprintf (Query,"SELECT LocCod"
 		  " FROM locations"
-		  " WHERE CrsCod='%ld'%s"
+		  " WHERE UsrCod='%ld'%s"
 		  " ORDER BY %s",
-	    Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
+	    Gbl.Usrs.Me.UsrDat.UsrCod,HiddenSubQuery,OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get locations");
 
    if (NumRows) // Locations found...
@@ -588,14 +552,14 @@ void Loc_GetDataOfLocationByCod (struct Location *Loc)
    char Query[1024];
 
    /***** Build query *****/
-   sprintf (Query,"SELECT LocCod,Hidden,UsrCod,"
+   sprintf (Query,"SELECT LocCod,UsrCod,Hidden,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title,Folder"
+                  "Title"
                   " FROM locations"
-                  " WHERE LocCod='%ld' AND CrsCod='%ld'",
-            Loc->LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
+            Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Get data of location *****/
    Loc_GetDataOfLocation (Loc,Query);
@@ -613,15 +577,12 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
 
    /***** Clear all location data *****/
    Loc->LocCod = -1L;
-   Loc->Hidden = false;
    Loc->UsrCod = -1L;
+   Loc->Hidden = false;
    Loc->TimeUTC[Loc_START_TIME] =
    Loc->TimeUTC[Loc_END_TIME  ] = (time_t) 0;
    Loc->Open = false;
    Loc->Title[0] = '\0';
-   Loc->SendWork = false;
-   Loc->Folder[0] = '\0';
-   Loc->IBelongToCrsOrGrps = false;
 
    /***** Get data of location from database *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get location data");
@@ -634,11 +595,11 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
       /* Get code of the location (row[0]) */
       Loc->LocCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get whether the location is hidden or not (row[1]) */
-      Loc->Hidden = (row[1][0] == 'Y');
+      /* Get author of the location (row[1]) */
+      Loc->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get author of the location (row[2]) */
-      Loc->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
+      /* Get whether the location is hidden or not (row[2]) */
+      Loc->Hidden = (row[2][0] == 'Y');
 
       /* Get start date (row[3] holds the start UTC time) */
       Loc->TimeUTC[Loc_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
@@ -651,13 +612,6 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
 
       /* Get the title of the location (row[6]) */
       strcpy (Loc->Title,row[6]);
-
-      /* Get the folder for the location files (row[7]) */
-      strcpy (Loc->Folder,row[7]);
-      Loc->SendWork = (Loc->Folder[0] != '\0');
-
-      /* Can I do this location? */
-      Loc->IBelongToCrsOrGrps = Loc_CheckIfIBelongToCrsThisLocation (Loc->LocCod);
      }
 
    /***** Free structure that stores the query result *****/
@@ -693,8 +647,8 @@ static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt)
 
    /***** Get text of location from database *****/
    sprintf (Query,"SELECT Txt FROM locations"
-	          " WHERE LocCod='%ld' AND CrsCod='%ld'",
-            LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+	          " WHERE LocCod='%ld' AND UsrCod='%ld'",
+            LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get location text");
 
    /***** The result of the query must have one row or none *****/
@@ -712,49 +666,6 @@ static void Loc_GetLocationTxtFromDB (long LocCod,char *Txt)
 
    if (NumRows > 1)
       Lay_ShowErrorAndExit ("Error when getting location text.");
-  }
-
-/*****************************************************************************/
-/****************** Get summary and content of a location  *******************/
-/*****************************************************************************/
-// This function may be called inside a web service
-
-void Loc_GetNotifLocation (char *SummaryStr,char **ContentStr,
-                             long LocCod,unsigned MaxChars,bool GetContent)
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM locations WHERE LocCod='%ld'",
-            LocCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get row *****/
-            row = mysql_fetch_row (mysql_res);
-
-            /***** Get summary *****/
-            strcpy (SummaryStr,row[0]);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
-
-            /***** Get content *****/
-            if (GetContent)
-              {
-               if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
   }
 
 /*****************************************************************************/
@@ -838,12 +749,9 @@ void Loc_RemoveLocation (void)
 
    /***** Remove location *****/
    sprintf (Query,"DELETE FROM locations"
-                  " WHERE LocCod='%ld' AND CrsCod='%ld'",
-            Loc.LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
+            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryDELETE (Query,"can not remove location");
-
-   /***** Mark possible notifications as removed *****/
-   Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Loc.LocCod);
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Location_X_removed,
@@ -873,8 +781,8 @@ void Loc_HideLocation (void)
 
    /***** Hide location *****/
    sprintf (Query,"UPDATE locations SET Hidden='Y'"
-                  " WHERE LocCod='%ld' AND CrsCod='%ld'",
-            Loc.LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
+            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not hide location");
 
    /***** Write message to show the change made *****/
@@ -905,8 +813,8 @@ void Loc_ShowLocation (void)
 
    /***** Hide location *****/
    sprintf (Query,"UPDATE locations SET Hidden='N'"
-                  " WHERE LocCod='%ld' AND CrsCod='%ld'",
-            Loc.LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
+            Loc.LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not show location");
 
    /***** Write message to show the change made *****/
@@ -928,8 +836,8 @@ static bool Loc_CheckIfSimilarLocationExists (const char *Field,const char *Valu
 
    /***** Get number of locations with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM locations"
-	          " WHERE CrsCod='%ld' AND %s='%s' AND LocCod<>'%ld'",
-            Gbl.CurrentCrs.Crs.CrsCod,Field,Value,LocCod);
+	          " WHERE UsrCod='%ld' AND %s='%s' AND LocCod<>'%ld'",
+            Gbl.Usrs.Me.UsrDat.UsrCod,Field,Value,LocCod);
    return (DB_QueryCOUNT (Query,"can not get similar locations") != 0);
   }
 
@@ -945,8 +853,6 @@ void Loc_RequestCreatOrEditLoc (void)
    extern const char *Txt_New_location;
    extern const char *Txt_Edit_location;
    extern const char *Txt_Title;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
    extern const char *Txt_Description;
    extern const char *Txt_Create_location;
    extern const char *Txt_Save;
@@ -967,13 +873,11 @@ void Loc_RequestCreatOrEditLoc (void)
      {
       /* Initialize to empty location */
       Loc.LocCod = -1L;
+      Loc.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Loc.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
       Loc.TimeUTC[Loc_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Loc.Open = true;
       Loc.Title[0] = '\0';
-      Loc.SendWork = false;
-      Loc.Folder[0] = '\0';
-      Loc.IBelongToCrsOrGrps = false;
      }
    else
      {
@@ -986,7 +890,7 @@ void Loc_RequestCreatOrEditLoc (void)
 
    /***** Start form *****/
    if (ItsANewLocation)
-      Act_FormStart (ActFrmNewLoc);
+      Act_FormStart (ActNewLoc);
    else
      {
       Act_FormStart (ActChgLoc);
@@ -1023,22 +927,6 @@ void Loc_RequestCreatOrEditLoc (void)
    /***** Location start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Loc.TimeUTC);
 
-   /***** Send work? *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
-	              "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s: "
-                      "<input type=\"text\" name=\"Folder\""
-                      " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Upload_files_QUESTION,
-            Txt_Folder,
-            Loc_MAX_LENGTH_FOLDER,Loc_MAX_LENGTH_FOLDER,Loc.Folder);
-
    /***** Location text *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
@@ -1071,7 +959,7 @@ void Loc_RequestCreatOrEditLoc (void)
 
 void Loc_RecFormLocation (void)
   {
-   extern const char *Txt_Already_existed_an_location_with_the_title_X;
+   extern const char *Txt_Already_existed_a_location_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_location;
    extern const char *Txt_Created_new_location_X;
    extern const char *Txt_The_location_has_been_modified;
@@ -1079,7 +967,6 @@ void Loc_RecFormLocation (void)
    struct Location NewLoc;
    bool ItsANewLocation;
    bool NewLocationIsCorrect = true;
-   unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get the code of the location *****/
@@ -1099,11 +986,6 @@ void Loc_RecFormLocation (void)
    /***** Get location title *****/
    Par_GetParToText ("Title",NewLoc.Title,Loc_MAX_LENGTH_ASSIGNMENT_TITLE);
 
-   /***** Get folder name where to send works of the location *****/
-   Par_GetParToText ("Folder",NewLoc.Folder,Loc_MAX_LENGTH_FOLDER);
-   NewLoc.SendWork = (NewLoc.Folder[0]) ? Loc_SEND_WORK :
-	                                  Loc_DO_NOT_SEND_WORK;
-
    /***** Get location text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
@@ -1120,7 +1002,7 @@ void Loc_RecFormLocation (void)
       if (Loc_CheckIfSimilarLocationExists ("Title",NewLoc.Title,NewLoc.LocCod))
         {
          NewLocationIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_an_location_with_the_title_X,
+         sprintf (Gbl.Message,Txt_Already_existed_a_location_with_the_title_X,
                   NewLoc.Title);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
@@ -1144,25 +1026,14 @@ void Loc_RecFormLocation (void)
 	}
       else
         {
-         if (OldLoc.Folder[0] && NewLoc.Folder[0])
-            if (strcmp (OldLoc.Folder,NewLoc.Folder))	// Folder name has changed
-               NewLocationIsCorrect = Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (OldLoc.Folder,NewLoc.Folder);
-         if (NewLocationIsCorrect)
-           {
-            Loc_UpdateLocation (&NewLoc,Txt);
+	 Loc_UpdateLocation (&NewLoc,Txt);
 
-	    /***** Write success message *****/
-	    Lay_ShowAlert (Lay_SUCCESS,Txt_The_location_has_been_modified);
-           }
+	 /***** Write success message *****/
+	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_location_has_been_modified);
         }
 
       /* Free memory for list of selected groups */
       Grp_FreeListCodSelectedGrps ();
-
-      /***** Notify by email about the new location *****/
-      if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewLoc.LocCod)))
-	 Loc_UpdateNumUsrsNotifiedByEMailAboutLocation (NewLoc.LocCod,NumUsrsToBeNotifiedByEMail);
-      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
       /***** Show locations again *****/
       Loc_SeeLocations ();
@@ -1170,21 +1041,6 @@ void Loc_RecFormLocation (void)
    else
       // TODO: The form should be filled with partial data, now is always empty
       Loc_RequestCreatOrEditLoc ();
-  }
-
-/*****************************************************************************/
-/********* Update number of users notified in table of locations *************/
-/*****************************************************************************/
-
-static void Loc_UpdateNumUsrsNotifiedByEMailAboutLocation (long LocCod,unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   char Query[512];
-
-   /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE locations SET NumNotif=NumNotif+'%u'"
-                  " WHERE LocCod='%ld'",
-            NumUsrsToBeNotifiedByEMail,LocCod);
-   DB_QueryUPDATE (Query,"can not update the number of notifications of an location");
   }
 
 /*****************************************************************************/
@@ -1197,16 +1053,14 @@ static void Loc_CreateLocation (struct Location *Loc,const char *Txt)
 
    /***** Create a new location *****/
    sprintf (Query,"INSERT INTO locations"
-	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
+	          " (UsrCod,StartTime,EndTime,Title,Txt)"
                   " VALUES"
-                  " ('%ld','%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
-                  "'%s','%s','%s')",
-            Gbl.CurrentCrs.Crs.CrsCod,
+                  " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  "'%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Loc->TimeUTC[Loc_START_TIME],
             Loc->TimeUTC[Loc_END_TIME  ],
             Loc->Title,
-            Loc->Folder,
             Txt);
    Loc->LocCod = DB_QueryINSERTandReturnCode (Query,"can not create new location");
   }
@@ -1223,155 +1077,135 @@ static void Loc_UpdateLocation (struct Location *Loc,const char *Txt)
    sprintf (Query,"UPDATE locations SET "
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
-                  "Title='%s',Folder='%s',Txt='%s'"
-                  " WHERE LocCod='%ld' AND CrsCod='%ld'",
+                  "Title='%s',Txt='%s'"
+                  " WHERE LocCod='%ld' AND UsrCod='%ld'",
             Loc->TimeUTC[Loc_START_TIME],
             Loc->TimeUTC[Loc_END_TIME  ],
             Loc->Title,
-            Loc->Folder,
             Txt,
-            Loc->LocCod,Gbl.CurrentCrs.Crs.CrsCod);
+            Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update location");
   }
 
 /*****************************************************************************/
-/******************* Remove all the locations of a course ********************/
+/******************** Remove all the locations of a user *********************/
 /*****************************************************************************/
 
-void Loc_RemoveCrsLocations (long CrsCod)
+void Loc_RemoveUsrLocations (long UsrCod)
   {
    char Query[128];
 
    /***** Remove locations *****/
-   sprintf (Query,"DELETE FROM locations WHERE CrsCod='%ld'",CrsCod);
-   DB_QueryDELETE (Query,"can not remove all the locations of a course");
+   sprintf (Query,"DELETE FROM locations WHERE UsrCod='%ld'",UsrCod);
+   DB_QueryDELETE (Query,"can not remove all the locations of a user");
   }
 
 /*****************************************************************************/
-/********** Check if I belong to any of the groups of an location ************/
+/******************* Get number of locations from a user *********************/
 /*****************************************************************************/
 
-static bool Loc_CheckIfIBelongToCrsThisLocation (long LocCod)
+unsigned Loc_GetNumLocationsFromUsr (long UsrCod)
   {
-   char Query[512];
-
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
-     {
-      // Students and teachers can edit locations depending on groups
-      /***** Get if I can edit an location from database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM locations"
-		     " WHERE LocCod='%ld'",
-	       LocCod);
-      return (DB_QueryCOUNT (Query,"can not check if I can do an location") != 0);
-     }
-   else
-      return (Gbl.Usrs.Me.LoggedRole > Rol_TEACHER);	// Admins can edit locations
-  }
-
-/*****************************************************************************/
-/******************* Get number of locations in a course *********************/
-/*****************************************************************************/
-
-unsigned Loc_GetNumLocationsInCrs (long CrsCod)
-  {
-   char Query[256];
+   char Query[128];
 
    /***** Get number of locations in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM locations WHERE CrsCod='%ld'",
-            CrsCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of locations in course");
+   sprintf (Query,"SELECT COUNT(*) FROM locations WHERE UsrCod='%ld'",
+            UsrCod);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of locations from user");
   }
 
 /*****************************************************************************/
-/******************* Get number of courses with locations ********************/
+/******************** Get number of users with locations *********************/
 /*****************************************************************************/
-// Returns the number of courses with locations
-// in this location (all the platform, current degree or current course)
+// Returns the number of users with locations in a given scope
 
-unsigned Loc_GetNumCoursesWithLocations (Sco_Scope_t Scope)
+unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumCourses;
+   unsigned NumUsrs;
 
    /***** Get number of courses with locations from database *****/
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
+         sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
                         " FROM locations"
-                        " WHERE CrsCod>'0'");
+                        " WHERE UsrCod>'0'");
          break;
        case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.CrsCod)"
-                        " FROM institutions,centres,degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr,locations"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
        case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.CrsCod)"
-                        " FROM centres,degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
+                        " FROM centres,degrees,courses,crs_usr,locations"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.CrsCod)"
-                        " FROM degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
+                        " FROM degrees,courses,crs_usr,locations"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.CrsCod)"
-                        " FROM courses,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
+                        " FROM courses,crs_usr,locations"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.Status=0"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
-                        " FROM locations"
-                        " WHERE CrsCod='%ld'",
+         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
+                        " FROM crs_usr,locations"
+                        " WHERE crs_usr.CrsCod='%ld'"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
-   DB_QuerySELECT (Query,&mysql_res,"can not get number of courses with locations");
+   DB_QuerySELECT (Query,&mysql_res,"can not get number of users with locations");
 
-   /***** Get number of courses *****/
+   /***** Get number of users *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumCourses) != 1)
-      Lay_ShowErrorAndExit ("Error when getting number of courses with locations.");
+   if (sscanf (row[0],"%u",&NumUsrs) != 1)
+      Lay_ShowErrorAndExit ("Error when getting number of users with locations.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumCourses;
+   return NumUsrs;
   }
 
 /*****************************************************************************/
 /************************* Get number of locations ***************************/
 /*****************************************************************************/
-// Returns the number of locations
-// in this location (all the platform, current degree or current course)
+// Returns the number of locations in a given scope
 
-unsigned Loc_GetNumLocations (Sco_Scope_t Scope,unsigned *NumNotif)
+unsigned Loc_GetNumLocations (Sco_Scope_t Scope)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -1382,48 +1216,53 @@ unsigned Loc_GetNumLocations (Sco_Scope_t Scope,unsigned *NumNotif)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
+         sprintf (Query,"SELECT COUNT(*)"
                         " FROM locations"
-                        " WHERE CrsCod>'0'");
+                        " WHERE UsrCod>'0'");
          break;
       case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(*),SUM(locations.NumNotif)"
-                        " FROM institutions,centres,degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM institutions,centres,degrees,courses,crs_usr,locations"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(*),SUM(locations.NumNotif)"
-                        " FROM centres,degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM centres,degrees,courses,crs_usr,locations"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(*),SUM(locations.NumNotif)"
-                        " FROM degrees,courses,locations"
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM degrees,courses,crs_usr,locations"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(*),SUM(locations.NumNotif)"
-                        " FROM courses,locations"
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM courses,crs_usr,locations"
                         " WHERE courses.DegCod='%ld'"
-                        " AND courses.CrsCod=locations.CrsCod",
+                        " AND courses.CrsCod=crs_usr.CrsCod"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
-                        " FROM locations"
-                        " WHERE CrsCod='%ld'",
+         sprintf (Query,"SELECT COUNT(*)"
+                        " FROM crs_usr,locations"
+                        " WHERE crs_usr.CrsCod='%ld'"
+                        " AND crs_usr.UsrCod=locations.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -1436,15 +1275,6 @@ unsigned Loc_GetNumLocations (Sco_Scope_t Scope,unsigned *NumNotif)
    row = mysql_fetch_row (mysql_res);
    if (sscanf (row[0],"%u",&NumLocations) != 1)
       Lay_ShowErrorAndExit ("Error when getting number of locations.");
-
-   /***** Get number of notifications by email *****/
-   if (row[1])
-     {
-      if (sscanf (row[1],"%u",NumNotif) != 1)
-         Lay_ShowErrorAndExit ("Error when getting number of notifications of locations.");
-     }
-   else
-      *NumNotif = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

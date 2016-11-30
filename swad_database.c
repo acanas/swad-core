@@ -1300,22 +1300,31 @@ mysql> DESCRIBE links;
    /***** Table locations *****/
 /*
 mysql> DESCRIBE locations;
-+-----------+--------------+------+-----+---------+----------------+
-| Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
-| LocCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
-| StartDate | date         | NO   |     | NULL    |                |
-| EndDate   | date         | NO   |     | NULL    |                |
-| Location  | varchar(255) | NO   |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-4 rows in set (0,01 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| LocCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| UsrCod    | int(11)       | NO   | MUL | NULL    |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| NumNotif  | int(11)       | NO   |     | 0       |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| Title     | varchar(255)  | NO   |     | NULL    |                |
+| Txt       | text          | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+8 rows in set (0,01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS locations ("
                    "LocCod INT NOT NULL AUTO_INCREMENT,"
-                   "StartDate DATE NOT NULL,"
-                   "EndDate DATE NOT NULL,"
-                   "Location VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX (LocCod))");
+                   "UsrCod INT NOT NULL,"
+                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+                   "NumNotif INT NOT NULL DEFAULT 0,"
+                   "StartTime DATETIME NOT NULL,"
+                   "EndTime DATETIME NOT NULL,"
+                   "Title VARCHAR(255) NOT NULL,"
+                   "Txt TEXT NOT NULL,"
+                   "UNIQUE INDEX(LocCod),"
+                   "INDEX(UsrCod,Hidden))");
 
    /***** Table log_banners *****/
 /*

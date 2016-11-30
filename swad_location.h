@@ -60,12 +60,6 @@ struct Location
    time_t TimeUTC[Loc_NUM_DATES];
    bool Open;
    char Title[Loc_MAX_LENGTH_ASSIGNMENT_TITLE+1];
-   Loc_SendWork_t SendWork;
-   char Folder[Loc_MAX_LENGTH_FOLDER+1];
-   bool IBelongToCrsOrGrps;	// I can do this location
-				// (it is associated to no groups
-				// or, if associated to groups,
-				// I belong to any of the groups)
   };
 
 typedef enum
@@ -87,18 +81,16 @@ void Loc_GetListLocations (void);
 void Loc_GetDataOfLocationByCod (struct Location *Loc);
 void Loc_FreeListLocations (void);
 
-void Loc_GetNotifLocation (char *SummaryStr,char **ContentStr,long LocCod,unsigned MaxChars,bool GetContent);
-
 long Loc_GetParamLocCod (void);
 void Loc_AskRemLocation (void);
 void Loc_RemoveLocation (void);
 void Loc_HideLocation (void);
 void Loc_ShowLocation (void);
 void Loc_RecFormLocation (void);
-void Loc_RemoveCrsLocations (long CrsCod);
-unsigned Loc_GetNumLocationsInCrs(long CrsCod);
+void Loc_RemoveUsrLocations (long UsrCod);
+unsigned Loc_GetNumLocationsFromUsr (long UsrCod);
 
-unsigned Loc_GetNumCoursesWithLocations (Sco_Scope_t Scope);
-unsigned Loc_GetNumLocations (Sco_Scope_t Scope,unsigned *NumNotif);
+unsigned Loc_GetNumUsrsWithLocations (Sco_Scope_t Scope);
+unsigned Loc_GetNumLocations (Sco_Scope_t Scope);
 
 #endif
