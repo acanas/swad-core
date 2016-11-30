@@ -107,6 +107,7 @@ static void Loc_ShowAllLocations (void)
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Location;
+   extern const char *Txt_Event;
    extern const char *Txt_No_locations;
    Loc_Order_t Order;
    struct Pagination Pagination;
@@ -156,8 +157,12 @@ static void Loc_ShowAllLocations (void)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
+			 "<th class=\"LEFT_MIDDLE\">"
+			 "%s"
+			 "</th>"
 			 "</tr>",
-	       Txt_Location);
+	       Txt_Location,
+	       Txt_Event);
 
       /***** Write all the locations *****/
       for (NumLoc = Pagination.FirstItemVisible;
@@ -298,13 +303,22 @@ static void Loc_ShowOneLocation (long LocCod)
             Gbl.RowEvenOdd,
             UniqueId,Loc.TimeUTC[Loc_END_TIME],Txt_Today);
 
-   /* Location title */
+   /* Location */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
                       "<div class=\"%s\">%s</div>",
             Gbl.RowEvenOdd,
             Loc.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
-            Loc.Title);
+            Loc.Location);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /* Event */
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
+                      "<div class=\"%s\">%s</div>",
+            Gbl.RowEvenOdd,
+            Loc.Hidden ? "ASG_TITLE_LIGHT" :
+        	         "ASG_TITLE",
+            Loc.Event);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -333,7 +347,7 @@ static void Loc_ShowOneLocation (long LocCod)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 
    fprintf (Gbl.F.Out,"<p class=\"%s\">"
@@ -349,7 +363,7 @@ static void Loc_ShowOneLocation (long LocCod)
   }
 
 /*****************************************************************************/
-/********************** Write the author of an location **********************/
+/********************** Write the author of a location ***********************/
 /*****************************************************************************/
 
 static void Loc_WriteLocAuthor (struct Location *Loc)
@@ -502,10 +516,10 @@ void Loc_GetListLocations (void)
    switch (Gbl.Usrs.Me.Locs.SelectedOrderType)
      {
       case Loc_ORDER_BY_START_DATE:
-         sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
+         sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Location DESC,Event DESC");
          break;
       case Loc_ORDER_BY_END_DATE:
-         sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
+         sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Location DESC,Event DESC");
          break;
      }
    sprintf (Query,"SELECT LocCod"
@@ -556,7 +570,7 @@ void Loc_GetDataOfLocationByCod (struct Location *Loc)
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title"
+                  "Location,Event"
                   " FROM locations"
                   " WHERE LocCod='%ld' AND UsrCod='%ld'",
             Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -582,7 +596,8 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
    Loc->TimeUTC[Loc_START_TIME] =
    Loc->TimeUTC[Loc_END_TIME  ] = (time_t) 0;
    Loc->Open = false;
-   Loc->Title[0] = '\0';
+   Loc->Location[0] = '\0';
+   Loc->Event[0]    = '\0';
 
    /***** Get data of location from database *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get location data");
@@ -610,8 +625,11 @@ static void Loc_GetDataOfLocation (struct Location *Loc,const char *Query)
       /* Get whether the location is open or closed (row(5)) */
       Loc->Open = (row[5][0] == '1');
 
-      /* Get the title of the location (row[6]) */
-      strcpy (Loc->Title,row[6]);
+      /* Get the location (row[6]) */
+      strcpy (Loc->Location,row[6]);
+
+      /* Get the event (row[7]) */
+      strcpy (Loc->Event,row[7]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -721,7 +739,7 @@ void Loc_AskRemLocation (void)
 
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_location_X,
-            Loc.Title);
+            Loc.Event);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
    Lay_PutRemoveButton (Txt_Remove_location);
    Act_FormEnd ();
@@ -754,8 +772,7 @@ void Loc_RemoveLocation (void)
    DB_QueryDELETE (Query,"can not remove location");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_removed,
-            Loc.Title);
+   sprintf (Gbl.Message,Txt_Location_X_removed,Loc.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show locations again *****/
@@ -786,8 +803,7 @@ void Loc_HideLocation (void)
    DB_QueryUPDATE (Query,"can not hide location");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_is_now_hidden,
-            Loc.Title);
+   sprintf (Gbl.Message,Txt_Location_X_is_now_hidden,Loc.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show locations again *****/
@@ -818,8 +834,7 @@ void Loc_ShowLocation (void)
    DB_QueryUPDATE (Query,"can not show location");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_is_now_visible,
-            Loc.Title);
+   sprintf (Gbl.Message,Txt_Location_X_is_now_visible,Loc.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show locations again *****/
@@ -827,7 +842,7 @@ void Loc_ShowLocation (void)
   }
 
 /*****************************************************************************/
-/********* Check if the title or the folder of an location exists ************/
+/********* Check if the title or the folder of a location exists *************/
 /*****************************************************************************/
 
 static bool Loc_CheckIfSimilarLocationExists (const char *Field,const char *Value,long LocCod)
@@ -852,7 +867,8 @@ void Loc_RequestCreatOrEditLoc (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_location;
    extern const char *Txt_Edit_location;
-   extern const char *Txt_Title;
+   extern const char *Txt_Location;
+   extern const char *Txt_Event;
    extern const char *Txt_Description;
    extern const char *Txt_Create_location;
    extern const char *Txt_Save;
@@ -877,7 +893,8 @@ void Loc_RequestCreatOrEditLoc (void)
       Loc.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
       Loc.TimeUTC[Loc_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Loc.Open = true;
-      Loc.Title[0] = '\0';
+      Loc.Location[0] = '\0';
+      Loc.Event[0]    = '\0';
      }
    else
      {
@@ -909,25 +926,40 @@ void Loc_RequestCreatOrEditLoc (void)
                         	                 Hlp_PROFILE_Location_edit_location,
                              2);
 
-   /***** Location title *****/
+   /***** Location *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Title\""
+                      "<input type=\"text\" name=\"Location\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Title,
-            Loc_MAX_LENGTH_ASSIGNMENT_TITLE,Loc.Title);
+            Txt_Location,
+            Loc_MAX_LENGTH_LOCATION,Loc.Location);
 
-   /***** Location start and end dates *****/
+   /***** Event *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "%s:"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\" name=\"Event\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Event,
+            Loc_MAX_LENGTH_EVENT,Loc.Event);
+
+   /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Loc.TimeUTC);
 
-   /***** Location text *****/
+   /***** Text *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
@@ -983,10 +1015,13 @@ void Loc_RecFormLocation (void)
    NewLoc.TimeUTC[Loc_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
    NewLoc.TimeUTC[Loc_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
-   /***** Get location title *****/
-   Par_GetParToText ("Title",NewLoc.Title,Loc_MAX_LENGTH_ASSIGNMENT_TITLE);
+   /***** Get location *****/
+   Par_GetParToText ("Location",NewLoc.Location,Loc_MAX_LENGTH_LOCATION);
 
-   /***** Get location text *****/
+   /***** Get event *****/
+   Par_GetParToText ("Event",NewLoc.Event,Loc_MAX_LENGTH_EVENT);
+
+   /***** Get text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
@@ -995,19 +1030,26 @@ void Loc_RecFormLocation (void)
    if (NewLoc.TimeUTC[Loc_END_TIME] == 0)
       NewLoc.TimeUTC[Loc_END_TIME] = NewLoc.TimeUTC[Loc_START_TIME] + 2*60*60;	// +2 hours
 
-   /***** Check if title is correct *****/
-   if (NewLoc.Title[0])	// If there's an location title
+   /***** Check if location is correct *****/
+   if (!NewLoc.Location[0])	// If there is no location
+     {
+      NewLocationIsCorrect = false;
+      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_location);
+     }
+
+   /***** Check if event is correct *****/
+   if (NewLoc.Event[0])	// If there's event
      {
       /* If title of location was in database... */
-      if (Loc_CheckIfSimilarLocationExists ("Title",NewLoc.Title,NewLoc.LocCod))
+      if (Loc_CheckIfSimilarLocationExists ("Event",NewLoc.Event,NewLoc.LocCod))
         {
          NewLocationIsCorrect = false;
          sprintf (Gbl.Message,Txt_Already_existed_a_location_with_the_title_X,
-                  NewLoc.Title);
+                  NewLoc.Event);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
-   else	// If there is not an location title
+   else	// If there is no event
      {
       NewLocationIsCorrect = false;
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_location);
@@ -1021,7 +1063,7 @@ void Loc_RecFormLocation (void)
          Loc_CreateLocation (&NewLoc,Txt);	// Add new location to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_location_X,NewLoc.Title);
+	 sprintf (Gbl.Message,Txt_Created_new_location_X,NewLoc.Event);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
@@ -1053,14 +1095,15 @@ static void Loc_CreateLocation (struct Location *Loc,const char *Txt)
 
    /***** Create a new location *****/
    sprintf (Query,"INSERT INTO locations"
-	          " (UsrCod,StartTime,EndTime,Title,Txt)"
+	          " (UsrCod,StartTime,EndTime,Location,Event,Txt)"
                   " VALUES"
                   " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
-                  "'%s','%s')",
+                  "'%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Loc->TimeUTC[Loc_START_TIME],
             Loc->TimeUTC[Loc_END_TIME  ],
-            Loc->Title,
+            Loc->Location,
+            Loc->Event,
             Txt);
    Loc->LocCod = DB_QueryINSERTandReturnCode (Query,"can not create new location");
   }
@@ -1077,12 +1120,11 @@ static void Loc_UpdateLocation (struct Location *Loc,const char *Txt)
    sprintf (Query,"UPDATE locations SET "
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
-                  "Title='%s',Txt='%s'"
+                  "Location='%s',Event='%s',Txt='%s'"
                   " WHERE LocCod='%ld' AND UsrCod='%ld'",
             Loc->TimeUTC[Loc_START_TIME],
             Loc->TimeUTC[Loc_END_TIME  ],
-            Loc->Title,
-            Txt,
+            Loc->Location,Loc->Event,Txt,
             Loc->LocCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update location");
   }

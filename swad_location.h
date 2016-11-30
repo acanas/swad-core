@@ -34,7 +34,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Loc_MAX_LENGTH_ASSIGNMENT_TITLE	255
+#define Loc_MAX_LENGTH_LOCATION	255
+#define Loc_MAX_LENGTH_EVENT	255
 
 #define Loc_MAX_LENGTH_FOLDER 32
 
@@ -59,7 +60,8 @@ struct Location
    long UsrCod;
    time_t TimeUTC[Loc_NUM_DATES];
    bool Open;
-   char Title[Loc_MAX_LENGTH_ASSIGNMENT_TITLE+1];
+   char Location[Loc_MAX_LENGTH_LOCATION+1];
+   char Event[Loc_MAX_LENGTH_EVENT+1];
   };
 
 typedef enum

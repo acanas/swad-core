@@ -1309,10 +1309,11 @@ mysql> DESCRIBE locations;
 | NumNotif  | int(11)       | NO   |     | 0       |                |
 | StartTime | datetime      | NO   |     | NULL    |                |
 | EndTime   | datetime      | NO   |     | NULL    |                |
-| Title     | varchar(255)  | NO   |     | NULL    |                |
+| Location  | varchar(255)  | NO   |     | NULL    |                |
+| Event     | varchar(255)  | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-8 rows in set (0,01 sec)
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS locations ("
                    "LocCod INT NOT NULL AUTO_INCREMENT,"
@@ -1321,7 +1322,8 @@ mysql> DESCRIBE locations;
                    "NumNotif INT NOT NULL DEFAULT 0,"
                    "StartTime DATETIME NOT NULL,"
                    "EndTime DATETIME NOT NULL,"
-                   "Title VARCHAR(255) NOT NULL,"
+                   "Location VARCHAR(255) NOT NULL,"
+                   "Event VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
                    "UNIQUE INDEX(LocCod),"
                    "INDEX(UsrCod,Hidden))");
