@@ -103,7 +103,7 @@ void Loc_SeeLocations (void)
 static void Loc_ShowAllLocations (void)
   {
    extern const char *Hlp_PROFILE_Location;
-   extern const char *Txt_Locations;
+   extern const char *Txt_Agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Location;
@@ -127,7 +127,7 @@ static void Loc_ShowAllLocations (void)
       Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Locations,
+   Lay_StartRoundFrame ("100%",Txt_Agenda,
                         Loc_PutIconsListLocations,Hlp_PROFILE_Location);
 
    if (Gbl.Usrs.Me.Locs.Num)
@@ -222,12 +222,12 @@ static void Loc_PutIconsListLocations (void)
 
 static void Loc_PutIconToCreateNewLoc (void)
   {
-   extern const char *Txt_New_location;
+   extern const char *Txt_New_event;
 
    /***** Put form to create a new location *****/
    Lay_PutContextualLink (ActFrmNewLoc,Loc_PutParamsToCreateNewLoc,
                           "plus64x64.png",
-                          Txt_New_location,NULL,
+                          Txt_New_event,NULL,
                           NULL);
   }
 
@@ -237,11 +237,11 @@ static void Loc_PutIconToCreateNewLoc (void)
 
 static void Loc_PutButtonToCreateNewLoc (void)
   {
-   extern const char *Txt_New_location;
+   extern const char *Txt_New_event;
 
    Act_FormStart (ActFrmNewLoc);
    Loc_PutParamsToCreateNewLoc ();
-   Lay_PutConfirmButton (Txt_New_location);
+   Lay_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
   }
 
@@ -865,12 +865,12 @@ void Loc_RequestCreatOrEditLoc (void)
    extern const char *Hlp_PROFILE_Location_new_location;
    extern const char *Hlp_PROFILE_Location_edit_location;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_New_location;
+   extern const char *Txt_New_event;
    extern const char *Txt_Edit_location;
    extern const char *Txt_Location;
    extern const char *Txt_Event;
    extern const char *Txt_Description;
-   extern const char *Txt_Create_location;
+   extern const char *Txt_Create_event;
    extern const char *Txt_Save;
    struct Location Loc;
    bool ItsANewLocation;
@@ -919,11 +919,11 @@ void Loc_RequestCreatOrEditLoc (void)
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,
-                             ItsANewLocation ? Txt_New_location :
-                                                 Txt_Edit_location,
+                             ItsANewLocation ? Txt_New_event :
+                                               Txt_Edit_location,
                              NULL,
                              ItsANewLocation ? Hlp_PROFILE_Location_new_location :
-                        	                 Hlp_PROFILE_Location_edit_location,
+                        	               Hlp_PROFILE_Location_edit_location,
                              2);
 
    /***** Location *****/
@@ -976,7 +976,7 @@ void Loc_RequestCreatOrEditLoc (void)
 
    /***** New location *****/
    if (ItsANewLocation)
-      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_location);
+      Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_event);
    else
       Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
    Act_FormEnd ();

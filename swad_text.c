@@ -2090,6 +2090,27 @@ const char *Txt_Admin_several_teachers =
 	"Gerenciar v&aacute;rios professores";
 #endif
 
+const char *Txt_Agenda =
+#if   L==1
+	"Agenda";
+#elif L==2
+	"Organizer";
+#elif L==3
+	"Agenda";
+#elif L==4
+	"Agenda";
+#elif L==5
+	"Agenda";
+#elif L==6
+	"Aporyr&atilde;";
+#elif L==7
+	"Agenda";
+#elif L==8
+	"Pami&eogon;tnik";
+#elif L==9
+	"Agenda";
+#endif
+
 const char *Txt_all =
 #if   L==1
 	"tot";
@@ -6316,7 +6337,7 @@ const char *Txt_Create_link =
 #elif L==9
 	"Criar liga&ccedil;&atilde;o";
 #endif
-
+/*
 const char *Txt_Create_location =
 #if   L==1
 	"Crear ubicaci&oacute;";
@@ -6337,7 +6358,7 @@ const char *Txt_Create_location =
 #elif L==9
 	"Criar localiza&ccedil;&atilde;o";
 #endif
-
+*/
 const char *Txt_Create_notice =
 #if   L==1
 	"Crear av&iacute;s";
@@ -19526,7 +19547,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Agenda"
 #elif L==6
-	"Agenda"	// Okoteve traducción
+	"Aporyr&atilde;"
 #elif L==7
 	"Agenda"
 #elif L==8
@@ -21420,7 +21441,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Agenda"
 #elif L==6
-	"Agenda"	// Okoteve traducción
+	"Aporyr&atilde;"
 #elif L==7
 	"Agenda"
 #elif L==8
@@ -23776,7 +23797,7 @@ const char *Txt_New_link =
 #elif L==9
 	"Nova liga&ccedil;&atilde;o";
 #endif
-
+/*
 const char *Txt_New_location =
 #if   L==1
 	"Nova ubicaci&oacute;";
@@ -23797,7 +23818,7 @@ const char *Txt_New_location =
 #elif L==9
 	"Nova localiza&ccedil;&atilde;o";
 #endif
-
+*/
 const char *Txt_New_message =
 #if   L==1
 	"Nou missatge";
