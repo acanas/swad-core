@@ -2090,6 +2090,27 @@ const char *Txt_Admin_several_teachers =
 	"Gerenciar v&aacute;rios professores";
 #endif
 
+const char *Txt_Agenda_USER =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Agenda de %s";
+#elif L==2
+	"Organizer von %s";
+#elif L==3
+	"%s's agenda";
+#elif L==4
+	"Agenda de %s";
+#elif L==5
+	"Agenda de %s";
+#elif L==6
+	"Aporyr&atilde; %s";
+#elif L==7
+	"Agenda di %s";
+#elif L==8
+	"Pami&eogon;tnik %s";
+#elif L==9
+	"Agenda de %s";
+#endif
+
 const char *Txt_all =
 #if   L==1
 	"tot";

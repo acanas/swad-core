@@ -179,19 +179,22 @@
 // TODO: When teacher sees "No hay estudiantes", put a button to add students
 // TODO: When admin sees "No hay profesores", put a button to add teachers
 
-// TODO: Cuando el alumno vea la agenda del profesor, sólo se mostrarán los eventos públicos cuya fecha final esté en el futuro
+// TODO: Cuando un alumno (no profesor en ninguna asignatura) vea su agenda, no tienen sentido los candados
+// TODO: Eliminar agenda de un usuario al eliminarlo completamente
+// TODO: Sólo horas y minutos en la agenda
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.82 (2016-12-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.82.1 (2016-12-02)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.82.1:  Dec 02, 2016	Changes in another user's agenda. (209450 lines)
         Version 16.82:    Dec 02, 2016	New action to show agenda another user's agenda. (209425 lines)
 					10 changes necessary in database:
 UPDATE actions SET Txt='Ver mi agenda' WHERE ActCod='1602' AND Language='es';

@@ -122,6 +122,7 @@ void Agd_ShowMyAgenda (void)
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
   {
    extern const char *Hlp_PROFILE_Agenda;
+   extern const char *Txt_Agenda_USER;
    extern const char *Txt_My_agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
@@ -135,16 +136,6 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
      {
       Pag_USR_AGENDA,
       Pag_MY_AGENDA,
-     };
-   void (*FunctionToDrawContextualIcons[Agd_NUM_AGENDA_TYPES]) (void) =
-     {
-      NULL,
-      Agd_PutIconToCreateNewEvent,
-     };
-   const char *Title[Agd_NUM_AGENDA_TYPES] =
-     {
-      "Agenda de otro usuario",
-      Txt_My_agenda,
      };
 
    /***** Get parameters *****/
@@ -165,9 +156,20 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Title[AgendaType],
-                        FunctionToDrawContextualIcons[AgendaType],
-                        Hlp_PROFILE_Agenda);
+   switch (AgendaType)
+     {
+      case Agd_USR_AGENDA:
+	 sprintf (Gbl.Title,Txt_Agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);	// TODO: Need translation!!!!!
+	 Lay_StartRoundFrame ("100%",Gbl.Title,
+			      NULL,
+			      Hlp_PROFILE_Agenda);	// TODO: Change
+	 break;
+      case Agd_MY_AGENDA:
+	 Lay_StartRoundFrame ("100%",Txt_My_agenda,
+			      Agd_PutIconToCreateNewEvent,
+			      Hlp_PROFILE_Agenda);
+	 break;
+     }
 
    if (Gbl.Agenda.Num)
      {

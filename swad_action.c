@@ -2364,7 +2364,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgVisFie	*/{ 297,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChangeVisibilityField	,NULL},
    /* ActRcvRecCrs	*/{ 301,-1,TabUnk,ActLstStd		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
-   /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
+   /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
    /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
@@ -2795,14 +2795,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
-   /* ActFrmNewEvtMyAgd	*/{1603,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
-   /* ActEdiOneEvtMyAgd	*/{1604,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
-   /* ActNewEvtMyAgd	*/{1605,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
-   /* ActChgEvtMyAgd	*/{1606,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
-   /* ActReqRemEvtMyAgd	*/{1607,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_AskRemEvent		,NULL},
-   /* ActRemEvtMyAgd	*/{1608,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RemoveEvent		,NULL},
-   /* ActHidEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_HideEvent			,NULL},
-   /* ActShoEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowEvent			,NULL},
+   /* ActFrmNewEvtMyAgd	*/{1603,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
+   /* ActEdiOneEvtMyAgd	*/{1604,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
+   /* ActNewEvtMyAgd	*/{1605,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
+   /* ActChgEvtMyAgd	*/{1606,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
+   /* ActReqRemEvtMyAgd	*/{1607,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_AskRemEvent		,NULL},
+   /* ActRemEvtMyAgd	*/{1608,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RemoveEvent		,NULL},
+   /* ActHidEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_HideEvent			,NULL},
+   /* ActShoEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowEvent			,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
