@@ -1152,6 +1152,8 @@ const char *Brw_FileExtensionsAllowed[] =
    "eps"  ,
    "fdf"  ,
    "flv"  ,
+   "ggb"  ,
+   "ggt"  ,
    "gif"  ,
    "gz"   ,
    "h"    ,
@@ -1282,6 +1284,8 @@ const char *Brw_MIMETypesAllowed[] =
    "application/stream",		// PDF in Mac?
    "application/unknown",
    "application/vnd.fdf",		// Forms Data Format
+   "application/vnd.geogebra.file",	// GeoGebra .ggb
+   "application/vnd.geogebra.tool",	// GeoGebra .ggt
    "application/vnd.msexcel",		// Microsoft Excel .xls
    "application/vnd.ms-excel",		// Microsoft Excel .xls
    "application/vnd.ms-powerpoint",	// Microsoft PowerPoint .ppt or .pps
