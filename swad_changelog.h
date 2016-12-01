@@ -185,13 +185,26 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.81.5 (2016-12-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.82 (2016-12-02)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.82:    Dec 02, 2016	New action to show agenda another user's agenda. (209425 lines)
+					10 changes necessary in database:
+UPDATE actions SET Txt='Ver mi agenda' WHERE ActCod='1602' AND Language='es';
+UPDATE actions SET Txt='Solicitar creaci&oacute;n evento mi agenda' WHERE ActCod='1603' AND Language='es';
+UPDATE actions SET Txt='Solicitar edici&oacute;n evento mi agenda' WHERE ActCod='1604' AND Language='es';
+UPDATE actions SET Txt='Crear evento mi agenda' WHERE ActCod='1605' AND Language='es';
+UPDATE actions SET Txt='Cambiar evento mi agenda' WHERE ActCod='1606' AND Language='es';
+UPDATE actions SET Txt='Solicitar eliminaci&oacute;n evento mi agenda' WHERE ActCod='1607' AND Language='es';
+UPDATE actions SET Txt='Eliminar evento mi agenda' WHERE ActCod='1608' AND Language='es';
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1609','es','N','Hacer privado evento mi agenda');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1610','es','N','Hacer p&uacute;blico evento mi agenda');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1611','es','N','Ver agenda otro usuario');
+
         Version 16.81.5:  Dec 01, 2016	Link in teacher's record card to show agenda. (209313 lines)
 Copy the following icon to icon public directory:
 sudo cp icon/date64x64.gif /var/www/html/swad/icon/

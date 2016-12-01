@@ -956,6 +956,8 @@ Users:
 	795. ActChgVisFie		Request change in visibility of a record field
         796. ActRcvRecCrs		Receive and update fields of my record in this course
 
+        NEW. ActSeeUsrAgd		Show user's agenda
+
 	797. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
 	798. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
 
@@ -1454,7 +1456,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeMai		*/{ 855, 5,TabSys,ActSeeMai		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_SeeMailDomains		,"email64x64.gif"	},
    /* ActSeeBan		*/{1137, 6,TabSys,ActSeeBan		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
    /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
-   /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,0x110,0x110,0x110,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
+   /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
    /* ActSetUp		*/{ 840, 9,TabSys,ActSetUp		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
 
    // Actions not in menu:
@@ -2362,6 +2364,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgVisFie	*/{ 297,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChangeVisibilityField	,NULL},
    /* ActRcvRecCrs	*/{ 301,-1,TabUnk,ActLstStd		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
+   /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
+
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
    /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
 
@@ -2774,7 +2778,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeMyAgd	*/{1602, 5,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_SeeEvents			,"date64x64.gif"	},
+   /* ActSeeMyAgd	*/{1602, 5,TabPrf,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"date64x64.gif"	},
    /* ActFrmMyAcc	*/{  36, 6,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 7,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 8,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
@@ -4500,6 +4504,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActRemEvtMyAgd,		// #1608
 	ActHidEvtMyAgd,		// #1609
 	ActShoEvtMyAgd,		// #1610
+	ActSeeUsrAgd,		// #1611
 	};
 
 /*****************************************************************************/

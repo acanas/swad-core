@@ -2090,27 +2090,6 @@ const char *Txt_Admin_several_teachers =
 	"Gerenciar v&aacute;rios professores";
 #endif
 
-const char *Txt_Agenda =
-#if   L==1
-	"Agenda";
-#elif L==2
-	"Organizer";
-#elif L==3
-	"Agenda";
-#elif L==4
-	"Agenda";
-#elif L==5
-	"Agenda";
-#elif L==6
-	"Aporyr&atilde;";
-#elif L==7
-	"Agenda";
-#elif L==8
-	"Pami&eogon;tnik";
-#elif L==9
-	"Agenda";
-#endif
-
 const char *Txt_all =
 #if   L==1
 	"tot";
@@ -23196,6 +23175,27 @@ const char *Txt_Multiple_enrollment =		// (to a type of group)
 	"Rejestracja wielu element&oacute;w?";
 #elif L==9
 	"Inscri&ccedil;&atilde;o m&uacute;ltiplas?";
+#endif
+
+const char *Txt_My_agenda =
+#if   L==1
+	"La meva agenda";
+#elif L==2
+	"Mein Organizer";
+#elif L==3
+	"My agenda";
+#elif L==4
+	"Mi agenda";
+#elif L==5
+	"Mon agenda";
+#elif L==6
+	"Che aporyr&atilde;";
+#elif L==7
+	"La mia agenda";
+#elif L==8
+	"Moja pami&eogon;tnik";
+#elif L==9
+	"Minha agenda";
 #endif
 
 const char *Txt_My_courses =

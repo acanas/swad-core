@@ -40,12 +40,14 @@
 typedef enum
   {
    Pag_ASSIGNMENTS,
+   Pag_USR_AGENDA,
    Pag_ATT_EVENTS,
    Pag_MESSAGES_RECEIVED,
    Pag_MESSAGES_SENT,
    Pag_THREADS_FORUM,
    Pag_POSTS_FORUM,
    Pag_SURVEYS,
+   Pag_MY_AGENDA,
   } Pag_WhatPaginate_t;
 
 struct Pagination	// Used for threads and messages pagination

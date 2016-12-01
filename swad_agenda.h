@@ -76,11 +76,11 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Agd_SeeEvents (void);
+void Agd_ShowUsrAgenda (void);
+void Agd_ShowMyAgenda (void);
+
 void Agd_PutHiddenParamEventsOrderType (void);
 void Agd_RequestCreatOrEditEvent (void);
-void Agd_GetListEvents (void);
-void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
 void Agd_FreeListEvents (void);
 
 long Agd_GetParamAgdCod (void);

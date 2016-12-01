@@ -131,6 +131,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_USR_AGENDA:
+               Act_FormStart (ActSeeUsrAgd);
+               Pag_PutHiddenParamPagNum (1);
+               Agd_PutHiddenParamEventsOrderType ();
+               Usr_PutParamOtherUsrCodEncrypted ();
+               break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (1);
@@ -163,6 +169,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
+               break;
+            case Pag_MY_AGENDA:
+               Act_FormStart (ActSeeMyAgd);
+               Pag_PutHiddenParamPagNum (1);
+               Agd_PutHiddenParamEventsOrderType ();
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
@@ -208,6 +219,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_USR_AGENDA:
+               Act_FormStart (ActSeeUsrAgd);
+               Pag_PutHiddenParamPagNum (1);
+               Agd_PutHiddenParamEventsOrderType ();
+               Usr_PutParamOtherUsrCodEncrypted ();
+               break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (1);
@@ -240,6 +257,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
+               break;
+            case Pag_MY_AGENDA:
+               Act_FormStart (ActSeeMyAgd);
+               Pag_PutHiddenParamPagNum (1);
+               Agd_PutHiddenParamEventsOrderType ();
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
@@ -268,6 +290,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_USR_AGENDA:
+               Act_FormStart (ActSeeUsrAgd);
+               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
+               Agd_PutHiddenParamEventsOrderType ();
+               Usr_PutParamOtherUsrCodEncrypted ();
+               break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
@@ -300,6 +328,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
+               break;
+            case Pag_MY_AGENDA:
+               Act_FormStart (ActSeeMyAgd);
+               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
+               Agd_PutHiddenParamEventsOrderType ();
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
@@ -335,6 +368,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   Asg_PutHiddenParamAsgOrderType ();
                   Grp_PutParamWhichGrps ();
                   break;
+	       case Pag_USR_AGENDA:
+		  Act_FormStart (ActSeeUsrAgd);
+		  Pag_PutHiddenParamPagNum (NumPage);
+		  Agd_PutHiddenParamEventsOrderType ();
+		  Usr_PutParamOtherUsrCodEncrypted ();
+		  break;
                case Pag_ATT_EVENTS:
                   Act_FormStart (ActSeeAtt);
                   Pag_PutHiddenParamPagNum (NumPage);
@@ -368,6 +407,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   Asg_PutHiddenParamAsgOrderType ();
                   Grp_PutParamWhichGrps ();
                   break;
+	       case Pag_MY_AGENDA:
+		  Act_FormStart (ActSeeMyAgd);
+		  Pag_PutHiddenParamPagNum (NumPage);
+		  Agd_PutHiddenParamEventsOrderType ();
+		  break;
               }
             sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                      (unsigned) NumPage,(unsigned) Pagination->NumPags);
@@ -398,6 +442,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_USR_AGENDA:
+	       Act_FormStart (ActSeeUsrAgd);
+	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
+	       Agd_PutHiddenParamEventsOrderType ();
+	       Usr_PutParamOtherUsrCodEncrypted ();
+	       break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
@@ -431,6 +481,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_MY_AGENDA:
+	       Act_FormStart (ActSeeMyAgd);
+	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
+	       Agd_PutHiddenParamEventsOrderType ();
+	       break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->RightPage,(unsigned) Pagination->NumPags);
@@ -458,6 +513,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_USR_AGENDA:
+	       Act_FormStart (ActSeeUsrAgd);
+	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
+	       Agd_PutHiddenParamEventsOrderType ();
+	       Usr_PutParamOtherUsrCodEncrypted ();
+	       break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
@@ -491,6 +552,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrderType ();
                Grp_PutParamWhichGrps ();
                break;
+	    case Pag_MY_AGENDA:
+	       Act_FormStart (ActSeeMyAgd);
+	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
+	       Agd_PutHiddenParamEventsOrderType ();
+	       break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
                   (unsigned) Pagination->NumPags,(unsigned) Pagination->NumPags);

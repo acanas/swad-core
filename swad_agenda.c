@@ -54,6 +54,13 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
+#define Agd_NUM_AGENDA_TYPES 2
+typedef enum
+  {
+   Agd_USR_AGENDA,
+   Agd_MY_AGENDA,
+  } Agd_AgendaType_t;
+
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -62,48 +69,60 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Agd_ShowAllEvents (void);
-static bool Agd_CheckIfICanCreateEvents (void);
-static void Agd_PutIconsListEvents (void);
+static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
+
 static void Agd_PutIconToCreateNewEvent (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
-static void Agd_ShowOneEvent (long AgdCod);
+static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
 static void Agd_GetParamEventOrderType (void);
 
 static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden);
 static void Agd_PutParams (void);
+static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
+static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
 static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query);
-static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt);
+static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt);
 static void Agd_PutParamAgdCod (long AgdCod);
 static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,long AgdCod);
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 
 /*****************************************************************************/
-/**************************** List all the events ****************************/
+/************************ Show another user's agenda *************************/
 /*****************************************************************************/
 
-void Agd_SeeEvents (void)
+void Agd_ShowUsrAgenda (void)
   {
-   /***** Get parameters *****/
-   Agd_GetParamEventOrderType ();
-   Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   /***** Show all the events *****/
-   Agd_ShowAllEvents ();
+   /***** Get user *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+      /***** Show all the visible events in the user's agenda *****/
+      Agd_ShowEvents (Agd_USR_AGENDA);
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
-/************************** Show all the events ******************************/
+/******************************* Show my agenda ******************************/
 /*****************************************************************************/
 
-static void Agd_ShowAllEvents (void)
+void Agd_ShowMyAgenda (void)
+  {
+   /***** Show all my events *****/
+   Agd_ShowEvents (Agd_MY_AGENDA);
+  }
+
+/*****************************************************************************/
+/*************************** Show events in agenda ***************************/
+/*****************************************************************************/
+
+static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
   {
    extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Txt_Agenda;
+   extern const char *Txt_My_agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
    extern const char *Txt_Event;
@@ -111,26 +130,46 @@ static void Agd_ShowAllEvents (void)
    extern const char *Txt_No_events;
    Loc_Order_t Order;
    struct Pagination Pagination;
-   unsigned NumLoc;
+   unsigned NumEvent;
+   Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+     {
+      Pag_USR_AGENDA,
+      Pag_MY_AGENDA,
+     };
+   void (*FunctionToDrawContextualIcons[Agd_NUM_AGENDA_TYPES]) (void) =
+     {
+      NULL,
+      Agd_PutIconToCreateNewEvent,
+     };
+   const char *Title[Agd_NUM_AGENDA_TYPES] =
+     {
+      "Agenda de otro usuario",
+      Txt_My_agenda,
+     };
+
+   /***** Get parameters *****/
+   Agd_GetParamEventOrderType ();
+   Pag_GetParamPagNum (WhatPaginate[AgendaType]);
 
    /***** Get list of events *****/
-   Agd_GetListEvents ();
+   Agd_GetListEvents (AgendaType);
 
    /***** Compute variables related to pagination *****/
-   Pagination.NumItems = Gbl.Usrs.Me.Locs.Num;
+   Pagination.NumItems = Gbl.Agenda.Num;
    Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
    Pag_CalculatePagination (&Pagination);
    Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],0,&Pagination);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Agenda,
-                        Agd_PutIconsListEvents,Hlp_PROFILE_Agenda);
+   Lay_StartRoundFrame ("100%",Title[AgendaType],
+                        FunctionToDrawContextualIcons[AgendaType],
+                        Hlp_PROFILE_Agenda);
 
-   if (Gbl.Usrs.Me.Locs.Num)
+   if (Gbl.Agenda.Num)
      {
       /***** Table head *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
@@ -140,15 +179,23 @@ static void Agd_ShowAllEvents (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeeMyAgd);
-	 Grp_PutParamWhichGrps ();
+	 switch (AgendaType)
+	   {
+	    case Agd_USR_AGENDA:
+	       Act_FormStart (ActSeeUsrAgd);
+	       Usr_PutParamOtherUsrCodEncrypted ();
+	       break;
+	    case Agd_MY_AGENDA:
+	       Act_FormStart (ActSeeMyAgd);
+	       break;
+	   }
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Usrs.Me.Locs.SelectedOrderType)
+	 if (Order == Gbl.Agenda.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
-	 if (Order == Gbl.Usrs.Me.Locs.SelectedOrderType)
+	 if (Order == Gbl.Agenda.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -165,10 +212,10 @@ static void Agd_ShowAllEvents (void)
 	       Txt_Location);
 
       /***** Write all the events *****/
-      for (NumLoc = Pagination.FirstItemVisible;
-	   NumLoc <= Pagination.LastItemVisible;
-	   NumLoc++)
-	 Agd_ShowOneEvent (Gbl.Usrs.Me.Locs.LstLocCods[NumLoc - 1]);
+      for (NumEvent = Pagination.FirstItemVisible;
+	   NumEvent <= Pagination.LastItemVisible;
+	   NumEvent++)
+	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent - 1]);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
@@ -177,7 +224,7 @@ static void Agd_ShowAllEvents (void)
       Lay_ShowAlert (Lay_INFO,Txt_No_events);
 
    /***** Button to create a new event *****/
-   if (Agd_CheckIfICanCreateEvents ())
+   if (AgendaType == Agd_MY_AGENDA)
       Agd_PutButtonToCreateNewEvent ();
 
    /***** End frame *****/
@@ -185,31 +232,10 @@ static void Agd_ShowAllEvents (void)
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ASSIGNMENTS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],0,&Pagination);
 
    /***** Free list of events *****/
    Agd_FreeListEvents ();
-  }
-
-/*****************************************************************************/
-/********************** Check if I can create events *************************/
-/*****************************************************************************/
-
-static bool Agd_CheckIfICanCreateEvents (void)
-  {
-   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
-  }
-
-/*****************************************************************************/
-/****************** Put contextual icons in list of events *******************/
-/*****************************************************************************/
-
-static void Agd_PutIconsListEvents (void)
-  {
-   /***** Put icon to create a new event *****/
-   if (Agd_CheckIfICanCreateEvents ())
-      Agd_PutIconToCreateNewEvent ();
   }
 
 /*****************************************************************************/
@@ -248,7 +274,6 @@ static void Agd_PutButtonToCreateNewEvent (void)
 static void Agd_PutParamsToCreateNewEvent (void)
   {
    Agd_PutHiddenParamEventsOrderType ();
-   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -256,7 +281,7 @@ static void Agd_PutParamsToCreateNewEvent (void)
 /******************************* Show one event ******************************/
 /*****************************************************************************/
 
-static void Agd_ShowOneEvent (long AgdCod)
+static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
@@ -265,15 +290,24 @@ static void Agd_ShowOneEvent (long AgdCod)
 
    /***** Get data of this event *****/
    AgdEvent.AgdCod = AgdCod;
+   switch (AgendaType)
+     {
+      case Agd_USR_AGENDA:
+	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
+         break;
+      case Agd_MY_AGENDA:
+	 AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+         break;
+     }
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Write first row of data of this event *****/
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('agd_date_start_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -286,9 +320,9 @@ static void Agd_ShowOneEvent (long AgdCod)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('agd_date_end_%u',%ld,'<br />','%s');"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -327,19 +361,13 @@ static void Agd_ShowOneEvent (long AgdCod)
    Agd_WriteEventAuthor (&AgdEvent);
 
    /* Forms to remove/edit this event */
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         Agd_PutFormsToRemEditOneEvent (AgdEvent.AgdCod,AgdEvent.Hidden);
-         break;
-      default:
-         break;
-     }
+   if (AgendaType == Agd_MY_AGENDA)
+      Agd_PutFormsToRemEditOneEvent (AgdEvent.AgdCod,AgdEvent.Hidden);
+
    fprintf (Gbl.F.Out,"</td>");
 
    /* Text of the event */
-   Agd_GetEventTxtFromDB (AgdEvent.AgdCod,Txt);
+   Agd_GetEventTxtFromDB (&AgdEvent,Txt);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
@@ -413,9 +441,9 @@ static void Agd_GetParamEventOrderType (void)
 
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Usrs.Me.Locs.SelectedOrderType = (Loc_Order_t) UnsignedNum;
+      Gbl.Agenda.SelectedOrderType = (Loc_Order_t) UnsignedNum;
    else
-      Gbl.Usrs.Me.Locs.SelectedOrderType = Loc_DEFAULT_ORDER_TYPE;
+      Gbl.Agenda.SelectedOrderType = Loc_DEFAULT_ORDER_TYPE;
   }
 
 /*****************************************************************************/
@@ -424,7 +452,7 @@ static void Agd_GetParamEventOrderType (void)
 
 void Agd_PutHiddenParamEventsOrderType (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Usrs.Me.Locs.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrderType);
   }
 
 /*****************************************************************************/
@@ -440,7 +468,7 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
 
    fprintf (Gbl.F.Out,"<div>");
 
-   Gbl.Usrs.Me.Locs.LocCodToEdit = AgdCod;	// Used as parameter in contextual links
+   Gbl.Agenda.AgdCodToEdit = AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
    Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutParams,
@@ -475,41 +503,29 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
 
 static void Agd_PutParams (void)
   {
-   Agd_PutParamAgdCod (Gbl.Usrs.Me.Locs.LocCodToEdit);
+   Agd_PutParamAgdCod (Gbl.Agenda.AgdCodToEdit);
    Agd_PutHiddenParamEventsOrderType ();
-   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
-/*************************** List all the events *****************************/
+/************************* Get list of agenda events *************************/
 /*****************************************************************************/
 
-void Agd_GetListEvents (void)
+static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
   {
-   char HiddenSubQuery[256];
    char OrderBySubQuery[256];
    char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   unsigned NumLoc;
+   unsigned NumEvent;
 
-   if (Gbl.Usrs.Me.Locs.LstIsRead)
+   if (Gbl.Agenda.LstIsRead)
       Agd_FreeListEvents ();
 
    /***** Get list of events from database *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         HiddenSubQuery[0] = '\0';
-         break;
-      default:
-         sprintf (HiddenSubQuery,"AND Hidden='N'");
-         break;
-     }
-   switch (Gbl.Usrs.Me.Locs.SelectedOrderType)
+   switch (Gbl.Agenda.SelectedOrderType)
      {
       case Loc_ORDER_BY_START_DATE:
          sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Location DESC,Event DESC");
@@ -518,46 +534,59 @@ void Agd_GetListEvents (void)
          sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Location DESC,Event DESC");
          break;
      }
-   sprintf (Query,"SELECT AgdCod"
-		  " FROM agendas"
-		  " WHERE UsrCod='%ld'%s"
-		  " ORDER BY %s",
-	    Gbl.Usrs.Me.UsrDat.UsrCod,HiddenSubQuery,OrderBySubQuery);
+   switch (AgendaType)
+     {
+      case Agd_USR_AGENDA:
+	 sprintf (Query,"SELECT AgdCod"
+			" FROM agendas"
+			" WHERE UsrCod='%ld' AND Hidden='N'"
+			" AND EndTime>NOW()"	// Only not obsolete events
+			" ORDER BY %s",
+		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
+         break;
+      case Agd_MY_AGENDA:
+	 sprintf (Query,"SELECT AgdCod"
+			" FROM agendas"
+			" WHERE UsrCod='%ld'"
+			" ORDER BY %s",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+         break;
+     }
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
 
    if (NumRows) // Events found...
      {
-      Gbl.Usrs.Me.Locs.Num = (unsigned) NumRows;
+      Gbl.Agenda.Num = (unsigned) NumRows;
 
       /***** Create list of events *****/
-      if ((Gbl.Usrs.Me.Locs.LstLocCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+      if ((Gbl.Agenda.LstAgdCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
           Lay_ShowErrorAndExit ("Not enough memory to store list of agenda events.");
 
       /***** Get the events codes *****/
-      for (NumLoc = 0;
-	   NumLoc < Gbl.Usrs.Me.Locs.Num;
-	   NumLoc++)
+      for (NumEvent = 0;
+	   NumEvent < Gbl.Agenda.Num;
+	   NumEvent++)
         {
          /* Get next event code */
          row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Usrs.Me.Locs.LstLocCods[NumLoc] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((Gbl.Agenda.LstAgdCods[NumEvent] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Error: wrong event code.");
         }
      }
    else
-      Gbl.Usrs.Me.Locs.Num = 0;
+      Gbl.Agenda.Num = 0;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   Gbl.Usrs.Me.Locs.LstIsRead = true;
+   Gbl.Agenda.LstIsRead = true;
   }
 
 /*****************************************************************************/
 /*********************** Get event data using its code ***********************/
 /*****************************************************************************/
 
-void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
+static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
   {
    char Query[1024];
 
@@ -569,7 +598,7 @@ void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
                   "Event,Location"
                   " FROM agendas"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent->AgdCod,AgdEvent->UsrCod);
 
    /***** Get data of event *****/
    Agd_GetDataOfEvent (AgdEvent,Query);
@@ -638,13 +667,13 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
 
 void Agd_FreeListEvents (void)
   {
-   if (Gbl.Usrs.Me.Locs.LstIsRead && Gbl.Usrs.Me.Locs.LstLocCods)
+   if (Gbl.Agenda.LstIsRead && Gbl.Agenda.LstAgdCods)
      {
       /***** Free memory used by the list of events *****/
-      free ((void *) Gbl.Usrs.Me.Locs.LstLocCods);
-      Gbl.Usrs.Me.Locs.LstLocCods = NULL;
-      Gbl.Usrs.Me.Locs.Num = 0;
-      Gbl.Usrs.Me.Locs.LstIsRead = false;
+      free ((void *) Gbl.Agenda.LstAgdCods);
+      Gbl.Agenda.LstAgdCods = NULL;
+      Gbl.Agenda.Num = 0;
+      Gbl.Agenda.LstIsRead = false;
      }
   }
 
@@ -652,7 +681,7 @@ void Agd_FreeListEvents (void)
 /*********************** Get event text from database ************************/
 /*****************************************************************************/
 
-static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt)
+static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -662,7 +691,7 @@ static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt)
    /***** Get text of event from database *****/
    sprintf (Query,"SELECT Txt FROM agendas"
 	          " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent->AgdCod,AgdEvent->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get event text");
 
    /***** The result of the query must have one row or none *****/
@@ -716,21 +745,20 @@ void Agd_AskRemEvent (void)
 
    /***** Get parameters *****/
    Agd_GetParamEventOrderType ();
-   Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Pag_GetParamPagNum (Pag_MY_AGENDA);
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
       Lay_ShowErrorAndExit ("Code of event is missing.");
 
    /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemEvtMyAgd);
    Agd_PutParamAgdCod (AgdEvent.AgdCod);
    Agd_PutHiddenParamEventsOrderType ();
-   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
@@ -741,7 +769,7 @@ void Agd_AskRemEvent (void)
    Act_FormEnd ();
 
    /***** Show events again *****/
-   Agd_SeeEvents ();
+   Agd_ShowMyAgenda ();
   }
 
 /*****************************************************************************/
@@ -759,6 +787,7 @@ void Agd_RemoveEvent (void)
       Lay_ShowErrorAndExit ("Code of event is missing.");
 
    /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);	// Inside this function, the course is checked to be the current one
 
    /***** Remove event *****/
@@ -772,7 +801,7 @@ void Agd_RemoveEvent (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
-   Agd_SeeEvents ();
+   Agd_ShowMyAgenda ();
   }
 
 /*****************************************************************************/
@@ -790,6 +819,7 @@ void Agd_HideEvent (void)
       Lay_ShowErrorAndExit ("Code of event is missing.");
 
    /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Hide event *****/
@@ -803,7 +833,7 @@ void Agd_HideEvent (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
-   Agd_SeeEvents ();
+   Agd_ShowMyAgenda ();
   }
 
 /*****************************************************************************/
@@ -821,6 +851,7 @@ void Agd_ShowEvent (void)
       Lay_ShowErrorAndExit ("Code of event is missing.");
 
    /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Hide event *****/
@@ -835,7 +866,7 @@ void Agd_ShowEvent (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
-   Agd_SeeEvents ();
+   Agd_ShowMyAgenda ();
   }
 
 /*****************************************************************************/
@@ -875,8 +906,7 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Get parameters *****/
    Agd_GetParamEventOrderType ();
-   Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Pag_GetParamPagNum (Pag_MY_AGENDA);
 
    /***** Get the code of the event *****/
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
@@ -895,11 +925,13 @@ void Agd_RequestCreatOrEditEvent (void)
      }
    else
      {
+      AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+
       /* Get data of the event from database */
       Agd_GetDataOfEventByCod (&AgdEvent);
 
       /* Get text of the event from database */
-      Agd_GetEventTxtFromDB (AgdEvent.AgdCod,Txt);
+      Agd_GetEventTxtFromDB (&AgdEvent,Txt);
      }
 
    /***** Start form *****/
@@ -911,7 +943,6 @@ void Agd_RequestCreatOrEditEvent (void)
       Agd_PutParamAgdCod (AgdEvent.AgdCod);
      }
    Agd_PutHiddenParamEventsOrderType ();
-   Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/
@@ -979,7 +1010,7 @@ void Agd_RequestCreatOrEditEvent (void)
    Act_FormEnd ();
 
    /***** Show current events, if any *****/
-   Agd_ShowAllEvents ();
+   Agd_ShowEvents (Agd_MY_AGENDA);
   }
 
 /*****************************************************************************/
@@ -992,57 +1023,58 @@ void Agd_RecFormEvent (void)
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct AgendaEvent OldLoc;
-   struct AgendaEvent NewLoc;
+   struct AgendaEvent OldAgdEvent;
+   struct AgendaEvent NewAgdEvent;
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((NewLoc.AgdCod = Agd_GetParamAgdCod ()) == -1L);
+   ItsANewEvent = ((NewAgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
    if (!ItsANewEvent)
      {
       /* Get data of the old (current) event from database */
-      OldLoc.AgdCod = NewLoc.AgdCod;
-      Agd_GetDataOfEventByCod (&OldLoc);
+      OldAgdEvent.AgdCod = NewAgdEvent.AgdCod;
+      OldAgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+      Agd_GetDataOfEventByCod (&OldAgdEvent);
      }
 
    /***** Get start/end date-times *****/
-   NewLoc.TimeUTC[Loc_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewLoc.TimeUTC[Loc_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewAgdEvent.TimeUTC[Loc_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAgdEvent.TimeUTC[Loc_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get event *****/
-   Par_GetParToText ("Location",NewLoc.Location,Loc_MAX_LENGTH_LOCATION);
+   Par_GetParToText ("Location",NewAgdEvent.Location,Loc_MAX_LENGTH_LOCATION);
 
    /***** Get event *****/
-   Par_GetParToText ("Event",NewLoc.Event,Loc_MAX_LENGTH_EVENT);
+   Par_GetParToText ("Event",NewAgdEvent.Event,Loc_MAX_LENGTH_EVENT);
 
    /***** Get text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewLoc.TimeUTC[Loc_START_TIME] == 0)
-      NewLoc.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewLoc.TimeUTC[Loc_END_TIME] == 0)
-      NewLoc.TimeUTC[Loc_END_TIME] = NewLoc.TimeUTC[Loc_START_TIME] + 2*60*60;	// +2 hours
+   if (NewAgdEvent.TimeUTC[Loc_START_TIME] == 0)
+      NewAgdEvent.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewAgdEvent.TimeUTC[Loc_END_TIME] == 0)
+      NewAgdEvent.TimeUTC[Loc_END_TIME] = NewAgdEvent.TimeUTC[Loc_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if event is correct *****/
-   if (!NewLoc.Location[0])	// If there is no event
+   if (!NewAgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Check if event is correct *****/
-   if (NewLoc.Event[0])	// If there's event
+   if (NewAgdEvent.Event[0])	// If there's event
      {
       /* If title of event was in database... */
-      if (Agd_CheckIfSimilarEventExists ("Event",NewLoc.Event,NewLoc.AgdCod))
+      if (Agd_CheckIfSimilarEventExists ("Event",NewAgdEvent.Event,NewAgdEvent.AgdCod))
         {
          NewEventIsCorrect = false;
          sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
-                  NewLoc.Event);
+                  NewAgdEvent.Event);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
@@ -1057,15 +1089,15 @@ void Agd_RecFormEvent (void)
      {
       if (ItsANewEvent)
 	{
-         Agd_CreateEvent (&NewLoc,Txt);	// Add new event to database
+         Agd_CreateEvent (&NewAgdEvent,Txt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_event_X,NewLoc.Event);
+	 sprintf (Gbl.Message,Txt_Created_new_event_X,NewAgdEvent.Event);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
         {
-	 Agd_UpdateEvent (&NewLoc,Txt);
+	 Agd_UpdateEvent (&NewAgdEvent,Txt);
 
 	 /***** Write success message *****/
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
@@ -1075,7 +1107,7 @@ void Agd_RecFormEvent (void)
       Grp_FreeListCodSelectedGrps ();
 
       /***** Show events again *****/
-      Agd_SeeEvents ();
+      Agd_ShowMyAgenda ();
      }
    else
       // TODO: The form should be filled with partial data, now is always empty

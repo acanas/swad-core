@@ -2367,7 +2367,7 @@ static void Rec_PutIconsCommands (void)
 	       // The following slow check is made only if the previous fails
 	       ICanViewAgenda = Usr_CheckIfUsrSharesAnyOfMyCrs (Gbl.Record.UsrDat->UsrCod);
 	    if (ICanViewAgenda)
-	       Lay_PutContextualLink (ActSeeMyAgd,
+	       Lay_PutContextualLink (ActSeeUsrAgd,
 				      Rec_PutParamUsrCodEncrypted,
 				      "date64x64.gif",
 				      Txt_View_agenda,NULL,
