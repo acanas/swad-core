@@ -17089,27 +17089,6 @@ const char *Txt_Location =
 	"Localiza&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Location_X_removed =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Ubicaci&oacute; <strong>%s</strong> eliminada.";
-#elif L==2
-	"Standort <strong>%s</strong> entfernt.";
-#elif L==3
-	"Location <strong>%s</strong> removed.";
-#elif L==4
-	"Ubicaci&oacute;n <strong>%s</strong> eliminada.";
-#elif L==5
-	"Emplacement <strong>%s</strong> supprim&eacute;.";
-#elif L==6
-	"Ubicaci&oacute;n <strong>%s</strong> eliminada.";	// Okoteve traducción
-#elif L==7
-	"Posizione <strong>%s</strong> rimossa.";
-#elif L==8
-	"Lokacja <strong>%s</strong> usuniete.";
-#elif L==9
-	"Localiza&ccedil;&atilde;o <strong>%s</strong> removida.";
-#endif
-
 const char *Txt_Locations =
 #if   L==1
 	"Ubicacions";
@@ -19388,7 +19367,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// ActSeeMyLoc
+	// ActSeeMyAgd
 #if   L==1
 	"Agenda"
 #elif L==2
@@ -21261,7 +21240,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	// ActSeeMyLoc
+	// ActSeeMyAgd
 #if   L==1
 	"Agenda"
 #elif L==2

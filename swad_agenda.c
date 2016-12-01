@@ -140,7 +140,7 @@ static void Agd_ShowAllEvents (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeeMyLoc);
+	 Act_FormStart (ActSeeMyAgd);
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -221,7 +221,7 @@ static void Agd_PutIconToCreateNewEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put form to create a new event *****/
-   Lay_PutContextualLink (ActFrmNewLoc,Agd_PutParamsToCreateNewEvent,
+   Lay_PutContextualLink (ActFrmNewEvtMyAgd,Agd_PutParamsToCreateNewEvent,
                           "plus64x64.png",
                           Txt_New_event,NULL,
                           NULL);
@@ -235,7 +235,7 @@ static void Agd_PutButtonToCreateNewEvent (void)
   {
    extern const char *Txt_New_event;
 
-   Act_FormStart (ActFrmNewLoc);
+   Act_FormStart (ActFrmNewEvtMyAgd);
    Agd_PutParamsToCreateNewEvent ();
    Lay_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
@@ -443,25 +443,25 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
    Gbl.Usrs.Me.Locs.LocCodToEdit = AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
-   Lay_PutContextualLink (ActReqRemLoc,Agd_PutParams,
+   Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutParams,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
                           NULL);
 
    /***** Put form to hide/show event *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoLoc,Agd_PutParams,
+      Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
                              "eye-slash-on64x64.png",
 			     Txt_Show,NULL,
                              NULL);
    else
-      Lay_PutContextualLink (ActHidLoc,Agd_PutParams,
+      Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
                              "eye-on64x64.png",
 			     Txt_Hide,NULL,
                              NULL);
 
    /***** Put form to edit event *****/
-   Lay_PutContextualLink (ActEdiOneLoc,Agd_PutParams,
+   Lay_PutContextualLink (ActEdiOneEvtMyAgd,Agd_PutParams,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
@@ -519,7 +519,7 @@ void Agd_GetListEvents (void)
          break;
      }
    sprintf (Query,"SELECT AgdCod"
-		  " FROM locations"
+		  " FROM agendas"
 		  " WHERE UsrCod='%ld'%s"
 		  " ORDER BY %s",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,HiddenSubQuery,OrderBySubQuery);
@@ -566,8 +566,8 @@ void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW() BETWEEN StartTime AND EndTime,"
-                  "Location,Event"
-                  " FROM locations"
+                  "Event,Location"
+                  " FROM agendas"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -622,10 +622,10 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
       AgdEvent->Open = (row[5][0] == '1');
 
       /* Get the event (row[6]) */
-      strcpy (AgdEvent->Location,row[6]);
+      strcpy (AgdEvent->Event,row[6]);
 
       /* Get the event (row[7]) */
-      strcpy (AgdEvent->Event,row[7]);
+      strcpy (AgdEvent->Location,row[7]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -660,7 +660,7 @@ static void Agd_GetEventTxtFromDB (long AgdCod,char *Txt)
    unsigned long NumRows;
 
    /***** Get text of event from database *****/
-   sprintf (Query,"SELECT Txt FROM locations"
+   sprintf (Query,"SELECT Txt FROM agendas"
 	          " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get event text");
@@ -727,7 +727,7 @@ void Agd_AskRemEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemLoc);
+   Act_FormStart (ActRemEvtMyAgd);
    Agd_PutParamAgdCod (AgdEvent.AgdCod);
    Agd_PutHiddenParamEventsOrderType ();
    Grp_PutParamWhichGrps ();
@@ -750,7 +750,7 @@ void Agd_AskRemEvent (void)
 
 void Agd_RemoveEvent (void)
   {
-   extern const char *Txt_Location_X_removed;
+   extern const char *Txt_Event_X_removed;
    char Query[512];
    struct AgendaEvent AgdEvent;
 
@@ -762,13 +762,13 @@ void Agd_RemoveEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);	// Inside this function, the course is checked to be the current one
 
    /***** Remove event *****/
-   sprintf (Query,"DELETE FROM locations"
+   sprintf (Query,"DELETE FROM agendas"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryDELETE (Query,"can not remove event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Location_X_removed,AgdEvent.Event);
+   sprintf (Gbl.Message,Txt_Event_X_removed,AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
@@ -793,7 +793,7 @@ void Agd_HideEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Hide event *****/
-   sprintf (Query,"UPDATE locations SET Hidden='Y'"
+   sprintf (Query,"UPDATE agendas SET Hidden='Y'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not hide event");
@@ -824,7 +824,7 @@ void Agd_ShowEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Hide event *****/
-   sprintf (Query,"UPDATE locations SET Hidden='N'"
+   sprintf (Query,"UPDATE agendas SET Hidden='N'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not show event");
@@ -846,7 +846,7 @@ static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,l
    char Query[512];
 
    /***** Get number of events with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM locations"
+   sprintf (Query,"SELECT COUNT(*) FROM agendas"
 	          " WHERE UsrCod='%ld' AND %s='%s' AND AgdCod<>'%ld'",
             Gbl.Usrs.Me.UsrDat.UsrCod,Field,Value,AgdCod);
    return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
@@ -903,10 +903,10 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Start form *****/
    if (ItsANewEvent)
-      Act_FormStart (ActNewLoc);
+      Act_FormStart (ActNewEvtMyAgd);
    else
      {
-      Act_FormStart (ActChgLoc);
+      Act_FormStart (ActChgEvtMyAgd);
       Agd_PutParamAgdCod (AgdEvent.AgdCod);
      }
    Agd_PutHiddenParamEventsOrderType ();
@@ -1090,16 +1090,16 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Create a new event *****/
-   sprintf (Query,"INSERT INTO locations"
-	          " (UsrCod,StartTime,EndTime,Location,Event,Txt)"
+   sprintf (Query,"INSERT INTO agendas"
+	          " (UsrCod,StartTime,EndTime,Event,Location,Txt)"
                   " VALUES"
                   " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             AgdEvent->TimeUTC[Loc_START_TIME],
             AgdEvent->TimeUTC[Loc_END_TIME  ],
-            AgdEvent->Location,
             AgdEvent->Event,
+            AgdEvent->Location,
             Txt);
    AgdEvent->AgdCod = DB_QueryINSERTandReturnCode (Query,"can not create new event");
   }
@@ -1113,14 +1113,14 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
    char Query[1024+Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the event *****/
-   sprintf (Query,"UPDATE locations SET "
+   sprintf (Query,"UPDATE agendas SET "
 	          "StartTime=FROM_UNIXTIME('%ld'),"
 	          "EndTime=FROM_UNIXTIME('%ld'),"
-                  "Location='%s',Event='%s',Txt='%s'"
+                  "Event='%s',Location='%s',Txt='%s'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent->TimeUTC[Loc_START_TIME],
             AgdEvent->TimeUTC[Loc_END_TIME  ],
-            AgdEvent->Location,AgdEvent->Event,Txt,
+            AgdEvent->Event,AgdEvent->Location,Txt,
             AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update event");
   }
@@ -1134,7 +1134,7 @@ void Agd_RemoveUsrEvents (long UsrCod)
    char Query[128];
 
    /***** Remove events *****/
-   sprintf (Query,"DELETE FROM locations WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM agendas WHERE UsrCod='%ld'",UsrCod);
    DB_QueryDELETE (Query,"can not remove all the events of a user");
   }
 
@@ -1147,7 +1147,7 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
    char Query[128];
 
    /***** Get number of events in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM locations WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod='%ld'",
             UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of events from user");
   }
@@ -1169,56 +1169,56 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
      {
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-                        " FROM locations"
+                        " FROM agendas"
                         " WHERE UsrCod>'0'");
          break;
        case Sco_SCOPE_CTY:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                        " FROM institutions,centres,degrees,courses,crs_usr,agendas"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
        case Sco_SCOPE_INS:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
-                        " FROM centres,degrees,courses,crs_usr,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                        " FROM centres,degrees,courses,crs_usr,agendas"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
-                        " FROM degrees,courses,crs_usr,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                        " FROM degrees,courses,crs_usr,agendas"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
-                        " FROM courses,crs_usr,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                        " FROM courses,crs_usr,agendas"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (Query,"SELECT COUNT(DISTINCT locations.UsrCod)"
-                        " FROM crs_usr,locations"
+         sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
+                        " FROM crs_usr,agendas"
                         " WHERE crs_usr.CrsCod='%ld'"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -1255,52 +1255,52 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
      {
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM locations"
+                        " FROM agendas"
                         " WHERE UsrCod>'0'");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM institutions,centres,degrees,courses,crs_usr,locations"
+                        " FROM institutions,centres,degrees,courses,crs_usr,agendas"
                         " WHERE institutions.CtyCod='%ld'"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM centres,degrees,courses,crs_usr,locations"
+                        " FROM centres,degrees,courses,crs_usr,agendas"
                         " WHERE centres.InsCod='%ld'"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM degrees,courses,crs_usr,locations"
+                        " FROM degrees,courses,crs_usr,agendas"
                         " WHERE degrees.CtrCod='%ld'"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM courses,crs_usr,locations"
+                        " FROM courses,crs_usr,agendas"
                         " WHERE courses.DegCod='%ld'"
                         " AND courses.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*)"
-                        " FROM crs_usr,locations"
+                        " FROM crs_usr,agendas"
                         " WHERE crs_usr.CrsCod='%ld'"
-                        " AND crs_usr.UsrCod=locations.UsrCod",
+                        " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:

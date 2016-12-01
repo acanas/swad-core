@@ -80,7 +80,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1232 actions in one CGI:
+1231 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -1326,107 +1326,107 @@ Profile:
        1140. ActFrmRolSes		Show form to log out and to change current role in this session
        1141. ActMyCrs			Select one of my courses
        1142. ActSeeMyTT			Show the timetable of all courses of the logged user
-       1144. ActSeeMyLoc		Show my agenda (personal organizer)
-       1145. ActFrmMyAcc		Show form to the creation or change of user's account
-       1146. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
-       1147. ActEdiPrf			Show forms to edit preferences
-       1148. ActAdmBrf			Show the briefcase of private archives
+       1143. ActSeeMyAgd		Show my agenda (personal organizer)
+       1144. ActFrmMyAcc		Show form to the creation or change of user's account
+       1145. ActReqEdiRecCom		Request the edition of the record with the personal data of the user
+       1146. ActEdiPrf			Show forms to edit preferences
+       1147. ActAdmBrf			Show the briefcase of private archives
 
-       1149. ActReqSndNewPwd		Show form to send a new password via email
-       1150. ActSndNewPwd		Send a new password via email
-       1151. ActLogOut			Close session
+       1148. ActReqSndNewPwd		Show form to send a new password via email
+       1149. ActSndNewPwd		Send a new password via email
+       1150. ActLogOut			Close session
 
-       1152. ActAutUsrInt		Authentify user internally (directly from the platform)
-       1153. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
-       1154. ActAutUsrChgLan		Change language to my language just after authentication
-       1155. ActAnnSee			Mark announcement as seen
-       1156. ActChgMyRol		Change type of logged user
+       1151. ActAutUsrInt		Authentify user internally (directly from the platform)
+       1152. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
+       1153. ActAutUsrChgLan		Change language to my language just after authentication
+       1154. ActAnnSee			Mark announcement as seen
+       1155. ActChgMyRol		Change type of logged user
 
-       1157. ActFrmNewLoc		Form to create a new location
-       1158. ActEdiOneLoc		Edit one location
-       1159. ActNewLoc			Create new location
-       1160. ActChgLoc			Modify data of an existing location
-       1161. ActReqRemLoc		Request the removal of a location
-       1162. ActRemLoc			Remove location
-       1163. ActHidLoc			Hide location
-       1164. ActShoLoc			Show location
+       1156. ActFrmNewEvtMyAgd		Form to create a new event in my agenda
+       1157. ActEdiOneEvtMyAgd		Edit one event from my agenda
+       1158. ActNewEvtMyAgd		Create a new event in my agenda
+       1159. ActChgEvtMyAgd		Modify data of an event from my agenda
+       1160. ActReqRemEvtMyAgd		Request the removal of an event from my agenda
+       1161. ActRemEvtMyAgd		Remove an event from my agenda
+       1162. ActHidEvtMyAgd		Hide an event from my agenda
+       1163. ActShoEvtMyAgd		Show an event from my agenda
 
-       1165. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
-       1166. ActCreUsrAcc		Create new user account
-       1167. ActRemID_Me		Remove one of my user's IDs
-       1168. ActNewIDMe			Create a new user's ID for me
-       1169. ActRemOldNic		Remove one of my old nicknames
-       1170. ActChgNic			Change my nickname
-       1171. ActRemMaiMe		Remove one of my old emails
-       1172. ActNewMaiMe		Change my email address
-       1173. ActCnfMai			Confirm email address
-       1174. ActFrmChgMyPwd		Show form to the change of the password
-       1175. ActChgPwd			Change the password
-       1176. ActReqRemMyAcc		Request the removal of my account
-       1177. ActRemMyAcc		Remove my account
+       1164. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
+       1165. ActCreUsrAcc		Create new user account
+       1166. ActRemID_Me		Remove one of my user's IDs
+       1167. ActNewIDMe			Create a new user's ID for me
+       1168. ActRemOldNic		Remove one of my old nicknames
+       1169. ActChgNic			Change my nickname
+       1170. ActRemMaiMe		Remove one of my old emails
+       1171. ActNewMaiMe		Change my email address
+       1172. ActCnfMai			Confirm email address
+       1173. ActFrmChgMyPwd		Show form to the change of the password
+       1174. ActChgPwd			Change the password
+       1175. ActReqRemMyAcc		Request the removal of my account
+       1176. ActRemMyAcc		Remove my account
 
-       1178. ActChgMyData		Update my personal data
+       1177. ActChgMyData		Update my personal data
 
-       1179. ActReqMyPho		Show form to send my photo
-       1180. ActDetMyPho		Receive my photo and detect faces on it
-       1181. ActUpdMyPho		Update my photo
-       1182. ActReqRemMyPho		Request the removal of my photo
-       1183. ActRemMyPho		Remove my photo
+       1178. ActReqMyPho		Show form to send my photo
+       1179. ActDetMyPho		Receive my photo and detect faces on it
+       1180. ActUpdMyPho		Update my photo
+       1181. ActReqRemMyPho		Request the removal of my photo
+       1182. ActRemMyPho		Remove my photo
 
-       1184. ActEdiPri			Edit my privacy
-       1185. ActChgPriPho		Change privacy of my photo
-       1186. ActChgPriPrf		Change privacy of my public profile
+       1183. ActEdiPri			Edit my privacy
+       1184. ActChgPriPho		Change privacy of my photo
+       1185. ActChgPriPrf		Change privacy of my public profile
 
-       1187. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1188. ActChgCtyMyIns		Change the country of my institution
-       1189. ActChgMyIns		Change my institution
-       1190. ActChgMyCtr		Change my centre
-       1191. ActChgMyDpt		Change my department
-       1192. ActChgMyOff		Change my office
-       1193. ActChgMyOffPho		Change my office phone
+       1186. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1187. ActChgCtyMyIns		Change the country of my institution
+       1188. ActChgMyIns		Change my institution
+       1189. ActChgMyCtr		Change my centre
+       1190. ActChgMyDpt		Change my department
+       1191. ActChgMyOff		Change my office
+       1192. ActChgMyOffPho		Change my office phone
 
-       1194. ActReqEdiMyNet		Request the edition of my social networks
-       1195. ActChgMyNet		Change my web and social networks
+       1193. ActReqEdiMyNet		Request the edition of my social networks
+       1194. ActChgMyNet		Change my web and social networks
 
-       1196. ActChgThe			Change theme
-       1197. ActReqChgLan		Ask if change language
-       1198. ActChgLan			Change language
-       1199. ActChg1stDay		Change first day of the week
-       1200. ActChgCol			Change side columns
-       1201. ActHidLftCol		Hide left side column
-       1202. ActHidRgtCol		Hide right side column
-       1203. ActShoLftCol		Show left side column
-       1204. ActShoRgtCol		Show right side column
-       1205. ActChgIco			Change icon set
-       1206. ActChgMnu			Change menu
-       1207. ActChgNtfPrf		Change whether to notify by email new messages
-       1208. ActPrnUsrQR		Show my QR code ready to print
+       1195. ActChgThe			Change theme
+       1196. ActReqChgLan		Ask if change language
+       1197. ActChgLan			Change language
+       1198. ActChg1stDay		Change first day of the week
+       1199. ActChgCol			Change side columns
+       1200. ActHidLftCol		Hide left side column
+       1201. ActHidRgtCol		Hide right side column
+       1202. ActShoLftCol		Show left side column
+       1203. ActShoRgtCol		Show right side column
+       1204. ActChgIco			Change icon set
+       1205. ActChgMnu			Change menu
+       1206. ActChgNtfPrf		Change whether to notify by email new messages
+       1207. ActPrnUsrQR		Show my QR code ready to print
 
-       1209. ActPrnMyTT			Show the timetable listo to impresión of all my courses
-       1210. ActEdiTut			Edit the timetable of tutorías
-       1211. ActChgTut			Modify the timetable of tutorías
-       1212. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+       1208. ActPrnMyTT			Show the timetable listo to impresión of all my courses
+       1209. ActEdiTut			Edit the timetable of tutorías
+       1210. ActChgTut			Modify the timetable of tutorías
+       1211. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 
-       1213. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1214. ActRemFilBrf		Remove a file of the briefcase
-       1215. ActRemFolBrf		Remove a folder empty of the briefcase
-       1216. ActCopBrf			Set source of copy in the briefcase
-       1217. ActPasBrf			Paste a folder or file in the briefcase
-       1218. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1219. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1220. ActCreFolBrf		Create a new folder in the briefcase
-       1221. ActCreLnkBrf		Create a new link in the briefcase
-       1222. ActRenFolBrf		Rename a folder of the briefcase
-       1223. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1224. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1225. ActExpBrf			Expand a folder in briefcase
-       1226. ActConBrf			Contract a folder in briefcase
-       1227. ActZIPBrf			Compress a folder in briefcase
-       1228. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1229. ActChgDatBrf		Change metadata of a file in the briefcase
-       1230. ActDowBrf			Download a file in the briefcase
-       1231. ActReqRemOldBrf		Ask for removing old files in the briefcase
-       1232. ActRemOldBrf		Remove old files in the briefcase
+       1212. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1213. ActRemFilBrf		Remove a file of the briefcase
+       1214. ActRemFolBrf		Remove a folder empty of the briefcase
+       1215. ActCopBrf			Set source of copy in the briefcase
+       1216. ActPasBrf			Paste a folder or file in the briefcase
+       1217. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1218. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1219. ActCreFolBrf		Create a new folder in the briefcase
+       1220. ActCreLnkBrf		Create a new link in the briefcase
+       1221. ActRenFolBrf		Rename a folder of the briefcase
+       1222. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1223. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1224. ActExpBrf			Expand a folder in briefcase
+       1225. ActConBrf			Contract a folder in briefcase
+       1226. ActZIPBrf			Compress a folder in briefcase
+       1227. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1228. ActChgDatBrf		Change metadata of a file in the briefcase
+       1229. ActDowBrf			Download a file in the briefcase
+       1230. ActReqRemOldBrf		Ask for removing old files in the briefcase
+       1231. ActRemOldBrf		Remove old files in the briefcase
 */
 
 struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
@@ -2774,7 +2774,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqSelectOneOfMyCourses	,"mygroups64x64.gif"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeMyLoc	*/{1602, 5,TabPrf,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_SeeEvents		,"date64x64.gif"	},
+   /* ActSeeMyAgd	*/{1602, 5,TabPrf,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_SeeEvents		,"date64x64.gif"	},
    /* ActFrmMyAcc	*/{  36, 6,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 7,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 8,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},
@@ -2791,14 +2791,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
-   /* ActFrmNewLoc	*/{1603,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
-   /* ActEdiOneLoc	*/{1604,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
-   /* ActNewLoc		*/{1605,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
-   /* ActChgLoc		*/{1606,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
-   /* ActReqRemLoc	*/{1607,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_AskRemEvent		,NULL},
-   /* ActRemLoc		*/{1608,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RemoveEvent		,NULL},
-   /* ActHidLoc		*/{1609,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_HideEvent		,NULL},
-   /* ActShoLoc		*/{1610,-1,TabUnk,ActSeeMyLoc		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowEvent		,NULL},
+   /* ActFrmNewEvtMyAgd	*/{1603,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
+   /* ActEdiOneEvtMyAgd	*/{1604,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RequestCreatOrEditEvent	,NULL},
+   /* ActNewEvtMyAgd	*/{1605,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
+   /* ActChgEvtMyAgd	*/{1606,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
+   /* ActReqRemEvtMyAgd	*/{1607,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_AskRemEvent		,NULL},
+   /* ActRemEvtMyAgd	*/{1608,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RemoveEvent		,NULL},
+   /* ActHidEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_HideEvent			,NULL},
+   /* ActShoEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowEvent			,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
@@ -4491,15 +4491,15 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgDegWWWCfg,	// #1599
 	ActRenCrsFulCfg,	// #1600
 	ActRenCrsShoCfg,	// #1601
-	ActSeeMyLoc,		// #1602
-	ActFrmNewLoc,		// #1603
-	ActEdiOneLoc,		// #1604
-	ActNewLoc,		// #1605
-	ActChgLoc,		// #1606
-	ActReqRemLoc,		// #1607
-	ActRemLoc,		// #1608
-	ActHidLoc,		// #1609
-	ActShoLoc,		// #1610
+	ActSeeMyAgd,		// #1602
+	ActFrmNewEvtMyAgd,	// #1603
+	ActEdiOneEvtMyAgd,	// #1604
+	ActNewEvtMyAgd,		// #1605
+	ActChgEvtMyAgd,		// #1606
+	ActReqRemEvtMyAgd,	// #1607
+	ActRemEvtMyAgd,		// #1608
+	ActHidEvtMyAgd,		// #1609
+	ActShoEvtMyAgd,		// #1610
 	};
 
 /*****************************************************************************/

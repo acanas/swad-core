@@ -36,6 +36,20 @@ CREATE TABLE IF NOT EXISTS actions_MFU (
 	LastClick DATETIME NOT NULL,
 	UNIQUE INDEX(UsrCod,ActCod));
 --
+-- Table agendas: stores users' agendas
+--
+CREATE TABLE IF NOT EXISTS agendas (
+	AgdCod INT NOT NULL AUTO_INCREMENT,
+	UsrCod INT NOT NULL,
+	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	StartTime DATETIME NOT NULL,
+	EndTime DATETIME NOT NULL,
+	Event VARCHAR(255) NOT NULL,
+	Location VARCHAR(255) NOT NULL,
+	Txt TEXT NOT NULL,
+	UNIQUE INDEX(AgdCod),
+	INDEX(UsrCod,Hidden));
+--
 -- Table ann_seen: stores users who have seen global announcements
 --
 CREATE TABLE IF NOT EXISTS admin (
@@ -597,21 +611,6 @@ CREATE TABLE IF NOT EXISTS links (
 	FullName VARCHAR(127) NOT NULL,
 	WWW VARCHAR(255) NOT NULL,
 	UNIQUE INDEX(LnkCod));
---
--- Table locations: stores the teachers' locations
---
-CREATE TABLE IF NOT EXISTS locations (
-	LocCod INT NOT NULL AUTO_INCREMENT,
-	UsrCod INT NOT NULL,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
-	NumNotif INT NOT NULL DEFAULT 0,
-	StartTime DATETIME NOT NULL,
-	EndTime DATETIME NOT NULL,
-	Location VARCHAR(255) NOT NULL,
-	Event VARCHAR(255) NOT NULL,
-	Txt TEXT NOT NULL,
-	UNIQUE INDEX(LocCod),
-	INDEX(UsrCod,Hidden));
 --
 -- Table log_banners: stores the log of clicked banners
 --
