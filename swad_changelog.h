@@ -185,13 +185,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.81.4 (2016-12-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.81.5 (2016-12-01)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.81.5:  Dec 01, 2016	Link in teacher's record card to show agenda. (209313 lines)
+Copy the following icon to icon public directory:
+sudo cp icon/date64x64.gif /var/www/html/swad/icon/
+
         Version 16.81.4:  Dec 01, 2016	Changes in texts related to agenda. (209268 lines)
         Version 16.81.3:  Dec 01, 2016	Icon view replaced by lock in agenda.
 					Changes in texts related to agenda. (209227 lines)

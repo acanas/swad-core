@@ -50170,6 +50170,27 @@ const char *Txt_View =
 	"Ver";
 #endif
 
+const char *Txt_View_agenda =
+#if   L==1
+	"Veure agenda";
+#elif L==2
+	"Siehe Organizer";
+#elif L==3
+	"View agenda";
+#elif L==4
+	"Ver agenda";
+#elif L==5
+	"Voir agenda";
+#elif L==6
+	"Ver agenda";	// Okoteve traducción
+#elif L==7
+	"Vedi agenda";
+#elif L==8
+	"Wiadomo&sacute;ci pami&eogon;tnik";
+#elif L==9
+	"Veja agenda";
+#endif
+
 const char *Txt_View_all_recipients =
 #if   L==1
 	"Ver todos los destinatarios";	// Necessita traduccio

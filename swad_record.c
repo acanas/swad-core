@@ -2306,6 +2306,7 @@ static void Rec_PutIconsCommands (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_View_record_for_this_course;
+   extern const char *Txt_View_agenda;
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
@@ -2317,8 +2318,12 @@ static void Rec_PutIconsCommands (void)
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
+   bool IBelongToCurrentCrs   = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
+	                         Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER);
    bool HeBelongsToCurrentCrs = (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
 	                         Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
+   bool HeIsATeacherInAnyCrs = (Gbl.Record.UsrDat->Roles & (1 << Rol_TEACHER));
+   bool ICanViewAgenda;
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
@@ -2336,16 +2341,39 @@ static void Rec_PutIconsCommands (void)
       /***** Button to view user's record card in course when:
              - a course is selected && the user belongs to it &&
              - I can view user's record card in course *****/
-      if (HeBelongsToCurrentCrs &&
-	  (IAmLoggedAsStudent ||
-	   IAmLoggedAsTeacher ||
-	   IAmLoggedAsSysAdm))
+      if (HeBelongsToCurrentCrs && (IBelongToCurrentCrs || IAmLoggedAsSysAdm))
 	 Lay_PutContextualLink (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 								                       ActSeeRecOneTch,
 				Rec_PutParamUsrCodEncrypted,
 				"card64x64.gif",
 			        Txt_View_record_for_this_course,NULL,
 		                NULL);
+
+      /***** Button to view teacher's agenda when:
+             - he/she is a teacher and I share any course with him/her *****/
+      if (HeIsATeacherInAnyCrs)
+	{
+	 if (ItsMe)
+	    Lay_PutContextualLink (ActSeeMyAgd,
+				   NULL,
+				   "date64x64.gif",
+				   Txt_View_agenda,NULL,
+				   NULL);
+	 else	// Not me
+	   {
+	    if (!(ICanViewAgenda = (IBelongToCurrentCrs &&
+		                    HeBelongsToCurrentCrs) ||	// Course selected and we both belong to it
+	                           IAmLoggedAsSysAdm))		// I am system admin
+	       // The following slow check is made only if the previous fails
+	       ICanViewAgenda = Usr_CheckIfUsrSharesAnyOfMyCrs (Gbl.Record.UsrDat->UsrCod);
+	    if (ICanViewAgenda)
+	       Lay_PutContextualLink (ActSeeMyAgd,
+				      Rec_PutParamUsrCodEncrypted,
+				      "date64x64.gif",
+				      Txt_View_agenda,NULL,
+				      NULL);
+	   }
+	}
 
       /***** Button to admin user *****/
       if (ItsMe ||
@@ -2391,23 +2419,18 @@ static void Rec_PutIconsCommands (void)
 		                   NULL);
 
 	 /***** Button to view user's attendance *****/
-	 if (IAmLoggedAsStudent ||
-	     IAmLoggedAsTeacher ||
-	     IAmLoggedAsSysAdm)
-	   {
-	    if (IAmLoggedAsStudent)
-	       // As student, I can see my attendance
-	       Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
-			              "rollcall64x64.png",
-			              Txt_View_attendance,NULL,
-		                      NULL);
-	    else	// IAmLoggedAsTeacher || IAmLoggedAsSysAdm
-	       // As teacher, I can see attendance of the student
-	       Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
-			              "rollcall64x64.png",
-			              Txt_View_attendance,NULL,
-		                      NULL);
-	   }
+	 if (ItsMe && IAmLoggedAsStudent)
+	    // As student, I can see my attendance
+	    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
+				   "rollcall64x64.png",
+				   Txt_View_attendance,NULL,
+				   NULL);
+	 else if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
+	    // As teacher, I can see attendance of the student
+	    Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
+				   "rollcall64x64.png",
+				   Txt_View_attendance,NULL,
+				   NULL);
 	}
 
       /***** Button to send a message *****/
