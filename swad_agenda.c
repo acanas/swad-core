@@ -434,8 +434,8 @@ void Agd_PutHiddenParamEventsOrderType (void)
 static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
+   extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
+   extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div>");
@@ -452,12 +452,12 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
    if (Hidden)
       Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
                              "closed_on16x16.gif",
-			     Txt_Show,NULL,
+			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
                              NULL);
    else
       Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
                              "open_on16x16.gif",
-			     Txt_Hide,NULL,
+			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
                              NULL);
 
    /***** Put form to edit event *****/
@@ -812,7 +812,7 @@ void Agd_HideEvent (void)
 
 void Agd_ShowEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_viewable_to_users_of_your_courses;
+   extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
    char Query[256];
    struct AgendaEvent AgdEvent;
 
@@ -830,7 +830,7 @@ void Agd_ShowEvent (void)
    DB_QueryUPDATE (Query,"can not show event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_viewable_to_users_of_your_courses,
+   sprintf (Gbl.Message,Txt_Event_X_is_now_visible_to_users_of_your_courses,
             AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 

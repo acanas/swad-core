@@ -10965,25 +10965,25 @@ const char *Txt_Event_X_is_now_visible =	// Warning: it is very important to inc
 	"O evento <strong>%s</strong> &eacute; agora vis&iacute;vel.";
 #endif
 
-const char *Txt_Event_X_is_now_viewable_to_users_of_your_courses =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Event_X_is_now_visible_to_users_of_your_courses =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"L'esdevenimen <strong>%s</strong> ara &eacute;s visible"
-	" per a usuaris de les seves assignatures.";
+	" pels usuaris de les seves assignatures.";
 #elif L==2
 	"Der Ereignis <strong>%s</strong> ist jetzt sichtbar"
 	" f&uuml;r Benutzer Ihrer Kurse.";
 #elif L==3
-	"Event <strong>%s</strong> is now viewable"
+	"Event <strong>%s</strong> is now visible"
 	" to users of your courses.";
 #elif L==4
 	"El evento <strong>%s</strong> ahora es visible"
-	" por usuarios de sus asignaturas.";
+	" por los usuarios de sus asignaturas.";
 #elif L==5
 	"L'&eacute;v&eacute;nement <strong>%s</strong> est maintenant visible"
 	" pour les utilisateurs de vos mati&egrave;res.";
 #elif L==6
 	"El evento <strong>%s</strong> ahora es visible"
-	" por usuarios de sus asignaturas.";	// Okoteve traducción
+	" por los usuarios de sus asignaturas.";	// Okoteve traducción
 #elif L==7
 	"L'evento <strong>%s</strong> &egrave; ora visibile"
 	" agli utenti dei corsi.";
@@ -10993,6 +10993,27 @@ const char *Txt_Event_X_is_now_viewable_to_users_of_your_courses =	// Warning: i
 #elif L==9
 	"O evento <strong>%s</strong> &eacute; agora vis&iacute;vel"
 	" para os usu&aacute;rios de seus disciplinas.";
+#endif
+
+const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses =
+#if   L==1
+	"Esdeveniment privat; feu clic per fer-lo visible pels usuaris de les seves assignatures";
+#elif L==2
+	"Ereignis privat; klicken Sie, um es f&uuml;r die Nutzer Ihrer Kurse sichtbar zu machen";
+#elif L==3
+	"Event private, click to make it visible to the users of your courses";
+#elif L==4
+	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";
+#elif L==5
+	"Event privat, cliquez pour le rendre visible aux utilisateurs de vos mati&egrave;res";
+#elif L==6
+	"Evento privado; pulse para hacerlo visible por los usuarios de sus asignaturas";	// Okoteve traducción
+#elif L==7
+	"Evento privato, fare clic per renderlo visibile agli utenti dei corsi";
+#elif L==8
+	"Event privat, kliknij aby by&lstrok; on widoczny dla u&zdot;ytkownik&oacute;w swoich kursach";
+#elif L==9
+	"Evento privat, clique para torn&aacute;-lo vis&iacute;vel para os usu&aacute;rios de seus disciplinas";
 #endif
 
 const char *Txt_Event_X_removed =	// Warning: it is very important to include %s in the following sentences
@@ -11014,6 +11035,27 @@ const char *Txt_Event_X_removed =	// Warning: it is very important to include %s
 	"Wydarzenie <strong>%s</strong> usuniete.";
 #elif L==9
 	"Evento <strong>%s</strong> removido.";
+#endif
+
+const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private =
+#if   L==1
+	"Esdeveniment visible pels usuaris de les seves assignatures; feu clic per fer-lo privat";
+#elif L==2
+	"Ereignis Nutzer Ihrer Kurse sichtbar zu machen; klicken Sie, um es f&uuml;r die privat";
+#elif L==3
+	"Event visible to the users of your courses, click to make it private";
+#elif L==4
+	"Evento visible por los usuarios de sus asignaturas; pulse para hacerlo privado";
+#elif L==5
+	"Event visible aux utilisateurs de vos mati&egrave;res, cliquez pour le rendre privat";
+#elif L==6
+	"Evento visible por los usuarios de sus asignaturas; pulse para hacerlo privado";	// Okoteve traducción
+#elif L==7
+	"Evento visibile agli utenti dei corsi, fare clic per renderlo privato";
+#elif L==8
+	"Event widoczny dla u&zdot;ytkownik&oacute;w swoich kurs&oacute;w, kliknij, aby prywatne";
+#elif L==9
+	"Evento vis&iacute;vel para os usu&aacute;rios de seus disciplinas, clique para torn&aacute;-lo privat";
 #endif
 
 const char *Txt_Events =
