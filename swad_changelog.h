@@ -179,17 +179,21 @@
 // TODO: When teacher sees "No hay estudiantes", put a button to add students
 // TODO: When admin sees "No hay profesores", put a button to add teachers
 
+// TODO: Cuando el alumno vea la agenda del profesor, sólo se mostrarán los eventos públicos cuya fecha final esté en el futuro
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.81.2 (2016-12-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.81.3 (2016-12-01)"
 #define CSS_FILE		"swad16.69.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.81.3:  Dec 01, 2016	Icon view replaced by lock in agenda.
+					Changes in texts related to agenda. (209227 lines)
         Version 16.81.2:  Dec 01, 2016	New file types for GeoGebra, suggested by Sandra Quero Ramones. (209174 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/filext16x16/ggb16x16.gif /var/www/html/swad/icon/filext16x16/

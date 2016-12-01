@@ -451,12 +451,12 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Hidden)
    /***** Put form to hide/show event *****/
    if (Hidden)
       Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
-                             "eye-slash-on64x64.png",
+                             "closed_on16x16.gif",
 			     Txt_Show,NULL,
                              NULL);
    else
       Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
-                             "eye-on64x64.png",
+                             "open_on16x16.gif",
 			     Txt_Hide,NULL,
                              NULL);
 
@@ -776,12 +776,12 @@ void Agd_RemoveEvent (void)
   }
 
 /*****************************************************************************/
-/******************************* Hide an event *******************************/
+/********************* Hide an event (make it private) ***********************/
 /*****************************************************************************/
 
 void Agd_HideEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_hidden;
+   extern const char *Txt_Event_X_is_now_private;
    char Query[512];
    struct AgendaEvent AgdEvent;
 
@@ -799,7 +799,7 @@ void Agd_HideEvent (void)
    DB_QueryUPDATE (Query,"can not hide event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,AgdEvent.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_private,AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
@@ -807,13 +807,13 @@ void Agd_HideEvent (void)
   }
 
 /*****************************************************************************/
-/******************************* Show an event *******************************/
+/********* Show an event (make it viewable to users of my courses) ***********/
 /*****************************************************************************/
 
 void Agd_ShowEvent (void)
   {
-   extern const char *Txt_Event_X_is_now_visible;
-   char Query[512];
+   extern const char *Txt_Event_X_is_now_viewable_to_users_of_your_courses;
+   char Query[256];
    struct AgendaEvent AgdEvent;
 
    /***** Get event code *****/
@@ -830,7 +830,8 @@ void Agd_ShowEvent (void)
    DB_QueryUPDATE (Query,"can not show event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,AgdEvent.Event);
+   sprintf (Gbl.Message,Txt_Event_X_is_now_viewable_to_users_of_your_courses,
+            AgdEvent.Event);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show events again *****/
