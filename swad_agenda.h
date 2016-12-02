@@ -34,43 +34,34 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Loc_MAX_LENGTH_LOCATION	255
-#define Loc_MAX_LENGTH_EVENT	255
+#define Agd_MAX_LENGTH_LOCATION	255
+#define Agd_MAX_LENGTH_EVENT	255
 
-#define Loc_MAX_LENGTH_FOLDER 32
-
-#define Loc_NUM_TYPES_SEND_WORK 2
+#define Agd_NUM_DATES 2
 typedef enum
   {
-   Loc_DO_NOT_SEND_WORK = 0,
-   Loc_SEND_WORK        = 1,
-  } Loc_SendWork_t;
-
-#define Loc_NUM_DATES 2
-typedef enum
-  {
-   Loc_START_TIME = 0,
-   Loc_END_TIME   = 1,
-  } Loc_StartOrEndTime_t;
+   Agd_START_TIME = 0,
+   Agd_END_TIME   = 1,
+  } Agd_StartOrEndTime_t;
 
 struct AgendaEvent
   {
    long AgdCod;
    bool Hidden;
    long UsrCod;
-   time_t TimeUTC[Loc_NUM_DATES];
-   bool Open;
-   char Event[Loc_MAX_LENGTH_EVENT+1];
-   char Location[Loc_MAX_LENGTH_LOCATION+1];
+   time_t TimeUTC[Agd_NUM_DATES];
+   Dat_TimeStatus_t TimeStatus;
+   char Event[Agd_MAX_LENGTH_EVENT+1];
+   char Location[Agd_MAX_LENGTH_LOCATION+1];
   };
 
 typedef enum
   {
-   Loc_ORDER_BY_START_DATE = 0,
-   Loc_ORDER_BY_END_DATE   = 1,
-  } Loc_Order_t;
+   Agd_ORDER_BY_START_DATE = 0,
+   Agd_ORDER_BY_END_DATE   = 1,
+  } Agd_Order_t;
 
-#define Loc_DEFAULT_ORDER_TYPE Loc_ORDER_BY_START_DATE
+#define Agd_DEFAULT_ORDER_TYPE Agd_ORDER_BY_END_DATE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

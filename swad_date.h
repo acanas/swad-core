@@ -69,6 +69,14 @@ struct DateTime
    char YYYYMMDDHHMMSS[4+2+2+2+2+2+1];
   };
 
+#define Dat_NUM_TIME_STATUS 3
+typedef enum
+  {
+   Dat_PAST    = 0,
+   Dat_PRESENT = 1,
+   Dat_FUTURE  = 2,
+  } Dat_TimeStatus_t;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

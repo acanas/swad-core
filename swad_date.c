@@ -61,6 +61,19 @@ const unsigned Dat_NumDaysMonth[1+12] =
    31,	// 12: December
   };
 
+const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS] =
+  {
+   "DATE_RED",		// Dat_PAST
+   "DATE_GREEN",	// Dat_PRESENT
+   "DATE_BLUE",		// Dat_FUTURE
+  };
+const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
+  {
+   "DATE_RED_LIGHT",	// Dat_PAST
+   "DATE_GREEN_LIGHT",	// Dat_PRESENT
+   "DATE_BLUE_LIGHT",	// Dat_FUTURE
+  };
+
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/

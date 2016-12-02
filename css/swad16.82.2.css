@@ -1815,10 +1815,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 .ASG_TITLE_LIGHT	{color:#AFC4CC; font-size:15pt; font-weight:bold;}
 .ASG_GRP		{color:#4D88A1; font-size:12pt;}
 .ASG_GRP_LIGHT		{color:#AFC4CC; font-size:12pt;}
-.DATE_GREEN		{color:#008000; font-size:13pt;}
-.DATE_GREEN_LIGHT	{color:#89BE87; font-size:13pt;}
+
 .DATE_RED		{color:red;     font-size:13pt;}
 .DATE_RED_LIGHT		{color:#F98A8A; font-size:13pt;}
+.DATE_GREEN		{color:#008000; font-size:13pt;}
+.DATE_GREEN_LIGHT	{color:#89BE87; font-size:13pt;}
+.DATE_BLUE		{color:#4D88A1; font-size:13pt;}
+.DATE_BLUE_LIGHT	{color:#AFC4CC; font-size:13pt;}
 
 .ASG_LST_DATE_GREEN	{color:#008000; font-size:11pt; white-space:nowrap;}
 .ASG_LST_DATE_RED	{color:red;     font-size:11pt; white-space:nowrap;}

@@ -129,7 +129,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    extern const char *Txt_No_events;
-   Loc_Order_t Order;
+   Agd_Order_t Order;
    struct Pagination Pagination;
    unsigned NumEvent;
    Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
@@ -176,8 +176,8 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       /***** Table head *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
                          "<tr>");
-      for (Order = Loc_ORDER_BY_START_DATE;
-	   Order <= Loc_ORDER_BY_END_DATE;
+      for (Order = Agd_ORDER_BY_START_DATE;
+	   Order <= Agd_ORDER_BY_END_DATE;
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -285,6 +285,8 @@ static void Agd_PutParamsToCreateNewEvent (void)
 
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
   {
+   extern const char *Dat_TimeStatusClassVisible[Dat_NUM_TIME_STATUS];
+   extern const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS];
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
    struct AgendaEvent AgdEvent;
@@ -313,12 +315,10 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            AgdEvent.Hidden ? (AgdEvent.Open ? "DATE_GREEN_LIGHT" :
-        	                               "DATE_RED_LIGHT") :
-                              (AgdEvent.Open ? "DATE_GREEN" :
-                                               "DATE_RED"),
+            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
-            UniqueId,AgdEvent.TimeUTC[Loc_START_TIME],Txt_Today);
+            UniqueId,AgdEvent.TimeUTC[Agd_START_TIME],Txt_Today);
 
    /* End date/time */
    UniqueId++;
@@ -328,12 +328,10 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            AgdEvent.Hidden ? (AgdEvent.Open ? "DATE_GREEN_LIGHT" :
-        	                               "DATE_RED_LIGHT") :
-                              (AgdEvent.Open ? "DATE_GREEN" :
-                                               "DATE_RED"),
+            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
-            UniqueId,AgdEvent.TimeUTC[Loc_END_TIME],Txt_Today);
+            UniqueId,AgdEvent.TimeUTC[Agd_END_TIME],Txt_Today);
 
    /* Event */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
@@ -443,9 +441,9 @@ static void Agd_GetParamEventOrderType (void)
 
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Agenda.SelectedOrderType = (Loc_Order_t) UnsignedNum;
+      Gbl.Agenda.SelectedOrderType = (Agd_Order_t) UnsignedNum;
    else
-      Gbl.Agenda.SelectedOrderType = Loc_DEFAULT_ORDER_TYPE;
+      Gbl.Agenda.SelectedOrderType = Agd_DEFAULT_ORDER_TYPE;
   }
 
 /*****************************************************************************/
@@ -529,10 +527,10 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    /***** Get list of events from database *****/
    switch (Gbl.Agenda.SelectedOrderType)
      {
-      case Loc_ORDER_BY_START_DATE:
+      case Agd_ORDER_BY_START_DATE:
          sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Location DESC,Event DESC");
          break;
-      case Loc_ORDER_BY_END_DATE:
+      case Agd_ORDER_BY_END_DATE:
          sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Location DESC,Event DESC");
          break;
      }
@@ -596,7 +594,8 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
    sprintf (Query,"SELECT AgdCod,UsrCod,Hidden,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
+                  "NOW()>EndTime,"	// Past event?
+                  "NOW()<StartTime,"	// Future event?
                   "Event,Location"
                   " FROM agendas"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
@@ -620,9 +619,9 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
    AgdEvent->AgdCod = -1L;
    AgdEvent->UsrCod = -1L;
    AgdEvent->Hidden = false;
-   AgdEvent->TimeUTC[Loc_START_TIME] =
-   AgdEvent->TimeUTC[Loc_END_TIME  ] = (time_t) 0;
-   AgdEvent->Open = false;
+   AgdEvent->TimeUTC[Agd_START_TIME] =
+   AgdEvent->TimeUTC[Agd_END_TIME  ] = (time_t) 0;
+   AgdEvent->TimeStatus = Dat_FUTURE;
    AgdEvent->Event[0]    = '\0';
    AgdEvent->Location[0] = '\0';
 
@@ -631,7 +630,17 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
 
    if (NumRows) // Event found...
      {
-      /* Get row */
+      /* Get row:
+      row[0] AgdCod
+      row[1] UsrCod
+      row[2] Hidden
+      row[3] UNIX_TIMESTAMP(StartTime)
+      row[4] UNIX_TIMESTAMP(EndTime)
+      row[5] NOW()>EndTime	// Past event?
+      row[6] NOW()<StartTime	// Future event?
+      row[7] Event
+      row[8] Location
+      */
       row = mysql_fetch_row (mysql_res);
 
       /* Get code of the event (row[0]) */
@@ -644,19 +653,21 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
       AgdEvent->Hidden = (row[2][0] == 'Y');
 
       /* Get start date (row[3] holds the start UTC time) */
-      AgdEvent->TimeUTC[Loc_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date   (row[4] holds the end   UTC time) */
-      AgdEvent->TimeUTC[Loc_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the event is open or closed (row(5)) */
-      AgdEvent->Open = (row[5][0] == '1');
-
-      /* Get the event (row[6]) */
-      strcpy (AgdEvent->Event,row[6]);
+      /* Get whether the event is past, present or futur (row(5), row[6]) */
+      AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
+	                     ((row[6][0] == '1') ? Dat_FUTURE :
+	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) */
-      strcpy (AgdEvent->Location,row[7]);
+      strcpy (AgdEvent->Event,row[7]);
+
+      /* Get the event (row[8]) */
+      strcpy (AgdEvent->Location,row[8]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -919,9 +930,9 @@ void Agd_RequestCreatOrEditEvent (void)
       /* Initialize to empty event */
       AgdEvent.AgdCod = -1L;
       AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      AgdEvent.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
-      AgdEvent.TimeUTC[Loc_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
-      AgdEvent.Open = true;
+      AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
+      AgdEvent.TimeUTC[Agd_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      AgdEvent.TimeStatus = Dat_FUTURE;
       AgdEvent.Event[0]    = '\0';
       AgdEvent.Location[0] = '\0';
      }
@@ -969,7 +980,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Event,
-            Loc_MAX_LENGTH_EVENT,AgdEvent.Event);
+            Agd_MAX_LENGTH_EVENT,AgdEvent.Event);
 
    /***** Location *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -984,7 +995,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Location,
-            Loc_MAX_LENGTH_LOCATION,AgdEvent.Location);
+            Agd_MAX_LENGTH_LOCATION,AgdEvent.Location);
 
    /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC);
@@ -1043,23 +1054,23 @@ void Agd_RecFormEvent (void)
      }
 
    /***** Get start/end date-times *****/
-   NewAgdEvent.TimeUTC[Loc_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAgdEvent.TimeUTC[Loc_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewAgdEvent.TimeUTC[Agd_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAgdEvent.TimeUTC[Agd_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get event *****/
-   Par_GetParToText ("Location",NewAgdEvent.Location,Loc_MAX_LENGTH_LOCATION);
+   Par_GetParToText ("Location",NewAgdEvent.Location,Agd_MAX_LENGTH_LOCATION);
 
    /***** Get event *****/
-   Par_GetParToText ("Event",NewAgdEvent.Event,Loc_MAX_LENGTH_EVENT);
+   Par_GetParToText ("Event",NewAgdEvent.Event,Agd_MAX_LENGTH_EVENT);
 
    /***** Get text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAgdEvent.TimeUTC[Loc_START_TIME] == 0)
-      NewAgdEvent.TimeUTC[Loc_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewAgdEvent.TimeUTC[Loc_END_TIME] == 0)
-      NewAgdEvent.TimeUTC[Loc_END_TIME] = NewAgdEvent.TimeUTC[Loc_START_TIME] + 2*60*60;	// +2 hours
+   if (NewAgdEvent.TimeUTC[Agd_START_TIME] == 0)
+      NewAgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewAgdEvent.TimeUTC[Agd_END_TIME] == 0)
+      NewAgdEvent.TimeUTC[Agd_END_TIME] = NewAgdEvent.TimeUTC[Agd_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if event is correct *****/
    if (!NewAgdEvent.Location[0])	// If there is no event
@@ -1131,8 +1142,8 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
                   " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            AgdEvent->TimeUTC[Loc_START_TIME],
-            AgdEvent->TimeUTC[Loc_END_TIME  ],
+            AgdEvent->TimeUTC[Agd_START_TIME],
+            AgdEvent->TimeUTC[Agd_END_TIME  ],
             AgdEvent->Event,
             AgdEvent->Location,
             Txt);
@@ -1153,8 +1164,8 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "Event='%s',Location='%s',Txt='%s'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent->TimeUTC[Loc_START_TIME],
-            AgdEvent->TimeUTC[Loc_END_TIME  ],
+            AgdEvent->TimeUTC[Agd_START_TIME],
+            AgdEvent->TimeUTC[Agd_END_TIME  ],
             AgdEvent->Event,AgdEvent->Location,Txt,
             AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update event");
