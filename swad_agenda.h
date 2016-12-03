@@ -58,6 +58,12 @@ struct AgendaEvent
 
 typedef enum
   {
+   Agd_ALL_EVENTS,
+   Agd_ONLY_PUBLIC_EVENTS,
+  } Agd_WhichEvents_t;
+
+typedef enum
+  {
    Agd_ORDER_BY_START_DATE = 0,
    Agd_ORDER_BY_END_DATE   = 1,
   } Agd_Order_t;

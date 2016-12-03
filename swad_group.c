@@ -4222,7 +4222,7 @@ void Grp_ShowSelectorWhichGrps (void)
   }
 
 /*****************************************************************************/
-/***** Get whether to show only my groups or all groups or in timetable ******/
+/************* Get whether to show only my groups or all groups **************/
 /*****************************************************************************/
 
 void Grp_GetParamWhichGrps (void)
@@ -4235,14 +4235,14 @@ void Grp_GetParamWhichGrps (void)
      {
       FirstTime = false;
 
-      /***** Get groups type (my groups or all groups) *****/
+      /***** Get which grous (my groups or all groups) *****/
       Par_GetParToText ("WhichGrps",UnsignedStr,1);
       if (UnsignedStr[0])
         {
          if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-            Lay_ShowErrorAndExit ("Types of groups to show is missing.");
+            Lay_ShowErrorAndExit ("Which groups to show is missing.");
          if (UnsignedNum >= 2)
-            Lay_ShowErrorAndExit ("Wrong types of groups to show.");
+            Lay_ShowErrorAndExit ("Wrong parameter with which groups to show.");
          Gbl.CurrentCrs.Grps.WhichGrps = (Grp_WhichGroups_t) UnsignedNum;
         }
       else	// This parameter does not exist ==> set default value

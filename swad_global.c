@@ -418,6 +418,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.FileType = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
+   /* Agenda */
+   Gbl.Agenda.WhichEvents = Agd_ALL_EVENTS;
+
    /* To alternate colors where listing rows */
    Gbl.RowEvenOdd = 0;
    Gbl.ColorRows[0] = "COLOR0";	// Darker

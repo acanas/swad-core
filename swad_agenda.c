@@ -74,6 +74,8 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 static void Agd_PutIconToCreateNewEvent (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
+static void Agd_ShowSelectorWhichEvents (void);
+static void Agd_GetParamWhichEvents (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
 static void Agd_GetParamEventOrderType (void);
@@ -111,6 +113,10 @@ void Agd_ShowUsrAgenda (void)
 
 void Agd_ShowMyAgenda (void)
   {
+   /***** Get whether to show all events or only my events ******/
+   if (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER))	// I am a teacher in some courses
+      Agd_GetParamWhichEvents ();
+
    /***** Show all my events *****/
    Agd_ShowEvents (Agd_MY_AGENDA);
   }
@@ -155,19 +161,26 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    if (Pagination.MoreThanOnePage)
       Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],0,&Pagination);
 
-   /***** Start frame *****/
    switch (AgendaType)
      {
       case Agd_USR_AGENDA:
+         /***** Start frame *****/
 	 sprintf (Gbl.Title,Txt_Agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);	// TODO: Need translation!!!!!
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
 			      NULL,
 			      Hlp_PROFILE_Agenda);	// TODO: Change
 	 break;
       case Agd_MY_AGENDA:
+         /***** Start frame *****/
 	 Lay_StartRoundFrame ("100%",Txt_My_agenda,
 			      Agd_PutIconToCreateNewEvent,
 			      Hlp_PROFILE_Agenda);
+
+	 /***** Put form to choice whether to show
+                all events or only public events *****/
+	 Act_FormStart (ActSeeMyAgd);
+	 Agd_ShowSelectorWhichEvents ();
+	 Act_FormEnd ();
 	 break;
      }
 
@@ -277,6 +290,57 @@ static void Agd_PutParamsToCreateNewEvent (void)
   {
    Agd_PutHiddenParamEventsOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+  }
+
+/*****************************************************************************/
+/** Show selector to choice whether to show all events or only public events */
+/*****************************************************************************/
+
+static void Agd_ShowSelectorWhichEvents (void)
+  {
+   extern const char *Txt_Show_WHICH_events[2];
+   Agd_WhichEvents_t WhichEvents;
+
+   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
+                      "<ul class=\"LIST_CENTER\">");
+   for (WhichEvents = Agd_ALL_EVENTS;
+	WhichEvents <= Agd_ONLY_PUBLIC_EVENTS;
+	WhichEvents++)
+     {
+      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+	                 " style=\"display:inline;\">"
+                         "<input type=\"radio\" name=\"WhichEvents\" value=\"%u\"",
+               (unsigned) WhichEvents);
+      if (WhichEvents == Gbl.Agenda.WhichEvents)
+         fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
+                         " %s"
+                         "</li>",
+               Gbl.Form.Id,Txt_Show_WHICH_events[WhichEvents]);
+     }
+   fprintf (Gbl.F.Out,"</ul>"
+                      "</div>");
+  }
+
+/*****************************************************************************/
+/************* Get whether to show all events or only my events **************/
+/*****************************************************************************/
+
+static void Agd_GetParamWhichEvents (void)
+  {
+   char UnsignedStr[10+1];
+   unsigned UnsignedNum;
+
+   /***** Get which events (all events or my events) *****/
+   Par_GetParToText ("WhichEvents",UnsignedStr,1);
+   if (UnsignedStr[0])
+     {
+      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
+	 Lay_ShowErrorAndExit ("Which events to show is missing.");
+      if (UnsignedNum >= 2)
+	 Lay_ShowErrorAndExit ("Wrong parameter with which events to show.");
+      Gbl.Agenda.WhichEvents = (Agd_WhichEvents_t) UnsignedNum;
+     }
   }
 
 /*****************************************************************************/
@@ -560,19 +624,28 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    switch (AgendaType)
      {
       case Agd_USR_AGENDA:
-	 sprintf (Query,"SELECT AgdCod"
-			" FROM agendas"
+	 sprintf (Query,"SELECT AgdCod FROM agendas"
 			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
 			" AND EndTime>NOW()"	// Only present and future events
 			" ORDER BY %s",
 		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
          break;
       case Agd_MY_AGENDA:
-	 sprintf (Query,"SELECT AgdCod"
-			" FROM agendas"
-			" WHERE UsrCod='%ld'"
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	 switch (Gbl.Agenda.WhichEvents)
+	   {
+	    case Agd_ALL_EVENTS:
+	       sprintf (Query,"SELECT AgdCod FROM agendas"
+			      " WHERE UsrCod='%ld'"
+			      " ORDER BY %s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	       break;
+	    case Agd_ONLY_PUBLIC_EVENTS:
+	       sprintf (Query,"SELECT AgdCod FROM agendas"
+			      " WHERE UsrCod='%ld' AND Public='Y'"
+			      " ORDER BY %s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	       break;
+	   }
          break;
      }
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");

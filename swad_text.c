@@ -36851,6 +36851,49 @@ const char *Txt_Show_list =
 	"Mostrar lista";
 #endif
 
+const char *Txt_Show_WHICH_events[2] =
+   {
+#if   L==1
+	 "Tots els esdeveniments"
+#elif L==2
+	 "Alle Ereignisse"
+#elif L==3
+	 "All events"
+#elif L==4
+	 "Todos los eventos"
+#elif L==5
+	 "Tous les &eacute;v&eacute;nements"
+#elif L==6
+	 "Todos los eventos"	// Okoteve traducción
+#elif L==7
+	 "Tutti i eventi"
+#elif L==8
+	 "Wszystkie imprezy"
+#elif L==9
+	 "Todos os eventos"
+#endif
+	 ,
+#if   L==1
+	 "Nom&eacute;s els esdeveniments p&uacute;blics"
+#elif L==2
+	 "Nur &ouml;ffentliche Ereignisse"
+#elif L==3
+	 "Only public events"
+#elif L==4
+	 "Solo eventos p&uacute;blicos"
+#elif L==5
+	 "Uniquement les &eacute;v&eacute;nements publics"
+#elif L==6
+	 "Solo eventos p&uacute;blicos"	// Okoteve traducción
+#elif L==7
+	 "Solo eventi pubblici"
+#elif L==8
+	 "Tylko wydarzenia publiczne"
+#elif L==9
+	 "Apenas eventos p&uacute;blicos"
+#endif
+	};
+
 const char *Txt_Show_WHICH_groups[2] =
    {
 #if   L==1
