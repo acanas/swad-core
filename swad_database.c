@@ -222,7 +222,7 @@ mysql> DESCRIBE agendas;
 +-----------+---------------+------+-----+---------+----------------+
 | AgdCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
 | UsrCod    | int(11)       | NO   | MUL | NULL    |                |
-| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| Public    | enum('N','Y') | NO   |     | N       |                |
 | StartTime | datetime      | NO   |     | NULL    |                |
 | EndTime   | datetime      | NO   |     | NULL    |                |
 | Event     | varchar(255)  | NO   |     | NULL    |                |
@@ -234,14 +234,14 @@ mysql> DESCRIBE agendas;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS agendas ("
                    "AgdCod INT NOT NULL AUTO_INCREMENT,"
                    "UsrCod INT NOT NULL,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+                   "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
                    "StartTime DATETIME NOT NULL,"
                    "EndTime DATETIME NOT NULL,"
                    "Event VARCHAR(255) NOT NULL,"
                    "Location VARCHAR(255) NOT NULL,"
                    "Txt TEXT NOT NULL,"
                    "UNIQUE INDEX(AgdCod),"
-                   "INDEX(UsrCod,Hidden))");
+                   "INDEX(UsrCod,Public))");
 
    /***** Table asg_grp *****/
 /*

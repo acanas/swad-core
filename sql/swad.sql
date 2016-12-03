@@ -41,14 +41,14 @@ CREATE TABLE IF NOT EXISTS actions_MFU (
 CREATE TABLE IF NOT EXISTS agendas (
 	AgdCod INT NOT NULL AUTO_INCREMENT,
 	UsrCod INT NOT NULL,
-	Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',
+	Public ENUM('N','Y') NOT NULL DEFAULT 'N',
 	StartTime DATETIME NOT NULL,
 	EndTime DATETIME NOT NULL,
 	Event VARCHAR(255) NOT NULL,
 	Location VARCHAR(255) NOT NULL,
 	Txt TEXT NOT NULL,
 	UNIQUE INDEX(AgdCod),
-	INDEX(UsrCod,Hidden));
+	INDEX(UsrCod,Public));
 --
 -- Table ann_seen: stores users who have seen global announcements
 --

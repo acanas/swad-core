@@ -187,13 +187,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.82.2 (2016-12-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.83 (2016-12-03)"
 #define CSS_FILE		"swad16.82.2.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.83:    Dec 03, 2016	Change in layout of agenda.
+					Agenda events are private by default. (? lines)
+					5 changes necessary in database:
+ALTER TABLE agendas ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Hidden;
+UPDATE agendas SET Public='Y' WHERE Hidden='N';
+DROP INDEX UsrCod ON agendas;
+ALTER TABLE agendas DROP COLUMN Hidden;
+ALTER TABLE agendas ADD INDEX(UsrCod,Public);
+
         Version 16.82.2:  Dec 02, 2016	Changes in colors of dates in agenda.
 					Default order of events in agenda now is "by end date". (209477 lines)
         Version 16.82.1:  Dec 02, 2016	Changes in another user's agenda. (209450 lines)
