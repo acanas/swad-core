@@ -1091,7 +1091,8 @@ void Agd_RequestCreatOrEditEvent (void)
             Agd_MAX_LENGTH_LOCATION,AgdEvent.Location);
 
    /***** Start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC);
+   Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
+                                            Dat_FORM_SECONDS_OFF);
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<tr>"

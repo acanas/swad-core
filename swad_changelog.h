@@ -179,20 +179,20 @@
 // TODO: When teacher sees "No hay estudiantes", put a button to add students
 // TODO: When admin sees "No hay profesores", put a button to add teachers
 
-// TODO: Eliminar agenda de un usuario al eliminarlo completamente
 // TODO: Sólo horas y minutos en la agenda
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.84.1 (2016-12-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.84.2 (2016-12-03)"
 #define CSS_FILE		"swad16.82.2.css"
-#define JS_FILE			"swad16.46.1.js"
+#define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.84.2:  Dec 03, 2016	Only hours and minutes (seconds = 0) in agenda events. (209606 lines)
         Version 16.84.1:  Dec 03, 2016	Remove user's agenda when removing user's account. (? lines)
         Version 16.84:    Dec 03, 2016	Agenda events can be hidden. (209580 lines)
 					3 changes necessary in database:

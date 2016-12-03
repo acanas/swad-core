@@ -1137,7 +1137,7 @@ void Asg_RequestCreatOrEditAsg (void)
             Asg_MAX_LENGTH_ASSIGNMENT_TITLE,Asg.Title);
 
    /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC);
+   Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Send work? *****/
    fprintf (Gbl.F.Out,"<tr>"

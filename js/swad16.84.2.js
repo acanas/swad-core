@@ -194,13 +194,17 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 
 // Set UTC time from local date-time form fields 
 function setUTCFromLocalDateTimeForm (id) {
+	var Seconds = 0;
+	var idSecond = document.getElementById(id+'Second');
+	if (idSecond)	// id+'Second' present
+		Seconds = idSecond.value;
 	// Important: set date all at once to avoid problems with different length of months
 	var d = new Date(document.getElementById(id+'Year'  ).value,
 			         document.getElementById(id+'Month' ).value-1,
 			         document.getElementById(id+'Day'   ).value,
 			         document.getElementById(id+'Hour'  ).value,
 			         document.getElementById(id+'Minute').value,
-			         document.getElementById(id+'Second').value,
+			         Seconds,
 			         0);
 	document.getElementById(id+'TimeUTC').value = d.getTime() / 1000;
 }

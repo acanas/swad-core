@@ -228,6 +228,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Gbl.DateRange.TimeUTC[0],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
+				                Dat_FORM_SECONDS_ON,
 				                false);
 
    /***** "Yesterday" and "Today" buttons *****/
@@ -256,6 +257,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Gbl.DateRange.TimeUTC[1],
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
+				                Dat_FORM_SECONDS_ON,
 				                false);
 
    fprintf (Gbl.F.Out,"</td>"
@@ -266,7 +268,8 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
 /************* Show forms to enter initial and ending date-times *************/
 /*****************************************************************************/
 
-void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
+void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
+                                              Dat_FormSeconds FormSeconds)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Start_date;
@@ -303,6 +306,7 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 	                                           TimeUTC[StartOrEndTime],
 	                                           Gbl.Now.Date.Year - 1,
 	                                           Gbl.Now.Date.Year + 1,
+				                   FormSeconds,
                                                    false);
 
       fprintf (Gbl.F.Out,"</td>"
@@ -320,7 +324,9 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2])
 void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   const char *ParamName,
                                                   time_t TimeUTC,
-                                                  unsigned FirstYear,unsigned LastYear,
+                                                  unsigned FirstYear,
+                                                  unsigned LastYear,
+                                                  Dat_FormSeconds FormSeconds,
                                                   bool SubmitFormOnChange)
   {
    extern const char *Txt_MONTHS_SMALL[12];
@@ -425,21 +431,24 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "</td>");
 
    /***** Second *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-                      "<select id=\"%sSecond\" name=\"%sSecond\""
-                      " onchange=\"setUTCFromLocalDateTimeForm('%s');",
-	    Id,ParamName,Id);
-   if (SubmitFormOnChange)
-      fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
-               Gbl.Form.Id);
-   fprintf (Gbl.F.Out,"\">");
-   for (Second = 0;
-	Second <= 59;
-	Second++)
-      fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &quot;</option>",
-               Second,Second);
-   fprintf (Gbl.F.Out,"</select>"
-	              "</td>");
+   if (FormSeconds == Dat_FORM_SECONDS_ON)
+     {
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+			 "<select id=\"%sSecond\" name=\"%sSecond\""
+			 " onchange=\"setUTCFromLocalDateTimeForm('%s');",
+	       Id,ParamName,Id);
+      if (SubmitFormOnChange)
+	 fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
+		  Gbl.Form.Id);
+      fprintf (Gbl.F.Out,"\">");
+      for (Second = 0;
+	   Second <= 59;
+	   Second++)
+	 fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &quot;</option>",
+		  Second,Second);
+      fprintf (Gbl.F.Out,"</select>"
+			 "</td>");
+     }
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"

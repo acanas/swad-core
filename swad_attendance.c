@@ -1139,7 +1139,7 @@ void Att_RequestCreatOrEditAttEvent (void)
             Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE,Att.Title);
 
    /***** Assignment start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC);
+   Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Visibility of comments *****/
    fprintf (Gbl.F.Out,"<tr>"

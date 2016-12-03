@@ -77,6 +77,12 @@ typedef enum
    Dat_FUTURE  = 2,
   } Dat_TimeStatus_t;
 
+typedef enum
+  {
+   Dat_FORM_SECONDS_OFF,
+   Dat_FORM_SECONDS_ON,
+  } Dat_FormSeconds;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -93,12 +99,15 @@ void Dat_GetLocalTimeFromClock (const time_t *clock);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void);
-void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2]);
+void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
+                                              Dat_FormSeconds FormSeconds);
 
 void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   const char *ParamName,
                                                   time_t TimeUTC,
-                                                  unsigned FirstYear,unsigned LastYear,
+                                                  unsigned FirstYear,
+                                                  unsigned LastYear,
+                                                  Dat_FormSeconds FormSeconds,
                                                   bool SubmitFormOnChange);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 

@@ -1880,7 +1880,7 @@ void Svy_RequestCreatOrEditSvy (void)
             Svy_MAX_LENGTH_SURVEY_TITLE,Svy.Title);
 
    /***** Survey start and end dates *****/
-   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC);
+   Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,Dat_FORM_SECONDS_ON);
 
    /***** Survey text *****/
    fprintf (Gbl.F.Out,"<tr>"
