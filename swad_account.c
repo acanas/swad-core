@@ -1045,9 +1045,6 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    /***** Remove user from table of seen announcements *****/
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
-   /***** Remove user's usage reports *****/
-   Rep_RemoveUsrUsageReports (UsrDat->UsrCod);
-
    /***** Remove user from table of connected users *****/
    sprintf (Query,"DELETE FROM connected WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
@@ -1066,6 +1063,12 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
    /***** Remove user from table of followers *****/
    Fol_RemoveUsrFromUsrFollow (UsrDat->UsrCod);
+
+   /***** Remove user's usage reports *****/
+   Rep_RemoveUsrUsageReports (UsrDat->UsrCod);
+
+   /***** Remove user's agenda *****/
+   Agd_RemoveUsrEvents (UsrDat->UsrCod);
 
    /***** Remove the user from the list of users without photo *****/
    Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
