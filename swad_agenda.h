@@ -47,8 +47,9 @@ typedef enum
 struct AgendaEvent
   {
    long AgdCod;
-   bool Public;
    long UsrCod;
+   bool Public;
+   bool Hidden;
    time_t TimeUTC[Agd_NUM_DATES];
    Dat_TimeStatus_t TimeStatus;
    char Event[Agd_MAX_LENGTH_EVENT+1];
@@ -75,11 +76,18 @@ void Agd_RequestCreatOrEditEvent (void);
 void Agd_FreeListEvents (void);
 
 long Agd_GetParamAgdCod (void);
+
 void Agd_AskRemEvent (void);
 void Agd_RemoveEvent (void);
-void Agd_SetEventPrivate (void);
-void Agd_SetEventPublic (void);
+
+void Agd_HideEvent (void);
+void Agd_ShowEvent (void);
+
+void Agd_MakeEventPrivate (void);
+void Agd_MakeEventPublic (void);
+
 void Agd_RecFormEvent (void);
+
 void Agd_RemoveUsrEvents (long UsrCod);
 unsigned Agd_GetNumEventsFromUsr (long UsrCod);
 

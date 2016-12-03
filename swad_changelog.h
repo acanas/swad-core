@@ -187,15 +187,21 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.83 (2016-12-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.84 (2016-12-03)"
 #define CSS_FILE		"swad16.82.2.css"
 #define JS_FILE			"swad16.46.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.84:    Dec 03, 2016	Agenda events can be hidden. (209580 lines)
+					3 changes necessary in database:
+ALTER TABLE agendas ADD COLUMN Hidden ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Public;
+DROP INDEX UsrCod ON agendas;
+ALTER TABLE agendas ADD INDEX(UsrCod,Public,Hidden);
+
         Version 16.83:    Dec 03, 2016	Change in layout of agenda.
-					Agenda events are private by default. (? lines)
+					Agenda events are private by default. (209488 lines)
 					5 changes necessary in database:
 ALTER TABLE agendas ADD COLUMN Public ENUM('N','Y') NOT NULL DEFAULT 'N' AFTER Hidden;
 UPDATE agendas SET Public='Y' WHERE Hidden='N';

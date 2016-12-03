@@ -1350,8 +1350,10 @@ Profile:
        1159. ActChgEvtMyAgd		Modify data of an event from my agenda
        1160. ActReqRemEvtMyAgd		Request the removal of an event from my agenda
        1161. ActRemEvtMyAgd		Remove an event from my agenda
-       1162. ActHidEvtMyAgd		Hide an event from my agenda
-       1163. ActShoEvtMyAgd		Show an event from my agenda
+        NEW. ActHidEvtMyAgd		Hide an event from my agenda
+        NEW. ActShoEvtMyAgd		Show an event from my agenda
+       1162. ActPrvEvtMyAgd		Make private an event from my agenda
+       1163. ActPubEvtMyAgd		Make public an event from my agenda
 
        1164. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
        1165. ActCreUsrAcc		Create new user account
@@ -2801,8 +2803,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgEvtMyAgd	*/{1606,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RecFormEvent		,NULL},
    /* ActReqRemEvtMyAgd	*/{1607,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_AskRemEvent		,NULL},
    /* ActRemEvtMyAgd	*/{1608,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_RemoveEvent		,NULL},
-   /* ActHidEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_SetEventPrivate			,NULL},
-   /* ActShoEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_SetEventPublic			,NULL},
+   /* ActHidEvtMyAgd	*/{1612,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_HideEvent			,NULL},
+   /* ActShoEvtMyAgd	*/{1613,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowEvent			,NULL},
+   /* ActPrvEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPrivate		,NULL},
+   /* ActPubEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPublic		,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
@@ -4502,9 +4506,11 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActChgEvtMyAgd,		// #1606
 	ActReqRemEvtMyAgd,	// #1607
 	ActRemEvtMyAgd,		// #1608
-	ActHidEvtMyAgd,		// #1609
-	ActShoEvtMyAgd,		// #1610
+	ActPrvEvtMyAgd,		// #1609
+	ActPubEvtMyAgd,		// #1610
 	ActSeeUsrAgd,		// #1611
+	ActHidEvtMyAgd,		// #1612
+	ActShoEvtMyAgd,		// #1613
 	};
 
 /*****************************************************************************/

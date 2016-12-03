@@ -175,6 +175,37 @@ mysql> DESCRIBE admin;
 	           "UNIQUE INDEX(UsrCod,Scope,Cod),"
 	           "INDEX (Scope,Cod))");
 
+   /***** Table agendas *****/
+/*
+mysql> DESCRIBE agendas;
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| AgdCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| UsrCod    | int(11)       | NO   | MUL | NULL    |                |
+| Public    | enum('N','Y') | NO   |     | N       |                |
+| Hidden    | enum('N','Y') | NO   |     | N       |                |
+| StartTime | datetime      | NO   |     | NULL    |                |
+| EndTime   | datetime      | NO   |     | NULL    |                |
+| Event     | varchar(255)  | NO   |     | NULL    |                |
+| Location  | varchar(255)  | NO   |     | NULL    |                |
+| Txt       | text          | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS agendas ("
+                   "AgdCod INT NOT NULL AUTO_INCREMENT,"
+                   "UsrCod INT NOT NULL,"
+                   "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
+                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+                   "StartTime DATETIME NOT NULL,"
+                   "EndTime DATETIME NOT NULL,"
+                   "Event VARCHAR(255) NOT NULL,"
+                   "Location VARCHAR(255) NOT NULL,"
+                   "Txt TEXT NOT NULL,"
+                   "UNIQUE INDEX(AgdCod),"
+                   "INDEX(UsrCod,Public,Hidden))");
+
    /***** Table ann_seen *****/
 /*
 mysql> DESCRIBE ann_seen;
@@ -213,35 +244,6 @@ mysql> DESCRIBE announcements;
                    "Content TEXT NOT NULL,"
                    "UNIQUE INDEX(AnnCod),"
                    "INDEX(Status))");
-
-   /***** Table agendas *****/
-/*
-mysql> DESCRIBE agendas;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| AgdCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| UsrCod    | int(11)       | NO   | MUL | NULL    |                |
-| Public    | enum('N','Y') | NO   |     | N       |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| Event     | varchar(255)  | NO   |     | NULL    |                |
-| Location  | varchar(255)  | NO   |     | NULL    |                |
-| Txt       | text          | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-8 rows in set (0,00 sec)
-*/
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS agendas ("
-                   "AgdCod INT NOT NULL AUTO_INCREMENT,"
-                   "UsrCod INT NOT NULL,"
-                   "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "StartTime DATETIME NOT NULL,"
-                   "EndTime DATETIME NOT NULL,"
-                   "Event VARCHAR(255) NOT NULL,"
-                   "Location VARCHAR(255) NOT NULL,"
-                   "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(AgdCod),"
-                   "INDEX(UsrCod,Public))");
 
    /***** Table asg_grp *****/
 /*

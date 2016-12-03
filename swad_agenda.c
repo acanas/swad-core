@@ -78,7 +78,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
 static void Agd_GetParamEventOrderType (void);
 
-static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Public);
+static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
 static void Agd_PutParams (void);
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
@@ -315,8 +315,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            AgdEvent.Public ? Dat_TimeStatusClassVisible[AgdEvent.TimeStatus] :
-                              Dat_TimeStatusClassHidden[AgdEvent.TimeStatus],
+            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
             UniqueId,AgdEvent.TimeUTC[Agd_START_TIME],Txt_Today);
 
@@ -328,8 +328,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</script>"
 	              "</td>",
 	    UniqueId,
-            AgdEvent.Public ? Dat_TimeStatusClassVisible[AgdEvent.TimeStatus] :
-        	              Dat_TimeStatusClassHidden[AgdEvent.TimeStatus],
+            AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
+        	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
             UniqueId,AgdEvent.TimeUTC[Agd_END_TIME],Txt_Today);
 
@@ -338,8 +338,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "<div class=\"%s\">%s</div>"
                       "</td>",
             Gbl.RowEvenOdd,
-            AgdEvent.Public ? "ASG_TITLE" :
-        	              "ASG_TITLE_LIGHT",
+            AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+        	              "ASG_TITLE",
             AgdEvent.Event);
 
    /* Event */
@@ -348,8 +348,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</td>"
 	              "</tr>",
             Gbl.RowEvenOdd,
-            AgdEvent.Public ? "ASG_TITLE" :
-        	              "ASG_TITLE_LIGHT",
+            AgdEvent.Hidden ? "ASG_TITLE_LIGHT" :
+        	              "ASG_TITLE",
             AgdEvent.Location);
 
    /***** Write second row of data of this event *****/
@@ -362,7 +362,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
    /* Forms to remove/edit this event */
    if (AgendaType == Agd_MY_AGENDA)
-      Agd_PutFormsToRemEditOneEvent (AgdEvent.AgdCod,AgdEvent.Public);
+      Agd_PutFormsToRemEditOneEvent (&AgdEvent);
 
    fprintf (Gbl.F.Out,"</td>");
 
@@ -379,8 +379,8 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
                       "</p>"
                       "</td>"
                       "</tr>",
-            AgdEvent.Public ? "DAT" :
-        	              "DAT_LIGHT",
+            AgdEvent.Hidden ? "DAT_LIGHT" :
+        	              "DAT",
             Txt);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
@@ -422,8 +422,8 @@ static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent)
    Str_LimitLengthHTMLStr (FirstName,9);
    Str_LimitLengthHTMLStr (Surnames,9);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
-            AgdEvent->Public ? "MSG_AUT" :
-        	               "MSG_AUT_LIGHT",
+            AgdEvent->Hidden ? "MSG_AUT_LIGHT" :
+        	               "MSG_AUT",
             FirstName,Surnames);
 
    /***** Free memory used for user's data *****/
@@ -459,16 +459,18 @@ void Agd_PutHiddenParamEventsOrderType (void)
 /******************* Put a link (form) to edit one event *********************/
 /*****************************************************************************/
 
-static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Public)
+static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
   {
    extern const char *Txt_Remove;
+   extern const char *Txt_Show;
+   extern const char *Txt_Hide;
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
    extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div>");
 
-   Gbl.Agenda.AgdCodToEdit = AgdCod;	// Used as parameter in contextual links
+   Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
    Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutParams,
@@ -476,22 +478,34 @@ static void Agd_PutFormsToRemEditOneEvent (long AgdCod,bool Public)
                           Txt_Remove,NULL,
                           NULL);
 
+   /***** Put form to hide/show event *****/
+   if (AgdEvent->Hidden)
+      Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
+                             "eye-slash-on64x64.png",
+			     Txt_Show,NULL,
+                             NULL);
+   else
+      Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
+                             "eye-on64x64.png",
+			     Txt_Hide,NULL,
+                             NULL);
+
    /***** Put form to edit event *****/
    Lay_PutContextualLink (ActEdiOneEvtMyAgd,Agd_PutParams,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
 
-   /***** Put form to hide/show event *****/
+   /***** Put form to make event public/private *****/
    if (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER))	// I am a teacher in some courses
      {
-      if (Public)
-	 Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
+      if (AgdEvent->Public)
+	 Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutParams,
 				"open_on16x16.gif",
 				Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
 				NULL);
       else
-	 Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
+	 Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutParams,
 				"closed_on16x16.gif",
 				Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
 				NULL);
@@ -518,7 +532,7 @@ static void Agd_PutParams (void)
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
   {
    char OrderBySubQuery[256];
-   char Query[2048];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -531,10 +545,16 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    switch (Gbl.Agenda.SelectedOrderType)
      {
       case Agd_ORDER_BY_START_DATE:
-         sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Location DESC,Event DESC");
+         sprintf (OrderBySubQuery,"StartTime DESC,"
+                                  "EndTime DESC,"
+                                  "Event DESC,"
+                                  "Location DESC");
          break;
       case Agd_ORDER_BY_END_DATE:
-         sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Location DESC,Event DESC");
+         sprintf (OrderBySubQuery,"EndTime DESC,"
+                                  "StartTime DESC,"
+                                  "Event DESC,"
+                                  "Location DESC");
          break;
      }
    switch (AgendaType)
@@ -542,7 +562,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
       case Agd_USR_AGENDA:
 	 sprintf (Query,"SELECT AgdCod"
 			" FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y'"
+			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
 			" AND EndTime>NOW()"	// Only present and future events
 			" ORDER BY %s",
 		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
@@ -591,10 +611,10 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
   {
-   char Query[1024];
+   char Query[512];
 
    /***** Build query *****/
-   sprintf (Query,"SELECT AgdCod,UsrCod,Public,"
+   sprintf (Query,"SELECT AgdCod,UsrCod,Public,Hidden,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW()>EndTime,"	// Past event?
@@ -622,6 +642,7 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
    AgdEvent->AgdCod = -1L;
    AgdEvent->UsrCod = -1L;
    AgdEvent->Public = false;
+   AgdEvent->Hidden = false;
    AgdEvent->TimeUTC[Agd_START_TIME] =
    AgdEvent->TimeUTC[Agd_END_TIME  ] = (time_t) 0;
    AgdEvent->TimeStatus = Dat_FUTURE;
@@ -637,12 +658,13 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
       row[0] AgdCod
       row[1] UsrCod
       row[2] Public
-      row[3] UNIX_TIMESTAMP(StartTime)
-      row[4] UNIX_TIMESTAMP(EndTime)
-      row[5] NOW()>EndTime	// Past event?
-      row[6] NOW()<StartTime	// Future event?
-      row[7] Event
-      row[8] Location
+      row[3] Hidden
+      row[4] UNIX_TIMESTAMP(StartTime)
+      row[5] UNIX_TIMESTAMP(EndTime)
+      row[6] NOW()>EndTime	// Past event?
+      row[7] NOW()<StartTime	// Future event?
+      row[8] Event
+      row[9] Location
       */
       row = mysql_fetch_row (mysql_res);
 
@@ -655,22 +677,25 @@ static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
       /* Get whether the event is public or not (row[2]) */
       AgdEvent->Public = (row[2][0] == 'Y');
 
-      /* Get start date (row[3] holds the start UTC time) */
-      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      /* Get whether the event is hidden or not (row[3]) */
+      AgdEvent->Hidden = (row[3][0] == 'Y');
 
-      /* Get end date   (row[4] holds the end   UTC time) */
-      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get start date (row[4] holds the start UTC time) */
+      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the event is past, present or futur (row(5), row[6]) */
-      AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
-	                     ((row[6][0] == '1') ? Dat_FUTURE :
+      /* Get end date   (row[5] holds the end   UTC time) */
+      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+
+      /* Get whether the event is past, present or futur (row(6), row[7]) */
+      AgdEvent->TimeStatus = ((row[6][0] == '1') ? Dat_PAST :
+	                     ((row[7][0] == '1') ? Dat_FUTURE :
 	                	                   Dat_PRESENT));
 
-      /* Get the event (row[7]) */
-      strcpy (AgdEvent->Event,row[7]);
-
       /* Get the event (row[8]) */
-      strcpy (AgdEvent->Location,row[8]);
+      strcpy (AgdEvent->Event,row[8]);
+
+      /* Get the event (row[9]) */
+      strcpy (AgdEvent->Location,row[9]);
      }
 
    /***** Free structure that stores the query result *****/
@@ -821,10 +846,75 @@ void Agd_RemoveEvent (void)
   }
 
 /*****************************************************************************/
-/****************************** Set event private ****************************/
+/********************************* Hide event ********************************/
 /*****************************************************************************/
 
-void Agd_SetEventPrivate (void)
+void Agd_HideEvent (void)
+  {
+   extern const char *Txt_Event_X_is_now_hidden;
+   char Query[512];
+   struct AgendaEvent AgdEvent;
+
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
+
+   /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Agd_GetDataOfEventByCod (&AgdEvent);
+
+   /***** Set event private *****/
+   sprintf (Query,"UPDATE agendas SET Hidden='Y'"
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not hide event");
+
+   /***** Write message to show the change made *****/
+   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,AgdEvent.Event);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Show events again *****/
+   Agd_ShowMyAgenda ();
+  }
+
+/*****************************************************************************/
+/******************************** Show event *********************************/
+/*****************************************************************************/
+
+void Agd_ShowEvent (void)
+  {
+   extern const char *Txt_Event_X_is_now_visible;
+   char Query[256];
+   struct AgendaEvent AgdEvent;
+
+   /***** Get event code *****/
+   if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
+      Lay_ShowErrorAndExit ("Code of event is missing.");
+
+   /***** Get data of the event from database *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+   Agd_GetDataOfEventByCod (&AgdEvent);
+
+   /***** Set event public *****/
+   sprintf (Query,"UPDATE agendas SET Hidden='N'"
+                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+   DB_QueryUPDATE (Query,"can not show event");
+
+   /***** Write message to show the change made *****/
+   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,
+            AgdEvent.Event);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+   /***** Show events again *****/
+   Agd_ShowMyAgenda ();
+  }
+
+/*****************************************************************************/
+/****************************** Make event private ***************************/
+/*****************************************************************************/
+
+void Agd_MakeEventPrivate (void)
   {
    extern const char *Txt_Event_X_is_now_private;
    char Query[512];
@@ -838,11 +928,11 @@ void Agd_SetEventPrivate (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Set event private *****/
+   /***** Make event private *****/
    sprintf (Query,"UPDATE agendas SET Public='N'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not set event as private");
+   DB_QueryUPDATE (Query,"can not make event private");
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Event_X_is_now_private,AgdEvent.Event);
@@ -853,10 +943,10 @@ void Agd_SetEventPrivate (void)
   }
 
 /*****************************************************************************/
-/********* Set event public (make it visible to users of my courses) *********/
+/******** Make event public (make it visible to users of my courses) *********/
 /*****************************************************************************/
 
-void Agd_SetEventPublic (void)
+void Agd_MakeEventPublic (void)
   {
    extern const char *Txt_Event_X_is_now_visible_to_users_of_your_courses;
    char Query[256];
@@ -870,11 +960,11 @@ void Agd_SetEventPublic (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Set event public *****/
+   /***** Make event public *****/
    sprintf (Query,"UPDATE agendas SET Public='Y'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not show event");
+   DB_QueryUPDATE (Query,"can not make event public");
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_Event_X_is_now_visible_to_users_of_your_courses,
