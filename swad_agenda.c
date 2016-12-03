@@ -128,7 +128,7 @@ void Agd_ShowMyAgenda (void)
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
   {
    extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Txt_Agenda_USER;
+   extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_My_agenda;
    extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
    extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
@@ -165,7 +165,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
      {
       case Agd_USR_AGENDA:
          /***** Start frame *****/
-	 sprintf (Gbl.Title,Txt_Agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);	// TODO: Need translation!!!!!
+	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);	// TODO: Need translation!!!!!
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
 			      NULL,
 			      Hlp_PROFILE_Agenda);	// TODO: Change

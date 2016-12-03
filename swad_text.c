@@ -2090,27 +2090,6 @@ const char *Txt_Admin_several_teachers =
 	"Gerenciar v&aacute;rios professores";
 #endif
 
-const char *Txt_Agenda_USER =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Agenda de %s";
-#elif L==2
-	"Organizer von %s";
-#elif L==3
-	"%s's agenda";
-#elif L==4
-	"Agenda de %s";
-#elif L==5
-	"Agenda de %s";
-#elif L==6
-	"Aporyr&atilde; %s";
-#elif L==7
-	"Agenda di %s";
-#elif L==8
-	"Pami&eogon;tnik %s";
-#elif L==9
-	"Agenda de %s";
-#endif
-
 const char *Txt_all =
 #if   L==1
 	"tot";
@@ -29513,6 +29492,27 @@ const char *Txt_Public_activity_OF_A_USER =	// Warning: it is very important to 
 	 "Aktywno&sacute;&cacute; publiczna %s";
 #elif L==9
 	 "Atividade p&uacute;blica de %s";
+#endif
+
+const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	"Agenda p&uacute;blica de %s";
+#elif L==2
+	"&Ouml;ffentliche Organizer von %s";
+#elif L==3
+	"%s's public agenda";
+#elif L==4
+	"Agenda p&uacute;blica de %s";
+#elif L==5
+	"Agenda publique de %s";
+#elif L==6
+	"Agenda p&uacute;blica de %s";	// Okoteve traducción
+#elif L==7
+	"Agenda pubblica di %s";
+#elif L==8
+	"Pami&eogon;tnik publiczny %s";
+#elif L==9
+	"Agenda p&uacute;blica de %s";
 #endif
 
 const char *Txt_public_FILES =

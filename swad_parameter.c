@@ -618,7 +618,7 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
       "ctr",	// To enter directly to a centre
       "deg",	// To enter directly to a degree
       "crs",	// To enter directly to a course
-      "usr",	// To enter directly to a user
+      "usr",	// To enter directly to a user's profile
       "act",	// To execute directly an action (allowed only for fully public actions)
       "ses",	// To use an open session when redirecting from one language to another
       "key",	// To verify an email address
