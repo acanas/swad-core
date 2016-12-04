@@ -406,7 +406,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Input: UsrDat->UsrCod must hold user's code
 
-void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)
+void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove this funcion, it's not used
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1683,7 +1683,7 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
 void Usr_WriteLandingPage (void)
   {
    /***** Form to log in *****/
-   Usr_WriteFormLogin ();
+   Usr_WriteFormLogin (ActAutUsrInt,NULL);
 
    /***** Form to go to request the creation of a new account *****/
    Acc_ShowFormGoToRequestNewAccount ();
@@ -1714,7 +1714,7 @@ void Usr_Logout (void)
    Lay_ShowAlert (Lay_INFO,Txt_The_session_has_been_closed);
 
    /***** Form to log in *****/
-   Usr_WriteFormLogin ();
+   Usr_WriteFormLogin (ActAutUsrInt,NULL);
 
    /***** Advertisement about mobile app *****/
    Lay_AdvertisementMobile ();
@@ -1738,7 +1738,7 @@ void Usr_PutLinkToLogin (void)
 /************************ Write form for user log in *************************/
 /*****************************************************************************/
 
-void Usr_WriteFormLogin (void)
+void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Hlp_PROFILE_Log_in;
    extern const char *Txt_Log_in;
@@ -1756,9 +1756,14 @@ void Usr_WriteFormLogin (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Start form *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActAutUsrInt);
+
+   /***** Start form *****/
+   Act_FormStart (NextAction);
+   if (FuncParams)
+      FuncParams ();
+
+   /***** Start frame and table *****/
    Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in,2);
 
    /***** User's ID/nickname and password *****/
@@ -1798,8 +1803,10 @@ void Usr_WriteFormLogin (void)
             Pwd_MAX_LENGTH_PLAIN_PASSWORD,
             Txt_password);
 
-   /***** Send button and form end *****/
+   /***** Send button and end table and frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Log_in);
+
+   /***** End form *****/
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
@@ -2195,7 +2202,17 @@ bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void)
 void Usr_ChkUsrAndGetUsrData (void)
   {
    extern const char *Txt_The_session_has_expired_due_to_inactivity;
-   bool PutFormLogin = false;
+   struct
+     {
+      bool PutForm;
+      Act_Action_t Action;
+      void (*FuncParams) ();
+     } FormLogin =
+     {
+      false,
+      ActAutUsrInt,
+      NULL
+     };
    Act_Action_t Action;
 
    if (Gbl.Session.HasBeenDisconnected)
@@ -2205,7 +2222,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
 	 Lay_ShowAlert (Lay_WARNING,Txt_The_session_has_expired_due_to_inactivity);
-	 PutFormLogin = true;
+	 FormLogin.PutForm = true;
 	}
      }
    else	// !Gbl.Session.HasBeenDisconnected
@@ -2249,9 +2266,10 @@ void Usr_ChkUsrAndGetUsrData (void)
 		 }
 	      }
 	    else
-	       PutFormLogin = true;
+	       FormLogin.PutForm = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrInt)	// Login using @nickname, email or ID from form
+	 else if (Gbl.Action.Act == ActAutUsrInt ||
+	          Gbl.Action.Act == ActSeeUsrAgd)	// Login using @nickname, email or ID from form
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
 	      {
@@ -2264,7 +2282,14 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
 	      }
 	    else
-	       PutFormLogin = true;
+	      {
+	       FormLogin.PutForm = true;
+	       if (Gbl.Action.Act == ActSeeUsrAgd)
+		 {
+	          FormLogin.Action = ActSeeUsrAgd;
+	          FormLogin.FuncParams = Usr_PutParamOtherUsrCodEncrypted;
+		 }
+	      }
 	   }
 	 else if (Gbl.Action.Act == ActAutUsrNew)	// Empty account without password, login using encrypted user's code
 	   {
@@ -2282,15 +2307,15 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Pre_SetPrefsFromIP ();	// Set preferences from current IP
 	      }
 	    else
-	       PutFormLogin = true;
+	       FormLogin.PutForm = true;
 	   }
 	}
      }
 
    /***** If session disconnected or error in login, show form to login *****/
-   if (PutFormLogin)
+   if (FormLogin.PutForm)
      {
-      Usr_WriteFormLogin ();
+      Usr_WriteFormLogin (FormLogin.Action,FormLogin.FuncParams);
       Lay_ShowErrorAndExit (NULL);
      }
 
@@ -2508,8 +2533,8 @@ static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void)
   {
    extern const char *Txt_The_user_does_not_exist_or_password_is_incorrect;
 
-   Gbl.Action.Act = ActFrmLogIn;
-   Tab_SetCurrentTab ();
+   // Gbl.Action.Act = ActFrmLogIn;
+   // Tab_SetCurrentTab ();
    Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
   }
 

@@ -215,7 +215,7 @@ void Usr_GetAllUsrDataFromUsrCod (struct UsrData *UsrDat);
 void Usr_AllocateListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods);
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat);
-void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat);
+void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat);	// TODO: Remove this funcion, it's not used
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat);
 
 void Usr_BuildFullName (struct UsrData *UsrDat);
@@ -278,7 +278,7 @@ void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
 void Usr_Logout (void);
 void Usr_PutLinkToLogin (void);
-void Usr_WriteFormLogin (void);
+void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ());
 void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,

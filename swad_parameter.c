@@ -619,6 +619,7 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
       "deg",	// To enter directly to a degree
       "crs",	// To enter directly to a course
       "usr",	// To enter directly to a user's profile
+      "agd",	// To view user's public agenda
       "act",	// To execute directly an action (allowed only for fully public actions)
       "ses",	// To use an open session when redirecting from one language to another
       "key",	// To verify an email address
@@ -673,6 +674,7 @@ void Par_GetMainParameters (void)
           (this nickname is used to go to another user's profile,
            not to get the logged user) *****/
    if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+     {
       if (Nickname[0])
 	{
 	 // This user's code is used to go to public profile
@@ -681,6 +683,17 @@ void Par_GetMainParameters (void)
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Nickname);
 	 Gbl.Action.Act = ActSeePubPrf;	// Set default action if no other is specified
 	}
+     }
+   else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+     {
+      if (Nickname[0])
+	{
+	 // This user's code is used to go to public agenda
+	 // If user does not exist ==> UsrCod = -1
+	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Nickname);
+	 Gbl.Action.Act = ActLogInSeeUsrAgd;	// Set default action if no other is specified
+	}
+     }
 
    /***** Get action to perform *****/
    Par_GetParToText ("act",UnsignedStr,10);
@@ -699,12 +712,17 @@ void Par_GetMainParameters (void)
 	    if (UnsignedNum <= Act_MAX_ACTION_COD)
 	       Gbl.Action.Act = Act_FromActCodToAction[UnsignedNum];
      }
+
+   /***** Some preliminary adjusts depending on action *****/
    if (Gbl.Action.Act == ActRefCon          ||
        Gbl.Action.Act == ActRefLstClk       ||
        Gbl.Action.Act == ActRefNewSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubUsr)
       Gbl.Action.UsesAJAX = true;
+   else if (Gbl.Action.Act == ActSeeUsrAgd)
+      // It's necessary to do this here when log in to view user's agenda fails
+      Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
 
    /***** Get session identifier, if exists *****/
    Par_GetParToText ("ses",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
@@ -740,6 +758,8 @@ void Par_GetMainParameters (void)
    switch (Gbl.Action.Act)
      {
       case ActAutUsrInt:
+      case ActLogInSeeUsrAgd:
+      case ActSeeUsrAgd:
          Pwd_GetParamUsrPwdLogin ();
          // no break;
       case ActReqSndNewPwd:

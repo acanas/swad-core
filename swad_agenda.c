@@ -95,6 +95,21 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 /************************ Show another user's agenda *************************/
 /*****************************************************************************/
 
+void Agd_LogInToShowUsrAgenda (void)
+  {
+   /***** Check if user exists and get her/his data *****/
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
+
+   /***** Form to log in *****/
+   /* Put the form to log in always, even if user does not exist,
+      to not give clues about whether a user exists or not */
+   Usr_WriteFormLogin (ActSeeUsrAgd,Usr_PutParamOtherUsrCodEncrypted);
+  }
+
+/*****************************************************************************/
+/************************ Show another user's agenda *************************/
+/*****************************************************************************/
+
 void Agd_ShowUsrAgenda (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;

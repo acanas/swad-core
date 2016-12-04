@@ -956,7 +956,8 @@ Users:
 	795. ActChgVisFie		Request change in visibility of a record field
         796. ActRcvRecCrs		Receive and update fields of my record in this course
 
-        NEW. ActSeeUsrAgd		Show user's agenda
+        NEW. ActLogInSeeUsrAgd		Log in to show another user's public agenda
+        NEW. ActSeeUsrAgd		Show another user's public agenda
 
 	797. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
 	798. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
@@ -2366,6 +2367,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgVisFie	*/{ 297,-1,TabUnk,ActLstStd		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ChangeVisibilityField	,NULL},
    /* ActRcvRecCrs	*/{ 301,-1,TabUnk,ActLstStd		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
+   /* ActLogInSeeUsrAgd	*/{1614,-1,TabUnk,ActLstTch		,0x001,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_LogInToShowUsrAgenda	,NULL},
    /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
@@ -4511,6 +4513,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeUsrAgd,		// #1611
 	ActHidEvtMyAgd,		// #1612
 	ActShoEvtMyAgd,		// #1613
+	ActLogInSeeUsrAgd,	// #1614
 	};
 
 /*****************************************************************************/

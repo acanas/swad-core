@@ -183,13 +183,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.85.1 (2016-12-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.86 (2016-12-04)"
 #define CSS_FILE		"swad16.82.2.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.86:    Dec 04, 2016	New action to log in and show another user's agenda when not logged. (209781 lines)
         Version 16.85.1:  Dec 03, 2016	Changed title of public agenda. (209722 lines)
         Version 16.85:    Dec 03, 2016	Form to choice between all events / only public events in agenda. (209721 lines)
         Version 16.84.2:  Dec 03, 2016	Only hours and minutes (seconds = 0) in agenda events. (209606 lines)

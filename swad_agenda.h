@@ -74,6 +74,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Agd_LogInToShowUsrAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowMyAgenda (void);
 
