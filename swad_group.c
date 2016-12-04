@@ -4190,6 +4190,16 @@ void Grp_PutParamWhichGrps (void)
    Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Gbl.CurrentCrs.Grps.WhichGrps);
   }
 
+void Grp_PutParamWhichGrpsOnlyMyGrps (void)
+  {
+   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_ONLY_MY_GROUPS);
+  }
+
+void Grp_PutParamWhichGrpsAllGrps (void)
+  {
+   Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) Grp_ALL_GROUPS);
+  }
+
 /*****************************************************************************/
 /********** Show selector to choice whether to show only my groups ***********/
 /********** or all groups in timetable                             ***********/

@@ -180,6 +180,8 @@ void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps);
 void Grp_PutParamAllGroups (void);
 
 void Grp_PutParamWhichGrps (void);
+void Grp_PutParamWhichGrpsOnlyMyGrps (void);
+void Grp_PutParamWhichGrpsAllGrps (void);
 void Grp_ShowSelectorWhichGrps (void);
 void Grp_GetParamWhichGrps (void);
 

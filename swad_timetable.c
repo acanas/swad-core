@@ -256,20 +256,25 @@ void TT_ShowClassTimeTable (void)
       default:
 	 Lay_ShowErrorAndExit ("Wrong action.");
      }
-   Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
+
+   Gbl.TimeTable.ContextualIcons.PutIconWhichGroups =  Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
+                                                      (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
+                                                       Gbl.CurrentCrs.Grps.NumGrps);
    Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT = (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
 	                                             !PrintView &&
                                                      Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
    Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours = (Gbl.TimeTable.Type == TT_MY_TIMETABLE &&
 	                                                   !PrintView &&
                                                            (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
+   Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/
    Grp_GetParamWhichGrps ();
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
-                        (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
+                        (Gbl.TimeTable.ContextualIcons.PutIconWhichGroups ||
+                         Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT ||
                          Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours ||
                          Gbl.TimeTable.ContextualIcons.PutIconPrint) ? TT_PutContextualIcons :
                                                                        NULL,
@@ -310,9 +315,43 @@ void TT_ShowClassTimeTable (void)
 
 static void TT_PutContextualIcons (void)
   {
+   extern const char *Txt_Show_WHICH_groups[2];
    extern const char *Txt_Edit;
    extern const char *Txt_Edit_office_hours;
    extern const char *Txt_Print;
+   Act_Action_t Action;
+
+   if (Gbl.TimeTable.ContextualIcons.PutIconWhichGroups)
+     {
+      switch (Gbl.TimeTable.Type)
+        {
+	 case TT_COURSE_TIMETABLE:
+	    Action = ActSeeCrsTT;
+	    break;
+	 case TT_MY_TIMETABLE:
+	    Action = ActSeeMyTT;
+	    break;
+	 default:	// Not used
+	    Action = ActUnk;
+	    break;
+        }
+      if (Action != ActUnk)	// Always true
+	 switch (Gbl.CurrentCrs.Grps.WhichGrps)
+	   {
+	    case Grp_ONLY_MY_GROUPS:
+	       Lay_PutContextualLink (Action,Grp_PutParamWhichGrpsAllGrps,
+				      "hierarchy64x64.png",
+				      Txt_Show_WHICH_groups[Grp_ALL_GROUPS],NULL,
+				      NULL);
+	       break;
+	    case Grp_ALL_GROUPS:
+	       Lay_PutContextualLink (Action,Grp_PutParamWhichGrpsOnlyMyGrps,
+				      "myhierarchy64x64.png",
+				      Txt_Show_WHICH_groups[Grp_ONLY_MY_GROUPS],NULL,
+				      NULL);
+	       break;
+	   }
+     }
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
       Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
