@@ -77,7 +77,9 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Lay_StartRoundFrame (NULL,Txt_Calendar,
                         Cal_PutIconsFirstDayOfWeek,
                         Hlp_PROFILE_Preferences_calendar);
+   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
    Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO40x40B");
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
   }
 
@@ -103,14 +105,13 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
    extern const char *Txt_DAYS_SMALL[7];
    unsigned FirstDayOfWeek;
 
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div style=\"display:table-cell; padding:0 20px;\">");
    for (FirstDayOfWeek = 0;	// Monday
 	FirstDayOfWeek <= 6;	// Sunday
 	FirstDayOfWeek++)
       if (Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
 	{
-	 fprintf (Gbl.F.Out,"<td class=\"%s\">",
+         fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table-cell;\">",
 		  FirstDayOfWeek == Gbl.Prefs.FirstDayOfWeek ? "PREF_ON" :
 							       "PREF_OFF");
 	 Act_FormStart (Action);
@@ -126,10 +127,9 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 		  Txt_First_day_of_the_week,Txt_DAYS_SMALL[FirstDayOfWeek],
 		  ClassIcon);
 	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</td>");
+	 fprintf (Gbl.F.Out,"</div>");
         }
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -258,7 +258,11 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
+     {
+      fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
       Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,NULL,"ICO25x25");
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"

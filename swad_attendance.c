@@ -72,6 +72,7 @@ typedef enum
 
 static void Att_ShowAllAttEvents (void);
 static void Att_PutFormToSelectWhichGroupsToShow (void);
+static void Att_ParamsWhichGroupsToShow (void);
 static void Att_PutIconToCreateNewAttEvent (void);
 static void Att_PutButtonToCreateNewAttEvent (void);
 static void Att_PutParamsToCreateNewAttEvent (void);
@@ -285,11 +286,15 @@ static void Att_ShowAllAttEvents (void)
 
 static void Att_PutFormToSelectWhichGroupsToShow (void)
   {
-   Act_FormStart (ActSeeAtt);
+   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
+   Grp_ShowFormToSelWhichGrps (ActSeeAtt,Att_ParamsWhichGroupsToShow);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Att_ParamsWhichGroupsToShow (void)
+  {
    Att_PutHiddenParamAttOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Grp_ShowSelectorWhichGrps ();
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/

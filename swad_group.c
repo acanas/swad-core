@@ -4231,6 +4231,37 @@ void Grp_ShowSelectorWhichGrps (void)
                       "</div>");
   }
 
+void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
+  {
+   extern const char *Txt_Show_WHICH_groups[2];
+   Grp_WhichGroups_t WhichGrps;
+
+   fprintf (Gbl.F.Out,"<div style=\"display:table-cell; padding:0 20px;\">");
+   for (WhichGrps = Grp_ONLY_MY_GROUPS;
+	WhichGrps <= Grp_ALL_GROUPS;
+	WhichGrps++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table-cell;\">",
+	       WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps ? "PREF_ON" :
+							    "PREF_OFF");
+      Act_FormStart (Action);
+      Par_PutHiddenParamUnsigned ("WhichGrps",(unsigned) WhichGrps);
+      if (FuncParams)	// Extra parameters depending on the action
+	 FuncParams ();
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       WhichGrps == Grp_ONLY_MY_GROUPS ? "myhierarchy64x64.png" :
+		                                 "hierarchy64x64.png",
+	       Txt_Show_WHICH_groups[WhichGrps],
+	       Txt_Show_WHICH_groups[WhichGrps]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
 /*****************************************************************************/
 /************* Get whether to show only my groups or all groups **************/
 /*****************************************************************************/

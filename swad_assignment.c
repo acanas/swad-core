@@ -69,6 +69,7 @@ static void Asg_PutIconToCreateNewAsg (void);
 static void Asg_PutButtonToCreateNewAsg (void);
 static void Asg_PutParamsToCreateNewAsg (void);
 static void Asg_PutFormToSelectWhichGroupsToShow (void);
+static void Asg_ParamsWhichGroupsToShow (void);
 static void Asg_ShowOneAssignment (long AsgCod);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg);
@@ -280,11 +281,15 @@ static void Asg_PutParamsToCreateNewAsg (void)
 
 static void Asg_PutFormToSelectWhichGroupsToShow (void)
   {
-   Act_FormStart (ActSeeAsg);
+   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
+   Grp_ShowFormToSelWhichGrps (ActSeeAsg,Asg_ParamsWhichGroupsToShow);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Asg_ParamsWhichGroupsToShow (void)
+  {
    Asg_PutHiddenParamAsgOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Grp_ShowSelectorWhichGrps ();
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/

@@ -290,6 +290,8 @@ void TT_ShowClassTimeTable (void)
       TT_ShowTimeTableGrpsSelected ();
    else
      {
+      fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
+
       /***** Select whether show only my groups or all groups *****/
       if ( Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
           (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
@@ -300,6 +302,8 @@ void TT_ShowClassTimeTable (void)
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
                                        Grp_PutParamWhichGrps,
 	                               "ICO25x25");
+
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Show the time table *****/
@@ -387,9 +391,7 @@ static void TT_PutFormToSelectWhichGroupsToShow (void)
       ActUnk,		// TT_TUTOR_TIMETABLE
      };
 
-   Act_FormStart (ActSeeTT[Gbl.TimeTable.Type]);
-   Grp_ShowSelectorWhichGrps ();
-   Act_FormEnd ();
+   Grp_ShowFormToSelWhichGrps (ActSeeTT[Gbl.TimeTable.Type],NULL);
   }
 
 /*****************************************************************************/

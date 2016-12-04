@@ -97,6 +97,7 @@ static void Svy_PutIconToCreateNewSvy (void);
 static void Svy_PutButtonToCreateNewSvy (void);
 static void Svy_PutParamsToCreateNewSvy (void);
 static void Svy_PutFormToSelectWhichGroupsToShow (void);
+static void Svy_ParamsWhichGroupsToShow (void);
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                                bool ShowOnlyThisSvyComplete);
 static void Svy_WriteAuthor (struct Survey *Svy);
@@ -367,11 +368,15 @@ static void Svy_PutParamsToCreateNewSvy (void)
 
 static void Svy_PutFormToSelectWhichGroupsToShow (void)
   {
-   Act_FormStart (ActSeeAllSvy);
+   fprintf (Gbl.F.Out,"<div style=\"display:table; margin:0 auto;\">");
+   Grp_ShowFormToSelWhichGrps (ActSeeAllSvy,Svy_ParamsWhichGroupsToShow);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Svy_ParamsWhichGroupsToShow (void)
+  {
    Svy_PutHiddenParamSvyOrderType ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
-   Grp_ShowSelectorWhichGrps ();
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
