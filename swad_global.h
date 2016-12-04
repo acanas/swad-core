@@ -639,7 +639,6 @@ struct Globals
       long GrpCod;		// Group code (-1 if no group selected)
       struct
         {
-	 bool PutIconWhichGroups;
 	 bool PutIconEditCrsTT;
 	 bool PutIconEditOfficeHours;
 	 bool PutIconPrint;
