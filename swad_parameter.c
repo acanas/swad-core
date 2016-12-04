@@ -691,7 +691,7 @@ void Par_GetMainParameters (void)
 	 // This user's code is used to go to public agenda
 	 // If user does not exist ==> UsrCod = -1
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Nickname);
-	 Gbl.Action.Act = ActLogInSeeUsrAgd;	// Set default action if no other is specified
+	 Gbl.Action.Act = ActFrmLogInUsrAgd;	// Set default action if no other is specified
 	}
      }
 
@@ -720,7 +720,7 @@ void Par_GetMainParameters (void)
        Gbl.Action.Act == ActRefOldSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubUsr)
       Gbl.Action.UsesAJAX = true;
-   else if (Gbl.Action.Act == ActSeeUsrAgd)
+   else if (Gbl.Action.Act == ActLogInUsrAgd)
       // It's necessary to do this here when log in to view user's agenda fails
       Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Other.UsrDat);
 
@@ -758,8 +758,8 @@ void Par_GetMainParameters (void)
    switch (Gbl.Action.Act)
      {
       case ActAutUsrInt:
-      case ActLogInSeeUsrAgd:
-      case ActSeeUsrAgd:
+      case ActFrmLogInUsrAgd:
+      case ActLogInUsrAgd:	// This action is necessary here when log in fails
          Pwd_GetParamUsrPwdLogin ();
          // no break;
       case ActReqSndNewPwd:

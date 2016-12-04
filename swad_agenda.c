@@ -92,18 +92,35 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 
 /*****************************************************************************/
-/************************ Show another user's agenda *************************/
+/********** Put form to log in and then show another user's agenda ***********/
 /*****************************************************************************/
 
-void Agd_LogInToShowUsrAgenda (void)
+void Agd_PutFormLogInToShowUsrAgenda (void)
   {
-   /***** Check if user exists and get her/his data *****/
+   /***** Get encrypted user code from user code *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
    /***** Form to log in *****/
    /* Put the form to log in always, even if user does not exist,
       to not give clues about whether a user exists or not */
-   Usr_WriteFormLogin (ActSeeUsrAgd,Usr_PutParamOtherUsrCodEncrypted);
+   Usr_WriteFormLogin (ActLogInUsrAgd,Usr_PutParamOtherUsrCodEncrypted);
+  }
+
+/*****************************************************************************/
+/***************** Show another user's agenda after log in *******************/
+/*****************************************************************************/
+
+void Agd_ShowUsrAgendaAfterLogIn (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user *****/
+   /* User code is already got */
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))        // Existing user
+      /***** Show all the visible events in the user's agenda *****/
+      Agd_ShowEvents (Agd_USR_AGENDA);
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

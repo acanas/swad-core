@@ -2269,7 +2269,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       FormLogin.PutForm = true;
 	   }
 	 else if (Gbl.Action.Act == ActAutUsrInt ||
-	          Gbl.Action.Act == ActSeeUsrAgd)	// Login using @nickname, email or ID from form
+	          Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
 	      {
@@ -2284,9 +2284,9 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	      {
 	       FormLogin.PutForm = true;
-	       if (Gbl.Action.Act == ActSeeUsrAgd)
+	       if (Gbl.Action.Act == ActLogInUsrAgd)
 		 {
-	          FormLogin.Action = ActSeeUsrAgd;
+	          FormLogin.Action = ActLogInUsrAgd;
 	          FormLogin.FuncParams = Usr_PutParamOtherUsrCodEncrypted;
 		 }
 	      }
