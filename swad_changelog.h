@@ -183,13 +183,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.86.1 (2016-12-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.86.3 (2016-12-04)"
 #define CSS_FILE		"swad16.82.2.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.86.3:  Dec 04, 2016	Changed icons related to hierarchy. (209815 lines)
         Version 16.86.2:  Dec 04, 2016	Fixed bugs in my timetable. (209814 lines)
         Version 16.86.1:  Dec 04, 2016	New action to show another user's agenda after log in. (209806 lines)
 					4 changes necessary in database:
