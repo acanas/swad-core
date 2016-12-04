@@ -190,6 +190,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.86.2:  Dec 04, 2016	Fixed bugs in my timetable. (209814 lines)
         Version 16.86.1:  Dec 04, 2016	New action to show another user's agenda after log in. (209806 lines)
 					4 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1612','es','N','Ocultar evento agenda');

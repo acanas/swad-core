@@ -286,11 +286,14 @@ void TT_ShowClassTimeTable (void)
    else
      {
       /***** Select whether show only my groups or all groups *****/
-      if (Gbl.CurrentCrs.Grps.NumGrps)
+      if ( Gbl.TimeTable.Type == TT_MY_TIMETABLE ||
+          (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
+           Gbl.CurrentCrs.Grps.NumGrps))
          TT_PutFormToSelectWhichGroupsToShow ();
 
       /***** Show form to change first day of week *****/
       Cal_ShowFormToSelFirstDayOfWeek (ActChgTT1stDay[Gbl.TimeTable.Type],
+                                       Grp_PutParamWhichGrps,
 	                               "ICO25x25");
      }
 

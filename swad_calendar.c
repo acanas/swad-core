@@ -77,7 +77,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Lay_StartRoundFrame (NULL,Txt_Calendar,
                         Cal_PutIconsFirstDayOfWeek,
                         Hlp_PROFILE_Preferences_calendar);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,"ICO40x40B");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO40x40B");
    Lay_EndRoundFrame ();
   }
 
@@ -96,7 +96,8 @@ static void Cal_PutIconsFirstDayOfWeek (void)
 /************** Show form to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon)
+void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
+                                      const char *ClassIcon)
   {
    extern const char *Txt_First_day_of_the_week;
    extern const char *Txt_DAYS_SMALL[7];
@@ -114,6 +115,8 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,const char *ClassIcon)
 							       "PREF_OFF");
 	 Act_FormStart (Action);
 	 Par_PutHiddenParamUnsigned ("FirstDayOfWeek",FirstDayOfWeek);
+	 if (FuncParams)	// Extra parameters depending on the action
+	    FuncParams ();
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u-64x64.png\""
 			    " alt=\"%s\" title=\"%s: %s\" class=\"%s\""
 			    " style=\"margin:0 auto;\" />",
@@ -255,7 +258,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,"ICO25x25");
+      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,NULL,"ICO25x25");
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"
