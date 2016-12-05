@@ -6049,7 +6049,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 
       /* Put icon to make public/private file */
       if (IsPublic)
-         fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/open_on16x16.gif\""
+         fprintf (Gbl.F.Out,"&nbsp;<img src=\"%s/unlock-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,

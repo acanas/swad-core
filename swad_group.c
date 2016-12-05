@@ -1334,12 +1334,12 @@ static void Grp_ListGroupsForEdition (void)
                   Grp->Open ? Txt_Group_X_open_click_to_close_it :
                               Txt_Group_X_closed_click_to_open_it,
                   Grp->GrpName);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s_on16x16.gif\""
+         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
                             " alt=\"%s\" title=\"%s\""
                             " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
-                  Grp->Open ? "open" :
-                	      "closed",
+                  Grp->Open ? "unlock" :
+                	      "lock",
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
@@ -2000,13 +2000,13 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\" style=\"width:15px;\">"
-	              "<img src=\"%s/%s_off16x16.gif\""
+	              "<img src=\"%s/%s-off64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
 	              "</td>",
             Gbl.Prefs.IconsURL,
-            Grp->Open ? "open" :
-        	        "closed",
+            Grp->Open ? "unlock" :
+        	        "lock",
 	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
@@ -2195,7 +2195,7 @@ static void Grp_PutFormToCreateGroup (void)
    Lay_PutIconRemovalNotAllowed ();
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"BM\">"
-                      "<img src=\"%s/closed_off16x16.gif\""
+                      "<img src=\"%s/lock-off64x64.png\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
                       "</td>"
@@ -4201,35 +4201,8 @@ void Grp_PutParamWhichGrpsAllGrps (void)
   }
 
 /*****************************************************************************/
-/********** Show selector to choice whether to show only my groups ***********/
-/********** or all groups in timetable                             ***********/
+/***** Show form to choice whether to show only my groups or all groups ******/
 /*****************************************************************************/
-
-void Grp_ShowSelectorWhichGrps (void)
-  {
-   extern const char *Txt_Show_WHICH_groups[2];
-   Grp_WhichGroups_t WhichGrps;
-
-   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
-                      "<ul class=\"LIST_CENTER\">");
-   for (WhichGrps = Grp_ONLY_MY_GROUPS;
-	WhichGrps <= Grp_ALL_GROUPS;
-	WhichGrps++)
-     {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
-	                 " style=\"display:inline;\">"
-                         "<input type=\"radio\" name=\"WhichGrps\" value=\"%u\"",
-               (unsigned) WhichGrps);
-      if (WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                         " %s"
-                         "</li>",
-               Gbl.Form.Id,Txt_Show_WHICH_groups[WhichGrps]);
-     }
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
-  }
 
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
   {

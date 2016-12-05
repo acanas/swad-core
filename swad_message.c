@@ -3589,7 +3589,7 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/open_on16x16.gif\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/unlock-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.IconsURL,
@@ -3611,7 +3611,7 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
-	              "<input type=\"image\" src=\"%s/closed_on16x16.gif\""
+	              "<input type=\"image\" src=\"%s/lock-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,
@@ -3790,7 +3790,7 @@ void Msg_ListBannedUsrs (void)
             Act_FormStart (ActUnbUsrLst);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             fprintf (Gbl.F.Out,"<input type=\"image\""
-        	               " src=\"%s/closed_on16x16.gif\""
+        	               " src=\"%s/lock-on64x64.png\""
         	               " alt=\"%s\" title=\"%s\""
         	               " class=\"ICO20x20\" />",
                      Gbl.Prefs.IconsURL,

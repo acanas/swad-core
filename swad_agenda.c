@@ -74,7 +74,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 static void Agd_PutIconToCreateNewEvent (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
-static void Agd_ShowSelectorWhichEvents (void);
+static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action);
 static void Agd_GetParamWhichEvents (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
@@ -211,7 +211,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 	 /***** Put form to choice whether to show
                 all events or only public events *****/
 	 Act_FormStart (ActSeeMyAgd);
-	 Agd_ShowSelectorWhichEvents ();
+	 Agd_ShowFormToSelWhichEvents (ActSeeMyAgd);
 	 Act_FormEnd ();
 	 break;
      }
@@ -325,33 +325,36 @@ static void Agd_PutParamsToCreateNewEvent (void)
   }
 
 /*****************************************************************************/
-/** Show selector to choice whether to show all events or only public events */
+/*** Show form to choice whether to show all events or only public events ****/
 /*****************************************************************************/
 
-static void Agd_ShowSelectorWhichEvents (void)
+static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action)
   {
    extern const char *Txt_Show_WHICH_events[2];
    Agd_WhichEvents_t WhichEvents;
 
-   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
-                      "<ul class=\"LIST_CENTER\">");
+   fprintf (Gbl.F.Out,"<div style=\"display:table-cell; padding:0 20px;\">");
    for (WhichEvents = Agd_ALL_EVENTS;
 	WhichEvents <= Agd_ONLY_PUBLIC_EVENTS;
 	WhichEvents++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
-	                 " style=\"display:inline;\">"
-                         "<input type=\"radio\" name=\"WhichEvents\" value=\"%u\"",
-               (unsigned) WhichEvents);
-      if (WhichEvents == Gbl.Agenda.WhichEvents)
-         fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                         " %s"
-                         "</li>",
-               Gbl.Form.Id,Txt_Show_WHICH_events[WhichEvents]);
+      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table-cell;\">",
+	       WhichEvents == Gbl.Agenda.WhichEvents ? "PREF_ON" :
+					               "PREF_OFF");
+      Act_FormStart (Action);
+      Par_PutHiddenParamUnsigned ("WhichEvents",(unsigned) WhichEvents);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       WhichEvents == Agd_ONLY_PUBLIC_EVENTS ? "unlock64x64.png" :
+		                                       "lockunlock64x64.png",
+	       Txt_Show_WHICH_events[WhichEvents],
+	       Txt_Show_WHICH_events[WhichEvents]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -597,12 +600,12 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
      {
       if (AgdEvent->Public)
 	 Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutParams,
-				"open_on16x16.gif",
+				"unlock-on64x64.png",
 				Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
 				NULL);
       else
 	 Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutParams,
-				"closed_on16x16.gif",
+				"lock-on64x64.png",
 				Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
 				NULL);
      }
