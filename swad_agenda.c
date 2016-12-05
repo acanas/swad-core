@@ -71,7 +71,9 @@ typedef enum
 
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 
+static void Agd_PutIconsListEvents (void);
 static void Agd_PutIconToCreateNewEvent (void);
+static void Agd_PutIconToShowQR (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
 static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action);
@@ -208,13 +210,13 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 	   {
 	    case Agd_ALL_EVENTS:
 	       Lay_StartRoundFrame ("100%",Txt_My_agenda,
-				    Agd_PutIconToCreateNewEvent,
+				    Agd_PutIconsListEvents,
 				    Hlp_PROFILE_Agenda);
 	       break;
 	    case Agd_ONLY_PUBLIC_EVENTS:
 	       sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Me.UsrDat.FullName);
 	       Lay_StartRoundFrame ("100%",Gbl.Title,
-				    Agd_PutIconToCreateNewEvent,
+				    Agd_PutIconsListEvents,
 				    Hlp_PROFILE_Agenda);
 	       break;
 	   }
@@ -297,6 +299,19 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
   }
 
 /*****************************************************************************/
+/***************** Put contextual icons in list of events ********************/
+/*****************************************************************************/
+
+static void Agd_PutIconsListEvents (void)
+  {
+   /***** Put icon to create a new event *****/
+   Agd_PutIconToCreateNewEvent ();
+
+   /***** Put icon to show QR code *****/
+   Agd_PutIconToShowQR ();
+  }
+
+/*****************************************************************************/
 /********************** Put icon to create a new event ***********************/
 /*****************************************************************************/
 
@@ -308,6 +323,21 @@ static void Agd_PutIconToCreateNewEvent (void)
    Lay_PutContextualLink (ActFrmNewEvtMyAgd,Agd_PutParamsToCreateNewEvent,
                           "plus64x64.png",
                           Txt_New_event,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
+/********************** Put icon to create a new event ***********************/
+/*****************************************************************************/
+
+static void Agd_PutIconToShowQR (void)
+  {
+   extern const char *Txt_QR_code;
+
+   /***** Put form to create a new event *****/
+   Lay_PutContextualLink (ActFrmNewEvtMyAgd,NULL,
+                          "qr64x64.gif",
+                          Txt_QR_code,NULL,
                           NULL);
   }
 
