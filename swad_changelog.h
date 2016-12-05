@@ -183,13 +183,22 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.87 (2016-12-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.87.1 (2016-12-05)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.87.1:  Dec 05, 2016	Temporary permissions to debug agendas. (209963 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/lock-on64x64.png /var/www/html/swad/icon/
+sudo cp icon/lock-off64x64.png /var/www/html/swad/icon/
+sudo cp icon/unlock-off64x64.png /var/www/html/swad/icon/
+sudo cp icon/unlock-on64x64.png /var/www/html/swad/icon/
+sudo cp icon/lockunlock64x64.png /var/www/html/swad/icon/
+sudo cp icon/unlock64x64.png /var/www/html/swad/icon/
+
         Version 16.87:    Dec 05, 2016	Change language after log in to view another user's public agenda. (209952 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1616','es','N','Cambiar idioma para ver agenda otro usuario');

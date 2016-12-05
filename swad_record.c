@@ -2351,7 +2351,9 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to view teacher's agenda when:
              - he/she is a teacher and I share any course with him/her *****/
-      if (HeIsATeacherInAnyCrs)
+//      if (HeIsATeacherInAnyCrs)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM &&	// TODO: Remove when debugged
+	  HeIsATeacherInAnyCrs)
 	{
 	 if (ItsMe)
 	    Lay_PutContextualLink (ActSeeMyAgd,
