@@ -39,7 +39,7 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (const char *Nickname,bool PrintText);
+void QR_PutLinkToPrintQRCode (bool PrintText);
 void QR_PrintQRCode (void);
 
 void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);

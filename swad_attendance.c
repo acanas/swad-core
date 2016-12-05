@@ -140,6 +140,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+
    /***** Get parameters *****/
    Att_GetParamAttOrderType ();
    Grp_GetParamWhichGrps ();
@@ -171,7 +173,11 @@ void Att_SeeAttEvents (void)
 
       /* Put link to my QR code */
       if (Gbl.Usrs.Me.UsrDat.Nickname[0])
-	 QR_PutLinkToPrintQRCode (Gbl.Usrs.Me.UsrDat.Nickname,true);
+	{
+	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
+	 Gbl.QR.Str = NicknameWithArroba;
+	 QR_PutLinkToPrintQRCode (true);
+	}
 
       fprintf (Gbl.F.Out,"</div>");
      }

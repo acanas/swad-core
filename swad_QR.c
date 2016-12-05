@@ -70,12 +70,11 @@ static void QR_ImageQRCode (const char *QRString);
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (const char *Nickname,bool PrintText)
+void QR_PutLinkToPrintQRCode (bool PrintText)
   {
    extern const char *Txt_QR_code;
 
    /***** Link to print QR *****/
-   Gbl.Usrs.NicknameForQR = Nickname;
    Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,
                           "qr64x64.gif",
                           Txt_QR_code,PrintText ? Txt_QR_code :
@@ -89,10 +88,7 @@ void QR_PutLinkToPrintQRCode (const char *Nickname,bool PrintText)
 
 static void QR_PutParamQRString (void)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-
-   sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.NicknameForQR);
-   Par_PutHiddenParamString ("QRString",NicknameWithArroba);
+   Par_PutHiddenParamString ("QRString",Gbl.QR.Str);
   }
 
 /*****************************************************************************/

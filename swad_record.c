@@ -2591,6 +2591,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_View_public_profile;
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"
@@ -2611,7 +2612,9 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 Act_FormEnd ();
 
          /* Link to QR code */
-	 QR_PutLinkToPrintQRCode (UsrDat->Nickname,false);
+	 sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
+	 Gbl.QR.Str = NicknameWithArroba;
+	 QR_PutLinkToPrintQRCode (false);
 	}
      }
    fprintf (Gbl.F.Out,"</div>"

@@ -196,6 +196,7 @@ void Nck_ShowFormChangeUsrNickname (void)
    MYSQL_ROW row;
    unsigned NumNicks;
    unsigned NumNick;
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
@@ -250,7 +251,11 @@ void Nck_ShowFormChangeUsrNickname (void)
 
       /* Link to QR code */
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
-         QR_PutLinkToPrintQRCode (Gbl.Usrs.Me.UsrDat.Nickname,false);
+	{
+	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
+	 Gbl.QR.Str = NicknameWithArroba;
+         QR_PutLinkToPrintQRCode (false);
+	}
 
       fprintf (Gbl.F.Out,"</div>");
 
