@@ -958,6 +958,7 @@ Users:
 
         NEW. ActFrmLogInUsrAgd		Put form to log in to show another user's public agenda
         NEW. ActLogInUsrAgd		Show another user's public agenda after log in
+        NEW. ActLogInUsrAgdLan		Show another user's public agenda after change language
         NEW. ActSeeUsrAgd		Show another user's public agenda
 
 	797. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
@@ -1340,9 +1341,9 @@ Profile:
        1149. ActSndNewPwd		Send a new password via email
        1150. ActLogOut			Close session
 
-       1151. ActAutUsrInt		Authentify user internally (directly from the platform)
-       1152. ActAutUsrNew		Authentify user internally (directly from the platform, only if user has not password)
-       1153. ActAutUsrChgLan		Change language to my language just after authentication
+       1151. ActLogIn		Authentify user internally (directly from the platform)
+       1152. ActLogInNew		Authentify user internally (directly from the platform, only if user has not password)
+       1153. ActLogInLan		Change language to my language just after authentication
        1154. ActAnnSee			Mark announcement as seen
        1155. ActChgMyRol		Change type of logged user
 
@@ -2370,6 +2371,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActFrmLogInUsrAgd	*/{1614,-1,TabUnk,ActLstTch		,0x001,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_PutFormLogInToShowUsrAgenda,NULL},
    /* ActLogInUsrAgd	*/{1615,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgendaAfterLogIn	,NULL},
+   /* ActLogInUsrAgdLan	*/{1616,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgendaAfterLogIn	,NULL},
    /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
@@ -2795,9 +2797,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSndNewPwd	*/{ 633,-1,TabUnk,ActFrmLogIn		,0x000,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pwd_ChkIdLoginAndSendNewPwd	,NULL},
    /* ActLogOut		*/{  10,-1,TabUnk,ActFrmLogIn		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Ses_CloseSession		,Usr_Logout			,NULL},
 
-   /* ActAutUsrInt	*/{   6,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrNew	*/{1585,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
-   /* ActAutUsrChgLan	*/{1077,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActLogIn		*/{   6,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActLogInNew	*/{1585,-1,TabUnk,ActFrmRolSes		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
+   /* ActLogInLan	*/{1077,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WelcomeUsr			,NULL},
    /* ActAnnSee		*/{1234,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ann_MarkAnnouncementAsSeen	,NULL},
    /* ActChgMyRol	*/{ 589,-1,TabUnk,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Rol_ChangeMyRole		,Usr_ShowFormsLogoutAndRole	,NULL},
 
@@ -2904,7 +2906,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeRcvMsg,		//  #3
 	-1,			//  #4 (obsolete action)
 	-1,			//  #5 (obsolete action)
-	ActAutUsrInt,		//  #6
+	ActLogIn,		//  #6
 	-1,			//  #7 (obsolete action)
 	-1,			//  #8 (obsolete action)
 	ActSeeCrsLnk,		//  #9
@@ -3975,7 +3977,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeLstStdAtt,	// #1074
 	ActPrnLstStdAtt,	// #1075
 	ActRecAttMe,		// #1076
-	ActAutUsrChgLan,	// #1077
+	ActLogInLan,	// #1077
 	ActSeeDocCrs,		// #1078
 	ActSeeMrkCrs,		// #1079
 	ActReqSeeUsrTstRes,	// #1080
@@ -4486,7 +4488,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeMyUsgRep,		// #1582
 	-1,			// #1583 (obsolete action)
 	ActChkUsrAcc,		// #1584
-	ActAutUsrNew,		// #1585
+	ActLogInNew,		// #1585
 	ActReqMyUsgRep,		// #1586
 	ActChgCrsDegCfg,	// #1587
 	ActChgDegCtrCfg,	// #1588
@@ -4517,6 +4519,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActShoEvtMyAgd,		// #1613
 	ActFrmLogInUsrAgd,	// #1614
 	ActLogInUsrAgd,		// #1615
+	ActLogInUsrAgdLan,	// #1616
 	};
 
 /*****************************************************************************/
@@ -4884,7 +4887,7 @@ void Act_AdjustCurrentAction (void)
      }
 
    /***** If my login password is not enough secure, the only action possible is show a form to change my password *****/
-   if (Gbl.Action.Act == ActAutUsrInt)
+   if (Gbl.Action.Act == ActLogIn)
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
         {
          Gbl.Action.Act = ActFrmChgMyPwd;
@@ -4978,8 +4981,8 @@ void Act_AdjustCurrentAction (void)
          case Rol_STUDENT:
             switch (Gbl.Action.Act)
               {
-               case ActAutUsrInt:
-               case ActAutUsrNew:
+               case ActLogIn:
+               case ActLogInNew:
                case ActHom:
                case ActMnu:
                case ActLogOut:

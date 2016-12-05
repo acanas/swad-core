@@ -334,9 +334,9 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.Usrs.Me.IBelongToCurrentCrs)	// I belong to this course
 	   {
-	    if (Gbl.Action.Act != ActAutUsrInt &&
-		Gbl.Action.Act != ActAutUsrNew &&
-                Gbl.Action.Act != ActAutUsrChgLan)	// I am not just logged
+	    if (Gbl.Action.Act != ActLogIn &&
+		Gbl.Action.Act != ActLogInNew &&
+                Gbl.Action.Act != ActLogInLan)	// I am not just logged
 	      {
 	       /* Request my removing from this course */
 	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,

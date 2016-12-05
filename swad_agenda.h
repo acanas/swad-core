@@ -75,6 +75,8 @@ typedef enum
 /*****************************************************************************/
 
 void Agd_PutFormLogInToShowUsrAgenda (void);
+void Agd_PutParamAgd (void);
+
 void Agd_ShowUsrAgendaAfterLogIn (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowMyAgenda (void);

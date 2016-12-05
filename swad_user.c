@@ -1683,7 +1683,7 @@ bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
 void Usr_WriteLandingPage (void)
   {
    /***** Form to log in *****/
-   Usr_WriteFormLogin (ActAutUsrInt,NULL);
+   Usr_WriteFormLogin (ActLogIn,NULL);
 
    /***** Form to go to request the creation of a new account *****/
    Acc_ShowFormGoToRequestNewAccount ();
@@ -1714,7 +1714,7 @@ void Usr_Logout (void)
    Lay_ShowAlert (Lay_INFO,Txt_The_session_has_been_closed);
 
    /***** Form to log in *****/
-   Usr_WriteFormLogin (ActAutUsrInt,NULL);
+   Usr_WriteFormLogin (ActLogIn,NULL);
 
    /***** Advertisement about mobile app *****/
    Lay_AdvertisementMobile ();
@@ -1872,7 +1872,9 @@ void Usr_WelcomeUsr (void)
          /***** Show the global announcements I have not seen *****/
          Ann_ShowMyAnnouncementsNotMarkedAsSeen ();
         }
-      else        // The current language is not my preferred language ==> change automatically to my language
+      else
+	 /* The current language is not my preferred language
+	    ==> change automatically to my language */
          Lay_ShowAlert (Lay_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
      }
   }
@@ -2210,7 +2212,7 @@ void Usr_ChkUsrAndGetUsrData (void)
      } FormLogin =
      {
       false,
-      ActAutUsrInt,
+      ActLogIn,
       NULL
      };
    Act_Action_t Action;
@@ -2268,7 +2270,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	    else
 	       FormLogin.PutForm = true;
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrInt ||
+	 else if (Gbl.Action.Act == ActLogIn ||
 	          Gbl.Action.Act == ActLogInUsrAgd)	// Login using @nickname, email or ID from form
 	   {
 	    if (Usr_ChkUsrAndGetUsrDataFromDirectLogin ())	// User logged in
@@ -2287,11 +2289,11 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       if (Gbl.Action.Act == ActLogInUsrAgd)
 		 {
 	          FormLogin.Action = ActLogInUsrAgd;
-	          FormLogin.FuncParams = Usr_PutParamOtherUsrCodEncrypted;
+	          FormLogin.FuncParams = Agd_PutParamAgd;
 		 }
 	      }
 	   }
-	 else if (Gbl.Action.Act == ActAutUsrNew)	// Empty account without password, login using encrypted user's code
+	 else if (Gbl.Action.Act == ActLogInNew)	// Empty account without password, login using encrypted user's code
 	   {
 	    /***** Get user's data *****/
 	    Usr_GetParamOtherUsrCodEncrypted (&Gbl.Usrs.Me.UsrDat);
@@ -2588,8 +2590,8 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Get my last data *****/
    Usr_GetMyLastData ();
-   if (Gbl.Action.Act == ActAutUsrInt ||
-       Gbl.Action.Act == ActAutUsrNew)	// If I just logged in...
+   if (Gbl.Action.Act == ActLogIn ||
+       Gbl.Action.Act == ActLogInNew)	// If I just logged in...
      {
       /***** WhatToSearch is stored in session,
              but in login it is got from user's last data *****/

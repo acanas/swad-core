@@ -1732,7 +1732,7 @@ void Mai_ConfirmEmail (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Failed_email_confirmation_key);
 
    /***** Form to log in *****/
-   Usr_WriteFormLogin (ActAutUsrInt,NULL);
+   Usr_WriteFormLogin (ActLogIn,NULL);
   }
 
 /*****************************************************************************/

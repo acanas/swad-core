@@ -79,7 +79,9 @@ static void Lay_WriteEndOfPage (void);
 
 static void Lay_WritePageTitle (void);
 
-static void Lay_WriteRedirectionToMyLanguage (void);
+static void Lay_WriteRedirToMyLangOnLogIn (void);
+static void Lay_WriteRedirToMyLangOnViewUsrAgd (void);
+
 static void Lay_WriteScripts (void);
 static void Lay_WriteScriptInit (void);
 static void Lay_WriteScriptParamsAJAX (void);
@@ -220,11 +222,15 @@ void Lay_WriteStartOfPage (void)
                Cfg_URL_SWAD_PUBLIC);
 
    /* Redirect to correct language */
-   if ((Gbl.Action.Act == ActAutUsrInt ||
-        Gbl.Action.Act == ActAutUsrNew) &&					// Action is log in
-       Gbl.Usrs.Me.Logged &&							// I am just logged
+   if (Gbl.Usrs.Me.Logged &&							// I am logged
        Gbl.Usrs.Me.UsrDat.Prefs.Language != Txt_Current_CGI_SWAD_Language)	// My language != current language
-      Lay_WriteRedirectionToMyLanguage ();
+     {
+      if (Gbl.Action.Act == ActLogIn ||		// Regular log in
+	  Gbl.Action.Act == ActLogInNew)		// Log in when checking account
+         Lay_WriteRedirToMyLangOnLogIn ();
+      else if (Gbl.Action.Act == ActLogInUsrAgd)	// Log in to view another user's public agenda
+         Lay_WriteRedirToMyLangOnViewUsrAgd ();
+     }
 
    /* Write initial scripts depending on the action */
    Lay_WriteScripts ();
@@ -321,9 +327,9 @@ void Lay_WriteStartOfPage (void)
    Gbl.Layout.HTMLStartWritten = true;
 
    /* Write new year greeting */
-   if (Gbl.Action.Act == ActAutUsrInt ||
-       Gbl.Action.Act == ActAutUsrNew ||
-       Gbl.Action.Act == ActAutUsrChgLan)
+   if (Gbl.Action.Act == ActLogIn ||
+       Gbl.Action.Act == ActLogInNew ||
+       Gbl.Action.Act == ActLogInLan)
       if (Gbl.Now.Date.Month == 1 &&
 	  Gbl.Now.Date.Day == 1)
         {
@@ -395,7 +401,7 @@ static void Lay_WritePageTitle (void)
 /************* Write script and meta to redirect to my language **************/
 /*****************************************************************************/
 
-static void Lay_WriteRedirectionToMyLanguage (void)
+static void Lay_WriteRedirToMyLangOnLogIn (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
@@ -404,8 +410,22 @@ static void Lay_WriteRedirectionToMyLanguage (void)
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
-	    Act_Actions[ActAutUsrChgLan].ActCod,
+	    Act_Actions[ActLogInLan].ActCod,
 	    Gbl.Session.Id);
+  }
+
+static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
+  {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+
+   fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
+	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
+	    Cfg_URL_SWAD_CGI,
+	    Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language],
+	    Act_Actions[ActLogInUsrAgdLan].ActCod,
+	    Gbl.Session.Id,
+	    Gbl.Usrs.Other.UsrDat.Nickname);
   }
 
 /*****************************************************************************/
@@ -984,8 +1004,8 @@ static void Lay_ShowRightColumn (void)
 
    /***** SWADroid advertisement *****/
    if (!Gbl.Usrs.Me.Logged ||
-       Gbl.Action.Act == ActAutUsrInt ||
-       Gbl.Action.Act == ActAutUsrNew)
+       Gbl.Action.Act == ActLogIn ||
+       Gbl.Action.Act == ActLogInNew)
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"

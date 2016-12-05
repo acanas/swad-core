@@ -299,7 +299,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
    /***** Button to login with this account *****/
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   Act_FormStart (ActAutUsrNew);
+   Act_FormStart (ActLogInNew);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Lay_PutCreateButtonInline (Txt_Its_me);
    Act_FormEnd ();
