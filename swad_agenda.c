@@ -38,6 +38,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_QR.h"
 #include "swad_string.h"
 
 /*****************************************************************************/
@@ -332,13 +333,15 @@ static void Agd_PutIconToCreateNewEvent (void)
 
 static void Agd_PutIconToShowQR (void)
   {
-   extern const char *Txt_QR_code;
+   char URL[Cns_MAX_BYTES_URL+1];
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
-   /***** Put form to create a new event *****/
-   Lay_PutContextualLink (ActFrmNewEvtMyAgd,NULL,
-                          "qr64x64.gif",
-                          Txt_QR_code,NULL,
-                          NULL);
+   sprintf (URL,"%s/%s?agd=@%s",
+            Cfg_URL_SWAD_CGI,
+            Txt_STR_LANG_ID[Gbl.Prefs.Language],
+            Gbl.Usrs.Me.UsrDat.Nickname);
+   Gbl.QR.Str = URL;
+   QR_PutLinkToPrintQRCode (false);
   }
 
 /*****************************************************************************/
