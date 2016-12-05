@@ -179,18 +179,21 @@
 // TODO: When teacher sees "No hay estudiantes", put a button to add students
 // TODO: When admin sees "No hay profesores", put a button to add teachers
 
+// TODO: Do not show hidden events of my agenda when selected "Only public events"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.87.1 (2016-12-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.87.2 (2016-12-05)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.87.1:  Dec 05, 2016	Temporary permissions to debug agendas. (209963 lines)
+        Version 16.87.2:  Dec 05, 2016	Icon to edit user's agenda. (209987 lines)
+        Version 16.87.1:  Dec 05, 2016	Temporary permissions to debug agendas. (209969 lines)
 Copy the following icons to icon public directory:
 sudo cp icon/lock-on64x64.png /var/www/html/swad/icon/
 sudo cp icon/lock-off64x64.png /var/www/html/swad/icon/
@@ -198,6 +201,12 @@ sudo cp icon/unlock-off64x64.png /var/www/html/swad/icon/
 sudo cp icon/unlock-on64x64.png /var/www/html/swad/icon/
 sudo cp icon/lockunlock64x64.png /var/www/html/swad/icon/
 sudo cp icon/unlock64x64.png /var/www/html/swad/icon/
+sudo cp icon/iconset/awesome/action64x64/hierarchy64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/
+sudo cp icon/iconset/nuvola/action64x64/hierarchy64x64.png /var/www/html/swad/icon/iconset/nuvola/action64x64/
+sudo cp icon/hierarchy64x64.png /var/www/html/swad/icon/
+sudo cp icon/myhierarchy64x64.png /var/www/html/swad/icon/
+					If you prefer MyISAM tables:
+ALTER TABLE agendas ENGINE=MyISAM;
 
         Version 16.87:    Dec 05, 2016	Change language after log in to view another user's public agenda. (209952 lines)
 					1 change necessary in database:

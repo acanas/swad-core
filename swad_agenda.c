@@ -72,6 +72,7 @@ typedef enum
 
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 
+static void Agd_PutIconToViewEditMyAgenda (void);
 static void Agd_PutIconsListEvents (void);
 static void Agd_PutIconToCreateNewEvent (void);
 static void Agd_PutIconToShowQR (void);
@@ -185,6 +186,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    extern const char *Txt_No_events;
+   bool ItsMe;
    Agd_Order_t Order;
    struct Pagination Pagination;
    unsigned NumEvent;
@@ -216,8 +218,10 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       case Agd_USR_AGENDA:
          /***** Start frame *****/
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
-			      NULL,
+			      ItsMe ? Agd_PutIconToViewEditMyAgenda :
+				      NULL,
 			      Hlp_PROFILE_Agenda);	// TODO: Change
 	 break;
       case Agd_MY_AGENDA:
@@ -312,6 +316,21 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 
    /***** Free list of events *****/
    Agd_FreeListEvents ();
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icon to view/edit my agenda ******************/
+/*****************************************************************************/
+
+static void Agd_PutIconToViewEditMyAgenda (void)
+  {
+   extern const char *Txt_Edit;
+
+   /***** Put icon to view/edit my agenda *****/
+   Lay_PutContextualLink (ActSeeMyAgd,NULL,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

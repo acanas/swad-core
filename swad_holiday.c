@@ -764,8 +764,8 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    char Query[512];
    struct Holiday *Hld;
    struct Date NewDate;
-   struct Date *PtrDate = NULL;	// Initialized to avoid warning
-   const char *StrStartOrEndDate;
+   struct Date *PtrDate = NULL;			// Initialized to avoid warning
+   const char *StrStartOrEndDate = NULL;	// Initialized to avoid warning
    char StrDate[11];
 
    Hld = &Gbl.Hlds.EditingHld;
