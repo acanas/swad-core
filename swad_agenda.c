@@ -197,16 +197,27 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
      {
       case Agd_USR_AGENDA:
          /***** Start frame *****/
-	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);	// TODO: Need translation!!!!!
+	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
 			      NULL,
 			      Hlp_PROFILE_Agenda);	// TODO: Change
 	 break;
       case Agd_MY_AGENDA:
          /***** Start frame *****/
-	 Lay_StartRoundFrame ("100%",Txt_My_agenda,
-			      Agd_PutIconToCreateNewEvent,
-			      Hlp_PROFILE_Agenda);
+	 switch (Gbl.Agenda.WhichEvents)
+	   {
+	    case Agd_ALL_EVENTS:
+	       Lay_StartRoundFrame ("100%",Txt_My_agenda,
+				    Agd_PutIconToCreateNewEvent,
+				    Hlp_PROFILE_Agenda);
+	       break;
+	    case Agd_ONLY_PUBLIC_EVENTS:
+	       sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Me.UsrDat.FullName);
+	       Lay_StartRoundFrame ("100%",Gbl.Title,
+				    Agd_PutIconToCreateNewEvent,
+				    Hlp_PROFILE_Agenda);
+	       break;
+	   }
 
 	 /***** Put form to choice whether to show
                 all events or only public events *****/
