@@ -98,20 +98,23 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
 	Hou = d.getHours();
 	Min = d.getMinutes();
 	Sec = d.getSeconds();
-	StrMon = ((Mon < 10) ? '0' : '') + Mon;
-	StrDay = ((Day < 10) ? '0' : '') + Day;
+	StrMon = ((Mon < 10) ? '-0' : '-') + Mon;
+	StrDay = ((Day < 10) ? '-0' : '-') + Day;
 	StrHou = ((Hou < 10) ? '0' : '') + Hou;
-	StrMin = ((Min < 10) ? '0' : '') + Min;
-	StrSec = ((Sec < 10) ? '0' : '') + Sec;
+	StrMin = ((Min < 10) ? ':0' : ':') + Min;
+	if (Sec)
+		StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
+	else
+		StrSec = '';
 	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
 		StrToday.length)
 		document.getElementById(id).innerHTML = StrToday +
 												separator +
-												StrHou + ':' + StrMin + ':' + StrSec;
+												StrHou + StrMin + StrSec;
 	else
-		document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
+		document.getElementById(id).innerHTML = Yea    + StrMon + StrDay +
 												separator +
-												StrHou + ':' + StrMin + ':' + StrSec;
+												StrHou + StrMin + StrSec;
 }
 
 function writeLocalDateHMFromUTC (id,TimeUTC,separator,StrToday) {

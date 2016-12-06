@@ -87,8 +87,6 @@ static void Agd_PutIconToShowQR (void);
 
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
-// static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action);
-// static void Agd_GetParamWhichEvents (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
 static void Agd_GetParamEventOrderType (void);
