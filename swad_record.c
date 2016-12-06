@@ -2616,7 +2616,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
          /* Link to QR code */
 	 sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
 	 Gbl.QR.Str = NicknameWithArroba;
-	 QR_PutLinkToPrintQRCode (false);
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,false);
 	}
      }
    fprintf (Gbl.F.Out,"</div>"

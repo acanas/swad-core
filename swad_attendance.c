@@ -176,7 +176,7 @@ void Att_SeeAttEvents (void)
 	{
 	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
 	 Gbl.QR.Str = NicknameWithArroba;
-	 QR_PutLinkToPrintQRCode (true);
+	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,true);
 	}
 
       fprintf (Gbl.F.Out,"</div>");

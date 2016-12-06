@@ -80,7 +80,7 @@ extern struct Globals Gbl;
 /************************ Internal global variables **************************/
 /*****************************************************************************/
 /*
-1238 actions in one CGI:
+1239 actions in one CGI:
 	  0. ActAll			Any action (used for statistics)
 	  1. ActUnk			Unknown action
 	  2. ActHom			Show home menu
@@ -1358,83 +1358,84 @@ Profile:
        1168. ActShoEvtMyAgd		Show an event from my agenda
        1169. ActPrvEvtMyAgd		Make private an event from my agenda
        1170. ActPubEvtMyAgd		Make public an event from my agenda
+       1171. ActPrnAgdQR		Show agenda QR code ready to print
 
-       1171. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
-       1172. ActCreUsrAcc		Create new user account
-       1173. ActRemID_Me		Remove one of my user's IDs
-       1174. ActNewIDMe			Create a new user's ID for me
-       1175. ActRemOldNic		Remove one of my old nicknames
-       1176. ActChgNic			Change my nickname
-       1177. ActRemMaiMe		Remove one of my old emails
-       1178. ActNewMaiMe		Change my email address
-       1179. ActCnfMai			Confirm email address
-       1180. ActFrmChgMyPwd		Show form to the change of the password
-       1181. ActChgPwd			Change the password
-       1182. ActReqRemMyAcc		Request the removal of my account
-       1183. ActRemMyAcc		Remove my account
+       1172. ActChkUsrAcc		Check if already exists a new account without password associated to a ID
+       1173. ActCreUsrAcc		Create new user account
+       1174. ActRemID_Me		Remove one of my user's IDs
+       1175. ActNewIDMe			Create a new user's ID for me
+       1176. ActRemOldNic		Remove one of my old nicknames
+       1177. ActChgNic			Change my nickname
+       1178. ActRemMaiMe		Remove one of my old emails
+       1179. ActNewMaiMe		Change my email address
+       1180. ActCnfMai			Confirm email address
+       1181. ActFrmChgMyPwd		Show form to the change of the password
+       1182. ActChgPwd			Change the password
+       1183. ActReqRemMyAcc		Request the removal of my account
+       1184. ActRemMyAcc		Remove my account
 
-       1184. ActChgMyData		Update my personal data
+       1185. ActChgMyData		Update my personal data
 
-       1185. ActReqMyPho		Show form to send my photo
-       1186. ActDetMyPho		Receive my photo and detect faces on it
-       1187. ActUpdMyPho		Update my photo
-       1188. ActReqRemMyPho		Request the removal of my photo
-       1189. ActRemMyPho		Remove my photo
+       1186. ActReqMyPho		Show form to send my photo
+       1187. ActDetMyPho		Receive my photo and detect faces on it
+       1188. ActUpdMyPho		Update my photo
+       1189. ActReqRemMyPho		Request the removal of my photo
+       1190. ActRemMyPho		Remove my photo
 
-       1190. ActEdiPri			Edit my privacy
-       1191. ActChgPriPho		Change privacy of my photo
-       1192. ActChgPriPrf		Change privacy of my public profile
+       1191. ActEdiPri			Edit my privacy
+       1192. ActChgPriPho		Change privacy of my photo
+       1193. ActChgPriPrf		Change privacy of my public profile
 
-       1193. ActReqEdiMyIns		Request the edition of my institution, centre and department
-       1194. ActChgCtyMyIns		Change the country of my institution
-       1195. ActChgMyIns		Change my institution
-       1196. ActChgMyCtr		Change my centre
-       1197. ActChgMyDpt		Change my department
-       1198. ActChgMyOff		Change my office
-       1199. ActChgMyOffPho		Change my office phone
+       1194. ActReqEdiMyIns		Request the edition of my institution, centre and department
+       1195. ActChgCtyMyIns		Change the country of my institution
+       1196. ActChgMyIns		Change my institution
+       1197. ActChgMyCtr		Change my centre
+       1198. ActChgMyDpt		Change my department
+       1199. ActChgMyOff		Change my office
+       1200. ActChgMyOffPho		Change my office phone
 
-       1200. ActReqEdiMyNet		Request the edition of my social networks
-       1201. ActChgMyNet		Change my web and social networks
+       1201. ActReqEdiMyNet		Request the edition of my social networks
+       1202. ActChgMyNet		Change my web and social networks
 
-       1202. ActChgThe			Change theme
-       1203. ActReqChgLan		Ask if change language
-       1204. ActChgLan			Change language
-       1205. ActChg1stDay		Change first day of the week
-       1206. ActChgCol			Change side columns
-       1207. ActHidLftCol		Hide left side column
-       1208. ActHidRgtCol		Hide right side column
-       1209. ActShoLftCol		Show left side column
-       1210. ActShoRgtCol		Show right side column
-       1211. ActChgIco			Change icon set
-       1212. ActChgMnu			Change menu
-       1213. ActChgNtfPrf		Change whether to notify by email new messages
-       1214. ActPrnUsrQR		Show my QR code ready to print
+       1203. ActChgThe			Change theme
+       1204. ActReqChgLan		Ask if change language
+       1205. ActChgLan			Change language
+       1206. ActChg1stDay		Change first day of the week
+       1207. ActChgCol			Change side columns
+       1208. ActHidLftCol		Hide left side column
+       1209. ActHidRgtCol		Hide right side column
+       1210. ActShoLftCol		Show left side column
+       1211. ActShoRgtCol		Show right side column
+       1212. ActChgIco			Change icon set
+       1213. ActChgMnu			Change menu
+       1214. ActChgNtfPrf		Change whether to notify by email new messages
+       1215. ActPrnUsrQR		Show my QR code ready to print
 
-       1215. ActPrnMyTT			Show the timetable listo to impresión of all my courses
-       1216. ActEdiTut			Edit the timetable of tutorías
-       1217. ActChgTut			Modify the timetable of tutorías
-       1218. ActChgMyTT1stDay		Change first day of week and show timetable of the course
+       1216. ActPrnMyTT			Show the timetable listo to impresión of all my courses
+       1217. ActEdiTut			Edit the timetable of tutorías
+       1218. ActChgTut			Modify the timetable of tutorías
+       1219. ActChgMyTT1stDay		Change first day of week and show timetable of the course
 
-       1219. ActReqRemFilBrf		Request removal of a file of the briefcase
-       1220. ActRemFilBrf		Remove a file of the briefcase
-       1221. ActRemFolBrf		Remove a folder empty of the briefcase
-       1222. ActCopBrf			Set source of copy in the briefcase
-       1223. ActPasBrf			Paste a folder or file in the briefcase
-       1224. ActRemTreBrf		Remove a folder no empty of the briefcase
-       1225. ActFrmCreBrf		Form to crear a folder or file in the briefcase
-       1226. ActCreFolBrf		Create a new folder in the briefcase
-       1227. ActCreLnkBrf		Create a new link in the briefcase
-       1228. ActRenFolBrf		Rename a folder of the briefcase
-       1229. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
-       1230. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
-       1231. ActExpBrf			Expand a folder in briefcase
-       1232. ActConBrf			Contract a folder in briefcase
-       1233. ActZIPBrf			Compress a folder in briefcase
-       1234. ActReqDatBrf		Ask for metadata of a file in the briefcase
-       1235. ActChgDatBrf		Change metadata of a file in the briefcase
-       1236. ActDowBrf			Download a file in the briefcase
-       1237. ActReqRemOldBrf		Ask for removing old files in the briefcase
-       1238. ActRemOldBrf		Remove old files in the briefcase
+       1220. ActReqRemFilBrf		Request removal of a file of the briefcase
+       1221. ActRemFilBrf		Remove a file of the briefcase
+       1222. ActRemFolBrf		Remove a folder empty of the briefcase
+       1223. ActCopBrf			Set source of copy in the briefcase
+       1224. ActPasBrf			Paste a folder or file in the briefcase
+       1225. ActRemTreBrf		Remove a folder no empty of the briefcase
+       1226. ActFrmCreBrf		Form to crear a folder or file in the briefcase
+       1227. ActCreFolBrf		Create a new folder in the briefcase
+       1228. ActCreLnkBrf		Create a new link in the briefcase
+       1229. ActRenFolBrf		Rename a folder of the briefcase
+       1230. ActRcvFilBrfDZ		Receive a file in the briefcase using Dropzone.js
+       1231. ActRcvFilBrfCla		Receive a file in the briefcase using the classic way
+       1232. ActExpBrf			Expand a folder in briefcase
+       1233. ActConBrf			Contract a folder in briefcase
+       1234. ActZIPBrf			Compress a folder in briefcase
+       1235. ActReqDatBrf		Ask for metadata of a file in the briefcase
+       1236. ActChgDatBrf		Change metadata of a file in the briefcase
+       1237. ActDowBrf			Download a file in the briefcase
+       1238. ActReqRemOldBrf		Ask for removing old files in the briefcase
+       1239. ActRemOldBrf		Remove old files in the briefcase
 */
 
 struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
@@ -2816,6 +2817,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrvEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPrivate		,NULL},
    /* ActPubEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPublic		,NULL},
    /* ActSeeMyPubAgd	*/{1617,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyPublicAgenda		,NULL},
+   /* ActPrnAgdQR	*/{1618,-1,TabUnk,ActSeeMyAgd		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,QR_PrintQRCode			,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
@@ -4524,6 +4526,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLogInUsrAgd,		// #1615
 	ActLogInUsrAgdLan,	// #1616
 	ActSeeMyPubAgd,		// #1617
+	ActPrnAgdQR,		// #1618
 	};
 
 /*****************************************************************************/

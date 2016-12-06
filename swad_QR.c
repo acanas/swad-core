@@ -70,12 +70,12 @@ static void QR_ImageQRCode (const char *QRString);
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (bool PrintText)
+void QR_PutLinkToPrintQRCode (Act_Action_t Action,bool PrintText)
   {
    extern const char *Txt_QR_code;
 
    /***** Link to print QR *****/
-   Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,
+   Lay_PutContextualLink (Action,QR_PutParamQRString,
                           "qr64x64.gif",
                           Txt_QR_code,PrintText ? Txt_QR_code :
 	                                          NULL,

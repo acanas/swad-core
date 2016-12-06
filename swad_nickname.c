@@ -254,7 +254,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 	{
 	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
 	 Gbl.QR.Str = NicknameWithArroba;
-         QR_PutLinkToPrintQRCode (false);
+         QR_PutLinkToPrintQRCode (ActPrnUsrQR,false);
 	}
 
       fprintf (Gbl.F.Out,"</div>");
