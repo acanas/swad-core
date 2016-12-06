@@ -211,8 +211,7 @@ void Agd_ShowMyAgenda (void)
    extern const char *Txt_Public_agenda_USER;
 
    /***** Get whether to show all events or only my events ******/
-   if (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER))	// I am a teacher in some courses
-      Agd_GetParamWhichEvents ();
+   Agd_GetParamWhichEvents ();
 
    /***** Start frame *****/
    switch (Gbl.Agenda.WhichEvents)
@@ -308,7 +307,8 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       Pag_WriteLinksToPagesCentered (WhatPaginate[AgendaType],0,&Pagination);
 
    /***** Button to create a new event *****/
-   if (AgendaType == Agd_MY_AGENDA)
+   if (AgendaType == Agd_MY_AGENDA &&
+       Gbl.Agenda.WhichEvents == Agd_ALL_EVENTS)
       Agd_PutButtonToCreateNewEvent ();
 
    /***** Free list of events *****/
@@ -452,7 +452,8 @@ static void Agd_PutIconToViewEditMyAgenda (void)
 static void Agd_PutIconsListEvents (void)
   {
    /***** Put icon to create a new event *****/
-   Agd_PutIconToCreateNewEvent ();
+   if (Gbl.Agenda.WhichEvents == Agd_ALL_EVENTS)
+      Agd_PutIconToCreateNewEvent ();
 
    /***** Put icon to show QR code *****/
    Agd_PutIconToShowQR ();
@@ -811,19 +812,16 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
                           NULL);
 
    /***** Put form to make event public/private *****/
-   if (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER))	// I am a teacher in some courses
-     {
-      if (AgdEvent->Public)
-	 Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutParams,
-				"unlock-on64x64.png",
-				Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
-				NULL);
-      else
-	 Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutParams,
-				"lock-on64x64.png",
-				Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
-				NULL);
-     }
+   if (AgdEvent->Public)
+      Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutParams,
+			     "unlock-on64x64.png",
+			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
+			     NULL);
+   else
+      Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutParams,
+			     "lock-on64x64.png",
+			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
+			     NULL);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -921,6 +919,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 	    case Agd_ONLY_PUBLIC_EVENTS:
 	       sprintf (Query,"SELECT AgdCod FROM agendas"
 			      " WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
+			      " AND DATE(EndTime)>=CURDATE()"  // Only today and future events
 			      " ORDER BY %s",
 			Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
 	       break;

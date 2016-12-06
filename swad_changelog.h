@@ -183,13 +183,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.89.1 (2016-12-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.89.2 (2016-12-06)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.89.2:  Dec 06, 2016	Fixed bugs in agenda.
+					Public agenda available for any user, not only teachers. (210167 lines)
         Version 16.89.1:  Dec 06, 2016	Changes in help on agenda. (210166 lines)
         Version 16.89:    Dec 06, 2016	Agenda events now are replaced by agenda events today. (210139 lines)
         Version 16.88.1:  Dec 06, 2016	Fixed bugs in agenda. (210118 lines)
