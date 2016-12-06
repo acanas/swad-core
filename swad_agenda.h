@@ -81,6 +81,7 @@ void Agd_ShowUsrAgendaAfterLogIn (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowMyAgenda (void);
 
+void Pag_PutHiddenParamWhichEvents (Agd_WhichEvents_t WhichEvents);
 void Agd_PutHiddenParamEventsOrderType (void);
 void Agd_RequestCreatOrEditEvent (void);
 void Agd_FreeListEvents (void);

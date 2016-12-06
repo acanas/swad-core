@@ -183,13 +183,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.88 (2016-12-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.88.1 (2016-12-06)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.88.1:  Dec 06, 2016	Fixed bugs in agenda. (210118 lines)
         Version 16.88:    Dec 06, 2016	Current events in user's agenda are displayed in a highlighted box. (210102 lines)
         Version 16.87.2:  Dec 05, 2016	Icon to edit my agenda. (209987 lines)
         Version 16.87.1:  Dec 05, 2016	Temporary permissions to debug agendas. (209969 lines)

@@ -390,6 +390,7 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	    Act_FormStart (ActSeeMyAgd);
 	    break;
 	}
+      Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
@@ -515,7 +516,7 @@ static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action)
 	       WhichEvents == Gbl.Agenda.WhichEvents ? "PREF_ON" :
 					               "PREF_OFF");
       Act_FormStart (Action);
-      Par_PutHiddenParamUnsigned ("WhichEvents",(unsigned) WhichEvents);
+      Pag_PutHiddenParamWhichEvents (WhichEvents);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
@@ -531,7 +532,16 @@ static void Agd_ShowFormToSelWhichEvents (Act_Action_t Action)
   }
 
 /*****************************************************************************/
-/************* Get whether to show all events or only my events **************/
+/****** Put hidden parameter to show all events or only public events ********/
+/*****************************************************************************/
+
+void Pag_PutHiddenParamWhichEvents (Agd_WhichEvents_t WhichEvents)
+  {
+   Par_PutHiddenParamUnsigned ("WhichEvents",(unsigned) WhichEvents);
+  }
+
+/*****************************************************************************/
+/*********** Get whether to show all events or only public events ************/
 /*****************************************************************************/
 
 static void Agd_GetParamWhichEvents (void)

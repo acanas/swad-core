@@ -173,6 +173,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (1);
+               Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
                Agd_PutHiddenParamEventsOrderType ();
                break;
            }
@@ -261,6 +262,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (1);
+               Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
                Agd_PutHiddenParamEventsOrderType ();
                break;
            }
@@ -332,6 +334,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
+               Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
                Agd_PutHiddenParamEventsOrderType ();
                break;
            }
@@ -410,6 +413,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 	       case Pag_MY_AGENDA:
 		  Act_FormStart (ActSeeMyAgd);
 		  Pag_PutHiddenParamPagNum (NumPage);
+                  Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
 		  Agd_PutHiddenParamEventsOrderType ();
 		  break;
               }
@@ -484,6 +488,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 	    case Pag_MY_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
+               Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
 	       Agd_PutHiddenParamEventsOrderType ();
 	       break;
            }
@@ -555,6 +560,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 	    case Pag_MY_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
+               Pag_PutHiddenParamWhichEvents (Gbl.Agenda.WhichEvents);
 	       Agd_PutHiddenParamEventsOrderType ();
 	       break;
            }
