@@ -617,7 +617,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    Str_LimitLengthHTMLStr (FileNameShort,50);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTableShadow (NULL,2);
+   Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
 
    /***** Link to download the file *****/
    fprintf (Gbl.F.Out,"<tr>"

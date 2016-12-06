@@ -58,9 +58,9 @@ extern struct Globals Gbl;
 #define Agd_NUM_AGENDA_TYPES 4
 typedef enum
   {
-   Agd_USR_AGENDA_NOW,
+   Agd_USR_AGENDA_TODAY,
    Agd_USR_AGENDA,
-   Agd_MY_AGENDA_NOW,
+   Agd_MY_AGENDA_TODAY,
    Agd_MY_AGENDA,
   } Agd_AgendaType_t;
 
@@ -147,7 +147,7 @@ void Agd_ShowUsrAgendaAfterLogIn (void)
 				 Hlp_PROFILE_Agenda);	// TODO: Change
 
 	    /***** Show the current events in the user's agenda *****/
-	    Agd_ShowEventsNow (Agd_USR_AGENDA_NOW);
+	    Agd_ShowEventsNow (Agd_USR_AGENDA_TODAY);
 
 	    /***** Show all the visible events in the user's agenda *****/
 	    Agd_ShowEvents (Agd_USR_AGENDA);
@@ -188,7 +188,7 @@ void Agd_ShowUsrAgenda (void)
 			   Hlp_PROFILE_Agenda);	// TODO: Change
 
       /***** Show the current events in the user's agenda *****/
-      Agd_ShowEventsNow (Agd_USR_AGENDA_NOW);
+      Agd_ShowEventsNow (Agd_USR_AGENDA_TODAY);
 
       /***** Show all the visible events in the user's agenda *****/
       Agd_ShowEvents (Agd_USR_AGENDA);
@@ -237,8 +237,7 @@ void Agd_ShowMyAgenda (void)
    Act_FormEnd ();
 
    /***** Show the current events in the user's agenda *****/
-   if (Gbl.Agenda.WhichEvents == Agd_ONLY_PUBLIC_EVENTS)
-      Agd_ShowEventsNow (Agd_MY_AGENDA_NOW);
+   Agd_ShowEventsNow (Agd_MY_AGENDA_TODAY);
 
    /***** Show all my events *****/
    Agd_ShowEvents (Agd_MY_AGENDA);
@@ -323,7 +322,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 static void Agd_ShowEventsNow (Agd_AgendaType_t AgendaType)
   {
    extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Txt_Now;
+   extern const char *Txt_Today;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_My_agenda;
    extern const char *Txt_No_events;
@@ -338,9 +337,9 @@ static void Agd_ShowEventsNow (Agd_AgendaType_t AgendaType)
    if (Gbl.Agenda.Num)
      {
       /***** Start frame *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Now,
-			        NULL,
-			        Hlp_PROFILE_Agenda,2);	// TODO: Change
+      Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
+			              NULL,
+			              Hlp_PROFILE_Agenda,2);	// TODO: Change
 
       /***** Table head *****/
       Agd_WriteHeaderListEvents (AgendaType);
@@ -380,12 +379,12 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       switch (AgendaType)
 	{
-	 case Agd_USR_AGENDA_NOW:
+	 case Agd_USR_AGENDA_TODAY:
 	 case Agd_USR_AGENDA:
 	    Act_FormStart (ActSeeUsrAgd);
 	    Usr_PutParamOtherUsrCodEncrypted ();
 	    break;
-	 case Agd_MY_AGENDA_NOW:
+	 case Agd_MY_AGENDA_TODAY:
 	 case Agd_MY_AGENDA:
 	    Act_FormStart (ActSeeMyAgd);
 	    break;
@@ -578,11 +577,11 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    AgdEvent.AgdCod = AgdCod;
    switch (AgendaType)
      {
-      case Agd_USR_AGENDA_NOW:
+      case Agd_USR_AGENDA_TODAY:
       case Agd_USR_AGENDA:
 	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
          break;
-      case Agd_MY_AGENDA_NOW:
+      case Agd_MY_AGENDA_TODAY:
       case Agd_MY_AGENDA:
 	 AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
          break;
@@ -849,10 +848,11 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
      }
    switch (AgendaType)
      {
-      case Agd_USR_AGENDA_NOW:
+      case Agd_USR_AGENDA_TODAY:
 	 sprintf (Query,"SELECT AgdCod FROM agendas"
 			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND StartTime<=NOW() AND EndTime>=NOW()"  // Only present events
+			" AND DATE(StartTime)<=CURDATE()"
+			" AND DATE(EndTime)>=CURDATE()"  // Only today events
 			" ORDER BY %s",
 		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
          break;
@@ -863,12 +863,26 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 			" ORDER BY %s",
 		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
          break;
-      case Agd_MY_AGENDA_NOW:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND StartTime<=NOW() AND EndTime>=NOW()"  // Only present events
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+      case Agd_MY_AGENDA_TODAY:
+	 switch (Gbl.Agenda.WhichEvents)
+	   {
+	    case Agd_ALL_EVENTS:
+	       sprintf (Query,"SELECT AgdCod FROM agendas"
+			      " WHERE UsrCod='%ld'"
+			      " AND DATE(StartTime)<=CURDATE()"
+			      " AND DATE(EndTime)>=CURDATE()"  // Only today events
+			      " ORDER BY %s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	       break;
+	    case Agd_ONLY_PUBLIC_EVENTS:
+	       sprintf (Query,"SELECT AgdCod FROM agendas"
+			      " WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
+			      " AND DATE(StartTime)<=CURDATE()"
+			      " AND DATE(EndTime)>=CURDATE()"  // Only today events
+			      " ORDER BY %s",
+			Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	       break;
+	   }
          break;
       case Agd_MY_AGENDA:
 	 switch (Gbl.Agenda.WhichEvents)

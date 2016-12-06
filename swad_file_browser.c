@@ -9304,7 +9304,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Start frame *****/
-	 Lay_StartRoundFrameTableShadow (NULL,2);
+	 Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"

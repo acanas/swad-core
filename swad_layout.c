@@ -95,6 +95,11 @@ static void Lay_WriteTitleAction (void);
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
 
+static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
+                                         void (*FunctionToDrawContextualIcons) (void),
+                                         const char *HelpLink,
+                                         const char *ClassFrame);
+
 static void Lay_WriteAboutZone (void);
 static void Lay_WriteFootFromHTMLFile (void);
 
@@ -1316,17 +1321,51 @@ void Lay_StartRoundFrameTable (const char *Width,const char *Title,
    fprintf (Gbl.F.Out,"\">");
   }
 
+void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
+                                     void (*FunctionToDrawContextualIcons) (void),
+                                     const char *HelpLink,
+                                     unsigned CellPadding)
+  {
+   Lay_StartRoundFrameShadow (Width,Title,FunctionToDrawContextualIcons,HelpLink);
+
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
+   fprintf (Gbl.F.Out,"\">");
+  }
+
 void Lay_StartRoundFrame (const char *Width,const char *Title,
                           void (*FunctionToDrawContextualIcons) (void),
                           const char *HelpLink)
+  {
+   Lay_StartRoundFrameInternal (Width,Title,
+			        FunctionToDrawContextualIcons,
+			        HelpLink,
+			        "FRAME");
+  }
+
+void Lay_StartRoundFrameShadow (const char *Width,const char *Title,
+                                void (*FunctionToDrawContextualIcons) (void),
+                                const char *HelpLink)
+  {
+   Lay_StartRoundFrameInternal (Width,Title,
+			        FunctionToDrawContextualIcons,
+			        HelpLink,
+			        "FRAME_SHADOW");
+  }
+
+static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
+                                         void (*FunctionToDrawContextualIcons) (void),
+                                         const char *HelpLink,
+                                         const char *ClassFrame)
   {
    extern const char *Txt_Help;
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"box-sizing:border-box; width:100%%;\">"
-	              "<div class=\"FRAME\"");
+	              "<div class=\"%s\"",ClassFrame);
    if (Width)
-       fprintf (Gbl.F.Out," style=\"box-sizing:border-box; width:%s;\"",Width);
+       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
    fprintf (Gbl.F.Out,">");
 
    fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
@@ -1360,22 +1399,6 @@ void Lay_StartRoundFrame (const char *Width,const char *Title,
 	       Title);
 
    Gbl.Layout.FrameNested++;
-  }
-
-// CellPadding must be 0, 1, 2, 4 or 8
-
-void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding)
-  {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"width:100%%;\">"
-	              "<div class=\"FRAME_SHADOW\"");
-   if (Width)
-       fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
-   fprintf (Gbl.F.Out,">"
-                      "<table class=\"FRAME_TBL");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
-   fprintf (Gbl.F.Out,"\">");
   }
 
 void Lay_EndRoundFrameTable (void)

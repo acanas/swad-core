@@ -105,7 +105,13 @@ void Lay_StartRoundFrameTable (const char *Width,const char *Title,
 void Lay_StartRoundFrame (const char *Width,const char *Title,
                           void (*FunctionToDrawContextualIcons) (void),
                           const char *HelpLink);
-void Lay_StartRoundFrameTableShadow (const char *Width,unsigned CellPadding);
+void Lay_StartRoundFrameShadow (const char *Width,const char *Title,
+                                void (*FunctionToDrawContextualIcons) (void),
+                                const char *HelpLink);
+void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
+                                     void (*FunctionToDrawContextualIcons) (void),
+                                     const char *HelpLink,
+                                     unsigned CellPadding);
 void Lay_EndRoundFrameTable (void);
 void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton);
 void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
