@@ -58,12 +58,12 @@ extern struct Globals Gbl;
 #define Agd_NUM_AGENDA_TYPES 6
 typedef enum
   {
-   Agd_OTHER_PUBLIC_AGENDA_TODAY,
-   Agd_OTHER_PUBLIC_AGENDA,
    Agd_MY_FULL_AGENDA_TODAY,
    Agd_MY_FULL_AGENDA,
    Agd_MY_PUBLIC_AGENDA_TODAY,
    Agd_MY_PUBLIC_AGENDA,
+   Agd_OTHER_PUBLIC_AGENDA_TODAY,
+   Agd_OTHER_PUBLIC_AGENDA,
   } Agd_AgendaType_t;
 
 /*****************************************************************************/
@@ -123,10 +123,92 @@ void Agd_PutParamAgd (void)
   }
 
 /*****************************************************************************/
+/******************************* Show my agenda ******************************/
+/*****************************************************************************/
+
+void Agd_ShowMyAgenda (void)
+  {
+   extern const char *Hlp_PROFILE_Agenda;
+   extern const char *Txt_My_agenda;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame ("100%",Txt_My_agenda,
+			Agd_PutIconsMyFullAgenda,Hlp_PROFILE_Agenda);
+
+   /***** Show the current events in the user's agenda *****/
+   Agd_ShowEventsToday (Agd_MY_FULL_AGENDA_TODAY);
+
+   /***** Show all my events *****/
+   Agd_ShowEvents (Agd_MY_FULL_AGENDA);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*************************** Show my public agenda ***************************/
+/*****************************************************************************/
+
+void Agd_ShowMyPublicAgenda (void)
+  {
+   extern const char *Hlp_PROFILE_Agenda;
+   extern const char *Txt_Public_agenda_USER;
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Me.UsrDat.FullName);
+   Lay_StartRoundFrame ("100%",Gbl.Title,
+			Agd_PutIconsMyPublicAgenda,Hlp_PROFILE_Agenda);
+
+   /***** Show the current events in the user's agenda *****/
+   Agd_ShowEventsToday (Agd_MY_PUBLIC_AGENDA_TODAY);
+
+   /***** Show all my events *****/
+   Agd_ShowEvents (Agd_MY_PUBLIC_AGENDA);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/************************ Show another user's agenda *************************/
+/*****************************************************************************/
+
+void Agd_ShowUsrAgenda (void)
+  {
+   extern const char *Hlp_USERS_Teachers_agenda;
+   extern const char *Txt_Public_agenda_USER;
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ItsMe;
+
+   /***** Get user *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Start frame *****/
+      sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
+      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+      Lay_StartRoundFrame ("100%",Gbl.Title,
+			   ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
+				   NULL,
+			   Hlp_USERS_Teachers_agenda);
+
+      /***** Show the current events in the user's agenda *****/
+      Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
+
+      /***** Show all the visible events in the user's agenda *****/
+      Agd_ShowEvents (Agd_OTHER_PUBLIC_AGENDA);
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+  }
+
+/*****************************************************************************/
 /***************** Show another user's agenda after log in *******************/
 /*****************************************************************************/
 
-void Agd_ShowUsrAgendaAfterLogIn (void)
+void Agd_ShowOtherAgendaAfterLogIn (void)
   {
    extern const char *Hlp_USERS_Teachers_agenda;
    extern const unsigned Txt_Current_CGI_SWAD_Language;
@@ -171,89 +253,6 @@ void Agd_ShowUsrAgendaAfterLogIn (void)
   }
 
 /*****************************************************************************/
-/************************ Show another user's agenda *************************/
-/*****************************************************************************/
-
-void Agd_ShowUsrAgenda (void)
-  {
-   extern const char *Hlp_USERS_Teachers_agenda;
-   extern const char *Txt_Public_agenda_USER;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool ItsMe;
-
-   /***** Get user *****/
-   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      /***** Start frame *****/
-      sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      Lay_StartRoundFrame ("100%",Gbl.Title,
-			   ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-				   NULL,
-			   Hlp_USERS_Teachers_agenda);
-
-      /***** Show the current events in the user's agenda *****/
-      Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
-
-      /***** Show all the visible events in the user's agenda *****/
-      Agd_ShowEvents (Agd_OTHER_PUBLIC_AGENDA);
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
-     }
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-  }
-
-/*****************************************************************************/
-/******************************* Show my agenda ******************************/
-/*****************************************************************************/
-
-void Agd_ShowMyAgenda (void)
-  {
-   extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Txt_My_agenda;
-   extern const char *Txt_Public_agenda_USER;
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_My_agenda,
-			Agd_PutIconsMyFullAgenda,Hlp_PROFILE_Agenda);
-
-   /***** Show the current events in the user's agenda *****/
-   Agd_ShowEventsToday (Agd_MY_FULL_AGENDA_TODAY);
-
-   /***** Show all my events *****/
-   Agd_ShowEvents (Agd_MY_FULL_AGENDA);
-
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/*************************** Show my public agenda ***************************/
-/*****************************************************************************/
-
-void Agd_ShowMyPublicAgenda (void)
-  {
-   extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Txt_Public_agenda_USER;
-
-   /***** Start frame *****/
-   sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Me.UsrDat.FullName);
-   Lay_StartRoundFrame ("100%",Gbl.Title,
-			Agd_PutIconsMyPublicAgenda,Hlp_PROFILE_Agenda);
-
-   /***** Show the current events in the user's agenda *****/
-   Agd_ShowEventsToday (Agd_MY_PUBLIC_AGENDA_TODAY);
-
-   /***** Show all my events *****/
-   Agd_ShowEvents (Agd_MY_PUBLIC_AGENDA);
-
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
 /*************************** Show events in agenda ***************************/
 /*****************************************************************************/
 
@@ -267,12 +266,12 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    unsigned NumEvent;
    Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
      {
-      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA_TODAY, not used
-      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA
       Pag_MY_FULL_AGENDA,	// Agd_MY_FULL_AGENDA_TODAY, not used
       Pag_MY_FULL_AGENDA,	// Agd_MY_FULL_AGENDA
       Pag_MY_PUBLIC_AGENDA,	// Agd_MY_PUBLIC_AGENDA_TODAY, not used
       Pag_MY_PUBLIC_AGENDA,	// Agd_MY_PUBLIC_AGENDA
+      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA_TODAY, not used
+      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA
      };
 
    /***** Get parameters *****/
@@ -349,12 +348,6 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
       /***** Start frame *****/
       switch (AgendaType)
         {
-	 case Agd_OTHER_PUBLIC_AGENDA_TODAY:
-	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
-					    NULL,
-					    Hlp_USERS_Teachers_agenda,
-					    2);
-            break;
 	 case Agd_MY_FULL_AGENDA_TODAY:
 	 case Agd_MY_PUBLIC_AGENDA_TODAY:
 	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
@@ -362,6 +355,12 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 					    Hlp_PROFILE_Agenda,
 					    2);
 	    break;
+	 case Agd_OTHER_PUBLIC_AGENDA_TODAY:
+	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
+					    NULL,
+					    Hlp_USERS_Teachers_agenda,
+					    2);
+            break;
 	 default:
 	    break;
         }
@@ -404,11 +403,6 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
       switch (AgendaType)
 	{
-	 case Agd_OTHER_PUBLIC_AGENDA_TODAY:
-	 case Agd_OTHER_PUBLIC_AGENDA:
-	    Act_FormStart (ActSeeUsrAgd);
-	    Usr_PutParamOtherUsrCodEncrypted ();
-	    break;
 	 case Agd_MY_FULL_AGENDA_TODAY:
 	 case Agd_MY_FULL_AGENDA:
 	    Act_FormStart (ActSeeMyAgd);
@@ -416,6 +410,11 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	 case Agd_MY_PUBLIC_AGENDA_TODAY:
 	 case Agd_MY_PUBLIC_AGENDA:
 	    Act_FormStart (ActSeeMyPubAgd);
+	    break;
+	 case Agd_OTHER_PUBLIC_AGENDA_TODAY:
+	 case Agd_OTHER_PUBLIC_AGENDA:
+	    Act_FormStart (ActSeeUsrAgd);
+	    Usr_PutParamOtherUsrCodEncrypted ();
 	    break;
 	}
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
@@ -554,15 +553,15 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    AgdEvent.AgdCod = AgdCod;
    switch (AgendaType)
      {
-      case Agd_OTHER_PUBLIC_AGENDA_TODAY:
-      case Agd_OTHER_PUBLIC_AGENDA:
-	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
-         break;
       case Agd_MY_FULL_AGENDA_TODAY:
       case Agd_MY_FULL_AGENDA:
       case Agd_MY_PUBLIC_AGENDA_TODAY:
       case Agd_MY_PUBLIC_AGENDA:
 	 AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+         break;
+      case Agd_OTHER_PUBLIC_AGENDA_TODAY:
+      case Agd_OTHER_PUBLIC_AGENDA:
+	 AgdEvent.UsrCod = Gbl.Usrs.Other.UsrDat.UsrCod;
          break;
      }
    Agd_GetDataOfEventByCod (&AgdEvent);
@@ -831,21 +830,6 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
      }
    switch (AgendaType)
      {
-      case Agd_OTHER_PUBLIC_AGENDA_TODAY:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND DATE(StartTime)<=CURDATE()"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today events
-			" ORDER BY %s",
-		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
-         break;
-      case Agd_OTHER_PUBLIC_AGENDA:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today and future events
-			" ORDER BY %s",
-		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
-         break;
       case Agd_MY_FULL_AGENDA_TODAY:
 	 sprintf (Query,"SELECT AgdCod FROM agendas"
 			" WHERE UsrCod='%ld'"
@@ -855,11 +839,11 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
 	 break;
       case Agd_MY_FULL_AGENDA:
-	    sprintf (Query,"SELECT AgdCod FROM agendas"
-			   " WHERE UsrCod='%ld'"
-			   " ORDER BY %s",
-		     Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
-	    break;
+	 sprintf (Query,"SELECT AgdCod FROM agendas"
+			" WHERE UsrCod='%ld'"
+			" ORDER BY %s",
+		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+	 break;
       case Agd_MY_PUBLIC_AGENDA_TODAY:
 	 sprintf (Query,"SELECT AgdCod FROM agendas"
 			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
@@ -875,6 +859,21 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 			" ORDER BY %s",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
 	 break;
+      case Agd_OTHER_PUBLIC_AGENDA_TODAY:
+	 sprintf (Query,"SELECT AgdCod FROM agendas"
+			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
+			" AND DATE(StartTime)<=CURDATE()"
+			" AND DATE(EndTime)>=CURDATE()"  // Only today events
+			" ORDER BY %s",
+		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
+         break;
+      case Agd_OTHER_PUBLIC_AGENDA:
+	 sprintf (Query,"SELECT AgdCod FROM agendas"
+			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
+			" AND DATE(EndTime)>=CURDATE()"  // Only today and future events
+			" ORDER BY %s",
+		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
+         break;
      }
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
 

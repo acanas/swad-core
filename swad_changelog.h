@@ -183,13 +183,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.90 (2016-12-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.90.1 (2016-12-06)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.84.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.90.1:  Dec 06, 2016	Code refactoring in agenda. (210147 lines)
         Version 16.90:    Dec 06, 2016	Changes in layout of agenda. (210147 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1617','es','N','Ver mi agenda p&uacute;blica');

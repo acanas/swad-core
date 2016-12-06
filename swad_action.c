@@ -2371,8 +2371,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvRecCrs	*/{ 301,-1,TabUnk,ActLstStd		,0x108,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowMyCrsRecord	,NULL},
 
    /* ActFrmLogInUsrAgd	*/{1614,-1,TabUnk,ActLstTch		,0x001,0x001,0x001,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_PutFormLogInToShowUsrAgenda,NULL},
-   /* ActLogInUsrAgd	*/{1615,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgendaAfterLogIn	,NULL},
-   /* ActLogInUsrAgdLan	*/{1616,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgendaAfterLogIn	,NULL},
+   /* ActLogInUsrAgd	*/{1615,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowOtherAgendaAfterLogIn	,NULL},
+   /* ActLogInUsrAgdLan	*/{1616,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowOtherAgendaAfterLogIn	,NULL},
    /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
