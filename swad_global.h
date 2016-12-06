@@ -411,7 +411,6 @@ struct Globals
       long *LstAgdCods;	// List of agenda codes
       Agd_Order_t SelectedOrderType;
       long AgdCodToEdit;	// Used as parameter in contextual links
-      Agd_WhichEvents_t WhichEvents;	// All events / only public events
      } Agenda;
    struct
      {
