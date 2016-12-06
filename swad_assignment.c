@@ -114,8 +114,8 @@ static void Asg_ShowAllAssignments (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
-   extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
    extern const char *Txt_Assignment;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
@@ -159,10 +159,10 @@ static void Asg_ShowAllAssignments (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
 	 if (Order == Gbl.Asgs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");

@@ -186,8 +186,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
   {
    extern const char *Hlp_STATS_Surveys;
    extern const char *Txt_Surveys;
-   extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
@@ -236,10 +236,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
 	 if (Order == Gbl.Svys.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");

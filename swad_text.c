@@ -3036,7 +3036,7 @@ const char *Txt_Assignments_and_other_works =
 	"Atividades e outros trabalhos";
 #endif
 
-const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2] =
+const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2] =
    {
 #if   L==1
 	 "Ordenar per data de comen&ccedil;ament"
@@ -3079,7 +3079,7 @@ const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_ASG_ATT_OR_SVY_ORDER[2] =
+const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2] =
    {
 #if   L==1
 	 "Data<br />inicial"
@@ -36874,23 +36874,23 @@ const char *Txt_Show_WHICH_events[2] =
 #endif
 	 ,
 #if   L==1
-	 "Nom&eacute;s els esdeveniments p&uacute;blics"
+	 "Nom&eacute;s els esdeveniments p&uacute;blics i visibles"
 #elif L==2
-	 "Nur &ouml;ffentliche Ereignisse"
+	 "Nur &ouml;ffentliche und sichtbare Ereignisse"
 #elif L==3
-	 "Only public events"
+	 "Only public, visible events"
 #elif L==4
-	 "Solo eventos p&uacute;blicos"
+	 "Solo eventos p&uacute;blicos y visibles"
 #elif L==5
-	 "Uniquement les &eacute;v&eacute;nements publics"
+	 "Uniquement les &eacute;v&eacute;nements publics et visibles"
 #elif L==6
-	 "Solo eventos p&uacute;blicos"	// Okoteve traducción
+	 "Solo eventos p&uacute;blicos y visibles"	// Okoteve traducción
 #elif L==7
-	 "Solo eventi pubblici"
+	 "Solo eventi pubblici e visibili"
 #elif L==8
-	 "Tylko wydarzenia publiczne"
+	 "Tylko wydarzenia publiczne i widoczne"
 #elif L==9
-	 "Apenas eventos p&uacute;blicos"
+	 "Apenas eventos p&uacute;blicos e vis&iacute;veis"
 #endif
 	};
 

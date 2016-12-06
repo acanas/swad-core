@@ -92,7 +92,7 @@ void Agd_AskRemEvent (void);
 void Agd_RemoveEvent (void);
 
 void Agd_HideEvent (void);
-void Agd_ShowEvent (void);
+void Agd_UnhideEvent (void);
 
 void Agd_MakeEventPrivate (void);
 void Agd_MakeEventPublic (void);

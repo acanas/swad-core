@@ -194,8 +194,8 @@ static void Att_ShowAllAttEvents (void)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Events;
-   extern const char *Txt_ASG_ATT_OR_SVY_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_OR_SVY_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
+   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_No_events;
@@ -239,10 +239,10 @@ static void Att_ShowAllAttEvents (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_OR_SVY_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_OR_SVY_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
 	 if (Order == Gbl.AttEvents.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
