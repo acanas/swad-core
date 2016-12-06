@@ -26868,6 +26868,27 @@ const char *Txt_Notify_me_BR_by_email =
 	"Notifique-me<br />por email";
 #endif
 
+const char *Txt_Now =
+#if   L==1
+	"Ara";
+#elif L==2
+	"Jetzt";
+#elif L==3
+	"Now";
+#elif L==4
+	"Ahora";
+#elif L==5
+	"Maintenant";
+#elif L==6
+	"Ko'&atilde;ga";
+#elif L==7
+	"Ora";
+#elif L==8
+	"Teraz";
+#elif L==9
+	"Agora";
+#endif
+
 const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Ahora cada estudiante puede pertenecer a varios grupos de tipo <strong>%s</strong>.";	// Necessita traduccio
