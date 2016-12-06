@@ -2817,7 +2817,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrvEvtMyAgd	*/{1609,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPrivate		,NULL},
    /* ActPubEvtMyAgd	*/{1610,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_MakeEventPublic		,NULL},
    /* ActSeeMyPubAgd	*/{1617,-1,TabUnk,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyPublicAgenda		,NULL},
-   /* ActPrnAgdQR	*/{1618,-1,TabUnk,ActSeeMyAgd		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,QR_PrintQRCode			,NULL},
+   /* ActPrnAgdQR	*/{1618,-1,TabUnk,ActSeeMyAgd		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Agd_PrintAgdQRCode		,NULL},
 
    /* ActChkUsrAcc	*/{1584,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_CheckIfEmptyAccountExists	,NULL},
    /* ActCreUsrAcc	*/{1163,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_AfterCreationNewAccount	,NULL},
@@ -2874,7 +2874,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMnu		*/{1243,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Mnu_ChangeMenu			,Pre_EditPrefs			,NULL},
    /* ActChgNtfPrf	*/{ 775,-1,TabUnk,ActEdiPrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Ntf_ChangeNotifyEvents		,Pre_EditPrefs			,NULL},
 
-   /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,QR_PrintQRCode			,NULL},
+   /* ActPrnUsrQR	*/{1022,-1,TabUnk,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintUsrQRCode		,NULL},
 
    /* ActPrnMyTT	*/{ 409,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
    /* ActEdiTut		*/{  65,-1,TabUnk,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditMyTutTimeTable		,NULL},

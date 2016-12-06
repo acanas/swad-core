@@ -112,21 +112,19 @@ void QR_PrintQRCode (void)
 
 static void QR_ImageQRCode (const char *QRString)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"width:%upx;\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
+	              " style=\"margin:0 auto; width:%upx;\">"
                       "<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s\""
                       " alt=\"%s\" title=\"%s\""
                       " style=\"width:%upx; height:%upx;"
                       " border:1px dashed silver;\" />"
-                      "<br />"
-                      "<span class=\"DAT\">%s</span>"
                       "</div>",
             QR_CODE_SIZE,
             QR_CODE_SIZE,QR_CODE_SIZE,
             QRString,
             QRString,
             QRString,
-            QR_CODE_SIZE,QR_CODE_SIZE,
-            QRString);
+            QR_CODE_SIZE,QR_CODE_SIZE);
   }
 
 /*****************************************************************************/

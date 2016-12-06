@@ -1757,3 +1757,22 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
 
    return NumEvents;
   }
+
+/*****************************************************************************/
+/************************** Show an agenda QR code ***************************/
+/*****************************************************************************/
+
+void Agd_PrintAgdQRCode (void)
+  {
+   extern const char *Txt_Where_s_USER;
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Where_s_USER,Gbl.Usrs.Me.UsrDat.FullName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+
+   /***** Print QR code ****/
+   QR_PrintQRCode ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }

@@ -51029,6 +51029,27 @@ const char *Txt_What_would_you_like_to_do =
 	"O que voc&ecirc; faria?";
 #endif
 
+const char *Txt_Where_s_USER =
+#if   L==1
+	"On &eacute;s %s?";
+#elif L==2
+	"Wo ist %s?";
+#elif L==3
+	"Where's %s";
+#elif L==4
+	"&iquest;D&oacute;nde est&aacute; %s?";
+#elif L==5
+	"O&ugrave; est %s?";
+#elif L==6
+	"&iquest;D&oacute;nde est&aacute; %s?";	// Okoteve traducción
+#elif L==7
+	"Dove &egrave; %s?";
+#elif L==8
+	"Gdzie jest %s?";
+#elif L==9
+	"Onde est&aacute; %s?";
+#endif
+
 const char *Txt_Who_to_follow =
 #if   L==1
 	"A qui seguir";

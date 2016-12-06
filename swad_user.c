@@ -54,6 +54,7 @@
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_preference.h"
+#include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_tab.h"
 #include "swad_user.h"
@@ -8094,4 +8095,20 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
    sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod='%ld'",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user from users banned");
+  }
+
+/*****************************************************************************/
+/**************************** Show a user QR code ****************************/
+/*****************************************************************************/
+
+void Usr_PrintUsrQRCode (void)
+  {
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Gbl.Usrs.Me.UsrDat.FullName,NULL,NULL);
+
+   /***** Print QR code ****/
+   QR_PrintQRCode ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }

@@ -105,4 +105,6 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod);
 unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope);
 unsigned Agd_GetNumEvents (Sco_Scope_t Scope);
 
+void Agd_PrintAgdQRCode (void);
+
 #endif
