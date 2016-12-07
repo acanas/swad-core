@@ -2322,7 +2322,6 @@ static void Rec_PutIconsCommands (void)
 	                         Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER);
    bool HeBelongsToCurrentCrs = (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
 	                         Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
-   bool HeIsATeacherInAnyCrs = (Gbl.Record.UsrDat->Roles & (1 << Rol_TEACHER));
    bool ICanViewAgenda;
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
@@ -2349,32 +2348,27 @@ static void Rec_PutIconsCommands (void)
 			        Txt_View_record_for_this_course,NULL,
 		                NULL);
 
-      /***** Button to view teacher's agenda when:
-             - he/she is a teacher and I share any course with him/her *****/
-//      if (HeIsATeacherInAnyCrs)
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM &&	// TODO: Remove when debugged
-	  HeIsATeacherInAnyCrs)
+      /***** Button to view user's agenda
+             when I share any course with him/her *****/
+      if (ItsMe)
+	 Lay_PutContextualLink (ActSeeMyAgd,
+				NULL,
+				"date64x64.gif",
+				Txt_View_agenda,NULL,
+				NULL);
+      else	// Not me
 	{
-	 if (ItsMe)
-	    Lay_PutContextualLink (ActSeeMyAgd,
-				   NULL,
+	 if (!(ICanViewAgenda = (IBelongToCurrentCrs &&
+				 HeBelongsToCurrentCrs) ||	// Course selected and we both belong to it
+				IAmLoggedAsSysAdm))		// I am system admin
+	    // The following slow check is made only if the previous fails
+	    ICanViewAgenda = Usr_CheckIfUsrSharesAnyOfMyCrs (Gbl.Record.UsrDat->UsrCod);
+	 if (ICanViewAgenda)
+	    Lay_PutContextualLink (ActSeeUsrAgd,
+				   Rec_PutParamUsrCodEncrypted,
 				   "date64x64.gif",
 				   Txt_View_agenda,NULL,
 				   NULL);
-	 else	// Not me
-	   {
-	    if (!(ICanViewAgenda = (IBelongToCurrentCrs &&
-		                    HeBelongsToCurrentCrs) ||	// Course selected and we both belong to it
-	                           IAmLoggedAsSysAdm))		// I am system admin
-	       // The following slow check is made only if the previous fails
-	       ICanViewAgenda = Usr_CheckIfUsrSharesAnyOfMyCrs (Gbl.Record.UsrDat->UsrCod);
-	    if (ICanViewAgenda)
-	       Lay_PutContextualLink (ActSeeUsrAgd,
-				      Rec_PutParamUsrCodEncrypted,
-				      "date64x64.gif",
-				      Txt_View_agenda,NULL,
-				      NULL);
-	   }
 	}
 
       /***** Button to admin user *****/

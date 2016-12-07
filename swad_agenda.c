@@ -173,7 +173,7 @@ void Agd_ShowMyPublicAgenda (void)
 
 void Agd_ShowUsrAgenda (void)
   {
-   extern const char *Hlp_USERS_Teachers_agenda;
+   extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
@@ -187,7 +187,7 @@ void Agd_ShowUsrAgenda (void)
       Lay_StartRoundFrame ("100%",Gbl.Title,
 			   ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 				   NULL,
-			   Hlp_USERS_Teachers_agenda);
+			   Hlp_PROFILE_Agenda_public_agenda);
 
       /***** Show the current events in the user's agenda *****/
       Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
@@ -208,7 +208,7 @@ void Agd_ShowUsrAgenda (void)
 
 void Agd_ShowOtherAgendaAfterLogIn (void)
   {
-   extern const char *Hlp_USERS_Teachers_agenda;
+   extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
@@ -229,7 +229,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Lay_StartRoundFrame ("100%",Gbl.Title,
 				 ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
 					 NULL,
-				 Hlp_USERS_Teachers_agenda);
+				 Hlp_PROFILE_Agenda_public_agenda);
 
 	    /***** Show the current events in the user's agenda *****/
 	    Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
@@ -328,7 +328,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
   {
    extern const char *Hlp_PROFILE_Agenda;
-   extern const char *Hlp_USERS_Teachers_agenda;
+   extern const char *Hlp_PROFILE_Agenda_public_agenda;
    extern const char *Txt_Today;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_My_agenda;
@@ -356,7 +356,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 	 case Agd_OTHER_PUBLIC_AGENDA_TODAY:
 	    Lay_StartRoundFrameTableShadow (NULL,Txt_Today,
 					    NULL,
-					    Hlp_USERS_Teachers_agenda,
+					    Hlp_PROFILE_Agenda_public_agenda,
 					    2);
             break;
 	 default:
@@ -685,8 +685,8 @@ static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent)
       strcat (Surnames," ");
       strcat (Surnames,UsrDat.Surname2);
      }
-   Str_LimitLengthHTMLStr (FirstName,9);
-   Str_LimitLengthHTMLStr (Surnames,9);
+   Str_LimitLengthHTMLStr (FirstName,8);
+   Str_LimitLengthHTMLStr (Surnames,8);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
             AgdEvent->Hidden ? "MSG_AUT_LIGHT" :
         	               "MSG_AUT",

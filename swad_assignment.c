@@ -456,8 +456,8 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
       strcat (Surnames," ");
       strcat (Surnames,UsrDat.Surname2);
      }
-   Str_LimitLengthHTMLStr (FirstName,9);
-   Str_LimitLengthHTMLStr (Surnames,9);
+   Str_LimitLengthHTMLStr (FirstName,8);
+   Str_LimitLengthHTMLStr (Surnames,8);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
             Asg->Hidden ? "MSG_AUT_LIGHT" :
         	          "MSG_AUT",

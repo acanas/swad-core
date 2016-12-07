@@ -134,7 +134,6 @@ const char *Hlp_USERS_Students_course_record_card = WIKI "USERS.Students#course-
 const char *Hlp_USERS_Teachers                    = WIKI "USERS.Teachers";
 const char *Hlp_USERS_Teachers_shared_record_card = WIKI "USERS.Teachers#shared-record-card";
 const char *Hlp_USERS_Teachers_timetable          = WIKI "USERS.Teachers#timetable";
-const char *Hlp_USERS_Teachers_agenda             = WIKI "USERS.Teachers#agenda";
 
 const char *Hlp_USERS_Administrators = WIKI "USERS.Administrators";
 
@@ -228,9 +227,10 @@ const char *Hlp_PROFILE_Courses = WIKI "PROFILE.Courses";
 
 const char *Hlp_PROFILE_Timetable = WIKI "PROFILE.Timetable";
 
-const char *Hlp_PROFILE_Agenda            = WIKI "PROFILE.Agenda";
-const char *Hlp_PROFILE_Agenda_new_event  = WIKI "PROFILE.Agenda#new-event";
-const char *Hlp_PROFILE_Agenda_edit_event = WIKI "PROFILE.Agenda#edit-event";
+const char *Hlp_PROFILE_Agenda               = WIKI "PROFILE.Agenda";
+const char *Hlp_PROFILE_Agenda_new_event     = WIKI "PROFILE.Agenda#new-event";
+const char *Hlp_PROFILE_Agenda_edit_event    = WIKI "PROFILE.Agenda#edit-event";
+const char *Hlp_PROFILE_Agenda_public_agenda = WIKI "PROFILE.Agenda#public-agenda";
 
 const char *Hlp_PROFILE_Record      = WIKI "PROFILE.Record";
 const char *Hlp_PROFILE_Institution = WIKI "PROFILE.Institution";
