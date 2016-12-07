@@ -11371,12 +11371,9 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
    extern const char *Txt_Folder;
    extern const char *Txt_Uploaded_by;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_File_size;
    struct FileMetadata FileMetadata;
-   bool Found;
    bool FileHasPublisher;
    struct UsrData PublisherUsrDat;
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
 
    /***** Return nothing on error *****/
    SummaryStr[0] = '\0';	// Return nothing on error
@@ -11386,11 +11383,6 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
    /***** Get file metadata *****/
    FileMetadata.FilCod = FilCod;
    Brw_GetFileMetadataByCod (&FileMetadata);
-
-   /***** Get file type, size and date *****/
-   Gbl.FileBrowser.Type = FileMetadata.FileBrowser;
-   Brw_SetPathFileBrowser ();
-   Found = Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Copy file name into summary string *****/
    strcpy (SummaryStr,FileMetadata.FilFolLnkName);
@@ -11414,21 +11406,13 @@ void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
 	    /* Unknown publisher */
 	    FileHasPublisher = false;
 
-	 /* File size */
-	 if (Found)
-	    Fil_WriteFileSizeFull ((double) FileMetadata.Size,FileSizeStr);
-
-	 /* Fill content string */
 	 sprintf (*ContentStr,"%s: %s<br />"	// File name
 	                      "%s: %s<br />"	// File path
-	                      "%s: %s<br />"	// Publisher
-	                      "%s: %s",		// File size
+	                      "%s: %s",		// Publisher
 	          Txt_Filename,FileMetadata.FilFolLnkName,
-	          Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,
+	          Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,	// TODO: Fix bug: do not write internal name (for example "comun")
 	          Txt_Uploaded_by,FileHasPublisher ? PublisherUsrDat.FullName :
-	                                             Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN],
-	          Txt_File_size,Found ? FileSizeStr :
-	        	                "Not found");
+	                                             Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN]);
 
 	 /* Free memory used for publisher's data */
 	 if (FileMetadata.PublisherUsrCod > 0)
