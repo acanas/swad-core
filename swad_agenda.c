@@ -814,16 +814,16 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
    switch (Gbl.Agenda.SelectedOrderType)
      {
       case Agd_ORDER_BY_START_DATE:
-         sprintf (OrderBySubQuery,"StartTime DESC,"
-                                  "EndTime DESC,"
-                                  "Event DESC,"
-                                  "Location DESC");
+         sprintf (OrderBySubQuery,"StartTime,"
+                                  "EndTime,"
+                                  "Event,"
+                                  "Location");
          break;
       case Agd_ORDER_BY_END_DATE:
-         sprintf (OrderBySubQuery,"EndTime DESC,"
-                                  "StartTime DESC,"
-                                  "Event DESC,"
-                                  "Location DESC");
+         sprintf (OrderBySubQuery,"EndTime,"
+                                  "StartTime,"
+                                  "Event,"
+                                  "Location");
          break;
      }
    switch (AgendaType)
