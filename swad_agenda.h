@@ -68,7 +68,7 @@ typedef enum
    Agd_ORDER_BY_END_DATE   = 1,
   } Agd_Order_t;
 
-#define Agd_DEFAULT_ORDER_TYPE Agd_ORDER_BY_END_DATE
+#define Agd_DEFAULT_ORDER_TYPE Agd_ORDER_BY_START_DATE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

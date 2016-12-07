@@ -185,13 +185,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.91.3 (2016-12-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.91.4 (2016-12-07)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.91.4:  Dec 07, 2016	Default ordering in agendas is start date. (210189 lines)
         Version 16.91.3:  Dec 07, 2016	Dates in agendas are ordered from old to new. (210188 lines)
         Version 16.91.2:  Dec 07, 2016	Changes in permissions to view public agendas.
 					Changes in help on public agendas. (210187 lines)
