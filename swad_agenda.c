@@ -88,7 +88,6 @@ static void Agd_PutIconToShowQR (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
-static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent);
 static void Agd_GetParamEventOrderType (void);
 
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
@@ -616,9 +615,6 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
 
-   /* Author of the event */
-   Agd_WriteEventAuthor (&AgdEvent);
-
    /* Forms to remove/edit this event */
    switch (AgendaType)
      {
@@ -653,51 +649,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
   }
 
 /*****************************************************************************/
-/*********************** Write the author of an event ************************/
-/*****************************************************************************/
-
-static void Agd_WriteEventAuthor (struct AgendaEvent *AgdEvent)
-  {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
-   char FirstName[Usr_MAX_BYTES_NAME+1];
-   char Surnames[2*(Usr_MAX_BYTES_NAME+1)];
-   struct UsrData UsrDat;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Get data of author *****/
-   UsrDat.UsrCod = AgdEvent->UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-
-   /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
-	             "PHOTO15x20",Pho_ZOOM,false);
-
-   /***** Write name *****/
-   strcpy (FirstName,UsrDat.FirstName);
-   strcpy (Surnames,UsrDat.Surname1);
-   if (UsrDat.Surname2[0])
-     {
-      strcat (Surnames," ");
-      strcat (Surnames,UsrDat.Surname2);
-     }
-   Str_LimitLengthHTMLStr (FirstName,8);
-   Str_LimitLengthHTMLStr (Surnames,8);
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
-            AgdEvent->Hidden ? "MSG_AUT_LIGHT" :
-        	               "MSG_AUT",
-            FirstName,Surnames);
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
-  }
-
-/*****************************************************************************/
-/********* Get parameter with the type or order in list of events ************/
+/********** Get parameter with the type or order in list of events ***********/
 /*****************************************************************************/
 
 static void Agd_GetParamEventOrderType (void)
@@ -740,8 +692,6 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
    extern const char *Txt_Edit;
 
-   fprintf (Gbl.F.Out,"<div>");
-
    Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
@@ -779,8 +729,6 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 			     "lock-on64x64.png",
 			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
 			     NULL);
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
