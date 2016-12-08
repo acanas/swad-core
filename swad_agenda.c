@@ -94,10 +94,9 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
 static void Agd_PutParams (void);
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
-static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query);
 static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt);
 static void Agd_PutParamAgdCod (long AgdCod);
-static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,long AgdCod);
+static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent);
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 
@@ -858,9 +857,11 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
   {
    char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
 
    /***** Build query *****/
-   sprintf (Query,"SELECT AgdCod,UsrCod,Public,Hidden,"
+   sprintf (Query,"SELECT AgdCod,Public,Hidden,"
                   "UNIX_TIMESTAMP(StartTime),"
                   "UNIX_TIMESTAMP(EndTime),"
                   "NOW()>EndTime,"	// Past event?
@@ -870,78 +871,59 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
             AgdEvent->AgdCod,AgdEvent->UsrCod);
 
-   /***** Get data of event *****/
-   Agd_GetDataOfEvent (AgdEvent,Query);
-  }
-
-/*****************************************************************************/
-/****************************** Get event data *******************************/
-/*****************************************************************************/
-
-static void Agd_GetDataOfEvent (struct AgendaEvent *AgdEvent,const char *Query)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-
-   /***** Clear all event data *****/
-   AgdEvent->AgdCod = -1L;
-   AgdEvent->UsrCod = -1L;
-   AgdEvent->Public = false;
-   AgdEvent->Hidden = false;
-   AgdEvent->TimeUTC[Agd_START_TIME] =
-   AgdEvent->TimeUTC[Agd_END_TIME  ] = (time_t) 0;
-   AgdEvent->TimeStatus = Dat_FUTURE;
-   AgdEvent->Event[0]    = '\0';
-   AgdEvent->Location[0] = '\0';
-
    /***** Get data of event from database *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda event data");
-
-   if (NumRows) // Event found...
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get agenda event data")) // Event found...
      {
       /* Get row:
       row[0] AgdCod
-      row[1] UsrCod
-      row[2] Public
-      row[3] Hidden
-      row[4] UNIX_TIMESTAMP(StartTime)
-      row[5] UNIX_TIMESTAMP(EndTime)
-      row[6] NOW()>EndTime	// Past event?
-      row[7] NOW()<StartTime	// Future event?
-      row[8] Event
-      row[9] Location
+      row[1] Public
+      row[2] Hidden
+      row[3] UNIX_TIMESTAMP(StartTime)
+      row[4] UNIX_TIMESTAMP(EndTime)
+      row[5] NOW()>EndTime	// Past event?
+      row[6] NOW()<StartTime	// Future event?
+      row[7] Event
+      row[8] Location
       */
       row = mysql_fetch_row (mysql_res);
 
       /* Get code of the event (row[0]) */
       AgdEvent->AgdCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get author of the event (row[1]) */
-      AgdEvent->UsrCod = Str_ConvertStrCodToLongCod (row[1]);
+      /* Get whether the event is public or not (row[1]) */
+      AgdEvent->Public = (row[1][0] == 'Y');
 
-      /* Get whether the event is public or not (row[2]) */
-      AgdEvent->Public = (row[2][0] == 'Y');
+      /* Get whether the event is hidden or not (row[2]) */
+      AgdEvent->Hidden = (row[2][0] == 'Y');
 
-      /* Get whether the event is hidden or not (row[3]) */
-      AgdEvent->Hidden = (row[3][0] == 'Y');
+      /* Get start date (row[3] holds the start UTC time) */
+      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
-      /* Get start date (row[4] holds the start UTC time) */
-      AgdEvent->TimeUTC[Agd_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+      /* Get end date   (row[4] holds the end   UTC time) */
+      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get end date   (row[5] holds the end   UTC time) */
-      AgdEvent->TimeUTC[Agd_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
-
-      /* Get whether the event is past, present or futur (row(6), row[7]) */
-      AgdEvent->TimeStatus = ((row[6][0] == '1') ? Dat_PAST :
-	                     ((row[7][0] == '1') ? Dat_FUTURE :
+      /* Get whether the event is past, present or future (row(5), row[6]) */
+      AgdEvent->TimeStatus = ((row[5][0] == '1') ? Dat_PAST :
+	                     ((row[6][0] == '1') ? Dat_FUTURE :
 	                	                   Dat_PRESENT));
 
-      /* Get the event (row[8]) */
-      strcpy (AgdEvent->Event,row[8]);
+      /* Get the event (row[7]) */
+      strcpy (AgdEvent->Event,row[7]);
 
-      /* Get the event (row[9]) */
-      strcpy (AgdEvent->Location,row[9]);
+      /* Get the event (row[8]) */
+      strcpy (AgdEvent->Location,row[8]);
+     }
+   else
+     {
+      /***** Clear all event data *****/
+      AgdEvent->AgdCod = -1L;
+      AgdEvent->Public = false;
+      AgdEvent->Hidden = false;
+      AgdEvent->TimeUTC[Agd_START_TIME] =
+      AgdEvent->TimeUTC[Agd_END_TIME  ] = (time_t) 0;
+      AgdEvent->TimeStatus = Dat_FUTURE;
+      AgdEvent->Event[0]    = '\0';
+      AgdEvent->Location[0] = '\0';
      }
 
    /***** Free structure that stores the query result *****/
@@ -1075,12 +1057,12 @@ void Agd_RemoveEvent (void)
 
    /***** Get data of the event from database *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-   Agd_GetDataOfEventByCod (&AgdEvent);	// Inside this function, the course is checked to be the current one
+   Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Remove event *****/
    sprintf (Query,"DELETE FROM agendas"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryDELETE (Query,"can not remove event");
 
    /***** Write message to show the change made *****/
@@ -1112,7 +1094,7 @@ void Agd_HideEvent (void)
    /***** Set event private *****/
    sprintf (Query,"UPDATE agendas SET Hidden='Y'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not hide event");
 
    /***** Write message to show the change made *****/
@@ -1144,7 +1126,7 @@ void Agd_UnhideEvent (void)
    /***** Set event public *****/
    sprintf (Query,"UPDATE agendas SET Hidden='N'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not show event");
 
    /***** Write message to show the change made *****/
@@ -1177,7 +1159,7 @@ void Agd_MakeEventPrivate (void)
    /***** Make event private *****/
    sprintf (Query,"UPDATE agendas SET Public='N'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not make event private");
 
    /***** Write message to show the change made *****/
@@ -1209,7 +1191,7 @@ void Agd_MakeEventPublic (void)
    /***** Make event public *****/
    sprintf (Query,"UPDATE agendas SET Public='Y'"
                   " WHERE AgdCod='%ld' AND UsrCod='%ld'",
-            AgdEvent.AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not make event public");
 
    /***** Write message to show the change made *****/
@@ -1225,14 +1207,14 @@ void Agd_MakeEventPublic (void)
 /*********** Check if the title or the folder of an event exists *************/
 /*****************************************************************************/
 
-static bool Agd_CheckIfSimilarEventExists (const char *Field,const char *Value,long AgdCod)
+static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
   {
-   char Query[512];
+   char Query[256+Agd_MAX_LENGTH_EVENT];
 
    /***** Get number of events with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM agendas"
-	          " WHERE UsrCod='%ld' AND %s='%s' AND AgdCod<>'%ld'",
-            Gbl.Usrs.Me.UsrDat.UsrCod,Field,Value,AgdCod);
+	          " WHERE UsrCod='%ld' AND Event='%s' AND AgdCod<>'%ld'",
+            AgdEvent->UsrCod,AgdEvent->Event,AgdEvent->AgdCod);
    return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
   }
 
@@ -1264,11 +1246,11 @@ void Agd_RequestCreatOrEditEvent (void)
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
    /***** Get from the database the data of the event *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    if (ItsANewEvent)
      {
       /* Initialize to empty event */
       AgdEvent.AgdCod = -1L;
-      AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
       AgdEvent.TimeUTC[Agd_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       AgdEvent.TimeStatus = Dat_FUTURE;
@@ -1277,8 +1259,6 @@ void Agd_RequestCreatOrEditEvent (void)
      }
    else
      {
-      AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-
       /* Get data of the event from database */
       Agd_GetDataOfEventByCod (&AgdEvent);
 
@@ -1376,58 +1356,49 @@ void Agd_RecFormEvent (void)
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
-   struct AgendaEvent OldAgdEvent;
-   struct AgendaEvent NewAgdEvent;
+   struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get the code of the event *****/
-   ItsANewEvent = ((NewAgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
-
-   if (!ItsANewEvent)
-     {
-      /* Get data of the old (current) event from database */
-      OldAgdEvent.AgdCod = NewAgdEvent.AgdCod;
-      OldAgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
-      Agd_GetDataOfEventByCod (&OldAgdEvent);
-     }
+   ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
    /***** Get start/end date-times *****/
-   NewAgdEvent.TimeUTC[Agd_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAgdEvent.TimeUTC[Agd_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   AgdEvent.TimeUTC[Agd_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   AgdEvent.TimeUTC[Agd_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get event *****/
-   Par_GetParToText ("Location",NewAgdEvent.Location,Agd_MAX_LENGTH_LOCATION);
+   Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_LENGTH_LOCATION);
 
    /***** Get event *****/
-   Par_GetParToText ("Event",NewAgdEvent.Event,Agd_MAX_LENGTH_EVENT);
+   Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_LENGTH_EVENT);
 
    /***** Get text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAgdEvent.TimeUTC[Agd_START_TIME] == 0)
-      NewAgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewAgdEvent.TimeUTC[Agd_END_TIME] == 0)
-      NewAgdEvent.TimeUTC[Agd_END_TIME] = NewAgdEvent.TimeUTC[Agd_START_TIME] + 2*60*60;	// +2 hours
+   if (AgdEvent.TimeUTC[Agd_START_TIME] == 0)
+      AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (AgdEvent.TimeUTC[Agd_END_TIME] == 0)
+      AgdEvent.TimeUTC[Agd_END_TIME] = AgdEvent.TimeUTC[Agd_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if event is correct *****/
-   if (!NewAgdEvent.Location[0])	// If there is no event
+   if (!AgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Check if event is correct *****/
-   if (NewAgdEvent.Event[0])	// If there's event
+   if (AgdEvent.Event[0])	// If there's event
      {
       /* If title of event was in database... */
-      if (Agd_CheckIfSimilarEventExists ("Event",NewAgdEvent.Event,NewAgdEvent.AgdCod))
+      if (Agd_CheckIfSimilarEventExists (&AgdEvent))
         {
          NewEventIsCorrect = false;
          sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
-                  NewAgdEvent.Event);
+                  AgdEvent.Event);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
         }
      }
@@ -1442,15 +1413,15 @@ void Agd_RecFormEvent (void)
      {
       if (ItsANewEvent)
 	{
-         Agd_CreateEvent (&NewAgdEvent,Txt);	// Add new event to database
+         Agd_CreateEvent (&AgdEvent,Txt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_event_X,NewAgdEvent.Event);
+	 sprintf (Gbl.Message,Txt_Created_new_event_X,AgdEvent.Event);
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
         {
-	 Agd_UpdateEvent (&NewAgdEvent,Txt);
+	 Agd_UpdateEvent (&AgdEvent,Txt);
 
 	 /***** Write success message *****/
 	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
@@ -1481,7 +1452,7 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
                   " VALUES"
                   " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s','%s')",
-            Gbl.Usrs.Me.UsrDat.UsrCod,
+            AgdEvent->UsrCod,
             AgdEvent->TimeUTC[Agd_START_TIME],
             AgdEvent->TimeUTC[Agd_END_TIME  ],
             AgdEvent->Event,
@@ -1507,7 +1478,7 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
             AgdEvent->TimeUTC[Agd_START_TIME],
             AgdEvent->TimeUTC[Agd_END_TIME  ],
             AgdEvent->Event,AgdEvent->Location,Txt,
-            AgdEvent->AgdCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+            AgdEvent->AgdCod,AgdEvent->UsrCod);
    DB_QueryUPDATE (Query,"can not update event");
   }
 

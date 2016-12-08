@@ -185,13 +185,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.91.5 (2016-12-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.91.6 (2016-12-09)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.91.6:  Dec 09, 2016	Code refactoring in agenda. (210128 lines)
         Version 16.91.5:  Dec 08, 2016	Removed author in agenda events. (210148 lines)
         Version 16.91.4:  Dec 07, 2016	Default ordering in agendas is start date. (210189 lines)
         Version 16.91.3:  Dec 07, 2016	Dates in agendas are ordered from old to new. (210188 lines)
