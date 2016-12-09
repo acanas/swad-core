@@ -192,7 +192,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.92.4:  Dec 09, 2016	Fixed bug in edition of user's agenda. (? lines)
+        Version 16.92.4:  Dec 09, 2016	Fixed bug in edition of user's agenda. (210313 lines)
         Version 16.92.3:  Dec 09, 2016	Contextual help on user's public profile. (210310 lines)
         Version 16.92.2:  Dec 09, 2016	New icons to view user's profile ant to view user's record card in public agenda. (210308 lines)
         Version 16.92.1:  Dec 09, 2016	New icon to view user's profile in user's record card. (210277 lines)
