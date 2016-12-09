@@ -185,13 +185,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.92 (2016-12-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.92.1 (2016-12-09)"
 #define CSS_FILE		"swad16.86.5.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.92.1:  Dec 09, 2016	New icon to view user's profile in user's record card. (210277 lines)
         Version 16.92:    Dec 09, 2016	Teachers' record cards can be viewed by users sharing courses with them even if no course is selected.
 					Code refactoring in user's record card. (210269 lines)
         Version 16.91.6:  Dec 09, 2016	Code refactoring in agenda. (210128 lines)

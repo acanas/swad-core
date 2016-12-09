@@ -1009,7 +1009,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
    if (UsrDat->UsrCod == Cached.UsrCodChecked)
       return Cached.UsrSharesAnyOfMyCrs;
 
-   /***** 5. Slow check: Get if user shares any course with me from database *****/
+   /***** 7. Slow check: Get if user shares any course with me from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
 	          " WHERE UsrCod='%ld'"
 	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",

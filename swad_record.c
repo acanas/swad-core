@@ -2302,6 +2302,7 @@ static void Rec_PutIconsCommands (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Edit_my_personal_data;
+   extern const char *Txt_View_public_profile;
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_View_agenda;
@@ -2316,11 +2317,16 @@ static void Rec_PutIconsCommands (void)
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
+   bool ICanViewUsrProfile;
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
+      ICanViewUsrProfile = Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
+				              Gbl.Record.UsrDat);
+
+
       /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
 
@@ -2330,6 +2336,14 @@ static void Rec_PutIconsCommands (void)
 	                        "edit64x64.png",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
+
+      /***** Button to view user's profile *****/
+      if (ICanViewUsrProfile)
+         Lay_PutContextualLink (ActSeePubPrf,
+			        Rec_PutParamUsrCodEncrypted,
+				"usr64x64.gif",
+				Txt_View_public_profile,NULL,
+				NULL);
 
       /***** Button to view user's record card *****/
       if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
@@ -2434,15 +2448,11 @@ static void Rec_PutIconsCommands (void)
 				   "following64x64.png",
 				   Txt_Following_unfollow,NULL,
 				   NULL);	// Put button to unfollow, even if I can not view user's profile
-	 else
-	    // I do not follow user
-	    if (Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
-				   Gbl.Record.UsrDat))
-	       // I can view user's profile
-	       Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
-				      "follow64x64.png",
-				      Txt_Follow,NULL,
-				      NULL);	// Put button to follow
+	 else if (ICanViewUsrProfile)
+	    Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
+				   "follow64x64.png",
+				   Txt_Follow,NULL,
+				   NULL);	// Put button to follow
 	}
 
       /***** End container *****/
