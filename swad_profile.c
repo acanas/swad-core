@@ -268,7 +268,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
      }
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod))
+   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat))
      {
       if (!ItsMe &&				// If not it's me...
 	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
@@ -1485,7 +1485,7 @@ void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
    extern const char *Txt_View_public_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
-   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
+   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"

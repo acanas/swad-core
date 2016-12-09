@@ -50381,6 +50381,27 @@ const char *Txt_View_public_profile =
 	"Ver perfil p&uacute;blico";
 #endif
 
+const char *Txt_View_record_and_office_hours =
+#if   L==1
+	"Veure fitxa i horari de tutories";
+#elif L==2
+	"Anzeigen profil und Gesch&auml;ftszeiten";
+#elif L==3
+	"View record and office hours";
+#elif L==4
+	"Ver ficha y horario de tutor&iacute;as";
+#elif L==5
+	"Voir carte et heures de tuteur";
+#elif L==6
+	"Ver ficha y horario de tutor&iacute;as";	// Okoteve traducción
+#elif L==7
+	"Vedi scheda e orario di tutoraggi";
+#elif L==8
+	"Zobacz rekord i godziny pracy";
+#elif L==9
+	"Ver cart&atilde;o e hor&aacute;rio de tutor";
+#endif
+
 const char *Txt_View_record_for_this_course =
 #if   L==1
 	"Veure fitxa en aquesta assignatura";
@@ -50399,7 +50420,7 @@ const char *Txt_View_record_for_this_course =
 #elif L==8
 	"Zobacz rekord na ten kurs";
 #elif L==9
-	"Meu cart&atilde;o em disciplina";
+	"Ver cart&atilde;o em disciplina";
 #endif
 
 const char *Txt_View_survey =

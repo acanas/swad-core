@@ -39,6 +39,7 @@
 #include "swad_menu.h"
 #include "swad_parameter.h"
 #include "swad_preference.h"
+#include "swad_privacy.h"
 #include "swad_text.h"
 
 /*****************************************************************************/

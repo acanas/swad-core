@@ -42,6 +42,7 @@
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_preference.h"
+#include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_user.h"
@@ -1030,9 +1031,7 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
 
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the student
-      if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
-	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_STUDENT)
+      if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneStdCrs ();
   }
 
@@ -1217,9 +1216,7 @@ void Rec_GetUsrAndShowRecordOneTchCrs (void)
 
    /***** Show the record *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get from the database the data of the teacher
-      if ((Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
-	   Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
-	                     Gbl.Usrs.Other.UsrDat.UsrCod)) == Rol_TEACHER)
+      if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
 	 Rec_ShowRecordOneTchCrs ();
   }
 
@@ -2306,6 +2303,7 @@ static void Rec_PutIconsCommands (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Edit_my_personal_data;
    extern const char *Txt_View_record_for_this_course;
+   extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_View_agenda;
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
@@ -2318,16 +2316,12 @@ static void Rec_PutIconsCommands (void)
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
-   bool IBelongToCurrentCrs   = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
-	                         Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER);
-   bool HeBelongsToCurrentCrs = (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
-	                         Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
-   bool ICanViewAgenda;
 
    if (!Gbl.Form.Inside &&						// Only if not inside another form
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
+      /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
 
       /***** Button to edit my record card *****/
@@ -2337,39 +2331,34 @@ static void Rec_PutIconsCommands (void)
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
 
-      /***** Button to view user's record card in course when:
-             - a course is selected && the user belongs to it &&
-             - I can view user's record card in course *****/
-      if (HeBelongsToCurrentCrs && (IBelongToCurrentCrs || IAmLoggedAsSysAdm))
-	 Lay_PutContextualLink (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
-								                       ActSeeRecOneTch,
+      /***** Button to view user's record card *****/
+      if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
+	 /* View student's records: common record card and course record card */
+         Lay_PutContextualLink (ActSeeRecOneStd,
+			        Rec_PutParamUsrCodEncrypted,
+				"card64x64.gif",
+				Txt_View_record_for_this_course,NULL,
+				NULL);
+      else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
+	 Lay_PutContextualLink (ActSeeRecOneTch,
 				Rec_PutParamUsrCodEncrypted,
 				"card64x64.gif",
-			        Txt_View_record_for_this_course,NULL,
-		                NULL);
+				Txt_View_record_and_office_hours,NULL,
+				NULL);
 
-      /***** Button to view user's agenda
-             when I share any course with him/her *****/
+      /***** Button to view user's agenda *****/
       if (ItsMe)
 	 Lay_PutContextualLink (ActSeeMyAgd,
 				NULL,
 				"date64x64.gif",
 				Txt_View_agenda,NULL,
 				NULL);
-      else	// Not me
-	{
-	 if (!(ICanViewAgenda = (IBelongToCurrentCrs &&
-				 HeBelongsToCurrentCrs) ||	// Course selected and we both belong to it
-				IAmLoggedAsSysAdm))		// I am system admin
-	    // The following slow check is made only if the previous fails
-	    ICanViewAgenda = Usr_CheckIfUsrSharesAnyOfMyCrs (Gbl.Record.UsrDat->UsrCod);
-	 if (ICanViewAgenda)
-	    Lay_PutContextualLink (ActSeeUsrAgd,
-				   Rec_PutParamUsrCodEncrypted,
-				   "date64x64.gif",
-				   Txt_View_agenda,NULL,
-				   NULL);
-	}
+      else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
+	 Lay_PutContextualLink (ActSeeUsrAgd,
+				Rec_PutParamUsrCodEncrypted,
+				"date64x64.gif",
+				Txt_View_agenda,NULL,
+				NULL);
 
       /***** Button to admin user *****/
       if (ItsMe ||
@@ -2386,7 +2375,7 @@ static void Rec_PutIconsCommands (void)
 			        Txt_Admin_user,NULL,
 		                NULL);
 
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// A course is selected
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// A course is selected
 	  Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
 	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
 	{
@@ -2448,7 +2437,7 @@ static void Rec_PutIconsCommands (void)
 	 else
 	    // I do not follow user
 	    if (Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
-				   Gbl.Record.UsrDat->UsrCod))
+				   Gbl.Record.UsrDat))
 	       // I can view user's profile
 	       Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
 				      "follow64x64.png",
@@ -2456,6 +2445,7 @@ static void Rec_PutIconsCommands (void)
 				      NULL);	// Put button to follow
 	}
 
+      /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");
      }
   }

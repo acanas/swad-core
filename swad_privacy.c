@@ -246,10 +246,10 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
 /*****************************************************************************/
 // Returns true if it can be shown and false if not.
 
-bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod)
+bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,const struct UsrData *UsrDat)
   {
    /***** It's me? I always can see my things *****/
-   if (OtherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
       return true;
 
    /***** System admins always can see others' profiles *****/
@@ -262,13 +262,9 @@ bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,long OtherUsrCod)
       case Pri_VISIBILITY_UNKNOWN:
 	 return false;			// It's not me
       case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
-         if (Gbl.Usrs.Me.Logged)
-            return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (OtherUsrCod);	// Both users share the same course but whit different role
-         return false;
+         return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);	// Both users share the same course but whit different role
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me
-         if (Gbl.Usrs.Me.Logged)
-	    return Usr_CheckIfUsrSharesAnyOfMyCrs (OtherUsrCod);	// Both users share the same course
-         return false;
+         return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);	// Both users share the same course
       case Pri_VISIBILITY_SYSTEM:	// Visible by any user logged in platform
          return Gbl.Usrs.Me.Logged;
       case Pri_VISIBILITY_WORLD:	// Public, visible by everyone, even unlogged visitors

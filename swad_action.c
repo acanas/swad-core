@@ -60,6 +60,7 @@
 #include "swad_password.h"
 #include "swad_photo.h"
 #include "swad_preference.h"
+#include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_QR.h"
 #include "swad_report.h"
@@ -2352,7 +2353,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstTchAll	*/{ 578,-1,TabUnk,ActLstTch		,0x1F0,0x1F0,0x1E0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_ListAllDataTchs 		,NULL},
 
    /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneStdCrs,NULL},
-   /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
+   /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
 
    /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsGsts		,NULL},
    /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsStdsForEdit	,NULL},

@@ -1,7 +1,7 @@
-// swad_privacy.h: users' photo and public profile visibility
+// swad_privacy_visibility_type.h: definition of privacy visibility type
 
-#ifndef _SWAD_PRI
-#define _SWAD_PRI
+#ifndef _SWAD_PRI_VIS_T
+#define _SWAD_PRI_VIS_T
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,27 +27,24 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include "swad_privacy_visibility_type.h"
-#include "swad_user.h"
-
 /*****************************************************************************/
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
 /***** Visibility (who can see user's photo / public profile) *****/
-#define Pri_PHOTO_VISIBILITY_DEFAULT	Pri_VISIBILITY_SYSTEM
-#define Pri_PROFILE_VISIBILITY_DEFAULT	Pri_VISIBILITY_SYSTEM
+#define Pri_NUM_OPTIONS_PRIVACY 5
+
+typedef enum
+  {
+   Pri_VISIBILITY_UNKNOWN = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
+   Pri_VISIBILITY_USER    = 1,	// Only visible by me and my teachers if I am a student or my students if I am a teacher
+   Pri_VISIBILITY_COURSE  = 2,	// Visible by users sharing courses with me
+   Pri_VISIBILITY_SYSTEM  = 3,	// Visible by any user logged in platform
+   Pri_VISIBILITY_WORLD   = 4,	// Public, visible by all the people, even unlogged visitors
+  } Pri_Visibility_t;
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
-
-void Pri_PutLinkToChangeMyPrivacy (void);
-void Pri_EditMyPrivacy (void);
-
-Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
-Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName);
-
-bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,const struct UsrData *UsrDat);
 
 #endif

@@ -955,7 +955,7 @@ bool Pho_ShowUsrPhotoIsAllowed (const struct UsrData *UsrDat,char *PhotoURL)
    bool ICanSeePhoto;
 
    /***** Check if I can see the other's photo *****/
-   ICanSeePhoto = Pri_ShowIsAllowed (UsrDat->PhotoVisibility,UsrDat->UsrCod);
+   ICanSeePhoto = Pri_ShowIsAllowed (UsrDat->PhotoVisibility,UsrDat);
 
    /***** Photo is shown if I can see it, and it exists *****/
    return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :

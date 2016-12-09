@@ -54,6 +54,7 @@
 #include "swad_parameter.h"
 #include "swad_password.h"
 #include "swad_preference.h"
+#include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
 #include "swad_tab.h"
@@ -896,19 +897,126 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
   }
 
 /*****************************************************************************/
+/************ Check if I can view the record card of a student ***************/
+/*****************************************************************************/
+
+bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
+  {
+   bool HeIsAStudentInCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STUDENT;
+   bool IBelongToCurrentCrs = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
+	                      Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER;
+   bool IAmLoggedAsSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+
+   return HeIsAStudentInCurrentCrs &&	// Course is selected and user is student in it
+          (IBelongToCurrentCrs ||	// I am student or teacher in current course
+	   IAmLoggedAsSysAdm);		// I am logged as system admin
+  }
+
+/*****************************************************************************/
+/************ Check if I can view the record card of a teacher ***************/
+/*****************************************************************************/
+
+bool Usr_CheckIfICanViewRecordTch (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Is he/she a teacher in any course? *****/
+   if (!(UsrDat->Roles & (1 << Rol_TEACHER)))
+      return false;
+
+   /***** 2. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 3. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 4. Fast check: Am I logged as system admin? *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      return true;
+
+   /***** 5. Slow check: Get if user shares any course with me from database *****/
+   return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+  }
+
+/*****************************************************************************/
+/******************* Check if I can view a user's agenda *********************/
+/*****************************************************************************/
+
+bool Usr_CheckIfICanViewUsrAgenda (const struct UsrData *UsrDat)
+  {
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 3. Fast check: Am I logged as system admin? *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      return true;
+
+   /***** 4. Slow check: Get if user shares any course with me from database *****/
+   return Usr_CheckIfUsrSharesAnyOfMyCrs (UsrDat);
+  }
+
+/*****************************************************************************/
 /*************** Check if a user belongs to any of my courses ****************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod)
+bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
   {
    char Query[256];
+   bool IBelongToCurrentCrs;
+   bool HeBelongsToCurrentCrs;
+   static struct
+     {
+      long UsrCodChecked;
+      bool UsrSharesAnyOfMyCrs;
+     } Cached =
+     {
+      -1L,
+      false
+     };	// A cache. If this function is called consecutive times
+	// with the same user, only the first time is slow
 
-   /***** Get if a user shares any course with me from database *****/
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast check: It is a valid user code? *****/
+   if (UsrDat->UsrCod <= 0)
+      return false;
+
+   /***** 3. Fast check: It's me? *****/
+   if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
+      return true;
+
+   /***** 4. Fast check: Does he/she belong to any course? *****/
+   if (!(UsrDat->Roles & (1 << Rol_STUDENT ||
+	                  1 << Rol_TEACHER)))
+      return false;
+
+   /***** 5. Fast check: Is course selected and we both belong to it? *****/
+   IBelongToCurrentCrs   = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
+	                   Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER;
+   HeBelongsToCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
+	                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER;
+   if (IBelongToCurrentCrs && HeBelongsToCurrentCrs)	// Course selected and we both belong to it
+      return true;
+
+   /***** 6. Fast check: Is already calculated if user shares any course with me? *****/
+   if (UsrDat->UsrCod == Cached.UsrCodChecked)
+      return Cached.UsrSharesAnyOfMyCrs;
+
+   /***** 5. Slow check: Get if user shares any course with me from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
 	          " WHERE UsrCod='%ld'"
 	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
-            UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0);
+            UsrDat->UsrCod);
+   Cached.UsrSharesAnyOfMyCrs = DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0;
+   Cached.UsrCodChecked = UsrDat->UsrCod;
+   return Cached.UsrSharesAnyOfMyCrs;
   }
 
 /*****************************************************************************/
@@ -919,6 +1027,10 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
   {
    char Query[512];
    bool UsrSharesAnyOfMyCrsWithDifferentRole;
+
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
 
    /***** Remove temporary table if exists *****/
    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS usr_courses_tmp");

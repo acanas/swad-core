@@ -33,6 +33,7 @@
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_notification.h"
+#include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_user.h"
 
@@ -683,7 +684,7 @@ static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
    extern const char *Txt_Follow;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
-   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat->UsrCod);
+   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR_PHOTO\">");
@@ -773,7 +774,7 @@ void Fol_FollowUsr (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       // Follow only if I can view his/her public profile
-      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,&Gbl.Usrs.Other.UsrDat))
          // Follow only if I do not follow him/her
 	 if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					Gbl.Usrs.Other.UsrDat.UsrCod))

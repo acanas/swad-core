@@ -38,7 +38,7 @@
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
-#include "swad_privacy.h"
+#include "swad_privacy_visibility_type.h"
 #include "swad_role.h"
 #include "swad_scope.h"
 #include "swad_search.h"
@@ -232,7 +232,11 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role);
 
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole);
-bool Usr_CheckIfUsrSharesAnyOfMyCrs (long UsrCod);
+
+bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewRecordTch (const struct UsrData *UsrDat);
+bool Usr_CheckIfICanViewUsrAgenda (const struct UsrData *UsrDat);
+bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat);
 bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod);
 
 void Usr_GetMyCountrs (void);

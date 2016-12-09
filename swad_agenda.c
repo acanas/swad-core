@@ -175,28 +175,33 @@ void Agd_ShowUsrAgenda (void)
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    bool ItsMe;
+   bool Error = true;
 
    /***** Get user *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-     {
-      /***** Start frame *****/
-      sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      Lay_StartRoundFrame ("100%",Gbl.Title,
-			   ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-				   NULL,
-			   Hlp_PROFILE_Agenda_public_agenda);
+      if (Usr_CheckIfICanViewUsrAgenda (&Gbl.Usrs.Other.UsrDat))
+	{
+	 Error = false;
 
-      /***** Show the current events in the user's agenda *****/
-      Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
+	 /***** Start frame *****/
+	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 Lay_StartRoundFrame ("100%",Gbl.Title,
+			      ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
+				      NULL,
+			      Hlp_PROFILE_Agenda_public_agenda);
 
-      /***** Show all the visible events in the user's agenda *****/
-      Agd_ShowEvents (Agd_OTHER_PUBLIC_AGENDA);
+	 /***** Show the current events in the user's agenda *****/
+	 Agd_ShowEventsToday (Agd_OTHER_PUBLIC_AGENDA_TODAY);
 
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
-     }
-   else
+	 /***** Show all the visible events in the user's agenda *****/
+	 Agd_ShowEvents (Agd_OTHER_PUBLIC_AGENDA);
+
+	 /***** End frame *****/
+	 Lay_EndRoundFrame ();
+	}
+
+   if (Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
