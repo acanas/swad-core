@@ -1242,21 +1242,6 @@ void Agd_MakeEventPublic (void)
   }
 
 /*****************************************************************************/
-/*********** Check if the title or the folder of an event exists *************/
-/*****************************************************************************/
-
-static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
-  {
-   char Query[256+Agd_MAX_LENGTH_EVENT];
-
-   /***** Get number of events with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM agendas"
-	          " WHERE UsrCod='%ld' AND Event='%s' AND AgdCod<>'%ld'",
-            AgdEvent->UsrCod,AgdEvent->Event,AgdEvent->AgdCod);
-   return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
-  }
-
-/*****************************************************************************/
 /******************** Put a form to create a new event ***********************/
 /*****************************************************************************/
 
@@ -1399,6 +1384,9 @@ void Agd_RecFormEvent (void)
    bool NewEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
+   /***** Set author of the event *****/
+   AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
+
    /***** Get the code of the event *****/
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
 
@@ -1474,6 +1462,21 @@ void Agd_RecFormEvent (void)
    else
       // TODO: The form should be filled with partial data, now is always empty
       Agd_RequestCreatOrEditEvent ();
+  }
+
+/*****************************************************************************/
+/*********** Check if the title or the folder of an event exists *************/
+/*****************************************************************************/
+
+static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
+  {
+   char Query[256+Agd_MAX_LENGTH_EVENT];
+
+   /***** Get number of events with a field value from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM agendas"
+	          " WHERE UsrCod='%ld' AND Event='%s' AND AgdCod<>'%ld'",
+            AgdEvent->UsrCod,AgdEvent->Event,AgdEvent->AgdCod);
+   return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
   }
 
 /*****************************************************************************/
