@@ -2337,7 +2337,7 @@ static void Rec_PutIconsCommands (void)
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
 
-      /***** Button to view user's profile *****/
+      /***** Button to view user's public profile *****/
       if (ICanViewUsrProfile)
          Lay_PutContextualLink (ActSeePubPrf,
 			        Rec_PutParamUsrCodEncrypted,

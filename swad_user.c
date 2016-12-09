@@ -971,7 +971,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
    bool HeBelongsToCurrentCrs;
    static struct
      {
-      long UsrCodChecked;
+      long UsrCod;
       bool UsrSharesAnyOfMyCrs;
      } Cached =
      {
@@ -993,8 +993,8 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
       return true;
 
    /***** 4. Fast check: Does he/she belong to any course? *****/
-   if (!(UsrDat->Roles & (1 << Rol_STUDENT ||
-	                  1 << Rol_TEACHER)))
+   if (!(UsrDat->Roles & ((1 << Rol_STUDENT) |	// Any of his/her roles is student
+	                  (1 << Rol_TEACHER))))	// or teacher?
       return false;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
@@ -1006,7 +1006,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
       return true;
 
    /***** 6. Fast check: Is already calculated if user shares any course with me? *****/
-   if (UsrDat->UsrCod == Cached.UsrCodChecked)
+   if (UsrDat->UsrCod == Cached.UsrCod)
       return Cached.UsrSharesAnyOfMyCrs;
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
@@ -1015,7 +1015,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
 	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
             UsrDat->UsrCod);
    Cached.UsrSharesAnyOfMyCrs = DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0;
-   Cached.UsrCodChecked = UsrDat->UsrCod;
+   Cached.UsrCod = UsrDat->UsrCod;
    return Cached.UsrSharesAnyOfMyCrs;
   }
 

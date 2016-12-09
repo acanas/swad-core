@@ -38,6 +38,7 @@
 #include "swad_pagination.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_string.h"
 
@@ -84,6 +85,7 @@ static void Agd_PutIconToViewMyPublicAgenda (void);
 static void Agd_PutIconToCreateNewEvent (void);
 static void Agd_PutIconToViewEditMyFullAgenda (void);
 static void Agd_PutIconToShowQR (void);
+static void Agd_PutIconsOtherPublicAgenda (void);
 
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
@@ -187,8 +189,8 @@ void Agd_ShowUsrAgenda (void)
 	 sprintf (Gbl.Title,Txt_Public_agenda_USER,Gbl.Usrs.Other.UsrDat.FullName);
 	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	 Lay_StartRoundFrame ("100%",Gbl.Title,
-			      ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-				      NULL,
+			      ItsMe ? Agd_PutIconsMyPublicAgenda :
+				      Agd_PutIconsOtherPublicAgenda,
 			      Hlp_PROFILE_Agenda_public_agenda);
 
 	 /***** Show the current events in the user's agenda *****/
@@ -231,7 +233,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
 	    Lay_StartRoundFrame ("100%",Gbl.Title,
 				 ItsMe ? Agd_PutIconToViewEditMyFullAgenda :
-					 NULL,
+					 Agd_PutIconsOtherPublicAgenda,
 				 Hlp_PROFILE_Agenda_public_agenda);
 
 	    /***** Show the current events in the user's agenda *****/
@@ -511,6 +513,37 @@ static void Agd_PutIconToShowQR (void)
             Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
    QR_PutLinkToPrintQRCode (ActPrnAgdQR,false);
+  }
+
+static void Agd_PutIconsOtherPublicAgenda (void)
+  {
+   extern const char *Txt_View_public_profile;
+   extern const char *Txt_View_record_for_this_course;
+   extern const char *Txt_View_record_and_office_hours;
+
+   /***** Button to view user's public profile *****/
+   if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
+		          &Gbl.Usrs.Other.UsrDat))
+      Lay_PutContextualLink (ActSeePubPrf,
+			     Usr_PutParamOtherUsrCodEncrypted,
+			     "usr64x64.gif",
+			     Txt_View_public_profile,NULL,
+			     NULL);
+
+   /***** Button to view user's record card *****/
+   if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
+      /* View student's records: common record card and course record card */
+      Lay_PutContextualLink (ActSeeRecOneStd,
+			     Usr_PutParamOtherUsrCodEncrypted,
+			     "card64x64.gif",
+			     Txt_View_record_for_this_course,NULL,
+			     NULL);
+   else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
+      Lay_PutContextualLink (ActSeeRecOneTch,
+			     Usr_PutParamOtherUsrCodEncrypted,
+			     "card64x64.gif",
+			     Txt_View_record_and_office_hours,NULL,
+			     NULL);
   }
 
 /*****************************************************************************/
