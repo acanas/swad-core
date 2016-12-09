@@ -2032,6 +2032,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_USERS_Signup;
    extern const char *Hlp_PROFILE_Record;
+   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
    extern const char *Hlp_USERS_Guests;
    extern const char *Hlp_USERS_Students_shared_record_card;
    extern const char *Hlp_USERS_Teachers_shared_record_card;
@@ -2041,23 +2042,23 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
-      Hlp_USERS_Signup,		// Rec_SHA_SIGN_UP_FORM
+      Hlp_USERS_Signup,				// Rec_SHA_SIGN_UP_FORM
 
-      Hlp_PROFILE_Record,	// Rec_SHA_MY_RECORD_FORM
-      Hlp_PROFILE_Record,	// Rec_SHA_MY_RECORD_CHECK
+      Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_FORM
+      Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_CHECK
 
-      NULL,			// Rec_SHA_OTHER_EXISTING_USR_FORM
-      NULL,			// Rec_SHA_OTHER_NEW_USR_FORM
-      NULL,			// Rec_SHA_OTHER_USR_CHECK
+      NULL,					// Rec_SHA_OTHER_EXISTING_USR_FORM
+      NULL,					// Rec_SHA_OTHER_NEW_USR_FORM
+      NULL,					// Rec_SHA_OTHER_USR_CHECK
 
-      NULL,			// Rec_SHA_RECORD_LIST
-      NULL,			// Rec_SHA_RECORD_PRINT
-      NULL,			// Rec_SHA_RECORD_PUBLIC
+      NULL,					// Rec_SHA_RECORD_LIST
+      NULL,					// Rec_SHA_RECORD_PRINT
+      Hlp_SOCIAL_Profiles_view_public_profile,	// Rec_SHA_RECORD_PUBLIC
      };
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {
       NULL,					// Rol_UNKNOWN
-      Hlp_USERS_Guests,			// Rol__GUEST_
+      Hlp_USERS_Guests,				// Rol__GUEST_
       NULL,					// Rol_VISITOR
       Hlp_USERS_Students_shared_record_card,	// Rol_STUDENT
       Hlp_USERS_Teachers_shared_record_card,	// Rol_TEACHER
