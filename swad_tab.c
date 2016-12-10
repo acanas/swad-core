@@ -107,7 +107,7 @@ void Tab_DrawTabs (void)
 	 Tab_DisableIncompatibleTabs ();
 	}
 
-      if (ICanViewTab || NumTab > TabCrs)	// Don't show the first hidden tabs
+      if (ICanViewTab)	// Don't show the first hidden tabs
 	{
 	 /* Form, icon (at top) and text (at bottom) of the tab */
 	 fprintf (Gbl.F.Out,"<li class=\"%s %s\">",
@@ -115,43 +115,29 @@ void Tab_DrawTabs (void)
 					     "TAB_OFF",
 		  NumTab == Gbl.Action.Tab ? The_TabOnBgColors[Gbl.Prefs.Theme] :
 					     The_TabOffBgColors[Gbl.Prefs.Theme]);
-	 if (ICanViewTab)
-	   {
-	    fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
-	    if (NumTab != Gbl.Action.Tab)
-	       fprintf (Gbl.F.Out," class=\"ICO_HIGHLIGHT\"");
-	    fprintf (Gbl.F.Out,">");
-	    Act_FormStart (ActMnu);
-	    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	    Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
-	                        NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-			                                   The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
-	    fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO40x40\" style=\"margin:3px;\" />"
-			       "<div class=\"TAB_TXT %s\">%s</div>"
-			       "</a>",
-		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-		     Tab_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
-			                        The_ClassTxtTabOff[Gbl.Prefs.Theme],
-		     Txt_TABS_SHORT_TXT[NumTab]);
-	    Act_FormEnd ();
-	   }
-	 else
-	    fprintf (Gbl.F.Out,"<div class=\"ICO_HIDDEN\">"
-			       "<img src=\"%s/%s/%s\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO40x40\" style=\"margin:3px;\" />"
-			       "<div class=\"TAB_TXT %s\">%s</div>",
-		     Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
-		     Tab_TabIcons[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     Txt_TABS_FULL_TXT[NumTab],
-		     The_ClassTxtTabOff[Gbl.Prefs.Theme],
-		     Txt_TABS_SHORT_TXT[NumTab]);
+
+	 fprintf (Gbl.F.Out,"<div");	// This div must be present even in current tab in order to render properly the tab
+	 if (NumTab != Gbl.Action.Tab)
+	    fprintf (Gbl.F.Out," class=\"ICO_HIGHLIGHT\"");
+	 fprintf (Gbl.F.Out,">");
+
+	 Act_FormStart (ActMnu);
+	 Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
+	 Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
+			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
+	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" title=\"%s\""
+			    " class=\"TAB_ICO\" />"
+			    "<div class=\"TAB_TXT %s\">%s</div>"
+			    "</a>",
+		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
+		  Tab_TabIcons[NumTab],
+		  Txt_TABS_FULL_TXT[NumTab],
+		  Txt_TABS_FULL_TXT[NumTab],
+		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
+					     The_ClassTxtTabOff[Gbl.Prefs.Theme],
+		  Txt_TABS_SHORT_TXT[NumTab]);
+	 Act_FormEnd ();
 
 	 fprintf (Gbl.F.Out,"</div>"
 			    "</li>");

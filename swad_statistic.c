@@ -590,8 +590,7 @@ void Sta_AskShowGblHits (void)
    Sta_ClicksGroupedBy_t ClicksGroupedBy;
 
    /***** Contextual links *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-		      " style=\"padding-bottom:12px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Put form to go to test edition and configuration */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected

@@ -21121,19 +21121,19 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// ActSeePhoDeg
 #if   L==1
 	"Estad&iacute;stiques del nombre d'estudiants en cada titulaci&oacute;"
-	" representades per les fotos mitjana dels estudiants de cada titulaci&oacute;"
+	" representades per les fotos mitjana dels estudiants"
 #elif L==2
 	"Mischbilder der Studieng&auml;nge"
 #elif L==3
 	"Photos of degrees"
 #elif L==4
 	"Estad&iacute;sticas del n&uacute;mero de estudiantes en cada titulaci&oacute;n"
-	" representadas por las fotos promedio de los estudiantes de cada titulaci&oacute;n"
+	" representadas por las fotos promedio de los estudiantes"
 #elif L==5
 	"Photographie &eacute;tudes"
 #elif L==6
 	"Estad&iacute;sticas del n&uacute;mero de estudiantes en cada titulaci&oacute;n"
-	" representadas por las fotos promedio de los estudiantes de cada titulaci&oacute;n"// Okoteve traducción
+	" representadas por las fotos promedio de los estudiantes"// Okoteve traducción
 #elif L==7
 	"Foto di lauree"
 #elif L==8
