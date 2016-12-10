@@ -78,7 +78,7 @@ unsigned Rol_GetRolesInAllCrss (long UsrCod);
 Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
 unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);
 
-void Rol_PutFormToChangeMyRole (bool FormInHead);
+void Rol_PutFormToChangeMyRole (void);
 void Rol_ChangeMyRole (void);
 
 void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,

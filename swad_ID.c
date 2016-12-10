@@ -634,7 +634,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	}
       fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
                          "<input type=\"text\" name=\"NewID\""
-	                 " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+	                 " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	                 "</div>",
 	       ID_MAX_LENGTH_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :

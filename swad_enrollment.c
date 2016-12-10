@@ -329,7 +329,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
                       "%s: "
                       "</label>"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
-                      " size=\"20\" maxlength=\"%u\""
+                      " size=\"18\" maxlength=\"%u\""
                       " required=\"required\" />",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,

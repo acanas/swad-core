@@ -940,7 +940,7 @@ const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_H
 #elif L==6
 	"Se le ha asignado la siguiente contraseña para entrar en %s: %s\n"
 	"Si desea activar esta nueva contraseña,"
-	" debe entrar en %s con su ID (DNI/c&eacute;dula&hellip;), apodo o dirección de correo"
+	" debe entrar en %s con su ID (DNI/c&eacute;dula), apodo o dirección de correo"
 	" y esta nueva contraseña antes de %u días."
 	" Una vez que haya entrado, puede cambiar la contraseña por otra.\n"
 	"Si no accede con esta nueva contraseña,"
@@ -1552,11 +1552,11 @@ const char *Txt_A_user_can_not_have_more_than_X_IDs =
 #elif L==3
 	"A user can not have more than %u IDs.";
 #elif L==4
-	"Un usuario no puede tener m&aacute;s de %u ID (DNI/c&eacute;dulas&hellip;).";
+	"Un usuario no puede tener m&aacute;s de %u ID (DNI/c&eacute;dulas).";
 #elif L==5
 	"Un utilisateur ne peut pas avoir plus de %u IDs.";
 #elif L==6
-	"Un usuario no puede tener m&aacute;s de %u ID (DNI/c&eacute;dulas&hellip;).";	// Okoteve traducción
+	"Un usuario no puede tener m&aacute;s de %u ID (DNI/c&eacute;dulas).";	// Okoteve traducción
 #elif L==7
 	"Un utente non pu&ograve; avere pi&ugrave; di %u ID.";
 #elif L==8
@@ -2581,11 +2581,11 @@ const char *Txt_Another_ID =
 #elif L==3
 	"Another ID";
 #elif L==4
-	"Otro ID (DNI/c&eacute;dula&hellip;)";
+	"Otro ID (DNI/c&eacute;dula)";
 #elif L==5
 	"Un autre num&eacute;ro d'identit&eacute;";
 #elif L==6
-	"Otro ID (DNI/c&eacute;dula&hellip;)";		// Okoteve traducción
+	"Otro ID (DNI/c&eacute;dula)";		// Okoteve traducción
 #elif L==7
 	"Un'altra carta d'identit&agrave;";
 #elif L==8
@@ -5832,27 +5832,6 @@ const char *Txt_Courses_of_DEGREE_X =	// Warning: it is very important to includ
 	"Kurs&oacute;w %s";
 #elif L==9
 	"Disciplinas de %s";
-#endif
-
-const char *Txt_Create_a_new_account =
-#if   L==1
-	"Crea un nou compte";
-#elif L==2
-	"Ein neues Benutzerkonto erstellen";
-#elif L==3
-	"Create a new account";
-#elif L==4
-	"Crear una nueva cuenta";
-#elif L==5
-	"Cr&eacute;er un nouveau compte";
-#elif L==6
-	"Crear una nueva cuenta";	// Okoteve traducción
-#elif L==7
-	"Creare un nuovo account";
-#elif L==8
-	"Stw&oacute;rz nowe konto";
-#elif L==9
-	"Criar uma nova conta";
 #endif
 
 const char *Txt_Create_account =
@@ -9345,11 +9324,11 @@ const char *Txt_Do_you_want_to_confirm_the_ID_X =	// Warning: it is very importa
 #elif L==3
 	"Do you want to confirm the ID (identity number/passport) <strong>%s</strong>?";
 #elif L==4
-	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>?";
+	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";
 #elif L==5
 	"Voulez-vous confirmer l'ID <strong>%s</strong>?";
 #elif L==6
-	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>?";	// Okoteve traducción
+	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";	// Okoteve traducción
 #elif L==7
 	"Vuoi confermare l'ID <strong>%s</strong>?";
 #elif L==8
@@ -12322,7 +12301,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula&hellip;) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";			// Necessita traduccio
@@ -12348,7 +12327,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula&hellip;) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";
@@ -12368,7 +12347,7 @@ const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_ =
 	" seleccionando la parte deseada de la tabla y guard&aacute;ndola como p&aacute;gina web.<br />"
 	" Una tabla puede tener <strong>varias filas de cabecera y varias filas de pie</strong>."
 	" Entre ellas debe haber <strong>una &uacute;nica fila para cada estudiante</strong>,"
-	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula&hellip;) del estudiante</strong>.<br />"
+	" con cualquier n&uacute;mero de columnas, conteniendo <strong>la primera columna el ID (DNI/c&eacute;dula) del estudiante</strong>.<br />"
 	" Un estudiante ver&aacute; una tabla con las filas de cabecera,"
 	" seguidas por la fila con sus calificaciones,"
 	" y por las filas de pie.";			// Okoteve traducción
@@ -14706,11 +14685,11 @@ const char *Txt_ID =
 #elif L==3
 	"ID (identity number/passport)";
 #elif L==4
-	"ID (DNI/c&eacute;dula&hellip;)";
+	"ID (DNI/c&eacute;dula)";
 #elif L==5
 	"Num. d'identit&eacute;";
 #elif L==6
-	"ID (DNI/c&eacute;dula&hellip;)";	// Okoteve traducción
+	"ID (DNI/c&eacute;dula)";	// Okoteve traducción
 #elif L==7
 	"Numero carta d'identit&agrave;";
 #elif L==8
@@ -14721,17 +14700,17 @@ const char *Txt_ID =
 
 const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El ID (DNI/c&eacute;dula&hellip;) %s ja havia estat confirmat.";
+	"El ID (DNI/c&eacute;dula) %s ja havia estat confirmat.";
 #elif L==2
 	"ID %s hatte bereits best&auml;tigt worden.";
 #elif L==3
 	"ID %s had already been confirmed.";
 #elif L==4
-	"El ID (DNI/c&eacute;dula&hellip;) %s ya hab&iacute;a sido confirmado.";
+	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";
 #elif L==5
 	"L'ID %s avait d&eacute;j&agrave; &eacute;t&eacute; confirm&eacute;e.";
 #elif L==6
-	"El ID (DNI/c&eacute;dula&hellip;) %s ya hab&iacute;a sido confirmado.";		// Okoteve traducción
+	"El ID (DNI/c&eacute;dula) %s ya hab&iacute;a sido confirmado.";		// Okoteve traducción
 #elif L==7
 	"L'ID %s era gi&agrave; stato confermato.";
 #elif L==8
@@ -14742,17 +14721,17 @@ const char *Txt_ID_X_had_already_been_confirmed =	// Warning: it is very importa
 
 const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"ID (DNI/c&eacute;dula&hellip;) %s confirmat";
+	"ID (DNI/c&eacute;dula) %s confirmat";
 #elif L==2
 	"ID %s best&auml;tigt";
 #elif L==3
 	"ID %s confirmed";
 #elif L==4
-	"ID (DNI/c&eacute;dula&hellip;) %s confirmado";
+	"ID (DNI/c&eacute;dula) %s confirmado";
 #elif L==5
 	"ID %s confirm&eacute;";
 #elif L==6
-	"ID (DNI/c&eacute;dula&hellip;) %s confirmado";		// Okoteve traducción
+	"ID (DNI/c&eacute;dula) %s confirmado";		// Okoteve traducción
 #elif L==7
 	"ID %s confermato";
 #elif L==8
@@ -14763,17 +14742,17 @@ const char *Txt_ID_X_confirmed =	// Warning: it is very important to include %s 
 
 const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"ID (DNI/c&eacute;dula&hellip;) %s no confirmat";
+	"ID (DNI/c&eacute;dula) %s no confirmat";
 #elif L==2
 	"ID %s nicht best&auml;tigt";
 #elif L==3
 	"ID %s not confirmed";
 #elif L==4
-	"ID (DNI/c&eacute;dula&hellip;) %s no confirmado";
+	"ID (DNI/c&eacute;dula) %s no confirmado";
 #elif L==5
 	"ID %s pas confirm&eacute;";
 #elif L==6
-	"ID (DNI/c&eacute;dula&hellip;) %s no confirmado";		// Okoteve traducción
+	"ID (DNI/c&eacute;dula) %s no confirmado";		// Okoteve traducción
 #elif L==7
 	"ID %s non confermato";
 #elif L==8
@@ -14784,17 +14763,17 @@ const char *Txt_ID_X_not_confirmed =	// Warning: it is very important to include
 
 const char *Txt_ID_X_removed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> eliminat.";
+	"ID (DNI/c&eacute;dula) <strong>%s</strong> eliminat.";
 #elif L==2
 	"ID <strong>%s</strong> entfernt.";
 #elif L==3
 	"ID <strong>%s</strong> removed.";
 #elif L==4
-	"ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> eliminado.";
+	"ID (DNI/c&eacute;dula) <strong>%s</strong> eliminado.";
 #elif L==5
 	"ID <strong>%s</strong> supprim&eacute;.";
 #elif L==6
-	"ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> eliminado.";	// Okoteve traducción
+	"ID (DNI/c&eacute;dula) <strong>%s</strong> eliminado.";	// Okoteve traducción
 #elif L==7
 	"ID <strong>%s</strong> rimosso.";
 #elif L==8
@@ -14866,7 +14845,7 @@ const char *Txt_If_there_are_multiple_versions_of_the_ID_ =
 const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Si se trata de un usuario nuevo en %s,"
-	" debe indicar el ID (DNI/c&eacute;dula&hellip;).";	// Necessita traduccio
+	" debe indicar el ID (DNI/c&eacute;dula).";	// Necessita traduccio
 #elif L==2
 	"If this is a new user in %s,"
 	" you should indicate her/his ID.";		// Übersetzung notwendig
@@ -14875,13 +14854,13 @@ const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID =	// W
 	" you should indicate her/his ID.";
 #elif L==4
 	"Si se trata de un usuario nuevo en %s,"
-	" debe indicar el ID (DNI/c&eacute;dula&hellip;).";
+	" debe indicar el ID (DNI/c&eacute;dula).";
 #elif L==5
 	"If this is a new user in %s,"
 	" you should indicate her/his ID.";		// Besoin de traduction
 #elif L==6
 	"Si se trata de un usuario nuevo en %s,"
-	" debe indicar el ID (DNI/c&eacute;dula&hellip;).";	// Okoteve traducción
+	" debe indicar el ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==7
 	"If this is a new user in %s,"
 	" you should indicate her/his ID.";		// Bisogno di traduzione
@@ -14993,7 +14972,7 @@ const char *Txt_If_you_have_forgotten_your_password_ =
 
 const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 #if   L==1
-	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula&hellip;),"
+	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula),"
 	" y el correo en su ficha es correcto,"
 	" recibir&aacute; un mensaje con una nueva contrase&ntilde;a.";	// Necessita traduccio
 #elif L==2
@@ -15005,7 +14984,7 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	" and the email address on your record is correct,"
 	" you will receive an email with a new password.";
 #elif L==4
-	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula&hellip;),"
+	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula),"
 	" y el correo en su ficha es correcto,"
 	" recibir&aacute; un mensaje con una nueva contrase&ntilde;a.";
 #elif L==5
@@ -15013,7 +14992,7 @@ const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_ =
 	" ainsi que l'adresse email sur votre carte est correct,"
 	" vous recevrez un email avec un nouveau mot de passe.";
 #elif L==6
-	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula&hellip;),"
+	"Si usted ha escrito correctamente su @apodo, correo o ID (DNI/c&eacute;dula),"
 	" y el correo en su ficha es correcto,"
 	" recibir&aacute; un mensaje con una nueva contrase&ntilde;a.";	// Okoteve traducción
 #elif L==7
@@ -17037,17 +17016,17 @@ const char *Txt_List_of_detailed_clicks =
 
 const char *Txt_List_of_nicks_emails_or_IDs =
 #if   L==1
-	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)";	// Necessita traduccio
+	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas)";	// Necessita traduccio
 #elif L==2
 	"Liste von @Benutzernamen, Emails oder Ausweis-Nr.";
 #elif L==3
 	"List of @nicks, emails or IDs";
 #elif L==4
-	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)";
+	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas)";
 #elif L==5
 	"Liste de num&eacute;ros d'identit&eacute;";
 #elif L==6
-	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)";	// Okoteve traducción
+	"Lista de @apodos, correos o ID (DNI/c&eacute;dulas)";	// Okoteve traducción
 #elif L==7
 	"Lista di @nomi-utenti, email o numero carte d'identit&agrave;";
 #elif L==8
@@ -24046,11 +24025,11 @@ const char *Txt_nick_email_or_ID =
 #elif L==3
 	"@nick, email or ID";
 #elif L==4
-	"@apodo, correo o ID (DNI/c&eacute;dula&hellip;)";
+	"@apodo, correo o ID (DNI/c&eacute;dula)";
 #elif L==5
 	"@surnom, courrier ou num&eacute;ro d'identit&eacute;";
 #elif L==6
-	"@apodo, correo o ID (DNI/c&eacute;dula&hellip;)";	// Okoteve traducción
+	"@apodo, correo o ID (DNI/c&eacute;dula)";	// Okoteve traducción
 #elif L==7
 	"@nome-utente, email o numero carta d'identit&agrave;";
 #elif L==8
@@ -24061,17 +24040,17 @@ const char *Txt_nick_email_or_ID =
 
 const char *Txt_nicks_emails_or_IDs_separated_by_commas =
 #if   L==1
-	"@apodos, correos o ID (DNI/c&eacute;dulas&hellip;) separados por comas";	// Necessita traduccio
+	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";	// Necessita traduccio
 #elif L==2
 	"@Benutzernamen, Emails oder Ausweis-Nr. durch Kommas getrennt";
 #elif L==3
 	"@nicks, emails or IDs separated by commas";
 #elif L==4
-	"@apodos, correos o ID (DNI/c&eacute;dulas&hellip;) separados por comas";
+	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";
 #elif L==5
 	"@surnoms, courriers ou num&eacute;ros d'identit&eacute; s&eacute;par&eacute;s par des virgules";
 #elif L==6
-	"@apodos, correos o ID (DNI/c&eacute;dulas&hellip;) separados por comas";	// Okoteve traducción
+	"@apodos, correos o ID (DNI/c&eacute;dulas) separados por comas";	// Okoteve traducción
 #elif L==7
 	"@nomi-utenti, email o numero carte d'identit&agrave; separati da virgole";
 #elif L==8
@@ -28573,11 +28552,11 @@ const char *Txt_Please_enter_your_ID =
 #elif L==3
 	"Please enter your ID.";
 #elif L==4
-	"Por favor, escriba su ID (DNI/c&eacute;dula&hellip;).";
+	"Por favor, escriba su ID (DNI/c&eacute;dula).";
 #elif L==5
 	"S'il vous pla&iacute;t, entrez votre ID.";
 #elif L==6
-	"Por favor, escriba su ID (DNI/c&eacute;dula&hellip;).";		// Okoteve traducción
+	"Por favor, escriba su ID (DNI/c&eacute;dula).";		// Okoteve traducción
 #elif L==7
 	"Per favore, inserisci il tuo ID.";
 #elif L==8
@@ -28648,7 +28627,7 @@ const char *Txt_Please_fill_in_your_ID =
 	" because it facilitates the registration process"
 	" of users in the courses.";
 #elif L==4
-	"Por favor, rellene su ID (DNI/c&eacute;dula&hellip;)."
+	"Por favor, rellene su ID (DNI/c&eacute;dula)."
 	" Es un dato opcional,"
 	" pero es recomendable que lo rellene"
 	" porque facilita el proceso de inscripci&oacute;n"
@@ -28660,7 +28639,7 @@ const char *Txt_Please_fill_in_your_ID =
 	" parce qu'il facilite le processus d'enregistrement"
 	" des utilisateurs dans les mati&egrave;res.";
 #elif L==6
-	"Por favor, rellene su ID (DNI/c&eacute;dula&hellip;)."
+	"Por favor, rellene su ID (DNI/c&eacute;dula)."
 	" Es un dato opcional,"
 	" pero es recomendable que lo rellene"
 	" porque facilita el proceso de inscripci&oacute;n"
@@ -43163,7 +43142,7 @@ const char *Txt_The_HTML_file_has_been_received_successfully =
 
 const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" ha sido confirmado.";		// Necessita traduccio
 #elif L==2
 	"The ID <strong>%s</strong>"
@@ -43172,13 +43151,13 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 	"The ID <strong>%s</strong>"
 	" has been confirmed.";
 #elif L==4
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" ha sido confirmado.";
 #elif L==5
 	"The ID <strong>%s</strong>"
 	" has been confirmed.";		// Besoin de traduction
 #elif L==6
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" ha sido confirmado.";		// Okoteve traducción
 #elif L==7
 	"Il ID <strong>%s</strong>"
@@ -43193,7 +43172,7 @@ const char *Txt_The_ID_X_has_been_confirmed =	// Warning: it is very important t
 
 const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" se ha registrado correctamente.";		// Necessita traduccio
 #elif L==2
 	"The ID <strong>%s</strong>"
@@ -43202,13 +43181,13 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 	"The ID <strong>%s</strong>"
 	" has been registered successfully.";
 #elif L==4
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" se ha registrado correctamente.";
 #elif L==5
 	"The ID <strong>%s</strong>"
 	" has been registered successfully.";		// Besoin de traduction
 #elif L==6
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" se ha registrado correctamente.";		// Okoteve traducción
 #elif L==7
 	"Il ID <strong>%s</strong>"
@@ -43223,7 +43202,7 @@ const char *Txt_The_ID_X_has_been_registered_successfully =	// Warning: it is ve
 
 const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido."
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
 	" Solo puede contener n&uacute;meros (al menos uno) y letras.";		// Necessita traduccio
 #elif L==2
 	"The ID <strong>%s</strong> is not valid."
@@ -43232,13 +43211,13 @@ const char *Txt_The_ID_X_is_not_valid =	// Warning: it is very important to incl
 	"The ID <strong>%s</strong> is not valid."
 	" It can only contain numbers (at least one) and letters.";
 #elif L==4
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido."
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
 	" Solo puede contener n&uacute;meros (al menos uno) y letras.";
 #elif L==5
 	"The ID <strong>%s</strong> is not valid."
 	" It can only contain numbers (at least one) and letters.";		// Besoin de traduction
 #elif L==6
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido."
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido."
 	" Solo puede contener n&uacute;meros (al menos uno) y letras.";		// Okoteve traducción
 #elif L==7
 	"L'ID <strong>%s</strong> non &egrave; valido."
@@ -43292,17 +43271,17 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 
 const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El @apodo, correo o ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido.";	// Necessita traduccio
+	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Necessita traduccio
 #elif L==2
 	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Need Übersetzung
 #elif L==3
 	"The @nick, email or ID <strong>%s</strong> is not valid.";
 #elif L==4
-	"El @apodo, correo o ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido.";
+	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";
 #elif L==5
 	"The @nick, email or ID <strong>%s</strong> is not valid.";				// Besoin de traduction
 #elif L==6
-	"El @apodo, correo o ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong> no es v&aacute;lido.";	// Okoteve traducción
+	"El @apodo, correo o ID (DNI/c&eacute;dula) <strong>%s</strong> no es v&aacute;lido.";	// Okoteve traducción
 #elif L==7
 	"Il @nome-utente, email o ID <strong>%s</strong> non &egrave; valido.";
 #elif L==8
@@ -43313,7 +43292,7 @@ const char *Txt_The_ID_nickname_or_email_X_is_not_valid =	// Warning: it is very
 
 const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" coincide con uno de los existentes.";		// Necessita traduccio
 #elif L==2
 	"The ID <strong>%s</strong>"
@@ -43322,13 +43301,13 @@ const char *Txt_The_ID_X_matches_one_of_the_existing =	// Warning: it is very im
 	"The ID <strong>%s</strong>"
 	" matches one of the existing.";
 #elif L==4
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" coincide con uno de los existentes.";
 #elif L==5
 	"The ID <strong>%s</strong>"
 	" matches one of the existing.";		// Besoin de traduction
 #elif L==6
-	"El ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>"
+	"El ID (DNI/c&eacute;dula) <strong>%s</strong>"
 	" coincide con uno de los existentes.";		// Okoteve traducción
 #elif L==7
 	"The ID <strong>%s</strong>"
@@ -46730,17 +46709,17 @@ const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is 
 
 const char *Txt_There_are_X_users_with_the_ID_Y =	// Warning: it is very important to include %u and %s in the following sentences
 #if   L==1
-	"Hi ha %u usuaris amb el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>.";
+	"Hi ha %u usuaris amb el ID (DNI/c&eacute;dula) <strong>%s</strong>.";
 #elif L==2
 	"There are %u users with the ID <strong>%s</strong>.";			// Need Übersetzung
 #elif L==3
 	"There are %u users with the ID <strong>%s</strong>.";
 #elif L==4
-	"Hay %u usuarios con el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>.";
+	"Hay %u usuarios con el ID (DNI/c&eacute;dula) <strong>%s</strong>.";
 #elif L==5
 	"Il y a %u utilisateurs avec le ID <strong>%s</strong>.";
 #elif L==6
-	"Hay %u usuarios con el ID (DNI/c&eacute;dula&hellip;) <strong>%s</strong>.";	// Okoteve traducción
+	"Hay %u usuarios con el ID (DNI/c&eacute;dula) <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"Ci sono %u utenti con il ID <strong>%s</strong>.";
 #elif L==8
@@ -46956,7 +46935,7 @@ const char *Txt_There_is_no_user_with_email_X =	// Warning: it is very important
 const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>.";	// Necessita traduccio
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
 	"There is no user"
 	" with ID, nick or email <strong>%s</strong>.";			// Übersetzung notwendig
@@ -46965,13 +46944,13 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 	" with ID, nick or email <strong>%s</strong>.";
 #elif L==4
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>.";
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>.";
 #elif L==5
 	"There is no user"
 	" with ID, nick or email <strong>%s</strong>.";			// Besoin de traduction
 #elif L==6
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>.";	// Okoteve traducción
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"Non c'&egrave; alcun utente"
 	" con ID, nome utente o email <strong>%s</strong>.";
@@ -46986,7 +46965,7 @@ const char *Txt_There_is_no_user_with_ID_nick_or_email_X =	// Warning: it is ver
 const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>"
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
 	"There is no user"
@@ -46998,7 +46977,7 @@ const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X_in_the_course_Y =	// W
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>"
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5
 	"There is no user"
@@ -47006,7 +46985,7 @@ const char *Txt_There_is_no_user_with_ID_nick_or_e_mail_X_in_the_course_Y =	// W
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"No existe ning&uacute;n usuario"
-	" con ID (DNI/c&eacute;dula&hellip;), apodo o correo <strong>%s</strong>"
+	" con ID (DNI/c&eacute;dula), apodo o correo <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
 	"Non c'&egrave; alcun utente"
@@ -48750,12 +48729,12 @@ const char *Txt_Type_of_group_X_removed =	// Warning: it is very important to in
 const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 #if   L==1
 	"Escriba o pegue una lista"
-	" con @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)."
-	" Los @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)"
+	" con @apodos, correos o ID (DNI/c&eacute;dulas)."
+	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
 	" Solo se tendr&aacute;n en cuenta aquellas palabras"
-	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas&hellip;);"
+	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";		// Necessita traduccio
 #elif L==2
 	"Type or paste a list"
@@ -48777,12 +48756,12 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" the rest of the text will be ignored.";
 #elif L==4
 	"Escriba o pegue una lista"
-	" con @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)."
-	" Los @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)"
+	" con @apodos, correos o ID (DNI/c&eacute;dulas)."
+	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
 	" Solo se tendr&aacute;n en cuenta aquellas palabras"
-	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas&hellip;);"
+	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";
 #elif L==5
 	"Type or paste a list"
@@ -48795,12 +48774,12 @@ const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_ =
 	" the rest of the text will be ignored.";		// Besoin de traduction
 #elif L==6
 	"Escriba o pegue una lista"
-	" con @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)."
-	" Los @apodos, correos o ID (DNI/c&eacute;dulas&hellip;)"
+	" con @apodos, correos o ID (DNI/c&eacute;dulas)."
+	" Los @apodos, correos o ID (DNI/c&eacute;dulas)"
 	" pueden ir separados por cadenas de caracteres arbitrarias"
 	" (por ej. nombres, apellidos, espacios, etc.)."
 	" Solo se tendr&aacute;n en cuenta aquellas palabras"
-	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas&hellip;);"
+	" que parezcan @apodos, correos o ID (DNI/c&eacute;dulas);"
 	" el resto del texto se ignorar&aacute;.";		// Okoteve traducción
 #elif L==7
 	"Scrivi o incolla la lista"
@@ -49783,11 +49762,11 @@ const char *Txt_User_ID =
 #elif L==3
 	"User ID";
 #elif L==4
-	"ID (DNI/c&eacute;dula&hellip;) del usuario";
+	"ID (DNI/c&eacute;dula) del usuario";
 #elif L==5
 	"Num&eacute;ro d'identit&eacute; d'utilisateur";
 #elif L==6
-	"ID (DNI/c&eacute;dula&hellip;) del usuario";		// Okoteve traducción
+	"ID (DNI/c&eacute;dula) del usuario";		// Okoteve traducción
 #elif L==7
 	"Numero carta d'identit&agrave; utente";
 #elif L==8
@@ -52067,17 +52046,17 @@ const char *Txt_You_can_not_delete_your_current_nickname =
 
 const char *Txt_You_can_not_delete_this_ID =
 #if   L==1
-	"No puede eliminar este ID (DNI/c&eacute;dula&hellip;).";	// Necessita traduccio
+	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Necessita traduccio
 #elif L==2
 	"You can not delete this ID.";				// Need Übersetzung
 #elif L==3
 	"You can not delete this ID.";
 #elif L==4
-	"No puede eliminar este ID (DNI/c&eacute;dula&hellip;).";
+	"No puede eliminar este ID (DNI/c&eacute;dula).";
 #elif L==5
 	"You can not delete this ID.";				// Besoin de traduction
 #elif L==6
-	"No puede eliminar este ID (DNI/c&eacute;dula&hellip;).";	// Okoteve traducción
+	"No puede eliminar este ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==7
 	"Non puoi cancellare questo ID.";
 #elif L==8
@@ -53633,11 +53612,11 @@ const char *Txt_You_must_enter_your_nick_email_or_ID =
 #elif L==3
 	"You must enter your @nick, email or ID.";
 #elif L==4
-	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula&hellip;).";
+	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";
 #elif L==5
 	"Vous devez entrer votre @surnom, courrier ou num&eacute;ro d'identit&eacute;.";
 #elif L==6
-	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula&hellip;).";	// Okoteve traducción
+	"Debe escribir su @apodo, correo o ID (DNI/c&eacute;dula).";	// Okoteve traducción
 #elif L==7
 	"Devi inserire il tuo @nome-utente, email o numero carta d'identit&agrave;.";
 #elif L==8

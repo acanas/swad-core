@@ -696,7 +696,7 @@ void Pwd_ShowFormChgPwd (void)
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<input type=\"password\" name=\"UsrPwd\""
-                         " size=\"25\" maxlength=\"%u\" autocomplete=\"off\""
+                         " size=\"18\" maxlength=\"%u\" autocomplete=\"off\""
                          " required=\"required\" />"
                          "</td>"
                          "</tr>",
@@ -742,7 +742,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" name=\"Paswd\""
-                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\""
+                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
@@ -770,7 +770,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" name=\"Paswd1\""
-                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\""
+                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>"
@@ -780,7 +780,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"password\" name=\"Paswd2\""
-                      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\""
+                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",

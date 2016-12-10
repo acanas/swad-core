@@ -283,16 +283,14 @@ unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr)
 /*********************** Put a form to change my role ************************/
 /*****************************************************************************/
 
-void Rol_PutFormToChangeMyRole (bool FormInHead)
+void Rol_PutFormToChangeMyRole (void)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
    Act_FormStart (ActChgMyRol);
-   fprintf (Gbl.F.Out,"<select name=\"UsrTyp\"");
-   if (FormInHead)
-      fprintf (Gbl.F.Out," style=\"width:130px;\"");
-   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\">",
+   fprintf (Gbl.F.Out,"<select name=\"UsrTyp\" class=\"SEL_ROLE\""
+                      " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (Role = Rol__GUEST_;
         Role < Rol_NUM_ROLES;

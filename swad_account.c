@@ -150,7 +150,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      "%s:&nbsp;"
 		      "</label>"
 		      "<input type=\"text\" name=\"ID\""
-		      " size=\"20\" maxlength=\"%u\" value=\"\" />",
+		      " size=\"18\" maxlength=\"%u\" value=\"\" />",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_LENGTH_USR_ID);
    Lay_PutConfirmButton (Txt_Check);
@@ -326,17 +326,16 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
   {
    extern const char *Hlp_PROFILE_Sign_up;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Create_a_new_account;
+   extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   extern const char *Txt_Create_account;
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
-   Lay_StartRoundFrameTable (NULL,Txt_Create_a_new_account,
+   Lay_StartRoundFrameTable (NULL,Txt_Create_account,
                              NULL,Hlp_PROFILE_Sign_up,2);
 
    /***** Nickname *****/
@@ -350,7 +349,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"NewNick\""
-                      " size=\"25\" maxlength=\"%u\""
+                      " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -368,7 +367,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"email\" name=\"NewEmail\""
-                      " size=\"25\" maxlength=\"%u\""
+                      " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -395,7 +394,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
   {
    extern const char *Hlp_PROFILE_Sign_up;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
-   extern const char *Txt_Create_a_new_account;
+   extern const char *Txt_Create_account;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
@@ -403,7 +402,7 @@ void Acc_ShowFormGoToRequestNewAccount (void)
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);
-   Lay_PutCreateButton (Txt_Create_a_new_account);
+   Lay_PutCreateButton (Txt_Create_account);
    Act_FormEnd ();
 
    /***** End frame *****/

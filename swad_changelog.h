@@ -185,13 +185,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.93 (2016-12-10)"
-#define CSS_FILE		"swad16.93.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.94 (2016-12-10)"
+#define CSS_FILE		"swad16.94.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.94:    Dec 10, 2016	Changes in layout for responsive design. (210421 lines)
         Version 16.93:    Dec 10, 2016	Changes in layout of heading rows and tabs. (210308 lines)
         Version 16.92.5:  Dec 10, 2016	Contextual help on calendar. (210318 lines)
         Version 16.92.4:  Dec 09, 2016	Fixed bug in edition of user's agenda. (210313 lines)

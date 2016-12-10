@@ -285,7 +285,7 @@ void Nck_ShowFormChangeUsrNickname (void)
    Act_FormStart (ActChgNic);
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
                       "<input type=\"text\" name=\"NewNick\""
-	              " size=\"20\" maxlength=\"%u\" value=\"@%s\" />"
+	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
 	              "</div>",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);

@@ -1888,7 +1888,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
-                      " size=\"25\" maxlength=\"%u\""
+                      " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -1901,7 +1901,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\">"
 		      "<input type=\"password\" name=\"UsrPwd\""
-		      " size=\"25\" maxlength=\"%u\" placeholder=\"%s\" />"
+		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
 		      "</td>"
 		      "</tr>",
             Gbl.Prefs.IconsURL,
@@ -2093,7 +2093,7 @@ void Usr_WriteLoggedUsrHead (void)
      }
    else
      {
-      Rol_PutFormToChangeMyRole (true);
+      Rol_PutFormToChangeMyRole ();
       fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;</span>",
                The_ClassUsr[Gbl.Prefs.Theme]);
      }
@@ -2880,7 +2880,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
 	                 "%s: ",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Role);
-      Rol_PutFormToChangeMyRole (false);
+      Rol_PutFormToChangeMyRole ();
       fprintf (Gbl.F.Out,"</div>");
      }
 

@@ -1289,7 +1289,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
      }
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
 	              "<input type=\"email\" name=\"NewEmail\""
-	              " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
