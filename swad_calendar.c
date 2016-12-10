@@ -235,6 +235,7 @@ void Cal_DrawCurrentMonth (void)
 */
 void Cal_DrawCalendar (void)
   {
+   extern const char *Hlp_ASSESSMENT_Calendar;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
    bool PrintView = (Gbl.Action.Act == ActPrnCal);
@@ -247,9 +248,11 @@ void Cal_DrawCalendar (void)
      }
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,NULL,PrintView ? NULL :
-	                                      Cal_PutIconToPrintCalendar,
-	                NULL);
+   Lay_StartRoundFrame (NULL,NULL,
+                        PrintView ? NULL :
+	                            Cal_PutIconToPrintCalendar,
+	                PrintView ? NULL :
+	                            Hlp_ASSESSMENT_Calendar);
    Lay_WriteHeaderClassPhoto (PrintView,false,
 			      Gbl.CurrentIns.Ins.InsCod,
 			      Gbl.CurrentDeg.Deg.DegCod,
