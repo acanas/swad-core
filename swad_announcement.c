@@ -65,7 +65,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     unsigned Roles,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit);
-static void Ann_PutHiddenParamAnnCod (long AnnCod);
+static void Ann_PutParams (void);
 static long Ann_GetParamAnnCod (void);
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content);
 
@@ -266,7 +266,6 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     bool ShowAllAnnouncements,
                                     bool ICanEdit)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Remove;
@@ -296,57 +295,36 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    Rol_Role_t Role;
    bool SomeRolesAreSelected;
 
+   Gbl.Announcements.AnnCod = AnnCod;	// Parameter for forms
+
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:500px;\">",
 	    ContainerClass[Status]);
 
    if (ICanEdit)
      {
-      /* Form to remove announcement */
-      Act_FormStart (ActRemAnn);
-      Ann_PutHiddenParamAnnCod (AnnCod);
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-        	         "<input type=\"image\""
-	                 " src=\"%s/remove-on64x64.png\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
-			 "</div>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Remove,
-	       Txt_Remove);
-      Act_FormEnd ();
+      /***** Put form to remove announcement *****/
+      Lay_PutContextualLink (ActRemAnn,Ann_PutParams,
+			     "remove-on64x64.png",
+			     Txt_Remove,NULL,
+			     NULL);
 
-      /* Put form to change the status of the notice */
+      /***** Put form to change the status of the notice *****/
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:
-	    Act_FormStart (ActHidAnn);
-	    Ann_PutHiddenParamAnnCod (AnnCod);
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-			       "<input type=\"image\""
-			       " src=\"%s/eye-on64x64.png\""
-			       " alt=%s\" title=\"%s\""
-			       " class=\"ICO20x20\" />"
-			       "</div>",
-		     Gbl.Prefs.IconsURL,
-		     Txt_NOTICE_Active_Mark_as_obsolete,
-		     Txt_NOTICE_Active_Mark_as_obsolete);
+	    Lay_PutContextualLink (ActHidAnn,Ann_PutParams,
+				   "eye-on64x64.png",
+				   Txt_NOTICE_Active_Mark_as_obsolete,NULL,
+				   NULL);
 	    break;
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
-	    Act_FormStart (ActRevAnn);
-	    Ann_PutHiddenParamAnnCod (AnnCod);
-	    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-			       "<input type=\"image\""
-			       " src=\"%s/eye-slash-on64x64.png\""
-			       " alt=\"%s\" title=\"%s\""
-			       " class=\"ICO20x20\" />"
-			       "</div>",
-		     Gbl.Prefs.IconsURL,
-		     Txt_NOTICE_Obsolete_Mark_as_active,
-		     Txt_NOTICE_Obsolete_Mark_as_active);
+	    Lay_PutContextualLink (ActRevAnn,Ann_PutParams,
+				   "eye-slash-on64x64.png",
+				   Txt_NOTICE_Obsolete_Mark_as_active,NULL,
+				   NULL);
 	    break;
 	}
-      Act_FormEnd ();
      }
 
    /***** Write the subject of the announcement *****/
@@ -378,21 +356,11 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       fprintf (Gbl.F.Out,"</p>");
      }
    else
-     {
-      /* Form to mark announcement as seen */
-      Act_FormStart (ActAnnSee);
-      Ann_PutHiddenParamAnnCod (AnnCod);
-      Act_LinkFormSubmit (Txt_Do_not_show_again,The_ClassForm[Gbl.Prefs.Theme],NULL);
-      fprintf (Gbl.F.Out,"<img src=\"%s/remove-on64x64.png\""
-			 " alt=\"%s\" title=\"%s\""
-			 " class=\"ICO20x20\" />"
-			 " %s</a>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_Do_not_show_again,
-	       Txt_Do_not_show_again,
-	       Txt_Do_not_show_again);
-      Act_FormEnd ();
-     }
+      /***** Put form to mark announcement as seen *****/
+      Lay_PutContextualLink (ActAnnSee,Ann_PutParams,
+			     "remove-on64x64.png",
+			     Txt_Do_not_show_again,Txt_Do_not_show_again,
+			     NULL);
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -401,12 +369,12 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
   }
 
 /*****************************************************************************/
-/************** Put parameter with the code of an announcement ***************/
+/******************** Params used to edit an assignment **********************/
 /*****************************************************************************/
 
-static void Ann_PutHiddenParamAnnCod (long AnnCod)
+static void Ann_PutParams (void)
   {
-   Par_PutHiddenParamLong ("AnnCod",AnnCod);
+   Par_PutHiddenParamLong ("AnnCod",Gbl.Announcements.AnnCod);
   }
 
 /*****************************************************************************/

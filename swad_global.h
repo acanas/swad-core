@@ -594,6 +594,10 @@ struct Globals
      } Forum;
    struct
      {
+      long AnnCod;
+     } Announcements;
+   struct
+     {
       Msg_TypeOfMessages_t TypeOfMessages;
       unsigned NumMsgs;
       int MsgId;
