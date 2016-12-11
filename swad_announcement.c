@@ -309,7 +309,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
 			     Txt_Remove,NULL,
 			     NULL);
 
-      /***** Put form to change the status of the notice *****/
+      /***** Put form to change the status of the announcement *****/
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:

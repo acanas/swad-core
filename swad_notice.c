@@ -79,6 +79,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              Not_Status_t Status);
 static long Not_InsertNoticeInDB (const char *Content);
 static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned NumUsrsToBeNotifiedByEMail);
+static void Not_PutParams (void);
 static long Not_GetParamNotCod (void);
 
 /*****************************************************************************/
@@ -595,7 +596,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
                              long UsrCod,
                              Not_Status_t Status)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_NOTICE_Active_SINGULAR;
    extern const char *Txt_NOTICE_Active_Mark_as_obsolete;
    extern const char *Txt_NOTICE_Obsolete_SINGULAR;
@@ -626,6 +626,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    static unsigned UniqueId = 0;
    struct UsrData UsrDat;
 
+   Gbl.CurrentCrs.Notices.NotCod = NotCod;	// Parameter for forms
+
    /***** Start yellow note *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"width:%upx;\">",
 	    ContainerClass[Status],
@@ -637,48 +639,26 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      {
       if (Not_CheckIfICanEditNotices ())
 	{
-	 /* Form to remove notice */
-	 Act_FormStart (ActReqRemNot);
-	 Not_PutHiddenParamNotCod (NotCod);
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-        	            "<input type=\"image\""
-	                    " src=\"%s/remove-on64x64.png\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />"
-        	            "</div>",
-		  Gbl.Prefs.IconsURL,
-		  Txt_Remove,
-		  Txt_Remove);
-	 Act_FormEnd ();
+	 /***** Put form to remove announcement *****/
+	 Lay_PutContextualLink (ActReqRemNot,Not_PutParams,
+				"remove-on64x64.png",
+				Txt_Remove,NULL,
+				NULL);
 
-	 /* Put form to change the status of the notice */
+	 /***** Put form to change the status of the notice *****/
          switch (Status)
            {
             case Not_ACTIVE_NOTICE:
-               Act_FormStart (ActHidNot);
-               Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-        	                  "<input type=\"image\""
-        	                  " src=\"%s/eye-on64x64.png\""
-        	                  " alt=%s\" title=\"%s\""
-        	                  " class=\"ICO20x20\" />"
-        	                  "</div>",
-                        Gbl.Prefs.IconsURL,
-                        Txt_NOTICE_Active_Mark_as_obsolete,
-                        Txt_NOTICE_Active_Mark_as_obsolete);
+	       Lay_PutContextualLink (ActHidNot,Not_PutParams,
+				      "eye-on64x64.png",
+				      Txt_NOTICE_Active_Mark_as_obsolete,NULL,
+				      NULL);
                break;
             case Not_OBSOLETE_NOTICE:
-               Act_FormStart (ActRevNot);
-               Not_PutHiddenParamNotCod (NotCod);
-               fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-        	                  "<input type=\"image\""
-        	                  " src=\"%s/eye-slash-on64x64.png\""
-        	                  " alt=\"%s\" title=\"%s\""
-        	                  " class=\"ICO20x20\" />"
-        	                  "</div>",
-                        Gbl.Prefs.IconsURL,
-                        Txt_NOTICE_Obsolete_Mark_as_active,
-                        Txt_NOTICE_Obsolete_Mark_as_active);
+	       Lay_PutContextualLink (ActRevNot,Not_PutParams,
+				      "eye-slash-on64x64.png",
+				      Txt_NOTICE_Obsolete_Mark_as_active,NULL,
+				      NULL);
                break;
            }
          Act_FormEnd ();
@@ -739,22 +719,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
-      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">%s</div>",
-	       Content);
+      fprintf (Gbl.F.Out,"<div class=\"NOTICE_TEXT_BRIEF\">%s</div>",Content);
 
-      /* Form to view full notice */
+      /* Put form to view full notice */
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-      Act_FormStart (ActSeeOneNot);
-      Not_PutHiddenParamNotCod (NotCod);
-      Act_LinkFormSubmit (Txt_See_full_notice,The_ClassForm[Gbl.Prefs.Theme],NULL);
-      fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " class=\"ICO40x40\" />"
-	                 "</a>",
-	       Gbl.Prefs.IconsURL,
-	       Txt_See_full_notice,
-	       Txt_See_full_notice);
-      Act_FormEnd ();
+      Lay_PutContextualLink (ActSeeOneNot,Not_PutParams,
+			     "ellipsis32x32.gif",
+			     Txt_See_full_notice,NULL,
+			     NULL);
       fprintf (Gbl.F.Out,"</div>");
      }
    else
@@ -1000,6 +972,15 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
    DB_FreeMySQLResult (&mysql_res);
 
    return NumNotices;
+  }
+
+/*****************************************************************************/
+/*************** Put parameter with the code of a notice *********************/
+/*****************************************************************************/
+
+static void Not_PutParams (void)
+  {
+   Not_PutHiddenParamNotCod (Gbl.CurrentCrs.Notices.NotCod);
   }
 
 /*****************************************************************************/

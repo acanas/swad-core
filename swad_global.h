@@ -471,6 +471,7 @@ struct Globals
         } Records;
       struct
         {
+         long NotCod;
          long HighlightNotCod;	// Notice code of a notice to be highlighted
         } Notices;
      } CurrentCrs;

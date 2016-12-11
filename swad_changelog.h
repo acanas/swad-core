@@ -185,7 +185,7 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.95.1 (2016-12-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.95.2 (2016-12-11)"
 #define CSS_FILE		"swad16.94.1.css"
 #define JS_FILE			"swad16.90.2.js"
 
@@ -196,6 +196,7 @@
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1619','es','N','');
 
+        Version 16.95.2:  Dec 11, 2016	Code refactoring related with notices. (210514 lines)
         Version 16.95.1:  Dec 11, 2016	Code refactoring related with global announcements. (210534 lines)
         Version 16.95:    Dec 11, 2016	Code refactoring related with dates. (210559 lines)
         Version 16.94.2:  Dec 11, 2016	Contextual help on calendar.
