@@ -123,6 +123,10 @@ const char *Hlp_ASSESSMENT_Tests_test_results = WIKI "ASSESSMENT.Tests#test-resu
 
 const char *Hlp_ASSESSMENT_Calendar = WIKI "ASSESSMENT.Calendar";
 
+const char *Hlp_ASSESSMENT_Announcements                   = WIKI "ASSESSMENT.Announcements";
+const char *Hlp_ASSESSMENT_Announcements_new_announcement  = WIKI "ASSESSMENT.Announcements#new-announcement";
+const char *Hlp_ASSESSMENT_Announcements_edit_announcement = WIKI "ASSESSMENT.Announcements#edit-announcement";
+
 const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
 
 /***** USERS tab *****/

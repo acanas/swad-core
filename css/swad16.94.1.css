@@ -369,14 +369,8 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
-.BC_SEMIOFF
-	{
-	opacity:0.5;
-	}
-.BC_OFF
-	{
-	opacity:0.25;
-	}
+.BC_SEMIOFF		{opacity:0.67;}
+.BC_OFF			{opacity:0.33;}
 
 .BC_WHITE	{color:#707070;}
 .BC_GREY	{color:#FFB42E;}

@@ -449,8 +449,9 @@ void Exa_GetDateToHighlight (void)
 
 static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
-   extern const char *Txt_All_announcements_of_exam;
-   extern const char *Txt_Announcements_of_exam;
+   extern const char *Hlp_ASSESSMENT_Announcements;
+   extern const char *Txt_All_announcements_of_exams;
+   extern const char *Txt_Announcements_of_exams;
    extern const char *Txt_No_announcements_of_exams_of_X;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -551,11 +552,11 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
                         (Gbl.ExamAnnouncements.HighlightExaCod > 0 ||
-			 Gbl.ExamAnnouncements.HighlightDate[0]) ? Txt_All_announcements_of_exam :
-								   Txt_Announcements_of_exam,
+			 Gbl.ExamAnnouncements.HighlightDate[0]) ? Txt_All_announcements_of_exams :
+								   Txt_Announcements_of_exams,
 			ICanEdit ? Exa_PutIconToCreateNewExamAnnouncement :
 				   NULL,
-		        NULL);
+		        Hlp_ASSESSMENT_Announcements);
 
    /***** The result of the query may be empty *****/
    if (!NumExaAnns)
@@ -882,11 +883,13 @@ static void Exa_GetDataExamAnnouncementFromDB (long ExaCod)
 
 static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t TypeViewExamAnnouncement)
   {
+   extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
+   extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Year;
+   extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Session;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Exam_date;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Start_time;
@@ -934,7 +937,9 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    Lay_StartRoundFrame ("625px",NULL,
                         TypeViewExamAnnouncement == Exa_NORMAL_VIEW ? Exa_PutIconsExamAnnouncement :
                                                                       NULL,
-                        NULL);
+                        TypeViewExamAnnouncement == Exa_FORM_VIEW ? ((ExaCod > 0) ? Hlp_ASSESSMENT_Announcements_edit_announcement :
+                                                                                    Hlp_ASSESSMENT_Announcements_new_announcement) :
+                                                                    NULL);
 
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -994,10 +999,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Name of the course *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>" \
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Course,
             StyleNormal);
@@ -1012,14 +1017,14 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    fprintf (Gbl.F.Out,"</td>" \
 	              "</tr>");
 
-   /***** Year (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
+   /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
    fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"%s RIGHT_TOP\">"
+                      "<td class=\"%s RIGHT_BOTTOM\">"
                       "%s:"
                       "</td>" \
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
-            Txt_EXAM_ANNOUNCEMENT_Year,
+            Txt_EXAM_ANNOUNCEMENT_Year_or_semester,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
@@ -1042,10 +1047,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Exam session *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>" \
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Session,
             StyleNormal);
@@ -1060,14 +1065,14 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Date of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Exam_date);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_BOTTOM\">");
       Dat_WriteFormDate (Gbl.ExamAnnouncements.ExaDat.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnnouncements.ExaDat.ExamDate.Year :
                                                                                           Gbl.Now.Date.Year,
                          Gbl.Now.Date.Year + 1,"Exam",
@@ -1078,7 +1083,7 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
    else
      {
       Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,StrExamDate);
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
+      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">"
 	                 "%s"
 	                 "</td>",
                StyleNormal,StrExamDate);
@@ -1087,10 +1092,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Start time *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>" \
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Start_time,
             StyleNormal);
@@ -1132,10 +1137,10 @@ static void Exa_ShowExamAnnouncement (long ExaCod,Exa_TypeViewExamAnnouncement_t
 
    /***** Approximate duration of the exam *****/
    fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
+	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>" \
-                      "<td class=\"%s LEFT_TOP\">",
+                      "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Approximate_duration,
             StyleNormal);
@@ -1468,7 +1473,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    extern const char *Txt_Degree;
    extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
-   extern const char *Txt_EXAM_ANNOUNCEMENT_Year;
+   extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Session;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Exam_date;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Start_time;
@@ -1523,7 +1528,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
             Txt_Institution,Ins.FullName,
             Txt_Degree,Deg.FullName,
             Txt_EXAM_ANNOUNCEMENT_Course,Gbl.ExamAnnouncements.ExaDat.CrsFullName,
-            Txt_EXAM_ANNOUNCEMENT_Year,Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year],
+            Txt_EXAM_ANNOUNCEMENT_Year_or_semester,Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year],
             Txt_EXAM_ANNOUNCEMENT_Session,Gbl.ExamAnnouncements.ExaDat.Session,
             Txt_EXAM_ANNOUNCEMENT_Exam_date,StrExamDate,
             Txt_EXAM_ANNOUNCEMENT_Start_time,Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,

@@ -2111,25 +2111,25 @@ const char *Txt_all =
 	"tudo";
 #endif
 
-const char *Txt_All_announcements_of_exam =
+const char *Txt_All_announcements_of_exams =
 #if   L==1
-	 "Totes les convocat&ograve;ries d'examen";
+	 "Totes les convocat&ograve;ries d'ex&agrave;mens";
 #elif L==2
 	 "Alle Aufrufe f&uuml;r Pr&uuml;fung";
 #elif L==3
-	 "All announcements of exam";
+	 "All announcements of exams";
 #elif L==4
-	 "Todas las convocatorias de examen";
+	 "Todas las convocatorias de ex&aacute;menes";
 #elif L==5
-	 "Tous les convocations &agrave; un examen";
+	 "Tous les convocations &agrave; examens";
 #elif L==6
-	 "Todas las convocatorias de examen";	// Okoteve traducción
+	 "Todas las convocatorias de ex&aacute;menes";	// Okoteve traducción
 #elif L==7
 	 "Tutti i appelli d'esame";
 #elif L==8
-	 "Wszystkie anonse egzamin";
+	 "Wszystkie ogloszenia egzamin&oacute;w";
 #elif L==9
-	 "Todas as chamadas para exame";
+	 "Todas as chamadas para exames";
 #endif
 
 const char *Txt_all_degrees =
@@ -2489,25 +2489,25 @@ const char *Txt_Announcement_of_exam_removed =
 	"Chamada para exame removida.";
 #endif
 
-const char *Txt_Announcements_of_exam =
+const char *Txt_Announcements_of_exams =
 #if   L==1
-	 "Convocat&ograve;ries d'examen";
+	 "Convocat&ograve;ries d'ex&agrave;mens";
 #elif L==2
 	 "Aufrufe f&uuml;r Pr&uuml;fung";
 #elif L==3
-	 "Announcements of exam";
+	 "Announcements of exams";
 #elif L==4
-	 "Convocatorias de examen";
+	 "Convocatorias de ex&aacute;menes";
 #elif L==5
-	 "Convocations &agrave; un examen";
+	 "Convocations &agrave; examens";
 #elif L==6
-	 "Convocatorias de examen";	// Okoteve traducción
+	 "Convocatorias de ex&aacute;menes";	// Okoteve traducción
 #elif L==7
 	 "Appelli d'esame";
 #elif L==8
-	 "Anonse egzamin";
+	 "Ogloszenia egzamin&oacute;w";
 #elif L==9
-	 "Chamadas para exame";
+	 "Chamadas para exames";
 #endif
 
 const char *Txt_Another_centre =
@@ -11331,25 +11331,25 @@ const char *Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam =
 	"Estrutura do exame";
 #endif
 
-const char *Txt_EXAM_ANNOUNCEMENT_Year =	// 1, 2, 3..., not 1984, 2010...
+const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester =	// 1, 2, 3..., not 1984, 2038...
 #if   L==1
-	"Curs";
+	"Any o semestre";
 #elif L==2
-	"Jahr";
+	"Jahr oder Semester";
 #elif L==3
-	"Year";
+	"Year or semester";
 #elif L==4
-	"Curso";
+	"A&ntilde;o o semestre";
 #elif L==5
-	"Ann&eacute;e";
+	"Ann&eacute;e ou semestre";
 #elif L==6
-	"Curso";		// Okoteve traducción
+	"A&ntilde;o o semestre";	// Okoteve traducción
 #elif L==7
-	"Anno";
+	"Anno o semestre";
 #elif L==8
-	"Rok";
+	"Rok lub semestr";
 #elif L==9
-	"Ano";
+	"Ano ou semestre";
 #endif
 
 const char *Txt_Exam_of_X =	// Warning: it is very important to include %s in the following sentences
@@ -20580,7 +20580,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	// ActSeeAllExaAnn
 #if   L==1
-	"Llistat de convocat&ograve;ries d'exàmens d'aquesta assignatura"
+	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2
 	"Pr&uuml;fungsaufruf"
 #elif L==3
