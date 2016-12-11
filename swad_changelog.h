@@ -185,16 +185,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.95.2 (2016-12-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.96 (2016-12-11)"
 #define CSS_FILE		"swad16.94.1.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.96:    Dec 11, 2016	Now removing an announcement of exam requires confirmation. (? lines)
+        Version 16.96:    Dec 11, 2016	Now removing an announcement of exam requires confirmation. (210563 lines)
 					1 change necessary in database:
-INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1619','es','N','');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1619','es','N','Solicitar eliminaci&oacute;n de convocatoria');
 
         Version 16.95.2:  Dec 11, 2016	Code refactoring related with notices. (210514 lines)
         Version 16.95.1:  Dec 11, 2016	Code refactoring related with global announcements. (210534 lines)

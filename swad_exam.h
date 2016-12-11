@@ -54,6 +54,7 @@ typedef enum
 void Exa_PutFrmEditAExamAnnouncement (void);
 void Exa_ReceiveExamAnnouncement (void);
 void Exa_PrintExamAnnouncement (void);
+void Exa_ReqRemoveExamAnnouncement (void);
 void Exa_RemoveExamAnnouncement (void);
 void Exa_FreeMemExamAnnouncement (void);
 void Exa_FreeListExamAnnouncements (void);

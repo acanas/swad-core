@@ -91,7 +91,7 @@ void Asg_FreeListAssignments (void);
 void Asg_GetNotifAssignment (char *SummaryStr,char **ContentStr,long AsgCod,unsigned MaxChars,bool GetContent);
 
 long Asg_GetParamAsgCod (void);
-void Asg_AskRemAssignment (void);
+void Asg_ReqRemAssignment (void);
 void Asg_RemoveAssignment (void);
 void Asg_HideAssignment (void);
 void Asg_ShowAssignment (void);

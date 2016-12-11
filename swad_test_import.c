@@ -255,7 +255,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    fclose (Gbl.Test.XML.FileXML);
 
    /***** Return to start of query result *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
 
    /***** Write the link to XML file *****/
    fprintf (Gbl.F.Out,"<a href=\"%s/%s/%s/test.xml\" class=\"%s\" target=\"_blank\">",

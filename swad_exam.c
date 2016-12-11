@@ -365,6 +365,36 @@ void Exa_PrintExamAnnouncement (void)
 /************************ Remove an exam announcement ************************/
 /*****************************************************************************/
 
+void Exa_ReqRemoveExamAnnouncement (void)
+  {
+   extern const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam;
+   extern const char *Txt_Remove;
+   long ExaCod;
+
+   /***** Get the code of the exam announcement *****/
+   if ((ExaCod = Exa_GetParamExaCod ()) <= 0)
+      Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
+
+   /***** Message *****/
+   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
+
+   /***** View announcement *****/
+   Exa_AllocMemExamAnnouncement ();
+   Exa_GetDataExamAnnouncementFromDB (ExaCod);
+   Exa_ShowExamAnnouncement (ExaCod,Exa_NORMAL_VIEW);
+   Exa_FreeMemExamAnnouncement ();
+
+   /***** Button of confirmation of removing *****/
+   Act_FormStart (ActRemExaAnn);
+   Exa_PutHiddenParamExaCod (ExaCod);
+   Lay_PutRemoveButton (Txt_Remove);
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************************ Remove an exam announcement ************************/
+/*****************************************************************************/
+
 void Exa_RemoveExamAnnouncement (void)
   {
    extern const char *Txt_Announcement_of_exam_removed;
@@ -1371,7 +1401,7 @@ static void Exa_PutIconsExamAnnouncement (void)
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/
-      Lay_PutContextualLink (ActRemExaAnn,Exa_PutParamExaCodToEdit,
+      Lay_PutContextualLink (ActReqRemExaAnn,Exa_PutParamExaCodToEdit,
                              "remove-on64x64.png",
 			     Txt_Remove,NULL,
                              NULL);

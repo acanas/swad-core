@@ -837,6 +837,7 @@ Assessment:
 	686. ActEdiExaAnn		Edit an exam announcement
 	687. ActRcvExaAnn		Receive an exam announcement
 	688. ActPrnExaAnn		Show an exam announcement ready to be printed
+	NEW. ActReqRemExaAnn		Request the removal of an exam announcement
 	689. ActRemExaAnn		Remove an exam announcement
 
 	690. ActChgToSeeMrk		Change to see marks in course/group
@@ -2127,7 +2128,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiOneAsg	*/{ 814,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
    /* ActNewAsg		*/{ 803,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
    /* ActChgAsg		*/{ 815,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
-   /* ActReqRemAsg	*/{ 813,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_AskRemAssignment		,NULL},
+   /* ActReqRemAsg	*/{ 813,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_ReqRemAssignment		,NULL},
    /* ActRemAsg		*/{ 806,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RemoveAssignment		,NULL},
    /* ActHidAsg		*/{ 964,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_HideAssignment		,NULL},
    /* ActShoAsg		*/{ 965,-1,TabUnk,ActSeeAsg		,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_ShowAssignment		,NULL},
@@ -2244,6 +2245,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiExaAnn	*/{  91,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_PutFrmEditAExamAnnouncement,NULL},
    /* ActRcvExaAnn	*/{ 110,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ReceiveExamAnnouncement	,NULL},
    /* ActPrnExaAnn	*/{ 179,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Exa_PrintExamAnnouncement	,NULL},
+   /* ActReqRemExaAnn	*/{1619,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ReqRemoveExamAnnouncement	,NULL},
    /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_RemoveExamAnnouncement	,NULL},
 
    /* ActChgToSeeMrk	*/{1198,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
@@ -3982,7 +3984,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeLstStdAtt,	// #1074
 	ActPrnLstStdAtt,	// #1075
 	ActRecAttMe,		// #1076
-	ActLogInLan,	// #1077
+	ActLogInLan,		// #1077
 	ActSeeDocCrs,		// #1078
 	ActSeeMrkCrs,		// #1079
 	ActReqSeeUsrTstRes,	// #1080
@@ -4155,7 +4157,6 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeAdmDocDeg,	// #1247
 	ActSeeAdmDocCtr,	// #1248
 	ActSeeAdmDocIns,	// #1249
-
 	ActChgToSeeDocDeg,	// #1250
 	ActSeeDocDeg,		// #1251
 	ActExpSeeDocDeg,	// #1252
@@ -4185,7 +4186,6 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqDatAdmDocDeg,	// #1276
 	ActChgDatAdmDocDeg,	// #1277
 	ActDowAdmDocDeg,	// #1278
-
 	ActChgToSeeDocCtr,	// #1279
 	ActSeeDocCtr,		// #1280
 	ActExpSeeDocCtr,	// #1281
@@ -4215,7 +4215,6 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActReqDatAdmDocCtr,	// #1305
 	ActChgDatAdmDocCtr,	// #1306
 	ActDowAdmDocCtr,	// #1307
-
 	ActChgToSeeDocIns,	// #1308
 	ActSeeDocIns,		// #1309
 	ActExpSeeDocIns,	// #1310
@@ -4527,6 +4526,7 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActLogInUsrAgdLan,	// #1616
 	ActSeeMyPubAgd,		// #1617
 	ActPrnAgdQR,		// #1618
+	ActReqRemExaAnn,	// #1619
 	};
 
 /*****************************************************************************/

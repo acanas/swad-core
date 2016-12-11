@@ -8845,6 +8845,27 @@ const char *Txt_Do_you_really_want_to_remove_the_folder_X =	// Warning: it is ve
 	" o diret&oacute;rio <strong>%s</strong> e todo o seu conte&uacute;do?";
 #endif
 
+const char *Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam =
+#if   L==1
+	"De veres voleu eliminar la seg&uuml;ent convocat&ograve;ria d'examen?";
+#elif L==2
+	"Wollen Sie wirklich, um die folgende Aufruf f&uuml;r Pr&uuml;fung?";
+#elif L==3
+	"Do you really want to remove the following announcement of exam?";
+#elif L==4
+	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";
+#elif L==5
+	"Voulez-vous vraiment supprimer la convocation &agrave; un examen suivante?";
+#elif L==6
+	"&iquest;Realmente desea eliminar la siguiente convocatoria de examen?";		// Okoteve traducción
+#elif L==7
+	"Vuoi realmente rimuovere il seguente appello d'esame?";
+#elif L==8
+	"Czy na pewno chcesz usun&aogon;&cacute; nast&eogon;puj&aogon;c&aogon; zapowied&zacute; egzaminu?";
+#elif L==9
+	"Voc&ecirc; realmente deseja remover a seguinte chamada para exame?";
+#endif
+
 const char *Txt_Do_you_really_want_to_remove_the_following_notice =
 #if   L==1
 	"De veres voleu eliminar el seg&uuml;ent av&iacute;s?";

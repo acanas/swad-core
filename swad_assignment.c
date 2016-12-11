@@ -894,10 +894,10 @@ long Asg_GetParamAsgCod (void)
   }
 
 /*****************************************************************************/
-/************ Ask for confirmation of removing of an assignment **************/
+/************* Ask for confirmation of removing an assignment ****************/
 /*****************************************************************************/
 
-void Asg_AskRemAssignment (void)
+void Asg_ReqRemAssignment (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_assignment_X;
    extern const char *Txt_Remove_assignment;
