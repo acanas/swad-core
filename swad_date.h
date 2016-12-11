@@ -95,7 +95,7 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDDString);
 
 void Dat_ShowClientLocalTime (void);
 
-void Dat_GetLocalTimeFromClock (const time_t *clock);
+struct tm *Dat_GetLocalTimeFromClock (const time_t *timep);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void);

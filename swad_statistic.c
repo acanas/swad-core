@@ -1900,7 +1900,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
    struct Date Date;
    unsigned D;
    unsigned NumDaysFromLastDateToCurrDate;
-   unsigned NumDayWeek;
+   int NumDayWeek;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
 

@@ -174,7 +174,6 @@ struct Globals
       bool UsesAJAX;
      } Action;
    time_t StartExecutionTimeUTC;
-   struct tm *tblock;
    struct DateTime Now;
    struct Date Yesterday;
    char Message[Lay_MAX_BYTES_ALERT];	// String for alerts

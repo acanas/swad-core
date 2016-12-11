@@ -93,15 +93,17 @@ void Dat_GetStartExecutionTimeUTC (void)
 
 void Dat_GetAndConvertCurrentDateTime (void)
   {
-   /***** Convert current local time to a struct tblock *****/
-   Dat_GetLocalTimeFromClock (&Gbl.StartExecutionTimeUTC);
+   struct tm *tm_ptr;
 
-   Gbl.Now.Date.Year   = Gbl.tblock->tm_year + 1900;
-   Gbl.Now.Date.Month  = Gbl.tblock->tm_mon + 1;
-   Gbl.Now.Date.Day    = Gbl.tblock->tm_mday;
-   Gbl.Now.Time.Hour   = Gbl.tblock->tm_hour;
-   Gbl.Now.Time.Minute = Gbl.tblock->tm_min;
-   Gbl.Now.Time.Second = Gbl.tblock->tm_sec;
+   /***** Convert current local time to a struct tblock *****/
+   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.StartExecutionTimeUTC);
+
+   Gbl.Now.Date.Year   = tm_ptr->tm_year + 1900;
+   Gbl.Now.Date.Month  = tm_ptr->tm_mon  + 1;
+   Gbl.Now.Date.Day    = tm_ptr->tm_mday;
+   Gbl.Now.Time.Hour   = tm_ptr->tm_hour;
+   Gbl.Now.Time.Minute = tm_ptr->tm_min;
+   Gbl.Now.Time.Second = tm_ptr->tm_sec;
 
    /***** Initialize current date in format YYYYMMDD *****/
    sprintf (Gbl.Now.Date.YYYYMMDD,"%04u%02u%02u",
@@ -175,16 +177,24 @@ void Dat_ShowClientLocalTime (void)
 /***************** Compute local time, adjusting day of week *****************/
 /*****************************************************************************/
 
-void Dat_GetLocalTimeFromClock (const time_t *clock)
+struct tm *Dat_GetLocalTimeFromClock (const time_t *timep)
   {
-   if ((Gbl.tblock = localtime (clock)) != NULL)
-     {
-      // Convert from sunday, monday, tuesday... to monday, tuesday, wednesday...
-      if (Gbl.tblock->tm_wday == 0)	// If sunday
-	 Gbl.tblock->tm_wday = 6;
-      else				// If no sunday
-	 Gbl.tblock->tm_wday--;
-     }
+   struct tm *tm_ptr;
+
+   if ((tm_ptr = localtime (timep)) == NULL)
+      Lay_ShowErrorAndExit ("Can not get local time from clock.");
+
+   /***** Convert from sunday, monday, tuesday...
+	  to monday, tuesday, wednesday... *****/
+   if (tm_ptr->tm_wday == 0)	// sunday
+      tm_ptr->tm_wday = 6;
+   else if (tm_ptr->tm_wday >= 1 &&
+	    tm_ptr->tm_wday <= 6)	// monday to saturday
+      tm_ptr->tm_wday--;
+   else				// error!
+      tm_ptr->tm_wday = 0;
+
+   return tm_ptr;
   }
 
 /*****************************************************************************/
@@ -702,33 +712,37 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
 
 void Dat_GetIniEndDatesFromForm (void)
   {
+   struct tm tm;
+   struct tm *tm_ptr;
+
    /***** Get initial date *****/
    Gbl.DateRange.TimeUTC[0] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
    if (Gbl.DateRange.TimeUTC[0])
       /* Convert time UTC to a local date */
-      Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
+      tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[0]);
    else	// Gbl.DateRange.TimeUTC[0] == 0 ==> initial date not specified
      {
-      Gbl.tblock->tm_year  = Cfg_LOG_START_YEAR - 1900;
-      Gbl.tblock->tm_mon   =  0;	// January
-      Gbl.tblock->tm_mday  =  1;
-      Gbl.tblock->tm_hour  =  0;
-      Gbl.tblock->tm_min   =  0;
-      Gbl.tblock->tm_sec   =  0;
-      Gbl.tblock->tm_isdst = -1;	// a negative value means that mktime() should
-					// (use timezone information and system databases to)
-					// attempt to determine whether DST
-					// is in effect at the specified time.
-      if ((Gbl.DateRange.TimeUTC[0] = mktime (Gbl.tblock)) < 0)
+      tm.tm_year  = Cfg_LOG_START_YEAR - 1900;
+      tm.tm_mon   =  0;	// January
+      tm.tm_mday  =  1;
+      tm.tm_hour  =  0;
+      tm.tm_min   =  0;
+      tm.tm_sec   =  0;
+      tm.tm_isdst = -1;	// a negative value means that mktime() should
+				// (use timezone information and system databases to)
+				// attempt to determine whether DST
+				// is in effect at the specified time.
+      if ((Gbl.DateRange.TimeUTC[0] = mktime (&tm)) < 0)
 	 Gbl.DateRange.TimeUTC[0] = (time_t) 0;
+      tm_ptr = &tm;
      }
 
-   Gbl.DateRange.DateIni.Date.Year   = Gbl.tblock->tm_year + 1900;
-   Gbl.DateRange.DateIni.Date.Month  = Gbl.tblock->tm_mon + 1;
-   Gbl.DateRange.DateIni.Date.Day    = Gbl.tblock->tm_mday;
-   Gbl.DateRange.DateIni.Time.Hour   = Gbl.tblock->tm_hour;
-   Gbl.DateRange.DateIni.Time.Minute = Gbl.tblock->tm_min;
-   Gbl.DateRange.DateIni.Time.Second = Gbl.tblock->tm_sec;
+   Gbl.DateRange.DateIni.Date.Year   = tm_ptr->tm_year + 1900;
+   Gbl.DateRange.DateIni.Date.Month  = tm_ptr->tm_mon  + 1;
+   Gbl.DateRange.DateIni.Date.Day    = tm_ptr->tm_mday;
+   Gbl.DateRange.DateIni.Time.Hour   = tm_ptr->tm_hour;
+   Gbl.DateRange.DateIni.Time.Minute = tm_ptr->tm_min;
+   Gbl.DateRange.DateIni.Time.Second = tm_ptr->tm_sec;
 
    /***** Get end date *****/
    Gbl.DateRange.TimeUTC[1] = Dat_GetTimeUTCFromForm ("EndTimeUTC");
@@ -736,14 +750,14 @@ void Dat_GetIniEndDatesFromForm (void)
       Gbl.DateRange.TimeUTC[1] = Gbl.StartExecutionTimeUTC;
 
    /* Convert current time UTC to a local date */
-   Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[1]);
+   tm_ptr = Dat_GetLocalTimeFromClock (&Gbl.DateRange.TimeUTC[1]);
 
-   Gbl.DateRange.DateEnd.Date.Year   = Gbl.tblock->tm_year + 1900;
-   Gbl.DateRange.DateEnd.Date.Month  = Gbl.tblock->tm_mon + 1;
-   Gbl.DateRange.DateEnd.Date.Day    = Gbl.tblock->tm_mday;
-   Gbl.DateRange.DateEnd.Time.Hour   = Gbl.tblock->tm_hour;
-   Gbl.DateRange.DateEnd.Time.Minute = Gbl.tblock->tm_min;
-   Gbl.DateRange.DateEnd.Time.Second = Gbl.tblock->tm_sec;
+   Gbl.DateRange.DateEnd.Date.Year   = tm_ptr->tm_year + 1900;
+   Gbl.DateRange.DateEnd.Date.Month  = tm_ptr->tm_mon  + 1;
+   Gbl.DateRange.DateEnd.Date.Day    = tm_ptr->tm_mday;
+   Gbl.DateRange.DateEnd.Time.Hour   = tm_ptr->tm_hour;
+   Gbl.DateRange.DateEnd.Time.Minute = tm_ptr->tm_min;
+   Gbl.DateRange.DateEnd.Time.Second = tm_ptr->tm_sec;
   }
 
 /*****************************************************************************/
@@ -751,7 +765,7 @@ void Dat_GetIniEndDatesFromForm (void)
 /*****************************************************************************/
 // tm must hold a UTC date
 
-void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm)
+void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm_ptr)
   {
    const char *StrDayOfWeek[7] =
      {
@@ -780,13 +794,13 @@ void Dat_WriteRFC822DateFromTM (FILE *File,struct tm *tm)
       };
 
    fprintf (File,"%s, %d %s %d %02d:%02d:%02d UT",
-            StrDayOfWeek[tm->tm_wday],
-            tm->tm_mday,
-            StrMonth[tm->tm_mon],
-            tm->tm_year + 1900,
-            tm->tm_hour,
-            tm->tm_min,
-            tm->tm_sec);
+            StrDayOfWeek[tm_ptr->tm_wday],
+            tm_ptr->tm_mday,
+            StrMonth[tm_ptr->tm_mon],
+            tm_ptr->tm_year + 1900,
+            tm_ptr->tm_hour,
+            tm_ptr->tm_min,
+            tm_ptr->tm_sec);
   }
 
 /*****************************************************************************/
@@ -1010,13 +1024,162 @@ unsigned Dat_GetNumWeeksInYear (unsigned Year)
 
 unsigned Dat_GetDayOfWeek (unsigned Year,unsigned Month,unsigned Day)
   {
+   struct tm tm;
+   struct tm *tm_ptr;
+   time_t t;
+
+   /***** Create clock in UNIX time from date *****/
+   tm.tm_year  = Year  - 1900;
+   tm.tm_mon   = Month - 1;
+   tm.tm_mday  = Day;
+   tm.tm_hour  = 0;
+   tm.tm_min   = 0;
+   tm.tm_sec   = 0;
+   tm.tm_isdst = -1;	// a negative value means that mktime() should
+			// (use timezone information and system databases to)
+			// attempt to determine whether DST
+			// is in effect at the specified time.
+   if ((t = mktime (&tm)) < 0)
+      return 0;
+
+   /***** Compute local time, adjusting day of week *****/
+   tm_ptr = Dat_GetLocalTimeFromClock (&t);
+
+   return (unsigned) tm_ptr->tm_wday;
+  }
+
+/* Alternative:
+
    if (Month <= 2)
      {
       Month += 12;
       Year--;
      }
-   return (((Day+(Month*2)+(((Month+1)*3)/5)+Year+(Year/4-Year/100+Year/400)+2) % 7) + 5) % 7;
-  }
+   return (
+	   (
+            (
+	     Day +
+	     Month*2 + (Month*3 + 3) / 5 +
+	     Year + Year/4 - Year/100 + Year/400 +
+	     2
+	    ) % 7
+	   ) + 5
+	  ) % 7;
+
+Code generated by gcc for the alternative:
+
+0000000000001810 <Dat_GetDayOfWeek>:
+    1810:	83 fe 02             	cmp    $0x2,%esi
+    1813:	77 06                	ja     181b <Dat_GetDayOfWeek+0xb>
+    1815:	83 c6 0c             	add    $0xc,%esi
+    1818:	83 ef 01             	sub    $0x1,%edi
+    181b:	8d 44 17 02          	lea    0x2(%rdi,%rdx,1),%eax
+    181f:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
+    1824:	8d 0c 70             	lea    (%rax,%rsi,2),%ecx
+    1827:	89 f8                	mov    %edi,%eax
+    1829:	c1 e8 02             	shr    $0x2,%eax
+    182c:	01 c1                	add    %eax,%ecx
+    182e:	89 f8                	mov    %edi,%eax
+    1830:	bf 25 49 92 24       	mov    $0x24924925,%edi
+    1835:	f7 e2                	mul    %edx
+    1837:	89 d0                	mov    %edx,%eax
+    1839:	c1 ea 05             	shr    $0x5,%edx
+    183c:	c1 e8 07             	shr    $0x7,%eax
+    183f:	01 c1                	add    %eax,%ecx
+    1841:	8d 44 76 03          	lea    0x3(%rsi,%rsi,2),%eax
+    1845:	29 d1                	sub    %edx,%ecx
+    1847:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+    184c:	f7 e2                	mul    %edx
+    184e:	c1 ea 02             	shr    $0x2,%edx
+    1851:	01 d1                	add    %edx,%ecx
+    1853:	89 c8                	mov    %ecx,%eax
+    1855:	89 ce                	mov    %ecx,%esi
+    1857:	f7 e7                	mul    %edi
+    1859:	29 d6                	sub    %edx,%esi
+    185b:	d1 ee                	shr    %esi
+    185d:	01 f2                	add    %esi,%edx
+    185f:	c1 ea 02             	shr    $0x2,%edx
+    1862:	8d 04 d5 00 00 00 00 	lea    0x0(,%rdx,8),%eax
+    1869:	29 d0                	sub    %edx,%eax
+    186b:	29 c1                	sub    %eax,%ecx
+    186d:	83 c1 05             	add    $0x5,%ecx
+    1870:	89 c8                	mov    %ecx,%eax
+    1872:	f7 e7                	mul    %edi
+    1874:	89 c8                	mov    %ecx,%eax
+    1876:	29 d0                	sub    %edx,%eax
+    1878:	d1 e8                	shr    %eax
+    187a:	01 d0                	add    %edx,%eax
+    187c:	c1 e8 02             	shr    $0x2,%eax
+    187f:	8d 14 c5 00 00 00 00 	lea    0x0(,%rax,8),%edx
+    1886:	29 c2                	sub    %eax,%edx
+    1888:	29 d1                	sub    %edx,%ecx
+    188a:	89 c8                	mov    %ecx,%eax
+    188c:	c3                   	retq
+    188d:	0f 1f 00             	nopl   (%rax)
+
+Understanding the code generated by gcc:
+
+0000000000001810 <Dat_GetDayOfWeek>:
+    1810:	83 fe 02             	cmp    $2,Month
+    1813:	77 06                	ja     continue
+
+    1815:	83 c6 0c             	add    $12,Month
+    1818:	83 ef 01             	sub    $1,Year
+continue:
+    181b:	8d 44 17 02          	lea    2(Year,Day,1),Suma1	// SumAux = Day + Year + 2
+
+    181f:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx		// 1374389535
+
+    1824:	8d 0c 70             	lea    (SumAux,Month,2),Sum	// Sum = Day + Year + 2 + Month*2
+    1827:	89 f8                	mov    Year,%eax
+    1829:	c1 e8 02             	shr    $2,%eax			// Year / 4
+    182c:	01 c1                	add    %eax,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4
+    182e:	89 f8                	mov    Year,%eax
+    1830:	bf 25 49 92 24       	mov    $0x24924925,%edi		// 613566757
+    1835:	f7 e2                	mul    %edx			// Year * 1374389535
+
+    1837:	89 d0                	mov    %edx,%eax		// (Year * 1374389535) / 2^32 = (Year * 2^32 * 2^5 / 100) / 2^32 = (Year * 2^5) / 100
+    1839:	c1 ea 05             	shr    $5,%edx			// (Year * 1374389535) / 2^32 / 2^5 = Year / 100
+    183c:	c1 e8 07             	shr    $7,%eax			// (Year * 1374389535) / 2^32 / 2^7 = Year / 400
+    183f:	01 c1                	add    %eax,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400
+    1841:	8d 44 76 03          	lea    3(Month,Month,2),%eax	// Month*3 + 3
+    1845:	29 d1                	sub    %edx,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100
+
+    1847:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+    184c:	f7 e2                	mul    %edx			// (Month*3 + 3) * 3435973837
+    184e:	c1 ea 02             	shr    $2,%edx			// (Month*3 + 3) * 3435973837 / 2^32 / 2^2 = (Month*3 + 3) / 5
+    1851:	01 d1                	add    %edx,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100 + (Month*3 + 3) / 5
+
+    1853:	89 c8                	mov    Sum,%eax
+    1855:	89 ce                	mov    Sum,%esi
+
+    1857:	f7 e7                	mul    %edi			// edx = Sum * 613566757 / 2^32
+    1859:	29 d6                	sub    %edx,%esi		//
+    185b:	d1 ee                	shr    %esi			//
+    185d:	01 f2                	add    %esi,%edx		//
+    185f:	c1 ea 02             	shr    $2,%edx			//
+    1862:	8d 04 d5 00 00 00 00 	lea    0(,%rdx,8),%eax		//
+    1869:	29 d0                	sub    %edx,%eax		//
+    186b:	29 c1                	sub    %eax,Sum			// Sum % 7
+
+    186d:	83 c1 05             	add    $5,Mod			// Mod += 5
+    1870:	89 c8                	mov    Mod,%eax
+
+    1872:	f7 e7                	mul    %edi
+    1874:	89 c8                	mov    Mod,%eax
+    1876:	29 d0                	sub    %edx,%eax
+    1878:	d1 e8                	shr    %eax
+    187a:	01 d0                	add    %edx,%eax
+    187c:	c1 e8 02             	shr    $2,%eax
+    187f:	8d 14 c5 00 00 00 00 	lea    0(,%rax,8),%edx
+    1886:	29 c2                	sub    %eax,%edx
+    1888:	29 d1                	sub    %edx,Mod			// Mod % 7
+
+    188a:	89 c8                	mov    Mod,%eax
+    188c:	c3                   	retq
+    188d:	0f 1f 00             	nopl   (%rax)
+
+ */
 
 /*****************************************************************************/
 /***************** Compute the day of year (from 1 to 366) *******************/
@@ -1069,7 +1232,7 @@ void Dat_CalculateWeekOfYear (struct Date *Date)
    */
    int DayThatFirstWeekStarts[7] = {1,0,-1,-2,4,3,2};
    unsigned DayThatLastWeekEnds[7] = {30,29,28,34,33,32,31};
-   unsigned January1DayOfWeek = Dat_GetDayOfWeek (Date->Year,1,1); // From 0 to 6
+   unsigned January1DayOfWeek   = Dat_GetDayOfWeek (Date->Year, 1, 1); // From 0 to 6
    unsigned December31DayOfWeek = Dat_GetDayOfWeek (Date->Year,12,31); // From 0 to 6
 
    if (Date->Month == 1 && (int) Date->Day < DayThatFirstWeekStarts[January1DayOfWeek])	// Week is the last week of the year before this
