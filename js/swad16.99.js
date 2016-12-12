@@ -72,7 +72,8 @@ function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
 // TimeUTC is the date-time to write in UTC UNIX time format
 // separator is HTML code to write between date and time
 
-function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameDay,OmitSeconds) {
+function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
+									WriteDateOnSameDay,WriteWeekDay,WriteSeconds) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
 	var todayYea = today.getFullYear();
@@ -83,6 +84,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameD
 	var Yea;
 	var Mon;
 	var Day;
+	var DayOfWeek;
 	var Hou;
 	var Min;
 	var Sec;
@@ -98,14 +100,14 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameD
 	Mon = d.getMonth() + 1;
 	Day = d.getDate();
 
-	if (OmitDateOnSameDay)
+	if (WriteDateOnSameDay)
+		WriteDate = true;
+	else
 		WriteDate = (Yea != writeLocalDateHMSFromUTC.lastd.getFullYear()	||
 					 Mon != writeLocalDateHMSFromUTC.lastd.getMonth() + 1	||
 					 Day != writeLocalDateHMSFromUTC.lastd.getDate())
-	else
-		WriteDate = true;
 
-	writeLocalDateHMSFromUTC.lastd = d;	// Remember current date for the next call
+	writeLocalDateHMSFromUTC.lastd = d;	// Static variable to remember current date for the next call
 
 	/* Set date */
 	if (WriteDate) {
@@ -119,6 +121,14 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameD
 			StrDate = StrToday;
 		else
 			StrDate = Yea.toString() + StrMon + StrDay;
+		
+		if (WriteWeekDay) {
+			DayOfWeek = d.getDay();
+			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
+			StrDate = StrDate + Separator + DAYS[DayOfWeek] + Separator;
+		}
+		else
+			StrDate = StrDate + Separator;
 	}
 	else
 		StrDate = '';
@@ -128,19 +138,18 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameD
 	Min = d.getMinutes();
 	StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
 	StrMin = ((Min < 10) ? ':0' : ':') + Min;
-	if (OmitSeconds)
-		StrSec = '';
-	else {
+	if (WriteSeconds) {
 		Sec = d.getSeconds();
 		if (Sec)
 			StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
 		else
 			StrSec = '';
 	}
+	else
+		StrSec = '';
 
 	/* Write date and time */
-	document.getElementById(id).innerHTML = StrDate + Separator +
-											StrHou + StrMin + StrSec;
+	document.getElementById(id).innerHTML = StrDate + StrHou + StrMin + StrSec;
 }
 
 // Set local date-time form fields from UTC time

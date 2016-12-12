@@ -3481,7 +3481,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
 	    UniqueId++;
             fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"%s LEFT_TOP %s\">"
                                "<script type=\"text/javascript\">"
-			       "writeLocalDateHMSFromUTC('date_%u',%ld,'<br />','%s',false,false);"
+			       "writeLocalDateHMSFromUTC('date_%u',"
+			       "%ld,'<br />','%s',true,false,false);"
 			       "</script>"
 			       "</td>",
                      UniqueId,Style,BgColor,

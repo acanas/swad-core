@@ -442,7 +442,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Start date/time *****/
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
+                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
@@ -452,13 +452,14 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('svy_date_start_%u',%ld,'<br />','%s',false,false);"
+                      "writeLocalDateHMSFromUTC('svy_date_start_%u',"
+                      "%ld,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_START_TIME],Txt_Today);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_BOTTOM",
             UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
@@ -468,7 +469,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('svy_date_end_%u',%ld,'<br />','%s',true,false);"
+                      "writeLocalDateHMSFromUTC('svy_date_end_%u',"
+                      "%ld,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_END_TIME],Txt_Today);

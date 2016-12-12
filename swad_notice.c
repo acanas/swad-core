@@ -711,7 +711,8 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('notice_date_%u',%ld,'<br />','%s',false,false);"
+                      "writeLocalDateHMSFromUTC('notice_date_%u',"
+                      "%ld,'<br />','%s',true,false,false);"
                       "</script>"
 	              "</div>",
 	    UniqueId,(long) TimeUTC,Txt_Today);

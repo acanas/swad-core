@@ -604,9 +604,10 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_start_%u',%ld,'<br />','%s',false,true);"
+                      "writeLocalDateHMSFromUTC('agd_date_start_%u',"
+                      "%ld,'<br />','%s',true,true,false);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -617,9 +618,10 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_end_%u',%ld,'<br />','%s',true,true);"
+                      "writeLocalDateHMSFromUTC('agd_date_end_%u',"
+                      "%ld,'<br />','%s',false,true,false);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -672,14 +674,11 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
-
-   fprintf (Gbl.F.Out,"<p class=\"%s\">"
-                      "%s"
-                      "</p>"
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">"
+	              "<p class=\"%s\">%s</p>"
                       "</td>"
                       "</tr>",
+            Gbl.RowEvenOdd,
             AgdEvent.Hidden ? "DAT_LIGHT" :
         	              "DAT",
             Txt);

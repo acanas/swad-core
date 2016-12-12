@@ -672,7 +672,8 @@ static bool Tst_CheckIfNextTstAllowed (void)
 	                 "<span id=\"date_next_test\">"
 	                 "</span>"
                          "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('date_next_test',%ld,'&nbsp;','%s',false,false);"
+			 "writeLocalDateHMSFromUTC('date_next_test',"
+			 "%ld,',&nbsp;','%s',true,true,true);"
 			 "</script>"
 			 "</div>",
 	       (long) TimeNextTestUTC,Txt_Today);
@@ -2813,7 +2814,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td id=\"tst_date_%u\""
 	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('tst_date_%u',%ld,'<br />','%s',false,false);"
+                         "writeLocalDateHMSFromUTC('tst_date_%u',"
+                         "%ld,'<br />','%s',true,false,true);"
                          "</script>"
                          "</td>",
                UniqueId,Gbl.RowEvenOdd,
@@ -7252,7 +7254,8 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
          UniqueId++;
 	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,'&nbsp;','%s',false,false);"
+			    "writeLocalDateHMSFromUTC('tst_date_%u',"
+			    "%ld,',&nbsp;','%s',true,false,true);"
 			    "</script>"
 			    "</td>",
 	          UniqueId,ClassDat,Gbl.RowEvenOdd,
@@ -7637,7 +7640,8 @@ void Tst_ShowOneTestResult (void)
 			 "</td>"
 			 "<td id=\"test\" class=\"DAT LEFT_TOP\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('test',%ld,'&nbsp;','%s',false,false);"
+			 "writeLocalDateHMSFromUTC('test',"
+			 "%ld,',&nbsp;','%s',true,true,true);"
 			 "</script>"
 			 "</td>"
 			 "</tr>",

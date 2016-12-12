@@ -314,9 +314,10 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,'<br />','%s',false,false);"
+                      "writeLocalDateHMSFromUTC('asg_date_start_%u',"
+                      "%ld,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -329,9 +330,10 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,'<br />','%s',true,false);"
+                      "writeLocalDateHMSFromUTC('asg_date_end_%u',"
+                      "%ld,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
 	    UniqueId,

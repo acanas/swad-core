@@ -362,7 +362,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    /***** Start date/time *****/
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"  \
-	              "<td id=\"att_date_start_%u\" class=\"%s LEFT_TOP",
+	              "<td id=\"att_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -372,13 +372,14 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'<br />','%s',false,false);"
+                      "writeLocalDateHMSFromUTC('att_date_start_%u',"
+                      "%ld,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_START_TIME],Txt_Today);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_BOTTOM",
             UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -388,7 +389,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_end_%u',%ld,'<br />','%s',true,false);"
+                      "writeLocalDateHMSFromUTC('att_date_end_%u',"
+                      "%ld,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_END_TIME],Txt_Today);
@@ -3107,7 +3109,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
                          "<span id=\"att_date_start_%u\"></span> %s"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s',false,false);"
+			 "writeLocalDateHMSFromUTC('att_date_start_%u',"
+			 "%ld,',&nbsp;','%s',true,true,true);"
 			 "</script>"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
@@ -3515,7 +3518,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s',false,false);"
+			    "writeLocalDateHMSFromUTC('att_date_start_%u',"
+			    "%ld,',&nbsp;','%s',true,true,true);"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",

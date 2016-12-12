@@ -442,6 +442,7 @@ static void Lay_WriteScripts (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_DAYS_CAPS[7];
+   extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
    unsigned Month;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
@@ -521,6 +522,17 @@ static void Lay_WriteScripts (void)
 	 if (DayOfWeek)
 	    fprintf (Gbl.F.Out,",");
 	 fprintf (Gbl.F.Out,"'%c'",Txt_DAYS_CAPS[DayOfWeek][0]);
+	}
+      fprintf (Gbl.F.Out,"];\n");
+
+      fprintf (Gbl.F.Out,"	var DAYS = [");
+      for (DayOfWeek = 0;
+	   DayOfWeek < 7;
+	   DayOfWeek++)
+	{
+	 if (DayOfWeek)
+	    fprintf (Gbl.F.Out,",");
+	 fprintf (Gbl.F.Out,"'%s'",Txt_DAYS_SMALL[DayOfWeek]);
 	}
       fprintf (Gbl.F.Out,"];\n");
 
