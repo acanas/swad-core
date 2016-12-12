@@ -3042,6 +3042,7 @@ static bool Brw_CheckIfQuotaExceded (void)
 
 void Brw_AskEditWorksCrs (void)
   {
+   extern const char *Hlp_ASSESSMENT_Homework_for_teachers;
    extern const char *Txt_Users;
    extern const char *Txt_View_homework;
    unsigned NumTotalUsrs;
@@ -3064,7 +3065,8 @@ void Brw_AskEditWorksCrs (void)
 	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
 
    /***** Draw class photos to select users *****/
-   Lay_StartRoundFrame (NULL,Txt_Users,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Users,
+                        NULL,Hlp_ASSESSMENT_Homework_for_teachers);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
@@ -3130,7 +3132,7 @@ static void Brw_ShowFileBrowserNormal (void)
 
 static void Brw_ShowFileBrowsersAsgWrkCrs (void)
   {
-   extern const char *Hlp_ASSESSMENT_Works;
+   extern const char *Hlp_ASSESSMENT_Homework_for_teachers;
    extern const char *Txt_Assignments_and_other_works;
    extern const char *Txt_You_must_select_one_ore_more_users;
    const char *Ptr;
@@ -3147,7 +3149,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
 
       /***** Header of the table with the list of users *****/
       Lay_StartRoundFrameTable ("100%",Txt_Assignments_and_other_works,
-                                Brw_PutIconShowFigure,Hlp_ASSESSMENT_Works,0);
+                                Brw_PutIconShowFigure,Hlp_ASSESSMENT_Homework_for_teachers,0);
 
       /***** List the assignments and works of the selected users *****/
       Ptr = Gbl.Usrs.Select.All;
@@ -3455,7 +3457,8 @@ static void Brw_ShowFileBrowser (void)
    extern const char *Hlp_COURSE_Documents;
    extern const char *Hlp_COURSE_Private;
    extern const char *Hlp_COURSE_Shared;
-   extern const char *Hlp_ASSESSMENT_Works;
+   extern const char *Hlp_ASSESSMENT_Homework_for_students;
+   extern const char *Hlp_ASSESSMENT_Homework_for_teachers;
    extern const char *Hlp_ASSESSMENT_Marks;
    extern const char *Hlp_PROFILE_Briefcase;
 
@@ -3511,16 +3514,16 @@ static void Brw_ShowFileBrowser (void)
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_CRS] = Hlp_COURSE_Documents;		// Brw_ADMI_DOCUM_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_CRS] = Hlp_COURSE_Shared;		// Brw_ADMI_SHARE_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_SHARE_GRP] = Hlp_COURSE_Shared;		// Brw_ADMI_SHARE_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_USR] = Hlp_ASSESSMENT_Works;		// Brw_ADMI_WORKS_USR
-   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_CRS] = NULL;				// Brw_ADMI_WORKS_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_USR] = Hlp_ASSESSMENT_Homework_for_students;	// Brw_ADMI_WORKS_USR
+   Brw_HelpOfFileBrowser[Brw_ADMI_WORKS_CRS] = Hlp_ASSESSMENT_Homework_for_teachers;	// Brw_ADMI_WORKS_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_CRS] = Hlp_ASSESSMENT_Marks;		// Brw_ADMI_MARKS_CRS
    Brw_HelpOfFileBrowser[Brw_ADMI_BRIEF_USR] = Hlp_PROFILE_Briefcase;		// Brw_ADMI_BRIEF_USR
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_GRP] = Hlp_COURSE_Documents;		// Brw_SHOW_DOCUM_GRP
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_GRP] = Hlp_COURSE_Documents;		// Brw_ADMI_DOCUM_GRP
    Brw_HelpOfFileBrowser[Brw_SHOW_MARKS_GRP] = Hlp_ASSESSMENT_Marks;		// Brw_SHOW_MARKS_GRP
    Brw_HelpOfFileBrowser[Brw_ADMI_MARKS_GRP] = Hlp_ASSESSMENT_Marks;		// Brw_ADMI_MARKS_GRP
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_USR] = Hlp_ASSESSMENT_Works;		// Brw_ADMI_ASSIG_USR
-   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_CRS] = NULL;				// Brw_ADMI_ASSIG_CRS
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_USR] = Hlp_ASSESSMENT_Homework_for_students;	// Brw_ADMI_ASSIG_USR
+   Brw_HelpOfFileBrowser[Brw_ADMI_ASSIG_CRS] = Hlp_ASSESSMENT_Homework_for_teachers;	// Brw_ADMI_ASSIG_CRS
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_DEG] = Hlp_DEGREE_Documents;		// Brw_SHOW_DOCUM_DEG
    Brw_HelpOfFileBrowser[Brw_ADMI_DOCUM_DEG] = Hlp_DEGREE_Documents;		// Brw_ADMI_DOCUM_DEG
    Brw_HelpOfFileBrowser[Brw_SHOW_DOCUM_CTR] = Hlp_CENTRE_Documents;		// Brw_SHOW_DOCUM_CTR
@@ -6148,7 +6151,7 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('asg_start_date_%u',%ld,'&nbsp;','%s');"
+			 "writeLocalDateHMSFromUTC('asg_start_date_%u',%ld,'&nbsp;','%s',false,false);"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME],Txt_Today);
@@ -6168,7 +6171,7 @@ static void Brw_WriteDatesAssignment (void)
                Gbl.FileBrowser.Asg.Open ? "ASG_LST_DATE_GREEN" :
                                           "ASG_LST_DATE_RED");
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('asg_end_date_%u',%ld,'&nbsp;','%s');"
+			 "writeLocalDateHMSFromUTC('asg_end_date_%u',%ld,'&nbsp;','%s',true,false);"
 			 "</script>",
                UniqueId,
 	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME],Txt_Today);
@@ -6211,7 +6214,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
       UniqueId++;
       fprintf (Gbl.F.Out,"<span id=\"filedate%u\"></span>"
 	                 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('filedate%u',%ld,'&nbsp;','%s');"
+			 "writeLocalDateHMSFromUTC('filedate%u',%ld,'&nbsp;','%s',false,false);"
                          "</script>",
                UniqueId,
                UniqueId,(long) FileMetadata->Time,Txt_Today);
@@ -9375,7 +9378,7 @@ void Brw_ShowFileMetadata (void)
 			    "</td>"
 			    "<td id=\"filedate\" class=\"DAT LEFT_MIDDLE\">"
 	                    "<script type=\"text/javascript\">"
-		            "writeLocalDateHMSFromUTC('filedate',%ld,'&nbsp;','%s');"
+		            "writeLocalDateHMSFromUTC('filedate',%ld,'&nbsp;','%s',false,false);"
 		            "</script>"
 	                    "</td>"
 			    "</tr>",

@@ -372,7 +372,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'<br />','%s',false,false);"
                       "</script>"
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_START_TIME],Txt_Today);
@@ -388,7 +388,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_end_%u',%ld,'<br />','%s');"
+                      "writeLocalDateHMSFromUTC('att_date_end_%u',%ld,'<br />','%s',true,false);"
                       "</script>"
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_END_TIME],Txt_Today);
@@ -3107,7 +3107,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
                          "<span id=\"att_date_start_%u\"></span> %s"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s');"
+			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s',false,false);"
 			 "</script>"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
@@ -3515,7 +3515,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s');"
+			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,'&nbsp;','%s',false,false);"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",

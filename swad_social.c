@@ -1449,7 +1449,7 @@ static void Soc_WriteDateTime (time_t TimeUTC)
    // This must be out of the div where the output is written
    // because it will be evaluated in a loop in JavaScript
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMFromUTC('%s',%ld,'&nbsp;','%s');"
+		      "writeLocalDateHMSFromUTC('%s',%ld,'&nbsp;','%s',false,true);"
                       "</script>",
             IdDateTime,(long) TimeUTC,Txt_Today);
   }

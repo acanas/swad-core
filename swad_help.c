@@ -116,7 +116,8 @@ const char *Hlp_ASSESSMENT_Assignments                 = WIKI "ASSESSMENT.Assign
 const char *Hlp_ASSESSMENT_Assignments_new_assignment  = WIKI "ASSESSMENT.Assignments#new-assignment";
 const char *Hlp_ASSESSMENT_Assignments_edit_assignment = WIKI "ASSESSMENT.Assignments#edit-assignment";
 
-const char *Hlp_ASSESSMENT_Works = WIKI "ASSESSMENT.Works";
+const char *Hlp_ASSESSMENT_Homework_for_students = WIKI "ASSESSMENT.Homework#for-students";
+const char *Hlp_ASSESSMENT_Homework_for_teachers = WIKI "ASSESSMENT.Homework#for-teachers";
 
 const char *Hlp_ASSESSMENT_Tests              = WIKI "ASSESSMENT.Tests";
 const char *Hlp_ASSESSMENT_Tests_test_results = WIKI "ASSESSMENT.Tests#test-results";

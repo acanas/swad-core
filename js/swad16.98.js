@@ -72,19 +72,21 @@ function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
 // TimeUTC is the date-time to write in UTC UNIX time format
 // separator is HTML code to write between date and time
 
-function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
+function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,OmitDateOnSameDay,OmitSeconds) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
 	var todayYea = today.getFullYear();
 	var todayMon = today.getMonth()+1;
 	var todayDay = today.getDate();
 	var d = new Date();
+	var WriteDate;
 	var Yea;
 	var Mon;
 	var Day;
 	var Hou;
 	var Min;
 	var Sec;
+	var StrDate;
 	var StrMon;
 	var StrDay;
 	var StrHou;
@@ -95,64 +97,50 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,separator,StrToday) {
 	Yea = d.getFullYear();
 	Mon = d.getMonth() + 1;
 	Day = d.getDate();
+
+	if (OmitDateOnSameDay)
+		WriteDate = (Yea != writeLocalDateHMSFromUTC.lastd.getFullYear()	||
+					 Mon != writeLocalDateHMSFromUTC.lastd.getMonth() + 1	||
+					 Day != writeLocalDateHMSFromUTC.lastd.getDate())
+	else
+		WriteDate = true;
+
+	writeLocalDateHMSFromUTC.lastd = d;	// Remember current date for the next call
+
+	/* Set date */
+	if (WriteDate) {
+		StrMon = ((Mon < 10) ? '-0' : '-') + Mon;
+		StrDay = ((Day < 10) ? '-0' : '-') + Day;
+
+		if (Yea == todayYea &&
+			Mon == todayMon &&
+			Day == todayDay &&	// Today
+			StrToday.length)
+			StrDate = StrToday;
+		else
+			StrDate = Yea.toString() + StrMon + StrDay;
+	}
+	else
+		StrDate = '';
+
+	/* Set time */
 	Hou = d.getHours();
 	Min = d.getMinutes();
-	Sec = d.getSeconds();
-	StrMon = ((Mon < 10) ? '-0' : '-') + Mon;
-	StrDay = ((Day < 10) ? '-0' : '-') + Day;
-	StrHou = ((Hou < 10) ? '0' : '') + Hou;
+	StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
 	StrMin = ((Min < 10) ? ':0' : ':') + Min;
-	if (Sec)
-		StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
-	else
+	if (OmitSeconds)
 		StrSec = '';
-	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
-		StrToday.length)
-		document.getElementById(id).innerHTML = StrToday +
-												separator +
-												StrHou + StrMin + StrSec;
-	else
-		document.getElementById(id).innerHTML = Yea    + StrMon + StrDay +
-												separator +
-												StrHou + StrMin + StrSec;
-}
+	else {
+		Sec = d.getSeconds();
+		if (Sec)
+			StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
+		else
+			StrSec = '';
+	}
 
-function writeLocalDateHMFromUTC (id,TimeUTC,separator,StrToday) {
-	// HM: Hour, Minutes
-	var today = new Date();
-	var todayYea = today.getFullYear();
-	var todayMon = today.getMonth()+1;
-	var todayDay = today.getDate();
-	var d = new Date();
-	var Yea;
-	var Mon;
-	var Day;
-	var Hou;
-	var Min;
-	var StrMon;
-	var StrDay;
-	var StrHou;
-	var StrMin;
-
-	d.setTime(TimeUTC * 1000);
-	Yea = d.getFullYear();
-	Mon = d.getMonth() + 1;
-	Day = d.getDate();
-	Hou = d.getHours();
-	Min = d.getMinutes();
-	StrMon = ((Mon < 10) ? '0' : '') + Mon;
-	StrDay = ((Day < 10) ? '0' : '') + Day;
-	StrHou = ((Hou < 10) ? '0' : '') + Hou;
-	StrMin = ((Min < 10) ? '0' : '') + Min;
-	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
-		StrToday.length)
-		document.getElementById(id).innerHTML = StrToday +
-												separator +
-												StrHou + ':' + StrMin;
-	else
-		document.getElementById(id).innerHTML = Yea    + '-' + StrMon + '-' + StrDay +
-												separator +
-												StrHou + ':' + StrMin;
+	/* Write date and time */
+	document.getElementById(id).innerHTML = StrDate + Separator +
+											StrHou + StrMin + StrSec;
 }
 
 // Set local date-time form fields from UTC time
