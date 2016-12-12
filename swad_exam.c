@@ -274,6 +274,8 @@ void Exa_FreeMemExamAnnouncement (void)
 /*****************************************************************************/
 /************************ Receive an exam announcement ***********************/
 /*****************************************************************************/
+// This function is splitted into a-priori and a-posteriori functions
+// in order to view updated links in month of left column
 
 void Exa_ReceiveExamAnnouncement1 (void)
   {
@@ -391,6 +393,8 @@ void Exa_ReqRemoveExamAnnouncement (void)
 /*****************************************************************************/
 /************************ Remove an exam announcement ************************/
 /*****************************************************************************/
+// This function is splitted into a-priori and a-posteriori functions
+// in order to view updated links in month of left column
 
 void Exa_RemoveExamAnnouncement1 (void)
   {
@@ -432,6 +436,8 @@ void Exa_RemoveExamAnnouncement2 (void)
 /*****************************************************************************/
 /************************ Hide an exam announcement **************************/
 /*****************************************************************************/
+// This function is splitted into a-priori and a-posteriori functions
+// in order to view updated links in month of left column
 
 void Exa_HideExamAnnouncement1 (void)
   {
@@ -452,10 +458,10 @@ void Exa_HideExamAnnouncement1 (void)
 
 void Exa_HideExamAnnouncement2 (void)
   {
-   extern const char *Txt_Announcement_of_exam_is_now_hidden;
+   extern const char *Txt_The_announcement_of_exam_is_now_hidden;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_of_exam_is_now_hidden);
+   Lay_ShowAlert (Lay_SUCCESS,Txt_The_announcement_of_exam_is_now_hidden);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -464,6 +470,8 @@ void Exa_HideExamAnnouncement2 (void)
 /*****************************************************************************/
 /************************ Unhide an exam announcement ************************/
 /*****************************************************************************/
+// This function is splitted into a-priori and a-posteriori functions
+// in order to view updated links in month of left column
 
 void Exa_UnhideExamAnnouncement1 (void)
   {
@@ -484,10 +492,10 @@ void Exa_UnhideExamAnnouncement1 (void)
 
 void Exa_UnhideExamAnnouncement2 (void)
   {
-   extern const char *Txt_Announcement_of_exam_is_now_visible;
+   extern const char *Txt_The_announcement_of_exam_is_now_visible;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_of_exam_is_now_visible);
+   Lay_ShowAlert (Lay_SUCCESS,Txt_The_announcement_of_exam_is_now_visible);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();

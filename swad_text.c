@@ -2470,7 +2470,7 @@ const char *Txt_Announcements =
 
 const char *Txt_Announcement_of_exam_removed =
 #if   L==1
-	"Convocatoria d'examen eliminada.";
+	"Convocat&ograve;ria d'examen eliminada.";
 #elif L==2
 	"Aufruf zur Pr&uuml;fung entfernt.";
 #elif L==3
@@ -2487,48 +2487,6 @@ const char *Txt_Announcement_of_exam_removed =
 	"Ogloszenie egzamin usuniete.";
 #elif L==9
 	"Chamada para exame removida.";
-#endif
-
-const char *Txt_Announcement_of_exam_is_now_hidden =
-#if   L==1
-	"Convocatoria d'examen ara est&agrave; oculta.";
-#elif L==2
-	"Aufruf zur Pr&uuml;fung ist jetzt ausgeblendet.";
-#elif L==3
-	"Announcement of exam is now hidden.";
-#elif L==4
-	"Convocatoria de examen ahora est&aacute; oculta.";
-#elif L==5
-	"Convocation pour l'examen est maintenant cach&eacute;.";
-#elif L==6
-	"Convocatoria de examen ahora est&aacute; oculta.";	// Okoteve traducción
-#elif L==7
-	"Appello d'esame &egrave; ora nascosto.";
-#elif L==8
-	"Ogloszenie egzamin jest teraz ukryte.";
-#elif L==9
-	"Chamada para exame &eacute; agora oculta.";
-#endif
-
-const char *Txt_Announcement_of_exam_is_now_visible =
-#if   L==1
-	"Convocatoria d'examen ara est&agrave; visible.";
-#elif L==2
-	"Aufruf zur Pr&uuml;fung ist jetzt sichtbar.";
-#elif L==3
-	"Announcement of exam is now visible.";
-#elif L==4
-	"Convocatoria de examen ahora est&aacute; visible.";
-#elif L==5
-	"Convocation pour l'examen est maintenant visible.";
-#elif L==6
-	"Convocatoria de examen ahora est&aacute; visible.";	// Okoteve traducción
-#elif L==7
-	"Appello d'esame &egrave; ora visibile.";
-#elif L==8
-	"Ogloszenie egzamin jest teraz widoczny.";
-#elif L==9
-	"Chamada para exame &eacute; agora vis&iacute;vel.";
 #endif
 
 const char *Txt_Announcements_of_exams =
@@ -41627,23 +41585,65 @@ const char *Txt_The_alphabetical_code_X_is_not_correct =	// Warning: it is very 
 
 const char *Txt_The_announcement_of_exam_has_been_successfully_updated =
 #if   L==1
-	"La convocatoria de examen se ha actualizado correctamente.";	// Necessita traduccio
+	"La convocat&ograve;ria d'examen s'ha actualitzat correctament.";
 #elif L==2
-	"The announcement of exam has been successfully updated.";	// Need Übersetzung
+	"Der Aufruf zur Pr&uuml;fung wurde erfolgreich aktualisiert.";
 #elif L==3
 	"The announcement of exam has been successfully updated.";
 #elif L==4
 	"La convocatoria de examen se ha actualizado correctamente.";
 #elif L==5
-	"The announcement of exam has been successfully updated.";	// Besoin de traduction
+	"La convocation pour l'examen a &eacute;t&eacute; mis &agrave; jour avec succ&egrave;s.";
 #elif L==6
 	"La convocatoria de examen se ha actualizado correctamente.";	// Okoteve traducción
 #elif L==7
 	"L'apello d'esame &egrave; stata aggiornata con successo.";
 #elif L==8
-	"The announcement of exam has been successfully updated.";	// Potrzebujesz tlumaczenie
+	"Ogloszenie egzamin zosta&lstrok; pomy&sacute;lnie zaktualizowany.";
 #elif L==9
-	"The announcement of exam has been successfully updated.";	// Necessita de tradução
+	"A chamada para exame foi atualizada com sucesso.";
+#endif
+
+const char *Txt_The_announcement_of_exam_is_now_hidden =
+#if   L==1
+	"La convocat&ograve;ria d'examen ara est&agrave; oculta.";
+#elif L==2
+	"Der Aufruf zur Pr&uuml;fung ist jetzt ausgeblendet.";
+#elif L==3
+	"The announcement of exam is now hidden.";
+#elif L==4
+	"La convocatoria de examen ahora est&aacute; oculta.";
+#elif L==5
+	"La convocation pour l'examen est maintenant cach&eacute;.";
+#elif L==6
+	"La convocatoria de examen ahora est&aacute; oculta.";	// Okoteve traducción
+#elif L==7
+	"L'apello d'esame &egrave; ora nascosto.";
+#elif L==8
+	"Ogloszenie egzamin jest teraz ukryte.";
+#elif L==9
+	"A chamada para exame &eacute; agora oculta.";
+#endif
+
+const char *Txt_The_announcement_of_exam_is_now_visible =
+#if   L==1
+	"La convocat&ograve;ria d'examen ara est&agrave; visible.";
+#elif L==2
+	"Der Aufruf zur Pr&uuml;fung ist jetzt sichtbar.";
+#elif L==3
+	"The announcement of exam is now visible.";
+#elif L==4
+	"La convocatoria de examen ahora est&aacute; visible.";
+#elif L==5
+	"La convocation pour l'examen est maintenant visible.";
+#elif L==6
+	"La convocatoria de examen ahora est&aacute; visible.";	// Okoteve traducción
+#elif L==7
+	"L'apello d'esame &egrave; ora visibile.";
+#elif L==8
+	"Ogloszenie egzamin jest teraz widoczny.";
+#elif L==9
+	"A chamada para exame &eacute; agora vis&iacute;vel.";
 #endif
 
 const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled =	// Warning: it is very important to include %ld in the following sentences
