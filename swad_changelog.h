@@ -185,13 +185,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.96 (2016-12-11)"
-#define CSS_FILE		"swad16.94.1.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.97 (2016-12-12)"
+#define CSS_FILE		"swad16.97.css"
 #define JS_FILE			"swad16.90.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.97:    Dec 12, 2016	Exam announcements can be hidden. (210739 lines)
+					2 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1620','es','N','Ocultar convocatoria de examen');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1621','es','N','Mostrar convocatoria de examen');
+
         Version 16.96:    Dec 11, 2016	Now removing an announcement of exam requires confirmation. (210563 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1619','es','N','Solicitar eliminaci&oacute;n de convocatoria');

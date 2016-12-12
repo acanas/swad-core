@@ -44,6 +44,7 @@
 #include "swad_cryptography.h"
 #include "swad_department.h"
 #include "swad_degree_type.h"
+#include "swad_exam.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
@@ -486,27 +487,10 @@ struct Globals
      {
       struct Date *Lst;	// List of dates of exam announcements
       unsigned NumExaAnns;	// Number of announcements of exam in the list
-      long ExaCodToEdit;	// Used as parameter in contextual links
       long HighlightExaCod;		// Exam announcement to be highlighted
       char HighlightDate[4+1+2+1+2+1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
-      struct
-	{
-	 long CrsCod;
-	 char CrsFullName[Cns_MAX_BYTES_STRING+1];
-	 unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
-	 char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
-	 struct Date CallDate;
-	 struct Date ExamDate;
-	 struct Hour StartTime;
-	 struct Hour Duration;
-	 char *Place;
-	 char *Mode;
-	 char *Structure;
-	 char *DocRequired;
-	 char *MatRequired;
-	 char *MatAllowed;
-	 char *OtherInfo;
-	} ExaDat;
+      struct ExamData ExaDat;
+      bool NewExamAnnouncement;
      } ExamAnnouncements;
    struct
      {

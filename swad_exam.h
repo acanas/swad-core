@@ -29,6 +29,9 @@
 
 #include <stdbool.h>		// For boolean type
 
+#include "swad_constant.h"
+#include "swad_date.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
@@ -40,22 +43,51 @@ typedef enum
    Exa_FORM_VIEW,
   } Exa_TypeViewExamAnnouncement_t;
 
+#define Exa_NUM_STATUS 3
 typedef enum
   {
-   Exa_ACTIVE_EXAM_ANNOUNCEMENT   = 0,
-   Exa_OBSOLETE_EXAM_ANNOUNCEMENT = 1,
-   Exa_DELETED_EXAM_ANNOUNCEMENT  = 2,
+   Exa_VISIBLE_EXAM_ANNOUNCEMENT = 0,
+   Exa_HIDDEN_EXAM_ANNOUNCEMENT  = 1,
+   Exa_DELETED_EXAM_ANNOUNCEMENT = 2,
   } Exa_ExamAnnouncementStatus_t;	// Don't change these numbers because they are used in database
+
+struct ExamData
+  {
+   long ExaCod;
+   long CrsCod;
+   Exa_ExamAnnouncementStatus_t Status;
+   char CrsFullName[Cns_MAX_BYTES_STRING+1];
+   unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
+   char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
+   struct Date CallDate;
+   struct Date ExamDate;
+   struct Hour StartTime;
+   struct Hour Duration;
+   char *Place;
+   char *Mode;
+   char *Structure;
+   char *DocRequired;
+   char *MatRequired;
+   char *MatAllowed;
+   char *OtherInfo;
+  };
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Exa_PutFrmEditAExamAnnouncement (void);
-void Exa_ReceiveExamAnnouncement (void);
+void Exa_ReceiveExamAnnouncement1 (void);
+void Exa_ReceiveExamAnnouncement2 (void);
 void Exa_PrintExamAnnouncement (void);
 void Exa_ReqRemoveExamAnnouncement (void);
-void Exa_RemoveExamAnnouncement (void);
+void Exa_RemoveExamAnnouncement1 (void);
+void Exa_RemoveExamAnnouncement2 (void);
+void Exa_HideExamAnnouncement1 (void);
+void Exa_HideExamAnnouncement2 (void);
+void Exa_UnhideExamAnnouncement1 (void);
+void Exa_UnhideExamAnnouncement2 (void);
+
 void Exa_FreeMemExamAnnouncement (void);
 void Exa_FreeListExamAnnouncements (void);
 void Exa_ListExamAnnouncementsSee (void);
@@ -63,7 +95,7 @@ void Exa_ListExamAnnouncementsSee (void);
 void Exa_GetExaCodToHighlight (void);
 void Exa_GetDateToHighlight (void);
 
-void Exa_CreateListOfExamAnnouncements (void);
+void Exa_CreateListDatesOfExamAnnouncements (void);
 void Exa_PutHiddenParamExaCod (long ExaCod);
 void Exa_GetSummaryAndContentExamAnnouncement (char *SummaryStr,char **ContentStr,
                                                long ExaCod,unsigned MaxChars,bool GetContent);

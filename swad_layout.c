@@ -498,7 +498,7 @@ static void Lay_WriteScripts (void)
 	}
 
       /***** Create list of calls for examination *****/
-      Exa_CreateListOfExamAnnouncements ();
+      Exa_CreateListDatesOfExamAnnouncements ();
 
       /***** Write script to initialize variables used to draw months *****/
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"

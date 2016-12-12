@@ -839,6 +839,8 @@ Assessment:
 	688. ActPrnExaAnn		Show an exam announcement ready to be printed
 	NEW. ActReqRemExaAnn		Request the removal of an exam announcement
 	689. ActRemExaAnn		Remove an exam announcement
+	NEW. ActHidExaAnn		Hide exam announcement
+	NEW. ActShoExaAnn		Show exam announcement
 
 	690. ActChgToSeeMrk		Change to see marks in course/group
 
@@ -2243,10 +2245,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeOneExaAnn	*/{1572,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActSeeDatExaAnn	*/{1571,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetDateToHighlight		,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActEdiExaAnn	*/{  91,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_PutFrmEditAExamAnnouncement,NULL},
-   /* ActRcvExaAnn	*/{ 110,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ReceiveExamAnnouncement	,NULL},
+   /* ActRcvExaAnn	*/{ 110,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_ReceiveExamAnnouncement1	,Exa_ReceiveExamAnnouncement2	,NULL},
    /* ActPrnExaAnn	*/{ 179,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,0x000,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Exa_PrintExamAnnouncement	,NULL},
    /* ActReqRemExaAnn	*/{1619,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ReqRemoveExamAnnouncement	,NULL},
-   /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_RemoveExamAnnouncement	,NULL},
+   /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_RemoveExamAnnouncement1	,Exa_RemoveExamAnnouncement2	,NULL},
+   /* ActHidExaAnn	*/{1620,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_HideExamAnnouncement1	,Exa_HideExamAnnouncement2	,NULL},
+   /* ActShoExaAnn	*/{1621,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,Exa_UnhideExamAnnouncement1	,Exa_UnhideExamAnnouncement2	,NULL},
 
    /* ActChgToSeeMrk	*/{1198,-1,TabUnk,ActSeeAdmMrk		,0x118,0x100,0x000,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_ShowFileBrowserOrWorks	,NULL},
 
@@ -4527,6 +4531,8 @@ Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse uniq
 	ActSeeMyPubAgd,		// #1617
 	ActPrnAgdQR,		// #1618
 	ActReqRemExaAnn,	// #1619
+	ActHidExaAnn,		// #1620
+	ActShoExaAnn,		// #1621
 	};
 
 /*****************************************************************************/

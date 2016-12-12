@@ -257,8 +257,10 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
       sprintf (Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
 	             "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
 		     " FROM exam_announcements"
-		     " WHERE CrsCod='%ld' AND ExamDate>=NOW() AND Status<>'%u' ORDER BY T",
-	       Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
+		     " WHERE CrsCod='%ld' AND Status='%u' AND ExamDate>=NOW()"
+		     " ORDER BY T",
+	       Gbl.CurrentCrs.Crs.CrsCod,
+	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
       NumExamAnnouncements = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements");
 
       /***** Write items with notices *****/

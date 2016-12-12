@@ -2489,6 +2489,48 @@ const char *Txt_Announcement_of_exam_removed =
 	"Chamada para exame removida.";
 #endif
 
+const char *Txt_Announcement_of_exam_is_now_hidden =
+#if   L==1
+	"Convocatoria d'examen ara est&agrave; oculta.";
+#elif L==2
+	"Aufruf zur Pr&uuml;fung ist jetzt ausgeblendet.";
+#elif L==3
+	"Announcement of exam is now hidden.";
+#elif L==4
+	"Convocatoria de examen ahora est&aacute; oculta.";
+#elif L==5
+	"Convocation pour l'examen est maintenant cach&eacute;.";
+#elif L==6
+	"Convocatoria de examen ahora est&aacute; oculta.";	// Okoteve traducción
+#elif L==7
+	"Appello d'esame &egrave; ora nascosto.";
+#elif L==8
+	"Ogloszenie egzamin jest teraz ukryte.";
+#elif L==9
+	"Chamada para exame &eacute; agora oculta.";
+#endif
+
+const char *Txt_Announcement_of_exam_is_now_visible =
+#if   L==1
+	"Convocatoria d'examen ara est&agrave; visible.";
+#elif L==2
+	"Aufruf zur Pr&uuml;fung ist jetzt sichtbar.";
+#elif L==3
+	"Announcement of exam is now visible.";
+#elif L==4
+	"Convocatoria de examen ahora est&aacute; visible.";
+#elif L==5
+	"Convocation pour l'examen est maintenant visible.";
+#elif L==6
+	"Convocatoria de examen ahora est&aacute; visible.";	// Okoteve traducción
+#elif L==7
+	"Appello d'esame &egrave; ora visibile.";
+#elif L==8
+	"Ogloszenie egzamin jest teraz widoczny.";
+#elif L==9
+	"Chamada para exame &eacute; agora vis&iacute;vel.";
+#endif
+
 const char *Txt_Announcements_of_exams =
 #if   L==1
 	 "Convocat&ograve;ries d'ex&agrave;mens";

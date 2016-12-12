@@ -369,8 +369,8 @@ a:hover						/* Default ==> underlined */
 		}
 	}
 
-.BC_SEMIOFF		{opacity:0.67;}
-.BC_OFF			{opacity:0.33;}
+.BC_SEMIOFF	{opacity:0.67;}
+.BC_OFF		{opacity:0.33;}
 
 .BC_WHITE	{color:#707070;}
 .BC_GREY	{color:#FFB42E;}
@@ -2115,7 +2115,23 @@ a:hover img.CENTRE_PHOTO_SHOW
 .LOG	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
 .LOG_R	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
 
-/******************************** Image uploading ****************************/
+/***************************** Exam announcement *****************************/
+/* Bottom space is used for signatures */
+.EXA_ANN_VISIBLE
+	{
+	box-sizing:border-box;
+	width:100%;
+	padding:25px 25px 125px 25px;
+	}
+.EXA_ANN_HIDDEN
+	{
+	box-sizing:border-box;
+	width:100%;
+	padding:25px 25px 125px 25px;
+	opacity:0.33;
+	}
+
+/****************************** Image uploading ******************************/
 .IMG_UPLOAD_CONTAINER
 	{
 	vertical-align:top;
