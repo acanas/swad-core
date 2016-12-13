@@ -1,7 +1,7 @@
-// swad_role.h: user's roles
+// swad_role_type.h: user's role type
 
-#ifndef _SWAD_ROL
-#define _SWAD_ROL
+#ifndef _SWAD_ROL_T
+#define _SWAD_ROL_T
 /*
     SWAD (Shared Workspace At a Distance in Spanish),
     is a web platform developed at the University of Granada (Spain),
@@ -27,36 +27,36 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
-#include "swad_user.h"
 
 /*****************************************************************************/
 /************************** Public constant and types ************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/****************************** Public prototypes ****************************/
-/*****************************************************************************/
+// Related with user's roles
+/*
+   Don't change these numbers!
+   They are used for users' permissions and for user's types in database
 
-unsigned Rol_GetNumAvailableRoles (void);
-Rol_Role_t Rol_GetMaxRole (unsigned Roles);
-Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
-Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
-Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);
-Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod);
-Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod);
-void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat);
-
-Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr);
-unsigned Rol_ConvertUnsignedStrToRoles (const char *UnsignedStr);
-
-void Rol_PutFormToChangeMyRole (void);
-void Rol_ChangeMyRole (void);
-
-void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
-                             bool Disabled,bool SendOnChange);
-void Rol_PutHiddenParamRoles (unsigned Roles);
-unsigned Rol_GetSelectedRoles (void);
-
-Rol_Role_t Rol_GetRequestedRole (long UsrCod);
+   Only Rol_ROLE_STUDENT and Rol_ROLE_TEACHER are allowed
+   as user permanent roles in courses,
+   but a user may be logged temporarily as other roles
+*/
+// TODO: Teachers/students should be teachers/students only inside their courses
+//       A user with courses (but not logged as admin) should be Rol_VISITOR outside his/her courses
+//	 (Rol_VISITOR should be labeled as "User" instead "Visitor")
+#define Rol_NUM_ROLES 9
+typedef enum
+  {
+   Rol_UNKNOWN = 0,	// User not logged in
+   Rol__GUEST_ = 1,	// User not belonging to any course
+   Rol_VISITOR = 2,	// Student or teacher in other courses...
+   	   	   	// ...but not belonging to the current course
+   Rol_STUDENT = 3,	// Student in current course
+   Rol_TEACHER = 4,	// Teacher in current course
+   Rol_DEG_ADM = 5,	// Degree administrator
+   Rol_CTR_ADM = 6,	// Centre administrator
+   Rol_INS_ADM = 7,	// Institution administrator
+   Rol_SYS_ADM = 8,	// System administrator (superuser)
+  } Rol_Role_t;
 
 #endif

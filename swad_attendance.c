@@ -412,7 +412,9 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of students in this event *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_TOP");
+   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP",
+            Att->Hidden ? "ASG_TITLE_LIGHT" :
+	                  "ASG_TITLE");
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"

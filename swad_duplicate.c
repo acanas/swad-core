@@ -32,7 +32,7 @@
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_profile.h"
-#include "swad_role.h"
+#include "swad_role_type.h"
 #include "swad_user.h"
 
 /*****************************************************************************/

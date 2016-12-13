@@ -64,6 +64,7 @@
 #include "swad_profile.h"
 #include "swad_QR.h"
 #include "swad_report.h"
+#include "swad_role.h"
 #include "swad_search.h"
 #include "swad_setup.h"
 #include "swad_social.h"
@@ -4873,7 +4874,7 @@ void Act_AdjustActionWhenNoUsrLogged (void)
 
 void Act_AdjustCurrentAction (void)
   {
-   bool IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
+   bool IAmATeacher;
 
    /***** Don't adjust anything when current action is not a menu option *****/
    if (Gbl.Action.Act != Act_Actions[Gbl.Action.Act].SuperAction)	// It is not a menu option
@@ -4945,6 +4946,8 @@ void Act_AdjustCurrentAction (void)
    /***** If I haven't filled my institution,
           or if I'm a teacher and I haven't filled my centre or department,
           the only action possible is to show a form to change my common record *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0 ||
        (IAmATeacher && (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
                         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))

@@ -78,7 +78,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
 static void Fol_ListFollowingUsr (struct UsrData *UsrDat);
 static void Fol_ListFollowersUsr (struct UsrData *UsrDat);
 
-static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat);
+static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat);
 
 /*****************************************************************************/
 /********************** Put link to show users to follow **********************/
@@ -676,7 +676,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 /************************* Show followed or follower *************************/
 /*****************************************************************************/
 
-static void Fol_ShowFollowedOrFollower (const struct UsrData *UsrDat)
+static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_public_profile;
    extern const char *Txt_Following_unfollow;

@@ -29,6 +29,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_role.h"
+#include "swad_role_type.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -221,35 +222,37 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
 /*****************************************************************************/
 /**************** Get roles of a user in all his/her courses *****************/
 /*****************************************************************************/
+// Roles >=0 ==> already filled/calculated ==> nothing to do
+// Roles  <0 ==> not yet filled/calculated ==> get roles
 
-unsigned Rol_GetRolesInAllCrss (long UsrCod)
+void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRole;
    unsigned NumRoles;
-   Rol_Role_t Role;
-   unsigned Roles = 0;
 
-   /***** Get distinct roles in all the courses of the user from database *****/
-   sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr"
-                  " WHERE UsrCod='%ld'",
-            UsrCod);
-   NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the roles of a user in all his/her courses");
-   for (NumRole = 0;
-        NumRole < NumRoles;
-        NumRole++)
+   /***** If roles is already filled ==> nothing to do *****/
+   if (UsrDat->Roles < 0)	// Not yet filled
      {
-      row = mysql_fetch_row (mysql_res);
-      if ((Role = Rol_ConvertUnsignedStrToRole (row[0])) != Rol_UNKNOWN)
-         Roles |= (1 << Role);
+      /***** Get distinct roles in all courses of the user from database *****/
+      sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod='%ld'",
+	       UsrDat->UsrCod);
+      NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,
+					    "can not get the roles of a user"
+					    " in all his/her courses");
+      for (NumRole = 0, UsrDat->Roles = 0;
+	   NumRole < NumRoles;
+	   NumRole++)
+	{
+	 row = mysql_fetch_row (mysql_res);
+	 UsrDat->Roles |= (int) (1 << Rol_ConvertUnsignedStrToRole (row[0]));
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
-
-   return Roles;
   }
 
 /*****************************************************************************/

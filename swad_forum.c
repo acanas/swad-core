@@ -41,6 +41,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_profile.h"
+#include "swad_role.h"
 #include "swad_social.h"
 
 /*****************************************************************************/
@@ -293,7 +294,8 @@ static void For_PutFormWhichForums (void);
 static void For_WriteLinkToTopLevelOfForums (void);
 static void For_PutParamsForumInsDegCrs (void);
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
-static void For_WriteLinksToPlatformForums (bool IsLastForum,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
+static void For_WriteLinksToPlatformForums (bool IsLastForum,
+                                            bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
 static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
 static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
 static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
@@ -1702,6 +1704,7 @@ void For_SetForumTypeAndRestrictAccess (void)
          break;
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM_SWAD_TCHS:
+         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
          ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
          break;
      }
@@ -1945,6 +1948,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LE
    For_WriteLinkToAForum (For_FORUM_GLOBAL_USRS,false,1,IsLastItemInLevel);
 
    /***** Link to forum of teachers global *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    if (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER))
      {
       IsLastItemInLevel[1] = false;
@@ -1956,10 +1960,15 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LE
 /****************** Write links to forums about the platform *****************/
 /*****************************************************************************/
 
-static void For_WriteLinksToPlatformForums (bool IsLastForum,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static void For_WriteLinksToPlatformForums (bool IsLastForum,
+                                            bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
   {
-   bool ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                       Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
+   bool ICanSeeTeacherForum;
+
+   /***** Can I see teachers's forums? *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+	                  Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
 
    /***** Link to forum of users about the platform *****/
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);

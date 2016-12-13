@@ -57,6 +57,7 @@
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
+#include "swad_role.h"
 #include "swad_tab.h"
 #include "swad_user.h"
 
@@ -260,7 +261,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
    UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
-   UsrDat->Roles = 0;
+   UsrDat->Roles = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
    UsrDat->Sex = Usr_SEX_UNKNOWN;
@@ -486,7 +487,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   UsrDat->Roles = Rol_GetRolesInAllCrss (UsrDat->UsrCod);
+   UsrDat->Roles = -1;	// Force roles to be got from database
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
    if (UsrDat->RoleInCurrentCrsDB == Rol_UNKNOWN)
       UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_STUDENT)) ?
 	                           Rol__GUEST_ :	// User does not belong to any course
@@ -916,15 +918,18 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
 /************ Check if I can view the record card of a teacher ***************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewRecordTch (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
   {
-   /***** 1. Fast check: Is he/she a teacher in any course? *****/
+   /***** 1. Fast check: Am I logged? *****/
+   if (!Gbl.Usrs.Me.Logged)
+      return false;
+
+   /***** 2. Fast/slow check: Is he/she a teacher in any course? *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
    if (!(UsrDat->Roles & (1 << Rol_TEACHER)))
       return false;
 
-   /***** 2. Fast check: Am I logged? *****/
-   if (!Gbl.Usrs.Me.Logged)
-      return false;
+   // He/she is a teacher
 
    /***** 3. Fast check: It's me? *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
@@ -942,7 +947,7 @@ bool Usr_CheckIfICanViewRecordTch (const struct UsrData *UsrDat)
 /******************* Check if I can view a user's agenda *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfICanViewUsrAgenda (const struct UsrData *UsrDat)
+bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
   {
    /***** 1. Fast check: Am I logged? *****/
    if (!Gbl.Usrs.Me.Logged)
@@ -964,7 +969,7 @@ bool Usr_CheckIfICanViewUsrAgenda (const struct UsrData *UsrDat)
 /*************** Check if a user belongs to any of my courses ****************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
+bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
    char Query[256];
    bool IBelongToCurrentCrs;
@@ -992,10 +997,9 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)
       return true;
 
-   /***** 4. Fast check: Does he/she belong to any course? *****/
-   if (!(UsrDat->Roles & ((1 << Rol_STUDENT) |	// Any of his/her roles is student
-	                  (1 << Rol_TEACHER))))	// or teacher?
-      return false;
+   /***** 4. Fast check: Is already calculated if user shares any course with me? *****/
+   if (UsrDat->UsrCod == Cached.UsrCod)
+      return Cached.UsrSharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
    IBelongToCurrentCrs   = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
@@ -1005,9 +1009,11 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (const struct UsrData *UsrDat)
    if (IBelongToCurrentCrs && HeBelongsToCurrentCrs)	// Course selected and we both belong to it
       return true;
 
-   /***** 6. Fast check: Is already calculated if user shares any course with me? *****/
-   if (UsrDat->UsrCod == Cached.UsrCod)
-      return Cached.UsrSharesAnyOfMyCrs;
+   /***** 6. Fast/slow check: Does he/she belong to any course? *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+   if (!(UsrDat->Roles & ((1 << Rol_STUDENT) |	// Any of his/her roles is student
+			  (1 << Rol_TEACHER))))	// or teacher?
+      return false;
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
@@ -2725,6 +2731,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
      }
 
    /***** Set the user's role I am logged *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
    Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole (Gbl.Usrs.Me.UsrDat.Roles);
    Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_UNKNOWN) ?	// If no logged role retrieved from session...
                             Gbl.Usrs.Me.MaxRole :				// ...set current logged role to maximum role in database
@@ -3923,7 +3930,6 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,char *Query)
 /*****************************************************************************/
 /*********** Get list of users with a given role in a given scope ************/
 /*****************************************************************************/
-
 // Role can be:
 // - Rol_STUDENT
 // - Rol_TEACHER

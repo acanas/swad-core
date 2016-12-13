@@ -31,6 +31,7 @@
 #include "swad_database.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_role.h"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
@@ -98,12 +99,15 @@ void Ann_ShowAllAnnouncements (void)
 		     " FROM announcements"
 		     " ORDER BY AnnCod DESC");
    else if (Gbl.Usrs.Me.Logged)
+     {
       /* Select only announcements I can see */
+      Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
       sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
 		     " FROM announcements"
                      " WHERE (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
             Gbl.Usrs.Me.UsrDat.Roles);	// All my roles in different courses
+     }
    else // No user logged
       /* Select only active announcements for unknown users */
       sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
@@ -212,7 +216,7 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    char Content[Cns_MAX_BYTES_TEXT+1];
 
    /***** Select announcements not seen *****/
-   // Roles == 24 ==> Teachers and students
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    sprintf (Query,"SELECT AnnCod,Subject,Content FROM announcements"
                   " WHERE Status='%u' AND (Roles&%u)<>0 "
                   " AND AnnCod NOT IN"

@@ -35,6 +35,7 @@
 #include "swad_global.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
+#include "swad_role.h"
 #include "swad_string.h"
 #include "swad_user.h"
 

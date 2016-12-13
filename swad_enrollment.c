@@ -37,6 +37,7 @@
 #include "swad_ID.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
+#include "swad_role.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -210,7 +211,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
 	}
 
       UsrDat->RoleInCurrentCrsDB = NewRole;
-      UsrDat->Roles |= (1 << NewRole);
+      UsrDat->Roles = -1;	// Force roles to be got from database
+      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
      }
   }
 
@@ -255,7 +257,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		                       'N');
    DB_QueryINSERT (Query,"can not register user in course");
    UsrDat->RoleInCurrentCrsDB = NewRole;
-   UsrDat->Roles |= NewRole;
+   UsrDat->Roles = -1;	// Force roles to be got from database
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
 
    /***** Create notification for this user.
 	  If this user wants to receive notifications by email,
@@ -3072,12 +3075,6 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 
       if (NewUsrIDValid)
 	{
-	 /* Initialize some data of this new user */
-	 Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB =
-	    (Gbl.CurrentCrs.Crs.CrsCod > 0) ? Rol_STUDENT :	// Course selected
-					      Rol_UNKNOWN;	// No course selected
-	 Gbl.Usrs.Other.UsrDat.Roles = (1 << Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB);
-
 	 /***** Show form to enter the data of a new user *****/
 	 sprintf (Gbl.Message,Txt_The_user_is_new_does_not_exists_yet_in_X,
 		  Cfg_PLATFORM_SHORT_NAME);

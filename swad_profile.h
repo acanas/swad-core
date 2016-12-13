@@ -77,6 +77,6 @@ void Prf_GetAndShowRankingForPst (void);
 void Prf_GetAndShowRankingMsgSnt (void);
 void Prf_ShowRankingFigure (const char *Query);
 void Prf_GetAndShowRankingClicksPerDay (void);
-void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank);
+void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank);
 
 #endif

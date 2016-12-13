@@ -950,7 +950,7 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 // Returns true if the photo can be shown and false if not.
 // Public photo means two different things depending on the user's type
 
-bool Pho_ShowUsrPhotoIsAllowed (const struct UsrData *UsrDat,char *PhotoURL)
+bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
   {
    bool ICanSeePhoto;
 

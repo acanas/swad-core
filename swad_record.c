@@ -45,6 +45,7 @@
 #include "swad_privacy.h"
 #include "swad_QR.h"
 #include "swad_record.h"
+#include "swad_role.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -2069,34 +2070,45 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      };
    char StrRecordWidth[10+1];
    const char *ClassForm = "REC_DAT";
-   bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
-   bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
-   bool CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
-   bool DataForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM ||
-                    TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ||
-                   (TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM &&
-                    Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM));
+   bool ItsMe;
+   bool IAmLoggedAsTeacher;
+   bool IAmLoggedAsSysAdm;
+   bool CountryForm;
+   bool DataForm;
    bool PutFormLinks;	// Put links (forms) inside record card
-   bool ShowData = (ItsMe ||
-	            Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
-	            UsrDat->Accepted);
-   bool ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
-   bool ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-                           TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
-			   ((TypeOfView == Rec_SHA_RECORD_LIST   ||
-			     TypeOfView == Rec_SHA_RECORD_PRINT) &&
-			    (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
-			    UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
-   bool ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
-			     TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
-			    (UsrDat->Roles & (1 << Rol_TEACHER))) ||		// He/she (me, really) is a teacher in any course
-			   ((TypeOfView == Rec_SHA_RECORD_LIST ||
-			     TypeOfView == Rec_SHA_RECORD_PRINT) &&
-			    UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
+   bool ShowData;
+   bool ShowIDRows;
+   bool ShowAddressRows;
+   bool ShowTeacherRows;
    struct Instit Ins;
 
    /***** Initializations *****/
+   ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
+   IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
+   CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
+   DataForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM ||
+               TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ||
+               (TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM &&
+                Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM));
+   ShowData = (ItsMe ||
+	       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
+	       UsrDat->Accepted);
+   ShowIDRows = (TypeOfView != Rec_SHA_RECORD_PUBLIC);
+   ShowAddressRows = (TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
+		      TypeOfView == Rec_SHA_MY_RECORD_CHECK ||
+		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
+		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
+		       (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
+		       UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get user's roles if not got
+   ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
+		        TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
+		       (UsrDat->Roles & (1 << Rol_TEACHER))) ||		// He/she (me, really) is a teacher in any course
+		      ((TypeOfView == Rec_SHA_RECORD_LIST ||
+		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
+		       UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
+
    switch (TypeOfView)
      {
       case Rec_SHA_SIGN_UP_FORM:
@@ -2718,6 +2730,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
    if (RoleForm)
      {
+      /* Get user's roles if not got */
+      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
+
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s:</td>"
@@ -3464,6 +3479,7 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	    if the other is already teacher in any course.
 	    That is, a teacher can not upgrade a student
 	    (in all other courses) to teacher */
+         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Other.UsrDat);
 	 if ( Role == Rol_STUDENT ||
 	     (Role == Rol_TEACHER &&					// He/she will be a teacher in current course
 	      (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER))))	// He/she was a teacher in some courses
@@ -3601,7 +3617,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
    unsigned NumIns;
    unsigned NumCtr;
    unsigned NumDpt;
-   bool IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
+   bool IAmTeacher;
+
+   /***** Get my roles if not yet got *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+
+   /***** Check if I am a teacher *****/
+   IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
 
    /***** If there is no country, institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)

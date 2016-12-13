@@ -39,6 +39,7 @@
 #include "swad_privacy.h"
 #include "swad_profile.h"
 #include "swad_role.h"
+#include "swad_role_type.h"
 #include "swad_social.h"
 #include "swad_text.h"
 #include "swad_theme.h"
@@ -1480,7 +1481,7 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 /************** Show user's photo and nickname in ranking list ***************/
 /*****************************************************************************/
 
-void Prf_ShowUsrInRanking (const struct UsrData *UsrDat,unsigned Rank)
+void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
   {
    extern const char *Txt_View_public_profile;
    bool ShowPhoto;

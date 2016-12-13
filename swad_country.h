@@ -30,7 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_action.h"
-#include "swad_role.h"
+#include "swad_role_type.h"
 #include "swad_text.h"
 
 /*****************************************************************************/

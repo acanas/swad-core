@@ -36,6 +36,7 @@
 #include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_parameter.h"
+#include "swad_role.h"
 #include "swad_survey.h"
 
 /*****************************************************************************/
