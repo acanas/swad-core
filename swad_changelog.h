@@ -187,13 +187,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.100 (2016-12-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.100.1 (2016-12-13)"
 #define CSS_FILE		"swad16.97.css"
 #define JS_FILE			"swad16.99.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.100.1: Dec 13, 2016	Fixed bugs checking if users share courses. (210828 lines)
         Version 16.100:   Dec 13, 2016	Changes in layout of list of attendance events.
 					Code refactoring related with roles. (210820 lines)
         Version 16.99.1:  Dec 13, 2016	Changes in translation of start and end.
