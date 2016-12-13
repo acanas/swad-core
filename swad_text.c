@@ -3082,43 +3082,43 @@ const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2] =
 const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2] =
    {
 #if   L==1
-	 "Data<br />inicial"
+	 "Inici"
 #elif L==2
-	 "Startdatum"
+	 "Start"
 #elif L==3
-	 "Start<br />date"
+	 "Start"
 #elif L==4
-	 "Fecha<br />inicial"
+	 "Inicio"
 #elif L==5
-	 "Date de<br />d&eacute;but"
+	 "D&eacute;but"
 #elif L==6
-	 "Fecha<br />inicial"	// Okoteve traducción
+	 "&Ntilde;epyr&utilde;"
 #elif L==7
-	 "Data di<br />inizio"
+	 "Inizio"
 #elif L==8
-	 "Start<br />data"
+	 "Pocz&aogon;tek"
 #elif L==9
-	 "Data de<br />in&iacute;cio"
+	 "In&iacute;cio"
 #endif
 	 ,
 #if   L==1
-	 "Data<br />final"
+	 "Final"
 #elif L==2
-	 "Enddatum"
+	 "Ende"
 #elif L==3
-	 "End<br />date"
+	 "End"
 #elif L==4
-	 "Fecha<br />final"
+	 "Final"
 #elif L==5
-	 "Date de<br />fin"
+	 "Fin"
 #elif L==6
-	 "Fecha<br />final"	// Okoteve traducción
+	 "Paha"
 #elif L==7
-	 "Data di<br />fine"
+	 "Fine"
 #elif L==8
-	 "Koniec<br />data"
+	 "Koniec"
 #elif L==9
-	 "Data de<br />t&eacute;rmino"
+	 "Fim"
 #endif
 	};
 
@@ -17222,49 +17222,6 @@ const char *Txt_LOCATIONS_HELP_ORDER[2] =
 	 "Sortuj wedlug daty koncowa"
 #elif L==9
 	 "Classificar por data final"
-#endif
-	};
-
-const char *Txt_LOCATIONS_ORDER[2] =
-   {
-#if   L==1
-	 "Data inicial"
-#elif L==2
-	 "Startdatum"
-#elif L==3
-	 "Start date"
-#elif L==4
-	 "Fecha inicial"
-#elif L==5
-	 "Date initiale"
-#elif L==6
-	 "Fecha inicial"	// Okoteve traducción
-#elif L==7
-	 "Data iniziale"
-#elif L==8
-	 "Data rozpoczecia"
-#elif L==9
-	 "Data de in&iacute;cio"
-#endif
-	 ,
-#if   L==1
-	"Data final"
-#elif L==2
-	"Enddatum"
-#elif L==3
-	"End date"
-#elif L==4
-	"Fecha final"
-#elif L==5
-	"Date finale"
-#elif L==6
-	"Fecha final"	// Okoteve traducción
-#elif L==7
-	"Data finale"
-#elif L==8
-	"Data koncowa"
-#elif L==9
-	"Data final"
 #endif
 	};
 

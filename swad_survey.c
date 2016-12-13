@@ -229,7 +229,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	   Order <= Svy_ORDER_BY_END_DATE;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 
 	 /* Form to change order */
 	 Act_FormStart (ActSeeAllSvy);
@@ -247,7 +247,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
 	 fprintf (Gbl.F.Out,"</th>");
 	}
-      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "<th class=\"CENTER_MIDDLE\">"

@@ -185,13 +185,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.99 (2016-12-12)"
+#define Log_PLATFORM_VERSION	"SWAD 16.99.1 (2016-12-13)"
 #define CSS_FILE		"swad16.97.css"
 #define JS_FILE			"swad16.99.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.99.1:  Dec 13, 2016	Changes in translation of start and end.
+					Changes in layout of assignments and surveys. (210742 lines)
         Version 16.99:    Dec 12, 2016	Changes in script to write local date and time. (210782 lines)
         Version 16.98:    Dec 12, 2016	Changes in help about homework.
 					Changes in script to write local date and time. (210739 lines)

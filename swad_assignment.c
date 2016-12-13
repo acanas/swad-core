@@ -175,7 +175,7 @@ static void Asg_ShowAllAssignments (void)
 			 "<th class=\"CENTER_MIDDLE\">"
 			 "%s"
 			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
+			 "<th class=\"LEFT_MIDDLE\">"
 			 "%s"
 			 "</th>"
 			 "</tr>",
