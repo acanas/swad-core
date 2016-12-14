@@ -219,8 +219,7 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr)
 void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Yesterday;
    extern const char *Txt_Today;
 
@@ -231,7 +230,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Start_date);
+            Txt_START_END_TIME[Dat_START_TIME]);
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
                                                 "Start",
@@ -260,7 +259,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_End_date);
+            Txt_START_END_TIME[Dat_END_TIME]);
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("End",
                                                 "End",
@@ -282,23 +281,17 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                                               Dat_FormSeconds FormSeconds)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
-   Asg_StartOrEndTime_t StartOrEndTime;
-   const char *Id[Asg_NUM_DATES] =
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   Dat_StartEndTime_t StartEndTime;
+   const char *Id[Dat_NUM_START_END_TIME] =
      {
-      "Start",
-      "End"
-     };
-   const char *Dates[Asg_NUM_DATES] =
-     {
-      Txt_Start_date,
-      Txt_End_date
+      "Start",	// Dat_START_TIME
+      "End"	// Dat_END_TIME
      };
 
-   for (StartOrEndTime = 0;
-	StartOrEndTime <= 1;
-	StartOrEndTime++)
+   for (StartEndTime = Dat_START_TIME;
+	StartEndTime <= Dat_END_TIME;
+	StartEndTime++)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"RIGHT_MIDDLE\">"
@@ -308,12 +301,12 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],Dates[StartOrEndTime]);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_START_END_TIME[StartEndTime]);
 
       /* Date-time */
-      Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartOrEndTime],
-                                                   Id[StartOrEndTime],
-	                                           TimeUTC[StartOrEndTime],
+      Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
+                                                   Id[StartEndTime],
+	                                           TimeUTC[StartEndTime],
 	                                           Gbl.Now.Date.Year - 1,
 	                                           Gbl.Now.Date.Year + 1,
 				                   FormSeconds,
@@ -346,6 +339,12 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    unsigned Hour;
    unsigned Minute;
    unsigned Second;
+   unsigned MinutesIInterval[Dat_NUM_FORM_SECONDS] =
+     {
+      5,   // Dat_FORM_SECONDS_OFF
+      1,   // Dat_FORM_SECONDS_ON
+     };
+
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table>"
@@ -432,11 +431,13 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
       fprintf (Gbl.F.Out,"document.getElementById('%s').submit();",
                Gbl.Form.Id);
    fprintf (Gbl.F.Out,"\">");
+
    for (Minute = 0;
-	Minute <= 59;
-	Minute++)
+	Minute < 60;
+	Minute += MinutesIInterval[FormSeconds])
       fprintf (Gbl.F.Out,"<option value=\"%u\">%02u &#39;</option>",
                Minute,Minute);
+
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
 
@@ -1130,10 +1131,10 @@ continue:
 
     181f:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx		// 1374389535
 
-    1824:	8d 0c 70             	lea    (SumAux,Month,2),Sum	// Sum = Day + Year + 2 + Month*2
+    1824:	8d 0c 70             	lea    (SumAux,Month,2),n	// n = Day + Year + 2 + Month*2
     1827:	89 f8                	mov    Year,%eax
     1829:	c1 e8 02             	shr    $2,%eax			// Year / 4
-    182c:	01 c1                	add    %eax,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4
+    182c:	01 c1                	add    %eax,n			// n = Day + Year + 2 + Month*2 + Year/4
     182e:	89 f8                	mov    Year,%eax
     1830:	bf 25 49 92 24       	mov    $0x24924925,%edi		// 613566757
     1835:	f7 e2                	mul    %edx			// Year * 1374389535
@@ -1141,26 +1142,28 @@ continue:
     1837:	89 d0                	mov    %edx,%eax		// (Year * 1374389535) / 2^32 = (Year * 2^32 * 2^5 / 100) / 2^32 = (Year * 2^5) / 100
     1839:	c1 ea 05             	shr    $5,%edx			// (Year * 1374389535) / 2^32 / 2^5 = Year / 100
     183c:	c1 e8 07             	shr    $7,%eax			// (Year * 1374389535) / 2^32 / 2^7 = Year / 400
-    183f:	01 c1                	add    %eax,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400
+    183f:	01 c1                	add    %eax,n			// n = Day + Year + 2 + Month*2 + Year/4 + Year/400
     1841:	8d 44 76 03          	lea    3(Month,Month,2),%eax	// Month*3 + 3
-    1845:	29 d1                	sub    %edx,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100
+    1845:	29 d1                	sub    %edx,n			// n = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100
 
     1847:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
     184c:	f7 e2                	mul    %edx			// (Month*3 + 3) * 3435973837
     184e:	c1 ea 02             	shr    $2,%edx			// (Month*3 + 3) * 3435973837 / 2^32 / 2^2 = (Month*3 + 3) / 5
-    1851:	01 d1                	add    %edx,Sum			// Sum = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100 + (Month*3 + 3) / 5
+    1851:	01 d1                	add    %edx,n			// n = Day + Year + 2 + Month*2 + Year/4 + Year/400 - Year/100 + (Month*3 + 3) / 5
 
-    1853:	89 c8                	mov    Sum,%eax
-    1855:	89 ce                	mov    Sum,%esi
+    1853:	89 c8                	mov    n,%eax
+    1855:	89 ce                	mov    n,%esi
 
-    1857:	f7 e7                	mul    %edi			// edx = Sum * 613566757 / 2^32
-    1859:	29 d6                	sub    %edx,%esi		//
-    185b:	d1 ee                	shr    %esi			//
-    185d:	01 f2                	add    %esi,%edx		//
-    185f:	c1 ea 02             	shr    $2,%edx			//
-    1862:	8d 04 d5 00 00 00 00 	lea    0(,%rdx,8),%eax		//
-    1869:	29 d0                	sub    %edx,%eax		//
-    186b:	29 c1                	sub    %eax,Sum			// Sum % 7
+									// Algorithm for remainder: https://doc.lagout.org/security/Hackers%20Delight.pdf, page 209
+
+    1857:	f7 e7                	mul    %edi			// edx = q = M*n/2**32
+    1859:	29 d6                	sub    %edx,%esi		// esi = t = n - q
+    185b:	d1 ee                	shr    %esi			// esi = t = (n - q)/2
+    185d:	01 f2                	add    %esi,%edx		// edx = t = (n - q)/2 + q = (n + q)/2
+    185f:	c1 ea 02             	shr    $2,%edx			// edx = q = (n + q)/8 = (n+Mn/2**32)/8 = floor(n/7)
+    1862:	8d 04 d5 00 00 00 00 	lea    0(,%rdx,8),%eax		// eax = q*8
+    1869:	29 d0                	sub    %edx,%eax		// eax = q*8-q = q*7
+    186b:	29 c1                	sub    %eax,%ecx		// ecx = r = n - q*7
 
     186d:	83 c1 05             	add    $5,Mod			// Mod += 5
     1870:	89 c8                	mov    Mod,%eax

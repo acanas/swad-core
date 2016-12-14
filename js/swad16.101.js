@@ -163,6 +163,7 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	var d;
 	var Year;
 	var YearIsValid = false;
+	var Min;
 
 	if (TimeUTC) {
 		d = new Date();
@@ -174,11 +175,18 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 				YearIsValid = true;
 			}
 		if (YearIsValid) {
-			FormMon.options[d.getMonth()  ].selected = true;
-			FormDay.options[d.getDate()-1 ].selected = true;
-			FormHou.options[d.getHours()  ].selected = true;
-			FormMin.options[d.getMinutes()].selected = true;
-			FormSec.options[d.getSeconds()].selected = true;
+			FormMon.options[d.getMonth() ].selected = true;
+			FormDay.options[d.getDate()-1].selected = true;
+			FormHou.options[d.getHours() ].selected = true;
+			
+			Min = d.getMinutes();
+			for (var i=FormMin.options.length-1; i>=0; i--)
+				if (FormMin.options[i].value <= Min) {
+					FormMin.options[i].selected = true;
+					break;
+				}
+			if (FormSec)
+				FormSec.options[d.getSeconds()].selected = true;
 		}
 	}
 	

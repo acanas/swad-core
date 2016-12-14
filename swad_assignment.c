@@ -114,13 +114,13 @@ static void Asg_ShowAllAssignments (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
+   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Assignment;
    extern const char *Txt_Upload_files_QUESTION;
    extern const char *Txt_Folder;
    extern const char *Txt_No_assignments;
-   tAsgsOrderType Order;
+   Dat_StartEndTime_t Order;
    struct Pagination Pagination;
    unsigned NumAsg;
 
@@ -150,8 +150,8 @@ static void Asg_ShowAllAssignments (void)
       /***** Table head *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
                          "<tr>");
-      for (Order = Asg_ORDER_BY_START_DATE;
-	   Order <= Asg_ORDER_BY_END_DATE;
+      for (Order = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -159,10 +159,10 @@ static void Asg_ShowAllAssignments (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Asgs.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
@@ -326,7 +326,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Asg_START_TIME],Txt_Today);
+            UniqueId,Asg.TimeUTC[Dat_START_TIME],Txt_Today);
 
    /* End date/time */
    UniqueId++;
@@ -342,7 +342,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
                          (Asg.Open ? "DATE_GREEN" :
                                      "DATE_RED"),
             Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Asg_END_TIME],Txt_Today);
+            UniqueId,Asg.TimeUTC[Dat_END_TIME],Txt_Today);
 
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
@@ -520,7 +520,7 @@ static void Asg_GetParamAsgOrderType (void)
 
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Asgs.SelectedOrderType = (tAsgsOrderType) UnsignedNum;
+      Gbl.Asgs.SelectedOrderType = (Dat_StartEndTime_t) UnsignedNum;
    else
       Gbl.Asgs.SelectedOrderType = Asg_DEFAULT_ORDER_TYPE;
   }
@@ -618,10 +618,10 @@ void Asg_GetListAssignments (void)
      }
    switch (Gbl.Asgs.SelectedOrderType)
      {
-      case Asg_ORDER_BY_START_DATE:
+      case Dat_START_TIME:
          sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
          break;
-      case Asg_ORDER_BY_END_DATE:
+      case Dat_END_TIME:
          sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
          break;
      }
@@ -731,8 +731,8 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
    Asg->AsgCod = -1L;
    Asg->Hidden = false;
    Asg->UsrCod = -1L;
-   Asg->TimeUTC[Asg_START_TIME] =
-   Asg->TimeUTC[Asg_END_TIME  ] = (time_t) 0;
+   Asg->TimeUTC[Dat_START_TIME] =
+   Asg->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
    Asg->Open = false;
    Asg->Title[0] = '\0';
    Asg->SendWork = false;
@@ -757,10 +757,10 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
       /* Get start date (row[3] holds the start UTC time) */
-      Asg->TimeUTC[Asg_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
+      Asg->TimeUTC[Dat_START_TIME] = Dat_GetUNIXTimeFromStr (row[3]);
 
       /* Get end date   (row[4] holds the end   UTC time) */
-      Asg->TimeUTC[Asg_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
+      Asg->TimeUTC[Dat_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[4]);
 
       /* Get whether the assignment is open or closed (row(5)) */
       Asg->Open = (row[5][0] == '1');
@@ -1090,8 +1090,8 @@ void Asg_RequestCreatOrEditAsg (void)
      {
       /* Initialize to empty assignment */
       Asg.AsgCod = -1L;
-      Asg.TimeUTC[Asg_START_TIME] = Gbl.StartExecutionTimeUTC;
-      Asg.TimeUTC[Asg_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
+      Asg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+      Asg.TimeUTC[Dat_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Asg.Open = true;
       Asg.Title[0] = '\0';
       Asg.SendWork = false;
@@ -1275,8 +1275,8 @@ void Asg_RecFormAssignment (void)
      }
 
    /***** Get start/end date-times *****/
-   NewAsg.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewAsg.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewAsg.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewAsg.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get assignment title *****/
    Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
@@ -1290,10 +1290,10 @@ void Asg_RecFormAssignment (void)
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
 
    /***** Adjust dates *****/
-   if (NewAsg.TimeUTC[Asg_START_TIME] == 0)
-      NewAsg.TimeUTC[Asg_START_TIME] = Gbl.StartExecutionTimeUTC;
-   if (NewAsg.TimeUTC[Asg_END_TIME] == 0)
-      NewAsg.TimeUTC[Asg_END_TIME] = NewAsg.TimeUTC[Asg_START_TIME] + 2*60*60;	// +2 hours
+   if (NewAsg.TimeUTC[Dat_START_TIME] == 0)
+      NewAsg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
+   if (NewAsg.TimeUTC[Dat_END_TIME] == 0)
+      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_START_TIME] + 2*60*60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAsg.Title[0])	// If there's an assignment title
@@ -1420,8 +1420,8 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
                   "'%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Asg->TimeUTC[Asg_START_TIME],
-            Asg->TimeUTC[Asg_END_TIME  ],
+            Asg->TimeUTC[Dat_START_TIME],
+            Asg->TimeUTC[Dat_END_TIME  ],
             Asg->Title,
             Asg->Folder,
             Txt);
@@ -1446,8 +1446,8 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
 	          "EndTime=FROM_UNIXTIME('%ld'),"
                   "Title='%s',Folder='%s',Txt='%s'"
                   " WHERE AsgCod='%ld' AND CrsCod='%ld'",
-            Asg->TimeUTC[Asg_START_TIME],
-            Asg->TimeUTC[Asg_END_TIME  ],
+            Asg->TimeUTC[Dat_START_TIME],
+            Asg->TimeUTC[Dat_END_TIME  ],
             Asg->Title,
             Asg->Folder,
             Txt,

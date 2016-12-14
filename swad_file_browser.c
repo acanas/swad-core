@@ -6155,7 +6155,7 @@ static void Brw_WriteDatesAssignment (void)
 			 "%ld,',&nbsp;','%s',true,false,true);"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_START_TIME],Txt_Today);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Dat_START_TIME],Txt_Today);
       fprintf (Gbl.F.Out,"</span>");
 
       /***** Arrow *****/
@@ -6176,7 +6176,7 @@ static void Brw_WriteDatesAssignment (void)
 			 "%ld,',&nbsp;','%s',false,false,true);"
 			 "</script>",
                UniqueId,
-	       (long) Gbl.FileBrowser.Asg.TimeUTC[Asg_END_TIME],Txt_Today);
+	       (long) Gbl.FileBrowser.Asg.TimeUTC[Dat_END_TIME],Txt_Today);
       fprintf (Gbl.F.Out,"</span>");
      }
    else

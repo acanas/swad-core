@@ -77,6 +77,14 @@ typedef enum
    Dat_FUTURE  = 2,
   } Dat_TimeStatus_t;
 
+#define Dat_NUM_START_END_TIME 2
+typedef enum
+  {
+   Dat_START_TIME = 0,
+   Dat_END_TIME   = 1,
+  } Dat_StartEndTime_t;
+
+#define Dat_NUM_FORM_SECONDS 2
 typedef enum
   {
    Dat_FORM_SECONDS_OFF,

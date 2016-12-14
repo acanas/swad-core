@@ -3036,7 +3036,7 @@ const char *Txt_Assignments_and_other_works =
 	"Atividades e outros trabalhos";
 #endif
 
-const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2] =
+const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME] =
    {
 #if   L==1
 	 "Ordenar per data de comen&ccedil;ament"
@@ -3079,7 +3079,7 @@ const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2] =
+const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME] =
    {
 #if   L==1
 	 "Inici"
@@ -37749,27 +37749,6 @@ const char *Txt_Source_of_information =
 	"&Zacute;r&oacute;d&lstrok;o informacji";
 #elif L==9
 	"Fonte de informa&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Start_date =
-#if   L==1
-	"Data inicial";
-#elif L==2
-	"Startdatum";
-#elif L==3
-	"Start date";
-#elif L==4
-	"Fecha inicial";
-#elif L==5
-	"Date initiale";
-#elif L==6
-	"Fecha inicial";	// Okoteve traducción
-#elif L==7
-	"Data iniziale";
-#elif L==8
-	"Data rozpocz&eogon;cia";
-#elif L==9
-	"Data de in&iacute;cio";
 #endif
 
 const char *Txt_STAT_CLICKS_GROUPED_BY[Sta_NUM_CLICKS_GROUPED_BY] =

@@ -60,17 +60,11 @@ struct AttendanceEvent
 
 typedef enum
   {
-   Att_ORDER_BY_START_DATE = 0,
-   Att_ORDER_BY_END_DATE   = 1,
-  } Att_EventsOrderType_t;
-
-typedef enum
-  {
    Att_NEWEST_FIRST,
    Att_OLDEST_FIRST,
   } Att_OrderTime_t;
 
-#define Att_DEFAULT_ORDER_TYPE Att_ORDER_BY_START_DATE
+#define Att_DEFAULT_ORDER_TYPE Dat_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

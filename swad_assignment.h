@@ -45,19 +45,12 @@ typedef enum
    Asg_SEND_WORK        = 1,
   } Asg_SendWork_t;
 
-#define Asg_NUM_DATES 2
-typedef enum
-  {
-   Asg_START_TIME = 0,
-   Asg_END_TIME   = 1,
-  } Asg_StartOrEndTime_t;
-
 struct Assignment
   {
    long AsgCod;
    bool Hidden;
    long UsrCod;
-   time_t TimeUTC[Asg_NUM_DATES];
+   time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
    char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE+1];
    Asg_SendWork_t SendWork;
@@ -68,13 +61,7 @@ struct Assignment
 				// I belong to any of the groups)
   };
 
-typedef enum
-  {
-   Asg_ORDER_BY_START_DATE = 0,
-   Asg_ORDER_BY_END_DATE   = 1,
-  } tAsgsOrderType;
-
-#define Asg_DEFAULT_ORDER_TYPE Asg_ORDER_BY_START_DATE
+#define Asg_DEFAULT_ORDER_TYPE Dat_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

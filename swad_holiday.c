@@ -904,8 +904,7 @@ static void Hld_PutFormToCreateHoliday (void)
    extern const char *Txt_New_holiday;
    extern const char *Txt_Place;
    extern const char *Txt_Type;
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Holiday;
    extern const char *Txt_HOLIDAY_TYPES[Hld_NUM_TYPES_HOLIDAY];
    extern const char *Txt_Create_holiday;
@@ -942,8 +941,8 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</tr>",
             Txt_Place,
             Txt_Type,
-            Txt_Start_date,
-            Txt_End_date,
+            Txt_START_END_TIME[Dat_START_TIME],
+            Txt_START_END_TIME[Dat_END_TIME],
             Txt_Holiday);
 
    /***** Holiday place *****/
@@ -1023,8 +1022,7 @@ static void Hld_PutHeadHolidays (void)
    extern const char *Txt_Code;
    extern const char *Txt_Place;
    extern const char *Txt_Type;
-   extern const char *Txt_Start_date;
-   extern const char *Txt_End_date;
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Holiday;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -1051,8 +1049,8 @@ static void Hld_PutHeadHolidays (void)
             Txt_Code,
             Txt_Place,
             Txt_Type,
-            Txt_Start_date,
-            Txt_End_date,
+            Txt_START_END_TIME[Dat_START_TIME],
+            Txt_START_END_TIME[Dat_END_TIME],
             Txt_Holiday);
   }
 

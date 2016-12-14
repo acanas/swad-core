@@ -391,8 +391,8 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
 
 static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
   {
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
+   extern const char *Txt_START_END_TIME_HELP[2];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
    extern const char *Txt_Location;
    Agd_Order_t Order;
@@ -422,10 +422,10 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	}
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
+      Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrderType)
 	 fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
+      fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
       if (Order == Gbl.Agenda.SelectedOrderType)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");

@@ -550,7 +550,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of assignments
       long *LstAsgCods;	// List of assigment codes
-      tAsgsOrderType SelectedOrderType;
+      Dat_StartEndTime_t SelectedOrderType;
       long AsgCodToEdit;	// Used as parameter in contextual links
      } Asgs;
    struct
@@ -558,7 +558,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of attendance events
       struct AttendanceEvent *Lst;	// List of attendance events
-      Att_EventsOrderType_t SelectedOrderType;
+      Dat_StartEndTime_t SelectedOrderType;
       long AttCod;
       bool ShowDetails;
       char *StrAttCodsSelected;

@@ -194,12 +194,12 @@ static void Att_ShowAllAttEvents (void)
   {
    extern const char *Hlp_USERS_Attendance;
    extern const char *Txt_Events;
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
+   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Event;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_No_events;
-   Att_EventsOrderType_t Order;
+   Dat_StartEndTime_t Order;
    struct Pagination Pagination;
    unsigned NumAttEvent;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
@@ -230,8 +230,8 @@ static void Att_ShowAllAttEvents (void)
       /***** Table head *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
-      for (Order = Att_ORDER_BY_START_DATE;
-	   Order <= Att_ORDER_BY_END_DATE;
+      for (Order = Dat_START_TIME;
+	   Order <= Dat_END_TIME;
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
@@ -239,10 +239,10 @@ static void Att_ShowAllAttEvents (void)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.AttEvents.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
@@ -520,7 +520,7 @@ static void Att_GetParamAttOrderType (void)
 
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.AttEvents.SelectedOrderType = (Att_EventsOrderType_t) UnsignedNum;
+      Gbl.AttEvents.SelectedOrderType = (Dat_StartEndTime_t) UnsignedNum;
    else
       Gbl.AttEvents.SelectedOrderType = Att_DEFAULT_ORDER_TYPE;
   }
@@ -652,13 +652,13 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
      }
    switch (Gbl.AttEvents.SelectedOrderType)
      {
-      case Att_ORDER_BY_START_DATE:
+      case Dat_START_TIME:
 	 if (Order == Att_NEWEST_FIRST)
             sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
 	 else
             sprintf (OrderBySubQuery,"StartTime,EndTime,Title");
          break;
-      case Att_ORDER_BY_END_DATE:
+      case Dat_END_TIME:
 	 if (Order == Att_NEWEST_FIRST)
             sprintf (OrderBySubQuery,"EndTime DESC,StartTime DESC,Title DESC");
 	 else

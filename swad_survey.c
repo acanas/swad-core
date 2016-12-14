@@ -187,8 +187,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
   {
    extern const char *Hlp_STATS_Surveys;
    extern const char *Txt_Surveys;
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[2];
-   extern const char *Txt_ASG_ATT_SVY_OR_AGD_ORDER[2];
+   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
@@ -237,10 +237,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_ASG_ATT_SVY_OR_AGD_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_ASG_ATT_SVY_OR_AGD_ORDER[Order]);
+	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
 	 if (Order == Gbl.Svys.SelectedOrderType)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
@@ -2163,8 +2163,8 @@ void Svy_RecFormSurvey (void)
      }
 
    /***** Get start/end date-times *****/
-   NewSvy.TimeUTC[Asg_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
-   NewSvy.TimeUTC[Asg_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
+   NewSvy.TimeUTC[Dat_START_TIME] = Dat_GetTimeUTCFromForm ("StartTimeUTC");
+   NewSvy.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get survey title *****/
    Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_LENGTH_SURVEY_TITLE);
