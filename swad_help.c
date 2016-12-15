@@ -102,7 +102,15 @@ const char *Hlp_DEGREE_Shared    = WIKI "DEGREE.Shared";
 
 /***** COURSE tab *****/
 
-const char *Hlp_COURSE_Information = WIKI "COURSE.Information";
+const char *Hlp_COURSE_Information                     = WIKI "COURSE.Information";
+const char *Hlp_COURSE_Information_textual_information = WIKI "COURSE.Information#textual-information";
+const char *Hlp_COURSE_Information_edit                = WIKI "COURSE.Information#edit";
+
+const char *Hlp_COURSE_Guide      = WIKI "COURSE.Guide";
+const char *Hlp_COURSE_Guide_edit = WIKI "COURSE.Guide#edit";
+
+const char *Hlp_COURSE_Syllabus      = WIKI "COURSE.Syllabus";
+const char *Hlp_COURSE_Syllabus_edit = WIKI "COURSE.Syllabus#edit";
 
 const char *Hlp_COURSE_Documents = WIKI "COURSE.Documents";
 const char *Hlp_COURSE_Private   = WIKI "COURSE.Private";
@@ -110,7 +118,19 @@ const char *Hlp_COURSE_Shared    = WIKI "COURSE.Shared";
 
 const char *Hlp_COURSE_Timetable = WIKI "COURSE.Timetable";
 
+const char *Hlp_COURSE_Bibliography      = WIKI "COURSE.Bibliography";
+const char *Hlp_COURSE_Bibliography_edit = WIKI "COURSE.Bibliography#edit";
+
+const char *Hlp_COURSE_FAQ      = WIKI "COURSE.FAQ";
+const char *Hlp_COURSE_FAQ_edit = WIKI "COURSE.FAQ#edit";
+
+const char *Hlp_COURSE_Links      = WIKI "COURSE.Links";
+const char *Hlp_COURSE_Links_edit = WIKI "COURSE.Links#edit";
+
 /***** ASSESSMENT tab *****/
+
+const char *Hlp_ASSESSMENT_System      = WIKI "ASSESSMENT.System";
+const char *Hlp_ASSESSMENT_System_edit = WIKI "ASSESSMENT.System#edit";
 
 const char *Hlp_ASSESSMENT_Assignments                 = WIKI "ASSESSMENT.Assignments";
 const char *Hlp_ASSESSMENT_Assignments_new_assignment  = WIKI "ASSESSMENT.Assignments#new-assignment";

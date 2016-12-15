@@ -276,6 +276,23 @@ const char *Inf_NamesInDBForInfoType[Inf_NUM_INFO_TYPES] =
    "assessment",
   };
 
+/***** Help *****/
+extern const char *Hlp_COURSE_Information_textual_information;
+extern const char *Hlp_COURSE_Guide;
+extern const char *Hlp_COURSE_Syllabus;
+extern const char *Hlp_COURSE_Bibliography;
+extern const char *Hlp_COURSE_FAQ;
+extern const char *Hlp_COURSE_Links;
+extern const char *Hlp_ASSESSMENT_System;
+
+extern const char *Hlp_COURSE_Information_edit;
+extern const char *Hlp_COURSE_Guide_edit;
+extern const char *Hlp_COURSE_Syllabus_edit;
+extern const char *Hlp_COURSE_Bibliography_edit;
+extern const char *Hlp_COURSE_FAQ_edit;
+extern const char *Hlp_COURSE_Links_edit;
+extern const char *Hlp_ASSESSMENT_System_edit;
+
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
@@ -325,12 +342,25 @@ void Inf_ShowInfo (void)
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool ShowWarningNoInfo = false;
+   const char *Help[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus,				// Inf_LECTURES
+      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ,				// Inf_FAQ
+      Hlp_COURSE_Links,				// Inf_LINKS
+      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+     };
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,
+                                 Gbl.CurrentCrs.Info.Type,
+                                 &InfoSrc,&MustBeRead);
 
    switch (Gbl.CurrentCrs.Info.Type)
      {
@@ -402,7 +432,7 @@ void Inf_ShowInfo (void)
       Lay_StartRoundFrame ("100%",Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			   ICanEdit ? Inf_PutIconToEditInfo :
 				      NULL,
-		           NULL);
+		           Help[Gbl.CurrentCrs.Info.Type]);
       Lay_ShowAlert (Lay_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
@@ -993,12 +1023,23 @@ static void Inf_ShowPage (const char *URL)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   const char *Help[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus,				// Inf_LECTURES
+      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ,				// Inf_FAQ
+      Hlp_COURSE_Links,				// Inf_LINKS
+      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+     };
 
    /***** Start of frame *****/
    Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                         ICanEdit ? Inf_PutIconToEditInfo :
                         	   NULL,
-                        NULL);
+                        Help[Gbl.CurrentCrs.Info.Type]);
 
    /***** Link to view in a new window *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
@@ -1043,12 +1084,25 @@ void Inf_FormsToSelSendInfo (void)
    Inf_InfoSrc_t InfoSrcSelected;
    bool InfoAvailable[Inf_NUM_INFO_SOURCES];
    bool MustBeRead;
+   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
+      Hlp_COURSE_Links_edit,			// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+     };
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
 
    /***** Get current info source from database *****/
-   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrcSelected,&MustBeRead);
+   Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,
+                                 Gbl.CurrentCrs.Info.Type,
+                                 &InfoSrcSelected,&MustBeRead);
 
    /***** Check if info available *****/
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1067,7 +1121,8 @@ void Inf_FormsToSelSendInfo (void)
 
    /***** Form to choice between alternatives *****/
    /* Start of table */
-   Lay_StartRoundFrameTable (NULL,Txt_Source_of_information,NULL,NULL,4);
+   Lay_StartRoundFrameTable (NULL,Txt_Source_of_information,
+                             NULL,HelpEdit[Gbl.CurrentCrs.Info.Type],4);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1496,7 +1551,8 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
 /***** Get and check info source for a type of course info from database *****/
 /*****************************************************************************/
 
-void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType,
+void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
+                                   Inf_InfoType_t InfoType,
                                    Inf_InfoSrc_t *InfoSrc,bool *MustBeRead)
   {
    char Query[512];
@@ -1725,6 +1781,17 @@ static bool Inf_CheckAndShowPlainTxt (void)
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   const char *Help[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus,				// Inf_LECTURES
+      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ,				// Inf_FAQ
+      Hlp_COURSE_Links,				// Inf_LINKS
+      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+     };
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
@@ -1736,7 +1803,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL,
-                           NULL);
+                           Help[Gbl.CurrentCrs.Info.Type]);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1798,6 +1865,17 @@ static bool Inf_CheckAndShowRichTxt (void)
    int ReturnCode;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   const char *Help[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus,				// Inf_LECTURES
+      Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ,				// Inf_FAQ
+      Hlp_COURSE_Links,				// Inf_LINKS
+      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+     };
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
@@ -1809,7 +1887,7 @@ static bool Inf_CheckAndShowRichTxt (void)
       Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
                            ICanEdit ? Inf_PutIconToEditInfo :
                         	      NULL,
-                           NULL);
+                           Help[Gbl.CurrentCrs.Info.Type]);
 
       if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
           Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -1977,6 +2055,17 @@ void Inf_EditPlainTxtInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
+      Hlp_COURSE_Links_edit,			// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+     };
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
@@ -1984,7 +2073,7 @@ void Inf_EditPlainTxtInfo (void)
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvPlaTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-                        NULL,NULL);
+                        NULL,HelpEdit[Gbl.CurrentCrs.Info.Type]);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)
@@ -2017,6 +2106,17 @@ void Inf_EditRichTxtInfo (void)
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   const char *HelpEdit[Inf_NUM_INFO_TYPES] =
+     {
+      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
+      Hlp_COURSE_Links_edit,			// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+     };
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
@@ -2024,7 +2124,7 @@ void Inf_EditRichTxtInfo (void)
    /***** Start form and frame *****/
    Act_FormStart (Inf_ActionsRcvRchTxtInfo[Gbl.CurrentCrs.Info.Type]);
    Lay_StartRoundFrame (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
-                        NULL,NULL);
+                        NULL,HelpEdit[Gbl.CurrentCrs.Info.Type]);
 
    if (Gbl.CurrentCrs.Info.Type == Inf_INTRODUCTION ||
        Gbl.CurrentCrs.Info.Type == Inf_TEACHING_GUIDE)

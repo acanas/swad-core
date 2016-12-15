@@ -213,6 +213,8 @@ bool Syl_CheckSyllabus (long CrsCod,Inf_InfoType_t InfoType)
 
 bool Syl_CheckAndEditSyllabus (void)
   {
+   extern const char *Hlp_COURSE_Syllabus_edit;
+   extern const char *Hlp_COURSE_Syllabus;
    extern const Act_Action_t Inf_ActionsSeeInfo[Inf_NUM_INFO_TYPES];
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Done;
@@ -238,7 +240,9 @@ bool Syl_CheckAndEditSyllabus (void)
       Lay_StartRoundFrameTable (NULL,Txt_INFO_TITLE[Gbl.CurrentCrs.Info.Type],
 			        PutIconToEdit ? Inf_PutIconToEditInfo :
 					        NULL,
-			        NULL,1);
+			        Gbl.Syllabus.EditionIsActive ? Hlp_COURSE_Syllabus_edit :
+			                                       Hlp_COURSE_Syllabus,
+			        1);
 
       /***** Write the current syllabus *****/
       Syl_ShowSyllabus ();
