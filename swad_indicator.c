@@ -1371,15 +1371,16 @@ static unsigned Ind_GetAndUpdateNumIndicatorsCrs (long CrsCod)
 /*****************************************************************************/
 /************ Get number of indicators of a course from database *************/
 /*****************************************************************************/
+// This function returns -1 if number of indicators is not yet calculated
 
 int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   int NumIndicatorsFromDB;
+   int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
-   /***** Get number of files in document zones of a course from database *****/
+   /***** Get number of indicators of a course from database *****/
    sprintf (Query,"SELECT NumIndicators FROM courses WHERE CrsCod='%ld'",
 	    CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get number of indicators"))

@@ -2741,7 +2741,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
-   Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole (Gbl.Usrs.Me.UsrDat.Roles);
+   Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole ((unsigned) Gbl.Usrs.Me.UsrDat.Roles);
    Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_UNKNOWN) ?	// If no logged role retrieved from session...
                             Gbl.Usrs.Me.MaxRole :				// ...set current logged role to maximum role in database
                             Gbl.Usrs.Me.RoleFromSession;			// Get logged role from session

@@ -17691,10 +17691,21 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
 	{
 	// TabUnk ****************************************************
+	NULL,	//  0
+	NULL,	//  1
+	NULL,	//  2
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSys *****************************************************
-	// ActSysReqSch
+	//  0: ActSysReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -17715,7 +17726,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeCty
+	//  1: ActSeeCty
 #if   L==1
 	"Pa&iuml;sos"
 #elif L==2
@@ -17736,7 +17747,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	// ActSeePen
+	//  2: ActSeePen
 #if   L==1
 	"Pendents"
 #elif L==2
@@ -17757,7 +17768,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pendentes"
 #endif
 	,
-	// ActReqRemOldCrs
+	//  3: ActReqRemOldCrs
 #if   L==1
 	"Antics"
 #elif L==2
@@ -17778,7 +17789,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Antigas"
 #endif
 	,
-	// ActSeeDegTyp
+	//  4: ActSeeDegTyp
 #if   L==1
 	"Estudis"
 #elif L==2
@@ -17799,7 +17810,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudos"
 #endif
 	,
-	// ActSeeMai
+	//  5: ActSeeMai
 #if   L==1
 	"Dominis"
 #elif L==2
@@ -17820,7 +17831,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Dom&iacute;nios"
 #endif
 	,
-	// ActSeeBan
+	//  6: ActSeeBan
 #if   L==1
 	"Banners"
 #elif L==2
@@ -17841,7 +17852,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Banners"
 #endif
 	,
-	// ActSeeLnk
+	//  7: ActSeeLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -17862,7 +17873,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	// ActLstPlg
+	//  8: ActLstPlg
 #if   L==1
 	"Complements"
 #elif L==2
@@ -17883,7 +17894,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	// ActSetUp
+	//  9: ActSetUp
 #if   L==1
 	"Instal lar"
 #elif L==2
@@ -17903,10 +17914,12 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Instalar"
 #endif
+	,
+	NULL,	// 10
 	},
 	{
 	// TabCty *****************************************************
-	// ActCtyReqSch
+	//  0: ActCtyReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -17927,7 +17940,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeCtyInf
+	//  1: ActSeeCtyInf
 #if   L==1
 	"Informaci&oacute;"
 #elif L==2
@@ -17948,7 +17961,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeIns
+	//  2: ActSeeIns
 #if   L==1
 	"Institucions"
 #elif L==2
@@ -17968,10 +17981,19 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Institu&ccedil;&otilde;es"
 #endif
+	,
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabIns *****************************************************
-	// ActInsReqSch
+	//  0: ActInsReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -17992,7 +18014,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeInsInf
+	//  1: ActSeeInsInf
 #if   L==1
 	"Informaci&oacute;"
 #elif L==2
@@ -18013,7 +18035,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeCtr
+	//  2: ActSeeCtr
 #if   L==1
 	"Centres"
 #elif L==2
@@ -18034,7 +18056,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	// ActSeeDpt
+	//  3: ActSeeDpt
 #if   L==1
 	"Departaments"
 #elif L==2
@@ -18055,7 +18077,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	// ActSeePlc
+	//  4: ActSeePlc
 #if   L==1
 	"Llocs"
 #elif L==2
@@ -18076,7 +18098,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes"
 #endif
 	,
-	// ActSeeHld
+	//  5: ActSeeHld
 #if   L==1
 	"Festius"
 #elif L==2
@@ -18097,7 +18119,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&eacute;rias"
 #endif
 	,
-	// ActSeeAdmDocIns
+	//  6: ActSeeAdmDocIns
 #if   L==1
 	"Documents"
 #elif L==2
@@ -18118,7 +18140,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaIns
+	//  7: ActAdmShaIns
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -18138,10 +18160,14 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Compartilhados"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabCtr *****************************************************
-	// ActCtrReqSch
+	//  0: ActCtrReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -18162,7 +18188,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeCtrInf
+	//  1: ActSeeCtrInf
 #if   L==1
 	"Informaci&oacute;"
 #elif L==2
@@ -18183,7 +18209,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeDeg
+	//  2: ActSeeDeg
 #if   L==1
 	"Titulacions"
 #elif L==2
@@ -18204,7 +18230,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	// ActSeeAdmDocCtr
+	//  3: ActSeeAdmDocCtr
 #if   L==1
 	"Documents"
 #elif L==2
@@ -18225,7 +18251,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaCtr
+	//  4: ActAdmShaCtr
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -18245,10 +18271,17 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Compartilhados"
 #endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabDeg *****************************************************
-	// ActDegReqSch
+	//  0: ActDegReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -18269,7 +18302,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeDegInf
+	//  1: ActSeeDegInf
 #if   L==1
 	"Informaci&oacute;"
 #elif L==2
@@ -18290,7 +18323,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeCrs
+	//  2: ActSeeCrs
 #if   L==1
 	"Assignatures"
 #elif L==2
@@ -18311,7 +18344,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	// ActSeeAdmDocDeg
+	//  3: ActSeeAdmDocDeg
 #if   L==1
 	"Documents"
 #elif L==2
@@ -18332,7 +18365,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaDeg
+	//  4: ActAdmShaDeg
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -18352,10 +18385,17 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Compartilhados"
 #endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabCrs *****************************************************
-	// ActCtrReqSch
+	//  0: ActCtrReqSch
 #if   L==1
 	"Cercar"
 #elif L==2
@@ -18376,7 +18416,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar"
 #endif
 	,
-	// ActSeeCrsInf
+	//  1: ActSeeCrsInf
 #if   L==1
 	"Informaci&oacute;"
 #elif L==2
@@ -18397,7 +18437,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeTchGui
+	//  2: ActSeeTchGui
 #if   L==1
 	"Guia"
 #elif L==2
@@ -18418,7 +18458,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia"
 #endif
 	,
-	// ActSeeSyl
+	//  3: ActSeeSyl
 #if   L==1
 	"Programa"
 #elif L==2
@@ -18439,7 +18479,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeAdmDocCrsGrp
+	//  4: ActSeeAdmDocCrsGrp
 #if   L==1
 	"Documents"
 #elif L==2
@@ -18460,7 +18500,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmTchCrsGrp
+	//  5: ActAdmTchCrsGrp
 #if   L==1
 	"Privats"
 #elif L==2
@@ -18481,7 +18521,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Privados"
 #endif
 	,
-	// ActAdmShaCrsGrp
+	//  6: ActAdmShaCrsGrp
 #if   L==1
 	"Compartits"
 #elif L==2
@@ -18502,7 +18542,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Compartilhados"
 #endif
 	,
-	// ActSeeCrsTT
+	//  7: ActSeeCrsTT
 #if   L==1
 	"Horari"
 #elif L==2
@@ -18523,7 +18563,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// ActSeeBib
+	//  8: ActSeeBib
 #if   L==1
 	"Bibliografia"
 #elif L==2
@@ -18544,7 +18584,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	// ActSeeFAQ
+	//  9: ActSeeFAQ
 #if   L==1
 	"FAQ"	// Necessita traduccio
 #elif L==2
@@ -18565,7 +18605,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	// ActSeeCrsLnk
+	// 10: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18588,7 +18628,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabAss *****************************************************
-	// ActSeeAss
+	//  0: ActSeeAss
 #if   L==1
 	"Sistema"
 #elif L==2
@@ -18609,7 +18649,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sistema"
 #endif
 	,
-	// ActSeeAsg
+	// 1: ActSeeAsg
 #if   L==1
 	"Activitats"
 #elif L==2
@@ -18630,7 +18670,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	// ActAdmAsgWrkUsr
+	//  2: ActAdmAsgWrkUsr
 #if   L==1
 	"Treballs"
 #elif L==2
@@ -18651,7 +18691,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Trabalhos"
 #endif
 	,
-	// ActReqAsgWrkCrs
+	//  3: ActReqAsgWrkCrs
 #if   L==1
 	"Treballs"
 #elif L==2
@@ -18672,7 +18712,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Trabalhos"
 #endif
 	,
-	// ActReqTst
+	//  4: ActReqTst
 #if   L==1
 	"Tests"
 #elif L==2
@@ -18693,7 +18733,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	// ActSeeCal
+	//  5: ActSeeCal
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18714,7 +18754,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	// ActSeeAllExaAnn
+	//  6: ActSeeAllExaAnn
 #if   L==1
 	"Convocat&ograve;ries"
 #elif L==2
@@ -18735,7 +18775,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	// ActSeeMrk
+	//  7: ActSeeMrk
 #if   L==1
 	"Qualificacions"
 #elif L==2
@@ -18755,10 +18795,14 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Notas"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabUsr *****************************************************
-	// ActReqSelGrp
+	//  0: ActReqSelGrp
 #if   L==1
 	"Grups"
 #elif L==2
@@ -18779,7 +18823,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstStd
+	//  1: ActLstStd
 #if   L==1
 	"Estudiants"
 #elif L==2
@@ -18800,7 +18844,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudantes"
 #endif
 	,
-	// ActLstTch
+	//  2: ActLstTch
 #if   L==1
 	"Professors"
 #elif L==2
@@ -18821,7 +18865,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Professores"
 #endif
 	,
-	// ActLstOth
+	//  3: ActLstOth
 #if   L==1
 	"Altres"
 #elif L==2
@@ -18842,7 +18886,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Outros"
 #endif
 	,
-	// ActSeeAtt
+	//  4: ActSeeAtt
 #if   L==1
 	"Assist&egrave;ncia"
 #elif L==2
@@ -18863,7 +18907,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Presen&ccedil;a"
 #endif
 	,
-	// ActReqSignUp
+	//  5: ActReqSignUp
 #if   L==1
 	"Inscriure"
 #elif L==2
@@ -18884,7 +18928,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inscrever"
 #endif
 	,
-	// ActSeeSignUpReq
+	//  6: ActSeeSignUpReq
 #if   L==1
 	"Peticions"
 #elif L==2
@@ -18905,7 +18949,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es"
 #endif
 	,
-	// ActLstCon
+	//  7: ActLstCon
 #if   L==1
 	"Connectats"
 #elif L==2
@@ -18925,10 +18969,14 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Conectados"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSoc *****************************************************
-	// ActSeeSocTmlGbl
+	//  0: ActSeeSocTmlGbl
 #if   L==1
 	 "Activitat"
 #elif L==2
@@ -18949,7 +18997,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Atividade"
 #endif
 	,
-	// ActSeeSocPrf
+	//  1: ActSeeSocPrf
 #if   L==1
 	 "Perfils"
 #elif L==2
@@ -18970,7 +19018,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfiles"
 #endif
 	,
-	// ActSeeFor
+	//  2: ActSeeFor
 #if   L==1
 	"F&ograve;rums"
 #elif L==2
@@ -18991,7 +19039,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	// ActSeeChtRms
+	//  3: ActSeeChtRms
 #if   L==1
 	"Xat"
 #elif L==2
@@ -19011,10 +19059,18 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Chat"
 #endif
+	,
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabMsg *****************************************************
-	// ActSeeNtf
+	//  0: ActSeeNtf
 #if   L==1
 	"Notificacions"
 #elif L==2
@@ -19035,7 +19091,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Notifica&ccedil;&otilde;es"
 #endif
 	,
-	// ActSeeAnn
+	//  1: ActSeeAnn
 #if   L==1
 	"Anuncis"
 #elif L==2
@@ -19056,7 +19112,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios"
 #endif
 	,
-	// ActSeeAllNot
+	//  2: ActSeeAllNot
 #if   L==1
 	"Avisos"
 #elif L==2
@@ -19077,7 +19133,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	// ActReqMsgUsr
+	//  3: ActReqMsgUsr
 #if   L==1
 	"Redactar"
 #elif L==2
@@ -19098,7 +19154,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Escrever"
 #endif
 	,
-	// ActSeeRcvMsg
+	//  4: ActSeeRcvMsg
 #if   L==1
 	"Rebuts"
 #elif L==2
@@ -19119,7 +19175,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Recebidas"
 #endif
 	,
-	// ActSeeSntMsg
+	//  5: ActSeeSntMsg
 #if   L==1
 	"Enviats"
 #elif L==2
@@ -19140,7 +19196,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Enviadas"
 #endif
 	,
-	// ActMaiStd
+	//  6: ActMaiStd
 #if   L==1
 	"Correu"
 #elif L==2
@@ -19160,10 +19216,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Email"
 #endif
+	,
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSta **********************************************************************
-	// ActSeeAllSvy
+	//  0: ActSeeAllSvy
 #if   L==1
 	"Enquestes"
 #elif L==2
@@ -19184,7 +19245,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	// ActReqUseGbl
+	//  1: ActReqUseGbl
 #if   L==1
 	"Xifres"
 #elif L==2
@@ -19205,7 +19266,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"N&uacute;meros"
 #endif
 	,
-	// ActSeePhoDeg
+	//  2: ActSeePhoDeg
 #if   L==1
 	"Titulacions"
 #elif L==2
@@ -19226,7 +19287,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	// ActReqStaCrs
+	//  3: ActReqStaCrs
 #if   L==1
 	"Indicadors"
 #elif L==2
@@ -19247,7 +19308,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores"
 #endif
 	,
-	// ActReqAccGbl
+	//  4: ActReqAccGbl
 #if   L==1
 	"Accessos"
 #elif L==2
@@ -19268,7 +19329,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Visitas"
 #endif
 	,
-	// ActReqMyUsgRep
+	//  5: ActReqMyUsgRep
 #if   L==1
 	"Informe"
 #elif L==2
@@ -19289,7 +19350,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Relat&oacute;rio"
 #endif
 	,
-	// ActMFUAct
+	//  6: ActMFUAct
 #if   L==1
 	"Freq&uuml;ents"
 #elif L==2
@@ -19309,10 +19370,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Freq&uuml;entes"
 #endif
+	,
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabPrf *****************************************************
-	// ActFrmLogIn
+	//  0: ActFrmLogIn
 #if   L==1
 	"Entrar"
 #elif L==2
@@ -19333,7 +19399,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Entrar"
 #endif
 	,
-	// ActFrmRolSes
+	//  1: ActFrmRolSes
 #if   L==1
 	"Sessi&oacute;"
 #elif L==2
@@ -19354,7 +19420,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sess&atilde;o"
 #endif
 	,
-	// ActMyCrs
+	//  2: ActMyCrs
 #if   L==1
 	"Assignatures"
 #elif L==2
@@ -19375,7 +19441,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	// ActSeeMyTT
+	//  3: ActSeeMyTT
 #if   L==1
 	"Horari"
 #elif L==2
@@ -19396,7 +19462,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// ActSeeMyAgd
+	//  4: ActSeeMyAgd
 #if   L==1
 	"Agenda"
 #elif L==2
@@ -19417,7 +19483,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	// ActFrmMyAcc
+	//  5: ActFrmMyAcc
 #if   L==1
 	"Compte"
 #elif L==2
@@ -19438,7 +19504,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Conta"
 #endif
 	,
-	// ActReqEdiRecCom
+	//  6: ActReqEdiRecCom
 #if   L==1
 	"Fitxa"
 #elif L==2
@@ -19459,7 +19525,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActEdiPrf
+	//  7: ActEdiPrf
 #if   L==1
 	"Prefer&egrave;ncies"
 #elif L==2
@@ -19480,7 +19546,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Prefer&ecirc;ncias"
 #endif
 	,
-	// ActAdmBrf
+	//  8: ActAdmBrf
 #if   L==1
 	"Malet&iacute;"
 #elif L==2
@@ -19500,6 +19566,9 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Pasta"
 #endif
+	,
+	NULL,	//  9
+	NULL,	// 10
 	}
 };
 
@@ -19507,10 +19576,21 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 {
 	{
 	// TabUnk ****************************************************
+	NULL,	//  0
+	NULL,	//  1
+	NULL,	//  2
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSys *****************************************************
-	// ActSysReqSch
+	//  0: ActSysReqSch
 #if   L==1
 	"Cerca d'assignatures, professors i documents"
 #elif L==2
@@ -19531,7 +19611,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	// ActSeeCty
+	//  1: ActSeeCty
 #if   L==1
 	"Llista de pa&iuml;sos i del nombre d'usuaris de cada pa&iacute;s"
 #elif L==2
@@ -19552,7 +19632,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Pa&iacute;ses"
 #endif
 	,
-	// ActSeePen
+	//  2: ActSeePen
 #if   L==1
 	"Institutions, centres, titulacions i assignatures pendents d'activar"
 #elif L==2
@@ -19573,7 +19653,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es, centros, titula&ccedil;&otilde;es e disciplinas pendentes"
 #endif
 	,
-	// ActReqRemOldCrs
+	//  3: ActReqRemOldCrs
 #if   L==1
 	"Eliminar assignatures antics"
 #elif L==2
@@ -19594,7 +19674,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Eliminar antigas disciplinas"
 #endif
 	,
-	// ActSeeDegTyp
+	//  4: ActSeeDegTyp
 #if   L==1
 	"Tipus de titulaci&oacute;"
 #elif L==2
@@ -19615,7 +19695,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Tipos de titula&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeMai
+	//  5: ActSeeMai
 #if   L==1
 	"Llista de dominis de correu permesos"
 	" per a l'enviament de notificacions"
@@ -19640,7 +19720,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	  " para notifica&ccedil;&otilde;es"
 #endif
 	,
-	// ActSeeBan
+	//  6: ActSeeBan
 #if   L==1
 	"Llista de banners publicitaris"
 #elif L==2
@@ -19661,7 +19741,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de banners publicit&aacute;rios"
 #endif
 	,
-	// ActSeeLnk
+	//  7: ActSeeLnk
 #if   L==1
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2
@@ -19682,7 +19762,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	// ActLstPlg
+	//  8: ActLstPlg
 #if   L==1
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2
@@ -19703,7 +19783,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	// ActSetUp
+	//  9: ActSetUp
 #if   L==1
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2
@@ -19723,10 +19803,12 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Instalar"
 #endif
+	,
+	NULL,	// 10
 	},
 	{
 	// TabCty *****************************************************
-	// ActCtyReqSch
+	//  0: ActCtyReqSch
 #if   L==1
 	"Cerca d'assignatures, professors i documents"
 #elif L==2
@@ -19747,7 +19829,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	// ActSeeCtyInf
+	//  1: ActSeeCtyInf
 #if   L==1
 	"Informaci&oacute; d'aquest pa&iacute;s"
 #elif L==2
@@ -19768,7 +19850,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o deste pa&iacute;s"
 #endif
 	,
-	// ActSeeIns
+	//  2: ActSeeIns
 #if   L==1
 	"Llista d'institucions"
 #elif L==2
@@ -19788,10 +19870,19 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Institu&ccedil;&otilde;es"
 #endif
+	,
+	NULL,	//  3
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabIns *****************************************************
-	// ActInsReqSch
+	//  0: ActInsReqSch
 #if   L==1
 	"Cerca d'assignatures, professors i documents"
 #elif L==2
@@ -19812,7 +19903,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	// ActSeeInsInf
+	//  1: ActSeeInsInf
 #if   L==1
 	"Informaci&oacute; d'aquesta instituci&oacute;"
 #elif L==2
@@ -19833,7 +19924,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta institu&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeCtr
+	//  2: ActSeeCtr
 #if   L==1
 	"Llista de centres"
 #elif L==2
@@ -19854,7 +19945,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Centros"
 #endif
 	,
-	// ActSeeDpt
+	//  3: ActSeeDpt
 #if   L==1
 	"Llista de tots els departaments d'aquesta instituci&oacute;"
 #elif L==2
@@ -19875,7 +19966,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	// ActSeePlc
+	//  4: ActSeePlc
 #if   L==1
 	"Llista d'empla&ccedil;aments d'aquesta instituci&oacute;"
 #elif L==2
@@ -19896,7 +19987,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes"
 #endif
 	,
-	// ActSeeHld
+	//  5: ActSeeHld
 #if   L==1
 	"Dies festius i per&iacute;odes no lectius d'aquesta instituci&oacute;"
 #elif L==2
@@ -19917,7 +20008,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Feriados e dias sem escola"
 #endif
 	,
-	// ActSeeAdmDocIns
+	//  6: ActSeeAdmDocIns
 #if   L==1
 	"Documents"
 #elif L==2
@@ -19938,7 +20029,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaIns
+	//  7: ActAdmShaIns
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de l'instituci&oacute;"
@@ -19962,10 +20053,14 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Arquivos compartilhados"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabCtr *****************************************************
-	// ActCtrReqSch
+	//  0: ActCtrReqSch
 #if   L==1
 	"Cerca d'assignatures, professors i documents"
 #elif L==2
@@ -19986,7 +20081,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	// ActSeeCtrInf
+	//  1: ActSeeCtrInf
 #if   L==1
 	"Informaci&oacute; d'aquest centre"
 #elif L==2
@@ -20007,7 +20102,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o deste centro"
 #endif
 	,
-	// ActSeeDeg
+	//  2: ActSeeDeg
 #if   L==1
 	"Titulacions d'aquest centre"
 #elif L==2
@@ -20028,7 +20123,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	// ActSeeAdmDocCtr
+	//  3: ActSeeAdmDocCtr
 #if   L==1
 	"Documents"
 #elif L==2
@@ -20049,7 +20144,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaCtr
+	//  4: ActAdmShaCtr
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" del centre"
@@ -20073,10 +20168,17 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Arquivos compartilhados"
 #endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabDeg *****************************************************
-	// ActDegReqSch
+	//  0: ActDegReqSch
 #if   L==1
 	"Cerca d'assignatures, professors i documents"
 #elif L==2
@@ -20097,7 +20199,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar disciplinas, professores e documentos"
 #endif
 	,
-	// ActSeeDegInf
+	//  1: ActSeeDegInf
 #if   L==1
 	"Informaci&oacute; d'aquesta titulaci&oacute;"
 #elif L==2
@@ -20118,7 +20220,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta titula&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeCrs
+	//  2: ActSeeCrs
 #if   L==1
 	"Assignatures d'aquesta titulaci&oacute;"
 #elif L==2
@@ -20139,7 +20241,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas nesta titula&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeAdmDocDeg
+	//  3: ActSeeAdmDocDeg
 #if   L==1
 	"Documents"
 #elif L==2
@@ -20160,7 +20262,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmShaDeg
+	//  4: ActAdmShaDeg
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de la titulaci&oacute;"
@@ -20184,10 +20286,17 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Arquivos compartilhados"
 #endif
+	,
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabCrs *****************************************************
-	// ActCrsReqSch
+	//  0: ActCrsReqSch
 #if   L==1
 	"Cerca de professors i documents"
 #elif L==2
@@ -20208,7 +20317,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Procurar professores e documentos"
 #endif
 	,
-	// ActSeeCrsInf
+	//  1: ActSeeCrsInf
 #if   L==1
 	"Informaci&oacute; d'aquesta assignatura"
 #elif L==2
@@ -20229,7 +20338,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Informa&ccedil;&atilde;o desta disciplina"
 #endif
 	,
-	// ActSeeTchGui
+	//  2: ActSeeTchGui
 #if   L==1
 	"Guia docent de l'assignatura"
 #elif L==2
@@ -20250,7 +20359,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Guia de ensino"
 #endif
 	,
-	// ActSeeSyl
+	//  3: ActSeeSyl
 #if   L==1
 	"Programa de l'assignatura"
 #elif L==2
@@ -20271,7 +20380,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	// ActSeeAdmDocCrsGrp
+	//  4: ActSeeAdmDocCrsGrp
 #if   L==1
 	"Documents de l'assignatura o d'un grup enviats per professors"
 #elif L==2
@@ -20292,7 +20401,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Documentos"
 #endif
 	,
-	// ActAdmTchCrsGrp
+	//  5: ActAdmTchCrsGrp
 #if   L==1
 	"Arxius privats, nom&eacute;s per als professors de l'assignatura"
 #elif L==2
@@ -20313,7 +20422,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Arquivos privados, apenas para os professores do curso"
 #endif
 	,
-	// ActAdmShaCrsGrp
+	//  6: ActAdmShaCrsGrp
 #if   L==1
 	"Arxius compartits per professors i estudiants"
 	" de l'assignatura o d'un grup"
@@ -20338,7 +20447,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Arquivos compartilhados"
 #endif
 	,
-	// ActSeeCrsTT
+	//  7: ActSeeCrsTT
 #if   L==1
 	"Horari de classes de l'assignatura"
 #elif L==2
@@ -20359,7 +20468,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	// ActSeeBib
+	//  8: ActSeeBib
 #if   L==1
 	"Bibliografia relacionada amb els continguts de l'assignatura"
 #elif L==2
@@ -20380,7 +20489,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	// ActSeeFAQ
+	//  9: ActSeeFAQ
 #if   L==1
 	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
 #elif L==2
@@ -20401,7 +20510,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	// ActSeeCrsLnk
+	// 10: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
 #elif L==2
@@ -20424,7 +20533,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabAss *****************************************************
-	// ActSeeAss
+	//  0: ActSeeAss
 #if   L==1
 	"Sistema o criteris d'avaluaci&oacute;"
 	" de l'estudiant en aquesta assignatura"
@@ -20448,7 +20557,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Sistema de avalia&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeAsg
+	//  1: ActSeeAsg
 #if   L==1
 	"Activitats obligat&ograve;ries o recomanades en aquesta assignatura"
 #elif L==2
@@ -20469,7 +20578,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	// ActAdmAsgWrkUsr
+	//  2: ActAdmAsgWrkUsr
 #if   L==1
 	"Els meus documents d'activitats i altres treballs en aquesta assignatura"
 #elif L==2
@@ -20490,7 +20599,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Os meus trabalhos"
 #endif
 	,
-	// ActReqAsgWrkCrs
+	//  3: ActReqAsgWrkCrs
 #if   L==1
 	"Activitats i altres treballs enviats pels usuaris d'aquesta assignatura"
 #elif L==2
@@ -20511,7 +20620,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Trabalhos de utilizadores"
 #endif
 	,
-	// ActReqTst
+	//  4: ActReqTst
 #if   L==1
 	"Tests sobre els continguts d'aquesta assignatura"
 #elif L==2
@@ -20532,7 +20641,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	// ActSeeCal
+	//  5: ActSeeCal
 #if   L==1
 	"Calendari acad&egrave;mic (els dies festius"
 	" corresponen al lloc del centre seleccionada)"
@@ -20556,7 +20665,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	// ActSeeAllExaAnn
+	//  6: ActSeeAllExaAnn
 #if   L==1
 	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2
@@ -20577,7 +20686,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	// ActSeeMrk
+	//  7: ActSeeMrk
 #if   L==1
 	"Consulta individualitzada de qualificacions"
 	" (cada estudiant nom&eacute;s veu les seves qualificacions)"
@@ -20606,10 +20715,14 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Consulta individualizada de notas"
 	" (somente cada aluno v&ecirc; suas notas)"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabUsr *****************************************************
-	// ActReqSelGrp
+	//  0: ActReqSelGrp
 #if   L==1
 	"Grups en aquesta assignatura"
 #elif L==2
@@ -20630,7 +20743,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Grupos"
 #endif
 	,
-	// ActLstStd
+	//  1: ActLstStd
 #if   L==1
 	"Llistat i fitxes dels estudiants"
 #elif L==2
@@ -20651,7 +20764,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es estudantes"
 #endif
 	,
-	// ActLstTch
+	//  2: ActLstTch
 #if   L==1
 	"Llistat i fitxes de professors"
 #elif L==2
@@ -20672,7 +20785,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es professores"
 #endif
 	,
-	// ActLstOth
+	//  3: ActLstOth
 #if   L==1
 	"Llistat i fitxes d'altres usuaris"
 #elif L==2
@@ -20693,7 +20806,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista e cart&otilde;es de outros usu&aacute;rios"
 #endif
 	,
-	// ActSeeAtt
+	//  4: ActSeeAtt
 #if   L==1
 	"Control d'assist&egrave;ncia dels estudiants"
 	" a les classes d'aquesta assignatura"
@@ -20718,7 +20831,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de presen&ccedil;a"
 #endif
 	,
-	// ActReqSignUp
+	//  5: ActReqSignUp
 #if   L==1
 	"Sol&middot;licitar inscripci&oacute;"
 #elif L==2
@@ -20739,7 +20852,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicitar inscri&ccedil;&atilde;o"
 #endif
 	,
-	// ActSeeSignUpReq
+	//  6: ActSeeSignUpReq
 #if   L==1
 	"Peticions d'inscripci&oacute;"
 #elif L==2
@@ -20760,7 +20873,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Solicita&ccedil;&otilde;es de inscri&ccedil;&atilde;o"
 #endif
 	,
-	// ActLstCon
+	//  7: ActLstCon
 #if   L==1
 	"Llista d'usuaris connectats en aquest moment"
 #elif L==2
@@ -20780,10 +20893,14 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Conectados"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSoc *****************************************************
-	// ActSeeSocTmlGbl
+	//  0: ActSeeSocTmlGbl
 #if   L==1
 	 "Activitat p&uacute;blica dels usuaris que segueixo"
 #elif L==2
@@ -20804,7 +20921,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Atividade p&uacute;blica dos usu&aacute;rios que eu sigo"
 #endif
 	,
-	 // ActSeeSocPrf
+	 //  1: ActSeeSocPrf
 #if   L==1
 	 "Perfils p&uacute;blics"
 #elif L==2
@@ -20825,7 +20942,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Perfis p&uacute;blicos"
 #endif
 	,
-	// ActSeeFor
+	//  2: ActSeeFor
 #if   L==1
 	"F&ograve;rums de discussi&oacute;, distribu&iuml;ts"
 	" segons la tem&agrave;tica (escolliu el f&ograve;rum adequat)"
@@ -20849,7 +20966,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&oacute;runs"
 #endif
 	,
-	// ActSeeChtRms
+	//  3: ActSeeChtRms
 #if   L==1
 	"Conversa en temps real amb altres usuaris"
 #elif L==2
@@ -20869,10 +20986,18 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Chat"
 #endif
+	,
+	NULL,	//  4
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabMsg *****************************************************
-	// ActSeeNtf
+	//  0: ActSeeNtf
 #if   L==1
 	"Esdeveniments recents que han estat o seran notificats"
 #elif L==2
@@ -20893,7 +21018,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Os recentes acontecimentos que foram ou ser&atilde;o notificados"
 #endif
 	,
-	// ActSeeAnn
+	//  1: ActSeeAnn
 #if   L==1
 	"Anuncis globals mostrat en iniciar sessi&oacute;"
 #elif L==2
@@ -20914,7 +21039,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"An&uacute;ncios globais vis&iacute;veis no in&iacute;cio da sess&atilde;o"
 #endif
 	,
-	// ActSeeAllNot
+	//  2: ActSeeAllNot
 #if   L==1
 	"Breus avisos relacionats amb aquesta assignatura,"
 	" visibles per qualsevol visitant, encara que no estigui identificat"
@@ -20938,7 +21063,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Avisos"
 #endif
 	,
-	// ActReqMsgUsr
+	//  3: ActReqMsgUsr
 #if   L==1
 	"Enviament d'un nou missatge privat a altres usuaris"
 #elif L==2
@@ -20959,7 +21084,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Nova mensagem"
 #endif
 	,
-	// ActSeeRcvMsg
+	//  4: ActSeeRcvMsg
 #if   L==1
 	"Missatges privats rebuts d'altres usuaris"
 #elif L==2
@@ -20980,7 +21105,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens recebidas"
 #endif
 	,
-	// ActSeeSntMsg
+	//  5: ActSeeSntMsg
 #if   L==1
 	"Missatges privats enviats per mi a altres usuaris"
 #elif L==2
@@ -21001,7 +21126,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Mensagens enviadas"
 #endif
 	,
-	// ActMaiStd
+	//  6: ActMaiStd
 #if   L==1
 	"Creaci&oacute; d'un missatge de correu"
 	" per enviar-lo a estudiants d'aquesta assignatura"
@@ -21027,10 +21152,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Email"
 #endif
+	,
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabSta *****************************************************
-	// ActSeeAllSvy
+	//  0: ActSeeAllSvy
 #if   L==1
 	"Enquestes an&ograve;nimes"
 #elif L==2
@@ -21051,7 +21181,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Inqu&eacute;ritos"
 #endif
 	,
-	// ActReqUseGbl
+	//  1: ActReqUseGbl
 #if   L==1
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
 	" o d'aquesta titulaci&oacute; o assignatura"
@@ -21075,7 +21205,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Utiliza&ccedil;&atilde;o de SWAD"
 #endif
 	,
-	// ActSeePhoDeg
+	//  2: ActSeePhoDeg
 #if   L==1
 	"Estad&iacute;stiques del nombre d'estudiants en cada titulaci&oacute;"
 	" representades per les fotos mitjana dels estudiants"
@@ -21099,7 +21229,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Fotografia titula&ccedil;oes"
 #endif
 	,
-	// ActReqStaCrs
+	//  3: ActReqStaCrs
 #if   L==1
 	"Indicadors d'assignatures per al contracte-programa"
 #elif L==2
@@ -21120,7 +21250,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores de disciplinas para o contrato programa"
 #endif
 	,
-	// ActReqAccGbl
+	//  4: ActReqAccGbl
 #if   L==1
 	"Estad&iacute;stiques d'accesso a la plataforma"
 #elif L==2
@@ -21141,7 +21271,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estat&iacute;sticas de acesso &agrave; plataforma"
 #endif
 	,
-	// ActReqMyUsgRep
+	//  5: ActReqMyUsgRep
 #if   L==1
 	"Informe sobre el meu &uacute;s de la plataforma"
 #elif L==2
@@ -21162,7 +21292,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Relat&oacute;rio sobre o meu uso da plataforma"
 #endif
 	,
-	// ActMFUAct
+	//  6: ActMFUAct
 #if   L==1
 	"Acc&eacute;s directe a les meves accions m&eacute;s freq&uuml;ents"
 #elif L==2
@@ -21182,10 +21312,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
+	,
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
 	},
 	{
 	// TabPrf *****************************************************
-	// ActFrmLogIn
+	//  0: ActFrmLogIn
 #if   L==1
 	"Rol en aquesta sessi&oacute;"
 #elif L==2
@@ -21206,7 +21341,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Role nesta sess&atilde;o"
 #endif
 	,
-	// ActFrmRolSes
+	//  1: ActFrmRolSes
 #if   L==1
 	"Rol en aquesta sessi&oacute;"
 #elif L==2
@@ -21227,7 +21362,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Role nesta sess&atilde;o"
 #endif
 	,
-	// ActMyCrs
+	//  2: ActMyCrs
 #if   L==1
 	"Assignatures a les quals pertanyo"
 #elif L==2
@@ -21248,7 +21383,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas a que perten&ccedil;o"
 #endif
 	,
-	// ActSeeMyTT
+	//  3: ActSeeMyTT
 #if   L==1
 	"Horari conjunt de totes les meves assignatures a la plataforma"
 #elif L==2
@@ -21269,7 +21404,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	,
-	// ActSeeMyAgd
+	//  4: ActSeeMyAgd
 #if   L==1
 	"Agenda"
 #elif L==2
@@ -21290,7 +21425,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Agenda"
 #endif
 	,
-	// ActFrmMyAcc
+	//  5: ActFrmMyAcc
 #if   L==1
 	"Creaci&oacute; o edici&oacute; del meu compte d'usuari"
 #elif L==2
@@ -21311,7 +21446,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Criar ou editar minha conta de usu&aacute;rio"
 #endif
 	,
-	// ActReqEdiRecCom
+	//  6: ActReqEdiRecCom
 #if   L==1
 	"Dades personals, comuns per a totes les assignatures"
 #elif L==2
@@ -21332,7 +21467,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Cart&atilde;o"
 #endif
 	,
-	// ActEdiPrf
+	//  7: ActEdiPrf
 #if   L==1
 	"Les meves prefer&egrave;ncies (idioma, colors, notificacions &hellip;)"
 #elif L==2
@@ -21353,7 +21488,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Prefer&ecirc;ncias"
 #endif
 	,
-	// ActAdmBrf
+	//  8: ActAdmBrf
 #if   L==1
 	"La meva zona privada d'emmagatzematge de fitxers"
 #elif L==2
@@ -21373,6 +21508,9 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Pasta"
 #endif
+	,
+	NULL,	//  9
+	NULL,	// 10
 	}
 };
 
@@ -42346,11 +42484,11 @@ const char *Txt_The_date_time_of_opening_of_groups_has_changed =
 #elif L==3
 	"The date / time of opening of groups has changed.";
 #elif L==4
-	"Los cambios de grupo solicitados se han realizado correctamente.";
+	"La fecha / hora de apertura ha cambiado.";
 #elif L==5
 	"The date / time of opening of groups has changed.";			// Besoin de traduction
 #elif L==6
-	"Los cambios de grupo solicitados se han realizado correctamente.";	// Okoteve traducción
+	"La fecha / hora de apertura ha cambiado.";	// Okoteve traducción
 #elif L==7
 	"La data / ora di apertura dei gruppi &egrave; cambiata.";
 #elif L==8

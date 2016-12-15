@@ -829,19 +829,22 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
                           {
                            strcpy (*ContentStr,"<![CDATA[");
                            if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")))
+                             {
                               for (Ptr = (*ContentStr) + 9, i = 0;
                         	   i < SizeOfMyMarks;
                         	   i++)
                                  Ptr[i] = (char) fgetc (FileUsrMarks);
+                              fclose (FileUsrMarks);
+                             }
                            strcpy ((*ContentStr)+9+SizeOfMyMarks,"]]>");
                           }
                        }
                      else
                        {
+                        fclose (FileUsrMarks);
                         if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
                            sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                        }
-                     fclose (FileUsrMarks);
                     }
                   else
                     {

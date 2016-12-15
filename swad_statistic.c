@@ -6328,17 +6328,17 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 
    /* Get number of courses (row[0]) */
    if (row[0])
-      if (sscanf (row[0],"%u",&(SizeOfFileZones->NumCrss)) != 1)
+      if (sscanf (row[0],"%d",&(SizeOfFileZones->NumCrss)) != 1)
          Lay_ShowErrorAndExit ("Error when getting number of courses.");
 
    /* Get number of groups (row[1]) */
    if (row[1])
-      if (sscanf (row[1],"%u",&(SizeOfFileZones->NumGrps)) != 1)
+      if (sscanf (row[1],"%d",&(SizeOfFileZones->NumGrps)) != 1)
          Lay_ShowErrorAndExit ("Error when getting number of groups.");
 
    /* Get number of users (row[2]) */
    if (row[2])
-      if (sscanf (row[2],"%u",&(SizeOfFileZones->NumUsrs)) != 1)
+      if (sscanf (row[2],"%d",&(SizeOfFileZones->NumUsrs)) != 1)
          Lay_ShowErrorAndExit ("Error when getting number of users.");
 
    /* Get maximum number of levels (row[3]) */

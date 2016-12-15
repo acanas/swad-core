@@ -68,129 +68,187 @@ const char *Mnu_MenuIcons[Mnu_NUM_MENUS] =
 // Actions not initialized are 0 by default
 const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	{
-		// TabUnk **********
+		// TabUnk *******************
 		{
+		0,			//  0
+		0,			//  1
+		0,			//  2
+		0,			//  3
+		0,			//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabSys **********
+		// TabSys *******************
 		{
-		ActSysReqSch,
-		ActSeeCty,
-		ActSeePen,
-		ActReqRemOldCrs,
-		ActSeeDegTyp,
-		ActSeeMai,
-		ActSeeBan,
-		ActSeeLnk,
-		ActLstPlg,
-		ActSetUp,
+		ActSysReqSch,		//  0
+		ActSeeCty,		//  1
+		ActSeePen,		//  2
+		ActReqRemOldCrs,	//  3
+		ActSeeDegTyp,		//  4
+		ActSeeMai,		//  5
+		ActSeeBan,		//  6
+		ActSeeLnk,		//  7
+		ActLstPlg,		//  8
+		ActSetUp,		//  9
+		0,			// 10
 		},
-		// TabCty **********
+		// TabCty *******************
 		{
-		ActCtyReqSch,
-		ActSeeCtyInf,
-		ActSeeIns,
+		ActCtyReqSch,		//  0
+		ActSeeCtyInf,		//  1
+		ActSeeIns,		//  2
+		0,			//  3
+		0,			//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabIns **********
+		// TabIns *******************
 		{
-		ActInsReqSch,
-		ActSeeInsInf,
-		ActSeeCtr,
-		ActSeeDpt,
-		ActSeePlc,
-		ActSeeHld,
-		ActSeeAdmDocIns,
-		ActAdmShaIns,
+		ActInsReqSch,		//  0
+		ActSeeInsInf,		//  1
+		ActSeeCtr,		//  2
+		ActSeeDpt,		//  3
+		ActSeePlc,		//  4
+		ActSeeHld,		//  5
+		ActSeeAdmDocIns,	//  6
+		ActAdmShaIns,		//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabCtr **********
+		// TabCtr *******************
 		{
-		ActCtrReqSch,
-		ActSeeCtrInf,
-		ActSeeDeg,
-		ActSeeAdmDocCtr,
-		ActAdmShaCtr,
+		ActCtrReqSch,		//  0
+		ActSeeCtrInf,		//  1
+		ActSeeDeg,		//  2
+		ActSeeAdmDocCtr,	//  3
+		ActAdmShaCtr,		//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabDeg **********
+		// TabDeg *******************
 		{
-		ActDegReqSch,
-		ActSeeDegInf,
-		ActSeeCrs,
-		ActSeeAdmDocDeg,
-		ActAdmShaDeg,
+		ActDegReqSch,		//  0
+		ActSeeDegInf,		//  1
+		ActSeeCrs,		//  2
+		ActSeeAdmDocDeg,	//  3
+		ActAdmShaDeg,		//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabCrs **********
+		// TabCrs *******************
 		{
-		ActCrsReqSch,
-		ActSeeCrsInf,
-		ActSeeTchGui,
-		ActSeeSyl,
-		ActSeeAdmDocCrsGrp,
-		ActAdmTchCrsGrp,
-		ActAdmShaCrsGrp,
-		ActSeeCrsTT,
-		ActSeeBib,
-		ActSeeFAQ,
-		ActSeeCrsLnk,
+		ActCrsReqSch,		//  0
+		ActSeeCrsInf,		//  1
+		ActSeeTchGui,		//  2
+		ActSeeSyl,		//  3
+		ActSeeAdmDocCrsGrp,	//  4
+		ActAdmTchCrsGrp,	//  5
+		ActAdmShaCrsGrp,	//  6
+		ActSeeCrsTT,		//  7
+		ActSeeBib,		//  8
+		ActSeeFAQ,		//  9
+		ActSeeCrsLnk,		// 10
 		},
-		// TabAss **********
+		// TabAss *******************
 		{
-		ActSeeAss,
-		ActSeeAsg,
-		ActAdmAsgWrkUsr,
-		ActReqAsgWrkCrs,
-		ActReqTst,
-		ActSeeCal,
-		ActSeeAllExaAnn,
-		ActSeeAdmMrk,
+		ActSeeAss,		//  0
+		ActSeeAsg,		//  1
+		ActAdmAsgWrkUsr,	//  2
+		ActReqAsgWrkCrs,	//  3
+		ActReqTst,		//  4
+		ActSeeCal,		//  5
+		ActSeeAllExaAnn,	//  6
+		ActSeeAdmMrk,		//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabUsr **********
+		// TabUsr *******************
 		{
-		ActReqSelGrp,
-		ActLstStd,
-		ActLstTch,
-		ActLstOth,
-		ActSeeAtt,
-		ActReqSignUp,
-		ActSeeSignUpReq,
-		ActLstCon,
+		ActReqSelGrp,		//  0
+		ActLstStd,		//  1
+		ActLstTch,		//  2
+		ActLstOth,		//  3
+		ActSeeAtt,		//  4
+		ActReqSignUp,		//  5
+		ActSeeSignUpReq,	//  6
+		ActLstCon,		//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabSoc **********
+		// TabSoc *******************
 		{
-		ActSeeSocTmlGbl,
-		ActSeeSocPrf,
-		ActSeeFor,
-		ActSeeChtRms,
+		ActSeeSocTmlGbl,	//  0
+		ActSeeSocPrf,		//  1
+		ActSeeFor,		//  2
+		ActSeeChtRms,		//  3
+		0,			//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabMsg **********
+		// TabMsg *******************
 		{
-		ActSeeNtf,
-		ActSeeAnn,
-		ActSeeAllNot,
-		ActReqMsgUsr,
-		ActSeeRcvMsg,
-		ActSeeSntMsg,
-		ActMaiStd,
+		ActSeeNtf,		//  0
+		ActSeeAnn,		//  1
+		ActSeeAllNot,		//  2
+		ActReqMsgUsr,		//  3
+		ActSeeRcvMsg,		//  4
+		ActSeeSntMsg,		//  5
+		ActMaiStd,		//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabSta **********
+		// TabSta *******************
 		{
-		ActSeeAllSvy,
-		ActReqUseGbl,
-		ActSeePhoDeg,
-		ActReqStaCrs,
-		ActReqAccGbl,
-		ActReqMyUsgRep,
-		ActMFUAct,
+		ActSeeAllSvy,		//  0
+		ActReqUseGbl,		//  1
+		ActSeePhoDeg,		//  2
+		ActReqStaCrs,		//  3
+		ActReqAccGbl,		//  4
+		ActReqMyUsgRep,		//  5
+		ActMFUAct,		//  6
+		0,			//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
 		},
-		// TabPrf **********
+		// TabPrf *******************
 		{
-		ActFrmLogIn,
-		ActFrmRolSes,
-		ActMyCrs,
-		ActSeeMyTT,
-		ActSeeMyAgd,
-		ActFrmMyAcc,
-		ActReqEdiRecCom,
-		ActEdiPrf,
-		ActAdmBrf,
+		ActFrmLogIn,		//  0
+		ActFrmRolSes,		//  1
+		ActMyCrs,		//  2
+		ActSeeMyTT,		//  3
+		ActSeeMyAgd,		//  4
+		ActFrmMyAcc,		//  5
+		ActReqEdiRecCom,	//  6
+		ActEdiPrf,		//  7
+		ActAdmBrf,		//  8
+		0,			//  9
+		0,			// 10
 		},
 	};
 

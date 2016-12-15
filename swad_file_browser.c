@@ -4822,7 +4822,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
       row = mysql_fetch_row (mysql_res);
       if (row[0] == NULL)
          Gbl.Usrs.Me.TimeLastAccToThisFileBrowser = 0;
-      else if (sscanf (row[0],"%lu",&Gbl.Usrs.Me.TimeLastAccToThisFileBrowser) != 1)
+      else if (sscanf (row[0],"%ld",&Gbl.Usrs.Me.TimeLastAccToThisFileBrowser) != 1)
          Lay_ShowErrorAndExit ("Error when reading date-time of last access to a file browser.");
      }
    else

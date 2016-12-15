@@ -836,8 +836,8 @@ void Mai_ListEmails (void)
    extern const char *Txt_X_students_who_have_accepted_and_who_have_email;
    extern const char *Txt_Create_email_message;
    unsigned NumUsr;
-   unsigned NumStdsWithEmail = 0;
-   unsigned NumAcceptedStdsWithEmail = 0;
+   unsigned NumStdsWithEmail;
+   unsigned NumAcceptedStdsWithEmail;
    char StrAddresses[Mai_MAX_LENGTH_STR_ADDR+1];
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
@@ -865,7 +865,8 @@ void Mai_ListEmails (void)
 
          /***** List the students' email addresses *****/
          fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL LEFT_MIDDLE\">");
-         for (NumUsr = 0;
+         for (NumUsr = 0, NumStdsWithEmail = 0, NumAcceptedStdsWithEmail = 0,
+              StrAddresses[0] = '\0';
               NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
               NumUsr++)
            {
