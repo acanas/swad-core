@@ -2436,9 +2436,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemStdPho	*/{1442,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_RemoveUsrPhoto		,NULL},
    /* ActRemTchPho	*/{1443,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_RemoveUsrPhoto		,NULL},
 
-   /* ActCreOth		*/{1444,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
-   /* ActCreStd		*/{1445,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
-   /* ActCreTch		*/{1446,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_CreateNewUsr		,NULL},
+   /* ActCreOth		*/{1444,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
+   /* ActCreStd		*/{1445,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
+   /* ActCreTch		*/{1446,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
 
    /* ActUpdOth		*/{1422,-1,TabUnk,ActLstOth		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ModifyUsr			,NULL},
    /* ActUpdStd		*/{1423,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ModifyUsr			,NULL},

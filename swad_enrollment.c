@@ -3448,7 +3448,7 @@ void Enr_AcceptRegisterMeInCrs (void)
 /******************* Create and show data from other user ********************/
 /*****************************************************************************/
 
-void Enr_CreateNewUsr (void)
+void Enr_CreateNewUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -3459,6 +3459,10 @@ void Enr_CreateNewUsr (void)
 
    /***** Get user's ID from form *****/
    ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
+
+   /***** Initialize error and message *****/
+   Gbl.Error = false;
+   Gbl.Message[0] = '\0';
 
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
      {
@@ -3491,12 +3495,11 @@ void Enr_CreateNewUsr (void)
 	       /* Modify role */
 	       Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
-	       /* Show success message */
+	       /* Success message */
 	       sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
 			Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
 			Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
 			Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	      }
 	   }
 	 else
@@ -3505,26 +3508,46 @@ void Enr_CreateNewUsr (void)
 	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
 	                                 Enr_SET_ACCEPTED_TO_FALSE);
 
-	    /* Show success message */
+	    /* Success message */
 	    sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
 		     Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	   }
+	}
+
+      /***** Change current action *****/
+      Gbl.Action.Act =  (NewRole == Rol_STUDENT) ? ActCreStd :
+	               ((NewRole == Rol_TEACHER) ? ActCreTch :
+	                                           ActCreOth);
+      Tab_SetCurrentTab ();
+     }
+   else        // User's ID not valid
+     {
+      Gbl.Error = true;
+
+      /***** Error message *****/
+      sprintf (Gbl.Message,Txt_The_ID_X_is_not_valid,
+               Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+     }
+  }
+
+void Enr_CreateNewUsr2 (void)
+  {
+   if (Gbl.Error)	// User's ID not valid
+      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+   else			// User's ID valid
+     {
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+	{
+	 /***** Show success message *****/
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
 	 /***** Change user's groups *****/
-	 if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
+	 if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
 	    Grp_ChangeOtherUsrGrps ();
 	}
 
       /***** Show user's record *****/
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
-     }
-   else        // User's ID not valid
-     {
-      /***** Write message *****/
-      sprintf (Gbl.Message,Txt_The_ID_X_is_not_valid,
-               Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
-      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
      }
   }
 
