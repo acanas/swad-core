@@ -223,11 +223,9 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
 // the user does not belong to the current course
 
 void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
-                                  Cns_QuietOrVerbose_t QuietOrVerbose,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted)
   {
    extern const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES];
-   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    char Query[1024];
 
    /***** Check if user's role is allowed *****/
@@ -264,14 +262,6 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 	  If this user wants to receive notifications by email,
 	  activate the sending of a notification *****/
    Enr_NotifyAfterEnrollment (UsrDat,NewRole);
-
-   /***** Show info message *****/
-   if (QuietOrVerbose == Cns_VERBOSE)
-     {
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
-	       UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-     }
   }
 
 /*****************************************************************************/
@@ -1648,7 +1638,8 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
                                       false))      // User does belong to current course, modify his/her role
 	 Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET);
       else
-	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET,
+	 /* Register user */
+	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
 	                              Enr_SET_ACCEPTED_TO_FALSE);
 
       /***** Register user in the selected groups *****/
@@ -3475,6 +3466,7 @@ void Enr_AcceptRegisterMeInCrs (void)
 
 void Enr_CreateNewUsr (void)
   {
+   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    extern const char *Txt_The_ID_X_is_not_valid;
    Rol_Role_t NewRole;
 
@@ -3507,8 +3499,16 @@ void Enr_CreateNewUsr (void)
 	                                 false))      // User does belong to current course, modify his/her role
 	    Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 	 else
-	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
+	   {
+	    /* Register user */
+	    Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
 	                                 Enr_SET_ACCEPTED_TO_FALSE);
+
+	    /* Show success message */
+	    sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
+		     Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	   }
 
 	 /***** Change user's groups *****/
 	 if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups?
@@ -3533,6 +3533,7 @@ void Enr_CreateNewUsr (void)
 
 void Enr_ModifyUsr (void)
   {
+   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
@@ -3573,8 +3574,16 @@ void Enr_ModifyUsr (void)
 			                                false))      // User does belong to current course, modify his/her role
 			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
 			else
-			   Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE,
+			  {
+			   /* Register user */
+			   Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
 			                                Enr_SET_ACCEPTED_TO_FALSE);
+
+			   /* Show success message */
+			   sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
+				    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
+			   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+			  }
 
 			/***** Change user's groups *****/
 			if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?

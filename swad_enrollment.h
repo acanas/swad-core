@@ -76,7 +76,6 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
                                  Rol_Role_t NewRole,
                                  Cns_QuietOrVerbose_t QuietOrVerbose);
 void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
-                                  Cns_QuietOrVerbose_t QuietOrVerbose,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);

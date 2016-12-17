@@ -184,17 +184,20 @@
 // TODO: Draw future dates in attendance, surveys, assignments in blue?
 // TODO: change checkbox "Obligar a los estudiantes a leer esta información"
 
+// TODO: Fix bug: after registering a teacher in a course in USERS > Teachers, the confirmation is displayed in USERS > Others.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.103.1 (2016-12-16)"
+#define Log_PLATFORM_VERSION	"SWAD 16.103.2 (2016-12-17)"
 #define CSS_FILE		"swad16.103.1.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.103.2: Dec 17, 2016	Code refactoring in user enrollment. (211133 lines)
         Version 16.103.1: Dec 16, 2016	Changes in layout of tabs. (211123 lines)
         Version 16.103:   Dec 16, 2016	Contextual help on course info. (211130 lines)
         Version 16.102:   Dec 15, 2016	Fixed bug in mail to students, reported by GitHub user raistmaj.
