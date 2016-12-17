@@ -72,9 +72,7 @@ void Enr_PutButtonToEnrollStudents (void);
 
 void Enr_PutLinkToRequestSignUp (void);
 
-void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
-                                 Rol_Role_t NewRole,
-                                 Cns_QuietOrVerbose_t QuietOrVerbose);
+void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole);
 void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
                                   Enr_KeepOrSetAccepted_t KeepOrSetAccepted);
 

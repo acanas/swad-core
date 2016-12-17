@@ -166,54 +166,34 @@ void Enr_PutLinkToRequestSignUp (void)
 /***************** Modify the role of a user in a course *********************/
 /*****************************************************************************/
 
-void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,
-                                 Rol_Role_t NewRole,
-                                 Cns_QuietOrVerbose_t QuietOrVerbose)
+void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
   {
-   extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
-   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
-   Rol_Role_t OldRole;
 
-   /***** Change user's role if different *****/
-   OldRole = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-   if (NewRole != OldRole)        // The role must be updated
+   /***** Check if user's role is allowed *****/
+   switch (NewRole)
      {
-      /***** Check if user's role is allowed *****/
-      switch (NewRole)
-	{
-	 case Rol_STUDENT:
-	 case Rol_TEACHER:
-	    break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong role.");
-	}
-
-      /***** Update the role of a user in a course *****/
-      sprintf (Query,"UPDATE crs_usr SET Role='%u'"
-		     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
-	       (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
-      DB_QueryUPDATE (Query,"can not modify user's role in course");
-
-      /***** Create notification for this user.
-	     If this user wants to receive notifications by email,
-	     activate the sending of a notification *****/
-      Enr_NotifyAfterEnrollment (UsrDat,NewRole);
-
-      /***** Show info message *****/
-      if (QuietOrVerbose == Cns_VERBOSE)
-	{
-	 sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
-		  UsrDat->FullName,Gbl.CurrentCrs.Crs.FullName,
-		  Txt_ROLES_SINGUL_abc[OldRole][UsrDat->Sex],
-		  Txt_ROLES_SINGUL_abc[NewRole][UsrDat->Sex]);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-	}
-
-      UsrDat->RoleInCurrentCrsDB = NewRole;
-      UsrDat->Roles = -1;	// Force roles to be got from database
-      Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
      }
+
+   /***** Update the role of a user in a course *****/
+   sprintf (Query,"UPDATE crs_usr SET Role='%u'"
+		  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	    (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   DB_QueryUPDATE (Query,"can not modify user's role in course");
+
+   /***** Create notification for this user.
+	  If this user wants to receive notifications by email,
+	  activate the sending of a notification *****/
+   Enr_NotifyAfterEnrollment (UsrDat,NewRole);
+
+   UsrDat->RoleInCurrentCrsDB = NewRole;
+   UsrDat->Roles = -1;	// Force roles to be got from database
+   Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get roles
   }
 
 /*****************************************************************************/
@@ -1635,8 +1615,12 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
      {
       if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
                                       Gbl.CurrentCrs.Crs.CrsCod,
-                                      false))      // User does belong to current course, modify his/her role
-	 Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole,Cns_QUIET);
+                                      false))      // User does belong to current course
+	{
+	 if (RegRemRole != UsrDat->RoleInCurrentCrsDB)	// The role must be updated
+	    /* Modify role */
+	    Enr_ModifyRoleInCurrentCrs (UsrDat,RegRemRole);
+	}
       else
 	 /* Register user */
 	 Enr_RegisterUsrInCurrentCrs (UsrDat,RegRemRole,
@@ -3466,8 +3450,11 @@ void Enr_AcceptRegisterMeInCrs (void)
 
 void Enr_CreateNewUsr (void)
   {
+   extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    extern const char *Txt_The_ID_X_is_not_valid;
+   Rol_Role_t OldRole;
    Rol_Role_t NewRole;
 
    /***** Get user's ID from form *****/
@@ -3496,8 +3483,22 @@ void Enr_CreateNewUsr (void)
 	{
 	 if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
 	                                 Gbl.CurrentCrs.Crs.CrsCod,
-	                                 false))      // User does belong to current course, modify his/her role
-	    Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
+	                                 false))      // User does belong to current course
+	   {
+	    OldRole = Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB;	// Remember old role before changing it
+	    if (NewRole != OldRole)	// The role must be updated
+	      {
+	       /* Modify role */
+	       Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+	       /* Show success message */
+	       sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+			Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
+			Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+			Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	      }
+	   }
 	 else
 	   {
 	    /* Register user */
@@ -3533,12 +3534,15 @@ void Enr_CreateNewUsr (void)
 
 void Enr_ModifyUsr (void)
   {
+   extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    bool ItsMe;
    Enr_RegRemOneUsrAction_t RegRemAction;
+   Rol_Role_t OldRole;
    Rol_Role_t NewRole;
    bool Error = false;
 
@@ -3571,8 +3575,22 @@ void Enr_ModifyUsr (void)
 			/***** Register user in current course in database *****/
 			if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
 			                                Gbl.CurrentCrs.Crs.CrsCod,
-			                                false))      // User does belong to current course, modify his/her role
-			   Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,Cns_VERBOSE);
+			                                false))      // User does belong to current course
+			  {
+	                   OldRole = Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB;	// Remember old role before changing it
+			   if (NewRole != OldRole)	// The role must be updated
+			     {
+			      /* Modify role */
+			      Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
+
+			      /* Show success message */
+			      sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
+				       Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
+				       Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
+				       Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
+			      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+			     }
+			  }
 			else
 			  {
 			   /* Register user */
