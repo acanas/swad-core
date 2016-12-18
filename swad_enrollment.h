@@ -133,7 +133,8 @@ void Enr_RemAdmDeg (void);
 void Enr_AcceptRegisterMeInCrs (void);
 void Enr_CreateNewUsr1 (void);
 void Enr_CreateNewUsr2 (void);
-void Enr_ModifyUsr (void);
+void Enr_ModifyUsr1 (void);
+void Enr_ModifyUsr2 (void);
 void Enr_AcceptUsrInCrs (long UsrCod);
 
 #endif

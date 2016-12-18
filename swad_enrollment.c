@@ -3539,7 +3539,8 @@ void Enr_CreateNewUsr2 (void)
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
 	 /***** Show success message *****/
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 if (Gbl.Message[0])
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
 	 /***** Change user's groups *****/
 	 if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -3555,19 +3556,20 @@ void Enr_CreateNewUsr2 (void)
 /**** Modify other user's data and register her/him in course and groups *****/
 /*****************************************************************************/
 
-void Enr_ModifyUsr (void)
+void Enr_ModifyUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
    bool ItsMe;
-   Enr_RegRemOneUsrAction_t RegRemAction;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
-   bool Error = false;
+
+   /***** Initialize error and message *****/
+   Gbl.Error = false;
+   Gbl.Message[0] = '\0';
 
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -3578,7 +3580,7 @@ void Enr_ModifyUsr (void)
       Par_GetParToText ("RegRemAction",UnsignedStr,1);
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
 	 if (UnsignedNum < Enr_NUM_ACTIONS_REG_REM_ONE_USR)
-	    switch ((RegRemAction = (Enr_RegRemOneUsrAction_t) UnsignedNum))
+	    switch ((Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t) UnsignedNum))
 	      {
 	       case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
@@ -3611,7 +3613,6 @@ void Enr_ModifyUsr (void)
 				       Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
 				       Txt_ROLES_SINGUL_abc[OldRole][Gbl.Usrs.Other.UsrDat.Sex],
 				       Txt_ROLES_SINGUL_abc[NewRole][Gbl.Usrs.Other.UsrDat.Sex]);
-			      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 			     }
 			  }
 			else
@@ -3623,93 +3624,124 @@ void Enr_ModifyUsr (void)
 			   /* Show success message */
 			   sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
 				    Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-			   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 			  }
 
-			/***** Change user's groups *****/
-			if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
-			  {
-			   if (ItsMe)
-			      Grp_ChangeMyGrps ();
-			   else
-			      Grp_ChangeOtherUsrGrps ();
-			  }
+			/***** Change current action *****/
+			Gbl.Action.Act =  (NewRole == Rol_STUDENT) ? ActUpdStd :
+					 ((NewRole == Rol_TEACHER) ? ActUpdTch :
+								     ActUpdOth);
+			Tab_SetCurrentTab ();
 		       }
-
-		     /***** Show user's record *****/
-		     Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 		    }
 		  else
-		     Error = true;
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_DEGREE_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-		     Enr_ReqAddAdm (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
-		                    Gbl.CurrentDeg.Deg.FullName);
-		  else
-		     Error = true;
+		  if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_CENTRE_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-		     Enr_ReqAddAdm (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
-		                    Gbl.CurrentCtr.Ctr.FullName);
-		  else
-		     Error = true;
+		  if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
-		  if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-		     Enr_ReqAddAdm (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
-		                    Gbl.CurrentIns.Ins.FullName);
-		  else
-		     Error = true;
+		  if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
-		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
-		     Dup_ReportUsrAsPossibleDuplicate ();
-		  else
-		     Error = true;
+		  if (ItsMe || Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_USR_FROM_CRS:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
-		     Enr_ReqRemUsrFromCrs ();
-		  else
-		     Error = true;
+		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_DEGREE_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
-		     Enr_ReqRemAdmOfDeg ();
-		  else
-		     Error = true;
+		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_CENTRE_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
-		     Enr_ReqRemAdmOfCtr ();
-		  else
-		     Error = true;
+		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
-		  if (ItsMe || Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-		     Enr_ReqRemAdmOfIns ();
-		  else
-		     Error = true;
+		  if (!ItsMe && Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
+		     Gbl.Error = true;
 		  break;
 	       case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
-                  Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
-		  break;
-	       default:
-		  Error = true;
+	          if (!Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+		     Gbl.Error = true;
 		  break;
 	      }
 	 else
-	    Error = true;
+	    Gbl.Error = true;
       else
-	 Error = true;
+	 Gbl.Error = true;
      }
    else
-      Error = true;
+      Gbl.Error = true;
+  }
 
-   if (Error)
+void Enr_ModifyUsr2 (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (Gbl.Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+   else // No error
+      switch (Gbl.Usrs.RegRemAction)
+	{
+	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
+	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	      {
+               /***** Show success message *****/
+	       if (Gbl.Message[0])
+		  Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+
+	       /***** Change user's groups *****/
+	       if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
+		 {
+		  if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+		     Grp_ChangeMyGrps ();
+		  else
+		     Grp_ChangeOtherUsrGrps ();
+		 }
+	      }
+
+	    /***** Show user's record *****/
+	    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
+	    break;
+	 case Enr_REGISTER_ONE_DEGREE_ADMIN:
+	    Enr_ReqAddAdm (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
+			   Gbl.CurrentDeg.Deg.FullName);
+	    break;
+	 case Enr_REGISTER_ONE_CENTRE_ADMIN:
+	    Enr_ReqAddAdm (Sco_SCOPE_CTR,Gbl.CurrentCtr.Ctr.CtrCod,
+			   Gbl.CurrentCtr.Ctr.FullName);
+	    break;
+	 case Enr_REGISTER_ONE_INSTITUTION_ADMIN:
+	    Enr_ReqAddAdm (Sco_SCOPE_INS,Gbl.CurrentIns.Ins.InsCod,
+			   Gbl.CurrentIns.Ins.FullName);
+	    break;
+	 case Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE:
+	    Dup_ReportUsrAsPossibleDuplicate ();
+	    break;
+	 case Enr_REMOVE_ONE_USR_FROM_CRS:
+            Enr_ReqRemUsrFromCrs ();
+	    break;
+	 case Enr_REMOVE_ONE_DEGREE_ADMIN:
+            Enr_ReqRemAdmOfDeg ();
+	    break;
+	 case Enr_REMOVE_ONE_CENTRE_ADMIN:
+            Enr_ReqRemAdmOfCtr ();
+	    break;
+	 case Enr_REMOVE_ONE_INSTITUTION_ADMIN:
+            Enr_ReqRemAdmOfIns ();
+	    break;
+	 case Enr_ELIMINATE_ONE_USR_FROM_PLATFORM:
+	    Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
+	    break;
+	}
   }
 
 /*****************************************************************************/

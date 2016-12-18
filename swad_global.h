@@ -44,6 +44,7 @@
 #include "swad_cryptography.h"
 #include "swad_department.h"
 #include "swad_degree_type.h"
+#include "swad_enrollment.h"
 #include "swad_exam.h"
 #include "swad_file.h"
 #include "swad_file_browser.h"
@@ -398,6 +399,7 @@ struct Globals
         } Connected;
       char FileNamePhoto[NAME_MAX+1];	// File name (with no path and no .jpg) of the temporary file with the selected face
       bool Error;	// To signal that an error has happened
+      Enr_RegRemOneUsrAction_t RegRemAction;	// Enrollment action
      } Usrs;
    struct
      {

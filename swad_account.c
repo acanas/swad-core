@@ -819,39 +819,43 @@ void Acc_AfterCreationNewAccount (void)
 void Acc_GetUsrCodAndRemUsrGbl (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool Error = false;
 
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
-      Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+     {
+      if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
+         Acc_ReqRemAccountOrRemAccount (Acc_REMOVE_USR);
+      else
+         Error = true;
+     }
    else
+      Error = true;
+
+   if (Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
-/**************************** Removing of a user *****************************/
+/*************************** Remove a user account ***************************/
 /*****************************************************************************/
 
 void Acc_ReqRemAccountOrRemAccount (Acc_ReqOrRemUsr_t RequestOrRemove)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   switch (RequestOrRemove)
+     {
+      case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
+	 Acc_AskIfRemoveUsrAccount (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
+	 break;
+      case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
+	 if (Pwd_GetConfirmationOnDangerousAction ())
+	   {
+	    Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
 
-   if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
-      switch (RequestOrRemove)
-	{
-	 case Acc_REQUEST_REMOVE_USR:	// Ask if eliminate completely the user from the platform
-	    Acc_AskIfRemoveUsrAccount (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-	    break;
-	 case Acc_REMOVE_USR:		// Eliminate completely the user from the platform
-	    if (Pwd_GetConfirmationOnDangerousAction ())
-	      {
-	       Acc_CompletelyEliminateAccount (&Gbl.Usrs.Other.UsrDat,Cns_VERBOSE);
-
-	       /***** Move unused contents of messages to table of deleted contents of messages *****/
-	       Msg_MoveUnusedMsgsContentToDeleted ();
-	      }
-	    break;
-	}
-   else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	    /***** Move unused contents of messages to table of deleted contents of messages *****/
+	    Msg_MoveUnusedMsgsContentToDeleted ();
+	   }
+	 break;
+     }
   }
 
 /*****************************************************************************/
