@@ -190,13 +190,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.103.5 (2016-12-17)"
+#define Log_PLATFORM_VERSION	"SWAD 16.103.6 (2016-12-18)"
 #define CSS_FILE		"swad16.103.1.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.103.6: Dec 18, 2016	Some div elements changed to header, footer, aside and nav elements. (211212 lines)
         Version 16.103.5: Dec 17, 2016	Code refactoring in user enrollment. (211207 lines)
         Version 16.103.4: Dec 17, 2016	Code refactoring in user enrollment. (211170 lines)
         Version 16.103.3: Dec 17, 2016	Code refactoring in user enrollment. (211149 lines)

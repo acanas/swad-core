@@ -88,10 +88,19 @@ void Tab_DrawTabs (void)
    extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
    bool ICanViewTab;
+   const char *ClassHeadRow3[The_NUM_THEMES] =
+     {
+      "HEAD_ROW_3_WHITE",	// The_THEME_WHITE
+      "HEAD_ROW_3_GREY",	// The_THEME_GREY
+      "HEAD_ROW_3_BLUE",	// The_THEME_BLUE
+      "HEAD_ROW_3_YELLOW",	// The_THEME_YELLOW
+      };
 
-   /***** Table start *****/
-   fprintf (Gbl.F.Out,"<div id=\"tabs\">"
-	              "<ul class=\"LIST_CENTER\">");
+   /***** Start tabs container *****/
+   fprintf (Gbl.F.Out,"<div class=\"%s\">"
+                      "<nav id=\"tabs\">"
+	              "<ul class=\"LIST_CENTER\">",
+            ClassHeadRow3[Gbl.Prefs.Theme]);
 
    /***** Draw the tabs *****/
    for (NumTab = (Tab_Tab_t) 1;
@@ -144,9 +153,10 @@ void Tab_DrawTabs (void)
 	}
      }
 
-   /***** End of the table *****/
+   /***** End tabs container *****/
    fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+	              "</nav>"
+                      "</div>");
   }
 
 /*****************************************************************************/

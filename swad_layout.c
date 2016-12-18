@@ -268,15 +268,18 @@ void Lay_WriteStartOfPage (void)
    /***** Header of layout *****/
    Lay_WritePageTopHeading ();
 
+   /***** 3rd. row (tabs) *****/
+   Tab_DrawTabs ();
+
    /***** 4th row: main zone *****/
    fprintf (Gbl.F.Out,"<div id=\"main_zone\">");
 
    /* Left column */
    if (Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN)		// Left column visible
      {
-      fprintf (Gbl.F.Out,"<div id=\"left_col\">");
+      fprintf (Gbl.F.Out,"<aside id=\"left_col\">");
       Lay_ShowLeftColumn ();
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</aside>");
      }
 
    /* Right column */
@@ -286,9 +289,9 @@ void Lay_WriteStartOfPage (void)
    // is that central column may hold a lot of content drawn slowly.
    if (Gbl.Prefs.SideCols & Lay_SHOW_RIGHT_COLUMN)	// Right column visible
      {
-      fprintf (Gbl.F.Out,"<div id=\"right_col\">");
+      fprintf (Gbl.F.Out,"<aside id=\"right_col\">");
       Lay_ShowRightColumn ();
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</aside>");
      }
 
    /* Central (main) column */
@@ -803,13 +806,9 @@ static void Lay_WritePageTopHeading (void)
       "HEAD_ROW_2_BLUE",	// The_THEME_BLUE
       "HEAD_ROW_2_YELLOW",	// The_THEME_YELLOW
       };
-   const char *ClassHeadRow3[The_NUM_THEMES] =
-     {
-      "HEAD_ROW_3_WHITE",	// The_THEME_WHITE
-      "HEAD_ROW_3_GREY",	// The_THEME_GREY
-      "HEAD_ROW_3_BLUE",	// The_THEME_BLUE
-      "HEAD_ROW_3_YELLOW",	// The_THEME_YELLOW
-      };
+
+   /***** Start header *****/
+   fprintf (Gbl.F.Out,"<header>");
 
    /***** 1st. row *****/
    /* Start of 1st. row */
@@ -903,11 +902,8 @@ static void Lay_WritePageTopHeading (void)
    /* End of 2nd. row */
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** 3rd. row (tabs) *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            ClassHeadRow3[Gbl.Prefs.Theme]);
-   Tab_DrawTabs ();
-   fprintf (Gbl.F.Out,"</div>");
+   /***** End header *****/
+   fprintf (Gbl.F.Out,"</header>");
   }
 
 /*****************************************************************************/
@@ -916,10 +912,10 @@ static void Lay_WritePageTopHeading (void)
 
 static void Lay_WriteBreadcrumb (void)
   {
-   fprintf (Gbl.F.Out,"<div id=\"breadcrumb\">");
+   fprintf (Gbl.F.Out,"<nav id=\"breadcrumb\">");
    Hie_WriteHierarchyBreadcrumb ();
    Crs_WriteSelectorMyCourses ();
-   fprintf (Gbl.F.Out,"</div>");
+   fprintf (Gbl.F.Out,"</nav>");
   }
 
 /*****************************************************************************/
@@ -1575,8 +1571,8 @@ static void Lay_WriteAboutZone (void)
    extern const char *Txt_About_X;
    extern const char *Txt_Questions_and_problems;
 
-   /***** About zone start *****/
-   fprintf (Gbl.F.Out,"<div id=\"about_zone\" class=\"ABOUT\">");
+   /***** Start about zone *****/
+   fprintf (Gbl.F.Out,"<footer id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">"
@@ -1614,8 +1610,8 @@ static void Lay_WriteAboutZone (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** About zone end *****/
-   fprintf (Gbl.F.Out,"</div>");	// about_zone
+   /***** End about zone *****/
+   fprintf (Gbl.F.Out,"</footer>");	// about_zone
   }
 
 /*****************************************************************************/
@@ -1689,13 +1685,13 @@ static void Lay_WriteFootFromHTMLFile (void)
    /***** Open file with the HTML page for the chat *****/
    if ((FileHTML = fopen (Cfg_PATH_AND_FILE_REL_HTML_PRIVATE,"rb")))
      {
-      fprintf (Gbl.F.Out,"<div id=\"foot_zone\">");
+      fprintf (Gbl.F.Out,"<footer id=\"foot_zone\">");
 
       /***** Copy HTML to output file *****/
       Fil_FastCopyOfOpenFiles (FileHTML,Gbl.F.Out);
       fclose (FileHTML);
 
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</footer>");
      }
   }
 
