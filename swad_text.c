@@ -31638,6 +31638,27 @@ const char *Txt_Requester =
 	"Requerente";
 #endif
 
+const char *Txt_Required_reading =
+#if   L==1
+	"Lectura obligat&ograve;ria";
+#elif L==2
+	"Erforderliches Lesen";
+#elif L==3
+	"Required reading";
+#elif L==4
+	"Lectura obligatoria";
+#elif L==5
+	"Lecture obligatoire";
+#elif L==6
+	"Lectura obligatoria";	// Okoteve traducción
+#elif L==7
+	"Lettura obbligatoria";
+#elif L==8
+	"Obowi&aogon;zkowa lektura";
+#elif L==9
+	"Leitura obrigat&oacute;ria";
+#endif
+
 const char *Txt_Reset =
 #if   L==1
 	"Posar a zero";
@@ -54828,34 +54849,25 @@ const char *Txt_You_need_an_XML_file_containing_a_list_of_questions =
 	" containing a list of questions.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_should_read_the_following_information_on_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_should_read_the_following_information =
 #if   L==1
-	"Usted debe leer la siguiente informaci&oacute;n"
-	" sobre la asignatura <strong>%s</strong>:";	// Necessita traduccio
+	"Vost&egrave; ha de llegir la seg%uuml;ent informaci&oacute;:";
 #elif L==2
-	"You should read the following information"
-	" on the course <strong>%s</strong>:";		// Need Übersetzung
+	"Sie sollten die folgenden Informationen lesen:";
 #elif L==3
-	"You should read the following information"
-	" on the course <strong>%s</strong>:";
+	"You should read the following information:";
 #elif L==4
-	"Usted debe leer la siguiente informaci&oacute;n"
-	" sobre la asignatura <strong>%s</strong>:";
+	"Debe leer la siguiente informaci&oacute;n:";
 #elif L==5
-	"You should read the following information"
-	" on the course <strong>%s</strong>:";		// Besoin de traduction
+	"Vous devez lire les informations suivantes:";
 #elif L==6
-	"Usted debe leer la siguiente informaci&oacute;n"
-	" sobre la asignatura <strong>%s</strong>:";	// Okoteve traducción
+	"Debe leer la siguiente informaci&oacute;n:";	// Okoteve traducción
 #elif L==7
-	"Dovresti leggere le seguenti informazioni"
-	" sul corso <strong>%s</strong>:";
+	"Dovresti leggere le seguenti informazioni:";
 #elif L==8
-	"You should read the following information"
-	" on the course <strong>%s</strong>:";		// Potrzebujesz tlumaczenie
+	"Nale&zdot;y przeczyta&cacute; nast&eogon;puj&aogon;ce informacje:";
 #elif L==9
-	"You should read the following information"
-	" on the course <strong>%s</strong>:";		// Necessita de tradução
+	"Voc&ecirc; deve ler as seguintes informa&ccedil;&otilde;es:";
 #endif
 
 const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences

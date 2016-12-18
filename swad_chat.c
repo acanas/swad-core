@@ -117,8 +117,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_Chat_rooms,NULL,NULL);
-   fprintf (Gbl.F.Out,"<div style=\"display:inline-block; margin:0 auto;\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Title of top level *****/
    fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:25px;\">"
@@ -227,8 +226,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
    Lay_EndRoundFrame ();
   }
 

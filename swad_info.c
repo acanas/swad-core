@@ -299,7 +299,7 @@ extern const char *Hlp_ASSESSMENT_System_edit;
 
 static void Inf_PutButtonToEditInfo (void);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead);
-static void Inf_PutFormToConfirmIHaveReadInfo (void);
+static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_CheckIfIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
 static bool Inf_GetIfIHaveReadFromForm (void);
@@ -377,7 +377,11 @@ void Inf_ShowInfo (void)
       case Rol_STUDENT:
          /* Put checkbox to force students to read this couse info */
          if (MustBeRead)
-            Inf_PutFormToConfirmIHaveReadInfo ();
+           {
+            fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+            Inf_PutCheckboxConfirmIHaveReadInfo ();
+            fprintf (Gbl.F.Out,"</div>");
+           }
          break;
       case Rol_TEACHER:
       case Rol_SYS_ADM:
@@ -487,28 +491,19 @@ static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead)
   }
 
 /*****************************************************************************/
-/***** Put a form (checkbox) to confirm that I have read a course info *******/
+/********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutFormToConfirmIHaveReadInfo (void)
+static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_I_have_read_this_information;
    bool IHaveRead = Inf_CheckIfIHaveReadInfo ();
 
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme]);
-   Act_FormStart (Inf_ActionsIHaveReadInfo[Gbl.CurrentCrs.Info.Type]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
-   if (IHaveRead)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," name=\"IHaveRead\" value=\"Y\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-                      "%s",
-            Gbl.Form.Id,
-            Txt_I_have_read_this_information);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.CurrentCrs.Info.Type],
+                              NULL,
+                              "IHaveRead",IHaveRead,
+                              Txt_I_have_read_this_information,
+                              Txt_I_have_read_this_information);
   }
 
 /*****************************************************************************/
@@ -582,19 +577,20 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 void Inf_WriteMsgYouMustReadInfo (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_You_should_read_the_following_information_on_the_course_X;
+   extern const char *Txt_Required_reading;
+   extern const char *Txt_You_should_read_the_following_information;
    Inf_InfoType_t InfoType;
 
+   /***** Start of frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Required_reading,NULL,NULL);
+
    /***** Write message *****/
-   sprintf (Gbl.Message,Txt_You_should_read_the_following_information_on_the_course_X,
-            Gbl.CurrentCrs.Crs.FullName);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Txt_You_should_read_the_following_information);
 
    /***** Write every information I must read *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	              "<tr>"
-	              "<td class=\"LEFT_MIDDLE\">"
-	              "<ul>");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<ul class=\"LIST_LEFT\""
+	              " style=\"list-style-type:initial;\">");
    for (InfoType = (Inf_InfoType_t) 0;
 	InfoType < Inf_NUM_INFO_TYPES;
 	InfoType++)
@@ -611,9 +607,10 @@ void Inf_WriteMsgYouMustReadInfo (void)
          fprintf (Gbl.F.Out,"</li>");
         }
    fprintf (Gbl.F.Out,"</ul>"
-	              "</td>"
-	              "</tr>"
-	              "</table>");
+	              "</div>");
+
+   /***** End of frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

@@ -871,9 +871,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block; margin:12px;\">"
-                      "<ul class=\"LIST_LEFT %s\">",
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Register user in course / Modify user's data *****/
@@ -1084,8 +1082,7 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
      }
 
    /***** End list of options *****/
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
 
    return (NumOptionsShown ? true :
 	                     false);
@@ -1105,9 +1102,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    extern const char *Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1;
 
    /***** Start list of options *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
-                      "<ul class=\"LIST_LEFT %s\">",
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT %s\" style=\"margin:12px;\">",
             The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Register / remove users listed or not listed *****/
@@ -1142,8 +1137,7 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
 
    /***** End list of options *****/
-   fprintf (Gbl.F.Out,"</ul>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
   }
 
 /*****************************************************************************/

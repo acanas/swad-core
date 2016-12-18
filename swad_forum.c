@@ -981,9 +981,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -1021,8 +1019,7 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    For_WriteNumPsts (NumPsts);
 
    fprintf (Gbl.F.Out,"</li>"
-	              "</ul>"
-	              "</div>");
+	              "</ul>");
    Lay_EndRoundFrame ();
 
    LastSubject[0] = '\0';
@@ -1751,9 +1748,7 @@ void For_ShowForumList (void)
    For_PutFormWhichForums ();
 
    /***** Write a link to top level of forums *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /***** Links to global forums *****/
@@ -1870,8 +1865,7 @@ void For_ShowForumList (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
    Lay_EndRoundFrame ();
   }
 
@@ -1889,8 +1883,8 @@ static void For_PutFormWhichForums (void)
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
-   fprintf (Gbl.F.Out,"<div style=\"margin:12px 0;\">"
-	              "<ul class=\"LIST_CENTER\">");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
 
    for (WhichForums = (For_WhichForums_t) 0;
 	WhichForums < For_NUM_WHICH_FORUMS;
@@ -2609,9 +2603,7 @@ void For_ShowForumThrs (void)
    For_PutFormWhichForums ();
 
    /* Write a link to top level of forums */
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"display:inline-block;\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
    /* Write a link to current forum */
@@ -2619,8 +2611,7 @@ void For_ShowForumThrs (void)
    For_WriteLinkToAForum (Gbl.Forum.ForumType,true,1,IsLastItemInLevel);
 
    /* End table */
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
    Lay_EndRoundFrame ();
 
    /***** List the threads *****/

@@ -3861,9 +3861,6 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
    extern const char *Txt_nobody_else_can_access_this_content;
    char Subtitle[1024];
 
-   /***** Container start *****/
-   fprintf (Gbl.F.Out,"<div style=\"margin:0 auto;\">");
-
    /***** Form to change zone (course and group browsers) *****/
    switch (Gbl.FileBrowser.Type)
      {
@@ -3981,11 +3978,8 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
          return;
      }
    if (Subtitle[0])
-      fprintf (Gbl.F.Out,"<span class=\"BROWSER_SUBTITLE\">%s</span>",
+      fprintf (Gbl.F.Out,"<div class=\"BROWSER_SUBTITLE\">%s</div>",
                Subtitle);
-
-   /***** Container end *****/
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

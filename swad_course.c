@@ -545,8 +545,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
    /***** Table start *****/
    Lay_StartRoundFrame (NULL,Txt_My_courses,NULL,Hlp_PROFILE_Courses);
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<ul class=\"LIST_LEFT\">");
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Write link to platform *****/
    Highlight = (Gbl.CurrentCty.Cty.CtyCod <= 0);
@@ -789,8 +788,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    DB_FreeMySQLResult (&mysql_resCty);
 
    /***** End frame *****/
-   fprintf (Gbl.F.Out,"</ul>"
-	              "</div>");
+   fprintf (Gbl.F.Out,"</ul>");
    Lay_EndRoundFrame ();
   }
 

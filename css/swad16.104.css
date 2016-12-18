@@ -33,7 +33,6 @@ body
 input	
 	{
 	font-size:12pt;
-	vertical-align:middle;
 	}
 select
 	{
@@ -1758,18 +1757,11 @@ a:hover img.CENTRE_PHOTO_SHOW
 /*********************************** Lists ***********************************/
 .LIST_LEFT
 	{
+	display:inline-block;
 	list-style-type:none;
 	padding:0;
 	margin:0;
 	text-align:left;
-	vertical-align:middle;
-	}
-.LIST_CENTER
-	{
-	list-style-type:none;
-	padding:0;
-	margin:0 auto;
-	text-align:center;
 	vertical-align:middle;
 	}
 
