@@ -298,7 +298,7 @@ extern const char *Hlp_ASSESSMENT_System_edit;
 /*****************************************************************************/
 
 static void Inf_PutButtonToEditInfo (void);
-static void Inf_PutFormToForceStdsToReadInfo (bool MustBeRead);
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead);
 static void Inf_PutFormToConfirmIHaveReadInfo (void);
 static bool Inf_CheckIfIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
@@ -383,7 +383,11 @@ void Inf_ShowInfo (void)
       case Rol_SYS_ADM:
          /* Put checkbox to force students to read this couse info */
          if (InfoSrc != Inf_INFO_SRC_NONE)
-            Inf_PutFormToForceStdsToReadInfo (MustBeRead);
+           {
+            fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead);
+            fprintf (Gbl.F.Out,"</div>");
+           }
          break;
       default:
          break;
@@ -471,24 +475,15 @@ void Inf_PutIconToEditInfo (void)
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutFormToForceStdsToReadInfo (bool MustBeRead)
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead)
   {
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Force_students_to_read_this_information;
 
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">",
-	    The_ClassForm[Gbl.Prefs.Theme]);
-   Act_FormStart (Inf_ActionsChangeForceReadInfo[Gbl.CurrentCrs.Info.Type]);
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\"");
-   if (MustBeRead)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," name=\"MustBeRead\" value=\"Y\""
-                      " onchange=\"document.getElementById('%s').submit();\" />"
-                      " %s",
-            Gbl.Form.Id,
-            Txt_Force_students_to_read_this_information);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+   Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.CurrentCrs.Info.Type],
+                              NULL,
+                              "MustBeRead",MustBeRead,
+                              Txt_Force_students_to_read_this_information,
+                              Txt_Force_students_to_read_this_information);
   }
 
 /*****************************************************************************/
