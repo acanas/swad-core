@@ -42,7 +42,7 @@
 /*****************************************************************************/
 
 #define Sch_MIN_LENGTH_LONGEST_WORD	  3
-#define Sch_MIN_LENGTH_TOTAL		  7	// "A An Ann" is not valid; "A An Ann Anna" is valid
+#define Sch_MIN_LENGTH_TOTAL		  3	// "A An" is not valid; "A An Ann" is valid
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -373,7 +373,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    fprintf (Gbl.F.Out,"<input");
    if (IdInputText)
       fprintf (Gbl.F.Out," id=\"%s\"",IdInputText);
-   fprintf (Gbl.F.Out," type=\"text\" name=\"Search\""
+   fprintf (Gbl.F.Out," type=\"search\" name=\"Search\""
 	              " size=\"18\" maxlength=\"%u\" value=\"%s\"",
 	    Sch_MAX_LENGTH_STRING_TO_FIND,
             Gbl.Search.Str);
@@ -1266,7 +1266,8 @@ bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
 	    LengthTotal += LengthWord;
 	    if (LengthWord > MaxLengthWord)
 	       MaxLengthWord = LengthWord;
-	    if (strlen (SearchQuery) + LengthWord + 512 > Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
+	    if (strlen (SearchQuery) + LengthWord + 512 >
+	        Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
 	       break;
 	    if (NumWords)
 	       strcat (SearchQuery," AND ");

@@ -2568,24 +2568,24 @@ void Msg_ShowFormToFilterMsgs (void)
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
 	              "<tr>");
 
-   /***** Authors/recipients of the message *****/
+   /***** Filter authors/recipients *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "<input type=\"text\" name=\"FilterFromTo\""
+                      "<input type=\"search\" name=\"FilterFromTo\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
             Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3,Gbl.Msg.FilterFromTo);
 
-   /***** Authors/recipients of the message *****/
+   /***** Filter message content *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "%s: "
                       "</label>"
-                      "<input type=\"text\" name=\"FilterContent\""
+                      "<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],

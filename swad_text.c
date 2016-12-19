@@ -7878,7 +7878,7 @@ const char *Txt_Delete_messages_sent =
 #elif L==7
 	"Rimuovere messaggi inviati";
 #elif L==8
-	"Usu&nacute; wiadomosci wyslanych";
+	"Usu&nacute; wiadomo&sacute;ci wyslanych";
 #elif L==9
 	"Eliminar mensagens enviadas";
 #endif
@@ -49363,7 +49363,7 @@ const char *Txt_Update_messages =
 #elif L==7
 	"Aggiornamento messaggi";
 #elif L==8
-	"Update messages";		// Potrzebujesz tlumaczenie
+	"Wiadomo&sacute;ci aktualizacji";
 #elif L==9
 	"Atualizar mensagens";
 #endif
