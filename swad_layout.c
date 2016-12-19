@@ -1572,7 +1572,7 @@ static void Lay_WriteAboutZone (void)
    extern const char *Txt_Questions_and_problems;
 
    /***** Start about zone *****/
-   fprintf (Gbl.F.Out,"<footer id=\"about_zone\" class=\"ABOUT\">");
+   fprintf (Gbl.F.Out,"<address id=\"about_zone\" class=\"ABOUT\">");
 
    /***** Institution and centre hosting the platform *****/
    fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"ABOUT\" target=\"_blank\">"
@@ -1588,7 +1588,7 @@ static void Lay_WriteAboutZone (void)
 	    Cfg_ABOUT_NAME);
 
    /***** Questions and problems *****/
-   fprintf (Gbl.F.Out,"<div class=\"ABOUT\">"
+   fprintf (Gbl.F.Out,"<div>"
 		      "%s: "
 		      "<a href=\"mailto:%s\" class=\"ABOUT\" target=\"_blank\">%s</a>"
 		      "</div>",
@@ -1611,7 +1611,7 @@ static void Lay_WriteAboutZone (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End about zone *****/
-   fprintf (Gbl.F.Out,"</footer>");	// about_zone
+   fprintf (Gbl.F.Out,"</address>");	// about_zone
   }
 
 /*****************************************************************************/

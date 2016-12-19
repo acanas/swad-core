@@ -55,7 +55,6 @@ table th
 	box-sizing:border-box;
 	padding:0;
 	color:#4D88A1;
-	/* font-size:12pt; */
 	font-weight:bold;
 	}
 table td
@@ -72,6 +71,10 @@ form
 	{
 	display:inline;
 	margin:0;
+	}
+address
+	{
+	font-style: normal;
 	}
 hr.WHITE_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
 hr.GREY_SEPARA		{height:0; border-top:0; border-bottom:#707070 dotted 1px;}
