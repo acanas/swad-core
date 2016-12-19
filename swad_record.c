@@ -3174,7 +3174,9 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 		  Usr_MAX_LENGTH_PHONE,
 		  UsrDat->LocalPhone);
       else if (UsrDat->LocalPhone[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalPhone);
+	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+	          UsrDat->LocalPhone,
+	          UsrDat->LocalPhone);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -3236,7 +3238,9 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 		  Usr_MAX_LENGTH_PHONE,
 		  UsrDat->FamilyPhone);
       else if (UsrDat->FamilyPhone[0])
-	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyPhone);
+	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+	          UsrDat->FamilyPhone,
+	          UsrDat->FamilyPhone);
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -3416,7 +3420,9 @@ static void Rec_ShowOfficePhone (struct UsrData *UsrDat,
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Phone);
    if (ShowData)
-      fprintf (Gbl.F.Out,"%s",UsrDat->Tch.OfficePhone);
+      fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
+	       UsrDat->Tch.OfficePhone,
+	       UsrDat->Tch.OfficePhone);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }
