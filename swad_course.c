@@ -216,8 +216,8 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"OthDegCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -232,7 +232,7 @@ static void Crs_Configuration (bool PrintView)
 
       /* Put form to select degree */
       Act_FormStart (ActChgCrsDegCfg);
-      fprintf (Gbl.F.Out,"<select name=\"OthDegCod\""
+      fprintf (Gbl.F.Out,"<select id=\"OthDegCod\" name=\"OthDegCod\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\">",
 	       Gbl.Form.Id);
@@ -258,8 +258,8 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
+		      "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"FullName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],
@@ -270,7 +270,8 @@ static void Crs_Configuration (bool PrintView)
      {
       /* Form to change course full name */
       Act_FormStart (ActRenCrsFulCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"FullName\" name=\"FullName\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
@@ -286,8 +287,8 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course short name *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
-		      "%s:"
+		      "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"DAT_N LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],
@@ -298,7 +299,8 @@ static void Crs_Configuration (bool PrintView)
      {
       /* Form to change course short name */
       Act_FormStart (ActRenCrsShoCfg);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"ShortName\" name=\"ShortName\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
@@ -314,8 +316,8 @@ static void Crs_Configuration (bool PrintView)
 
    /***** Course year *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"OthCrsYear\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -323,7 +325,7 @@ static void Crs_Configuration (bool PrintView)
    if (IsForm)
      {
       Act_FormStart (ActChgCrsYeaCfg);
-      fprintf (Gbl.F.Out,"<select name=\"OthCrsYear\""
+      fprintf (Gbl.F.Out,"<select id=\"OthCrsYear\" name=\"OthCrsYear\""
 	                 " onchange=\"document.getElementById('%s').submit();\">",
                Gbl.Form.Id);
       for (Year = 0;
@@ -348,8 +350,8 @@ static void Crs_Configuration (bool PrintView)
      {
       /***** Institutional code of the course *****/
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s RIGHT_MIDDLE\">"
-                         "%s:"
+                         "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"InsCrsCod\" class=\"%s\">%s:</label>"
                          "</td>"
                          "<td class=\"DAT LEFT_MIDDLE\">",
               The_ClassForm[Gbl.Prefs.Theme],
@@ -357,7 +359,8 @@ static void Crs_Configuration (bool PrintView)
       if (IsForm)
 	{
          Act_FormStart (ActChgInsCrsCodCfg);
-         fprintf (Gbl.F.Out,"<input type=\"text\" name=\"InsCrsCod\""
+         fprintf (Gbl.F.Out,"<input type=\"text\""
+                            " id=\"InsCrsCod\" name=\"InsCrsCod\""
                             " size=\"%u\" maxlength=\"%u\" value=\"%s\""
 	                    " onchange=\"document.getElementById('%s').submit();\" />",
                   Crs_LENGTH_INSTITUTIONAL_CRS_COD,
