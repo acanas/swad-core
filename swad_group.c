@@ -261,7 +261,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Usr_PutExtraParamsUsrList (NextAction);
 
       /***** Select all groups *****/
-      fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s\">"
                          "<label>"
 			 "<input type=\"checkbox\""
 			 " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",

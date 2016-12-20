@@ -1684,7 +1684,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	opacity:0.6;
 	}
-.ICO_HIGHLIGHT:hover, .CHECKBOX_CHECKED
+.ICO_HIGHLIGHT:hover, .CHECKBOX_UNCHECKED:hover, .CHECKBOX_CHECKED
 	{
 	opacity:1;
 	}
