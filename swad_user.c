@@ -6447,12 +6447,13 @@ void Usr_ListDataAdms (void)
                         NULL,Hlp_USERS_Administrators);
 
    /***** Form to select range of administrators *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-		      "<label class=\"%s\">%s: </label>",
-	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Act_FormStart (ActLstOth);
-   Sco_PutSelectorScope ("ScopeUsr",true);
    Usr_PutParamListWithPhotos ();
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+   Sco_PutSelectorScope ("ScopeUsr",true);
+   fprintf (Gbl.F.Out,"</label>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
@@ -6935,9 +6936,10 @@ void Usr_SeeGuests (void)
 	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
 	    Usr_PutParamColsClassPhoto ();
 	    Usr_PutParamListWithPhotos ();
-	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	    Sco_PutSelectorScope ("ScopeUsr",true);
+	    fprintf (Gbl.F.Out,"</label>");
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</div>");
 	    break;
@@ -7090,9 +7092,10 @@ void Usr_SeeStudents (void)
 	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
 	    Usr_PutParamColsClassPhoto ();
 	    Usr_PutParamListWithPhotos ();
-	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	    Sco_PutSelectorScope ("ScopeUsr",true);
+	    fprintf (Gbl.F.Out,"</label>");
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</div>");
 	    break;
@@ -7248,9 +7251,10 @@ void Usr_SeeTeachers (void)
       Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
       Usr_PutParamColsClassPhoto ();
       Usr_PutParamListWithPhotos ();
-      fprintf (Gbl.F.Out,"<label class=\"%s\">%s: </label>",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);
+      fprintf (Gbl.F.Out,"</label>");
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
@@ -7784,9 +7788,10 @@ void Usr_PutSelectorNumColsClassPhoto (void)
    unsigned Cols;
 
    /***** Start selector *****/
-   fprintf (Gbl.F.Out,"<select name=\"ColsClassPhoto\""
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "<select name=\"ColsClassPhoto\""
                       " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.Form.Id);
+            The_ClassForm[Gbl.Prefs.Theme],Gbl.Form.Id);
 
    /***** Put a row in selector for every number from 1 to Usr_CLASS_PHOTO_COLS_MAX *****/
    for (Cols = 1;
@@ -7801,8 +7806,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
    /***** End selector *****/
    fprintf (Gbl.F.Out,"</select>"
-	              "<span class=\"%s\">%s</span>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_columns);
+	              "%s</label>",
+            Txt_columns);
   }
 
 /*****************************************************************************/

@@ -1861,7 +1861,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Scope of the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"ScopeSvy\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -1875,10 +1875,10 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey title *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label class=\"%s\">%s:</label>"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Title\""
+                      "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -1893,10 +1893,11 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Survey text *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">%s:</label>"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewSurvey)
@@ -1907,8 +1908,7 @@ void Svy_RequestCreatOrEditSvy (void)
 
    /***** Users' roles who can answer the survey *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">%s:</label>"
+	              "<td class=\"RIGHT_TOP %s\">%s:"
 	              "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -3292,7 +3292,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
                   Txt_SURVEY_STR_ANSWER_TYPES[SvyQst->AnswerType]);
 
          /* Write the stem (row[3]) and the answers of this question */
-         fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP COLOR%u\">",
+         fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP COLOR%u\">",
 	          Gbl.RowEvenOdd);
          Svy_WriteQstStem (row[3]);
          Svy_WriteAnswersOfAQst (Svy,SvyQst,PutFormAnswerSurvey);
@@ -3386,7 +3386,8 @@ static void Svy_WriteQstStem (const char *Stem)
 
 static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *SvyQst,bool PutFormAnswerSurvey)
   {
-   unsigned NumAns,NumAnswers;
+   unsigned NumAnswers;
+   unsigned NumAns;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrsThisAnswer;
@@ -3431,20 +3432,24 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 			(unsigned) SvyQst->QstCod,NumAnswers);
 	    else // SvyQst->AnswerType == Svy_ANS_MULTIPLE_CHOICE
 	       fprintf (Gbl.F.Out,"checkbox\"");
-	    fprintf (Gbl.F.Out," name=\"Ans%010u\" value=\"%u\" />"
+	    fprintf (Gbl.F.Out," id=\"Ans%010u_%010u\" name=\"Ans%010u\""
+		               " value=\"%u\" />"
 			       "</td>",
-		     (unsigned) SvyQst->QstCod,NumAns);
+		     (unsigned) SvyQst->QstCod,NumAns,(unsigned) SvyQst->QstCod,
+		     NumAns);
 	   }
 
 	 /* Write the number of option */
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\" style=\"width:50px;\">"
-			    "%u)"
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:50px;\">"
+			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%u)</label>"
 			    "</td>",
-		  NumAns + 1);
+		  (unsigned) SvyQst->QstCod,NumAns,NumAns + 1);
 
 	 /* Write the text of the answer */
-	 fprintf (Gbl.F.Out,"<td class=\"TEST_EDI LEFT_TOP\">%s</td>",
-		  Answer);
+	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%s</label>"
+	                    "</td>",
+		  (unsigned) SvyQst->QstCod,NumAns,Answer);
 
 	 /* Show stats of this answer */
 	 if (Svy->Status.ICanViewResults)

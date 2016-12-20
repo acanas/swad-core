@@ -143,10 +143,10 @@ void TsI_ShowFormImportQstsFromXML (void)
    /***** Write a form to import questions *****/
    Act_FormStart (ActImpTstQst);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\".xml\""
-                      " onchange=\"document.getElementById('%s').submit();\" />",
+                      " onchange=\"document.getElementById('%s').submit();\" />"
+                      "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_XML_file,
             Fil_NAME_OF_PARAM_FILENAME_ORG,

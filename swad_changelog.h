@@ -182,18 +182,21 @@
 // TODO: Fix bug in notification content about files sent to plugins like SWADroid: do not write internal name (for example "comun"). Call instead Brw_GetFileNameToShow or similar.
 
 // TODO: Draw future dates in attendance, surveys, assignments in blue?
+// TODO: Fix bug in generate a test: after entering a number of questions with empty tags and type of answers, number of questions is not remembered
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.104.3 (2016-12-19)"
-#define CSS_FILE		"swad16.104.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.105 (2016-12-20)"
+#define CSS_FILE		"swad16.105.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.105:   Dec 20, 2016	Changes in behaviour of labels in forms.
+					Changes in layout for Safari browser. (211237 lines)
         Version 16.104.3: Dec 19, 2016	Changes in search input fields. (211196 lines)
         Version 16.104.2: Dec 19, 2016	New links to phones. (211194 lines)
         Version 16.104.1: Dec 19, 2016	New address element. (211187 lines)

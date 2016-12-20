@@ -301,7 +301,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                          "<table class=\"CELLS_PAD_2\">"
                          "<tr>"
                          "<td class=\"LEFT_TOP\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_START_END_TIME[StartEndTime]);
+               The_ClassForm[Gbl.Prefs.Theme],
+               Txt_START_END_TIME[StartEndTime]);
 
       /* Date-time */
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],

@@ -356,7 +356,8 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
         Role++)
       if ((RolesAllowed & (1 << Role)))
 	{
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
+	 fprintf (Gbl.F.Out,"<label>"
+	                    "<input type=\"checkbox\" name=\"Role\" value=\"%u\"",
 		  (unsigned) Role);
 
 	 if ((RolesSelected & (1 << Role)))
@@ -369,7 +370,8 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
 	    fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
 		     Gbl.Form.Id);
 
-	 fprintf (Gbl.F.Out," />%s<br />",
+	 fprintf (Gbl.F.Out," />%s</label>"
+	                    "<br />",
 		  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
         }
   }

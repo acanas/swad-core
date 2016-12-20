@@ -113,7 +113,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Scope */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"ScopeInd\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
@@ -124,7 +124,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for a type of degree */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"OthDegTypCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_degree);
@@ -138,7 +138,7 @@ void Ind_ReqIndicatorsCourses (void)
    /* Compute stats for courses with teachers belonging to any department or to a particular departament? */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"DptCod\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Department);
@@ -159,11 +159,12 @@ void Ind_ReqIndicatorsCourses (void)
 
    /* Selection of the number of indicators */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<td class=\"RIGHT_TOP %s\">"
+                      "%s:"
                       "</td>"
                       "<td class=\"LEFT_TOP\">",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_indicators);
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_No_of_indicators);
    Ind_ShowNumCoursesWithIndicators (NumCrssWithIndicatorYes,NumCrss,true);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -614,8 +615,10 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
       if (PutForm)
 	{
 	 fprintf (Gbl.F.Out,"<td class=\"%s\">"
-			    "<input type=\"checkbox\" name=\"Indicators\" value=\"%u\"",
-		  Class,Ind);
+			    "<input type=\"checkbox\""
+			    " id=\"Indicators%u\" name=\"Indicators\""
+			    " value=\"%u\"",
+		  Class,Ind,Ind);
 	 if (Gbl.Stat.IndicatorsSelected[Ind])
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />"
@@ -623,7 +626,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                   Gbl.Form.Id);
 	}
       fprintf (Gbl.F.Out,"<td class=\"%s\">"
-                         "%u"
+                         "<label for=\"Indicators%u\">%u</label>"
                          "</td>"
                          "<td class=\"%s\">"
                          "%u"
@@ -633,7 +636,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                          "</td>"
                          "</tr>",
                Class,
-               Ind,
+               Ind,Ind,
                Class,
                NumCrssWithIndicatorYes[Ind],
                Class,

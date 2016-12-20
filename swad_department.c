@@ -1121,7 +1121,8 @@ void Dpt_WriteSelectorDepartment (long InsCod)
    Dpt_GetListDepartments (InsCod);
 
    /* List departments */
-   fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:375px;\""
+   fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
+	              " style=\"width:375px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
 

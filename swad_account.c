@@ -148,9 +148,9 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    Act_FormStart (ActChkUsrAcc);
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s:&nbsp;"
-		      "</label>"
 		      "<input type=\"text\" name=\"ID\""
-		      " size=\"18\" maxlength=\"%u\" value=\"\" />",
+		      " size=\"18\" maxlength=\"%u\" value=\"\" />"
+		      "</label>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_LENGTH_USR_ID);
    Lay_PutConfirmButton (Txt_Check);

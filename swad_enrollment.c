@@ -299,11 +299,11 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
    /***** Form to request user's ID, @nickname or email address *****/
    Act_FormStart (NextAction);
    fprintf (Gbl.F.Out,"<label class=\"%s RIGHT_MIDDLE\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"text\" name=\"OtherUsrIDNickOrEMail\""
                       " size=\"18\" maxlength=\"%u\""
-                      " required=\"required\" />",
+                      " required=\"required\" />"
+                      "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
             Usr_MAX_BYTES_USR_LOGIN);
@@ -2109,7 +2109,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"ScopeEnr\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);

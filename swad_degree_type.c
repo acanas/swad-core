@@ -93,7 +93,7 @@ void DT_WriteSelectorDegreeTypes (void)
    DT_GetListDegreeTypes ();
 
    /* List degree types */
-   fprintf (Gbl.F.Out,"<select name=\"OthDegTypCod\""
+   fprintf (Gbl.F.Out,"<select id=\"OthDegTypCod\" name=\"OthDegTypCod\""
 	              " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
 

@@ -2571,10 +2571,10 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter authors/recipients *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterFromTo\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "</label>"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
@@ -2583,10 +2583,10 @@ void Msg_ShowFormToFilterMsgs (void)
    /***** Filter message content *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
+                      "</label>"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message,
@@ -2934,10 +2934,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	                 "</td>");
 
       /***** Write "From:" *****/
-      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                         "<label class=\"MSG_TIT\">"
-	                 "%s: "
-                         "</label>"
+      fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"
+	                 "%s:&nbsp;"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_From);
@@ -2947,10 +2945,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "To:" *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP\">"
-                         "<label class=\"MSG_TIT\">"
-	                 "%s: "
-                         "</label>"
+	                 "<td class=\"RIGHT_TOP MSG_TIT\">"
+	                 "%s:&nbsp;"
 	                 "</td>"
                          "<td colspan=\"2\" class=\"LEFT_TOP\">",
                Txt_MSG_To);
@@ -2960,10 +2956,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
       /***** Write "Message:" *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP\">"
-                         "<label class=\"MSG_TIT\">"
-	                 "%s: "
-                         "</label>"
+	                 "<td class=\"RIGHT_TOP MSG_TIT\">"
+	                 "%s:&nbsp;"
 	                 "</td>",
                Txt_MSG_Message);
 

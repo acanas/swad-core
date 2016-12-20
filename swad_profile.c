@@ -174,10 +174,10 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
 
    /***** Form to request user's @nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"text\" name=\"usr\""
-                      " size=\"18\" maxlength=\"%u\" value=\"@%s\" />",
+                      " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
+                      "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,

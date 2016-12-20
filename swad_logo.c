@@ -292,10 +292,10 @@ void Log_RequestLogo (Sco_Scope_t Scope)
 
    /***** Upload logo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s: "
-	              "</label>"
+	              "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\""
-                      " onchange=\"document.getElementById('%s').submit();\" />",
+                      " onchange=\"document.getElementById('%s').submit();\" />"
+	              "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_logo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,

@@ -1409,10 +1409,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
-                      "<span class=\"%s\">(</span>"
-	              "<select name=\"RecsPerPag\">",
+                      "<label class=\"%s\">(<select name=\"RecsPerPag\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
-
    for (i = 1;
         i <= 10;
         i++)
@@ -1422,9 +1420,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",i);
      }
-   fprintf (Gbl.F.Out,"</select>"
-	              "<span class=\"%s\"> %s)</span>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_record_cards_per_page);
+   fprintf (Gbl.F.Out,"</select> %s)</label>",
+            Txt_record_cards_per_page);
   }
 
 /*****************************************************************************/

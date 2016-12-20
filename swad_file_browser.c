@@ -8061,10 +8061,10 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    /***** Folder *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s: "
-	              "</label>"
                       "<input type=\"text\" name=\"NewFolderName\""
                       " size=\"30\" maxlength=\"40\" value=\"\""
-                      " required=\"required\" />",
+                      " required=\"required\" />"
+	              "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Folder);
 
    /* Button to send and end frame *****/
@@ -8304,12 +8304,13 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    fprintf (Gbl.F.Out,"<table>"
 	              "<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label class=\"%s\">"
-	              "%s: "
+	              "<label for=\"NewLinkURL\" class=\"%s\">"
+	              "%s:&nbsp;"
 	              "</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"url\" name=\"NewLinkURL\""
+                      "<input type=\"url\""
+                      " id=\"NewLinkURL\" name=\"NewLinkURL\""
                       " size=\"40\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
                       "</td>"
@@ -8320,10 +8321,13 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
    /***** Link name *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label class=\"%s\">%s&nbsp;(%s):&nbsp;</label>"
+	              "<label for=\"NewLinkName\" class=\"%s\">"
+	              "%s&nbsp;(%s):&nbsp;"
+	              "</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NewLinkName\""
+                      "<input type=\"text\""
+                      " id=\"NewLinkName\" name=\"NewLinkName\""
                       " size=\"40\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"

@@ -333,10 +333,10 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-                      "%s: "
-                      "</label>"
+                      "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" accept=\"image/*\""
-                      " onchange=\"document.getElementById('%s').submit();\" />",
+                      " onchange=\"document.getElementById('%s').submit();\" />"
+                      "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_File_with_the_photo,
             Fil_NAME_OF_PARAM_FILENAME_ORG,

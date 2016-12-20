@@ -252,10 +252,10 @@ void Pwd_ShowFormSendNewPwd (void)
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s: "
-                      "</label>"
+	              "%s:&nbsp;"
                       "<input type=\"text\" name=\"UsrId\""
-                      " size=\"8\" maxlength=\"%u\" value=\"%s\" />",
+                      " size=\"8\" maxlength=\"%u\" value=\"%s\" />"
+                      "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
             Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 

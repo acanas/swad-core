@@ -457,8 +457,7 @@ void Sta_AskShowCrsHits (void)
          fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
                             " style=\"margin:0 auto;\">"
                             "<tr>"
-			    "<td class=\"RIGHT_TOP\">"
-			    "<label class=\"%s\">%s:</label>"
+			    "<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
                             "<table>",
@@ -478,9 +477,7 @@ void Sta_AskShowCrsHits (void)
 
          /***** Option a) Listing of clicks distributed by some metric *****/
          fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"RIGHT_TOP\">"
-			    "<label class=\"%s\">%s:</label>"
-			    "</td>"
+			    "<td class=\"RIGHT_TOP %s\">%s:</td>"
 			    "<td colspan=\"2\" class=\"LEFT_TOP\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
 
@@ -498,7 +495,7 @@ void Sta_AskShowCrsHits (void)
          /* Selection of count type (number of pages generated, accesses per user, etc.) */
          Sta_WriteSelectorCountType ();
 
-         fprintf (Gbl.F.Out,"<label class=\"%s\"> %s </label>"
+         fprintf (Gbl.F.Out,"<label class=\"%s\">&nbsp;%s&nbsp;"
                             "<select id=\"GroupedBy\" name=\"GroupedBy\">",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
          for (ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
@@ -512,7 +509,7 @@ void Sta_AskShowCrsHits (void)
             fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
            }
          fprintf (Gbl.F.Out,"</select>"
-                            "<br />");
+                            "</label><br />");
 
          /***** Option b) Listing of detailed clicks to this course *****/
          fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GroupedOrDetailed\" value=\"%u\"",
@@ -619,10 +616,10 @@ void Sta_AskShowGblHits (void)
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"Role\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">"
-                      "<select name=\"Role\">",
+                      "<select id=\"Role\" name=\"Role\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    for (RoleStat = (Sta_Role_t) 0;
 	RoleStat < Sta_NUM_ROLES_STAT;
@@ -643,7 +640,7 @@ void Sta_AskShowGblHits (void)
    /***** Clicks made from anywhere, current centre, current degree or current course *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_MIDDLE\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"ScopeSta\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
@@ -662,14 +659,14 @@ void Sta_AskShowGblHits (void)
    /***** Count type for the statistic *****/
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"CountType\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Show);
    Sta_WriteSelectorCountType ();
 
    /***** Type of statistic *****/
-   fprintf (Gbl.F.Out,"<label class=\"%s\"> %s </label>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">&nbsp;%s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],Txt_distributed_by);
 
    if (Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_GBL_PER_DAYS ||
@@ -688,6 +685,7 @@ void Sta_AskShowGblHits (void)
       fprintf (Gbl.F.Out,">%s",Txt_STAT_CLICKS_GROUPED_BY[ClicksGroupedBy]);
      }
    fprintf (Gbl.F.Out,"</select>"
+	              "</label>"
 		      "</td>"
 		      "</tr>"
 		      "</table>");
@@ -743,10 +741,10 @@ static void Sta_WriteSelectorAction (void)
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
-                      "<label class=\"%s\">%s:</label>"
+                      "<label for=\"StatAct\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td colspan=\"2\" class=\"LEFT_TOP\">"
-                      "<select name=\"StatAct\" id=\"StatAct\""
+                      "<select id=\"StatAct\" name=\"StatAct\""
                       " style=\"width:375px;\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Action);
    for (Action = (Act_Action_t) 0;

@@ -323,14 +323,17 @@ void Tst_ShowFormAskTst (void)
          /***** Number of questions to generate ****/
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"RIGHT_MIDDLE\">"
-                            "<label class=\"%s\">"
+                            "<label for=\"NumQst\" class=\"%s\">"
                             "%s:"
                             "</label>"
                             "</td>"
                             "<td class=\"LEFT_MIDDLE\">"
-                            "<input type=\"text\" name=\"NumQst\""
-                            " size=\"3\" maxlength=\"3\" value=\"%u\"",
+                            "<input type=\"number\""
+                            " id=\"NumQst\" name=\"NumQst\""
+                            " min=\"%u\" max=\"%u\" value=\"%u\"",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_No_of_questions,
+                  Gbl.Test.Config.Min,
+                  Gbl.Test.Config.Max,
                   Gbl.Test.Config.Def);
          if (Gbl.Test.Config.Min == Gbl.Test.Config.Max)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1068,44 +1071,47 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
       fprintf (Gbl.F.Out,"<div class=\"TEST_FORM_EDIT_IMG\">");
 
       /***** Choice 1: No image *****/
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	                 "<input type=\"radio\" name=\"%s\" value=\"%u\"",
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       ParamUploadImg.Action,Img_ACTION_NO_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
-			 "<label class=\"%s\">"
 			 "%s"
 			 "</label>"
 			 "<br />",
-	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_No_image);
 
       /***** Choice 2: Current image *****/
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"%s\" value=\"%u\" checked=\"checked\"",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	                 "<input type=\"radio\" name=\"%s\" value=\"%u\""
+	                 " checked=\"checked\"",
+	       The_ClassForm[Gbl.Prefs.Theme],
 	       ParamUploadImg.Action,Img_ACTION_KEEP_IMAGE);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
-			 "<label class=\"%s\">"
 			 "%s"
 			 "</label>",
-	       The_ClassForm[Gbl.Prefs.Theme],
 	       Txt_Current_image);
       Img_ShowImage (Image,ClassContainer,ClassImg);
 
       /***** Choice 3: Change/new image *****/
       UniqueId++;
-      fprintf (Gbl.F.Out,"<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
+      fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	                 "<input type=\"radio\" id=\"chg_img_%u\" name=\"%s\""
 			 " value=\"%u\"",
-	       UniqueId,ParamUploadImg.Action,Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
+	       The_ClassForm[Gbl.Prefs.Theme],
+	       UniqueId,ParamUploadImg.Action,
+	       Img_ACTION_CHANGE_IMAGE);	// Replace existing image by new image
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
-			 "<label class=\"%s\">"
 			 "%s: "
 			 "</label>"
                          "<input type=\"file\" name=\"%s\" accept=\"image/*\"",
-	       The_ClassForm[Gbl.Prefs.Theme],Txt_Change_image,
+	       Txt_Change_image,
 	       ParamUploadImg.File);
       if (OptionsDisabled)
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -1615,10 +1621,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
 
    /***** Label *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_TOP\">"
-		      "<label class=\"%s\">"
+		      "<td class=\"RIGHT_TOP %s\">"
 		      "%s:"
-		      "</label>"
                       "</td>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Tags);
 
@@ -1631,13 +1635,15 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
                       "<tr>");
    if (!ShowOnlyEnabledTags)
       fprintf (Gbl.F.Out,"<td></td>");
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                      "<label class=\"%s\">"
 	              "<input type=\"checkbox\" name=\"AllTags\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Test.Tags.All)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'ChkTag');\" />"
-                      " %s"
+                      "&nbsp;%s"
+                      "</label>"
                       "</td>"
                       "</tr>",
             Txt_All_tags);
@@ -1666,7 +1672,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
          fprintf (Gbl.F.Out,"\" class=\"ICO20x20\" />"
                             "</td>");
         }
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+                         "<label class=\"DAT\">"
 	                 "<input type=\"checkbox\" name=\"ChkTag\" value=\"%s\"",
 	       row[1]);
       if (Gbl.Test.Tags.List)
@@ -1680,7 +1687,8 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
            }
         }
       fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllTags');\" />"
-	                 " %s"
+	                 "&nbsp;%s"
+	                 "</label>"
 	                 "</td>"
 	                 "</tr>",
 	       row[1]);
@@ -2248,10 +2256,8 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 
    /***** Label *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"RIGHT_TOP\">"
-		      "<label class=\"%s\">"
+		      "<td class=\"RIGHT_TOP %s\">"
 		      "%s:"
-		      "</label>"
                       "</td>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Types_of_answers);
 
@@ -2262,13 +2268,15 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    fprintf (Gbl.F.Out," class=\"LEFT_TOP\">"
 	              "<table class=\"CELLS_PAD_2\">"
                       "<tr>"
-	              "<td class=\"%s LEFT_MIDDLE\">"
+	              "<td class=\"LEFT_MIDDLE\">"
+                      "<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"AllAnsTypes\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Test.AllAnsTypes)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'AnswerType');\" />"
-                      " %s"
+                      "&nbsp;%s"
+                      "</label>"
                       "</td>"
                       "</tr>",
             Txt_All_types_of_answers);
@@ -2279,7 +2287,8 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
 	AnsType++)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"DAT LEFT_MIDDLE\">"
+	                 "<td class=\"LEFT_MIDDLE\">"
+                         "<label class=\"DAT\">"
                          "<input type=\"checkbox\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       Ptr = Gbl.Test.ListAnsTypes;
@@ -2290,7 +2299,8 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
             fprintf (Gbl.F.Out," checked=\"checked\"");
         }
       fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllAnsTypes');\" />"
-	                 " %s"
+	                 "&nbsp;%s"
+	                 "</label>"
 	                 "</td>"
 	                 "</tr>",
                Txt_TST_STR_ANSWER_TYPES[AnsType]);
@@ -4495,10 +4505,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Write the tags *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">"
+                      "<td class=\"RIGHT_TOP %s\">"
                       "%s:"
-                      "</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<table class=\"CELLS_PAD_2\">",
@@ -4560,13 +4568,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Stem and image *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">"
+	              "<label for=\"Stem\" class=\"%s\">"
 	              "%s:"
                       "</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Stem\" class=\"STEM\" rows=\"5\""
-                      " required=\"required\">"
+                      "<textarea id=\"Stem\" name=\"Stem\""
+                      " class=\"STEM\" rows=\"5\" required=\"required\">"
                       "%s"
                       "</textarea><br />",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -4580,8 +4588,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** Feedback *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
-	              "%s (%s):"
-                      "</label><br />"
+	              "%s (%s):<br />"
                       "<textarea name=\"Feedback\" class=\"STEM\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Feedback,Txt_optional);
@@ -4589,15 +4596,14 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       if (Feedback[0])
 	 fprintf (Gbl.F.Out,"%s",Feedback);
    fprintf (Gbl.F.Out,"</textarea>"
+                      "</label>"
                       "</td>"
                       "</tr>");
 
    /***** Type of answer *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">"
+	              "<td class=\"RIGHT_TOP %s\">"
 	              "%s:"
-                      "</label>"
 	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -4607,12 +4613,14 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 	AnsType < Tst_NUM_ANS_TYPES;
 	AnsType++)
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>"
+	                 "<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
                (unsigned) AnsType);
       if (AnsType == Gbl.Test.AnswerType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"enableDisableAns(this.form);\" />"
-	                 "%s&nbsp;<br />",
+	                 "%s&nbsp;"
+	                 "</label><br />",
                Txt_TST_STR_ANSWER_TYPES[AnsType]);
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -4622,13 +4630,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /* Integer answer */
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
-	              "<label class=\"%s\">"
+	              "<label for=\"AnsInt\" class=\"%s\">"
                       "%s:"
                       "</label>"
                       "</td>"
                       "<td class=\"%s LEFT_TOP\">"
                       "%s: "
-                      "<input type=\"text\" name=\"AnsInt\""
+                      "<input type=\"text\" id=\"AnsInt\" name=\"AnsInt\""
                       " size=\"11\" maxlength=\"11\" value=\"%ld\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Answers,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Integer_number,
