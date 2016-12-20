@@ -188,13 +188,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.105.3 (2016-12-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.105.4 (2016-12-20)"
 #define CSS_FILE		"swad16.105.3.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.105.4: Dec 20, 2016	Changes in behaviour of labels in forms. (211281 lines)
         Version 16.105.3: Dec 20, 2016	Changes in contextual checkboxes. (211280 lines)
         Version 16.105.2: Dec 20, 2016	Changes in behaviour of labels in forms. (211279 lines)
         Version 16.105.1: Dec 20, 2016	Changes in behaviour of labels in forms. (211244 lines)

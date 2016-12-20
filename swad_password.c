@@ -737,11 +737,11 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
 
    sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s: "
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Passwd\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"password\" name=\"Paswd\""
+                      "<input type=\"password\" id=\"Passwd\" name=\"Paswd\""
                       " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
                       " required=\"required\" />"
                       "</td>"

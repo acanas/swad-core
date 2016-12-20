@@ -344,11 +344,11 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    else
       NewNicknameWithArroba[0] = '\0';
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"NewNick\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NewNick\""
+                      "<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
@@ -362,11 +362,11 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
    /***** Email *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"email\" name=\"NewEmail\""
+                      "<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
                       " required=\"required\" />"
