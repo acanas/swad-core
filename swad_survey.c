@@ -2056,11 +2056,15 @@ static void Svy_ShowLstGrpsToEditSurvey (long SvyCod)
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
+                         "<label>"
                          "<input type=\"checkbox\""
                          " id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Svy_CheckIfSvyIsAssociatedToGrps (SvyCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />%s %s</td>"
+      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
+	                 "%s %s"
+	                 "</label>"
+	                 "</td>"
 	                 "</tr>",
                Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 

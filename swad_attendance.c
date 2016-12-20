@@ -1240,10 +1240,14 @@ static void Att_ShowLstGrpsToEditAttEvent (long AttCod)
       /***** First row: checkbox to select the whole course *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"7\" class=\"DAT LEFT_MIDDLE\">"
+                         "<label>"
                          "<input type=\"checkbox\" id=\"WholeCrs\" name=\"WholeCrs\" value=\"Y\"");
       if (!Att_CheckIfAttEventIsAssociatedToGrps (AttCod))
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />%s %s</td>"
+      fprintf (Gbl.F.Out," onclick=\"uncheckChildren(this,'GrpCods')\" />"
+	                 "%s %s"
+                         "</label>"
+	                 "</td>"
 	                 "</tr>",
                Txt_The_whole_course,Gbl.CurrentCrs.Crs.ShrtName);
 

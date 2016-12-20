@@ -262,12 +262,15 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 
       /***** Select all groups *****/
       fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-			 "<input type=\"checkbox\" id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
+                         "<label>"
+			 "<input type=\"checkbox\""
+			 " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
 	       The_ClassForm[Gbl.Prefs.Theme]);
       if (Gbl.Usrs.ClassPhoto.AllGroups)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
-			 " %s"
+			 "&nbsp;%s"
+                         "</label>"
 			 "</div>",
 	       Txt_All_groups);
 
@@ -1490,7 +1493,9 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
+	                 "<input type=\"checkbox\""
+	                 " id=\"Grp%ld\" name=\"GrpCods\" value=\"%ld\"",
+               Grp->GrpCod,
                Grp->GrpCod);
       if (Cod > 0)	// Cod == -1L means new assignment or survey
         {
@@ -1512,7 +1517,8 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
       if (!(IBelongToThisGroup ||
             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" /></td>");
+      fprintf (Gbl.F.Out," onclick=\"uncheckParent(this,'WholeCrs')\" />"
+	                 "</td>");
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -1705,15 +1711,19 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
           !GrpTyp->MultipleEnrollment &&
           GrpTyp->NumGrps > 1)
 	{
-         fprintf (Gbl.F.Out,"radio\" name=\"GrpCod%ld\" value=\"%ld\"",
-                  GrpTyp->GrpTypCod,Grp->GrpCod);
+         fprintf (Gbl.F.Out,"radio\" id=\"Grp%ld\" name=\"GrpCod%ld\""
+                            " value=\"%ld\"",
+                  Grp->GrpCod,GrpTyp->GrpTypCod,
+                  Grp->GrpCod);
          if (!GrpTyp->MandatoryEnrollment)	// If the enrollment is not mandatory, I can select no groups
             fprintf (Gbl.F.Out," onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
                      GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	}
       else // Put a checkbox item
-         fprintf (Gbl.F.Out,"checkbox\" name=\"GrpCod%ld\" value=\"%ld\"",
-                  GrpTyp->GrpTypCod,Grp->GrpCod);
+         fprintf (Gbl.F.Out,"checkbox\" id=\"Grp%ld\" name=\"GrpCod%ld\""
+                            " value=\"%ld\"",
+                  Grp->GrpCod,GrpTyp->GrpTypCod,
+                  Grp->GrpCod);
 
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1808,8 +1818,10 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
       if (UsrBelongsToThisGroup)
 	 fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"checkbox\" name=\"GrpCod%ld\" value=\"%ld\"",
-               GrpTyp->GrpTypCod,Grp->GrpCod);
+	                 "<input type=\"checkbox\""
+	                 " id=\"Grp%ld\" name=\"GrpCod%ld\" value=\"%ld\"",
+               Grp->GrpCod,GrpTyp->GrpTypCod,
+               Grp->GrpCod);
       if (UsrBelongsToThisGroup)
       	 fprintf (Gbl.F.Out," checked=\"checked\"");
       if (!(IBelongToThisGroup ||
@@ -1862,7 +1874,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
       if (IBelongToThisGroup)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
-	                 "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
+	                 "<input type=\"checkbox\""
+	                 " id=\"Grp%ld\" name=\"GrpCods\" value=\"%ld\"",
+               Grp->GrpCod,
                Grp->GrpCod);
       if (Gbl.Usrs.ClassPhoto.AllGroups)
          fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1890,7 +1904,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
    /* Write checkbox to select the group */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"checkbox\" name=\"GrpCods\" value=\"%ld\"",
+                      "<input type=\"checkbox\" id=\"Grp%ld\" name=\"GrpCods\""
+                      " value=\"%ld\"",
+            -(GrpTyp->GrpTypCod),
             -(GrpTyp->GrpTypCod));
    if (Gbl.Usrs.ClassPhoto.AllGroups)
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -1903,7 +1919,8 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
             fprintf (Gbl.F.Out," checked=\"checked\"");
             break;
            }
-   fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" /></td>");
+   fprintf (Gbl.F.Out," onclick=\"checkParent(this,'AllGroups')\" />"
+	              "</td>");
 
    /* Column closed/open */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1911,9 +1928,9 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 
    /* Group name = students with no group */
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT LEFT_MIDDLE\">"
-	              "%s&nbsp;"
+	              "<label for=\"Grp%ld\">%s</label>"
 	              "</td>",
-            Txt_students_with_no_group);
+            -(GrpTyp->GrpTypCod),Txt_students_with_no_group);
 
    /* Number of students who don't belong to any group of this type */
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
@@ -2015,8 +2032,11 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">"
-	              "%s&nbsp;"
+                      "<label for=\"Grp%ld\">"
+	              "%s"
+	              "</label>"
 	              "</td>",
+	    Grp->GrpCod,
 	    Grp->GrpName);
 
    /***** Max. number of students in this group *****/

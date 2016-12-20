@@ -145,12 +145,14 @@ void Syl_PutFormWhichSyllabus (void)
      {
       fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
 	                 " style=\"display:inline;\">"
+                         "<label>"
                          "<input type=\"radio\" name=\"WhichSyllabus\" value=\"%u\"",
                (unsigned) WhichSyllabus);
       if (WhichSyllabus == Gbl.Syllabus.WhichSyllabus)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
+                         "</label>"
                          "</li>",
                Gbl.Form.Id,Txt_SYLLABUS_WHICH_SYLLABUS[WhichSyllabus]);
      }
