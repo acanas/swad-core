@@ -1130,17 +1130,16 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Assignment title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Title\""
+                      "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Title,
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
             Asg_MAX_LENGTH_ASSIGNMENT_TITLE,Asg.Title);
 
    /***** Assignment start and end dates *****/
@@ -1151,10 +1150,11 @@ void Asg_RequestCreatOrEditAsg (void)
 	              "<td class=\"%s RIGHT_MIDDLE\">"
 	              "%s:"
 	              "</td>"
-                      "<td class=\"DAT LEFT_MIDDLE\">"
-                      "%s: "
+                      "<td class=\"LEFT_MIDDLE\">"
+	              "<label class=\"DAT\">%s:"
                       "<input type=\"text\" name=\"Folder\""
                       " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
+                      "</label>"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -1164,13 +1164,13 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Assignment text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Description);
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"10\">",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAssignment)
       fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</textarea>"
