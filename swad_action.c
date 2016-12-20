@@ -4716,7 +4716,8 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
   }
 
 // Params should have space for 256+256+Ses_LENGTH_SESSION_ID+256 bytes
-void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParameterLocationIfNoSesion)
+void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
+                        bool PutParameterLocationIfNoSesion)
   {
    char ParamAction[256];
    char ParamSession[256+Ses_LENGTH_SESSION_ID];
@@ -4727,30 +4728,44 @@ void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,bool PutParamete
    ParamLocation[0] = '\0';
 
    if (NextAction != ActUnk)
-      sprintf (ParamAction,"<input type=\"hidden\" name=\"act\" value=\"%ld\" />",
+      sprintf (ParamAction,"<input type=\"hidden\" name=\"act\""
+	                   " value=\"%ld\" />",
 	       Act_Actions[NextAction].ActCod);
 
    if (Gbl.Session.Id[0])
-      sprintf (ParamSession,"<input type=\"hidden\" name=\"ses\" value=\"%s\" />",
+      sprintf (ParamSession,"<input type=\"hidden\" name=\"ses\""
+	                    " value=\"%s\" />",
 	       Gbl.Session.Id);
-   else if (PutParameterLocationIfNoSesion)	// Extra parameters necessary when there's no open session
+   else if (PutParameterLocationIfNoSesion)
+      // Extra parameters necessary when there's no open session
      {
       /* If session is open, course code will be get from session data,
-	 but if there is not an open session, and next action is known, it is necessary to send a parameter with course code */
-      if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// If course selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"crs\" value=\"%ld\" />",
+	 but if there is not an open session, and next action is known,
+	 it is necessary to send a parameter with course code */
+      if (Gbl.CurrentCrs.Crs.CrsCod > 0)
+	 // If course selected...
+         sprintf (ParamLocation,"<input type=\"hidden\" name=\"crs\""
+                                " value=\"%ld\" />",
                   Gbl.CurrentCrs.Crs.CrsCod);
-      else if (Gbl.CurrentDeg.Deg.DegCod > 0)		// If no course selected, but degree selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"deg\" value=\"%ld\" />",
+      else if (Gbl.CurrentDeg.Deg.DegCod > 0)
+	 // If no course selected, but degree selected...
+         sprintf (ParamLocation,"<input type=\"hidden\" name=\"deg\""
+                                " value=\"%ld\" />",
                   Gbl.CurrentDeg.Deg.DegCod);
-      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)		// If no degree selected, but centre selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ctr\" value=\"%ld\" />",
+      else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
+	 // If no degree selected, but centre selected...
+         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ctr\""
+                                " value=\"%ld\" />",
                   Gbl.CurrentCtr.Ctr.CtrCod);
-      else if (Gbl.CurrentIns.Ins.InsCod > 0)		// If no centre selected, but institution selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ins\" value=\"%ld\" />",
+      else if (Gbl.CurrentIns.Ins.InsCod > 0)
+	 // If no centre selected, but institution selected...
+         sprintf (ParamLocation,"<input type=\"hidden\" name=\"ins\""
+                                " value=\"%ld\" />",
                   Gbl.CurrentIns.Ins.InsCod);
-      else if (Gbl.CurrentCty.Cty.CtyCod > 0)		// If no institution selected, but country selected...
-         sprintf (ParamLocation,"<input type=\"hidden\" name=\"cty\" value=\"%ld\" />",
+      else if (Gbl.CurrentCty.Cty.CtyCod > 0)
+	 // If no institution selected, but country selected...
+         sprintf (ParamLocation,"<input type=\"hidden\" name=\"cty\""
+                                " value=\"%ld\" />",
                   Gbl.CurrentCty.Cty.CtyCod);
      }
 

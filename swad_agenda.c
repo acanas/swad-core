@@ -1312,11 +1312,11 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Event *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Event\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Event\""
+                      "<input type=\"text\" id=\"Event\" name=\"Event\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -1327,11 +1327,11 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Location *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Location\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"Location\""
+                      "<input type=\"text\" id=\"Location\" name=\"Location\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -1346,11 +1346,12 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Text *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Txt\" cols=\"60\" rows=\"10\">",
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"10\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Description);
    if (!ItsANewEvent)
