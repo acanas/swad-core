@@ -1141,11 +1141,11 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event title *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Title\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<input type=\"text\" name=\"Title\""
+                      "<input type=\"text\" id=\"Title\" name=\"Title\""
                       " size=\"45\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
@@ -1158,11 +1158,11 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Visibility of comments *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"ComTchVisible\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<select name=\"CommentTchVisible\">",
+                      "<select id=\"ComTchVisible\" name=\"ComTchVisible\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Teachers_comment);
 
    fprintf (Gbl.F.Out,"<option value=\"N\"");
@@ -1183,11 +1183,12 @@ void Att_RequestCreatOrEditAttEvent (void)
 
    /***** Attendance event description *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Txt\" cols=\"60\" rows=\"5\">",
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"5\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Description);
    if (!ItsANewAttEvent)
       fprintf (Gbl.F.Out,"%s",Txt);
@@ -1301,7 +1302,7 @@ void Att_RecFormAttEvent (void)
    ReceivedAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
-   Par_GetParToText ("CommentTchVisible",YN,1);
+   Par_GetParToText ("ComTchVisible",YN,1);
    ReceivedAtt.CommentTchVisible = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /***** Get attendance event title *****/
