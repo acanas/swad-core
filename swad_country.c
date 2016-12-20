@@ -1106,7 +1106,7 @@ void Cty_WriteSelectorOfCountry (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeIns);
-   fprintf (Gbl.F.Out,"<select name=\"cty\" style=\"width:175px;\""
+   fprintf (Gbl.F.Out,"<select id=\"cty\" name=\"cty\" style=\"width:175px;\""
                       " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"\"",
 	    Gbl.Form.Id);

@@ -371,6 +371,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    extern const char *Txt_Search;
 
    /***** String to find *****/
+   // Input field not required, because it can be hidden (display:none)
    fprintf (Gbl.F.Out,"<input");
    if (IdInputText)
       fprintf (Gbl.F.Out," id=\"%s\"",IdInputText);
@@ -381,8 +382,7 @@ void Sch_PutInputStringToSearch (const char *IdInputText)
    if (!Gbl.Search.Str[0])
       fprintf (Gbl.F.Out," placeholder=\"%s&hellip;\"",
 	       Txt_Search);
-   fprintf (Gbl.F.Out," style=\"margin:0;\""
-	              " required=\"required\" />");
+   fprintf (Gbl.F.Out," style=\"margin:0;\" />");
   }
 
 /*****************************************************************************/

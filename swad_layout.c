@@ -1092,8 +1092,9 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
    if (FuncParams)
       FuncParams ();
 
-   /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">",
+   /***** Start container and label *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s %s\" title=\"%s\">"
+	              "<label>",
             Checked ? "CHECKBOX_CHECKED" :
         	      "CHECKBOX_UNCHECKED",
             The_ClassFormBold[Gbl.Prefs.Theme],
@@ -1111,8 +1112,9 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
 	 fprintf (Gbl.F.Out,"&nbsp;%s",
 		  Text);
 
-   /***** End container *****/
-   fprintf (Gbl.F.Out,"</div>");
+   /***** End label and container *****/
+   fprintf (Gbl.F.Out,"</label>"
+	              "</div>");
 
    /***** End form *****/
    Act_FormEnd ();

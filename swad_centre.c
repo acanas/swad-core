@@ -1301,7 +1301,7 @@ void Ctr_WriteSelectorOfCentre (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeDeg);
-   fprintf (Gbl.F.Out,"<select name=\"ctr\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"ctr\" name=\"ctr\" style=\"width:175px;\"");
    if (Gbl.CurrentIns.Ins.InsCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);

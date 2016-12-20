@@ -907,7 +907,7 @@ void Crs_WriteSelectorOfCourse (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCrsInf);
-   fprintf (Gbl.F.Out,"<select name=\"crs\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"crs\" name=\"crs\" style=\"width:175px;\"");
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);

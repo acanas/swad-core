@@ -1221,7 +1221,7 @@ void Ins_WriteSelectorOfInstitution (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCtr);
-   fprintf (Gbl.F.Out,"<select name=\"ins\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"ins\" name=\"ins\" style=\"width:175px;\"");
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);

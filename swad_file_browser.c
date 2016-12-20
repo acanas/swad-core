@@ -3254,6 +3254,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
    /***** Select the complete course, not a group *****/
    fprintf (Gbl.F.Out,"<li class=\"%s\">"
+                      "<label>"
                       "<input type=\"radio\" name=\"GrpCod\" value=\"-1\"",
             IsCourseZone ? "BROWSER_TITLE" :
                            "BROWSER_TITLE_LIGHT");
@@ -3261,6 +3262,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
                       "%s"
+                      "</label>"
                       "</li>",
             Gbl.Form.Id,
             Gbl.CurrentCrs.Crs.FullName);
@@ -3282,6 +3284,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
                             " alt=\"\" title=\"\""
                             " class=\"ICO25x25\""
                             " style=\"margin-left:6px;\" />"
+                            "<label>"
 	                    "<input type=\"radio\" name=\"GrpCod\" value=\"%ld\"",
                   (IsGroupZone &&
                    GrpDat.GrpCod == Gbl.CurrentCrs.Grps.GrpCod) ? "BROWSER_TITLE" :
@@ -3294,6 +3297,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			    "%s %s"
+			    "</label>"
 			    "</li>",
 		  Gbl.Form.Id,
                   GrpDat.GrpTypName,GrpDat.GrpName);

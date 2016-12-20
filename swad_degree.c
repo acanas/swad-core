@@ -596,7 +596,7 @@ void Deg_WriteSelectorOfDegree (void)
 
    /***** Start form *****/
    Act_FormGoToStart (ActSeeCrs);
-   fprintf (Gbl.F.Out,"<select name=\"deg\" style=\"width:175px;\"");
+   fprintf (Gbl.F.Out,"<select id=\"deg\" name=\"deg\" style=\"width:175px;\"");
    if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
       fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\"",
                Gbl.Form.Id);
