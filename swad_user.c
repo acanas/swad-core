@@ -5463,16 +5463,20 @@ void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
    Usr_Sex_t Sex;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">",
+	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
    if (Role == Rol_STUDENT)
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_STDS\" value=\"\""
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+	                 " name=\"SEL_UNSEL_STDS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
    else	// Role == Rol_TEACHER or Role == Rol__GUEST_
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"SEL_UNSEL_TCHS\" value=\"\""
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+	                 " name=\"SEL_UNSEL_TCHS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
    Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
+	              "</label>"
 	              "</th>"
 	              "</tr>",
 	    Gbl.Usrs.LstUsrs[Role].NumUsrs == 1 ? Txt_ROLES_SINGUL_Abc[Role][Sex] :

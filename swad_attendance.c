@@ -2057,10 +2057,12 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    /***** Icon to show if the user is already registered *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"BT%u\">"
+                      "<label for=\"Std%u\">"
 	              "<img src=\"%s/%s16x16.gif\""
 	              " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+                      "</label>"
 	              "</td>",
-            Gbl.RowEvenOdd,
+            Gbl.RowEvenOdd,NumStd,
             Gbl.Prefs.IconsURL,
             Present ? "check" :
         	      "check-empty",
@@ -2071,8 +2073,9 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 
    /***** Checkbox to select user *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">"
-	              "<input type=\"checkbox\" name=\"UsrCodStd\" value=\"%s\"",
-	    Gbl.RowEvenOdd,
+	              "<input type=\"checkbox\" id=\"Std%u\" name=\"UsrCodStd\""
+	              " value=\"%s\"",
+	    Gbl.RowEvenOdd,NumStd,
 	    UsrDat->EncryptedUsrCod);
    if (Present)	// This student has attended to the event?
       fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -3103,18 +3106,22 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
       /* Write a row for this event */
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"DAT CENTER_MIDDLE COLOR%u\">"
-			 "<input type=\"checkbox\" name=\"AttCods\" value=\"%ld\"",
+			 "<input type=\"checkbox\""
+			 " id=\"Att%u\" name=\"AttCods\" value=\"%ld\"",
 	       Gbl.RowEvenOdd,
+	       NumAttEvent,
 	       Gbl.AttEvents.Lst[NumAttEvent].AttCod);
       if (Gbl.AttEvents.Lst[NumAttEvent].Selected)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />"
 	                 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
-			 "%u:"
+			 "<label for=\"Att%u\">%u:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE COLOR%u\">"
-                         "<span id=\"att_date_start_%u\"></span> %s"
+			 "<label for=\"Att%u\">"
+                         "<span id=\"att_date_start_%u\"></span>&nbsp;%s"
+                         "</label>"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('att_date_start_%u',"
 			 "%ld,',&nbsp;','%s',true,true,true);"
@@ -3125,10 +3132,9 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 			 "</td>"
 			 "</tr>",
 	       Gbl.RowEvenOdd,
-	       NumAttEvent + 1,
+	       NumAttEvent,NumAttEvent + 1,
 	       Gbl.RowEvenOdd,
-	       UniqueId,
-	       Gbl.AttEvents.Lst[NumAttEvent].Title,
+	       NumAttEvent,UniqueId,Gbl.AttEvents.Lst[NumAttEvent].Title,
                UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
                Txt_Today,
 	       Gbl.RowEvenOdd,
