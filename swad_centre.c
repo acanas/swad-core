@@ -377,8 +377,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Institution *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -393,7 +393,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /* Put form to select institution */
 	 Act_FormStart (ActChgCtrInsCfg);
-	 fprintf (Gbl.F.Out,"<select name=\"OthInsCod\""
+	 fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
@@ -419,8 +419,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -431,7 +431,8 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /* Form to change centre full name */
 	 Act_FormStart (ActRenCtrFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -447,8 +448,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -459,7 +460,8 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /* Form to change centre short name */
 	 Act_FormStart (ActRenCtrShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -475,8 +477,8 @@ static void Ctr_Configuration (bool PrintView)
 
       /***** Centre WWW *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -488,7 +490,7 @@ static void Ctr_Configuration (bool PrintView)
 	{
 	 /* Form to change centre WWW */
 	 Act_FormStart (ActChgCtrWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
