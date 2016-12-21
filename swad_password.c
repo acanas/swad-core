@@ -920,11 +920,16 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
    extern const char *Txt_For_security_enter_your_password;
 
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\" style=\"margin:12px;\">"
+                      "<label class=\"%s\">"
 		      "<input type=\"checkbox\" name=\"Consent\" value=\"Y\" />"
-		      "<span class=\"%s\">%s</span><br />"
-		      "<span class=\"%s\">%s: </span>"
+		      "%s"
+                      "</label>"
+		      "<br />"
+                      "<label class=\"%s\">"
+		      "%s:&nbsp;"
 		      "<input type=\"password\" name=\"OthUsrPwd\""
 		      " size=\"16\" maxlength=\"%u\" autocomplete=\"off\" />"
+		      "</label>"
 		      "</div>",
             The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_I_understand_that_this_action_can_not_be_undone,

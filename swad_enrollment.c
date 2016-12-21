@@ -884,14 +884,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		                                      Txt_Register_USER_in_the_course_X),
 	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+                         "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\"",
                (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS);
       if (!OptionChecked)
 	{
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
          OptionChecked = true;
 	}
-      fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+                         "</label>"
+	                 "</li>",
+	       Gbl.Message);
 
       NumOptionsShown++;
      }
@@ -908,14 +914,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	       sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_degree_X,
 			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
-				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+                                  "<label>"
+				  "<input type=\"radio\" name=\"RegRemAction\""
+				  " value=\"%u\"",
 			(unsigned) Enr_REGISTER_ONE_DEGREE_ADMIN);
 	       if (!OptionChecked)
 		 {
 		  fprintf (Gbl.F.Out," checked=\"checked\"");
 		  OptionChecked = true;
 		 }
-	       fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	       fprintf (Gbl.F.Out," />"
+		                  "%s"
+	                          "</label>"
+		                  "</li>",
+		        Gbl.Message);
 
 	       NumOptionsShown++;
 	      }
@@ -927,14 +939,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	    sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_centre_X,
 		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
-			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	                       "<label>"
+			       "<input type=\"radio\" name=\"RegRemAction\""
+			       " value=\"%u\"",
 		     (unsigned) Enr_REGISTER_ONE_CENTRE_ADMIN);
 	    if (!OptionChecked)
 	      {
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	       OptionChecked = true;
 	      }
-	    fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	    fprintf (Gbl.F.Out," />"
+		               "%s"
+	                       "</label>"
+		               "</li>",
+		     Gbl.Message);
 
 	    NumOptionsShown++;
 	   }
@@ -947,14 +965,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 	 sprintf (Gbl.Message,Txt_Register_USER_as_an_administrator_of_the_institution_X,
 		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
-			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	                    "<label>"
+			    "<input type=\"radio\" name=\"RegRemAction\""
+			    " value=\"%u\"",
 		  (unsigned) Enr_REGISTER_ONE_INSTITUTION_ADMIN);
 	 if (!OptionChecked)
 	   {
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	    OptionChecked = true;
 	   }
-	 fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	 fprintf (Gbl.F.Out," />"
+	                    "%s"
+	                    "</label>"
+	                    "</li>",
+	          Gbl.Message);
 
 	 NumOptionsShown++;
 	}
@@ -964,14 +988,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
      {
       fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+                         "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\"",
 	       (unsigned) Enr_REPORT_USR_AS_POSSIBLE_DUPLICATE);
       if (!OptionChecked)
 	{
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
 	 OptionChecked = true;
 	}
-      fprintf (Gbl.F.Out," />%s</li>",Txt_Report_possible_duplicate_user);
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+                         "</label>"
+	                 "</li>",
+	       Txt_Report_possible_duplicate_user);
 
       NumOptionsShown++;
      }
@@ -984,14 +1014,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 		       Txt_Remove_USER_from_the_course_X,
 	       Gbl.CurrentCrs.Crs.ShrtName);
       fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+                         "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\"",
 	       (unsigned) Enr_REMOVE_ONE_USR_FROM_CRS);
       if (!OptionChecked)
 	{
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
 	 OptionChecked = true;
 	}
-      fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</label>"
+	                 "</li>",
+               Gbl.Message);
 
       NumOptionsShown++;
      }
@@ -1010,14 +1046,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 				Txt_Remove_USER_as_an_administrator_of_the_degree_X,
 			Gbl.CurrentDeg.Deg.ShrtName);
 	       fprintf (Gbl.F.Out,"<li>"
-				  "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	                          "<label>"
+				  "<input type=\"radio\" name=\"RegRemAction\""
+				  " value=\"%u\"",
 			(unsigned) Enr_REMOVE_ONE_DEGREE_ADMIN);
 	       if (!OptionChecked)
 		 {
 		  fprintf (Gbl.F.Out," checked=\"checked\"");
 		  OptionChecked = true;
 		 }
-	       fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	       fprintf (Gbl.F.Out," />"
+		                  "%s"
+	                          "</label>"
+		                  "</li>",
+	                Gbl.Message);
 
 	       NumOptionsShown++;
 	      }
@@ -1031,14 +1073,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 			     Txt_Remove_USER_as_an_administrator_of_the_centre_X,
 		     Gbl.CurrentCtr.Ctr.ShrtName);
 	    fprintf (Gbl.F.Out,"<li>"
-			       "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	                       "<label>"
+			       "<input type=\"radio\" name=\"RegRemAction\""
+			       " value=\"%u\"",
 		     (unsigned) Enr_REMOVE_ONE_CENTRE_ADMIN);
 	    if (!OptionChecked)
 	      {
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
 	       OptionChecked = true;
 	      }
-	    fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	    fprintf (Gbl.F.Out," />"
+		               "%s"
+	                       "</label>"
+		               "</li>",
+	             Gbl.Message);
 
 	    NumOptionsShown++;
 	   }
@@ -1053,14 +1101,20 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
 			  Txt_Remove_USER_as_an_administrator_of_the_institution_X,
 		  Gbl.CurrentIns.Ins.ShrtName);
 	 fprintf (Gbl.F.Out,"<li>"
-			    "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+	                    "<label>"
+			    "<input type=\"radio\" name=\"RegRemAction\""
+			    " value=\"%u\"",
 		  (unsigned) Enr_REMOVE_ONE_INSTITUTION_ADMIN);
 	 if (!OptionChecked)
 	   {
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	    OptionChecked = true;
 	   }
-	 fprintf (Gbl.F.Out," />%s</li>",Gbl.Message);
+	 fprintf (Gbl.F.Out," />"
+	                    "%s"
+	                    "</label>"
+	                    "</li>",
+	          Gbl.Message);
 
 	 NumOptionsShown++;
 	}
@@ -1070,11 +1124,16 @@ bool Enr_PutActionsRegRemOneUsr (bool ItsMe)
    if (Acc_CheckIfICanEliminateAccount (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
       fprintf (Gbl.F.Out,"<li>"
-                         "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\"",
+                         "<label>"
+                         "<input type=\"radio\" name=\"RegRemAction\""
+                         " value=\"%u\"",
                (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
       if (!OptionChecked)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s</li>",
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+                         "</label>"
+	                 "</li>",
                ItsMe ? Txt_Eliminate_my_user_account :
         	       Txt_Eliminate_user_account);
 
@@ -1108,17 +1167,33 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    /***** Register / remove users listed or not listed *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
       fprintf (Gbl.F.Out,"<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" checked=\"checked\" />"
-			 "%s</li>"
+			 "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\" checked=\"checked\" />"
+			 "%s"
+			 "</label>"
+			 "</li>"
 			 "<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" />"
-			 "%s</li>"
+			 "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\" />"
+			 "%s"
+			 "</label>"
+			 "</li>"
 			 "<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" />"
-			 "%s</li>"
+			 "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\" />"
+			 "%s"
+			 "</label>"
+			 "</li>"
 			 "<li>"
-			 "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" />"
-			 "%s</li>",
+			 "<label>"
+			 "<input type=\"radio\" name=\"RegRemAction\""
+			 " value=\"%u\" />"
+			 "%s"
+			 "</label>"
+			 "</li>",
 	       (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
 	       Txt_Register_the_users_indicated_in_step_1,
 	       (unsigned) Enr_REMOVE_SPECIFIED_USRS_FROM_CRS,
@@ -1131,8 +1206,12 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
    /***** Only for superusers *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       fprintf (Gbl.F.Out,"<li>"
-                         "<input type=\"radio\" name=\"RegRemAction\" value=\"%u\" />"
-                         "%s</li>",
+			 "<label>"
+                         "<input type=\"radio\" name=\"RegRemAction\""
+                         " value=\"%u\" />"
+                         "%s"
+			 "</label>"
+                         "</li>",
                (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
                Txt_Eliminate_from_the_platform_the_users_indicated_in_step_1);
 
