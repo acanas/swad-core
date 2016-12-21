@@ -333,8 +333,8 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -349,7 +349,7 @@ static void Deg_Configuration (bool PrintView)
 
 	 /* Put form to select centre */
 	 Act_FormStart (ActChgDegCtrCfg);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\""
+	 fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
@@ -375,8 +375,8 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -388,7 +388,8 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /* Form to change degree full name */
 	 Act_FormStart (ActRenDegFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -404,8 +405,8 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -417,7 +418,8 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /* Form to change degree short name */
 	 Act_FormStart (ActRenDegShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -433,8 +435,8 @@ static void Deg_Configuration (bool PrintView)
 
       /***** Degree WWW *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -446,7 +448,7 @@ static void Deg_Configuration (bool PrintView)
 	{
 	 /* Form to change degree WWW */
 	 Act_FormStart (ActChgDegWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
