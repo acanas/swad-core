@@ -261,8 +261,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Usr_PutExtraParamsUsrList (NextAction);
 
       /***** Select all groups *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT %s\">"
-                         "<label>"
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
+                         "<label class=\"%s\">"
 			 "<input type=\"checkbox\""
 			 " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
 	       The_ClassForm[Gbl.Prefs.Theme]);
@@ -2028,11 +2028,11 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Gbl.Title,Gbl.Title);
 
    /***** Group name *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">"
-                      "<label for=\"Grp%ld\">"
+                      "<label for=\"Grp%ld\" class=\"DAT\">"
 	              "%s"
 	              "</label>"
 	              "</td>",
@@ -2262,7 +2262,8 @@ static void Grp_PutFormToCreateGroup (void)
 	              "<input type=\"text\" name=\"MaxStudents\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStdsGrp (Gbl.CurrentCrs.Grps.MaxStudents);
-   fprintf (Gbl.F.Out,"\" /></td>");
+   fprintf (Gbl.F.Out,"\" />"
+	              "</td>");
 
    /***** Current number of students in this group *****/
    fprintf (Gbl.F.Out,"<td></td>"
@@ -4230,12 +4231,12 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
    extern const char *Txt_Show_WHICH_groups[2];
    Grp_WhichGroups_t WhichGrps;
 
-   fprintf (Gbl.F.Out,"<div style=\"display:table-cell; padding:0 20px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (WhichGrps = Grp_ONLY_MY_GROUPS;
 	WhichGrps <= Grp_ALL_GROUPS;
 	WhichGrps++)
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s\" style=\"display:table-cell;\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
 	       WhichGrps == Gbl.CurrentCrs.Grps.WhichGrps ? "PREF_ON" :
 							    "PREF_OFF");
       Act_FormStart (Action);

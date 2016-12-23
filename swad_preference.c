@@ -72,39 +72,31 @@ void Pre_EditPrefs (void)
    extern const char *Txt_Language;
 
    /***** Language, first day of week *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
-                      "<tr>"
-                      "<td>");
    Lay_StartRoundFrame (NULL,Txt_Language,
                         Pre_PutIconsLanguage,Hlp_PROFILE_Preferences_language);
-   fprintf (Gbl.F.Out,"<div style=\"height:42px;\">");
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
-   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
-   fprintf (Gbl.F.Out,"</td>"
-                      "<td>");
-   Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-	              "</table>");
 
    /***** Icon set, theme *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px 0;\">"
                       "<tr>"
                       "<td>");
-   Ico_PutIconsToSelectIconSet ();		// 3. Icon set
+   Ico_PutIconsToSelectIconSet ();		// 2. Icon set
    fprintf (Gbl.F.Out,"</td>"
 		      "<td>");
-   The_PutIconsToSelectTheme ();		// 4. Theme
+   Mnu_PutIconsToSelectMenu ();			// 3. Menu
+   fprintf (Gbl.F.Out,"</td>"
+		      "<td>");
+   Cal_PutIconsToSelectFirstDayOfWeek ();	// 4. First day of week
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
 	              "</table>");
 
    /***** Menu, side columns *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:16px 0;\">"
+   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px 0;\">"
                       "<tr>"
                       "<td>");
-   Mnu_PutIconsToSelectMenu ();			// 5. Menu
+   The_PutIconsToSelectTheme ();		// 5. Theme
    fprintf (Gbl.F.Out,"</td>"
 		      "<td>");
    Pre_PutIconsToSelectSideCols ();		// 6. Side columns
@@ -387,13 +379,12 @@ static void Pre_PutIconsToSelectSideCols (void)
    Lay_StartRoundFrame (NULL,Txt_Columns,
                         Pre_PutIconsSideColumns,
                         Hlp_PROFILE_Preferences_columns);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (SideCols = 0;
 	SideCols <= Lay_SHOW_BOTH_COLUMNS;
 	SideCols++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
                SideCols == Gbl.Prefs.SideCols ? "PREF_ON" :
         	                                "PREF_OFF");
       Act_FormStart (ActChgCol);
@@ -407,10 +398,9 @@ static void Pre_PutIconsToSelectSideCols (void)
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],
                Txt_LAYOUT_SIDE_COLUMNS[SideCols]);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
   }
 

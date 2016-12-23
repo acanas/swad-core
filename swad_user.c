@@ -5313,10 +5313,10 @@ void Usr_FreeListOtherRecipients (void)
 
 void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+
    /***** Select Usr_CLASS_PHOTO *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\" style=\"margin:4px auto;\">"
-	              "<tr>"
-	              "<td class=\"%s LEFT_MIDDLE\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "PREF_ON" :
         	                                      "PREF_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_CLASS_PHOTO);
@@ -5329,10 +5329,10 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Select Usr_LIST *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE\">",
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",
             Gbl.Usrs.Me.ListType == Usr_LIST ? "PREF_ON" :
         	                               "PREF_OFF");
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST);
@@ -5344,9 +5344,9 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutCheckboxListWithPhotos ();
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</td>"
-	              "</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
+
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

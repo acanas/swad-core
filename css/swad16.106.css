@@ -2094,8 +2094,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PRAC	{height:20px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
 .TUTO	{height:20px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
+/********************************* Preference ********************************/
+.PREF_CONTAINER
+	{
+	display:inline-block;
+	padding:0 10px;
+	border-spacing:0;
+	}
 .PREF_OFF
 	{
+	display:table-cell;
 	box-sizing:border-box;
 	padding:6px;
 	text-align:center;
@@ -2103,8 +2111,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .PREF_ON
 	{
+	display:table-cell;
 	box-sizing:border-box;
-	padding:6px;
+        padding:6px;
 	text-align:center;
 	vertical-align:middle;
 	border:solid 1px;
@@ -2112,8 +2121,19 @@ a:hover img.CENTRE_PHOTO_SHOW
 	background-color:#DDECF1;
 	}
 
-.LOG	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:#606060; font-size:11pt;}
-.LOG_R	{font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; color:red;     font-size:11pt;}
+/************************************* Log ***********************************/
+.LOG
+	{
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	font-size:11pt;
+	color:#606060;
+	}
+.LOG_R
+	{
+	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
+	font-size:11pt;
+	color:red;
+	}
 
 /***************************** Exam announcement *****************************/
 /* Bottom space is used for signatures */

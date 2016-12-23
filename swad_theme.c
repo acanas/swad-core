@@ -257,13 +257,12 @@ void The_PutIconsToSelectTheme (void)
 
    Lay_StartRoundFrame (NULL,Txt_Theme_SKIN,
                         The_PutIconsTheme,Hlp_PROFILE_Preferences_theme);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
                Theme == Gbl.Prefs.Theme ? "PREF_ON" :
         	                          "PREF_OFF");
       Act_FormStart (ActChgThe);
@@ -278,10 +277,9 @@ void The_PutIconsToSelectTheme (void)
                The_ThemeNames[Theme],
                The_ThemeNames[Theme]);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
   }
 

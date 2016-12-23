@@ -372,13 +372,12 @@ void Mnu_PutIconsToSelectMenu (void)
 
    Lay_StartRoundFrame (NULL,Txt_Menu,
                         Mnu_PutIconsMenu,Hlp_PROFILE_Preferences_menu);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (Menu = (Mnu_Menu_t) 0;
 	Menu < Mnu_NUM_MENUS;
 	Menu++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
                Menu == Gbl.Prefs.Menu ? "PREF_ON" :
         	                        "PREF_OFF");
       Act_FormStart (ActChgMnu);
@@ -391,10 +390,9 @@ void Mnu_PutIconsToSelectMenu (void)
                Txt_MENU_NAMES[Menu],
                Txt_MENU_NAMES[Menu]);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
   }
 

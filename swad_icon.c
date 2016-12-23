@@ -78,20 +78,19 @@ void Ico_PutIconsToSelectIconSet (void)
 
    Lay_StartRoundFrame (NULL,Txt_Icons,
                         Ico_PutIconsIconSet,Hlp_PROFILE_Preferences_icons);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
-                      "<tr>");
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
    for (IconSet = (Ico_IconSet_t) 0;
 	IconSet < Ico_NUM_ICON_SETS;
 	IconSet++)
      {
-      fprintf (Gbl.F.Out,"<td class=\"%s\">",
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
                IconSet == Gbl.Prefs.IconSet ? "PREF_ON" :
         	                              "PREF_OFF");
       Act_FormStart (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
 	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x40B\""
-	                 " style=\"margin:0 auto; padding:0;\" />",
+	                 " style=\"margin:0 auto;\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
@@ -99,10 +98,9 @@ void Ico_PutIconsToSelectIconSet (void)
                Ico_IconSetNames[IconSet],
                Ico_IconSetNames[IconSet]);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</td>");
+      fprintf (Gbl.F.Out,"</div>");
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
   }
 
