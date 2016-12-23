@@ -117,10 +117,10 @@ typedef enum
    Sta_SURVEYS,			// Number of surveys
    Sta_SOCIAL_NETWORKS,		// Number of users in social networks
    Sta_LANGUAGES,		// Number of users per language
-   Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
    Sta_ICON_SETS,		// Number of users per icon set
-   Sta_THEMES,			// Number of users per theme
    Sta_MENUS,			// Number of users per menu
+   Sta_FIRST_DAY_OF_WEEK,	// Number of users per first day of week
+   Sta_THEMES,			// Number of users per theme
    Sta_SIDE_COLUMNS,		// Number of users per layout of columns
    Sta_PRIVACY,			// Number of users per privacity
   } Sta_FigureType_t;

@@ -39393,26 +39393,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Lingua"
 #endif
 	 ,
-#if   L==1				// Sta_FIRST_DAY_OF_WEEK
-	"Calendari"
-#elif L==2
-	"Kalender"
-#elif L==3
-	"Calendar"
-#elif L==4
-	"Calendario"
-#elif L==5
-	"Calendrier"
-#elif L==6
-	"Arapapaha"
-#elif L==7
-	"Calendario"
-#elif L==8
-	"Kalendarz"
-#elif L==9
-	"Calend&aacute;rio"
-#endif
-	 ,
 #if   L==1				// Sta_ICON_SETS
 	 "Icones"
 #elif L==2
@@ -39433,26 +39413,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "&Iacute;cones"
 #endif
 	 ,
-#if   L==1				// Sta_THEMES
-	 "Tema (colors)"
-#elif L==2
-	 "Skin"
-#elif L==3
-	 "Theme"
-#elif L==4
-	 "Tema (colores)"
-#elif L==5
-	 "Th&egrave;me"
-#elif L==6
-	 "Tema (colores)"	// Okoteve traducción
-#elif L==7
-	 "Tema"
-#elif L==8
-	 "Temat"
-#elif L==9
-	 "Skin"
-#endif
-	 ,
 #if   L==1				// Sta_MENUS
 	"Men&uacute;"
 #elif L==2
@@ -39471,6 +39431,46 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Menu"
 #elif L==9
 	"Menu"
+#endif
+	 ,
+#if   L==1				// Sta_FIRST_DAY_OF_WEEK
+	"Calendari"
+#elif L==2
+	"Kalender"
+#elif L==3
+	"Calendar"
+#elif L==4
+	"Calendario"
+#elif L==5
+	"Calendrier"
+#elif L==6
+	"Arapapaha"
+#elif L==7
+	"Calendario"
+#elif L==8
+	"Kalendarz"
+#elif L==9
+	"Calend&aacute;rio"
+#endif
+	 ,
+#if   L==1				// Sta_THEMES
+	 "Tema (colors)"
+#elif L==2
+	 "Skin"
+#elif L==3
+	 "Theme"
+#elif L==4
+	 "Tema (colores)"
+#elif L==5
+	 "Th&egrave;me"
+#elif L==6
+	 "Tema (colores)"	// Okoteve traducción
+#elif L==7
+	 "Tema"
+#elif L==8
+	 "Temat"
+#elif L==9
+	 "Skin"
 #endif
 	 ,
 #if   L==1				// Sta_SIDE_COLUMNS

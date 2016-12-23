@@ -230,10 +230,10 @@ const char *Hlp_STATS_Figures_messages                       = WIKI "STATS.Figur
 const char *Hlp_STATS_Figures_surveys                        = WIKI "STATS.Figures#surveys";
 const char *Hlp_STATS_Figures_webs_social_networks           = WIKI "STATS.Figures#webs--social-networks";
 const char *Hlp_STATS_Figures_language                       = WIKI "STATS.Figures#language";
-const char *Hlp_STATS_Figures_calendar                       = WIKI "STATS.Figures#calendar";
 const char *Hlp_STATS_Figures_icons                          = WIKI "STATS.Figures#icons";
-const char *Hlp_STATS_Figures_theme                          = WIKI "STATS.Figures#theme";
 const char *Hlp_STATS_Figures_menu                           = WIKI "STATS.Figures#menu";
+const char *Hlp_STATS_Figures_calendar                       = WIKI "STATS.Figures#calendar";
+const char *Hlp_STATS_Figures_theme                          = WIKI "STATS.Figures#theme";
 const char *Hlp_STATS_Figures_columns                        = WIKI "STATS.Figures#columns";
 const char *Hlp_STATS_Figures_privacy                        = WIKI "STATS.Figures#privacy";
 
