@@ -1890,14 +1890,16 @@ static void For_PutFormWhichForums (void)
 	WhichForums < For_NUM_WHICH_FORUMS;
 	WhichForums++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""
+      fprintf (Gbl.F.Out,"<li class=\"LEFT_MIDDLE\""
 	                 " style=\"display:inline;\">"
+                         "<label class=\"DAT\">"
                          "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
                (unsigned) WhichForums);
       if (WhichForums == Gbl.Forum.WhichForums)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 	                 "%s"
+                         "</label>"
                          "</li>",
                Gbl.Form.Id,Txt_FORUM_WHICH_FORUM[WhichForums]);
      }
