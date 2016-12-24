@@ -1416,7 +1416,12 @@ a:hover						/* Default ==> underlined */
 	white-space:nowrap;
 	}
 
-/********************************* Frame 10 **********************************/
+/********************************** Frame ************************************/
+.FRAME_INLINE
+	{
+	display:inline-block;
+	margin:0 8px;
+	}
 .FRAME
 	{
 	display:inline-block;
@@ -2098,7 +2103,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 .PREF_CONTAINER
 	{
 	display:inline-block;
-	margin:0 8px;
+	margin:0 10px;
 	}
 .PREF_OFF
 	{

@@ -79,23 +79,23 @@ void Pre_EditPrefs (void)
 
    /***** Icon set, theme *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"PREF_CONTAINER\">");
+                      "<div class=\"FRAME_INLINE\">");
    Ico_PutIconsToSelectIconSet ();		// 2. Icon set
    fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"PREF_CONTAINER\">");
+                      "<div class=\"FRAME_INLINE\">");
    Mnu_PutIconsToSelectMenu ();			// 3. Menu
    fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"PREF_CONTAINER\">");
+                      "<div class=\"FRAME_INLINE\">");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 4. First day of week
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 
    /***** Menu, side columns *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"PREF_CONTAINER\">");
+                      "<div class=\"FRAME_INLINE\">");
    The_PutIconsToSelectTheme ();		// 5. Theme
    fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"PREF_CONTAINER\">");
+                      "<div class=\"FRAME_INLINE\">");
    Pre_PutIconsToSelectSideCols ();		// 6. Side columns
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
@@ -284,7 +284,6 @@ void Pre_AskChangeLanguage (void)
    Gbl.Prefs.Language = Pre_GetParamLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
-   if (Gbl.Usrs.Me.Logged)
    Lay_ShowAlert (Lay_INFO,
                   Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
 	                               Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
@@ -296,6 +295,9 @@ void Pre_AskChangeLanguage (void)
    Act_FormEnd ();
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
+
+   /***** Display preferences *****/
+   Pre_EditPrefs ();
   }
 
 /*****************************************************************************/
