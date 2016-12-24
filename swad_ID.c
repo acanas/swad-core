@@ -616,8 +616,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (UsrDat->IDs.Num < ID_MAX_IDS_PER_USER)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+			 "<label for=\"NewID\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -633,7 +633,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-                         "<input type=\"text\" name=\"NewID\""
+                         "<input type=\"text\" id=\"NewID\" name=\"NewID\""
 	                 " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	                 "</div>",
 	       ID_MAX_LENGTH_USR_ID,
