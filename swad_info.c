@@ -1069,6 +1069,7 @@ void Inf_SetInfoSrc (void)
 
 void Inf_FormsToSelSendInfo (void)
   {
+   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Source_of_information;
    extern const char *Txt_INFO_SRC_FULL_TEXT[Inf_NUM_INFO_SOURCES];
    extern const char *Txt_INFO_SRC_HELP[Inf_NUM_INFO_SOURCES];
@@ -1128,8 +1129,9 @@ void Inf_FormsToSelSendInfo (void)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">");
       Act_FormStart (Inf_ActionsSelecInfoSrc[Gbl.CurrentCrs.Info.Type]);
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"InfoSrc\" value=\"%u\"",
-	       (unsigned) InfoSrc);
+      fprintf (Gbl.F.Out,"<input type=\"radio\""
+	                 " id=\"InfoSrc%u\" name=\"InfoSrc\" value=\"%u\"",
+	       (unsigned) InfoSrc,(unsigned) InfoSrc);
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," checked=\"checked\"");
       else
@@ -1150,10 +1152,11 @@ void Inf_FormsToSelSendInfo (void)
       if (InfoSrc == InfoSrcSelected)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
-	                 "<span class=\"TIT\">%s<br /></span>",
+	                 "<label for=\"InfoSrc%u\" class=\"%s\">%s</label>",
+	       (unsigned) InfoSrc,The_ClassForm[Gbl.Prefs.Theme],
                Txt_INFO_SRC_FULL_TEXT[InfoSrc]);
       if (Txt_INFO_SRC_HELP[InfoSrc])
-         fprintf (Gbl.F.Out,"<span class=\"DAT\">(%s)</span>",
+         fprintf (Gbl.F.Out,"<span class=\"DAT\"><br />(%s)</span>",
                   Txt_INFO_SRC_HELP[InfoSrc]);
       if (Inf_FormsForEditionTypes[InfoSrc])
          Inf_FormsForEditionTypes[InfoSrc] (InfoSrc);
@@ -1255,16 +1258,12 @@ void Inf_FormToSendPage (Inf_InfoSrc_t InfoSrc)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** File *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-	              "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+	              "<label class=\"%s\">"
+                      "%s:&nbsp;"
                       "<input type=\"file\" name=\"%s\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>",
+                      "</label>"
+                      "</div>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_File,
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
@@ -1294,12 +1293,9 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    Act_FormStart (Inf_ActionsInfo[InfoSrc][Gbl.CurrentCrs.Info.Type]);
 
    /***** Link *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
-                      "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+                      "<label class=\"%s\">"
+                      "%s:&nbsp;"
                       "<input type=\"url\" name=\"InfoSrcURL\""
                       " size=\"50\" maxlength=\"256\" value=\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_URL);
@@ -1314,9 +1310,8 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
       fprintf (Gbl.F.Out,"%s",Gbl.CurrentCrs.Info.URL);
      }
    fprintf (Gbl.F.Out,"\" />"
-                      "</td>"
-	              "</tr>"
-	              "</table>");
+                      "</label>"
+	              "</div>");
 
    /***** Send button *****/
    Lay_PutCreateButton (Txt_Send_URL);
