@@ -1243,18 +1243,6 @@ void Lay_PutIconRemove (void)
 	    Txt_Remove);
   }
 
-void Lay_PutIconBRemove (void)
-  {
-   extern const char *Txt_Remove;
-
-   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
-		      " alt=\"%s\" title=\"%s\""
-		      " class=\"ICO20x20B\" />",
-	    Gbl.Prefs.IconsURL,
-	    Txt_Remove,
-	    Txt_Remove);
-  }
-
 /*****************************************************************************/
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/

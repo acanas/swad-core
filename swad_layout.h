@@ -89,7 +89,6 @@ void Lay_PutCalculateIconWithText (const char *Alt,const char *Text);
 void Lay_PutIconRemovalNotAllowed (void);
 void Lay_PutIconBRemovalNotAllowed (void);
 void Lay_PutIconRemove (void);
-void Lay_PutIconBRemove (void);
 
 void Lay_PutCreateButton (const char *Text);
 void Lay_PutCreateButtonInline (const char *Text);

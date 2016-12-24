@@ -78,31 +78,27 @@ void Pre_EditPrefs (void)
    Lay_EndRoundFrame ();
 
    /***** Icon set, theme *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px 0;\">"
-                      "<tr>"
-                      "<td>");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+                      "<div class=\"PREF_CONTAINER\">");
    Ico_PutIconsToSelectIconSet ();		// 2. Icon set
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td>");
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div class=\"PREF_CONTAINER\">");
    Mnu_PutIconsToSelectMenu ();			// 3. Menu
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td>");
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div class=\"PREF_CONTAINER\">");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 4. First day of week
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
 
    /***** Menu, side columns *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:10px 0;\">"
-                      "<tr>"
-                      "<td>");
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+                      "<div class=\"PREF_CONTAINER\">");
    The_PutIconsToSelectTheme ();		// 5. Theme
-   fprintf (Gbl.F.Out,"</td>"
-		      "<td>");
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div class=\"PREF_CONTAINER\">");
    Pre_PutIconsToSelectSideCols ();		// 6. Side columns
-   fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
 
    if (Gbl.Usrs.Me.Logged)
      {
