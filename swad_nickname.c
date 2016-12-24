@@ -237,7 +237,8 @@ void Nck_ShowFormChangeUsrNickname (void)
 
 	 /* Form to remove old nickname */
 	 Act_FormStart (ActRemOldNic);
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\" value=\"%s\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Nick\""
+	                    " value=\"%s\" />",
 		  row[0]);
 	 Lay_PutIconRemove ();
 	 Act_FormEnd ();
@@ -263,7 +264,8 @@ void Nck_ShowFormChangeUsrNickname (void)
       if (NumNick > 1)
 	{
 	 Act_FormStart (ActChgNic);
-	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\" value=\"@%s\" />",
+	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewNick\""
+	                    " value=\"@%s\" />",
 		  row[0]);	// Nickname
 	 Lay_PutConfirmButtonInline (Txt_Use_this_nickname);
 	 Act_FormEnd ();
@@ -275,8 +277,8 @@ void Nck_ShowFormChangeUsrNickname (void)
 
    /***** Form to enter new nickname *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label for=\"NewNick\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -284,7 +286,7 @@ void Nck_ShowFormChangeUsrNickname (void)
         	       Txt_Nickname);		// The first nickname
    Act_FormStart (ActChgNic);
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-                      "<input type=\"text\" name=\"NewNick\""
+                      "<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
 	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
 	              "</div>",
             1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
