@@ -1272,8 +1272,8 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 
    /***** Form to enter new email *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s:"
+                      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label for=\"NewEmail\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -1289,7 +1289,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
-	              "<input type=\"email\" name=\"NewEmail\""
+	              "<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
 	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
             Usr_MAX_BYTES_USR_EMAIL,
