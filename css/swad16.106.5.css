@@ -1395,6 +1395,7 @@ a:hover						/* Default ==> underlined */
 .ICO20x20	{width:20px; height:20px; vertical-align:middle;}
 .ICO20x20B	{width:20px; height:20px; vertical-align:middle; display:block;}
 .ICO25x25	{width:25px; height:25px; vertical-align:middle;}
+.ICO40x25B	{width:40px; height:25px; vertical-align:middle;}
 .ICO40x40	{width:40px; height:40px; vertical-align:middle;}
 .ICO40x40B	{width:40px; height:40px; vertical-align:middle; display:block;}
 .ICO64x64	{width:64px; height:64px; vertical-align:middle;}

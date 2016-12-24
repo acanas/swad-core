@@ -383,8 +383,7 @@ void Mnu_PutIconsToSelectMenu (void)
       Act_FormStart (ActChgMnu);
       Par_PutHiddenParamUnsigned ("Menu",(unsigned) Menu);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s32x32.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x40B\""
-	                 " style=\"margin:0 auto;\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x40B\" />",
                Gbl.Prefs.IconsURL,
                Mnu_MenuIcons[Menu],
                Txt_MENU_NAMES[Menu],

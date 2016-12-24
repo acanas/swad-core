@@ -117,8 +117,7 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 	 if (FuncParams)	// Extra parameters depending on the action
 	    FuncParams ();
 	 fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/first-day-of-week-%u-64x64.png\""
-			    " alt=\"%s\" title=\"%s: %s\" class=\"%s\""
-			    " style=\"margin:0 auto;\" />",
+			    " alt=\"%s\" title=\"%s: %s\" class=\"%s\" />",
 		  Gbl.Prefs.IconsURL,
 		  FirstDayOfWeek,
 		  Txt_DAYS_SMALL[FirstDayOfWeek],

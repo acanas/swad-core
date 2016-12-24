@@ -388,9 +388,7 @@ static void Pre_PutIconsToSelectSideCols (void)
       Act_FormStart (ActChgCol);
       Par_PutHiddenParamUnsigned ("SideCols",SideCols);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/layout%u%u_32x20.gif\""
-	                 " alt=\"%s\" title=\"%s\""
-	                 " style=\"display:block;"
-	                 " width:40px; height:25px;\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x25B\" />",
                Gbl.Prefs.IconsURL,
                SideCols >> 1,SideCols & 1,
                Txt_LAYOUT_SIDE_COLUMNS[SideCols],

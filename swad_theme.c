@@ -269,8 +269,7 @@ void The_PutIconsToSelectTheme (void)
       Par_PutHiddenParamString ("Theme",The_ThemeId[Theme]);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/%s/%s/theme_32x20.gif\" alt=\"%s\""
-	                 " title=\"%s\" style=\"display:block;"
-	                 " width:40px; height:25px; margin:0 auto;\" />",
+	                 " title=\"%s\" class=\"ICO40x25B\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_THEMES,
                The_ThemeId[Theme],

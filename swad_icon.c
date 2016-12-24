@@ -89,8 +89,7 @@ void Ico_PutIconsToSelectIconSet (void)
       Act_FormStart (ActChgIco);
       Par_PutHiddenParamString ("IconSet",Ico_IconSetId[IconSet]);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s/%s/%s/heart64x64.gif\""
-	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x40B\""
-	                 " style=\"margin:0 auto;\" />",
+	                 " alt=\"%s\" title=\"%s\" class=\"ICO40x40B\" />",
                Gbl.Prefs.IconsURL,
                Cfg_ICON_FOLDER_ICON_SETS,
                Ico_IconSetId[IconSet],
