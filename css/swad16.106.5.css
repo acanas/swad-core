@@ -498,7 +498,7 @@ a:hover						/* Default ==> underlined */
 		{
 		display:table-cell;
 		box-sizing:border-box;
-		width:42px;
+		width:44px;
 		height:60px;
 		margin:0;
 		padding:0;

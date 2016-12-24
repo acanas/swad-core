@@ -282,7 +282,7 @@ void Net_PutLinkToChangeMySocialNetworks (void)
 /********************* Show form to edit my social networks ******************/
 /*****************************************************************************/
 
-#define Net_COL2_WIDTH 500
+#define Net_COL2_WIDTH 300
 
 void Net_ShowFormMyWebsAndSocialNets (void)
   {
@@ -296,9 +296,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    char URL[Cns_MAX_BYTES_URL+1];
 
    /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_Webs_social_networks,
-                        Net_PutIconsWebsSocialNetworks,Hlp_PROFILE_Webs);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   Lay_StartRoundFrameTable (NULL,Txt_Webs_social_networks,
+                             Net_PutIconsWebsSocialNetworks,Hlp_PROFILE_Webs,2);
 
    for (NumURL = (Net_WebsAndSocialNetworks_t) 0;
 	NumURL < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
@@ -328,14 +327,17 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
       /***** Row for this web / social network *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s LEFT_MIDDLE\">"
+			 "<td class=\"LEFT_MIDDLE\">"
+			 "<label for=\"URL%u\" class=\"%s\">"
 			 "<img src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\""
                          " class=\"ICO20x20\""
-			 " style=\"margin-right:12px;\" />"
-			 "%s:</td>"
+			 " style=\"margin-right:6px;\" />"
+			 "%s:"
+			 "</label>"
+			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
-	       The_ClassForm[Gbl.Prefs.Theme],
+	       (unsigned) NumURL,The_ClassForm[Gbl.Prefs.Theme],
 	       Gbl.Prefs.IconsURL,Net_WebsAndSocialNetworksIcons[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
 	       Net_WebsAndSocialNetworksTitle[NumURL],
@@ -343,10 +345,11 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	       Net_COL2_WIDTH);
       Act_FormStart (ActChgMyNet);
       Par_PutHiddenParamUnsigned ("Web",(unsigned) NumURL);
-      fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
-			 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
+      fprintf (Gbl.F.Out,"<input type=\"url\" id=\"URL%u\" name=\"URL\""
+			 " maxlength=\"%u\" value=\"%s\" style=\"width:%upx;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Cns_MAX_LENGTH_URL,URL,
+	       (unsigned) NumURL,
+	       Cns_MAX_LENGTH_URL,URL,Net_COL2_WIDTH - 20,
 	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -354,7 +357,6 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
    Lay_EndRoundFrameTable ();
   }
 
