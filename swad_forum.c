@@ -3830,13 +3830,14 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
 
-   /***** Subject *****/
+   /***** Post subject *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s: "
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Subject\" class=\"%s\">%s:&nbsp;</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Subject\" cols=\"72\" rows=\"2\">",
+                      "<textarea id=\"Subject\" name=\"Subject\""
+                      " cols=\"72\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
    if (IsReply)	// If writing a reply to a message of an existing thread
@@ -3845,13 +3846,14 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "</td>"
 	              "</tr>");
 
-   /***** Post *****/
+   /***** Post content *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s: "
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Content\" class=\"%s\">%s:&nbsp;</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Content\" cols=\"72\" rows=\"15\">"
+                      "<textarea id=\"Content\" name=\"Content\""
+                      " cols=\"72\" rows=\"15\">"
                       "</textarea>"
                       "</td>"
                       "</tr>",

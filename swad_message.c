@@ -484,10 +484,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
    /***** Get possible code (of original message if it's a reply) *****/
    MsgCod = Msg_GetParamMsgCod ();
 
-   /***** Subject of new message *****/
+   /***** Message subject *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s: "
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"MsgSubject\" class=\"%s\">"
+	              "%s:&nbsp;"
+	              "</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
@@ -495,17 +497,17 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
-   /***** If message is a reply ==> get original message *****/
+   /* If message is a reply ==> get original message */
    if (MsgCod > 0)	// It's a reply
      {
       if (!SubjectAndContentComeFromForm)
 	{
-	 /***** Get subject and content of message from database *****/
+	 /* Get subject and content of message from database */
 	 sprintf (Query,"SELECT Subject,Content FROM msg_content"
 			" WHERE MsgCod='%ld'",MsgCod);
 	 NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get message content");
 
-	 /***** Result should have a unique row *****/
+	 /* Result should have a unique row */
 	 if (NumRows != 1)
 	    Lay_ShowErrorAndExit ("Error when getting message.");
 
@@ -519,11 +521,11 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	 strncpy (Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
 	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
 
-	 /***** Free structure that stores the query result *****/
+	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
 	}
 
-      /***** Write subject *****/
+      /* Write subject */
       if (!SubjectAndContentComeFromForm)
 	 fprintf (Gbl.F.Out,"Re: ");
       fprintf (Gbl.F.Out,"%s"
@@ -532,10 +534,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	                 "</tr>",
 	       Gbl.Msg.Subject);
 
-      /***** Write content *****/
+      /***** Message content *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%s: "
+	                 "<td class=\"RIGHT_TOP\">"
+	                 "<label for=\"MsgContent\" class=\"%s\">"
+	                 "%s:&nbsp;"
+	                 "</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
@@ -556,17 +560,19 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
      }
    else	// It's not a reply
      {
-      /***** Subject of new message *****/
+      /* End of message subject */
       fprintf (Gbl.F.Out,"%s</textarea>"
 	                 "</td>"
 	                 "</tr>",
 	       Gbl.Msg.Subject);
 
-      /***** Content of new message *****/
+      /***** Message content *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%s: "
-	                 "</td>"
+	                 "<td class=\"RIGHT_TOP\">"
+	                 "<label for=\"MsgContent\" class=\"%s\">"
+	                 "%s:&nbsp;"
+	                 "</label>"
+                         "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " cols=\"72\" rows=\"20\">",
@@ -2607,13 +2613,15 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
    extern const char *Txt_only_unread_messages;
 
    /***** Put checkbox to select whether to show only unread (received) messages *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	              " name=\"OnlyUnreadMsgs\" value=\"Y\"");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "<input type=\"checkbox\" name=\"OnlyUnreadMsgs\""
+	              " value=\"Y\"",
+            The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Msg.ShowOnlyUnreadMsgs)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," />"
-	              "<span class=\"%s\">%s</span>",
-            The_ClassForm[Gbl.Prefs.Theme],
+	              "%s"
+	              "</label>",
             Txt_only_unread_messages);
   }
 
@@ -3605,10 +3613,9 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
-   fprintf (Gbl.F.Out,"<span class=\"MSG_AUT\">&nbsp;</span>"
-	              "<input type=\"image\" src=\"%s/lock-on64x64.png\""
+   fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-on64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />",
+	              " class=\"ICO20x20\" style=\"margin-left:12px;\" />",
             Gbl.Prefs.IconsURL,
             Txt_Sender_banned_click_to_unban_him,
             Txt_Sender_banned_click_to_unban_him);
