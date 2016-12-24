@@ -322,8 +322,8 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Country *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -338,7 +338,7 @@ static void Ins_Configuration (bool PrintView)
 
 	 /* Put form to select country */
 	 Act_FormStart (ActChgInsCtyCfg);
-	 fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\""
+	 fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
 			    " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\">",
 		  Gbl.Form.Id);
@@ -364,8 +364,8 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Institution full name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"FullName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -376,7 +376,8 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /* Form to change institution full name */
 	 Act_FormStart (ActRenInsFulCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FullName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"FullName\" name=\"FullName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -392,8 +393,8 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Institution short name *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"ShortName\" class=\"%s\">%s:</label>"
 	                 "</td>"
 			 "<td class=\"DAT_N LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -404,7 +405,8 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /* Form to change institution short name */
 	 Act_FormStart (ActRenInsShoCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ShortName\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"ShortName\" name=\"ShortName\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
@@ -420,8 +422,8 @@ static void Ins_Configuration (bool PrintView)
 
       /***** Institution WWW *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
-			 "%s:"
+			 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"WWW\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"DAT LEFT_MIDDLE\">",
 	       The_ClassForm[Gbl.Prefs.Theme],
@@ -433,7 +435,7 @@ static void Ins_Configuration (bool PrintView)
 	{
 	 /* Form to change institution WWW */
 	 Act_FormStart (ActChgInsWWWCfg);
-	 fprintf (Gbl.F.Out,"<input type=\"url\" name=\"WWW\""
+	 fprintf (Gbl.F.Out,"<input type=\"url\" id=\"WWW\" name=\"WWW\""
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
