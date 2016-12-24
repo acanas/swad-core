@@ -691,13 +691,14 @@ void Pwd_ShowFormChgPwd (void)
    /* Current password */
    if (IHaveAPasswordInDB) // If I have a password in database...
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
-	                 "%s: "
+	                 "<td class=\"RIGHT_MIDDLE\">"
+	                 "<label for=\"UsrPwd\" class=\"%s\">%s:</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
-                         "<input type=\"password\" name=\"UsrPwd\""
-                         " size=\"18\" maxlength=\"%u\" autocomplete=\"off\""
-                         " required=\"required\" />"
+                         "<input type=\"password\""
+                         " id=\"UsrPwd\" name=\"UsrPwd\""
+                         " size=\"18\" maxlength=\"%u\""
+                         " autocomplete=\"off\" required=\"required\" />"
                          "</td>"
                          "</tr>",
                The_ClassForm[Gbl.Prefs.Theme],
@@ -765,23 +766,23 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
 
    sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s: "
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"password\" name=\"Paswd1\""
-                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
-                      " required=\"required\" />"
+                      "<input type=\"password\" id=\"Paswd1\" name=\"Paswd1\""
+                      " size=\"18\" maxlength=\"%u\""
+                      " placeholder=\"%s\" required=\"required\" />"
                       "</td>"
                       "</tr>"
                       "<tr>"
-                      "<td class=\"%s RIGHT_MIDDLE\">"
-                      "%s: "
+                      "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Paswd2\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"password\" name=\"Paswd2\""
-                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
-                      " required=\"required\" />"
+                      "<input type=\"password\" id=\"Paswd2\" name=\"Paswd2\""
+                      " size=\"18\" maxlength=\"%u\""
+                      " placeholder=\"%s\" required=\"required\" />"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],

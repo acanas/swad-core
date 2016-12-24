@@ -1908,7 +1908,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	    Txt_Create_BR_notification,
 	    Txt_Notify_me_BR_by_email);
 
-   /***** Checkbox to activate the sending of email to notify me about events *****/
+   /***** Checkbox to activate internal notifications and email notifications
+          about events *****/
    for (NotifyEvent = (Ntf_NotifyEvent_t) 1;
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// O is reserved for Ntf_EVENT_UNKNOWN
