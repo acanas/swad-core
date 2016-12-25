@@ -3677,8 +3677,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label for=\"OthCtyCod\" class=\"%s\">"
 		      "%s:"
+                      "</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Country_of_your_institution,
@@ -3693,7 +3695,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select the country of my institution */
    Act_FormGoToStart (ActChgCtyMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" style=\"width:500px;\""
+   fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
+	              " style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
@@ -3718,8 +3721,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "<td class=\"RIGHT_MIDDLE\">"
+                      "<label for=\"OthInsCod\" class=\"%s\">"
 		      "%s:"
+		      "</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Institution,
@@ -3732,7 +3737,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /* Start form to select institution */
    Act_FormGoToStart (ActChgMyIns);
-   fprintf (Gbl.F.Out,"<select name=\"OthInsCod\" style=\"width:500px;\""
+   fprintf (Gbl.F.Out,"<select id=\"OthInsCod\" name=\"OthInsCod\""
+	              " style=\"width:500px;\""
 	              " onchange=\"document.getElementById('%s').submit();\">"
                       "<option value=\"-1\"",
 	    Gbl.Form.Id);
@@ -3764,8 +3770,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
      {
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "<td class=\"RIGHT_MIDDLE\">"
+                         "<label for=\"OthCtrCod\" class=\"%s\">"
 			 "%s:"
+                         "</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Centre,
@@ -3778,7 +3786,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select centre */
       Act_FormGoToStart (ActChgMyCtr);
-      fprintf (Gbl.F.Out,"<select name=\"OthCtrCod\" style=\"width:500px;\""
+      fprintf (Gbl.F.Out,"<select id=\"OthCtrCod\" name=\"OthCtrCod\""
+	                 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.Form.Id);
@@ -3808,8 +3817,10 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"%s RIGHT_MIDDLE\">"
+			 "<td class=\"RIGHT_MIDDLE\">"
+                         "<label for=\"DptCod\" class=\"%s\">"
 			 "%s:"
+                         "</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Department,
@@ -3822,7 +3833,8 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /* Start form to select department */
       Act_FormGoToStart (ActChgMyDpt);
-      fprintf (Gbl.F.Out,"<select name=\"DptCod\" style=\"width:500px;\""
+      fprintf (Gbl.F.Out,"<select id=\"DptCod\" name=\"DptCod\""
+	                 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\">"
 			 "<option value=\"-1\"",
 	       Gbl.Form.Id);
