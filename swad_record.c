@@ -2867,20 +2867,22 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
 			 "%s*:</td>"
-			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
+			 "<td class=\"REC_C2_BOT LEFT_MIDDLE\">",
 	       ClassForm,Txt_Sex);
       for (Sex = Usr_SEX_FEMALE;
 	   Sex <= Usr_SEX_MALE;
 	   Sex++)
 	{
-	 fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Sex\" value=\"%u\"",(unsigned) Sex);
+	 fprintf (Gbl.F.Out,"<label class=\"REC_DAT_BOLD\">"
+	                    "<input type=\"radio\" name=\"Sex\" value=\"%u\"",
+	          (unsigned) Sex);
 	 if (Sex == Gbl.Usrs.Me.UsrDat.Sex)
 	    fprintf (Gbl.F.Out," checked=\"checked\"");
 	 fprintf (Gbl.F.Out," required=\"required\" />"
 			    "<img src=\"%s/%s16x16.gif\""
-			    " alt=\"%s\" title=\"%s\""
-			    " class=\"ICO20x20\" />"
-			    "%s",
+			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
+			    "%s"
+			    "</label>",
 		  Gbl.Prefs.IconsURL,Usr_StringsSexDB[Sex],
 		  Txt_SEX_SINGULAR_Abc[Sex],
 		  Txt_SEX_SINGULAR_Abc[Sex],
@@ -2917,15 +2919,19 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
    extern const char *Txt_Surname_1;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"Surname1\" class=\"%s\">"
 		      "%s",
 	    ClassForm,Txt_Surname_1);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
+   fprintf (Gbl.F.Out,":"
+	              "</label>"
+	              "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname1\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"Surname1\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\""
                          " required=\"required\" />",
@@ -2949,13 +2955,16 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
    extern const char *Txt_Surname_2;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"Surname2\" class=\"%s\">"
 		      "%s:"
+		      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Surname_2);
    if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Surname2\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"Surname2\" name=\"Surname2\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\" />",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
@@ -2978,16 +2987,20 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
    extern const char *Txt_First_name;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"FirstName\" class=\"%s\">"
 		      "%s",
 	    ClassForm,Txt_First_name);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
+   fprintf (Gbl.F.Out,":"
+                      "</label>"
+	              "</td>"
 		      "<td colspan=\"2\""
 		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (DataForm)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FirstName\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"FirstName\" name=\"FirstName\""
                          " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\""
                          " required=\"required\" />",
@@ -3019,18 +3032,21 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
      }
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+                      "<label for=\"OthCtyCod\" class=\"%s\">"
 		      "%s",
 	    ClassForm,Txt_Country);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":</td>"
+   fprintf (Gbl.F.Out,":"
+                      "</label>"
+	              "</td>"
 		      "<td colspan=\"2\""
-		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
+		      " class=\"REC_C2_BOT LEFT_MIDDLE\">");
 
    /***** Selector of country *****/
-   fprintf (Gbl.F.Out,"<select name=\"OthCtyCod\" class=\"REC_C2_BOT_INPUT\""
-	              " required=\"required\">"
+   fprintf (Gbl.F.Out,"<select id=\"OthCtyCod\" name=\"OthCtyCod\""
+	              " class=\"REC_C2_BOT_INPUT\" required=\"required\">"
 		      "<option value=\"\">%s</option>"
 		      "<option value=\"0\"",
 	    Txt_Country);
@@ -3064,15 +3080,18 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
    extern const char *Txt_Place_of_origin;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"OriginPlace\" class=\"%s\">"
 		      "%s:"
+                      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Place_of_origin);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"OriginPlace\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"OriginPlace\" name=\"OriginPlace\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
@@ -3126,15 +3145,18 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
    extern const char *Txt_Local_address;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"LocalAddress\" class=\"%s\">"
 		      "%s:"
+		      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Local_address);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"LocalAddress\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"LocalAddress\" name=\"LocalAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
@@ -3157,15 +3179,18 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
    extern const char *Txt_Phone;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"LocalPhone\" class=\"%s\">"
 		      "%s:"
+                      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Phone);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"LocalPhone\""
+	 fprintf (Gbl.F.Out,"<input type=\"tel\""
+	                    " id=\"LocalPhone\" name=\"LocalPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
@@ -3190,15 +3215,18 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
    extern const char *Txt_Family_address;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"FamilyAddress\" class=\"%s\">"
 		      "%s:"
+		      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Family_address);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FamilyAddress\""
+	 fprintf (Gbl.F.Out,"<input type=\"text\""
+	                    " id=\"FamilyAddress\" name=\"FamilyAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Cns_MAX_LENGTH_STRING,
@@ -3221,15 +3249,18 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
    extern const char *Txt_Phone;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
+		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+		      "<label for=\"FamilyPhone\" class=\"%s\">"
 		      "%s:"
+		      "</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Phone);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"FamilyPhone\""
+	 fprintf (Gbl.F.Out,"<input type=\"tel\""
+	                    " id=\"FamilyPhone\" name=\"FamilyPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
 		  Usr_MAX_LENGTH_PHONE,
@@ -3821,14 +3852,16 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Office *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
+	                 "<td class=\"RIGHT_MIDDLE\">"
+		         "<label for=\"Office\" class=\"%s\">"
 	                 "%s:"
+	                 "</label>"
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Office,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOff);
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Office\""
+      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"Office\" name=\"Office\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
@@ -3841,14 +3874,17 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
       /***** Phone *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_MIDDLE\">"
+	                 "<td class=\"RIGHT_MIDDLE\">"
+		         "<label for=\"OfficePhone\" class=\"%s\">"
 	                 "%s:"
+                         "</label>"
 	                 "</td>"
 	                 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
                ClassForm,Txt_Phone,
                COL2_WIDTH);
       Act_FormGoToStart (ActChgMyOffPho);
-      fprintf (Gbl.F.Out,"<input type=\"tel\" name=\"OfficePhone\""
+      fprintf (Gbl.F.Out,"<input type=\"tel\""
+	                 " id=\"OfficePhone\" name=\"OfficePhone\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
