@@ -2619,7 +2619,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumAns,NumAnswers = 0;
+   unsigned NumAns;
+   unsigned NumAnswers = 0;
    Svy_AnswerType_t AnsType;
 
    if (Gbl.Action.Act == ActEdiOneSvyQst) // If no receiving the question, but editing a new or existing question
@@ -2696,11 +2697,12 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Txt\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Txt\" cols=\"60\" rows=\"4\">"
+                      "<textarea id=\"Txt\" name=\"Txt\""
+                      " cols=\"60\" rows=\"4\">"
 	              "%s"
                       "</textarea>"
                       "</td>"
@@ -2721,11 +2723,15 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
 	AnsType < Svy_NUM_ANS_TYPES;
 	AnsType++)
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"AnswerType\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label>"
+	                 "<input type=\"radio\" name=\"AnswerType\""
+	                 " value=\"%u\"",
                (unsigned) AnsType);
       if (AnsType == SvyQst->AnswerType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," />%s<br />",
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</label><br />",
                Txt_SURVEY_STR_ANSWER_TYPES[AnsType]);
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -2744,15 +2750,16 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
      {
       /* Label with the number of the answer */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%u)"
+	                 "<td class=\"RIGHT_TOP\">"
+	                 "<label for=\"AnsStr%u\" class=\"%s\">%u)</label>"
 	                 "</td>",
-               The_ClassForm[Gbl.Prefs.Theme],NumAns+1);
+               NumAns,The_ClassForm[Gbl.Prefs.Theme],NumAns + 1);
 
       /* Answer text */
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP\">"
-                         "<textarea name=\"AnsStr%u\" cols=\"50\" rows=\"1\">",
-               NumAns);
+                         "<textarea id=\"AnsStr%u\" name=\"AnsStr%u\""
+                         " cols=\"50\" rows=\"1\">",
+               NumAns,NumAns);
       if (SvyQst->AnsChoice[NumAns].Text)
          fprintf (Gbl.F.Out,"%s",SvyQst->AnsChoice[NumAns].Text);
       fprintf (Gbl.F.Out,"</textarea>"
@@ -3445,7 +3452,9 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 
 	 /* Write the number of option */
 	 fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:50px;\">"
-			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">%u)</label>"
+			    "<label for=\"Ans%010u_%010u\" class=\"DAT\">"
+			    "%u)"
+			    "</label>"
 			    "</td>",
 		  (unsigned) SvyQst->QstCod,NumAns,NumAns + 1);
 
