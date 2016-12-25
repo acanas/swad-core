@@ -725,7 +725,6 @@ static void Plc_PutFormToCreatePlace (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>"
-                      "<td></td>"
                       "</tr>",
             Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName);
 

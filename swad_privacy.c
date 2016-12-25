@@ -177,6 +177,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
       if (MaskAllowedVisibility & 1 << Visibility)
 	{
 	 fprintf (Gbl.F.Out,"<li class=\"%s\">"
+	                    "<label>"
 			    "<input type=\"radio\" name=\"%s\" value=\"%u\"",
 		  (Visibility == CurrentVisibilityInDB) ? "DAT_N LIGHT_BLUE" :
 							  "DAT",
@@ -190,6 +191,7 @@ static void Pri_PutFormVisibility (const char *TxtLabel,
 		     Gbl.Form.Id);
 	 fprintf (Gbl.F.Out," />"
 			    "%s"
+	                    "</label>"
 			    "</li>",
 		  Txt_PRIVACY_OPTIONS[Visibility]);
 	}
