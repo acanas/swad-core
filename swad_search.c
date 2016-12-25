@@ -255,7 +255,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    Sch_PutInputStringToSearch (NULL);
 
    /***** What to search? *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\"> %s </span>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              " %s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],Txt_SEARCH_X_in_Y);
    fprintf (Gbl.F.Out,"<select name=\"WhatToSearch\" style=\"width:186px;\">");
    for (WhatToSearch = (Sch_WhatToSearch_t) 0;
@@ -270,7 +271,8 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	 fprintf (Gbl.F.Out,">%s</option>",
 		  Titles[WhatToSearch]);
         }
-   fprintf (Gbl.F.Out,"</select>");
+   fprintf (Gbl.F.Out,"</select>"
+	              "</label>");
 
    /***** Magnifying glass icon *****/
    Sch_PutMagnifyingGlassButton ("search64x64.png");

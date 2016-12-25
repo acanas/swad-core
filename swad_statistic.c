@@ -486,7 +486,8 @@ void Sta_AskShowCrsHits (void)
               Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
 
-         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GroupedOrDetailed\" value=\"%u\"",
+         fprintf (Gbl.F.Out,"<input type=\"radio\""
+                            " name=\"GroupedOrDetailed\" value=\"%u\"",
                   (unsigned) Sta_CLICKS_GROUPED);
          if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -512,16 +513,22 @@ void Sta_AskShowCrsHits (void)
                             "</label><br />");
 
          /***** Option b) Listing of detailed clicks to this course *****/
-         fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"GroupedOrDetailed\" value=\"%u\"",
+         fprintf (Gbl.F.Out,"<label>"
+                            "<input type=\"radio\""
+                            " name=\"GroupedOrDetailed\" value=\"%u\"",
                   (unsigned) Sta_CLICKS_DETAILED);
          if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," checked=\"checked\"");
-         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />%s",
+         fprintf (Gbl.F.Out," onclick=\"enableDetailedClicks()\" />"
+                            "%s"
+                            "</label>",
                   Txt_STAT_CLICKS_GROUPED_BY[Sta_CLICKS_CRS_DETAILED_LIST]);
 
          /* Number of rows per page */
          // To use getElementById in Firefox, it's necessary to have the id attribute
-         fprintf (Gbl.F.Out," (%s: <select id=\"RowsPage\" name=\"RowsPage\"",
+         fprintf (Gbl.F.Out," "
+                            "<label>"
+                            "(%s: <select id=\"RowsPage\" name=\"RowsPage\"",
                   Txt_results_per_page);
          if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
             fprintf (Gbl.F.Out," disabled=\"disabled\"");
@@ -536,6 +543,7 @@ void Sta_AskShowCrsHits (void)
             fprintf (Gbl.F.Out,">%lu",RowsPerPage[i]);
            }
          fprintf (Gbl.F.Out,"</select>)"
+                            "</label>"
                             "</td>"
                             "</tr>"
                             "</table>");
