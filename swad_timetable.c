@@ -1310,7 +1310,9 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	    if (TimeTableView == TT_CRS_EDIT)
 	      {
 	       /***** Group *****/
-	       fprintf (Gbl.F.Out,"<br />%s"
+	       fprintf (Gbl.F.Out,"<br />"
+		                  "<label>"
+		                  "%s"
 	                          "<select name=\"ModTTGrpCod\""
 	                          " style=\"width:110px;\""
 		                  " onchange=\"document.getElementById('%s').submit();\">",
@@ -1336,23 +1338,30 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	        	      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpName);
                     }
-	       fprintf (Gbl.F.Out,"</select>");
+	       fprintf (Gbl.F.Out,"</select>"
+		                  "</label>");
 
 	       /***** Class room *****/
-	       fprintf (Gbl.F.Out,"<br />%s"
+	       fprintf (Gbl.F.Out,"<br />"
+		                  "<label>"
+		                  "%s"
 	                          "<input type=\"text\" name=\"ModHorLugar\""
 	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />",
+		                  " onchange=\"document.getElementById('%s').submit();\" />"
+		                  "</label>",
 		        Txt_Classroom,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
                Par_PutHiddenParamString ("ModHorGrp","");
 	       /***** Place *****/
-	       fprintf (Gbl.F.Out,"<br />%s"
+	       fprintf (Gbl.F.Out,"<br />"
+		                  "<label>"
+		                  "%s"
                                   "<input type=\"text\" name=\"ModHorLugar\""
                                   " size=\"12\" maxlength=\"%u\" value=\"%s\""
-		                  " onchange=\"document.getElementById('%s').submit();\" />",
+		                  " onchange=\"document.getElementById('%s').submit();\" />"
+		                  "</label>",
 		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
 	      }
 	   }
