@@ -2128,7 +2128,10 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT && Att->Open)	// Show with form
-      fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\""
+	                 " cols=\"40\" rows=\"3\">"
+	                 "%s"
+	                 "</textarea>",
 	       UsrDat->UsrCod,CommentStd);
    else								// Show without form
      {
@@ -2142,7 +2145,10 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)	// Show with form
-      fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\" cols=\"40\" rows=\"3\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\""
+	                 " cols=\"40\" rows=\"3\">"
+	                 "%s"
+	                 "</textarea>",
 	       UsrDat->UsrCod,CommentTch);
    else	if (Att->CommentTchVisible)			// Show without form
      {

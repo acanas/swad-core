@@ -269,7 +269,8 @@ static void Cty_Configuration (bool PrintView)
 	   {
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActChgCtyMapAtt);
-	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\" cols=\"50\" rows=\"2\""
+	    fprintf (Gbl.F.Out,"<textarea name=\"Attribution\""
+		               " cols=\"50\" rows=\"2\""
 			       " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
             if (MapAttribution)

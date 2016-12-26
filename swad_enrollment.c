@@ -791,22 +791,21 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
-   /***** Start of text area *****/
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">"
+   /***** Text area for users' IDs *****/
+   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
                       "<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s: "
+                      "<td class=\"RIGHT_TOP\">"
+                      "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
                       "</td>"
                       "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"UsrsIDs\" cols=\"72\" rows=\"10\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_List_of_nicks_emails_or_IDs);
-
-   /***** End of text area *****/
-   fprintf (Gbl.F.Out,"</textarea>"
+                      "<textarea id=\"UsrsIDs\" name=\"UsrsIDs\""
+                      " cols=\"60\" rows=\"10\">"
+                      "</textarea>"
                       "</td>"
                       "</tr>"
-                      "</table>");
+                      "</table>",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_List_of_nicks_emails_or_IDs);
   }
 
 /*****************************************************************************/
