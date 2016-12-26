@@ -943,14 +943,14 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
                             (Gbl.CurrentCrs.Info.Type == Inf_LECTURES ? ActModIteSylLec :
                         	                                        ActModIteSylPra));
    Syl_PutParamNumItem (NumItem);
-   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\"");
+   fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\""
+	              " size=\"80\" maxlength=\"%u\" value=\"%s\""
+                      " placeholder=\"%s\"",
+	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
+	    Txt_Enter_a_new_item_here);
    if (NewItem)
       fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
-   fprintf (Gbl.F.Out," size=\"80\" maxlength=\"%u\" value=\"%s\""
-                      " placeholder=\"%s\""
-                      " onchange=\"document.getElementById('%s').submit();\" />",
-	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
-	    Txt_Enter_a_new_item_here,
+   fprintf (Gbl.F.Out," onchange=\"document.getElementById('%s').submit();\" />",
 	    Gbl.Form.Id);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");

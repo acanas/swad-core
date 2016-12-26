@@ -435,13 +435,17 @@ void Tst_ShowNewTest (void)
 	    fprintf (Gbl.F.Out,"</table>");
 
 	    /***** Test result will be saved? *****/
-	    fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\""
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 		               " style=\"margin-top:20px;\">"
-			       "<input type=\"checkbox\" name=\"Save\" value=\"Y\"",
+	                       "<label class=\"%s\">"
+			       "<input type=\"checkbox\" name=\"Save\""
+			       " value=\"Y\"",
 		     The_ClassForm[Gbl.Prefs.Theme]);
 	    if (Gbl.Test.AllowTeachers)
 	       fprintf (Gbl.F.Out," checked=\"checked\"");
-	    fprintf (Gbl.F.Out," />%s"
+	    fprintf (Gbl.F.Out," />"
+		               "&nbsp;%s"
+	                       "</label>"
 			       "</div>",
 		     Txt_Allow_teachers_to_consult_this_test);
 
@@ -621,7 +625,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *Txt_Test;
-   extern const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until;
+   extern const char *Txt_You_can_not_take_a_new_test_until;
    extern const char *Txt_Today;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -660,29 +664,15 @@ static bool Tst_CheckIfNextTstAllowed (void)
    /***** Check if access is allowed *****/
    if (NumSecondsFromNowToNextAccTst > 0)
      {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Test,NULL,Hlp_ASSESSMENT_Tests);
-      Lay_WriteHeaderClassPhoto (false,false,
-				 Gbl.CurrentIns.Ins.InsCod,
-				 Gbl.CurrentDeg.Deg.DegCod,
-				 Gbl.CurrentCrs.Crs.CrsCod);
-
       /***** Write warning *****/
-      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
-      fprintf (Gbl.F.Out,Txt_You_can_not_make_a_new_test_in_the_course_X_until,
-               Gbl.CurrentCrs.Crs.FullName);
-      fprintf (Gbl.F.Out,": "
-	                 "<span id=\"date_next_test\">"
-	                 "</span>"
-                         "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('date_next_test',"
-			 "%ld,',&nbsp;','%s',true,true,true);"
-			 "</script>"
-			 "</div>",
+      sprintf (Gbl.Message,"%s:<br /><span id=\"date_next_test\"></span>."
+                           "<script type=\"text/javascript\">"
+			   "writeLocalDateHMSFromUTC('date_next_test',"
+			   "%ld,',&nbsp;','%s',true,true,true);"
+			   "</script>",
+	       Txt_You_can_not_take_a_new_test_until,
 	       (long) TimeNextTestUTC,Txt_Today);
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
       return false;
      }
@@ -1079,8 +1069,7 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 	 fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," />"
 			 "%s"
-			 "</label>"
-			 "<br />",
+			 "</label><br />",
 	       Txt_No_image);
 
       /***** Choice 2: Current image *****/

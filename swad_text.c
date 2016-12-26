@@ -52910,27 +52910,6 @@ const char *Txt_You_can_not_leave_the_web_address_empty =
 	"You can not leave the web address empty.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_can_not_make_a_new_test_in_the_course_X_until =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"No puede hacer un nuevo test en la asignatura <strong>%s</strong> hasta";	// Necessita traduccio
-#elif L==2
-	"You can not make a new test in the course <strong>%s</strong> until";		// Need Übersetzung
-#elif L==3
-	"You can not make a new test in the course <strong>%s</strong> until";
-#elif L==4
-	"No puede hacer un nuevo test en la asignatura <strong>%s</strong> hasta";
-#elif L==5
-	"You can not make a new test in the course <strong>%s</strong> until";		// Besoin de traduction
-#elif L==6
-	"No puede hacer un nuevo test en la asignatura <strong>%s</strong> hasta";	// Okoteve traducción
-#elif L==7
-	"Non puoi fare un nuovo test nel corso <strong>%s</strong> fino";
-#elif L==8
-	"You can not make a new test in the course <strong>%s</strong> until";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"You can not make a new test in the course <strong>%s</strong> until";		// Necessita de tradução
-#endif
-
 const char *Txt_You_can_not_paste_file_or_folder_here =
 #if   L==1
 	"No puede pegar un archivo o carpeta aqu&iacute;.";		// Necessita traduccio
@@ -53064,6 +53043,27 @@ const char *Txt_You_can_not_send_a_message_to_so_many_recipients_ =
 #elif L==9
 	"You can not send a message to so many recipients."
 	" Better use the forums.";		// Necessita de tradução
+#endif
+
+const char *Txt_You_can_not_take_a_new_test_until =
+#if   L==1
+	"No podr&agrave; fer un test fins";
+#elif L==2
+	"Sie k&ouml;nnen nicht einen neuen Test bis";
+#elif L==3
+	"You can not take a new test until";
+#elif L==4
+	"No podr&aacute; hacer un nuevo test hasta";
+#elif L==5
+	"Vous ne pouvez pas passer un nouveau test avant";
+#elif L==6
+	"No podr&aacute; hacer un nuevo test hasta";	// Okoteve traducción
+#elif L==7
+	"Non si pu&ograve; fare un nuovo test fino";
+#elif L==8
+	"Nie mo&zdot;na wykona&cacute; nowy test do";
+#elif L==9
+	"Voc&ecirc; n&atilde;o pode fazer um novo teste at&eacute;";
 #endif
 
 const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very important to include %u in the following sentences
