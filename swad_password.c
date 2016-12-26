@@ -929,7 +929,8 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
                       "<label class=\"%s\">"
 		      "%s:&nbsp;"
 		      "<input type=\"password\" name=\"OthUsrPwd\""
-		      " size=\"16\" maxlength=\"%u\" autocomplete=\"off\" />"
+		      " size=\"16\" maxlength=\"%u\""
+		      " autocomplete=\"off\" required=\"required\" />"
 		      "</label>"
 		      "</div>",
             The_ClassForm[Gbl.Prefs.Theme],

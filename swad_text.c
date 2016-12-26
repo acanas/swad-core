@@ -29925,7 +29925,7 @@ const char *Txt_Real_number_between_A_and_B_1 =
 	"N&ordm; real entre";
 #endif
 
-const char *Txt_Real_number_between_A_and_B_2 =
+const char *Txt_Real_number_between_A_and_B_2 =	// Must start by space
 #if   L==1
 	" i";
 #elif L==2

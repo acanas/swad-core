@@ -1894,37 +1894,33 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
    /***** Start frame and table *****/
    Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in,2);
 
-   /***** User's ID/nickname and password *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">"
-                      "<img src=\"%s/user64x64.gif\""
-                      " alt=\"%s\" title=\"%s\""
+   /***** User's ID/nickname *****/
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
+	              "<label>"
+                      "<img src=\"%s/user64x64.gif\" alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />"
-                      "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
-                      " size=\"18\" maxlength=\"%u\""
-                      " placeholder=\"%s\" value=\"%s\""
+                      "<input type=\"text\" name=\"UsrId\""
+                      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\""
+                      " value=\"%s\""
                       " autofocus=\"autofocus\" required=\"required\" />"
-                      "</td>"
-		      "</tr>"
-		      "<tr>"
-		      "<td class=\"BM\">"
-                      "<img src=\"%s/key64x64.gif\""
-                      " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
-		      "</td>"
-		      "<td class=\"LEFT_MIDDLE\">"
-		      "<input type=\"password\" name=\"UsrPwd\""
-		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
-		      "</td>"
-		      "</tr>",
+	              "</label>"
+	              "</div>",
             Gbl.Prefs.IconsURL,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
             Usr_MAX_LENGTH_USR_LOGIN,
             Txt_nick_email_or_ID,
-            Gbl.Usrs.Me.UsrIdLogin,
+            Gbl.Usrs.Me.UsrIdLogin);
+
+   /***** User's password *****/
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"
+	              "<label>"
+                      "<img src=\"%s/key64x64.gif\" alt=\"%s\" title=\"%s\""
+	              " class=\"ICO20x20\" />"
+		      "<input type=\"password\" name=\"UsrPwd\""
+		      " size=\"18\" maxlength=\"%u\" placeholder=\"%s\" />"
+	              "</label>"
+	              "</div>",
             Gbl.Prefs.IconsURL,
             Txt_Password,
             Txt_Password,
@@ -5438,7 +5434,7 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
       return;
 
    /***** Put a row to select all users *****/
-   Usr_PutCheckboxToSelectAllTheUsers (Role);
+   Usr_PutCheckboxToSelectAllUsers (Role);
 
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
@@ -5453,10 +5449,10 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/****** Put a row, in a classphoto or a list, to select all the users ********/
+/******** Put a row, in a classphoto or a list, to select all users **********/
 /*****************************************************************************/
 
-void Usr_PutCheckboxToSelectAllTheUsers (Rol_Role_t Role)
+void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -5564,13 +5560,16 @@ static void Usr_PutCheckboxListWithPhotos (void)
    Par_PutHiddenParamChar ("WithPhotosExists",'Y');
 
    /***** Put checkbox to select whether list users with photos *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"WithPhotos\" value=\"Y\"");
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+	              "<input type=\"checkbox\" name=\"WithPhotos\""
+	              " value=\"Y\"",
+	    The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Usrs.Listing.WithPhotos)
       fprintf (Gbl.F.Out," checked=\"checked\"");
    fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-                      "<span class=\"%s\">%s</span>",
-	    Gbl.Form.Id,
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Display_photos);
+                      "%s"
+                      "</label>",
+	    Gbl.Form.Id,Txt_Display_photos);
   }
 
 /*****************************************************************************/
@@ -6979,7 +6978,7 @@ void Usr_SeeGuests (void)
          fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
 
 	 /* Put a row to select all users */
-         Usr_PutCheckboxToSelectAllTheUsers (Rol__GUEST_);
+         Usr_PutCheckboxToSelectAllUsers (Rol__GUEST_);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -7145,7 +7144,7 @@ void Usr_SeeStudents (void)
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
-            Usr_PutCheckboxToSelectAllTheUsers (Rol_STUDENT);
+            Usr_PutCheckboxToSelectAllUsers (Rol_STUDENT);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -7298,7 +7297,7 @@ void Usr_SeeTeachers (void)
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
-	    Usr_PutCheckboxToSelectAllTheUsers (Rol_TEACHER);
+	    Usr_PutCheckboxToSelectAllUsers (Rol_TEACHER);
 
          /***** Draw the classphoto/list  *****/
          switch (Gbl.Usrs.Me.ListType)
@@ -7451,10 +7450,12 @@ static void Usr_PutLinkToShowGstsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Usr_PutIconToShowStdsAllData (void)
@@ -7471,10 +7472,12 @@ static void Usr_PutLinkToShowStdsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
@@ -7491,10 +7494,12 @@ static void Usr_PutLinkToShowTchsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Usr_ShowGstsAllDataParams (void)
