@@ -1905,7 +1905,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
                       "<input type=\"text\" id=\"UsrId\" name=\"UsrId\""
                       " size=\"18\" maxlength=\"%u\""
                       " placeholder=\"%s\" value=\"%s\""
-                      " required=\"required\" />"
+                      " autofocus=\"autofocus\" required=\"required\" />"
                       "</td>"
 		      "</tr>"
 		      "<tr>"

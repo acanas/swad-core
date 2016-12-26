@@ -650,10 +650,7 @@ static void Lay_WriteScriptInit (void)
       Con_WriteScriptClockConnected ();
 
    // Put the focus on login form
-   fprintf (Gbl.F.Out,"	LoginForm = document.getElementById('UsrId');\n"
-                      "	if (LoginForm)\n"
-                      "		LoginForm.focus();\n"
-                      "	ActionAJAX = \"%s\";\n"
+   fprintf (Gbl.F.Out,"	ActionAJAX = \"%s\";\n"
                       "	setTimeout(\"refreshConnected()\",%lu);\n",
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Connected.TimeToRefreshInMs);

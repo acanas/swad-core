@@ -945,7 +945,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    Syl_PutParamNumItem (NumItem);
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\"");
    if (NewItem)
-      fprintf (Gbl.F.Out," autofocus");
+      fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
    fprintf (Gbl.F.Out," size=\"80\" maxlength=\"%u\" value=\"%s\""
                       " placeholder=\"%s\""
                       " onchange=\"document.getElementById('%s').submit();\" />",
