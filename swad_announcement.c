@@ -68,6 +68,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
                                     bool ICanEdit);
 static void Ann_PutParams (void);
 static long Ann_GetParamAnnCod (void);
+static void Ann_PutSubjectMessage (const char *Field,const char *Label,
+                                   unsigned Rows);
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content);
 
 /*****************************************************************************/
@@ -420,30 +422,8 @@ void Ann_ShowFormAnnouncement (void)
                              NULL,Hlp_MESSAGES_Announcements,2);
 
    /***** Announcement subject and body *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Subject\" class=\"%s\">%s:&nbsp;</label>"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Subject\" name=\"Subject\""
-                      " cols=\"75\" rows=\"2\">"
-                      "</textarea>"
-	              "</td>"
-	              "</tr>"
-                      "<tr>"
-                      "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Content\" class=\"%s\">%s:&nbsp;</label>"
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Content\" name=\"Content\""
-                      " cols=\"75\" rows=\"20\">"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Subject,
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Message);
+   Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);
+   Ann_PutSubjectMessage ("Content",Txt_MSG_Message,20);
 
    /***** Users' roles who can view the announcement *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -470,6 +450,29 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** End form *****/
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/*********** Put form field for message subject or message content ***********/
+/*****************************************************************************/
+
+static void Ann_PutSubjectMessage (const char *Field,const char *Label,
+                                   unsigned Rows)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"%s\" class=\"%s\">%s:</label>"
+                      "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"%s\" name=\"%s\""
+                      " cols=\"75\" rows=\"%u\">"
+                      "</textarea>"
+	              "</td>"
+	              "</tr>",
+	    Field,The_ClassForm[Gbl.Prefs.Theme],Label,
+	    Field,Field,Rows);
   }
 
 /*****************************************************************************/
@@ -518,7 +521,6 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
             Roles,Subject,Content);
    DB_QueryINSERT (Query,"can not create announcement");
   }
-
 
 /*****************************************************************************/
 /*********** Mark as hidden a global announcement that was active ************/
