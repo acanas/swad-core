@@ -183,18 +183,21 @@
 
 // TODO: Draw future dates in attendance, surveys, assignments in blue?
 // TODO: Fix bug in generate a test: after entering a number of questions with empty tags and type of answers, number of questions is not remembered
+// TODO: Fix big when editing a test question with images: when "Change image" is selected but no image is uploades, other images (for example in answers) are lost
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.106.20 (2016-12-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.107 (2016-12-26)"
 #define CSS_FILE		"swad16.106.5.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.107:   Dec 26, 2016	Changes in behaviour of labels in forms.
+                                        Code refactoring in tests. (211510 lines)
         Version 16.106.20:Dec 26, 2016	Changes in warning about next time to take a test. (211486 lines)
         Version 16.106.19:Dec 26, 2016	Changes in login form (autofocus). (211494 lines)
         Version 16.106.18:Dec 25, 2016	Changes in behaviour of labels in forms. (211496 lines)

@@ -172,6 +172,8 @@ static void Tst_ShowFormEditTags (void);
 static void Tst_PutIconEnable (long TagCod,const char *TagTxt);
 static void Tst_PutIconDisable (long TagCod,const char *TagTxt);
 static void Tst_ShowFormConfigTst (void);
+static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
+                                     unsigned Value);
 static void Tst_GetConfigTstFromDB (void);
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void);
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void);
@@ -214,6 +216,8 @@ static bool Tst_GetCreateXMLFromForm (void);
 static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
+static void Tst_PutFloatInputField (const char *Label,const char *Field,
+                                    double Value);
 
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
@@ -1830,18 +1834,21 @@ static void Tst_ShowFormConfigTst (void)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
-	              "<td class=\"LEFT_TOP\">",
+	              "<td class=\"LEFT_BOTTOM\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Plugins);
    for (Pluggable = Tst_PLUGGABLE_NO;
 	Pluggable <= Tst_PLUGGABLE_YES;
 	Pluggable++)
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Pluggable\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
+	                 "<input type=\"radio\" name=\"Pluggable\" value=\"%u\"",
 	       (unsigned) Pluggable);
       if (Pluggable == Gbl.Test.Config.Pluggable)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," /><span class=\"DAT\">%s</span><br />",
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</label><br />",
                Txt_TST_PLUGGABLE[Pluggable]);
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -1852,60 +1859,30 @@ static void Tst_ShowFormConfigTst (void)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
+                      "<td class=\"LEFT_BOTTOM\">"
                       "<table style=\"border-spacing:2px;\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_No_of_questions);
-
-   /* Minimum number of questions in a test */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-	              "%s"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstMin\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\""
-                      " required=\"required\" />"
+   Tst_PutInputFieldNumQst ("NumQstMin",Txt_minimum,
+                            Gbl.Test.Config.Min);	// Minimum number of questions
+   Tst_PutInputFieldNumQst ("NumQstDef",Txt_default,
+                            Gbl.Test.Config.Def);	// Default number of questions
+   Tst_PutInputFieldNumQst ("NumQstMax",Txt_maximum,
+                            Gbl.Test.Config.Max);	// Maximum number of questions
+   fprintf (Gbl.F.Out,"</table>"
                       "</td>"
-                      "</tr>",
-            Txt_minimum,Gbl.Test.Config.Min);
-
-   /* Default number of questions in a test */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-	              "%s"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstDef\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\""
-                      " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
-            Txt_default,Gbl.Test.Config.Def);
-
-   /* Maximum number of questions in a test */
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"DAT RIGHT_MIDDLE\">"
-	              "%s"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"NumQstMax\""
-                      " size=\"3\" maxlength=\"3\" value=\"%u\""
-                      " required=\"required\" />"
-                      "</td>"
-                      "</tr>"
-                      "</table>"
-                      "</td>"
-                      "</tr>",
-            Txt_maximum,Gbl.Test.Config.Max);
+                      "</tr>");
 
    /***** Minimum time between consecutive tests, per question *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"MinTimeNxtTstPerQst\" class=\"%s\">"
 	              "%s:"
+	              "</label>"
 	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" name=\"MinTimeNxtTstPerQst\""
+                      "<td class=\"LEFT_BOTTOM\">"
+                      "<input type=\"text\""
+                      " id=\"MinTimeNxtTstPerQst\" name=\"MinTimeNxtTstPerQst\""
                       " size=\"7\" maxlength=\"7\" value=\"%lu\""
                       " required=\"required\" />"
                       "</td>"
@@ -1919,17 +1896,20 @@ static void Tst_ShowFormConfigTst (void)
 	              "<td class=\"%s RIGHT_TOP\">"
 	              "%s:"
 	              "</td>"
-	              "<td class=\"LEFT_TOP\">",
+	              "<td class=\"LEFT_BOTTOM\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback_to_students);
    for (FeedbTyp = (Tst_Feedback_t) 0;
 	FeedbTyp < Tst_NUM_TYPES_FEEDBACK;
 	FeedbTyp++)
      {
-      fprintf (Gbl.F.Out,"<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<label class=\"DAT\">"
+	                 "<input type=\"radio\" name=\"Feedback\" value=\"%u\"",
 	       (unsigned) FeedbTyp);
       if (FeedbTyp == Gbl.Test.Config.FeedbackType)
          fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," /><span class=\"DAT\">%s</span><br />",
+      fprintf (Gbl.F.Out," />"
+	                 "%s"
+	                 "</label><br />",
                Txt_TST_STR_FEEDBACK[FeedbTyp]);
      }
    fprintf (Gbl.F.Out,"</td>"
@@ -1944,6 +1924,29 @@ static void Tst_ShowFormConfigTst (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*************** Get configuration of test for current course ****************/
+/*****************************************************************************/
+
+static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
+                                     unsigned Value)
+  {
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"%s\" class=\"DAT\">%s</label>"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\""
+                      " id=\"%s\" name=\"%s\""
+                      " size=\"3\" maxlength=\"3\" value=\"%u\""
+                      " required=\"required\" />"
+                      "</td>"
+                      "</tr>",
+           Field,Label,
+           Field,Field,
+           Value);
   }
 
 /*****************************************************************************/
@@ -3394,20 +3397,29 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
       Par_PutHiddenParamUnsigned (ParamName,Index);
       fprintf (Gbl.F.Out,"<input type=\"");
       if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
-         fprintf (Gbl.F.Out,"radio\" onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
+         fprintf (Gbl.F.Out,"radio\""
+                            " onclick=\"selectUnselectRadio(this,this.form.Ans%06u,%u);\"",
                   NumQst,Gbl.Test.Answer.NumOptions);
       else // Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE
          fprintf (Gbl.F.Out,"checkbox\"");
-      fprintf (Gbl.F.Out," name=\"Ans%06u\" value=\"%u\" /> </td>",
-               NumQst,Index);
-      fprintf (Gbl.F.Out,"<td class=\"TEST LEFT_TOP\">"
-	                 "%c)&nbsp;"
+      fprintf (Gbl.F.Out," id=\"Ans%06u_%u\" name=\"Ans%06u\" value=\"%u\" />"
 	                 "</td>",
-               'a' + (char) NumOpt);
+               NumQst,NumOpt,
+               NumQst,Index);
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+                         "<label for=\"Ans%06u_%u\" class=\"TEST\">"
+	                 "%c)&nbsp;"
+	                 "</label>"
+	                 "</td>",
+	       NumQst,NumOpt,
+	       'a' + (char) NumOpt);
 
       /***** Write the option text *****/
-      fprintf (Gbl.F.Out,"<td class=\"TEST_EXA LEFT_TOP\">"
-	                 "%s",
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">"
+                         "<label for=\"Ans%06u_%u\" class=\"TEST_EXA\">"
+	                 "%s"
+	                 "</label>",
+               NumQst,NumOpt,
                Gbl.Test.Answer.Options[NumOpt].Text);
       Img_ShowImage (&Gbl.Test.Answer.Options[NumOpt].Image,
                      "TEST_IMG_SHOW_ANS_CONTAINER",
@@ -4618,14 +4630,13 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Answers *****/
    /* Integer answer */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"AnsInt\" class=\"%s\">"
+                      "<td class=\"RIGHT_TOP %s\">"
                       "%s:"
-                      "</label>"
                       "</td>"
-                      "<td class=\"%s LEFT_TOP\">"
-                      "%s: "
-                      "<input type=\"text\" id=\"AnsInt\" name=\"AnsInt\""
+                      "<td class=\"LEFT_TOP\">"
+	              "<label class=\"%s\">"
+                      "%s:&nbsp;"
+                      "<input type=\"text\" name=\"AnsInt\""
                       " size=\"11\" maxlength=\"11\" value=\"%ld\"",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Answers,
             The_ClassForm[Gbl.Prefs.Theme],Txt_Integer_number,
@@ -4633,30 +4644,19 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.AnswerType != Tst_ANS_INT)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," required=\"required\" />"
+                      "</label>"
 	              "</td>"
 	              "</tr>");
 
    /* Floating point answer */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-                      "<td class=\"%s LEFT_TOP\">"
-                      "%s "
-                      "<input type=\"text\" name=\"AnsFloatMin\""
-                      " size=\"11\" maxlength=\"%u\" value=\"%lg\"",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Real_number_between_A_and_B_1,
-            Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[0]);
-   if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />"
-	              " %s "
-	              "<input type=\"text\" name=\"AnsFloatMax\""
-	              " size=\"11\" maxlength=\"%u\" value=\"%lg\"",
-            Txt_Real_number_between_A_and_B_2,
-            Tst_MAX_BYTES_FLOAT_ANSWER,Gbl.Test.Answer.FloatingPoint[1]);
-   if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />"
-	              "</td>"
+                      "<td class=\"LEFT_TOP\">");
+   Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_1,"AnsFloatMin",
+                           Gbl.Test.Answer.FloatingPoint[0]);
+   Tst_PutFloatInputField (Txt_Real_number_between_A_and_B_2,"AnsFloatMax",
+                           Gbl.Test.Answer.FloatingPoint[1]);
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /* T/F answer */
@@ -4849,6 +4849,29 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************* Put input field for floating answer *******************/
+/*****************************************************************************/
+
+static void Tst_PutFloatInputField (const char *Label,const char *Field,
+                                    double Value)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
+                      "<input type=\"text\" name=\"%s\""
+                      " size=\"11\" maxlength=\"%u\""
+                      " value=\"%lg\"",
+            The_ClassForm[Gbl.Prefs.Theme],Label,
+            Field,
+            Tst_MAX_BYTES_FLOAT_ANSWER,
+            Value);
+   if (Gbl.Test.AnswerType != Tst_ANS_FLOAT)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "</label>");
   }
 
 /*****************************************************************************/

@@ -29927,23 +29927,23 @@ const char *Txt_Real_number_between_A_and_B_1 =
 
 const char *Txt_Real_number_between_A_and_B_2 =
 #if   L==1
-	"y";	// Necessita traduccio
+	" i";
 #elif L==2
-	"und";
+	" und";
 #elif L==3
-	"and";
+	" and";
 #elif L==4
-	"y";
+	" y";
 #elif L==5
-	"et";
+	" et";
 #elif L==6
-	"y";	// Okoteve traducción
+	" y";	// Okoteve traducción
 #elif L==7
-	"e";
+	" e";
 #elif L==8
-	"i";
+	" i";
 #elif L==9
-	"e";
+	" e";
 #endif
 
 const char *Txt_Recommended_aspect_ratio =
