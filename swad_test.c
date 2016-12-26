@@ -218,6 +218,7 @@ static int Tst_CountNumAnswerTypesInList (void);
 static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value);
+static void Tst_PutTFInputField (const char *Label,char Value);
 
 static void Tst_FreeTextChoiceAnswers (void);
 static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
@@ -4662,37 +4663,17 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /* T/F answer */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<table class=\"CELLS_PAD_2\">"
-                      "<tr>"
-	              "<td class=\"%s LEFT_TOP\">"
-                      "<input type=\"radio\" name=\"AnsTF\" value=\"T\"",
-            The_ClassForm[Gbl.Prefs.Theme]);
-   if (Gbl.Test.Answer.TF == 'T')
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />"
-	              "%s&nbsp;"
-	              "<input type=\"radio\" name=\"AnsTF\" value=\"F\"",
-	    Txt_TF_QST[0]);
-   if (Gbl.Test.Answer.TF == 'F')
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
-      fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," required=\"required\" />"
-	              "%s"
-	              "</td>"
-	              "</tr>"
-	              "</table>"
-	              "</td>"
-	              "</tr>",
-	    Txt_TF_QST[1]);
+                      "<td class=\"LEFT_TOP\">");
+   Tst_PutTFInputField (Txt_TF_QST[0],'T');
+   Tst_PutTFInputField (Txt_TF_QST[1],'F');
+   fprintf (Gbl.F.Out,"</td>"
+	              "</tr>");
 
    /* Questions can be shuffled? */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-                      "<td class=\"%s LEFT_TOP\">"
+                      "<td class=\"LEFT_TOP\">"
+                      "<label class=\"%s\">"
                       "<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"",
             The_ClassForm[Gbl.Prefs.Theme]);
    if (Gbl.Test.Shuffle)
@@ -4700,7 +4681,10 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    if (Gbl.Test.AnswerType != Tst_ANS_UNIQUE_CHOICE &&
        Gbl.Test.AnswerType != Tst_ANS_MULTIPLE_CHOICE)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out," />%s</td>"
+   fprintf (Gbl.F.Out," />"
+	              "%s"
+                      "</label>"
+	              "</td>"
 	              "</tr>",
             Txt_Shuffle);
 
@@ -4814,7 +4798,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                                  OptionsDisabled);
 
       /* Feedback */
-      fprintf (Gbl.F.Out,"<div class=\"%s\">%s (%s):</div>"
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s (%s):<br />"
 	                 "<textarea name=\"FbStr%u\" class=\"ANS_STR\" rows=\"2\"",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Feedback,Txt_optional,
 	       NumOpt);
@@ -4824,7 +4808,8 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
       if (Gbl.Test.Answer.Options[NumOpt].Feedback)
          if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
             fprintf (Gbl.F.Out,"%s",Gbl.Test.Answer.Options[NumOpt].Feedback);
-      fprintf (Gbl.F.Out,"</textarea>");
+      fprintf (Gbl.F.Out,"</textarea>"
+	                 "</label>");
 
       /* End of right column */
       fprintf (Gbl.F.Out,"</div>"
@@ -4872,6 +4857,27 @@ static void Tst_PutFloatInputField (const char *Label,const char *Field,
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," required=\"required\" />"
 	              "</label>");
+  }
+
+/*****************************************************************************/
+/*********************** Put input field for T/F answer **********************/
+/*****************************************************************************/
+
+static void Tst_PutTFInputField (const char *Label,char Value)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   fprintf (Gbl.F.Out,"<label class=\"%s\">"
+                      "<input type=\"radio\" name=\"AnsTF\" value=\"%c\"",
+            The_ClassForm[Gbl.Prefs.Theme],Value);
+   if (Gbl.Test.Answer.TF == Value)
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+   if (Gbl.Test.AnswerType != Tst_ANS_TRUE_FALSE)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   fprintf (Gbl.F.Out," required=\"required\" />"
+	              "%s"
+	              "</label>",
+	    Label);
   }
 
 /*****************************************************************************/
