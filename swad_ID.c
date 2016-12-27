@@ -102,7 +102,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       // First the confirmed (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
       sprintf (Query,"SELECT UsrID,Confirmed FROM usr_IDs"
-	             " WHERE UsrCod='%ld'" \
+	             " WHERE UsrCod='%ld'"
 	             " ORDER BY Confirmed DESC,UsrID",
                UsrDat->UsrCod);
       if ((NumIDs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's IDs")))

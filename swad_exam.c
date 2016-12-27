@@ -800,7 +800,7 @@ static void Exa_ModifyExamAnnouncementInDB (void)
                   "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
                   "Duration='%02u:%02u:00',"
                   "Place='%s',ExamMode='%s',Structure='%s',"
-                  "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'" \
+                  "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'"
                   " WHERE ExaCod='%ld'",
             Gbl.ExamAnnouncements.ExaDat.CrsFullName,
             Gbl.ExamAnnouncements.ExaDat.Year,
@@ -842,7 +842,7 @@ void Exa_CreateListDatesOfExamAnnouncements (void)
              of visible exam announcements
              in current course from database *****/
       sprintf (Query,"SELECT DISTINCT(DATE(ExamDate))"
-	             " FROM exam_announcements" \
+	             " FROM exam_announcements"
 		     " WHERE CrsCod='%ld' AND Status='%u'",
 	       Gbl.CurrentCrs.Crs.CrsCod,
 	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
@@ -1032,11 +1032,23 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    struct Instit Ins;
    char StrExamDate[Cns_MAX_LENGTH_DATE+1];
    unsigned Year,Hour,Minute;
-   const char *ClassExaAnnouncement[Exa_NUM_STATUS] =
+   const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
-      "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
-      "EXA_ANN_HIDDEN",		// Exa_HIDDEN_EXAM_ANNOUNCEMENT
-      NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
+	{	// Exa_NORMAL_VIEW
+	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
+	 "EXA_ANN_HIDDEN",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
+	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
+	},
+	{	// Exa_PRINT_VIEW
+	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
+	 "EXA_ANN_VISIBLE",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
+	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
+	},
+	{	// Exa_FORM_VIEW
+	 "EXA_ANN_VISIBLE",	// Exa_VISIBLE_EXAM_ANNOUNCEMENT
+	 "EXA_ANN_VISIBLE",	// Exa_HIDDEN_EXAM_ANNOUNCEMENT
+	 NULL,			// Exa_DELETED_EXAM_ANNOUNCEMENT, Not applicable here
+	},
      };
 
    /***** Get data of institution of this degree *****/
@@ -1075,10 +1087,10 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
-            ClassExaAnnouncement[Gbl.ExamAnnouncements.ExaDat.Status]);
+            ClassExaAnnouncement[TypeViewExamAnnouncement][Gbl.ExamAnnouncements.ExaDat.Status]);
 
    /***** Institution logo *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"CENTER_MIDDLE\">");
    if (TypeViewExamAnnouncement == Exa_PRINT_VIEW)
       fprintf (Gbl.F.Out,"<span class=\"%s\">",StyleTitle);
@@ -1086,15 +1098,15 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
       fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"%s\">",
                Ins.WWW,StyleTitle);
    Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.FullName,64,NULL,true);
-   fprintf (Gbl.F.Out,"<br />%s%s" \
-                      "</td>" \
+   fprintf (Gbl.F.Out,"<br />%s%s"
+                      "</td>"
 	              "</tr>",
             Ins.FullName,
             TypeViewExamAnnouncement == Exa_PRINT_VIEW ? "</span>" :
  	                                                 "</a>");
 
    /***** Degree *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">",
 	    StyleTitle);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
@@ -1103,56 +1115,57 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    fprintf (Gbl.F.Out,"%s",Gbl.CurrentDeg.Deg.FullName);
    if (TypeViewExamAnnouncement == Exa_NORMAL_VIEW)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Title *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"%s CENTER_MIDDLE\">"
 	              "&nbsp;<br />"
 	              "<strong>%s</strong>"
-	              "</td>" \
+	              "</td>"
 	              "</tr>",
             StyleNormal,Txt_EXAM_ANNOUNCEMENT);
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"2\" class=\"%s LEFT_MIDDLE\">"
 	              "&nbsp;"
-	              "</td>" \
+	              "</td>"
 	              "</tr>",
 	    StyleNormal);
 
    /***** Name of the course *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_BOTTOM\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_BOTTOM\">"
+	              "<label for=\"CrsName\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Course,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"CrsName\""
+      fprintf (Gbl.F.Out,"<input type=\"text\" id=\"CrsName\" name=\"CrsName\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
                Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncements.ExaDat.CrsFullName);
      }
    else
-      fprintf (Gbl.F.Out,"<strong>%s</strong>",Gbl.ExamAnnouncements.ExaDat.CrsFullName);
-   fprintf (Gbl.F.Out,"</td>" \
+      fprintf (Gbl.F.Out,"<strong>%s</strong>",
+               Gbl.ExamAnnouncements.ExaDat.CrsFullName);
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Year/semester (N.A., 1º, 2º, 3º, 4º, 5º...) *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-                      "<td class=\"%s RIGHT_BOTTOM\">"
-                      "%s:"
-                      "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"RIGHT_BOTTOM\">"
+	              "<label for=\"Year\" class=\"%s\">%s:</label>"
+                      "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Year_or_semester,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select name=\"Year\">");
+      fprintf (Gbl.F.Out,"<select id=\"Year\" name=\"Year\">");
       for (Year = 0;
 	   Year <= Deg_MAX_YEARS_PER_DEGREE;
 	   Year++)
@@ -1160,35 +1173,40 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 	 fprintf (Gbl.F.Out,"<option");
 	 if (Gbl.ExamAnnouncements.ExaDat.Year == Year)
             fprintf (Gbl.F.Out," selected=\"selected\"");
-	 fprintf (Gbl.F.Out," value=\"%u\">%s</option>",Year,Txt_YEAR_OF_DEGREE[Year]);
+	 fprintf (Gbl.F.Out," value=\"%u\">"
+	                    "%s"
+	                    "</option>",
+	          Year,Txt_YEAR_OF_DEGREE[Year]);
 	}
       fprintf (Gbl.F.Out,"</select>");
      }
    else
-      fprintf (Gbl.F.Out,"%s",Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year]);
-   fprintf (Gbl.F.Out,"</td>" \
+      fprintf (Gbl.F.Out,"%s",
+               Txt_YEAR_OF_DEGREE[Gbl.ExamAnnouncements.ExaDat.Year]);
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Exam session *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_BOTTOM\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_BOTTOM\">"
+	              "<label for=\"ExamSession\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Session,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<input type=\"text\" name=\"ExamSession\""
+      fprintf (Gbl.F.Out,"<input type=\"text\""
+	                 " id=\"ExamSession\" name=\"ExamSession\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
                Cns_MAX_LENGTH_STRING,Gbl.ExamAnnouncements.ExaDat.Session);
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Session);
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Date of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
 	              "</td>",
@@ -1206,7 +1224,8 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
      }
    else
      {
-      Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,StrExamDate);
+      Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,
+                             StrExamDate);
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_BOTTOM\">"
 	                 "%s"
 	                 "</td>",
@@ -1215,17 +1234,18 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** Start time *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
-	              "</td>" \
+	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Start_time,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
      {
-      fprintf (Gbl.F.Out,"<select name=\"ExamHour\"><option value=\"0\"");
+      fprintf (Gbl.F.Out,"<select name=\"ExamHour\">"
+	                 "<option value=\"0\"");
       if (Gbl.ExamAnnouncements.ExaDat.StartTime.Hour == 0)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">-</option>");
@@ -1239,7 +1259,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
 	}
-      fprintf (Gbl.F.Out,"</select>" \
+      fprintf (Gbl.F.Out,"</select>"
 	                 "<select name=\"ExamMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
@@ -1256,14 +1276,14 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
       fprintf (Gbl.F.Out,"%2u:%02u",
                Gbl.ExamAnnouncements.ExaDat.StartTime.Hour,
                Gbl.ExamAnnouncements.ExaDat.StartTime.Minute);
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Approximate duration of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>" \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"%s RIGHT_BOTTOM\">"
 	              "%s:"
-	              "</td>" \
+	              "</td>"
                       "<td class=\"%s LEFT_BOTTOM\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Approximate_duration,
@@ -1281,7 +1301,8 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 	 fprintf (Gbl.F.Out,">%02u %s</option>",
                   Hour,Txt_hours_ABBREVIATION);
 	}
-      fprintf (Gbl.F.Out,"</select><select name=\"DurationMinute\">");
+      fprintf (Gbl.F.Out,"</select>"
+	                 "<select name=\"DurationMinute\">");
       for (Minute = 0;
 	   Minute <= 59;
 	   Minute++)
@@ -1308,7 +1329,8 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
             if (Gbl.ExamAnnouncements.ExaDat.Duration.Hour == 1)
                fprintf (Gbl.F.Out,"1 %s",Txt_hour);
             else
-               fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Txt_hours);
+               fprintf (Gbl.F.Out,"%u %s",
+                        Gbl.ExamAnnouncements.ExaDat.Duration.Hour,Txt_hours);
            }
         }
       else if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute)
@@ -1316,156 +1338,185 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
          if (Gbl.ExamAnnouncements.ExaDat.Duration.Minute == 1)
             fprintf (Gbl.F.Out,"1 %s",Txt_minute);
          else
-            fprintf (Gbl.F.Out,"%u %s",Gbl.ExamAnnouncements.ExaDat.Duration.Minute,Txt_minutes);
+            fprintf (Gbl.F.Out,"%u %s",
+                     Gbl.ExamAnnouncements.ExaDat.Duration.Minute,Txt_minutes);
         }
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Place where the exam will be made *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Place\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Place_of_exam,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"Place\" cols=\"40\" rows=\"4\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"Place\" name=\"Place\""
+	                 " cols=\"40\" rows=\"4\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.Place);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.Place,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.Place,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Place);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Exam mode *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"ExamMode\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Mode,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"ExamMode\" cols=\"40\" rows=\"2\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"ExamMode\" name=\"ExamMode\""
+	                 " cols=\"40\" rows=\"2\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.Mode);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.Mode,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.Mode,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Mode);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Structure of the exam *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Structure\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Structure_of_the_exam,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"Structure\" cols=\"40\" rows=\"8\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"Structure\" name=\"Structure\""
+	                 " cols=\"40\" rows=\"8\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.Structure);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.Structure,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.Structure,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.Structure);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Documentation required *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"DocRequired\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Documentation_required,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"DocRequired\" cols=\"40\" rows=\"2\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"DocRequired\" name=\"DocRequired\""
+	                 " cols=\"40\" rows=\"2\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.DocRequired);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.DocRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.DocRequired,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.DocRequired);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Material required *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"MatRequired\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Material_required,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"MatRequired\" cols=\"40\" rows=\"4\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"MatRequired\" name=\"MatRequired\""
+	                 " cols=\"40\" rows=\"4\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.MatRequired);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.MatRequired,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.MatRequired,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.MatRequired);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Material allowed *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"MatAllowed\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,
             Txt_EXAM_ANNOUNCEMENT_Material_allowed,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"MatAllowed\" cols=\"40\" rows=\"4\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"MatAllowed\" name=\"MatAllowed\""
+	                 " cols=\"40\" rows=\"4\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.MatAllowed);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.MatAllowed,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.MatAllowed,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.MatAllowed);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Other information to students *****/
-   fprintf (Gbl.F.Out,"<tr>" \
-	              "<td class=\"%s RIGHT_TOP\">"
-	              "%s:"
-	              "</td>" \
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"OtherInfo\" class=\"%s\">%s:</label>"
+	              "</td>"
                       "<td class=\"%s LEFT_TOP\">",
             StyleForm,Txt_EXAM_ANNOUNCEMENT_Other_information,
             StyleNormal);
    if (TypeViewExamAnnouncement == Exa_FORM_VIEW)
-      fprintf (Gbl.F.Out,"<textarea name=\"OtherInfo\" cols=\"40\" rows=\"5\">%s</textarea>",
+      fprintf (Gbl.F.Out,"<textarea id=\"OtherInfo\" name=\"OtherInfo\""
+	                 " cols=\"40\" rows=\"5\">"
+	                 "%s"
+	                 "</textarea>",
                Gbl.ExamAnnouncements.ExaDat.OtherInfo);
    else
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.ExamAnnouncements.ExaDat.OtherInfo,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to rigorous HTML
+                        Gbl.ExamAnnouncements.ExaDat.OtherInfo,
+                        Cns_MAX_BYTES_TEXT,false);
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnnouncements.ExaDat.OtherInfo);
      }
-   fprintf (Gbl.F.Out,"</td>" \
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End table *****/
@@ -1659,20 +1710,20 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    Dat_ConvDateToDateStr (&Gbl.ExamAnnouncements.ExaDat.ExamDate,StrExamDate);
 
    /***** Institution *****/
-   sprintf (*ContentStr,"%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %2u:%02u %s<br />" \
-                        "%s: %2u:%02u %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
-                        "%s: %s<br />" \
+   sprintf (*ContentStr,"%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %2u:%02u %s<br />"
+                        "%s: %2u:%02u %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
+                        "%s: %s<br />"
                         "%s: %s",
             Txt_Institution,Ins.FullName,
             Txt_Degree,Deg.FullName,

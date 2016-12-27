@@ -361,7 +361,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    /***** Start date/time *****/
    UniqueId++;
-   fprintf (Gbl.F.Out,"<tr>"  \
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td id=\"att_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
@@ -2955,7 +2955,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	    else						// No students attended to this event
 	      {
 	       /***** Get groups associated to an attendance event from database *****/
-	       sprintf (Query,"SELECT GrpCod FROM att_grp" \
+	       sprintf (Query,"SELECT GrpCod FROM att_grp"
 			      " WHERE att_grp.AttCod='%ld'",
 			Gbl.AttEvents.Lst[NumAttEvent].AttCod);
 	       NumGrpsInThisEvent = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event");

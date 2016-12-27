@@ -596,7 +596,7 @@ void Ntf_ShowMyNotifications (void)
          /* Write status (sent by email / pending to be sent by email) */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
                             "%s"
-                            "</td>"  \
+                            "</td>"
                             "</tr>",
                   ClassBackground,Txt_NOTIFICATION_STATUS[StatusTxt]);
 
