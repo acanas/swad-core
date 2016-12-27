@@ -435,6 +435,11 @@ a:hover						/* Default ==> underlined */
 .GREY_COURSE	{color:#F7F6F5;}
 .BLUE_COURSE	{color:white;}
 .YELLOW_COURSE	{color:white;}
+#my_courses
+	{
+	width:130px;
+	margin:1px;
+	}
 
 /***************************** Notifications *********************************/
 #msg	/* Notifications, used for AJAX based refresh */

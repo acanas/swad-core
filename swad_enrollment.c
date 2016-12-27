@@ -675,7 +675,7 @@ void Enr_AskRemoveOldUsrs (void)
    Lay_StartRoundFrame (NULL,Txt_Eliminate_old_users,NULL,NULL);
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
@@ -688,12 +688,10 @@ void Enr_AskRemoveOldUsrs (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
-   fprintf (Gbl.F.Out,"</select>"
-                      "<span class=\"%s\"> ",
-            The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</span>");
+   fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
    Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);

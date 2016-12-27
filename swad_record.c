@@ -1409,7 +1409,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
    Act_LinkFormSubmit (Txt_Print,The_ClassFormBold[Gbl.Prefs.Theme],NULL);
    Lay_PutIconWithText ("print64x64.png",Txt_Print,Txt_Print);
    fprintf (Gbl.F.Out,"</a>"
-                      "<label class=\"%s\">(<select name=\"RecsPerPag\">",
+                      "<label class=\"%s\">"
+                      "(<select name=\"RecsPerPag\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
    for (i = 1;
         i <= 10;
@@ -1420,7 +1421,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",i);
      }
-   fprintf (Gbl.F.Out,"</select> %s)</label>",
+   fprintf (Gbl.F.Out,"</select> %s)"
+	              "</label>",
             Txt_record_cards_per_page);
   }
 
@@ -2731,8 +2733,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
       Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE %s\">"
-			 "%s:</td>"
+			 "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
+			 "<label for=\"Role\" class=\"%s\">%s:</label>"
+			 "</td>"
 			 "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	       ClassForm,Txt_Role);
       switch (TypeOfView)
@@ -2742,7 +2745,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 				       UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod) ?	// I am the creator of the course
 				      Rol_TEACHER :
 				      Rol_STUDENT;
-	    fprintf (Gbl.F.Out,"<select name=\"Role\">");
+	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	    for (Role = Rol_STUDENT;
 		 Role <= Rol_TEACHER;
 		 Role++)
@@ -2756,7 +2759,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"</select>");
 	    break;
 	 case Rec_SHA_OTHER_EXISTING_USR_FORM:	// The other user already exists in the platform
-	    fprintf (Gbl.F.Out,"<select name=\"Role\">");
+	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	      {
 	       if (UsrDat->RoleInCurrentCrsDB < Rol_STUDENT)	// The other user does not belong to current course
@@ -2774,7 +2777,10 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol__GUEST_:
 		  case Rol_VISITOR:
 		  case Rol_STUDENT:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
+		     fprintf (Gbl.F.Out,"<option value=\"%u\""
+			                " selected=\"selected\""
+			                " disabled=\"disabled\">"
+			                "%s</option>",
 			      (unsigned) Gbl.Usrs.Me.LoggedRole,
 			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 		     break;
@@ -2817,26 +2823,29 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       DefaultRoleInCurrentCrs = (UsrDat->Roles & ((1 << Rol_STUDENT) |
 							   (1 << Rol_TEACHER))) ? Rol_VISITOR :
 										  Rol__GUEST_;
-	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\" disabled=\"disabled\">%s</option>",
+	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
+		                  " disabled=\"disabled\">%s</option>",
 			(unsigned) DefaultRoleInCurrentCrs,
 			Txt_ROLES_SINGUL_Abc[DefaultRoleInCurrentCrs][UsrDat->Sex]);
 	      }
 	    fprintf (Gbl.F.Out,"</select>");
 	    break;
 	 case Rec_SHA_OTHER_NEW_USR_FORM:	// The other user does not exist in platform
-	    fprintf (Gbl.F.Out,"<select name=\"Role\">");
+	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
 		  case Rol_TEACHER:	// A teacher only can create students
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
+		     fprintf (Gbl.F.Out,"<option value=\"%u\""
+			                " selected=\"selected\">%s</option>",
 			      (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
 		     break;
 		  case Rol_DEG_ADM:	// An administrator can create students and teachers in a course
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>"
+		     fprintf (Gbl.F.Out,"<option value=\"%u\""
+			                " selected=\"selected\">%s</option>"
 					"<option value=\"%u\">%s</option>",
 			      (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
 			      (unsigned) Rol_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
@@ -2848,7 +2857,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
 		  case Rol_SYS_ADM:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\">%s</option>",
+		     fprintf (Gbl.F.Out,"<option value=\"%u\""
+			                " selected=\"selected\">%s</option>",
 			      (unsigned) Rol__GUEST_,Txt_ROLES_SINGUL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
 		     break;
 		  default:	// The rest of users can not register other users
@@ -3033,13 +3043,11 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"REC_C1_BOT RIGHT_MIDDLE\">"
-                      "<label for=\"OthCtyCod\" class=\"%s\">"
-		      "%s",
+                      "<label for=\"OthCtyCod\" class=\"%s\">%s",
 	    ClassForm,Txt_Country);
    if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
       fprintf (Gbl.F.Out,"*");
-   fprintf (Gbl.F.Out,":"
-                      "</label>"
+   fprintf (Gbl.F.Out,":</label>"
 	              "</td>"
 		      "<td colspan=\"2\""
 		      " class=\"REC_C2_BOT LEFT_MIDDLE\">");
@@ -3678,9 +3686,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /***** Country *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"OthCtyCod\" class=\"%s\">"
-		      "%s:"
-                      "</label>"
+                      "<label for=\"OthCtyCod\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Country_of_your_institution,
@@ -3722,9 +3728,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /***** Institution *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"RIGHT_MIDDLE\">"
-                      "<label for=\"OthInsCod\" class=\"%s\">"
-		      "%s:"
-		      "</label>"
+                      "<label for=\"OthInsCod\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             ClassForm,Txt_Institution,
@@ -3771,9 +3775,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_MIDDLE\">"
-                         "<label for=\"OthCtrCod\" class=\"%s\">"
-			 "%s:"
-                         "</label>"
+                         "<label for=\"OthCtrCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Centre,
@@ -3818,9 +3820,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
       /***** Department *****/
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td class=\"RIGHT_MIDDLE\">"
-                         "<label for=\"DptCod\" class=\"%s\">"
-			 "%s:"
-                         "</label>"
+                         "<label for=\"DptCod\" class=\"%s\">%s:</label>"
 			 "</td>"
 			 "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
 	       ClassForm,Txt_Department,

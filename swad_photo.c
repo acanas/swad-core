@@ -1675,8 +1675,8 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_AvgPhotoTypeOfAverage_t TypeOfAvg;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"AvgType\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Average_type);
@@ -1684,7 +1684,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamColsClassPhoto ();
-   fprintf (Gbl.F.Out,"<select name=\"AvgType\""
+   fprintf (Gbl.F.Out,"<select id=\"AvgType\" name=\"AvgType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (TypeOfAvg = (Pho_AvgPhotoTypeOfAverage_t) 0;
@@ -1744,8 +1744,8 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_HowComputePhotoSize_t PhoSi;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"PhotoSize\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Size_of_photos);
@@ -1753,7 +1753,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
    Usr_PutParamColsClassPhoto ();
-   fprintf (Gbl.F.Out,"<select name=\"PhotoSize\""
+   fprintf (Gbl.F.Out,"<select id=\"PhotoSize\" name=\"PhotoSize\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (PhoSi = (Pho_HowComputePhotoSize_t) 0;
@@ -1813,8 +1813,8 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_HowOrderDegrees_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s RIGHT_MIDDLE\">"
-	              "%s:"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"OrdDeg\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
@@ -1822,7 +1822,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamColsClassPhoto ();
-   fprintf (Gbl.F.Out,"<select name=\"OrdDeg\""
+   fprintf (Gbl.F.Out,"<select id=\"OrdDeg\" name=\"OrdDeg\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (Order = (Pho_HowOrderDegrees_t) 0;

@@ -1181,7 +1181,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
             RowSpan,ColSpan,TimeTableClasses[ClassType]);
    if (ClassType == TT_NO_CLASS)
       fprintf (Gbl.F.Out,"%u",Hour % 4);
-   fprintf (Gbl.F.Out," CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out," CENTER_MIDDLE DAT_SMALL\">");
 
    /***** Form to modify this cell *****/
    if (TimeTableView == TT_CRS_EDIT)
@@ -1240,8 +1240,6 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
          Par_PutHiddenParamUnsigned ("ModTTDay",Day);
          Par_PutHiddenParamUnsigned ("ModTTHour",Hour);
          Par_PutHiddenParamUnsigned ("ModTTCol",Column);
-
-	 fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\">");
 
 	 /***** Class type *****/
 	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:68px;\""
@@ -1356,7 +1354,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                Par_PutHiddenParamString ("ModHorGrp","");
 	       /***** Place *****/
 	       fprintf (Gbl.F.Out,"<br />"
-		                  "<label>"
+		                  "<label class=\"DAT_SMALL\">"
 		                  "%s"
                                   "<input type=\"text\" name=\"ModHorLugar\""
                                   " size=\"12\" maxlength=\"%u\" value=\"%s\""
@@ -1365,7 +1363,6 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
 	      }
 	   }
-         fprintf (Gbl.F.Out,"</span>");
 	 break;
      }
 

@@ -1103,8 +1103,7 @@ void Crs_WriteSelectorMyCourses (void)
                                                ActSysReqSch);
 
    /***** Start of selector of courses *****/
-   fprintf (Gbl.F.Out,"<select name=\"crs\""
-	              " style=\"width:130px; margin:1px;\""
+   fprintf (Gbl.F.Out,"<select id=\"my_courses\" name=\"crs\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
 
@@ -3345,10 +3344,10 @@ void Crs_AskRemoveOldCrss (void)
    Lay_StartRoundFrame (NULL,Txt_Eliminate_old_courses,NULL,Hlp_SYSTEM_Old);
 
    /***** Form to request number of months without clicks *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
+	              "<select name=\"Months\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Eliminate_all_courses_whithout_users_PART_1_OF_2);
-   fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (i  = Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i <= Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS;
         i++)
@@ -3358,12 +3357,10 @@ void Crs_AskRemoveOldCrss (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",i);
      }
-   fprintf (Gbl.F.Out,"</select>"
-                      "<span class=\"%s\"> ",
-            The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</span>");
+   fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
    Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Eliminate);

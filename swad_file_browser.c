@@ -9394,14 +9394,16 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** Private or public? *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "<td class=\"RIGHT_MIDDLE\">"
+			    "<label for=\"PublicFile\" class=\"%s\">"
 			    "%s:"
+			    "</label>"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_Availability);
 	 if (ICanChangePublic)	// I can change file to public
 	   {
-	    fprintf (Gbl.F.Out,"<select name=\"PublicFile\">");
+	    fprintf (Gbl.F.Out,"<select id=\"PublicFile\" name=\"PublicFile\">");
 
 	    fprintf (Gbl.F.Out,"<option value=\"N\"");
 	    if (!FileMetadata.IsPublic)
@@ -9424,14 +9426,14 @@ void Brw_ShowFileMetadata (void)
 
 	 /***** License *****/
 	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
+			    "<td class=\"RIGHT_MIDDLE\">"
+			    "<label for=\"License\" class=\"%s\">%s:</label>"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">",
 		  The_ClassForm[Gbl.Prefs.Theme],Txt_License);
 	 if (ICanEdit)	// I can edit file properties
 	   {
-	    fprintf (Gbl.F.Out,"<select name=\"License\">");
+	    fprintf (Gbl.F.Out,"<select id=\"License\" name=\"License\">");
 
 	    for (License = 0;
 		 License < Brw_NUM_LICENSES;
@@ -11820,7 +11822,7 @@ void Brw_AskRemoveOldFiles (void)
    Lay_StartRoundFrame (NULL,Txt_Remove_old_files,NULL,NULL);
 
    /***** Form to request number of months (to remove files older) *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
@@ -11833,12 +11835,10 @@ void Brw_AskRemoveOldFiles (void)
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
-   fprintf (Gbl.F.Out,"</select>"
-                      "<span class=\"%s\"> ",
-            The_ClassForm[Gbl.Prefs.Theme]);
+   fprintf (Gbl.F.Out,"</select>&nbsp;");
    fprintf (Gbl.F.Out,Txt_Remove_files_older_than_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
-   fprintf (Gbl.F.Out,"</span>");
+   fprintf (Gbl.F.Out,"</label>");
 
    /***** End frame *****/
    Lay_EndRoundFrameWithButton (Lay_REMOVE_BUTTON,Txt_Remove);

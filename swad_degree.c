@@ -604,7 +604,8 @@ void Deg_WriteSelectorOfDegree (void)
                Gbl.Form.Id);
    else
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"\"");
+   fprintf (Gbl.F.Out,">"
+	              "<option value=\"\"");
    if (Gbl.CurrentDeg.Deg.DegCod < 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out," disabled=\"disabled\">[%s]</option>",

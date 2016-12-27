@@ -2061,8 +2061,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
    /***** Put a selector for the type of color *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"26\" class=\"%s CENTER_MIDDLE\">",
-            The_ClassForm[Gbl.Prefs.Theme]);
+	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
    Act_FormStartAnchor (Gbl.Action.Act,"stat_form");
    Sta_WriteParamsDatesSeeAccesses ();
@@ -2077,9 +2076,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       Sta_PutHiddenParamScopeSta ();
      }
 
-   fprintf (Gbl.F.Out,"%s: ",Txt_Color_of_the_graphic);
-   fprintf (Gbl.F.Out,"<select name=\"ColorType\""
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;"
+                      "<select name=\"ColorType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
+            The_ClassForm[Gbl.Prefs.Theme],
+            Txt_Color_of_the_graphic,
             Gbl.Form.Id);
    for (ColorType = (Sta_ColorType_t) 0;
 	ColorType < Sta_NUM_COLOR_TYPES;
@@ -2090,7 +2091,8 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
          fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s",Txt_STAT_COLOR_TYPES[ColorType]);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   fprintf (Gbl.F.Out,"</select>"
+	              "</label>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
@@ -3812,8 +3814,7 @@ void Sta_ReqShowFigures (void)
    Lay_StartRoundFrame (NULL,Txt_Statistic,NULL,Hlp_STATS_Figures);
 
    /***** Compute stats for anywhere, degree or course? *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-	              "%s: ",
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
@@ -3824,11 +3825,12 @@ void Sta_ReqShowFigures (void)
    Gbl.Scope.Default = Sco_SCOPE_SYS;
    Sco_GetScope ("ScopeSta");
    Sco_PutSelectorScope ("ScopeSta",false);
+   fprintf (Gbl.F.Out,"</label><br />");
 
    /***** Type of statistic *****/
-   fprintf (Gbl.F.Out,"<br />"
-	              "%s: <select name=\"FigureType\">",
-	    Txt_Statistic);
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;"
+	              "<select name=\"FigureType\">",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_Statistic);
    for (FigureType = (Sta_FigureType_t) 0;
 	FigureType < Sta_NUM_FIGURES;
 	FigureType++)
@@ -3843,7 +3845,7 @@ void Sta_ReqShowFigures (void)
                Txt_STAT_USE_STAT_TYPES[FigureType]);
      }
    fprintf (Gbl.F.Out,"</select>"
-                      "</div>");
+	              "</label>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Show_statistic);

@@ -292,7 +292,7 @@ void Rol_PutFormToChangeMyRole (void)
    Rol_Role_t Role;
 
    Act_FormStart (ActChgMyRol);
-   fprintf (Gbl.F.Out,"<select name=\"UsrTyp\" class=\"SEL_ROLE\""
+   fprintf (Gbl.F.Out,"<select name=\"MyRole\" class=\"SEL_ROLE\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (Role = Rol__GUEST_;
@@ -320,7 +320,7 @@ void Rol_ChangeMyRole (void)
    unsigned UnsignedNum;
 
    /***** Get parameter with the new logged role ******/
-   Par_GetParToText ("UsrTyp",UnsignedStr,10);
+   Par_GetParToText ("MyRole",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
      {
       /* Check if new role is a correct type *****/

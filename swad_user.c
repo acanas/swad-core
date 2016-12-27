@@ -2091,7 +2091,7 @@ void Usr_WriteLoggedUsrHead (void)
    char PhotoURL[PATH_MAX+1];
    char UsrName[Usr_MAX_BYTES_NAME+1];
 
-   /***** User's type *****/
+   /***** User's role *****/
    if (Rol_GetNumAvailableRoles () == 1)
      {
       Act_FormStart (ActFrmRolSes);
@@ -2882,18 +2882,16 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Put a form to change my role *****/
    if (Rol_GetNumAvailableRoles () == 1)
-      fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">"
-	                 "%s: <span class=\"DAT_N_BOLD\">%s</span>"
-                         "</div>",
+      fprintf (Gbl.F.Out,"<span class=\"DAT\">%s:&nbsp;</span>"
+	                 "<span class=\"DAT_N_BOLD\">%s</span>",
                Txt_Role,
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
    else
      {
-      fprintf (Gbl.F.Out,"<div class=\"%s CENTER_MIDDLE\">"
-	                 "%s: ",
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
                The_ClassForm[Gbl.Prefs.Theme],Txt_Role);
       Rol_PutFormToChangeMyRole ();
-      fprintf (Gbl.F.Out,"</div>");
+      fprintf (Gbl.F.Out,"</label>");
      }
 
    /***** End frame *****/

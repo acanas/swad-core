@@ -2536,7 +2536,7 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
      };
 
    /***** Course selection *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s </span>"
+   fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;"
                       "<select name=\"FilterCrsCod\">"
                       "<option value=\"\"",
             The_ClassForm[Gbl.Prefs.Theme],
@@ -2555,7 +2555,8 @@ void Msg_ShowFormSelectCourseSentOrRecMsgs (void)
         fprintf (Gbl.F.Out," selected=\"selected\"");	// Select origin course
       fprintf (Gbl.F.Out,">%s</option>",Gbl.Msg.Courses[NumOriginCrs].ShrtName);
      }
-   fprintf (Gbl.F.Out,"</select>");
+   fprintf (Gbl.F.Out,"</select>"
+	              "</label>");
   }
 
 /*****************************************************************************/
