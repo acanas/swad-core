@@ -422,38 +422,42 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
-   char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];	// old version because is a nickname retrieved from database. TODO: change in 2013
-   bool PutColspan;
+   char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];
    unsigned Colspan;
+   bool StdsAndTchsWritten = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
+                             (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
+                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-   PutColspan = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
-                (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
-                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
-   if (PutColspan)
+   /***** How many columns? *****/
+   if (StdsAndTchsWritten)
       Colspan = Usr_GetColumnsForSelectUsrs ();
+   else
+      Colspan = 1;
+
+   /***** Title *****/
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<th");
+   if (Colspan > 1)
+      fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
+   fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+	              "<label for=\"OtherRecipients\">%s:</label>"
+	              "</th>"
+	              "</tr>",
+            StdsAndTchsWritten ? Txt_Other_recipients :
+        	                 Txt_Recipients);
 
    /***** Textarea with users' @nicknames, emails or IDs *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<th class=\"LEFT_MIDDLE LIGHT_BLUE\"");
-   if (PutColspan)
-      fprintf (Gbl.F.Out," colspan=\"%u\">%s:",
-	       Colspan,Txt_Other_recipients);
-   else
-      fprintf (Gbl.F.Out," >%s:",
-	       Txt_Recipients);
-   fprintf (Gbl.F.Out,"</th>"
-	              "</tr>"
-                      "<tr>"
                       "<td");
-   if (PutColspan)
+   if (Colspan > 1)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
-	              "<textarea name=\"OtherRecipients\" cols=\"72\" rows=\"2\""
-	              " placeholder=\"%s&hellip;\">",
+	              "<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
+	              " cols=\"72\" rows=\"2\""
+	              " placeholder=\"%s\">",
             Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.ListOtherRecipients[0])
       fprintf (Gbl.F.Out,"%s",Gbl.Usrs.ListOtherRecipients);
-//   else if (Gbl.Msg.Reply.IsReply)	// If this is a reply message
    else if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)	// If there is a recipient
 						// and there's no list of explicit recipients,
 						// write @nickname of original sender

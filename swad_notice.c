@@ -89,14 +89,12 @@ static long Not_GetParamNotCod (void);
 void Not_ShowFormNotice (void)
   {
    extern const char *Hlp_MESSAGES_Notices;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_;
+   extern const char *Txt_The_notice_will_appear_as_a_yellow_note_;
    extern const char *Txt_New_notice;
-   extern const char *Txt_MSG_Message;
    extern const char *Txt_Create_notice;
 
    /***** Help message *****/
-   sprintf (Gbl.Message,Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_,
+   sprintf (Gbl.Message,Txt_The_notice_will_appear_as_a_yellow_note_,
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
@@ -104,23 +102,15 @@ void Not_ShowFormNotice (void)
    Act_FormStart (ActRcvNot);
 
    /***** Start frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices,2);
+   Lay_StartRoundFrame (NULL,Txt_New_notice,NULL,Hlp_MESSAGES_Notices);
 
    /***** Message body *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s RIGHT_TOP\">"
-                      "%s: "
-                      "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea name=\"Content\" cols=\"30\" rows=\"10\">"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Message);
+   fprintf (Gbl.F.Out,"<textarea name=\"Content\" cols=\"30\" rows=\"10\""
+	              " autofocus=\"autofocus\" required=\"required\">"
+                      "</textarea>");
 
    /***** Button to create notice and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
+   Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_notice);
 
    /***** End form *****/
    Act_FormEnd ();

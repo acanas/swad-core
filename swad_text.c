@@ -44399,88 +44399,106 @@ const char *Txt_The_nickname_entered_X_is_not_valid_ =	// Warning: it is very im
 	" a digit (0-9) or &quot;_&quot;.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_notice_you_enter_here_will_appear_as_a_yellow_note_ =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_notice_will_appear_as_a_yellow_note_ =
 #if   L==1
-	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
-	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no solo por los usuarios de la asignatura %s).<br />"
-	"<strong>El mensaje debe ser breve</strong>."
-	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
-	" puede usar el foro de la asignatura,"
-	" enviar un mensaje a todos a trav&eacute;s del sistema de mensajer&iacute;a interna,"
-	" o incluso crear un archivo con el texto y a&ntilde;adirlo a la zona de documentos.";	// Necessita traduccio
+	"L'av&iacute;s apareixer&agrave; en forma de nota groga"
+	" a l'esquerra de la p&agrave;gina"
+	" i ser&agrave; <strong>visible per tot el m&oacute;n</strong>"
+	" (no nom&eacute;s pels usuaris de l'assignatura).<br />"
+	"<strong>El missatge ha de ser breu.</strong>"
+	" Per crear un av&iacute;s extens"
+	" o d'acc&eacute;s exclusiu per a estudiants,"
+	" pot utilitzar el f&ograve;rum de l'assignatura,"
+	" enviar un missatge a tots,"
+	" o pujar un arxiu amb el text a la zona de documents.";
 #elif L==2
-	"The notice you enter here will appear as a yellow note"
-	" in the left of the page and will be visible <strong>worldwide</strong>"
-	" (not just by users of the course %s).<br />"
-	"<strong>The message should be short</strong>."
-	" If you want to create a long notice or a notice with exclusive access to your students,"
-	" you can use the forum of the course,"
-	" or send a message to all through the internal messaging system,"
-	" or even create a file with the text and upload it to the documents area.";	// Need Übersetzung
+	"Die Ank&uuml;ndigung wird als ein gelber Hinweis"
+	" auf der linken Seite der Seite erscheinen"
+	" und wird <strong>weltweit</strong>"
+	" (nicht nur von den Benutzern des Kurses) sichtbar sein.<br />"
+	"<strong>Die Nachricht sollte kurz sein</strong>."
+	" Wenn Sie eine lange Ank&uuml;ndigung"
+	" oder einen Hinweis mit exklusivem Zugang f&uuml;r Studenten erstellen m&ouml;chten,"
+	" k&ouml;nnen Sie das Forum des Kurses nutzen,"
+	" eine Nachricht an alle senden"
+	" oder eine Datei mit dem Text in den Dokumentenbereich hochladen.";
 #elif L==3
-	"The notice you enter here will appear as a yellow note"
-	" in the left of the page and will be visible <strong>worldwide</strong>"
-	" (not just by users of the course %s).<br />"
+	"The notice will appear as a yellow note"
+	" in the left of the page"
+	" and will be <strong>visible worldwide</strong>"
+	" (not just by users of the course).<br />"
 	"<strong>The message should be short</strong>."
-	" If you want to create a long notice or a notice with exclusive access to your students,"
+	" If you want to create a long notice"
+	" or a notice with exclusive access for students,"
 	" you can use the forum of the course,"
-	" or send a message to all through the internal messaging system,"
-	" or even create a file with the text and upload it to the documents area.";
+	" send a message to all,"
+	" or upload a file with the text to the documents area.";
 #elif L==4
-	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
-	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no solo por los usuarios de la asignatura %s).<br />"
+	"El aviso aparecer&aacute; en forma de nota amarilla"
+	" a la izquierda de la p&aacute;gina"
+	" y ser&aacute; <strong>visible por todo el mundo</strong>"
+	" (no solo por los usuarios de la asignatura).<br />"
 	"<strong>El mensaje debe ser breve</strong>."
-	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
+	" Si desea crear un aviso extenso"
+	" o de acceso exclusivo para estudiantes,"
 	" puede usar el foro de la asignatura,"
-	" enviar un mensaje a todos a trav&eacute;s del sistema de mensajer&iacute;a interna,"
-	" o incluso crear un archivo con el texto y a&ntilde;adirlo a la zona de documentos.";
+	" enviar un mensaje a todos,"
+	" o subir un archivo con el texto a la zona de documentos.";
 #elif L==5
-	"The notice you enter here will appear as a yellow note"
-	" in the left of the page and will be visible <strong>worldwide</strong>"
-	" (not just by users of the course %s).<br />"
-	"<strong>The message should be short</strong>."
-	" If you want to create a long notice or a notice with exclusive access to your students,"
-	" you can use the forum of the course,"
-	" or send a message to all through the internal messaging system,"
-	" or even create a file with the text and upload it to the documents area.";	// Besoin de traduction
+	"L'avis appara&icirc;tra comme une note jaune"
+	" &agrave; gauche de la page"
+	" et sera <strong>visible dans le monde entier</strong>"
+	" (pas seulement par les utilisateurs du cours).<br />"
+	"<strong>Le message doit &ecirc;tre court</strong>."
+	" Si vous souhaitez cr&eacute;er un avis long"
+	" ou un avis avec un acc&egrave;s exclusif pour les &eacute;tudiants,"
+	" vous pouvez utiliser le forum du cours,"
+	" envoyer un message &agrave; tous"
+	" ou t&eacute;l&eacute;charger un fichier avec le texte dans la zone des documents.";
 #elif L==6
-	"El aviso que escriba aqu&iacute; aparecer&aacute; en forma de nota amarilla"
-	" a la izquierda de la p&aacute;gina y ser&aacute; <strong>visible por todo el mundo</strong>"
-	" (no solo por los usuarios de la asignatura %s).<br />"
+	"El aviso aparecer&aacute; en forma de nota amarilla"
+	" a la izquierda de la p&aacute;gina"
+	" y ser&aacute; <strong>visible por todo el mundo</strong>"
+	" (no solo por los usuarios de la asignatura).<br />"
 	"<strong>El mensaje debe ser breve</strong>."
-	" Si desea crear un aviso extenso o de acceso exclusivo para sus estudiantes,"
+	" Si desea crear un aviso extenso"
+	" o de acceso exclusivo para estudiantes,"
 	" puede usar el foro de la asignatura,"
-	" enviar un mensaje a todos a trav&eacute;s del sistema de mensajer&iacute;a interna,"
-	" o incluso crear un archivo con el texto y a&ntilde;adirlo a la zona de documentos.";	// Okoteve traducción
+	" enviar un mensaje a todos,"
+	" o subir un archivo con el texto a la zona de documentos.";	// Okoteve traducción
 #elif L==7
-	"L'avviso che hai inserito qui apparir&agrave; come una nota in giallo"
-	" sulla parte sinistra della pagina &egrave; sar&agrave; <strong>visibile a tutti</strong>"
-	" (non solo da utenti del corso %s).<br />"
-	"<strong>Il messaggio dovr&agrave; essere breve</strong>."
-	" Se vuoi creare un avviso lungo o un avviso con accesso esclusivo per i tuoi studenti,"
-	" potrai usare il forum del corso,"
-	" o inviare un messaggio a tutti attraverso il sistema di messaggistica interno,"
-	" o sempre creare un file con il testo e caricarlo nell'area documenti.";
+	"L'avviso verr&agrave; visualizzato come una nota di colore giallo"
+	" nella parte sinistra della pagina"
+	" e sar&agrave; <strong>visibile in tutto il mondo</strong>"
+	" (non solo dagli utenti del corso).<br />"
+	"<strong>Il messaggio deve essere breve</strong>."
+	" Se si desidera creare un lungo avviso"
+	" o una comunicazione con accesso esclusivo per gli studenti,"
+	" &egrave; possibile utilizzare il forum del corso,"
+	" inviare un messaggio a tutti,"
+	" o caricare un file con il testo all'area documenti.";
 #elif L==8
-	"The notice you enter here will appear as a yellow note"
-	" in the left of the page and will be visible <strong>worldwide</strong>"
-	" (not just by users of the course %s).<br />"
-	"<strong>The message should be short</strong>."
-	" If you want to create a long notice or a notice with exclusive access to your students,"
-	" you can use the forum of the course,"
-	" or send a message to all through the internal messaging system,"
-	" or even create a file with the text and upload it to the documents area.";	// Potrzebujesz tlumaczenie
+	"Og&lstrok;oszenie pojawi si&eogon; jako &zdot;&oacute;&lstrok;ty notatki"
+	" w lewej strony"
+	" i b&eogon;dzie <strong>widoczny na ca&lstrok;ym &sacute;wiecie</strong>"
+	" (nie tylko przez u&zdot;ytkownik&oacute;w oczywi&sacute;cie).<br />"
+	"<strong>Wiadomo&sacute;&cacute; powinna by&cacute; kr&oacute;tka</strong>."
+	" Je&sacute;li chcesz stworzy&cacute; d&lstrok;ug&aogon; zawiadomienie"
+	" lub zawiadomienie z wy&lstrok;&aogon;cznego dost&eogon;pu dla student&oacute;w,"
+	" mo&zdot;na korzysta&cacute; z forum kursu,"
+	" wys&lstrok;a&cacute; wiadomo&sacute;&cacute; do wszystkich,"
+	" lub przes&lstrok;a&cacute; plik z tekstem do obszaru dokument&oacute;w.";
 #elif L==9
-	"The notice you enter here will appear as a yellow note"
-	" in the left of the page and will be visible <strong>worldwide</strong>"
-	" (not just by users of the course %s).<br />"
-	"<strong>The message should be short</strong>."
-	" If you want to create a long notice or a notice with exclusive access to your students,"
-	" you can use the forum of the course,"
-	" or send a message to all through the internal messaging system,"
-	" or even create a file with the text and upload it to the documents area.";	// Necessita de tradução
+	"O aviso aparecer&aacute; como uma nota amarela"
+	" &agrave; esquerda da p&aacute;gina"
+	" e ser&aacute; <strong>vis&iacute;vel em todo o mundo</strong>"
+	" (n&atilde;o apenas pelos usu&aacute;rios do curso).<br />"
+	"<strong>A mensagem deve ser curta</strong>."
+	" Se voc&ecirc; quiser criar um aviso longo"
+	" ou um aviso com acesso exclusivo para os alunos,"
+	" voc&ecirc; pode usar o f&oacute;rum do curso,"
+	" enviar uma mensagem para todos"
+	" ou enviar um arquivo com o texto para a &aacute;rea de documentos.";
 #endif
 
 const char *Txt_The_new_web_address_is_X =	// Warning: it is very important to include %s in the following sentences
