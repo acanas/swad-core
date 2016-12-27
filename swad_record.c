@@ -3285,16 +3285,16 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
    extern const char *Txt_USER_comments;
 
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"REC_C1_BOT RIGHT_TOP %s\">"
-		      "%s:"
+		      "<td class=\"REC_C1_BOT RIGHT_TOP\">"
+		      "<label for=\"Comments\" class=\"%s\">%s:</label>"
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP\">",
 	    ClassForm,Txt_USER_comments);
    if (ShowData)
      {
       if (DataForm)
-	 fprintf (Gbl.F.Out,"<textarea name=\"Comments\" rows=\"4\""
-			    " class=\"REC_C2_BOT_INPUT\">"
+	 fprintf (Gbl.F.Out,"<textarea id=\"Comments\" name=\"Comments\""
+	                    " rows=\"4\" class=\"REC_C2_BOT_INPUT\">"
 			    "%s"
 			    "</textarea>",
 		  UsrDat->Comments);

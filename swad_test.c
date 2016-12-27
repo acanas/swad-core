@@ -4570,9 +4570,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
    /***** Stem and image *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Stem\" class=\"%s\">"
-	              "%s:"
-                      "</label>"
+	              "<label for=\"Stem\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Stem\" name=\"Stem\""
