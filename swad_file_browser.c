@@ -1479,7 +1479,9 @@ static void Brw_PutHiddenParamFullTreeIfSelected (void);
 static bool Brw_GetFullTreeFromForm (void);
 
 static bool Brw_GetIfGroupFileBrowser (void);
+static bool Brw_GetIfUsrAssigWorksFileBrowser (void);
 static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
+static bool Brw_GetIfBriefcaseFileBrowser (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
@@ -2176,19 +2178,14 @@ void Brw_GetParAndInitFileBrowser (void)
    Brw_SetFullPathInTree (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
 	                  Gbl.FileBrowser.FilFolLnkName);
 
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         /* Get lists of the selected users */
-         Usr_GetListsSelectedUsrsCods ();
-         /* Get user whose folder will be used to make any operation */
-         Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-         /* Get whether we must create the zip file or not */
-         Gbl.FileBrowser.ZIP.CreateZIP = ZIP_GetCreateZIPFromForm ();
-         break;
-      default:
-         break;
+      /* Get lists of the selected users */
+      Usr_GetListsSelectedUsrsCods ();
+      /* Get user whose folder will be used to make any operation */
+      Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+      /* Get whether we must create the zip file or not */
+      Gbl.FileBrowser.ZIP.CreateZIP = ZIP_GetCreateZIPFromForm ();
      }
 
    switch (Gbl.Action.Act)
@@ -3421,20 +3418,12 @@ void Brw_ShowAgainFileBrowserOrWorks (void)
    extern const char *Txt_Files_of_marks_must_contain_a_table_in_HTML_format_;
    extern const char *Txt_Disclaimer_the_files_hosted_here_;
 
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_ASSIG_USR:
-      case Brw_ADMI_WORKS_USR:
-         Brw_ShowFileBrowsersAsgWrkUsr ();
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Brw_ShowFileBrowsersAsgWrkCrs ();
-         break;
-      default:
-         Brw_ShowFileBrowserNormal ();
-         break;
-     }
+   if (Brw_GetIfUsrAssigWorksFileBrowser ())
+      Brw_ShowFileBrowsersAsgWrkUsr ();
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+      Brw_ShowFileBrowsersAsgWrkCrs ();
+   else
+      Brw_ShowFileBrowserNormal ();
 
    /***** Help *****/
    switch (Gbl.FileBrowser.Type)
@@ -3732,21 +3721,17 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /* Put checkbox to show the full tree */
    Brw_PutCheckboxFullTree ();
 
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-	 /* Put link to create a zip file with all the works of the selected users */
-	 if (!Gbl.FileBrowser.ZIP.CreateZIP)
-	    ZIP_PutLinkToCreateZIPAsgWrk ();
-         break;
-      case Brw_ADMI_BRIEF_USR:
-	 /* Put link to remove old files */
-	 if (Gbl.Action.Act != ActReqRemOldBrf)
-	    Brw_PutLinkToAskRemOldFiles ();
-         break;
-      default:
-         break;
+      /* Put link to remove old files */
+      if (Gbl.Action.Act != ActReqRemOldBrf)
+	 Brw_PutLinkToAskRemOldFiles ();
+     }
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+     {
+      /* Put link to create a zip file with all the works of the selected users */
+      if (!Gbl.FileBrowser.ZIP.CreateZIP)
+	 ZIP_PutLinkToCreateZIPAsgWrk ();
      }
 
    fprintf (Gbl.F.Out,"</div>");
@@ -4727,8 +4712,33 @@ static bool Brw_GetIfCrsAssigWorksFileBrowser (void)
   {
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
+      case Brw_ADMI_ASSIG_CRS:	// Course assignments
+      case Brw_ADMI_WORKS_CRS:	// Course works
+         return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/****** Get if the current file browser is course assignments or works *******/
+/*****************************************************************************/
+
+static bool Brw_GetIfBriefcaseFileBrowser (void)
+  {
+   return (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR);
+  }
+
+/*****************************************************************************/
+/****** Get if the current file browser is course assignments or works *******/
+/*****************************************************************************/
+
+static bool Brw_GetIfUsrAssigWorksFileBrowser (void)
+  {
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_ASSIG_USR:	// My assignments
+      case Brw_ADMI_WORKS_USR:	// My works
          return true;
       default:
 	 return false;
@@ -10689,18 +10699,16 @@ long Brw_GetCodForFiles (void)
 
 static long Brw_GetZoneUsrCodForFiles (void)
   {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_WORKS_USR:	// My works
-      case Brw_ADMI_ASSIG_USR:	// My assignments
-      case Brw_ADMI_BRIEF_USR:	// My briefcase
-	 return Gbl.Usrs.Me.UsrDat.UsrCod;
-      case Brw_ADMI_WORKS_CRS:	// Course works
-      case Brw_ADMI_ASSIG_CRS:	// Course assignments
-	 return Gbl.Usrs.Other.UsrDat.UsrCod;
-      default:
-	 return -1L;
-     }
+   if (Brw_GetIfBriefcaseFileBrowser ())	// Briefcase
+      return Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   if (Brw_GetIfUsrAssigWorksFileBrowser ())	// My assignments or works
+      return Gbl.Usrs.Me.UsrDat.UsrCod;
+
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())	// Course assignments or works
+      return Gbl.Usrs.Other.UsrDat.UsrCod;
+
+   return -1L;
   }
 
 /*****************************************************************************/
@@ -11736,7 +11744,7 @@ void Brw_RemoveOldFilesBriefcase (void)
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
 
-   if (Gbl.FileBrowser.Type == Brw_ADMI_BRIEF_USR)
+   if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Get parameter with number of months without access *****/
       Par_GetParToText ("Months",UnsignedStr,10);
