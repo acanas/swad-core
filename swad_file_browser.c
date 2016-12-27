@@ -1475,7 +1475,12 @@ static void Brw_PutParamsContextualLink (void);
 
 static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
+static void Brw_PutHiddenParamFullTreeIfSelected (void);
 static bool Brw_GetFullTreeFromForm (void);
+
+static bool Brw_GetIfGroupFileBrowser (void);
+static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
+
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB);
 static void Brw_ResetFileBrowserSize (void);
@@ -1555,7 +1560,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow);
 static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType);
 static bool Brw_CheckIfUploadIsAllowed (const char *FileType);
 
-static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod);
+static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner);
+static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod);
 static void Brw_WriteBigLinkToDownloadFile (const char *URL,
                                             struct FileMetadata *FileMetadata,
                                             const char *FileNameToShow);
@@ -3081,7 +3087,8 @@ void Brw_AskEditWorksCrs (void)
          /* Start form */
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
-         Par_PutHiddenParamChar ("FullTree",'Y');	// By default, show all files
+         Gbl.FileBrowser.FullTree = true;	// By default, show all files
+         Brw_PutHiddenParamFullTreeIfSelected ();
 
          /* Put list of users to select some of them */
          fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
@@ -3248,6 +3255,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActChgZone[Gbl.FileBrowser.Type]);
+   Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** List start *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
@@ -4641,9 +4649,7 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
 
 static void Brw_PutParamsContextualLink (void)
   {
-   if (Gbl.FileBrowser.FullTree)
-      Par_PutHiddenParamChar ("FullTree",'Y');
-
+   Brw_PutHiddenParamFullTreeIfSelected ();
    // It's not necessary to put a parameter with the group code...
    // ...because it is stored in database
   }
@@ -4664,40 +4670,21 @@ static void Brw_PutCheckboxFullTree (void)
 
 static void Brw_PutParamsFullTree (void)
   {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOCUM_INS:
-      case Brw_ADMI_DOCUM_INS:
-      case Brw_ADMI_SHARE_INS:
-      case Brw_SHOW_DOCUM_CTR:
-      case Brw_ADMI_DOCUM_CTR:
-      case Brw_ADMI_SHARE_CTR:
-      case Brw_SHOW_DOCUM_DEG:
-      case Brw_ADMI_DOCUM_DEG:
-      case Brw_ADMI_SHARE_DEG:
-      case Brw_SHOW_DOCUM_CRS:
-      case Brw_ADMI_DOCUM_CRS:
-      case Brw_ADMI_TEACH_CRS:
-      case Brw_ADMI_SHARE_CRS:
-      case Brw_SHOW_MARKS_CRS:
-      case Brw_ADMI_MARKS_CRS:
-         Grp_PutParamGrpCod (-1L);
-	 break;
-      case Brw_SHOW_DOCUM_GRP:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_SHOW_MARKS_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-	 Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 break;
-      default:
-	 break;
-     }
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+      Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+  }
+
+/*****************************************************************************/
+/********* Put hidden parameter "full tree" if full tree is selected *********/
+/*****************************************************************************/
+
+static void Brw_PutHiddenParamFullTreeIfSelected (void)
+  {
+   if (Gbl.FileBrowser.FullTree)
+      Par_PutHiddenParamChar ("FullTree",'Y');
+   // if not full tree selected ==> do not put hidden parameter
   }
 
 /*****************************************************************************/
@@ -4710,6 +4697,42 @@ static bool Brw_GetFullTreeFromForm (void)
 
    Par_GetParToText ("FullTree",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+  }
+
+/*****************************************************************************/
+/********* Get if the current file browser is a group file browser ***********/
+/*****************************************************************************/
+
+static bool Brw_GetIfGroupFileBrowser (void)
+  {
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_SHOW_DOCUM_GRP:
+      case Brw_ADMI_DOCUM_GRP:
+      case Brw_ADMI_TEACH_GRP:
+      case Brw_ADMI_SHARE_GRP:
+      case Brw_SHOW_MARKS_GRP:
+      case Brw_ADMI_MARKS_GRP:
+         return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/****** Get if the current file browser is course assignments or works *******/
+/*****************************************************************************/
+
+static bool Brw_GetIfCrsAssigWorksFileBrowser (void)
+  {
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_ASSIG_CRS:
+      case Brw_ADMI_WORKS_CRS:
+         return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -5388,21 +5411,12 @@ static void Brw_PutIconRemoveFile (const char *PathInTree,const char *FileName,c
      {
       /***** Form to remove a file *****/
       Act_FormStart (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
+      if (Brw_GetIfGroupFileBrowser ())
+         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
         {
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-            Usr_PutHiddenParUsrCodAll (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
+	 Usr_PutHiddenParUsrCodAll (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
         }
       Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
@@ -5433,21 +5447,12 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
      {
       /***** Form to remove a folder *****/
       Act_FormStart (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
+      if (Brw_GetIfGroupFileBrowser ())
+         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
         {
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-            Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
+	 Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
         }
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
@@ -5476,21 +5481,12 @@ static void Brw_PutIconCopy (const char *PathInTree,const char *FileName,const c
 
    /***** Form to copy into the clipboard *****/
    Act_FormStart (Brw_ActCopy[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-	 Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	 break;
-      default:
-	 break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
@@ -5517,21 +5513,12 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
 
    /***** Form to paste the content of the clipboard *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
@@ -5592,23 +5579,12 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          /***** Form to expand folder *****/
 	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Anchor);
-         switch (Gbl.FileBrowser.Type)
-           {
-            case Brw_SHOW_DOCUM_GRP:
-            case Brw_ADMI_DOCUM_GRP:
-            case Brw_ADMI_TEACH_GRP:
-            case Brw_ADMI_SHARE_GRP:
-            case Brw_SHOW_MARKS_GRP:
-            case Brw_ADMI_MARKS_GRP:
-               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-               break;
-            case Brw_ADMI_ASSIG_CRS:
-            case Brw_ADMI_WORKS_CRS:
-               Usr_PutHiddenParUsrCodAll (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted ();
-               break;
-            default:
-               break;
+         if (Brw_GetIfGroupFileBrowser ())
+            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	   {
+	    Usr_PutHiddenParUsrCodAll (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	    Usr_PutParamOtherUsrCodEncrypted ();
            }
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
@@ -5625,23 +5601,12 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          /***** Form to contract folder *****/
 	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],Anchor);
-         switch (Gbl.FileBrowser.Type)
-           {
-            case Brw_SHOW_DOCUM_GRP:
-            case Brw_ADMI_DOCUM_GRP:
-            case Brw_ADMI_TEACH_GRP:
-            case Brw_ADMI_SHARE_GRP:
-            case Brw_SHOW_MARKS_GRP:
-            case Brw_ADMI_MARKS_GRP:
-               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-               break;
-            case Brw_ADMI_ASSIG_CRS:
-            case Brw_ADMI_WORKS_CRS:
-               Usr_PutHiddenParUsrCodAll (Brw_ActContractFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted ();
-               break;
-            default:
-               break;
+         if (Brw_GetIfGroupFileBrowser ())
+            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	   {
+	    Usr_PutHiddenParUsrCodAll (Brw_ActContractFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	    Usr_PutParamOtherUsrCodEncrypted ();
            }
          Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
@@ -5691,15 +5656,8 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActShow[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      default:
-         break;
-     }
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
    Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
@@ -5724,15 +5682,8 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActHide[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      default:
-         break;
-     }
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
    Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
@@ -5784,21 +5735,12 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
      {
       /***** Form to create a new file or folder *****/
       Act_FormStart (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-	    Usr_PutHiddenParUsrCodAll (Brw_ActFormCreate[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
+      if (Brw_GetIfGroupFileBrowser ())
+	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	{
+	 Usr_PutHiddenParUsrCodAll (Brw_ActFormCreate[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
         }
       Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
@@ -5858,23 +5800,12 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
    extern const char *Txt_View_data_of_FILE_OR_LINK_X;
 
    Act_FormStart (Brw_ActReqDatFile[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_SHOW_DOCUM_GRP:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_SHOW_MARKS_GRP:
-      case Brw_ADMI_MARKS_GRP:
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-	 Usr_PutHiddenParUsrCodAll (Brw_ActReqDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	 break;
-      default:
-	 break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActReqDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_PutHiddenParamFilCod (FileMetadata->FilCod);
 
@@ -5959,21 +5890,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
          Act_FormStart (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
-         switch (Gbl.FileBrowser.Type)
-           {
-            case Brw_ADMI_DOCUM_GRP:
-            case Brw_ADMI_TEACH_GRP:
-            case Brw_ADMI_SHARE_GRP:
-            case Brw_ADMI_MARKS_GRP:
-               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-               break;
-            case Brw_ADMI_ASSIG_CRS:
-            case Brw_ADMI_WORKS_CRS:
-	       Usr_PutHiddenParUsrCodAll (Brw_ActRenameFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-               Usr_PutParamOtherUsrCodEncrypted ();
-               break;
-            default:
-               break;
+         if (Brw_GetIfGroupFileBrowser ())
+            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	   {
+	    Usr_PutHiddenParUsrCodAll (Brw_ActRenameFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	    Usr_PutParamOtherUsrCodEncrypted ();
            }
 	 Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
 	}
@@ -6018,23 +5940,12 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">&nbsp;");
 
       Act_FormStart (Brw_ActDowFile[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_SHOW_DOCUM_GRP:
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_SHOW_MARKS_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-	    Usr_PutHiddenParUsrCodAll (Brw_ActDowFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
+      if (Brw_GetIfGroupFileBrowser ())
+	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	{
+	 Usr_PutHiddenParUsrCodAll (Brw_ActDowFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
         }
       Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
 
@@ -6121,8 +6032,7 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
 void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const char *FileName)
   {
    Brw_PutParamsPathAndFile (FileType,PathInTree,FileName);
-   if (Gbl.FileBrowser.FullTree)
-      Par_PutHiddenParamChar ("FullTree",'Y');
+   Brw_PutHiddenParamFullTreeIfSelected ();
   }
 
 /*****************************************************************************/
@@ -6289,21 +6199,12 @@ void Brw_AskRemFileFromTree (void)
      {
       /***** Form to ask for confirmation to remove a file *****/
       Act_FormStart (Brw_ActRemoveFile[Gbl.FileBrowser.Type]);
-      switch (Gbl.FileBrowser.Type)
-        {
-         case Brw_ADMI_DOCUM_GRP:
-         case Brw_ADMI_TEACH_GRP:
-         case Brw_ADMI_SHARE_GRP:
-         case Brw_ADMI_MARKS_GRP:
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-            break;
-         case Brw_ADMI_ASSIG_CRS:
-         case Brw_ADMI_WORKS_CRS:
-            Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-            Usr_PutParamOtherUsrCodEncrypted ();
-            break;
-         default:
-            break;
+      if (Brw_GetIfGroupFileBrowser ())
+	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
+	{
+	 Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	 Usr_PutParamOtherUsrCodEncrypted ();
         }
       Brw_ParamListFiles (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
@@ -6443,21 +6344,12 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 
    /***** Form to remove a not empty folder *****/
    Act_FormStart (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
@@ -8038,21 +7930,12 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActCreateFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActCreateFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
@@ -8114,21 +7997,12 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Gbl.Prefs.IconsURL);
    Par_PutHiddenParamLong ("act",Act_Actions[Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]].ActCod);
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
@@ -8140,24 +8014,14 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
 
    /***** Put button to refresh file browser after upload *****/
    Act_FormStart (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActRefreshAfterUploadFiles[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
-   if (Gbl.FileBrowser.FullTree)
-      Par_PutHiddenParamChar ("FullTree",'Y');
+   Brw_PutHiddenParamFullTreeIfSelected ();
 
    /***** Button to send *****/
    Lay_PutConfirmButton (Txt_Done);
@@ -8190,21 +8054,12 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Form to upload one files using the classic way *****/
    Act_FormStart (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
@@ -8230,21 +8085,12 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
@@ -8278,21 +8124,12 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
+   if (Brw_GetIfGroupFileBrowser ())
+      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_ADMI_MARKS_GRP:
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-         break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-         Usr_PutHiddenParUsrCodAll (Brw_ActCreateLink[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-         Usr_PutParamOtherUsrCodEncrypted ();
-         break;
-      default:
-         break;
+      Usr_PutHiddenParUsrCodAll (Brw_ActCreateLink[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutParamOtherUsrCodEncrypted ();
      }
    Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
@@ -9180,6 +9017,7 @@ void Brw_ShowFileMetadata (void)
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
    bool Found;
    bool ICanView = false;
+   bool IAmTheOwner;
    bool ICanEdit;
    bool ICanChangePublic = false;
    bool FileHasPublisher;
@@ -9260,7 +9098,8 @@ void Brw_ShowFileMetadata (void)
 				       URL);
 
 	 /***** Can I edit the properties of the file? *****/
-	 ICanEdit = Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod);
+	 IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
+	 ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
 
 	 /***** Name of the file/link to be shown *****/
 	 Brw_LimitLengthFileNameToShow (FileMetadata.FileType,
@@ -9291,20 +9130,12 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    /* Put extra parameters */
-	    switch (Gbl.FileBrowser.Type)
+	    if (Brw_GetIfGroupFileBrowser ())
+	       Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	      {
-	       case Brw_ADMI_DOCUM_GRP:
-	       case Brw_ADMI_TEACH_GRP:
-	       case Brw_ADMI_SHARE_GRP:
-		  Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-		  break;
-	       case Brw_ADMI_ASSIG_CRS:
-	       case Brw_ADMI_WORKS_CRS:
-		  Usr_PutHiddenParUsrCodAll (Brw_ActRecDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-		  Usr_PutParamOtherUsrCodEncrypted ();
-		  break;
-	       default:
-		  break;
+	       Usr_PutHiddenParUsrCodAll (Brw_ActRecDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+	       Usr_PutParamOtherUsrCodEncrypted ();
 	      }
 	    Brw_ParamListFiles (FileMetadata.FileType,
 	                        FileMetadata.PathInTreeUntilFilFolLnk,
@@ -9312,6 +9143,38 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Start frame *****/
+	 /*
+         if (IAmTheOwner)	// I am the owner of this file
+            if (ICanEdit)	// I can edit this file
+
+            else
+
+
+
+	 Lay_PutContextualLink (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
+				Brw_PutParamsContextualLink,
+				"eye-on64x64.png",
+				Txt_View,NULL,
+				NULL);
+
+	 Lay_PutContextualLink (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
+				Brw_PutParamsContextualLink,
+				"edit64x64.png",
+				Txt_Edit,NULL,
+				NULL);
+
+	 ActReqDatAdmDocCrs
+	 <input name="act" value="1029" type="hidden">
+<input name="FilCod" value="2276" type="hidden">
+
+*/
+
+
+
+
+
+
+
 	 Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
@@ -9742,10 +9605,8 @@ void Brw_DownloadFile (void)
 /*********** Check if I have permission to change file metadata **************/
 /*****************************************************************************/
 
-static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
+static bool Brw_CheckIfICanEditFileMetadata (long IAmTheOwner)
   {
-   long ZoneUsrCod;
-
    switch (Gbl.Action.Act)	// Only in actions where edition is allowed
      {
       case ActReqDatAdmDocIns:		case ActChgDatAdmDocIns:
@@ -9773,26 +9634,31 @@ static bool Brw_CheckIfICanEditFileMetadata (long PublisherUsrCod)
       case ActReqDatWrkUsr:		case ActChgDatWrkUsr:
 
       case ActReqDatBrf:		case ActChgDatBrf:
-	 if (Gbl.Usrs.Me.Logged)							// I am logged
-	   {
-	    if (PublisherUsrCod > 0)							// The file has publisher
-	      {
-	       if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the publisher
-		  return true;
-	      }
-	    else									// The file has no publisher
-	      {
-	       ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-	       if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
-		   ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
-		  return true;
-	      }
-	   }
-         break;
+	 return IAmTheOwner;
       default:
-         break;
+         return false;
      }
+  }
 
+static bool Brw_CheckIfIAmOwnerOfFile (long PublisherUsrCod)
+  {
+   long ZoneUsrCod;
+
+   if (Gbl.Usrs.Me.Logged)							// I am logged
+     {
+      if (PublisherUsrCod > 0)							// The file has publisher
+	{
+	 if (PublisherUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)			// I am the publisher
+	    return true;
+	}
+      else									// The file has no publisher
+	{
+	 ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
+	 if ((ZoneUsrCod <= 0 && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM) ||	// It's a zone without owner and I am a superuser (I may be the future owner)
+	     ZoneUsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)				// I am the owner
+	    return true;
+	}
+     }
    return false;
   }
 
@@ -9820,7 +9686,8 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 	    break;
 	 case Brw_SHOW_MARKS_GRP:
 	    Act_FormStart (ActSeeMyMrkGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	    if (Brw_GetIfGroupFileBrowser ())
+               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
 	    break;
 	 default:	// Not aplicable here
 	    break;
@@ -9885,7 +9752,8 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 	    break;
 	 case Brw_SHOW_MARKS_GRP:
 	    Act_FormStart (ActSeeMyMrkGrp);
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+	    if (Brw_GetIfGroupFileBrowser ())
+               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
 	    break;
 	 default:	// Not aplicable here
 	    break;
@@ -9961,6 +9829,7 @@ void Brw_ChgFileMetadata (void)
    extern const char *Txt_The_properties_of_file_X_have_been_saved;
    extern const char *Txt_You_dont_have_permission_to_change_the_properties_of_file_X;
    struct FileMetadata FileMetadata;
+   bool IAmTheOwner;
    bool PublicFileBeforeEdition;
    bool PublicFileAfterEdition;
    Brw_License_t License;
@@ -9974,7 +9843,8 @@ void Brw_ChgFileMetadata (void)
    Brw_GetFileTypeSizeAndDate (&FileMetadata);
 
    /***** Check if I can change file metadata *****/
-   if (Brw_CheckIfICanEditFileMetadata (FileMetadata.PublisherUsrCod))
+   IAmTheOwner = Brw_CheckIfIAmOwnerOfFile (FileMetadata.PublisherUsrCod);
+   if (Brw_CheckIfICanEditFileMetadata (IAmTheOwner))
      {
       /* Check if the file was public before the edition */
       PublicFileBeforeEdition = FileMetadata.IsPublic;
