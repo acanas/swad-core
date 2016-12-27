@@ -143,7 +143,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
-      Brw_ParamListFiles (FileType,PathInTree,FileName);
+      Brw_PutHiddenParamFullTreeIfSelected ();
+      Brw_PutParamsPathAndFile (FileType,PathInTree,FileName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -169,7 +170,8 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
                Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
-      Brw_ParamListFiles (FileType,PathInTree,FileName);
+      Brw_PutHiddenParamFullTreeIfSelected ();
+      Brw_PutParamsPathAndFile (FileType,PathInTree,FileName);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
      }

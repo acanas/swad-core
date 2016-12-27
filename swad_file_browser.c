@@ -1475,12 +1475,12 @@ static void Brw_PutParamsContextualLink (void);
 
 static void Brw_PutCheckboxFullTree (void);
 static void Brw_PutParamsFullTree (void);
-static void Brw_PutHiddenParamFullTreeIfSelected (void);
 static bool Brw_GetFullTreeFromForm (void);
 
-static bool Brw_GetIfGroupFileBrowser (void);
+bool Brw_GetIfGroupFileBrowser (void);
+bool Brw_GetIfCrsAssigWorksFileBrowser (void);
+
 static bool Brw_GetIfUsrAssigWorksFileBrowser (void);
-static bool Brw_GetIfCrsAssigWorksFileBrowser (void);
 static bool Brw_GetIfBriefcaseFileBrowser (void);
 
 static void Brw_GetAndUpdateDateLastAccFileBrowser (void);
@@ -2410,7 +2410,8 @@ long Brw_GetParamFilCod (void)
 /** Put hidden params. with the path in the tree and the name of file/folder */
 /*****************************************************************************/
 
-void Brw_PutParamsPathAndFile (Brw_FileType_t FileType,const char *PathInTree,const char *FileFolderName)
+void Brw_PutParamsPathAndFile (Brw_FileType_t FileType,
+                               const char *PathInTree,const char *FileFolderName)
   {
    Par_PutHiddenParamString ("Path",PathInTree);
    Par_PutHiddenParamString (Brw_FileTypeParamName[FileType],FileFolderName);
@@ -4665,7 +4666,7 @@ static void Brw_PutParamsFullTree (void)
 /********* Put hidden parameter "full tree" if full tree is selected *********/
 /*****************************************************************************/
 
-static void Brw_PutHiddenParamFullTreeIfSelected (void)
+void Brw_PutHiddenParamFullTreeIfSelected (void)
   {
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
@@ -4688,7 +4689,7 @@ static bool Brw_GetFullTreeFromForm (void)
 /********* Get if the current file browser is a group file browser ***********/
 /*****************************************************************************/
 
-static bool Brw_GetIfGroupFileBrowser (void)
+bool Brw_GetIfGroupFileBrowser (void)
   {
    switch (Gbl.FileBrowser.Type)
      {
@@ -4698,22 +4699,6 @@ static bool Brw_GetIfGroupFileBrowser (void)
       case Brw_ADMI_SHARE_GRP:
       case Brw_SHOW_MARKS_GRP:
       case Brw_ADMI_MARKS_GRP:
-         return true;
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/****** Get if the current file browser is course assignments or works *******/
-/*****************************************************************************/
-
-static bool Brw_GetIfCrsAssigWorksFileBrowser (void)
-  {
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_ADMI_ASSIG_CRS:	// Course assignments
-      case Brw_ADMI_WORKS_CRS:	// Course works
          return true;
       default:
 	 return false;
@@ -4739,6 +4724,22 @@ static bool Brw_GetIfUsrAssigWorksFileBrowser (void)
      {
       case Brw_ADMI_ASSIG_USR:	// My assignments
       case Brw_ADMI_WORKS_USR:	// My works
+         return true;
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
+/****** Get if the current file browser is course assignments or works *******/
+/*****************************************************************************/
+
+bool Brw_GetIfCrsAssigWorksFileBrowser (void)
+  {
+   switch (Gbl.FileBrowser.Type)
+     {
+      case Brw_ADMI_ASSIG_CRS:	// Course assignments
+      case Brw_ADMI_WORKS_CRS:	// Course works
          return true;
       default:
 	 return false;
@@ -5421,14 +5422,8 @@ static void Brw_PutIconRemoveFile (const char *PathInTree,const char *FileName,c
      {
       /***** Form to remove a file *****/
       Act_FormStart (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
-      if (Brw_GetIfGroupFileBrowser ())
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-        {
-	 Usr_PutHiddenParUsrCodAll (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-        }
-      Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+      Brw_PutParamsFileBrowser (Brw_ActAskRemoveFile[Gbl.FileBrowser.Type]);
+      Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_FILE_OR_LINK_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
@@ -5457,14 +5452,8 @@ static void Brw_PutIconRemoveDir (const char *PathInTree,const char *FileName,co
      {
       /***** Form to remove a folder *****/
       Act_FormStart (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
-      if (Brw_GetIfGroupFileBrowser ())
-         Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-        {
-	 Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-        }
-      Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+      Brw_PutParamsFileBrowser (Brw_ActRemoveFolder[Gbl.FileBrowser.Type]);
+      Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Remove_folder_X,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/remove-on64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
@@ -5491,14 +5480,8 @@ static void Brw_PutIconCopy (const char *PathInTree,const char *FileName,const c
 
    /***** Form to copy into the clipboard *****/
    Act_FormStart (Brw_ActCopy[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActCopy[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (Brw_ActCopy[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Copy_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/copy_on16x16.gif\""
 		      " alt=\"%s\" title=\"%s\""
@@ -5523,14 +5506,8 @@ static void Brw_PutIconPasteOn (const char *PathInTree,const char *FileName,cons
 
    /***** Form to paste the content of the clipboard *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Paste_in_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
 	              " alt=\"%s\" title=\"%s\""
@@ -5589,14 +5566,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          /***** Form to expand folder *****/
 	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Anchor);
-         if (Brw_GetIfGroupFileBrowser ())
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	   {
-	    Usr_PutHiddenParUsrCodAll (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	    Usr_PutParamOtherUsrCodEncrypted ();
-           }
-         Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+         Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type]);
+         Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,"%s %s",Txt_Expand,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/expand64x64.png\""
                             " alt=\"%s\" title=\"%s\""
@@ -5611,14 +5582,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          /***** Form to contract folder *****/
 	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
          Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],Anchor);
-         if (Brw_GetIfGroupFileBrowser ())
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	   {
-	    Usr_PutHiddenParUsrCodAll (Brw_ActContractFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	    Usr_PutParamOtherUsrCodEncrypted ();
-           }
-         Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+         Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type]);
+         Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
          sprintf (Gbl.Title,"%s %s",Txt_Contract,FileNameToShow);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/contract64x64.png\""
                             " alt=\"%s\" title=\"%s\""
@@ -5666,9 +5631,8 @@ static void Brw_PutIconShow (unsigned Level,const char *PathInTree,const char *F
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActShow[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (ActUnk);
+   Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Show_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-slash-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
@@ -5692,9 +5656,8 @@ static void Brw_PutIconHide (unsigned Level,const char *PathInTree,const char *F
 
    fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
    Act_FormStart (Brw_ActHide[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (ActUnk);
+   Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,PathInTree,FileName);
    sprintf (Gbl.Title,Txt_Hide_FOLDER_FILE_OR_LINK_X,FileNameToShow);
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/eye-%s64x64.png\""
 	              " alt=\"%s\" title=\"%s\""
@@ -5745,14 +5708,8 @@ static void Brw_PutIconFolder (unsigned Level,Brw_ExpandTree_t ExpandTree,
      {
       /***** Form to create a new file or folder *****/
       Act_FormStart (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
-      if (Brw_GetIfGroupFileBrowser ())
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	{
-	 Usr_PutHiddenParUsrCodAll (Brw_ActFormCreate[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-        }
-      Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+      Brw_PutParamsFileBrowser (Brw_ActFormCreate[Gbl.FileBrowser.Type]);
+      Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
       sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,FileNameToShow);
       fprintf (Gbl.F.Out,"<input type=\"image\""
 	                 " src=\"%s/folder-%s-plus16x16.gif\""
@@ -5817,6 +5774,7 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
       Usr_PutHiddenParUsrCodAll (Brw_ActReqDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
       Usr_PutParamOtherUsrCodEncrypted ();
      }
+   Brw_PutHiddenParamFullTreeIfSelected ();
    Brw_PutHiddenParamFilCod (FileMetadata->FilCod);
 
    /***** Name and link of the file or folder *****/
@@ -5900,14 +5858,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
          Act_FormStart (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
-         if (Brw_GetIfGroupFileBrowser ())
-            Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	   {
-	    Usr_PutHiddenParUsrCodAll (Brw_ActRenameFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	    Usr_PutParamOtherUsrCodEncrypted ();
-           }
-	 Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+         Brw_PutParamsFileBrowser (Brw_ActRenameFolder[Gbl.FileBrowser.Type]);
+	 Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
 	}
 
       /***** Write name of the folder *****/
@@ -5950,14 +5902,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">&nbsp;");
 
       Act_FormStart (Brw_ActDowFile[Gbl.FileBrowser.Type]);
-      if (Brw_GetIfGroupFileBrowser ())
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	{
-	 Usr_PutHiddenParUsrCodAll (Brw_ActDowFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-        }
-      Brw_ParamListFiles (Gbl.FileBrowser.FileType,PathInTree,FileName);
+      Brw_PutParamsFileBrowser (Brw_ActDowFile[Gbl.FileBrowser.Type]);
+      Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,PathInTree,FileName);
 
       /* Link to the form and to the file */
       sprintf (Gbl.Title,(Gbl.FileBrowser.Type == Brw_SHOW_MARKS_CRS ||
@@ -6033,16 +5979,6 @@ void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
             Gbl.FileBrowser.TmpPubDir,FileName);
    if (symlink (FullPathIncludingFile,Link) != 0)
       Lay_ShowErrorAndExit ("Can not create temporary link.");
-  }
-
-/*****************************************************************************/
-/***************** Write parameters of a row of file list ********************/
-/*****************************************************************************/
-
-void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const char *FileName)
-  {
-   Brw_PutParamsPathAndFile (FileType,PathInTree,FileName);
-   Brw_PutHiddenParamFullTreeIfSelected ();
   }
 
 /*****************************************************************************/
@@ -6209,14 +6145,8 @@ void Brw_AskRemFileFromTree (void)
      {
       /***** Form to ask for confirmation to remove a file *****/
       Act_FormStart (Brw_ActRemoveFile[Gbl.FileBrowser.Type]);
-      if (Brw_GetIfGroupFileBrowser ())
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-      else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	{
-	 Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-        }
-      Brw_ParamListFiles (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+      Brw_PutParamsFileBrowser (Brw_ActRemoveFile[Gbl.FileBrowser.Type]);
+      Brw_PutParamsPathAndFile (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
       /* Show question */
       Brw_GetFileNameToShow (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
@@ -6354,14 +6284,10 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 
    /***** Form to remove a not empty folder *****/
    Act_FormStart (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,
+                             Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName);
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
             Gbl.FileBrowser.FilFolLnkName);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -7940,14 +7866,8 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActCreateFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActCreateFolder[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Create_folder,NULL,NULL);
@@ -8007,14 +7927,10 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
             Gbl.Prefs.IconsURL);
    Par_PutHiddenParamLong ("act",Act_Actions[Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]].ActCod);
    Par_PutHiddenParamString ("ses",Gbl.Session.Id);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActUploadFileDropzone[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,
+                             Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+                             Gbl.FileBrowser.FilFolLnkName);
 
    fprintf (Gbl.F.Out,"<div class=\"dz-message\">"
 		      "<span class=\"DAT_LIGHT\">%s</span>"
@@ -8064,14 +7980,8 @@ static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow)
 
    /***** Form to upload one files using the classic way *****/
    Act_FormStart (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActUploadFileClassic[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
    fprintf (Gbl.F.Out,"<input type=\"file\" name=\"%s\" />",
             Fil_NAME_OF_PARAM_FILENAME_ORG);
 
@@ -8095,14 +8005,8 @@ static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActPaste[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActPaste[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActPaste[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Paste,NULL,NULL);
@@ -8134,14 +8038,8 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
 
    /***** Start form *****/
    Act_FormStart (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-     {
-      Usr_PutHiddenParUsrCodAll (Brw_ActCreateLink[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
+   Brw_PutParamsFileBrowser (Brw_ActCreateLink[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.FilFolLnkName);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Create_link,NULL,NULL);
@@ -9140,16 +9038,10 @@ void Brw_ShowFileMetadata (void)
 	      }
 
 	    /* Put extra parameters */
-	    if (Brw_GetIfGroupFileBrowser ())
-	       Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	      {
-	       Usr_PutHiddenParUsrCodAll (Brw_ActRecDatFile[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	       Usr_PutParamOtherUsrCodEncrypted ();
-	      }
-	    Brw_ParamListFiles (FileMetadata.FileType,
-	                        FileMetadata.PathInTreeUntilFilFolLnk,
-				FileMetadata.FilFolLnkName);
+            Brw_PutParamsFileBrowser (Brw_ActRecDatFile[Gbl.FileBrowser.Type]);
+	    Brw_PutParamsPathAndFile (FileMetadata.FileType,
+	                              FileMetadata.PathInTreeUntilFilFolLnk,
+				      FileMetadata.FilFolLnkName);
 	   }
 
 	 /***** Start frame *****/
@@ -9689,22 +9581,12 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
        Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP)
      {
       /* Form to see marks */
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_SHOW_MARKS_CRS:
-	    Act_FormStart (ActSeeMyMrkCrs);
-	    break;
-	 case Brw_SHOW_MARKS_GRP:
-	    Act_FormStart (ActSeeMyMrkGrp);
-	    if (Brw_GetIfGroupFileBrowser ())
-               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	    break;
-	 default:	// Not aplicable here
-	    break;
-	}
-      Brw_ParamListFiles (FileMetadata->FileType,
-                          FileMetadata->PathInTreeUntilFilFolLnk,
-			  FileMetadata->FilFolLnkName);
+      Act_FormStart (Gbl.FileBrowser.Type == Brw_SHOW_MARKS_CRS ? ActSeeMyMrkCrs :
+								  ActSeeMyMrkGrp);
+      Brw_PutParamsFileBrowser (ActUnk);
+      Brw_PutParamsPathAndFile (FileMetadata->FileType,
+                                FileMetadata->PathInTreeUntilFilFolLnk,
+			        FileMetadata->FilFolLnkName);
 
       /* Link begin */
       sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
@@ -9755,22 +9637,12 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
        Gbl.FileBrowser.Type == Brw_SHOW_MARKS_GRP)
      {
       /* Form to see marks */
-      switch (Gbl.FileBrowser.Type)
-	{
-	 case Brw_SHOW_MARKS_CRS:
-	    Act_FormStart (ActSeeMyMrkCrs);
-	    break;
-	 case Brw_SHOW_MARKS_GRP:
-	    Act_FormStart (ActSeeMyMrkGrp);
-	    if (Brw_GetIfGroupFileBrowser ())
-               Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	    break;
-	 default:	// Not aplicable here
-	    break;
-	}
-      Brw_ParamListFiles (FileType,
-                          Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-			  Gbl.FileBrowser.FilFolLnkName);
+      Act_FormStart (Gbl.FileBrowser.Type == Brw_SHOW_MARKS_CRS ? ActSeeMyMrkCrs :
+								  ActSeeMyMrkGrp);
+      Brw_PutParamsFileBrowser (ActUnk);
+      Brw_PutParamsPathAndFile (FileType,
+                                Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+			        Gbl.FileBrowser.FilFolLnkName);
 
       /* Link begin */
       sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);

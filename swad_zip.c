@@ -355,25 +355,8 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    extern const char *Txt_Create_ZIP_file;
 
    Act_FormStart (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
-   switch (Gbl.FileBrowser.Type)
-     {
-      case Brw_SHOW_DOCUM_GRP:
-      case Brw_ADMI_DOCUM_GRP:
-      case Brw_ADMI_TEACH_GRP:
-      case Brw_ADMI_SHARE_GRP:
-      case Brw_SHOW_MARKS_GRP:
-      case Brw_ADMI_MARKS_GRP:
-	 Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-	 break;
-      case Brw_ADMI_ASSIG_CRS:
-      case Brw_ADMI_WORKS_CRS:
-	 Usr_PutHiddenParUsrCodAll (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	 break;
-      default:
-	 break;
-     }
-   Brw_ParamListFiles (Brw_IS_FOLDER,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
+   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
 	              " alt=\"%s\" title=\"%s\""

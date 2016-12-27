@@ -159,7 +159,6 @@ struct FileMetadata
 void Brw_GetParAndInitFileBrowser (void);
 void Brw_PutHiddenParamFilCod (long FilCod);
 long Brw_GetParamFilCod (void);
-void Brw_PutParamsPathAndFile (Brw_FileType_t FileType,const char *PathInTree,const char *FileFolderName);
 void Brw_InitializeFileBrowser (void);
 bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName);
 bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,const char *NewFolderName);
@@ -175,6 +174,10 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod);
 void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod);
 void Brw_RemoveUsrFilesFromDB (long UsrCod);
+
+void Brw_PutHiddenParamFullTreeIfSelected (void);
+bool Brw_GetIfGroupFileBrowser (void);
+bool Brw_GetIfCrsAssigWorksFileBrowser (void);
 
 void Brw_CreateDirDownloadTmp (void);
 void Brw_AskEditWorksCrs (void);
@@ -231,7 +234,8 @@ void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_ParamListFiles (Brw_FileType_t FileType,const char *PathInTree,const char *FileName);
+void Brw_PutParamsPathAndFile (Brw_FileType_t FileType,
+                               const char *PathInTree,const char *FileFolderName);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZonesVerbose (struct GroupData *GrpDat);
