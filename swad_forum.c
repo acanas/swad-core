@@ -309,6 +309,8 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
+static void For_PutSubjectContent (const char *Label,const char *Field,
+                                   unsigned NumRows,const char *Content);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
@@ -3827,40 +3829,12 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.ForumType]);
    For_PutAllHiddenParamsForum ();
 
-   /***** Start table *****/
+   /***** Subject and content *****/
+   // If writing a reply to a message of an existing thread ==> write subject
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
-
-   /***** Post subject *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Subject\" class=\"%s\">%s:&nbsp;</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Subject\" name=\"Subject\""
-                      " cols=\"72\" rows=\"2\">",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Subject);
-   if (IsReply)	// If writing a reply to a message of an existing thread
-      fprintf (Gbl.F.Out,"%s",Subject);
-   fprintf (Gbl.F.Out,"</textarea>"
-	              "</td>"
-	              "</tr>");
-
-   /***** Post content *****/
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Content\" class=\"%s\">%s:&nbsp;</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"Content\" name=\"Content\""
-                      " cols=\"72\" rows=\"15\">"
-                      "</textarea>"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Message);
-
-   /***** End table *****/
+   For_PutSubjectContent (Txt_MSG_Subject,"Subject", 2,IsReply ? Subject :
+                                                                 NULL);
+   For_PutSubjectContent (Txt_MSG_Message,"Content",15,NULL);
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Help for text editor *****/
@@ -3877,6 +3851,32 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/****************** Put form field for subject or content ********************/
+/*****************************************************************************/
+
+static void For_PutSubjectContent (const char *Label,const char *Field,
+                                   unsigned NumRows,const char *Content)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"%s\" class=\"%s\">%s:&nbsp;</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"%s\" name=\"%s\""
+                      " cols=\"72\" rows=\"%u\">",
+            Field,The_ClassForm[Gbl.Prefs.Theme],Label,
+            Field,Field,
+            NumRows);
+   if (Content)
+      fprintf (Gbl.F.Out,"%s",Content);
+   fprintf (Gbl.F.Out,"</textarea>"
+	              "</td>"
+	              "</tr>");
   }
 
 /*****************************************************************************/
