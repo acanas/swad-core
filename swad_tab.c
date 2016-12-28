@@ -84,8 +84,8 @@ void Tab_DrawTabs (void)
    extern const char *The_ClassTxtTabOff[The_NUM_THEMES];
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *The_TabOffBgColors[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
-   extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Tab_Tab_t NumTab;
    bool ICanViewTab;
    const char *ClassHeadRow3[The_NUM_THEMES] =
@@ -132,7 +132,7 @@ void Tab_DrawTabs (void)
 
 	 Act_FormStart (ActMnu);
 	 Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) NumTab);
-	 Act_LinkFormSubmit (Txt_TABS_FULL_TXT[NumTab],
+	 Act_LinkFormSubmit (Txt_TABS_TXT[NumTab],
 			     NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 							The_ClassTxtTabOff[Gbl.Prefs.Theme],NULL);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/%s/%s\" alt=\"%s\" title=\"%s\""
@@ -141,11 +141,11 @@ void Tab_DrawTabs (void)
 			    "</a>",
 		  Gbl.Prefs.PathIconSet,Cfg_ICON_ACTION,
 		  Tab_TabIcons[NumTab],
-		  Txt_TABS_FULL_TXT[NumTab],
-		  Txt_TABS_FULL_TXT[NumTab],
+		  Txt_TABS_TXT[NumTab],
+		  Txt_TABS_TXT[NumTab],
 		  NumTab == Gbl.Action.Tab ? The_ClassTxtTabOn[Gbl.Prefs.Theme] :
 					     The_ClassTxtTabOff[Gbl.Prefs.Theme],
-		  Txt_TABS_SHORT_TXT[NumTab]);
+		  Txt_TABS_TXT[NumTab]);
 	 Act_FormEnd ();
 
 	 fprintf (Gbl.F.Out,"</div>"
@@ -250,15 +250,15 @@ static void Tab_WriteBreadcrumbHome (void)
 static void Tab_WriteBreadcrumbTab (void)
   {
    extern const char *The_ClassTxtTabOn[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
 
    /***** Start form *****/
    Act_FormStart (ActMnu);
    Par_PutHiddenParamUnsigned ("NxtTab",(unsigned) Gbl.Action.Tab);
-   Act_LinkFormSubmit (Txt_TABS_FULL_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
+   Act_LinkFormSubmit (Txt_TABS_TXT[Gbl.Action.Tab],The_ClassTxtTabOn[Gbl.Prefs.Theme],NULL);
 
    /***** Title and end of form *****/
-   fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_FULL_TXT[Gbl.Action.Tab]);
+   fprintf (Gbl.F.Out,"%s</a>",Txt_TABS_TXT[Gbl.Action.Tab]);
    Act_FormEnd ();
   }
 

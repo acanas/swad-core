@@ -924,7 +924,7 @@ static void Lay_WriteTitleAction (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassTitleAction[The_NUM_THEMES];
    extern const char *The_ClassSubtitleAction[The_NUM_THEMES];
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Act_Action_t SuperAction = Act_Actions[Gbl.Action.Act].SuperAction;
 
    /***** Container start *****/
@@ -936,7 +936,7 @@ static void Lay_WriteTitleAction (void)
    /***** Title *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">%s &gt; %s</div>",
 	    The_ClassTitleAction[Gbl.Prefs.Theme],
-	    Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],
+	    Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
 	    Act_GetTitleAction (Gbl.Action.Act));
 
    /***** Subtitle *****/

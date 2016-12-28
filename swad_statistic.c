@@ -741,7 +741,7 @@ static void Sta_WriteSelectorAction (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Action;
-   extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    Act_Action_t Action;
    Act_Action_t SuperAction;
    Tab_Tab_t Tab;
@@ -767,8 +767,8 @@ static void Sta_WriteSelectorAction (void)
          fprintf (Gbl.F.Out,"%u: ",(unsigned) Action);
       SuperAction = Act_Actions[Action].SuperAction;
       Tab = Act_Actions[SuperAction].Tab;
-      if (Txt_TABS_SHORT_TXT[Tab])
-         fprintf (Gbl.F.Out,"%s &gt; ",Txt_TABS_SHORT_TXT[Tab]);
+      if (Txt_TABS_TXT[Tab])
+         fprintf (Gbl.F.Out,"%s &gt; ",Txt_TABS_TXT[Tab]);
       fprintf (Gbl.F.Out,"%s",
                Act_GetActionTextFromDB (Act_Actions[Action].ActCod,ActTxt));
      }

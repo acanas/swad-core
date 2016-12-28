@@ -755,7 +755,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_Other_actions;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -813,8 +813,8 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 	   {
 	    SuperAction = Act_Actions[Action].SuperAction;
 	    Tab = Act_Actions[SuperAction].Tab;
-	    if (Txt_TABS_FULL_TXT[Tab])
-	       fprintf (Gbl.F.Rep,"%s &gt; ",Txt_TABS_FULL_TXT[Tab]);
+	    if (Txt_TABS_TXT[Tab])
+	       fprintf (Gbl.F.Rep,"%s &gt; ",Txt_TABS_TXT[Tab]);
 	   }
 	 fprintf (Gbl.F.Rep,"%s",Act_GetActionTextFromDB (ActCod,ActTxt));
 	}

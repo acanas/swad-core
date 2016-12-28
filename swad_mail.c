@@ -349,7 +349,7 @@ void Mai_WriteWarningEmailNotifications (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
-   extern const char *Txt_TABS_SHORT_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
    Act_Action_t SuperActionMyAccount   = Act_Actions[ActFrmMyAcc].SuperAction;
    Act_Action_t SuperActionMailDomains = Act_Actions[ActSeeMai  ].SuperAction;
@@ -357,9 +357,9 @@ void Mai_WriteWarningEmailNotifications (void)
    Tab_Tab_t TabMailDomains = Act_Actions[SuperActionMailDomains].Tab;
 
    sprintf (Gbl.Message,Txt_You_can_only_receive_email_notifications_if_,
-	    Txt_TABS_SHORT_TXT[TabMyAccount  ],
+	    Txt_TABS_TXT[TabMyAccount  ],
 	    Txt_MENU_TITLE[TabMyAccount  ][Act_Actions[SuperActionMyAccount  ].IndexInMenu],
-            Txt_TABS_SHORT_TXT[TabMailDomains],
+            Txt_TABS_TXT[TabMailDomains],
 	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu]);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
   }

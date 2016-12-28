@@ -207,7 +207,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    extern const char *Hlp_STATS_Frequent;
    extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_My_frequent_actions;
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
    Act_Action_t SuperAction;
@@ -232,7 +232,7 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 SuperAction = Act_Actions[Action].SuperAction;
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],128);
+	 strncpy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';
@@ -266,7 +266,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_My_frequent_actions;
    extern const char *Txt_Frequent_ACTIONS;
-   extern const char *Txt_TABS_FULL_TXT[Tab_NUM_TABS];
+   extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    unsigned NumAct;
    Act_Action_t Action;
    Act_Action_t SuperAction;
@@ -296,7 +296,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 SuperAction = Act_Actions[Action].SuperAction;
-	 strncpy (TabStr,Txt_TABS_FULL_TXT[Act_Actions[SuperAction].Tab],128);
+	 strncpy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],128);
 	 TabStr[128] = '\0';
 	 strncpy (MenuStr,Title,128);
 	 MenuStr[128] = '\0';
