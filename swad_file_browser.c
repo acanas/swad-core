@@ -3743,7 +3743,7 @@ static void Brw_WriteTopBeforeShowingFileBrowser (void)
    /* Put checkbox to show the full tree */
    Brw_PutCheckboxFullTree ();
 
-   if (Brw_GetIfCrsAssigWorksFileBrowser ())
+   if (Brw_GetIfBriefcaseFileBrowser ())
      {
       /* Put link to remove old files */
       if (Gbl.Action.Act != ActReqRemOldBrf)

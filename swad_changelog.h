@@ -189,13 +189,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.111.3 (2016-12-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.111.4 (2016-12-28)"
 #define CSS_FILE		"swad16.108.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.111.4: Dec 28, 2016	Fixed bug in file browser. (211336 lines)
         Version 16.111.3: Dec 28, 2016	Unused code removed in file browsers. (211335 lines)
         Version 16.111.2: Dec 28, 2016	Code refactoring in groups and course. (211352 lines)
         Version 16.111.1: Dec 28, 2016	Code refactoring in file browsers. (211352 lines)
