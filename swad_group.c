@@ -527,6 +527,8 @@ void Grp_ChangeMyGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the group codes which I want to join to *****/
+   LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+   LstGrpsIWant.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
 
    /***** A student can not be enrolled in more than one group
@@ -575,6 +577,8 @@ void Grp_ChangeOtherUsrGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the list of groups to which register this user *****/
+   LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
+   LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
 
    /***** A student can not be enrolled in more than one group
