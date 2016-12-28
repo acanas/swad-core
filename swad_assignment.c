@@ -78,6 +78,7 @@ static void Asg_GetParamAsgOrderType (void);
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_PutParams (void);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query);
+static void Asg_ResetAssignment (struct Assignment *Asg);
 static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt);
 static void Asg_PutParamAsgCod (long AsgCod);
 static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod);
@@ -684,18 +685,24 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
   {
    char Query[1024];
 
-   /***** Build query *****/
-   sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime),"
-                  "UNIX_TIMESTAMP(EndTime),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title,Folder"
-                  " FROM assignments"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
-            Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
+   if (Asg->AsgCod > 0)
+     {
+      /***** Build query *****/
+      sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "Title,Folder"
+		     " FROM assignments"
+		     " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+	       Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
-   /***** Get data of assignment *****/
-   Asg_GetDataOfAssignment (Asg,Query);
+      /***** Get data of assignment *****/
+      Asg_GetDataOfAssignment (Asg,Query);
+     }
+   else
+      /***** Clear all assignment data *****/
+      Asg_ResetAssignment (Asg);
   }
 
 /*****************************************************************************/
@@ -706,18 +713,24 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
   {
    char Query[1024];
 
-   /***** Query database *****/
-   sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime),"
-                  "UNIX_TIMESTAMP(EndTime),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "Title,Folder"
-                  " FROM assignments"
-                  " WHERE CrsCod='%ld' AND Folder='%s'",
-            Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder);
+   if (Asg->Folder[0])
+     {
+      /***** Query database *****/
+      sprintf (Query,"SELECT AsgCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "Title,Folder"
+		     " FROM assignments"
+		     " WHERE CrsCod='%ld' AND Folder='%s'",
+	       Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder);
 
-   /***** Get data of assignment *****/
-   Asg_GetDataOfAssignment (Asg,Query);
+      /***** Get data of assignment *****/
+      Asg_GetDataOfAssignment (Asg,Query);
+     }
+   else
+      /***** Clear all assignment data *****/
+      Asg_ResetAssignment (Asg);
   }
 
 /*****************************************************************************/
@@ -731,16 +744,7 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
    unsigned long NumRows;
 
    /***** Clear all assignment data *****/
-   Asg->AsgCod = -1L;
-   Asg->Hidden = false;
-   Asg->UsrCod = -1L;
-   Asg->TimeUTC[Dat_START_TIME] =
-   Asg->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
-   Asg->Open = false;
-   Asg->Title[0] = '\0';
-   Asg->SendWork = false;
-   Asg->Folder[0] = '\0';
-   Asg->IBelongToCrsOrGrps = false;
+   Asg_ResetAssignment (Asg);
 
    /***** Get data of assignment from database *****/
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignment data");
@@ -781,6 +785,24 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/************************* Clear all assignment data **************************/
+/*****************************************************************************/
+
+static void Asg_ResetAssignment (struct Assignment *Asg)
+  {
+   Asg->AsgCod = -1L;
+   Asg->Hidden = false;
+   Asg->UsrCod = -1L;
+   Asg->TimeUTC[Dat_START_TIME] =
+   Asg->TimeUTC[Dat_END_TIME  ] = (time_t) 0;
+   Asg->Open = false;
+   Asg->Title[0] = '\0';
+   Asg->SendWork = false;
+   Asg->Folder[0] = '\0';
+   Asg->IBelongToCrsOrGrps = false;
   }
 
 /*****************************************************************************/
@@ -1264,19 +1286,23 @@ void Asg_RecFormAssignment (void)
    extern const char *Txt_Created_new_assignment_X;
    extern const char *Txt_The_assignment_has_been_modified;
    extern const char *Txt_You_can_not_disable_file_uploading_once_folders_have_been_created;
-   struct Assignment OldAsg;
-   struct Assignment NewAsg;
+   struct Assignment OldAsg;	// Current assigment data in database
+   struct Assignment NewAsg;	// Assignment data received from form
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
    char Txt[Cns_MAX_BYTES_TEXT+1];
 
    /***** Get the code of the assignment *****/
-   ItsANewAssignment = ((NewAsg.AsgCod = Asg_GetParamAsgCod ()) == -1L);
+   NewAsg.AsgCod = Asg_GetParamAsgCod ();
+   ItsANewAssignment = (NewAsg.AsgCod < 0);
 
-   if (!ItsANewAssignment)
+   if (ItsANewAssignment)
+      /***** Reset old (current, not existing) assignment data *****/
+      Asg_ResetAssignment (&OldAsg);
+   else
      {
-      /* Get data of the old (current) assignment from database */
+      /***** Get data of the old (current) assignment from database *****/
       OldAsg.AsgCod = NewAsg.AsgCod;
       Asg_GetDataOfAssignmentByCod (&OldAsg);
      }
