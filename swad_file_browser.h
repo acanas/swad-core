@@ -234,8 +234,9 @@ void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName);
 
-void Brw_PutParamsPathAndFile (Brw_FileType_t FileType,
-                               const char *PathInTree,const char *FileFolderName);
+void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
+                               const char *PathInTree,const char *FileFolderName,
+                               Brw_FileType_t FileType,long FilCod);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
 void Brw_RemoveGrpZonesVerbose (struct GroupData *GrpDat);

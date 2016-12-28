@@ -355,8 +355,9 @@ void ZIP_PutButtonToDownloadZIPOfAFolder (const char *PathInTree,const char *Fil
    extern const char *Txt_Create_ZIP_file;
 
    Act_FormStart (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
-   Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type]);
-   Brw_PutParamsPathAndFile (Brw_IS_FOLDER,PathInTree,FileName);
+   Brw_PutParamsFileBrowser (ZIP_ActZIPFolder[Gbl.FileBrowser.Type],
+                             PathInTree,FileName,
+                             Brw_IS_FOLDER,-1L);
    Act_LinkFormSubmit (Txt_Create_ZIP_file,The_ClassForm[Gbl.Prefs.Theme],NULL);
    fprintf (Gbl.F.Out,"<img src=\"%s/download64x64.png\""
 	              " alt=\"%s\" title=\"%s\""

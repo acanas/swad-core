@@ -487,7 +487,10 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
         {
          /* Form to create a new file or folder */
          Act_FormStart (ActFrmCreAsgUsr);
-         Brw_PutParamsPathAndFile (Brw_IS_FOLDER,Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,Asg->Folder);
+         Brw_PutParamsFileBrowser (ActUnk,
+                                   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+                                   Asg->Folder,
+                                   Brw_IS_FOLDER,-1L);
          sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
                   Asg->Folder);
          fprintf (Gbl.F.Out,"<input type=\"image\""

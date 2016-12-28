@@ -4916,25 +4916,6 @@ static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
   }
 
 /*****************************************************************************/
-/**************** Write parameters related with file browser *****************/
-/*****************************************************************************/
-
-void Brw_PutParamsFileBrowser (Act_Action_t NextAction)
-  {
-   if (Brw_GetIfGroupFileBrowser ())
-      Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
-   else if (NextAction != ActUnk)
-     {
-      if (Brw_GetIfCrsAssigWorksFileBrowser ())
-	{
-	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select.All);
-	 Usr_PutParamOtherUsrCodEncrypted ();
-	}
-     }
-   Brw_PutHiddenParamFullTreeIfSelected ();
-  }
-
-/*****************************************************************************/
 /************* Write parameter with the list of users selected ***************/
 /*****************************************************************************/
 

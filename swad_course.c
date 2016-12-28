@@ -2047,50 +2047,34 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    unsigned long NumRows;
    bool CrsFound = false;
 
-   if (Crs->CrsCod <= 0)
-     {
-      Crs->CrsCod = -1L;
-      Crs->DegCod = -1L;
-      Crs->Year = 0;
-      Crs->Status = (Crs_Status_t) 0;
-      Crs->RequesterUsrCod = -1L;
-      Crs->ShrtName[0] = '\0';
-      Crs->FullName[0] = '\0';
-      Crs->NumStds = 0;
-      Crs->NumTchs = 0;
-      Crs->NumUsrs = 0;
-      return false;
-     }
+   /***** Reset course data *****/
+   Crs->DegCod = -1L;
+   Crs->Year = 0;
+   Crs->Status = (Crs_Status_t) 0;
+   Crs->RequesterUsrCod = -1L;
+   Crs->ShrtName[0] = '\0';
+   Crs->FullName[0] = '\0';
+   Crs->NumStds = 0;
+   Crs->NumTchs = 0;
+   Crs->NumUsrs = 0;
 
-   /***** Get data of a course from database *****/
-   sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-                  " FROM courses WHERE CrsCod='%ld'",
-            Crs->CrsCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a course");
-
-   if (NumRows == 1)		// Course found
+   if (Crs->CrsCod > 0)
      {
-      /***** Get data of the course *****/
-      row = mysql_fetch_row (mysql_res);
-      Crs_GetDataOfCourseFromRow (Crs,row);
+      /***** Get data of a course from database *****/
+      sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
+		     " FROM courses WHERE CrsCod='%ld'",
+	       Crs->CrsCod);
+      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a course");
 
-      CrsFound = true;
+      if (NumRows == 1)		// Course found
+	{
+	 /***** Get data of the course *****/
+	 row = mysql_fetch_row (mysql_res);
+	 Crs_GetDataOfCourseFromRow (Crs,row);
+
+	 CrsFound = true;
+	}
      }
-   else if (NumRows == 0)	// Course not found
-     {
-      Crs->CrsCod = -1L;
-      Crs->DegCod = -1L;
-      Crs->Year = 0;
-      Crs->Status = (Crs_Status_t) 0;
-      Crs->RequesterUsrCod = -1L;
-      Crs->ShrtName[0] = '\0';
-      Crs->FullName[0] = '\0';
-      Crs->NumStds = 0;
-      Crs->NumTchs = 0;
-      Crs->NumUsrs = 0;
-     }
-   else if (NumRows > 1)	// Course duplicated
-      Lay_ShowErrorAndExit ("Course is repeated in database.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

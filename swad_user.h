@@ -341,7 +341,6 @@ void Usr_FreeUsrsList (Rol_Role_t Role);
 
 bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit);
 
-void Brw_PutParamsFileBrowser (Act_Action_t NextAction);
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods);
 void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
