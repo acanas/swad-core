@@ -9065,38 +9065,6 @@ void Brw_ShowFileMetadata (void)
 	   }
 
 	 /***** Start frame *****/
-	 /*
-         if (IAmTheOwner)	// I am the owner of this file
-            if (ICanEdit)	// I can edit this file
-
-            else
-
-
-
-	 Lay_PutContextualLink (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
-				Brw_PutHiddenParamFullTreeIfSelected,
-				"eye-on64x64.png",
-				Txt_View,NULL,
-				NULL);
-
-	 Lay_PutContextualLink (Brw_ActReqDatFile[Gbl.FileBrowser.Type],
-				Brw_PutHiddenParamFullTreeIfSelected,
-				"edit64x64.png",
-				Txt_Edit,NULL,
-				NULL);
-
-	 ActReqDatAdmDocCrs
-	 <input name="act" value="1029" type="hidden">
-<input name="FilCod" value="2276" type="hidden">
-
-*/
-
-
-
-
-
-
-
 	 Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
 
 	 /***** Link to download the file *****/
