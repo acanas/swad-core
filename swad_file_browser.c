@@ -4456,7 +4456,7 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 /* Remove some info about files related to a course and a user from database */
 /*****************************************************************************/
 
-void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long CrsCod,long UsrCod)
+void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
   {
    char Query[512];
 

@@ -2201,7 +2201,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
    /***** Set all the notifications from the course as removed,
           except notifications about new messages *****/
-   Ntf_MarkNotifInCrsAsRemoved (CrsCod,-1L);
+   Ntf_MarkNotifInCrsAsRemoved (-1L,CrsCod);
 
    /***** Remove information of the course ****/
    /* Remove timetable of the course */

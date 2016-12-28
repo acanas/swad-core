@@ -3906,7 +3906,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 
       /***** Set all the notifications for this user in this course as removed,
              except notifications about new messages *****/
-      Ntf_MarkNotifInCrsAsRemoved (Crs->CrsCod,UsrDat->UsrCod);
+      Ntf_MarkNotifInCrsAsRemoved (UsrDat->UsrCod,Crs->CrsCod);
 
       /***** Remove user from the table of courses-users *****/
       sprintf (Query,"DELETE FROM crs_usr"

@@ -1005,20 +1005,24 @@ void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long
 // However, notifications about new messages should not be removed
 // because the messages will remain available
 
-void Ntf_MarkNotifInCrsAsRemoved (long CrsCod,long ToUsrCod)
+void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Set all notifications from the course as removed,
           except notifications about new messages *****/
    if (ToUsrCod > 0)	// If the user code is specified
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE ToUsrCod='%ld' AND CrsCod='%ld' AND NotifyEvent<>'%u'",
+		     " WHERE ToUsrCod='%ld'"
+		     " AND CrsCod='%ld'"
+		     " AND NotifyEvent<>'%u'",	// messages will remain available
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
-	       ToUsrCod,CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
-   else
+	       ToUsrCod,
+	       CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
+   else			// User code not specified ==> any user
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE CrsCod='%ld' AND NotifyEvent<>'%u'",
+		     " WHERE CrsCod='%ld'"
+		     " AND NotifyEvent<>'%u'",	// messages will remain available
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
 	       CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");

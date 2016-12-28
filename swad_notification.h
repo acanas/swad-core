@@ -114,7 +114,7 @@ void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
 void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,long ToUsrCod);
 void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod);
 void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long ToUsrCod);
-void Ntf_MarkNotifInCrsAsRemoved (long CrsCod,long ToUsrCod);
+void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod);
 void Ntf_MarkNotifOneFileAsRemoved (const char *Path);
 void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path);
 void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod);
