@@ -736,58 +736,61 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool Found;
+   bool Found = false;
 
    /***** Reset attendance event data *****/
    Att_ResetAttendanceEvent (Att);
 
-   /***** Build query *****/
-   sprintf (Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
-                  "UNIX_TIMESTAMP(StartTime),"
-                  "UNIX_TIMESTAMP(EndTime),"
-                  "NOW() BETWEEN StartTime AND EndTime,"
-                  "CommentTchVisible,"
-                  "Title"
-                  " FROM att_events"
-                  " WHERE AttCod='%ld'",
-            Att->AttCod);
-
-   /***** Get data of attendance event from database *****/
-   if ((Found = (DB_QuerySELECT (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
+   if (Att->AttCod > 0)
      {
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
+      /***** Build query *****/
+      sprintf (Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
+		     "UNIX_TIMESTAMP(StartTime),"
+		     "UNIX_TIMESTAMP(EndTime),"
+		     "NOW() BETWEEN StartTime AND EndTime,"
+		     "CommentTchVisible,"
+		     "Title"
+		     " FROM att_events"
+		     " WHERE AttCod='%ld'",
+	       Att->AttCod);
 
-      /* Get code of the attendance event (row[0]) */
-      Att->AttCod = Str_ConvertStrCodToLongCod (row[0]);
+      /***** Get data of attendance event from database *****/
+      if ((Found = (DB_QuerySELECT (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
+	{
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-      /* Get code of the course (row[1]) */
-      Att->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
+	 /* Get code of the attendance event (row[0]) */
+	 Att->AttCod = Str_ConvertStrCodToLongCod (row[0]);
 
-      /* Get whether the attendance event is hidden or not (row[2]) */
-      Att->Hidden = (row[2][0] == 'Y');
+	 /* Get code of the course (row[1]) */
+	 Att->CrsCod = Str_ConvertStrCodToLongCod (row[1]);
 
-      /* Get author of the attendance event (row[3]) */
-      Att->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
+	 /* Get whether the attendance event is hidden or not (row[2]) */
+	 Att->Hidden = (row[2][0] == 'Y');
 
-      /* Get start date (row[4] holds the start UTC time) */
-      Att->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
+	 /* Get author of the attendance event (row[3]) */
+	 Att->UsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
-      /* Get end   date (row[5] holds the end   UTC time) */
-      Att->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
+	 /* Get start date (row[4] holds the start UTC time) */
+	 Att->TimeUTC[Att_START_TIME] = Dat_GetUNIXTimeFromStr (row[4]);
 
-      /* Get whether the attendance event is open or closed (row(6)) */
-      Att->Open = (row[6][0] == '1');
+	 /* Get end   date (row[5] holds the end   UTC time) */
+	 Att->TimeUTC[Att_END_TIME  ] = Dat_GetUNIXTimeFromStr (row[5]);
 
-      /* Get whether the attendance event is visible or not (row[7]) */
-      Att->CommentTchVisible = (row[7][0] == 'Y');
+	 /* Get whether the attendance event is open or closed (row(6)) */
+	 Att->Open = (row[6][0] == '1');
 
-      /* Get the title of the attendance event (row[8]) */
-      strcpy (Att->Title,row[8]);
+	 /* Get whether the attendance event is visible or not (row[7]) */
+	 Att->CommentTchVisible = (row[7][0] == 'Y');
+
+	 /* Get the title of the attendance event (row[8]) */
+	 strcpy (Att->Title,row[8]);
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return Found;
   }
@@ -798,7 +801,8 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 
 static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
   {
-   Att->AttCod = -1L;
+   if (Att->AttCod <= 0)	// If > 0 ==> keep value
+      Att->AttCod = -1L;
    Att->CrsCod = -1L;
    Att->Hidden = false;
    Att->UsrCod = -1L;
@@ -834,13 +838,14 @@ void Att_FreeListAttEvents (void)
 
 static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
 
    /***** Get text of attendance event from database *****/
-   sprintf (Query,"SELECT Txt FROM att_events WHERE AttCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"SELECT Txt FROM att_events"
+	          " WHERE AttCod='%ld' AND CrsCod='%ld'",
             AttCod,Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get attendance event text");
 
@@ -1123,6 +1128,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    if (ItsANewAttEvent)
      {
       /* Reset attendance event data */
+      Att.AttCod = -1L;
       Att_ResetAttendanceEvent (&Att);
 
       /* Initialize some fields */

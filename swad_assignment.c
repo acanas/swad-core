@@ -701,8 +701,11 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
       Asg_GetDataOfAssignment (Asg,Query);
      }
    else
+     {
       /***** Clear all assignment data *****/
+      Asg->AsgCod = -1L;
       Asg_ResetAssignment (Asg);
+     }
   }
 
 /*****************************************************************************/
@@ -729,8 +732,11 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
       Asg_GetDataOfAssignment (Asg,Query);
      }
    else
+     {
       /***** Clear all assignment data *****/
+      Asg->AsgCod = -1L;
       Asg_ResetAssignment (Asg);
+     }
   }
 
 /*****************************************************************************/
@@ -741,15 +747,12 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
 
    /***** Clear all assignment data *****/
    Asg_ResetAssignment (Asg);
 
    /***** Get data of assignment from database *****/
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignment data");
-
-   if (NumRows) // Assignment found...
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get assignment data")) // Assignment found...
      {
       /* Get row */
       row = mysql_fetch_row (mysql_res);
@@ -793,6 +796,8 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
 
 static void Asg_ResetAssignment (struct Assignment *Asg)
   {
+   if (Asg->AsgCod <= 0)	// If > 0 ==> keep value
+      Asg->AsgCod = -1L;
    Asg->AsgCod = -1L;
    Asg->Hidden = false;
    Asg->UsrCod = -1L;
@@ -1298,8 +1303,11 @@ void Asg_RecFormAssignment (void)
    ItsANewAssignment = (NewAsg.AsgCod < 0);
 
    if (ItsANewAssignment)
+     {
       /***** Reset old (current, not existing) assignment data *****/
+      OldAsg.AsgCod = -1L;
       Asg_ResetAssignment (&OldAsg);
+     }
    else
      {
       /***** Get data of the old (current) assignment from database *****/
