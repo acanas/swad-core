@@ -4386,29 +4386,30 @@ static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	    sprintf (PathFileRel       ,"%s/%s",Path      ,FileList[NumFile]->d_name);
 	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
 
-	    lstat (PathFileRel,&FileStatus);
-
-	    /***** Construct the full path of the file or folder *****/
-	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
-
-	    if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+	    if (!lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
 	      {
-	       /***** Write a row for the subdirectory *****/
-	       if (Svc_WriteRowFileBrowser (Level,Brw_IS_FOLDER,FileList[NumFile]->d_name))
-		 {
-		  /* List subtree starting at this this directory */
-		  Svc_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+	       /***** Construct the full path of the file or folder *****/
+	       Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
 
-		  /* Indent and end dir */
-		  Svc_IndentXMLLine (Level);
-		  fprintf (Gbl.F.XML,"</dir>%s",Txt_NEW_LINE);
+	       if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+		 {
+		  /***** Write a row for the subdirectory *****/
+		  if (Svc_WriteRowFileBrowser (Level,Brw_IS_FOLDER,FileList[NumFile]->d_name))
+		    {
+		     /* List subtree starting at this this directory */
+		     Svc_ListDir (Level + 1,PathFileRel,PathFileInExplTree);
+
+		     /* Indent and end dir */
+		     Svc_IndentXMLLine (Level);
+		     fprintf (Gbl.F.XML,"</dir>%s",Txt_NEW_LINE);
+		    }
 		 }
+	       else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
+		  Svc_WriteRowFileBrowser (Level,
+					   Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
+											  Brw_IS_FILE,
+					   FileList[NumFile]->d_name);
 	      }
-	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
-	       Svc_WriteRowFileBrowser (Level,
-					Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :
-										       Brw_IS_FILE,
-					FileList[NumFile]->d_name);
 	   }
 
 	 free ((void *) FileList[NumFile]);

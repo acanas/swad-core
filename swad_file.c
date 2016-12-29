@@ -440,8 +440,9 @@ void Fil_RemoveTree (const char *Path)
 
    if (Fil_CheckIfPathExists (Path))
      {
-      lstat (Path,&FileStatus);
-      if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	{
 	 if (rmdir (Path))
 	   {
@@ -501,8 +502,9 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
    char Path2[PATH_MAX+1];
    struct stat FileStatus;
 
-   lstat (Path,&FileStatus);
-   if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+   if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+   else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
      {
       /***** Scan the directory *****/
       if ((NumFiles = scandir (Path,&FileList,NULL,NULL)) >= 0)	// No error

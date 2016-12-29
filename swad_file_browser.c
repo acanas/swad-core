@@ -4983,8 +4983,9 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
 
 	    /* Update counters depending on whether it's a directory or a regular file */
 	    sprintf (PathFileRel,"%s/%s",Path,FileList[NumFile]->d_name);
-	    lstat (PathFileRel,&FileStatus);
-	    if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	      {
 	       Gbl.FileBrowser.Size.NumFolds++;
 	       Gbl.FileBrowser.Size.TotalSiz += (unsigned long long) FileStatus.st_size;
@@ -5038,8 +5039,9 @@ static void Brw_ListDir (unsigned Level,const char *Path,const char *PathInTree)
 	    Brw_SetFullPathInTree (PathInTree,FileList[NumFile]->d_name);
 
 	    /***** Get file or folder status *****/
-	    lstat (PathFileRel,&FileStatus);
-	    if (S_ISDIR (FileStatus.st_mode))	// It's a directory
+	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	    else if (S_ISDIR (FileStatus.st_mode))	// It's a directory
 	      {
 	       if (Gbl.FileBrowser.FullTree)
 		  ExpandTree = Brw_EXPAND_TREE_NOTHING;
@@ -6206,8 +6208,9 @@ void Brw_RemFileFromTree (void)
       sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Check if is a file/link or a folder *****/
-      lstat (Path,&FileStatus);
-      if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
+      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
         {
 	 /* Name of the file/link to be shown */
 	 Brw_LimitLengthFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnkName,"url") ? Brw_IS_LINK :
@@ -6256,8 +6259,9 @@ void Brw_RemFolderFromTree (void)
       sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 
       /***** Check if it's a file or a folder *****/
-      lstat (Path,&FileStatus);
-      if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+      if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	 if (Brw_RemoveFolderFromDiskAndDB (Path,
                                             Gbl.FileBrowser.Priv.FullPathInTree))
            {
@@ -7631,14 +7635,14 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	                                 FileNameOrg);
 
    /***** Is it a file or a folder? *****/
-   lstat (PathOrg,&FileStatus);
-   if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+   FileType = Brw_IS_UNKNOWN;
+   if (lstat (PathOrg,&FileStatus))	// On success ==> 0 is returned
+      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+   else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
       FileType = Brw_IS_FOLDER;
    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
       FileType = Str_FileIs (FileNameOrg,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 	                                          Brw_IS_FILE;	// It's a file
-   else
-      FileType = Brw_IS_UNKNOWN;
 
    /***** Name of the file/folder/link to be shown ****/
    Brw_LimitLengthFileNameToShow (FileType,FileNameOrg,FileNameToShow);
@@ -10166,7 +10170,7 @@ bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
 
    sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,
 	                 FileMetadata->FullPathInTree);
-   if (lstat (Path,&FileStatus))
+   if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
      {
       // Error on lstat
       FileMetadata->FileType = Brw_IS_UNKNOWN;
@@ -11681,10 +11685,10 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,const char *Path,
    /***** Save folder status *****/
    // Folder st_mtime must be saved before remove files inside it
    // because st_mtime is updated by the deletion
-   lstat (Path,&FolderStatus);
-
+   if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+      Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
    /***** Scan directory *****/
-   if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
+   else if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
      {
       /***** Check file by file removing old files *****/
       for (NumFile = 0;
@@ -11699,8 +11703,9 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,const char *Path,
 	    sprintf (PathFileInExplTree,"%s/%s",PathInTree,FileList[NumFile]->d_name);
 
 	    /***** Get file or folder status *****/
-	    lstat (PathFileRel,&FileStatus);
-	    if (S_ISDIR (FileStatus.st_mode))				// It's a folder
+	    if (lstat (PathFileRel,&FileStatus))	// On success ==> 0 is returned
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	    else if (S_ISDIR (FileStatus.st_mode))				// It's a folder
 	       /* Scan subtree starting at this this directory recursively */
 	       Brw_ScanDirRemovingOldFiles (Level + 1,PathFileRel,
 					    PathFileInExplTree,

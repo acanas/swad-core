@@ -229,18 +229,21 @@ void ZIP_CreateZIPAsgWrk (void)
    if (Result == 0)
      {
       /***** Get file size *****/
-      lstat (PathFileZIP,&FileStatus);
+      if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
+	 Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+      else
+	{
+	 /***** Create URL pointing to ZIP file *****/
+	 sprintf (URLWithSpaces,"%s/%s/%s/%s",
+		  Cfg_URL_SWAD_PUBLIC,
+		  Cfg_FOLDER_FILE_BROWSER_TMP,
+		  Gbl.FileBrowser.TmpPubDir,
+		  FileNameZIP);
+	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
-      /***** Create URL pointing to ZIP file *****/
-      sprintf (URLWithSpaces,"%s/%s/%s/%s",
-	       Cfg_URL_SWAD_PUBLIC,
-               Cfg_FOLDER_FILE_BROWSER_TMP,
-               Gbl.FileBrowser.TmpPubDir,
-               FileNameZIP);
-      Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
-
-      /****** Link to download file *****/
-      ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,0);
+	 /****** Link to download file *****/
+	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,0);
+	}
      }
    else
       Lay_ShowErrorAndExit ("Can not compress files into zip file.");
@@ -456,18 +459,21 @@ static void ZIP_CompressFolderIntoZIP (void)
       if (Result == 0)
 	{
 	 /***** Get file size *****/
-	 lstat (PathFileZIP,&FileStatus);
+	 if (lstat (PathFileZIP,&FileStatus))	// On success ==> 0 is returned
+	    Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	 else
+	   {
+	    /***** Create URL pointing to ZIP file *****/
+	    sprintf (URLWithSpaces,"%s/%s/%s/%s",
+		     Cfg_URL_SWAD_PUBLIC,
+		     Cfg_FOLDER_FILE_BROWSER_TMP,
+		     Gbl.FileBrowser.TmpPubDir,
+		     FileNameZIP);
+	    Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
 
-	 /***** Create URL pointing to ZIP file *****/
-	 sprintf (URLWithSpaces,"%s/%s/%s/%s",
-		  Cfg_URL_SWAD_PUBLIC,
-		  Cfg_FOLDER_FILE_BROWSER_TMP,
-		  Gbl.FileBrowser.TmpPubDir,
-		  FileNameZIP);
-	 Str_CopyStrChangingSpaces (URLWithSpaces,URL,PATH_MAX);	// In HTML, URL must have no spaces
-
-	 /****** Link to download file *****/
-	 ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
+	    /****** Link to download file *****/
+	    ZIP_ShowLinkToDownloadZIP (FileNameZIP,URL,FileStatus.st_size,UncompressedSize);
+	   }
 	}
       else
 	 Lay_ShowErrorAndExit ("Can not compress files into zip file.");
@@ -533,14 +539,14 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
 	    sprintf (PathFileClone,"%s/%s",
 		     PathClone,FileList[NumFile]->d_name);
 
-	    lstat (PathFile,&FileStatus);
-	    if (S_ISDIR (FileStatus.st_mode))		// It's a directory
+	    FileType = Brw_IS_UNKNOWN;
+	    if (lstat (PathFile,&FileStatus))	// On success ==> 0 is returned
+	       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
+	    else if (S_ISDIR (FileStatus.st_mode))		// It's a directory
 	       FileType = Brw_IS_FOLDER;
 	    else if (S_ISREG (FileStatus.st_mode))	// It's a regular file
 	       FileType = Str_FileIs (FileList[NumFile]->d_name,"url") ? Brw_IS_LINK :	// It's a link (URL inside a .url file)
 									 Brw_IS_FILE;	// It's a file
-	    else
-	       FileType = Brw_IS_UNKNOWN;
 
 	    Hidden = (SeeDocsZone || SeeMarks) ? Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (FileType,PathFileInTree) :
 						 false;
