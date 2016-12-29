@@ -232,6 +232,8 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
             /* Initialize anchors for this link */
             Links[NumLinks].Anchor1Nick = NULL;
             Links[NumLinks].Anchor2Nick = NULL;
+	    Links[NumLinks].Anchor1NickLength = 0;
+	    Links[NumLinks].Anchor2NickLength = 0;
 
             /* Calculate length of this URL */
             Links[NumLinks].NumActualBytes = (size_t) (Links[NumLinks].PtrEnd + 1 - Links[NumLinks].PtrStart);
@@ -313,7 +315,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			                  Gbl.Form.Id,
 		     ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
-	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength+1)) == NULL)
+	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
 	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
@@ -326,7 +328,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                  Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
-	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength+1)) == NULL)
+	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
 	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
