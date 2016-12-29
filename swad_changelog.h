@@ -189,13 +189,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.111.12 (2016-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.111.13 (2016-12-29)"
 #define CSS_FILE		"swad16.111.5.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.111.13:Dec 29, 2016	Fixed bug in attendance events, reported by Coverity. (211173 lines)
         Version 16.111.12:Dec 29, 2016	Fixed minor bug in groups, reported by Coverity. (? lines)
         Version 16.111.11:Dec 29, 2016	Fixed minor bug inserting links to nicknames, reported by Coverity. (211149 lines)
         Version 16.111.10:Dec 29, 2016	Fixed minor bug in groups, reported by Coverity. (211146 lines)

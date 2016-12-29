@@ -88,6 +88,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden);
 static void Att_PutParams (void);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
+static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att);
 static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt);
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
@@ -737,6 +738,9 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    MYSQL_ROW row;
    bool Found;
 
+   /***** Reset attendance event data *****/
+   Att_ResetAttendanceEvent (Att);
+
    /***** Build query *****/
    sprintf (Query,"SELECT AttCod,CrsCod,Hidden,UsrCod,"
                   "UNIX_TIMESTAMP(StartTime),"
@@ -747,11 +751,6 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
                   " FROM att_events"
                   " WHERE AttCod='%ld'",
             Att->AttCod);
-
-   /***** Clear data *****/
-   Att->TimeUTC[Att_START_TIME] =
-   Att->TimeUTC[Att_END_TIME  ] = (time_t) 0;
-   Att->Title[0] = '\0';
 
    /***** Get data of attendance event from database *****/
    if ((Found = (DB_QuerySELECT (Query,&mysql_res,"can not get attendance event data") != 0))) // Attendance event found...
@@ -791,6 +790,26 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
    DB_FreeMySQLResult (&mysql_res);
 
    return Found;
+  }
+
+/*****************************************************************************/
+/********************** Clear all attendance event data **********************/
+/*****************************************************************************/
+
+static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
+  {
+   Att->AttCod = -1L;
+   Att->CrsCod = -1L;
+   Att->Hidden = false;
+   Att->UsrCod = -1L;
+   Att->TimeUTC[Att_START_TIME] =
+   Att->TimeUTC[Att_END_TIME  ] = (time_t) 0;
+   Att->Open = false;
+   Att->Title[0] = '\0';
+   Att->CommentTchVisible = false;
+   Att->NumStdsTotal = 0;
+   Att->NumStdsFromList = 0;
+   Att->Selected = false;
   }
 
 /*****************************************************************************/
@@ -1097,17 +1116,21 @@ void Att_RequestCreatOrEditAttEvent (void)
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
-   ItsANewAttEvent = ((Att.AttCod = Att_GetParamAttCod ()) == -1L);
+   Att.AttCod = Att_GetParamAttCod ();
+   ItsANewAttEvent = (Att.AttCod <= 0);
 
    /***** Get from the database the data of the attendance event *****/
    if (ItsANewAttEvent)
      {
-      /* Initialize to empty attendance event */
-      Att.AttCod = -1L;
+      /* Reset attendance event data */
+      Att_ResetAttendanceEvent (&Att);
+
+      /* Initialize some fields */
+      Att.CrsCod = Gbl.CurrentCrs.Crs.CrsCod;
+      Att.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Att.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
       Att.TimeUTC[Att_END_TIME  ] = Gbl.StartExecutionTimeUTC + (2 * 60 * 60);	// +2 hours
       Att.Open = true;
-      Att.Title[0] = '\0';
      }
    else
      {
