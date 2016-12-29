@@ -189,13 +189,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.111.9 (2016-12-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.111.10 (2016-12-29)"
 #define CSS_FILE		"swad16.111.5.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.111.10:Dec 29, 2016	Fixed minor bug in groups, reported by Coverity. (211146 lines)
         Version 16.111.9: Dec 29, 2016	Fixed bugs in lstat, reported by Coverity. (211138 lines)
         Version 16.111.8: Dec 28, 2016	Fixed bug in notifications, reported by Coverity. (211119 lines)
         Version 16.111.7: Dec 28, 2016	Fixed minor bug in groups, reported by Coverity. (211114 lines)

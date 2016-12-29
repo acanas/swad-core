@@ -527,8 +527,8 @@ void Grp_ChangeMyGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the group codes which I want to join to *****/
-   LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    LstGrpsIWant.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
 
    /***** A student can not be enrolled in more than one group
@@ -577,8 +577,8 @@ void Grp_ChangeOtherUsrGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the list of groups to which register this user *****/
-   LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
-   LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   // LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   // LstGrpsUsrWants.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
 
    /***** A student can not be enrolled in more than one group
@@ -922,7 +922,10 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z;
    struct ListCodGrps LstGrpsHeBelongs;
-   unsigned NumGrpTyp,NumGrpSel,NumGrpThisType,NumGrpHeBelongs;
+   unsigned NumGrpTyp;
+   unsigned NumGrpSel;
+   unsigned NumGrpThisType;
+   unsigned NumGrpHeBelongs;
    bool MultipleEnrollment;
    bool AlreadyRegisteredInGrp;
 
@@ -934,6 +937,8 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
       MultipleEnrollment = Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment;
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
+      // LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+      // LstGrpsHeBelongs.GrpCod = NULL;// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 	                           UsrDat->UsrCod,&LstGrpsHeBelongs);
 
@@ -4201,13 +4206,15 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
   }
 
 /*****************************************************************************/
-/************************* Liberar list of group codes ***********************/
+/************************** Free list of group codes *************************/
 /*****************************************************************************/
 
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps)
   {
-   if (LstGrps->NumGrps)
+   if (LstGrps->NumGrps && LstGrps->GrpCod)
       free ((void *) LstGrps->GrpCod);
+   LstGrps->GrpCod = NULL;
+   LstGrps->NumGrps = 0;
   }
 
 /*****************************************************************************/
