@@ -577,8 +577,8 @@ void Grp_ChangeOtherUsrGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the list of groups to which register this user *****/
-   // LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
-   // LstGrpsUsrWants.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+   LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
 
    /***** A student can not be enrolled in more than one group
@@ -937,8 +937,8 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
       MultipleEnrollment = Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment;
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
-      // LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
-      // LstGrpsHeBelongs.GrpCod = NULL;// Initialized to avoid bug reported by Coverity
+      LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
+      LstGrpsHeBelongs.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 	                           UsrDat->UsrCod,&LstGrpsHeBelongs);
 
