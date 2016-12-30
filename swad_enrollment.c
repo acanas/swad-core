@@ -1441,7 +1441,10 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		    {
 		     /***** Find users for this user's ID *****/
 		     ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-		     strcpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail);
+
+		     strncpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
+		     UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+
 		     Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		     ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		    }
@@ -1564,7 +1567,10 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 		  /* Find users for this user's ID */
 		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-		  strcpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail);
+
+		  strncpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
+		  UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+
 	          Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		  ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		 }
