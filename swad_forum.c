@@ -405,13 +405,18 @@ static bool For_GetIfForumPstExists (long PstCod)
 
 static bool For_GetIfPstIsEnabled (long PstCod)
   {
-   char Query[512];
+   char Query[128];
 
-   /***** Get if post is disabled from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_disabled_post"
-                  " WHERE PstCod='%ld'",
-            PstCod);
-   return (DB_QueryCOUNT (Query,"can not check if a post of a forum is disabled") == 0);	// Post is enabled if it does not appear in table of disabled posts
+   if (PstCod > 0)
+     {
+      /***** Get if post is disabled from database *****/
+      sprintf (Query,"SELECT COUNT(*) FROM forum_disabled_post"
+		     " WHERE PstCod='%ld'",
+	       PstCod);
+      return (DB_QueryCOUNT (Query,"can not check if a post of a forum is disabled") == 0);	// Post is enabled if it does not appear in table of disabled posts
+     }
+   else
+      return false;
   }
 
 /*****************************************************************************/
@@ -3565,6 +3570,12 @@ void For_GetThrData (struct ForumThread *Thr)
       Lay_ShowErrorAndExit ("Error when getting data of a thread of a forum.");
    row = mysql_fetch_row (mysql_res);
 
+   /***** Get the code of the first post in this thread (row[0]) *****/
+   //Thr->PstCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[0]);
+
+   /***** Get the code of the last  post in this thread (row[1]) *****/
+   //Thr->PstCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[1]);
+
    /***** Get the code of the first message in this thread (row[0]) *****/
    if (sscanf (row[0],"%ld",&(Thr->PstCod[For_FIRST_MSG])) != 1)
       Lay_ShowErrorAndExit ("Wrong code of post.");
@@ -3573,16 +3584,16 @@ void For_GetThrData (struct ForumThread *Thr)
    if (sscanf (row[1],"%ld",&(Thr->PstCod[For_LAST_MSG])) != 1)
       Lay_ShowErrorAndExit ("Wrong code of post.");
 
-   /***** Get the author of the first message in this thread (row[2]) *****/
+   /***** Get the author of the first post in this thread (row[2]) *****/
    Thr->UsrCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[2]);
 
-   /***** Get the author of the last message in this thread (row[3]) *****/
-   Thr->UsrCod[For_LAST_MSG] = Str_ConvertStrCodToLongCod (row[3]);
+   /***** Get the author of the last  post in this thread (row[3]) *****/
+   Thr->UsrCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[3]);
 
-   /***** Get the date of the first message in this thread (row[4]) *****/
+   /***** Get the date of the first post in this thread (row[4]) *****/
    Thr->WriteTime[For_FIRST_MSG] = Dat_GetUNIXTimeFromStr (row[4]);
 
-   /***** Get the date of the last  message in this thread (row[5]) *****/
+   /***** Get the date of the last  post in this thread (row[5]) *****/
    Thr->WriteTime[For_LAST_MSG ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
@@ -3598,7 +3609,8 @@ void For_GetThrData (struct ForumThread *Thr)
    for (Order = For_FIRST_MSG;
 	Order <= For_LAST_MSG;
 	Order++)
-      Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
+      // Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
+      Thr->Enabled[Order] = true;
 
    /***** Get number of posts in this thread *****/
    Thr->NumPosts = For_GetNumPstsInThr (Thr->ThrCod);

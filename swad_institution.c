@@ -1085,7 +1085,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool InsFound;
+   bool InsFound = false;
 
    /***** Clear data *****/
    Ins->CtyCod = -1L;
@@ -1099,67 +1099,62 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
    Ins->NumUsrs = 0;
 
    /***** Check if institution code is correct *****/
-   if (Ins->InsCod <= 0)
-      return false;
-   // Ins->InsCod > 0
-
-   /***** Get data of an institution from database *****/
-   sprintf (Query,"SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
-                  " FROM institutions WHERE InsCod='%ld'",
-            Ins->InsCod);
-
-   /***** Count number of rows in result *****/
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get data of an institution")) // Institution found...
+   if (Ins->InsCod > 0)
      {
-      InsFound = true;
+      /***** Get data of an institution from database *****/
+      sprintf (Query,"SELECT CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW"
+		     " FROM institutions WHERE InsCod='%ld'",
+	       Ins->InsCod);
 
-      /* Get row */
-      row = mysql_fetch_row (mysql_res);
-
-      /* Get country code (row[0]) */
-      Ins->CtyCod = Str_ConvertStrCodToLongCod (row[0]);
-
-      /* Get centre status (row[1]) */
-      if (sscanf (row[1],"%u",&(Ins->Status)) != 1)
-	 Lay_ShowErrorAndExit ("Wrong institution status.");
-
-      /* Get requester user's code (row[2]) */
-      Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
-
-      /* Get the short name of the institution (row[3]) */
-      strcpy (Ins->ShrtName,row[3]);
-
-      /* Get the full name of the institution (row[4]) */
-      strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
-      Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
-
-      /* Get the URL of the institution (row[5]) */
-      strcpy (Ins->WWW,row[5]);
-
-      /* Get extra data */
-      if (GetExtraData == Ins_GET_EXTRA_DATA)
+      /***** Count number of rows in result *****/
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of an institution")) // Institution found...
 	{
-	 /* Get number of centres in this institution */
-	 Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
+	 /* Get row */
+	 row = mysql_fetch_row (mysql_res);
 
-	 /* Get number of departments in this institution */
-	 Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
+	 /* Get country code (row[0]) */
+	 Ins->CtyCod = Str_ConvertStrCodToLongCod (row[0]);
 
-	 /* Get number of degrees in this institution */
-	 Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
+	 /* Get centre status (row[1]) */
+	 if (sscanf (row[1],"%u",&(Ins->Status)) != 1)
+	    Lay_ShowErrorAndExit ("Wrong institution status.");
 
-	 /* Get number of users in courses of this institution */
-	 Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
+	 /* Get requester user's code (row[2]) */
+	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
+
+	 /* Get the short name of the institution (row[3]) */
+	 strcpy (Ins->ShrtName,row[3]);
+
+	 /* Get the full name of the institution (row[4]) */
+	 strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+	 Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
+
+	 /* Get the URL of the institution (row[5]) */
+	 strcpy (Ins->WWW,row[5]);
+
+	 /* Get extra data */
+	 if (GetExtraData == Ins_GET_EXTRA_DATA)
+	   {
+	    /* Get number of centres in this institution */
+	    Ins->NumCtrs = Ctr_GetNumCtrsInIns (Ins->InsCod);
+
+	    /* Get number of departments in this institution */
+	    Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
+
+	    /* Get number of degrees in this institution */
+	    Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
+
+	    /* Get number of users in courses of this institution */
+	    Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
+	   }
+
+         /* Set return value */
+	 InsFound = true;
 	}
-     }
-   else
-     {
-      Ins->InsCod = -1L;
-      InsFound = false;
-     }
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return InsFound;
   }

@@ -2304,6 +2304,9 @@ long Str_ConvertStrCodToLongCod (const char *Str)
   {
    long Code;
 
+   if (!Str)
+      return -1L;
+
    if (Str[0] == '\0')
       return -1L;
 

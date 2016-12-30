@@ -2044,10 +2044,9 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool CrsFound = false;
 
-   /***** Reset course data *****/
+   /***** Clear data *****/
    Crs->DegCod = -1L;
    Crs->Year = 0;
    Crs->Status = (Crs_Status_t) 0;
@@ -2058,26 +2057,26 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    Crs->NumTchs = 0;
    Crs->NumUsrs = 0;
 
+   /***** Check if course code is correct *****/
    if (Crs->CrsCod > 0)
      {
       /***** Get data of a course from database *****/
       sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
 		     " FROM courses WHERE CrsCod='%ld'",
 	       Crs->CrsCod);
-      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a course");
-
-      if (NumRows == 1)		// Course found
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a course")) // Course found...
 	{
 	 /***** Get data of the course *****/
 	 row = mysql_fetch_row (mysql_res);
 	 Crs_GetDataOfCourseFromRow (Crs,row);
 
+         /* Set return value */
 	 CrsFound = true;
 	}
-     }
 
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
+     }
 
    return CrsFound;
   }

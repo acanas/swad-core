@@ -1677,56 +1677,39 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRows;
    bool DegFound = false;
 
-   if (Deg->DegCod <= 0)
+   /***** Clear data *****/
+   Deg->CtrCod = -1L;
+   Deg->DegTypCod = -1L;
+   Deg->Status = (Deg_Status_t) 0;
+   Deg->RequesterUsrCod = -1L;
+   Deg->ShrtName[0] = '\0';
+   Deg->FullName[0] = '\0';
+   Deg->WWW[0] = '\0';
+   Deg->LstCrss = NULL;
+
+   /***** Check if degree code is correct *****/
+   if (Deg->DegCod > 0)
      {
-      Deg->DegCod = -1L;
-      Deg->CtrCod = -1L;
-      Deg->DegTypCod = -1L;
-      Deg->Status = (Deg_Status_t) 0;
-      Deg->RequesterUsrCod = -1L;
-      Deg->ShrtName[0] = '\0';
-      Deg->FullName[0] = '\0';
-      Deg->WWW[0] = '\0';
-      Deg->LstCrss = NULL;
-      return false;
+      /***** Get data of a degree from database *****/
+      sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
+		     "ShortName,FullName,WWW"
+		     " FROM degrees WHERE DegCod ='%ld'",
+	       Deg->DegCod);
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a degree")) // Degree found...
+	{
+	 /***** Get data of degree *****/
+	 row = mysql_fetch_row (mysql_res);
+	 Deg_GetDataOfDegreeFromRow (Deg,row);
+
+         /* Set return value */
+	 DegFound = true;
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
-
-   /***** Get data of a degree from database *****/
-   sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,WWW"
-                  " FROM degrees WHERE DegCod ='%ld'",
-            Deg->DegCod);
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a degree");
-
-   if (NumRows == 1)
-     {
-      /***** Get data of degree *****/
-      row = mysql_fetch_row (mysql_res);
-      Deg_GetDataOfDegreeFromRow (Deg,row);
-
-      DegFound = true;
-     }
-   else if (NumRows == 0)
-     {
-      Deg->DegCod = -1L;
-      Deg->CtrCod = -1L;
-      Deg->DegTypCod = -1L;
-      Deg->Status = (Deg_Status_t) 0;
-      Deg->RequesterUsrCod = -1L;
-      Deg->ShrtName[0] = '\0';
-      Deg->FullName[0] = '\0';
-      Deg->WWW[0] = '\0';
-      Deg->LstCrss = NULL;
-      return false;
-     }
-   else if (NumRows > 1)
-      Lay_ShowErrorAndExit ("Degree repeated in database.");
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    return DegFound;
   }
