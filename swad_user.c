@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -741,8 +741,8 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
 
 void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxChars)
   {
-   char FirstName[Usr_MAX_BYTES_NAME_SPEC_CHAR+1];
-   char Surnames[2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)];
+   char FirstName[Usr_MAX_BYTES_NAME + 1];
+   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
 
    /***** Restrict length of firstname and surnames *****/
    strcpy (FirstName,UsrDat->FirstName);
@@ -2089,7 +2089,7 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
-   char UsrName[Usr_MAX_BYTES_NAME+1];
+   char UsrName[Usr_MAX_BYTES_NAME + 1];
 
    /***** User's role *****/
    if (Rol_GetNumAvailableRoles () == 1)
@@ -5686,7 +5686,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if ((GroupNames = (char *) malloc ((MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
+      if ((GroupNames = (char *) malloc ((Grp_MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
       /***** Start table with list of students *****/
@@ -6007,7 +6007,7 @@ void Usr_ListAllDataStds (void)
 
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
-         if ((GroupNames = (char *) malloc ((MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
+         if ((GroupNames = (char *) malloc ((Grp_MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
       /***** Start table with list of students *****/

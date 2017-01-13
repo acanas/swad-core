@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -947,10 +947,12 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
 	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) */
-      strcpy (AgdEvent->Event,row[7]);
+      strncpy (AgdEvent->Event,row[7],Agd_MAX_LENGTH_EVENT);
+      AgdEvent->Event[Agd_MAX_LENGTH_EVENT] = '\0';
 
       /* Get the event (row[8]) */
-      strcpy (AgdEvent->Location,row[8]);
+      strncpy (AgdEvent->Location,row[8],Agd_MAX_LENGTH_LOCATION);
+      AgdEvent->Location[Agd_MAX_LENGTH_LOCATION] = '\0';
      }
    else
      {
@@ -1007,7 +1009,8 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      strcpy (Txt,row[0]);
+      strncpy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Txt[Cns_MAX_BYTES_TEXT] = '\0';
      }
    else
       Txt[0] = '\0';

@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -166,7 +166,7 @@ static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char *SummaryStr,unsigned MaxChars);
+                                char SummaryStr[Cns_MAX_BYTES_TEXT + 1],unsigned MaxChars);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
@@ -1091,7 +1091,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
    char ForumName[512];
-   char SummaryStr[Cns_MAX_BYTES_TEXT+1];
+   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    unsigned NumComments;
    char IdNewComment[Act_MAX_LENGTH_ID];
 
@@ -1689,7 +1689,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 /*****************************************************************************/
 
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char *SummaryStr,unsigned MaxChars)
+                                char SummaryStr[Cns_MAX_BYTES_TEXT + 1],unsigned MaxChars)
   {
    SummaryStr[0] = '\0';
 
@@ -1955,7 +1955,7 @@ static void Soc_PutFormToWriteNewPost (void)
    extern const char *Txt_New_SOCIAL_post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX+1];
-   char FullName[(Usr_MAX_BYTES_NAME+1)*3];
+   char FullName[(Usr_MAX_BYTES_NAME + 1) * 3];
 
    /***** Start list *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"

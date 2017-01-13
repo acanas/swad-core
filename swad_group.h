@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -34,8 +34,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define MAX_LENGTH_GROUP_TYPE_NAME	255
-#define MAX_LENGTH_GROUP_NAME		255
+#define Grp_MAX_LENGTH_GROUP_TYPE_NAME	(256 - 1)
+#define Grp_MAX_LENGTH_GROUP_NAME	(256 - 1)
 
 #define Grp_MAX_STUDENTS_IN_A_GROUP	10000	// If max of students in a group is greater than this, it is considered infinite
 
@@ -55,8 +55,8 @@ struct GroupData
    long GrpCod;
    long GrpTypCod;
    long CrsCod;
-   char GrpTypName[MAX_LENGTH_GROUP_TYPE_NAME+1];
-   char GrpName[MAX_LENGTH_GROUP_NAME+1];
+   char GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME+1];
+   char GrpName[Grp_MAX_LENGTH_GROUP_NAME+1];
    unsigned MaxStudents;
    int  Vacant;
    bool Open;					// Group is open?
@@ -66,7 +66,7 @@ struct GroupData
 struct Group
   {
    long GrpCod;					// Code of group
-   char GrpName[MAX_LENGTH_GROUP_NAME+1];	// Name of group
+   char GrpName[Grp_MAX_LENGTH_GROUP_NAME+1];	// Name of group
    unsigned MaxStudents;
    unsigned NumStudents;			// Number of students in the group
    bool Open;					// Group is open?
@@ -76,7 +76,7 @@ struct Group
 struct GroupType
   {
    long GrpTypCod;					// Code of type of group
-   char GrpTypName[MAX_LENGTH_GROUP_TYPE_NAME+1];	// Name of type of group
+   char GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME + 1];	// Name of type of group
    bool MandatoryEnrollment;				// Enrollment is mandatory?
    bool MultipleEnrollment;				// Enrollment is multiple?
    bool MustBeOpened;					// Groups must be opened?

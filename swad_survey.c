@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -672,8 +672,8 @@ static void Svy_WriteAuthor (struct Survey *Svy)
   {
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char FirstName[Usr_MAX_BYTES_NAME+1];
-   char Surnames[2*(Usr_MAX_BYTES_NAME+1)];
+   char FirstName[Usr_MAX_BYTES_NAME + 1];
+   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
 
    /***** Initialize structure with user's data *****/

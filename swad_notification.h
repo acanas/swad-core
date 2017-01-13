@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -107,7 +107,7 @@ void Ntf_ShowMyNotifications (void);
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void);
 
 Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
-void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
                                     unsigned MaxChars,bool GetContent);

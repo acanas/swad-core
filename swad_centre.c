@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1038,13 +1038,16 @@ void Ctr_GetListCentres (long InsCod)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
          /* Get the short name of the centre (row[5]) */
-         strcpy (Ctr->ShrtName,row[5]);
+         strncpy (Ctr->ShrtName,row[5],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+         Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
 
          /* Get the full name of the centre (row[6]) */
-         strcpy (Ctr->FullName,row[6]);
+         strncpy (Ctr->FullName,row[6],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+         Ctr->FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
 
          /* Get the URL of the centre (row[7]) */
-         strcpy (Ctr->WWW,row[7]);
+         strncpy (Ctr->WWW,row[7],Cns_MAX_LENGTH_WWW);
+         Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
          /* Get number of users who claim to belong to this centre (row[8]) */
          if (sscanf (row[8],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1133,13 +1136,16 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the centre (row[4]) */
-         strcpy (Ctr->ShrtName,row[4]);
+         strncpy (Ctr->ShrtName,row[4],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+         Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
 
          /* Get the full name of the centre (row[5]) */
-         strcpy (Ctr->FullName,row[5]);
+         strncpy (Ctr->FullName,row[5],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+         Ctr->FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
 
          /* Get the URL of the centre (row[6]) */
-         strcpy (Ctr->WWW,row[6]);
+         strncpy (Ctr->WWW,row[6],Cns_MAX_LENGTH_WWW);
+         Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
          /* Get number of users who claim to belong to this centre (row[7]) */
          if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1216,7 +1222,9 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 	{
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Ctr->ShrtName,row[0]);
+
+	 strncpy (Ctr->ShrtName,row[0],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+	 Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1233,6 +1241,7 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    /***** Free possible former photo attribution *****/
    Ctr_FreePhotoAttribution (PhotoAttribution);
@@ -1249,9 +1258,13 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
       if (row[0])
 	 if (row[0][0])
 	   {
-	    if (((*PhotoAttribution) = (char *) malloc (strlen (row[0])+1)) == NULL)
+	    Length = strlen (row[0]);
+
+	    if (((*PhotoAttribution) = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for photo attribution.");
-	    strcpy (*PhotoAttribution,row[0]);
+
+	    strncpy (*PhotoAttribution,row[0],Length);
+	    PhotoAttribution[Length] = '\0';
 	   }
      }
 
@@ -1999,7 +2012,9 @@ void Ctr_ChangeCtrWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Ctr->CtrCod,NewWWW);
-      strcpy (Ctr->WWW,NewWWW);
+
+      strncpy (Ctr->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2030,7 +2045,9 @@ void Ctr_ChangeCtrWWWInConfig (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.CurrentCtr.Ctr.CtrCod,NewWWW);
-      strcpy (Gbl.CurrentCtr.Ctr.WWW,NewWWW);
+
+      strncpy (Gbl.CurrentCtr.Ctr.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Gbl.CurrentCtr.Ctr.WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);

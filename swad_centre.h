@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -65,9 +65,9 @@ struct Centre
    long PlcCod;			// Place code
    Ctr_Status_t Status;		// Centre status
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
-   char ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME+1];
-   char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
-   char WWW[Cns_MAX_LENGTH_WWW+1];
+   char ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME + 1];
+   char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
    struct ListDegrees Degs;	// List of degrees in this centre
    unsigned NumCrss;		// Number of courses in this centre

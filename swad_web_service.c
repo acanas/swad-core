@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -595,8 +595,8 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    /* Get user's brithday */
    if (row[4])
      {
-      strncpy (UsrDat->Birthday.YYYYMMDD,row[4],4+2+2);
-      UsrDat->Birthday.YYYYMMDD[4+2+2] = '\0';
+      strncpy (UsrDat->Birthday.YYYYMMDD,row[4],Dat_LENGTH_YYYYMMDD);
+      UsrDat->Birthday.YYYYMMDD[Dat_LENGTH_YYYYMMDD] = '\0';
      }
    else
       strcpy (UsrDat->Birthday.YYYYMMDD,"00000000");
@@ -815,9 +815,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,256);
    loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
    loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (Gbl.soap,256);
-   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
    loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,8+2+2+1);
 
@@ -917,19 +917,19 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 	 loginByUserPasswordKeyOut->userID[255] = '\0';
 	}
 
-      strncpy (loginByUserPasswordKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginByUserPasswordKeyOut->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
-      strncpy (loginByUserPasswordKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginByUserPasswordKeyOut->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
-      strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginByUserPasswordKeyOut->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userSurname1 ,Gbl.Usrs.Me.UsrDat.Surname1 ,Usr_MAX_BYTES_NAME);
+      loginByUserPasswordKeyOut->userSurname1 [Usr_MAX_BYTES_NAME] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userSurname2 ,Gbl.Usrs.Me.UsrDat.Surname2 ,Usr_MAX_BYTES_NAME);
+      loginByUserPasswordKeyOut->userSurname2 [Usr_MAX_BYTES_NAME] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+      loginByUserPasswordKeyOut->userFirstname[Usr_MAX_BYTES_NAME] = '\0';
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       strncpy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,PATH_MAX);
       loginByUserPasswordKeyOut->userPhoto[PATH_MAX] = '\0';
 
-      strncpy (loginByUserPasswordKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
-      loginByUserPasswordKeyOut->userBirthday[4+2+2] = '\0';
+      strncpy (loginByUserPasswordKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+      loginByUserPasswordKeyOut->userBirthday[Dat_LENGTH_YYYYMMDD] = '\0';
 
       loginByUserPasswordKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
 
@@ -975,11 +975,11 @@ int swad__loginBySessionKey (struct soap *soap,
 
    /***** Allocate space for strings *****/
    loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,256);
-   loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1);
+   loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1);
    loginBySessionKeyOut->userID         = (char *) soap_malloc (Gbl.soap,256);
-   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
+   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,8+2+2+1);
    loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,256);
@@ -1071,19 +1071,19 @@ int swad__loginBySessionKey (struct soap *soap,
 	 loginBySessionKeyOut->userID[255] = '\0';
 	}
 
-      strncpy (loginBySessionKeyOut->userSurname1,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginBySessionKeyOut->userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
-      strncpy (loginBySessionKeyOut->userSurname2,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginBySessionKeyOut->userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
-      strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-      loginBySessionKeyOut->userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+      strncpy (loginBySessionKeyOut->userSurname1 ,Gbl.Usrs.Me.UsrDat.Surname1 ,Usr_MAX_BYTES_NAME);
+      loginBySessionKeyOut->userSurname1 [Usr_MAX_BYTES_NAME] = '\0';
+      strncpy (loginBySessionKeyOut->userSurname2 ,Gbl.Usrs.Me.UsrDat.Surname2 ,Usr_MAX_BYTES_NAME);
+      loginBySessionKeyOut->userSurname2 [Usr_MAX_BYTES_NAME] = '\0';
+      strncpy (loginBySessionKeyOut->userFirstname,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+      loginBySessionKeyOut->userFirstname[Usr_MAX_BYTES_NAME] = '\0';
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       strncpy (loginBySessionKeyOut->userPhoto,PhotoURL,PATH_MAX);
       loginBySessionKeyOut->userPhoto[PATH_MAX] = '\0';
 
-      strncpy (loginBySessionKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,4+2+2);
-      loginBySessionKeyOut->userBirthday[4+2+2] = '\0';
+      strncpy (loginBySessionKeyOut->userBirthday,Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+      loginBySessionKeyOut->userBirthday[Dat_LENGTH_YYYYMMDD] = '\0';
 
       loginBySessionKeyOut->userRole = Svc_RolRole_to_SvcRole[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB];
 
@@ -2804,7 +2804,7 @@ int swad__getNotifications (struct soap *soap,
    struct Course Crs;
    long Cod;
    char ForumName[512];
-   char *SummaryStr;
+   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    char *ContentStr;
    Ntf_Status_t Status;
 
@@ -2842,12 +2842,6 @@ int swad__getNotifications (struct soap *soap,
    NumNotifications = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's notifications");
    if (NumNotifications)	// Notifications found
      {
-      /* Allocate memory for summary string */
-      if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
-	 return soap_receiver_fault (Gbl.soap,
-				     "Not enough memory",
-				     "Not enough memory to store the summary of the notification");
-
       getNotificationsOut->numNotifications = (int) NumNotifications;
       getNotificationsOut->notificationsArray.__size = (int) NumNotifications;
       getNotificationsOut->notificationsArray.__ptr = soap_malloc (Gbl.soap,(getNotificationsOut->notificationsArray.__size) * sizeof (*(getNotificationsOut->notificationsArray.__ptr)));
@@ -2888,17 +2882,17 @@ int swad__getNotifications (struct soap *soap,
             strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname,Gbl.Usrs.Other.UsrDat.Nickname,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userNickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,Gbl.Usrs.Other.UsrDat.Surname1,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 ,Gbl.Usrs.Other.UsrDat.Surname1 ,Usr_MAX_BYTES_NAME);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1 [Usr_MAX_BYTES_NAME] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,Gbl.Usrs.Other.UsrDat.Surname2,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 ,Gbl.Usrs.Other.UsrDat.Surname2 ,Usr_MAX_BYTES_NAME);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2 [Usr_MAX_BYTES_NAME] = '\0';
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME_SPEC_CHAR+1);
-            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName,Usr_MAX_BYTES_NAME_SPEC_CHAR);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname[Usr_MAX_BYTES_NAME_SPEC_CHAR] = '\0';
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            strncpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname[Usr_MAX_BYTES_NAME] = '\0';
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,PATH_MAX+1);
@@ -2989,9 +2983,6 @@ int swad__getNotifications (struct soap *soap,
             ContentStr = NULL;
            }
 	}
-
-      /* Free memory used by summary string */
-      free ((void *) SummaryStr);
      }
    else	// No notifications found
      {

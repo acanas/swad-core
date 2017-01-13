@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -39,9 +39,9 @@
 
 struct DegreeType
   {
-   long DegTypCod;					// Degree type code
-   char DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME+1];	// Degree type name
-   unsigned NumDegs;					// Number of degrees of this type
+   long DegTypCod;						// Degree type code
+   char DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME + 1];	// Degree type name
+   unsigned NumDegs;						// Number of degrees of this type
   };
 
 /*****************************************************************************/

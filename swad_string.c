@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -2706,15 +2706,19 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-         sprintf (Gbl.Message,
-                  Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
-                	                                  Txt_UPLOAD_FILE_X_invalid_name,
-		  FileName);
+         snprintf (Gbl.Message,Lay_MAX_BYTES_ALERT,
+                   Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
+                	                                   Txt_UPLOAD_FILE_X_invalid_name,
+		   FileName);
      }
    else	// FileName is empty
-      strcpy (Gbl.Message,
-	      Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
-						      Txt_UPLOAD_FILE_Invalid_name);
+     {
+      strncpy (Gbl.Message,
+	       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
+						       Txt_UPLOAD_FILE_Invalid_name,
+	       Lay_MAX_BYTES_ALERT);
+      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+     }
 
    return FileNameIsOK;
   }

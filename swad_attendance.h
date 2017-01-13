@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -34,7 +34,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE	255
+#define Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE	(256-1)
 
 #define Att_NUM_DATES 2
 typedef enum
@@ -51,7 +51,7 @@ struct AttendanceEvent
    long UsrCod;
    time_t TimeUTC[Att_NUM_DATES];
    bool Open;
-   char Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE+1];
+   char Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;
    unsigned NumStdsTotal;	// Number total of students who have assisted to the event
    unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
@@ -75,8 +75,6 @@ void Att_PutHiddenParamAttOrderType (void);
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att);
 void Att_FreeListAttEvents (void);
-
-void Att_GetNotifAttEvent (char *SummaryStr,char **ContentStr,long AsgCod,unsigned MaxChars,bool GetContent);
 
 void Att_PutParamAttCod (long AttCod);
 long Att_GetParamAttCod (void);

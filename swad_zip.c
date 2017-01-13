@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -285,7 +285,7 @@ static void ZIP_CreateTmpDirForCompression (void)
 
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
-   char FullNameAndUsrID[(Usr_MAX_BYTES_NAME+1)*3+
+   char FullNameAndUsrID[(Usr_MAX_BYTES_NAME + 1)*3+
                          ID_MAX_LENGTH_USR_ID+1+
                          10+1];
    char PathFolderUsrInsideCrs[PATH_MAX+1];

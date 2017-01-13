@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1738,13 +1738,16 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get degree short name (row[5]) *****/
-   strcpy (Deg->ShrtName,row[5]);
+   strncpy (Deg->ShrtName,row[5],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+   Deg->ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
 
    /***** Get degree full name (row[6]) *****/
-   strcpy (Deg->FullName,row[6]);
+   strncpy (Deg->FullName,row[6],Deg_MAX_LENGTH_DEGREE_FULL_NAME);
+   Deg->FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME] = '\0';
 
    /***** Get WWW (row[7]) *****/
-   strcpy (Deg->WWW,row[7]);
+   strncpy (Deg->WWW,row[7],Cns_MAX_LENGTH_WWW);
+   Deg->WWW[Cns_MAX_LENGTH_WWW] = '\0';
   }
 
 /*****************************************************************************/
@@ -1768,7 +1771,9 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
 	{
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Deg->ShrtName,row[0]);
+
+	 strncpy (Deg->ShrtName,row[0],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+	 Deg->ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2138,7 +2143,8 @@ void Deg_ChangeDegWWW (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Deg->DegCod,NewWWW);
-      strcpy (Deg->WWW,NewWWW);
+      strncpy (Deg->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Deg->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2169,7 +2175,8 @@ void Deg_ChangeDegWWWInConfig (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Gbl.CurrentDeg.Deg.DegCod,NewWWW);
-      strcpy (Gbl.CurrentDeg.Deg.WWW,NewWWW);
+      strncpy (Gbl.CurrentDeg.Deg.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Gbl.CurrentDeg.Deg.WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);

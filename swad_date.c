@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -142,8 +142,8 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
   {
    if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
      {
-      strncpy (Date->YYYYMMDD,YYYYMMDD,4+2+2);
-      Date->YYYYMMDD[4+2+2] = '\0';
+      strncpy (Date->YYYYMMDD,YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+      Date->YYYYMMDD[Dat_LENGTH_YYYYMMDD] = '\0';
       return true;
      }
    else
@@ -1263,7 +1263,8 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Month = DateSrc->Month;
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
-   strcpy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD);
+   strncpy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+   DateDst->YYYYMMDD[Dat_LENGTH_YYYYMMDD] = '\0';
   }
 
 /*****************************************************************************/

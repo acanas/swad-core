@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -89,7 +89,7 @@ static void Att_PutParams (void);
 static void Att_GetListAttEvents (Att_OrderTime_t Order);
 static void Att_GetDataOfAttEventByCodAndCheckCrs (struct AttendanceEvent *Att);
 static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att);
-static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt);
+static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod);
 static void Att_ShowLstGrpsToEditAttEvent (long AttCod);
 static void Att_RemoveAllTheGrpsAssociatedToAnAttEvent (long AttCod);
@@ -474,8 +474,8 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
   {
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char FirstName[Usr_MAX_BYTES_NAME+1];
-   char Surnames[2*(Usr_MAX_BYTES_NAME+1)];
+   char FirstName[Usr_MAX_BYTES_NAME + 1];
+   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
 
    /***** Initialize structure with user's data *****/
@@ -492,8 +492,12 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   strcpy (FirstName,UsrDat.FirstName);
-   strcpy (Surnames,UsrDat.Surname1);
+   strncpy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   FirstName[Usr_MAX_BYTES_NAME] = '\0';
+
+   strncpy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
+   Surnames[Usr_MAX_BYTES_SURNAMES] = '\0';
+
    if (UsrDat.Surname2[0])
      {
       strcat (Surnames," ");
@@ -785,7 +789,8 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 	 Att->CommentTchVisible = (row[7][0] == 'Y');
 
 	 /* Get the title of the attendance event (row[8]) */
-	 strcpy (Att->Title,row[8]);
+	 strncpy (Att->Title,row[8],Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
+	 Att->Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE] = '\0';
 	}
 
       /***** Free structure that stores the query result *****/
@@ -836,7 +841,7 @@ void Att_FreeListAttEvents (void)
 /***************** Get attendance event text from database *******************/
 /*****************************************************************************/
 
-static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt)
+static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -852,9 +857,12 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt)
    /***** The result of the query must have one row or none *****/
    if (NumRows == 1)
      {
-      /* Get info text */
+      /* Get row */
       row = mysql_fetch_row (mysql_res);
-      strcpy (Txt,row[0]);
+
+      /* Get info text */
+      strncpy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Txt[Cns_MAX_BYTES_TEXT] = '\0';
      }
    else
       Txt[0] = '\0';
@@ -864,48 +872,6 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char *Txt)
 
    if (NumRows > 1)
       Lay_ShowErrorAndExit ("Error when getting attendance event text.");
-  }
-
-/*****************************************************************************/
-/************** Get summary and content of an attendance event ***************/
-/*****************************************************************************/
-// This function may be called inside a web service, so don't report error
-
-void Att_GetNotifAttEvent (char *SummaryStr,char **ContentStr,long AttCod,unsigned MaxChars,bool GetContent)
-  {
-   char Query[512];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-
-   SummaryStr[0] = '\0';	// Return nothing on error
-
-   /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM att_events WHERE AttCod='%ld'",
-            AttCod);
-   if (!mysql_query (&Gbl.mysql,Query))
-      if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
-        {
-         /***** Result should have a unique row *****/
-         if (mysql_num_rows (mysql_res) == 1)
-           {
-            /***** Get row *****/
-            row = mysql_fetch_row (mysql_res);
-
-            /***** Get summary *****/
-            strcpy (SummaryStr,row[0]);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
-
-            /***** Get content *****/
-            if (GetContent)
-              {
-               if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
-                  Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
-              }
-           }
-         mysql_free_result (mysql_res);
-        }
   }
 
 /*****************************************************************************/
@@ -1113,7 +1079,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    extern const char *Txt_Save;
    struct AttendanceEvent Att;
    bool ItsANewAttEvent;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
    Att_GetParamAttOrderType ();

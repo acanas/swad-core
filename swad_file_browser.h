@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -245,7 +245,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
 void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
 
-void Brw_GetSummaryAndContentOfFile (char *SummaryStr,char **ContentStr,
+void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                      long FilCod,unsigned MaxChars,bool GetContent);
 
 unsigned Brw_ListDocsFound (const char *Query,

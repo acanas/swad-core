@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -34,7 +34,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Asg_MAX_LENGTH_ASSIGNMENT_TITLE	255
+#define Asg_MAX_LENGTH_ASSIGNMENT_TITLE	(256-1)
 
 #define Asg_MAX_LENGTH_FOLDER 32
 
@@ -75,7 +75,8 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg);
 void Asg_FreeListAssignments (void);
 
-void Asg_GetNotifAssignment (char *SummaryStr,char **ContentStr,long AsgCod,unsigned MaxChars,bool GetContent);
+void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
+                             long AsgCod,unsigned MaxChars,bool GetContent);
 
 long Asg_GetParamAsgCod (void);
 void Asg_ReqRemAssignment (void);

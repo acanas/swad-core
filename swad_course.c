@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -104,6 +104,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod);
 
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
+
+static void Crs_GetShortNamesByCod (long CrsCod,
+                                    char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1],
+                                    char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1]);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -516,11 +520,11 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
-   char InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
-   char CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
-   char DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
-   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
-   bool IsLastItemInLevel[1+5];
+   char InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME + 1];
+   char CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
+   char DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1];
+   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
+   bool IsLastItemInLevel[1 + 5];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
    MYSQL_RES *mysql_resIns;
@@ -540,10 +544,10 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumCrss;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
    char PathRelRSSFile[PATH_MAX+1];
-   char ClassNormal[64];
+   const char *ClassNormal;
    char ClassHighlight[64];
 
-   strcpy (ClassNormal,The_ClassForm[Gbl.Prefs.Theme]);
+   ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Table start *****/
@@ -639,7 +643,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
-	 strcpy (InsFullName,Ins.FullName);
+	 strncpy (InsFullName,Ins.FullName,Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+	 InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
          Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsFullName);
 	 Act_FormEnd ();
@@ -674,7 +679,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
-	    strcpy (CtrFullName,Ctr.FullName);
+	    strncpy (CtrFullName,Ctr.FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+	    CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
             Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrFullName);
 	    Act_FormEnd ();
@@ -709,7 +715,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
-	       strcpy (DegFullName,Deg.FullName);
+	       strncpy (DegFullName,Deg.FullName,Deg_MAX_LENGTH_DEGREE_FULL_NAME);
+	       DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME] = '\0';
                Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegFullName);
 	       Act_FormEnd ();
@@ -749,7 +756,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShrtName,
 		           Crs.FullName);
-	          strcpy (CrsFullName,Crs.FullName);
+	          strncpy (CrsFullName,Crs.FullName,Crs_MAX_LENGTH_COURSE_FULL_NAME);
+	          CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
                   Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
 		  fprintf (Gbl.F.Out,"&nbsp;%s</a>",CrsFullName);
 		  Act_FormEnd ();
@@ -1091,8 +1099,8 @@ void Crs_WriteSelectorMyCourses (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
-   char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME+1];
+   char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
+   char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
@@ -2130,7 +2138,9 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 /******* Get the short names of degree and course from a course code *********/
 /*****************************************************************************/
 
-void Crs_GetShortNamesByCod (long CrsCod,char *CrsShortName,char *DegShortName)
+static void Crs_GetShortNamesByCod (long CrsCod,
+                                    char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1],
+                                    char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2150,8 +2160,12 @@ void Crs_GetShortNamesByCod (long CrsCod,char *CrsShortName,char *DegShortName)
 	{
 	 /***** Get the short name of this course *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (CrsShortName,row[0]);
-	 strcpy (DegShortName,row[1]);
+
+	 strncpy (CrsShortName,row[0],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+         CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME] = '\0';
+
+	 strncpy (DegShortName,row[1],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+	 DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2376,7 +2390,9 @@ void Crs_ChangeInsCrsCod (void)
    else
      {
       Gbl.Error = true;
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+               Lay_MAX_BYTES_ALERT);
+      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
      }
   }
 
@@ -2582,7 +2598,9 @@ void Crs_ChangeCrsYear (void)
    else
      {
       Gbl.Error = true;
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+               Lay_MAX_BYTES_ALERT);
+      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
      }
   }
 
@@ -2738,7 +2756,9 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    else
      {
       Gbl.Error = true;
-      strcpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course);
+      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+               Lay_MAX_BYTES_ALERT);
+      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
      }
   }
 

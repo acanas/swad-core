@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -43,13 +43,14 @@
 /******************************* Public types ********************************/
 /*****************************************************************************/
 
+#define Dat_LENGTH_YYYYMMDD (4 + 2 + 2)
 struct Date
   {
    unsigned Day;
    unsigned Month;
    unsigned Year;
    unsigned Week;
-   char YYYYMMDD[4+2+2+1];
+   char YYYYMMDD[Dat_LENGTH_YYYYMMDD + 1];
   };
 struct Time
   {

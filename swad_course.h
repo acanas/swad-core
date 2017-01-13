@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -39,9 +39,9 @@
 
 #define Crs_MAX_COURSES_PER_USR		100 // Used in list of my courses and list of distinct courses in sent or received messages
 
-#define Crs_LENGTH_INSTITUTIONAL_CRS_COD	  7
+#define Crs_LENGTH_INSTITUTIONAL_CRS_COD  7
 #define Crs_MAX_LENGTH_COURSE_SHRT_NAME	 32
-#define Crs_MAX_LENGTH_COURSE_FULL_NAME		127
+#define Crs_MAX_LENGTH_COURSE_FULL_NAME	(128 - 1)
 
 #define Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS  6
 #define Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS 12
@@ -115,7 +115,6 @@ void Crs_RecFormNewCrs (void);
 
 void Crs_RemoveCourse (void);
 bool Crs_GetDataOfCourseByCod (struct Course *Crs);
-void Crs_GetShortNamesByCod (long CrsCod,char *CrsShortName,char *DegShortName);
 void Crs_RemoveCourseCompletely (long CrsCod);
 void Crs_ChangeInsCrsCodInConfig (void);
 void Crs_ChangeInsCrsCod (void);

@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -36,15 +36,15 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_YEARS_PER_DEGREE	 12 // Max number of academic years per degree
+#define Deg_MAX_YEARS_PER_DEGREE	12 // Max number of academic years per degree
 
-#define Deg_MAX_DEGREES_PER_USR		 20 // Used in list of my degrees
+#define Deg_MAX_DEGREES_PER_USR		20 // Used in list of my degrees
 
-#define Deg_MAX_LENGTH_DEGREE_SHRT_NAME	 32
-#define Deg_MAX_LENGTH_DEGREE_FULL_NAME		127
+#define Deg_MAX_LENGTH_DEGREE_SHRT_NAME	32
+#define Deg_MAX_LENGTH_DEGREE_FULL_NAME	(128 - 1)
 
 #define Deg_MAX_LENGTH_LOCATION_SHORT_NAME	 32
-#define Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR (Deg_MAX_LENGTH_LOCATION_SHORT_NAME*Str_MAX_LENGTH_SPEC_CHAR_HTML)
+#define Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR (Deg_MAX_LENGTH_LOCATION_SHORT_NAME * Str_MAX_LENGTH_SPEC_CHAR_HTML)
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -73,9 +73,9 @@ struct Degree
    long CtrCod;						// Centre code
    Deg_Status_t Status;					// Degree status
    long RequesterUsrCod;				// User code of the person who requested the creation of this degree
-   char ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME+1];	// Short name of degree
-   char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];	// Full name of degree
-   char WWW[Cns_MAX_LENGTH_WWW+1];
+   char ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];	// Short name of degree
+   char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1];	// Full name of degree
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
    struct Course *LstCrss;				// List of courses in this degree
   };
 

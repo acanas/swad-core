@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -189,13 +189,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.111.16 (2016-12-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.112 (2017-01-13)"
 #define CSS_FILE		"swad16.111.5.css"
 #define JS_FILE			"swad16.101.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.112:   Jan 13, 2017	Some strcpy changed to strncpy. (211415 lines)
         Version 16.111.16:Dec 30, 2016	Fixed minor bug in user's ID, reported by Coverity. (211185 lines)
         Version 16.111.15:Dec 30, 2016	Fixed bug in forums, reported by Coverity. (211182 lines)
         Version 16.111.14:Dec 29, 2016	Fixed bug in attendance events. (211189 lines)

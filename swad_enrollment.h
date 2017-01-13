@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -79,7 +79,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);
 
 void Enr_ReqAcceptRegisterInCrs (void);
-void Enr_GetNotifEnrollment (char *SummaryStr,
+void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                              long CrsCod,long UsrCod,
                              unsigned MaxChars);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
@@ -104,7 +104,7 @@ void Enr_RemAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Course *Crs);
 void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);
-void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
+void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                     long ReqCod,unsigned MaxChars,bool GetContent);
 void Enr_AskIfRejectSignUp (void);
 void Enr_RejectSignUp (void);

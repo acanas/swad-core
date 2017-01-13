@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -79,7 +79,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_PutParams (void);
 static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query);
 static void Asg_ResetAssignment (struct Assignment *Asg);
-static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt);
+static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Asg_PutParamAsgCod (long AsgCod);
 static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod);
 static void Asg_ShowLstGrpsToEditAssignment (long AsgCod);
@@ -434,8 +434,8 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
   {
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char FirstName[Usr_MAX_BYTES_NAME+1];
-   char Surnames[2*(Usr_MAX_BYTES_NAME+1)];
+   char FirstName[Usr_MAX_BYTES_NAME + 1];
+   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
 
    /***** Initialize structure with user's data *****/
@@ -452,8 +452,12 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   strcpy (FirstName,UsrDat.FirstName);
-   strcpy (Surnames,UsrDat.Surname1);
+   strncpy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   UsrDat.FirstName[Usr_MAX_BYTES_NAME] = '\0';
+
+   strncpy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
+   Surnames[Usr_MAX_BYTES_SURNAMES] = '\0';
+
    if (UsrDat.Surname2[0])
      {
       strcat (Surnames," ");
@@ -776,10 +780,13 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->Open = (row[5][0] == '1');
 
       /* Get the title of the assignment (row[6]) */
-      strcpy (Asg->Title,row[6]);
+      strncpy (Asg->Title,row[6],Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
+      Asg->Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE] = '\0';
 
       /* Get the folder for the assignment files (row[7]) */
-      strcpy (Asg->Folder,row[7]);
+      strncpy (Asg->Folder,row[7],Asg_MAX_LENGTH_FOLDER);
+      Asg->Folder[Asg_MAX_LENGTH_FOLDER] = '\0';
+
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
@@ -830,7 +837,7 @@ void Asg_FreeListAssignments (void)
 /******************** Get assignment text from database **********************/
 /*****************************************************************************/
 
-static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt)
+static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -848,7 +855,8 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      strcpy (Txt,row[0]);
+      strncpy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Txt[Cns_MAX_BYTES_TEXT] = '\0';
      }
    else
       Txt[0] = '\0';
@@ -865,7 +873,7 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char *Txt)
 /*****************************************************************************/
 // This function may be called inside a web service
 
-void Asg_GetNotifAssignment (char *SummaryStr,char **ContentStr,
+void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                              long AsgCod,unsigned MaxChars,bool GetContent)
   {
    char Query[512];
@@ -887,16 +895,20 @@ void Asg_GetNotifAssignment (char *SummaryStr,char **ContentStr,
             row = mysql_fetch_row (mysql_res);
 
             /***** Get summary *****/
-            strcpy (SummaryStr,row[0]);
+            strncpy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
+
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Get content *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
+               if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
+
+               strncpy (*ContentStr,row[1],Cns_MAX_BYTES_TEXT);
+               (*ContentStr)[Cns_MAX_BYTES_TEXT] = '\0';
               }
            }
          mysql_free_result (mysql_res);

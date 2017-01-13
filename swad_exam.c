@@ -126,7 +126,11 @@ static long Exa_GetParamsExamAnnouncement (void)
    Par_GetParToText ("CrsName",Gbl.ExamAnnouncements.ExaDat.CrsFullName,Cns_MAX_BYTES_STRING);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!Gbl.ExamAnnouncements.ExaDat.CrsFullName[0])
-      strcpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName);
+     {
+      strncpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName,
+               Crs_MAX_LENGTH_COURSE_FULL_NAME);
+      Gbl.ExamAnnouncements.ExaDat.CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
+     }
 
    /***** Get the year *****/
    Par_GetParToText ("Year",UnsignedStr,10);
@@ -937,14 +941,17 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
    Gbl.ExamAnnouncements.ExaDat.Status = (Exa_ExamAnnouncementStatus_t) UnsignedNum;
 
    /* Name of the course (row[2]) */
-   strcpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,row[2]);
+   strncpy (Gbl.ExamAnnouncements.ExaDat.CrsFullName,row[2],
+            Crs_MAX_LENGTH_COURSE_FULL_NAME);
+   Gbl.ExamAnnouncements.ExaDat.CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&Gbl.ExamAnnouncements.ExaDat.Year) != 1)
       Lay_ShowErrorAndExit ("Wrong year.");
 
    /* Exam session (row[4]) */
-   strcpy (Gbl.ExamAnnouncements.ExaDat.Session,row[4]);
+   strncpy (Gbl.ExamAnnouncements.ExaDat.Session,row[4],Cns_MAX_BYTES_STRING);
+   Gbl.ExamAnnouncements.ExaDat.Session[Cns_MAX_BYTES_STRING] = '\0';
 
    /* Date of exam announcement (row[5]) */
    if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",

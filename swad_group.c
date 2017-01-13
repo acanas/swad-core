@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1161,7 +1161,7 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_GROUP_TYPE_NAME,
+               Grp_MAX_LENGTH_GROUP_TYPE_NAME,
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                Gbl.Form.Id);
       Act_FormEnd ();
@@ -1405,7 +1405,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
+                  Grp_MAX_LENGTH_GROUP_NAME,Grp->GrpName,Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
@@ -2121,7 +2121,7 @@ static void Grp_PutFormToCreateGroupType (void)
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
 	              " required=\"required\" />"
                       "</td>",
-            MAX_LENGTH_GROUP_TYPE_NAME,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
+            Grp_MAX_LENGTH_GROUP_TYPE_NAME,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -2264,7 +2264,7 @@ static void Grp_PutFormToCreateGroup (void)
                       " size=\"40\" maxlength=\"%u\" value=\"%s\""
 	              " required=\"required\" />"
 	              "</td>",
-            MAX_LENGTH_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
+            Grp_MAX_LENGTH_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
 
    /***** Maximum number of students *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -2367,7 +2367,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
             Lay_ShowErrorAndExit ("Wrong type of group.");
 
          /* Get group type name (row[1]) */
-         strncpy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],MAX_LENGTH_GROUP_TYPE_NAME);
+         strncpy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
          Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrollment = (row[2][0] == 'Y');
@@ -3121,7 +3121,7 @@ void Grp_RecFormNewGrpTyp (void)
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
-   Par_GetParToText ("GrpTypName",Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,MAX_LENGTH_GROUP_TYPE_NAME);
+   Par_GetParToText ("GrpTypName",Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type */
    Par_GetParToText ("MandatoryEnrollment",YN,1);
@@ -3185,7 +3185,7 @@ void Grp_RecFormNewGrp (void)
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
      {
       /* Get group name */
-      Par_GetParToText ("GrpName",Gbl.CurrentCrs.Grps.GrpName,MAX_LENGTH_GROUP_NAME);
+      Par_GetParToText ("GrpName",Gbl.CurrentCrs.Grps.GrpName,Grp_MAX_LENGTH_GROUP_NAME);
 
       /* Get maximum number of students */
       Par_GetParToText ("MaxStudents",UnsignedStr,10);
@@ -3957,7 +3957,7 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_group_X_has_not_changed;
    char Query[1024];
-   char NewNameGrpTyp[MAX_LENGTH_GROUP_TYPE_NAME+1];
+   char NewNameGrpTyp[Grp_MAX_LENGTH_GROUP_TYPE_NAME+1];
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
@@ -3965,7 +3965,7 @@ void Grp_RenameGroupType (void)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new name for the group type */
-   Par_GetParToText ("GrpTypName",NewNameGrpTyp,MAX_LENGTH_GROUP_TYPE_NAME);
+   Par_GetParToText ("GrpTypName",NewNameGrpTyp,Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
    /***** Get from the database the old name of the group type *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
@@ -4030,7 +4030,7 @@ void Grp_RenameGroup (void)
    extern const char *Txt_The_name_of_the_group_X_has_not_changed;
    struct GroupData GrpDat;
    char Query[512];
-   char NewNameGrp[MAX_LENGTH_GROUP_NAME+1];
+   char NewNameGrp[Grp_MAX_LENGTH_GROUP_NAME+1];
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
@@ -4038,7 +4038,7 @@ void Grp_RenameGroup (void)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new name for the group */
-   Par_GetParToText ("GrpName",NewNameGrp,MAX_LENGTH_GROUP_NAME);
+   Par_GetParToText ("GrpName",NewNameGrp,Grp_MAX_LENGTH_GROUP_NAME);
 
    /***** Get from the database the type and the old name of the group *****/
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;

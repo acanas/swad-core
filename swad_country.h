@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -38,7 +38,6 @@
 /*****************************************************************************/
 
 #define Cty_MAX_BYTES_COUNTRY_NAME	    255
-#define Cty_MAX_LENGTH_COUNTRY_WWW	    255
 #define Cty_MAX_LENGTH_MAP_ATTRIBUTION	(4*1024)
 
 #define Cty_MAX_COUNTRS_PER_USR	 10	// Used in list of my countries
@@ -46,9 +45,9 @@
 struct Country
   {
    long CtyCod;
-   char Alpha2[2+1];
-   char Name[1+Txt_NUM_LANGUAGES][Cty_MAX_BYTES_COUNTRY_NAME+1];
-   char WWW [1+Txt_NUM_LANGUAGES][Cty_MAX_LENGTH_COUNTRY_WWW+1];
+   char Alpha2[2 + 1];
+   char Name[1 + Txt_NUM_LANGUAGES][Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char WWW [1 + Txt_NUM_LANGUAGES][Cns_MAX_LENGTH_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCty;
    unsigned NumInss;
    unsigned NumCtrs;

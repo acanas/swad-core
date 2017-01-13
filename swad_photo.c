@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -1129,9 +1129,9 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        bool FormUnique)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char FullName [3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
-   char ShortName[3*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+6];
-   char Surnames [2*(Usr_MAX_BYTES_NAME_SPEC_CHAR+1)+1];
+   char FullName [3*(Usr_MAX_BYTES_NAME+1)];
+   char ShortName[3*(Usr_MAX_BYTES_NAME+1)];
+   char Surnames [Usr_MAX_BYTES_SURNAMES + 1];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
                                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window

@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_constant.h"
+#include "swad_course.h"
 #include "swad_date.h"
 
 /*****************************************************************************/
@@ -57,9 +58,9 @@ struct ExamData
    long ExaCod;
    long CrsCod;
    Exa_ExamAnnouncementStatus_t Status;
-   char CrsFullName[Cns_MAX_BYTES_STRING+1];
+   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
-   char Session[Cns_MAX_BYTES_STRING+1];	// Exam session is june, september, etc.
+   char Session[Cns_MAX_BYTES_STRING + 1];	// Exam session is june, september, etc.
    struct Date CallDate;
    struct Date ExamDate;
    struct Hour StartTime;

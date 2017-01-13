@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -41,10 +41,10 @@ struct Banner
   {
    long BanCod;
    bool Hidden;
-   char ShrtName[Ban_MAX_LENGTH_SHRT_NAME+1];
-   char FullName[Ban_MAX_LENGTH_FULL_NAME+1];
-   char Img[Ban_MAX_LENGTH_IMAGE+1];
-   char WWW[Cns_MAX_LENGTH_WWW+1];
+   char ShrtName[Ban_MAX_LENGTH_SHRT_NAME + 1];
+   char FullName[Ban_MAX_LENGTH_FULL_NAME + 1];
+   char Img[Ban_MAX_LENGTH_IMAGE + 1];
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
   };
 
 /*****************************************************************************/

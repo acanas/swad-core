@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -204,16 +204,20 @@ static void Ban_GetListBanners (const char *Query)
             Ban->Hidden = (row[1][0] == 'Y');
 
 	    /* Get the short name of the banner (row[2]) */
-	    strcpy (Ban->ShrtName,row[2]);
+	    strncpy (Ban->ShrtName,row[2],Ban_MAX_LENGTH_SHRT_NAME);
+	    Ban->ShrtName[Ban_MAX_LENGTH_SHRT_NAME] = '\0';
 
 	    /* Get the full name of the banner (row[3]) */
-	    strcpy (Ban->FullName,row[3]);
+	    strncpy (Ban->FullName,row[3],Ban_MAX_LENGTH_FULL_NAME);
+	    Ban->FullName[Ban_MAX_LENGTH_FULL_NAME] = '\0';
 
 	    /* Get the image of the banner (row[4]) */
-	    strcpy (Ban->Img,row[4]);
+	    strncpy (Ban->Img,row[4],Ban_MAX_LENGTH_IMAGE);
+	    Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
 
 	    /* Get the URL of the banner (row[5]) */
-	    strcpy (Ban->WWW,row[5]);
+	    strncpy (Ban->WWW,row[5],Cns_MAX_LENGTH_WWW);
+	    Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 	   }
 	}
       else
@@ -257,16 +261,20 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
          Ban->Hidden = (row[0][0] == 'Y');
 
          /* Get the short name of the banner (row[1]) */
-         strcpy (Ban->ShrtName,row[1]);
+         strncpy (Ban->ShrtName,row[1],Ban_MAX_LENGTH_SHRT_NAME);
+         Ban->ShrtName[Ban_MAX_LENGTH_SHRT_NAME] = '\0';
 
          /* Get the full name of the banner (row[2]) */
-         strcpy (Ban->FullName,row[2]);
+         strncpy (Ban->FullName,row[2],Ban_MAX_LENGTH_FULL_NAME);
+         Ban->FullName[Ban_MAX_LENGTH_FULL_NAME] = '\0';
 
          /* Get the image of the banner (row[3]) */
-         strcpy (Ban->Img,row[3]);
+         strncpy (Ban->Img,row[3],Ban_MAX_LENGTH_IMAGE);
+         Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
 
          /* Get the URL of the banner (row[4]) */
-         strcpy (Ban->WWW,row[4]);
+         strncpy (Ban->WWW,row[4],Cns_MAX_LENGTH_WWW);
+         Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
         }
 
       /***** Free structure that stores the query result *****/
@@ -616,7 +624,9 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   strcpy (CurrentBanName,NewBanName);
+   strncpy (CurrentBanName,NewBanName,MaxLength);
+   CurrentBanName[MaxLength] = '\0';
+
    Ban_EditBanners ();
   }
 
@@ -673,7 +683,9 @@ void Ban_ChangeBannerImg (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_image_empty);
 
    /***** Show the form again *****/
-   strcpy (Ban->Img,NewImg);
+   strncpy (Ban->Img,NewImg,Ban_MAX_LENGTH_IMAGE);
+   Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
+
    Ban_EditBanners ();
   }
 
@@ -687,7 +699,7 @@ void Ban_ChangeBannerWWW (void)
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Banner *Ban;
    char Query[256+Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Ban = &Gbl.Banners.EditingBan;
 
@@ -716,7 +728,9 @@ void Ban_ChangeBannerWWW (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Ban->WWW,NewWWW);
+   strncpy (Ban->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+   Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+
    Ban_EditBanners ();
   }
 

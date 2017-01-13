@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -650,7 +650,8 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the degree type (row[0]) */
-      strcpy (DegTyp->DegTypName,row[0]);
+      strncpy (DegTyp->DegTypName,row[0],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+      DegTyp->DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -785,7 +786,8 @@ void DT_RenameDegreeType (void)
      }
 
    /***** Show the form again *****/
-   strcpy (DegTyp->DegTypName,NewNameDegTyp);
+   strncpy (DegTyp->DegTypName,NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+   DegTyp->DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
    DT_ReqEditDegreeTypes ();
   }
 

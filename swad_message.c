@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -707,7 +707,7 @@ void Msg_RecMsgFromUsr (void)
 
    /***** Allocate space to store a list of recipients with the following format:
 	  "FirstName Surname1 Surname2; FirstName Surname1 Surname2; FirstName Surname1 Surname2" *****/
-   if ((ListUsrsDst = (char *) malloc (((Usr_MAX_BYTES_NAME+1)*3+1)*NumRecipients)) == NULL)
+   if ((ListUsrsDst = (char *) malloc (((Usr_MAX_BYTES_NAME + 1) * 3 + 1)*NumRecipients)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store email addresses of recipients.");
    ListUsrsDst[0] = '\0';
 

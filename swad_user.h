@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -53,13 +53,17 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
-#define Usr_MAX_BYTES_USR_EMAIL			127
-#define Usr_MAX_LENGTH_USR_LOGIN		127	// @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN			127
+#define Usr_MAX_BYTES_USR_EMAIL			(128-1)
+#define Usr_MAX_LENGTH_USR_LOGIN		(128-1)	// @nick, email or ID
+#define Usr_MAX_BYTES_USR_LOGIN			(128-1)
 
 #define Usr_MAX_LENGTH_USR_NAME_OR_SURNAME	 32
 #define Usr_MAX_BYTES_NAME			 32
-#define Usr_MAX_BYTES_NAME_SPEC_CHAR		(Usr_MAX_BYTES_NAME*Str_MAX_LENGTH_SPEC_CHAR_HTML)
+
+#define Usr_MAX_BYTES_SURNAMES			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME)
+						// Surname1         +' '+ Surname2
+#define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME + 1 + 1 + Usr_MAX_BYTES_NAME)
+						// Surname1         +' '+ Surname2           +','+' '+ FirstName
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (1+4+1+2+1+2+1)	// "'%04u-%02u-%02u'"
 
@@ -126,10 +130,10 @@ struct UsrData
 			// >=0 ==> filled/calculated
 			//  <0 ==> not yet filled/calculated
    bool Accepted;	// User has accepted joining to current course?
-   char Surname1	[Usr_MAX_BYTES_NAME+1];
-   char Surname2	[Usr_MAX_BYTES_NAME+1];
-   char FirstName	[Usr_MAX_BYTES_NAME+1];
-   char FullName	[(Usr_MAX_BYTES_NAME+1)*3];
+   char Surname1	[Usr_MAX_BYTES_NAME + 1];
+   char Surname2	[Usr_MAX_BYTES_NAME + 1];
+   char FirstName	[Usr_MAX_BYTES_NAME + 1];
+   char FullName	[(Usr_MAX_BYTES_NAME + 1)*3];
    Usr_Sex_t Sex;
    char Email		[Usr_MAX_BYTES_USR_EMAIL+1];
    bool EmailConfirmed;
@@ -179,9 +183,9 @@ struct UsrInList
   {
    long UsrCod;
    char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
-   char Surname1 [Usr_MAX_BYTES_NAME+1];
-   char Surname2 [Usr_MAX_BYTES_NAME+1];
-   char FirstName[Usr_MAX_BYTES_NAME+1];
+   char Surname1 [Usr_MAX_BYTES_NAME + 1];
+   char Surname2 [Usr_MAX_BYTES_NAME + 1];
+   char FirstName[Usr_MAX_BYTES_NAME + 1];
    Usr_Sex_t Sex;
    char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo

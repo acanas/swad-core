@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General 3 License as
@@ -359,7 +359,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollment (char *SummaryStr,
+void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                              long CrsCod,long UsrCod,
                              unsigned MaxChars)
   {
@@ -396,7 +396,8 @@ void Enr_GetNotifEnrollment (char *SummaryStr,
 
             /* Role (row[0]) */
             Role = Rol_ConvertUnsignedStrToRole (row[0]);
-            strcpy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex]);
+            strncpy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],Cns_MAX_BYTES_TEXT);
+            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1936,7 +1937,7 @@ void Enr_SignUpInCrs (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
+void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                     long ReqCod,unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -1972,7 +1973,8 @@ void Enr_GetNotifEnrollmentRequest (char *SummaryStr,char **ContentStr,
 
             /* Role (row[1]) */
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
-            strcpy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex]);
+            strncpy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],Cns_MAX_BYTES_TEXT);
+            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 

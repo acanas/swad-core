@@ -8,7 +8,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -178,8 +178,8 @@ struct Globals
    time_t StartExecutionTimeUTC;
    struct DateTime Now;
    struct Date Yesterday;
-   char Message[Lay_MAX_BYTES_ALERT];	// String for alerts
-   char Title[Lay_MAX_BYTES_TITLE];	// String for the help message in a link
+   char Message[Lay_MAX_BYTES_ALERT + 1];	// String for alerts
+   char Title[Lay_MAX_BYTES_TITLE + 1];		// String for the help message in a link
    unsigned RowEvenOdd;	// To alternate row colors in listings
    char *ColorRows[2];
    const char *XMLPtr;
@@ -453,7 +453,7 @@ struct Globals
          struct GroupTypes GrpTypes;
          struct GroupType GrpTyp;
          long GrpCod;
-         char GrpName[MAX_LENGTH_GROUP_NAME+1];
+         char GrpName[Grp_MAX_LENGTH_GROUP_NAME + 1];
          int MaxStudents;
          bool Open;
          bool FileZones;
@@ -513,13 +513,13 @@ struct Globals
         } Size;
       struct
 	{
-	 char PathAboveRootFolder[PATH_MAX+1];
-	 char PathRootFolder[PATH_MAX+1];
-	 char PathInTreeUntilFilFolLnk[PATH_MAX+1];
-	 char FullPathInTree[PATH_MAX+1];
+	 char PathAboveRootFolder[PATH_MAX + 1];
+	 char PathRootFolder[PATH_MAX + 1];
+	 char PathInTreeUntilFilFolLnk[PATH_MAX + 1];
+	 char FullPathInTree[PATH_MAX + 1];
 	} Priv;
-      char NewFilFolLnkName[NAME_MAX+1];
-      char FilFolLnkName[NAME_MAX+1];
+      char NewFilFolLnkName[NAME_MAX + 1];
+      char FilFolLnkName[NAME_MAX + 1];
       Brw_FileType_t FileType;
       unsigned Level;
       bool ICanEditFileOrFolder;	// Can I modify (remove, rename, create inside, etc.) a file or folder?
@@ -529,22 +529,22 @@ struct Globals
          Brw_FileBrowser_t FileBrowser;	// Type of the file browser
          long Cod;			// Code of the institution/centre/degree/course/group related to the file browser with the clipboard
 	 long WorksUsrCod;		// User code of the user related to the works file browser with the clipboard
-         char Path[PATH_MAX+1];		// Complete path in the file browser
-         char FileName[NAME_MAX+1];	// File name, last part of complete path in the file browser
+         char Path[PATH_MAX + 1];	// Complete path in the file browser
+         char FileName[NAME_MAX + 1];	// File name, last part of complete path in the file browser
          unsigned Level;
          Brw_FileType_t FileType;	// Folder, file or link
          bool IsThisTree;		// When showing a file browser, is it that corresponding to the clipboard?
          bool IsThisFile;		// When showing a row of a file browser, are we in the path of the clipboard?
         } Clipboard;
-      char TmpPubDir[NAME_MAX+1];
-      bool HiddenLevels[1+Brw_MAX_DIR_LEVELS];
+      char TmpPubDir[NAME_MAX + 1];
+      bool HiddenLevels[1 + Brw_MAX_DIR_LEVELS];
       const char *TxtStyle;
       const char *InputStyle;
       struct Assignment Asg;	// Data of assignment when browsing level 1 or an assignment zone
       struct
         {
 	 bool CreateZIP;
-         char TmpDir[NAME_MAX+1];
+         char TmpDir[NAME_MAX + 1];
         } ZIP;
      } FileBrowser;	// Struct used for a file browser
    struct
@@ -576,7 +576,7 @@ struct Globals
       struct Course Crs;
       int Level;
       For_ForumOrderType_t SelectedOrderType;
-      char PathRelOld[PATH_MAX+1];
+      char PathRelOld[PATH_MAX + 1];
       long ThreadToMove;
      } Forum;
    struct
@@ -588,17 +588,17 @@ struct Globals
       Msg_TypeOfMessages_t TypeOfMessages;
       unsigned NumMsgs;
       int MsgId;
-      char Subject[Cns_MAX_BYTES_SUBJECT+1];
+      char Subject[Cns_MAX_BYTES_SUBJECT + 1];
       unsigned NumCourses;
       struct
         {
          long CrsCod;
-         char ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
+         char ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
         } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
       long FilterCrsCod; 		// Show only messages sent from this course code
-      char FilterCrsShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME+1];
-      char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3+1];	// Show only messages from/to these users
-      char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT+1];		// Show only messages that match this content
+      char FilterCrsShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
+      char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3 + 1];	// Show only messages from/to these users
+      char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT + 1];		// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
       long ExpandedMsgCod;	// The current expanded message code
       struct
@@ -607,7 +607,7 @@ struct Globals
          long OriginalMsgCod;		// Original message code when I am editing a reply
         } Reply;
       bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
-      char FileNameMail[PATH_MAX+1];
+      char FileNameMail[PATH_MAX + 1];
       FILE *FileMail;
      } Msg;
    struct

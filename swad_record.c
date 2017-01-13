@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -2567,7 +2567,7 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
 
 static void Rec_ShowFullName (struct UsrData *UsrDat)
   {
-   char Name[Usr_MAX_BYTES_NAME+1];	// To shorten length of FirstName, Surname1, Surname2
+   char Name[Usr_MAX_BYTES_NAME + 1];	// To shorten length of FirstName, Surname1, Surname2
 
    fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_NAME LEFT_TOP\">");
 

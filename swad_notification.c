@@ -6,7 +6,7 @@
     and used to support university teaching.
 
     This file is part of SWAD core.
-    Copyright (C) 1999-2016 Antonio Cañas Vargas
+    Copyright (C) 1999-2017 Antonio Cañas Vargas
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -322,7 +322,7 @@ void Ntf_ShowMyNotifications (void)
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
    Ntf_StatusTxt_t StatusTxt;
-   char *SummaryStr;
+   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    char *ContentStr;
    const char *ClassBackground;
    const char *ClassAnchor;
@@ -374,10 +374,6 @@ void Ntf_ShowMyNotifications (void)
    /***** List my notifications *****/
    if (NumNotifications)	// Notifications found
      {
-      /***** Allocate memory for the summary of the notification *****/
-      if ((SummaryStr = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store the summary of the notification.");
-
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
 
@@ -628,9 +624,6 @@ void Ntf_ShowMyNotifications (void)
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
-
-      /***** Free summary *****/
-      free ((void *) SummaryStr);
      }
    else
       Lay_ShowAlert (Lay_INFO,AllNotifications ? Txt_You_have_no_notifications :
@@ -868,7 +861,7 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
 /******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
-void Ntf_GetNotifSummaryAndContent (char *SummaryStr,char **ContentStr,
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
                                     unsigned MaxChars,bool GetContent)
