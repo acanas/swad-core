@@ -1413,8 +1413,9 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
 	    Length = strlen (row[0]);
 	    if (((*MapAttribution) = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
+
 	    strncpy (*MapAttribution,row[0],Length);
-	    MapAttribution[Length] = '\0';
+	    (*MapAttribution)[Length] = '\0';
 	   }
      }
 

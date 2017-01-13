@@ -232,13 +232,16 @@ void Lnk_GetListLinks (void)
 	       Lay_ShowErrorAndExit ("Wrong code of institutional link.");
 
 	    /* Get the short name of the link (row[1]) */
-	    strcpy (Lnk->ShrtName,row[1]);
+	    strncpy (Lnk->ShrtName,row[1],Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+	    Lnk->ShrtName[Lnk_MAX_LENGTH_LINK_SHRT_NAME] = '\0';
 
 	    /* Get the full name of the link (row[2]) */
-	    strcpy (Lnk->FullName,row[2]);
+	    strncpy (Lnk->FullName,row[2],Lnk_MAX_LENGTH_LINK_FULL_NAME);
+	    Lnk->FullName[Lnk_MAX_LENGTH_LINK_FULL_NAME] = '\0';
 
 	    /* Get the URL of the link (row[3]) */
-	    strcpy (Lnk->WWW,row[3]);
+	    strncpy (Lnk->WWW,row[3],Cns_MAX_LENGTH_WWW);
+	    Lnk->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 	   }
 	}
       else
@@ -277,13 +280,16 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the link (row[0]) */
-         strcpy (Lnk->ShrtName,row[0]);
+         strncpy (Lnk->ShrtName,row[0],Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+         Lnk->ShrtName[Lnk_MAX_LENGTH_LINK_SHRT_NAME] = '\0';
 
          /* Get the full name of the link (row[1]) */
-         strcpy (Lnk->FullName,row[1]);
+         strncpy (Lnk->FullName,row[1],Lnk_MAX_LENGTH_LINK_FULL_NAME);
+         Lnk->FullName[Lnk_MAX_LENGTH_LINK_FULL_NAME] = '\0';
 
          /* Get the URL of the link (row[2]) */
-         strcpy (Lnk->WWW,row[2]);
+         strncpy (Lnk->WWW,row[2],Cns_MAX_LENGTH_WWW);
+         Lnk->WWW[Cns_MAX_LENGTH_WWW] = '\0';
         }
 
       /***** Free structure that stores the query result *****/
@@ -545,7 +551,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   strcpy (CurrentLnkName,NewLnkName);
+   strncpy (CurrentLnkName,NewLnkName,MaxLength);
+   CurrentLnkName[MaxLength] = '\0';
+
    Lnk_EditLinks ();
   }
 
@@ -602,7 +610,9 @@ void Lnk_ChangeLinkWWW (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Lnk->WWW,NewWWW);
+   strncpy (Lnk->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+   Lnk->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+
    Lnk_EditLinks ();
   }
 

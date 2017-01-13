@@ -99,12 +99,13 @@ struct Image
   };
 
 /***** Parameters used in a form to upload an image *****/
+#define Img_MAX_LENGTH_PARAM_UPLOAD_IMG (16 - 1)
 struct ParamUploadImg
   {
-   char Action[16];
-   char File[16];
-   char Title[16];
-   char URL[16];
+   char Action[Img_MAX_LENGTH_PARAM_UPLOAD_IMG + 1];
+   char File  [Img_MAX_LENGTH_PARAM_UPLOAD_IMG + 1];
+   char Title [Img_MAX_LENGTH_PARAM_UPLOAD_IMG + 1];
+   char URL   [Img_MAX_LENGTH_PARAM_UPLOAD_IMG + 1];
   };
 
 /*****************************************************************************/

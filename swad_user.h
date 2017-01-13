@@ -133,21 +133,21 @@ struct UsrData
    char Surname1	[Usr_MAX_BYTES_NAME + 1];
    char Surname2	[Usr_MAX_BYTES_NAME + 1];
    char FirstName	[Usr_MAX_BYTES_NAME + 1];
-   char FullName	[(Usr_MAX_BYTES_NAME + 1)*3];
+   char FullName	[(Usr_MAX_BYTES_NAME + 1) * 3];
    Usr_Sex_t Sex;
-   char Email		[Usr_MAX_BYTES_USR_EMAIL+1];
+   char Email		[Usr_MAX_BYTES_USR_EMAIL + 1];
    bool EmailConfirmed;
-   char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
+   char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t ProfileVisibility;	// Who can see user's public profile
    long CtyCod;		// Country
-   char OriginPlace	[Cns_MAX_BYTES_STRING+1];
+   char OriginPlace	[Cns_MAX_BYTES_STRING + 1];
    struct Date Birthday;
-   char StrBirthday	[Cns_MAX_LENGTH_DATE +1];
-   char LocalAddress	[Cns_MAX_BYTES_STRING+1];
-   char LocalPhone	[Usr_MAX_BYTES_PHONE +1];
-   char FamilyAddress	[Cns_MAX_BYTES_STRING+1];
-   char FamilyPhone	[Usr_MAX_BYTES_PHONE +1];
+   char StrBirthday	[Cns_MAX_LENGTH_DATE  + 1];
+   char LocalAddress	[Cns_MAX_BYTES_STRING + 1];
+   char LocalPhone	[Usr_MAX_BYTES_PHONE  + 1];
+   char FamilyAddress	[Cns_MAX_BYTES_STRING + 1];
+   char FamilyPhone	[Usr_MAX_BYTES_PHONE  + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
    long InsCod;		// Institution
@@ -155,8 +155,8 @@ struct UsrData
      {
       long CtrCod;	// Centre
       long DptCod;	// Department
-      char Office	[Cns_MAX_BYTES_STRING+1];
-      char OfficePhone	[Usr_MAX_BYTES_PHONE +1];
+      char Office	[Cns_MAX_BYTES_STRING + 1];
+      char OfficePhone	[Usr_MAX_BYTES_PHONE  + 1];
      } Tch;
    struct
      {

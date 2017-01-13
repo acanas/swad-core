@@ -84,6 +84,8 @@ typedef enum
   } For_ForumOrderType_t;
 #define For_DEFAULT_ORDER For_LAST_MSG
 
+#define For_MAX_BYTES_FORUM_NAME (512 - 1)
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -97,7 +99,8 @@ unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 
-void For_GetSummaryAndContentForumPst (char *SummaryStr,char **ContentStr,
+void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                       char **ContentStr,
                                        long PstCod,
                                        unsigned MaxChars,bool GetContent);
 
@@ -109,7 +112,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                        struct Centre *Ctr,
                        struct Degree *Deg,
                        struct Course *Crs,
-                       char *ForumName,Txt_Language_t Language,bool UseHTMLEntities);
+                       char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
+                       Txt_Language_t Language,bool UseHTMLEntities);
 unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned NumThreads);
 void For_ShowForumThrs (void);
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,

@@ -1264,7 +1264,7 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
 	       Lay_ShowErrorAndExit ("Error allocating memory for photo attribution.");
 
 	    strncpy (*PhotoAttribution,row[0],Length);
-	    PhotoAttribution[Length] = '\0';
+	    (*PhotoAttribution)[Length] = '\0';
 	   }
      }
 

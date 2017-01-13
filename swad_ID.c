@@ -178,6 +178,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
    char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
    unsigned NumID;
    unsigned NumUsr;
    bool CheckPassword = false;
@@ -189,14 +190,17 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	    CheckPassword = true;
 
       /***** Allocate memory for query string *****/
-      if ((Query = (char *) malloc (512 + UsrDat->IDs.Num * (1 + ID_MAX_LENGTH_USR_ID + 1))) == NULL)
+      Length = 512 + UsrDat->IDs.Num * (1 + ID_MAX_LENGTH_USR_ID + 1) - 1;
+      if ((Query = (char *) malloc (Length + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of user's IDs.");
 
       /***** Get user's code(s) from database *****/
-      strcpy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
-				    " WHERE usr_IDs.UsrID IN (" :
-				    "SELECT DISTINCT(UsrCod) FROM usr_IDs"
-				    " WHERE UsrID IN (");
+      strncpy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
+				     " WHERE usr_IDs.UsrID IN (" :
+				     "SELECT DISTINCT(UsrCod) FROM usr_IDs"
+				     " WHERE UsrID IN (",Length);
+      Query[Length] = '\0';
+
       for (NumID = 0;
 	   NumID < UsrDat->IDs.Num;
 	   NumID++)

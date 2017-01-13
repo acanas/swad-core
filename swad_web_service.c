@@ -2803,7 +2803,7 @@ int swad__getNotifications (struct soap *soap,
    struct Degree Deg;
    struct Course Crs;
    long Cod;
-   char ForumName[512];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    char *ContentStr;
    Ntf_Status_t Status;

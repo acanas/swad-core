@@ -934,7 +934,7 @@ void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr)
    SummaryStr[0] = '\0';
 
    if ((*ContentStr = (char *) malloc (1)))
-      strcpy (*ContentStr,"");
+      *ContentStr[0] = '\0';
   }
 
 /*****************************************************************************/

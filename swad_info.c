@@ -2141,8 +2141,8 @@ void Inf_EditRichTxtInfo (void)
 
 void Inf_RecAndChangePlainTxtInfo (void)
   {
-   char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
+   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type = Inf_AsignInfoType ();
@@ -2150,7 +2150,10 @@ void Inf_RecAndChangePlainTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
+
+   strncpy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2176,8 +2179,8 @@ void Inf_RecAndChangePlainTxtInfo (void)
 
 void Inf_RecAndChangeRichTxtInfo (void)
   {
-   char Txt_HTMLFormat[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Txt_HTMLFormat    [Cns_MAX_BYTES_LONG_TEXT + 1];
+   char Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Set info type *****/
    Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
@@ -2185,7 +2188,10 @@ void Inf_RecAndChangeRichTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   strcpy (Txt_MarkdownFormat,Txt_HTMLFormat);
+
+   strncpy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,

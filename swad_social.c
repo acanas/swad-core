@@ -1090,7 +1090,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    struct Course Crs;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX+1];
-   char ForumName[512];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    unsigned NumComments;
    char IdNewComment[Act_MAX_LENGTH_ID];

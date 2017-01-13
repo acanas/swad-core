@@ -53,11 +53,11 @@ struct Holiday
   {
    long HldCod;
    long PlcCod;
-   char PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME+1];
+   char PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
    Hld_HolidayType_t HldTyp;
    struct Date StartDate;
    struct Date EndDate;
-   char Name[Hld_MAX_LENGTH_HOLIDAY_NAME+1];
+   char Name[Hld_MAX_LENGTH_HOLIDAY_NAME + 1];
   };
 
 typedef enum

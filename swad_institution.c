@@ -1028,14 +1028,16 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the institution (row[4]) */
-         strcpy (Ins->ShrtName,row[4]);
+         strncpy (Ins->ShrtName,row[4],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+         Ins->ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME] = '\0';
 
          /* Get the full name of the institution (row[5]) */
          strncpy (Ins->FullName,row[5],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
          Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
 
          /* Get the URL of the institution (row[6]) */
-         strcpy (Ins->WWW,row[6]);
+         strncpy (Ins->WWW,row[6],Cns_MAX_LENGTH_WWW);
+         Ins->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
          /* Get extra data */
          switch (GetExtraData)
@@ -1123,14 +1125,16 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	 /* Get the short name of the institution (row[3]) */
-	 strcpy (Ins->ShrtName,row[3]);
+	 strncpy (Ins->ShrtName,row[3],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+	 Ins->ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME] = '\0';
 
 	 /* Get the full name of the institution (row[4]) */
 	 strncpy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
 	 Ins->FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
 
 	 /* Get the URL of the institution (row[5]) */
-	 strcpy (Ins->WWW,row[5]);
+	 strncpy (Ins->WWW,row[5],Cns_MAX_LENGTH_WWW);
+	 Ins->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
 	 /* Get extra data */
 	 if (GetExtraData == Ins_GET_EXTRA_DATA)
@@ -1179,7 +1183,9 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
 	{
 	 /***** Get the short name of this institution *****/
 	 row = mysql_fetch_row (mysql_res);
-	 strcpy (Ins->ShrtName,row[0]);
+
+	 strncpy (Ins->ShrtName,row[0],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+	 Ins->ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME] = '\0';
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1856,7 +1862,9 @@ void Ins_ChangeInsWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Ins->InsCod,NewWWW);
-      strcpy (Ins->WWW,NewWWW);
+
+      strncpy (Ins->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Ins->WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -1887,7 +1895,9 @@ void Ins_ChangeInsWWWInConfig (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Gbl.CurrentIns.Ins.InsCod,NewWWW);
-      strcpy (Gbl.CurrentIns.Ins.WWW,NewWWW);
+
+      strncpy (Gbl.CurrentIns.Ins.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Gbl.CurrentIns.Ins.WWW[Cns_MAX_LENGTH_WWW] = '\0';
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);

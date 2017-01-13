@@ -61,9 +61,9 @@ struct Instit
    long CtyCod;
    Ins_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
-   char ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME+1];
-   char FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
-   char WWW[Cns_MAX_LENGTH_WWW+1];
+   char ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME + 1];
+   char FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME + 1];
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToIns;
    unsigned NumCtrs;
    unsigned NumDegs;

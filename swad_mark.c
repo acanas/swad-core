@@ -323,7 +323,10 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
          // Only one table is allowed
          if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
            {
-            strcpy (Gbl.Message,Txt_There_are_more_than_one_table_in_the_file_of_marks);
+            strncpy (Gbl.Message,Txt_There_are_more_than_one_table_in_the_file_of_marks,
+                     Lay_MAX_BYTES_ALERT);
+            Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+
             FileIsCorrect = false;
            }
          else
@@ -384,7 +387,10 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
         }
       else
         {
-         strcpy (Gbl.Message,Txt_Table_not_found_in_the_file_of_marks);
+         strncpy (Gbl.Message,Txt_Table_not_found_in_the_file_of_marks,
+                  Lay_MAX_BYTES_ALERT);
+         Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+
          FileIsCorrect = false;
         }
 
@@ -456,7 +462,9 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      strcpy (Gbl.Message,"Can not open file of marks.");
+      strncpy (Gbl.Message,"Can not open file of marks.",Lay_MAX_BYTES_ALERT);	// TODO: Need translation!
+      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+
       return false;
      }
 
@@ -709,7 +717,8 @@ void Mrk_ShowMyMarks (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
+void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                          char **ContentStr,
                           long MrkCod,long UsrCod,
                           unsigned MaxChars,bool GetContent)
   {
@@ -733,8 +742,9 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
    char PathMarks[PATH_MAX+1];
    char FileNameUsrMarks[PATH_MAX+1];
    FILE *FileUsrMarks;
-   long SizeOfMyMarks;
-   long i;
+   size_t SizeOfMyMarks;
+   size_t Length;
+   size_t i;
    char *Ptr;
 
    SummaryStr[0] = '\0';	// Return nothing on error
@@ -824,21 +834,31 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
                      /***** Get user's marks *****/
                      if (Mrk_GetUsrMarks (FileUsrMarks,&UsrDat,PathMarks,&Marks))
                        {
-                        SizeOfMyMarks = ftell (FileUsrMarks);
+                        SizeOfMyMarks = (size_t) ftell (FileUsrMarks);
                         fclose (FileUsrMarks);
 
-                        if ((*ContentStr = (char *) malloc (9+SizeOfMyMarks+3+1)))
+                        Length = 9 + SizeOfMyMarks + 3;
+                        if ((*ContentStr = (char *) malloc (Length + 1)))
                           {
-                           strcpy (*ContentStr,"<![CDATA[");
+                           /* 9 starting chars */
+                           strncpy (*ContentStr,"<![CDATA[",9);
+
+                           /* Content */
+                           Ptr = (*ContentStr) + 9;
                            if ((FileUsrMarks = fopen (FileNameUsrMarks,"rb")))
                              {
-                              for (Ptr = (*ContentStr) + 9, i = 0;
+                              for (i = 0;
                         	   i < SizeOfMyMarks;
                         	   i++)
-                                 Ptr[i] = (char) fgetc (FileUsrMarks);
+                                 *Ptr++ = (char) fgetc (FileUsrMarks);
                               fclose (FileUsrMarks);
                              }
-                           strcpy ((*ContentStr)+9+SizeOfMyMarks,"]]>");
+
+                           /* 3 ending chars */
+                           strncpy (Ptr,"]]>",3);
+
+                           /* Ending null char */
+                           (*ContentStr)[Length] = '\0';
                           }
                        }
                      else
@@ -850,7 +870,10 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
                     }
                   else
                     {
-                     strcpy (Gbl.Message,"Can not open file with user's marks!");
+                     strncpy (Gbl.Message,"Can not open file with user's marks!",	// TODO: Need translation!
+                              Lay_MAX_BYTES_ALERT);
+                     Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+
                      if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
                         sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                     }
@@ -858,7 +881,9 @@ void Mrk_GetNotifMyMarks (char *SummaryStr,char **ContentStr,
                  }
                else
                  {
-                  strcpy (Gbl.Message,"User's IDs not found!");
+                  strncpy (Gbl.Message,"User's IDs not found!",Lay_MAX_BYTES_ALERT);	// TODO: Need translation!
+                  Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+
                   if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
                      sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                  }

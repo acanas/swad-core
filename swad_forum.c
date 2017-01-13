@@ -1394,13 +1394,15 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void For_GetSummaryAndContentForumPst (char *SummaryStr,char **ContentStr,
+void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                       char **ContentStr,
                                        long PstCod,
                                        unsigned MaxChars,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -1417,16 +1419,22 @@ void For_GetSummaryAndContentForumPst (char *SummaryStr,char **ContentStr,
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            strcpy (SummaryStr,row[0]);
+            strncpy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
+
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Copy content *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (strlen (row[1])+1)) == NULL)
+               Length = strlen (row[1]);
+
+               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
+
+               strncpy (*ContentStr,row[1],Length);
+               (*ContentStr)[Length] = '\0';
               }
            }
          mysql_free_result (mysql_res);
@@ -2125,7 +2133,7 @@ static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts
                                    unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
   {
    char Icon[512];
-   char ForumName[512];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
 
    For_SetForumName (ForumType,
 	             &Gbl.Forum.Ins,
@@ -2182,7 +2190,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                        struct Centre *Ctr,
                        struct Degree *Deg,
                        struct Course *Crs,
-                       char *ForumName,Txt_Language_t Language,bool UseHTMLEntities)
+                       char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
+                       Txt_Language_t Language,bool UseHTMLEntities)
   {
    extern const char *Txt_General;
    extern const char *Txt_General_NO_HTML[1+Txt_NUM_LANGUAGES];
@@ -2192,7 +2201,8 @@ void For_SetForumName (For_ForumType_t ForumType,
    switch (ForumType)
      {
       case For_FORUM_COURSE_USRS:
-         strcpy (ForumName,Crs->ShrtName);
+         strncpy (ForumName,Crs->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_COURSE_TCHS:
          sprintf (ForumName,"%s%s",Crs->ShrtName,
@@ -2200,7 +2210,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-         strcpy (ForumName,Deg->ShrtName);
+         strncpy (ForumName,Deg->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_DEGREE_TCHS:
          sprintf (ForumName,"%s%s",Deg->ShrtName,
@@ -2208,7 +2219,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
-         strcpy (ForumName,Ctr->ShrtName);
+         strncpy (ForumName,Ctr->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_CENTRE_TCHS:
          sprintf (ForumName,"%s%s",Ctr->ShrtName,
@@ -2216,7 +2228,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-         strcpy (ForumName,Ins->ShrtName);
+         strncpy (ForumName,Ins->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_INSTIT_TCHS:
          sprintf (ForumName,"%s%s",Ins->ShrtName,
@@ -2224,8 +2237,10 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_GLOBAL_USRS:
-         strcpy (ForumName,UseHTMLEntities ? Txt_General :
-                                             Txt_General_NO_HTML[Language]);
+         strncpy (ForumName,UseHTMLEntities ? Txt_General :
+                                              Txt_General_NO_HTML[Language],
+                  For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_GLOBAL_TCHS:
          sprintf (ForumName,"%s%s",
@@ -2235,7 +2250,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_SWAD_USRS:
-         strcpy (ForumName,Cfg_PLATFORM_SHORT_NAME);
+         strncpy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
+         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
          break;
       case For_FORUM_SWAD_TCHS:
          sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,

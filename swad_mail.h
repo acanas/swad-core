@@ -46,8 +46,8 @@ typedef enum
 struct Mail
   {
    long MaiCod;
-   char Domain[Mai_MAX_LENGTH_MAIL_DOMAIN+1];
-   char Info[Mai_MAX_LENGTH_MAIL_INFO+1];
+   char Domain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1];
+   char Info[Mai_MAX_LENGTH_MAIL_INFO + 1];
    unsigned NumUsrs;
   };
 

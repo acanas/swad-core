@@ -343,17 +343,24 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
 /*****************************************************************************/
 /********* Set parameters names depending on number of image in form *********/
 /*****************************************************************************/
-// If NumImgInForm < 0, params have no suffix
+// If NumImgInForm <  0, params have no suffix
 // If NumImgInForm >= 0, the number is a suffix of the params
 
 void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
   {
    if (NumImgInForm < 0)	// One unique image in form ==> no suffix needed
      {
-      strcpy (ParamUploadImg->Action,"ImgAct");
-      strcpy (ParamUploadImg->File  ,"ImgFil");
-      strcpy (ParamUploadImg->Title ,"ImgTit");
-      strcpy (ParamUploadImg->URL   ,"ImgURL");
+      strncpy (ParamUploadImg->Action,"ImgAct",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      ParamUploadImg->Action[Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
+
+      strncpy (ParamUploadImg->File  ,"ImgFil",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      ParamUploadImg->File  [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
+
+      strncpy (ParamUploadImg->Title ,"ImgTit",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      ParamUploadImg->Title [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
+
+      strncpy (ParamUploadImg->URL   ,"ImgURL",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      ParamUploadImg->URL   [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
      }
    else				// Several images in form ==> add suffix
      {

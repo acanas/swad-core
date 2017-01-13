@@ -37,9 +37,9 @@
 struct Link
   {
    long LnkCod;
-   char ShrtName[Lnk_MAX_LENGTH_LINK_SHRT_NAME+1];
-   char FullName[Lnk_MAX_LENGTH_LINK_FULL_NAME+1];
-   char WWW[Cns_MAX_LENGTH_WWW+1];
+   char ShrtName[Lnk_MAX_LENGTH_LINK_SHRT_NAME + 1];
+   char FullName[Lnk_MAX_LENGTH_LINK_FULL_NAME + 1];
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
   };
 
 /*****************************************************************************/

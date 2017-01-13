@@ -318,7 +318,7 @@ void Ntf_ShowMyNotifications (void)
    struct Degree Deg;
    struct Course Crs;
    long Cod;
-   char ForumName[512];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
    Ntf_StatusTxt_t StatusTxt;
@@ -861,7 +861,8 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
 /******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
-void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                    char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
                                     unsigned MaxChars,bool GetContent)
@@ -1563,7 +1564,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    struct Course Crs;
    long Cod;
    For_ForumType_t ForumType = (For_ForumType_t) 0;	// Initialized to avoid warning
-   char ForumName[512];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
 
