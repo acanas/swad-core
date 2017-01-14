@@ -234,32 +234,49 @@ function setTZname (id) {
 	FormTZname.value = tz.name();	// Returns the name of the time zone eg "Europe/Berlin"
 }
 
-// Adjust a date form correcting days in the month
+// Get number of days in a month
+function daysInMonth (month, year) {	//Month is 1 based
+	  return new Date(year, month, 0).getDate();	// 0 is the last day of previous month
+}
+
+// Adjust a date form correcting selector days in the month
+// The selector of days can start by 1, 2, 3... or by -, 1, 2, 3...
 function adjustDateForm (id) {
 	var FormYea = document.getElementById(id+'Year' );
 	var FormMon = document.getElementById(id+'Month');
 	var FormDay = document.getElementById(id+'Day'  );
-	var Yea = FormYea.options[FormYea.selectedIndex].value;
-	var Days;
-
-	if (FormMon.options[1].selected)			// February
-		Days = ((((Yea % 4) == 0) && ((Yea % 100) != 0)) || ((Yea % 400) == 0)) ? 29 : 28;
-	else if (FormMon.options[ 3].selected ||	// April
-			 FormMon.options[ 5].selected ||	// June
-			 FormMon.options[ 8].selected ||	// September
-			 FormMon.options[10].selected)		// November
-		Days = 30;
-	else
-		Days = 31;
-
-	if (FormDay.selectedIndex >= Days)
-		FormDay.options[Days-1].selected = true;			// Select last day in month
-
-	for (var i=FormDay.options.length; i<Days; i++) {		// Create new days at the end
-		FormDay.options[i] = new Option(String(i+1),i+1);
+	var Yea = Number(FormYea.options[FormYea.selectedIndex].value);
+	var Mon = Number(FormMon.options[FormMon.selectedIndex].value);
+	
+	if (Yea != 0 && Mon != 0) {
+		var LastDayIndex = FormDay.options.length - 1;
+		var LastDayValue = Number(FormDay.options[LastDayIndex].value);
+		var SelectedDay = Number(FormDay.options[FormDay.selectedIndex].value);
+		var Days = daysInMonth (Mon,Yea);
+	
+		// If current selected day is out of range...
+		if (SelectedDay > Days)
+			// Select last day in month
+			for (var i=LastDayIndex; i>=0; i--)
+				if (FormDay.options[i].value == Days) {
+					FormDay.options[i].selected = true;
+					break;
+				}
+	
+		// Create new days at the end if necessary
+		for (var Day=Number(LastDayValue)+1; Day<=Days; Day++) {
+			var opt = document.createElement('option');
+			opt.value = opt.text = Day;
+			FormDay.add(opt);
+		}
+	
+		// Remove days from the end if necessary
+		for (var i=LastDayIndex; i>=0; i--)
+			if (FormDay.options[i].value > Days)
+				FormDay.options[i] = null;
+			else
+				break;
 	}
-	for (var i=FormDay.options.length-1; i>=Days; i--)		// Remove days from the end
-		FormDay.options[i] = null;
 }
 
 // Set a date range form to yesterday
@@ -1002,21 +1019,6 @@ function DrawCurrentMonth (id,FirstDayOfWeek,TimeUTC,CurrentPlcCod,
 function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,CurrentDay,
 					CurrentPlcCod,DrawingCalendar,PrintView,
 					CGI,FormGoToCalendarParams,FormEventParams) {
-	var NumDaysMonth = [
-		  0,
-		 31, //  1: January
-		 28, //  2: February
-		 31, //  3: Mars
-		 30, //  4: April
-		 31, //  5: May
-		 30, //  6: June
-		 31, //  7: July
-		 31, //  8: Agoust
-		 30, //  9: September
-		 31, // 10: October
-		 30, // 11: November
-		 31, // 12: December
-	];
 	var Hld_HOLIDAY = 0;
 	var Hld_NON_SCHOOL_PERIOD = 1;
 	var Yea = YearToDraw;
@@ -1058,8 +1060,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 			Yea--;
 		} else
 			Mon--;
-		NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary(Yea) :
-									  NumDaysMonth[Mon];
+		NumDaysInMonth = daysInMonth (Mon,Yea);
 		Day = NumDaysInMonth - DayOfWeek + 1;
 	}
 
@@ -1210,8 +1211,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 			Gbl_HTMLContent += '</td>';
 
 			/***** Set the next day *****/
-			NumDaysInMonth = (Mon == 2) ? GetNumDaysFebruary (Yea) :
-										  NumDaysMonth[Mon];
+			NumDaysInMonth = daysInMonth (Mon,Yea);
 			if (++Day > NumDaysInMonth) {
 				if (++Mon > 12) {
 					Yea++;
@@ -1245,22 +1245,6 @@ function GetDayOfWeekMondayFirst (Year,Month,Day) {
 			Math.floor (Year/100) +
 			Math.floor (Year/400) +
 			2) % 7) + 5) % 7;
-}
-
-/*****************************************************************************/
-/****************** Return the number of days of february ********************/
-/*****************************************************************************/
-
-function GetNumDaysFebruary (Year) {
-	return (GetIfLeapYear (Year) ? 29 : 28);
-}
-
-/*****************************************************************************/
-/************************* Return true if year is leap ***********************/
-/*****************************************************************************/
-
-function GetIfLeapYear (Year) {
-	return (Year % 4 == 0) && ((Year % 100 != 0) || (Year % 400 == 0));
 }
 
 /*****************************************************************************/

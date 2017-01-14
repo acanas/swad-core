@@ -616,7 +616,8 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
    fprintf (Gbl.F.Out,"\"");
    if (Disabled)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
-   fprintf (Gbl.F.Out,"><option value=\"0\">-</option>");
+   fprintf (Gbl.F.Out,">"
+	              "<option value=\"0\">-</option>");
    for (Year = FirstYear;
 	Year <= LastYear;
 	Year++)

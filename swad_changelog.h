@@ -189,13 +189,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.113 (2017-01-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.114 (2017-01-14)"
 #define CSS_FILE		"swad16.111.5.css"
-#define JS_FILE			"swad16.101.js"
+#define JS_FILE			"swad16.114.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.114:   Jan 14, 2017	Fixed bug in dates, reported by José Luis Bernier Villamor.
+					Javascript code refactoring related to dates. (211490 lines)
         Version 16.113:   Jan 13, 2017	Some strcpy changed to strncpy. (211497 lines)
         Version 16.112:   Jan 13, 2017	Some strcpy changed to strncpy. (211415 lines)
         Version 16.111.16:Dec 30, 2016	Fixed minor bug in user's ID, reported by Coverity. (211185 lines)
