@@ -119,4 +119,6 @@ void Str_ConvertToValidFileName (char *Str);
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length);
 void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength);
 
+void Str_Concat (char *Src,const char *Dst,size_t MaxLength);
+
 #endif

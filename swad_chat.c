@@ -420,11 +420,11 @@ void Cht_OpenChatWindow (void)
    UsrName[Usr_MAX_BYTES_NAME] = '\0';
    if (Gbl.Usrs.Me.UsrDat.Surname2[0])
      {
-      strncat (UsrName," ",1);
-      strncat (UsrName,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME);
+      Str_Concat (UsrName," ",Usr_MAX_BYTES_NAME);
+      Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME);
      }
-   strncat (UsrName,", ",2);
-   strncat (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   Str_Concat (UsrName,", ",Usr_MAX_BYTES_NAME);
+   Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
 
    /***** Build the lists of available rooms *****/
    sprintf (ListRoomCodes,"#%s",RoomCode);
@@ -437,76 +437,40 @@ void Cht_OpenChatWindow (void)
 
    if (strcmp (RoomCode,"GBL_USR"))
      {
-      strncat (ListRoomCodes,"|#GBL_USR",
-               MAX (0,
-                    sizeof (ListRoomCodes) - 1 -
-                    strlen (ListRoomCodes) -
-                    strlen ("|#GBL_USR")));
+      Str_Concat (ListRoomCodes,"|#GBL_USR",sizeof (ListRoomCodes) - 1);
 
       sprintf (RoomShortName,"|%s",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL]);
-      strncat (ListRoomShortNames,RoomShortName,
-               MAX (0,
-                    sizeof (ListRoomShortNames) - 1 -
-                    strlen (ListRoomShortNames) -
-                    strlen (RoomShortName)));
+      Str_Concat (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
 
       sprintf (RoomFullName,"|%s (%s)",
                Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
-      strncat (ListRoomFullNames,RoomFullName,
-               MAX (0,
-                    sizeof (ListRoomFullNames) - 1 -
-                    strlen (ListRoomFullNames) -
-                    strlen (RoomFullName)));
+      Str_Concat (ListRoomFullNames,RoomFullName,sizeof (ListRoomFullNames) - 1);
      }
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
       if (strcmp (RoomCode,"GBL_STD"))
         {
-         strncat (ListRoomCodes,"|#GBL_STD",
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen ("|#GBL_STD")));
+         Str_Concat (ListRoomCodes,"|#GBL_STD",sizeof (ListRoomCodes) - 1);
 
          sprintf (RoomShortName,"|%s",Txt_Students_ABBREVIATION);
-         strncat (ListRoomShortNames,RoomShortName,
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen (RoomShortName)));
+         Str_Concat (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
 
          sprintf (RoomFullName,"|%s (%s)",Txt_General,
                   Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_ALL]);
-	 strncat (ListRoomFullNames,RoomFullName,
-		  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-		       strlen (ListRoomFullNames) -
-		       strlen (RoomFullName)));
+	 Str_Concat (ListRoomFullNames,RoomFullName,sizeof (ListRoomFullNames) - 1);
         }
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
       if (strcmp (RoomCode,"GBL_TCH"))
         {
-         strncat (ListRoomCodes,"|#GBL_TCH",
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen ("|#GBL_TCH")));
+         Str_Concat (ListRoomCodes,"|#GBL_TCH",sizeof (ListRoomCodes) - 1);
 
          sprintf (RoomShortName,"|%s",Txt_Teachers_ABBREVIATION);
-         strncat (ListRoomShortNames,RoomShortName,
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen (RoomShortName)));
+         Str_Concat (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
 
          sprintf (RoomFullName,"|%s (%s)",
                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_ALL]);
-	 strncat (ListRoomFullNames,RoomFullName,
-		  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-		       strlen (ListRoomFullNames) -
-		       strlen (RoomFullName)));
+	 Str_Concat (ListRoomFullNames,RoomFullName,sizeof (ListRoomFullNames) - 1);
         }
 
    for (NumMyDeg = 0;
@@ -516,17 +480,9 @@ void Cht_OpenChatWindow (void)
       sprintf (ThisRoomCode,"DEG_%ld",Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
-         strncat (ListRoomCodes,"|#",
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen ("|#")));
+         Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
 
-         strncat (ListRoomCodes,ThisRoomCode,
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen (ThisRoomCode)));
+         Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this degree */
          Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
@@ -534,31 +490,15 @@ void Cht_OpenChatWindow (void)
 
          sprintf (ThisRoomShortName,"%s",Deg.ShrtName);
 
-         strncat (ListRoomShortNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen ("|")));
+         Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
 
-         strncat (ListRoomShortNames,ThisRoomShortName,
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen (ThisRoomShortName)));
+         Str_Concat (ListRoomShortNames,ThisRoomShortName,sizeof (ListRoomShortNames) - 1);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShrtName);
 
-         strncat (ListRoomFullNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-                       strlen (ListRoomFullNames) -
-                       strlen ("|")));
+         Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
 
-         strncat (ListRoomFullNames,ThisRoomFullName,
-                  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-                       strlen (ListRoomFullNames) -
-                       strlen (ThisRoomFullName)));
+         Str_Concat (ListRoomFullNames,ThisRoomFullName,sizeof (ListRoomFullNames) - 1);
         }
      }
 
@@ -569,53 +509,25 @@ void Cht_OpenChatWindow (void)
       sprintf (ThisRoomCode,"CRS_%ld",Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod);
       if (strcmp (RoomCode,ThisRoomCode))
         {
-         strncat (ListRoomCodes,"|#",
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen ("|#")));
+         Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
 
-         strncat (ListRoomCodes,ThisRoomCode,
-                  MAX (0,
-                       sizeof (ListRoomCodes) - 1 -
-                       strlen (ListRoomCodes) -
-                       strlen (ThisRoomCode)));
+         Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this course */
          Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
          Crs_GetDataOfCourseByCod (&Crs);
 
          sprintf (ThisRoomShortName,"%s",Crs.ShrtName);
-         strncat (ListRoomShortNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen ("|")));
+         Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
 
-         strncat (ListRoomShortNames,ThisRoomShortName,
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen (ThisRoomShortName)));
+         Str_Concat (ListRoomShortNames,ThisRoomShortName,sizeof (ListRoomShortNames) - 1);
 
-         strncat (ListRoomShortNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomShortNames) - 1 -
-                       strlen (ListRoomShortNames) -
-                       strlen (ThisRoomShortName)));
+         Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShrtName);
-         strncat (ListRoomFullNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-                       strlen (ListRoomFullNames) -
-                       strlen ("|")));
+         Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
 
-         strncat (ListRoomFullNames,"|",
-                  MAX (0,
-                       sizeof (ListRoomFullNames) - 1 -
-                       strlen (ListRoomFullNames) -
-                       strlen (ThisRoomFullName)));
+         Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
         }
      }
 

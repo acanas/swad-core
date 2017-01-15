@@ -2812,3 +2812,12 @@ void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength)
            }
         }
   }
+
+/*****************************************************************************/
+/************************** Safe string concatenation ************************/
+/*****************************************************************************/
+
+void Str_Concat (char *Src,const char *Dst,size_t MaxLength)
+  {
+   strncat (Src,Dst,MaxLength - strlen (Src));
+  }

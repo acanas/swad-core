@@ -4968,8 +4968,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
             Gbl.Usrs.Select.All[Length  ] = Par_SEPARATOR_PARAM_MULTIPLE;
             Gbl.Usrs.Select.All[Length+1] = '\0';
            }
-      strncat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,
-               Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS - strlen (Gbl.Usrs.Select.All));
+      Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,
+                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
      }
 
    /***** Add students to the list with all selected users *****/
@@ -4981,8 +4981,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
             Gbl.Usrs.Select.All[Length  ] = Par_SEPARATOR_PARAM_MULTIPLE;
             Gbl.Usrs.Select.All[Length+1] = '\0';
            }
-      strncat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Std,
-               Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS - strlen (Gbl.Usrs.Select.All));
+      Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Std,
+                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
      }
   }
 
@@ -5217,7 +5217,7 @@ void Usr_AllocateListSelectedUsrCodAll (void)
   {
    if (!Gbl.Usrs.Select.All)
      {
-      if ((Gbl.Usrs.Select.All = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS+1)) == NULL)
+      if ((Gbl.Usrs.Select.All = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
       Gbl.Usrs.Select.All[0] = '\0';
      }
