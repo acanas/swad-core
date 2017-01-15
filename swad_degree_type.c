@@ -481,8 +481,8 @@ void DT_GetListDegreeTypes (void)
             Lay_ShowErrorAndExit ("Wrong code of type of degree.");
 
          /* Get degree type name (row[1]) */
-         strncpy (Gbl.Degs.DegTypes.Lst[NumRow].DegTypName,row[1],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
-         Gbl.Degs.DegTypes.Lst[NumRow].DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
+         Str_Copy (Gbl.Degs.DegTypes.Lst[NumRow].DegTypName,row[1],
+                   Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
 
          /* Number of degrees of this type (row[2]) */
          if (sscanf (row[2],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
@@ -650,8 +650,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the degree type (row[0]) */
-      strncpy (DegTyp->DegTypName,row[0],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
-      DegTyp->DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
+      Str_Copy (DegTyp->DegTypName,row[0],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -786,8 +785,7 @@ void DT_RenameDegreeType (void)
      }
 
    /***** Show the form again *****/
-   strncpy (DegTyp->DegTypName,NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
-   DegTyp->DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME] = '\0';
+   Str_Copy (DegTyp->DegTypName,NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
    DT_ReqEditDegreeTypes ();
   }
 

@@ -351,16 +351,13 @@ void Dpt_GetListDepartments (long InsCod)
             Lay_ShowErrorAndExit ("Wrong code of institution.");
 
          /* Get the short name of the department (row[2]) */
-         strncpy (Dpt->ShrtName,row[2],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
-         Dpt->ShrtName[MAX_LENGTH_DEPARTMENT_SHRT_NAME] = '\0';
+         Str_Copy (Dpt->ShrtName,row[2],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
          /* Get the full name of the department (row[3]) */
-         strncpy (Dpt->FullName,row[3],MAX_LENGTH_DEPARTMENT_FULL_NAME);
-         Dpt->FullName[MAX_LENGTH_DEPARTMENT_FULL_NAME] = '\0';
+         Str_Copy (Dpt->FullName,row[3],MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
          /* Get the URL of the department (row[4]) */
-         strncpy (Dpt->WWW,row[4],Cns_MAX_LENGTH_WWW);
-         Dpt->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Dpt->WWW,row[4],Cns_MAX_LENGTH_WWW);
 
          /* Get number of teachers in this department (row[5]) */
          if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
@@ -394,11 +391,10 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
    /***** Check if department code is correct *****/
    if (Dpt->DptCod == 0)
      {
-      strncpy (Dpt->ShrtName,Txt_Another_department,MAX_LENGTH_DEPARTMENT_SHRT_NAME);
-      Dpt->ShrtName[MAX_LENGTH_DEPARTMENT_SHRT_NAME] = '\0';
-
-      strncpy (Dpt->FullName,Txt_Another_department,MAX_LENGTH_DEPARTMENT_FULL_NAME);
-      Dpt->FullName[MAX_LENGTH_DEPARTMENT_FULL_NAME] = '\0';
+      Str_Copy (Dpt->ShrtName,Txt_Another_department,
+                MAX_LENGTH_DEPARTMENT_SHRT_NAME);
+      Str_Copy (Dpt->FullName,Txt_Another_department,
+                MAX_LENGTH_DEPARTMENT_FULL_NAME);
      }
    else if (Dpt->DptCod > 0)
      {
@@ -430,16 +426,13 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
          Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get the short name of the department (row[1]) */
-         strncpy (Dpt->ShrtName,row[1],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
-         Dpt->ShrtName[MAX_LENGTH_DEPARTMENT_SHRT_NAME] = '\0';
+         Str_Copy (Dpt->ShrtName,row[1],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
          /* Get the full name of the department (row[2]) */
-         strncpy (Dpt->FullName,row[2],MAX_LENGTH_DEPARTMENT_FULL_NAME);
-         Dpt->FullName[MAX_LENGTH_DEPARTMENT_FULL_NAME] = '\0';
+         Str_Copy (Dpt->FullName,row[2],MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
          /* Get the URL of the department (row[3]) */
-         strncpy (Dpt->WWW,row[3],Cns_MAX_LENGTH_WWW);
-         Dpt->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Dpt->WWW,row[3],Cns_MAX_LENGTH_WWW);
 
          /* Get number of teachers in this department (row[4]) */
          if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)
@@ -798,8 +791,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   strncpy (CurrentDptName,NewDptName,MaxLength);
-   CurrentDptName[MaxLength] = '\0';
+   Str_Copy (CurrentDptName,NewDptName,MaxLength);
    Dpt_EditDepartments ();
   }
 
@@ -860,8 +852,7 @@ void Dpt_ChangeDptWWW (void)
      }
 
    /***** Show the form again *****/
-   strncpy (Dpt->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-   Dpt->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+   Str_Copy (Dpt->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
    Dpt_EditDepartments ();
   }
 

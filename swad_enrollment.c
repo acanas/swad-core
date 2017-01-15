@@ -396,8 +396,8 @@ void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 
             /* Role (row[0]) */
             Role = Rol_ConvertUnsignedStrToRole (row[0]);
-            strncpy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],Cns_MAX_BYTES_TEXT);
-            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
+            Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1442,10 +1442,8 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 		    {
 		     /***** Find users for this user's ID *****/
 		     ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-
-		     strncpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-		     UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-
+		     Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
+		               ID_MAX_LENGTH_USR_ID);
 		     Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		     ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		    }
@@ -1568,10 +1566,8 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 		  /* Find users for this user's ID */
 		  ID_ReallocateListIDs (&UsrDat,1);	// Only one user's ID
-
-		  strncpy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-		  UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
-
+		  Str_Copy (UsrDat.IDs.List[0].ID,UsrDat.UsrIDNickOrEmail,
+		            ID_MAX_LENGTH_USR_ID);
 	          Str_ConvertToUpperText (UsrDat.IDs.List[0].ID);
 		  ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false);
 		 }
@@ -1973,8 +1969,8 @@ void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char
 
             /* Role (row[1]) */
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
-            strncpy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],Cns_MAX_BYTES_TEXT);
-            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
+            Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 

@@ -33,11 +33,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
+#define Ntf_MAX_LENGTH_NOTIFY_EVENT 32
+
+#define Ntf_MAX_LENGTH_NOTIFY_LOCATION (1024 - 1)
+
 /*****************************************************************************/
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	(1+19)
+#define Ntf_NUM_NOTIFY_EVENTS	(1 + 19)
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones
 // in database tables notif, sta_notif and usr_data

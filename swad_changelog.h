@@ -183,19 +183,20 @@
 
 // TODO: Draw future dates in attendance, surveys, assignments in blue?
 // TODO: Fix bug in generate a test: after entering a number of questions with empty tags and type of answers, number of questions is not remembered
-// TODO: Fix big when editing a test question with images: when "Change image" is selected but no image is uploades, other images (for example in answers) are lost
+// TODO: Fix bug when editing a test question with images: when "Change image" is selected but no image is uploades, other images (for example in answers) are lost
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.114.3 (2017-01-15)"
+#define Log_PLATFORM_VERSION	"SWAD 16.115 (2017-01-15)"
 #define CSS_FILE		"swad16.111.5.css"
 #define JS_FILE			"swad16.114.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.115:   Jan 15, 2017	Code refactoring related to string copy. (211046 lines)
         Version 16.114.3: Jan 15, 2017	Fixed bug in chat. (211412 lines)
         Version 16.114.2: Jan 15, 2017	Fixed bug in file browser. (211412 lines)
         Version 16.114.1: Jan 15, 2017	Fixed bug in string concatenation. (211411 lines)

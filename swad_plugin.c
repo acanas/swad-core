@@ -227,28 +227,22 @@ static void Plg_GetListPlugins (void)
             Lay_ShowErrorAndExit ("Wrong code of plugin.");
 
          /* Get the name of the plugin (row[1]) */
-         strncpy (Plg->Name,row[1],Plg_MAX_LENGTH_PLUGIN_NAME);
-         Plg->Name[Plg_MAX_LENGTH_PLUGIN_NAME] = '\0';
+         Str_Copy (Plg->Name,row[1],Plg_MAX_LENGTH_PLUGIN_NAME);
 
          /* Get the description of the plugin (row[2]) */
-         strncpy (Plg->Description,row[2],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
-         Plg->Description[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION] = '\0';
+         Str_Copy (Plg->Description,row[2],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
 
          /* Get the logo of the plugin (row[3]) */
-         strncpy (Plg->Logo,row[3],Plg_MAX_LENGTH_PLUGIN_LOGO);
-         Plg->Logo[Plg_MAX_LENGTH_PLUGIN_LOGO] = '\0';
+         Str_Copy (Plg->Logo,row[3],Plg_MAX_LENGTH_PLUGIN_LOGO);
 
          /* Get the application key of the plugin (row[4]) */
-         strncpy (Plg->AppKey,row[4],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
-         Plg->AppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY] = '\0';
+         Str_Copy (Plg->AppKey,row[4],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
 
          /* Get the URL of the plugin (row[5]) */
-         strncpy (Plg->URL,row[5],Cns_MAX_LENGTH_WWW);
-         Plg->URL[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Plg->URL,row[5],Cns_MAX_LENGTH_WWW);
 
          /* Get the IP of the plugin (row[6]) */
-         strncpy (Plg->IP,row[6],Cns_MAX_LENGTH_IP);
-         Plg->IP[Cns_MAX_LENGTH_IP] = '\0';
+         Str_Copy (Plg->IP,row[6],Cns_MAX_LENGTH_IP);
         }
      }
    else
@@ -294,28 +288,22 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the plugin (row[0]) */
-      strncpy (Plg->Name,row[0],Plg_MAX_LENGTH_PLUGIN_NAME);
-      Plg->Name[Plg_MAX_LENGTH_PLUGIN_NAME] = '\0';
+      Str_Copy (Plg->Name,row[0],Plg_MAX_LENGTH_PLUGIN_NAME);
 
       /* Get the description of the plugin (row[1]) */
-      strncpy (Plg->Description,row[1],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
-      Plg->Description[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION] = '\0';
+      Str_Copy (Plg->Description,row[1],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
 
       /* Get the logo of the plugin (row[2]) */
-      strncpy (Plg->Logo,row[2],Plg_MAX_LENGTH_PLUGIN_LOGO);
-      Plg->Logo[Plg_MAX_LENGTH_PLUGIN_LOGO] = '\0';
+      Str_Copy (Plg->Logo,row[2],Plg_MAX_LENGTH_PLUGIN_LOGO);
 
       /* Get the application key of the plugin (row[3]) */
-      strncpy (Plg->AppKey,row[3],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
-      Plg->AppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY] = '\0';
+      Str_Copy (Plg->AppKey,row[3],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
 
       /* Get the URL of the plugin (row[4]) */
-      strncpy (Plg->URL,row[4],Cns_MAX_LENGTH_WWW);
-      Plg->URL[Cns_MAX_LENGTH_WWW] = '\0';
+      Str_Copy (Plg->URL,row[4],Cns_MAX_LENGTH_WWW);
 
       /* Get the IP of the plugin (row[5]) */
-      strncpy (Plg->IP,row[5],Cns_MAX_LENGTH_IP);
-      Plg->IP[Cns_MAX_LENGTH_IP] = '\0';
+      Str_Copy (Plg->IP,row[5],Cns_MAX_LENGTH_IP);
      }
    else
       PluginFound = false;

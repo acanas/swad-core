@@ -947,12 +947,10 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
 	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) */
-      strncpy (AgdEvent->Event,row[7],Agd_MAX_LENGTH_EVENT);
-      AgdEvent->Event[Agd_MAX_LENGTH_EVENT] = '\0';
+      Str_Copy (AgdEvent->Event,row[7],Agd_MAX_LENGTH_EVENT);
 
       /* Get the event (row[8]) */
-      strncpy (AgdEvent->Location,row[8],Agd_MAX_LENGTH_LOCATION);
-      AgdEvent->Location[Agd_MAX_LENGTH_LOCATION] = '\0';
+      Str_Copy (AgdEvent->Location,row[8],Agd_MAX_LENGTH_LOCATION);
      }
    else
      {
@@ -1009,8 +1007,7 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      strncpy (Txt,row[0],Cns_MAX_BYTES_TEXT);
-      Txt[Cns_MAX_BYTES_TEXT] = '\0';
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';

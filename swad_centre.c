@@ -1038,16 +1038,13 @@ void Ctr_GetListCentres (long InsCod)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
          /* Get the short name of the centre (row[5]) */
-         strncpy (Ctr->ShrtName,row[5],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
-         Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
+         Str_Copy (Ctr->ShrtName,row[5],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
 
          /* Get the full name of the centre (row[6]) */
-         strncpy (Ctr->FullName,row[6],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
-         Ctr->FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
+         Str_Copy (Ctr->FullName,row[6],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
 
          /* Get the URL of the centre (row[7]) */
-         strncpy (Ctr->WWW,row[7],Cns_MAX_LENGTH_WWW);
-         Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Ctr->WWW,row[7],Cns_MAX_LENGTH_WWW);
 
          /* Get number of users who claim to belong to this centre (row[8]) */
          if (sscanf (row[8],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1136,16 +1133,13 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 	 Ctr->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the centre (row[4]) */
-         strncpy (Ctr->ShrtName,row[4],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
-         Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
+         Str_Copy (Ctr->ShrtName,row[4],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
 
          /* Get the full name of the centre (row[5]) */
-         strncpy (Ctr->FullName,row[5],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
-         Ctr->FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
+         Str_Copy (Ctr->FullName,row[5],Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
 
          /* Get the URL of the centre (row[6]) */
-         strncpy (Ctr->WWW,row[6],Cns_MAX_LENGTH_WWW);
-         Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Ctr->WWW,row[6],Cns_MAX_LENGTH_WWW);
 
          /* Get number of users who claim to belong to this centre (row[7]) */
          if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1223,8 +1217,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 	 /***** Get the short name of this centre *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 strncpy (Ctr->ShrtName,row[0],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
-	 Ctr->ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME] = '\0';
+	 Str_Copy (Ctr->ShrtName,row[0],Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1263,8 +1256,7 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
 	    if (((*PhotoAttribution) = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for photo attribution.");
 
-	    strncpy (*PhotoAttribution,row[0],Length);
-	    (*PhotoAttribution)[Length] = '\0';
+	    Str_Copy (*PhotoAttribution,row[0],Length);
 	   }
      }
 
@@ -1518,8 +1510,7 @@ static void Ctr_ListCentresForEdition (void)
 	}
       else
 	{
-         strncpy (WWW,Ctr->WWW,Ctr_MAX_LENGTH_WWW_ON_SCREEN);
-         WWW[Ctr_MAX_LENGTH_WWW_ON_SCREEN] = '\0';
+         Str_Copy (WWW,Ctr->WWW,Ctr_MAX_LENGTH_WWW_ON_SCREEN);
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\">%s",
                   Ctr->WWW,Ctr->WWW,WWW);
          if (strlen (Ctr->WWW) > Ctr_MAX_LENGTH_WWW_ON_SCREEN)
@@ -1959,8 +1950,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
                      CurrentCtrName,NewCtrName);
 
 	    /* Change current centre name in order to display it properly */
-	    strncpy (CurrentCtrName,NewCtrName,MaxLength);
-	    CurrentCtrName[MaxLength] = '\0';
+	    Str_Copy (CurrentCtrName,NewCtrName,MaxLength);
            }
         }
       else	// The same name
@@ -2013,8 +2003,7 @@ void Ctr_ChangeCtrWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Ctr->CtrCod,NewWWW);
 
-      strncpy (Ctr->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-      Ctr->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+      Str_Copy (Ctr->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2045,9 +2034,7 @@ void Ctr_ChangeCtrWWWInConfig (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.CurrentCtr.Ctr.CtrCod,NewWWW);
-
-      strncpy (Gbl.CurrentCtr.Ctr.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-      Gbl.CurrentCtr.Ctr.WWW[Cns_MAX_LENGTH_WWW] = '\0';
+      Str_Copy (Gbl.CurrentCtr.Ctr.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2252,7 +2239,7 @@ void Ctr_ReceivePhoto (void)
    char FileNameImgSrc[PATH_MAX+1];
    char *PtrExtension;
    size_t LengthExtension;
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char PathImgPriv[PATH_MAX+1];
    char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
    char FileNameImg[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file

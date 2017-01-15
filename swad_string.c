@@ -244,8 +244,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                /* Make a copy of this URL */
                NumBytesToCopy = (Links[NumLinks].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLinks].NumActualBytes :
         	                                                                           MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,Links[NumLinks].PtrStart,NumBytesToCopy);
-               LimitedURL[NumBytesToCopy] = '\0';
+               Str_Copy (LimitedURL,Links[NumLinks].PtrStart,NumBytesToCopy);
 
                /* Limit the number of characters on screen of the copy, and calculate its length in bytes */
                LengthVisibleLink = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
@@ -408,8 +407,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
                /* Make a copy of this URL */
                NumBytesToCopy = (Links[NumLink].NumActualBytes < MAX_BYTES_LIMITED_URL) ? Links[NumLink].NumActualBytes :
         	                                                                          MAX_BYTES_LIMITED_URL;
-               strncpy (LimitedURL,Links[NumLink].PtrStart,NumBytesToCopy);
-               LimitedURL[NumBytesToCopy] = '\0';
+               Str_Copy (LimitedURL,Links[NumLink].PtrStart,NumBytesToCopy);
 
                /* Limit the length of the copy */
                NumBytesToShow = Str_LimitLengthHTMLStr (LimitedURL,MaxCharsURLOnScreen);
@@ -1316,7 +1314,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                Lay_ShowErrorAndExit ("Space allocated to string is full.");
 
             /* Copy to appropiate place the special character string */
-            strncpy (PtrDst,StrSpecialChar,LengthSpecStrDst);
+            Str_Copy (PtrDst,StrSpecialChar,LengthSpecStrDst);
 
             /* Increment pointer to character after ';' */
             PtrSrc += LengthSpecStrSrc;
@@ -1340,8 +1338,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         }
 
       /***** Copy destination string with changes to source string *****/
-      strncpy (Str,StrDst,LengthStrDst);	// Str <-- StrDst
-      Str[LengthStrDst] = '\0';
+      Str_Copy (Str,StrDst,LengthStrDst);	// Str <-- StrDst
 
       /***** Free memory used for the destination string *****/
       free ((void *) StrDst);
@@ -2356,24 +2353,14 @@ void Str_SplitFullPathIntoPathAndFileName (const char *FullPath,
    /***** Get PathWithoutFileName *****/
    LengthUntilFileName = (size_t) (PtrFileName - FullPath); // Last slash included
    if (LengthUntilFileName > 1)
-     {
-      if (LengthUntilFileName > PATH_MAX)
-	{
-	 strncpy (PathWithoutFileName,FullPath,PATH_MAX);
-	 PathWithoutFileName[PATH_MAX] = '\0';
-	}
-      else
-	{
-         strncpy (PathWithoutFileName,FullPath,LengthUntilFileName - 1);	// Do not copy ending slash
-         PathWithoutFileName[LengthUntilFileName - 1] = '\0';
-	}
-     }
+      Str_Copy (PathWithoutFileName,FullPath,
+                LengthUntilFileName > PATH_MAX ? PATH_MAX :
+	                                         LengthUntilFileName - 1);	// Do not copy ending slash
    else
       PathWithoutFileName[0] = '\0';
 
    /***** Get FileName *****/
-   strncpy (FileName,PtrFileName,NAME_MAX);
-   FileName[NAME_MAX] = '\0';
+   Str_Copy (FileName,PtrFileName,NAME_MAX);
   }
 
 /*****************************************************************************/
@@ -2712,13 +2699,10 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
 		   FileName);
      }
    else	// FileName is empty
-     {
-      strncpy (Gbl.Message,
-	       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
-						       Txt_UPLOAD_FILE_Invalid_name,
-	       Lay_MAX_BYTES_ALERT);
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-     }
+      Str_Copy (Gbl.Message,
+	        Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
+						        Txt_UPLOAD_FILE_Invalid_name,
+	        Lay_MAX_BYTES_ALERT);
 
    return FileNameIsOK;
   }
@@ -2806,18 +2790,25 @@ void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength)
         {
          Ptr++;					// Skip '@'
          if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
-           {
-            strncpy (MailBox,Ptr,MaxLength);
-            MailBox[MaxLength] = '\0';
-           }
+            Str_Copy (MailBox,Ptr,MaxLength);
         }
+  }
+
+/*****************************************************************************/
+/****************************** Safe string copy *****************************/
+/*****************************************************************************/
+
+void Str_Copy (char *Dst,const char *Src,size_t MaxLength)
+  {
+   strncpy (Dst,Src,MaxLength);
+   Dst[MaxLength] = '\0';
   }
 
 /*****************************************************************************/
 /************************** Safe string concatenation ************************/
 /*****************************************************************************/
 
-void Str_Concat (char *Src,const char *Dst,size_t MaxLength)
+void Str_Concat (char *Dst,const char *Src,size_t MaxLength)
   {
-   strncat (Src,Dst,MaxLength - strlen (Src));
+   strncat (Dst,Src,MaxLength - strlen (Dst));
   }

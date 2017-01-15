@@ -323,10 +323,8 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
          // Only one table is allowed
          if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
            {
-            strncpy (Gbl.Message,Txt_There_are_more_than_one_table_in_the_file_of_marks,
-                     Lay_MAX_BYTES_ALERT);
-            Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-
+            Str_Copy (Gbl.Message,Txt_There_are_more_than_one_table_in_the_file_of_marks,
+                      Lay_MAX_BYTES_ALERT);
             FileIsCorrect = false;
            }
          else
@@ -387,10 +385,8 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
         }
       else
         {
-         strncpy (Gbl.Message,Txt_Table_not_found_in_the_file_of_marks,
-                  Lay_MAX_BYTES_ALERT);
-         Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-
+         Str_Copy (Gbl.Message,Txt_Table_not_found_in_the_file_of_marks,
+                   Lay_MAX_BYTES_ALERT);
          FileIsCorrect = false;
         }
 
@@ -462,9 +458,8 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      strncpy (Gbl.Message,"Can not open file of marks.",Lay_MAX_BYTES_ALERT);	// TODO: Need translation!
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-
+      Str_Copy (Gbl.Message,"Can not open file of marks.",	// TODO: Need translation!
+                Lay_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -784,13 +779,11 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                                            &InsCod,&CtrCod,&DegCod,&CrsCod,&GrpCod);
 
             /* Path (row[2]) */
-            strncpy (FullPathInTreeFromDBMarksTable,row[2],PATH_MAX);
-            FullPathInTreeFromDBMarksTable[PATH_MAX] = '\0';
+            Str_Copy (FullPathInTreeFromDBMarksTable,row[2],PATH_MAX);
             Str_SplitFullPathIntoPathAndFileName (FullPathInTreeFromDBMarksTable,
         	                                  PathUntilFileName,
         	                                  FileName);
-            strncpy (SummaryStr,FileName,NAME_MAX);
-            SummaryStr[NAME_MAX] = '\0';
+            Str_Copy (SummaryStr,FileName,NAME_MAX);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -841,7 +834,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                         if ((*ContentStr = (char *) malloc (Length + 1)))
                           {
                            /* 9 starting chars */
-                           strncpy (*ContentStr,"<![CDATA[",9);
+                           Str_Copy (*ContentStr,"<![CDATA[",9);
 
                            /* Content */
                            Ptr = (*ContentStr) + 9;
@@ -855,10 +848,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                              }
 
                            /* 3 ending chars */
-                           strncpy (Ptr,"]]>",3);
-
-                           /* Ending null char */
-                           (*ContentStr)[Length] = '\0';
+                           Str_Copy (Ptr,"]]>",3);
                           }
                        }
                      else
@@ -870,10 +860,8 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                     }
                   else
                     {
-                     strncpy (Gbl.Message,"Can not open file with user's marks!",	// TODO: Need translation!
-                              Lay_MAX_BYTES_ALERT);
-                     Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-
+                     Str_Copy (Gbl.Message,"Can not open file with user's marks!",	// TODO: Need translation!
+                               Lay_MAX_BYTES_ALERT);
                      if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
                         sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                     }
@@ -881,9 +869,8 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                  }
                else
                  {
-                  strncpy (Gbl.Message,"User's IDs not found!",Lay_MAX_BYTES_ALERT);	// TODO: Need translation!
-                  Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-
+                  Str_Copy (Gbl.Message,"User's IDs not found!",	// TODO: Need translation!
+                            Lay_MAX_BYTES_ALERT);
                   if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
                      sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                  }

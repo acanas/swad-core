@@ -822,8 +822,7 @@ static void Deg_ListDegreesForEdition (void)
 	}
       else
 	{
-         strncpy (WWW,Deg->WWW,Deg_MAX_LENGTH_WWW_ON_SCREEN);
-         WWW[Deg_MAX_LENGTH_WWW_ON_SCREEN] = '\0';
+         Str_Copy (WWW,Deg->WWW,Deg_MAX_LENGTH_WWW_ON_SCREEN);
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">%s",
                   Deg->WWW,Deg->WWW,WWW);
@@ -1738,16 +1737,13 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
    Deg->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[4]);
 
    /***** Get degree short name (row[5]) *****/
-   strncpy (Deg->ShrtName,row[5],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
-   Deg->ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
+   Str_Copy (Deg->ShrtName,row[5],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
 
    /***** Get degree full name (row[6]) *****/
-   strncpy (Deg->FullName,row[6],Deg_MAX_LENGTH_DEGREE_FULL_NAME);
-   Deg->FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME] = '\0';
+   Str_Copy (Deg->FullName,row[6],Deg_MAX_LENGTH_DEGREE_FULL_NAME);
 
    /***** Get WWW (row[7]) *****/
-   strncpy (Deg->WWW,row[7],Cns_MAX_LENGTH_WWW);
-   Deg->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+   Str_Copy (Deg->WWW,row[7],Cns_MAX_LENGTH_WWW);
   }
 
 /*****************************************************************************/
@@ -1772,8 +1768,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
 	 /***** Get the short name of this degree *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 strncpy (Deg->ShrtName,row[0],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
-	 Deg->ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
+	 Str_Copy (Deg->ShrtName,row[0],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2011,8 +2006,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
                      CurrentDegName,NewDegName);
 
 	    /* Change current degree name in order to display it properly */
-	    strncpy (CurrentDegName,NewDegName,MaxLength);
-	    CurrentDegName[MaxLength] = '\0';
+	    Str_Copy (CurrentDegName,NewDegName,MaxLength);
            }
         }
       else	// The same name
@@ -2143,8 +2137,7 @@ void Deg_ChangeDegWWW (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Deg->DegCod,NewWWW);
-      strncpy (Deg->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-      Deg->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+      Str_Copy (Deg->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2175,8 +2168,7 @@ void Deg_ChangeDegWWWInConfig (void)
      {
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Gbl.CurrentDeg.Deg.DegCod,NewWWW);
-      strncpy (Gbl.CurrentDeg.Deg.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-      Gbl.CurrentDeg.Deg.WWW[Cns_MAX_LENGTH_WWW] = '\0';
+      Str_Copy (Gbl.CurrentDeg.Deg.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);

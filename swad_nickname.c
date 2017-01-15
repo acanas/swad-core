@@ -73,8 +73,8 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
       return false;
 
    /***** Make a copy of nickname *****/
-   strncpy (NicknameWithoutArroba,NicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-   NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+   Str_Copy (NicknameWithoutArroba,NicknameWithArroba,
+             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
    Str_RemoveLeadingArrobas (NicknameWithoutArroba);
    Length = strlen (NicknameWithoutArroba);
 
@@ -116,8 +116,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname)
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
-      strncpy (Nickname,row[0],Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-      Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+      Str_Copy (Nickname,row[0],Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
       Found = true;
      }
    else
@@ -150,8 +149,8 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
       if (Nickname[0])
 	{
 	 /***** Make a copy without possible starting arrobas *****/
-	 strncpy (NicknameWithoutArroba,Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-	 NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+	 Str_Copy (NicknameWithoutArroba,Nickname,
+	           Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
 	 Str_RemoveLeadingArrobas (NicknameWithoutArroba);
 
 	 /***** Get user's code from database *****/
@@ -362,8 +361,8 @@ void Nck_UpdateNick (void)
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
-      strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-      NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+      Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
+                Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
       Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
       /***** Check if new nickname exists in database *****/

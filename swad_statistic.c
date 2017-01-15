@@ -255,10 +255,7 @@ The IP address of the remote host making the request.
 void Sta_GetRemoteAddr (void)
   {
    if (getenv ("REMOTE_ADDR"))
-     {
-      strncpy (Gbl.IP,getenv ("REMOTE_ADDR"),Cns_MAX_LENGTH_IP);
-      Gbl.IP[Cns_MAX_LENGTH_IP] = '\0';
-     }
+      Str_Copy (Gbl.IP,getenv ("REMOTE_ADDR"),Cns_MAX_LENGTH_IP);
    else
       Gbl.IP[0] = '\0';
   }

@@ -773,8 +773,8 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    Cty_DrawCountryMap (Cty,ClassMap);
 
    /***** Write country name and end link *****/
-   strncpy (CountryName,Cty->Name[Gbl.Prefs.Language],Cty_MAX_BYTES_COUNTRY_NAME);
-   CountryName[Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
+   Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
+             Cty_MAX_BYTES_COUNTRY_NAME);
    Str_LimitLengthHTMLStr (CountryName,30);
    fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>",
 	    CountryName,
@@ -1031,8 +1031,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
             Lay_ShowErrorAndExit ("Wrong code of country.");
 
          /* Get Alpha-2 country code (row[1]) */
-         strncpy (Cty->Alpha2,row[1],2);
-         Cty->Alpha2[2] = '\0';
+         Str_Copy (Cty->Alpha2,row[1],2);
 
          switch (GetExtraData)
            {
@@ -1049,9 +1048,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                Cty->NumUsrs = 0;
 
                /* Get the name of the country in current language */
-               strncpy (Cty->Name[Gbl.Prefs.Language],row[2],
-                        Cty_MAX_BYTES_COUNTRY_NAME);
-               Cty->Name[Gbl.Prefs.Language][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
+               Str_Copy (Cty->Name[Gbl.Prefs.Language],row[2],
+                         Cty_MAX_BYTES_COUNTRY_NAME);
                break;
             case Cty_GET_EXTRA_DATA:
                /* Get the name of the country in several languages */
@@ -1059,13 +1057,10 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	    Lan <= Txt_NUM_LANGUAGES;
         	    Lan++)
         	 {
-                  strncpy (Cty->Name[Lan],row[1 + Lan],
-                           Cty_MAX_BYTES_COUNTRY_NAME);
-                  Cty->Name[Lan][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
-
-                  strncpy (Cty->WWW[Lan],row[1 + Txt_NUM_LANGUAGES + Lan],
-                           Cns_MAX_LENGTH_WWW);
-                  Cty->WWW[Lan][Cns_MAX_LENGTH_WWW] = '\0';
+                  Str_Copy (Cty->Name[Lan],row[1 + Lan],
+                            Cty_MAX_BYTES_COUNTRY_NAME);
+                  Str_Copy (Cty->WWW[Lan],row[1 + Txt_NUM_LANGUAGES + Lan],
+                            Cns_MAX_LENGTH_WWW);
         	 }
 
                /* Get number of users who claim to belong to this country */
@@ -1230,11 +1225,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	   Lan <= Txt_NUM_LANGUAGES;
 	   Lan++)
          if (Lan == Gbl.Prefs.Language)
-           {
-            strncpy (Cty->Name[Lan],Txt_Another_country,
-                     Cty_MAX_BYTES_COUNTRY_NAME);
-            Cty->Name[Lan][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
-           }
+            Str_Copy (Cty->Name[Lan],Txt_Another_country,
+                      Cty_MAX_BYTES_COUNTRY_NAME);
          else
             Cty->Name[Lan][0] = '\0';
       return false;
@@ -1298,19 +1290,15 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       row = mysql_fetch_row (mysql_res);
 
       /* Get Alpha-2 country code (row[0]) */
-      strncpy (Cty->Alpha2,row[0],2);
-      Cty->Alpha2[2] = '\0';
+      Str_Copy (Cty->Alpha2,row[0],2);
 
       switch (GetExtraData)
 	{
 	 case Cty_GET_BASIC_DATA:
 	    /* Get name and WWW of the country in current language */
-	    strncpy (Cty->Name[Gbl.Prefs.Language],row[1],
-	             Cty_MAX_BYTES_COUNTRY_NAME);
-	    Cty->Name[Gbl.Prefs.Language][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
-
-	    strncpy (Cty->WWW[Gbl.Prefs.Language],row[2],Cns_MAX_LENGTH_WWW);
-	    Cty->WWW[Gbl.Prefs.Language][Cns_MAX_LENGTH_WWW] = '\0';
+	    Str_Copy (Cty->Name[Gbl.Prefs.Language],row[1],
+	              Cty_MAX_BYTES_COUNTRY_NAME);
+	    Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],Cns_MAX_LENGTH_WWW);
 	    break;
 	 case Cty_GET_EXTRA_DATA:
 	    /* Get name and WWW of the country in several languages */
@@ -1318,13 +1306,10 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 		 Lan <= Txt_NUM_LANGUAGES;
 		 Lan++)
 	      {
-	       strncpy (Cty->Name[Lan],row[Lan],
-	                Cty_MAX_BYTES_COUNTRY_NAME);
-	       Cty->Name[Lan][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
-
-	       strncpy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES + Lan],
-	                Cns_MAX_LENGTH_WWW);
-	       Cty->WWW[Lan][Cns_MAX_LENGTH_WWW] = '\0';
+	       Str_Copy (Cty->Name[Lan],row[Lan],
+	                 Cty_MAX_BYTES_COUNTRY_NAME);
+	       Str_Copy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES + Lan],
+	                 Cns_MAX_LENGTH_WWW);
 	      }
 
 	    /* Get number of users who claim to belong to this country */
@@ -1375,8 +1360,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1])
          row = mysql_fetch_row (mysql_res);
 
          /* Get the name of the country */
-         strncpy (CtyName,row[0],Cty_MAX_BYTES_COUNTRY_NAME);
-         CtyName[Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
+         Str_Copy (CtyName,row[0],Cty_MAX_BYTES_COUNTRY_NAME);
         }
 
       /***** Free structure that stores the query result *****/
@@ -1414,8 +1398,7 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
 	    if (((*MapAttribution) = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
 
-	    strncpy (*MapAttribution,row[0],Length);
-	    (*MapAttribution)[Length] = '\0';
+	    Str_Copy (*MapAttribution,row[0],Length);
 	   }
      }
 
@@ -1724,8 +1707,7 @@ void Cty_RenameCountry (void)
      }
 
    /***** Show the form again *****/
-   strncpy (Cty->Name[Language],NewCtyName,Cty_MAX_BYTES_COUNTRY_NAME);
-   Cty->Name[Language][Cty_MAX_BYTES_COUNTRY_NAME] = '\0';
+   Str_Copy (Cty->Name[Language],NewCtyName,Cty_MAX_BYTES_COUNTRY_NAME);
    Cty_EditCountries ();
   }
 
@@ -1812,8 +1794,7 @@ void Cty_ChangeCtyWWW (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
-   strncpy (Cty->WWW[Language],NewWWW,Cns_MAX_LENGTH_WWW);
-   Cty->WWW[Language][Cns_MAX_LENGTH_WWW] = '\0';
+   Str_Copy (Cty->WWW[Language],NewWWW,Cns_MAX_LENGTH_WWW);
    Cty_EditCountries ();
   }
 

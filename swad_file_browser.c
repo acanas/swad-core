@@ -2384,15 +2384,10 @@ static void Brw_GetDataCurrentGrp (void)
       if (Gbl.CurrentCrs.Grps.GrpCod > 0)
 	{
 	 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod           = GrpDat.GrpTypCod;
-
-	 strncpy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
-	          Grp_MAX_LENGTH_GROUP_TYPE_NAME);
-	 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME] = '\0';
-
-	 strncpy (Gbl.CurrentCrs.Grps.GrpName,GrpDat.GrpName,
-	          Grp_MAX_LENGTH_GROUP_NAME);
-	 Gbl.CurrentCrs.Grps.GrpName[Grp_MAX_LENGTH_GROUP_NAME] = '\0';
-
+	 Str_Copy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
+	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	 Str_Copy (Gbl.CurrentCrs.Grps.GrpName,GrpDat.GrpName,
+	           Grp_MAX_LENGTH_GROUP_NAME);
 	 Gbl.CurrentCrs.Grps.MaxStudents                = GrpDat.MaxStudents;
 	 Gbl.CurrentCrs.Grps.Open                       = GrpDat.Open;
 	 Gbl.CurrentCrs.Grps.FileZones                  = GrpDat.FileZones;
@@ -2508,11 +2503,9 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
         Gbl.FileBrowser.Type == Brw_ADMI_ASSIG_CRS))
      {
       if (Gbl.FileBrowser.Level == 1)
-        {
          // We are in this case: assignments/assignment-folder
-         strncpy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnkName,Asg_MAX_LENGTH_FOLDER);
-         Gbl.FileBrowser.Asg.Folder[Asg_MAX_LENGTH_FOLDER] = '\0';
-        }
+         Str_Copy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnkName,
+                   Asg_MAX_LENGTH_FOLDER);
       else
         {
          // We are in this case: assignments/assignment-folder/rest-of-path
@@ -2612,9 +2605,8 @@ static void Brw_SetPathFileBrowser (void)
       case Brw_ADMI_SHARE_CRS:
       case Brw_SHOW_MARKS_CRS:
       case Brw_ADMI_MARKS_CRS:
-         strncpy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-                  Gbl.CurrentCrs.PathPriv,PATH_MAX);
-         Gbl.FileBrowser.Priv.PathAboveRootFolder[PATH_MAX] = '\0';
+         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                   Gbl.CurrentCrs.PathPriv,PATH_MAX);
 	 break;
       case Brw_SHOW_DOCUM_GRP:
       case Brw_ADMI_DOCUM_GRP:
@@ -2664,9 +2656,8 @@ static void Brw_SetPathFileBrowser (void)
            }
          break;
       case Brw_ADMI_BRIEF_USR:
-         strncpy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
-                  Gbl.Usrs.Me.PathDir,PATH_MAX);
-         Gbl.FileBrowser.Priv.PathAboveRootFolder[PATH_MAX] = '\0';
+         Str_Copy (Gbl.FileBrowser.Priv.PathAboveRootFolder,
+                   Gbl.Usrs.Me.PathDir,PATH_MAX);
 	 break;
       default:
 	 return;
@@ -4807,10 +4798,7 @@ void Brw_CreateDirDownloadTmp (void)
    if (NumDir)
       sprintf (Gbl.FileBrowser.TmpPubDir,"%s_%u",Gbl.UniqueNameEncrypted,NumDir);
    else
-     {
-      strncpy (Gbl.FileBrowser.TmpPubDir,Gbl.UniqueNameEncrypted,NAME_MAX);
-      Gbl.FileBrowser.TmpPubDir[NAME_MAX] = '\0';
-     }
+      Str_Copy (Gbl.FileBrowser.TmpPubDir,Gbl.UniqueNameEncrypted,NAME_MAX);
    sprintf (PathPubDirTmp,"%s/%s",PathFileBrowserTmpPubl,Gbl.FileBrowser.TmpPubDir);
    if (mkdir (PathPubDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create a temporary folder for download.");
@@ -5219,8 +5207,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
      {
       if (Level == 1)	// Main folder of the assignment
 	{
-	 strncpy (Gbl.FileBrowser.Asg.Folder,FileName,Asg_MAX_LENGTH_FOLDER);
-	 Gbl.FileBrowser.Asg.Folder[Asg_MAX_LENGTH_FOLDER] = '\0';
+	 Str_Copy (Gbl.FileBrowser.Asg.Folder,FileName,Asg_MAX_LENGTH_FOLDER);
 	 Asg_GetDataOfAssignmentByFolder (&Gbl.FileBrowser.Asg);
 	 // The data of this assignment remains in Gbl.FileBrowser.Asg
 	 // for all subsequent rows with Level > 1 (files or folders inside this folder),
@@ -5356,11 +5343,8 @@ void Brw_SetFullPathInTree (const char *PathInTreeUntilFileOrFolder,const char *
       sprintf (Gbl.FileBrowser.Priv.FullPathInTree,"%s/%s",
 	       PathInTreeUntilFileOrFolder,FilFolLnkName);
    else	// It's the root folder
-     {
-      strncpy (Gbl.FileBrowser.Priv.FullPathInTree,
-	       PathInTreeUntilFileOrFolder,PATH_MAX);
-      Gbl.FileBrowser.Priv.FullPathInTree[PATH_MAX] = '\0';
-     }
+      Str_Copy (Gbl.FileBrowser.Priv.FullPathInTree,
+	        PathInTreeUntilFileOrFolder,PATH_MAX);
   }
 
 /*****************************************************************************/
@@ -6013,8 +5997,7 @@ static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,const char *F
       NumCharsToCopy -= 4;	// Remove .url
    if (NumCharsToCopy > NAME_MAX)
       NumCharsToCopy = NAME_MAX;
-   strncpy (FileNameToShow,FileName,NumCharsToCopy);
-   FileNameToShow[NumCharsToCopy] = '\0';
+   Str_Copy (FileNameToShow,FileName,NumCharsToCopy);
    Str_LimitLengthHTMLStr (FileNameToShow,60);
   }
 
@@ -6724,8 +6707,7 @@ static bool Brw_GetMyClipboard (void)
                Gbl.FileBrowser.Clipboard.FileType = (Brw_FileType_t) UnsignedNum;
 
          /* Get file path (row[4]) */
-         strncpy (Gbl.FileBrowser.Clipboard.Path,row[4],PATH_MAX);
-         Gbl.FileBrowser.Clipboard.Path[PATH_MAX] = '\0';
+         Str_Copy (Gbl.FileBrowser.Clipboard.Path,row[4],PATH_MAX);
          Str_SplitFullPathIntoPathAndFileName (Gbl.FileBrowser.Clipboard.Path,
                                                PathUntilFileName,
                                                Gbl.FileBrowser.Clipboard.FileName);
@@ -6920,8 +6902,7 @@ static void Brw_InsFoldersInPathAndUpdOtherFoldersInExpandedFolders (const char 
    // if (strcmp (Path,Brw_RootFolderInternalNames[Gbl.FileBrowser.Type]))	// Don't insert root folder
 
    /***** Make a copy to keep Path unchanged *****/
-   strncpy (CopyOfPath,Path,PATH_MAX);
-   CopyOfPath[PATH_MAX] = '\0';
+   Str_Copy (CopyOfPath,Path,PATH_MAX);
 
    /***** Insert paths in table of expanded folders if they are not yet there *****/
    do
@@ -7689,10 +7670,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
    if (LevelOrg == 0)	// Origin of copy is the root folder,
 			// for example "sha"
 			// ==> do not copy the root folder itself into destination
-     {
-      strncpy (PathDstInTreeWithFile,PathDstInTree,PATH_MAX);
-      PathDstInTreeWithFile[PATH_MAX] = '\0';
-     }
+      Str_Copy (PathDstInTreeWithFile,PathDstInTree,PATH_MAX);
    else			// Origin of copy is a file or folder inside the root folder
 			// for example "sha/folder1/file1"
       sprintf (PathDstInTreeWithFile,"%s/%s",PathDstInTree,FileNameOrg);
@@ -8417,15 +8395,15 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    char PathUntilFileName[PATH_MAX+1];
    char Path[PATH_MAX+1];
    char PathTmp[PATH_MAX+1];
-   char PathCompleteInTreeIncludingFile[PATH_MAX+1];
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char PathCompleteInTreeIncludingFile[PATH_MAX + 1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool AdminMarks;
    bool FileIsValid = true;
    long FilCod = -1L;	// Code of new file in database
    struct FileMetadata FileMetadata;
    struct MarksProperties Marks;
    unsigned NumUsrsToBeNotifiedByEMail;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
    bool UploadSucessful = false;
 
    /***** Get parameters related to file browser *****/
@@ -8573,18 +8551,12 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
            }
         }
       else	// Empty filename
-	{
-         strncpy (Gbl.Message,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
-                  Lay_MAX_BYTES_ALERT);
-         Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-	}
+         Str_Copy (Gbl.Message,Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML,
+                   Lay_MAX_BYTES_ALERT);
      }
    else		// I do not have permission to create files here
-     {
-      strncpy (Gbl.Message,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
-               Lay_MAX_BYTES_ALERT);
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
-     }
+      Str_Copy (Gbl.Message,Txt_UPLOAD_FILE_Forbidden_NO_HTML,
+                Lay_MAX_BYTES_ALERT);
 
    return UploadSucessful;
   }
@@ -8630,7 +8602,7 @@ void Brw_RecLinkFileBrowser (void)
 	    Name given by me: intel-architectures.pdf
 	    File in swad: intel-architectures.pdf.url
 	    */
-	    strncpy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
+	    Str_Copy (URLWithoutEndingSlash,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
 	 else
 	    /*
 	    Gbl.FileBrowser.NewFilFolLnkName is empty
@@ -8639,8 +8611,7 @@ void Brw_RecLinkFileBrowser (void)
 	    URL: http://www.intel.es/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-manual-325462.pdf
 	    File in swad: 64-ia-32-architectures-software-developer-manual-325462.pdf.url
 	    */
-	    strncpy (URLWithoutEndingSlash,URL,PATH_MAX);
-	 URLWithoutEndingSlash[PATH_MAX] = '\0';
+	    Str_Copy (URLWithoutEndingSlash,URL,PATH_MAX);
 
 	 /* Remove possible final '/' from URL */
 	 if (URLWithoutEndingSlash[LengthURL - 1] == '/')
@@ -9997,8 +9968,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
 	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
 
       /* Get path (row[6]) */
-      strncpy (FileMetadata->FullPathInTree,row[6],PATH_MAX);
-      FileMetadata->FullPathInTree[PATH_MAX] = '\0';
+      Str_Copy (FileMetadata->FullPathInTree,row[6],PATH_MAX);
       Str_SplitFullPathIntoPathAndFileName (FileMetadata->FullPathInTree,
 					    FileMetadata->PathInTreeUntilFilFolLnk,
 					    FileMetadata->FilFolLnkName);
@@ -10127,8 +10097,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 	    FileMetadata->FileType = (Brw_FileType_t) UnsignedNum;
 
       /* Get path (row[6]) */
-      strncpy (FileMetadata->FullPathInTree,row[6],PATH_MAX);
-      FileMetadata->FullPathInTree[PATH_MAX] = '\0';
+      Str_Copy (FileMetadata->FullPathInTree,row[6],PATH_MAX);
       Str_SplitFullPathIntoPathAndFileName (FileMetadata->FullPathInTree,
 					    FileMetadata->PathInTreeUntilFilFolLnk,
 					    FileMetadata->FilFolLnkName);
@@ -11189,8 +11158,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],cha
    Brw_GetFileMetadataByCod (&FileMetadata);
 
    /***** Copy file name into summary string *****/
-   strncpy (SummaryStr,FileMetadata.FilFolLnkName,Cns_MAX_BYTES_TEXT);
-   SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
+   Str_Copy (SummaryStr,FileMetadata.FilFolLnkName,Cns_MAX_BYTES_TEXT);
    if (MaxChars)
       Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 

@@ -45,6 +45,9 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+#define MFU_MAX_LENGTH_TAB	(128 - 1)
+#define MFU_MAX_LENGTH_MENU	(128 - 1)
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -212,9 +215,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    const char *Title;
-   char TabStr[128+1];
-   char MenuStr[128+1];
-   char TabMenuStr[128+6+128+1];
+   char TabStr[MFU_MAX_LENGTH_TAB + 1];
+   char MenuStr[MFU_MAX_LENGTH_MENU + 1];
+   char TabMenuStr[MFU_MAX_LENGTH_TAB + 6 + MFU_MAX_LENGTH_MENU + 1];
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_My_frequent_actions,NULL,Hlp_STATS_Frequent);
@@ -232,10 +235,9 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 SuperAction = Act_Actions[Action].SuperAction;
-	 strncpy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],128);
-	 TabStr[128] = '\0';
-	 strncpy (MenuStr,Title,128);
-	 MenuStr[128] = '\0';
+	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
+	           MFU_MAX_LENGTH_TAB);
+	 Str_Copy (MenuStr,Title,MFU_MAX_LENGTH_MENU);
          sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */
@@ -271,9 +273,9 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    const char *Title;
-   char TabStr[128+1];
-   char MenuStr[128+1];
-   char TabMenuStr[128+6+128+1];
+   char TabStr[MFU_MAX_LENGTH_TAB + 1];
+   char MenuStr[MFU_MAX_LENGTH_MENU + 1];
+   char TabMenuStr[MFU_MAX_LENGTH_TAB + 6 + MFU_MAX_LENGTH_MENU + 1];
 
    /***** Start div and link *****/
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
@@ -296,10 +298,9 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
         {
 	 /* Action string */
 	 SuperAction = Act_Actions[Action].SuperAction;
-	 strncpy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],128);
-	 TabStr[128] = '\0';
-	 strncpy (MenuStr,Title,128);
-	 MenuStr[128] = '\0';
+	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
+	           MFU_MAX_LENGTH_TAB);
+	 Str_Copy (MenuStr,Title,MFU_MAX_LENGTH_MENU);
          sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */

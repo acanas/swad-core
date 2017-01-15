@@ -29,7 +29,6 @@
 #include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For sprintf
 #include <string.h>
-#include <sys/param.h>		// For MAX()
 
 #include "swad_chat.h"
 #include "swad_config.h"
@@ -416,8 +415,7 @@ void Cht_OpenChatWindow (void)
    Usr_GetMyCourses ();
 
    /***** Build my user's name *****/
-   strncpy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME);
-   UsrName[Usr_MAX_BYTES_NAME] = '\0';
+   Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME);
    if (Gbl.Usrs.Me.UsrDat.Surname2[0])
      {
       Str_Concat (UsrName," ",Usr_MAX_BYTES_NAME);
@@ -428,12 +426,8 @@ void Cht_OpenChatWindow (void)
 
    /***** Build the lists of available rooms *****/
    sprintf (ListRoomCodes,"#%s",RoomCode);
-
-   strncpy (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
-   ListRoomShortNames[sizeof (ListRoomShortNames) - 1] = '\0';
-
-   strncpy (ListRoomFullNames ,RoomFullName,sizeof (ListRoomFullNames) - 1);
-   ListRoomFullNames[sizeof (ListRoomFullNames) - 1] = '\0';
+   Str_Copy (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
+   Str_Copy (ListRoomFullNames ,RoomFullName,sizeof (ListRoomFullNames) - 1);
 
    if (strcmp (RoomCode,"GBL_USR"))
      {

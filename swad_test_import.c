@@ -397,11 +397,11 @@ static void TsI_WriteAnswersOfAQstXML (long QstCod)
 void TsI_ImportQstsFromXML (void)
   {
    extern const char *Txt_The_file_is_not_X;
-   char PathTestPriv[PATH_MAX+1];
+   char PathTestPriv[PATH_MAX + 1];
    struct Param *Param;
-   char FileNameXMLSrc[PATH_MAX+1];
-   char FileNameXMLTmp[PATH_MAX+1];	// Full name (including path and .xml) of the destination temporary file
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char FileNameXMLSrc[PATH_MAX + 1];
+   char FileNameXMLTmp[PATH_MAX + 1];	// Full name (including path and .xml) of the destination temporary file
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool WrongType = false;
 
    /***** Creates directory if not exists *****/
@@ -570,8 +570,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		       {
 			if (TagElem->Content)
 			  {
-			   strncpy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],TagElem->Content,Tst_MAX_BYTES_TAG);
-			   Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num][Tst_MAX_BYTES_TAG] = '\0';
+			   Str_Copy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],
+			             TagElem->Content,Tst_MAX_BYTES_TAG);
 			   Gbl.Test.Tags.Num++;
 			  }
 		       }
@@ -587,8 +587,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  if (StemElem->Content)
 		    {
 		     /* Convert stem from text to HTML (in database stem is stored in HTML) */
-		     strncpy (Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
-		     Stem[Cns_MAX_BYTES_TEXT] = '\0';
+		     Str_Copy (Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Stem,Cns_MAX_BYTES_TEXT,true);
 
@@ -607,8 +606,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  if (FeedbackElem->Content)
 		    {
 		     /* Convert feedback from text to HTML (in database feedback is stored in HTML) */
-		     strncpy (Feedback,FeedbackElem->Content,Cns_MAX_BYTES_TEXT);
-		     Feedback[Cns_MAX_BYTES_TEXT] = '\0';
+		     Str_Copy (Feedback,FeedbackElem->Content,
+		               Cns_MAX_BYTES_TEXT);
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Feedback,Cns_MAX_BYTES_TEXT,true);
 
@@ -829,11 +828,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             Lay_ShowErrorAndExit (Gbl.Message);
 
          if (AnswerElem->Content)
-           {
-            strncpy (Gbl.Test.Answer.Options[0].Text,AnswerElem->Content,
-                     Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-            Gbl.Test.Answer.Options[0].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-           }
+            Str_Copy (Gbl.Test.Answer.Options[0].Text,AnswerElem->Content,
+                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
          break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
@@ -847,11 +843,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"lower"))
               {
                if (LowerUpperElem->Content)
-                 {
-                  strncpy (Gbl.Test.Answer.Options[0].Text,LowerUpperElem->Content,
-                           Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-                  Gbl.Test.Answer.Options[0].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-                 }
+                  Str_Copy (Gbl.Test.Answer.Options[0].Text,LowerUpperElem->Content,
+                            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "lower"
               }
          for (LowerUpperElem = AnswerElem->FirstChild;
@@ -860,11 +853,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"upper"))
               {
                if (LowerUpperElem->Content)
-                 {
-                  strncpy (Gbl.Test.Answer.Options[1].Text,LowerUpperElem->Content,
-                           Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-                  Gbl.Test.Answer.Options[1].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-                 }
+                  Str_Copy (Gbl.Test.Answer.Options[1].Text,LowerUpperElem->Content,
+                            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "upper"
               }
          break;
@@ -904,9 +894,9 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
 		    {
 		     if (TextElem->Content)
 		       {
-			strncpy (Gbl.Test.Answer.Options[NumOpt].Text,TextElem->Content,
-			         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-			Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+			Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,
+			          TextElem->Content,
+			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert answer from text to HTML (in database answer text is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
@@ -922,9 +912,9 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
 		    {
 		     if (FeedbackElem->Content)
 		       {
-			strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,FeedbackElem->Content,
-			         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-			Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+			Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,
+			          FeedbackElem->Content,
+			          Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 			/* Convert feedback from text to HTML (in database answer feedback is stored in HTML) */
 			Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
@@ -1132,8 +1122,8 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
         	               Str_MAX_LENGTH_SPEC_CHAR_HTML;
             if ((AnswerText = malloc (AnswerTextLength+1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-            strncpy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,AnswerTextLength);
-            AnswerText[AnswerTextLength] = '\0';
+            Str_Copy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,
+                      AnswerTextLength);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               AnswerText,AnswerTextLength,false);
 
@@ -1147,8 +1137,9 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 					 Str_MAX_LENGTH_SPEC_CHAR_HTML;
 	          if ((AnswerFeedback = malloc (AnswerFeedbackLength+1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
-		  strncpy (AnswerFeedback,Gbl.Test.Answer.Options[NumOpt].Feedback,AnswerFeedbackLength);
-		  AnswerFeedback[AnswerFeedbackLength] = '\0';
+		  Str_Copy (AnswerFeedback,
+		            Gbl.Test.Answer.Options[NumOpt].Feedback,
+		            AnswerFeedbackLength);
 		  Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 		                    AnswerFeedback,AnswerFeedbackLength,false);
 		 }

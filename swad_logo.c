@@ -320,7 +320,7 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    char Path[PATH_MAX+1];
    struct Param *Param;
    char FileNameLogoSrc[PATH_MAX+1];
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
    bool WrongType = false;
 

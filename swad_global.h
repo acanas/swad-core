@@ -493,7 +493,7 @@ struct Globals
       char HighlightDate[4+1+2+1+2+1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
       struct ExamData ExaDat;
       bool NewExamAnnouncement;
-     } ExamAnnouncements;
+     } ExamAnns;
    struct
      {
       unsigned Id;		// Each file browser in the page has a unique identifier

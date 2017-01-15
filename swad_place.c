@@ -340,17 +340,15 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    /***** Check if place code is correct *****/
    if (Plc->PlcCod < 0)
      {
-      strncpy (Plc->ShrtName,Txt_Place_unspecified,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
-      Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
-      strncpy (Plc->FullName,Txt_Place_unspecified,Plc_MAX_LENGTH_PLACE_FULL_NAME);
-      Plc->FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
+      Str_Copy (Plc->ShrtName,Txt_Place_unspecified,
+                Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+      Str_Copy (Plc->FullName,Txt_Place_unspecified,
+                Plc_MAX_LENGTH_PLACE_FULL_NAME);
      }
    else if (Plc->PlcCod == 0)
      {
-      strncpy (Plc->ShrtName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
-      Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
-      strncpy (Plc->FullName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_FULL_NAME);
-      Plc->FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
+      Str_Copy (Plc->ShrtName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+      Str_Copy (Plc->FullName,Txt_Another_place,Plc_MAX_LENGTH_PLACE_FULL_NAME);
      }
    else if (Plc->PlcCod > 0)
      {
@@ -379,12 +377,10 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the place (row[0]) */
-         strncpy (Plc->ShrtName,row[0],Plc_MAX_LENGTH_PLACE_SHRT_NAME);
-         Plc->ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME] = '\0';
+         Str_Copy (Plc->ShrtName,row[0],Plc_MAX_LENGTH_PLACE_SHRT_NAME);
 
          /* Get the full name of the place (row[1]) */
-         strncpy (Plc->FullName,row[1],Plc_MAX_LENGTH_PLACE_FULL_NAME);
-         Plc->FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
+         Str_Copy (Plc->FullName,row[1],Plc_MAX_LENGTH_PLACE_FULL_NAME);
 
          /* Get number of centres in this place (row[2]) */
          if (sscanf (row[2],"%u",&Plc->NumCtrs) != 1)

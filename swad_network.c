@@ -225,8 +225,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
-	 strncpy (URL,row[0],Cns_MAX_BYTES_URL);
-	 URL[Cns_MAX_BYTES_URL] = '\0';
+	 Str_Copy (URL,row[0],Cns_MAX_BYTES_URL);
 
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
@@ -316,8 +315,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get URL */
-	 strncpy (URL,row[0],Cns_MAX_BYTES_URL);
-	 URL[Cns_MAX_BYTES_URL] = '\0';
+	 Str_Copy (URL,row[0],Cns_MAX_BYTES_URL);
 	}
       else
 	 URL[0] = '\0';
@@ -553,8 +551,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get web / social network (row[0]) */
-      strncpy (WebStr,row[0],sizeof (WebStr) - 1);
-      WebStr[sizeof (WebStr) - 1] = '\0';
+      Str_Copy (WebStr,row[0],sizeof (WebStr) - 1);
       for (Web = (Net_WebsAndSocialNetworks_t) 0;
 	   Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	   Web++)

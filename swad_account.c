@@ -559,9 +559,8 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
       Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
 
       /***** Set password to the password typed by the user *****/
-      strncpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-               Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
-      Gbl.Usrs.Me.UsrDat.Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64] = '\0';
+      Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
+                Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 
       /***** User does not exist in the platform, so create him/her! *****/
       Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
@@ -569,16 +568,14 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 
       /***** Save nickname *****/
       Nck_UpdateMyNick (NewNicknameWithoutArroba);
-      strncpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
-               Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
-      Gbl.Usrs.Me.UsrDat.Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA] = '\0';
+      Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
+                Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
       /***** Save email *****/
       if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
 	{
 	 /* Email updated sucessfully */
-	 strncpy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,Usr_MAX_BYTES_USR_EMAIL);
-	 Gbl.Usrs.Me.UsrDat.Email[Usr_MAX_BYTES_USR_EMAIL] = '\0';
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,Usr_MAX_BYTES_USR_EMAIL);
 
 	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
 	}
@@ -615,8 +612,8 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
    Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
 
    /* Remove arrobas at the beginning */
-   strncpy (NewNicknameWithoutArroba,NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
-   NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA] = '\0';
+   Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
+             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
    Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
    /* Create a new version of the nickname with arroba */

@@ -314,8 +314,7 @@ bool Ses_GetSessionData (void)
 	       Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
 
 	 /* Get search string (row[9]) */
-	 strncpy (Gbl.Search.Str,row[9],Sch_MAX_LENGTH_STRING_TO_FIND);
-	 Gbl.Search.Str[Sch_MAX_LENGTH_STRING_TO_FIND] = '\0';
+	 Str_Copy (Gbl.Search.Str,row[9],Sch_MAX_LENGTH_STRING_TO_FIND);
 	}
 
       Result = true;
@@ -428,8 +427,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t Action,const char *ParamName,char 
         {
          /***** Get the value del parameter *****/
          row = mysql_fetch_row (mysql_res);
-         strncpy (ParamValue,row[0],MaxBytes);
-         ParamValue[MaxBytes] = '\0';
+         Str_Copy (ParamValue,row[0],MaxBytes);
          ParameterIsTooBig = (strlen (row[0]) > MaxBytes);
         }
 

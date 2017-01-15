@@ -232,7 +232,8 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
             Lay_ShowErrorAndExit ("Wrong code of field.");
 
          /* Name of the field (row[1]) */
-         strncpy (Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Name,row[1],Rec_MAX_LENGTH_NAME_FIELD);
+         Str_Copy (Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Name,row[1],
+                   Rec_MAX_LENGTH_NAME_FIELD);
 
          /* Number of lines (row[2]) */
          Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].NumLines = Rec_ConvertToNumLinesField (row[2]);
@@ -2572,20 +2573,17 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_NAME LEFT_TOP\">");
 
    /***** First name *****/
-   strncpy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_Copy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s<br />",Name);
 
    /***** Surname 1 *****/
-   strncpy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_Copy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s<br />",Name);
 
    /***** Surname 2 *****/
-   strncpy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
-   Name[Usr_MAX_BYTES_NAME] = '\0';
+   Str_Copy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s",Name);
 

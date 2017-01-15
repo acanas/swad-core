@@ -143,8 +143,7 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
    size_t Length;
 
    /***** Copy image name to struct *****/
-   strncpy (Image->Name,Name,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-   Image->Name[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+   Str_Copy (Image->Name,Name,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
    /***** Set status of image file *****/
    Image->Status = Image->Name[0] ? Img_NAME_STORED_IN_DB :
@@ -164,8 +163,7 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 
       if ((Image->Title = (char *) malloc (Length+1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
-      strncpy (Image->Title,Title,Length);
-      Image->Title[Length] = '\0';
+      Str_Copy (Image->Title,Title,Length);
      }
 
    /***** Copy image URL to struct *****/
@@ -181,8 +179,7 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 
       if ((Image->URL = (char *) malloc (Length+1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
-      strncpy (Image->URL,URL,Length);
-      Image->URL[Length] = '\0';
+      Str_Copy (Image->URL,URL,Length);
      }
   }
 
@@ -320,8 +317,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
       Img_FreeImageTitle (Image);
       if ((Image->Title = (char *) malloc (Length + 1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image title.");
-      strncpy (Image->Title,Title,Length);
-      Image->Title[Length] = '\0';
+      Str_Copy (Image->Title,Title,Length);
      }
 
    /***** By last, get image URL from form *****/
@@ -335,8 +331,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
       Img_FreeImageURL (Image);
       if ((Image->URL = (char *) malloc (Length + 1)) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for image URL.");
-      strncpy (Image->URL,URL,Length);
-      Image->URL[Length] = '\0';
+      Str_Copy (Image->URL,URL,Length);
      }
   }
 
@@ -350,17 +345,10 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
   {
    if (NumImgInForm < 0)	// One unique image in form ==> no suffix needed
      {
-      strncpy (ParamUploadImg->Action,"ImgAct",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
-      ParamUploadImg->Action[Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
-
-      strncpy (ParamUploadImg->File  ,"ImgFil",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
-      ParamUploadImg->File  [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
-
-      strncpy (ParamUploadImg->Title ,"ImgTit",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
-      ParamUploadImg->Title [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
-
-      strncpy (ParamUploadImg->URL   ,"ImgURL",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
-      ParamUploadImg->URL   [Img_MAX_LENGTH_PARAM_UPLOAD_IMG] = '\0';
+      Str_Copy (ParamUploadImg->Action,"ImgAct",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      Str_Copy (ParamUploadImg->File  ,"ImgFil",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      Str_Copy (ParamUploadImg->Title ,"ImgTit",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+      Str_Copy (ParamUploadImg->URL   ,"ImgURL",Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
      }
    else				// Several images in form ==> add suffix
      {
@@ -401,7 +389,7 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
    char FileNameImgSrc[PATH_MAX+1];
    char *PtrExtension;
    size_t LengthExtension;
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char PathImgPriv[PATH_MAX+1];
    char FileNameImgOrig[PATH_MAX+1];	// Full name of original uploaded file
    char FileNameImgTmp[PATH_MAX+1];	// Full name of temporary processed file

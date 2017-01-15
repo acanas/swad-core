@@ -43,7 +43,7 @@
 struct ListIDs
   {
    bool Confirmed;
-   char ID[ID_MAX_LENGTH_USR_ID+1];
+   char ID[ID_MAX_LENGTH_USR_ID + 1];
   };
 
 /*****************************************************************************/

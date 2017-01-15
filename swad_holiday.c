@@ -312,8 +312,7 @@ void Hld_GetListHolidays (void)
 	    Hld->PlcCod = Str_ConvertStrCodToLongCod (row[1]);
 
 	    /* Get the full name of the place (row[2]) */
-	    strncpy (Hld->PlaceFullName,row[2],Plc_MAX_LENGTH_PLACE_FULL_NAME);
-	    Hld->PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
+	    Str_Copy (Hld->PlaceFullName,row[2],Plc_MAX_LENGTH_PLACE_FULL_NAME);
 
 	    /* Get type (row[3]) */
 	    Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
@@ -337,8 +336,7 @@ void Hld_GetListHolidays (void)
 	      }
 
 	    /* Get the name of the holiday/non school period (row[6]) */
-	    strncpy (Hld->Name,row[6],Hld_MAX_LENGTH_HOLIDAY_NAME);
-	    Hld->Name[Hld_MAX_LENGTH_HOLIDAY_NAME] = '\0';
+	    Str_Copy (Hld->Name,row[6],Hld_MAX_LENGTH_HOLIDAY_NAME);
 	   }
 	}
 
@@ -404,8 +402,7 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
       Hld->PlcCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get the full name of the place (row[1]) */
-      strncpy (Hld->PlaceFullName,row[1],Plc_MAX_LENGTH_PLACE_FULL_NAME);
-      Hld->PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
+      Str_Copy (Hld->PlaceFullName,row[1],Plc_MAX_LENGTH_PLACE_FULL_NAME);
 
       /* Get type (row[2]) */
       Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
@@ -429,8 +426,7 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 	}
 
       /* Get the name of the holiday/non school period (row[5]) */
-      strncpy (Hld->Name,row[5],Hld_MAX_LENGTH_HOLIDAY_NAME);
-      Hld->Name[Hld_MAX_LENGTH_HOLIDAY_NAME] = '\0';
+      Str_Copy (Hld->Name,row[5],Hld_MAX_LENGTH_HOLIDAY_NAME);
      }
 
   /***** Free structure that stores the query result *****/
@@ -698,9 +694,7 @@ void Hld_ChangeHolidayPlace (void)
 
    /***** Show the form again *****/
    Hld->PlcCod = NewPlace.PlcCod;
-   strncpy (Hld->PlaceFullName,NewPlace.FullName,Plc_MAX_LENGTH_PLACE_FULL_NAME);
-   Hld->PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME] = '\0';
-
+   Str_Copy (Hld->PlaceFullName,NewPlace.FullName,Plc_MAX_LENGTH_PLACE_FULL_NAME);
    Hld_EditHolidays ();
   }
 
@@ -895,9 +889,7 @@ void Hld_RenameHoliday (void)
      }
 
    /***** Show the form again *****/
-   strncpy (Hld->Name,NewHldName,Hld_MAX_LENGTH_HOLIDAY_NAME);
-   Hld->Name[Hld_MAX_LENGTH_HOLIDAY_NAME] = '\0';
-
+   Str_Copy (Hld->Name,NewHldName,Hld_MAX_LENGTH_HOLIDAY_NAME);
    Hld_EditHolidays ();
   }
 

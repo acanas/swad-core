@@ -429,8 +429,8 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
 
       /***** Get encrypted user's code *****/
       row = mysql_fetch_row (mysql_res);
-      strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod) - 1);
-      UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod) - 1] = '\0';
+      Str_Copy (UsrDat->EncryptedUsrCod,row[0],
+                Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -478,12 +478,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    row = mysql_fetch_row (mysql_res);
 
    /* Get encrypted user's code */
-   strncpy (UsrDat->EncryptedUsrCod,row[0],sizeof (UsrDat->EncryptedUsrCod) - 1);
-   UsrDat->EncryptedUsrCod[sizeof (UsrDat->EncryptedUsrCod) - 1] = '\0';
+   Str_Copy (UsrDat->EncryptedUsrCod,row[0],
+            Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
    /* Get encrypted password */
-   strncpy (UsrDat->Password,row[1],sizeof (UsrDat->Password) - 1);
-   UsrDat->Password[sizeof (UsrDat->Password) - 1] = '\0';
+   Str_Copy (UsrDat->Password,row[1],Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
@@ -495,12 +494,9 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 	                           Rol_VISITOR;		// User belongs to some courses
 
    /* Get name */
-   strncpy (UsrDat->Surname1 ,row[2],sizeof (UsrDat->Surname1 ) - 1);
-   UsrDat->Surname1 [sizeof (UsrDat->Surname1 ) - 1] = '\0';
-   strncpy (UsrDat->Surname2 ,row[3],sizeof (UsrDat->Surname2 ) - 1);
-   UsrDat->Surname2 [sizeof (UsrDat->Surname2 ) - 1] = '\0';
-   strncpy (UsrDat->FirstName,row[4],sizeof (UsrDat->FirstName) - 1);
-   UsrDat->FirstName[sizeof (UsrDat->FirstName) - 1] = '\0';
+   Str_Copy (UsrDat->Surname1 ,row[2],Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname2 ,row[3],Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->FirstName,row[4],Usr_MAX_BYTES_NAME);
 
    /* Get sex */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
@@ -545,8 +541,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
          UsrDat->Prefs.FirstDayOfWeek = UnsignedNum;
 
    /* Get rest of data */
-   strncpy (UsrDat->Photo,row[10],sizeof (UsrDat->Photo) - 1);
-   UsrDat->Photo[sizeof (UsrDat->Photo) - 1] = '\0';
+   Str_Copy (UsrDat->Photo,row[10],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
@@ -555,21 +550,14 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
-   strncpy (UsrDat->Tch.Office     ,row[18],sizeof (UsrDat->Tch.Office     ) - 1);
-   UsrDat->Tch.Office     [sizeof (UsrDat->Tch.Office     ) - 1] = '\0';
-   strncpy (UsrDat->Tch.OfficePhone,row[19],sizeof (UsrDat->Tch.OfficePhone) - 1);
-   UsrDat->Tch.OfficePhone[sizeof (UsrDat->Tch.OfficePhone) - 1] = '\0';
+   Str_Copy (UsrDat->Tch.Office     ,row[18],Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->Tch.OfficePhone,row[19],Usr_MAX_BYTES_PHONE);
 
-   strncpy (UsrDat->LocalAddress ,row[20],sizeof (UsrDat->LocalAddress ) - 1);
-   UsrDat->LocalAddress [sizeof (UsrDat->LocalAddress ) - 1] = '\0';
-   strncpy (UsrDat->LocalPhone   ,row[21],sizeof (UsrDat->LocalPhone   ) - 1);
-   UsrDat->LocalPhone   [sizeof (UsrDat->LocalPhone   ) - 1] = '\0';
-   strncpy (UsrDat->FamilyAddress,row[22],sizeof (UsrDat->FamilyAddress) - 1);
-   UsrDat->FamilyAddress[sizeof (UsrDat->FamilyAddress) - 1] = '\0';
-   strncpy (UsrDat->FamilyPhone  ,row[23],sizeof (UsrDat->FamilyPhone  ) - 1);
-   UsrDat->FamilyPhone  [sizeof (UsrDat->FamilyPhone  ) - 1] = '\0';
-   strncpy (UsrDat->OriginPlace  ,row[24],sizeof (UsrDat->OriginPlace  ) - 1);
-   UsrDat->OriginPlace  [sizeof (UsrDat->OriginPlace  ) - 1] = '\0';
+   Str_Copy (UsrDat->LocalAddress ,row[20],Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->LocalPhone   ,row[21],Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->FamilyAddress,row[22],Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->FamilyPhone  ,row[23],Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->OriginPlace  ,row[24],Cns_MAX_BYTES_STRING);
    strcpy (StrBirthday,
 	   row[25] ? row[25] :
 		     "0000-00-00");
@@ -632,11 +620,8 @@ static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat)
   {
    /***** Check that memory for comments is allocated *****/
    if (UsrDat->Comments)
-     {
       /***** Copy comments from Str to Comments *****/
-      strncpy (UsrDat->Comments,Str,Cns_MAX_BYTES_TEXT);
-      UsrDat->Comments[Cns_MAX_BYTES_TEXT] = '\0';
-     }
+      Str_Copy (UsrDat->Comments,Str,Cns_MAX_BYTES_TEXT);
   }
 
 /*****************************************************************************/
@@ -2230,8 +2215,9 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 	    /* Allocate space for the list */
 	    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
 
-	    strncpy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-	    Gbl.Usrs.Other.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+	    Str_Copy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
+	              Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
+	              ID_MAX_LENGTH_USR_ID);
 	    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
 	    /* Check if user's ID exists in database */
@@ -2532,8 +2518,8 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 /***** Allocate space for the list *****/
 	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
-	 strncpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,ID_MAX_LENGTH_USR_ID);
-	 Gbl.Usrs.Me.UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
+	           ID_MAX_LENGTH_USR_ID);
 	 Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Check if user's ID exists in database, and get user's data */
@@ -4681,27 +4667,24 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             UsrInList->UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
             /* Get encrypted user's code (row[1]) */
-	    strncpy (UsrInList->EncryptedUsrCod,row[1],sizeof (UsrInList->EncryptedUsrCod) - 1);
-	    UsrInList->EncryptedUsrCod[sizeof (UsrInList->EncryptedUsrCod) - 1] = '\0';
+	    Str_Copy (UsrInList->EncryptedUsrCod,row[1],
+	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
             /* Get user's surname 1 (row[2]) */
-	    strncpy (UsrInList->Surname1 ,row[2],sizeof (UsrInList->Surname1 ) - 1);
-	    UsrInList->Surname1 [sizeof (UsrInList->Surname1 ) - 1] = '\0';
+	    Str_Copy (UsrInList->Surname1 ,row[2],Usr_MAX_BYTES_NAME);
 
             /* Get user's surname 2 (row[3]) */
-	    strncpy (UsrInList->Surname2 ,row[3],sizeof (UsrInList->Surname2 ) - 1);
-	    UsrInList->Surname2 [sizeof (UsrInList->Surname2 ) - 1] = '\0';
+	    Str_Copy (UsrInList->Surname2 ,row[3],Usr_MAX_BYTES_NAME);
 
             /* Get user's first name (row[4]) */
-	    strncpy (UsrInList->FirstName,row[4],sizeof (UsrInList->FirstName) - 1);
-	    UsrInList->FirstName[sizeof (UsrInList->FirstName) - 1] = '\0';
+	    Str_Copy (UsrInList->FirstName,row[4],Usr_MAX_BYTES_NAME);
 
             /* Get user's sex (row[5]) */
             UsrInList->Sex = Usr_GetSexFromStr (row[5]);
 
             /* Get user's photo (row[6]) */
-	    strncpy (UsrInList->Photo,row[6],sizeof (UsrInList->Photo) - 1);
-	    UsrInList->Photo[sizeof (UsrInList->Photo) - 1] = '\0';
+	    Str_Copy (UsrInList->Photo,row[6],
+	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
             /* Get user's photo visibility (row[7]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
@@ -5085,8 +5068,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  /***** Allocate space for the list *****/
 		  ID_ReallocateListIDs (&UsrDat,1);
 
-		  strncpy (UsrDat.IDs.List[0].ID,UsrIDNickOrEmail,ID_MAX_LENGTH_USR_ID);
-		  UsrDat.IDs.List[0].ID[ID_MAX_LENGTH_USR_ID] = '\0';
+		  Str_Copy (UsrDat.IDs.List[0].ID,UsrIDNickOrEmail,
+		            ID_MAX_LENGTH_USR_ID);
 
 		  /***** Check if a user exists having this user's ID *****/
 		  if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false))

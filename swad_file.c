@@ -322,8 +322,7 @@ void Fil_CreateUpdateFile (const char *CurrentName,const char *ExtensionOldName,
   {
    size_t LengthFileRoot = Str_GetLengthRootFileName (CurrentName);
 
-   strncpy (NewName,CurrentName,LengthFileRoot);
-   NewName[LengthFileRoot] = '\0';
+   Str_Copy (NewName,CurrentName,LengthFileRoot);
    sprintf (OldName,"%s%s",NewName,ExtensionOldName);
    strcat (NewName,".new");
 

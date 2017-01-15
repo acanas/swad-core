@@ -562,18 +562,18 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    extern const char *Txt_X_faces_have_been_detected_in_front_position_1_Z_;
    extern const char *Txt_X_faces_have_been_detected_in_front_position_Y_Z_;
    extern const char *Txt_Faces_detected;
-   char PathPhotosPriv[PATH_MAX+1];
-   char PathPhotosPubl[PATH_MAX+1];
+   char PathPhotosPriv[PATH_MAX + 1];
+   char PathPhotosPubl[PATH_MAX + 1];
    struct Param *Param;
-   char FileNamePhotoSrc[PATH_MAX+1];
-   char FileNamePhotoTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNamePhotoMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the original image with faces
-   char FileNameTxtMap[PATH_MAX+1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
-   char PathRelPhoto[PATH_MAX+1];
-   FILE *FileTxtMap = NULL;	// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char FileNamePhotoSrc[PATH_MAX + 1];
+   char FileNamePhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNamePhotoMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the original image with faces
+   char FileNameTxtMap[PATH_MAX + 1];	// Full name (including path) of the temporary file with the text neccesary to make the image map
+   char PathRelPhoto[PATH_MAX + 1];
+   FILE *FileTxtMap = NULL;		// Temporary file with the text neccesary to make the image map. Initialized to avoid warning
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool WrongType = false;
-   char Command[256+PATH_MAX];	// Command to call the program of preprocessing of photos
+   char Command[256 + PATH_MAX];	// Command to call the program of preprocessing of photos
    int ReturnCode;
    int NumLastForm = 0;	// Initialized to avoid warning
    char FormId[32];
@@ -585,7 +585,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    unsigned Y;
    unsigned Radius;
    unsigned BackgroundCode;
-   char StrFileName[NAME_MAX+1];
+   char StrFileName[NAME_MAX + 1];
 
    /***** Creates directories if not exist *****/
    sprintf (PathPhotosPriv,"%s/%s",
@@ -2369,8 +2369,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
 
    /***** Make a copy of the degree short name *****/
-   strncpy (CopyOfDegShortName,Deg->ShrtName,Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
-   CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
+   Str_Copy (CopyOfDegShortName,Deg->ShrtName,Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
    Str_LimitLengthHTMLStr (CopyOfDegShortName,
                            SeeOrPrint == Pho_DEGREES_SEE ? 10 :
                         	                           15);

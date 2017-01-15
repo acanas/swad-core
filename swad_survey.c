@@ -2644,8 +2644,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
          /* Get the stem of the question from the database (row[2]) */
-         strncpy (Txt,row[2],Cns_MAX_BYTES_TEXT);
-         Txt[Cns_MAX_BYTES_TEXT] = '\0';
+         Str_Copy (Txt,row[2],Cns_MAX_BYTES_TEXT);
 
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2663,8 +2662,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
                Lay_ShowErrorAndExit (Gbl.Message);
 
-            strncpy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
-            SvyQst->AnsChoice[NumAns].Text[Svy_MAX_BYTES_ANSWER] = '\0';
+            Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
            }
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);

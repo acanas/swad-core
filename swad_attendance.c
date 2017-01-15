@@ -492,12 +492,8 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   strncpy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
-   FirstName[Usr_MAX_BYTES_NAME] = '\0';
-
-   strncpy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
-   Surnames[Usr_MAX_BYTES_SURNAMES] = '\0';
-
+   Str_Copy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
       strcat (Surnames," ");
@@ -789,8 +785,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 	 Att->CommentTchVisible = (row[7][0] == 'Y');
 
 	 /* Get the title of the attendance event (row[8]) */
-	 strncpy (Att->Title,row[8],Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
-	 Att->Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE] = '\0';
+	 Str_Copy (Att->Title,row[8],Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -861,8 +856,7 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 
       row = mysql_fetch_row (mysql_res);
 
       /* Get info text */
-      strncpy (Txt,row[0],Cns_MAX_BYTES_TEXT);
-      Txt[Cns_MAX_BYTES_TEXT] = '\0';
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -2518,12 +2512,10 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
       Present = (row[0][0] == 'Y');
 
       /* Get student's comment (row[1]) */
-      strncpy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
-      CommentStd[Cns_MAX_BYTES_TEXT] = '\0';
+      Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
 
       /* Get teacher's comment (row[2]) */
-      strncpy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
-      CommentTch[Cns_MAX_BYTES_TEXT] = '\0';
+      Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
      }
    else	// User is not present
      {

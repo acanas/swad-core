@@ -643,8 +643,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
-	 strncpy (InsFullName,Ins.FullName,Ins_MAX_LENGTH_INSTIT_FULL_NAME);
-	 InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME] = '\0';
+	 Str_Copy (InsFullName,Ins.FullName,Ins_MAX_LENGTH_INSTIT_FULL_NAME);
          Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
 	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsFullName);
 	 Act_FormEnd ();
@@ -679,8 +678,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
-	    strncpy (CtrFullName,Ctr.FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
-	    CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME] = '\0';
+	    Str_Copy (CtrFullName,Ctr.FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
             Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
 	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrFullName);
 	    Act_FormEnd ();
@@ -715,8 +713,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
-	       strncpy (DegFullName,Deg.FullName,Deg_MAX_LENGTH_DEGREE_FULL_NAME);
-	       DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME] = '\0';
+	       Str_Copy (DegFullName,Deg.FullName,Deg_MAX_LENGTH_DEGREE_FULL_NAME);
                Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
 	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegFullName);
 	       Act_FormEnd ();
@@ -756,8 +753,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShrtName,
 		           Crs.FullName);
-	          strncpy (CrsFullName,Crs.FullName,Crs_MAX_LENGTH_COURSE_FULL_NAME);
-	          CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
+	          Str_Copy (CrsFullName,Crs.FullName,
+	                    Crs_MAX_LENGTH_COURSE_FULL_NAME);
                   Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
 		  fprintf (Gbl.F.Out,"&nbsp;%s</a>",CrsFullName);
 		  Act_FormEnd ();
@@ -2106,8 +2103,7 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Crs->Year = Deg_ConvStrToYear (row[2]);
 
    /***** Get institutional course code (row[3]) *****/
-   strncpy (Crs->InstitutionalCrsCod,row[3],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-   Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
+   Str_Copy (Crs->InstitutionalCrsCod,row[3],Crs_LENGTH_INSTITUTIONAL_CRS_COD);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -2117,12 +2113,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Crs->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[5]);
 
    /***** Get the short name of the course (row[6]) *****/
-   strncpy (Crs->ShrtName,row[6],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
-   Crs->ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME] = '\0';
+   Str_Copy (Crs->ShrtName,row[6],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
 
    /***** Get the full name of the course (row[7]) *****/
-   strncpy (Crs->FullName,row[7],Crs_MAX_LENGTH_COURSE_FULL_NAME);
-   Crs->FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME] = '\0';
+   Str_Copy (Crs->FullName,row[7],Crs_MAX_LENGTH_COURSE_FULL_NAME);
 
    /***** Get number of teachers *****/
    Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
@@ -2161,11 +2155,8 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 	 /***** Get the short name of this course *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 strncpy (CrsShortName,row[0],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
-         CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME] = '\0';
-
-	 strncpy (DegShortName,row[1],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
-	 DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME] = '\0';
+	 Str_Copy (CrsShortName,row[0],Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+	 Str_Copy (DegShortName,row[1],Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2390,9 +2381,8 @@ void Crs_ChangeInsCrsCod (void)
    else
      {
       Gbl.Error = true;
-      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
-               Lay_MAX_BYTES_ALERT);
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+      Str_Copy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+                Lay_MAX_BYTES_ALERT);
      }
   }
 
@@ -2598,9 +2588,8 @@ void Crs_ChangeCrsYear (void)
    else
      {
       Gbl.Error = true;
-      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
-               Lay_MAX_BYTES_ALERT);
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+      Str_Copy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+                Lay_MAX_BYTES_ALERT);
      }
   }
 
@@ -2635,8 +2624,8 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
    DB_QueryUPDATE (Query,"can not update the institutional code of the current course");
 
    /***** Copy institutional course code *****/
-   strncpy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
-   Crs->InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD] = '\0';
+   Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
+             Crs_LENGTH_INSTITUTIONAL_CRS_COD);
   }
 
 /*****************************************************************************/
@@ -2744,8 +2733,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
                         CurrentCrsName,NewCrsName);
 
                /* Change current course name in order to display it properly */
-               strncpy (CurrentCrsName,NewCrsName,MaxLength);
-               CurrentCrsName[MaxLength] = '\0';
+               Str_Copy (CurrentCrsName,NewCrsName,MaxLength);
               }
            }
          else	// The same name
@@ -2756,9 +2744,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    else
      {
       Gbl.Error = true;
-      strncpy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
-               Lay_MAX_BYTES_ALERT);
-      Gbl.Message[Lay_MAX_BYTES_ALERT] = '\0';
+      Str_Copy (Gbl.Message,Txt_You_dont_have_permission_to_edit_this_course,
+                Lay_MAX_BYTES_ALERT);
      }
   }
 

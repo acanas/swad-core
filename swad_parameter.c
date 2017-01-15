@@ -577,8 +577,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		    {
 		     case Act_CONT_NORM:
 			if (PtrDst)
-			   strncpy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
-				    Param->Value.Length);
+			   Str_Copy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
+				     Param->Value.Length);
 			break;
 		     case Act_CONT_DATA:
 		        if (Param->FileName.Start == 0 &&	// Copy into destination only if it's not a file

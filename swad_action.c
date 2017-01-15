@@ -4608,8 +4608,7 @@ char *Act_GetActionTextFromDB (long ActCod,char *Txt)
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);
-      strncpy (Txt,row[0],Act_MAX_LENGTH_ACTION_TXT);
-      Txt[Act_MAX_LENGTH_ACTION_TXT] = '\0';
+      Str_Copy (Txt,row[0],Act_MAX_LENGTH_ACTION_TXT);
      }
    else	// ActCod-Language not found on database
       Txt[0] = '\0';

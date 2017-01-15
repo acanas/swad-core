@@ -464,49 +464,43 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         strncpy (LocationName,Cfg_PLATFORM_SHORT_NAME,
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Cfg_PLATFORM_SHORT_NAME,
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CTY:		// Show connected users in the current country
          if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
             return;
 
-         strncpy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
             return;
 
-         strncpy (LocationName,Gbl.CurrentIns.Ins.ShrtName,
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Gbl.CurrentIns.Ins.ShrtName,
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
          if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
             return;
 
-         strncpy (LocationName,Gbl.CurrentCtr.Ctr.ShrtName,
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Gbl.CurrentCtr.Ctr.ShrtName,
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
          if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
             return;
 
-         strncpy (LocationName,Gbl.CurrentDeg.Deg.ShrtName,
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Gbl.CurrentDeg.Deg.ShrtName,
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
             return;
 
-         strncpy (LocationName,Gbl.CurrentCrs.Crs.ShrtName,
-                  Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR] = '\0';
+         Str_Copy (LocationName,Gbl.CurrentCrs.Crs.ShrtName,
+                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       default:
 	 return;
@@ -575,9 +569,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
 
    /* Write total number of connected users belonging to the current course */
-   strncpy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
-            Crs_MAX_LENGTH_COURSE_SHRT_NAME);
-   CourseName[Crs_MAX_LENGTH_COURSE_SHRT_NAME] = '\0';
+   Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
+             Crs_MAX_LENGTH_COURSE_SHRT_NAME);
    Str_LimitLengthHTMLStr (CourseName,12);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s",

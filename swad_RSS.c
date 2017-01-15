@@ -191,8 +191,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
          fprintf (FileRSS,"<item>\n");
 
          /* Write title (first characters) of the notice */
-         strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
-         Content[Cns_MAX_BYTES_TEXT] = '\0';
+         Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
          Str_LimitLengthHTMLStr (Content,40);
          fprintf (FileRSS,"<title>%s: ",Txt_Notice);
          Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
@@ -203,8 +202,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
                   Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
-         strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
-         Content[Cns_MAX_BYTES_TEXT] = '\0';
+         Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
          Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
          fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
                   UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);
@@ -295,9 +293,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 		     Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
 	    /* Write full content of the exam announcement */
-	    //strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
-	    //Content[Cns_MAX_BYTES_TEXT] = '\0';
-	    //Str_InsertLinkInURLs (Content,Cns_MAX_BYTES_TEXT,40);
 	    fprintf (FileRSS,"<description><![CDATA[<p><em>Fecha examen: %s</em></p>]]></description>\n",
 		     row[2]);
 

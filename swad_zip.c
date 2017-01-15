@@ -598,12 +598,11 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
    extern const char *Txt_FILE_uncompressed;
-   char FileNameShort[NAME_MAX+1];
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileNameShort[NAME_MAX + 1];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Limit length of the name of the file *****/
-   strncpy (FileNameShort,FileName,NAME_MAX);
-   FileNameShort[NAME_MAX] = '\0';
+   Str_Copy (FileNameShort,FileName,NAME_MAX);
    Str_LimitLengthHTMLStr (FileNameShort,50);
 
    /***** Start frame *****/

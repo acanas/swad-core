@@ -16769,39 +16769,39 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #endif
 	,
 #if   L==1
-	"Tots els drets reservats"			// All Rights Reserved
+	"Tots els drets reservats"		// All Rights Reserved
 #elif L==2
-	"Alle Rechte vorbehalten"			// All Rights Reserved
+	"Alle Rechte vorbehalten"		// All Rights Reserved
 #elif L==3
 	"All rights reserved"			// All Rights Reserved
 #elif L==4
 	"Todos los derechos reservados"		// All Rights Reserved
 #elif L==5
-	"Tous droits r&eacute;serv&eacute;s"		// All Rights Reserved
+	"Tous droits r&eacute;serv&eacute;s"	// All Rights Reserved
 #elif L==6
 	"Todos los derechos reservados"		// All Rights Reserved	// Okoteve traducción
 #elif L==7
-	"Tutti i diritti riservati"			// All Rights Reserved
+	"Tutti i diritti riservati"		// All Rights Reserved
 #elif L==8
-	"Wszelkie prawa zastrze&zdot;one"		// All Rights Reserved
+	"Wszelkie prawa zastrze&zdot;one"	// All Rights Reserved
 #elif L==9
 	"Todos os direitos reservados"		// All Rights Reserved
 #endif
 	,
 #if   L==1
-	"CC Reconeixement"				// CC Attribution License
+	"CC Reconeixement"			// CC Attribution License
 #elif L==2
-	"CC Namensnennung"				// CC Attribution License
+	"CC Namensnennung"			// CC Attribution License
 #elif L==3
-	"CC Attribution"				// CC Attribution License
+	"CC Attribution"			// CC Attribution License
 #elif L==4
-	"CC Reconocimiento"				// CC Attribution License
+	"CC Reconocimiento"			// CC Attribution License
 #elif L==5
-	"CC Attribution"				// CC Attribution License
+	"CC Attribution"			// CC Attribution License
 #elif L==6
-	"CC Reconocimiento"				// CC Attribution License	// Okoteve traducción
+	"CC Reconocimiento"			// CC Attribution License	// Okoteve traducción
 #elif L==7
-	"CC Attribuzione"				// CC Attribution License
+	"CC Attribuzione"			// CC Attribution License
 #elif L==8
 	"CC Uznanie autorstwa"			// CC Attribution License
 #elif L==9
@@ -16813,15 +16813,15 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==2
 	"CC Namensnennung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-ShareAlike License
 #elif L==3
-	"CC Attribution - Share Alike"				// CC Attribution-ShareAlike License
+	"CC Attribution - Share Alike"					// CC Attribution-ShareAlike License
 #elif L==4
-	"CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License
+	"CC Reconocimiento - Compartir bajo la misma licencia"		// CC Attribution-ShareAlike License
 #elif L==5
-	"CC Attribution - Partage &agrave; l'Identique"		// CC Attribution-ShareAlike License
+	"CC Attribution - Partage &agrave; l'Identique"			// CC Attribution-ShareAlike License
 #elif L==6
-	"CC Reconocimiento - Compartir bajo la misma licencia"	// CC Attribution-ShareAlike License	// Okoteve traducción
+	"CC Reconocimiento - Compartir bajo la misma licencia"		// CC Attribution-ShareAlike License	// Okoteve traducción
 #elif L==7
-	"CC Attribuzione - Condividi allo stesso modo"		// CC Attribution-ShareAlike License
+	"CC Attribuzione - Condividi allo stesso modo"			// CC Attribution-ShareAlike License
 #elif L==8
 	"CC Uznanie autorstwa - Na tych samych warunkach"		// CC Attribution-ShareAlike License
 #elif L==9
@@ -16831,17 +16831,17 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #if   L==1
 	"CC Reconeixement - Sense obra derivada"				// CC Attribution-NoDerivs License
 #elif L==2
-	"CC Namensnennung - Keine Bearbeitung"				// CC Attribution-NoDerivs License
+	"CC Namensnennung - Keine Bearbeitung"					// CC Attribution-NoDerivs License
 #elif L==3
-	"CC Attribution - No Derivative Works"				// CC Attribution-NoDerivs License
+	"CC Attribution - No Derivative Works"					// CC Attribution-NoDerivs License
 #elif L==4
 	"CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License
 #elif L==5
-	"CC Attribution - Pas de travaux d&eacute;riv&eacute;s"		// CC Attribution-NoDerivs License
+	"CC Attribution - Pas de travaux d&eacute;riv&eacute;s"			// CC Attribution-NoDerivs License
 #elif L==6
 	"CC Reconocimiento - Sin obras derivadas"				// CC Attribution-NoDerivs License	// Okoteve traducción
 #elif L==7
-	"CC Attribuzione - Non opere derivate"				// CC Attribution-NoDerivs License
+	"CC Attribuzione - Non opere derivate"					// CC Attribution-NoDerivs License
 #elif L==8
 	"CC Uznanie autorstwa - Bez utwor&oacute;w zale&zdot;nych"		// CC Attribution-NoDerivs License
 #elif L==9
@@ -16851,7 +16851,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #if   L==1
 	"CC Reconeixement - No comercial"			// CC Attribution-NonCommercial License
 #elif L==2
-	"CC Namensnennung - Keine kommerzielle Nutzung"	// CC Attribution-NonCommercial License
+	"CC Namensnennung - Keine kommerzielle Nutzung"		// CC Attribution-NonCommercial License
 #elif L==3
 	"CC Attribution - Noncommercial"			// CC Attribution-NonCommercial License
 #elif L==4
@@ -16869,7 +16869,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #endif
 	,
 #if   L==1
-	"CC Reconeixement - No comercial - Compartir igual"						// CC Attribution-NonCommercial-ShareAlike License
+	"CC Reconeixement - No comercial - Compartir igual"					// CC Attribution-NonCommercial-ShareAlike License
 #elif L==2
 	"CC Namensnennung - Keine kommerzielle Nutzung - Weitergabe unter gleichen Bedingungen"	// CC Attribution-NonCommercial-ShareAlike License
 #elif L==3
@@ -16881,7 +16881,7 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #elif L==6
 	"CC Reconocimiento - No comercial - Compartir bajo la misma licencia"			// CC Attribution-NonCommercial-ShareAlike License	// Okoteve traducción
 #elif L==7
-	"CC Attribuzione - Non commerciale - Condividi allo stesso modo"				// CC Attribution-NonCommercial-ShareAlike License
+	"CC Attribuzione - Non commerciale - Condividi allo stesso modo"			// CC Attribution-NonCommercial-ShareAlike License
 #elif L==8
 	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Na tych samych warunkach"		// CC Attribution-NonCommercial-ShareAlike License
 #elif L==9
@@ -16889,21 +16889,21 @@ const char *Txt_LICENSES[Brw_NUM_LICENSES] =
 #endif
 	,
 #if   L==1
-	"CC Reconeixement - No comercial - Sense obra derivada"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Reconeixement - No comercial - Sense obra derivada"						// CC Attribution-NonCommercial-NoDerivs License
 #elif L==2
 	"CC Namensnennung - Keine kommerzielle Nutzung - Keine Bearbeitung"				// CC Attribution-NonCommercial-NoDerivs License
 #elif L==3
-	"CC Attribution - Noncommercial - No Derivative Works"					// CC Attribution-NonCommercial-NoDerivs License
+	"CC Attribution - Noncommercial - No Derivative Works"						// CC Attribution-NonCommercial-NoDerivs License
 #elif L==4
 	"CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==5
-	"CC Attribution - Pas d’Utilisation Commerciale - Pas de travaux d&eacute;riv&eacute;s"	// CC Attribution-NonCommercial-NoDerivs License
+	"CC Attribution - Pas d’Utilisation Commerciale - Pas de travaux d&eacute;riv&eacute;s"		// CC Attribution-NonCommercial-NoDerivs License
 #elif L==6
 	"CC Reconocimiento - No comercial - Sin obras derivadas"					// CC Attribution-NonCommercial-NoDerivs License	// Okoteve traducción
 #elif L==7
 	"CC Attribuzione - Non commerciale - Non opere derivate"					// CC Attribution-NonCommercial-NoDerivs License
 #elif L==8
-	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Bez utwor&oacute;w zale&zdot;nych"	// CC Attribution-NonCommercial-NoDerivs License
+	"CC Uznanie autorstwa - U&zdot;ycie niekomercyjne - Bez utwor&oacute;w zale&zdot;nych"		// CC Attribution-NonCommercial-NoDerivs License
 #elif L==9
 	"CC Atribui&ccedil;&atilde;o - N&atilde;oComercial - Trabalhos Derivados Pro&iacute;bidos"	// CC Attribution-NonCommercial-NoDerivs License
 #endif

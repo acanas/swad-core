@@ -53,6 +53,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+// strings are limited to Tst_MAX_LENGTH_FEEDBACK_TYPE characters
 const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
   {
    "nothing",
@@ -61,6 +62,8 @@ const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
    "eachGoodBad",
    "fullFeedback",
   };
+
+// strings are limited to Tst_MAX_LENGTH_ANSWER_TYPE characters
 const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
   {
    "int",
@@ -1022,8 +1025,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
    StemLength = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
    if ((StemRigorousHTML = malloc (StemLength+1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-   strncpy (StemRigorousHTML,Stem,StemLength);
-   StemRigorousHTML[StemLength] = '\0';
+   Str_Copy (StemRigorousHTML,Stem,StemLength);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 	             StemRigorousHTML,StemLength,false);
 
@@ -1152,8 +1154,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	 FeedbackLength = strlen (Feedback) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
 	 if ((FeedbackRigorousHTML = malloc (FeedbackLength+1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-	 strncpy (FeedbackRigorousHTML,Feedback,FeedbackLength);
-	 FeedbackRigorousHTML[FeedbackLength] = '\0';
+	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
@@ -3050,8 +3051,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             LengthAnswer = strlen (row[1]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
             if ((Answer = malloc (LengthAnswer+1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-            strncpy (Answer,row[1],LengthAnswer);
-            Answer[LengthAnswer] = '\0';
+            Str_Copy (Answer,row[1],LengthAnswer);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               Answer,LengthAnswer,false);
 
@@ -3064,8 +3064,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 		  LengthFeedback = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
 		  if ((Feedback = malloc (LengthFeedback+1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
-		  strncpy (Feedback,row[2],LengthFeedback);
-		  Feedback[LengthFeedback] = '\0';
+		  Str_Copy (Feedback,row[2],LengthFeedback);
                   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                     Feedback,LengthFeedback,false);
         	 }
@@ -3383,10 +3382,11 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
          Lay_ShowErrorAndExit ("Wrong index of answer when showing a test.");
 
       /***** Copy text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy image *****/
       Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
@@ -3481,10 +3481,11 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /***** Copy answer text (row[1]) and convert it,
              that is in HTML, to rigorous HTML ******/
-      strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                        Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it,
              that is in HTML, to rigorous HTML ******/
@@ -3492,10 +3493,11 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	 if (row[2])
 	    if (row[2][0])
 	      {
-	       strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+	       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+	                         Gbl.Test.Answer.Options[NumOpt].Feedback,
+	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
 
       /***** Copy image *****/
@@ -3719,19 +3721,22 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
          Lay_ShowErrorAndExit (Gbl.Message);
 
       /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
-      strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-      Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+      Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+                Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+      Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
+                        Gbl.Test.Answer.Options[NumOpt].Text,
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 
       /***** Copy answer feedback (row[2]) and convert it, that is in HTML, to rigorous HTML ******/
       if (Gbl.Test.Config.FeedbackType == Tst_FEEDBACK_FULL_FEEDBACK)
 	 if (row[2])
 	    if (row[2][0])
 	      {
-	       strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	       Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+	       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+	                 Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-	                         Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
+	                         Gbl.Test.Answer.Options[NumOpt].Feedback,
+	                         Tst_MAX_BYTES_ANSWER_OR_FEEDBACK,false);
 	      }
 
       /***** Assign correctness (row[6]) of this answer (this option) *****/
@@ -5061,17 +5066,13 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
    Gbl.Test.Shuffle = (row[1][0] == 'Y');
 
    /* Get the stem of the question from the database (row[2]) */
-   strncpy (Stem,row[2],Cns_MAX_BYTES_TEXT);
-   Stem[Cns_MAX_BYTES_TEXT] = '\0';
+   Str_Copy (Stem,row[2],Cns_MAX_BYTES_TEXT);
 
    /* Get the feedback of the question from the database (row[3]) */
    Feedback[0] = '\0';
    if (row[3])
       if (row[3][0])
-	{
-	 strncpy (Feedback,row[3],Cns_MAX_BYTES_TEXT);
-	 Feedback[Cns_MAX_BYTES_TEXT] = '\0';
-	}
+	 Str_Copy (Feedback,row[3],Cns_MAX_BYTES_TEXT);
 
    /* Get the image name, title and URL of the question
       from the database (row[4], row[5], row[6]) */
@@ -5087,8 +5088,7 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      strncpy (Gbl.Test.Tags.Txt[NumRow],row[0],Tst_MAX_BYTES_TAG);
-      Gbl.Test.Tags.Txt[NumRow][Tst_MAX_BYTES_TAG] = '\0';
+      Str_Copy (Gbl.Test.Tags.Txt[NumRow],row[0],Tst_MAX_BYTES_TAG);
      }
 
    /* Free structure that stores the query result */
@@ -5135,16 +5135,14 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
 	       Lay_ShowErrorAndExit (Gbl.Message);
 
-	    strncpy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-	    Gbl.Test.Answer.Options[NumOpt].Text[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
+	    Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
+	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    // Feedback (row[2]) is initialized to empty string
 	    if (row[2])
 	       if (row[2][0])
-		 {
-		  strncpy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
-		  Gbl.Test.Answer.Options[NumOpt].Feedback[Tst_MAX_BYTES_ANSWER_OR_FEEDBACK] = '\0';
-		 }
+		  Str_Copy (Gbl.Test.Answer.Options[NumOpt].Feedback,row[2],
+		            Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Copy image */
             Img_GetImageNameTitleAndURLFromRow (row[3],row[4],row[5],&Gbl.Test.Answer.Options[NumOpt].Image);
@@ -7931,12 +7929,12 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod)
 	 Lay_ShowErrorAndExit ("Wrong code of question.");
 
       /* Get indexes for this question (row[1]) */
-      strncpy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],Tst_MAX_SIZE_INDEXES_ONE_QST);
-      Gbl.Test.StrIndexesOneQst[NumQst][Tst_MAX_SIZE_INDEXES_ONE_QST] = '\0';
+      Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],
+                Tst_MAX_SIZE_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question (row[2]) */
-      strncpy (Gbl.Test.StrAnswersOneQst[NumQst],row[2],Tst_MAX_SIZE_ANSWERS_ONE_QST);
-      Gbl.Test.StrAnswersOneQst[NumQst][Tst_MAX_SIZE_ANSWERS_ONE_QST] = '\0';
+      Str_Copy (Gbl.Test.StrAnswersOneQst[NumQst],row[2],
+                Tst_MAX_SIZE_ANSWERS_ONE_QST);
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */

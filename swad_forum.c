@@ -676,8 +676,7 @@ static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
 
    /***** Write the subject of the thread *****/
    row = mysql_fetch_row (mysql_res);
-   strncpy (Subject,row[0],MaxSize);
-   Subject[MaxSize] = '\0';
+   Str_Copy (Subject,row[0],MaxSize);
    Str_LimitLengthHTMLStr (Subject,20);
 
    /***** Free structure that stores the query result *****/
@@ -1193,11 +1192,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                    Subject,OriginalContent,&Image);
 
    if (Enabled)
-     {
       /* Return this subject as last subject */
-      strncpy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
-      LastSubject[Cns_MAX_BYTES_SUBJECT] = '\0';
-     }
+      Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
 
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1323,8 +1319,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 	              "<td class=\"MSG_TXT LEFT_TOP\">");
    if (Enabled)
      {
-      strncpy (Content,OriginalContent,Cns_MAX_BYTES_LONG_TEXT);
-      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+      Str_Copy (Content,OriginalContent,Cns_MAX_BYTES_LONG_TEXT);
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
@@ -1375,12 +1370,10 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
    /****** Get subject (row[2]) *****/
-   strncpy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
-   Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
+   Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
 
    /****** Get location (row[3]) *****/
-   strncpy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
-   Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+   Str_Copy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
 
    /****** Get image name (row[4]), title (row[5]) and URL (row[6]) *****/
    Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],Image);
@@ -1419,9 +1412,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            strncpy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
-            SummaryStr[Cns_MAX_BYTES_TEXT] = '\0';
-
+            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1433,8 +1424,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
 
-               strncpy (*ContentStr,row[1],Length);
-               (*ContentStr)[Length] = '\0';
+               Str_Copy (*ContentStr,row[1],Length);
               }
            }
          mysql_free_result (mysql_res);
@@ -2201,8 +2191,7 @@ void For_SetForumName (For_ForumType_t ForumType,
    switch (ForumType)
      {
       case For_FORUM_COURSE_USRS:
-         strncpy (ForumName,Crs->ShrtName,For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+         Str_Copy (ForumName,Crs->ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
          sprintf (ForumName,"%s%s",Crs->ShrtName,
@@ -2210,8 +2199,7 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-         strncpy (ForumName,Deg->ShrtName,For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+         Str_Copy (ForumName,Deg->ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
          sprintf (ForumName,"%s%s",Deg->ShrtName,
@@ -2219,8 +2207,7 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
-         strncpy (ForumName,Ctr->ShrtName,For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+         Str_Copy (ForumName,Ctr->ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
          sprintf (ForumName,"%s%s",Ctr->ShrtName,
@@ -2228,8 +2215,7 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-         strncpy (ForumName,Ins->ShrtName,For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+         Str_Copy (ForumName,Ins->ShrtName,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
          sprintf (ForumName,"%s%s",Ins->ShrtName,
@@ -2237,10 +2223,9 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_GLOBAL_USRS:
-         strncpy (ForumName,UseHTMLEntities ? Txt_General :
+         Str_Copy (ForumName,UseHTMLEntities ? Txt_General :
                                               Txt_General_NO_HTML[Language],
-                  For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_GLOBAL_TCHS:
          sprintf (ForumName,"%s%s",
@@ -2250,8 +2235,7 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_SWAD_USRS:
-         strncpy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
-         ForumName[For_MAX_BYTES_FORUM_NAME] = '\0';
+         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_SWAD_TCHS:
          sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,
@@ -3613,8 +3597,7 @@ void For_GetThrData (struct ForumThread *Thr)
    Thr->WriteTime[For_LAST_MSG ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
-   strncpy (Thr->Subject,row[6],Cns_MAX_BYTES_SUBJECT);
-   Thr->Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
+   Str_Copy (Thr->Subject,row[6],Cns_MAX_BYTES_SUBJECT);
    if (!Thr->Subject[0])
       sprintf (Thr->Subject,"[%s]",Txt_no_subject);
 

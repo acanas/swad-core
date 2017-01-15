@@ -46,9 +46,9 @@ int main (void)
    unsigned NumUsrs = 0;
    unsigned i;
    long UsrCod;
-   char UsrID[16+1];
-   char OldPathUsr[PATH_MAX+1];
-   char Command[1024+PATH_MAX*2];
+   char UsrID[16 + 1];
+   char OldPathUsr[PATH_MAX + 1];
+   char Command[1024 + PATH_MAX * 2];
 
    sprintf (Command,"mv %s/%s %s/%s_backup",
 	    PATH_SWAD_PRIVATE,FOLDER_USR,
@@ -94,8 +94,7 @@ int main (void)
 	       if (sscanf (row[0],"%ld",&UsrCod) == 1)	// UsrCod
 		  if (row[1])
 		    {
-                     strncpy (UsrID,row[1],16);		// UsrID
-                     UsrID[16] = '\0';
+                     Str_Copy (UsrID,row[1],16);		// UsrID
 
                      sprintf (OldPathUsr,"%s/%s_backup/%c/%s",
                 	      PATH_SWAD_PRIVATE,FOLDER_USR,UsrID[strlen (UsrID)-1],UsrID);

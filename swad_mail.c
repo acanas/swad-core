@@ -288,12 +288,10 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
             Lay_ShowErrorAndExit ("Wrong code of mail domain.");
 
          /* Get the mail domain (row[1]) */
-         strncpy (Mai->Domain,row[1],Mai_MAX_LENGTH_MAIL_DOMAIN);
-         Mai->Domain[Mai_MAX_LENGTH_MAIL_DOMAIN] = '\0';
+         Str_Copy (Mai->Domain,row[1],Mai_MAX_LENGTH_MAIL_DOMAIN);
 
          /* Get the mail domain info (row[2]) */
-         strncpy (Mai->Info,row[2],Mai_MAX_LENGTH_MAIL_INFO);
-         Mai->Info[Mai_MAX_LENGTH_MAIL_INFO] = '\0';
+         Str_Copy (Mai->Info,row[2],Mai_MAX_LENGTH_MAIL_INFO);
 
          /* Get number of users (row[3]) */
          if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
@@ -394,12 +392,10 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the mail (row[0]) */
-         strncpy (Mai->Domain,row[0],Mai_MAX_LENGTH_MAIL_DOMAIN);
-         Mai->Domain[Mai_MAX_LENGTH_MAIL_DOMAIN] = '\0';
+         Str_Copy (Mai->Domain,row[0],Mai_MAX_LENGTH_MAIL_DOMAIN);
 
          /* Get the full name of the mail (row[1]) */
-         strncpy (Mai->Info,row[1],Mai_MAX_LENGTH_MAIL_INFO);
-         Mai->Info[Mai_MAX_LENGTH_MAIL_INFO] = '\0';
+         Str_Copy (Mai->Info,row[1],Mai_MAX_LENGTH_MAIL_INFO);
         }
 
       /***** Free structure that stores the query result *****/
@@ -653,9 +649,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   strncpy (CurrentMaiName,NewMaiName,MaxLength);
-   CurrentMaiName[MaxLength] = '\0';
-
+   Str_Copy (CurrentMaiName,NewMaiName,MaxLength);
    Mai_EditMailDomains ();
   }
 
@@ -1036,14 +1030,10 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
      }
    else
      {
-      row = mysql_fetch_row (mysql_res);
-
       /* Get email */
-      strncpy (UsrDat->Email,row[0],Usr_MAX_BYTES_USR_EMAIL);
-      UsrDat->Email[Usr_MAX_BYTES_USR_EMAIL] = '\0';
-
+      row = mysql_fetch_row (mysql_res);
+      Str_Copy (UsrDat->Email,row[0],Usr_MAX_BYTES_USR_EMAIL);
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
-
       Found = true;
      }
 
@@ -1690,8 +1680,7 @@ void Mai_ConfirmEmail (void)
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get user's email */
-      strncpy (Email,row[1],Usr_MAX_BYTES_USR_EMAIL);
-      Email[Usr_MAX_BYTES_USR_EMAIL] = '\0';
+      Str_Copy (Email,row[1],Usr_MAX_BYTES_USR_EMAIL);
 
       KeyIsCorrect = true;
      }

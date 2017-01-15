@@ -180,8 +180,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
            {
             if ((ParentElem->Content = malloc (ContentLength+1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory.");
-            strncpy (ParentElem->Content,StartContent,ContentLength);
-            ParentElem->Content[ContentLength] = '\0';
+            Str_Copy (ParentElem->Content,StartContent,ContentLength);
             ParentElem->ContentLength = ContentLength;
            }
 
@@ -217,8 +216,7 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          ChildElem->TagNameLength = strcspn (Gbl.XMLPtr,">/ \t");
          if ((ChildElem->TagName = malloc (ChildElem->TagNameLength+1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
-         strncpy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
-         ChildElem->TagName[ChildElem->TagNameLength] = '\0';
+         Str_Copy (ChildElem->TagName,Gbl.XMLPtr,ChildElem->TagNameLength);
          Gbl.XMLPtr += ChildElem->TagNameLength;
 
          /*
@@ -337,8 +335,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
          Attribute->AttributeNameLength = strcspn (Gbl.XMLPtr,"=");
          if ((Attribute->AttributeName = malloc (Attribute->AttributeNameLength+1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
-         strncpy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
-         Attribute->AttributeName[Attribute->AttributeNameLength] = '\0';
+         Str_Copy (Attribute->AttributeName,Gbl.XMLPtr,Attribute->AttributeNameLength);
          Gbl.XMLPtr += Attribute->AttributeNameLength;
          /* End of attribute name:
          <parent><child attribute1="value" attribute2="value">...</child>...</parent>
@@ -367,8 +364,7 @@ static void XML_GetAttributes (struct XMLElement *Elem)
 
          if ((Attribute->Content = malloc (Attribute->ContentLength+1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory.");
-         strncpy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
-         Attribute->Content[Attribute->ContentLength] = '\0';
+         Str_Copy (Attribute->Content,Gbl.XMLPtr,Attribute->ContentLength);
          Gbl.XMLPtr += Attribute->ContentLength;
 
          Gbl.XMLPtr++;

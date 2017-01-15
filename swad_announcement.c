@@ -25,8 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <string.h>	// For strncpy...
-
 #include "swad_announcement.h"
 #include "swad_database.h"
 #include "swad_global.h"
@@ -151,12 +149,10 @@ void Ann_ShowAllAnnouncements (void)
       	 Lay_ShowErrorAndExit ("Error when reading roles of announcement.");
 
       /* Get the content (row[3]) */
-      strncpy (Subject,row[3],Cns_MAX_BYTES_SUBJECT);
-      Content[Cns_MAX_BYTES_SUBJECT] = '\0';
+      Str_Copy (Subject,row[3],Cns_MAX_BYTES_SUBJECT);
 
       /* Get the content (row[4]) and insert links */
-      strncpy (Content,row[4],Cns_MAX_BYTES_TEXT);
-      Content[Cns_MAX_BYTES_TEXT] = '\0';
+      Str_Copy (Content,row[4],Cns_MAX_BYTES_TEXT);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
       /* Show the announcement */
@@ -245,12 +241,10 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	    Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
 	 /* Get the content (row[1]) */
-	 strncpy (Subject,row[1],Cns_MAX_BYTES_SUBJECT);
-	 Content[Cns_MAX_BYTES_SUBJECT] = '\0';
+	 Str_Copy (Subject,row[1],Cns_MAX_BYTES_SUBJECT);
 
 	 /* Get the content (row[2]) and insert links */
-	 strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
-	 Content[Cns_MAX_BYTES_TEXT] = '\0';
+	 Str_Copy (Content,row[2],Cns_MAX_BYTES_TEXT);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */

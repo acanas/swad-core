@@ -1715,17 +1715,11 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 
       /* Get text in HTML format (not rigorous) */
       if (InfoTxtHTML)
-	{
-	 strncpy (InfoTxtHTML,row[0],MaxLength);
-         InfoTxtHTML[MaxLength] = '\0';
-	}
+	 Str_Copy (InfoTxtHTML,row[0],MaxLength);
 
       /* Get text in Markdown format */
       if (InfoTxtMD)
-	{
-	 strncpy (InfoTxtMD,row[1],MaxLength);
-	 InfoTxtMD[MaxLength] = '\0';
-	}
+	 Str_Copy (InfoTxtMD,row[1],MaxLength);
      }
    else
      {
@@ -2150,10 +2144,7 @@ void Inf_RecAndChangePlainTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-
-   strncpy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
-   Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2188,10 +2179,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-
-   strncpy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
-   Txt_MarkdownFormat[Cns_MAX_BYTES_LONG_TEXT] = '\0';
-
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2286,7 +2274,7 @@ void Inf_ReceivePagInfo (void)
    char PathRelDirHTML[PATH_MAX+1];
    char PathRelFileHTML[PATH_MAX+1];
    char PathRelFileZIP[PATH_MAX+1];
-   char MIMEType[Brw_MAX_BYTES_MIME_TYPE+1];
+   char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    char StrUnzip[100+PATH_MAX*2+1];
    bool WrongType = false;
    bool FileIsOK = false;

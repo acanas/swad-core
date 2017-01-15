@@ -2367,7 +2367,8 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
             Lay_ShowErrorAndExit ("Wrong type of group.");
 
          /* Get group type name (row[1]) */
-         strncpy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+         Str_Copy (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].GrpTypName,row[1],
+                   Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
          Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrollment = (row[2][0] == 'Y');
@@ -2497,8 +2498,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                   Lay_ShowErrorAndExit ("Wrong code of group.");
 
                /* Get group name (row[1]) */
-               strncpy (Grp->GrpName,row[1],Grp_MAX_LENGTH_GROUP_NAME);
-               Grp->GrpName[Grp_MAX_LENGTH_GROUP_NAME] = '\0';
+               Str_Copy (Grp->GrpName,row[1],Grp_MAX_LENGTH_GROUP_NAME);
 
                /* Get max number of students of group (row[2]) and number of current students */
                Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[2]);
@@ -2626,8 +2626,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
 
    /***** Get some data of group type *****/
    row = mysql_fetch_row (mysql_res);
-   strncpy (GrpTyp->GrpTypName,row[0],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
-   GrpTyp->GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME] = '\0';
+   Str_Copy (GrpTyp->GrpTypName,row[0],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
    GrpTyp->MandatoryEnrollment = (row[1][0] == 'Y');
    GrpTyp->MultipleEnrollment  = (row[2][0] == 'Y');
    GrpTyp->MustBeOpened        = (row[3][0] == 'Y');
@@ -2713,15 +2712,13 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	    Lay_ShowErrorAndExit ("Wrong code of course.");
 
 	 /* Get the name of the group type (row[2]) */
-	 strncpy (GrpDat->GrpTypName,row[2],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
-	 GrpDat->GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME] = '\0';
+	 Str_Copy (GrpDat->GrpTypName,row[2],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
 	 /* Get whether a student may be in one or multiple groups (row[3]) */
 	 GrpDat->MultipleEnrollment = (row[3][0] == 'Y');
 
 	 /* Get the name of the group (row[4]) */
-	 strncpy (GrpDat->GrpName,row[4],Grp_MAX_LENGTH_GROUP_NAME);
-	 GrpDat->GrpName[Grp_MAX_LENGTH_GROUP_NAME] = '\0';
+	 Str_Copy (GrpDat->GrpName,row[4],Grp_MAX_LENGTH_GROUP_NAME);
 
 	 /* Get maximum number of students (row[5]) */
 	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[5]);
@@ -4018,9 +4015,8 @@ void Grp_RenameGroupType (void)
      }
 
    /***** Show the form again *****/
-   strncpy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
-            Grp_MAX_LENGTH_GROUP_TYPE_NAME);
-   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName[Grp_MAX_LENGTH_GROUP_TYPE_NAME] = '\0';
+   Str_Copy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
+             Grp_MAX_LENGTH_GROUP_TYPE_NAME);
    Grp_ReqEditGroups ();
   }
 
@@ -4091,8 +4087,7 @@ void Grp_RenameGroup (void)
      }
 
    /***** Show the form again *****/
-   strncpy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,Grp_MAX_LENGTH_GROUP_NAME);
-   Gbl.CurrentCrs.Grps.GrpName[Grp_MAX_LENGTH_GROUP_NAME] = '\0';
+   Str_Copy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,Grp_MAX_LENGTH_GROUP_NAME);
    Grp_ReqEditGroups ();
   }
 

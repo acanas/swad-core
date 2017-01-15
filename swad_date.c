@@ -142,8 +142,7 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
   {
    if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
      {
-      strncpy (Date->YYYYMMDD,YYYYMMDD,Dat_LENGTH_YYYYMMDD);
-      Date->YYYYMMDD[Dat_LENGTH_YYYYMMDD] = '\0';
+      Str_Copy (Date->YYYYMMDD,YYYYMMDD,Dat_LENGTH_YYYYMMDD);
       return true;
      }
    else
@@ -1264,8 +1263,7 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
    DateDst->Month = DateSrc->Month;
    DateDst->Day   = DateSrc->Day;
    DateDst->Week  = DateSrc->Week;
-   strncpy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD,Dat_LENGTH_YYYYMMDD);
-   DateDst->YYYYMMDD[Dat_LENGTH_YYYYMMDD] = '\0';
+   Str_Copy (DateDst->YYYYMMDD,DateSrc->YYYYMMDD,Dat_LENGTH_YYYYMMDD);
   }
 
 /*****************************************************************************/

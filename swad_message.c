@@ -518,12 +518,10 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get subject */
-	 strncpy (Gbl.Msg.Subject,row[0],Cns_MAX_BYTES_SUBJECT);
-	 Gbl.Msg.Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
+	 Str_Copy (Gbl.Msg.Subject,row[0],Cns_MAX_BYTES_SUBJECT);
 
 	 /* Get content */
-	 strncpy (Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
-	 Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+	 Str_Copy (Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
 
 	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2714,8 +2712,7 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
      {
       /***** Get subject *****/
       row = mysql_fetch_row (mysql_res);
-      strncpy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
-      Subject[Cns_MAX_BYTES_SUBJECT] = '\0';
+      Str_Copy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
      }
    else
       Subject[0] = '\0';
@@ -2749,8 +2746,7 @@ static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
    row = mysql_fetch_row (mysql_res);
 
    /****** Get content (row[0]) *****/
-   strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-   Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+   Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
    /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
    Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],Image);

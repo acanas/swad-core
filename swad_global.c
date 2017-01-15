@@ -191,10 +191,10 @@ void Gbl_InitializeGlobals (void)
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
      }
 
-   Gbl.ExamAnnouncements.NumExaAnns = 0;
-   Gbl.ExamAnnouncements.Lst = NULL;
-   Gbl.ExamAnnouncements.HighlightExaCod = -1L;
-   Gbl.ExamAnnouncements.HighlightDate[0] = '\0';	// No exam announcements highlighted
+   Gbl.ExamAnns.NumExaAnns = 0;
+   Gbl.ExamAnns.Lst = NULL;
+   Gbl.ExamAnns.HighlightExaCod = -1L;
+   Gbl.ExamAnns.HighlightDate[0] = '\0';	// No exam announcements highlighted
 
    Gbl.Usrs.Select.All =
    Gbl.Usrs.Select.Std =

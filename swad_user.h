@@ -116,15 +116,15 @@ typedef enum
 struct UsrData
   {
    long UsrCod;
-   char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
-   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or email
+   char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
       unsigned Num;
      } IDs;
-   char Nickname        [Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];
-   char Password        [Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   char Nickname        [Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
+   char Password        [Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
    Rol_Role_t RoleInCurrentCrsDB;
    int Roles;		// Check always if filled/calculated
 			// >=0 ==> filled/calculated
@@ -133,7 +133,7 @@ struct UsrData
    char Surname1	[Usr_MAX_BYTES_NAME + 1];
    char Surname2	[Usr_MAX_BYTES_NAME + 1];
    char FirstName	[Usr_MAX_BYTES_NAME + 1];
-   char FullName	[(Usr_MAX_BYTES_NAME + 1) * 3];
+   char FullName	[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
    char Email		[Usr_MAX_BYTES_USR_EMAIL + 1];
    bool EmailConfirmed;

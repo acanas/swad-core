@@ -411,9 +411,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	 /* Get the content (row[3]) and insert links */
-	 strncpy (Content,row[3],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-	                       Not_MaxCharsURLOnScreen[TypeNoticesListing]);
+	                  Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
             Str_LimitLengthHTMLStr (Content,Not_MAX_CHARS_ON_NOTICE);
 
@@ -555,9 +555,9 @@ static void Not_GetDataAndShowNotice (long NotCod)
       UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get the content (row[2]) and insert links*/
-      strncpy (Content,row[2],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[2],Cns_MAX_BYTES_TEXT);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
-			    Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
+		       Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
 
       /* Get status of the notice (row[3]) */
       Status = Not_OBSOLETE_NOTICE;

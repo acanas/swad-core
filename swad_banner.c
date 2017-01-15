@@ -204,20 +204,16 @@ static void Ban_GetListBanners (const char *Query)
             Ban->Hidden = (row[1][0] == 'Y');
 
 	    /* Get the short name of the banner (row[2]) */
-	    strncpy (Ban->ShrtName,row[2],Ban_MAX_LENGTH_SHRT_NAME);
-	    Ban->ShrtName[Ban_MAX_LENGTH_SHRT_NAME] = '\0';
+	    Str_Copy (Ban->ShrtName,row[2],Ban_MAX_LENGTH_SHRT_NAME);
 
 	    /* Get the full name of the banner (row[3]) */
-	    strncpy (Ban->FullName,row[3],Ban_MAX_LENGTH_FULL_NAME);
-	    Ban->FullName[Ban_MAX_LENGTH_FULL_NAME] = '\0';
+	    Str_Copy (Ban->FullName,row[3],Ban_MAX_LENGTH_FULL_NAME);
 
 	    /* Get the image of the banner (row[4]) */
-	    strncpy (Ban->Img,row[4],Ban_MAX_LENGTH_IMAGE);
-	    Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
+	    Str_Copy (Ban->Img,row[4],Ban_MAX_LENGTH_IMAGE);
 
 	    /* Get the URL of the banner (row[5]) */
-	    strncpy (Ban->WWW,row[5],Cns_MAX_LENGTH_WWW);
-	    Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+	    Str_Copy (Ban->WWW,row[5],Cns_MAX_LENGTH_WWW);
 	   }
 	}
       else
@@ -261,20 +257,16 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
          Ban->Hidden = (row[0][0] == 'Y');
 
          /* Get the short name of the banner (row[1]) */
-         strncpy (Ban->ShrtName,row[1],Ban_MAX_LENGTH_SHRT_NAME);
-         Ban->ShrtName[Ban_MAX_LENGTH_SHRT_NAME] = '\0';
+         Str_Copy (Ban->ShrtName,row[1],Ban_MAX_LENGTH_SHRT_NAME);
 
          /* Get the full name of the banner (row[2]) */
-         strncpy (Ban->FullName,row[2],Ban_MAX_LENGTH_FULL_NAME);
-         Ban->FullName[Ban_MAX_LENGTH_FULL_NAME] = '\0';
+         Str_Copy (Ban->FullName,row[2],Ban_MAX_LENGTH_FULL_NAME);
 
          /* Get the image of the banner (row[3]) */
-         strncpy (Ban->Img,row[3],Ban_MAX_LENGTH_IMAGE);
-         Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
+         Str_Copy (Ban->Img,row[3],Ban_MAX_LENGTH_IMAGE);
 
          /* Get the URL of the banner (row[4]) */
-         strncpy (Ban->WWW,row[4],Cns_MAX_LENGTH_WWW);
-         Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+         Str_Copy (Ban->WWW,row[4],Cns_MAX_LENGTH_WWW);
         }
 
       /***** Free structure that stores the query result *****/
@@ -624,8 +616,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   strncpy (CurrentBanName,NewBanName,MaxLength);
-   CurrentBanName[MaxLength] = '\0';
+   Str_Copy (CurrentBanName,NewBanName,MaxLength);
 
    Ban_EditBanners ();
   }
@@ -683,8 +674,7 @@ void Ban_ChangeBannerImg (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_image_empty);
 
    /***** Show the form again *****/
-   strncpy (Ban->Img,NewImg,Ban_MAX_LENGTH_IMAGE);
-   Ban->Img[Ban_MAX_LENGTH_IMAGE] = '\0';
+   Str_Copy (Ban->Img,NewImg,Ban_MAX_LENGTH_IMAGE);
 
    Ban_EditBanners ();
   }
@@ -728,8 +718,7 @@ void Ban_ChangeBannerWWW (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   strncpy (Ban->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
-   Ban->WWW[Cns_MAX_LENGTH_WWW] = '\0';
+   Str_Copy (Ban->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
 
    Ban_EditBanners ();
   }

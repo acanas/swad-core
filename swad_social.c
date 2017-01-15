@@ -1483,8 +1483,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
       row = mysql_fetch_row (mysql_res);
 
       /****** Get content (row[0]) *****/
-      strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-      Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+      Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 
       /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
       Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],&Image);
@@ -4550,8 +4549,7 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    SocCom->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
    /***** Get content (row[4]) *****/
-   strncpy (SocCom->Content,row[4],Cns_MAX_BYTES_LONG_TEXT);
-   SocCom->Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+   Str_Copy (SocCom->Content,row[4],Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
    SocCom->NumFavs     = Soc_GetNumTimesACommHasBeenFav (SocCom);
@@ -4689,8 +4687,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	       row = mysql_fetch_row (mysql_res);
 
 	       /****** Get content (row[0]) *****/
-	       strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-	       Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+	       Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 	      }
 
 	    /***** Free structure that stores the query result *****/
@@ -4723,8 +4720,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 	    row = mysql_fetch_row (mysql_res);
 
 	    /****** Get content (row[0]) *****/
-	    strncpy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
-	    Content[Cns_MAX_BYTES_LONG_TEXT] = '\0';
+	    Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
 	   }
 
 	 /***** Free structure that stores the query result *****/
@@ -4808,8 +4804,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	 if (IsNickname)
 	   {
 	    /* Copy nickname */
-	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
-	    UsrDat.Nickname[Nickname.Length] = '\0';
+	    Str_Copy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
 	       if (UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// It's not me
