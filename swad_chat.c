@@ -481,7 +481,6 @@ void Cht_OpenChatWindow (void)
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
-
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this degree */
@@ -489,15 +488,11 @@ void Cht_OpenChatWindow (void)
          Deg_GetDataOfDegreeByCod (&Deg);
 
          sprintf (ThisRoomShortName,"%s",Deg.ShrtName);
-
          Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
-
          Str_Concat (ListRoomShortNames,ThisRoomShortName,sizeof (ListRoomShortNames) - 1);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShrtName);
-
          Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
-
          Str_Concat (ListRoomFullNames,ThisRoomFullName,sizeof (ListRoomFullNames) - 1);
         }
      }
@@ -510,7 +505,6 @@ void Cht_OpenChatWindow (void)
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",sizeof (ListRoomCodes) - 1);
-
          Str_Concat (ListRoomCodes,ThisRoomCode,sizeof (ListRoomCodes) - 1);
 
          /* Get data of this course */
@@ -519,15 +513,11 @@ void Cht_OpenChatWindow (void)
 
          sprintf (ThisRoomShortName,"%s",Crs.ShrtName);
          Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
-
          Str_Concat (ListRoomShortNames,ThisRoomShortName,sizeof (ListRoomShortNames) - 1);
-
-         Str_Concat (ListRoomShortNames,"|",sizeof (ListRoomShortNames) - 1);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShrtName);
          Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
-
-         Str_Concat (ListRoomFullNames,"|",sizeof (ListRoomFullNames) - 1);
+         Str_Concat (ListRoomFullNames,ThisRoomFullName,sizeof (ListRoomFullNames) - 1);
         }
      }
 
