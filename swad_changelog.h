@@ -196,6 +196,7 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.114.2: Jan 15, 2017	Fixed bug in file browser. (211412 lines)
         Version 16.114.1: Jan 15, 2017	Fixed bug in string concatenation. (211411 lines)
         Version 16.114:   Jan 14, 2017	Fixed bug in dates, reported by José Luis Bernier Villamor.
 					Javascript code refactoring related to dates. (211490 lines)

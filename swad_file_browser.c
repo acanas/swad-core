@@ -11738,7 +11738,7 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
    /***** Save folder status *****/
    // Folder st_mtime must be saved before remove files inside it
    // because st_mtime is updated by the deletion
-   if (lstat (Path,&FileStatus))	// On success ==> 0 is returned
+   if (lstat (Path,&FolderStatus))	// On success ==> 0 is returned
       Lay_ShowErrorAndExit ("Can not get information about a file or folder.");
    /***** Scan directory *****/
    else if ((NumFiles = scandir (Path,&FileList,NULL,alphasort)) >= 0)	// No error
