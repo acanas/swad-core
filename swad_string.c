@@ -316,7 +316,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    Anchor1NickLength = strlen (Anchor1Nick);
 	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
-	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
+	    Str_Copy (Links[NumLinks].Anchor1Nick,Anchor1Nick,Anchor1NickLength);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
 
 	    /* Store second part of anchor */
@@ -329,7 +329,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	    Anchor2NickLength = strlen (Anchor2Nick);
 	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
-	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
+	    Str_Copy (Links[NumLinks].Anchor2Nick,Anchor2Nick,Anchor2NickLength);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
 
 	    AnchorNickTotalLength = Anchor1NickLength + Anchor2NickLength + Anchor3NickLength;
@@ -954,6 +954,8 @@ For example the string "Nueva++de+San+Ant%F3n"
       "Nueva  de San Antón"			if ChangeTo == Str_TO_HTML
       "Nueva  de San Antón"			if ChangeTo == Str_TO_TEXT
 */
+#define Str_MAX_LENGTH_SPECIAL_CHAR (256 - 1)
+
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                        char *Str,size_t MaxLengthStr,bool RemoveLeadingAndTrailingSpaces)
   {
@@ -970,7 +972,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    unsigned NumPrintableCharsFromReturn = 0;	// To substitute tabs for spaces
    bool IsSpecialChar = false;
    bool ThereIsSpaceChar = true;	// Indicates if the character before was a space. Set to true to respect the initial spaces.
-   char StrSpecialChar[256];
+   char StrSpecialChar[Str_MAX_LENGTH_SPECIAL_CHAR + 1];
 
 /*
   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
@@ -1110,27 +1112,44 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      NumPrintableCharsFromReturn += NumSpacesTab;
                     }
                   else
-                     strcpy (StrSpecialChar,"\t");
+                    {
+                     StrSpecialChar[0] = '\t';
+                     StrSpecialChar[1] = '\0';
+                    }
                   ThereIsSpaceChar = true;
                   break;
                case 0x0A:  /* \n */
-                  strcpy (StrSpecialChar,
-                          ChangeTo == Str_TO_RIGOROUS_HTML ? "<br />" :
-                        	                             Str_LF);
+        	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
+                     Str_Copy (StrSpecialChar,"<br />",
+                               Str_MAX_LENGTH_SPECIAL_CHAR);
+        	  else
+                    {
+                     StrSpecialChar[0] = Str_LF[0];
+                     StrSpecialChar[1] = '\0';
+                    }
                   NumPrintableCharsFromReturn = 0;
                   ThereIsSpaceChar = true;
                   break;
                case 0x0D:  /* "%0D" --> "" */
-                  strcpy (StrSpecialChar,
-                          ChangeTo == Str_TO_RIGOROUS_HTML ? "" :
-                        	                             Str_CR);
+        	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
+                     StrSpecialChar[0] = '\0';
+        	  else
+                    {
+                     StrSpecialChar[0] = Str_CR[0];
+                     StrSpecialChar[1] = '\0';
+                    }
                   NumPrintableCharsFromReturn = 0;
                   ThereIsSpaceChar = true;
                   break;
                case 0x20:  /* Space */
-                  strcpy (StrSpecialChar,
-                          (ChangeTo == Str_TO_RIGOROUS_HTML && ThereIsSpaceChar) ? "&nbsp;" :
-                        	                                                   " ");
+        	  if (ChangeTo == Str_TO_RIGOROUS_HTML && ThereIsSpaceChar)
+                     Str_Copy (StrSpecialChar,"&nbsp;",
+                               Str_MAX_LENGTH_SPECIAL_CHAR);
+        	  else
+                    {
+                     StrSpecialChar[0] = ' ';
+                     StrSpecialChar[1] = '\0';
+                    }
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = true;
                   break;
@@ -1147,12 +1166,14 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x23:  /* "%23" --> "#" */
-                  strcpy (StrSpecialChar,"#");
+		  StrSpecialChar[0] = '#';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x26:  /* "%26" --> "&#38;" (&) */
-                  strcpy (StrSpecialChar,"&");
+		  StrSpecialChar[0] = '&';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1169,48 +1190,62 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x2C:  /* "%2C" --> "," */
-                  strcpy (StrSpecialChar,",");
+		  StrSpecialChar[0] = ',';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x2F:  /* "%2F" --> "/" */
-                  strcpy (StrSpecialChar,"/");
+		  StrSpecialChar[0] = '/';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3A:  /* "%3A" --> ":" */
-                  strcpy (StrSpecialChar,":");
+		  StrSpecialChar[0] = ':';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3B:  /* "%3B" --> ";" */
-                  strcpy (StrSpecialChar,";");
+		  StrSpecialChar[0] = ';';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3C:  /* "%3C" --> "&#60;" (<) */
         	  if (ChangeTo == Str_TO_MARKDOWN)
-                     strcpy (StrSpecialChar,"<");
+        	    {
+		     StrSpecialChar[0] = '<';
+		     StrSpecialChar[1] = '\0';
+        	    }
         	  else
-                     strcpy (StrSpecialChar,"&#60;"); // "<" is stored as HTML code to avoid problems when displaying it
+                     Str_Copy (StrSpecialChar,"&#60;", // "<" is stored as HTML code to avoid problems when displaying it
+                               Str_MAX_LENGTH_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3E:  /* "%3E" --> "&#62;" (>) */
         	  if (ChangeTo == Str_TO_MARKDOWN)
-                     strcpy (StrSpecialChar,">");
+        	    {
+		     StrSpecialChar[0] = '>';
+		     StrSpecialChar[1] = '\0';
+        	    }
         	  else
-        	     strcpy (StrSpecialChar,"&#62;"); // ">" is stored as HTML code to avoid problems when displaying it
+        	     Str_Copy (StrSpecialChar,"&#62;", // ">" is stored as HTML code to avoid problems when displaying it
+        	               Str_MAX_LENGTH_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x3F:  /* "%3F" --> "?" */
-                  strcpy (StrSpecialChar,"?");
+		  StrSpecialChar[0] = '?';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0x40:  /* "%40" --> "@" */
-                  strcpy (StrSpecialChar,"@");
+		  StrSpecialChar[0] = '@';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1222,77 +1257,92 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	     StrSpecialChar[2] = '\0';	// End of string
         	    }
         	  else
-                     strcpy (StrSpecialChar,"&#92;"); // "\" is stored as HTML code to avoid problems when displaying it
+                     Str_Copy (StrSpecialChar,"&#92;", // "\" is stored as HTML code to avoid problems when displaying it
+                               Str_MAX_LENGTH_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xC1:  /* "%C1" --> "Á" */
-                  strcpy (StrSpecialChar,"Á");
+		  StrSpecialChar[0] = 'Á';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xC9:  /* "%C9" --> "É" */
-                  strcpy (StrSpecialChar,"É");
+		  StrSpecialChar[0] = 'É';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xCD:  /* "%CD" --> "Í" */
-                  strcpy (StrSpecialChar,"Í");
+		  StrSpecialChar[0] = 'Í';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xD3:  /* "%D3" --> "Ó" */
-                  strcpy (StrSpecialChar,"Ó");
+		  StrSpecialChar[0] = 'Ó';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xDA:  /* "%DA" --> "Ú" */
-                  strcpy (StrSpecialChar,"Ú");
+		  StrSpecialChar[0] = 'Ú';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xD1:  /* "%D1" --> "Ñ" */
-                  strcpy (StrSpecialChar,"Ñ");
+		  StrSpecialChar[0] = 'Ñ';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xC7:  /* "%C7" --> "Ç" */
-                  strcpy (StrSpecialChar,"Ç");
+		  StrSpecialChar[0] = 'Ç';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xE1:  /* "%E1" --> "á" */
-                  strcpy (StrSpecialChar,"á");
+		  StrSpecialChar[0] = 'á';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xE9:  /* "%E9" --> "é" */
-                  strcpy (StrSpecialChar,"é");
+		  StrSpecialChar[0] = 'é';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xED:  /* "%ED" --> "í" */
-                  strcpy (StrSpecialChar,"í");
+		  StrSpecialChar[0] = 'í';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xF3:  /* "%F3" --> "ó" */
-                  strcpy (StrSpecialChar,"ó");
+		  StrSpecialChar[0] = 'ó';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xFA:  /* "%FA" --> "ú" */
-                  strcpy (StrSpecialChar,"ú");
+		  StrSpecialChar[0] = 'ú';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xF1:  /* "%F1" --> "ñ" */
-                  strcpy (StrSpecialChar,"ñ");
+		  StrSpecialChar[0] = 'ñ';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
                case 0xE7:  /* "%E7" --> "ç" */
-                  strcpy (StrSpecialChar,"ç");
+		  StrSpecialChar[0] = 'ç';
+		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;

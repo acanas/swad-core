@@ -140,17 +140,17 @@ time_t Dat_GetUNIXTimeFromStr (const char *Str)
 
 bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
   {
-   if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
-     {
-      Str_Copy (Date->YYYYMMDD,YYYYMMDD,Dat_LENGTH_YYYYMMDD);
-      return true;
-     }
-   else
-     {
-      Date->Year = Date->Month = Date->Day = 0;
-      Date->YYYYMMDD[0] = '\0';
-      return false;
-     }
+   if (YYYYMMDD)
+      if (YYYYMMDD[0])
+	 if (sscanf (YYYYMMDD,"%04u%02u%02u",&(Date->Year),&(Date->Month),&(Date->Day)) == 3)
+	   {
+	    Str_Copy (Date->YYYYMMDD,YYYYMMDD,Dat_LENGTH_YYYYMMDD);
+	    return true;
+	   }
+
+   Date->Year = Date->Month = Date->Day = 0;
+   Date->YYYYMMDD[0] = '\0';
+   return false;
   }
 
 /*****************************************************************************/

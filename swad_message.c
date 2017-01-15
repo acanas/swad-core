@@ -103,7 +103,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
-static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery);
+static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1]);
 
 static void Msg_ExpandSentMsg (long MsgCod);
 static void Msg_ExpandReceivedMsg (long MsgCod);
@@ -943,7 +943,7 @@ void Msg_ReqDelAllSntMsgs (void)
 
 void Msg_DelAllRecMsgs (void)
   {
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Get parameters *****/
@@ -965,7 +965,7 @@ void Msg_DelAllRecMsgs (void)
 
 void Msg_DelAllSntMsgs (void)
   {
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Get parameters *****/
@@ -1011,16 +1011,18 @@ void Msg_GetParamMsgsCrsCod (void)
 
    Par_GetParToText ("FilterCrsCod",LongStr,1+10);
    Gbl.Msg.FilterCrsCod = Str_ConvertStrCodToLongCod (LongStr);
-   if (Gbl.Msg.FilterCrsCod >= 0)	// If origin course specified
+   if (Gbl.Msg.FilterCrsCod > 0)	// If origin course specified
      {
       /* Get data of course */
       Crs.CrsCod = Gbl.Msg.FilterCrsCod;
       Crs_GetDataOfCourseByCod (&Crs);
 
-      strcpy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName);
+      Str_Copy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName,
+                Crs_MAX_LENGTH_COURSE_SHRT_NAME);
      }
    else
-      strcpy (Gbl.Msg.FilterCrsShrtName,Txt_any_course);
+      Str_Copy (Gbl.Msg.FilterCrsShrtName,Txt_any_course,
+                Crs_MAX_LENGTH_COURSE_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -1047,7 +1049,7 @@ void Msg_GetParamFilterContent (void)
 /************************* Make "from"/"to" subquery *************************/
 /*****************************************************************************/
 
-static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery)
+static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1])
   {
    const char *Ptr;
    char SearchWord[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME+1];
@@ -1056,7 +1058,9 @@ static void Msg_MakeFilterFromToSubquery (char *FilterFromToSubquery)
    if (Gbl.Msg.FilterFromTo[0])
      {
       Ptr = Gbl.Msg.FilterFromTo;
-      strcpy (FilterFromToSubquery," AND CONCAT(usr_data.FirstName,usr_data.Surname1,usr_data.Surname2) LIKE '");
+      Str_Copy (FilterFromToSubquery,
+                " AND CONCAT(usr_data.FirstName,usr_data.Surname1,usr_data.Surname2) LIKE '",
+                Msg_MAX_LENGTH_MESSAGES_QUERY);
       while (*Ptr)
         {
          Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_LENGTH_USR_NAME_OR_SURNAME);
@@ -1671,7 +1675,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2507,7 +2511,8 @@ void Msg_GetDistinctCoursesInMyMessages (void)
          if (Crs_GetDataOfCourseByCod (&Crs))
            {
             Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
-            strcpy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName);
+            Str_Copy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName,
+                      Crs_MAX_LENGTH_COURSE_SHRT_NAME);
             Gbl.Msg.NumCourses++;
            }
      }
@@ -2997,13 +3002,15 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,
+void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                          char **ContentStr,long MsgCod,
                           unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_MSG_Subject;
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -3020,16 +3027,17 @@ void Msg_GetNotifMessage (char *SummaryStr,char **ContentStr,long MsgCod,
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            strcpy (SummaryStr,row[0]);
+            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Copy subject *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (strlen (row[1])+1)) == NULL)
+               Length = strlen (row[1]);
+               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
+               Str_Copy (*ContentStr,row[1],Length);
               }
            }
          mysql_free_result (mysql_res);

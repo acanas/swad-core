@@ -75,7 +75,7 @@ void Inf_ChangeIHaveReadInfo (void);
 bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void);
 void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod);
 int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer);
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_URL+1]);
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_LENGTH_WWW + 1]);
 void Inf_SetInfoSrc (void);
 void Inf_FormsToSelSendInfo (void);
 void Inf_FormToEnterIntegratedEditor (Inf_InfoSrc_t InfoSrc);

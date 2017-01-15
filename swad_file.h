@@ -53,7 +53,7 @@ struct Files
    FILE *Rep;		// Temporary file to save report
   };
 
-#define Fil_MAX_BYTES_FILE_SIZE_STRING 32
+#define Fil_MAX_BYTES_FILE_SIZE_STRING (32 - 1)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -82,8 +82,8 @@ void Fil_CloseXMLFile (void);
 void Fil_CloseReportFile (void);
 
 void Fil_WriteFileSizeBrief (double SizeInBytes,
-                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING]);
+                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1]);
 void Fil_WriteFileSizeFull (double SizeInBytes,
-                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING]);
+                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1]);
 
 #endif

@@ -70,14 +70,17 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
 /*** Read all parameters passed to this CGI and store for later processing ***/
 /*****************************************************************************/
 
+#define Par_MAX_LENGTH_METHOD		(256 - 1)
+#define Par_MAX_LENGTH_CONTENT_TYPE	(256 - 1)
+
 bool Par_GetQueryString (void)
   {
-   char Method[256];
-   char ContentType[512];
-   char UnsignedLongStr[10+1];
+   char Method[Par_MAX_LENGTH_METHOD + 1];
+   char ContentType[Par_MAX_LENGTH_CONTENT_TYPE + 1];
+   char UnsignedLongStr[10 + 1];
    unsigned long UnsignedLong;
 
-   strcpy (Method,getenv ("REQUEST_METHOD"));
+   Str_Copy (Method,getenv ("REQUEST_METHOD"),Par_MAX_LENGTH_METHOD);
 
    if (!strcmp (Method,"GET"))
      {
@@ -93,7 +96,8 @@ bool Par_GetQueryString (void)
 	 return false;
 
       /* Copy query string from environment variable */
-      strcpy (Gbl.Params.QueryString,getenv ("QUERY_STRING"));
+      Str_Copy (Gbl.Params.QueryString,getenv ("QUERY_STRING"),
+                Gbl.Params.ContentLength);
      }
    else
      {
@@ -101,7 +105,7 @@ bool Par_GetQueryString (void)
       /* Get content length */
       if (getenv ("CONTENT_LENGTH"))
 	{
-         strcpy (UnsignedLongStr,getenv ("CONTENT_LENGTH"));
+         Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),10);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
          Gbl.Params.ContentLength = (size_t) UnsignedLong;
@@ -115,7 +119,7 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_TYPE") == NULL)
          return false;
 
-      strcpy (ContentType,getenv ("CONTENT_TYPE"));
+      Str_Copy (ContentType,getenv ("CONTENT_TYPE"),Par_MAX_LENGTH_CONTENT_TYPE);
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
@@ -679,7 +683,8 @@ void Par_GetMainParameters (void)
 	{
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
-         strcpy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname);	// without arroba
+         Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
+                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
 	 // This user's code is used to go to public profile
 	 // and to refresh old publishings in user's timeline
@@ -694,7 +699,8 @@ void Par_GetMainParameters (void)
 	{
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
-         strcpy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname);	// without arroba
+         Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
+                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
 	 // This user's code is used to go to public agenda
 	 // If user does not exist ==> UsrCod = -1

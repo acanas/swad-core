@@ -99,8 +99,8 @@ struct TimeTableColumn
    TT_HourType_t HourType;
    TT_ClassType_t ClassType;
    unsigned Duration;
-   char Place[TT_MAX_BYTES_PLACE+1];
-   char Group[TT_MAX_BYTES_GROUP+1];
+   char Place[TT_MAX_BYTES_PLACE + 1];
+   char Group[TT_MAX_BYTES_GROUP + 1];
   };
 struct
   {
@@ -742,11 +742,13 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].CrsCod =
                         (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
                                                                  Gbl.CurrentCrs.Crs.CrsCod);
-                     strcpy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Group,row[5]);
+                     Str_Copy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Group,
+                               row[5],TT_MAX_BYTES_GROUP);
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].GrpCod = GrpCod;
                      // no break;
                   case TT_TUTOR_TIMETABLE:
-                     strcpy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Place,row[3]);
+                     Str_Copy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Place,
+                               row[3],TT_MAX_BYTES_PLACE);
                      break;
                  }
 
@@ -795,8 +797,10 @@ static void TT_ModifTimeTable (void)
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].HourType  = TT_FIRST_HOUR;
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].ClassType = Gbl.TimeTable.ClassType;
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Duration  = Gbl.TimeTable.Duration;
-      strcpy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Group,Gbl.TimeTable.Group);
-      strcpy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Place,Gbl.TimeTable.Place);
+      Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Group,
+                Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
+      Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Place,
+                Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
      }
   }
 

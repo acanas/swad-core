@@ -71,7 +71,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Rec_WriteHeadingRecordFields (void);
-static void Rec_GetFieldByCod (long FieldCod,char *Name,unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
+static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD+1],
+                               unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
 static void Rec_ShowRecordOneStdCrs (void);
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
@@ -680,7 +681,8 @@ void Rec_RemoveFieldFromDB (void)
 /************** Get the data of a field of records from its code *************/
 /*****************************************************************************/
 
-static void Rec_GetFieldByCod (long FieldCod,char *Name,unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility)
+static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD + 1],
+                               unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -701,7 +703,7 @@ static void Rec_GetFieldByCod (long FieldCod,char *Name,unsigned *NumLines,Rec_V
    row = mysql_fetch_row (mysql_res);
 
    /* Name of the field */
-   strcpy (Name,row[0]);
+   Str_Copy (Name,row[0],Rec_MAX_LENGTH_NAME_FIELD);
 
    /* Number of lines of the field (row[1]) */
    *NumLines = Rec_ConvertToNumLinesField (row[1]);
@@ -798,7 +800,8 @@ void Rec_RenameField (void)
      }
 
    /***** Show the form again *****/
-   strcpy (Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
+   Str_Copy (Gbl.CurrentCrs.Records.Field.Name,NewFieldName,
+             Rec_MAX_LENGTH_NAME_FIELD);
    Rec_ReqEditRecordFields ();
   }
 
@@ -1582,7 +1585,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    bool ShowField;
    bool ThisFieldHasText;
    bool ICanEdit;
-   char Text[Cns_MAX_BYTES_TEXT+1];
+   char Text[Cns_MAX_BYTES_TEXT + 1];
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
      {
@@ -1719,7 +1722,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
            {
             if (ThisFieldHasText)
               {
-               strcpy (Text,row[0]);
+               Str_Copy (Text,row[0],Cns_MAX_BYTES_TEXT);
                Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                  Text,Cns_MAX_BYTES_TEXT,false);
                fprintf (Gbl.F.Out,"%s",Text);

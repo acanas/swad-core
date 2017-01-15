@@ -60,7 +60,8 @@ void Fol_UnfollowUsr (void);
 
 void Fol_GetAndShowRankingFollowers (void);
 
-void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr);
+void Fol_GetNotifFollower (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                           char **ContentStr);
 
 void Fol_RemoveUsrFromUsrFollow (long UsrCod);
 

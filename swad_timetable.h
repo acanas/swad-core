@@ -33,8 +33,8 @@
 /************************* Public constants and types ************************/
 /*****************************************************************************/
 
-#define TT_MAX_BYTES_PLACE	127
-#define TT_MAX_BYTES_GROUP	255
+#define TT_MAX_BYTES_PLACE	(128 - 1)
+#define TT_MAX_BYTES_GROUP	(256 - 1)
 
 #define TT_NUM_TIMETABLE_TYPES 3
 typedef enum

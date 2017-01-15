@@ -29,7 +29,7 @@
 #include <errno.h>		// For errno
 #include <linux/limits.h>	// For PATH_MAX
 #include <stdlib.h>		// For system...
-#include <string.h>		// For strcpy...
+#include <string.h>		// For string functions...
 #include <sys/stat.h>		// For mkdir...
 #include <sys/types.h>		// For mkdir...
 #include <unistd.h>		// For chdir...
@@ -272,7 +272,7 @@ static void ZIP_CreateTmpDirForCompression (void)
    Fil_RemoveOldTmpFiles (PathZipPriv,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
 
    /***** Create a new temporary directory *****/
-   strcpy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted);
+   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,NAME_MAX);
    sprintf (PathDirTmp,"%s/%s",PathZipPriv,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
@@ -283,14 +283,14 @@ static void ZIP_CreateTmpDirForCompression (void)
 /**************** in the temporary directory of compression ******************/
 /*****************************************************************************/
 
+#define ZIP_MAX_LENGTH_FULL_NAME_AND_ID (Usr_MAX_BYTES_FULL_NAME + 1 + ID_MAX_LENGTH_USR_ID + 10)
+
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
-   char FullNameAndUsrID[(Usr_MAX_BYTES_NAME + 1)*3+
-                         ID_MAX_LENGTH_USR_ID+1+
-                         10+1];
-   char PathFolderUsrInsideCrs[PATH_MAX+1];
-   char LinkTmpUsr[PATH_MAX+1];
-   char Link[PATH_MAX+1];
+   char FullNameAndUsrID[ZIP_MAX_LENGTH_FULL_NAME_AND_ID + 1];
+   char PathFolderUsrInsideCrs[PATH_MAX + 1];
+   char LinkTmpUsr[PATH_MAX + 1];
+   char Link[PATH_MAX + 1];
    unsigned NumTry;
    bool Success;
 
@@ -298,7 +298,7 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
           with a name that identifies the owner
           of the assignments and works *****/
    /* Create link name for this user */
-   strcpy (FullNameAndUsrID,UsrDat->Surname1);
+   Str_Copy (FullNameAndUsrID,UsrDat->Surname1,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
    if (UsrDat->Surname1[0] &&
        UsrDat->Surname2[0])
       strcat (FullNameAndUsrID,"_");	// Separation between surname 1 and surname 2

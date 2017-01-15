@@ -62,10 +62,11 @@
 
 #define Usr_MAX_BYTES_SURNAMES			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME)
 						// Surname1         +' '+ Surname2
-#define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME + 1 + 1 + Usr_MAX_BYTES_NAME)
-						// Surname1         +' '+ Surname2           +','+' '+ FirstName
+#define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME +     6    + Usr_MAX_BYTES_NAME)
+						// Surname1         +' '+ Surname2           +  ','+' ' + FirstName
+						// Surname1         +' '+ Surname2           + '<br />' + FirstName
 
-#define Usr_BIRTHDAY_STR_DB_LENGTH (1+4+1+2+1+2+1)	// "'%04u-%02u-%02u'"
+#define Usr_BIRTHDAY_STR_DB_LENGTH (4+1+2+1+2)	// "'%04u-%02u-%02u'"
 
 #define Usr_MAX_LENGTH_PHONE	16
 #define Usr_MAX_BYTES_PHONE	16
@@ -292,7 +293,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ());
 void Usr_WelcomeUsr (void);
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
-                            char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1]);
+                              char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1]);
 
 void Usr_PutFormLogIn (void);
 void Usr_WriteLoggedUsrHead (void);

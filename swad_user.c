@@ -458,13 +458,13 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    Ico_IconSet_t IconSet;
    Txt_Language_t Lan;
    unsigned UnsignedNum;
-   char StrBirthday[4+1+2+1+2+1];
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
                   "Theme,IconSet,Language,FirstDayOfWeek,Photo,PhotoVisibility,ProfileVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
-                  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
+                  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,"
+                  "DATE_FORMAT(Birthday,'%%Y%%m%%d'),Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
                   " FROM usr_data WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
@@ -558,9 +558,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    Str_Copy (UsrDat->FamilyAddress,row[22],Cns_MAX_BYTES_STRING);
    Str_Copy (UsrDat->FamilyPhone  ,row[23],Usr_MAX_BYTES_PHONE);
    Str_Copy (UsrDat->OriginPlace  ,row[24],Cns_MAX_BYTES_STRING);
-   strcpy (StrBirthday,
-	   row[25] ? row[25] :
-		     "0000-00-00");
+
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[25]);
 
    Usr_GetUsrCommentsFromString (row[26] ? row[26] :
 	                                   "",
@@ -597,11 +596,6 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    /* Create full name using FirstName, Surname1 and Surname2 */
    Usr_BuildFullName (UsrDat);
 
-   if (sscanf (StrBirthday,"%u-%u-%u",
-	       &(UsrDat->Birthday.Year),
-	       &(UsrDat->Birthday.Month),
-	       &(UsrDat->Birthday.Day)) != 3)
-      Lay_ShowErrorAndExit ("Wrong date.");
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
    /***** Free structure that stores the query result *****/
@@ -707,7 +701,7 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
 
 void Usr_BuildFullName (struct UsrData *UsrDat)
   {
-   strcpy (UsrDat->FullName,UsrDat->FirstName);
+   Str_Copy (UsrDat->FullName,UsrDat->FirstName,Usr_MAX_BYTES_FULL_NAME);
    if (UsrDat->Surname1[0])
      {
       strcat (UsrDat->FullName," ");
@@ -730,8 +724,8 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
    char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
 
    /***** Restrict length of firstname and surnames *****/
-   strcpy (FirstName,UsrDat->FirstName);
-   strcpy (Surnames,UsrDat->Surname1);
+   Str_Copy (FirstName,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat->Surname1,Usr_MAX_BYTES_SURNAMES);
    if (UsrDat->Surname2[0])
      {
       strcat (Surnames," ");
@@ -1993,12 +1987,12 @@ void Usr_WelcomeUsr (void)
 /*****************************************************************************/
 
 void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
-                              char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1])
+                              char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1])
   {
    if (UsrDat->Birthday.Year  == 0 ||
        UsrDat->Birthday.Month == 0 ||
        UsrDat->Birthday.Day   == 0)
-      strcpy (BirthdayStrDB,"NULL");
+      Str_Copy (BirthdayStrDB,"NULL",Usr_BIRTHDAY_STR_DB_LENGTH);
    else
       sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",
 	       UsrDat->Birthday.Year,
@@ -2107,7 +2101,7 @@ void Usr_WriteLoggedUsrHead (void)
    /* Name */
    if (Gbl.Usrs.Me.UsrDat.FullName[0])
      {
-      strcpy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName);
+      Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
       Str_LimitLengthHTMLStr (UsrName,12);
       fprintf (Gbl.F.Out,"%s",UsrName);
      }
@@ -2958,13 +2952,15 @@ static void Usr_InsertMyLastData (void)
 /*********** Write a row of a table with the main data of a user *************/
 /*****************************************************************************/
 
+#define Usr_MAX_LENGTH_BG_COLOR (16 - 1)
+
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   char BgColor[16];
-   char PhotoURL[PATH_MAX+1];
+   char BgColor[Usr_MAX_LENGTH_BG_COLOR + 1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
 	                    (UsrDat->UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -2976,7 +2972,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
    if (UsrIsTheMsgSender)
-      strcpy (BgColor,"LIGHT_GREEN");
+      Str_Copy (BgColor,"LIGHT_GREEN",Usr_MAX_LENGTH_BG_COLOR);
    else
       sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
@@ -3156,7 +3152,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char Text[Cns_MAX_BYTES_TEXT+1];
+   char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Instit Ins;
    bool ShowData = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM;
@@ -3246,7 +3242,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
          if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             row = mysql_fetch_row (mysql_res);
-            strcpy (Text,row[0]);
+            Str_Copy (Text,row[0],Cns_MAX_BYTES_TEXT);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
            }
@@ -4780,12 +4776,14 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList *UsrInList)
   {
    UsrDat->UsrCod                = UsrInList->UsrCod;
-   strcpy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod);
-   strcpy (UsrDat->Surname1       ,UsrInList->Surname1);
-   strcpy (UsrDat->Surname2       ,UsrInList->Surname2);
-   strcpy (UsrDat->FirstName      ,UsrInList->FirstName);
+   Str_Copy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod,
+             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+   Str_Copy (UsrDat->Surname1 ,UsrInList->Surname1 ,Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname2 ,UsrInList->Surname2 ,Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->FirstName,UsrInList->FirstName,Usr_MAX_BYTES_NAME);
    UsrDat->Sex                   = UsrInList->Sex;
-   strcpy (UsrDat->Photo          ,UsrInList->Photo);
+   Str_Copy (UsrDat->Photo,UsrInList->Photo,
+             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
    UsrDat->InsCod                = UsrInList->InsCod;
    UsrDat->RoleInCurrentCrsDB    = UsrInList->RoleInCurrentCrsDB;
@@ -5120,7 +5118,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                   if (LengthSelectedUsrsCods == 0)        // First user in list
                     {
                      if (strlen (UsrDat.EncryptedUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-                        strcpy (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod);        // Add first user
+                        Str_Copy (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod,
+                                  Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);        // Add first user
                     }
                   else        // Not first user in list
                     {

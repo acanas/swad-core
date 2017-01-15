@@ -80,7 +80,7 @@ void Ses_GetNumSessions (void)
 void Ses_CreateSession (void)
   {
    /***** Create a unique name for the session *****/
-   strcpy (Gbl.Session.Id,Gbl.UniqueNameEncrypted);
+   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,Ses_LENGTH_SESSION_ID);
 
    /***** Check that session is not open *****/
    if (Ses_CheckIfSessionExists (Gbl.Session.Id))
@@ -283,7 +283,8 @@ bool Ses_GetSessionData (void)
       Gbl.Session.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /***** Get password (row[1]) *****/
-      strcpy (Gbl.Usrs.Me.LoginEncryptedPassword,row[1]);
+      Str_Copy (Gbl.Usrs.Me.LoginEncryptedPassword,row[1],
+                Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 
       /***** Get logged user type (row[2]) *****/
       if (sscanf (row[2],"%u",&Gbl.Usrs.Me.RoleFromSession) != 1)

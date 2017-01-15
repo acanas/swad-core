@@ -111,7 +111,7 @@ static void Svy_PutParams (void);
 static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
                                            unsigned *HiddenAllowed);
 
-static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt);
+static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_PutParamSvyCod (long SvyCod);
 static long Svy_GetParamSvyCod (void);
 
@@ -426,7 +426,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_View_survey_results;
    static unsigned UniqueId = 0;
    struct Survey Svy;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Start frame *****/
    if (ShowOnlyThisSvyComplete)
@@ -690,8 +690,8 @@ static void Svy_WriteAuthor (struct Survey *Svy)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   strcpy (FirstName,UsrDat.FirstName);
-   strcpy (Surnames,UsrDat.Surname1);
+   Str_Copy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
       strcat (Surnames," ");
@@ -1247,7 +1247,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       Svy->Status.Open = (row[8][0] == '1');
 
       /* Get the title of the survey (row[9]) */
-      strcpy (Svy->Title,row[9]);
+      Str_Copy (Svy->Title,row[9],Svy_MAX_LENGTH_SURVEY_TITLE);
 
       /* Get number of questions and number of users who have already answer this survey */
       Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);
@@ -1411,7 +1411,7 @@ void Svy_FreeListSurveys (void)
 /********************** Get survey text from database ************************/
 /*****************************************************************************/
 
-static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt)
+static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1427,7 +1427,7 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      strcpy (Txt,row[0]);
+      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -1444,11 +1444,13 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char *Txt)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Svy_GetNotifSurvey (char *SummaryStr,char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent)
+void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                         char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -1465,16 +1467,17 @@ void Svy_GetNotifSurvey (char *SummaryStr,char **ContentStr,long SvyCod,unsigned
             row = mysql_fetch_row (mysql_res);
 
             /***** Get summary *****/
-            strcpy (SummaryStr,row[0]);
+            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Get content *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (512+Cns_MAX_BYTES_TEXT)) == NULL)
+               Length = strlen (row[1]);
+               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[1]);
+               Str_Copy (*ContentStr,row[1],Length);
               }
            }
          mysql_free_result (mysql_res);
@@ -3371,16 +3374,16 @@ static void Svy_PutButtonToCreateNewQuestion (void)
 
 static void Svy_WriteQstStem (const char *Stem)
   {
-   unsigned long LengthHeading;
    char *HeadingRigorousHTML;
+   size_t Length;
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
-   LengthHeading = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-   if ((HeadingRigorousHTML = malloc (LengthHeading+1)) == NULL)
+   Length = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+   if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-   strcpy (HeadingRigorousHTML,Stem);
+   Str_Copy (HeadingRigorousHTML,Stem,Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
-                     HeadingRigorousHTML,LengthHeading,false);
+                     HeadingRigorousHTML,Length,false);
 
    /* Write the stem */
    fprintf (Gbl.F.Out,"%s",HeadingRigorousHTML);
@@ -3420,10 +3423,10 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	    Lay_ShowErrorAndExit ("Error when getting number of users who have marked an answer.");
 
 	 /* Convert the answer (row[2]), that is in HTML, to rigorous HTML */
-	 AnsLength = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-	 if ((Answer = malloc (AnsLength+1)) == NULL)
+	 AnsLength = strlen (row[2]);
+	 if ((Answer = malloc (AnsLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-	 strcpy (Answer,row[2]);
+	 Str_Copy (Answer,row[2],AnsLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   Answer,AnsLength,false);
 

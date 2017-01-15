@@ -4040,7 +4040,7 @@ static void Brw_ShowAndStoreSizeOfFileTree (void)
    extern const char *Txt_file;
    extern const char *Txt_files;
    extern const char *Txt_of_PART_OF_A_TOTAL;
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    fprintf (Gbl.F.Out,"<div class=\"DAT CENTER_MIDDLE\">");
 
@@ -6084,7 +6084,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata)
   {
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Write the file size *****/
    if (Gbl.FileBrowser.FileType == Brw_IS_FILE)
@@ -8968,7 +8968,7 @@ void Brw_ShowFileMetadata (void)
    struct UsrData PublisherUsrDat;
    char FileNameToShow[NAME_MAX+1];
    char URL[PATH_MAX+1];
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    bool Found;
    bool ICanView = false;
    bool IAmTheOwner;

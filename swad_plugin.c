@@ -569,7 +569,7 @@ void Plg_RenamePlugin (void)
      }
 
    /***** Show the form again *****/
-   strcpy (Plg->Name,NewPlgName);
+   Str_Copy (Plg->Name,NewPlgName,Plg_MAX_LENGTH_PLUGIN_NAME);
    Plg_EditPlugins ();
   }
 
@@ -629,7 +629,7 @@ void Plg_ChangePlgDescription (void)
      }
 
    /***** Show the form again *****/
-   strcpy (Plg->Description,NewDescription);
+   Str_Copy (Plg->Description,NewDescription,Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
    Plg_EditPlugins ();
   }
 
@@ -672,7 +672,7 @@ void Plg_ChangePlgLogo (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);
 
    /***** Show the form again *****/
-   strcpy (Plg->Logo,NewLogo);
+   Str_Copy (Plg->Logo,NewLogo,Plg_MAX_LENGTH_PLUGIN_LOGO);
    Plg_EditPlugins ();
   }
 
@@ -715,7 +715,7 @@ void Plg_ChangePlgAppKey (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
    /***** Show the form again *****/
-   strcpy (Plg->AppKey,NewAppKey);
+   Str_Copy (Plg->AppKey,NewAppKey,Plg_MAX_LENGTH_PLUGIN_APP_KEY);
    Plg_EditPlugins ();
   }
 
@@ -758,7 +758,7 @@ void Plg_ChangePlgURL (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_URL_empty);
 
    /***** Show the form again *****/
-   strcpy (Plg->URL,NewURL);
+   Str_Copy (Plg->URL,NewURL,Cns_MAX_LENGTH_WWW);
    Plg_EditPlugins ();
   }
 
@@ -801,7 +801,7 @@ void Plg_ChangePlgIP (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
 
    /***** Show the form again *****/
-   strcpy (Plg->IP,NewIP);
+   Str_Copy (Plg->IP,NewIP,Cns_MAX_LENGTH_IP);
    Plg_EditPlugins ();
   }
 

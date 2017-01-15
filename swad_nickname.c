@@ -396,7 +396,8 @@ void Nck_UpdateNick (void)
         {
          // Now we know the new nickname is not already in database and is diffent to the current one
          Nck_UpdateMyNick (NewNicknameWithoutArroba);
-         strcpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba);
+         Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
+                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
          sprintf (Gbl.Message,Txt_Your_nickname_X_has_been_registered_successfully,
                   NewNicknameWithoutArroba);

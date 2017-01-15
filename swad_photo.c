@@ -1117,7 +1117,8 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
    unlink (PathPublPhoto);                // Remove public link
 
    /***** Update photo name in user's data *****/
-   strcpy (UsrDat->Photo,Gbl.UniqueNameEncrypted);
+   Str_Copy (UsrDat->Photo,Gbl.UniqueNameEncrypted,
+             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
   }
 
 /*****************************************************************************/
@@ -1129,8 +1130,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        bool FormUnique)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char FullName [3*(Usr_MAX_BYTES_NAME+1)];
-   char ShortName[3*(Usr_MAX_BYTES_NAME+1)];
+   char FullName [Usr_MAX_BYTES_FULL_NAME + 1];
+   char ShortName[Usr_MAX_BYTES_FULL_NAME + 1];
    char Surnames [Usr_MAX_BYTES_SURNAMES + 1];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
@@ -1156,14 +1157,14 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
-   strcpy (FullName,UsrDat->FullName);
+   Str_Copy (FullName,UsrDat->FullName,Usr_MAX_BYTES_FULL_NAME);
    if (PutZoomCode)
      {
-      strcpy (ShortName,UsrDat->FirstName);
+      Str_Copy (ShortName,UsrDat->FirstName,Usr_MAX_BYTES_FULL_NAME);
       Str_LimitLengthHTMLStr (ShortName,23);
       Surnames[0] = '\0';
       if (UsrDat->Surname1[0])
-         strcpy (Surnames,UsrDat->Surname1);
+         Str_Copy (Surnames,UsrDat->Surname1,Usr_MAX_BYTES_SURNAMES);
       if (UsrDat->Surname2[0])
         {
          strcat (Surnames," ");
@@ -1898,6 +1899,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 /*************** Put a link to calculate the stats of degrees ****************/
 /*****************************************************************************/
 
+#define Pho_MAX_LENGTH_ESTIMATED_TIME (64 - 1)
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -1909,7 +1911,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    unsigned NumDeg;
    struct Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
-   char StrEstimatedTimeToComputeAvgPhoto[64];
+   char StrEstimatedTimeToComputeAvgPhoto[Pho_MAX_LENGTH_ESTIMATED_TIME + 1];
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -1945,7 +1947,8 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
          /* Get time to compute average photo of this degree */
          EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
          if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
-            strcpy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME);
+            Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
+                      Pho_MAX_LENGTH_ESTIMATED_TIME);
          else
             Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,EstimatedTimeToComputeAvgPhotoInMicroseconds);
 

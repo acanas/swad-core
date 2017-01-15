@@ -1620,7 +1620,8 @@ static long Exa_GetParamExaCod (void)
 // This function may be called inside a web service, so don't report error
 // MaxChars must be > 3+(2+Cns_MAX_LENGTH_DATE+6)
 
-void Exa_GetSummaryAndContentExamAnnouncement (char *SummaryStr,char **ContentStr,
+void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                               char **ContentStr,
                                                long ExaCod,unsigned MaxChars,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;

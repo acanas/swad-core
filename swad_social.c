@@ -487,6 +487,8 @@ void Soc_MarkMyNotifAsSeen (void)
 /*****************************************************************************/
 // Query must have space for at least 1024 chars
 
+#define Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS (256 - 1)
+
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
                                          char *Query)
@@ -494,7 +496,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    char SubQueryPublishers[128];
    char SubQueryRangeBottom[128];
    char SubQueryRangeTop[128];
-   char SubQueryAlreadyExists[256];
+   char SubQueryAlreadyExists[Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS + 1];
    struct
      {
       long Top;
@@ -569,12 +571,16 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
            {
             case Soc_GET_ONLY_NEW_PUBS:
             case Soc_GET_RECENT_TIMELINE:
-	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
-					     " (SELECT NotCod FROM not_codes)");
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " AND NotCod NOT IN"
+			 " (SELECT NotCod FROM not_codes)",
+			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
-	       strcpy (SubQueryAlreadyExists," AND NotCod NOT IN"
-					     " (SELECT NotCod FROM current_timeline)");
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " AND NotCod NOT IN"
+			 " (SELECT NotCod FROM current_timeline)",
+			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;
@@ -583,12 +589,16 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
            {
             case Soc_GET_ONLY_NEW_PUBS:
             case Soc_GET_RECENT_TIMELINE:
-	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
-					     " (SELECT NotCod FROM not_codes)");
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " AND social_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM not_codes)",
+			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
-	       strcpy (SubQueryAlreadyExists," AND social_pubs.NotCod NOT IN"
-					     " (SELECT NotCod FROM current_timeline)");
+	       Str_Copy (SubQueryAlreadyExists,
+	                 " AND social_pubs.NotCod NOT IN"
+			 " (SELECT NotCod FROM current_timeline)",
+			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;
@@ -1953,8 +1963,8 @@ static void Soc_PutFormToWriteNewPost (void)
   {
    extern const char *Txt_New_SOCIAL_post;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
-   char FullName[(Usr_MAX_BYTES_NAME + 1) * 3];
+   char PhotoURL[PATH_MAX + 1];
+   char FullName[Usr_MAX_BYTES_FULL_NAME + 2];
 
    /***** Start list *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
@@ -1972,7 +1982,7 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
 
    /* Write author's full name and nickname */
-   strcpy (FullName,Gbl.Usrs.Me.UsrDat.FullName);
+   Str_Copy (FullName,Gbl.Usrs.Me.UsrDat.FullName,Usr_MAX_BYTES_FULL_NAME);
    Str_LimitLengthHTMLStr (FullName,16);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
@@ -2541,7 +2551,8 @@ static void Soc_PutDisabledIconShare (unsigned NumShared)
    if (NumShared)
       sprintf (Gbl.Title,Txt_SOCIAL_NOTE_Shared_by_X_USERS,NumShared);
    else
-      strcpy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone);
+      Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_shared_by_anyone,
+                Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to share *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE_DISABLED\">"
@@ -2565,7 +2576,8 @@ static void Soc_PutDisabledIconFav (unsigned NumFavs)
    if (NumFavs)
       sprintf (Gbl.Title,Txt_SOCIAL_NOTE_Favourited_by_X_USERS,NumFavs);
    else
-      strcpy (Gbl.Title,Txt_SOCIAL_NOTE_Not_favourited_by_anyone);
+      Str_Copy (Gbl.Title,Txt_SOCIAL_NOTE_Not_favourited_by_anyone,
+                Lay_MAX_BYTES_TITLE);
 
    /***** Disabled icon to mark as favourite *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV_DISABLED\">"
@@ -4633,7 +4645,8 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 /******************* Get notification of a new social post *******************/
 /*****************************************************************************/
 
-void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCod,
+void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                   char **ContentStr,long PubCod,
                                    unsigned MaxChars,bool GetContent)
   {
    char Query[256];
@@ -4642,6 +4655,7 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
    char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   size_t Length;
    bool ContentCopied = false;
 
    /***** Return nothing on error *****/
@@ -4695,15 +4709,18 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 
 	    /***** Copy content string *****/
 	    if (GetContent)
-	       if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
+	      {
+	       Length = strlen (Content);
+	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 		 {
-		  strcpy (*ContentStr,Content);
+		  Str_Copy (*ContentStr,Content,Length);
 		  ContentCopied = true;
 		 }
+	      }
 
 	    /***** Copy summary string *****/
 	    Str_LimitLengthHTMLStr (Content,MaxChars);
-	    strcpy (SummaryStr,Content);
+	    Str_Copy (SummaryStr,Content,Cns_MAX_BYTES_TEXT);
 	   }
 	 else
 	    Soc_GetNoteSummary (&SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
@@ -4728,15 +4745,18 @@ void Soc_GetNotifSocialPublishing (char *SummaryStr,char **ContentStr,long PubCo
 
 	 /***** Copy content string *****/
 	 if (GetContent)
-	    if ((*ContentStr = (char *) malloc (strlen (Content)+1)) != NULL)
+	   {
+	    Length = strlen (Content);
+	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 	      {
-	       strcpy (*ContentStr,Content);
+	       Str_Copy (*ContentStr,Content,Length);
 	       ContentCopied = true;
 	      }
+	   }
 
 	 /***** Copy summary string *****/
 	 Str_LimitLengthHTMLStr (Content,MaxChars);
-	 strcpy (SummaryStr,Content);
+	 Str_Copy (SummaryStr,Content,Cns_MAX_BYTES_TEXT);
 	 break;
      }
 

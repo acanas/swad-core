@@ -804,7 +804,9 @@ void Sta_SeeCrsAccesses (void)
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-#define MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000)
+#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000)
+
+#define Sta_MAX_LENGTH_COUNT_TYPE (256 - 1)
 
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
   {
@@ -816,7 +818,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
-   char Query[MAX_LENGTH_QUERY_ACCESS+1];
+   char Query[Sta_MAX_LENGTH_QUERY_ACCESS+1];
    char QueryAux[512];
    long LengthQuery;
    MYSQL_RES *mysql_res;
@@ -830,7 +832,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    unsigned NumUsr = 0;
    const char *Ptr;
    char StrRole[256];
-   char StrQueryCountType[256];
+   char StrQueryCountType[Sta_MAX_LENGTH_COUNT_TYPE + 1];
    unsigned NumDays;
    bool ICanQueryWholeRange;
 
@@ -980,7 +982,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    switch (Gbl.Stat.CountType)
      {
       case Sta_TOTAL_CLICKS:
-         strcpy (StrQueryCountType,"COUNT(*)");
+         Str_Copy (StrQueryCountType,"COUNT(*)",Sta_MAX_LENGTH_COUNT_TYPE);
 	 break;
       case Sta_DISTINCT_USRS:
          sprintf (StrQueryCountType,"COUNT(DISTINCT(%s.UsrCod))",LogTable);
@@ -1253,7 +1255,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    if (UsrDat.UsrCod > 0)
 	      {
 	       LengthQuery = LengthQuery + 25 + 10 + 1;
-	       if (LengthQuery > MAX_LENGTH_QUERY_ACCESS - 128)
+	       if (LengthQuery > Sta_MAX_LENGTH_QUERY_ACCESS - 128)
                   Lay_ShowErrorAndExit ("Query is too large.");
                sprintf (QueryAux,
                         NumUsr ? " OR %s.UsrCod='%ld'" :
@@ -5425,17 +5427,17 @@ static void Sta_WriteStatsExpTreesTableHead (void)
 
 static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char *NameOfFileZones)
   {
-   char StrNumCrss[10+1];
-   char StrNumGrps[10+1];
-   char StrNumUsrs[10+1];
-   char StrNumFoldersPerCrs[10+1];
-   char StrNumFoldersPerUsr[10+1];
-   char StrNumFilesPerCrs[10+1];
-   char StrNumFilesPerUsr[10+1];
+   char StrNumCrss[10 + 1];
+   char StrNumGrps[10 + 1];
+   char StrNumUsrs[10 + 1];
+   char StrNumFoldersPerCrs[10 + 1];
+   char StrNumFoldersPerUsr[10 + 1];
+   char StrNumFilesPerCrs[10 + 1];
+   char StrNumFilesPerUsr[10 + 1];
    struct Sta_SizeOfFileZones SizeOfFileZones;
-   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
-   char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
-   char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING];
+   char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+   char FileSizePerCrsStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
+   char FileSizePerUsrStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    char *Class = (FileZone == Brw_UNKNOWN) ? "DAT_N_LINE_TOP" :
 	                                     "DAT";
 
@@ -5445,10 +5447,10 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
 
    if (SizeOfFileZones.NumCrss == -1)
      {
-      strcpy (StrNumCrss         ,"-");
-      strcpy (StrNumFoldersPerCrs,"-");
-      strcpy (StrNumFilesPerCrs  ,"-");
-      strcpy (FileSizePerCrsStr  ,"-");
+      Str_Copy (StrNumCrss         ,"-",10);
+      Str_Copy (StrNumFoldersPerCrs,"-",10);
+      Str_Copy (StrNumFilesPerCrs  ,"-",10);
+      Str_Copy (FileSizePerCrsStr  ,"-",Fil_MAX_BYTES_FILE_SIZE_STRING);
      }
    else
      {
@@ -5468,16 +5470,16 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
      }
 
    if (SizeOfFileZones.NumGrps == -1)
-      strcpy (StrNumGrps,"-");
+      Str_Copy (StrNumGrps,"-",10);
    else
       sprintf (StrNumGrps,"%d",SizeOfFileZones.NumGrps);
 
    if (SizeOfFileZones.NumUsrs == -1)
      {
-      strcpy (StrNumUsrs         ,"-");
-      strcpy (StrNumFoldersPerUsr,"-");
-      strcpy (StrNumFilesPerUsr  ,"-");
-      strcpy (FileSizePerUsrStr  ,"-");
+      Str_Copy (StrNumUsrs         ,"-",10);
+      Str_Copy (StrNumFoldersPerUsr,"-",10);
+      Str_Copy (StrNumFilesPerUsr  ,"-",10);
+      Str_Copy (FileSizePerUsrStr  ,"-",Fil_MAX_BYTES_FILE_SIZE_STRING);
      }
    else
      {

@@ -35,8 +35,8 @@
 
 #define Tst_MAX_QUESTIONS_PER_TEST		100	// Absolute maximum number of questions in a test
 #define Tst_MAX_TAGS_PER_QUESTION		  5
-#define Tst_MAX_TAG_LENGTH			255
-#define Tst_MAX_BYTES_TAG			(Tst_MAX_TAG_LENGTH*Str_MAX_CHARACTER)
+#define Tst_MAX_LENGTH_TAG			(256 -1)
+#define Tst_MAX_BYTES_TAG			(Tst_MAX_LENGTH_TAG*Str_MAX_CHARACTER)
 #define Tst_MAX_OPTIONS_PER_QUESTION		 10
 #define Tst_MAX_SIZE_INDEXES_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION*(10+1))
 #define Tst_MAX_SIZE_ANSWERS_ONE_QST		(Tst_MAX_OPTIONS_PER_QUESTION*(10+1))

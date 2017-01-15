@@ -743,12 +743,14 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Not_GetSummaryAndContentNotice (char *SummaryStr,char **ContentStr,
-                                     long NotCod,unsigned MaxChars,bool GetContent)
+void Not_GetSummaryAndContentNotice (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                                     char **ContentStr,long NotCod,
+                                     unsigned MaxChars,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -765,16 +767,17 @@ void Not_GetSummaryAndContentNotice (char *SummaryStr,char **ContentStr,
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy summary *****/
-            strcpy (SummaryStr,row[0]);
+            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Copy content *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (strlen (row[0])+1)) == NULL)
+               Length = strlen (row[0]);
+               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               strcpy (*ContentStr,row[0]);
+               Str_Copy (*ContentStr,row[0],Length);
               }
            }
          mysql_free_result (mysql_res);

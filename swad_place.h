@@ -38,8 +38,8 @@ struct Place
   {
    long PlcCod;
    long InsCod;
-   char ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME+1];
-   char FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME+1];
+   char ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME + 1];
+   char FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
    unsigned NumCtrs;
   };
 

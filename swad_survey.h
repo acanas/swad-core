@@ -33,7 +33,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Svy_MAX_LENGTH_SURVEY_TITLE	255
+#define Svy_MAX_LENGTH_SURVEY_TITLE	(256 - 1)
 
 #define Svy_NUM_DATES 2
 typedef enum
@@ -49,7 +49,7 @@ struct Survey
    long Cod;		// Country, institution, centre, degree or course code
    unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER)
    long UsrCod;
-   char Title[Svy_MAX_LENGTH_SURVEY_TITLE+1];
+   char Title[Svy_MAX_LENGTH_SURVEY_TITLE + 1];
    time_t TimeUTC[Svy_NUM_DATES];
    unsigned NumQsts;	// Number of questions in the survey
    unsigned NumUsrs;	// Number of distinct users who have already answered the survey
@@ -87,7 +87,8 @@ void Svy_GetListSurveys (void);
 void Svy_GetDataOfSurveyByCod (struct Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Survey *Svy);
 void Svy_FreeListSurveys (void);
-void Svy_GetNotifSurvey (char *SummaryStr,char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent);
+void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                         char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent);
 void Svy_AskRemSurvey (void);
 void Svy_RemoveSurvey (void);
 void Svy_AskResetSurvey (void);

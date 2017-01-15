@@ -421,7 +421,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
-   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH+1];
+   char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char Query[2048];
 
    /***** Check if user's code is initialized *****/

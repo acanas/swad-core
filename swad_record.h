@@ -89,7 +89,7 @@ typedef enum
 struct RecordField
   {
    long FieldCod;		// FieldCode
-   char Name[Rec_MAX_LENGTH_NAME_FIELD+1];	// Field name
+   char Name[Rec_MAX_LENGTH_NAME_FIELD + 1];	// Field name
    unsigned NumLines;		// Number of rows of form used to edit the filed (always >= 2)
    Rec_VisibilityRecordFields_t Visibility;		// Hidden, visible or editable by students?
    char *Text;			// Filed text

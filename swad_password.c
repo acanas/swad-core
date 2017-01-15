@@ -117,7 +117,8 @@ bool Pwd_CheckPendingPassword (void)
      {
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);
-      strcpy (Gbl.Usrs.Me.PendingPassword,row[0]);
+      Str_Copy (Gbl.Usrs.Me.PendingPassword,row[0],
+                Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
      }
    else
       Gbl.Usrs.Me.PendingPassword[0] = '\0';
@@ -136,7 +137,7 @@ bool Pwd_CheckPendingPassword (void)
 
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
-   char Query[128+Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64];
+   char Query[128 + Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64];
 
    /***** Update my current password in database *****/
    sprintf (Query,"UPDATE usr_data SET Password='%s'"
@@ -146,7 +147,8 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
    DB_QueryUPDATE (Query,"can not update your password");
 
    /***** Update my current password *****/
-   strcpy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword);
+   Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
+             Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
   }
 
 /*****************************************************************************/
@@ -177,7 +179,8 @@ void Pwd_ActChgMyPwd1 (void)
       /***** Check if I have written twice the same password *****/
       if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
          // Passwords don't match
-         strcpy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password);
+         Str_Copy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password,
+                   Lay_MAX_BYTES_ALERT);
       else
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
@@ -185,16 +188,19 @@ void Pwd_ActChgMyPwd1 (void)
          Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
          if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
            {
-            strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
+            Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
+                      Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
             Ses_UpdateSessionDataInDB ();
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
-            strcpy (Gbl.Message,Txt_Your_password_has_been_changed_successfully);
+            Str_Copy (Gbl.Message,Txt_Your_password_has_been_changed_successfully,
+                      Lay_MAX_BYTES_ALERT);
             Gbl.Usrs.Error = false;
            }
         }
      }
    else
-      strcpy (Gbl.Message,Txt_You_have_not_entered_your_password_correctly);
+      Str_Copy (Gbl.Message,Txt_You_have_not_entered_your_password_correctly,
+                Lay_MAX_BYTES_ALERT);
   }
 
 void Pwd_ActChgMyPwd2 (void)
@@ -324,7 +330,8 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
 	 // User has typed a user's ID
-	 strcpy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin);
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
+	           ID_MAX_LENGTH_USR_ID);
          Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Get users' codes for this ID */
@@ -494,7 +501,8 @@ void Pwd_UpdateOtherPwd1 (void)
 
 	 if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
 	    // Paswords don't match
-	    strcpy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password);
+	    Str_Copy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password,
+	              Lay_MAX_BYTES_ALERT);
 	 else
 	   {
 	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
@@ -503,7 +511,8 @@ void Pwd_UpdateOtherPwd1 (void)
 	    if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Other.UsrDat.UsrCod))        // Good password
 	      {
 	       /* Update other user's data */
-	       strcpy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword);
+	       Str_Copy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword,
+	                 Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
 	       sprintf (Gbl.Message,Txt_The_X_password_has_been_changed_successfully,
@@ -513,10 +522,12 @@ void Pwd_UpdateOtherPwd1 (void)
 	   }
 	}
       else
-	 strcpy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Str_Copy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_,
+	           Lay_MAX_BYTES_ALERT);
      }
    else		// User not found
-     strcpy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_);
+     Str_Copy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_,
+               Lay_MAX_BYTES_ALERT);
   }
 
 void Pwd_UpdateOtherPwd2 (void)
@@ -552,7 +563,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      strcpy (Gbl.Message,Txt_The_password_is_too_trivial_);
+      Str_Copy (Gbl.Message,Txt_The_password_is_too_trivial_,
+                Lay_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -560,7 +572,8 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      strcpy (Gbl.Message,Txt_The_password_is_too_trivial_);
+      Str_Copy (Gbl.Message,Txt_The_password_is_too_trivial_,
+                Lay_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -637,7 +650,8 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      strcpy (Gbl.Message,Txt_The_password_can_not_contain_spaces);
+      Str_Copy (Gbl.Message,Txt_The_password_can_not_contain_spaces,
+                Lay_MAX_BYTES_ALERT);
       return false;
      }
 
@@ -649,7 +663,8 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      strcpy (Gbl.Message,Txt_The_password_can_not_consist_only_of_digits);
+      Str_Copy (Gbl.Message,Txt_The_password_can_not_consist_only_of_digits,
+                Lay_MAX_BYTES_ALERT);
       return false;
      }
 

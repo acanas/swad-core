@@ -1738,7 +1738,7 @@ static void Tst_ShowFormEditTags (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  Tst_MAX_TAG_LENGTH,row[1],Gbl.Form.Id);
+                  Tst_MAX_LENGTH_TAG,row[1],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -3697,7 +3697,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
   {
    unsigned NumOpt;
    MYSQL_ROW row;
-   char TextAnsUsr[Tst_MAX_SIZE_ANSWERS_ONE_QST],TextAnsOK[Tst_MAX_SIZE_ANSWERS_ONE_QST];
+   char TextAnsUsr[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
+   char TextAnsOK[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
    bool Correct = false;
    /*
    row[ 0] AnsInd
@@ -3755,7 +3756,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    if (Gbl.Test.StrAnswersOneQst[NumQst][0])	// If user has answered the question
      {
       /* Filter the user answer */
-      strcpy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst]);
+      Str_Copy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst],
+                Tst_MAX_SIZE_ANSWERS_ONE_QST);
 
       /* In order to compare student answer to stored answer,
 	 the text answers are stored avoiding two or more consecurive spaces */
@@ -3768,7 +3770,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 	   NumOpt++)
         {
          /* Filter this correct answer */
-         strcpy (TextAnsOK,Gbl.Test.Answer.Options[NumOpt].Text);
+         Str_Copy (TextAnsOK,Gbl.Test.Answer.Options[NumOpt].Text,
+                   Tst_MAX_SIZE_ANSWERS_ONE_QST);
          Str_ConvertToComparable (TextAnsOK);
 
          /* Check is user answer is correct */
@@ -4561,7 +4564,7 @@ static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
                          " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
-	       NumTag,NumTag,Tst_MAX_TAG_LENGTH,Gbl.Test.Tags.Txt[NumTag],NumTag);
+	       NumTag,NumTag,Tst_MAX_LENGTH_TAG,Gbl.Test.Tags.Txt[NumTag],NumTag);
 
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -5748,13 +5751,13 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
         {
-         strcpy (Gbl.Message,"Wrong code of tag.");
+         Str_Copy (Gbl.Message,"Wrong code of tag.",Lay_MAX_BYTES_ALERT);
          Error = true;
         }
      }
    else if (NumRows > 1)
      {
-      strcpy (Gbl.Message,"Duplicated tag.");
+      Str_Copy (Gbl.Message,"Duplicated tag.",Lay_MAX_BYTES_ALERT);
       Error = true;
      }
 

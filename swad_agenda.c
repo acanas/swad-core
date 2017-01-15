@@ -504,7 +504,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void)
 
 static void Agd_PutIconToShowQR (void)
   {
-   char URL[Cns_MAX_BYTES_URL+1];
+   char URL[Cns_MAX_LENGTH_WWW + 1];
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
 
    sprintf (URL,"%s/%s?agd=@%s",

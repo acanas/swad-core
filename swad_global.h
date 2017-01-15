@@ -144,8 +144,8 @@ struct Globals
    long TimeGenerationInMicroseconds;
    long TimeSendInMicroseconds;
 
-   char IP[Cns_MAX_LENGTH_IP+1];
-   char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Used for session id, temporary directory names, etc.
+   char IP[Cns_MAX_LENGTH_IP + 1];
+   char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 
    struct
      {
@@ -154,10 +154,10 @@ struct Globals
       Mnu_Menu_t Menu;
       unsigned SideCols;
       The_Theme_t Theme;
-      char PathTheme[PATH_MAX+1];
+      char PathTheme[PATH_MAX + 1];
       Ico_IconSet_t IconSet;
-      char PathIconSet[PATH_MAX+1];
-      char IconsURL[PATH_MAX+1];
+      char PathIconSet[PATH_MAX + 1];
+      char IconsURL[PATH_MAX + 1];
      } Prefs;
 
    struct
@@ -165,7 +165,7 @@ struct Globals
       unsigned NumSessions;
       bool IsOpen;
       bool HasBeenDisconnected;
-      char Id[Ses_LENGTH_SESSION_ID+1];
+      char Id[Ses_LENGTH_SESSION_ID + 1];
       long UsrCod;
      } Session;
 
@@ -290,11 +290,11 @@ struct Globals
          Rol_Role_t LoggedRoleBeforeCloseSession;
          Rol_Role_t MaxRole;
          bool RoleHasChanged;	// Set when I have changed my role
-	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN+1];	// String to store the ID, nickname or email entered in the user's login
-         char LoginPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
-         char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
-         char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
-	 char PathDir[PATH_MAX+1];
+	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email entered in the user's login
+         char LoginPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+         char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+         char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+	 char PathDir[PATH_MAX + 1];
 	 bool Logged;
          bool IBelongToCurrentIns;
          bool IBelongToCurrentCtr;
@@ -302,7 +302,7 @@ struct Globals
          bool IBelongToCurrentCrs;
          bool MyPhotoExists;
          unsigned NumAccWithoutPhoto;
-         char PhotoURL[PATH_MAX+1];
+         char PhotoURL[PATH_MAX + 1];
          time_t TimeLastAccToThisFileBrowser;
          bool ConfirmEmailJustSent;	// An email to confirm my email address has just been sent
          struct
@@ -463,7 +463,7 @@ struct Globals
       struct
 	{
          Inf_InfoType_t Type;
-	 char URL[Cns_MAX_BYTES_URL+1];
+	 char URL[Cns_MAX_LENGTH_WWW + 1];
          bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
          bool ShowMsgMustBeRead;
 	} Info;

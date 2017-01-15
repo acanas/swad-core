@@ -929,7 +929,8 @@ void Fol_GetAndShowRankingFollowers (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Fol_GetNotifFollower (char *SummaryStr,char **ContentStr)
+void Fol_GetNotifFollower (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+                           char **ContentStr)
   {
    SummaryStr[0] = '\0';
 

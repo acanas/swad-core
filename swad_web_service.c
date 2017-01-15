@@ -204,10 +204,11 @@ Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
 
 static int Svc_GetPlgCodFromAppKey (const char *appKey);
 static int Svc_CheckIdSession (const char *IdSession);
-static int Svc_CheckWSKey (char *WSKey);
+static int Svc_CheckWSKey (char WSKey[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
 static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod);
-static int Svc_GenerateNewWSKey (long UsrCod,char *WSKey);
+static int Svc_GenerateNewWSKey (long UsrCod,
+                                 char WSKey[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 static int Svc_RemoveOldWSKeys (void);
 static int Svc_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
@@ -370,7 +371,7 @@ static int Svc_CheckIdSession (const char *IdSession)
 /************** Check if a web service key exists in database ****************/
 /*****************************************************************************/
 
-static int Svc_CheckWSKey (char *WSKey)
+static int Svc_CheckWSKey (char WSKey[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -441,7 +442,8 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 /***** Generate a key used in subsequents calls to other web services ********/
 /*****************************************************************************/
 
-static int Svc_GenerateNewWSKey (long UsrCod,char *WSKey)
+static int Svc_GenerateNewWSKey (long UsrCod,
+                                 char WSKey[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    int ReturnCode;
    char Query[512];
@@ -451,7 +453,8 @@ static int Svc_GenerateNewWSKey (long UsrCod,char *WSKey)
       return ReturnCode;
 
    /***** Create a unique name for the key *****/
-   strcpy (WSKey,Gbl.UniqueNameEncrypted);
+   Str_Copy (WSKey,Gbl.UniqueNameEncrypted,
+             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
    /***** Check that key does not exist in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM ws_keys WHERE WSKey='%s'",
@@ -558,10 +561,7 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    Str_Copy (UsrDat->Photo,row[3],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
    /* Get user's brithday */
-   if (row[4])
-      Str_Copy (UsrDat->Birthday.YYYYMMDD,row[4],Dat_LENGTH_YYYYMMDD);
-   else
-      strcpy (UsrDat->Birthday.YYYYMMDD,"00000000");
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[4]);
 
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
@@ -674,7 +674,8 @@ int swad__createAccount (struct soap *soap,
    Gbl.Usrs.Me.UsrDat.IDs.List = NULL;
 
    /***** Set password to the password typed by the user *****/
-   strcpy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword);
+   Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
+             Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 
    /***** User does not exist in the platform, so create him/her! *****/
    Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
@@ -682,13 +683,14 @@ int swad__createAccount (struct soap *soap,
 
    /***** Save nickname *****/
    Nck_UpdateMyNick (NewNicknameWithoutArroba);
-   strcpy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba);
+   Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
+             Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
    /***** Save email *****/
    if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,userEmail))
      {
       /* Email updated sucessfully */
-      strcpy (Gbl.Usrs.Me.UsrDat.Email,userEmail);
+      Str_Copy (Gbl.Usrs.Me.UsrDat.Email,userEmail,Usr_MAX_BYTES_USR_EMAIL);
       Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
      }
 
@@ -766,7 +768,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    bool UsrFound;
 
    /***** Initializations *****/
@@ -780,7 +782,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+   loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
    loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
 
    /***** Default values returned on error *****/
@@ -885,7 +887,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                 Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,Cns_MAX_BYTES_URL);
+      Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,Cns_MAX_LENGTH_WWW);
 
       Str_Copy (loginByUserPasswordKeyOut->userBirthday,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
@@ -925,7 +927,7 @@ int swad__loginBySessionKey (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    bool UsrFound;
 
    /***** Initializations *****/
@@ -939,7 +941,7 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+   loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
    loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1);
    loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Crs_MAX_LENGTH_COURSE_FULL_NAME + 1);
@@ -1033,7 +1035,7 @@ int swad__loginBySessionKey (struct soap *soap,
                 Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
-      Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,Cns_MAX_BYTES_URL);
+      Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,Cns_MAX_LENGTH_WWW);
 
       Str_Copy (loginBySessionKeyOut->userBirthday,
                 Gbl.Usrs.Me.UsrDat.Birthday.YYYYMMDD,Dat_LENGTH_YYYYMMDD);
@@ -1238,6 +1240,7 @@ int swad__getCourseInfo (struct soap *soap,
   {
    int ReturnCode;
    Inf_InfoType_t InfoType;
+   size_t Length;
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
    int Result = SOAP_OK;
@@ -1306,8 +1309,9 @@ int swad__getCourseInfo (struct soap *soap,
 	                          "Unknown requested info type");
    Gbl.CurrentCrs.Info.Type = InfoType;
    Inf_GetAndCheckInfoSrcFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,&InfoSrc,&MustBeRead);
-   getCourseInfo->infoSrc = (char *) soap_malloc (Gbl.soap,strlen (NamesInWSForInfoSrc[InfoSrc]) + 1);
-   strcpy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc]);
+   Length = strlen (NamesInWSForInfoSrc[InfoSrc]);
+   getCourseInfo->infoSrc = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (getCourseInfo->infoSrc,NamesInWSForInfoSrc[InfoSrc],Length);
 
    /***** Set paths *****/
    Hie_InitHierarchy ();
@@ -1337,7 +1341,7 @@ int swad__getCourseInfo (struct soap *soap,
 	 Result = Inf_WritePageIntoHTMLBuffer (&(getCourseInfo->infoTxt));
          break;
       case Inf_INFO_SRC_URL:		// Link to a web page
-         getCourseInfo->infoTxt = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+         getCourseInfo->infoTxt = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
          Inf_WriteURLIntoTxtBuffer (getCourseInfo->infoTxt);
          break;
      }
@@ -1984,40 +1988,47 @@ int swad__sendMyGroups (struct soap *soap,
 
 static void Svc_CopyUsrData (struct swad__user *Usr,struct UsrData *UsrDat,bool UsrIDIsVisible)
   {
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    const char *FirstID;
+   size_t Length;
 
    /* Copy user's code */
    Usr->userCode = UsrDat->UsrCod;
 
    /* Copy user's nickname */
-   Usr->userNickname = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Nickname) + 1);
-   strcpy (Usr->userNickname,UsrDat->Nickname);
+   Length = strlen (UsrDat->Nickname);
+   Usr->userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userNickname,UsrDat->Nickname,Length);
 
    /* Copy user's first ID */
    if (UsrIDIsVisible && UsrDat->IDs.List)
       FirstID = UsrDat->IDs.List[0].ID;
    else	// Hide user's ID
       FirstID = "********";
-   Usr->userID = (char *) soap_malloc (Gbl.soap,strlen (FirstID) + 1);
-   strcpy (Usr->userID,FirstID);
+   Length = strlen (FirstID);
+   Usr->userID = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userID,FirstID,Length);
 
    /* Copy user's surname1 */
-   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Surname1) + 1);
-   strcpy (Usr->userSurname1,UsrDat->Surname1);
+   Length = strlen (UsrDat->Surname1);
+   Usr->userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userSurname1,UsrDat->Surname1,Length);
 
    /* Copy user's surname2 */
-   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->Surname2) + 1);
-   strcpy (Usr->userSurname2,UsrDat->Surname2);
+   Length = strlen (UsrDat->Surname2);
+   Usr->userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userSurname2,UsrDat->Surname2,Length);
 
    /* Copy user's first name */
-   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,strlen (UsrDat->FirstName) + 1);
-   strcpy (Usr->userFirstname,UsrDat->FirstName);
+   Length = strlen (UsrDat->FirstName);
+   Usr->userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userFirstname,UsrDat->FirstName,Length);
 
    /* User's photo URL */
    Pho_BuildLinkToPhoto (UsrDat,PhotoURL);
-   Usr->userPhoto = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
-   strcpy (Usr->userPhoto,PhotoURL);
+   Length = strlen (PhotoURL);
+   Usr->userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
+   Str_Copy (Usr->userPhoto,PhotoURL,Length);
   }
 
 /*****************************************************************************/
@@ -2034,7 +2045,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    MYSQL_ROW row;
    int NumAttEvent;
    long AttCod;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    long StartTime;
    long EndTime;
    size_t Length;
@@ -2111,24 +2122,24 @@ int swad__getAttendanceEvents (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
-                    Gbl.Usrs.Other.UsrDat.Surname1);
+            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname1,
+                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
-                    Gbl.Usrs.Other.UsrDat.Surname2);
+            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userSurname2,
+                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
-                    Gbl.Usrs.Other.UsrDat.FirstName);
+            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userFirstname,
+                      Gbl.Usrs.Other.UsrDat.FirstName,Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
-                    PhotoURL);
+            Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].userPhoto,
+                      PhotoURL,Length);
            }
          else
            {
@@ -2157,14 +2168,14 @@ int swad__getAttendanceEvents (struct soap *soap,
 	 /* Get title of the event (row[6]) */
          Length = strlen (row[6]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title = (char *) soap_malloc (Gbl.soap,Length + 1);
-         strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,
-                 row[6]);
+         Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].title,
+                   row[6],Length);
 
 	 /* Get Txt (row[7]) */
          Length = strlen (row[7]);
          getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text = (char *) soap_malloc (Gbl.soap,Length + 1);
-         strcpy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,
-                 row[7]);
+         Str_Copy (getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].text,
+                   row[7],Length);
 
 	 /* Get list of groups for this attendance event */
 	 Svc_GetListGrpsInAttendanceEventFromDB (AttCod,&(getAttendanceEventsOut->eventsArray.__ptr[NumAttEvent].groups));
@@ -2450,7 +2461,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    size_t Length;
 
    /***** Initializations *****/
@@ -2552,13 +2563,15 @@ int swad__getAttendanceUsers (struct soap *soap,
            {
             Length = strlen (Gbl.Usrs.Other.UsrDat.Nickname);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,Gbl.Usrs.Other.UsrDat.Nickname);
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userNickname,
+                      Gbl.Usrs.Other.UsrDat.Nickname,Length);
 
             if (Gbl.Usrs.Other.UsrDat.IDs.Num)
               {
 	       Length = strlen (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// TODO: What user's ID?
 	       getAttendanceUsersOut->usersArray.__ptr[NumRow].userID = (char *) soap_malloc (Gbl.soap,Length + 1);
-	       strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
+	       Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userID,
+	                 Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,Length);
               }
             else
               {
@@ -2568,20 +2581,24 @@ int swad__getAttendanceUsers (struct soap *soap,
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname1);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1 = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1,Gbl.Usrs.Other.UsrDat.Surname1);
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname1,
+                      Gbl.Usrs.Other.UsrDat.Surname1,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.Surname2);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2 = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2,Gbl.Usrs.Other.UsrDat.Surname2);
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userSurname2,
+                      Gbl.Usrs.Other.UsrDat.Surname2,Length);
 
             Length = strlen (Gbl.Usrs.Other.UsrDat.FirstName);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,Gbl.Usrs.Other.UsrDat.FirstName);
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userFirstname,
+                      Gbl.Usrs.Other.UsrDat.FirstName,Length);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             Length = strlen (PhotoURL);
             getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto = (char *) soap_malloc (Gbl.soap,Length + 1);
-            strcpy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,PhotoURL);
+            Str_Copy (getAttendanceUsersOut->usersArray.__ptr[NumRow].userPhoto,
+                      PhotoURL,Length);
            }
          else
            {
@@ -2749,7 +2766,7 @@ int swad__getNotifications (struct soap *soap,
    long NtfCod;
    Ntf_NotifyEvent_t NotifyEvent;
    long EventTime;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
    struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -2759,6 +2776,7 @@ int swad__getNotifications (struct soap *soap,
    char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    char *ContentStr;
    Ntf_Status_t Status;
+   size_t Length;
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -2848,9 +2866,9 @@ int swad__getNotifications (struct soap *soap,
                       Gbl.Usrs.Other.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto,
-                      PhotoURL,Cns_MAX_BYTES_URL);
+                      PhotoURL,Cns_MAX_LENGTH_WWW);
            }
          else
            {
@@ -2905,7 +2923,8 @@ int swad__getNotifications (struct soap *soap,
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Institution,Ins.ShrtName);
          else
-            strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-");
+            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,
+                      "-",Ntf_MAX_LENGTH_NOTIFY_LOCATION);
 
          /* Get status (row[9]) */
          if (sscanf (row[9],"%u",&Status) != 1)
@@ -2918,8 +2937,10 @@ int swad__getNotifications (struct soap *soap,
                                         Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
                                         Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE,true);
 
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].summary = (char *) soap_malloc (Gbl.soap,strlen (SummaryStr)+1);
-         strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].summary,SummaryStr);
+         Length = strlen (SummaryStr);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].summary = (char *) soap_malloc (Gbl.soap,Length + 1);
+         Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].summary,
+                   SummaryStr,Length);
 
          if (ContentStr == NULL)
            {
@@ -2928,8 +2949,10 @@ int swad__getNotifications (struct soap *soap,
            }
          else
            {
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,strlen (ContentStr)+1);
-            strcpy (getNotificationsOut->notificationsArray.__ptr[NumNotif].content,ContentStr);
+            Length = strlen (ContentStr);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].content = (char *) soap_malloc (Gbl.soap,Length + 1);
+            Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].content,
+                      ContentStr,Length);
 
             /* Free memory used by content string */
             free ((void *) ContentStr);
@@ -4365,7 +4388,7 @@ static bool Svc_WriteRowFileBrowser (unsigned Level,Brw_FileType_t FileType,cons
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    struct FileMetadata FileMetadata;
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Is this row hidden or visible? *****/
    if (Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CRS ||
@@ -4441,8 +4464,8 @@ int swad__getFile (struct soap *soap,
    extern const char *Txt_LICENSES[Brw_NUM_LICENSES];
    int ReturnCode;
    struct FileMetadata FileMetadata;
-   char URL[Cns_MAX_BYTES_URL + 1];
-   char PhotoURL[Cns_MAX_BYTES_URL + 1];
+   char URL[Cns_MAX_LENGTH_WWW + 1];
+   char PhotoURL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -4450,10 +4473,10 @@ int swad__getFile (struct soap *soap,
 
    /***** Allocate space for strings *****/
    getFileOut->fileName        = (char *) soap_malloc (Gbl.soap,NAME_MAX + 1);
-   getFileOut->URL             = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+   getFileOut->URL             = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
    getFileOut->license         = (char *) soap_malloc (Gbl.soap,Brw_MAX_LENGTH_LICENSE + 1);
    getFileOut->publisherName   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FULL_NAME + 1);
-   getFileOut->publisherPhoto  = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_URL + 1);
+   getFileOut->publisherPhoto  = (char *) soap_malloc (Gbl.soap,Cns_MAX_LENGTH_WWW + 1);
 
    /***** Default values returned on error *****/
    getFileOut->fileName[0]       = '\0';
@@ -4561,7 +4584,7 @@ int swad__getFile (struct soap *soap,
    /***** Copy data into output structure *****/
    Str_Copy (getFileOut->fileName,FileMetadata.FilFolLnkName,NAME_MAX);
 
-   Str_Copy (getFileOut->URL,URL,Cns_MAX_BYTES_URL);
+   Str_Copy (getFileOut->URL,URL,Cns_MAX_LENGTH_WWW);
 
    getFileOut->size = (int) FileMetadata.Size;
 
@@ -4579,7 +4602,7 @@ int swad__getFile (struct soap *soap,
 	           Usr_MAX_BYTES_FULL_NAME);
 
 	 Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
-	 Str_Copy (getFileOut->publisherPhoto,PhotoURL,Cns_MAX_BYTES_URL);
+	 Str_Copy (getFileOut->publisherPhoto,PhotoURL,Cns_MAX_LENGTH_WWW);
 	}
 
    return SOAP_OK;
@@ -4597,6 +4620,7 @@ int swad__getMarks (struct soap *soap,
    struct FileMetadata FileMetadata;
    char SummaryStr[NAME_MAX+1];	// Really not used
    char *ContentStr;
+   size_t Length;
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -4664,10 +4688,9 @@ int swad__getMarks (struct soap *soap,
                         0,true);
    if (ContentStr != NULL)
      {
-      getMarksOut->content = (char *) soap_malloc (Gbl.soap,strlen (ContentStr)+1);
-
-      strcpy (getMarksOut->content,ContentStr);
-
+      Length = strlen (ContentStr);
+      getMarksOut->content = (char *) soap_malloc (Gbl.soap,Length + 1);
+      Str_Copy (getMarksOut->content,ContentStr,Length);
       free ((void *) ContentStr);
       ContentStr = NULL;
      }

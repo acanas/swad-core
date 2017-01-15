@@ -610,7 +610,7 @@ void Fil_CloseReportFile (void)
 #define Ti 1099511627776.0
 
 void Fil_WriteFileSizeBrief (double SizeInBytes,
-                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING])
+                             char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1])
   {
    if (SizeInBytes < Ki)
       sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);
@@ -625,7 +625,7 @@ void Fil_WriteFileSizeBrief (double SizeInBytes,
   }
 
 void Fil_WriteFileSizeFull (double SizeInBytes,
-                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING])
+                            char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1])
   {
    if (SizeInBytes < Ki)
       sprintf (FileSizeStr,"%.0f&nbsp;B"  ,SizeInBytes);

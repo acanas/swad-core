@@ -1027,14 +1027,18 @@ static void Prf_ResetUsrFigures (struct UsrFigures *UsrFigures)
 /***** Get number of messages sent by a user and store in user's figures *****/
 /*****************************************************************************/
 
+#define Prf_MAX_LENGTH_SUBQUERY_FIRST_CLICK_TIME (64 - 1)
+
 static void Prf_CreateUsrFigures (long UsrCod,const struct UsrFigures *UsrFigures,
                                   bool CreatingMyOwnAccount)
   {
-   char Query[512];
-   char SubQueryFirstClickTime[64];
+   char Query[512 + Prf_MAX_LENGTH_SUBQUERY_FIRST_CLICK_TIME];
+   char SubQueryFirstClickTime[Prf_MAX_LENGTH_SUBQUERY_FIRST_CLICK_TIME + 1];
 
    if (CreatingMyOwnAccount)
-      strcpy (SubQueryFirstClickTime,"NOW()");	// This is the first click
+      // This is the first click
+      Str_Copy (SubQueryFirstClickTime,"NOW()",
+                Prf_MAX_LENGTH_SUBQUERY_FIRST_CLICK_TIME);
    else
       sprintf (SubQueryFirstClickTime,"FROM_UNIXTIME('%ld')",
 	       (long) UsrFigures->FirstClickTimeUTC);	//   0 ==> unknown first click time or user never logged
