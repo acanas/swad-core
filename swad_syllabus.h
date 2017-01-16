@@ -80,7 +80,7 @@ void Syl_FreeListItemsSyllabus (void);
 int Syl_ReadLevelItemSyllabus (void);
 int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer);
 void Syl_PutParamNumItem (unsigned NumItem);
-void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
+
 void Syl_RemoveItemSyllabus (void);
 void Syl_UpItemSyllabus (void);
 void Syl_DownItemSyllabus (void);

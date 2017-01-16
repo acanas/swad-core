@@ -66,7 +66,11 @@ void Fil_EndOfReadingStdin (void);
 struct Param *Fil_StartReceptionOfFile (const char *ParamFile,
                                         char *FileName,char *MIMEType);
 bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param);
-void Fil_CreateUpdateFile  (const char *CurrentName,const char *ExtensionOldName,char *OldName,char *NewName,FILE **NewFile);
+void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
+                           const char *ExtensionOldName,
+                           char OldName[PATH_MAX + 1],
+                           char NewName[PATH_MAX + 1],
+                           FILE **NewFile);
 void Fil_CloseUpdateFile (const char *CurrentName,const char *OldName,const char *NewName,FILE *NewFile);
 
 bool Fil_RenameFileOrDir (const char *PathOld,const char *PathNew);

@@ -3080,7 +3080,9 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
+   size_t MaxLength = (Grp_MAX_LENGTH_GROUP_NAME + 2) * Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
 
    /***** Get the names of groups which a user belongs to, from database *****/
    sprintf (Query,"SELECT crs_grp.GrpName FROM crs_grp,crs_grp_usr"
@@ -3102,8 +3104,8 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 
       /* El group name in row[0] */
       if (NumRow)
-         strcat (GroupNames,", ");
-      strcat (GroupNames,row[0]);
+         Str_Concat (GroupNames,", ",MaxLength);
+      Str_Concat (GroupNames,row[0],MaxLength);
      }
 
    /***** Free structure that stores the query result *****/
@@ -4032,7 +4034,7 @@ void Grp_RenameGroup (void)
    extern const char *Txt_The_name_of_the_group_X_has_not_changed;
    struct GroupData GrpDat;
    char Query[512];
-   char NewNameGrp[Grp_MAX_LENGTH_GROUP_NAME+1];
+   char NewNameGrp[Grp_MAX_LENGTH_GROUP_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the group */

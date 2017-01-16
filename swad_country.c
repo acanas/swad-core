@@ -930,16 +930,18 @@ void Cty_EditCountries (void)
 /************************** List all the countries ***************************/
 /*****************************************************************************/
 
+#define Cty_MAX_LENGTH_SUBQUERY_CTYS	((1 + Txt_NUM_LANGUAGES) * 32)
+
 void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char StrField[32];
-   char SubQueryNam1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryNam2[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryWWW1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryWWW2[(1+Txt_NUM_LANGUAGES)*32];
+   char SubQueryNam1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryNam2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryWWW1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryWWW2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
    char OrderBySubQuery[256];
-   char Query[1024+(1+Txt_NUM_LANGUAGES)*32*4];
+   char Query[1024 + Cty_MAX_LENGTH_SUBQUERY_CTYS * 4];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -967,17 +969,17 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
            {
             sprintf (StrField,"countries.Name_%s,",
         	     Txt_STR_LANG_ID[Lan]);
-            strcat (SubQueryNam1,StrField);
+            Str_Concat (SubQueryNam1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
             sprintf (StrField,"Name_%s,",
         	     Txt_STR_LANG_ID[Lan]);
-            strcat (SubQueryNam2,StrField);
+            Str_Concat (SubQueryNam2,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 
             sprintf (StrField,"countries.WWW_%s,",
         	     Txt_STR_LANG_ID[Lan]);
-            strcat (SubQueryWWW1,StrField);
+            Str_Concat (SubQueryWWW1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
             sprintf (StrField,"WWW_%s,",
         	     Txt_STR_LANG_ID[Lan]);
-            strcat (SubQueryWWW2,StrField);
+            Str_Concat (SubQueryWWW2,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
            }
 
          switch (Gbl.Ctys.SelectedOrderType)
@@ -1192,11 +1194,11 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
    extern const char *Txt_Another_country;
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char StrField[32];
-   char SubQueryNam1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryNam2[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryWWW1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryWWW2[(1+Txt_NUM_LANGUAGES)*32];
-   char Query[1024+(1+Txt_NUM_LANGUAGES)*32*4];
+   char SubQueryNam1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryNam2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryWWW1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char SubQueryWWW2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
+   char Query[1024 + Cty_MAX_LENGTH_SUBQUERY_CTYS * 4];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1255,14 +1257,14 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	      Lan++)
 	   {
 	    sprintf (StrField,"countries.Name_%s,",Txt_STR_LANG_ID[Lan]);
-	    strcat (SubQueryNam1,StrField);
+	    Str_Concat (SubQueryNam1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 	    sprintf (StrField,"Name_%s,",Txt_STR_LANG_ID[Lan]);
-	    strcat (SubQueryNam2,StrField);
+	    Str_Concat (SubQueryNam2,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 
 	    sprintf (StrField,"countries.WWW_%s,",Txt_STR_LANG_ID[Lan]);
-	    strcat (SubQueryWWW1,StrField);
+	    Str_Concat (SubQueryWWW1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 	    sprintf (StrField,"WWW_%s,",Txt_STR_LANG_ID[Lan]);
-	    strcat (SubQueryWWW2,StrField);
+	    Str_Concat (SubQueryWWW2,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 	   }
 	 sprintf (Query,"(SELECT countries.Alpha2,%s%sCOUNT(*) AS NumUsrs"
 			" FROM countries,usr_data"
@@ -2077,17 +2079,24 @@ void Cty_RecFormNewCountry (void)
 /**************************** Create a new country ***************************/
 /*****************************************************************************/
 
+#define Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME	((1 + Txt_NUM_LANGUAGES) * Cty_MAX_BYTES_COUNTRY_NAME)
+#define Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW	((1 + Txt_NUM_LANGUAGES) * Cns_MAX_LENGTH_WWW)
+
 static void Cty_CreateCountry (struct Country *Cty)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    extern const char *Txt_Created_new_country_X;
    Txt_Language_t Lan;
    char StrField[32];
-   char SubQueryNam1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryNam2[(1+Txt_NUM_LANGUAGES)*Cty_MAX_BYTES_COUNTRY_NAME];
-   char SubQueryWWW1[(1+Txt_NUM_LANGUAGES)*32];
-   char SubQueryWWW2[(1+Txt_NUM_LANGUAGES)*Cns_MAX_LENGTH_WWW];
-   char Query[1024 + (1 + Txt_NUM_LANGUAGES) * (32 + Cty_MAX_BYTES_COUNTRY_NAME + 32 + Cns_MAX_LENGTH_WWW)];
+   char SubQueryNam1[Cty_MAX_LENGTH_SUBQUERY_CTYS      + 1];
+   char SubQueryNam2[Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME + 1];
+   char SubQueryWWW1[Cty_MAX_LENGTH_SUBQUERY_CTYS      + 1];
+   char SubQueryWWW2[Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW  + 1];
+   char Query[1024 +
+              Cty_MAX_LENGTH_SUBQUERY_CTYS +
+              Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME +
+              Cty_MAX_LENGTH_SUBQUERY_CTYS +
+              Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW];
 
    /***** Create a new country *****/
    SubQueryNam1[0] = '\0';
@@ -2099,18 +2108,18 @@ static void Cty_CreateCountry (struct Country *Cty)
 	Lan++)
      {
       sprintf (StrField,",Name_%s",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryNam1,StrField);
+      Str_Concat (SubQueryNam1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 
-      strcat (SubQueryNam2,",'");
-      strcat (SubQueryNam2,Cty->Name[Lan]);
-      strcat (SubQueryNam2,"'");
+      Str_Concat (SubQueryNam2,",'"          ,Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME);
+      Str_Concat (SubQueryNam2,Cty->Name[Lan],Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME);
+      Str_Concat (SubQueryNam2,"'"           ,Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME);
 
       sprintf (StrField,",WWW_%s",Txt_STR_LANG_ID[Lan]);
-      strcat (SubQueryWWW1,StrField);
+      Str_Concat (SubQueryWWW1,StrField,Cty_MAX_LENGTH_SUBQUERY_CTYS);
 
-      strcat (SubQueryWWW2,",'");
-      strcat (SubQueryWWW2,Cty->WWW[Lan]);
-      strcat (SubQueryWWW2,"'");
+      Str_Concat (SubQueryWWW2,",'"         ,Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW);
+      Str_Concat (SubQueryWWW2,Cty->WWW[Lan],Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW);
+      Str_Concat (SubQueryWWW2,"'"          ,Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW);
      }
    sprintf (Query,"INSERT INTO countries (CtyCod,Alpha2%s%s)"
 	          " VALUES ('%03ld','%s'%s%s)",

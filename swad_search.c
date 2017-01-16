@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #include <stdio.h>	// For fprintf...
-#include <string.h>	// For strcat...
+#include <string.h>	// For string functions...
 
 #include "swad_database.h"
 #include "swad_global.h"
@@ -666,8 +666,8 @@ static void Sch_SearchInDB (void)
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_CTR &&
@@ -1219,7 +1219,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 // Returns true if a valid search query is built
 // Returns false when no valid search query
 
-bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
+bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1],
+                           const char *FieldName,
                            const char *CharSet,const char *Collate)
   {
    const char *Ptr;
@@ -1273,18 +1274,18 @@ bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
 	        Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
 	       break;
 	    if (NumWords)
-	       strcat (SearchQuery," AND ");
-	    strcat (SearchQuery,FieldName);
-	    strcat (SearchQuery," LIKE ");
+	       Str_Concat (SearchQuery," AND ",Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,FieldName,Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery," LIKE ",Sch_MAX_LENGTH_SEARCH_QUERY);
 	    if (CharSet)
 	       if (CharSet[0])
-		  strcat (SearchQuery,CharSet);
-	    strcat (SearchQuery,"'%");
-	    strcat (SearchQuery,SearchWords[NumWords]);
-	    strcat (SearchQuery,"%'");
+		  Str_Concat (SearchQuery,CharSet,Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"'%",Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,SearchWords[NumWords],Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"%'",Sch_MAX_LENGTH_SEARCH_QUERY);
 	    if (Collate)
 	       if (Collate[0])
-		  strcat (SearchQuery,Collate);
+		  Str_Concat (SearchQuery,Collate,Sch_MAX_LENGTH_SEARCH_QUERY);
 	   }
 	}
 

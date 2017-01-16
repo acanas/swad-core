@@ -301,21 +301,21 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
    Str_Copy (FullNameAndUsrID,UsrDat->Surname1,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
    if (UsrDat->Surname1[0] &&
        UsrDat->Surname2[0])
-      strcat (FullNameAndUsrID,"_");	// Separation between surname 1 and surname 2
-   strcat (FullNameAndUsrID,UsrDat->Surname2);
+      Str_Concat (FullNameAndUsrID,"_",ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// Separation between surname 1 and surname 2
+   Str_Concat (FullNameAndUsrID,UsrDat->Surname2,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0]) &&
        UsrDat->FirstName[0])
-      strcat (FullNameAndUsrID,"_");	// Separation between surnames and first name
-   strcat (FullNameAndUsrID,UsrDat->FirstName);
+      Str_Concat (FullNameAndUsrID,"_",ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// Separation between surnames and first name
+   Str_Concat (FullNameAndUsrID,UsrDat->FirstName,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0] ||
 	UsrDat->FirstName[0]) &&
        UsrDat->IDs.Num)
-      strcat (FullNameAndUsrID,"-");	// Separation between name and ID
+      Str_Concat (FullNameAndUsrID,"-",ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// Separation between name and ID
    Str_LimitLengthHTMLStr (FullNameAndUsrID,50);
    if (UsrDat->IDs.Num)	// If this user has at least one ID
-      strcat (FullNameAndUsrID,UsrDat->IDs.List[0].ID);	// First user's ID
+      Str_Concat (FullNameAndUsrID,UsrDat->IDs.List[0].ID,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// First user's ID
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
    /* Create path to folder and link */

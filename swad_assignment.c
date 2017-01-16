@@ -456,8 +456,8 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
    Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
-      strcat (Surnames," ");
-      strcat (Surnames,UsrDat.Surname2);
+      Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames,UsrDat.Surname2,Usr_MAX_BYTES_SURNAMES);
      }
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);

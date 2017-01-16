@@ -318,13 +318,17 @@ bool Fil_EndReceptionOfFile (char *FileNameDataTmp,struct Param *Param)
 // OldName is created
 // NewName is created
 
-void Fil_CreateUpdateFile (const char *CurrentName,const char *ExtensionOldName,char *OldName,char *NewName,FILE **NewFile)
+void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
+                           const char *ExtensionOldName,
+                           char OldName[PATH_MAX + 1],
+                           char NewName[PATH_MAX + 1],
+                           FILE **NewFile)
   {
    size_t LengthFileRoot = Str_GetLengthRootFileName (CurrentName);
 
    Str_Copy (NewName,CurrentName,LengthFileRoot);
    sprintf (OldName,"%s%s",NewName,ExtensionOldName);
-   strcat (NewName,".new");
+   Str_Concat (NewName,".new",PATH_MAX);
 
    /* The new file shouldn't exist. If it exists is due to any error when running this CGI formerly
       and the file was not renamed successfully. In this case, remove it! */

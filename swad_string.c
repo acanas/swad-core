@@ -1102,13 +1102,15 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      // Insert a space to separate former string from &nbsp;
                      // This space is not printed on screen in HTML,
                      // but it is necessary to mark the end of a possible previous URL
-                     strcat (StrSpecialChar,
-                             ThereIsSpaceChar ? "&nbsp;" :
-                        	                " ");	// The first space
+                     Str_Concat (StrSpecialChar,
+                                 ThereIsSpaceChar ? "&nbsp;" :
+                        	                    " ",	// The first space
+                                 Str_MAX_LENGTH_SPECIAL_CHAR);
                      for (i = 1;
                 	  i < NumSpacesTab;
                 	  i++)					// Rest of spaces, except the first
-                        strcat (StrSpecialChar,"&nbsp;"); // Add a space
+                        Str_Concat (StrSpecialChar,"&nbsp;",	// Add a space
+                                    Str_MAX_LENGTH_SPECIAL_CHAR);
                      NumPrintableCharsFromReturn += NumSpacesTab;
                     }
                   else

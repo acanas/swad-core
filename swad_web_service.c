@@ -2201,6 +2201,7 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    long NumGrp;
    long GrpCod;
    char GrpCodStr[10+1];
+   size_t Length;
 
    /***** Get list of groups *****/
    sprintf (Query,"SELECT GrpCod FROM att_grp WHERE AttCod='%ld'",
@@ -2209,7 +2210,8 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
       *ListGroups = NULL;
    else	// Events found
      {
-      *ListGroups = soap_malloc (Gbl.soap,NumGrps * 10);
+      Length = NumGrps * (10 + 1) - 1;
+      *ListGroups = soap_malloc (Gbl.soap,Length + 1);
 
       for (NumGrp = 0;
 	   NumGrp < NumGrps;
@@ -2224,7 +2226,7 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
 		  NumGrp ? ",%ld" :
 			   "%ld",
 		  GrpCod);
-	 strcat (*ListGroups,GrpCodStr);
+	 Str_Concat (*ListGroups,GrpCodStr,Length);
 	}
      }
 
@@ -2638,6 +2640,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    long UsrCod;
    unsigned NumCodsInList;
    char SubQuery[256];
+   size_t Length = 0;	// Initialized to avoid warning
    char *Query = NULL;	// Initialized to avoid warning
 
    /***** Initializations *****/
@@ -2686,7 +2689,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
 
       /* Start query used to mark not present users as absent */
-      if ((Query = (char *) malloc (256 + NumCodsInList * (1+1+10+1))) == NULL)
+      Length = 256 + NumCodsInList * (1+1+10+1) - 1;
+      if ((Query = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
@@ -2718,7 +2722,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",'%ld'" :
 								       " AND UsrCod NOT IN ('%ld'",
 			   UsrCod);
-		  strcat (Query,SubQuery);
+		  Str_Concat (Query,SubQuery,Length);
 		 }
 
 	       sendAttendanceUsersOut->numUsers++;
@@ -2729,7 +2733,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
      {
       /* Mark not present users as absent in table of users */
       if (sendAttendanceUsersOut->numUsers)
-        strcat (Query,")");
+         Str_Concat (Query,")",Length);
 
       DB_QueryUPDATE (Query,"can not set other users as absent");
       free ((void *) Query);
@@ -3085,7 +3089,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 /****************** Send a message to one or more users **********************/
 /*****************************************************************************/
 
-#define Svc_MAX_LENGHT_QUERY_RECIPIENTS (10*1024)
+#define Svc_MAX_LENGTH_QUERY_RECIPIENTS (10*1024 - 1)
 
 int swad__sendMessage (struct soap *soap,
                        char *wsKey,int messageCode,char *to,char *subject,char *body,	// input
@@ -3094,7 +3098,7 @@ int swad__sendMessage (struct soap *soap,
    int ReturnCode;
    long ReplyUsrCod = -1L;
    char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char Query[Svc_MAX_LENGHT_QUERY_RECIPIENTS+1];
+   char Query[Svc_MAX_LENGTH_QUERY_RECIPIENTS + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -3199,7 +3203,7 @@ int swad__sendMessage (struct soap *soap,
          Str_RemoveLeadingArrobas (Nickname);
 
 	 /* Check for overflow in query */
-	 if (strlen (Query)+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+32 > Svc_MAX_LENGHT_QUERY_RECIPIENTS)
+	 if (strlen (Query)+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+32 > Svc_MAX_LENGTH_QUERY_RECIPIENTS)
 	    return soap_sender_fault (Gbl.soap,
 				      "Can not send message",
 				      "Too many recipients");
@@ -3208,20 +3212,21 @@ int swad__sendMessage (struct soap *soap,
 	 if (FirstNickname)
 	   {
 	    if (ReplyUsrCod > 0)
-	       strcat (Query," UNION ");
-	    strcat (Query,"SELECT UsrCod FROM usr_nicknames"
-			  " WHERE Nickname IN ('");
+	       Str_Concat (Query," UNION ",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	    Str_Concat (Query,"SELECT UsrCod FROM usr_nicknames"
+			      " WHERE Nickname IN ('",
+			Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 	    FirstNickname = false;
 	    ThereAreNicknames = true;
 	   }
 	 else
-	    strcat (Query,",'");
-	 strcat (Query,Nickname);
-	 strcat (Query,"'");
+	    Str_Concat (Query,",'",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	 Str_Concat (Query,Nickname,Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	 Str_Concat (Query,"'",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 	}
      }
    if (ThereAreNicknames)
-      strcat (Query,")");
+      Str_Concat (Query,")",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 
    /***** Initialize output structure *****/
    sendMessageOut->numUsers = 0;
@@ -3932,6 +3937,8 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
 /***************** Return one test question for Trivial game *****************/
 /*****************************************************************************/
 
+#define Svc_MAX_LENGTH_DEGREES_STR (1024 - 1)
+
 int swad__getTrivialQuestion (struct soap *soap,
                               char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
                               struct swad__getTrivialQuestionOutput *getTrivialQuestionOut)	// output
@@ -3940,7 +3947,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    int ReturnCode;
    const char *Ptr;
    char LongStr[1+10+1];
-   char DegreesStr[1024];
+   char DegreesStr[Svc_MAX_LENGTH_DEGREES_STR + 1];
    char DegStr[ 1+1+1+  10  +1+ 1];
    //   DegStr=", ' - number ' \0"
    long DegCod;
@@ -4004,7 +4011,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	    else
 	      {
 	       sprintf (DegStr,",'%ld'",DegCod);
-	       strcat (DegreesStr,DegStr);
+	       Str_Concat (DegreesStr,DegStr,Svc_MAX_LENGTH_DEGREES_STR);
 	      }
 	   }
      }

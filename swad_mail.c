@@ -838,7 +838,7 @@ void Mai_ListEmails (void)
    unsigned NumUsr;
    unsigned NumStdsWithEmail;
    unsigned NumAcceptedStdsWithEmail;
-   char StrAddresses[Mai_MAX_LENGTH_STR_ADDR+1];
+   char StrAddresses[Mai_MAX_LENGTH_STR_ADDR + 1];
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
 
@@ -884,18 +884,15 @@ void Mai_ListEmails (void)
 		  if (NumAcceptedStdsWithEmail > 0)
 		    {
 		     fprintf (Gbl.F.Out,", ");
-		     LengthStrAddr += 2;
-		     if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
-			strcat (StrAddresses,",");
-		     else
+		     LengthStrAddr ++;
+		     if (LengthStrAddr > Mai_MAX_LENGTH_STR_ADDR)
 			Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
+		     Str_Concat (StrAddresses,",",Mai_MAX_LENGTH_STR_ADDR);
 		    }
 		  LengthStrAddr += strlen (UsrDat.Email);
-		  if (LengthStrAddr <= Mai_MAX_LENGTH_STR_ADDR)
-		     strcat (StrAddresses,UsrDat.Email);
-		  else
+		  if (LengthStrAddr > Mai_MAX_LENGTH_STR_ADDR)
 		     Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
-
+		  Str_Concat (StrAddresses,UsrDat.Email,Mai_MAX_LENGTH_STR_ADDR);
 		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
 			   UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
 
@@ -1715,8 +1712,8 @@ void Mai_ConfirmEmail (void)
 			   " AND usr_emails.E_mail='%s'",
 		     UsrCod,Email);
 	    DB_QueryUPDATE (Query,"can not confirm email");
+
 	    sprintf (Gbl.Message,Txt_The_email_X_has_been_confirmed,Email);
-	    strcat (Gbl.Message,".");
            }
          Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}

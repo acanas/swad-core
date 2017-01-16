@@ -496,8 +496,8 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
-      strcat (Surnames," ");
-      strcat (Surnames,UsrDat.Surname2);
+      Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames,UsrDat.Surname2,Usr_MAX_BYTES_SURNAMES);
      }
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);
@@ -2404,11 +2404,13 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
    char SubQuery[1+1+10+1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;
+   size_t MaxLength;
 
    if (NumStdsInList)
      {
       /***** Allocate space for query *****/
-      if ((Query = (char *) malloc ((size_t) (256+NumStdsInList*(1+1+10)))) == NULL)
+      MaxLength = 256 + NumStdsInList * (1 + 1 + 10);
+      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory for query.");
 
       /***** Count number of students registered in an event in database *****/
@@ -2424,9 +2426,9 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
                   NumStd ? ",%ld" :
                 	   "%ld",
                   LstSelectedUsrCods[NumStd]);
-	 strcat (Query,SubQuery);
+	 Str_Concat (Query,SubQuery,MaxLength);
 	}
-      strcat (Query,") AND Present='Y'");
+      Str_Concat (Query,") AND Present='Y'",MaxLength);
 
       NumStdsInAttEvent = (unsigned) DB_QueryCOUNT (Query,"can not get number of students from a list who are registered in an event");
 

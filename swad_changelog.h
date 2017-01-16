@@ -189,13 +189,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.116 (2017-01-15)"
+#define Log_PLATFORM_VERSION	"SWAD 16.117 (2017-01-16)"
 #define CSS_FILE		"swad16.111.5.css"
 #define JS_FILE			"swad16.114.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.117:   Jan 16, 2017	Code refactoring related to string concatenation. (211244 lines)
         Version 16.116:   Jan 15, 2017	Code refactoring related to string copy. (211195 lines)
         Version 16.115:   Jan 15, 2017	Code refactoring related to string copy. (211046 lines)
         Version 16.114.3: Jan 15, 2017	Fixed bug in chat. (211412 lines)

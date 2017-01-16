@@ -630,12 +630,13 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
    if (NumRecords == 1)
-      strcat (Gbl.Message,Txt_this_field_is_filled_in_the_record_of_one_student);
+      Str_Concat (Gbl.Message,Txt_this_field_is_filled_in_the_record_of_one_student,
+                  Lay_MAX_BYTES_ALERT);
    else
      {
       sprintf (Message_part2,Txt_this_field_is_filled_in_the_records_of_X_students,
                NumRecords);
-      strcat (Gbl.Message,Message_part2);
+      Str_Concat (Gbl.Message,Message_part2,Lay_MAX_BYTES_ALERT);
      }
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 

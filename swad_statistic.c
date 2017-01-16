@@ -264,10 +264,11 @@ void Sta_GetRemoteAddr (void)
 /**************************** Log access in database *************************/
 /*****************************************************************************/
 
+#define Sta_MAX_LENGTH_QUERY_LOG (2048 - 1)
 void Sta_LogAccess (const char *Comments)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char Query[2048];
+   char Query[Sta_MAX_LENGTH_QUERY_LOG + 1];
    long LogCod;
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.LoggedRoleBeforeCloseSession :
                                                             Gbl.Usrs.Me.LoggedRole;
@@ -333,7 +334,7 @@ void Sta_LogAccess (const char *Comments)
                      " VALUES ('%ld','",
 	       LogCod);
       Str_AddStrToQuery (Query,Comments,sizeof (Query));
-      strcat (Query,"')");
+      Str_Concat (Query,"')",Sta_MAX_LENGTH_QUERY_LOG);
 
       if (Gbl.WebService.IsWebService)
         {
@@ -804,7 +805,7 @@ void Sta_SeeCrsAccesses (void)
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000)
+#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000 - 1)
 
 #define Sta_MAX_LENGTH_COUNT_TYPE (256 - 1)
 
@@ -818,7 +819,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    extern const char *Txt_List_of_detailed_clicks;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics;
-   char Query[Sta_MAX_LENGTH_QUERY_ACCESS+1];
+   char Query[Sta_MAX_LENGTH_QUERY_ACCESS + 1];
    char QueryAux[512];
    long LengthQuery;
    MYSQL_RES *mysql_res;
@@ -1110,7 +1111,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
             LogTable,
             (long) Gbl.DateRange.TimeUTC[0],
             (long) Gbl.DateRange.TimeUTC[1]);
-   strcat (Query,QueryAux);
+   Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 
    switch (GlobalOrCourse)
      {
@@ -1126,7 +1127,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CtyCod='%ld'",
 			   LogTable,Gbl.CurrentCty.Cty.CtyCod);
-		  strcat (Query,QueryAux);
+		  Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 		 }
                break;
 	    case Sco_SCOPE_INS:
@@ -1134,7 +1135,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.InsCod='%ld'",
 			   LogTable,Gbl.CurrentIns.Ins.InsCod);
-		  strcat (Query,QueryAux);
+		  Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 		 }
 	       break;
 	    case Sco_SCOPE_CTR:
@@ -1142,7 +1143,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CtrCod='%ld'",
 			   LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
-		  strcat (Query,QueryAux);
+		  Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 		 }
                break;
 	    case Sco_SCOPE_DEG:
@@ -1150,7 +1151,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.DegCod='%ld'",
 			   LogTable,Gbl.CurrentDeg.Deg.DegCod);
-		  strcat (Query,QueryAux);
+		  Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 		 }
 	       break;
 	    case Sco_SCOPE_CRS:
@@ -1158,7 +1159,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 		 {
 		  sprintf (QueryAux," AND %s.CrsCod='%ld'",
 			   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
-		  strcat (Query,QueryAux);
+		  Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 		 }
 	       break;
 	   }
@@ -1222,7 +1223,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         LogTable,Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	   }
-         strcat (Query,StrRole);
+         Str_Concat (Query,StrRole,Sta_MAX_LENGTH_QUERY_ACCESS);
 
          switch (Gbl.Stat.ClicksGroupedBy)
            {
@@ -1230,12 +1231,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
             case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
                sprintf (QueryAux," AND %s.LogCod=log_ws.LogCod",
                         LogTable);
-               strcat (Query,QueryAux);
+               Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
                break;
             case Sta_CLICKS_GBL_PER_BANNER:
                sprintf (QueryAux," AND %s.LogCod=log_banners.LogCod",
                         LogTable);
-               strcat (Query,QueryAux);
+               Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
                break;
             default:
                break;
@@ -1244,7 +1245,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
       case Sta_SHOW_COURSE_ACCESSES:
          sprintf (QueryAux," AND %s.CrsCod='%ld'",
                   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
-	 strcat (Query,QueryAux);
+	 Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 LengthQuery = strlen (Query);
 	 NumUsr = 0;
 	 Ptr = Gbl.Usrs.Select.All;
@@ -1261,11 +1262,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                         NumUsr ? " OR %s.UsrCod='%ld'" :
                                  " AND (%s.UsrCod='%ld'",
                         LogTable,UsrDat.UsrCod);
-	       strcat (Query,QueryAux);
+	       Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	       NumUsr++;
 	      }
 	   }
-	 strcat (Query,")");
+	 Str_Concat (Query,")",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
      }
 
@@ -1274,76 +1275,79 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       sprintf (QueryAux," AND %s.ActCod='%ld'",
                LogTable,Act_Actions[Gbl.Stat.NumAction].ActCod);
-      strcat (Query,QueryAux);
+      Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
      }
 
    /* End the query */
    switch (Gbl.Stat.ClicksGroupedBy)
      {
       case Sta_CLICKS_CRS_DETAILED_LIST:
-	 strcat (Query," ORDER BY F");
+	 Str_Concat (Query," ORDER BY F",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_USR:
 	 sprintf (QueryAux," GROUP BY %s.UsrCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS:
       case Sta_CLICKS_GBL_PER_DAYS:
-	 strcat (Query," GROUP BY Day DESC");
+	 Str_Concat (Query," GROUP BY Day DESC",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_DAYS_AND_HOUR:
       case Sta_CLICKS_GBL_PER_DAYS_AND_HOUR:
-	 strcat (Query," GROUP BY Day DESC,Hour");
+	 Str_Concat (Query," GROUP BY Day DESC,Hour",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_WEEKS:
       case Sta_CLICKS_GBL_PER_WEEKS:
-	 strcat (Query," GROUP BY Week DESC");
+	 Str_Concat (Query," GROUP BY Week DESC",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MONTHS:
       case Sta_CLICKS_GBL_PER_MONTHS:
-	 strcat (Query," GROUP BY Month DESC");
+	 Str_Concat (Query," GROUP BY Month DESC",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_HOUR:
       case Sta_CLICKS_GBL_PER_HOUR:
-	 strcat (Query," GROUP BY Hour");
+	 Str_Concat (Query," GROUP BY Hour",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_MINUTE:
       case Sta_CLICKS_GBL_PER_MINUTE:
-	 strcat (Query," GROUP BY Minute");
+	 Str_Concat (Query," GROUP BY Minute",Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_CRS_PER_ACTION:
       case Sta_CLICKS_GBL_PER_ACTION:
 	 sprintf (QueryAux," GROUP BY %s.ActCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_PLUGIN:
-         strcat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC");
+         Str_Concat (Query," GROUP BY log_ws.PlgCod ORDER BY Num DESC",
+                     Sta_MAX_LENGTH_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_WEB_SERVICE_FUNCTION:
-         strcat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC");
+         Str_Concat (Query," GROUP BY log_ws.FunCod ORDER BY Num DESC",
+                     Sta_MAX_LENGTH_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_BANNER:
-         strcat (Query," GROUP BY log_banners.BanCod ORDER BY Num DESC");
+         Str_Concat (Query," GROUP BY log_banners.BanCod ORDER BY Num DESC",
+                     Sta_MAX_LENGTH_QUERY_ACCESS);
          break;
       case Sta_CLICKS_GBL_PER_COUNTRY:
 	 sprintf (QueryAux," GROUP BY %s.CtyCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_INSTITUTION:
 	 sprintf (QueryAux," GROUP BY %s.InsCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_CENTRE:
 	 sprintf (QueryAux," GROUP BY %s.CtrCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_DEGREE:
 	 sprintf (QueryAux," GROUP BY %s.DegCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
       case Sta_CLICKS_GBL_PER_COURSE:
 	 sprintf (QueryAux," GROUP BY %s.CrsCod ORDER BY Num DESC",LogTable);
-         strcat (Query,QueryAux);
+         Str_Concat (Query,QueryAux,Sta_MAX_LENGTH_QUERY_ACCESS);
 	 break;
      }
    /***** Write query for debug *****/

@@ -1052,7 +1052,7 @@ void Msg_GetParamFilterContent (void)
 static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1])
   {
    const char *Ptr;
-   char SearchWord[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME+1];
+   char SearchWord[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME + 1];
 
    /***** Split "from"/"to" string into words *****/
    if (Gbl.Msg.FilterFromTo[0])
@@ -1066,10 +1066,10 @@ static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENG
          Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_LENGTH_USR_NAME_OR_SURNAME);
          if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 > Msg_MAX_LENGTH_MESSAGES_QUERY)	// Prevent string overflow
             break;
-         strcat (FilterFromToSubquery,"%");
-         strcat (FilterFromToSubquery,SearchWord);
+         Str_Concat (FilterFromToSubquery,"%",Msg_MAX_LENGTH_MESSAGES_QUERY);
+         Str_Concat (FilterFromToSubquery,SearchWord,Msg_MAX_LENGTH_MESSAGES_QUERY);
         }
-      strcat (FilterFromToSubquery,"%'");
+      Str_Concat (FilterFromToSubquery,"%'",Msg_MAX_LENGTH_MESSAGES_QUERY);
      }
    else
       FilterFromToSubquery[0] = '\0';

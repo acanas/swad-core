@@ -177,7 +177,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
    char *Query;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   size_t Length;
+   size_t MaxLength;
    unsigned NumID;
    unsigned NumUsr;
    bool CheckPassword = false;
@@ -189,40 +189,41 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	    CheckPassword = true;
 
       /***** Allocate memory for query string *****/
-      Length = 512 + UsrDat->IDs.Num * (1 + ID_MAX_LENGTH_USR_ID + 1) - 1;
-      if ((Query = (char *) malloc (Length + 1)) == NULL)
+      MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_LENGTH_USR_ID + 1) - 1;
+      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of user's IDs.");
 
       /***** Get user's code(s) from database *****/
       Str_Copy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
 				      " WHERE usr_IDs.UsrID IN (" :
 				      "SELECT DISTINCT(UsrCod) FROM usr_IDs"
-				      " WHERE UsrID IN (",Length);
+				      " WHERE UsrID IN (",MaxLength);
       for (NumID = 0;
 	   NumID < UsrDat->IDs.Num;
 	   NumID++)
 	{
 	 if (NumID)
-	    strcat (Query,",");
+	    Str_Concat (Query,",",MaxLength);
 	 sprintf (SubQuery,"'%s'",UsrDat->IDs.List[NumID].ID);
-	 strcat (Query,SubQuery);
+
+	 Str_Concat (Query,SubQuery,MaxLength);
 	}
-      strcat (Query,")");
+      Str_Concat (Query,")",MaxLength);
 
       if (CheckPassword)
 	{
 	 if (OnlyConfirmedIDs)
-	    strcat (Query," AND usr_IDs.Confirmed='Y'");
+	    Str_Concat (Query," AND usr_IDs.Confirmed='Y'",MaxLength);
 
 	 // Get user's code if I have written the correct password
 	 // or if password in database is empty (new user)
 	 sprintf (SubQuery," AND usr_IDs.UsrCod=usr_data.UsrCod"
 			   " AND (usr_data.Password='%s' OR usr_data.Password='')",
 		  EncryptedPassword);
-	 strcat (Query,SubQuery);
+	 Str_Concat (Query,SubQuery,MaxLength);
 	}
       else if (OnlyConfirmedIDs)
-	 strcat (Query," AND Confirmed='Y'");
+	 Str_Concat (Query," AND Confirmed='Y'",MaxLength);
 
       ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
 

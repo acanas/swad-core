@@ -30,7 +30,7 @@
 #include <linux/stddef.h>	// For NULL
 #include <stdsoap2.h>		// For SOAP_OK and soap functions
 #include <stdlib.h>		// For free ()
-#include <string.h>		// For strcat (), etc.
+#include <string.h>		// For string functions
 #include <time.h>		// For time ()
 
 #include "swad_changelog.h"
@@ -52,6 +52,9 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Syl_MAX_LEVELS_SYLLABUS		  10
+
+#define Syl_MAX_LENGTH_ITEM_COD			(Syl_MAX_LEVELS_SYLLABUS * (10 + 1) - 1)
+
 #define Syl_MAX_LENGTH_TEXT_ITEM	1024
 #define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_LENGTH_TEXT_ITEM*Str_MAX_CHARACTER)
 
@@ -106,6 +109,8 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
                                  int Level,int *CodItem,const char *Text,bool NewItem);
 static void Syl_WriteSyllabusIntoHTMLTmpFile (FILE *FileHTMLTmp);
 static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int *CodItem,const char *Text);
+
+static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
 /*****************************************************************************/
 /******************** Get parameter to select a syllabus *********************/
@@ -573,7 +578,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
    extern const char *Txt_Increase_level_of_X;
    extern const char *Txt_Decrease_level_of_X;
    static int LastLevel = 0;
-   char StrItemCod[Syl_MAX_LEVELS_SYLLABUS*(10+1)];
+   char StrItemCod[Syl_MAX_LEVELS_SYLLABUS * (10 + 1)];
    struct MoveSubtrees Subtree;
 
    Subtree.ToGetUp.Ini   = Subtree.ToGetUp.End   = 0;
@@ -969,7 +974,7 @@ void Syl_PutParamNumItem (unsigned NumItem)
 /******************** Write number of item in legal style ********************/
 /*****************************************************************************/
 
-void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
+static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
   {
    int N;
    char InStr[1+10+1];
@@ -984,13 +989,13 @@ void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
       if (N > 1)
 	{
 	 if (StrDst)
-	    strcat (StrDst,".");
+	    Str_Concat (StrDst,".",Syl_MAX_LENGTH_ITEM_COD);
 	 if (FileTgt)
 	    fprintf (FileTgt,".");
 	}
       sprintf (InStr,"%d",CodItem[N]);
       if (StrDst)
-	 strcat (StrDst,InStr);
+	 Str_Concat (StrDst,InStr,Syl_MAX_LENGTH_ITEM_COD);
       if (FileTgt)
 	 fprintf (FileTgt,"%s",InStr);
      }
@@ -1002,9 +1007,9 @@ void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
 
 void Syl_RemoveItemSyllabus (void)
   {
-   char PathFile[PATH_MAX+1];
-   char PathOldFile[PATH_MAX+1];
-   char PathNewFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathOldFile[PATH_MAX + 1];
+   char PathNewFile[PATH_MAX + 1];
    FILE *NewFile;
    unsigned NumItem;
 

@@ -8145,7 +8145,7 @@ void Brw_RecFolderFileBrowser (void)
    extern const char *Txt_Can_not_create_the_folder_X_because_there_is_already_a_folder_or_a_file_with_that_name;
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    char PathCompleteInTreeIncludingFolder[PATH_MAX+1];
    char FileNameToShow[NAME_MAX+1];
 
@@ -8162,8 +8162,8 @@ void Brw_RecFolderFileBrowser (void)
 
          if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	    Lay_ShowErrorAndExit ("Path is too long.");
-         strcat (Path,"/");
-         strcat (Path,Gbl.FileBrowser.NewFilFolLnkName);
+         Str_Concat (Path,"/",PATH_MAX);
+         Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
 
          /* Create the new directory */
          if (mkdir (Path,(mode_t) 0xFFF) == 0)
@@ -8391,8 +8391,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    extern const char *Txt_UPLOAD_FILE_You_must_specify_the_file_NO_HTML;
    extern const char *Txt_UPLOAD_FILE_Forbidden_NO_HTML;
    struct Param *Param;
-   char SrcFileName[PATH_MAX+1];
-   char PathUntilFileName[PATH_MAX+1];
+   char SrcFileName[PATH_MAX + 1];
+   char PathUntilFileName[PATH_MAX + 1];
    char Path[PATH_MAX+1];
    char PathTmp[PATH_MAX+1];
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1];
@@ -8436,8 +8436,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                         Gbl.FileBrowser.Priv.FullPathInTree);
                if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) + strlen (".tmp") > PATH_MAX)
 	          Lay_ShowErrorAndExit ("Path is too long.");
-               strcat (Path,"/");
-               strcat (Path,Gbl.FileBrowser.NewFilFolLnkName);
+               Str_Concat (Path,"/",PATH_MAX);
+               Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
 
                /* Check if the destination file exists */
                if (Fil_CheckIfPathExists (Path))
@@ -8572,16 +8572,16 @@ void Brw_RecLinkFileBrowser (void)
    extern const char *Txt_The_link_X_has_been_placed_inside_the_folder_Y;
    extern const char *Txt_UPLOAD_FILE_Invalid_link;
    extern const char *Txt_You_can_not_create_links_here;
-   char URL[PATH_MAX+1];
-   char URLWithoutEndingSlash[PATH_MAX+1];
+   char URL[PATH_MAX + 1];
+   char URLWithoutEndingSlash[PATH_MAX + 1];
    size_t LengthURL;
-   char URLUntilLastFilename[PATH_MAX+1];
-   char FileName[NAME_MAX+1];
-   char Path[PATH_MAX+1];
+   char URLUntilLastFilename[PATH_MAX + 1];
+   char FileName[NAME_MAX + 1];
+   char Path[PATH_MAX + 1];
    FILE *FileURL;
-   char PathCompleteInTreeIncludingFile[PATH_MAX+1];
+   char PathCompleteInTreeIncludingFile[PATH_MAX + 1];
    long FilCod = -1L;	// Code of new file in database
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
    struct FileMetadata FileMetadata;
    unsigned NumUsrsToBeNotifiedByEMail;
 
@@ -8629,9 +8629,9 @@ void Brw_RecLinkFileBrowser (void)
 	    sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
-	    strcat (Path,"/");
-	    strcat (Path,FileName);
-	    strcat (Path,".url");
+	    Str_Concat (Path,"/",PATH_MAX);
+	    Str_Concat (Path,FileName,PATH_MAX);
+	    Str_Concat (Path,".url",PATH_MAX);
 
 	    /* Check if the URL file exists */
 	    if (Fil_CheckIfPathExists (Path))

@@ -81,7 +81,8 @@ void Sch_CtrSearch (void);
 void Sch_DegSearch (void);
 void Sch_CrsSearch (void);
 
-bool Sch_BuildSearchQuery (char *SearchQuery,const char *FieldName,
+bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1],
+                           const char *FieldName,
                            const char *CharSet,const char *Collate);
 
 #endif

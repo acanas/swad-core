@@ -1167,12 +1167,12 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
          Str_Copy (Surnames,UsrDat->Surname1,Usr_MAX_BYTES_SURNAMES);
       if (UsrDat->Surname2[0])
         {
-         strcat (Surnames," ");
-         strcat (Surnames,UsrDat->Surname2);
+         Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
+         Str_Concat (Surnames,UsrDat->Surname2,Usr_MAX_BYTES_SURNAMES);
         }
       Str_LimitLengthHTMLStr (Surnames,23);
-      strcat (ShortName,"<br />");
-      strcat (ShortName,Surnames);
+      Str_Concat (ShortName,"<br />",Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (ShortName,Surnames,Usr_MAX_BYTES_FULL_NAME);
 
       Act_SetUniqueId (IdCaption);
       fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
