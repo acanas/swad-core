@@ -274,6 +274,7 @@ a:hover						/* Default ==> underlined */
 #current_date
 	{
 	box-sizing:border-box;
+	background-color:rgba(255, 255, 255, 0.8);
 	width:80px;
 	margin-left:6px;
 	border-radius:4px;
@@ -282,17 +283,17 @@ a:hover						/* Default ==> underlined */
 #current_month
 	{
 	border-radius:4px 4px 0 0;
-	background-color:rgba(172, 64, 64, 0.8);;
+	background-color:rgba(222, 33, 33, 0.8);
 	color:white;
-	font-size:12pt;
+	font-size:10pt;
 	font-weight:bold;
 	white-space:nowrap;
 	overflow:hidden;
 	}
 #current_day
 	{
-	background-color:rgba(255, 255, 255, 0.8);;
 	color:#606060;
+	margin:2px 0 -4px 0;
 	font-size:20pt;
 	font-weight:bold;
 	line-height:100%;
@@ -300,7 +301,6 @@ a:hover						/* Default ==> underlined */
 #current_time
 	{
 	border-radius:0 0 4px 4px;
-	background-color:rgba(255, 255, 255, 0.8);;
 	color:#606060;
 	font-size:12pt;
 	font-weight:bold;

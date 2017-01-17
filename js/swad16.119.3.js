@@ -350,13 +350,9 @@ function writeLocalClock () {
 	Hou = d.getHours();
 	Min = d.getMinutes();
 	StrMin = ((Min < 10) ? '0' : '') + Min;
-	document.getElementById('hm').innerHTML =	'<div id="current_date"><div id="current_month">' +
-												Months[Mon] +
-												'</div><div id="current_day">' +
-												Day +
-												'</div><div id="current_time">' +
-												Hou + ':' + StrMin +
-												'</div></div>';
+	document.getElementById('current_month').innerHTML = Months[Mon];
+	document.getElementById('current_day').innerHTML = Day;
+	document.getElementById('current_time').innerHTML = Hou + ':' + StrMin;
 }
       
 function writeClockConnected () {

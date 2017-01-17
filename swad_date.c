@@ -160,8 +160,14 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
 
 void Dat_ShowClientLocalTime (void)
   {
-   fprintf (Gbl.F.Out,"<div id=\"hm\">"
+   fprintf (Gbl.F.Out,"<div id=\"current_date\">"
+	              "<div id=\"current_month\">"
                       "</div>"
+                      "<div id=\"current_day\">"
+		      "</div>"
+		      "<div id=\"current_time\">"
+            	      "</div>"
+            	      "</div>"
                       "<script type=\"text/javascript\">\n"
 		      "secondsSince1970UTC = %ld;\n"
                       "writeLocalClock();"

@@ -191,13 +191,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.119.2 (2017-01-17)"
-#define CSS_FILE		"swad16.119.css"
-#define JS_FILE			"swad16.119.js"
+#define Log_PLATFORM_VERSION	"SWAD 16.119.4 (2017-01-18)"
+#define CSS_FILE		"swad16.119.4.css"
+#define JS_FILE			"swad16.119.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.119.4: Jan 18, 2017	Changes in layout of current data and time. (211882 lines)
+        Version 16.119.3: Jan 17, 2017	Changes in layout of current data and time. (211881 lines)
         Version 16.119.2: Jan 17, 2017	Fixed bug in web service related to attendance. (211879 lines)
         Version 16.119.1: Jan 17, 2017	Fixed bug in attendance. (211877 lines)
         Version 16.119:   Jan 17, 2017	Changes in layout of current data and time.
