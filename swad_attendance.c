@@ -811,6 +811,8 @@ static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
    if (Att->AttCod <= 0)	// If > 0 ==> keep values of AttCod and Selected
      {
       Att->AttCod = -1L;
+      Att->NumStdsTotal = 0;
+      Att->NumStdsFromList = 0;
       Att->Selected = false;
      }
    Att->CrsCod = -1L;
@@ -821,8 +823,6 @@ static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
    Att->Open = false;
    Att->Title[0] = '\0';
    Att->CommentTchVisible = false;
-   Att->NumStdsTotal = 0;
-   Att->NumStdsFromList = 0;
   }
 
 /*****************************************************************************/

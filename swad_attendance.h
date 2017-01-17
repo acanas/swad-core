@@ -45,6 +45,7 @@ typedef enum
 
 struct AttendanceEvent
   {
+   /* Fields stored in database */
    long AttCod;
    long CrsCod;
    bool Hidden;
@@ -53,9 +54,11 @@ struct AttendanceEvent
    bool Open;
    char Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;
+
+   /* Fields computed, not associated to the event in database */
    unsigned NumStdsTotal;	// Number total of students who have assisted to the event
    unsigned NumStdsFromList;	// Number of students (taken from a list) who has assisted to the event
-   bool Selected;	// I have selected this attendance event
+   bool Selected;		// I have selected this attendance event
   };
 
 typedef enum
