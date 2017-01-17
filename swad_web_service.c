@@ -2242,6 +2242,7 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
      {
       Length = NumGrps * (10 + 1) - 1;
       *ListGroups = soap_malloc (Gbl.soap,Length + 1);
+      (*ListGroups)[0] = '\0';
 
       for (NumGrp = 0;
 	   NumGrp < NumGrps;
