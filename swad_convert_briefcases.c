@@ -3,6 +3,8 @@
 // Author: Antonio Cañas Vargas
 // Compile with: gcc -Wall -O1 swad_convert_BRIEFs.c -o swad_convert_BRIEFs -lmysqlclient -L/usr/lib64/mysql
 
+#include "swad_ID.h"
+
 #include <mysql/mysql.h>
 #include <limits.h>
 #include <stdio.h>
@@ -46,7 +48,7 @@ int main (void)
    unsigned NumUsrs = 0;
    unsigned i;
    long UsrCod;
-   char UsrID[16 + 1];
+   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
    char OldPathUsr[PATH_MAX + 1];
    char Command[1024 + PATH_MAX * 2];
 
@@ -94,8 +96,8 @@ int main (void)
 	       if (sscanf (row[0],"%ld",&UsrCod) == 1)	// UsrCod
 		  if (row[1])
 		    {
-                     Str_Copy (UsrID,row[1],16);		// UsrID
-
+                     Str_Copy (UsrID,row[1],
+                               ID_MAX_LENGTH_USR_ID);		// UsrID
                      sprintf (OldPathUsr,"%s/%s_backup/%c/%s",
                 	      PATH_SWAD_PRIVATE,FOLDER_USR,UsrID[strlen (UsrID)-1],UsrID);
                      if (CheckIfPathExists (OldPathUsr))

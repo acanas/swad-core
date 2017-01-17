@@ -743,12 +743,14 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                         (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
                                                                  Gbl.CurrentCrs.Crs.CrsCod);
                      Str_Copy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Group,
-                               row[5],TT_MAX_BYTES_GROUP);
+                               row[5],
+                               TT_MAX_BYTES_GROUP);
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].GrpCod = GrpCod;
                      // no break;
                   case TT_TUTOR_TIMETABLE:
                      Str_Copy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Place,
-                               row[3],TT_MAX_BYTES_PLACE);
+                               row[3],
+                               TT_MAX_BYTES_PLACE);
                      break;
                  }
 
@@ -798,9 +800,11 @@ static void TT_ModifTimeTable (void)
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].ClassType = Gbl.TimeTable.ClassType;
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Duration  = Gbl.TimeTable.Duration;
       Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Group,
-                Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
+                Gbl.TimeTable.Group,
+                TT_MAX_BYTES_GROUP);
       Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Place,
-                Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
+                Gbl.TimeTable.Place,
+                TT_MAX_BYTES_PLACE);
      }
   }
 

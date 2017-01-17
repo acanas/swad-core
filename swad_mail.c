@@ -67,6 +67,7 @@ extern struct Globals Gbl;
 static void Mai_GetParamMaiOrderType (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
+static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMAIL + 1]);
 static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain);
 
 static void Mai_ListMailDomainsForEdition (void);
@@ -288,10 +289,12 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
             Lay_ShowErrorAndExit ("Wrong code of mail domain.");
 
          /* Get the mail domain (row[1]) */
-         Str_Copy (Mai->Domain,row[1],Mai_MAX_LENGTH_MAIL_DOMAIN);
+         Str_Copy (Mai->Domain,row[1],
+                   Mai_MAX_LENGTH_MAIL_DOMAIN);
 
          /* Get the mail domain info (row[2]) */
-         Str_Copy (Mai->Info,row[2],Mai_MAX_LENGTH_MAIL_INFO);
+         Str_Copy (Mai->Info,row[2],
+                   Mai_MAX_LENGTH_MAIL_INFO);
 
          /* Get number of users (row[3]) */
          if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
@@ -316,15 +319,35 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
   {
-   char MailDomain[Usr_MAX_BYTES_USR_EMAIL+1];
+   char MailDomain[Usr_MAX_BYTES_USR_EMAIL + 1];
 
    /***** Check #1: is my email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
       return false;
 
    /***** Check #2: if my mail domain allowed? *****/
-   Str_GetMailBox (UsrDat->Email,MailDomain,Usr_MAX_BYTES_USR_EMAIL);
+   Mai_GetMailBox (UsrDat->Email,MailDomain);
    return Mai_CheckIfMailDomainIsAllowedForNotif (MailDomain);
+  }
+
+/*****************************************************************************/
+/********************** Get mailbox from email address ***********************/
+/*****************************************************************************/
+
+static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMAIL + 1])
+  {
+   const char *Ptr;
+
+   MailBox[0] = '\0';	// Return empty mailbox on error
+
+   if ((Ptr = strchr (Email,(int) '@')))	// Find first '@' in address
+      if (Ptr != Email)				// '@' is not the first character in Email
+        {
+         Ptr++;					// Skip '@'
+         if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
+            Str_Copy (MailBox,Ptr,
+                      Usr_MAX_BYTES_USR_EMAIL);
+        }
   }
 
 /*****************************************************************************/
@@ -392,10 +415,12 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the mail (row[0]) */
-         Str_Copy (Mai->Domain,row[0],Mai_MAX_LENGTH_MAIL_DOMAIN);
+         Str_Copy (Mai->Domain,row[0],
+                   Mai_MAX_LENGTH_MAIL_DOMAIN);
 
          /* Get the full name of the mail (row[1]) */
-         Str_Copy (Mai->Info,row[1],Mai_MAX_LENGTH_MAIL_INFO);
+         Str_Copy (Mai->Info,row[1],
+                   Mai_MAX_LENGTH_MAIL_INFO);
         }
 
       /***** Free structure that stores the query result *****/
@@ -649,7 +674,8 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   Str_Copy (CurrentMaiName,NewMaiName,MaxLength);
+   Str_Copy (CurrentMaiName,NewMaiName,
+             MaxLength);
    Mai_EditMailDomains ();
   }
 
@@ -966,7 +992,7 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
    bool ArrobaFound = false;
 
    /***** An email address must have a number of characters
-          5 <= Length <= Mai_MAX_BYTES_USR_EMAIL *****/
+          5 <= Length <= Usr_MAX_BYTES_USR_EMAIL *****/
    if (Length < 5 ||
        Length > Usr_MAX_BYTES_USR_EMAIL)
       return false;
@@ -1029,7 +1055,8 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
      {
       /* Get email */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (UsrDat->Email,row[0],Usr_MAX_BYTES_USR_EMAIL);
+      Str_Copy (UsrDat->Email,row[0],
+                Usr_MAX_BYTES_USR_EMAIL);
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
       Found = true;
      }
@@ -1677,7 +1704,8 @@ void Mai_ConfirmEmail (void)
       UsrCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Get user's email */
-      Str_Copy (Email,row[1],Usr_MAX_BYTES_USR_EMAIL);
+      Str_Copy (Email,row[1],
+                Usr_MAX_BYTES_USR_EMAIL);
 
       KeyIsCorrect = true;
      }

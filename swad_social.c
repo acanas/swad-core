@@ -113,7 +113,7 @@ struct SocialComment
    long NotCod;		// Note code
    time_t DateTimeUTC;
    unsigned NumFavs;	// Number of times (users) this comment has been favourited
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
   };
 
@@ -1475,7 +1475,7 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
 
    /***** Initialize image *****/
@@ -1493,7 +1493,8 @@ static void Soc_GetAndWriteSocialPost (long PstCod)
       row = mysql_fetch_row (mysql_res);
 
       /****** Get content (row[0]) *****/
-      Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+      Str_Copy (Content,row[0],
+                Cns_MAX_BYTES_LONG_TEXT);
 
       /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
       Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],&Image);
@@ -1982,7 +1983,8 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
 
    /* Write author's full name and nickname */
-   Str_Copy (FullName,Gbl.Usrs.Me.UsrDat.FullName,Usr_MAX_BYTES_FULL_NAME);
+   Str_Copy (FullName,Gbl.Usrs.Me.UsrDat.FullName,
+             Usr_MAX_BYTES_FULL_NAME);
    Str_LimitLengthHTMLStr (FullName,16);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
@@ -4561,7 +4563,8 @@ static void Soc_GetDataOfSocialCommentFromRow (MYSQL_ROW row,struct SocialCommen
    SocCom->DateTimeUTC = Dat_GetUNIXTimeFromStr (row[3]);
 
    /***** Get content (row[4]) *****/
-   Str_Copy (SocCom->Content,row[4],Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (SocCom->Content,row[4],
+             Cns_MAX_BYTES_LONG_TEXT);
 
    /***** Get number of times this comment has been favourited *****/
    SocCom->NumFavs     = Soc_GetNumTimesACommHasBeenFav (SocCom);
@@ -4654,7 +4657,7 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
    MYSQL_ROW row;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    size_t Length;
    bool ContentCopied = false;
 
@@ -4701,7 +4704,8 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	       row = mysql_fetch_row (mysql_res);
 
 	       /****** Get content (row[0]) *****/
-	       Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	       Str_Copy (Content,row[0],
+	                 Cns_MAX_BYTES_LONG_TEXT);
 	      }
 
 	    /***** Free structure that stores the query result *****/
@@ -4713,14 +4717,16 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	       Length = strlen (Content);
 	       if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 		 {
-		  Str_Copy (*ContentStr,Content,Length);
+		  Str_Copy (*ContentStr,Content,
+		            Length);
 		  ContentCopied = true;
 		 }
 	      }
 
 	    /***** Copy summary string *****/
 	    Str_LimitLengthHTMLStr (Content,MaxChars);
-	    Str_Copy (SummaryStr,Content,Cns_MAX_BYTES_TEXT);
+	    Str_Copy (SummaryStr,Content,
+	              Cns_MAX_BYTES_TEXT);
 	   }
 	 else
 	    Soc_GetNoteSummary (&SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
@@ -4737,7 +4743,8 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	    row = mysql_fetch_row (mysql_res);
 
 	    /****** Get content (row[0]) *****/
-	    Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+	    Str_Copy (Content,row[0],
+	              Cns_MAX_BYTES_LONG_TEXT);
 	   }
 
 	 /***** Free structure that stores the query result *****/
@@ -4749,14 +4756,16 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	    Length = strlen (Content);
 	    if ((*ContentStr = (char *) malloc (Length + 1)) != NULL)
 	      {
-	       Str_Copy (*ContentStr,Content,Length);
+	       Str_Copy (*ContentStr,Content,
+	                 Length);
 	       ContentCopied = true;
 	      }
 	   }
 
 	 /***** Copy summary string *****/
 	 Str_LimitLengthHTMLStr (Content,MaxChars);
-	 Str_Copy (SummaryStr,Content,Cns_MAX_BYTES_TEXT);
+	 Str_Copy (SummaryStr,Content,
+	           Cns_MAX_BYTES_TEXT);
 	 break;
      }
 
@@ -4824,7 +4833,8 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	 if (IsNickname)
 	   {
 	    /* Copy nickname */
-	    Str_Copy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
+	    Str_Copy (UsrDat.Nickname,Nickname.PtrStart,
+	              Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
 	       if (UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// It's not me

@@ -180,7 +180,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
-            Nck_MAX_BYTES_NICKNAME_WITH_ARROBA,
+            Nck_MAX_BYTES_NICKNAME_FROM_FORM,
             DefaultNickname);
 
    /***** Send button and end frame *****/

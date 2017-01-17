@@ -33,6 +33,7 @@
 
 #include "swad_database.h"
 #include "swad_global.h"
+#include "swad_hierarchy.h"
 #include "swad_parameter.h"
 #include "swad_photo.h"
 #include "swad_role.h"
@@ -457,7 +458,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
    extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_from;
-   char LocationName[Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR + 1];
+   char LocationName[Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR + 1];
    struct ConnectedUsrs Usrs;
 
    /***** Set location name depending on scope *****/
@@ -465,42 +466,42 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
      {
       case Sco_SCOPE_SYS:		// Show connected users in the whole platform
          Str_Copy (LocationName,Cfg_PLATFORM_SHORT_NAME,
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CTY:		// Show connected users in the current country
          if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
             return;
 
          Str_Copy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_INS:		// Show connected users in the current institution
          if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
             return;
 
          Str_Copy (LocationName,Gbl.CurrentIns.Ins.ShrtName,
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CTR:		// Show connected users in the current centre
          if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
             return;
 
          Str_Copy (LocationName,Gbl.CurrentCtr.Ctr.ShrtName,
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_DEG:		// Show connected users in the current degree
          if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
             return;
 
          Str_Copy (LocationName,Gbl.CurrentDeg.Deg.ShrtName,
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       case Sco_SCOPE_CRS:		// Show connected users in the current course
          if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
             return;
 
          Str_Copy (LocationName,Gbl.CurrentCrs.Crs.ShrtName,
-                   Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
+                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
          break;
       default:
 	 return;

@@ -53,9 +53,8 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
-#define Usr_MAX_BYTES_USR_EMAIL			(128-1)
-#define Usr_MAX_LENGTH_USR_LOGIN		(128-1)	// @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN			(128-1)
+#define Usr_MAX_LENGTH_USR_LOGIN		(128 - 1)	// @nick, email or ID
+#define Usr_MAX_BYTES_USR_LOGIN			(128 - 1)
 
 #define Usr_MAX_LENGTH_USR_NAME_OR_SURNAME	 32
 #define Usr_MAX_BYTES_NAME			 32
@@ -65,6 +64,8 @@
 #define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME +     6    + Usr_MAX_BYTES_NAME)
 						// Surname1         +' '+ Surname2           +  ','+' ' + FirstName
 						// Surname1         +' '+ Surname2           + '<br />' + FirstName
+
+#define Usr_MAX_BYTES_USR_EMAIL		(128 - 1)
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4+1+2+1+2)	// "'%04u-%02u-%02u'"
 

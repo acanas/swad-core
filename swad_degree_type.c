@@ -650,7 +650,8 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the degree type (row[0]) */
-      Str_Copy (DegTyp->DegTypName,row[0],Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+      Str_Copy (DegTyp->DegTypName,row[0],
+                Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -785,7 +786,8 @@ void DT_RenameDegreeType (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (DegTyp->DegTypName,NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+   Str_Copy (DegTyp->DegTypName,NewNameDegTyp,
+             Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
    DT_ReqEditDegreeTypes ();
   }
 

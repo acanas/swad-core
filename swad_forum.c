@@ -265,7 +265,7 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod);
 static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod);
 static void For_RemoveThreadOnly (long ThrCod);
 static void For_RemoveThreadAndItsPsts (long ThrCod);
-static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize);
+static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 static void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
 static long For_GetLastPstCod (long ThrCod);
@@ -276,16 +276,18 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod);
 static unsigned For_GetNumPstsInThr (long ThrCod);
 static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
-static void For_ShowThreadPosts (long ThrCod,char *LastSubject);
+static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1]);
 
 static void For_PutIconsForums (void);
 
 static void For_WriteNumPsts (unsigned NumPsts);
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
-                                bool LastPst,char *LastSubject,
+                                bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum);
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char *Subject,char *Content,struct Image *Image);
+                            char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                            char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+                            struct Image *Image);
 static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 
 static void For_PutParamWhichForum (void);
@@ -661,7 +663,7 @@ static void For_RemoveThreadAndItsPsts (long ThrCod)
 /********************* Get the thread subject from a thread ******************/
 /*****************************************************************************/
 
-static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
+static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -676,7 +678,8 @@ static void For_GetThrSubject (long ThrCod,char *Subject,size_t MaxSize)
 
    /***** Write the subject of the thread *****/
    row = mysql_fetch_row (mysql_res);
-   Str_Copy (Subject,row[0],MaxSize);
+   Str_Copy (Subject,row[0],
+             Cns_MAX_BYTES_SUBJECT);
    Str_LimitLengthHTMLStr (Subject,20);
 
    /***** Free structure that stores the query result *****/
@@ -942,7 +945,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 /****************************** Show forum posts *****************************/
 /*****************************************************************************/
 
-static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
+static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1])
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Thread;
@@ -954,7 +957,8 @@ static void For_ShowThreadPosts (long ThrCod,char *LastSubject)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    unsigned NumPst = 0;		// Initialized to avoid warning
    unsigned NumPsts;
    time_t ReadTimeUTC;		// Read time of thread for the current user
@@ -1158,7 +1162,7 @@ static void For_WriteNumPsts (unsigned NumPsts)
 /*****************************************************************************/
 
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
-                                bool LastPst,char *LastSubject,
+                                bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum)
   {
    extern const char *Txt_unread_MESSAGE;
@@ -1172,9 +1176,9 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    extern const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums;
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a post
-   char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    bool Enabled;
 
@@ -1193,7 +1197,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 
    if (Enabled)
       /* Return this subject as last subject */
-      Str_Copy (LastSubject,Subject,Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (LastSubject,Subject,
+                Cns_MAX_BYTES_SUBJECT);
 
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1319,7 +1324,8 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 	              "<td class=\"MSG_TXT LEFT_TOP\">");
    if (Enabled)
      {
-      Str_Copy (Content,OriginalContent,Cns_MAX_BYTES_LONG_TEXT);
+      Str_Copy (Content,OriginalContent,
+                Cns_MAX_BYTES_LONG_TEXT);
       Msg_WriteMsgContent (Content,Cns_MAX_BYTES_LONG_TEXT,true,false);
 
       /***** Show image *****/
@@ -1342,7 +1348,9 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
 /*****************************************************************************/
 
 static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
-                            char *Subject, char *Content,struct Image *Image)
+                            char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                            char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+                            struct Image *Image)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1370,10 +1378,12 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    *CreatTimeUTC = Dat_GetUNIXTimeFromStr (row[1]);
 
    /****** Get subject (row[2]) *****/
-   Str_Copy (Subject,row[2],Cns_MAX_BYTES_SUBJECT);
+   Str_Copy (Subject,row[2],
+             Cns_MAX_BYTES_SUBJECT);
 
    /****** Get location (row[3]) *****/
-   Str_Copy (Content,row[3],Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Content,row[3],
+             Cns_MAX_BYTES_LONG_TEXT);
 
    /****** Get image name (row[4]), title (row[5]) and URL (row[6]) *****/
    Img_GetImageNameTitleAndURLFromRow (row[4],row[5],row[6],Image);
@@ -1412,7 +1422,8 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            Str_Copy (SummaryStr,row[0],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1424,7 +1435,11 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
 
-               Str_Copy (*ContentStr,row[1],Length);
+               if (Length)
+                  Str_Copy (*ContentStr,row[1],
+                            Length);
+               else
+        	  **ContentStr = '\0';
               }
            }
          mysql_free_result (mysql_res);
@@ -2191,7 +2206,8 @@ void For_SetForumName (For_ForumType_t ForumType,
    switch (ForumType)
      {
       case For_FORUM_COURSE_USRS:
-         Str_Copy (ForumName,Crs->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Crs->ShrtName,
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_COURSE_TCHS:
          sprintf (ForumName,"%s%s",Crs->ShrtName,
@@ -2199,7 +2215,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_DEGREE_USRS:
-         Str_Copy (ForumName,Deg->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Deg->ShrtName,
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_DEGREE_TCHS:
          sprintf (ForumName,"%s%s",Deg->ShrtName,
@@ -2207,7 +2224,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_CENTRE_USRS:
-         Str_Copy (ForumName,Ctr->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Ctr->ShrtName,
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_CENTRE_TCHS:
          sprintf (ForumName,"%s%s",Ctr->ShrtName,
@@ -2215,7 +2233,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_INSTIT_USRS:
-         Str_Copy (ForumName,Ins->ShrtName,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Ins->ShrtName,
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_INSTIT_TCHS:
          sprintf (ForumName,"%s%s",Ins->ShrtName,
@@ -2224,7 +2243,7 @@ void For_SetForumName (For_ForumType_t ForumType,
          break;
       case For_FORUM_GLOBAL_USRS:
          Str_Copy (ForumName,UseHTMLEntities ? Txt_General :
-                                              Txt_General_NO_HTML[Language],
+                                               Txt_General_NO_HTML[Language],
                    For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_GLOBAL_TCHS:
@@ -2235,7 +2254,8 @@ void For_SetForumName (For_ForumType_t ForumType,
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
       case For_FORUM_SWAD_USRS:
-         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,For_MAX_BYTES_FORUM_NAME);
+         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,
+                   For_MAX_BYTES_FORUM_NAME);
          break;
       case For_FORUM_SWAD_TCHS:
          sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,
@@ -3597,7 +3617,8 @@ void For_GetThrData (struct ForumThread *Thr)
    Thr->WriteTime[For_LAST_MSG ] = Dat_GetUNIXTimeFromStr (row[5]);
 
    /***** Get the subject of this thread (row[6]) *****/
-   Str_Copy (Thr->Subject,row[6],Cns_MAX_BYTES_SUBJECT);
+   Str_Copy (Thr->Subject,row[6],
+             Cns_MAX_BYTES_SUBJECT);
    if (!Thr->Subject[0])
       sprintf (Thr->Subject,"[%s]",Txt_no_subject);
 
@@ -3794,7 +3815,7 @@ static long For_GetParamPstCod (void)
 
 void For_ShowForumLevel2 (long ThrCod)
   {
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -4127,7 +4148,7 @@ void For_ReqDelThr (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread;
    extern const char *Txt_Remove_thread;
    long ThrCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -4139,7 +4160,7 @@ void For_ReqDelThr (void)
    ThrCod = For_GetParamThrCod ();
 
    /***** Get subject of thread to delete *****/
-   For_GetThrSubject (ThrCod,Subject,Cns_MAX_BYTES_SUBJECT);
+   For_GetThrSubject (ThrCod,Subject);
 
    /***** Request confirmation to remove the thread *****/
    if (Subject[0])
@@ -4179,7 +4200,7 @@ void For_DelThr (void)
       ThrCod = For_GetParamThrCod ();
 
       /***** Get subject of thread to delete *****/
-      For_GetThrSubject (ThrCod,Subject,Cns_MAX_BYTES_SUBJECT);
+      For_GetThrSubject (ThrCod,Subject);
 
       /***** Remove the thread and all its posts *****/
       For_RemoveThreadAndItsPsts (ThrCod);
@@ -4222,7 +4243,7 @@ void For_CutThr (void)
    ThrCod = For_GetParamThrCod ();
 
    /***** Get subject of thread to cut *****/
-   For_GetThrSubject (ThrCod,Subject,Cns_MAX_BYTES_SUBJECT);
+   For_GetThrSubject (ThrCod,Subject);
 
    /***** Mark the thread as cut *****/
    For_InsertThrInClipboard (ThrCod);
@@ -4262,7 +4283,7 @@ void For_PasteThr (void)
    ThrCod = For_GetParamThrCod ();
 
    /***** Get subject of thread to paste *****/
-   For_GetThrSubject (ThrCod,Subject,Cns_MAX_BYTES_SUBJECT);
+   For_GetThrSubject (ThrCod,Subject);
 
    /***** Paste (move) the thread to current forum *****/
    if (For_CheckIfThrBelongsToForum (ThrCod,Gbl.Forum.ForumType))

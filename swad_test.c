@@ -218,7 +218,8 @@ static void Tst_GetParamNumQst (void);
 static bool Tst_GetCreateXMLFromForm (void);
 static int Tst_CountNumTagsInList (void);
 static int Tst_CountNumAnswerTypesInList (void);
-static void Tst_PutFormEditOneQst (char *Stem,char *Feedback);
+static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
+                                   char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_PutFloatInputField (const char *Label,const char *Field,
                                     double Value);
 static void Tst_PutTFInputField (const char *Label,char Value);
@@ -229,7 +230,8 @@ static void Tst_FreeTextChoiceAnswer (unsigned NumOpt);
 static void Tst_InitImagesOfQuestion (void);
 static void Tst_FreeImagesOfQuestion (void);
 
-static void Tst_GetQstDataFromDB (char *Stem,char *Feedback);
+static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
+                                  char Feedback[Cns_MAX_BYTES_TEXT + 1]);
 static void Tst_GetImageFromDB (int NumOpt,struct Image *Image);
 
 static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
@@ -1023,9 +1025,10 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
 
    /***** Convert the stem, that is in HTML, to rigorous HTML *****/
    StemLength = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-   if ((StemRigorousHTML = malloc (StemLength+1)) == NULL)
+   if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-   Str_Copy (StemRigorousHTML,Stem,StemLength);
+   Str_Copy (StemRigorousHTML,Stem,
+             StemLength);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 	             StemRigorousHTML,StemLength,false);
 
@@ -1152,9 +1155,10 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
 	 FeedbackLength = strlen (Feedback) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-	 if ((FeedbackRigorousHTML = malloc (FeedbackLength+1)) == NULL)
+	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-	 Str_Copy (FeedbackRigorousHTML,Feedback,FeedbackLength);
+	 Str_Copy (FeedbackRigorousHTML,Feedback,
+	           FeedbackLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   FeedbackRigorousHTML,FeedbackLength,false);
 
@@ -3053,9 +3057,10 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
 
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
             LengthAnswer = strlen (row[1]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-            if ((Answer = malloc (LengthAnswer+1)) == NULL)
+            if ((Answer = malloc (LengthAnswer + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-            Str_Copy (Answer,row[1],LengthAnswer);
+            Str_Copy (Answer,row[1],
+                      LengthAnswer);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               Answer,LengthAnswer,false);
 
@@ -3066,9 +3071,10 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
                if (row[2][0])
         	 {
 		  LengthFeedback = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
-		  if ((Feedback = malloc (LengthFeedback+1)) == NULL)
+		  if ((Feedback = malloc (LengthFeedback + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
-		  Str_Copy (Feedback,row[2],LengthFeedback);
+		  Str_Copy (Feedback,row[2],
+		            LengthFeedback);
                   Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                     Feedback,LengthFeedback,false);
         	 }
@@ -4427,8 +4433,8 @@ void Tst_FreeTagsList (void)
 
 void Tst_ShowFormEditOneQst (void)
   {
-   char Stem[Cns_MAX_BYTES_TEXT+1];
-   char Feedback[Cns_MAX_BYTES_TEXT+1];
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor ();
@@ -4453,7 +4459,8 @@ void Tst_ShowFormEditOneQst (void)
 // 2. By clicking "Edit" icon in a listing of existing questions
 // 3. From the action associated to reception of a question, on error in the parameters received from the form
 
-static void Tst_PutFormEditOneQst (char *Stem,char *Feedback)
+static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
+                                   char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_ASSESSMENT_Tests;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -5038,7 +5045,8 @@ static void Tst_FreeImagesOfQuestion (void)
 /****************** Get data of a question from database *********************/
 /*****************************************************************************/
 
-static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
+static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
+                                  char Feedback[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -5073,13 +5081,15 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
    Gbl.Test.Shuffle = (row[1][0] == 'Y');
 
    /* Get the stem of the question from the database (row[2]) */
-   Str_Copy (Stem,row[2],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Stem,row[2],
+             Cns_MAX_BYTES_TEXT);
 
    /* Get the feedback of the question from the database (row[3]) */
    Feedback[0] = '\0';
    if (row[3])
       if (row[3][0])
-	 Str_Copy (Feedback,row[3],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Feedback,row[3],
+	           Cns_MAX_BYTES_TEXT);
 
    /* Get the image name, title and URL of the question
       from the database (row[4], row[5], row[6]) */
@@ -5095,7 +5105,8 @@ static void Tst_GetQstDataFromDB (char *Stem,char *Feedback)
 	NumRow++)
      {
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Gbl.Test.Tags.Txt[NumRow],row[0],Tst_MAX_BYTES_TAG);
+      Str_Copy (Gbl.Test.Tags.Txt[NumRow],row[0],
+                Tst_MAX_BYTES_TAG);
      }
 
    /* Free structure that stores the query result */
@@ -5755,13 +5766,13 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
         {
-         Str_Copy (Gbl.Message,"Wrong code of tag.",Lay_MAX_BYTES_ALERT);
+         sprintf (Gbl.Message,"%s","Wrong code of tag.");
          Error = true;
         }
      }
    else if (NumRows > 1)
      {
-      Str_Copy (Gbl.Message,"Duplicated tag.",Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s","Duplicated tag.");
       Error = true;
      }
 

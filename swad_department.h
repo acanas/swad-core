@@ -31,15 +31,15 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define MAX_LENGTH_DEPARTMENT_SHRT_NAME	32
-#define MAX_LENGTH_DEPARTMENT_FULL_NAME	(256 - 1)
+#define Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME	32
+#define Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME	(256 - 1)
 
 struct Department
   {
    long DptCod;
    long InsCod;
-   char ShrtName[MAX_LENGTH_DEPARTMENT_SHRT_NAME + 1];
-   char FullName[MAX_LENGTH_DEPARTMENT_FULL_NAME + 1];
+   char ShrtName[Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME + 1];
+   char FullName[Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME + 1];
    char WWW[Cns_MAX_LENGTH_WWW + 1];
    unsigned NumTchs;
   };

@@ -179,8 +179,7 @@ void Pwd_ActChgMyPwd1 (void)
       /***** Check if I have written twice the same password *****/
       if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
          // Passwords don't match
-         Str_Copy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password,
-                   Lay_MAX_BYTES_ALERT);
+         sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
       else
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
@@ -192,15 +191,13 @@ void Pwd_ActChgMyPwd1 (void)
                       Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
             Ses_UpdateSessionDataInDB ();
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
-            Str_Copy (Gbl.Message,Txt_Your_password_has_been_changed_successfully,
-                      Lay_MAX_BYTES_ALERT);
+            sprintf (Gbl.Message,"%s",Txt_Your_password_has_been_changed_successfully);
             Gbl.Usrs.Error = false;
            }
         }
      }
    else
-      Str_Copy (Gbl.Message,Txt_You_have_not_entered_your_password_correctly,
-                Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s",Txt_You_have_not_entered_your_password_correctly);
   }
 
 void Pwd_ActChgMyPwd2 (void)
@@ -501,8 +498,7 @@ void Pwd_UpdateOtherPwd1 (void)
 
 	 if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
 	    // Paswords don't match
-	    Str_Copy (Gbl.Message,Txt_You_have_not_written_twice_the_same_new_password,
-	              Lay_MAX_BYTES_ALERT);
+	    sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
 	 else
 	   {
 	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
@@ -522,12 +518,10 @@ void Pwd_UpdateOtherPwd1 (void)
 	   }
 	}
       else
-	 Str_Copy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_,
-	           Lay_MAX_BYTES_ALERT);
+	 sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-     Str_Copy (Gbl.Message,Txt_User_not_found_or_you_do_not_have_permission_,
-               Lay_MAX_BYTES_ALERT);
+     sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 void Pwd_UpdateOtherPwd2 (void)
@@ -563,8 +557,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      Str_Copy (Gbl.Message,Txt_The_password_is_too_trivial_,
-                Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -572,8 +565,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      Str_Copy (Gbl.Message,Txt_The_password_is_too_trivial_,
-                Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -650,8 +642,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      Str_Copy (Gbl.Message,Txt_The_password_can_not_contain_spaces,
-                Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s",Txt_The_password_can_not_contain_spaces);
       return false;
      }
 
@@ -663,8 +654,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      Str_Copy (Gbl.Message,Txt_The_password_can_not_consist_only_of_digits,
-                Lay_MAX_BYTES_ALERT);
+      sprintf (Gbl.Message,"%s",Txt_The_password_can_not_consist_only_of_digits);
       return false;
      }
 

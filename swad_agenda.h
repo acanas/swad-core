@@ -52,8 +52,8 @@ struct AgendaEvent
    bool Hidden;
    time_t TimeUTC[Agd_NUM_DATES];
    Dat_TimeStatus_t TimeStatus;
-   char Event[Agd_MAX_LENGTH_EVENT+1];
-   char Location[Agd_MAX_LENGTH_LOCATION+1];
+   char Event[Agd_MAX_LENGTH_EVENT + 1];
+   char Location[Agd_MAX_LENGTH_LOCATION + 1];
   };
 
 typedef enum

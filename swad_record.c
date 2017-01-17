@@ -624,7 +624,10 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
    char Message_part2[512];
 
    /***** Get from the database the name of the field *****/
-   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
+   Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,
+                      Gbl.CurrentCrs.Records.Field.Name,
+                      &Gbl.CurrentCrs.Records.Field.NumLines,
+                      &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Write mensaje to ask confirmation of deletion *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
@@ -704,7 +707,8 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD
    row = mysql_fetch_row (mysql_res);
 
    /* Name of the field */
-   Str_Copy (Name,row[0],Rec_MAX_LENGTH_NAME_FIELD);
+   Str_Copy (Name,row[0],
+             Rec_MAX_LENGTH_NAME_FIELD);
 
    /* Number of lines of the field (row[1]) */
    *NumLines = Rec_ConvertToNumLinesField (row[1]);
@@ -1723,7 +1727,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
            {
             if (ThisFieldHasText)
               {
-               Str_Copy (Text,row[0],Cns_MAX_BYTES_TEXT);
+               Str_Copy (Text,row[0],
+                         Cns_MAX_BYTES_TEXT);
                Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                                  Text,Cns_MAX_BYTES_TEXT,false);
                fprintf (Gbl.F.Out,"%s",Text);
@@ -2577,17 +2582,20 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_NAME LEFT_TOP\">");
 
    /***** First name *****/
-   Str_Copy (Name,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (Name,UsrDat->FirstName,
+             Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s<br />",Name);
 
    /***** Surname 1 *****/
-   Str_Copy (Name,UsrDat->Surname1,Usr_MAX_BYTES_NAME);
+   Str_Copy (Name,UsrDat->Surname1,
+             Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s<br />",Name);
 
    /***** Surname 2 *****/
-   Str_Copy (Name,UsrDat->Surname2,Usr_MAX_BYTES_NAME);
+   Str_Copy (Name,UsrDat->Surname2,
+             Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (Name,20);
    fprintf (Gbl.F.Out,"%s",Name);
 
@@ -2601,7 +2609,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_View_public_profile;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"

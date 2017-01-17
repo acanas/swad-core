@@ -27,6 +27,7 @@
 /********************************* Headers **********************************/
 /*****************************************************************************/
 
+#include <limits.h>		// For NAME_MAX and PATH_MAX
 #include <stdbool.h>		// For boolean type
 #include <stdio.h>		// For FILE
 
@@ -102,8 +103,9 @@ void Str_ReplaceSeveralSpacesForOne (char *Str);
 void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithoutSpaces,unsigned MaxLength);
 long Str_ConvertStrCodToLongCod (const char *Str);
 size_t Str_GetLengthRootFileName (const char *FileName);
-void Str_SplitFullPathIntoPathAndFileName (const char *FullPath,
-                                           char *PathWithoutFileName,char *FileName);
+void Str_SplitFullPathIntoPathAndFileName (const char FullPath[PATH_MAX + 1],
+                                           char PathWithoutFileName[PATH_MAX + 1],
+                                           char FileName[NAME_MAX + 1]);
 bool Str_FileIs (const char *FileName,const char *Extension);
 bool Str_FileIsHTML (const char *FileName);
 bool Str_Path1BeginsByPath2 (const char *Path1,const char *Path2);
@@ -117,9 +119,8 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName);
 void Str_ConvertToValidFileName (char *Str);
 
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length);
-void Str_GetMailBox (const char *Email,char *MailBox,size_t MaxLength);
 
-void Str_Copy (char *Dst,const char *Src,size_t MaxLength);
-void Str_Concat (char *Dst,const char *Src,size_t MaxLength);
+void Str_Copy (char *Dst,const char *Src,size_t DstSize);
+void Str_Concat (char *Dst,const char *Src,size_t DstSize);
 
 #endif

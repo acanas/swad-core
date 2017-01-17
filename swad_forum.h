@@ -70,7 +70,7 @@ struct ForumThread
    long UsrCod[2];
    time_t WriteTime[2];
    bool Enabled[2];
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
    unsigned NumPosts;
    unsigned NumUnreadPosts;	// Number of my unread posts in thread
    unsigned NumMyPosts;		// Number of posts written by me in thread

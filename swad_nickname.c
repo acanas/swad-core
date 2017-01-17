@@ -64,7 +64,7 @@ static void Nck_RemoveNicknameFromDB (const char *Nickname);
 
 bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
   {
-   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
    unsigned Length;
    const char *Ptr;
 
@@ -74,7 +74,7 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
 
    /***** Make a copy of nickname *****/
    Str_Copy (NicknameWithoutArroba,NicknameWithArroba,
-             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+             Nck_MAX_BYTES_NICKNAME_FROM_FORM);
    Str_RemoveLeadingArrobas (NicknameWithoutArroba);
    Length = strlen (NicknameWithoutArroba);
 
@@ -101,7 +101,8 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
 /************* Get nickname of a user from his/her user's code ***************/
 /*****************************************************************************/
 
-bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname)
+bool Nck_GetNicknameFromUsrCod (long UsrCod,
+                                char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1])
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -116,12 +117,13 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname)
      {
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Nickname,row[0],Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+      Str_Copy (Nickname,row[0],
+                Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
       Found = true;
      }
    else
      {
-      *Nickname = '\0';
+      Nickname[0] = '\0';
       Found = false;
      }
 
@@ -139,7 +141,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname)
 
 long Nck_GetUsrCodFromNickname (const char *Nickname)
   {
-   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA + 1];
+   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -150,7 +152,7 @@ long Nck_GetUsrCodFromNickname (const char *Nickname)
 	{
 	 /***** Make a copy without possible starting arrobas *****/
 	 Str_Copy (NicknameWithoutArroba,Nickname,
-	           Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+	           Nck_MAX_BYTES_NICKNAME_FROM_FORM);
 	 Str_RemoveLeadingArrobas (NicknameWithoutArroba);
 
 	 /***** Get user's code from database *****/
@@ -195,7 +197,7 @@ void Nck_ShowFormChangeUsrNickname (void)
    MYSQL_ROW row;
    unsigned NumNicks;
    unsigned NumNick;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
@@ -352,17 +354,17 @@ void Nck_UpdateNick (void)
    extern const char *Txt_Your_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    char Query[1024];
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
    bool Error = false;
 
    /***** Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_FROM_FORM);
    if (Nck_CheckIfNickWithArrobaIsValid (NewNicknameWithArroba))        // If new nickname is valid
      {
       /***** Remove arrobas at the beginning *****/
       Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
-                Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+                Nck_MAX_BYTES_NICKNAME_FROM_FORM);
       Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
       /***** Check if new nickname exists in database *****/

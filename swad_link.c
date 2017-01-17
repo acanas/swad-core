@@ -232,13 +232,16 @@ void Lnk_GetListLinks (void)
 	       Lay_ShowErrorAndExit ("Wrong code of institutional link.");
 
 	    /* Get the short name of the link (row[1]) */
-	    Str_Copy (Lnk->ShrtName,row[1],Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+	    Str_Copy (Lnk->ShrtName,row[1],
+	              Lnk_MAX_LENGTH_LINK_SHRT_NAME);
 
 	    /* Get the full name of the link (row[2]) */
-	    Str_Copy (Lnk->FullName,row[2],Lnk_MAX_LENGTH_LINK_FULL_NAME);
+	    Str_Copy (Lnk->FullName,row[2],
+	              Lnk_MAX_LENGTH_LINK_FULL_NAME);
 
 	    /* Get the URL of the link (row[3]) */
-	    Str_Copy (Lnk->WWW,row[3],Cns_MAX_LENGTH_WWW);
+	    Str_Copy (Lnk->WWW,row[3],
+	              Cns_MAX_LENGTH_WWW);
 	   }
 	}
       else
@@ -277,13 +280,16 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the short name of the link (row[0]) */
-         Str_Copy (Lnk->ShrtName,row[0],Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+         Str_Copy (Lnk->ShrtName,row[0],
+                   Lnk_MAX_LENGTH_LINK_SHRT_NAME);
 
          /* Get the full name of the link (row[1]) */
-         Str_Copy (Lnk->FullName,row[1],Lnk_MAX_LENGTH_LINK_FULL_NAME);
+         Str_Copy (Lnk->FullName,row[1],
+                   Lnk_MAX_LENGTH_LINK_FULL_NAME);
 
          /* Get the URL of the link (row[2]) */
-         Str_Copy (Lnk->WWW,row[2],Cns_MAX_LENGTH_WWW);
+         Str_Copy (Lnk->WWW,row[2],
+                   Cns_MAX_LENGTH_WWW);
         }
 
       /***** Free structure that stores the query result *****/
@@ -545,7 +551,8 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   Str_Copy (CurrentLnkName,NewLnkName,MaxLength);
+   Str_Copy (CurrentLnkName,NewLnkName,
+             MaxLength);
    Lnk_EditLinks ();
   }
 
@@ -602,7 +609,8 @@ void Lnk_ChangeLinkWWW (void)
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
-   Str_Copy (Lnk->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+   Str_Copy (Lnk->WWW,NewWWW,
+             Cns_MAX_LENGTH_WWW);
    Lnk_EditLinks ();
   }
 

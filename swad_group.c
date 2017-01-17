@@ -2498,7 +2498,8 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                   Lay_ShowErrorAndExit ("Wrong code of group.");
 
                /* Get group name (row[1]) */
-               Str_Copy (Grp->GrpName,row[1],Grp_MAX_LENGTH_GROUP_NAME);
+               Str_Copy (Grp->GrpName,row[1],
+                         Grp_MAX_LENGTH_GROUP_NAME);
 
                /* Get max number of students of group (row[2]) and number of current students */
                Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[2]);
@@ -2626,7 +2627,8 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
 
    /***** Get some data of group type *****/
    row = mysql_fetch_row (mysql_res);
-   Str_Copy (GrpTyp->GrpTypName,row[0],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+   Str_Copy (GrpTyp->GrpTypName,row[0],
+             Grp_MAX_LENGTH_GROUP_TYPE_NAME);
    GrpTyp->MandatoryEnrollment = (row[1][0] == 'Y');
    GrpTyp->MultipleEnrollment  = (row[2][0] == 'Y');
    GrpTyp->MustBeOpened        = (row[3][0] == 'Y');
@@ -2712,13 +2714,15 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	    Lay_ShowErrorAndExit ("Wrong code of course.");
 
 	 /* Get the name of the group type (row[2]) */
-	 Str_Copy (GrpDat->GrpTypName,row[2],Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	 Str_Copy (GrpDat->GrpTypName,row[2],
+	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
 	 /* Get whether a student may be in one or multiple groups (row[3]) */
 	 GrpDat->MultipleEnrollment = (row[3][0] == 'Y');
 
 	 /* Get the name of the group (row[4]) */
-	 Str_Copy (GrpDat->GrpName,row[4],Grp_MAX_LENGTH_GROUP_NAME);
+	 Str_Copy (GrpDat->GrpName,row[4],
+	           Grp_MAX_LENGTH_GROUP_NAME);
 
 	 /* Get maximum number of students (row[5]) */
 	 GrpDat->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[5]);
@@ -4089,7 +4093,8 @@ void Grp_RenameGroup (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,Grp_MAX_LENGTH_GROUP_NAME);
+   Str_Copy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,
+             Grp_MAX_LENGTH_GROUP_NAME);
    Grp_ReqEditGroups ();
   }
 

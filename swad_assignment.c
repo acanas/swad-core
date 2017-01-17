@@ -452,8 +452,10 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   Str_Copy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
-   Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
+   Str_Copy (FirstName,UsrDat.FirstName,
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat.Surname1,
+             Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
       Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
@@ -776,10 +778,12 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
       Asg->Open = (row[5][0] == '1');
 
       /* Get the title of the assignment (row[6]) */
-      Str_Copy (Asg->Title,row[6],Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
+      Str_Copy (Asg->Title,row[6],
+                Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
 
       /* Get the folder for the assignment files (row[7]) */
-      Str_Copy (Asg->Folder,row[7],Asg_MAX_LENGTH_FOLDER);
+      Str_Copy (Asg->Folder,row[7],
+                Asg_MAX_LENGTH_FOLDER);
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
@@ -848,7 +852,8 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],
+                Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -871,6 +876,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **Cont
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   size_t Length;
 
    SummaryStr[0] = '\0';	// Return nothing on error
 
@@ -887,18 +893,19 @@ void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **Cont
             row = mysql_fetch_row (mysql_res);
 
             /***** Get summary *****/
-            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
-
+            Str_Copy (SummaryStr,row[0],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             /***** Get content *****/
             if (GetContent)
               {
-               if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
+               Length = strlen (row[1]);
+               if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-
-               Str_Copy (*ContentStr,row[1],Cns_MAX_BYTES_TEXT);
+               Str_Copy (*ContentStr,row[1],
+                         Length);
               }
            }
          mysql_free_result (mysql_res);

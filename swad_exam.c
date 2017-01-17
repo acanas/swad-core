@@ -207,25 +207,25 @@ static long Exa_GetParamsExamAnnouncement (void)
 
 static void Exa_AllocMemExamAnnouncement (void)
   {
-   if ((Gbl.ExamAnns.ExaDat.Place       = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Place       = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.Mode        = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Mode        = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.Structure   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.Structure   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.DocRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.DocRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.MatRequired = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.MatRequired = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.MatAllowed  = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
 
-   if ((Gbl.ExamAnns.ExaDat.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((Gbl.ExamAnns.ExaDat.OtherInfo   = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store exam announcement.");
   }
 
@@ -946,7 +946,8 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
       Lay_ShowErrorAndExit ("Wrong year.");
 
    /* Exam session (row[4]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.Session,row[4],Cns_MAX_BYTES_STRING);
+   Str_Copy (Gbl.ExamAnns.ExaDat.Session,row[4],
+             Cns_MAX_BYTES_STRING);
 
    /* Date of exam announcement (row[5]) */
    if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",
@@ -967,25 +968,32 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
       Lay_ShowErrorAndExit ("Wrong duration of exam.");
 
    /* Place (row[8]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.Place,row[8],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.Place,row[8],
+             Cns_MAX_BYTES_TEXT);
 
    /* Exam mode (row[9]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.Mode,row[9],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.Mode,row[9],
+             Cns_MAX_BYTES_TEXT);
 
    /* Structure (row[10]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.Structure,row[10],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.Structure,row[10],
+             Cns_MAX_BYTES_TEXT);
 
    /* Documentation required (row[11]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.DocRequired,row[11],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.DocRequired,row[11],
+             Cns_MAX_BYTES_TEXT);
 
    /* Material required (row[12]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.MatRequired,row[12],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.MatRequired,row[12],
+             Cns_MAX_BYTES_TEXT);
 
    /* Material allowed (row[13]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.MatAllowed,row[13],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.MatAllowed,row[13],
+             Cns_MAX_BYTES_TEXT);
 
    /* Other information for students (row[14]) */
-   Str_Copy (Gbl.ExamAnns.ExaDat.OtherInfo,row[14],Cns_MAX_BYTES_TEXT);
+   Str_Copy (Gbl.ExamAnns.ExaDat.OtherInfo,row[14],
+             Cns_MAX_BYTES_TEXT);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

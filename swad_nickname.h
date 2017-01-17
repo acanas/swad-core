@@ -34,9 +34,10 @@
 
 #define Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA	  3
 #define Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA	 16
-#define Nck_MAX_BYTES_NICKNAME_WITH_ARROBA      127	// Used for variables that store the characters typed in a form
 
-#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+2)*Cfg_MAX_USRS_IN_LIST)
+#define Nck_MAX_BYTES_NICKNAME_FROM_FORM	(128 - 1)	// For variables that store characters typed in a form
+
+#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICKNAME_FROM_FORM+2)*Cfg_MAX_USRS_IN_LIST)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -44,7 +45,8 @@
 
 bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba);
 
-bool Nck_GetNicknameFromUsrCod (long UsrCod,char *Nickname);
+bool Nck_GetNicknameFromUsrCod (long UsrCod,
+                                char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1]);
 long Nck_GetUsrCodFromNickname (const char *Nickname);
 void Nck_ShowFormChangeUsrNickname (void);
 

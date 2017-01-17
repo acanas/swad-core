@@ -4593,9 +4593,10 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 /********************* Get text for action from database *********************/
 /*****************************************************************************/
 
-char *Act_GetActionTextFromDB (long ActCod,char *Txt)
+char *Act_GetActionTextFromDB (long ActCod,
+                               char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1])
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -4608,15 +4609,16 @@ char *Act_GetActionTextFromDB (long ActCod,char *Txt)
      {
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Act_MAX_LENGTH_ACTION_TXT);
+      Str_Copy (ActTxt,row[0],
+                Act_MAX_LENGTH_ACTION_TXT);
      }
    else	// ActCod-Language not found on database
-      Txt[0] = '\0';
+      ActTxt[0] = '\0';
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return Txt;
+   return ActTxt;
   }
 
 /*****************************************************************************/

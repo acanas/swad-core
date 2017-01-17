@@ -74,7 +74,7 @@ extern struct Globals Gbl;
 /**************************** Internal prototypes ****************************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (char *Content);
+static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static void Msg_ShowSentOrReceivedMessages (void);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
@@ -100,7 +100,7 @@ static void Msg_PutLinkToShowMorePotentialRecipients (void);
 static void Msg_PutParamsShowMorePotentialRecipients (void);
 static void Msg_ShowOneUniqueRecipient (void);
 static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content);
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
 static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1]);
@@ -125,8 +125,11 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod);
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery);
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
-                               time_t *CreatTimeUTC,char *Subject,bool *Deleted);
-static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image);
+                               time_t *CreatTimeUTC,
+                               char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                               bool *Deleted);
+static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+                               struct Image *Image);
 
 static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,bool Open,bool Expanded);
 static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
@@ -148,7 +151,7 @@ static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod);
 
 void Msg_FormMsgUsrs (void)
   {
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get possible hidden subject and content of the message *****/
    Par_GetParToHTML ("HiddenSubject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
@@ -162,7 +165,7 @@ void Msg_FormMsgUsrs (void)
 /***************** Put a form to write a new message to users ****************/
 /*****************************************************************************/
 
-static void Msg_PutFormMsgUsrs (char *Content)
+static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *Hlp_MESSAGES_Write;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -422,7 +425,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
-   char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];
+   char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
    unsigned Colspan;
    bool StdsAndTchsWritten = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
@@ -472,7 +475,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
 /****** Write form fields with subject and content of a message to users *****/
 /*****************************************************************************/
 
-static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
+static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
@@ -518,10 +521,12 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get subject */
-	 Str_Copy (Gbl.Msg.Subject,row[0],Cns_MAX_BYTES_SUBJECT);
+	 Str_Copy (Gbl.Msg.Subject,row[0],
+	           Cns_MAX_BYTES_SUBJECT);
 
 	 /* Get content */
-	 Str_Copy (Content,row[1],Cns_MAX_BYTES_LONG_TEXT);
+	 Str_Copy (Content,row[1],
+	           Cns_MAX_BYTES_LONG_TEXT);
 
 	 /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -598,7 +603,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char *Content)
 
 void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString ("OtherRecipients",NicknameWithArroba);
@@ -647,7 +652,7 @@ void Msg_RecMsgFromUsr (void)
    bool MsgAlreadyInserted = false;
    bool CreateNotif;
    bool NotifyByEmail;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    bool Error = false;
 
@@ -2651,7 +2656,9 @@ static void Msg_GetParamOnlyUnreadMsgs (void)
 /*****************************************************************************/
 
 static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
-                               time_t *CreatTimeUTC,char *Subject,bool *Deleted)
+                               time_t *CreatTimeUTC,
+                               char Subject[Cns_MAX_BYTES_SUBJECT + 1],
+                               bool *Deleted)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2703,7 +2710,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
 /************************ Get the subject of a message ***********************/
 /*****************************************************************************/
 
-void Msg_GetMsgSubject (long MsgCod,char *Subject)
+void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2717,7 +2724,8 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
      {
       /***** Get subject *****/
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Subject,row[0],Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (Subject,row[0],
+                Cns_MAX_BYTES_SUBJECT);
      }
    else
       Subject[0] = '\0';
@@ -2730,7 +2738,8 @@ void Msg_GetMsgSubject (long MsgCod,char *Subject)
 /*************** Get content and optional image of a message *****************/
 /*****************************************************************************/
 
-static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
+static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT + 1],
+                               struct Image *Image)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -2751,7 +2760,8 @@ static void Msg_GetMsgContent (long MsgCod,char *Content,struct Image *Image)
    row = mysql_fetch_row (mysql_res);
 
    /****** Get content (row[0]) *****/
-   Str_Copy (Content,row[0],Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Content,row[0],
+             Cns_MAX_BYTES_LONG_TEXT);
 
    /****** Get image name (row[1]), title (row[2]) and URL (row[3]) *****/
    Img_GetImageNameTitleAndURLFromRow (row[1],row[2],row[3],Image);
@@ -2846,8 +2856,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    bool FromThisCrs = false;	// Initialized to avoid warning
    time_t CreatTimeUTC;		// Creation time of a message
    long CrsCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    bool Deleted;
    bool Open = true;
@@ -3027,7 +3037,8 @@ void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            Str_Copy (SummaryStr,row[0],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -3037,7 +3048,8 @@ void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                Length = strlen (row[1]);
                if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[1],Length);
+               Str_Copy (*ContentStr,row[1],
+                         Length);
               }
            }
          mysql_free_result (mysql_res);

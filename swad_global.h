@@ -264,7 +264,7 @@ struct Globals
    struct
      {
       Sch_WhatToSearch_t WhatToSearch;
-      char Str[Sch_MAX_LENGTH_STRING_TO_FIND+1];
+      char Str[Sch_MAX_LENGTH_STRING_TO_FIND + 1];
      } Search;
   struct
      {
@@ -641,13 +641,13 @@ struct Globals
          unsigned Num;
          bool All;
          char *List;
-         char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG+1];
+         char Txt[Tst_MAX_TAGS_PER_QUESTION][Tst_MAX_BYTES_TAG + 1];
         } Tags;
       Tst_AnswerType_t AnswerType;
       unsigned NumQsts;
       long QstCodes[Tst_MAX_QUESTIONS_PER_TEST];	// Codes of the sent/received questions in a test
-      char StrIndexesOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_SIZE_INDEXES_ONE_QST+1];	// 0 1 2 3, 3 0 2 1, etc.
-      char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_SIZE_ANSWERS_ONE_QST+1];	// Answers selected by user
+      char StrIndexesOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_SIZE_INDEXES_ONE_QST + 1];	// 0 1 2 3, 3 0 2 1, etc.
+      char StrAnswersOneQst[Tst_MAX_QUESTIONS_PER_TEST][Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];	// Answers selected by user
       bool AllowTeachers;	// Can teachers of this course see the test result?
       bool AllAnsTypes;
       struct
@@ -671,7 +671,7 @@ struct Globals
          long Integer;
          double FloatingPoint[2];
         } Answer;
-      char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES+1];
+      char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
       Tst_QuestionsOrder_t SelectedOrderType;
       struct
         {

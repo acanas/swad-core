@@ -86,8 +86,8 @@ void Ann_ShowAllAnnouncements (void)
    unsigned NumAnn;
    long AnnCod;
    unsigned Roles;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
    unsigned UnsignedNum;
    Ann_Status_t Status;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
@@ -149,10 +149,12 @@ void Ann_ShowAllAnnouncements (void)
       	 Lay_ShowErrorAndExit ("Error when reading roles of announcement.");
 
       /* Get the content (row[3]) */
-      Str_Copy (Subject,row[3],Cns_MAX_BYTES_SUBJECT);
+      Str_Copy (Subject,row[3],
+                Cns_MAX_BYTES_SUBJECT);
 
       /* Get the content (row[4]) and insert links */
-      Str_Copy (Content,row[4],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[4],
+                Cns_MAX_BYTES_TEXT);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
       /* Show the announcement */
@@ -210,8 +212,8 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    unsigned NumAnnouncements;
    unsigned NumAnn;
    long AnnCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
@@ -241,10 +243,12 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
 	    Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
 	 /* Get the content (row[1]) */
-	 Str_Copy (Subject,row[1],Cns_MAX_BYTES_SUBJECT);
+	 Str_Copy (Subject,row[1],
+	           Cns_MAX_BYTES_SUBJECT);
 
 	 /* Get the content (row[2]) and insert links */
-	 Str_Copy (Content,row[2],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Content,row[2],
+	           Cns_MAX_BYTES_TEXT);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,50);
 
 	 /* Show the announcement */

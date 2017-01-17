@@ -346,11 +346,11 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char StrWidth[10+2+1];
-   char PathRelRSSFile[PATH_MAX+1];
+   char PathRelRSSFile[PATH_MAX + 1];
    long NotCod;
    unsigned long NumNot;
    unsigned long NumNotices;
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
    time_t TimeUTC;
    long UsrCod;
    unsigned UnsignedNum;
@@ -411,7 +411,8 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 UsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	 /* Get the content (row[3]) and insert links */
-	 Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
+	 Str_Copy (Content,row[3],
+	           Cns_MAX_BYTES_TEXT);
 	 Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 	                  Not_MaxCharsURLOnScreen[TypeNoticesListing]);
 	 if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
@@ -532,7 +533,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
    time_t TimeUTC;
    long UsrCod;
    unsigned UnsignedNum;
@@ -555,7 +556,8 @@ static void Not_GetDataAndShowNotice (long NotCod)
       UsrCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Get the content (row[2]) and insert links*/
-      Str_Copy (Content,row[2],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Content,row[2],
+                Cns_MAX_BYTES_TEXT);
       Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,
 		       Not_MaxCharsURLOnScreen[Not_LIST_FULL_NOTICES]);
 
@@ -767,7 +769,8 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy summary *****/
-            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            Str_Copy (SummaryStr,row[0],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -777,7 +780,8 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                Length = strlen (row[0]);
                if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[0],Length);
+               Str_Copy (*ContentStr,row[0],
+                         Length);
               }
            }
          mysql_free_result (mysql_res);

@@ -326,7 +326,9 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
   {
    size_t LengthFileRoot = Str_GetLengthRootFileName (CurrentName);
 
-   Str_Copy (NewName,CurrentName,LengthFileRoot);
+   Str_Copy (NewName,CurrentName,
+             PATH_MAX);
+   NewName[LengthFileRoot] = '\0';
    sprintf (OldName,"%s%s",NewName,ExtensionOldName);
    Str_Concat (NewName,".new",PATH_MAX);
 

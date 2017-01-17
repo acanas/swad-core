@@ -78,6 +78,8 @@ typedef enum
    Net_YOUTUBE,
   } Net_WebsAndSocialNetworks_t;
 
+#define Net_MAX_LENGTH_NETWORK_NAME 32
+
 const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
    "www",		// Net_WWW
@@ -225,7 +227,8 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	{
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
-	 Str_Copy (URL,row[0],Cns_MAX_LENGTH_WWW);
+	 Str_Copy (URL,row[0],
+	           Cns_MAX_LENGTH_WWW);
 
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
@@ -315,7 +318,8 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get URL */
-	 Str_Copy (URL,row[0],Cns_MAX_LENGTH_WWW);
+	 Str_Copy (URL,row[0],
+	           Cns_MAX_LENGTH_WWW);
 	}
       else
 	 URL[0] = '\0';
@@ -438,9 +442,10 @@ void Net_ShowWebAndSocialNetworksStats (void)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumRows,NumRow;
+   unsigned NumRows;
+   unsigned NumRow;
    Net_WebsAndSocialNetworks_t Web;
-   char WebStr[32];
+   char NetName[Net_MAX_LENGTH_NETWORK_NAME + 1];
    unsigned NumUsrsTotalInPlatform;
    unsigned NumUsrs;
 
@@ -551,11 +556,12 @@ void Net_ShowWebAndSocialNetworksStats (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get web / social network (row[0]) */
-      Str_Copy (WebStr,row[0],sizeof (WebStr) - 1);
+      Str_Copy (NetName,row[0],
+                Net_MAX_LENGTH_NETWORK_NAME);
       for (Web = (Net_WebsAndSocialNetworks_t) 0;
 	   Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	   Web++)
-	 if (!strcmp (Net_WebsAndSocialNetworksDB[Web],WebStr))
+	 if (!strcmp (Net_WebsAndSocialNetworksDB[Web],NetName))
 	    break;
       if (Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS)
 	{

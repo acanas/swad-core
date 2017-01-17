@@ -107,7 +107,9 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList);
 static bool Att_CheckIfUsrIsInTableAttUsr (long AttCod,long UsrCod,bool *Present);
 static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod);
-static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,char *CommentStd,char *CommentTch);
+static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,
+                                                             char CommentStd[Cns_MAX_BYTES_TEXT + 1],
+                                                             char CommentTch[Cns_MAX_BYTES_TEXT + 1]);
 static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
                                                   const char *CommentStd,const char *CommentTch);
 static void Att_RemoveUsrFromAttEvent (long AttCod,long UsrCod);
@@ -141,7 +143,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    /***** Get parameters *****/
    Att_GetParamAttOrderType ();
@@ -492,8 +494,10 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   Str_Copy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
-   Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
+   Str_Copy (FirstName,UsrDat.FirstName,
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat.Surname1,
+             Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
       Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
@@ -785,7 +789,8 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 	 Att->CommentTchVisible = (row[7][0] == 'Y');
 
 	 /* Get the title of the attendance event (row[8]) */
-	 Str_Copy (Att->Title,row[8],Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
+	 Str_Copy (Att->Title,row[8],
+	           Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -856,7 +861,8 @@ static void Att_GetAttEventTxtFromDB (long AttCod,char Txt[Cns_MAX_BYTES_TEXT + 
       row = mysql_fetch_row (mysql_res);
 
       /* Get info text */
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],
+                Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -2493,7 +2499,9 @@ static bool Att_CheckIfUsrIsPresentInAttEvent (long AttCod,long UsrCod)
 /***************** Check if a student attended to an event *******************/
 /*****************************************************************************/
 
-static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,char *CommentStd,char *CommentTch)
+static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long UsrCod,
+                                                             char CommentStd[Cns_MAX_BYTES_TEXT + 1],
+                                                             char CommentTch[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -2514,10 +2522,12 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
       Present = (row[0][0] == 'Y');
 
       /* Get student's comment (row[1]) */
-      Str_Copy (CommentStd,row[1],Cns_MAX_BYTES_TEXT);
+      Str_Copy (CommentStd,row[1],
+                Cns_MAX_BYTES_TEXT);
 
       /* Get teacher's comment (row[2]) */
-      Str_Copy (CommentTch,row[2],Cns_MAX_BYTES_TEXT);
+      Str_Copy (CommentTch,row[2],
+                Cns_MAX_BYTES_TEXT);
      }
    else	// User is not present
      {
@@ -3450,8 +3460,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    bool Present;
    bool ShowCommentStd;
    bool ShowCommentTch;
-   char CommentStd[Cns_MAX_BYTES_TEXT+1];
-   char CommentTch[Cns_MAX_BYTES_TEXT+1];
+   char CommentStd[Cns_MAX_BYTES_TEXT + 1];
+   char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Write number of student in the list *****/
    fprintf (Gbl.F.Out,"<tr>"

@@ -73,7 +73,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title);
 static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrData *UsrDat);
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail);
-static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
+static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword);
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat);
@@ -331,7 +331,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
@@ -548,9 +548,9 @@ static void Acc_PrintAccountSeparator (void)
 
 bool Acc_CreateMyNewAccountAndLogIn (void)
   {
-   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
-   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewEmail[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    if (Acc_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
      {
@@ -575,7 +575,8 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
       if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
 	{
 	 /* Email updated sucessfully */
-	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,Usr_MAX_BYTES_USR_EMAIL);
+	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
+	           Usr_MAX_BYTES_USR_EMAIL);
 
 	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
 	}
@@ -595,7 +596,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 /*****************************************************************************/
 // Return false on error
 
-static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
+static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1],
                                      char *NewEmail,
                                      char *NewEncryptedPassword)
   {
@@ -604,16 +605,17 @@ static bool Acc_GetParamsNewAccount (char *NewNicknameWithoutArroba,
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char Query[1024];
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
-   char NewPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
-   Par_GetParToText ("NewNick",NewNicknameWithArroba,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+   Par_GetParToText ("NewNick",NewNicknameWithArroba,
+                     Nck_MAX_BYTES_NICKNAME_FROM_FORM);
 
    /* Remove arrobas at the beginning */
    Str_Copy (NewNicknameWithoutArroba,NewNicknameWithArroba,
-             Nck_MAX_BYTES_NICKNAME_WITH_ARROBA);
+             Nck_MAX_BYTES_NICKNAME_FROM_FORM);
    Str_RemoveLeadingArrobas (NewNicknameWithoutArroba);
 
    /* Create a new version of the nickname with arroba */

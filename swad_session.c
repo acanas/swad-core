@@ -80,7 +80,8 @@ void Ses_GetNumSessions (void)
 void Ses_CreateSession (void)
   {
    /***** Create a unique name for the session *****/
-   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,Ses_LENGTH_SESSION_ID);
+   Str_Copy (Gbl.Session.Id,Gbl.UniqueNameEncrypted,
+             Ses_LENGTH_SESSION_ID);
 
    /***** Check that session is not open *****/
    if (Ses_CheckIfSessionExists (Gbl.Session.Id))
@@ -315,7 +316,8 @@ bool Ses_GetSessionData (void)
 	       Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
 
 	 /* Get search string (row[9]) */
-	 Str_Copy (Gbl.Search.Str,row[9],Sch_MAX_LENGTH_STRING_TO_FIND);
+	 Str_Copy (Gbl.Search.Str,row[9],
+	           Sch_MAX_LENGTH_STRING_TO_FIND);
 	}
 
       Result = true;
@@ -428,8 +430,11 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t Action,const char *ParamName,char 
         {
          /***** Get the value del parameter *****/
          row = mysql_fetch_row (mysql_res);
-         Str_Copy (ParamValue,row[0],MaxBytes);
+
          ParameterIsTooBig = (strlen (row[0]) > MaxBytes);
+         if (!ParameterIsTooBig)
+	    Str_Copy (ParamValue,row[0],
+		      MaxBytes);
         }
 
       /***** Free structure that stores the query result *****/

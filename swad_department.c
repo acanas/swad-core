@@ -351,13 +351,16 @@ void Dpt_GetListDepartments (long InsCod)
             Lay_ShowErrorAndExit ("Wrong code of institution.");
 
          /* Get the short name of the department (row[2]) */
-         Str_Copy (Dpt->ShrtName,row[2],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
+         Str_Copy (Dpt->ShrtName,row[2],
+                   Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
          /* Get the full name of the department (row[3]) */
-         Str_Copy (Dpt->FullName,row[3],MAX_LENGTH_DEPARTMENT_FULL_NAME);
+         Str_Copy (Dpt->FullName,row[3],
+                   Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
          /* Get the URL of the department (row[4]) */
-         Str_Copy (Dpt->WWW,row[4],Cns_MAX_LENGTH_WWW);
+         Str_Copy (Dpt->WWW,row[4],
+                   Cns_MAX_LENGTH_WWW);
 
          /* Get number of teachers in this department (row[5]) */
          if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
@@ -392,9 +395,9 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
    if (Dpt->DptCod == 0)
      {
       Str_Copy (Dpt->ShrtName,Txt_Another_department,
-                MAX_LENGTH_DEPARTMENT_SHRT_NAME);
+                Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME);
       Str_Copy (Dpt->FullName,Txt_Another_department,
-                MAX_LENGTH_DEPARTMENT_FULL_NAME);
+                Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME);
      }
    else if (Dpt->DptCod > 0)
      {
@@ -426,13 +429,16 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
          Dpt->InsCod = Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get the short name of the department (row[1]) */
-         Str_Copy (Dpt->ShrtName,row[1],MAX_LENGTH_DEPARTMENT_SHRT_NAME);
+         Str_Copy (Dpt->ShrtName,row[1],
+                   Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
          /* Get the full name of the department (row[2]) */
-         Str_Copy (Dpt->FullName,row[2],MAX_LENGTH_DEPARTMENT_FULL_NAME);
+         Str_Copy (Dpt->FullName,row[2],
+                   Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
          /* Get the URL of the department (row[3]) */
-         Str_Copy (Dpt->WWW,row[3],Cns_MAX_LENGTH_WWW);
+         Str_Copy (Dpt->WWW,row[3],
+                   Cns_MAX_LENGTH_WWW);
 
          /* Get number of teachers in this department (row[4]) */
          if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)
@@ -556,7 +562,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
+               Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -568,7 +574,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
+               Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -720,7 +726,7 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    size_t MaxLength = 0;		// Initialized to avoid warning
    char *CurrentDptName = NULL;		// Initialized to avoid warning
-   char NewDptName[MAX_LENGTH_DEPARTMENT_FULL_NAME + 1];
+   char NewDptName[Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME + 1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
    switch (ShrtOrFullName)
@@ -728,13 +734,13 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = MAX_LENGTH_DEPARTMENT_SHRT_NAME;
+         MaxLength = Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME;
          CurrentDptName = Dpt->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = MAX_LENGTH_DEPARTMENT_FULL_NAME;
+         MaxLength = Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME;
          CurrentDptName = Dpt->FullName;
          break;
      }
@@ -791,7 +797,8 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
      }
 
    /***** Show the form again *****/
-   Str_Copy (CurrentDptName,NewDptName,MaxLength);
+   Str_Copy (CurrentDptName,NewDptName,
+             MaxLength);
    Dpt_EditDepartments ();
   }
 
@@ -852,7 +859,8 @@ void Dpt_ChangeDptWWW (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Dpt->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+   Str_Copy (Dpt->WWW,NewWWW,
+             Cns_MAX_LENGTH_WWW);
    Dpt_EditDepartments ();
   }
 
@@ -928,7 +936,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName);
+            Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME,Dpt->ShrtName);
 
    /***** Department full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -937,7 +945,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
+            Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME,Dpt->FullName);
 
    /***** Department WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -1017,10 +1025,10 @@ void Dpt_RecFormNewDpt (void)
    Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get department short name */
-   Par_GetParToText ("ShortName",Dpt->ShrtName,MAX_LENGTH_DEPARTMENT_SHRT_NAME);
+   Par_GetParToText ("ShortName",Dpt->ShrtName,Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME);
 
    /* Get department full name */
-   Par_GetParToText ("FullName",Dpt->FullName,MAX_LENGTH_DEPARTMENT_FULL_NAME);
+   Par_GetParToText ("FullName",Dpt->FullName,Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
    /* Get department WWW */
    Par_GetParToText ("WWW",Dpt->WWW,Cns_MAX_LENGTH_WWW);

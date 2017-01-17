@@ -52,9 +52,9 @@ struct Assignment
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
-   char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE+1];
+   char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
-   char Folder[Asg_MAX_LENGTH_FOLDER+1];
+   char Folder[Asg_MAX_LENGTH_FOLDER + 1];
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups
 				// or, if associated to groups,

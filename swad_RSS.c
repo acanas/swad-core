@@ -152,7 +152,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
    time_t CreatTimeUTC;
    long NotCod;
    unsigned long NumNot,NumNotices;
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get active notices in course *****/
    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
@@ -191,7 +191,8 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
          fprintf (FileRSS,"<item>\n");
 
          /* Write title (first characters) of the notice */
-         Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
+         Str_Copy (Content,row[3],
+                   Cns_MAX_BYTES_TEXT);
          Str_LimitLengthHTMLStr (Content,40);
          fprintf (FileRSS,"<title>%s: ",Txt_Notice);
          Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
@@ -202,7 +203,8 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
                   Cfg_URL_SWAD_CGI,Crs->CrsCod);
 
          /* Write full content of the notice */
-         Str_Copy (Content,row[3],Cns_MAX_BYTES_TEXT);
+         Str_Copy (Content,row[3],
+                   Cns_MAX_BYTES_TEXT);
          Str_InsertLinks (Content,Cns_MAX_BYTES_TEXT,40);
          fprintf (FileRSS,"<description><![CDATA[<p><em>%s %s %s:</em></p><p>%s</p>]]></description>\n",
                   UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2,Content);

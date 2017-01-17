@@ -43,9 +43,6 @@
 #define Deg_MAX_LENGTH_DEGREE_SHRT_NAME	32
 #define Deg_MAX_LENGTH_DEGREE_FULL_NAME	(128 - 1)
 
-#define Deg_MAX_LENGTH_LOCATION_SHORT_NAME	 32
-#define Deg_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR (Deg_MAX_LENGTH_LOCATION_SHORT_NAME * Str_MAX_LENGTH_SPEC_CHAR_HTML)
-
 /*****************************************************************************/
 /******************************* Public types ********************************/
 /*****************************************************************************/

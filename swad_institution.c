@@ -1028,13 +1028,16 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[3]);
 
          /* Get the short name of the institution (row[4]) */
-         Str_Copy (Ins->ShrtName,row[4],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+         Str_Copy (Ins->ShrtName,row[4],
+                   Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
 
          /* Get the full name of the institution (row[5]) */
-         Str_Copy (Ins->FullName,row[5],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+         Str_Copy (Ins->FullName,row[5],
+                   Ins_MAX_LENGTH_INSTIT_FULL_NAME);
 
          /* Get the URL of the institution (row[6]) */
-         Str_Copy (Ins->WWW,row[6],Cns_MAX_LENGTH_WWW);
+         Str_Copy (Ins->WWW,row[6],
+                   Cns_MAX_LENGTH_WWW);
 
          /* Get extra data */
          switch (GetExtraData)
@@ -1122,13 +1125,16 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	 Ins->RequesterUsrCod = Str_ConvertStrCodToLongCod (row[2]);
 
 	 /* Get the short name of the institution (row[3]) */
-	 Str_Copy (Ins->ShrtName,row[3],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+	 Str_Copy (Ins->ShrtName,row[3],
+	           Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
 
 	 /* Get the full name of the institution (row[4]) */
-	 Str_Copy (Ins->FullName,row[4],Ins_MAX_LENGTH_INSTIT_FULL_NAME);
+	 Str_Copy (Ins->FullName,row[4],
+	           Ins_MAX_LENGTH_INSTIT_FULL_NAME);
 
 	 /* Get the URL of the institution (row[5]) */
-	 Str_Copy (Ins->WWW,row[5],Cns_MAX_LENGTH_WWW);
+	 Str_Copy (Ins->WWW,row[5],
+	           Cns_MAX_LENGTH_WWW);
 
 	 /* Get extra data */
 	 if (GetExtraData == Ins_GET_EXTRA_DATA)
@@ -1178,7 +1184,8 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
 	 /***** Get the short name of this institution *****/
 	 row = mysql_fetch_row (mysql_res);
 
-	 Str_Copy (Ins->ShrtName,row[0],Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
+	 Str_Copy (Ins->ShrtName,row[0],
+	           Ins_MAX_LENGTH_INSTIT_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1270,7 +1277,7 @@ void Ins_WriteSelectorOfInstitution (void)
 /************************* List all the institutions *************************/
 /*****************************************************************************/
 
-#define Ins_MAX_LENGTH_WWW_ON_SCREEN 10
+#define Ins_MAX_LENGTH_WWW_ON_SCREEN 15
 
 static void Ins_ListInstitutionsForEdition (void)
   {
@@ -1279,7 +1286,7 @@ static void Ins_ListInstitutionsForEdition (void)
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Instit *Ins;
-   char WWW[Ins_MAX_LENGTH_WWW_ON_SCREEN+1];
+   char WWW[Cns_MAX_LENGTH_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
    Ins_StatusTxt_t StatusTxt;
@@ -1387,12 +1394,14 @@ static void Ins_ListInstitutionsForEdition (void)
 	}
       else
 	{
-         Str_Copy (WWW,Ins->WWW,Ins_MAX_LENGTH_WWW_ON_SCREEN);
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"DAT\" title=\"%s\">%s",
+         Str_Copy (WWW,Ins->WWW,
+                   Cns_MAX_LENGTH_WWW);
+         Str_LimitLengthHTMLStr (WWW,Ins_MAX_LENGTH_WWW_ON_SCREEN);
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+                            " class=\"DAT\" title=\"%s\">"
+                            "%s"
+                            "</a>",
                   Ins->WWW,Ins->WWW,WWW);
-         if (strlen (Ins->WWW) > Ins_MAX_LENGTH_WWW_ON_SCREEN)
-            fprintf (Gbl.F.Out,"&hellip;");
-         fprintf (Gbl.F.Out,"</a>");
 	}
       fprintf (Gbl.F.Out,"</td>");
 
@@ -1853,7 +1862,8 @@ void Ins_ChangeInsWWW (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Ins->InsCod,NewWWW);
-      Str_Copy (Ins->WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Str_Copy (Ins->WWW,NewWWW,
+                Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -1884,7 +1894,8 @@ void Ins_ChangeInsWWWInConfig (void)
      {
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Gbl.CurrentIns.Ins.InsCod,NewWWW);
-      Str_Copy (Gbl.CurrentIns.Ins.WWW,NewWWW,Cns_MAX_LENGTH_WWW);
+      Str_Copy (Gbl.CurrentIns.Ins.WWW,NewWWW,
+                Cns_MAX_LENGTH_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);

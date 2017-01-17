@@ -355,6 +355,7 @@ void Sch_PutFormToSearchInPageTopHeading (void)
       ActionSearch = ActSysSch;
       Gbl.Scope.Default = Sco_SCOPE_SYS;
      }
+
    Act_FormStart (ActionSearch);
    Sco_GetScope ("ScopeSch");
    Sco_PutParamScope ("ScopeSch",Gbl.Scope.Current);

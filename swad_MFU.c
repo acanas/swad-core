@@ -237,7 +237,8 @@ void MFU_WriteBigMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	 SuperAction = Act_Actions[Action].SuperAction;
 	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
 	           MFU_MAX_LENGTH_TAB);
-	 Str_Copy (MenuStr,Title,MFU_MAX_LENGTH_MENU);
+	 Str_Copy (MenuStr,Title,
+	           MFU_MAX_LENGTH_MENU);
          sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */
@@ -300,7 +301,8 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 	 SuperAction = Act_Actions[Action].SuperAction;
 	 Str_Copy (TabStr,Txt_TABS_TXT[Act_Actions[SuperAction].Tab],
 	           MFU_MAX_LENGTH_TAB);
-	 Str_Copy (MenuStr,Title,MFU_MAX_LENGTH_MENU);
+	 Str_Copy (MenuStr,Title,
+	           MFU_MAX_LENGTH_MENU);
          sprintf (TabMenuStr,"%s &gt; %s",TabStr,MenuStr);
 
          /* Icon and text */

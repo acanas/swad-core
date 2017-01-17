@@ -93,7 +93,7 @@ void Msg_PutHiddenParamsMsgsFilters (void);
 void Msg_GetDistinctCoursesInMyMessages (void);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
 void Msg_ShowFormToFilterMsgs (void);
-void Msg_GetMsgSubject (long MsgCod,char *Subject);
+void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
 void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                           char **ContentStr,long MsgCod,
                           unsigned MaxChars,bool GetContent);

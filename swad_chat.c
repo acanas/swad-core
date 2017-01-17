@@ -372,6 +372,10 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
 /******************************* Enter a chat room ***************************/
 /*****************************************************************************/
 
+#define Cht_MAX_LENGTH_ROOM_CODES      ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_CODE)
+#define Cht_MAX_LENGTH_ROOM_SHRT_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_SHRT_NAME)
+#define Cht_MAX_LENGTH_ROOM_FULL_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_FULL_NAME)
+
 void Cht_OpenChatWindow (void)
   {
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -393,9 +397,9 @@ void Cht_OpenChatWindow (void)
    char ThisRoomCode     [MAX_LENGTH_ROOM_CODE      + 1];
    char ThisRoomShortName[MAX_LENGTH_ROOM_SHRT_NAME + 1];
    char ThisRoomFullName [MAX_LENGTH_ROOM_FULL_NAME + 1];
-   char ListRoomCodes     [(2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_CODE      + 1];
-   char ListRoomShortNames[(2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_SHRT_NAME + 1];
-   char ListRoomFullNames [(2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_FULL_NAME + 1];
+   char ListRoomCodes     [Cht_MAX_LENGTH_ROOM_CODES      + 1];
+   char ListRoomShortNames[Cht_MAX_LENGTH_ROOM_SHRT_NAMES + 1];
+   char ListRoomFullNames [Cht_MAX_LENGTH_ROOM_FULL_NAMES + 1];
    FILE *FileChat;
 
    /***** Get the code and the nombre of the room *****/
@@ -415,19 +419,22 @@ void Cht_OpenChatWindow (void)
    Usr_GetMyCourses ();
 
    /***** Build my user's name *****/
-   Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.Surname1,
+             Usr_MAX_BYTES_FULL_NAME);
    if (Gbl.Usrs.Me.UsrDat.Surname2[0])
      {
-      Str_Concat (UsrName," ",Usr_MAX_BYTES_NAME);
-      Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_NAME);
+      Str_Concat (UsrName," ",Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.Surname2,Usr_MAX_BYTES_FULL_NAME);
      }
-   Str_Concat (UsrName,", ",Usr_MAX_BYTES_NAME);
-   Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+   Str_Concat (UsrName,", ",Usr_MAX_BYTES_FULL_NAME);
+   Str_Concat (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_FULL_NAME);
 
    /***** Build the lists of available rooms *****/
    sprintf (ListRoomCodes,"#%s",RoomCode);
-   Str_Copy (ListRoomShortNames,RoomShortName,sizeof (ListRoomShortNames) - 1);
-   Str_Copy (ListRoomFullNames ,RoomFullName,sizeof (ListRoomFullNames) - 1);
+   Str_Copy (ListRoomShortNames,RoomShortName,
+             Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+   Str_Copy (ListRoomFullNames ,RoomFullName,
+             Cht_MAX_LENGTH_ROOM_FULL_NAMES);
 
    if (strcmp (RoomCode,"GBL_USR"))
      {

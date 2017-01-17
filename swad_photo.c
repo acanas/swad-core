@@ -1157,14 +1157,17 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
-   Str_Copy (FullName,UsrDat->FullName,Usr_MAX_BYTES_FULL_NAME);
+   Str_Copy (FullName,UsrDat->FullName,
+             Usr_MAX_BYTES_FULL_NAME);
    if (PutZoomCode)
      {
-      Str_Copy (ShortName,UsrDat->FirstName,Usr_MAX_BYTES_FULL_NAME);
+      Str_Copy (ShortName,UsrDat->FirstName,
+                Usr_MAX_BYTES_FULL_NAME);
       Str_LimitLengthHTMLStr (ShortName,23);
       Surnames[0] = '\0';
       if (UsrDat->Surname1[0])
-         Str_Copy (Surnames,UsrDat->Surname1,Usr_MAX_BYTES_SURNAMES);
+         Str_Copy (Surnames,UsrDat->Surname1,
+                   Usr_MAX_BYTES_SURNAMES);
       if (UsrDat->Surname2[0])
         {
          Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
@@ -2372,7 +2375,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
 
    /***** Make a copy of the degree short name *****/
-   Str_Copy (CopyOfDegShortName,Deg->ShrtName,Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+   Str_Copy (CopyOfDegShortName,Deg->ShrtName,
+             Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
    Str_LimitLengthHTMLStr (CopyOfDegShortName,
                            SeeOrPrint == Pho_DEGREES_SEE ? 10 :
                         	                           15);

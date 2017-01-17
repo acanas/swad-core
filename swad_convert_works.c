@@ -126,8 +126,8 @@ int main (void)
 				 if (sscanf (row[0],"%ld",&UsrCod) == 1)	// UsrCod
 				    if (row[1])
 				      {
-				       Str_Copy (UsrID,row[1],ID_MAX_LENGTH_USR_ID);		// UsrID
-
+				       Str_Copy (UsrID,row[1],
+				                 ID_MAX_LENGTH_USR_ID,62);		// UsrID
 				       sprintf (OldPathUsr,"%s_backup/%s",OldPathUsrs,UsrID);
 				       if (CheckIfPathExists (OldPathUsr))
 					 {

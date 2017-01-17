@@ -244,7 +244,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
 void Usr_UsrDataConstructor (struct UsrData *UsrDat)
   {
    /***** Allocate memory for the comments *****/
-   if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+   if ((UsrDat->Comments = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store user's data.");
 
    /***** Initialize to zero the data of the user *****/
@@ -485,7 +485,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
    /* Get encrypted password */
-   Str_Copy (UsrDat->Password,row[1],Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+   Str_Copy (UsrDat->Password,row[1],
+             Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
@@ -497,9 +498,12 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 	                           Rol_VISITOR;		// User belongs to some courses
 
    /* Get name */
-   Str_Copy (UsrDat->Surname1 ,row[2],Usr_MAX_BYTES_NAME);
-   Str_Copy (UsrDat->Surname2 ,row[3],Usr_MAX_BYTES_NAME);
-   Str_Copy (UsrDat->FirstName,row[4],Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname1,row[2],
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname2,row[3],
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->FirstName,row[4],
+             Usr_MAX_BYTES_NAME);
 
    /* Get sex */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
@@ -544,7 +548,8 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
          UsrDat->Prefs.FirstDayOfWeek = UnsignedNum;
 
    /* Get rest of data */
-   Str_Copy (UsrDat->Photo,row[10],Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+   Str_Copy (UsrDat->Photo,row[10],
+             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
@@ -553,14 +558,21 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
-   Str_Copy (UsrDat->Tch.Office     ,row[18],Cns_MAX_BYTES_STRING);
-   Str_Copy (UsrDat->Tch.OfficePhone,row[19],Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->Tch.Office,row[18],
+             Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->Tch.OfficePhone,row[19],
+             Usr_MAX_BYTES_PHONE);
 
-   Str_Copy (UsrDat->LocalAddress ,row[20],Cns_MAX_BYTES_STRING);
-   Str_Copy (UsrDat->LocalPhone   ,row[21],Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->FamilyAddress,row[22],Cns_MAX_BYTES_STRING);
-   Str_Copy (UsrDat->FamilyPhone  ,row[23],Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->OriginPlace  ,row[24],Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->LocalAddress,row[20],
+             Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->LocalPhone,row[21],
+             Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->FamilyAddress,row[22],
+             Cns_MAX_BYTES_STRING);
+   Str_Copy (UsrDat->FamilyPhone,row[23],
+             Usr_MAX_BYTES_PHONE);
+   Str_Copy (UsrDat->OriginPlace,row[24],
+             Cns_MAX_BYTES_STRING);
 
    Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[25]);
 
@@ -618,7 +630,8 @@ static void Usr_GetUsrCommentsFromString (char *Str,struct UsrData *UsrDat)
    /***** Check that memory for comments is allocated *****/
    if (UsrDat->Comments)
       /***** Copy comments from Str to Comments *****/
-      Str_Copy (UsrDat->Comments,Str,Cns_MAX_BYTES_TEXT);
+      Str_Copy (UsrDat->Comments,Str,
+                Cns_MAX_BYTES_TEXT);
   }
 
 /*****************************************************************************/
@@ -704,7 +717,8 @@ static Usr_Sex_t Usr_GetSexFromStr (const char *Str)
 
 void Usr_BuildFullName (struct UsrData *UsrDat)
   {
-   Str_Copy (UsrDat->FullName,UsrDat->FirstName,Usr_MAX_BYTES_FULL_NAME);
+   Str_Copy (UsrDat->FullName,UsrDat->FirstName,
+             Usr_MAX_BYTES_FULL_NAME);
    if (UsrDat->Surname1[0])
      {
       Str_Concat (UsrDat->FullName," ",Usr_MAX_BYTES_FULL_NAME);
@@ -727,10 +741,12 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
    char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
 
    /***** Restrict length of firstname and surnames *****/
-   Str_Copy (FirstName,UsrDat->FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (FirstName,UsrDat->FirstName,
+             Usr_MAX_BYTES_NAME);
    Str_LimitLengthHTMLStr (FirstName,MaxChars);
 
-   Str_Copy (Surnames,UsrDat->Surname1,Usr_MAX_BYTES_SURNAMES);
+   Str_Copy (Surnames,UsrDat->Surname1,
+             Usr_MAX_BYTES_SURNAMES);
    if (UsrDat->Surname2[0])
      {
       Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
@@ -1996,7 +2012,8 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
    if (UsrDat->Birthday.Year  == 0 ||
        UsrDat->Birthday.Month == 0 ||
        UsrDat->Birthday.Day   == 0)
-      Str_Copy (BirthdayStrDB,"NULL",Usr_BIRTHDAY_STR_DB_LENGTH);
+      Str_Copy (BirthdayStrDB,"NULL",
+                Usr_BIRTHDAY_STR_DB_LENGTH);
    else
       sprintf (BirthdayStrDB,"'%04u-%02u-%02u'",
 	       UsrDat->Birthday.Year,
@@ -2105,7 +2122,8 @@ void Usr_WriteLoggedUsrHead (void)
    /* Name */
    if (Gbl.Usrs.Me.UsrDat.FullName[0])
      {
-      Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,Usr_MAX_BYTES_NAME);
+      Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,
+                Usr_MAX_BYTES_NAME);
       Str_LimitLengthHTMLStr (UsrName,12);
       fprintf (Gbl.F.Out,"%s",UsrName);
      }
@@ -2976,7 +2994,8 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    /***** Checkbox to select user *****/
    // Two colors are used alternatively to better distinguish the rows
    if (UsrIsTheMsgSender)
-      Str_Copy (BgColor,"LIGHT_GREEN",Usr_MAX_LENGTH_BG_COLOR);
+      Str_Copy (BgColor,"LIGHT_GREEN",
+                Usr_MAX_LENGTH_BG_COLOR);
    else
       sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
@@ -3247,7 +3266,8 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
          if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             row = mysql_fetch_row (mysql_res);
-            Str_Copy (Text,row[0],Cns_MAX_BYTES_TEXT);
+            Str_Copy (Text,row[0],
+                      Cns_MAX_BYTES_TEXT);
             Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                               Text,Cns_MAX_BYTES_TEXT,false);        // Se convierte of HTML a HTML respetuoso
            }
@@ -4676,13 +4696,16 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
             /* Get user's surname 1 (row[2]) */
-	    Str_Copy (UsrInList->Surname1 ,row[2],Usr_MAX_BYTES_NAME);
+	    Str_Copy (UsrInList->Surname1,row[2],
+	              Usr_MAX_BYTES_NAME);
 
             /* Get user's surname 2 (row[3]) */
-	    Str_Copy (UsrInList->Surname2 ,row[3],Usr_MAX_BYTES_NAME);
+	    Str_Copy (UsrInList->Surname2,row[3],
+	              Usr_MAX_BYTES_NAME);
 
             /* Get user's first name (row[4]) */
-	    Str_Copy (UsrInList->FirstName,row[4],Usr_MAX_BYTES_NAME);
+	    Str_Copy (UsrInList->FirstName,row[4],
+	              Usr_MAX_BYTES_NAME);
 
             /* Get user's sex (row[5]) */
             UsrInList->Sex = Usr_GetSexFromStr (row[5]);
@@ -4787,9 +4810,12 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    UsrDat->UsrCod                = UsrInList->UsrCod;
    Str_Copy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod,
              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
-   Str_Copy (UsrDat->Surname1 ,UsrInList->Surname1 ,Usr_MAX_BYTES_NAME);
-   Str_Copy (UsrDat->Surname2 ,UsrInList->Surname2 ,Usr_MAX_BYTES_NAME);
-   Str_Copy (UsrDat->FirstName,UsrInList->FirstName,Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname1,UsrInList->Surname1,
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->Surname2,UsrInList->Surname2,
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (UsrDat->FirstName,UsrInList->FirstName,
+             Usr_MAX_BYTES_NAME);
    UsrDat->Sex                   = UsrInList->Sex;
    Str_Copy (UsrDat->Photo,UsrInList->Photo,
              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
@@ -5128,7 +5154,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                     {
                      if (strlen (UsrDat.EncryptedUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                         Str_Copy (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod,
-                                  Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);        // Add first user
+                                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);        // Add first user
                     }
                   else        // Not first user in list
                     {

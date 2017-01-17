@@ -255,7 +255,8 @@ The IP address of the remote host making the request.
 void Sta_GetRemoteAddr (void)
   {
    if (getenv ("REMOTE_ADDR"))
-      Str_Copy (Gbl.IP,getenv ("REMOTE_ADDR"),Cns_MAX_LENGTH_IP);
+      Str_Copy (Gbl.IP,getenv ("REMOTE_ADDR"),
+                Cns_MAX_LENGTH_IP);
    else
       Gbl.IP[0] = '\0';
   }
@@ -983,7 +984,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    switch (Gbl.Stat.CountType)
      {
       case Sta_TOTAL_CLICKS:
-         Str_Copy (StrQueryCountType,"COUNT(*)",Sta_MAX_LENGTH_COUNT_TYPE);
+         Str_Copy (StrQueryCountType,"COUNT(*)",
+                   Sta_MAX_LENGTH_COUNT_TYPE);
 	 break;
       case Sta_DISTINCT_USRS:
          sprintf (StrQueryCountType,"COUNT(DISTINCT(%s.UsrCod))",LogTable);
@@ -5451,10 +5453,14 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
 
    if (SizeOfFileZones.NumCrss == -1)
      {
-      Str_Copy (StrNumCrss         ,"-",10);
-      Str_Copy (StrNumFoldersPerCrs,"-",10);
-      Str_Copy (StrNumFilesPerCrs  ,"-",10);
-      Str_Copy (FileSizePerCrsStr  ,"-",Fil_MAX_BYTES_FILE_SIZE_STRING);
+      Str_Copy (StrNumCrss,"-",
+                10);
+      Str_Copy (StrNumFoldersPerCrs,"-",
+                10);
+      Str_Copy (StrNumFilesPerCrs,"-",
+                10);
+      Str_Copy (FileSizePerCrsStr,"-",
+                Fil_MAX_BYTES_FILE_SIZE_STRING);
      }
    else
      {
@@ -5474,16 +5480,21 @@ static void Sta_WriteRowStatsFileBrowsers (Brw_FileBrowser_t FileZone,const char
      }
 
    if (SizeOfFileZones.NumGrps == -1)
-      Str_Copy (StrNumGrps,"-",10);
+      Str_Copy (StrNumGrps,"-",
+                10);
    else
       sprintf (StrNumGrps,"%d",SizeOfFileZones.NumGrps);
 
    if (SizeOfFileZones.NumUsrs == -1)
      {
-      Str_Copy (StrNumUsrs         ,"-",10);
-      Str_Copy (StrNumFoldersPerUsr,"-",10);
-      Str_Copy (StrNumFilesPerUsr  ,"-",10);
-      Str_Copy (FileSizePerUsrStr  ,"-",Fil_MAX_BYTES_FILE_SIZE_STRING);
+      Str_Copy (StrNumUsrs,"-",
+                10);
+      Str_Copy (StrNumFoldersPerUsr,"-",
+                10);
+      Str_Copy (StrNumFilesPerUsr,"-",
+                10);
+      Str_Copy (FileSizePerUsrStr,"-",
+                Fil_MAX_BYTES_FILE_SIZE_STRING);
      }
    else
      {

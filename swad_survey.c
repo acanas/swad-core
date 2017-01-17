@@ -131,7 +131,8 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy);
 static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod);
 
 static unsigned Svy_GetNumQstsSvy (long SvyCod);
-static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,char *Txt);
+static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
+                                    char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Svy_InitQst (struct SurveyQuestion *SvyQst);
 static void Svy_PutParamQstCod (long QstCod);
 static long Svy_GetParamQstCod (void);
@@ -690,8 +691,10 @@ static void Svy_WriteAuthor (struct Survey *Svy)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   Str_Copy (FirstName,UsrDat.FirstName,Usr_MAX_BYTES_NAME);
-   Str_Copy (Surnames,UsrDat.Surname1,Usr_MAX_BYTES_SURNAMES);
+   Str_Copy (FirstName,UsrDat.FirstName,
+             Usr_MAX_BYTES_NAME);
+   Str_Copy (Surnames,UsrDat.Surname1,
+             Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
       Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
@@ -1247,7 +1250,8 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
       Svy->Status.Open = (row[8][0] == '1');
 
       /* Get the title of the survey (row[9]) */
-      Str_Copy (Svy->Title,row[9],Svy_MAX_LENGTH_SURVEY_TITLE);
+      Str_Copy (Svy->Title,row[9],
+                Svy_MAX_LENGTH_SURVEY_TITLE);
 
       /* Get number of questions and number of users who have already answer this survey */
       Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);
@@ -1427,7 +1431,8 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],
+                Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -1467,7 +1472,8 @@ void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Get summary *****/
-            Str_Copy (SummaryStr,row[0],Cns_MAX_BYTES_TEXT);
+            Str_Copy (SummaryStr,row[0],
+                      Cns_MAX_BYTES_TEXT);
             if (MaxChars)
                Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
@@ -1477,7 +1483,8 @@ void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                Length = strlen (row[1]);
                if ((*ContentStr = (char *) malloc (Length + 1)) == NULL)
                   Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
-               Str_Copy (*ContentStr,row[1],Length);
+               Str_Copy (*ContentStr,row[1],
+                         Length);
               }
            }
          mysql_free_result (mysql_res);
@@ -2579,7 +2586,7 @@ void Svy_RequestEditQuestion (void)
   {
    long SvyCod;
    struct SurveyQuestion SvyQst;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Initialize question to zero *****/
    Svy_InitQst (&SvyQst);
@@ -2608,7 +2615,8 @@ void Svy_RequestEditQuestion (void)
 /******************* Show form to edit one survey question *******************/
 /*****************************************************************************/
 
-static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,char *Txt)
+static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
+                                    char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    extern const char *Hlp_STATS_Surveys_questions;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -2647,7 +2655,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
 
          /* Get the stem of the question from the database (row[2]) */
-         Str_Copy (Txt,row[2],Cns_MAX_BYTES_TEXT);
+         Str_Copy (Txt,row[2],
+                   Cns_MAX_BYTES_TEXT);
 
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2665,7 +2674,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,ch
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
                Lay_ShowErrorAndExit (Gbl.Message);
 
-            Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],Svy_MAX_BYTES_ANSWER);
+            Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
+                      Svy_MAX_BYTES_ANSWER);
            }
          /* Free structure that stores the query result */
 	 DB_FreeMySQLResult (&mysql_res);
@@ -2918,7 +2928,7 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 static int Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns)
   {
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
-   if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER+1)) == NULL)
+   if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
       sprintf (Gbl.Message,"Not enough memory to store answer.");
       return 0;
@@ -3381,7 +3391,8 @@ static void Svy_WriteQstStem (const char *Stem)
    Length = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
-   Str_Copy (HeadingRigorousHTML,Stem,Length);
+   Str_Copy (HeadingRigorousHTML,Stem,
+             Length);
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      HeadingRigorousHTML,Length,false);
 
@@ -3426,7 +3437,8 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	 AnsLength = strlen (row[2]);
 	 if ((Answer = malloc (AnsLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store answer.");
-	 Str_Copy (Answer,row[2],AnsLength);
+	 Str_Copy (Answer,row[2],
+	           AnsLength);
 	 Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
 			   Answer,AnsLength,false);
 

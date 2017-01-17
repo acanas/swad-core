@@ -272,7 +272,8 @@ static void ZIP_CreateTmpDirForCompression (void)
    Fil_RemoveOldTmpFiles (PathZipPriv,Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES,false);
 
    /***** Create a new temporary directory *****/
-   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,NAME_MAX);
+   Str_Copy (Gbl.FileBrowser.ZIP.TmpDir,Gbl.UniqueNameEncrypted,
+             NAME_MAX);
    sprintf (PathDirTmp,"%s/%s",PathZipPriv,Gbl.FileBrowser.ZIP.TmpDir);
    if (mkdir (PathDirTmp,(mode_t) 0xFFF))
       Lay_ShowErrorAndExit ("Can not create temporary folder for compression.");
@@ -298,7 +299,8 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
           with a name that identifies the owner
           of the assignments and works *****/
    /* Create link name for this user */
-   Str_Copy (FullNameAndUsrID,UsrDat->Surname1,ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+   Str_Copy (FullNameAndUsrID,UsrDat->Surname1,
+             ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
    if (UsrDat->Surname1[0] &&
        UsrDat->Surname2[0])
       Str_Concat (FullNameAndUsrID,"_",ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// Separation between surname 1 and surname 2
@@ -602,7 +604,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
 
    /***** Limit length of the name of the file *****/
-   Str_Copy (FileNameShort,FileName,NAME_MAX);
+   Str_Copy (FileNameShort,FileName,
+             NAME_MAX);
    Str_LimitLengthHTMLStr (FileNameShort,50);
 
    /***** Start frame *****/

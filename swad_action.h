@@ -1512,7 +1512,8 @@ struct Act_Actions
 bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
-char *Act_GetActionTextFromDB (long ActCod,char *Txt);
+char *Act_GetActionTextFromDB (long ActCod,
+                               char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1]);
 
 void Act_FormGoToStart (Act_Action_t NextAction);
 void Act_FormStart (Act_Action_t NextAction);

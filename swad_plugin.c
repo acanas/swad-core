@@ -227,22 +227,28 @@ static void Plg_GetListPlugins (void)
             Lay_ShowErrorAndExit ("Wrong code of plugin.");
 
          /* Get the name of the plugin (row[1]) */
-         Str_Copy (Plg->Name,row[1],Plg_MAX_LENGTH_PLUGIN_NAME);
+         Str_Copy (Plg->Name,row[1],
+                   Plg_MAX_LENGTH_PLUGIN_NAME);
 
          /* Get the description of the plugin (row[2]) */
-         Str_Copy (Plg->Description,row[2],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+         Str_Copy (Plg->Description,row[2],
+                   Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
 
          /* Get the logo of the plugin (row[3]) */
-         Str_Copy (Plg->Logo,row[3],Plg_MAX_LENGTH_PLUGIN_LOGO);
+         Str_Copy (Plg->Logo,row[3],
+                   Plg_MAX_LENGTH_PLUGIN_LOGO);
 
          /* Get the application key of the plugin (row[4]) */
-         Str_Copy (Plg->AppKey,row[4],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+         Str_Copy (Plg->AppKey,row[4],
+                   Plg_MAX_LENGTH_PLUGIN_APP_KEY);
 
          /* Get the URL of the plugin (row[5]) */
-         Str_Copy (Plg->URL,row[5],Cns_MAX_LENGTH_WWW);
+         Str_Copy (Plg->URL,row[5],
+                   Cns_MAX_LENGTH_WWW);
 
          /* Get the IP of the plugin (row[6]) */
-         Str_Copy (Plg->IP,row[6],Cns_MAX_LENGTH_IP);
+         Str_Copy (Plg->IP,row[6],
+                   Cns_MAX_LENGTH_IP);
         }
      }
    else
@@ -288,22 +294,28 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
       row = mysql_fetch_row (mysql_res);
 
       /* Get the name of the plugin (row[0]) */
-      Str_Copy (Plg->Name,row[0],Plg_MAX_LENGTH_PLUGIN_NAME);
+      Str_Copy (Plg->Name,row[0],
+                Plg_MAX_LENGTH_PLUGIN_NAME);
 
       /* Get the description of the plugin (row[1]) */
-      Str_Copy (Plg->Description,row[1],Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+      Str_Copy (Plg->Description,row[1],
+                Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
 
       /* Get the logo of the plugin (row[2]) */
-      Str_Copy (Plg->Logo,row[2],Plg_MAX_LENGTH_PLUGIN_LOGO);
+      Str_Copy (Plg->Logo,row[2],
+                Plg_MAX_LENGTH_PLUGIN_LOGO);
 
       /* Get the application key of the plugin (row[3]) */
-      Str_Copy (Plg->AppKey,row[3],Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+      Str_Copy (Plg->AppKey,row[3],
+                Plg_MAX_LENGTH_PLUGIN_APP_KEY);
 
       /* Get the URL of the plugin (row[4]) */
-      Str_Copy (Plg->URL,row[4],Cns_MAX_LENGTH_WWW);
+      Str_Copy (Plg->URL,row[4],
+                Cns_MAX_LENGTH_WWW);
 
       /* Get the IP of the plugin (row[5]) */
-      Str_Copy (Plg->IP,row[5],Cns_MAX_LENGTH_IP);
+      Str_Copy (Plg->IP,row[5],
+                Cns_MAX_LENGTH_IP);
      }
    else
       PluginFound = false;
@@ -569,7 +581,8 @@ void Plg_RenamePlugin (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Plg->Name,NewPlgName,Plg_MAX_LENGTH_PLUGIN_NAME);
+   Str_Copy (Plg->Name,NewPlgName,
+             Plg_MAX_LENGTH_PLUGIN_NAME);
    Plg_EditPlugins ();
   }
 
@@ -629,7 +642,8 @@ void Plg_ChangePlgDescription (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Plg->Description,NewDescription,Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+   Str_Copy (Plg->Description,NewDescription,
+             Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
    Plg_EditPlugins ();
   }
 
@@ -672,7 +686,8 @@ void Plg_ChangePlgLogo (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);
 
    /***** Show the form again *****/
-   Str_Copy (Plg->Logo,NewLogo,Plg_MAX_LENGTH_PLUGIN_LOGO);
+   Str_Copy (Plg->Logo,NewLogo,
+             Plg_MAX_LENGTH_PLUGIN_LOGO);
    Plg_EditPlugins ();
   }
 
@@ -715,7 +730,8 @@ void Plg_ChangePlgAppKey (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
    /***** Show the form again *****/
-   Str_Copy (Plg->AppKey,NewAppKey,Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+   Str_Copy (Plg->AppKey,NewAppKey,
+             Plg_MAX_LENGTH_PLUGIN_APP_KEY);
    Plg_EditPlugins ();
   }
 
@@ -758,7 +774,8 @@ void Plg_ChangePlgURL (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_URL_empty);
 
    /***** Show the form again *****/
-   Str_Copy (Plg->URL,NewURL,Cns_MAX_LENGTH_WWW);
+   Str_Copy (Plg->URL,NewURL,
+             Cns_MAX_LENGTH_WWW);
    Plg_EditPlugins ();
   }
 
@@ -801,7 +818,8 @@ void Plg_ChangePlgIP (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
 
    /***** Show the form again *****/
-   Str_Copy (Plg->IP,NewIP,Cns_MAX_LENGTH_IP);
+   Str_Copy (Plg->IP,NewIP,
+             Cns_MAX_LENGTH_IP);
    Plg_EditPlugins ();
   }
 

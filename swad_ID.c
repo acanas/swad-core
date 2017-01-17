@@ -118,7 +118,8 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
             row = mysql_fetch_row (mysql_res);
 
 	    /* Get ID from row[0] */
-            Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],ID_MAX_LENGTH_USR_ID);
+            Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],
+                      ID_MAX_LENGTH_USR_ID);
 
             /* Get if ID is confirmed from row[1] */
             UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y');
@@ -197,7 +198,8 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
       Str_Copy (Query,CheckPassword ? "SELECT DISTINCT(usr_IDs.UsrCod) FROM usr_IDs,usr_data"
 				      " WHERE usr_IDs.UsrID IN (" :
 				      "SELECT DISTINCT(UsrCod) FROM usr_IDs"
-				      " WHERE UsrID IN (",MaxLength);
+				      " WHERE UsrID IN (",
+		MaxLength);
       for (NumID = 0;
 	   NumID < UsrDat->IDs.Num;
 	   NumID++)

@@ -80,7 +80,8 @@ bool Par_GetQueryString (void)
    char UnsignedLongStr[10 + 1];
    unsigned long UnsignedLong;
 
-   Str_Copy (Method,getenv ("REQUEST_METHOD"),Par_MAX_LENGTH_METHOD);
+   Str_Copy (Method,getenv ("REQUEST_METHOD"),
+             Par_MAX_LENGTH_METHOD);
 
    if (!strcmp (Method,"GET"))
      {
@@ -105,7 +106,8 @@ bool Par_GetQueryString (void)
       /* Get content length */
       if (getenv ("CONTENT_LENGTH"))
 	{
-         Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),10);
+         Str_Copy (UnsignedLongStr,getenv ("CONTENT_LENGTH"),
+                   10);
          if (sscanf (UnsignedLongStr,"%lu",&UnsignedLong) != 1)
             return false;
          Gbl.Params.ContentLength = (size_t) UnsignedLong;
@@ -119,7 +121,8 @@ bool Par_GetQueryString (void)
       if (getenv ("CONTENT_TYPE") == NULL)
          return false;
 
-      Str_Copy (ContentType,getenv ("CONTENT_TYPE"),Par_MAX_LENGTH_CONTENT_TYPE);
+      Str_Copy (ContentType,getenv ("CONTENT_TYPE"),
+                Par_MAX_LENGTH_CONTENT_TYPE);
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {
@@ -581,8 +584,8 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 		    {
 		     case Act_CONT_NORM:
 			if (PtrDst)
-			   Str_Copy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
-				     Param->Value.Length);
+			   strncpy (PtrDst,&Gbl.Params.QueryString[Param->Value.Start],
+				    Param->Value.Length);
 			break;
 		     case Act_CONT_DATA:
 		        if (Param->FileName.Start == 0 &&	// Copy into destination only if it's not a file
@@ -650,7 +653,7 @@ void Par_GetMainParameters (void)
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char UnsignedStr[10+1];
    unsigned UnsignedNum;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
    char LongStr[1+10+1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
@@ -677,7 +680,7 @@ void Par_GetMainParameters (void)
    /***** Get another user's nickname, if exists
           (this nickname is used to go to another user's profile,
            not to get the logged user) *****/
-   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+   if (Par_GetParToText ("usr",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))
      {
       if (Nickname[0])
 	{
@@ -693,7 +696,7 @@ void Par_GetMainParameters (void)
 	 Gbl.Action.Act = ActSeePubPrf;	// Set default action if no other is specified
 	}
      }
-   else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_WITH_ARROBA))
+   else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))
      {
       if (Nickname[0])
 	{

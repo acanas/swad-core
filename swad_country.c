@@ -759,7 +759,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
                                         const char *ClassLink,const char *ClassMap)
   {
    extern const char *Txt_Go_to_X;
-   char CountryName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   char CountryName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
 
    /***** Start form *****/
    Act_FormGoToStart (Action);
@@ -1033,7 +1033,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
             Lay_ShowErrorAndExit ("Wrong code of country.");
 
          /* Get Alpha-2 country code (row[1]) */
-         Str_Copy (Cty->Alpha2,row[1],2);
+         Str_Copy (Cty->Alpha2,row[1],
+                   2);
 
          switch (GetExtraData)
            {
@@ -1162,8 +1163,8 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod,const char *Class)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
    bool PutForm = !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
 
@@ -1292,7 +1293,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
       row = mysql_fetch_row (mysql_res);
 
       /* Get Alpha-2 country code (row[0]) */
-      Str_Copy (Cty->Alpha2,row[0],2);
+      Str_Copy (Cty->Alpha2,row[0],
+                2);
 
       switch (GetExtraData)
 	{
@@ -1300,7 +1302,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    /* Get name and WWW of the country in current language */
 	    Str_Copy (Cty->Name[Gbl.Prefs.Language],row[1],
 	              Cty_MAX_BYTES_COUNTRY_NAME);
-	    Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],Cns_MAX_LENGTH_WWW);
+	    Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],
+	              Cns_MAX_LENGTH_WWW);
 	    break;
 	 case Cty_GET_EXTRA_DATA:
 	    /* Get name and WWW of the country in several languages */
@@ -1340,7 +1343,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 /***************************** Get country name ******************************/
 /*****************************************************************************/
 
-void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1])
+void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
    char Query[128];
@@ -1362,7 +1365,8 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1])
          row = mysql_fetch_row (mysql_res);
 
          /* Get the name of the country */
-         Str_Copy (CtyName,row[0],Cty_MAX_BYTES_COUNTRY_NAME);
+         Str_Copy (CtyName,row[0],
+                   Cty_MAX_BYTES_COUNTRY_NAME);
         }
 
       /***** Free structure that stores the query result *****/
@@ -1399,8 +1403,8 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
 	    Length = strlen (row[0]);
 	    if (((*MapAttribution) = (char *) malloc (Length + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Error allocating memory for map attribution.");
-
-	    Str_Copy (*MapAttribution,row[0],Length);
+	    Str_Copy (*MapAttribution,row[0],
+	              Length);
 	   }
      }
 
@@ -1709,7 +1713,8 @@ void Cty_RenameCountry (void)
      }
 
    /***** Show the form again *****/
-   Str_Copy (Cty->Name[Language],NewCtyName,Cty_MAX_BYTES_COUNTRY_NAME);
+   Str_Copy (Cty->Name[Language],NewCtyName,
+             Cty_MAX_BYTES_COUNTRY_NAME);
    Cty_EditCountries ();
   }
 
@@ -1796,7 +1801,8 @@ void Cty_ChangeCtyWWW (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
-   Str_Copy (Cty->WWW[Language],NewWWW,Cns_MAX_LENGTH_WWW);
+   Str_Copy (Cty->WWW[Language],NewWWW,
+             Cns_MAX_LENGTH_WWW);
    Cty_EditCountries ();
   }
 

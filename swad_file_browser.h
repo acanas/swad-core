@@ -114,10 +114,10 @@ struct FileMetadata
    long Cod;	// Code of institution, centre, degree, course or group
    long ZoneUsrCod;
    long PublisherUsrCod;
-   char FullPathInTree[PATH_MAX+1];
+   char FullPathInTree[PATH_MAX + 1];
    // FullPathInTree is splitted as PathInTreeUntilFilFolLnk/FilFolLnkName
-   char PathInTreeUntilFilFolLnk[PATH_MAX+1];	// Path in tree, without ending '/', until file, folder or link name
-   char FilFolLnkName[NAME_MAX+1];		// File, folder or link name
+   char PathInTreeUntilFilFolLnk[PATH_MAX + 1];	// Path in tree, without ending '/', until file, folder or link name
+   char FilFolLnkName[NAME_MAX + 1];		// File, folder or link name
    bool IsHidden;
    bool IsPublic;
    Brw_License_t License;

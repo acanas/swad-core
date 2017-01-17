@@ -96,7 +96,8 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
 static void Agd_PutParams (void);
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
-static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt);
+static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
+                                   char Txt[Cns_MAX_BYTES_TEXT + 1]);
 static void Agd_PutParamAgdCod (long AgdCod);
 static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent);
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
@@ -114,7 +115,7 @@ void Agd_PutFormLogInToShowUsrAgenda (void)
 
 void Agd_PutParamAgd (void)
   {
-   char Nickname[Nck_MAX_BYTES_NICKNAME_WITH_ARROBA+1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
 
    sprintf (Nickname,"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
    Par_PutHiddenParamString ("agd",Nickname);
@@ -947,10 +948,12 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
 	                	                   Dat_PRESENT));
 
       /* Get the event (row[7]) */
-      Str_Copy (AgdEvent->Event,row[7],Agd_MAX_LENGTH_EVENT);
+      Str_Copy (AgdEvent->Event,row[7],
+                Agd_MAX_LENGTH_EVENT);
 
       /* Get the event (row[8]) */
-      Str_Copy (AgdEvent->Location,row[8],Agd_MAX_LENGTH_LOCATION);
+      Str_Copy (AgdEvent->Location,row[8],
+                Agd_MAX_LENGTH_LOCATION);
      }
    else
      {
@@ -989,7 +992,8 @@ void Agd_FreeListEvents (void)
 /*********************** Get event text from database ************************/
 /*****************************************************************************/
 
-static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt)
+static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
+                                   char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1007,7 +1011,8 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,char *Txt)
      {
       /* Get info text */
       row = mysql_fetch_row (mysql_res);
-      Str_Copy (Txt,row[0],Cns_MAX_BYTES_TEXT);
+      Str_Copy (Txt,row[0],
+                Cns_MAX_BYTES_TEXT);
      }
    else
       Txt[0] = '\0';
@@ -1260,7 +1265,7 @@ void Agd_RequestCreatOrEditEvent (void)
    extern const char *Txt_Save;
    struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
    Agd_GetParamEventOrderType ();

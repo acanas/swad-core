@@ -320,8 +320,8 @@ static bool Inf_CheckIfInfoAvailable (Inf_InfoSrc_t InfoSrc);
 static Inf_InfoType_t Inf_AsignInfoType (void);
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD);
 static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                                  char *InfoTxtHTML,char *InfoTxtMD,
-                                  size_t MaxLength);
+                                  char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
+                                  char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1]);
 
 static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType);
 static bool Inf_CheckAndShowPlainTxt (void);
@@ -1692,8 +1692,8 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
 /*****************************************************************************/
 
 static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
-                                  char *InfoTxtHTML,char *InfoTxtMD,
-                                  size_t MaxLength)
+                                  char InfoTxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1],
+                                  char InfoTxtMD[Cns_MAX_BYTES_LONG_TEXT + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1715,11 +1715,13 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 
       /* Get text in HTML format (not rigorous) */
       if (InfoTxtHTML)
-	 Str_Copy (InfoTxtHTML,row[0],MaxLength);
+	 Str_Copy (InfoTxtHTML,row[0],
+	           Cns_MAX_BYTES_LONG_TEXT);
 
       /* Get text in Markdown format */
       if (InfoTxtMD)
-	 Str_Copy (InfoTxtMD,row[1],MaxLength);
+	 Str_Copy (InfoTxtMD,row[1],
+	           Cns_MAX_BYTES_LONG_TEXT);
      }
    else
      {
@@ -1743,10 +1745,10 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
 
 static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
-   Inf_GetInfoTxtFromDB (CrsCod,InfoType,TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+   Inf_GetInfoTxtFromDB (CrsCod,InfoType,TxtHTML,NULL);
 
    return (TxtHTML[0] != '\0');
   }
@@ -1776,7 +1778,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
-                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,NULL);
 
    if (TxtHTML[0])
      {
@@ -1817,12 +1819,12 @@ static bool Inf_CheckAndShowPlainTxt (void)
 
 static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
-   char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (CrsCod,InfoType,
-                         TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,TxtMD);
 
    return (TxtMD[0] != '\0');
   }
@@ -1835,14 +1837,14 @@ static bool Inf_CheckRichTxt (long CrsCod,Inf_InfoType_t InfoType)
 static bool Inf_CheckAndShowRichTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
-   char TxtMD[Cns_MAX_BYTES_LONG_TEXT+1];
-   char PathFileMD[PATH_MAX+1];
-   char PathFileHTML[PATH_MAX+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char TxtMD[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char PathFileMD[PATH_MAX + 1];
+   char PathFileHTML[PATH_MAX + 1];
    FILE *FileMD;		// Temporary Markdown file
    FILE *FileHTML;		// Temporary HTML file
    char MathJaxURL[PATH_MAX];
-   char Command[512+PATH_MAX*3]; // Command to call the program of preprocessing of photos
+   char Command[512 + PATH_MAX * 3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
@@ -1860,7 +1862,7 @@ static bool Inf_CheckAndShowRichTxt (void)
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
-                         TxtHTML,TxtMD,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,TxtMD);
 
    if (TxtMD[0])
      {
@@ -1951,8 +1953,8 @@ static bool Inf_CheckAndShowRichTxt (void)
 int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
-   char FileNameHTMLTmp[PATH_MAX+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
+   char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
 
@@ -1961,7 +1963,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
-                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,NULL);
 
    if (TxtHTML[0])
      {
@@ -2062,7 +2064,7 @@ void Inf_EditPlainTxtInfo (void)
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
-                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,NULL);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -2113,7 +2115,7 @@ void Inf_EditRichTxtInfo (void)
 
    /***** Get info text from database *****/
    Inf_GetInfoTxtFromDB (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,
-                         TxtHTML,NULL,Cns_MAX_BYTES_LONG_TEXT);
+                         TxtHTML,NULL);
 
    /***** Edition area *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -2144,7 +2146,8 @@ void Inf_RecAndChangePlainTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,
+             Cns_MAX_BYTES_LONG_TEXT);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,
@@ -2179,7 +2182,8 @@ void Inf_RecAndChangeRichTxtInfo (void)
    /***** Get text with course information from form *****/
    Par_GetParameter (Par_PARAM_SINGLE,"Txt",Txt_HTMLFormat,
                      Cns_MAX_BYTES_LONG_TEXT,NULL);
-   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT);
+   Str_Copy (Txt_MarkdownFormat,Txt_HTMLFormat,
+             Cns_MAX_BYTES_LONG_TEXT);
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_HTML,
                      Txt_HTMLFormat,Cns_MAX_BYTES_LONG_TEXT,true);	// Store in HTML format (not rigorous)
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_MARKDOWN,

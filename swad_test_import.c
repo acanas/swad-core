@@ -499,8 +499,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
    struct XMLAttribute *Attribute;
    bool AnswerTypeFound;
    bool QuestionExists;
-   char Stem[Cns_MAX_BYTES_TEXT+1];
-   char Feedback[Cns_MAX_BYTES_TEXT+1];
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Allocate and get XML tree *****/
    XML_GetTree (XMLBuffer,&RootElem);
@@ -571,7 +571,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 			if (TagElem->Content)
 			  {
 			   Str_Copy (Gbl.Test.Tags.Txt[Gbl.Test.Tags.Num],
-			             TagElem->Content,Tst_MAX_BYTES_TAG);
+			             TagElem->Content,
+			             Tst_MAX_BYTES_TAG);
 			   Gbl.Test.Tags.Num++;
 			  }
 		       }
@@ -587,7 +588,8 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 		  if (StemElem->Content)
 		    {
 		     /* Convert stem from text to HTML (in database stem is stored in HTML) */
-		     Str_Copy (Stem,StemElem->Content,Cns_MAX_BYTES_TEXT);
+		     Str_Copy (Stem,StemElem->Content,
+		               Cns_MAX_BYTES_TEXT);
 		     Str_ChangeFormat (Str_FROM_TEXT,Str_TO_HTML,
 				       Stem,Cns_MAX_BYTES_TEXT,true);
 
@@ -719,7 +721,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
 
    /***** Check if stem exists *****/
    /* Allocate space for query */
-   if ((QueryQst = malloc (256+Gbl.Test.Stem.Length)) == NULL)
+   if ((QueryQst = malloc (256 + Gbl.Test.Stem.Length)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /* Make database query */
@@ -843,7 +845,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"lower"))
               {
                if (LowerUpperElem->Content)
-                  Str_Copy (Gbl.Test.Answer.Options[0].Text,LowerUpperElem->Content,
+                  Str_Copy (Gbl.Test.Answer.Options[0].Text,
+                            LowerUpperElem->Content,
                             Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "lower"
               }
@@ -853,7 +856,8 @@ static void TsI_GetAnswerFromXML (struct XMLElement *AnswerElem)
             if (!strcmp (LowerUpperElem->TagName,"upper"))
               {
                if (LowerUpperElem->Content)
-                  Str_Copy (Gbl.Test.Answer.Options[1].Text,LowerUpperElem->Content,
+                  Str_Copy (Gbl.Test.Answer.Options[1].Text,
+                            LowerUpperElem->Content,
                             Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
                break;	// Only first element "upper"
               }
@@ -1120,7 +1124,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
             /* Convert the answer, that is in HTML, to rigorous HTML */
             AnswerTextLength = strlen (Gbl.Test.Answer.Options[NumOpt].Text) *
         	               Str_MAX_LENGTH_SPEC_CHAR_HTML;
-            if ((AnswerText = malloc (AnswerTextLength+1)) == NULL)
+            if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,
                       AnswerTextLength);
@@ -1135,7 +1139,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
 		 {
 	          AnswerFeedbackLength = strlen (Gbl.Test.Answer.Options[NumOpt].Feedback) *
 					 Str_MAX_LENGTH_SPEC_CHAR_HTML;
-	          if ((AnswerFeedback = malloc (AnswerFeedbackLength+1)) == NULL)
+	          if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (AnswerFeedback,
 		            Gbl.Test.Answer.Options[NumOpt].Feedback,
