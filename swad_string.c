@@ -2837,15 +2837,15 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
   {
    size_t LengthSrc = strlen (Src);
 
-   if (DstSize < LengthSrc)
+   /***** Check if buffer has enough space for source *****/
+   if (LengthSrc > DstSize)
      {
       sprintf (Gbl.Message,"Trying to copy %lu chars into a %lu-chars buffer.",
                LengthSrc,DstSize);
       Lay_ShowErrorAndExit (Gbl.Message);
      }
 
-   // strncpy (Dst,Src,MaxLength);
-   // Dst[MaxLength] = '\0';
+   /***** Copy source into destination *****/
    strcpy (Dst,Src);
   }
 
@@ -2859,14 +2859,17 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    size_t LengthSrc;
    size_t FreeSpace;
 
+   /***** Check if buffer has already overflowed *****/
    LengthDst = strlen (Dst);
    if (LengthDst > DstSize)
      {
       sprintf (Gbl.Message,"%lu-chars buffer has %lu chars!",
-               DstSize,LengthSrc);
+               DstSize,LengthDst);
       Lay_ShowErrorAndExit (Gbl.Message);
      }
 
+   /***** Check if buffer has enough space for source *****/
+   // DstSize >= LengthDst ==> FreeSpace >= 0
    FreeSpace = DstSize - LengthDst;
    LengthSrc = strlen (Src);
    if (FreeSpace < LengthSrc)
@@ -2876,6 +2879,6 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
       Lay_ShowErrorAndExit (Gbl.Message);
      }
 
-   // strncat (Dst,Src,FreeSpace);
+   /***** Concatenate ******/
    strcat (Dst,Src);
   }
