@@ -103,14 +103,6 @@ const char *The_ClassTagline[The_NUM_THEMES] =
    "YELLOW_TAGLINE",
   };
 
-const char *The_ClassCurrentTime[The_NUM_THEMES] =
-  {
-   "WHITE_CUR_TIME",
-   "GREY_CUR_TIME",
-   "BLUE_CUR_TIME",
-   "YELLOW_CUR_TIME",
-  };
-
 const char *The_ClassNotif[The_NUM_THEMES] =
   {
    "WHITE_NOTIF",

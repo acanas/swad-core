@@ -97,7 +97,7 @@ void Con_ShowConnectedUsrs (void)
    /* Current time */
    sprintf (Gbl.Title,"%s<br />%s %u, %u:%02u",
 	    Txt_Connected_users,
-            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month-1],
+            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
             Gbl.Now.Date.Day,
             Gbl.Now.Time.Hour,
             Gbl.Now.Time.Minute);

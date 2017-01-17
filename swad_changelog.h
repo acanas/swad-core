@@ -191,14 +191,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.118.2 (2017-01-17)"
-#define CSS_FILE		"swad16.111.5.css"
-#define JS_FILE			"swad16.114.js"
+#define Log_PLATFORM_VERSION	"SWAD 16.119 (2017-01-17)"
+#define CSS_FILE		"swad16.119.css"
+#define JS_FILE			"swad16.119.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.118.2: Jan 17, 2017	Fix bug in string concatenation. (? lines)
+        Version 16.119:   Jan 17, 2017	Changes in layout of current data and time.
+					Fixed bug in attendance, reported by Javier Fernández Baldomero. (211874 lines)
+        Version 16.118.2: Jan 17, 2017	Fix bug in string concatenation. (211854 lines)
         Version 16.118.1: Jan 17, 2017	Code refactoring related to string concatenation. (211850 lines)
         Version 16.118:   Jan 17, 2017	Code refactoring related to string copy. (211676 lines)
         Version 16.117.1: Jan 16, 2017	Code refactoring related to string concatenation. (211229 lines)

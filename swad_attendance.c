@@ -808,8 +808,11 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 
 static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
   {
-   if (Att->AttCod <= 0)	// If > 0 ==> keep value
+   if (Att->AttCod <= 0)	// If > 0 ==> keep values of AttCod and Selected
+     {
       Att->AttCod = -1L;
+      Att->Selected = false;
+     }
    Att->CrsCod = -1L;
    Att->Hidden = false;
    Att->UsrCod = -1L;
@@ -820,7 +823,6 @@ static void Att_ResetAttendanceEvent (struct AttendanceEvent *Att)
    Att->CommentTchVisible = false;
    Att->NumStdsTotal = 0;
    Att->NumStdsFromList = 0;
-   Att->Selected = false;
   }
 
 /*****************************************************************************/

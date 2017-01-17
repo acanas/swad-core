@@ -892,6 +892,7 @@ unsigned Par_GetParMultiToText (const char *ParamName,char *ParamValue,size_t Ma
   {
    unsigned NumTimes = Par_GetParameter (Par_PARAM_MULTIPLE,ParamName,
                                          ParamValue,MaxBytes,NULL);
+
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
                      ParamValue,MaxBytes,true);
    return NumTimes;

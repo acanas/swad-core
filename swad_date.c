@@ -160,16 +160,12 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
 
 void Dat_ShowClientLocalTime (void)
   {
-   extern const char *The_ClassCurrentTime[The_NUM_THEMES];
-
-   fprintf (Gbl.F.Out,"<div id=\"hm\" class=\"%s\""
-	              " style=\"padding-top:10px;\">"
+   fprintf (Gbl.F.Out,"<div id=\"hm\">"
                       "</div>"
                       "<script type=\"text/javascript\">\n"
 		      "secondsSince1970UTC = %ld;\n"
                       "writeLocalClock();"
                       "</script>",
-            The_ClassCurrentTime[Gbl.Prefs.Theme],
             (long) Gbl.StartExecutionTimeUTC);
   }
 
@@ -1274,7 +1270,7 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
 
 void Dat_WriteScriptMonths (void)
   {
-   extern const char *Txt_MONTHS_SMALL_SHORT[12];
+   extern const char *Txt_MONTHS_SMALL[12];
    unsigned NumMonth;
 
    fprintf (Gbl.F.Out,"var Months = [");
@@ -1284,7 +1280,7 @@ void Dat_WriteScriptMonths (void)
      {
       if (NumMonth)
 	 fprintf (Gbl.F.Out,",");
-      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
+      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL[NumMonth]);
      }
    fprintf (Gbl.F.Out,"];\n");
   }
