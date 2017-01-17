@@ -205,27 +205,33 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	   NumID++)
 	{
 	 if (NumID)
-	    Str_Concat (Query,",",MaxLength);
+	    Str_Concat (Query,",",
+	                MaxLength);
 	 sprintf (SubQuery,"'%s'",UsrDat->IDs.List[NumID].ID);
 
-	 Str_Concat (Query,SubQuery,MaxLength);
+	 Str_Concat (Query,SubQuery,
+	             MaxLength);
 	}
-      Str_Concat (Query,")",MaxLength);
+      Str_Concat (Query,")",
+                  MaxLength);
 
       if (CheckPassword)
 	{
 	 if (OnlyConfirmedIDs)
-	    Str_Concat (Query," AND usr_IDs.Confirmed='Y'",MaxLength);
+	    Str_Concat (Query," AND usr_IDs.Confirmed='Y'",
+	                MaxLength);
 
 	 // Get user's code if I have written the correct password
 	 // or if password in database is empty (new user)
 	 sprintf (SubQuery," AND usr_IDs.UsrCod=usr_data.UsrCod"
 			   " AND (usr_data.Password='%s' OR usr_data.Password='')",
 		  EncryptedPassword);
-	 Str_Concat (Query,SubQuery,MaxLength);
+	 Str_Concat (Query,SubQuery,
+	             MaxLength);
 	}
       else if (OnlyConfirmedIDs)
-	 Str_Concat (Query," AND Confirmed='Y'",MaxLength);
+	 Str_Concat (Query," AND Confirmed='Y'",
+	             MaxLength);
 
       ListUsrCods->NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's codes");
 

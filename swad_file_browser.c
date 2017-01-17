@@ -8176,8 +8176,10 @@ void Brw_RecFolderFileBrowser (void)
 
          if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	    Lay_ShowErrorAndExit ("Path is too long.");
-         Str_Concat (Path,"/",PATH_MAX);
-         Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
+         Str_Concat (Path,"/",
+                     PATH_MAX);
+         Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,
+                     PATH_MAX);
 
          /* Create the new directory */
          if (mkdir (Path,(mode_t) 0xFFF) == 0)
@@ -8450,8 +8452,10 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                         Gbl.FileBrowser.Priv.FullPathInTree);
                if (strlen (Path) + 1 + strlen (Gbl.FileBrowser.NewFilFolLnkName) + strlen (".tmp") > PATH_MAX)
 	          Lay_ShowErrorAndExit ("Path is too long.");
-               Str_Concat (Path,"/",PATH_MAX);
-               Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,PATH_MAX);
+               Str_Concat (Path,"/",
+                           PATH_MAX);
+               Str_Concat (Path,Gbl.FileBrowser.NewFilFolLnkName,
+                           PATH_MAX);
 
                /* Check if the destination file exists */
                if (Fil_CheckIfPathExists (Path))
@@ -8643,9 +8647,12 @@ void Brw_RecLinkFileBrowser (void)
 	    sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,Gbl.FileBrowser.Priv.FullPathInTree);
 	    if (strlen (Path) + 1 + strlen (FileName) + strlen (".url") > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
-	    Str_Concat (Path,"/",PATH_MAX);
-	    Str_Concat (Path,FileName,PATH_MAX);
-	    Str_Concat (Path,".url",PATH_MAX);
+	    Str_Concat (Path,"/",
+	                PATH_MAX);
+	    Str_Concat (Path,FileName,
+	                PATH_MAX);
+	    Str_Concat (Path,".url",
+	                PATH_MAX);
 
 	    /* Check if the URL file exists */
 	    if (Fil_CheckIfPathExists (Path))

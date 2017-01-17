@@ -500,8 +500,10 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
              Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
-      Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
-      Str_Concat (Surnames,UsrDat.Surname2,Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames," ",
+                  Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames,UsrDat.Surname2,
+                  Usr_MAX_BYTES_SURNAMES);
      }
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);
@@ -2432,9 +2434,11 @@ static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSel
                   NumStd ? ",%ld" :
                 	   "%ld",
                   LstSelectedUsrCods[NumStd]);
-	 Str_Concat (Query,SubQuery,MaxLength);
+	 Str_Concat (Query,SubQuery,
+	             MaxLength);
 	}
-      Str_Concat (Query,") AND Present='Y'",MaxLength);
+      Str_Concat (Query,") AND Present='Y'",
+                  MaxLength);
 
       NumStdsInAttEvent = (unsigned) DB_QueryCOUNT (Query,"can not get number of students from a list who are registered in an event");
 

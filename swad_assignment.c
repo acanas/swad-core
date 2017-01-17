@@ -458,8 +458,10 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
              Usr_MAX_BYTES_SURNAMES);
    if (UsrDat.Surname2[0])
      {
-      Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
-      Str_Concat (Surnames,UsrDat.Surname2,Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames," ",
+                  Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames,UsrDat.Surname2,
+                  Usr_MAX_BYTES_SURNAMES);
      }
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);

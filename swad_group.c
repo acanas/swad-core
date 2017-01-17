@@ -3108,8 +3108,10 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 
       /* El group name in row[0] */
       if (NumRow)
-         Str_Concat (GroupNames,", ",MaxLength);
-      Str_Concat (GroupNames,row[0],MaxLength);
+         Str_Concat (GroupNames,", ",
+                     MaxLength);
+      Str_Concat (GroupNames,row[0],
+                  MaxLength);
      }
 
    /***** Free structure that stores the query result *****/

@@ -330,7 +330,8 @@ void Fil_CreateUpdateFile (const char CurrentName[PATH_MAX + 1],
              PATH_MAX);
    NewName[LengthFileRoot] = '\0';
    sprintf (OldName,"%s%s",NewName,ExtensionOldName);
-   Str_Concat (NewName,".new",PATH_MAX);
+   Str_Concat (NewName,".new",
+               PATH_MAX);
 
    /* The new file shouldn't exist. If it exists is due to any error when running this CGI formerly
       and the file was not renamed successfully. In this case, remove it! */

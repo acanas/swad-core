@@ -2256,7 +2256,8 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
 		  NumGrp ? ",%ld" :
 			   "%ld",
 		  GrpCod);
-	 Str_Concat (*ListGroups,GrpCodStr,Length);
+	 Str_Concat (*ListGroups,GrpCodStr,
+	             Length);
 	}
      }
 
@@ -2759,7 +2760,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
 		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",'%ld'" :
 								       " AND UsrCod NOT IN ('%ld'",
 			   UsrCod);
-		  Str_Concat (Query,SubQuery,Length);
+		  Str_Concat (Query,SubQuery,
+		              Length);
 		 }
 
 	       sendAttendanceUsersOut->numUsers++;
@@ -2770,7 +2772,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
      {
       /* Mark not present users as absent in table of users */
       if (sendAttendanceUsersOut->numUsers)
-         Str_Concat (Query,")",Length);
+         Str_Concat (Query,")",
+                     Length);
 
       DB_QueryUPDATE (Query,"can not set other users as absent");
       free ((void *) Query);
@@ -3256,7 +3259,8 @@ int swad__sendMessage (struct soap *soap,
 	 if (FirstNickname)
 	   {
 	    if (ReplyUsrCod > 0)
-	       Str_Concat (Query," UNION ",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	       Str_Concat (Query," UNION ",
+	                   Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 	    Str_Concat (Query,"SELECT UsrCod FROM usr_nicknames"
 			      " WHERE Nickname IN ('",
 			Svc_MAX_LENGTH_QUERY_RECIPIENTS);
@@ -3264,13 +3268,17 @@ int swad__sendMessage (struct soap *soap,
 	    ThereAreNicknames = true;
 	   }
 	 else
-	    Str_Concat (Query,",'",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
-	 Str_Concat (Query,Nickname,Svc_MAX_LENGTH_QUERY_RECIPIENTS);
-	 Str_Concat (Query,"'",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	    Str_Concat (Query,",'",
+	                Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	 Str_Concat (Query,Nickname,
+	             Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	 Str_Concat (Query,"'",
+	             Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 	}
      }
    if (ThereAreNicknames)
-      Str_Concat (Query,")",Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+      Str_Concat (Query,")",
+                  Svc_MAX_LENGTH_QUERY_RECIPIENTS);
 
    /***** Initialize output structure *****/
    sendMessageOut->numUsers = 0;
@@ -4056,7 +4064,8 @@ int swad__getTrivialQuestion (struct soap *soap,
 	    else
 	      {
 	       sprintf (DegStr,",'%ld'",DegCod);
-	       Str_Concat (DegreesStr,DegStr,Svc_MAX_LENGTH_DEGREES_STR);
+	       Str_Concat (DegreesStr,DegStr,
+	                   Svc_MAX_LENGTH_DEGREES_STR);
 	      }
 	   }
      }

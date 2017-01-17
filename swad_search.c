@@ -1275,18 +1275,26 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1],
 	        Sch_MAX_LENGTH_SEARCH_QUERY)	// Prevent string overflow
 	       break;
 	    if (NumWords)
-	       Str_Concat (SearchQuery," AND ",Sch_MAX_LENGTH_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,FieldName,Sch_MAX_LENGTH_SEARCH_QUERY);
-	    Str_Concat (SearchQuery," LIKE ",Sch_MAX_LENGTH_SEARCH_QUERY);
+	       Str_Concat (SearchQuery," AND ",
+	                   Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,FieldName,
+	                Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery," LIKE ",
+	                Sch_MAX_LENGTH_SEARCH_QUERY);
 	    if (CharSet)
 	       if (CharSet[0])
-		  Str_Concat (SearchQuery,CharSet,Sch_MAX_LENGTH_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,"'%",Sch_MAX_LENGTH_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,SearchWords[NumWords],Sch_MAX_LENGTH_SEARCH_QUERY);
-	    Str_Concat (SearchQuery,"%'",Sch_MAX_LENGTH_SEARCH_QUERY);
+		  Str_Concat (SearchQuery,CharSet,
+		              Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"'%",
+	                Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,SearchWords[NumWords],
+	                Sch_MAX_LENGTH_SEARCH_QUERY);
+	    Str_Concat (SearchQuery,"%'",
+	                Sch_MAX_LENGTH_SEARCH_QUERY);
 	    if (Collate)
 	       if (Collate[0])
-		  Str_Concat (SearchQuery,Collate,Sch_MAX_LENGTH_SEARCH_QUERY);
+		  Str_Concat (SearchQuery,Collate,
+		              Sch_MAX_LENGTH_SEARCH_QUERY);
 	   }
 	}
 

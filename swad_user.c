@@ -721,13 +721,17 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
              Usr_MAX_BYTES_FULL_NAME);
    if (UsrDat->Surname1[0])
      {
-      Str_Concat (UsrDat->FullName," ",Usr_MAX_BYTES_FULL_NAME);
-      Str_Concat (UsrDat->FullName,UsrDat->Surname1,Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName," ",
+                  Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName,UsrDat->Surname1,
+                  Usr_MAX_BYTES_FULL_NAME);
      }
    if (UsrDat->Surname2[0])
      {
-      Str_Concat (UsrDat->FullName," ",Usr_MAX_BYTES_FULL_NAME);
-      Str_Concat (UsrDat->FullName,UsrDat->Surname2,Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName," ",
+                  Usr_MAX_BYTES_FULL_NAME);
+      Str_Concat (UsrDat->FullName,UsrDat->Surname2,
+                  Usr_MAX_BYTES_FULL_NAME);
      }
   }
 
@@ -749,8 +753,10 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
              Usr_MAX_BYTES_SURNAMES);
    if (UsrDat->Surname2[0])
      {
-      Str_Concat (Surnames," ",Usr_MAX_BYTES_SURNAMES);
-      Str_Concat (Surnames,UsrDat->Surname2,Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames," ",
+                  Usr_MAX_BYTES_SURNAMES);
+      Str_Concat (Surnames,UsrDat->Surname2,
+                  Usr_MAX_BYTES_SURNAMES);
      }
    Str_LimitLengthHTMLStr (Surnames,MaxChars);
 
@@ -3893,11 +3899,14 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                 	                              " GrpCod='",
                 	      Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
                   sprintf (LongStr,"%ld",GrpCod);
-                  Str_Concat (Query,LongStr,Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
-                  Str_Concat (Query,"'",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                  Str_Concat (Query,LongStr,
+                              Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                  Str_Concat (Query,"'",
+                              Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
                   NumPositiveCods++;
                  }
-            Str_Concat (Query,")",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+            Str_Concat (Query,")",
+                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
            }
         }
 
@@ -3908,9 +3917,11 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
          if (AddStdsWithoutGroupOf[NumGrpTyp])
            {
             if (NumPositiveCods || NumNegativeCods)
-               Str_Concat (Query," OR ",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+               Str_Concat (Query," OR ",
+                           Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
             else
-               Str_Concat (Query," AND (",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+               Str_Concat (Query," AND (",
+                           Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (Query,"crs_usr.UsrCod NOT IN"
                               " (SELECT DISTINCT crs_grp_usr.UsrCod"
@@ -3918,14 +3929,16 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                               " WHERE crs_grp.GrpTypCod='",
                         Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
             sprintf (LongStr,"%ld",Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-            Str_Concat (Query,LongStr,Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+            Str_Concat (Query,LongStr,
+                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
             Str_Concat (Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
                         Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }
       if (NumPositiveCods ||
           NumNegativeCods)
-         Str_Concat (Query,")",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+         Str_Concat (Query,")",
+                     Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
 
       /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
       free ((void *) AddStdsWithoutGroupOf);
@@ -3939,7 +3952,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 	             "usr_data.Surname1,"
 	             "usr_data.Surname2,"
 	             "usr_data.FirstName,"
-	             "usr_data.UsrCod",Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+	             "usr_data.UsrCod",
+	       Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
   }
 
 /*****************************************************************************/

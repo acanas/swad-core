@@ -2391,27 +2391,38 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
                   "tst_questions.Score"
                  " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
-      Str_Concat (Query,",tst_question_tags,tst_tags",Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,",tst_question_tags,tst_tags",
+                  Tst_MAX_LENGTH_QUERY_TEST);
 
-   Str_Concat (Query," WHERE tst_questions.CrsCod='",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query," WHERE tst_questions.CrsCod='",
+               Tst_MAX_LENGTH_QUERY_TEST);
    sprintf (CrsCodStr,"%ld",Gbl.CurrentCrs.Crs.CrsCod);
-   Str_Concat (Query,CrsCodStr,Tst_MAX_LENGTH_QUERY_TEST);
-   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,CrsCodStr,
+               Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
+               Tst_MAX_LENGTH_QUERY_TEST);
    sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[0]);
-   Str_Concat (Query,LongStr,Tst_MAX_LENGTH_QUERY_TEST);
-   Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,LongStr,
+               Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
+               Tst_MAX_LENGTH_QUERY_TEST);
    sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[1]);
-   Str_Concat (Query,LongStr,Tst_MAX_LENGTH_QUERY_TEST);
-   Str_Concat (Query,"')",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,LongStr,
+               Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,"')",
+               Tst_MAX_LENGTH_QUERY_TEST);
 
    /* Add the tags selected */
    if (!Gbl.Test.Tags.All)
      {
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
-                        " AND tst_tags.CrsCod='",Tst_MAX_LENGTH_QUERY_TEST);
-      Str_Concat (Query,CrsCodStr,Tst_MAX_LENGTH_QUERY_TEST);
-      Str_Concat (Query,"'",Tst_MAX_LENGTH_QUERY_TEST);
+                        " AND tst_tags.CrsCod='",
+                  Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,CrsCodStr,
+                  Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,"'",
+                  Tst_MAX_LENGTH_QUERY_TEST);
       LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
@@ -2425,11 +2436,14 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,TagText,Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,"'",Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,TagText,
+                     Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,"'",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,")",
+                  Tst_MAX_LENGTH_QUERY_TEST);
      }
 
    /* Add the types of answer selected */
@@ -2449,38 +2463,47 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,"'",Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
+                     Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,"'",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,")",
+                  Tst_MAX_LENGTH_QUERY_TEST);
      }
 
    /* End the query */
-   Str_Concat (Query," GROUP BY tst_questions.QstCod",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query," GROUP BY tst_questions.QstCod",
+               Tst_MAX_LENGTH_QUERY_TEST);
 
    switch (Gbl.Test.SelectedOrderType)
      {
       case Tst_ORDER_STEM:
-         Str_Concat (Query," ORDER BY tst_questions.Stem",Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query," ORDER BY tst_questions.Stem",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS:
          Str_Concat (Query," ORDER BY tst_questions.NumHits DESC,"
-                           "tst_questions.Stem",Tst_MAX_LENGTH_QUERY_TEST);
+                           "tst_questions.Stem",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE:
          Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
                            "tst_questions.NumHits DESC,"
-                           "tst_questions.Stem",Tst_MAX_LENGTH_QUERY_TEST);
+                           "tst_questions.Stem",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS_NOT_BLANK:
          Str_Concat (Query," ORDER BY tst_questions.NumHitsNotBlank DESC,"
-                           "tst_questions.Stem",Tst_MAX_LENGTH_QUERY_TEST);
+                           "tst_questions.Stem",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE_NOT_BLANK:
          Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
                            "tst_questions.NumHitsNotBlank DESC,"
-                           "tst_questions.Stem",Tst_MAX_LENGTH_QUERY_TEST);
+                           "tst_questions.Stem",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          break;
      }
 
@@ -2566,11 +2589,14 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
                      Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,TagText,Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,"'",Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,TagText,
+                     Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,"'",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,")",
+                  Tst_MAX_LENGTH_QUERY_TEST);
      }
 
    /* Add answer types selected */
@@ -2590,17 +2616,22 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
                      Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],Tst_MAX_LENGTH_QUERY_TEST);
-         Str_Concat (Query,"'",Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
+                     Tst_MAX_LENGTH_QUERY_TEST);
+         Str_Concat (Query,"'",
+                     Tst_MAX_LENGTH_QUERY_TEST);
          NumItemInList++;
         }
-      Str_Concat (Query,")",Tst_MAX_LENGTH_QUERY_TEST);
+      Str_Concat (Query,")",
+                  Tst_MAX_LENGTH_QUERY_TEST);
      }
 
    /* End query */
-   Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
+               Tst_MAX_LENGTH_QUERY_TEST);
    sprintf (StrNumQsts,"%u",Gbl.Test.NumQsts);
-   Str_Concat (Query,StrNumQsts,Tst_MAX_LENGTH_QUERY_TEST);
+   Str_Concat (Query,StrNumQsts,
+               Tst_MAX_LENGTH_QUERY_TEST);
 /*
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);

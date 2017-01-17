@@ -639,7 +639,8 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
      {
       sprintf (Message_part2,Txt_this_field_is_filled_in_the_records_of_X_students,
                NumRecords);
-      Str_Concat (Gbl.Message,Message_part2,Lay_MAX_BYTES_ALERT);
+      Str_Concat (Gbl.Message,Message_part2,
+                  Lay_MAX_BYTES_ALERT);
      }
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 

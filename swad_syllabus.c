@@ -989,13 +989,15 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
       if (N > 1)
 	{
 	 if (StrDst)
-	    Str_Concat (StrDst,".",Syl_MAX_LENGTH_ITEM_COD);
+	    Str_Concat (StrDst,".",
+	                Syl_MAX_LENGTH_ITEM_COD);
 	 if (FileTgt)
 	    fprintf (FileTgt,".");
 	}
       sprintf (InStr,"%d",CodItem[N]);
       if (StrDst)
-	 Str_Concat (StrDst,InStr,Syl_MAX_LENGTH_ITEM_COD);
+	 Str_Concat (StrDst,InStr,
+	             Syl_MAX_LENGTH_ITEM_COD);
       if (FileTgt)
 	 fprintf (FileTgt,"%s",InStr);
      }
