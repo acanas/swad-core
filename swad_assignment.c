@@ -1401,7 +1401,7 @@ void Asg_RecFormAssignment (void)
    if (NewAssignmentIsCorrect)
      {
       /* Get groups for this assignments */
-      Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy ();
+      Grp_GetParCodsSeveralGrps ();
 
       if (ItsANewAssignment)
 	{
@@ -1600,7 +1600,7 @@ static void Asg_CreateGrps (long AsgCod)
      {
       /* Create group */
       sprintf (Query,"INSERT INTO asg_grp (AsgCod,GrpCod) VALUES ('%ld','%ld')",
-               AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]);
+               AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an assignment");
      }
   }

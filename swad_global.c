@@ -324,7 +324,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Grps.GrpName[0] = '\0';
    Gbl.CurrentCrs.Grps.MaxStudents = INT_MAX;
    Gbl.CurrentCrs.Grps.Open = false;
-   Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod  = NULL;
+   Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods  = NULL;
    Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
    Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls = 0;
 

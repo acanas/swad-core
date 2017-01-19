@@ -93,7 +93,7 @@ struct GroupTypes
   };
 struct ListCodGrps
   {
-   long *GrpCod;
+   long *GrpCods;
    unsigned NumGrps;
    int NestedCalls;				// Number of nested calls to the function that allocates memory for this list
   };
@@ -124,7 +124,7 @@ void Grp_ReqEditGroups (void);
 void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction);
 void Grp_PutParamsCodGrps (void);
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void);
-void Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy (void);
+void Grp_GetParCodsSeveralGrps (void);
 void Grp_FreeListCodSelectedGrps (void);
 void Grp_ChangeMyGrpsAndShowChanges (void);
 void Grp_ChangeMyGrps (void);

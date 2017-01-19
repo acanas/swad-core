@@ -3872,7 +3872,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
          for (NumGrpSel = 0;
               NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
-            if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]) > 0)
+            if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
                NumPositiveCods++;
             else
                for (NumGrpTyp = 0;
@@ -3893,7 +3893,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
             for (NumGrpSel = 0;
                  NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
                  NumGrpSel++)
-               if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]) > 0)
+               if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) > 0)
                  {
                   Str_Concat (Query,NumPositiveCods ? " OR GrpCod='" :
                 	                              " GrpCod='",

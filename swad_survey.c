@@ -2219,7 +2219,7 @@ void Svy_RecFormSurvey (void)
    if (NewSurveyIsCorrect)
      {
       /* Get groups for this surveys */
-      Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy ();
+      Grp_GetParCodsSeveralGrps ();
 
       if (ItsANewSurvey)
          Svy_CreateSurvey (&NewSvy,Txt);	// Add new survey to database
@@ -2423,7 +2423,7 @@ static void Svy_CreateGrps (long SvyCod)
      {
       /* Create group */
       sprintf (Query,"INSERT INTO svy_grp (SvyCod,GrpCod) VALUES ('%ld','%ld')",
-               SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]);
+               SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to a survey");
      }
   }

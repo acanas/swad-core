@@ -3318,7 +3318,7 @@ static void Brw_FormToChangeCrsGrpZone (void)
 	   NumGrp++)
         {
          /* Get next group */
-         GrpDat.GrpCod = LstMyGrps.GrpCod[NumGrp];
+         GrpDat.GrpCod = LstMyGrps.GrpCods[NumGrp];
          Grp_GetDataOfGroupByCod (&GrpDat);
 
          /* Select this group */

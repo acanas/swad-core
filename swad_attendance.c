@@ -1338,7 +1338,7 @@ void Att_RecFormAttEvent (void)
    if (ReceivedAttEventIsCorrect)
      {
       /* Get groups for this attendance events */
-      Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy ();
+      Grp_GetParCodsSeveralGrps ();
 
       if (ItsANewAttEvent)
 	{
@@ -1520,7 +1520,7 @@ static void Att_CreateGrps (long AttCod)
      {
       /* Create group */
       sprintf (Query,"INSERT INTO att_grp (AttCod,GrpCod) VALUES ('%ld','%ld')",
-               AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]);
+               AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an attendance event");
      }
   }
@@ -2980,7 +2980,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 			     NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps &&
 			     !Gbl.AttEvents.Lst[NumAttEvent].Selected;
 			     NumGrpSel++)
-			   if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel] == GrpCodInThisEvent)
+			   if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == GrpCodInThisEvent)
 			      Gbl.AttEvents.Lst[NumAttEvent].Selected = true;
 		    }
 	       else			// This event is not associated to groups

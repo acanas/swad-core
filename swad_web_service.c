@@ -1897,7 +1897,7 @@ int swad__sendMyGroups (struct soap *soap,
 
    /***** Get the group codes which I want to join to *****/
    LstGrpsIWant.NumGrps = 0;
-   LstGrpsIWant.GrpCod = NULL;
+   LstGrpsIWant.GrpCods = NULL;
 
    if (myGroups[0])
      {
@@ -1911,7 +1911,7 @@ int swad__sendMyGroups (struct soap *soap,
       if (LstGrpsIWant.NumGrps)	// If I have selected groups...
         {
          /***** Create a list of groups selected from myGroups *****/
-         if ((LstGrpsIWant.GrpCod = (long *) calloc (LstGrpsIWant.NumGrps,sizeof (long))) == NULL)
+         if ((LstGrpsIWant.GrpCods = (long *) calloc (LstGrpsIWant.NumGrps,sizeof (long))) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
          for (NumGrp = 0, Ptr = myGroups;
               *Ptr;
@@ -1919,7 +1919,7 @@ int swad__sendMyGroups (struct soap *soap,
 	   {
 	    /* Find next string in text until comma (leading and trailing spaces are removed) */
             Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
-	    LstGrpsIWant.GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
+	    LstGrpsIWant.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	   }
         }
      }
@@ -2465,7 +2465,7 @@ static void Svc_GetLstGrpsSel (const char *Groups)
       // Here NestedCalls is always 0
       Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls++;
       // Here NestedCalls is always 1
-      if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
+      if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
 
       for (Ptr = Groups, NumGrp = 0;
@@ -2473,8 +2473,8 @@ static void Svc_GetLstGrpsSel (const char *Groups)
 	   )
 	{
 	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
-	 Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-	 if (Grp_CheckIfGroupBelongsToCourse (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrp],Gbl.CurrentCrs.Crs.CrsCod))
+	 Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
+	 if (Grp_CheckIfGroupBelongsToCourse (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.CurrentCrs.Crs.CrsCod))
 	    NumGrp++;
 	}
       Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;	// Update number of groups

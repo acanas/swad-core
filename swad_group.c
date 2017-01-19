@@ -61,6 +61,7 @@ extern struct Globals Gbl;
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
+
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
@@ -126,7 +127,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
 	NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	NumGrpSel++)
      {
-      if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]) >= 0)
+      if ((GrpCod = Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]) >= 0)
         {
          GrpDat.GrpCod = GrpCod;
          Grp_GetDataOfGroupByCod (&GrpDat);
@@ -242,8 +243,6 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 	         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-
       /***** Start frame *****/
       Lay_StartRoundFrame (NULL,Txt_Groups,
 			   ICanEdit ? Grp_PutIconToEditGroups :
@@ -304,7 +303,6 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
-      fprintf (Gbl.F.Out,"</div>");
      }
   }
 
@@ -332,7 +330,7 @@ void Grp_PutParamsCodGrps (void)
         {
          if (NumGrpSel)
             fprintf (Gbl.F.Out,"%c",Par_SEPARATOR_PARAM_MULTIPLE);
-         fprintf (Gbl.F.Out,"%ld",Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel]);
+         fprintf (Gbl.F.Out,"%ld",Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
         }
       fprintf (Gbl.F.Out,"\" />");
      }
@@ -341,85 +339,47 @@ void Grp_PutParamsCodGrps (void)
 /*****************************************************************************/
 /**************** Get parameters related to groups selected ******************/
 /*****************************************************************************/
-// Returns number of groups in current course
-// TODO: Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy is very similar to Grp_GetParCodsSeveralGrpsToShowUsrs ==> merge code
 
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
   {
    char YN[1+1];
-   unsigned long MaxSizeLstGrpCods;
-   char *LstCodGrps;
    struct ListCodGrps LstGrpsIBelong;
-   const char *Ptr;
-   char LongStr[1+10+1];
    unsigned NumGrp;
 
    if (++Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls > 1) // If list is created yet, there's nothing to do
       return;
 
-   /***** Set default for number of groups selected by me *****/
-   Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
-
    /***** Get boolean parameter that indicates if all groups must be listed *****/
    Par_GetParToText ("AllGroups",YN,1);
    Gbl.Usrs.ClassPhoto.AllGroups = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
-   if (Gbl.CurrentCrs.Grps.NumGrps)
+   /***** Get parameter with list of groups selected *****/
+   Grp_GetParCodsSeveralGrps ();
+
+   if (Gbl.CurrentCrs.Grps.NumGrps &&		// This course has groups and...
+       !Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)	// ...I haven't selected any group
      {
-      /***** Allocate memory for the list of group codes *****/
-      MaxSizeLstGrpCods = ((1+10+1) * Gbl.CurrentCrs.Grps.NumGrps) - 1;
-      if ((LstCodGrps = (char *) malloc (MaxSizeLstGrpCods + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+      /***** I I haven't selected any group, show by default the groups I belong to *****/
+      /* Get list of groups of all types in current course I belong to */
+      Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
+				   Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
-      /***** Get parameter with list of groups to list *****/
-      Par_GetParMultiToText ("GrpCods",LstCodGrps,MaxSizeLstGrpCods);
+      if (LstGrpsIBelong.NumGrps)
+	{
+	 /* Allocate space for list of selected groups */
+	 if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (LstGrpsIBelong.NumGrps,sizeof (long))) == NULL)
+	    Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
 
-      if (LstCodGrps[0])
-        {
-         /***** Count number of groups selected from LstCodGrps *****/
-         for (Ptr = LstCodGrps, NumGrp = 0;
-              *Ptr;
-              NumGrp++)
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
-         Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;
-        }
+	 /* Fill list of selected groups with list of groups I belong to */
+	 for (NumGrp = 0;
+	      NumGrp < LstGrpsIBelong.NumGrps;
+	      NumGrp++)
+	    Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp] = LstGrpsIBelong.GrpCods[NumGrp];
+	 Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = LstGrpsIBelong.NumGrps;
+	}
 
-      if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
-        {
-         /***** Create a list of groups selected from LstCodGrps *****/
-         if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
-            Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
-         for (Ptr = LstCodGrps, NumGrp = 0;
-              *Ptr;
-              NumGrp++)
-           {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
-            Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-           }
-        }
-      else						// If I haven't selected any group...
-        {
-         /***** I I haven't selected any group, show by default the groups I belong to *****/
-         if (Gbl.CurrentCrs.Grps.NumGrps)
-           {
-            Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
-        	                         Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
-            if (LstGrpsIBelong.NumGrps)
-              {
-               if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = (long *) calloc (LstGrpsIBelong.NumGrps,sizeof (long))) == NULL)
-                  Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
-               for (NumGrp = 0;
-        	    NumGrp < LstGrpsIBelong.NumGrps;
-        	    NumGrp++)
-                  Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrp] = LstGrpsIBelong.GrpCod[NumGrp];
-               Grp_FreeListCodGrp (&LstGrpsIBelong);
-               Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = LstGrpsIBelong.NumGrps;
-              }
-           }
-        }
-
-      /***** Free memory used for the list of groups to show *****/
-      free ((void *) LstCodGrps);
+      /* Free list of groups I belong to */
+      Grp_FreeListCodGrp (&LstGrpsIBelong);
      }
 
    /***** If no groups selected ==> show all groups *****/
@@ -428,57 +388,55 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
   }
 
 /*****************************************************************************/
-/***************** Get parameters related to groups selected *****************/
+/**************** Get parameter with list of groups selected *****************/
 /*****************************************************************************/
-// TODO: Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy is very similar to Grp_GetParCodsSeveralGrpsToShowUsrs ==> merge code
 
-void Grp_GetParCodsSeveralGrpsToEditAsgAttOrSvy (void)
+void Grp_GetParCodsSeveralGrps (void)
   {
-   unsigned long MaxSizeLstGrpCods;
-   char *LstCodGrps;
+   char *ParamLstCodGrps;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    unsigned NumGrp;
+   unsigned long MaxSizeLstGrpCods = ((1 + 10 + 1) * Gbl.CurrentCrs.Grps.NumGrps) - 1;
 
-   /***** Set default for number of groups selected by me *****/
+   /***** Reset number of groups selected *****/
    Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
 
-   if (Gbl.CurrentCrs.Grps.NumGrps)
+   if (Gbl.CurrentCrs.Grps.NumGrps)	// If course has groups
      {
-      /***** Allocate memory for the list of group codes *****/
-      MaxSizeLstGrpCods = ((1+10+1) * Gbl.CurrentCrs.Grps.NumGrps) - 1;
-      if ((LstCodGrps = (char *) malloc (MaxSizeLstGrpCods + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+      /***** Allocate memory for the list of group codes selected *****/
+      if ((ParamLstCodGrps = (char *) malloc (MaxSizeLstGrpCods + 1)) == NULL)
+	 Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
 
       /***** Get parameter with list of groups to list *****/
-      Par_GetParMultiToText ("GrpCods",LstCodGrps,MaxSizeLstGrpCods);
+      Par_GetParMultiToText ("GrpCods",ParamLstCodGrps,MaxSizeLstGrpCods);
 
-      if (LstCodGrps[0])
-        {
-         /***** Count number of groups selected from LstCodGrps *****/
-         for (Ptr = LstCodGrps, NumGrp = 0;
-              *Ptr;
-              NumGrp++)
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
-         Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;
-        }
+      if (ParamLstCodGrps[0])
+	{
+	 /***** Count number of groups selected from LstCodGrps *****/
+	 for (Ptr = ParamLstCodGrps, NumGrp = 0;
+	      *Ptr;
+	      NumGrp++)
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	 Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
-      if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
-        {
-         /***** Create a list of groups selected from LstCodGrps *****/
-         if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
-            Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
-         for (Ptr = LstCodGrps, NumGrp = 0;
-              *Ptr;
-              NumGrp++)
-           {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
-            Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
-           }
-        }
+	 if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
+	   {
+	    /***** Create a list of groups selected from LstCodGrps *****/
+	    if ((Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = (long *) calloc (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps,sizeof (long))) == NULL)
+	       Lay_ShowErrorAndExit ("Not enough memory to store the codes of the selected groups.");
+	    for (Ptr = ParamLstCodGrps, NumGrp = 0;
+		 *Ptr;
+		 NumGrp++)
+	      {
+	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	       Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
+	      }
+	   }
+	}
 
       /***** Free memory used for the list of groups to show *****/
-      free ((void *) LstCodGrps);
+      free ((void *) ParamLstCodGrps);
      }
   }
 
@@ -490,10 +448,10 @@ void Grp_FreeListCodSelectedGrps (void)
   {
    if (Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls > 0)
       if (--Gbl.CurrentCrs.Grps.LstGrpsSel.NestedCalls == 0)
-         if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod)
+         if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods)
            {
-            free ((void *) Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod);
-            Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod = NULL;
+            free ((void *) Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods);
+            Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods = NULL;
             Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
            }
   }
@@ -527,7 +485,7 @@ void Grp_ChangeMyGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the group codes which I want to join to *****/
-   LstGrpsIWant.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   LstGrpsIWant.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
    LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
 
@@ -577,7 +535,7 @@ void Grp_ChangeOtherUsrGrps (void)
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get the list of groups to which register this user *****/
-   LstGrpsUsrWants.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+   LstGrpsUsrWants.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
    LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
 
@@ -650,7 +608,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 for (NumGrpIWant = 0, RemoveMeFromThisGrp = true;
 	      NumGrpIWant < LstGrpsIWant->NumGrps && RemoveMeFromThisGrp;
 	      NumGrpIWant++)
-	    if (LstGrpsIBelong.GrpCod[NumGrpIBelong] == LstGrpsIWant->GrpCod[NumGrpIWant])
+	    if (LstGrpsIBelong.GrpCods[NumGrpIBelong] == LstGrpsIWant->GrpCods[NumGrpIWant])
 	       RemoveMeFromThisGrp = false;
 	 if (RemoveMeFromThisGrp)
 	    /* Check if the group is closed */
@@ -662,7 +620,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	       for (NumGrpThisType = 0;
 		    NumGrpThisType < GrpTyp->NumGrps && !ITryToLeaveAClosedGroup;
 		    NumGrpThisType++)
-		  if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIBelong.GrpCod[NumGrpIBelong])
+		  if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIBelong.GrpCods[NumGrpIBelong])
 		     if (!((GrpTyp->LstGrps[NumGrpThisType]).Open))
 			ITryToLeaveAClosedGroup = true;
 	      }
@@ -680,7 +638,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	    for (NumGrpIBelong = 0, RegisterMeInThisGrp = true;
 		 NumGrpIBelong < LstGrpsIBelong.NumGrps && RegisterMeInThisGrp;
 		 NumGrpIBelong++)
-	       if (LstGrpsIWant->GrpCod[NumGrpIWant] == LstGrpsIBelong.GrpCod[NumGrpIBelong])
+	       if (LstGrpsIWant->GrpCods[NumGrpIWant] == LstGrpsIBelong.GrpCods[NumGrpIBelong])
 		  RegisterMeInThisGrp = false;
 	    if (RegisterMeInThisGrp)
 	       /* Check if the group is closed or full */
@@ -696,7 +654,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 					!ITryToRegisterInAClosedGroup &&
 					!ITryToRegisterInFullGroup;
 		       NumGrpThisType++)
-		     if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIWant->GrpCod[NumGrpIWant])
+		     if ((GrpTyp->LstGrps[NumGrpThisType]).GrpCod == LstGrpsIWant->GrpCods[NumGrpIWant])
 		       {
 			/* Check if the group is closed */
 			if (!((GrpTyp->LstGrps[NumGrpThisType]).Open))
@@ -722,10 +680,10 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 for (NumGrpIWant = 0, RemoveMeFromThisGrp = true;
 	      NumGrpIWant < LstGrpsIWant->NumGrps && RemoveMeFromThisGrp;
 	      NumGrpIWant++)
-	    if (LstGrpsIBelong.GrpCod[NumGrpIBelong] == LstGrpsIWant->GrpCod[NumGrpIWant])
+	    if (LstGrpsIBelong.GrpCods[NumGrpIBelong] == LstGrpsIWant->GrpCods[NumGrpIWant])
 	       RemoveMeFromThisGrp = false;
 	 if (RemoveMeFromThisGrp)
-	    Grp_RemoveUsrFromGroup (Gbl.Usrs.Me.UsrDat.UsrCod,LstGrpsIBelong.GrpCod[NumGrpIBelong]);
+	    Grp_RemoveUsrFromGroup (Gbl.Usrs.Me.UsrDat.UsrCod,LstGrpsIBelong.GrpCods[NumGrpIBelong]);
 	}
 
       /***** Go across the list of groups that I want to register in, adding those groups that are not present in the list of groups I belong to *****/
@@ -736,10 +694,10 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 	 for (NumGrpIBelong = 0, RegisterMeInThisGrp = true;
 	      NumGrpIBelong < LstGrpsIBelong.NumGrps && RegisterMeInThisGrp;
 	      NumGrpIBelong++)
-	    if (LstGrpsIWant->GrpCod[NumGrpIWant] == LstGrpsIBelong.GrpCod[NumGrpIBelong])
+	    if (LstGrpsIWant->GrpCods[NumGrpIWant] == LstGrpsIBelong.GrpCods[NumGrpIBelong])
 	       RegisterMeInThisGrp = false;
 	 if (RegisterMeInThisGrp)
-	    Grp_AddUsrToGroup (&Gbl.Usrs.Me.UsrDat,LstGrpsIWant->GrpCod[NumGrpIWant]);
+	    Grp_AddUsrToGroup (&Gbl.Usrs.Me.UsrDat,LstGrpsIWant->GrpCods[NumGrpIWant]);
 	}
 
       ChangesMade = true;
@@ -798,10 +756,10 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
       for (NumGrpUsrWants = 0, RemoveUsrFromThisGrp = true;
 	   NumGrpUsrWants < LstGrpsUsrWants->NumGrps && RemoveUsrFromThisGrp;
 	   NumGrpUsrWants++)
-	 if (LstGrpsUsrBelongs.GrpCod[NumGrpUsrBelongs] == LstGrpsUsrWants->GrpCod[NumGrpUsrWants])
+	 if (LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs] == LstGrpsUsrWants->GrpCods[NumGrpUsrWants])
 	    RemoveUsrFromThisGrp = false;
       if (RemoveUsrFromThisGrp)
-	 Grp_RemoveUsrFromGroup (Gbl.Usrs.Other.UsrDat.UsrCod,LstGrpsUsrBelongs.GrpCod[NumGrpUsrBelongs]);
+	 Grp_RemoveUsrFromGroup (Gbl.Usrs.Other.UsrDat.UsrCod,LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs]);
      }
 
    /***** Go across the list of groups that user wants to register in, adding those groups that are not present in the list of groups user belongs to *****/
@@ -812,10 +770,10 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
       for (NumGrpUsrBelongs = 0, RegisterUsrInThisGrp = true;
 	   NumGrpUsrBelongs < LstGrpsUsrBelongs.NumGrps && RegisterUsrInThisGrp;
 	   NumGrpUsrBelongs++)
-	 if (LstGrpsUsrWants->GrpCod[NumGrpUsrWants] == LstGrpsUsrBelongs.GrpCod[NumGrpUsrBelongs])
+	 if (LstGrpsUsrWants->GrpCods[NumGrpUsrWants] == LstGrpsUsrBelongs.GrpCods[NumGrpUsrBelongs])
 	    RegisterUsrInThisGrp = false;
       if (RegisterUsrInThisGrp)
-	 Grp_AddUsrToGroup (&Gbl.Usrs.Other.UsrDat,LstGrpsUsrWants->GrpCod[NumGrpUsrWants]);
+	 Grp_AddUsrToGroup (&Gbl.Usrs.Other.UsrDat,LstGrpsUsrWants->GrpCods[NumGrpUsrWants]);
      }
 
    ChangesMade = true;
@@ -859,7 +817,7 @@ bool Grp_CheckIfSelectionGrpsIsValid (struct ListCodGrps *LstGrps)
 	SelectionValid && NumCodGrp < LstGrps->NumGrps;
 	NumCodGrp++)
      {
-      GrpTypCod = Grp_GetTypeOfGroupOfAGroup (LstGrps->GrpCod[NumCodGrp]);
+      GrpTypCod = Grp_GetTypeOfGroupOfAGroup (LstGrps->GrpCods[NumCodGrp]);
       if (!Grp_GetMultipleEnrollmentOfAGroupType (GrpTypCod))
          for (NumGrpTyp = 0;
 	      NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
@@ -938,7 +896,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
       LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
-      LstGrpsHeBelongs.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+      LstGrpsHeBelongs.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod,
 	                           UsrDat->UsrCod,&LstGrpsHeBelongs);
 
@@ -951,7 +909,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
          for (NumGrpThisType = 0;
               NumGrpThisType < Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps;
               NumGrpThisType++)
-            if (LstGrps->GrpCod[NumGrpSel] == Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
+            if (LstGrps->GrpCods[NumGrpSel] == Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpCod)
               {	// The selected group is of this type
                AlreadyRegisteredInGrp = false;
 
@@ -959,13 +917,13 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
                for (NumGrpHeBelongs = 0;
         	    NumGrpHeBelongs < LstGrpsHeBelongs.NumGrps;
         	    NumGrpHeBelongs++)
-                  if (LstGrps->GrpCod[NumGrpSel] == LstGrpsHeBelongs.GrpCod[NumGrpHeBelongs])
+                  if (LstGrps->GrpCods[NumGrpSel] == LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs])
                      AlreadyRegisteredInGrp = true;
                   else if (!MultipleEnrollment)	// If the type of group is of single enrollment
                     {
                      /* If the enrollment is single and the group to which the user belongs is different from the selected ==>
                         remove user from the group to which he belongs */
-                     Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCod[NumGrpHeBelongs]);
+                     Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
                      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
 			      UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName);
                      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -973,7 +931,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
-                  Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCod[NumGrpSel]);
+                  Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
                   sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z,
 		           UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
@@ -1015,9 +973,9 @@ unsigned Grp_RemoveUsrFromGroups (struct UsrData *UsrDat,struct ListCodGrps *Lst
 	   NumGrpHeBelongs < LstGrpsHeBelongs.NumGrps;
 	   NumGrpHeBelongs++)
          /* If the user belongs to a selected group from which he must be removed */
-         if (LstGrpsHeBelongs.GrpCod[NumGrpHeBelongs] == LstGrps->GrpCod[NumGrpSel])
+         if (LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs] == LstGrps->GrpCods[NumGrpSel])
            {
-            Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCod[NumGrpHeBelongs]);
+            Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
             NumGrpsHeIsRemoved++;
            }
 
@@ -1893,7 +1851,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
          for (NumGrpSel = 0;
               NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
               NumGrpSel++)
-            if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel] == Grp->GrpCod)
+            if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == Grp->GrpCod)
               {
                fprintf (Gbl.F.Out," checked=\"checked\"");
                break;
@@ -1923,7 +1881,7 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
       for (NumGrpSel = 0;
 	   NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
 	   NumGrpSel++)
-         if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCod[NumGrpSel] == -(GrpTyp->GrpTypCod))
+         if (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel] == -(GrpTyp->GrpTypCod))
            {
             fprintf (Gbl.F.Out," checked=\"checked\"");
             break;
@@ -2997,7 +2955,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
    if (LstGrps->NumGrps)
      {
       /***** Create a list of groups the user belongs to *****/
-      if ((LstGrps->GrpCod = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
+      if ((LstGrps->GrpCods = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store codes of groups a user belongs to.");
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
@@ -3006,7 +2964,7 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
          row = mysql_fetch_row (mysql_res);
 
          /* Get the code of group (row[0]) */
-         if ((LstGrps->GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((LstGrps->GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of group.");
         }
      }
@@ -3041,7 +2999,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    if (LstGrps->NumGrps)
      {
       /***** Create a list of groups I belong to *****/
-      if ((LstGrps->GrpCod = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
+      if ((LstGrps->GrpCods = (long *) calloc (LstGrps->NumGrps,sizeof (long))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store codes of groups I belongs to.");
       for (NumGrp = 0;
 	   NumGrp < LstGrps->NumGrps;
@@ -3050,7 +3008,7 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
          row = mysql_fetch_row (mysql_res);
 
          /* Get the code of group (row[0]) */
-         if ((LstGrps->GrpCod[NumGrp] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+         if ((LstGrps->GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (row[0])) < 0)
             Lay_ShowErrorAndExit ("Wrong code of group.");
         }
      }
@@ -3070,7 +3028,7 @@ static bool Grp_CheckIfGrpIsInList (long GrpCod,struct ListCodGrps *LstGrps)
    for (NumGrp = 0;
 	NumGrp < LstGrps->NumGrps;
 	NumGrp++)
-      if (GrpCod == LstGrps->GrpCod[NumGrp])
+      if (GrpCod == LstGrps->GrpCods[NumGrp])
          return true;
    return false;
   }
@@ -4191,7 +4149,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
           with all the groups selected (of all the types) *****/
    if (LstGrpsWanted->NumGrps)
      {
-      if ((LstGrpsWanted->GrpCod = (long *) calloc (LstGrpsWanted->NumGrps,sizeof (long))) == NULL)
+      if ((LstGrpsWanted->GrpCods = (long *) calloc (LstGrpsWanted->NumGrps,sizeof (long))) == NULL)
          Lay_ShowErrorAndExit ("Not enoguh memory to store codes of groups in which a user wants to be enrolled.");
 
       /***** Get the groups *****/
@@ -4205,7 +4163,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
               NumGrpWanted++)
            {
             Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
-            LstGrpsWanted->GrpCod[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
+            LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */
          free ((void *) LstStrCodGrps[NumGrpTyp]);
@@ -4222,9 +4180,9 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 
 void Grp_FreeListCodGrp (struct ListCodGrps *LstGrps)
   {
-   if (LstGrps->NumGrps && LstGrps->GrpCod)
-      free ((void *) LstGrps->GrpCod);
-   LstGrps->GrpCod = NULL;
+   if (LstGrps->NumGrps && LstGrps->GrpCods)
+      free ((void *) LstGrps->GrpCods);
+   LstGrps->GrpCods = NULL;
    LstGrps->NumGrps = 0;
   }
 

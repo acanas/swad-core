@@ -1359,7 +1359,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	 Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
 	 /***** Get the list of groups to which register/remove students *****/
-	 LstGrps.GrpCod = NULL;	// Initialized to avoid bug reported by Coverity
+	 LstGrps.GrpCods = NULL;	// Initialized to avoid bug reported by Coverity
 	 LstGrps.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
 	 Grp_GetLstCodsGrpWanted (&LstGrps);
 
