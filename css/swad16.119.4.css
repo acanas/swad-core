@@ -293,7 +293,7 @@ a:hover						/* Default ==> underlined */
 #current_day
 	{
 	color:#606060;
-	margin:2px 0 -4px 0;
+	margin:2px 0 -2px 0;
 	font-size:20pt;
 	font-weight:bold;
 	line-height:100%;

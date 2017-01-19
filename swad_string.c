@@ -52,6 +52,9 @@ extern struct Globals Gbl;		// Declaration in swad.c
 /*****************************************************************************/
 
 static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch);
+
+static unsigned Str_FindHTMLEntity (const char *Ptr);
+
 static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments);
 static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_SkipHTMLComments_t SkipHTMLComments);
 static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments);
@@ -499,7 +502,7 @@ static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch)
          for (NumChars = 2, Num = 0;
               *Ptr >= '0' && *Ptr <= '9';
               Ptr++, NumChars++)
-            if (Num < 256)	// To avoid overflow
+            if (Num < 100000)	// To avoid overflow
                Num = Num * 10 + (unsigned) (*Ptr - '0');
          if (*Ptr == ';')	// &#num; found
            {
@@ -539,7 +542,7 @@ static unsigned Str_GetNextASCIICharFromStr (const char *Ptr,unsigned char *Ch)
                case 124: *Ch = '|';  return NumChars;
                case 125: *Ch = '}';  return NumChars;
                case 126: *Ch = '~';  return NumChars;
-               default:  *Ch = ' ';  return NumChars;	// Unknown character
+               default:  *Ch = '?';  return NumChars;	// Unknown character
               }
            }
          else
@@ -571,6 +574,7 @@ size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen)
    char *Ptr;
    size_t NumCharsOnScreen;
    size_t Length;
+   size_t LengthHTMLEntity;
 
    if (MaxCharsOnScreen < 3)
       MaxCharsOnScreen = 3;	// Length of "..."
@@ -579,10 +583,14 @@ size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen)
    for (Ptr = Str, NumCharsOnScreen = 0, Length = 0;
 	*Ptr;
 	Ptr++, NumCharsOnScreen++, Length++)
-      if (*Ptr == '&')	// Special character
-	 for (Ptr++, Length++;
-	      *Ptr && *Ptr != ';';
-	      Ptr++, Length++);  // While not end of special character
+      /* Check if an HTML entity is present */
+      if (*Ptr == '&')	// Possible HTML entity
+	 if ((LengthHTMLEntity = Str_FindHTMLEntity (Ptr)))
+	   {
+	    /* if Ptr points to &ntilde; ==> Length = 8 */
+	    Ptr    += LengthHTMLEntity - 1;	// Now Ptr point to ';'
+	    Length += LengthHTMLEntity - 1;
+	   }
 
    if (NumCharsOnScreen <= MaxCharsOnScreen)	// Don't limit string
       return Length;
@@ -601,17 +609,67 @@ size_t Str_LimitLengthHTMLStr (char *Str,size_t MaxCharsOnScreen)
 	 Length += 3;
          break;
 	}
-      if (*Ptr == '&')		// Special character
-	 for (Ptr++, Length++;
-	      *Ptr && *Ptr != ';';
-	      Ptr++, Length++);	// While not end of special character
-      else if (*Ptr == '<')	// HTML entity
+      /* Check if an HTML entity or directive is present */
+      if (*Ptr == '&')	// Possible HTML entity
+	{
+	 if ((LengthHTMLEntity = Str_FindHTMLEntity (Ptr)))
+	   {
+	    /* if Ptr points to &ntilde; ==> Length = 8 */
+	    Ptr += LengthHTMLEntity - 1;	// Now Ptr point to ';'
+	    Length += LengthHTMLEntity - 1;
+	   }
+	}
+      else if (*Ptr == '<')	// HTML directive "<...>"
 	 for (Ptr++, Length++;
 	      *Ptr && *Ptr != '>';
-	      Ptr++, Length++);	// While not end of HTML entity
+	      Ptr++, Length++);	// While not end of HTML directive "<...>"
      }
 
    return Length;
+  }
+
+/*****************************************************************************/
+/******** Return the length of a possible HTML entity inside a string ********/
+/*****************************************************************************/
+// For example, if Ptr points to "&ntilde;..." or "&#38754;...", return 8
+// If Ptr points to no HTML entity, return 0
+
+static unsigned Str_FindHTMLEntity (const char *Ptr)
+  {
+   size_t Length = 0;
+   char Ch;
+
+   /***** Check first character *****/
+   if (Ptr[Length] != '&')
+      return 0;	// No HTML entity found
+
+   /***** Check second character *****/
+   Length++;
+   if (Ptr[Length] == '#')
+      /* Go to third character */
+      Length++;
+
+   /***** Now some alphanumeric characters are expected *****/
+   /* Check second/third character */
+   Ch = Ptr[Length];
+   if (!((Ch >= '0' && Ch <= '9') ||
+	 (Ch >= 'a' && Ch <= 'z') ||
+	 (Ch >= 'A' && Ch <= 'Z')))
+      return 0;	// No HTML entity found
+
+   /* Go to first non alphanumeric character */
+   do
+     {
+      Length++;
+      Ch = Ptr[Length];
+     }
+   while ((Ch >= '0' && Ch <= '9') ||
+	  (Ch >= 'a' && Ch <= 'z') ||
+	  (Ch >= 'A' && Ch <= 'Z'));
+
+   /***** An HTML entity must end by ';' *****/
+   return (Ptr[Length] == ';') ? Length + 1 :	// HTML entity found (return Length including the final ';')
+	                         0;		// No HTML entity found
   }
 
 /*****************************************************************************/
@@ -1173,8 +1231,8 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
-               case 0x26:  /* "%26" --> "&#38;" (&) */
-		  StrSpecialChar[0] = '&';
+               case 0x26:  /* "%26" --> "&" */
+		  StrSpecialChar[0] = '&';	// '&' must be converted to '&' to allow HTML entities like &#20998;
 		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
@@ -1187,7 +1245,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	     StrSpecialChar[2] = '\0';	// End of string
         	    }
         	  else
-        	     sprintf (StrSpecialChar,"&#39;");	// Single comilla is stored as HTML code to avoid problem when querying database (SQL code injection)
+        	     sprintf (StrSpecialChar,"&#39;");	// Single comilla is stored as HTML entity to avoid problem when querying database (SQL code injection)
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;

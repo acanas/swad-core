@@ -769,7 +769,7 @@ void Msg_RecMsgFromUsr (void)
                             (UsrDstData.Prefs.EmailNtfEvents & (1 << Ntf_EVENT_MESSAGE));
 
             /***** Create the received message for this recipient
-                   and ncrement number of new messages received by this recipient *****/
+                   and increment number of new messages received by this recipient *****/
             Msg_InsertReceivedMsgIntoDB (NewMsgCod,UsrDstData.UsrCod,NotifyByEmail);
 
             /***** Create notification for this recipient.
