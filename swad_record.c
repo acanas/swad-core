@@ -2795,6 +2795,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			      (unsigned) Gbl.Usrs.Me.LoggedRole,
 			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 		     break;
+		  /*
 		  case Rol_TEACHER:
 		     for (Role = Rol_STUDENT;
 			  Role <= Rol_TEACHER;
@@ -2809,6 +2810,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 				    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
 			  }
 		     break;
+		  */
+		  case Rol_TEACHER:
 		  case Rol_DEG_ADM:
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
@@ -3527,20 +3530,23 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	 if (Role == Rol_STUDENT)
 	    RoleOK = true;
 	 break;
+      /*
       case Rol_TEACHER:		// I am logged as teacher
-	 /* A teacher can only register another user as teacher
-	    if the other is already teacher in any course.
-	    That is, a teacher can not upgrade a student
-	    (in all other courses) to teacher */
+	 // A teacher can only register another user as teacher
+	 // if the other is already teacher in any course.
+	 // That is, a teacher can not upgrade a student
+	 // (in all other courses) to teacher
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Other.UsrDat);
 	 if ( Role == Rol_STUDENT ||
 	     (Role == Rol_TEACHER &&					// He/she will be a teacher in current course
 	      (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER))))	// He/she was a teacher in some courses
 	    RoleOK = true;
          break;
-      case Rol_DEG_ADM:		// I am logged as admin
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
+      */
+      case Rol_TEACHER:		// I am logged as teacher
+      case Rol_DEG_ADM:		// I am logged as degree admin
+      case Rol_CTR_ADM:		// I am logged as centre admin
+      case Rol_INS_ADM:		// I am logged as institution admin
 	 if (Role == Rol_STUDENT ||
 	     Role == Rol_TEACHER)
 	    RoleOK = true;

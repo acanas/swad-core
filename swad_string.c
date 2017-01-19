@@ -639,17 +639,17 @@ static unsigned Str_FindHTMLEntity (const char *Ptr)
    size_t Length = 0;
    char Ch;
 
-   /***** Check first character *****/
+   /***** The first character must be '&' *****/
    if (Ptr[Length] != '&')
       return 0;	// No HTML entity found
 
-   /***** Check second character *****/
+   /***** The second character can be '#' *****/
    Length++;
    if (Ptr[Length] == '#')
       /* Go to third character */
       Length++;
 
-   /***** Now some alphanumeric characters are expected *****/
+   /***** Now one or more alphanumeric characters are expected *****/
    /* Check second/third character */
    Ch = Ptr[Length];
    if (!((Ch >= '0' && Ch <= '9') ||
