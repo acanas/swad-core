@@ -320,7 +320,8 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 void Enr_ReqAcceptRegisterInCrs (void)
   {
    extern const char *Txt_Enrollment;
-   extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_;
+   extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y;
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Confirm_my_enrollment;
    extern const char *Txt_Remove_me_from_this_course;
 
@@ -328,7 +329,8 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_StartRoundFrame (NULL,Txt_Enrollment,NULL,NULL);
 
    /***** Show message *****/
-   sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_,
+   sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y,
+            Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 

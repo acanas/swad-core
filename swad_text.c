@@ -1496,52 +1496,62 @@ const char *Txt_A_student_can_only_belong_to_one_group =
 	"Um aluno pode pertencer a um grupo";
 #endif
 
-const char *Txt_A_teacher_or_administrator_has_enrolled_you_into_the_course_ =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
-	"Un profesor/a o un administrador/a le ha inscrito"
-	" en la asignatura <strong>%s</strong>."
-	" &iquest;Confirma la inscripci&oacute;n"
-	" o prefiere ser eliminado de la asignatura?";		// Necessita traduccio
+	"Un professor/a o un administrador/a l'ha inscrit"
+	" com a <strong>%s</strong>"
+	" en l'assignatura <strong>%s</strong>."
+	" &iquest;Confirma la inscripci&oacute;"
+	" o prefereix ser eliminat de l'assignatura?";
 #elif L==2
-	"Ein Lehrer oder Administrator hat Sie"
-	" im Kurs <strong>%s</strong> eingeschrieben."
-	" M&ouml;chten Sie, dass die Registrierung"
-	" oder bevorzugen Sie, um aus dem Kurs?";
+	"Ein Lehrer oder ein Administrator hat Sie"
+	" als <strong>%s</strong>"
+	" in den Kurs <strong>%s</strong> eingeschrieben."
+	" M&ouml;chten Sie die Anmeldung best&auml;tigen"
+	" oder ziehen Sie es vor,"
+	" aus dem Kurs entfernt zu werden?";
 #elif L==3
-	"A teacher or administrator has enrolled you"
-	" into the course <strong>%s</strong>."
+	"A teacher or an administrator has enrolled you"
+	" as a <strong>%s</strong>"
+	"into the course <strong>%s</strong>."
 	" Do you want to confirm the enrollment"
 	" or do you prefer to be removed from the course?";
 #elif L==4
 	"Un profesor/a o un administrador/a le ha inscrito"
+	" como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>."
 	" &iquest;Confirma la inscripci&oacute;n"
-	" o prefiere ser eliminado de la asignatura?";
+	" o prefiere ser eliminado/a de la asignatura?";
 #elif L==5
 	"Un professeur ou un administrateur vous a enregistr&eacute;"
+	" en tant que <strong>%s</strong>"
 	" dans la mati&egrave;re <strong>%s</strong>."
-	" Voulez-vous confirmer l'enregistrement"
-	" ou pr&eacute;f&eacute;rez-vous &ecirc;tre enlev&eacute; de la mati&egrave;re?";
+	" Voulez-vous confirmer l'inscription"
+	" ou pr&eacute;f&eacute;rez-vous &ecirc;tre retir&eacute; de la mati&egrave;re?";
 #elif L==6
-	"Un profesor/a o un administrador/a le ha inscrito "
+	"Un profesor/a o un administrador/a le ha inscrito"
+	" como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>."
 	" &iquest;Confirma la inscripci&oacute;n"
-	" o prefiere ser eliminado de la asignatura?";		// Okoteve traducción
+	" o prefiere ser eliminado/a de la asignatura?";		// Okoteve traducción
 #elif L==7
 	"Un insegnante o amministratore ti a registrato"
+	" come <strong>%s</strong>"
 	" nel corso <strong>%s</strong>."
 	" Vuoi confermare la registrazione"
 	" o preferisci essere rimosso da questo corso?";
 #elif L==8
-	"A teacher or administrator has enrolled you"
-	" into the course <strong>%s</strong>."
-	" Do you want to confirm the enrollment"
-	" or do you prefer to be removed from the course?";	// Potrzebujesz tlumaczenie
+	"Nauczyciel lub administrator zapisa&lstrok; ci&eogon;"
+	" jako <strong>%s</strong>"
+	" do kursu <strong>%s</strong>."
+	" Czy chcesz, aby potwierdzi&cacute; rejestracj&eogon;"
+	" czy wolisz zosta&cacute; usuni&eogon;te z kursu?";
 #elif L==9
-	"Um professor ou administrador tem registrado voc&ecirc;"
+	"Um professor/a ou administrador/a tem registrado voc&ecirc;"
+	" como <strong>%s</strong>"
 	" na disciplina <strong>%s</strong>."
 	" Voc&ecirc; quer para confirmar a inscri&ccedil;&atilde;o"
-	" ou voc&ecirc; prefere para ser removido da disciplina?";
+	" ou voc&ecirc; prefere para ser removido/a da disciplina?";
 #endif
 
 const char *Txt_A_user_can_not_have_more_than_X_IDs =

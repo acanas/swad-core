@@ -193,13 +193,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.120.1 (2017-01-19)"
+#define Log_PLATFORM_VERSION	"SWAD 16.120.2 (2017-01-19)"
 #define CSS_FILE		"swad16.119.4.css"
 #define JS_FILE			"swad16.119.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.120.2: Jan 19, 2017	Changed the question to confirm user's enrollment. (211954 lines)
         Version 16.120.1: Jan 19, 2017	From now on, a teacher A can enroll another user B as a teacher in their courses, although user B is not yet a teacher in any course. (? lines)
         Version 16.120:   Jan 19, 2017	Fixed bug when limiting length of links. (211934 lines)
         Version 16.119.4: Jan 18, 2017	Changes in layout of current data and time. (211882 lines)
