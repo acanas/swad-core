@@ -36893,6 +36893,27 @@ const char *Txt_Show_all_notifications =
 	"Mostrar todas as notifica&ccedil;&otilde;es";
 #endif
 
+const char *Txt_Show_agenda =
+#if   L==1
+	"Mostra agenda";
+#elif L==2
+	"Organizer anzeigen";
+#elif L==3
+	"Show agenda";
+#elif L==4
+	"Ver agenda";
+#elif L==5
+	"Afficher agenda";
+#elif L==6
+	"Ver agenda";	// Okoteve traducción
+#elif L==7
+	"Mostra agenda";
+#elif L==8
+	"Poka&zdot; pami&eogon;tnik";
+#elif L==9
+	"Mostrar agenda";
+#endif
+
 const char *Txt_Show_anyway =
 #if   L==1
 	"Mostra de totes maneres";
@@ -50140,27 +50161,6 @@ const char *Txt_View =
 	"Wy&sacute;wietl";
 #elif L==9
 	"Ver";
-#endif
-
-const char *Txt_View_agenda =
-#if   L==1
-	"Veure agenda";
-#elif L==2
-	"Siehe Organizer";
-#elif L==3
-	"View agenda";
-#elif L==4
-	"Ver agenda";
-#elif L==5
-	"Voir agenda";
-#elif L==6
-	"Ver agenda";	// Okoteve traducción
-#elif L==7
-	"Vedi agenda";
-#elif L==8
-	"Wiadomo&sacute;ci pami&eogon;tnik";
-#elif L==9
-	"Veja agenda";
 #endif
 
 const char *Txt_View_all_recipients =

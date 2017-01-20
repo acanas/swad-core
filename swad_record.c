@@ -2328,7 +2328,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_public_profile;
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_View_record_and_office_hours;
-   extern const char *Txt_View_agenda;
+   extern const char *Txt_Show_agenda;
    extern const char *Txt_Admin_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
@@ -2388,13 +2388,13 @@ static void Rec_PutIconsCommands (void)
 	 Lay_PutContextualLink (ActSeeMyAgd,
 				NULL,
 				"date64x64.gif",
-				Txt_View_agenda,NULL,
+				Txt_Show_agenda,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
 	 Lay_PutContextualLink (ActSeeUsrAgd,
 				Rec_PutParamUsrCodEncrypted,
 				"date64x64.gif",
-				Txt_View_agenda,NULL,
+				Txt_Show_agenda,NULL,
 				NULL);
 
       /***** Button to admin user *****/

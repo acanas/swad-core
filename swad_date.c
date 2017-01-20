@@ -161,6 +161,7 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
 void Dat_ShowClientLocalTime (void)
   {
    extern const char *Txt_Show_calendar;
+   extern const char *Txt_Show_agenda;
 
    /***** Draw the current date and time *****/
    /* Start container */
@@ -176,12 +177,12 @@ void Dat_ShowClientLocalTime (void)
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /* Day with link to calendar */
+   /* Day with link to agenda (if I am logged) */
    fprintf (Gbl.F.Out,"<div id=\"current_day\">");
    if (Gbl.Usrs.Me.Logged)
      {
       Act_FormStart (ActSeeMyAgd);
-      Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_DAY",NULL);
+      Act_LinkFormSubmit (Txt_Show_agenda,"CURRENT_DAY",NULL);
      }
    fprintf (Gbl.F.Out,"<span id=\"current_day_txt\">"	// JavaScript will write HTML here
 		      "</span>");
