@@ -160,6 +160,11 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
 
 void Dat_ShowClientLocalTime (void)
   {
+   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
+
+   /***** Draw the month in JavaScript *****/
+   /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"current_date\">"
 	              "<div id=\"current_month\">"
                       "</div>"
@@ -167,12 +172,18 @@ void Dat_ShowClientLocalTime (void)
 		      "</div>"
 		      "<div id=\"current_time\">"
             	      "</div>"
-            	      "</div>"
-                      "<script type=\"text/javascript\">\n"
+            	      "</div>");
+
+   /* Write script to draw the month */
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
 		      "secondsSince1970UTC = %ld;\n"
-                      "writeLocalClock();"
-                      "</script>",
-            (long) Gbl.StartExecutionTimeUTC);
+                      "writeLocalClock('%s/%s',",
+            (long) Gbl.StartExecutionTimeUTC,
+	    Cfg_URL_SWAD_CGI,
+	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+   Act_SetParamsForm (ParamsStr,ActSeeCal,true);
+   fprintf (Gbl.F.Out,"'%s');"
+	              "</script>",ParamsStr);
   }
 
 /*****************************************************************************/

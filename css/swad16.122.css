@@ -290,6 +290,10 @@ a:hover						/* Default ==> underlined */
 	white-space:nowrap;
 	overflow:hidden;
 	}
+#current_month a
+	{
+	color:white;
+	}
 #current_day
 	{
 	color:#606060;

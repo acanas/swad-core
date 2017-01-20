@@ -4721,7 +4721,7 @@ void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {
    char ParamAction[256];
-   char ParamSession[256+Ses_LENGTH_SESSION_ID];
+   char ParamSession[256 + Ses_LENGTH_SESSION_ID];
    char ParamLocation[256];
 
    ParamAction[0] = '\0';

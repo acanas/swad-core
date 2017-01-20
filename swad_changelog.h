@@ -186,20 +186,20 @@
 // TODO: Fix bug when editing a test question with images: when "Change image" is selected but no image is uploades, other images (for example in answers) are lost
 // TODO: Fix bug when creating a new attendance event: if title is repeated, form is cleared
 // TODO: Fix bug: When registering an administrator, the user's name changes are ignored
-
-// TODO: Link to agenda in current time (left-top date-time)
+// TODO: Link to agenda instead of calendar in current time (left-top date-time)?
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.121 (2017-01-19)"
-#define CSS_FILE		"swad16.119.4.css"
-#define JS_FILE			"swad16.119.3.js"
+#define Log_PLATFORM_VERSION	"SWAD 16.122 (2017-01-19)"
+#define CSS_FILE		"swad16.122.css"
+#define JS_FILE			"swad16.122.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.122:   Jan 20, 2017	Link to calendar in current time (left-top date-time). (211937 lines)
         Version 16.121:   Jan 19, 2017	Fixed bug in groups selection, reported by Eva Martínez Ortigosa.
 					Code refactoring in groups selected. (211915 lines)
         Version 16.120.2: Jan 19, 2017	Changed the question to confirm user's enrollment. (211954 lines)
