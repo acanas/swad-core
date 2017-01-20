@@ -160,30 +160,51 @@ bool Dat_GetDateFromYYYYMMDD (struct Date *Date,const char *YYYYMMDD)
 
 void Dat_ShowClientLocalTime (void)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
+   extern const char *Txt_Show_calendar;
 
-   /***** Draw the month in JavaScript *****/
-   /* JavaScript will write HTML here */
-   fprintf (Gbl.F.Out,"<div id=\"current_date\">"
-	              "<div id=\"current_month\">"
-                      "</div>"
-                      "<div id=\"current_day\">"
-		      "</div>"
-		      "<div id=\"current_time\">"
-            	      "</div>"
+   /***** Draw the current date and time *****/
+   /* Start container */
+   fprintf (Gbl.F.Out,"<div id=\"current_date\">");
+
+   /* Month with link to calendar */
+   fprintf (Gbl.F.Out,"<div id=\"current_month\">");
+   Act_FormStart (ActSeeCal);
+   Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
+   fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
+                      "</span>"
+                      "</a>");
+   Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Day with link to calendar */
+   fprintf (Gbl.F.Out,"<div id=\"current_day\">");
+   if (Gbl.Usrs.Me.Logged)
+     {
+      Act_FormStart (ActSeeMyAgd);
+      Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_DAY",NULL);
+     }
+   fprintf (Gbl.F.Out,"<span id=\"current_day_txt\">"	// JavaScript will write HTML here
+		      "</span>");
+   if (Gbl.Usrs.Me.Logged)
+     {
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+     }
+   fprintf (Gbl.F.Out,"</div>");
+
+   /* Time */
+   fprintf (Gbl.F.Out,"<div id=\"current_time\">"	// JavaScript will write HTML here
             	      "</div>");
+
+   /* End container */
+   fprintf (Gbl.F.Out,"</div>");
 
    /* Write script to draw the month */
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
 		      "secondsSince1970UTC = %ld;\n"
-                      "writeLocalClock('%s/%s',",
-            (long) Gbl.StartExecutionTimeUTC,
-	    Cfg_URL_SWAD_CGI,
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,ActSeeCal,true);
-   fprintf (Gbl.F.Out,"'%s');"
-	              "</script>",ParamsStr);
+                      "writeLocalClock();\n"
+	              "</script>",
+            (long) Gbl.StartExecutionTimeUTC);
   }
 
 /*****************************************************************************/

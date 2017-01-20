@@ -331,16 +331,15 @@ function setDateRange (d) {
 }
 
 // Write clock in client local time updated every minute
-function writeLocalClock (CGI,FormGoToCalendarParams) {
+function writeLocalClock () {
 	var d;
 	var Mon;
 	var Day;
 	var Hou;
 	var Min;
 	var StrMin;
-	var FormId;
 
-	setTimeout('writeLocalClock(\''+CGI+'\',\''+FormGoToCalendarParams+'\')',60000);
+	setTimeout('writeLocalClock()',60000);
 
 	d = new Date();
 	d.setTime(secondsSince1970UTC * 1000);
@@ -352,15 +351,8 @@ function writeLocalClock (CGI,FormGoToCalendarParams) {
 	Min = d.getMinutes();
 	StrMin = ((Min < 10) ? '0' : '') + Min;
 
-	FormId = 'current_month_form';
-	document.getElementById('current_month').innerHTML =
-		'<form method="post" action="' + CGI + '" id="' + FormId + '">' +
-		FormGoToCalendarParams +
-		'<a href="" onclick="document.getElementById(\'' + FormId +
-		'\').submit();return false;">' +
-		Months[Mon] +
-		'</a></form>';
-	document.getElementById('current_day').innerHTML = Day;
+	document.getElementById('current_month_txt').innerHTML = Months[Mon];
+	document.getElementById('current_day_txt').innerHTML = Day;
 	document.getElementById('current_time').innerHTML = Hou + ':' + StrMin;
 }
       

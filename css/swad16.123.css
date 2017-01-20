@@ -290,7 +290,7 @@ a:hover						/* Default ==> underlined */
 	white-space:nowrap;
 	overflow:hidden;
 	}
-#current_month a
+.CURRENT_MONTH
 	{
 	color:white;
 	}
@@ -301,6 +301,10 @@ a:hover						/* Default ==> underlined */
 	font-size:20pt;
 	font-weight:bold;
 	line-height:100%;
+	}
+.CURRENT_DAY
+	{
+	color:#606060;
 	}
 #current_time
 	{
