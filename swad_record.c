@@ -109,38 +109,38 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
                           const char *ClassForm);
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,
                               Rec_SharedRecordViewType_t TypeOfView,
-                              bool DataForm,
+                              bool ICanEdit,
                               const char *ClassForm);
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,
-                              bool DataForm,
+                              bool ICanEdit,
                               const char *ClassForm);
 static void Rec_ShowFirstName (struct UsrData *UsrDat,
                                Rec_SharedRecordViewType_t TypeOfView,
-                               bool DataForm,
+                               bool ICanEdit,
                                const char *ClassForm);
 static void Rec_ShowCountry (struct UsrData *UsrDat,
                              Rec_SharedRecordViewType_t TypeOfView,
                              const char *ClassForm);
 static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm);
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm);
 static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
-                                  bool ShowData,bool DataForm,
+                                  bool ShowData,bool ICanEdit,
                                   const char *ClassForm);
 static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
-                                bool ShowData,bool DataForm,
+                                bool ShowData,bool ICanEdit,
                                 const char *ClassForm);
 static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
-                                   bool ShowData,bool DataForm,
+                                   bool ShowData,bool ICanEdit,
                                    const char *ClassForm);
 static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm);
 static void Rec_ShowComments (struct UsrData *UsrDat,
-                              bool ShowData,bool DataForm,
+                              bool ShowData,bool ICanEdit,
                               const char *ClassForm);
 static void Rec_ShowInstitution (struct Instit *Ins,
                                  bool ShowData,const char *ClassForm);
@@ -1584,13 +1584,13 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    unsigned Col1Width = 210;
    unsigned Col2Width;
    bool ItsMe;
-   bool DataForm = false;
+   bool ICanEdit = false;
    unsigned NumField;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row = NULL; // Initialized to avoid warning
    bool ShowField;
    bool ThisFieldHasText;
-   bool ICanEdit;
+   bool ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
@@ -1625,7 +1625,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
               NumField++)
             if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
               {
-               DataForm = true;
+               ICanEdit = true;
   	       Act_FormStart (ActRcvRecCrs);
                break;
               }
@@ -1633,7 +1633,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
          break;
       case Rec_CRS_RECORD_LIST:
-         DataForm = true;
+         ICanEdit = true;
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
 	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -1682,17 +1682,17 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       // If the field must be shown...
       if (ShowField)
         {
-         ICanEdit = TypeOfView == Rec_CRS_RECORD_LIST ||
-                    (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-                     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+         ICanEditThisField = TypeOfView == Rec_CRS_RECORD_LIST ||
+                            (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
+                             Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"%s RIGHT_TOP COLOR%u\""
                             " style=\"width:%upx;\">"
                             "%s:",
-                  ICanEdit ? The_ClassForm[Gbl.Prefs.Theme] :
-                	     "REC_DAT_SMALL",
+                  ICanEditThisField ? The_ClassForm[Gbl.Prefs.Theme] :
+                	             "REC_DAT_SMALL",
                   Gbl.RowEvenOdd,Col1Width,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_RECORD_LIST)
@@ -1714,7 +1714,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          fprintf (Gbl.F.Out,"<td class=\"REC_DAT_BOLD LEFT_TOP COLOR%u\""
                             " style=\"width:%upx;\">",
                   Gbl.RowEvenOdd,Col2Width);
-         if (ICanEdit)	// Show with form
+         if (ICanEditThisField)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
         	               " style=\"width:450px;\">",
@@ -1746,7 +1746,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      }
 
    /***** Button to save changes and end frame *****/
-   if (DataForm)
+   if (ICanEdit)
      {
       Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_Save);
       Act_FormEnd ();
@@ -2084,7 +2084,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    bool IAmLoggedAsTeacher;
    bool IAmLoggedAsSysAdm;
    bool CountryForm;
-   bool DataForm;
+   bool ICanEdit;
    bool PutFormLinks;	// Put links (forms) inside record card
    bool ShowData;
    bool ShowIDRows;
@@ -2097,10 +2097,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
    IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
-   DataForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM ||
-               TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ||
-               (TypeOfView == Rec_SHA_OTHER_EXISTING_USR_FORM &&
-                Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM));
    ShowData = (ItsMe ||
 	       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM ||
 	       UsrDat->Accepted);
@@ -2124,13 +2120,13 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      {
       case Rec_SHA_MY_RECORD_FORM:
       case Rec_SHA_OTHER_NEW_USR_FORM:
-	 DataForm = true;
+	 ICanEdit = true;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 DataForm = Enr_CheckIfICanChangeAnotherUsrData (UsrDat);
+	 ICanEdit = Enr_CheckIfICanChangeAnotherUsrData (UsrDat);
 	 break;
       default:	// In other options, I can not edit another user's data
-	 DataForm = false;
+	 ICanEdit = false;
          break;
      }
 
@@ -2235,9 +2231,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 Rec_ShowRole (UsrDat,TypeOfView,ClassForm);
 
 	 /***** Name *****/
-	 Rec_ShowSurname1 (UsrDat,TypeOfView,DataForm,ClassForm);
-	 Rec_ShowSurname2 (UsrDat,DataForm,ClassForm);
-	 Rec_ShowFirstName (UsrDat,TypeOfView,DataForm,ClassForm);
+	 Rec_ShowSurname1 (UsrDat,TypeOfView,ICanEdit,ClassForm);
+	 Rec_ShowSurname2 (UsrDat,ICanEdit,ClassForm);
+	 Rec_ShowFirstName (UsrDat,TypeOfView,ICanEdit,ClassForm);
 
 	 /***** Country *****/
 	 if (CountryForm)
@@ -2247,25 +2243,25 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       if (ShowAddressRows)
 	{
 	 /***** Origin place *****/
-         Rec_ShowOriginPlace (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowOriginPlace (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** Date of birth *****/
-         Rec_ShowDateOfBirth (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowDateOfBirth (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** Local address *****/
-         Rec_ShowLocalAddress (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowLocalAddress (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** Local phone *****/
-         Rec_ShowLocalPhone (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowLocalPhone (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** Family address *****/
-         Rec_ShowFamilyAddress (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowFamilyAddress (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** Family phone *****/
-         Rec_ShowFamilyPhone (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowFamilyPhone (UsrDat,ShowData,ICanEdit,ClassForm);
 
 	 /***** User's comments *****/
-         Rec_ShowComments (UsrDat,ShowData,DataForm,ClassForm);
+         Rec_ShowComments (UsrDat,ShowData,ICanEdit,ClassForm);
 	}
 
       if (ShowTeacherRows)
@@ -2953,7 +2949,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 
 static void Rec_ShowSurname1 (struct UsrData *UsrDat,
                               Rec_SharedRecordViewType_t TypeOfView,
-                              bool DataForm,
+                              bool ICanEdit,
                               const char *ClassForm)
   {
    extern const char *Txt_Surname_1;
@@ -2969,7 +2965,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 	              "</label>"
 	              "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
-   if (DataForm)
+   if (ICanEdit)
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"Surname1\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -2989,7 +2985,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowSurname2 (struct UsrData *UsrDat,
-                              bool DataForm,
+                              bool ICanEdit,
                               const char *ClassForm)
   {
    extern const char *Txt_Surname_2;
@@ -3002,7 +2998,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">",
 	    ClassForm,Txt_Surname_2);
-   if (DataForm)
+   if (ICanEdit)
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"Surname2\" name=\"Surname2\""
 			 " maxlength=\"%u\" value=\"%s\""
@@ -3021,7 +3017,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 
 static void Rec_ShowFirstName (struct UsrData *UsrDat,
                                Rec_SharedRecordViewType_t TypeOfView,
-                               bool DataForm,
+                               bool ICanEdit,
                                const char *ClassForm)
   {
    extern const char *Txt_First_name;
@@ -3038,7 +3034,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 	              "</td>"
 		      "<td colspan=\"2\""
 		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
-   if (DataForm)
+   if (ICanEdit)
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"FirstName\" name=\"FirstName\""
                          " maxlength=\"%u\" value=\"%s\""
@@ -3112,7 +3108,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm)
   {
    extern const char *Txt_Place_of_origin;
@@ -3127,7 +3123,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 	    ClassForm,Txt_Place_of_origin);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"OriginPlace\" name=\"OriginPlace\""
 			    " maxlength=\"%u\" value=\"%s\""
@@ -3146,7 +3142,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm)
   {
    extern const char *Txt_Date_of_birth;
@@ -3159,7 +3155,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
 	    ClassForm,Txt_Date_of_birth);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 Dat_WriteFormDate (Gbl.Now.Date.Year - Rec_USR_MAX_AGE,
 			    Gbl.Now.Date.Year - Rec_USR_MIN_AGE,
 			    "Birth",
@@ -3177,7 +3173,7 @@ static void Rec_ShowDateOfBirth (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
-                                  bool ShowData,bool DataForm,
+                                  bool ShowData,bool ICanEdit,
                                   const char *ClassForm)
   {
    extern const char *Txt_Local_address;
@@ -3192,7 +3188,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 	    ClassForm,Txt_Local_address);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"LocalAddress\" name=\"LocalAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
@@ -3211,7 +3207,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
-                                bool ShowData,bool DataForm,
+                                bool ShowData,bool ICanEdit,
                                 const char *ClassForm)
   {
    extern const char *Txt_Phone;
@@ -3226,7 +3222,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 	    ClassForm,Txt_Phone);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<input type=\"tel\""
 	                    " id=\"LocalPhone\" name=\"LocalPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
@@ -3247,7 +3243,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
-                                   bool ShowData,bool DataForm,
+                                   bool ShowData,bool ICanEdit,
                                    const char *ClassForm)
   {
    extern const char *Txt_Family_address;
@@ -3262,7 +3258,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 	    ClassForm,Txt_Family_address);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<input type=\"text\""
 	                    " id=\"FamilyAddress\" name=\"FamilyAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
@@ -3281,7 +3277,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
-                                 bool ShowData,bool DataForm,
+                                 bool ShowData,bool ICanEdit,
                                  const char *ClassForm)
   {
    extern const char *Txt_Phone;
@@ -3296,7 +3292,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 	    ClassForm,Txt_Phone);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<input type=\"tel\""
 	                    " id=\"FamilyPhone\" name=\"FamilyPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
@@ -3317,7 +3313,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 /*****************************************************************************/
 
 static void Rec_ShowComments (struct UsrData *UsrDat,
-                              bool ShowData,bool DataForm,
+                              bool ShowData,bool ICanEdit,
                               const char *ClassForm)
   {
    extern const char *Txt_USER_comments;
@@ -3330,7 +3326,7 @@ static void Rec_ShowComments (struct UsrData *UsrDat,
 	    ClassForm,Txt_USER_comments);
    if (ShowData)
      {
-      if (DataForm)
+      if (ICanEdit)
 	 fprintf (Gbl.F.Out,"<textarea id=\"Comments\" name=\"Comments\""
 	                    " rows=\"4\" class=\"REC_C2_BOT_INPUT\">"
 			    "%s"
