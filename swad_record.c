@@ -2119,6 +2119,22 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		       UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
 
+   /* Data form = I can edit fields like surnames and name */
+   switch (TypeOfView)
+     {
+      case Rec_SHA_MY_RECORD_FORM:
+      case Rec_SHA_OTHER_NEW_USR_FORM:
+	 DataForm = true;
+	 break;
+      case Rec_SHA_OTHER_EXISTING_USR_FORM:
+	 DataForm = Enr_CheckIfICanChangeAnotherUsrData (UsrDat);
+	 break;
+      default:	// In other options, I can not edit another user's data
+	 DataForm = false;
+         break;
+     }
+
+   /* Class for labels */
    switch (TypeOfView)
      {
       case Rec_SHA_SIGN_UP_FORM:

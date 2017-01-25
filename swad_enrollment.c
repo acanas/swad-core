@@ -3664,7 +3664,7 @@ void Enr_ModifyUsr1 (void)
 		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 		    {
 		     /***** Get user's name from record form *****/
-		     if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// Only an admin can change another user's name
+		     if (Enr_CheckIfICanChangeAnotherUsrData (&Gbl.Usrs.Other.UsrDat))
 			Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 		     /***** Update user's data in database *****/
@@ -3820,6 +3820,28 @@ void Enr_ModifyUsr2 (void)
 	    Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
 	    break;
 	}
+  }
+
+/*****************************************************************************/
+/**************** Check if I can change another user's data ******************/
+/*****************************************************************************/
+
+bool Enr_CheckIfICanChangeAnotherUsrData (const struct UsrData *UsrDat)
+  {
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:	// Teachers only can edit data of new users
+	 return !UsrDat->Email[0]	||	// Email empty
+		!UsrDat->Surname1[0]	||	// Surname 1 empty
+		!UsrDat->FirstName[0];	// First name empty
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:	// Admins always can edit another user's data
+	 return true;
+      default:	// With other roles, I can not edit another user's data
+	 return false;
+     }
   }
 
 /*****************************************************************************/
