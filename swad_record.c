@@ -3583,15 +3583,28 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
   {
-   Par_GetParToText ("Surname1",UsrDat->Surname1,Usr_MAX_BYTES_NAME);
-   Str_ConvertToTitleType (UsrDat->Surname1);
+   char Surname1 [Usr_MAX_BYTES_NAME + 1];	// Temporary surname 1
+   char FirstName[Usr_MAX_BYTES_NAME + 1];	// Temporary first name
 
+   /***** Get surname 1 *****/
+   Par_GetParToText ("Surname1",Surname1,Usr_MAX_BYTES_NAME);
+   Str_ConvertToTitleType (Surname1);
+   // Surname 1 is mandatory, so avoid overwriting surname 1 with empty string
+   if (Surname1[0])		// New surname 1 not empty
+      Str_Copy (UsrDat->Surname1,Surname1,Usr_MAX_BYTES_NAME);
+
+   /***** Get surname 2 *****/
    Par_GetParToText ("Surname2",UsrDat->Surname2,Usr_MAX_BYTES_NAME);
    Str_ConvertToTitleType (UsrDat->Surname2);
 
-   Par_GetParToText ("FirstName",UsrDat->FirstName,Usr_MAX_BYTES_NAME);
-   Str_ConvertToTitleType (UsrDat->FirstName);
+   /***** Get first name *****/
+   Par_GetParToText ("FirstName",FirstName,Usr_MAX_BYTES_NAME);
+   Str_ConvertToTitleType (FirstName);
+   // First name is mandatory, so avoid overwriting first name with empty string
+   if (Surname1[0])		// New first name not empty
+      Str_Copy (UsrDat->FirstName,FirstName,Usr_MAX_BYTES_NAME);
 
+   /***** Build full name *****/
    Usr_BuildFullName (UsrDat);
   }
 

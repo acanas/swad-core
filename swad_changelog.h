@@ -187,18 +187,20 @@
 // TODO: Fix bug when creating a new attendance event: if title is repeated, form is cleared
 // TODO: Fix bug: When registering an administrator, the user's name changes are ignored
 
+// TODO: Teachers sbould view ID of students/teachers with no name/email
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.123.3 (2017-01-25)"
+#define Log_PLATFORM_VERSION	"SWAD 16.123.4 (2017-01-25)"
 #define CSS_FILE		"swad16.123.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.123.4: Jan 25, 2017	Teachers can view ID of students/teachers with no name/email. (? lines)
+        Version 16.123.4: Jan 26, 2017	Surname1 and first name can not be deleted when editing user's data. (212000 lines)
         Version 16.123.3: Jan 25, 2017	Code refactoring in edition of user's record. (211987 lines)
         Version 16.123.2: Jan 25, 2017	Teachers can edit names of students/teachers with no name/email. (211989 lines)
         Version 16.123.1: Jan 20, 2017	Minor change in text to show agenda. (211952 lines)
