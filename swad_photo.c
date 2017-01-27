@@ -140,17 +140,12 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 /* If I am a teacher in current course,
-	    I only can change the photo of students from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
-	         UsrDat->Accepted) ||	// who has accepted inscription in course
-	        (
-	        (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	        !UsrDat->Password[0] &&	// who has no password (never logged)
-	        !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	        !UsrDat->FirstName[0]	// and who has no first name (nobody filled user's first name)
-                );
+	 /* Check 1: I can change the photo of confirmed students */
+         if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
+	     UsrDat->Accepted)					// who accepted registration
+            return true;
+
+         return false;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:

@@ -1807,11 +1807,9 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
 /**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
-bool Mai_ICanSeeEmail (const struct UsrData *UsrDat)
+bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
   {
-   bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-
-   if (ItsMe)
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
    /* Check if I have permission to see another user's email */
@@ -1820,17 +1818,28 @@ bool Mai_ICanSeeEmail (const struct UsrData *UsrDat)
       case Rol_STUDENT:
 	 /* If I am a student of current course,
 	    I only can see the user's email of teachers from current course */
-	 return (UsrDat->Accepted &&
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER);
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER &&
+	         UsrDat->Accepted);
       case Rol_TEACHER:
-	 /* If I am a teacher of current course,
-	    I only can see the user's email of students or teachers from current course */
-	 return ((UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
-	          UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// A student or a teacher
-	         (UsrDat->Accepted ||				// who has accepted inscription in course
-	          !UsrDat->Email[0] ||				// or whose email is empty
-	          !UsrDat->Surname1[0] ||			// or whose surname 1 is empty
-	          !UsrDat->FirstName[0]));			// or whose first name is empty
+	 /* Check 1: I can see the email of users who do not exist in database */
+         if (UsrDat->UsrCod <= 0)	// User does not exist (if in the future email is used to create a new user)
+            return true;
+
+	 /* Check 2: I can see the email of confirmed students and teachers */
+         if ((UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
+              UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+	     UsrDat->Accepted)					// who accepted registration
+            return true;
+
+         /* Check 3: I can see the IDs of users with user's data empty */
+         if (!UsrDat->Password[0] &&	// User has no password (never logged)
+	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
+	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
+            // Warning: I could view simultaneously ID and email (if filled)
+            return true;
+
+         return false;
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */

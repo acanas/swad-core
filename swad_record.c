@@ -2701,7 +2701,7 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 	    ClassForm,Txt_Email);
    if (UsrDat->Email[0])
      {
-      if (Mai_ICanSeeEmail (UsrDat))
+      if (Mai_ICanSeeOtherUsrEmail (UsrDat))
 	{
 	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
 		  UsrDat->Email);
@@ -2961,13 +2961,17 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 	              "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (ICanEdit)
+     {
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"Surname1\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\""
-                         " required=\"required\" />",
+			 " class=\"REC_C2_BOT_INPUT\"",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 	       UsrDat->Surname1);
+      if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
+         fprintf (Gbl.F.Out," required=\"required\"");
+      fprintf (Gbl.F.Out," />");
+     }
    else if (UsrDat->Surname1[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname1);
    fprintf (Gbl.F.Out,"</td>"
@@ -3030,13 +3034,17 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 		      "<td colspan=\"2\""
 		      " class=\"REC_C2_BOT REC_DAT_BOLD LEFT_MIDDLE\">");
    if (ICanEdit)
+     {
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"FirstName\" name=\"FirstName\""
                          " maxlength=\"%u\" value=\"%s\""
-			 " class=\"REC_C2_BOT_INPUT\""
-                         " required=\"required\" />",
+			 " class=\"REC_C2_BOT_INPUT\"",
 	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
 	       UsrDat->FirstName);
+      if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
+         fprintf (Gbl.F.Out," required=\"required\"");
+      fprintf (Gbl.F.Out," />");
+     }
    else if (UsrDat->FirstName[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->FirstName);
    fprintf (Gbl.F.Out,"</td>"

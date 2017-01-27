@@ -414,17 +414,24 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 /* If I am a teacher of current course,
-	    I only can see the user's IDs of students from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
-	         UsrDat->Accepted) ||	// who has accepted inscription in course
-	        (
-	        (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	        !UsrDat->Password[0] &&	// who has no password (never logged)
-	        !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	        !UsrDat->FirstName[0]	// and who has no first name (nobody filled user's first name)
-                );
+	 /* Check 1: I can see the IDs of users who do not exist in database */
+         if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
+            return true;
+
+	 /* Check 2: I can see the IDs of confirmed students */
+         if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
+	     UsrDat->Accepted)					// who accepted registration
+            return true;
+
+         /* Check 3: I can see the IDs of users with user's data empty */
+         if (!UsrDat->Password[0] &&	// User has no password (never logged)
+	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
+	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
+            // Warning: I could view simultaneously ID and email (if filled)
+            return true;
+
+         return false;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:

@@ -834,13 +834,19 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 /* If I am a teacher of current course,
-	    I only can change the user's data of empty users from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	         !UsrDat->Password[0] &&	// who has no password (never logged)
-	         !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	         !UsrDat->FirstName[0];		// and who has no first name (nobody filled user's first name)
+	 /* Check 1: I can change data of users who do not exist in database */
+         if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
+            return true;
+
+         /* Check 2: I change data of users with user's data empty */
+         if (!UsrDat->Password[0] &&	// User has no password (never logged)
+	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
+	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
+            // Warning: I could view simultaneously ID and email (if filled)
+            return true;
+
+         return false;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -3609,8 +3615,9 @@ static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
 
    if (UsrDat->Email[0])
      {
-      ShowEmail = Mai_ICanSeeEmail (UsrDat);
-      sprintf (MailLink,"mailto:%s",UsrDat->Email);
+      ShowEmail = Mai_ICanSeeOtherUsrEmail (UsrDat);
+      if (ShowEmail)
+         sprintf (MailLink,"mailto:%s",UsrDat->Email);
      }
    else
       ShowEmail = false;
@@ -4254,6 +4261,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
+      "usr_data.Password,"
       "usr_data.Surname1,"
       "usr_data.Surname2,"
       "usr_data.FirstName,"
@@ -4264,15 +4272,16 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    /*
    row[ 0]: usr_data.UsrCod
    row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Surname1
-   row[ 3]: usr_data.Surname2
-   row[ 4]: usr_data.FirstName
-   row[ 5]: usr_data.Sex
-   row[ 6]: usr_data.Photo
-   row[ 7]: usr_data.PhotoVisibility
-   row[ 8]: usr_data.InsCod
-   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.InsCod
+   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
    const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
 			    " ORDER BY "
