@@ -3132,7 +3132,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	 sprintf (Gbl.Message,Txt_The_user_is_new_not_yet_in_X,
 		  Cfg_PLATFORM_SHORT_NAME);
 	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
-	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat,Role);
 	}
       else        // User's ID is not valid
 	{
@@ -3644,7 +3644,7 @@ void Enr_ModifyUsr1 (void)
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    bool ItsMe;
    Rol_Role_t OldRole;

@@ -144,7 +144,7 @@ void Rec_FreeMemFieldsRecordsCrs (void);
 
 void Rec_ShowFormSignUpWithMySharedRecord (void);
 void Rec_ShowFormMySharedRecord (void);
-void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat);
+void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole);
 void Rec_ShowMySharedRecordUpd (void);
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,

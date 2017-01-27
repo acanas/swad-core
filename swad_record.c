@@ -1993,9 +1993,14 @@ void Rec_ShowFormMySharedRecord (void)
 /*************** Show form to edit the record of a new user ******************/
 /*****************************************************************************/
 
-void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat)
+void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t DefaultRole)
   {
    /***** Show the form *****/
+   /* In this case UsrDat->RoleInCurrentCrsDB
+      is not the current role in current course.
+      Instead it is initialized with the preferred role. */
+   UsrDat->RoleInCurrentCrsDB = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
+	                                                          Rol__GUEST_;	// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat);
   }
 
@@ -2807,22 +2812,6 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			      (unsigned) Gbl.Usrs.Me.LoggedRole,
 			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 		     break;
-		  /*
-		  case Rol_TEACHER:
-		     for (Role = Rol_STUDENT;
-			  Role <= Rol_TEACHER;
-			  Role++)
-			if (Role == Rol_STUDENT ||
-			    (UsrDat->Roles & (1 << Role)))	// A teacher can not upgrade a student (in all other courses) to teacher
-			  {
-			   fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
-			   if (Role == DefaultRoleInCurrentCrs)
-			      fprintf (Gbl.F.Out," selected=\"selected\"");
-			   fprintf (Gbl.F.Out,">%s</option>",
-				    Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
-			  }
-		     break;
-		  */
 		  case Rol_TEACHER:
 		  case Rol_DEG_ADM:
 		  case Rol_CTR_ADM:
@@ -2861,20 +2850,25 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
-		  case Rol_TEACHER:	// A teacher only can create students
-		     fprintf (Gbl.F.Out,"<option value=\"%u\""
-			                " selected=\"selected\">%s</option>",
-			      (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
-		     break;
-		  case Rol_DEG_ADM:	// An administrator can create students and teachers in a course
+		  case Rol_TEACHER:
+		  case Rol_DEG_ADM:
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     fprintf (Gbl.F.Out,"<option value=\"%u\""
-			                " selected=\"selected\">%s</option>"
-					"<option value=\"%u\">%s</option>",
-			      (unsigned) Rol_STUDENT,Txt_ROLES_SINGUL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-			      (unsigned) Rol_TEACHER,Txt_ROLES_SINGUL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
+		     /* In this case UsrDat->RoleInCurrentCrsDB
+		        is not the current role in current course.
+		        Instead it is initialized with the preferred role. */
+		     DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
+		     for (Role = Rol_STUDENT;
+			  Role <= Rol_TEACHER;
+			  Role++)
+		       {
+			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
+			if (Role == DefaultRoleInCurrentCrs)
+			   fprintf (Gbl.F.Out," selected=\"selected\"");
+			fprintf (Gbl.F.Out,">%s</option>",
+				 Txt_ROLES_SINGUL_Abc[Role][Usr_SEX_UNKNOWN]);
+		       }
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
