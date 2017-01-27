@@ -822,6 +822,36 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   }
 
 /*****************************************************************************/
+/**************** Check if I can change another user's data ******************/
+/*****************************************************************************/
+
+bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
+  {
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      return true;
+
+   /***** Check if I have permission to see another user's IDs *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+	 /* If I am a teacher of current course,
+	    I only can change the user's data of empty users from current course */
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
+	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+	         !UsrDat->Password[0] &&	// who has no password (never logged)
+	         !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	         !UsrDat->FirstName[0];		// and who has no first name (nobody filled user's first name)
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
 /************ Check if I (as admin) can edit another user's data *************/
 /*****************************************************************************/
 

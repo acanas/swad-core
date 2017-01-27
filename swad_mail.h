@@ -78,7 +78,6 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
 long Mai_GetUsrCodFromEmail (const char *Email);
 
 void Mai_PutLinkToChangeOtherUsrEmails (void);
-bool Mai_ICanChangeOtherUsrEmails (const struct UsrData *UsrDat);
 void Mai_ShowFormOthEmail (void);
 void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe);
 void Mai_RemoveMyUsrEmail (void);

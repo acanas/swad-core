@@ -3051,7 +3051,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
    extern const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrollment;
    extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_course_Z;
    extern const char *Txt_THE_USER_X_already_exists_in_Y;
-   extern const char *Txt_The_user_is_new_does_not_exists_yet_in_X;
+   extern const char *Txt_The_user_is_new_not_yet_in_X;
    extern const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID;
    unsigned NumUsr;
    bool NewUsrIDValid;
@@ -3129,7 +3129,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
       if (NewUsrIDValid)
 	{
 	 /***** Show form to enter the data of a new user *****/
-	 sprintf (Gbl.Message,Txt_The_user_is_new_does_not_exists_yet_in_X,
+	 sprintf (Gbl.Message,Txt_The_user_is_new_not_yet_in_X,
 		  Cfg_PLATFORM_SHORT_NAME);
 	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	 Rec_ShowFormOtherNewSharedRecord (&Gbl.Usrs.Other.UsrDat);
@@ -3154,14 +3154,14 @@ static void Enr_ShowFormToEditOtherUsr (void)
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_CheckIfIAsAdminCanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
 
-   if (Mai_ICanChangeOtherUsrEmails (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+     {
       Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails
-
-   if (ID_ICanChangeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
+     }
 
    if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
       Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
@@ -3669,7 +3669,7 @@ void Enr_ModifyUsr1 (void)
 		  if (ItsMe || Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 		    {
 		     /***** Get user's name from record form *****/
-		     if (Enr_CheckIfICanChangeAnotherUsrData (&Gbl.Usrs.Other.UsrDat))
+		     if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
 			Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);
 
 		     /***** Update user's data in database *****/
@@ -3825,28 +3825,6 @@ void Enr_ModifyUsr2 (void)
 	    Acc_ReqRemAccountOrRemAccount (Acc_REQUEST_REMOVE_USR);
 	    break;
 	}
-  }
-
-/*****************************************************************************/
-/**************** Check if I can change another user's data ******************/
-/*****************************************************************************/
-
-bool Enr_CheckIfICanChangeAnotherUsrData (const struct UsrData *UsrDat)
-  {
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:	// Teachers only can edit data of new users
-	 return !UsrDat->Email[0]	||	// Email empty
-		!UsrDat->Surname1[0]	||	// Surname 1 empty
-		!UsrDat->FirstName[0];	// First name empty
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:	// Admins always can edit another user's data
-	 return true;
-      default:	// With other roles, I can not edit another user's data
-	 return false;
-     }
   }
 
 /*****************************************************************************/

@@ -69,8 +69,6 @@ void Pwd_ShowFormOthPwd (void);
 void Pwd_PutLinkToChangeMyPassword (void);
 void Pwd_PutLinkToChangeOtherUsrPassword (void);
 
-bool Pwd_ICanChangeOtherUsrPassword (const struct UsrData *UsrDat);
-
 void Pwd_AskForConfirmationOnDangerousAction (void);
 bool Pwd_GetConfirmationOnDangerousAction (void);
 

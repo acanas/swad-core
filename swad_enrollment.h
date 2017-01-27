@@ -136,8 +136,6 @@ void Enr_CreateNewUsr2 (void);
 void Enr_ModifyUsr1 (void);
 void Enr_ModifyUsr2 (void);
 
-bool Enr_CheckIfICanChangeAnotherUsrData (const struct UsrData *UsrDat);
-
 void Enr_AcceptUsrInCrs (long UsrCod);
 
 #endif

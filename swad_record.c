@@ -2123,7 +2123,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 ICanEdit = true;
 	 break;
       case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	 ICanEdit = Enr_CheckIfICanChangeAnotherUsrData (UsrDat);
+	 ICanEdit = Usr_ICanChangeOtherUsrData (UsrDat);
 	 break;
       default:	// In other options, I can not edit another user's data
 	 ICanEdit = false;

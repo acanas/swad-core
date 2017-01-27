@@ -425,45 +425,6 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 	        !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
 	        !UsrDat->FirstName[0]	// and who has no first name (nobody filled user's first name)
                 );
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
-	         UsrDat->Accepted) ||	// who has accepted inscription in course
-	        (
-	        (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	        !UsrDat->Password[0] &&	// who has no password (never logged)
-	        !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	        !UsrDat->FirstName[0]	// and who has no first name (nobody filled user's first name)
-                );
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
-      default:
-	 return false;
-     }
-  }
-
-/*****************************************************************************/
-/***************** Check if I can change another user's IDs ******************/
-/*****************************************************************************/
-
-bool ID_ICanChangeOtherUsrIDs (const struct UsrData *UsrDat)
-  {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      return true;
-
-   /***** Check if I have permission to see another user's IDs *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-	 /* If I am a teacher of current course,
-	    I only can change the user's IDs of empty users from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	         !UsrDat->Password[0] &&	// who has no password (never logged)
-	         !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	         !UsrDat->FirstName[0];		// and who has no first name (nobody filled user's first name)
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -548,7 +509,7 @@ void ID_ShowFormOthIDs (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (ID_ICanChangeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
@@ -752,7 +713,7 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
    char UsrID[ID_MAX_LENGTH_USR_ID+1];
    bool ICanRemove;
 
-   if (ID_ICanChangeOtherUsrIDs (UsrDat))
+   if (Usr_ICanChangeOtherUsrData (UsrDat))
      {
       /***** Get user's ID from form *****/
       Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
@@ -873,7 +834,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
    bool Error = false;
 
-   if (ID_ICanChangeOtherUsrIDs (UsrDat))
+   if (Usr_ICanChangeOtherUsrData (UsrDat))
      {
       /***** Get new user's ID from form *****/
       Par_GetParToText ("NewID",NewID,ID_MAX_LENGTH_USR_ID);
@@ -996,7 +957,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
-	 if (ID_ICanChangeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
+	 if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;
 
    if (ICanConfirm)

@@ -491,7 +491,7 @@ void Pwd_UpdateOtherPwd1 (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfIAsAdminCanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
 	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
@@ -813,7 +813,7 @@ void Pwd_ShowFormOthPwd (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_CheckIfIAsAdminCanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);
@@ -881,19 +881,6 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
                              "key64x64.gif",
                              Txt_Change_password,Txt_Change_password,
                              NULL);
-  }
-
-/*****************************************************************************/
-/************ Check if I can change the password of another user *************/
-/*****************************************************************************/
-
-bool Pwd_ICanChangeOtherUsrPassword (const struct UsrData *UsrDat)
-  {
-   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      return true;
-
-   /***** Check if I have permission to change another user's password *****/
-   return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
   }
 
 /*****************************************************************************/

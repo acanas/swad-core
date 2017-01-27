@@ -234,6 +234,7 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
+bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
 bool Usr_CheckIfIAsAdminCanEditOtherUsr (const struct UsrData *UsrDat);
 
 unsigned Usr_GetNumCrssOfUsr (long UsrCod);

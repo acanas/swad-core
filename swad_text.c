@@ -45985,25 +45985,25 @@ const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y =	// Warning: it 
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_user_is_new_does_not_exists_yet_in_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_user_is_new_not_yet_in_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
-	"El usuario/a es nuevo/a, a&uacute;n no existe en %s.";	// Necessita traduccio
+	"L'usuari &eacute;s nou, encara no existeix en %s.";
 #elif L==2
-	"The user is new, does not exist yet in %s.";		// Übersetzung notwendig
+	"Der Benutzer ist neu, noch nicht in %s.";
 #elif L==3
-	"The user is new, does not exist yet in %s.";
+	"The user is new, not yet in %s.";
 #elif L==4
 	"El usuario/a es nuevo/a, a&uacute;n no existe en %s.";
 #elif L==5
-	"The user is new, does not exist yet in %s.";		// Besoin de traduction
+	"L'utilisateur est nouveau, pas encore dans %s.";
 #elif L==6
 	"El usuario/a es nuevo/a, a&uacute;n no existe en %s.";	// Okoteve traducción
 #elif L==7
 	"L'utente &egrave; nuovo, non esiste ancora in %s.";
 #elif L==8
-	"The user is new, does not exist yet in %s.";		// Potrzebujesz tlumaczenie
+	"U&zdot;ytkownik jest nowa, jeszcze nie w %s.";
 #elif L==9
-	"The user is new, does not exist yet in %s.";		// Necessita de tradução
+	"O usu&aacute;rio &eacute; novo, ainda n&atilde;o existe o %s.";
 #endif
 
 const char *Txt_THE_USER_X_is_not_an_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
