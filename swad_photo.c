@@ -150,7 +150,7 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
+         return Usr_AsAdminICanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }

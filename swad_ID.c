@@ -424,11 +424,14 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
             return true;
 
          /* Check 3: I can see the IDs of users with user's data empty */
+         // This check is made to not view simultaneously:
+         // - an ID
+         // - a name or an email
          if (!UsrDat->Password[0] &&	// User has no password (never logged)
 	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
 	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
-	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
-            // Warning: I could view simultaneously ID and email (if filled)
+	     !UsrDat->FirstName[0] &&	// and who has no first name (nobody filled user's first name)
+             !UsrDat->Email[0])		// and who has no email (nobody filled user's email)
             return true;
 
          return false;
@@ -436,7 +439,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
+         return Usr_AsAdminICanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }
@@ -516,7 +519,7 @@ void ID_ShowFormOthIDs (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
@@ -720,7 +723,7 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
    char UsrID[ID_MAX_LENGTH_USR_ID+1];
    bool ICanRemove;
 
-   if (Usr_ICanChangeOtherUsrData (UsrDat))
+   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
       /***** Get user's ID from form *****/
       Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
@@ -841,7 +844,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
    bool Error = false;
 
-   if (Usr_ICanChangeOtherUsrData (UsrDat))
+   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
       /***** Get new user's ID from form *****/
       Par_GetParToText ("NewID",NewID,ID_MAX_LENGTH_USR_ID);
@@ -956,15 +959,16 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UsrID[ID_MAX_LENGTH_USR_ID+1];
-   bool ICanConfirm = false;
+   bool ICanConfirm;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Get other user's code from form and get user's data *****/
+   ICanConfirm = false;
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
-	 if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+	 if (ID_ICanSeeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
 	    ICanConfirm = true;
 
    if (ICanConfirm)

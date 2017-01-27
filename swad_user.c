@@ -838,12 +838,8 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
             return true;
 
-         /* Check 2: I change data of users with user's data empty */
-         if (!UsrDat->Password[0] &&	// User has no password (never logged)
-	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
-	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
-            // Warning: I could view simultaneously ID and email (if filled)
+         /* Check 2: I change data of users without password */
+         if (!UsrDat->Password[0])	// User has no password (never logged)
             return true;
 
          return false;
@@ -851,7 +847,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
+         return Usr_AsAdminICanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }
@@ -861,7 +857,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
 /************ Check if I (as admin) can edit another user's data *************/
 /*****************************************************************************/
 
-bool Usr_CheckIfIAsAdminCanEditOtherUsr (const struct UsrData *UsrDat)
+bool Usr_AsAdminICanEditOtherUsr (const struct UsrData *UsrDat)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {

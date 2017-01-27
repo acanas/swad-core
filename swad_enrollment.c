@@ -109,7 +109,7 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
 static void Enr_RemoveExpiredEnrollmentRequests (void);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
-static bool Enr_CheckIfICanAdminOtherUsrs (void);
+static bool Enr_ICanAdminOtherUsrs (void);
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
 static void Enr_AskIfRegRemMe (Rol_Role_t Role);
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
@@ -2882,7 +2882,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
    extern const char *Txt_Admin_me;
    extern const char *Txt_Admin_one_user;
-   const char *TitleText = Enr_CheckIfICanAdminOtherUsrs () ? Txt_Admin_one_user :
+   const char *TitleText = Enr_ICanAdminOtherUsrs () ? Txt_Admin_one_user :
                         	                              Txt_Admin_me;
 
    Lay_PutContextualLink (NextAction,NULL,
@@ -2930,7 +2930,7 @@ void Enr_ReqRegRemTch (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   if (Enr_CheckIfICanAdminOtherUsrs ())
+   if (Enr_ICanAdminOtherUsrs ())
       Enr_ReqAnotherUsrIDToRegisterRemove (Role);
    else
       Enr_AskIfRegRemMe (Role);
@@ -2940,7 +2940,7 @@ static void Enr_ReqRegRemUsr (Rol_Role_t Role)
 /*********** Check If I can admin other users (distinct to me) ***************/
 /*****************************************************************************/
 
-static bool Enr_CheckIfICanAdminOtherUsrs (void)
+static bool Enr_ICanAdminOtherUsrs (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
@@ -3154,11 +3154,9 @@ static void Enr_ShowFormToEditOtherUsr (void)
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   if (Usr_CheckIfIAsAdminCanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
-      Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
-
-   if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
      {
+      Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
       Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
      }

@@ -1149,7 +1149,7 @@ void Mai_ShowFormOthEmail (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_ICanChangeOtherUsrData (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
@@ -1368,7 +1368,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Email[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   if (Usr_ICanChangeOtherUsrData (UsrDat))
+   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
@@ -1450,7 +1450,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   if (Usr_ICanChangeOtherUsrData (UsrDat))
+   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
@@ -1816,30 +1816,16 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STUDENT:
-	 /* If I am a student of current course,
-	    I only can see the user's email of teachers from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER &&
-	         UsrDat->Accepted);
+	 /* If I am a student in the current course,
+	    I can see the email of confirmed teachers */
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER &&	// A teacher
+	         UsrDat->Accepted);				// who accepted registration
       case Rol_TEACHER:
-	 /* Check 1: I can see the email of users who do not exist in database */
-         if (UsrDat->UsrCod <= 0)	// User does not exist (if in the future email is used to create a new user)
-            return true;
-
-	 /* Check 2: I can see the email of confirmed students and teachers */
-         if ((UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-              UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
-	     UsrDat->Accepted)					// who accepted registration
-            return true;
-
-         /* Check 3: I can see the IDs of users with user's data empty */
-         if (!UsrDat->Password[0] &&	// User has no password (never logged)
-	     !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
-	     !UsrDat->Surname2[0] &&	// and who has no surname 2 (nobody filled user's surname 2)
-	     !UsrDat->FirstName[0])	// and who has no first name (nobody filled user's first name)
-            // Warning: I could view simultaneously ID and email (if filled)
-            return true;
-
-         return false;
+	 /* If I am a teacher in the current course,
+	    I can see the email of confirmed students and teachers */
+         return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
+                 UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+	         UsrDat->Accepted;				// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
