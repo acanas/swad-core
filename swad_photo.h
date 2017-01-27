@@ -80,7 +80,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat);
+bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat);
 void Pho_PutLinkToChangeMyPhoto (void);
 void Pho_PutLinkToChangeOtherUsrPhoto (void);
 void Pho_ReqMyPhotoWithContextLinks (void);

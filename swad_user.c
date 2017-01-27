@@ -792,12 +792,72 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    char Query[128];
+   static struct
+     {
+      long UsrCod;
+      bool IsSuperuser;
+     } Cache =
+     {
+      -1L,
+      false
+     };
 
-   /***** Get if a user is superuser from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM admin"
-                  " WHERE UsrCod='%ld' AND Scope='%s'",
-            UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
-   return (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
+   if (UsrCod <= 0)
+     {
+      /***** Trivial case *****/
+      Cache.UsrCod = -1L;
+      Cache.IsSuperuser = false;
+     }
+   else if (UsrCod != Cache.UsrCod)	// If not cached...
+     {
+      /***** Get if a user is superuser from database *****/
+      sprintf (Query,"SELECT COUNT(*) FROM admin"
+		     " WHERE UsrCod='%ld' AND Scope='%s'",
+	       UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
+      Cache.UsrCod = UsrCod;
+      Cache.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
+     }
+
+   return Cache.IsSuperuser;
+  }
+
+/*****************************************************************************/
+/************ Check if I (as admin) can edit another user's data *************/
+/*****************************************************************************/
+
+bool Usr_CheckIfIAsAdminCanEditOtherUsr (const struct UsrData *UsrDat)
+  {
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_DEG_ADM:
+	 /* If I am an administrator of current degree,
+	    I only can edit users from current degree who have accepted */
+	 if (Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod))
+	    // Degree admins can't edit superusers' data
+	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	       return true;
+	 return false;
+      case Rol_CTR_ADM:
+	 /* If I am an administrator of current centre,
+	    I only can edit from current centre who have accepted */
+	 if (Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod))
+	    // Centre admins can't edit superusers' data
+	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	       return true;
+	 return false;
+      case Rol_INS_ADM:
+	 /* If I am an administrator of current institution,
+	    I only can edit from current institution who have accepted */
+	 if (Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod))
+	    // Institution admins can't edit superusers' data
+	    if (!Usr_CheckIfUsrIsSuperuser (UsrDat->UsrCod))
+	       return true;
+	 return false;
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -1432,95 +1492,148 @@ static void Usr_RemoveTemporaryTableMyCourses (void)
 /**************** Check if a user belongs to an institution ******************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
-                                 long InsCod,
-                                 bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
   {
    char Query[512];
-   const char *SubQuery;
+   static struct
+     {
+      long UsrCod;
+      long InsCod;
+      bool Belongs;
+     } Cache =
+     {
+      -1L,
+      -1L,
+      false
+     };
 
-   /***** Trivial case *****/
    if (UsrCod <= 0 ||
        InsCod <= 0)
-      return false;
+     {
+      /***** Trivial case *****/
+      Cache.UsrCod = -1L;
+      Cache.InsCod = -1L;
+      Cache.Belongs = false;
+     }
+   else if (UsrCod != Cache.UsrCod ||
+            InsCod != Cache.InsCod)	// If not cached...
+     {
+      /***** Get is a user belongs to an institution from database *****/
+      sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
+		     " FROM crs_usr,courses,degrees,centres"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.Accepted='Y'"
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod=degrees.DegCod"
+		     " AND degrees.CtrCod=centres.CtrCod"
+		     " AND centres.InsCod='%ld'",
+	       UsrCod,InsCod);
+      Cache.UsrCod = UsrCod;
+      Cache.InsCod = InsCod;
+      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+     }
 
-   /***** Get is a user belongs to an institution from database *****/
-   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
-	                                  "");
-   sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
-		  " FROM crs_usr,courses,degrees,centres"
-		  " WHERE crs_usr.UsrCod='%ld'%s"
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod=centres.CtrCod"
-		  " AND centres.InsCod='%ld'",
-	    UsrCod,SubQuery,InsCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+   return Cache.Belongs;
   }
 
 /*****************************************************************************/
 /******************* Check if a user belongs to a centre *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,
-                                 long CtrCod,
-                                 bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
   {
    char Query[512];
-   const char *SubQuery;
+   static struct
+     {
+      long UsrCod;
+      long CtrCod;
+      bool Belongs;
+     } Cache =
+     {
+      -1L,
+      -1L,
+      false
+     };
 
-   /***** Trivial case *****/
    if (UsrCod <= 0 ||
        CtrCod <= 0)
-      return false;
+     {
+      /***** Trivial case *****/
+      Cache.UsrCod = -1L;
+      Cache.CtrCod = -1L;
+      Cache.Belongs = false;
+     }
+   else if (UsrCod != Cache.UsrCod ||
+            CtrCod != Cache.CtrCod)	// If not cached...
+     {
+      /***** Get is a user belongs to a centre from database *****/
+      sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
+		     " FROM crs_usr,courses,degrees"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod=degrees.DegCod"
+		     " AND degrees.CtrCod='%ld'",
+	       UsrCod,CtrCod);
+      Cache.UsrCod = UsrCod;
+      Cache.CtrCod = CtrCod;
+      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+     }
 
-   /***** Get is a user belongs to a centre from database *****/
-   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
-	                                  "");
-   sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
-		  " FROM crs_usr,courses,degrees"
-		  " WHERE crs_usr.UsrCod='%ld'%s"
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod=degrees.DegCod"
-		  " AND degrees.CtrCod='%ld'",
-	    UsrCod,SubQuery,CtrCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+   return Cache.Belongs;
   }
 
 /*****************************************************************************/
 /******************* Check if a user belongs to a degree *********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,
-                                 long DegCod,
-                                 bool CountOnlyAcceptedCourses)
+bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
   {
    char Query[512];
-   const char *SubQuery;
+   static struct
+     {
+      long UsrCod;
+      long DegCod;
+      bool Belongs;
+     } Cache =
+     {
+      -1L,
+      -1L,
+      false
+     };
 
-   /***** Trivial case *****/
    if (UsrCod <= 0 ||
        DegCod <= 0)
-      return false;
+     {
+      /***** Trivial case *****/
+      Cache.UsrCod = -1L;
+      Cache.DegCod = -1L;
+      Cache.Belongs = false;
+     }
+   else if (UsrCod != Cache.UsrCod ||
+            DegCod != Cache.DegCod)	// If not cached...
+     {
+      /***** Get is a user belongs to a degree from database *****/
+      sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
+		     " FROM crs_usr,courses"
+		     " WHERE crs_usr.UsrCod='%ld'"
+		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
+		     " AND crs_usr.CrsCod=courses.CrsCod"
+		     " AND courses.DegCod='%ld'",
+	       UsrCod,DegCod);
+      Cache.UsrCod = UsrCod;
+      Cache.DegCod = DegCod;
+      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
+     }
 
-   /***** Get is a user belongs to a degree from database *****/
-   SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
-	                                  "");
-   sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
-		  " FROM crs_usr,courses"
-		  " WHERE crs_usr.UsrCod='%ld'%s"
-		  " AND crs_usr.CrsCod=courses.CrsCod"
-		  " AND courses.DegCod='%ld'",
-	    UsrCod,SubQuery,DegCod);
-   return (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
+   return Cache.Belongs;
   }
 
 /*****************************************************************************/
 /******************** Check if a user belongs to a course ********************/
 /*****************************************************************************/
 
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
-                                 long CrsCod,
+bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses)
   {
    char Query[512];
@@ -3797,6 +3910,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    const char *QueryFields =
       "usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
+      "usr_data.Password,"
       "usr_data.Surname1,"
       "usr_data.Surname2,"
       "usr_data.FirstName,"
@@ -3809,15 +3923,16 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    /*
    row[ 0]: usr_data.UsrCod
    row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Surname1
-   row[ 3]: usr_data.Surname2
-   row[ 4]: usr_data.FirstName
-   row[ 5]: usr_data.Sex
-   row[ 6]: usr_data.Photo
-   row[ 7]: usr_data.PhotoVisibility
-   row[ 8]: usr_data.InsCod
-   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.InsCod
+   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** If there are no groups selected, don't do anything *****/
@@ -3969,6 +4084,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
+      "usr_data.Password,"
       "usr_data.Surname1,"
       "usr_data.Surname2,"
       "usr_data.FirstName,"
@@ -3979,15 +4095,16 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
    /*
    row[ 0]: usr_data.UsrCod
    row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Surname1
-   row[ 3]: usr_data.Surname2
-   row[ 4]: usr_data.FirstName
-   row[ 5]: usr_data.Sex
-   row[ 6]: usr_data.Photo
-   row[ 7]: usr_data.PhotoVisibility
-   row[ 8]: usr_data.InsCod
-   row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.InsCod
+   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** Build query *****/
@@ -3995,7 +4112,8 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
      {
       case Sco_SCOPE_SYS:
 	 /* Get users in courses from the whole platform */
-	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr"
+	 sprintf (Query,"SELECT %s"
+	                " FROM usr_data,crs_usr"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" ORDER BY "
@@ -4008,7 +4126,8 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 break;
       case Sco_SCOPE_CTY:
 	 /* Get users in courses from the current country */
-	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees,centres,institutions"
+	 sprintf (Query,"SELECT %s"
+	                " FROM usr_data,crs_usr,courses,degrees,centres,institutions"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -4027,7 +4146,8 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 break;
       case Sco_SCOPE_INS:
 	 /* Get users in courses from the current institution */
-	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees,centres"
+	 sprintf (Query,"SELECT %s"
+	                " FROM usr_data,crs_usr,courses,degrees,centres"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -4045,7 +4165,8 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 break;
       case Sco_SCOPE_CTR:
 	 /* Get users in courses from the current centre */
-	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses,degrees"
+	 sprintf (Query,"SELECT %s"
+	                " FROM usr_data,crs_usr,courses,degrees"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -4062,7 +4183,8 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 break;
       case Sco_SCOPE_DEG:
 	 /* Get users in courses from the current degree */
-	 sprintf (Query,"SELECT %s FROM usr_data,crs_usr,courses"
+	 sprintf (Query,"SELECT %s"
+	                " FROM usr_data,crs_usr,courses"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
 			" AND crs_usr.Role='%u'"
 			" AND crs_usr.CrsCod=courses.CrsCod"
@@ -4690,15 +4812,16 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             /*
             row[ 0]: usr_data.UsrCod
             row[ 1]: usr_data.EncryptedUsrCod
-	    row[ 2]: usr_data.Surname1
-	    row[ 3]: usr_data.Surname2
-	    row[ 4]: usr_data.FirstName
-            row[ 5]: usr_data.Sex
-            row[ 6]: usr_data.Photo
-            row[ 7]: usr_data.PhotoVisibility
-	    row[ 8]: usr_data.InsCod
-	    row[ 9]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-	    row[10]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+            row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+	    row[ 3]: usr_data.Surname1
+	    row[ 4]: usr_data.Surname2
+	    row[ 5]: usr_data.FirstName
+            row[ 6]: usr_data.Sex
+            row[ 7]: usr_data.Photo
+            row[ 8]: usr_data.PhotoVisibility
+	    row[ 9]: usr_data.InsCod
+	    row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+	    row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
 	    */
             UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -4709,33 +4832,37 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 	    Str_Copy (UsrInList->EncryptedUsrCod,row[1],
 	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
-            /* Get user's surname 1 (row[2]) */
-	    Str_Copy (UsrInList->Surname1,row[2],
+            /* Get encrypted password (row[2]) */
+	    Str_Copy (UsrInList->Password,row[2],
+	              Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+
+            /* Get user's surname 1 (row[3]) */
+	    Str_Copy (UsrInList->Surname1,row[3],
 	              Usr_MAX_BYTES_NAME);
 
-            /* Get user's surname 2 (row[3]) */
-	    Str_Copy (UsrInList->Surname2,row[3],
+            /* Get user's surname 2 (row[4]) */
+	    Str_Copy (UsrInList->Surname2,row[4],
 	              Usr_MAX_BYTES_NAME);
 
-            /* Get user's first name (row[4]) */
-	    Str_Copy (UsrInList->FirstName,row[4],
+            /* Get user's first name (row[5]) */
+	    Str_Copy (UsrInList->FirstName,row[5],
 	              Usr_MAX_BYTES_NAME);
 
-            /* Get user's sex (row[5]) */
-            UsrInList->Sex = Usr_GetSexFromStr (row[5]);
+            /* Get user's sex (row[6]) */
+            UsrInList->Sex = Usr_GetSexFromStr (row[6]);
 
-            /* Get user's photo (row[6]) */
-	    Str_Copy (UsrInList->Photo,row[6],
+            /* Get user's photo (row[7]) */
+	    Str_Copy (UsrInList->Photo,row[7],
 	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
 
-            /* Get user's photo visibility (row[7]) */
-            UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[7]);
+            /* Get user's photo visibility (row[8]) */
+            UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
 
-            /* Get user's institution code (row[8]) */
-	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[8]);
+            /* Get user's institution code (row[9]) */
+	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[9]);
 
             /* Get user's role and acceptance of enrollment in course(s)
-               (row[9], row[10] if Scope == Sco_SCOPE_CRS) */
+               (row[10], row[11] if Scope == Sco_SCOPE_CRS) */
             switch (Role)
               {
                case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any user
@@ -4762,8 +4889,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
-			UsrInList->Accepted = (row[10][0] == 'Y');
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[10]);
+			UsrInList->Accepted = (row[11][0] == 'Y');
 			break;
 		    }
         	  break;
@@ -4792,8 +4919,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[9]);
-			UsrInList->Accepted = (row[10][0] == 'Y');
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[10]);
+			UsrInList->Accepted = (row[11][0] == 'Y');
 			break;
 		    }
         	  break;

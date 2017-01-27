@@ -3153,14 +3153,19 @@ static void Enr_ShowFormToEditOtherUsr (void)
   {
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
-     {
+
+   if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
-      Mai_PutLinkToChangeOtherUsrEmail ();	// Put link (form) to change user's email
+
+   if (Mai_ICanChangeOtherUsrEmails (&Gbl.Usrs.Other.UsrDat))
+      Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails
+
+   if (ID_ICanChangeOtherUsrIDs (&Gbl.Usrs.Other.UsrDat))
       ID_PutLinkToChangeUsrIDs ();		// Put link (form) to change user's IDs
-     }
-   if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+
+   if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
       Pho_PutLinkToChangeOtherUsrPhoto ();	// Put link (form) to change user's photo
+
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/

@@ -184,12 +184,13 @@ struct UsrLast
 struct UsrInList
   {
    long UsrCod;
-   char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
    char Surname1 [Usr_MAX_BYTES_NAME + 1];
    char Surname2 [Usr_MAX_BYTES_NAME + 1];
    char FirstName[Usr_MAX_BYTES_NAME + 1];
    Usr_Sex_t Sex;
-   char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];	// Name of public link to photo
+   char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
    long InsCod;		// Institution
    Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
@@ -233,6 +234,8 @@ void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxCh
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
+bool Usr_CheckIfIAsAdminCanEditOtherUsr (const struct UsrData *UsrDat);
+
 unsigned Usr_GetNumCrssOfUsr (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role);
@@ -259,17 +262,10 @@ void Usr_FreeMyCentres (void);
 void Usr_FreeMyDegrees (void);
 void Usr_FreeMyCourses (void);
 
-bool Usr_CheckIfUsrBelongsToIns (long UsrCod,
-                                 long InsCod,
-                                 bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,
-                                 long CtrCod,
-                                 bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,
-                                 long DegCod,
-                                 bool CountOnlyAcceptedCourses);
-bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,
-                                 long CrsCod,
+bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod);
+bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod);
+bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod);
+bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
                                  bool CountOnlyAcceptedCourses);
 
 bool Usr_CheckIfIBelongToCty (long CtyCod);

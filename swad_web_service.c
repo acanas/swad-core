@@ -1590,10 +1590,7 @@ static void Svc_CopyListUsers (Rol_Role_t Role,struct swad__getUsersOutput *getU
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
-	 if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)	// It's me
-	    ICanSeeUsrID = true;
-	 else							// A user distinct than me
-	    ICanSeeUsrID = ID_ICanSeeAnotherUsrID (&UsrDat);
+         ICanSeeUsrID = ID_ICanSeeOtherUsrIDs (&UsrDat);
 
 	 /* Get nickname */
          Nck_GetNicknameFromUsrCod (UsrDat.UsrCod,UsrDat.Nickname);

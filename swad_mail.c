@@ -1114,10 +1114,10 @@ long Mai_GetUsrCodFromEmail (const char *Email)
   }
 
 /*****************************************************************************/
-/********** Put a link to the action used to change user's email *************/
+/********** Put a link to the action used to change user's emails ************/
 /*****************************************************************************/
 
-void Mai_PutLinkToChangeOtherUsrEmail (void)
+void Mai_PutLinkToChangeOtherUsrEmails (void)
   {
    extern const char *Txt_Change_email;
 
@@ -1138,6 +1138,37 @@ void Mai_PutLinkToChangeOtherUsrEmail (void)
   }
 
 /*****************************************************************************/
+/************** Check if I can change the email of another user **************/
+/*****************************************************************************/
+
+bool Mai_ICanChangeOtherUsrEmails (const struct UsrData *UsrDat)
+  {
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      return true;
+
+   /***** Check if I have permission to change another user's emails *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+	 /* If I am a teacher of current course,
+	    I only can change the user's emails
+	    of empty users from current course */
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
+	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+	         !UsrDat->Password[0] &&	// who has no password (never logged)
+	         !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	         !UsrDat->FirstName[0];		// and who has no first name (nobody filled user's first name)
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
+      default:
+	 return false;
+     }
+  }
+
+/*****************************************************************************/
 /*********** Show form to the change the email of another user ***************/
 /*****************************************************************************/
 
@@ -1149,7 +1180,7 @@ void Mai_ShowFormOthEmail (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Mai_ICanChangeOtherUsrEmails (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
@@ -1368,7 +1399,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Email[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
+   if (Mai_ICanChangeOtherUsrEmails (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
@@ -1450,7 +1481,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
 
-   if (Pwd_CheckIfICanChangeOtherUsrPassword (UsrDat->UsrCod))
+   if (Mai_ICanChangeOtherUsrEmails (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
@@ -1807,7 +1838,7 @@ void Mai_WriteFootNoteEMail (Txt_Language_t Language)
 /**************** Check if I can see another user's email ********************/
 /*****************************************************************************/
 
-bool Mai_ICanSeeEmail (struct UsrData *UsrDat)
+bool Mai_ICanSeeEmail (const struct UsrData *UsrDat)
   {
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
@@ -1825,21 +1856,27 @@ bool Mai_ICanSeeEmail (struct UsrData *UsrDat)
       case Rol_TEACHER:
 	 /* If I am a teacher of current course,
 	    I only can see the user's email of students or teachers from current course */
-	 return (UsrDat->Accepted &&
-	         (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
-	          UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));
+	 return ((UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
+	          UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// A student or a teacher
+	         (UsrDat->Accepted ||				// who has accepted inscription in course
+	          !UsrDat->Email[0] ||				// or whose email is empty
+	          !UsrDat->Surname1[0] ||			// or whose surname 1 is empty
+	          !UsrDat->FirstName[0]));			// or whose first name is empty
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,
 	    I only can see the user's email of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
+	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
+	                                    Gbl.CurrentDeg.Deg.DegCod);
       case Rol_CTR_ADM:
 	 /* If I am an administrator of current centre,
 	    I only can see the user's email of users from current centre */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
+	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
+	                                    Gbl.CurrentCtr.Ctr.CtrCod);
       case Rol_INS_ADM:
 	 /* If I am an administrator of current institution,
 	    I only can see the user's email of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
+	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
+	                                    Gbl.CurrentIns.Ins.InsCod);
       case Rol_SYS_ADM:
 	 return true;
       default:

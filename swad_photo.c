@@ -131,40 +131,31 @@ static void Pho_ComputePhotoSize (int NumStds,int NumStdsWithPhoto,unsigned *Pho
 /************** Check if I can change the photo of another user **************/
 /*****************************************************************************/
 
-bool Pho_CheckIfICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
+bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
   {
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   /* Check if I have permission to change user's photo
-      Only users who have accepted registration in courses are counted */
+   /* Check if I have permission to change user's photo */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
 	 /* If I am a teacher in current course,
 	    I only can change the photo of students from current course */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&
-	         UsrDat->Accepted);
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
+	         UsrDat->Accepted) ||	// who has accepted inscription in course
+	        (
+	        (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
+	         UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+	        !UsrDat->Password[0] &&	// who has no password (never logged)
+	        !UsrDat->Surname1[0] &&	// and who has no surname 1 (nobody filled user's surname 1)
+	        !UsrDat->FirstName[0]	// and who has no first name (nobody filled user's first name)
+                );
       case Rol_DEG_ADM:
-	 /* If I am an administrator of current degree,
-	    I only can change the photo of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrDat->UsrCod,
-	                                    Gbl.CurrentDeg.Deg.DegCod,
-	                                    true);
       case Rol_CTR_ADM:
-	 /* If I am an administrator of current centre,
-	    I only can change the photo of users from current centre */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrDat->UsrCod,
-	                                    Gbl.CurrentCtr.Ctr.CtrCod,
-	                                    true);
       case Rol_INS_ADM:
-	 /* If I am an administrator of current institution,
-	    I only can change the photo of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrDat->UsrCod,
-	                                    Gbl.CurrentIns.Ins.InsCod,
-	                                    true);
       case Rol_SYS_ADM:
-	 return true;
+         return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }
@@ -203,7 +194,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pho_PutLinkToChangeMyPhoto ();
    else									// Not me
-      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
@@ -360,7 +351,7 @@ void Pho_SendPhotoUsr (void)
    /***** Get user whose photo must be sent or removed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
+      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))	// If I have permission to change user's photo...
 	{
 	 Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
 	                                                              Gbl.CurrentCrs.Crs.CrsCod,
@@ -488,7 +479,7 @@ void Pho_ReqRemoveUsrPhoto (void)
    /***** Get password, user type and user's data from database *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
      {
-      if (Pho_CheckIfICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
+      if (Pho_ICanChangeOtherUsrPhoto (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Show current photo and help message *****/
 	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))

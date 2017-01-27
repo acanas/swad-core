@@ -491,7 +491,7 @@ void Pwd_UpdateOtherPwd1 (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
 	{
 	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
 	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
@@ -813,7 +813,7 @@ void Pwd_ShowFormOthPwd (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Pwd_CheckIfICanChangeOtherUsrPassword (Gbl.Usrs.Other.UsrDat.UsrCod))
+      if (Pwd_ICanChangeOtherUsrPassword (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);
@@ -884,35 +884,16 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
   }
 
 /*****************************************************************************/
-/************ Check if I can change th password of another user **************/
+/************ Check if I can change the password of another user *************/
 /*****************************************************************************/
 
-bool Pwd_CheckIfICanChangeOtherUsrPassword (long UsrCod)
+bool Pwd_ICanChangeOtherUsrPassword (const struct UsrData *UsrDat)
   {
-   if (UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   /* Check if I have permission to change another user's password.
-      Only users who have accepted registration in courses are counted */
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_DEG_ADM:
-	 /* If I am an administrator of current degree,
-	    I only can change the password of users from current degree */
-	 return Usr_CheckIfUsrBelongsToDeg (UsrCod,Gbl.CurrentDeg.Deg.DegCod,true);
-      case Rol_CTR_ADM:
-	 /* If I am an administrator of current centre,
-	    I only can change the password of users from current centre */
-	 return Usr_CheckIfUsrBelongsToCtr (UsrCod,Gbl.CurrentCtr.Ctr.CtrCod,true);
-      case Rol_INS_ADM:
-	 /* If I am an administrator of current institution,
-	    I only can change the password of users from current institution */
-	 return Usr_CheckIfUsrBelongsToIns (UsrCod,Gbl.CurrentIns.Ins.InsCod,true);
-      case Rol_SYS_ADM:
-	 return true;
-      default:
-	 return false;
-     }
+   /***** Check if I have permission to change another user's password *****/
+   return Usr_CheckIfIAsAdminCanEditOtherUsr (UsrDat);
   }
 
 /*****************************************************************************/
