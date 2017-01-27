@@ -187,19 +187,20 @@
 // TODO: Fix bug when creating a new attendance event: if title is repeated, form is cleared
 // TODO: Fix bug: When registering an administrator, the user's name changes are ignored
 
-// TODO: When creating a new user, the ID should be visible and the record card should not have contextual icons
+// TODO: When creating a new user, the ID should be visible
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.126.1 (2017-01-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.126.2 (2017-01-27)"
 #define CSS_FILE		"swad16.123.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.126.2: Jan 27, 2017	When creating a new user, the record card don't have contextual icons. (212083 lines)
         Version 16.126.1: Jan 27, 2017	A teacher can create and register a new teacher directly in a course. (212080 lines)
         Version 16.126:   Jan 27, 2017	Code refactoring related to permissions to view/change another user's data. (212086 lines)
         Version 16.125:   Jan 27, 2017	Code refactoring related to permissions to view/change another user's data. (212152 lines)

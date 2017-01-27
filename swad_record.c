@@ -2167,7 +2167,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    Gbl.Record.UsrDat = UsrDat;
    Gbl.Record.TypeOfView = TypeOfView;
    Lay_StartRoundFrameTable (StrRecordWidth,NULL,
-                             Rec_PutIconsCommands,Rec_RecordHelp[TypeOfView],
+                             TypeOfView == Rec_SHA_OTHER_NEW_USR_FORM ? NULL :	// New user ==> don't put icons
+                        	                                        Rec_PutIconsCommands,
+                             Rec_RecordHelp[TypeOfView],
                              2);
 
    /***** Institution and user's photo *****/
@@ -2365,7 +2367,6 @@ static void Rec_PutIconsCommands (void)
      {
       ICanViewUsrProfile = Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
 				              Gbl.Record.UsrDat);
-
 
       /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
