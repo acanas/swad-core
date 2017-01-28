@@ -342,7 +342,6 @@ void Grp_PutParamsCodGrps (void)
 
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
   {
-   char YN[1 + 1];
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrp;
 
@@ -350,8 +349,7 @@ void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
       return;
 
    /***** Get boolean parameter that indicates if all groups must be listed *****/
-   Par_GetParToText ("AllGroups",YN,1);
-   Gbl.Usrs.ClassPhoto.AllGroups = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Usrs.ClassPhoto.AllGroups = Par_GetParToBool ("AllGroups");
 
    /***** Get parameter with list of groups selected *****/
    Grp_GetParCodsSeveralGrps ();
@@ -3084,19 +3082,16 @@ void Grp_RecFormNewGrpTyp (void)
   {
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_group;
-   char YN[1 + 1];
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
    Par_GetParToText ("GrpTypName",Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type */
-   Par_GetParToText ("MandatoryEnrollment",YN,1);
-   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = Par_GetParToBool ("MandatoryEnrollment");
 
    /* Get whether it is possible to register in multiple groups of this type */
-   Par_GetParToText ("MultipleEnrollment",YN,1);
-   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = Par_GetParToBool ("MultipleEnrollment");
 
    /* Get open time */
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
@@ -3691,7 +3686,6 @@ void Grp_ChangeMandatGrpTyp (void)
    extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory;
    extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary;
    char Query[1024];
-   char YN[1 + 1];
    bool NewMandatoryEnrollment;
 
    /***** Get parameters of the form *****/
@@ -3700,8 +3694,7 @@ void Grp_ChangeMandatGrpTyp (void)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new type of enrollment (mandatory or voluntaria) of this type of group */
-   Par_GetParToText ("MandatoryEnrollment",YN,1);
-   NewMandatoryEnrollment = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   NewMandatoryEnrollment = Par_GetParToBool ("MandatoryEnrollment");
 
    /* Get from the database the name of the type and the old type of enrollment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
@@ -3746,7 +3739,6 @@ void Grp_ChangeMultiGrpTyp (void)
    extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
    char Query[1024];
-   char YN[1 + 1];
    bool NewMultipleEnrollment;
 
    /***** Get parameters from the form *****/
@@ -3755,8 +3747,7 @@ void Grp_ChangeMultiGrpTyp (void)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
    /* Get the new type of enrollment (single or multiple) of this type of group */
-   Par_GetParToText ("MultipleEnrollment",YN,1);
-   NewMultipleEnrollment = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   NewMultipleEnrollment = Par_GetParToBool ("MultipleEnrollment");
 
    /* Get from the database the name of the type and the old type of enrollment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
@@ -4064,11 +4055,8 @@ void Grp_RenameGroup (void)
 
 static long Grp_GetParamGrpTypCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of group type *****/
-   Par_GetParToText ("GrpTypCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of group type *****/
+   return Par_GetParToLong ("GrpTypCod");
   }
 
 /*****************************************************************************/
@@ -4077,11 +4065,8 @@ static long Grp_GetParamGrpTypCod (void)
 
 static long Grp_GetParamGrpCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with group code *****/
-   Par_GetParToText ("GrpCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get group code *****/
+   return Par_GetParToLong ("GrpCod");
   }
 
 /*****************************************************************************/

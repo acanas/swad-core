@@ -873,6 +873,32 @@ unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxByte
   }
 
 /*****************************************************************************/
+/******************** Get the long value of a parameter **********************/
+/*****************************************************************************/
+
+long Par_GetParToLong (const char *ParamName)
+  {
+   char LongStr[1 + 10 + 1];
+
+   /***** Get parameter with long number *****/
+   Par_GetParToText (ParamName,LongStr,1 + 10);
+   return Str_ConvertStrCodToLongCod (LongStr);
+  }
+
+/*****************************************************************************/
+/************************** Get a boolean parameter **************************/
+/*****************************************************************************/
+
+bool Par_GetParToBool (const char *ParamName)
+  {
+   char YN[1 + 1];
+
+   /***** Get parameter "Y"/"N" and convert to boolean *****/
+   Par_GetParToText (ParamName,YN,1);
+   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+  }
+
+/*****************************************************************************/
 /*** Get value of a single parameter and change format to not rigorous HTML **/
 /*****************************************************************************/
 // Return the number of parameters found

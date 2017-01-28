@@ -519,11 +519,8 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 time_t Dat_GetTimeUTCFromForm (const char *ParamName)
   {
-   char LongStr[1 + 10 + 1];
-
    /**** Get time ****/
-   Par_GetParToText (ParamName,LongStr,1 + 10);
-   return Dat_GetUNIXTimeFromStr (LongStr);
+   return Par_GetParToLong (ParamName);
   }
 
 /*****************************************************************************/

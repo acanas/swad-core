@@ -673,10 +673,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
 
 static bool Ntf_GetAllNotificationsFromForm (void)
   {
-   char YN[1 + 1];
-
-   Par_GetParToText ("All",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("All");
   }
 
 /*****************************************************************************/
@@ -1956,7 +1953,6 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 static void Ntf_GetParamsNotifyEvents (void)
   {
    Ntf_NotifyEvent_t NotifyEvent;
-   char YN[1 + 1];
    bool CreateNotifForThisEvent;
 
    Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents = 0;
@@ -1965,14 +1961,13 @@ static void Ntf_GetParamsNotifyEvents (void)
 	NotifyEvent < Ntf_NUM_NOTIFY_EVENTS;
 	NotifyEvent++)	// 0 is reserved for Ntf_EVENT_UNKNOWN
      {
-      Par_GetParToText (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent],YN,1);
-      if ((CreateNotifForThisEvent = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+      if ((CreateNotifForThisEvent = Par_GetParToBool (Ntf_ParamNotifMeAboutNotifyEvents[NotifyEvent])))
          Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents |= (1 << NotifyEvent);
 
       if (CreateNotifForThisEvent)
 	{
-         Par_GetParToText (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent],YN,1);
-         if (Str_ConvertToUpperLetter (YN[0]) == 'Y')
+         Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]);
+         if (Par_GetParToBool (Ntf_ParamEmailMeAboutNotifyEvents[NotifyEvent]))
             Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents |= (1 << NotifyEvent);
 	}
      }

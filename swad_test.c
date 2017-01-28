@@ -497,7 +497,6 @@ void Tst_AssessTest (void)
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
-   char YN[1 + 1];
    long TstCod = -1L;	// Initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -517,8 +516,7 @@ void Tst_AssessTest (void)
          Tst_GetParamNumQst ();
 
          /***** Get if test must be saved *****/
-	 Par_GetParToText ("Save",YN,1);
-	 Gbl.Test.AllowTeachers = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+	 Gbl.Test.AllowTeachers = Par_GetParToBool ("Save");
 
 	 /***** Get questions and answers from form to assess a test *****/
 	 Tst_GetQuestionsAndAnswersFromForm ();
@@ -581,7 +579,6 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
   {
    unsigned NumQst;
    char StrQstIndOrAns[3 + 10 + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
-   char LongStr[1 + 10 + 1];
 
    /***** Get questions and answers *****/
    for (NumQst = 0;
@@ -590,8 +587,7 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
      {
       /* Get question code */
       sprintf (StrQstIndOrAns,"Qst%06u",NumQst);
-      Par_GetParToText (StrQstIndOrAns,LongStr,1 + 10);
-      if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (LongStr)) < 0)
+      if ((Gbl.Test.QstCodes[NumQst] = Par_GetParToLong (StrQstIndOrAns)) <= 0)
 	 Lay_ShowErrorAndExit ("Code of question is missing.");
 
       /* Get indexes for this question */
@@ -1418,11 +1414,10 @@ void Tst_DisableTag (void)
 
 static long Tst_GetParamTagCode (void)
   {
-   char StrLong[1 + 10 + 1];
    long TagCod;
 
-   Par_GetParToText ("TagCod",StrLong,1 + 10);
-   if ((TagCod = Str_ConvertStrCodToLongCod (StrLong)) < 0)
+   /***** Get tag code *****/
+   if ((TagCod = Par_GetParToLong ("TagCod")) <= 0)
       Lay_ShowErrorAndExit ("Code of tag is missing.");
 
    return TagCod;
@@ -4274,15 +4269,13 @@ static bool Tst_GetParamsTst (void)
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
    extern const char *Txt_The_number_of_questions_must_be_in_the_interval_X;
-   char YN[1 + 1];
    bool Error = false;
    char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Tags *****/
    /* Get parameter that indicates whether all tags are selected */
-   Par_GetParToText ("AllTags",YN,1);
-   Gbl.Test.Tags.All = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Test.Tags.All = Par_GetParToBool ("AllTags");
 
    /* Get the tags */
    if ((Gbl.Test.Tags.List = malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
@@ -4298,8 +4291,7 @@ static bool Tst_GetParamsTst (void)
 
    /***** Types of answer *****/
    /* Get parameter that indicates if all types of answer are selected */
-   Par_GetParToText ("AllAnsTypes",YN,1);
-   Gbl.Test.AllAnsTypes = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Test.AllAnsTypes = Par_GetParToBool ("AllAnsTypes");
 
    /* Get types of answer */
    Par_GetParMultiToText ("AnswerType",Gbl.Test.ListAnsTypes,Tst_MAX_BYTES_LIST_ANSWER_TYPES);
@@ -4394,10 +4386,7 @@ static void Tst_GetParamNumQst (void)
 
 static bool Tst_GetCreateXMLFromForm (void)
   {
-   char YN[1 + 1];
-
-   Par_GetParToText ("CreateXML",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("CreateXML");
   }
 
 /*****************************************************************************/
@@ -5322,7 +5311,6 @@ void Tst_ReceiveQst (void)
 static void Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
    char UnsignedStr[10 + 1];
-   char YN[1 + 1];
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
@@ -5397,14 +5385,12 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Tst_ANS_TRUE_FALSE:
-	 Par_GetParToText ("AnsTF",YN,1);
-	 Gbl.Test.Answer.TF = YN[0];
+	 Gbl.Test.Answer.TF = Par_GetParToBool ("AnsTF");
 	 break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:
          /* Get shuffle */
-         Par_GetParToText ("Shuffle",YN,1);
-         Gbl.Test.Shuffle = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+         Gbl.Test.Shuffle = Par_GetParToBool ("Shuffle");
          // No break
       case Tst_ANS_TEXT:
          /* Get the texts of the answers */
@@ -5880,7 +5866,6 @@ void Tst_RequestRemoveQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
-   char YN[1 + 1];
    bool EditingOnlyThisQst;
 
    /***** Get main parameters from form *****/
@@ -5891,8 +5876,7 @@ void Tst_RequestRemoveQst (void)
 
    /* Get a parameter that indicates whether it's necessary
       to continue listing the rest of questions */
-   Par_GetParToText ("OnlyThisQst",YN,1);
-   EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
    /***** Start form *****/
    Act_FormStart (ActRemTstQst);
@@ -5934,7 +5918,6 @@ void Tst_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
    char Query[512];
-   char YN[1 + 1];
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
@@ -5944,8 +5927,7 @@ void Tst_RemoveQst (void)
 
    /***** Get a parameter that indicates whether it's necessary
           to continue listing the rest of questions ******/
-   Par_GetParToText ("OnlyThisQst",YN,1);
-   EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
    /***** Remove images associated to question *****/
    Tst_RemoveAllImgFilesFromAnsOfQst (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.QstCod);
@@ -5983,7 +5965,6 @@ void Tst_ChangeShuffleQst (void)
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
    char Query[512];
-   char YN[1 + 1];
    bool EditingOnlyThisQst;
    bool Shuffle;
 
@@ -5993,12 +5974,10 @@ void Tst_ChangeShuffleQst (void)
       Lay_ShowErrorAndExit ("Wrong code of question.");
 
    /***** Get a parameter that indicates whether it's necessary to continue listing the rest of questions ******/
-   Par_GetParToText ("OnlyThisQst",YN,1);
-   EditingOnlyThisQst = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
    /***** Get a parameter that indicates whether it's possible to shuffle the answers of this question ******/
-   Par_GetParToText ("Shuffle",YN,1);
-   Shuffle = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Shuffle = Par_GetParToBool ("Shuffle");
 
    /***** Remove the question from all the tables *****/
    /* Update the question changing the current shuffle */
@@ -6029,10 +6008,8 @@ void Tst_ChangeShuffleQst (void)
 
 static long Tst_GetQstCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   Par_GetParToText ("QstCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of test question *****/
+   return Par_GetParToLong ("QstCod");
   }
 
 /*****************************************************************************/
@@ -7573,11 +7550,8 @@ static void Tst_PutParamTstCod (long TstCod)
 
 static long Tst_GetParamTstCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of test *****/
-   Par_GetParToText ("TstCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of test *****/
+   return Par_GetParToLong ("TstCod");
   }
 
 /*****************************************************************************/

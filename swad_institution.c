@@ -1556,11 +1556,8 @@ long Ins_GetAndCheckParamOtherInsCod (void)
 
 static long Ins_GetParamOtherInsCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of institution *****/
-   Par_GetParToText ("OthInsCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of institution *****/
+   return Par_GetParToLong ("OthInsCod");
   }
 
 /*****************************************************************************/

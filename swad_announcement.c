@@ -387,12 +387,10 @@ static void Ann_PutParams (void)
 
 static long Ann_GetParamAnnCod (void)
   {
-   char LongStr[1 + 10 + 1];	// String that holds the announcement code
    long AnnCod;
 
-   /* Get announcement code */
-   Par_GetParToText ("AnnCod",LongStr,1 + 10);
-   if (sscanf (LongStr,"%ld",&AnnCod) != 1)
+   /***** Get announcement code *****/
+   if ((AnnCod = Par_GetParToLong ("AnnCod")) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
    return AnnCod;

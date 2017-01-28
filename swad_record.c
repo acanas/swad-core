@@ -590,11 +590,8 @@ void Rec_ReqRemField (void)
 
 long Rec_GetFieldCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
    /***** Get the code of the field *****/
-   Par_GetParToText ("FieldCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   return Par_GetParToLong ("FieldCod");
   }
 
 /*****************************************************************************/
@@ -1492,14 +1489,9 @@ static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
 
 static bool Rec_GetParamShowOfficeHours (void)
   {
-   char YN[1 + 1];
+   if (Par_GetParToBool ("ParamOfficeHours"))
+      return Par_GetParToBool ("ShowOfficeHours");
 
-   Par_GetParToText ("ParamOfficeHours",YN,1);
-   if (Str_ConvertToUpperLetter (YN[0]) == 'Y')
-     {
-      Par_GetParToText ("ShowOfficeHours",YN,1);
-      return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-     }
    return Rec_SHOW_OFFICE_HOURS_DEFAULT;
   }
 
@@ -3614,7 +3606,6 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
   {
    char UnsignedStr[10 + 1];
-   char LongStr[1 + 10 + 1];
    unsigned UnsignedNum;
 
    /***** Get sex from form *****/
@@ -3625,8 +3616,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
    /***** Get country code *****/
-   Par_GetParToText ("OthCtyCod",LongStr,1 + 10);
-   UsrDat->CtyCod = Str_ConvertStrCodToLongCod (LongStr);
+   UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");
 
    Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Cns_MAX_BYTES_STRING);
    Str_ConvertToTitleType (UsrDat->OriginPlace);

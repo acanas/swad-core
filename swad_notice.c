@@ -996,12 +996,10 @@ void Not_PutHiddenParamNotCod (long NotCod)
 
 static long Not_GetParamNotCod (void)
   {
-   char LongStr[1 + 10 + 1];	// String that holds the notice code
    long NotCod;
 
-   /* Get notice code */
-   Par_GetParToText ("NotCod",LongStr,1 + 10);
-   if (sscanf (LongStr,"%ld",&NotCod) != 1)
+   /***** Get notice code *****/
+   if ((NotCod = Par_GetParToLong ("NotCod")) <= 0)
       Lay_ShowErrorAndExit ("Wrong code of notice.");
 
    return NotCod;

@@ -669,11 +669,7 @@ void Inf_ChangeIHaveReadInfo (void)
 
 static bool Inf_GetMustBeReadFromForm (void)
   {
-   char YN[1 + 1];
-
-   /***** Get a parameter that indicates if info must be read by students ******/
-   Par_GetParToText ("MustBeRead",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("MustBeRead");
   }
 
 /*****************************************************************************/
@@ -682,11 +678,7 @@ static bool Inf_GetMustBeReadFromForm (void)
 
 static bool Inf_GetIfIHaveReadFromForm (void)
   {
-   char YN[1 + 1];
-
-   /***** Get a parameter that indicates if I have read a course info ******/
-   Par_GetParToText ("IHaveRead",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("IHaveRead");
   }
 
 /*****************************************************************************/

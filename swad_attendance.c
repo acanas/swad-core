@@ -893,11 +893,8 @@ void Att_PutParamAttCod (long AttCod)
 
 long Att_GetParamAttCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of attendance event *****/
-   Par_GetParToText ("AttCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of attendance event *****/
+   return Par_GetParToLong ("AttCod");
   }
 
 /*****************************************************************************/
@@ -1280,7 +1277,6 @@ void Att_RecFormAttEvent (void)
    extern const char *Txt_The_event_has_been_modified;
    struct AttendanceEvent OldAtt;
    struct AttendanceEvent ReceivedAtt;
-   char YN[1 + 1];
    bool ItsANewAttEvent;
    bool ReceivedAttEventIsCorrect = true;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
@@ -1301,8 +1297,7 @@ void Att_RecFormAttEvent (void)
    ReceivedAtt.TimeUTC[Att_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get boolean parameter that indicates if teacher's comments are visible by students *****/
-   Par_GetParToText ("ComTchVisible",YN,1);
-   ReceivedAtt.CommentTchVisible = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   ReceivedAtt.CommentTchVisible = Par_GetParToBool ("ComTchVisible");
 
    /***** Get attendance event title *****/
    Par_GetParToText ("Title",ReceivedAtt.Title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
@@ -2719,14 +2714,12 @@ void Usr_PrintMyAttendanceCrs (void)
 static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    unsigned NumAttEvent;
-   char YN[1 + 1];
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
 
    /***** Get boolean parameter that indicates if details must be shown *****/
-   Par_GetParToText ("ShowDetails",YN,1);
-   Gbl.AttEvents.ShowDetails = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
 
    /***** Get list of groups selected ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
@@ -2785,7 +2778,6 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
-   char YN[1 + 1];
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2797,8 +2789,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    if ((NumStdsInList = Usr_CountNumUsrsInListOfSelectedUsrs ()))
      {
       /***** Get boolean parameter that indicates if details must be shown *****/
-      Par_GetParToText ("ShowDetails",YN,1);
-      Gbl.AttEvents.ShowDetails = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+      Gbl.AttEvents.ShowDetails = Par_GetParToBool ("ShowDetails");
 
       /***** Get list of groups selected ******/
       Grp_GetParCodsSeveralGrpsToShowUsrs ();

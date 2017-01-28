@@ -2790,15 +2790,8 @@ void Soc_PutHiddenParamPubCod (long PubCod)
 
 static long Soc_GetParamNotCod (void)
   {
-   char LongStr[1 + 10 + 1];	// String that holds the social note code
-   long NotCod;
-
-   /* Get social note code */
-   Par_GetParToText ("NotCod",LongStr,1 + 10);
-   if (sscanf (LongStr,"%ld",&NotCod) != 1)
-      return -1L;
-
-   return NotCod;
+   /***** Get social note code *****/
+   return Par_GetParToLong ("NotCod");
   }
 
 /*****************************************************************************/
@@ -2807,15 +2800,8 @@ static long Soc_GetParamNotCod (void)
 
 static long Soc_GetParamPubCod (void)
   {
-   char LongStr[1 + 10 + 1];	// String that holds the code
-   long PubCod;
-
-   /* Get social comment code */
-   Par_GetParToText ("PubCod",LongStr,1 + 10);
-   if (sscanf (LongStr,"%ld",&PubCod) != 1)
-      return -1L;
-
-   return PubCod;
+   /***** Get social comment code *****/
+   return Par_GetParToLong ("PubCod");
   }
 
 /*****************************************************************************/

@@ -507,11 +507,8 @@ static void Plc_PutParamPlcCod (long PlcCod)
 
 long Plc_GetParamPlcCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of place *****/
-   Par_GetParToText ("PlcCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of place *****/
+   return Par_GetParToLong ("PlcCod");
   }
 
 /*****************************************************************************/

@@ -409,11 +409,8 @@ static void Lnk_PutParamLnkCod (long LnkCod)
 
 long Lnk_GetParamLnkCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of link *****/
-   Par_GetParToText ("LnkCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of link *****/
+   return Par_GetParToLong ("LnkCod");
   }
 
 /*****************************************************************************/

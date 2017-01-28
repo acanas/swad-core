@@ -929,11 +929,8 @@ static void Asg_PutParamAsgCod (long AsgCod)
 
 long Asg_GetParamAsgCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of assignment *****/
-   Par_GetParToText ("AsgCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of assignment *****/
+   return Par_GetParToLong ("AsgCod");
   }
 
 /*****************************************************************************/

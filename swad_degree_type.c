@@ -598,11 +598,8 @@ static void DT_PutParamOtherDegTypCod (long DegTypCod)
 
 long DT_GetParamOtherDegTypCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of degree type *****/
-   Par_GetParToText ("OthDegTypCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of degree type *****/
+   return Par_GetParToLong ("OthDegTypCod");
   }
 
 /*****************************************************************************/

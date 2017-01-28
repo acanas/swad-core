@@ -423,11 +423,8 @@ static void Ban_PutParamBanCod (long BanCod)
 
 long Ban_GetParamBanCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of banner *****/
-   Par_GetParToText ("BanCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of banner *****/
+   return Par_GetParToLong ("BanCod");
   }
 
 /*****************************************************************************/

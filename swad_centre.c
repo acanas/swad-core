@@ -94,7 +94,6 @@ static Ctr_StatusTxt_t Ctr_GetStatusTxtFromStatusBits (Ctr_Status_t Status);
 static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
-static long Ctr_GetParamOtherCtrCod (void);
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -1670,19 +1669,10 @@ long Ctr_GetAndCheckParamOtherCtrCod (void)
    long CtrCod;
 
    /***** Get and check parameter with code of centre *****/
-   if ((CtrCod = Ctr_GetParamOtherCtrCod ()) < 0)
+   if ((CtrCod = Par_GetParToLong ("OthCtrCod")) <= 0)
       Lay_ShowErrorAndExit ("Code of centre is missing.");
 
    return CtrCod;
-  }
-
-static long Ctr_GetParamOtherCtrCod (void)
-  {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of centre *****/
-   Par_GetParToText ("OthCtrCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/

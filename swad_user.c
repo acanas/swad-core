@@ -5060,16 +5060,13 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
   {
    bool ShowBigList;
-   char YN[1 + 1];
 
    /***** If list of users is too big... *****/
    if (NumUsrs > Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST)
      {
       /***** Get parameter with user's confirmation
              to see a big list of users *****/
-      Par_GetParToText ("ShowBigList",YN,1);
-      ShowBigList = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-      if (!ShowBigList)
+      if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
 	 Usr_PutButtonToConfirmIWantToSeeBigList (NumUsrs,OnSubmit);
 
       return ShowBigList;
@@ -6986,19 +6983,15 @@ void Usr_PutParamListWithPhotos (void)
 
 static bool Usr_GetParamListWithPhotosFromForm (void)
   {
-   char YN[1 + 1];
-
    /***** Get if exists parameter with preference about photos in users' list *****/
-   Par_GetParToText ("WithPhotosExists",YN,1);
-   if (Str_ConvertToUpperLetter (YN[0]) != 'Y')
+   if (Par_GetParToBool ("WithPhotosExists"))
      {
       Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
       return false;
      }
 
    /***** Parameter with preference about photos in users' list exists, so get it *****/
-   Par_GetParToText ("WithPhotos",YN,1);
-   Gbl.Usrs.Listing.WithPhotos = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
    return true;
   }
 

@@ -2413,11 +2413,8 @@ void Brw_PutHiddenParamFilCod (long FilCod)
 
 long Brw_GetParamFilCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of file *****/
-   Par_GetParToText ("FilCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of file *****/
+   return Par_GetParToLong ("FilCod");
   }
 
 /*****************************************************************************/
@@ -4705,10 +4702,7 @@ void Brw_PutHiddenParamFullTreeIfSelected (void)
 
 static bool Brw_GetFullTreeFromForm (void)
   {
-   char YN[1 + 1];
-
-   Par_GetParToText ("FullTree",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("FullTree");
   }
 
 /*****************************************************************************/
@@ -9867,10 +9861,7 @@ void Brw_ChgFileMetadata (void)
 
 static bool Brw_GetParamPublicFile (void)
   {
-   char YN[1 + 1];
-
-   Par_GetParToText ("PublicFile",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("PublicFile");
   }
 
 /*****************************************************************************/

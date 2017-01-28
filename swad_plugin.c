@@ -476,11 +476,8 @@ static void Plg_PutParamPlgCod (long PlgCod)
 
 long Plg_GetParamPlgCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of plugin *****/
-   Par_GetParToText ("PlgCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of plugin *****/
+   return Par_GetParToLong ("PlgCod");
   }
 
 /*****************************************************************************/

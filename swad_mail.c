@@ -533,11 +533,8 @@ static void Mai_PutParamMaiCod (long MaiCod)
 
 long Mai_GetParamMaiCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of mail *****/
-   Par_GetParToText ("MaiCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of mail *****/
+   return Par_GetParToLong ("MaiCod");
   }
 
 /*****************************************************************************/

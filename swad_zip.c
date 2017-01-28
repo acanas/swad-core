@@ -140,10 +140,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
 
 bool ZIP_GetCreateZIPFromForm (void)
   {
-   char YN[1 + 1];
-
-   Par_GetParToText ("CreateZIP",YN,1);
-   return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   return Par_GetParToBool ("CreateZIP");
   }
 
 /*****************************************************************************/

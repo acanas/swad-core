@@ -102,7 +102,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
-static long Deg_GetParamOtherDegCod (void);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
@@ -1652,19 +1651,10 @@ long Deg_GetAndCheckParamOtherDegCod (void)
    long DegCod;
 
    /***** Get and check parameter with code of degree *****/
-   if ((DegCod = Deg_GetParamOtherDegCod ()) < 0)
+   if ((DegCod = Par_GetParToLong ("OthDegCod")) <= 0)
       Lay_ShowErrorAndExit ("Code of degree is missing.");
 
    return DegCod;
-  }
-
-static long Deg_GetParamOtherDegCod (void)
-  {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of degree *****/
-   Par_GetParToText ("OthDegCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/

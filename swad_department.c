@@ -616,11 +616,8 @@ static void Dpt_PutParamDptCod (long DptCod)
 
 long Dpt_GetParamDptCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of department *****/
-   Par_GetParToText ("DptCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of department *****/
+   return Par_GetParToLong ("DptCod");
   }
 
 /*****************************************************************************/

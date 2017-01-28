@@ -1508,11 +1508,8 @@ static void Svy_PutParamSvyCod (long SvyCod)
 
 static long Svy_GetParamSvyCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of survey *****/
-   Par_GetParToText ("SvyCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of survey *****/
+   return Par_GetParToLong ("SvyCod");
   }
 
 /*****************************************************************************/
@@ -2834,11 +2831,8 @@ static void Svy_PutParamQstCod (long QstCod)
 
 static long Svy_GetParamQstCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of survey *****/
-   Par_GetParToText ("QstCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of question *****/
+   return Par_GetParToLong ("QstCod");
   }
 
 /*****************************************************************************/

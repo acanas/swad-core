@@ -1601,11 +1601,8 @@ long Cty_GetAndCheckParamOtherCtyCod (void)
 
 static long Cty_GetParamOtherCtyCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of country *****/
-   Par_GetParToText ("OthCtyCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of country *****/
+   return Par_GetParToLong ("OthCtyCod");
   }
 
 /*****************************************************************************/

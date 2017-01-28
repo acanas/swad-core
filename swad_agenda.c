@@ -1039,11 +1039,8 @@ static void Agd_PutParamAgdCod (long AgdCod)
 
 long Agd_GetParamAgdCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of event *****/
-   Par_GetParToText ("AgdCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of event *****/
+   return Par_GetParToLong ("AgdCod");
   }
 
 /*****************************************************************************/

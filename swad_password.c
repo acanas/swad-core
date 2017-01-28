@@ -927,8 +927,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    char EncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    /***** Get if consent has been done *****/
-   Par_GetParToText ("Consent",YN,1);
-   if (Str_ConvertToUpperLetter (YN[0]) != 'Y')
+   if (Par_GetParToBool ("Consent"))
      {
       Lay_ShowAlert (Lay_WARNING,Txt_You_have_not_confirmed_the_action);
       return false;

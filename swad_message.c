@@ -173,7 +173,6 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
-   char YN[1 + 1];
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
@@ -182,21 +181,17 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
-   Par_GetParToText ("IsReply",YN,1);
-   if ((Gbl.Msg.Reply.IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+   if ((Gbl.Msg.Reply.IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((Gbl.Msg.Reply.OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
          Lay_ShowErrorAndExit ("Wrong code of message.");
 
    /***** Get user's code of possible preselected recipient *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// There is a preselected recipient
-     {
       /* Get who to show as potential recipients:
          - only the selected recipient
          - any user (default) */
-      Par_GetParToText ("ShowOnlyOneRecipient",YN,1);
-      Gbl.Msg.ShowOnlyOneRecipient = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
-     }
+      Gbl.Msg.ShowOnlyOneRecipient = Par_GetParToBool ("ShowOnlyOneRecipient");
    else
       Gbl.Msg.ShowOnlyOneRecipient = false;
 
@@ -637,7 +632,6 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_The_message_has_been_sent_to_1_recipient;
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
    extern const char *Txt_There_have_been_X_errors_in_sending_the_message;
-   char YN[1 + 1];
    bool IsReply;
    bool RecipientHasBannedMe;
    bool Replied = false;
@@ -665,8 +659,7 @@ void Msg_RecMsgFromUsr (void)
                               Str_DONT_CHANGE,false);
 
    /* Get parameter that indicates if the message is a reply to a previous message */
-   Par_GetParToText ("IsReply",YN,1);
-   if ((IsReply = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+   if ((IsReply = Par_GetParToBool ("IsReply")))
       /* Get original message code */
       if ((OriginalMsgCod = Msg_GetParamMsgCod ()) <= 0)
          Lay_ShowErrorAndExit ("Wrong code of message.");
@@ -1011,12 +1004,9 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 void Msg_GetParamMsgsCrsCod (void)
   {
    extern const char *Txt_any_course;
-   char LongStr[1 + 10 + 1];
    struct Course Crs;
 
-   Par_GetParToText ("FilterCrsCod",LongStr,1 + 10);
-   Gbl.Msg.FilterCrsCod = Str_ConvertStrCodToLongCod (LongStr);
-   if (Gbl.Msg.FilterCrsCod > 0)	// If origin course specified
+   if ((Gbl.Msg.FilterCrsCod = Par_GetParToLong ("FilterCrsCod")) > 0)	// If origin course specified
      {
       /* Get data of course */
       Crs.CrsCod = Gbl.Msg.FilterCrsCod;
@@ -2649,11 +2639,8 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 
 static void Msg_GetParamOnlyUnreadMsgs (void)
   {
-   char YN[1 + 1];
-
    /***** Get parameter to show only unread (received) messages *****/
-   Par_GetParToText ("OnlyUnreadMsgs",YN,1);
-   Gbl.Msg.ShowOnlyUnreadMsgs = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
+   Gbl.Msg.ShowOnlyUnreadMsgs = Par_GetParToBool ("OnlyUnreadMsgs");
   }
 
 /*****************************************************************************/
@@ -3362,7 +3349,6 @@ static void Msg_WriteMsgTo (long MsgCod)
    unsigned NumRecipientsKnown;
    unsigned NumRecipientsUnknown;
    unsigned NumRecipientsToShow;
-   char YN[1 + 1];
    struct UsrData UsrDat;
    bool Deleted;
    bool OpenByDst;
@@ -3408,12 +3394,9 @@ static void Msg_WriteMsgTo (long MsgCod)
       if (NumRecipientsKnown <= Msg_MAX_RECIPIENTS_TO_SHOW)
          NumRecipientsToShow = NumRecipientsKnown;
       else	// A lot of recipients
-        {
          /***** Get parameter that indicates if I want to see all recipients *****/
-         Par_GetParToText ("SeeAllRcpts",YN,1);
-         NumRecipientsToShow = (Str_ConvertToUpperLetter (YN[0]) == 'Y') ? NumRecipientsKnown :
-                                                                           Msg_DEF_RECIPIENTS_TO_SHOW;
-        }
+         NumRecipientsToShow = Par_GetParToBool ("SeeAllRcpts") ? NumRecipientsKnown :
+                                                                  Msg_DEF_RECIPIENTS_TO_SHOW;
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
@@ -3599,11 +3582,8 @@ void Msg_PutHiddenParamMsgCod (long MsgCod)
 
 static long Msg_GetParamMsgCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of message *****/
-   Par_GetParToText ("MsgCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of message *****/
+   return Par_GetParToLong ("MsgCod");
   }
 
 /*****************************************************************************/

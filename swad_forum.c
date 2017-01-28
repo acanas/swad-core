@@ -3729,7 +3729,6 @@ void For_GetParamsForum (void)
   {
    char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
-   char LongStr[1 + 10 + 1];
 
    /***** Get which forums I want to see *****/
    Par_GetParToText ("WhichForum",UnsignedStr,10);
@@ -3746,23 +3745,19 @@ void For_GetParamsForum (void)
       Gbl.Forum.SelectedOrderType = For_DEFAULT_ORDER;
 
    /***** Get parameter with code of institution *****/
-   Par_GetParToText ("ForInsCod",LongStr,1 + 10);
-   Gbl.Forum.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
+   Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
    Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
 
    /***** Get parameter with code of institution *****/
-   Par_GetParToText ("ForCtrCod",LongStr,1 + 10);
-   Gbl.Forum.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
+   Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
    Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
 
    /***** Get parameter with code of degree *****/
-   Par_GetParToText ("ForDegCod",LongStr,1 + 10);
-   Gbl.Forum.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
+   Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
    Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
 
    /***** Get parameter with code of course *****/
-   Par_GetParToText ("ForCrsCod",LongStr,1 + 10);
-   Gbl.Forum.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);
+   Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
    Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
   }
 
@@ -3781,12 +3776,10 @@ void For_PutHiddenParamThrCod (long ThrCod)
 
 static long For_GetParamThrCod (void)
   {
-   char StrThrCod[1 + 10 + 1];	// String that holds the thread code
    long ThrCod;
 
-   /* Get thread code */
-   Par_GetParToText ("ThrCod",StrThrCod,1 + 10);
-   if (sscanf (StrThrCod,"%ld",&ThrCod) != 1)
+   /***** Get thread code *****/
+   if ((ThrCod = Par_GetParToLong ("ThrCod")) <= 0)
       Lay_ShowErrorAndExit ("Wrong thread code.");
 
    return ThrCod;
@@ -3807,12 +3800,10 @@ static void For_PutHiddenParamPstCod (long PstCod)
 
 static long For_GetParamPstCod (void)
   {
-   char StrPstCod[1 + 10 + 1];	// String that holds the post code
    long PstCod;
 
-   /* Get post code */
-   Par_GetParToText ("PstCod",StrPstCod,1 + 10);
-   if (sscanf (StrPstCod,"%ld",&PstCod) != 1)
+   /***** Get post code *****/
+   if ((PstCod = Par_GetParToLong ("PstCod")) <= 0)
       Lay_ShowErrorAndExit ("Wrong post code.");
 
    return PstCod;

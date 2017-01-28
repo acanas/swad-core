@@ -622,11 +622,8 @@ static void Hld_PutParamHldCod (long HldCod)
 
 long Hld_GetParamHldCod (void)
   {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of holiday *****/
-   Par_GetParToText ("HldCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   /***** Get code of holiday *****/
+   return Par_GetParToLong ("HldCod");
   }
 
 /*****************************************************************************/

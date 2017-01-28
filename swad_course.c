@@ -120,7 +120,6 @@ static void Sch_PutLinkToSearchCoursesParams (void);
 
 static void Crs_PutParamOtherCrsCod (long CrsCod);
 static long Crs_GetAndCheckParamOtherCrsCod (void);
-static long Crs_GetParamOtherCrsCod (void);
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted);
 
@@ -2977,19 +2976,10 @@ static long Crs_GetAndCheckParamOtherCrsCod (void)
    long CrsCod;
 
    /***** Get and check parameter with code of course *****/
-   if ((CrsCod = Crs_GetParamOtherCrsCod ()) < 0)
+   if ((CrsCod = Par_GetParToLong ("OthCrsCod")) <= 0)
       Lay_ShowErrorAndExit ("Code of course is missing.");
 
    return CrsCod;
-  }
-
-static long Crs_GetParamOtherCrsCod (void)
-  {
-   char LongStr[1 + 10 + 1];
-
-   /***** Get parameter with code of course *****/
-   Par_GetParToText ("OthCrsCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/

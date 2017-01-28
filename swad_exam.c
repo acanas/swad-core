@@ -1611,11 +1611,8 @@ void Exa_PutHiddenParamExaCod (long ExaCod)
 
 static long Exa_GetParamExaCod (void)
   {
-   char LongStr[1 + 10 + 1];	// String that holds the exam announcement code
-
    /* Get notice code */
-   Par_GetParToText ("ExaCod",LongStr,1 + 10);
-   return Str_ConvertStrCodToLongCod (LongStr);
+   return Par_GetParToLong ("ExaCod");
   }
 
 /*****************************************************************************/

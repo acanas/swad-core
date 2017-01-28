@@ -494,15 +494,13 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 static bool Ind_GetIfShowBigList (unsigned NumCrss)
   {
    bool ShowBigList;
-   char YN[1 + 1];
 
    /***** If list of courses is too big... *****/
    if (NumCrss <= Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST)
       return true;	// List is not too big ==> show it
 
    /***** Get parameter with user's confirmation to see a big list of courses *****/
-   Par_GetParToText ("ShowBigList",YN,1);
-   if (!(ShowBigList = (Str_ConvertToUpperLetter (YN[0]) == 'Y')))
+   if (!(ShowBigList = Par_GetParToBool ("ShowBigList")))
       Ind_PutButtonToConfirmIWantToSeeBigList (NumCrss);
 
    return ShowBigList;
