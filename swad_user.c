@@ -4133,7 +4133,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
    /*
    row[ 0]: usr_data.UsrCod
    row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 2]: usr_data.Password
    row[ 3]: usr_data.Surname1
    row[ 4]: usr_data.Surname2
    row[ 5]: usr_data.FirstName
@@ -4273,7 +4273,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    /*
    row[ 0]: usr_data.UsrCod
    row[ 1]: usr_data.EncryptedUsrCod
-   row[ 2]: usr_data.Password (used to check if a teacher can edit user's data)
+   row[ 2]: usr_data.Password
    row[ 3]: usr_data.Surname1
    row[ 4]: usr_data.Surname2
    row[ 5]: usr_data.FirstName
@@ -4544,6 +4544,7 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    const char *QueryFields =
       "UsrCod,"
       "EncryptedUsrCod,"
+      "Password,"
       "Surname1,"
       "Surname2,"
       "FirstName,"
@@ -4554,13 +4555,14 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
+   row[2]: usr_data.Password
+   row[3]: usr_data.Surname1
+   row[4]: usr_data.Surname2
+   row[5]: usr_data.FirstName
+   row[6]: usr_data.Sex
+   row[7]: usr_data.Photo
+   row[8]: usr_data.PhotoVisibility
+   row[9]: usr_data.InsCod
    */
 
    /***** Build query *****/
@@ -4703,6 +4705,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    const char *QueryFields =
       "UsrCod,"
       "EncryptedUsrCod,"
+      "Password,"
       "Surname1,"
       "Surname2,"
       "FirstName,"
@@ -4713,13 +4716,14 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
+   row[2]: usr_data.Password
+   row[3]: usr_data.Surname1
+   row[4]: usr_data.Surname2
+   row[5]: usr_data.FirstName
+   row[6]: usr_data.Sex
+   row[7]: usr_data.Photo
+   row[8]: usr_data.PhotoVisibility
+   row[9]: usr_data.InsCod
    */
 
    /***** Build query *****/
@@ -4774,6 +4778,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
+      "usr_data.Password,"
       "usr_data.Surname1,"
       "usr_data.Surname2,"
       "usr_data.FirstName,"
@@ -4784,13 +4789,14 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    /*
    row[0]: usr_data.UsrCod
    row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Surname1
-   row[3]: usr_data.Surname2
-   row[4]: usr_data.FirstName
-   row[5]: usr_data.Sex
-   row[6]: usr_data.Photo
-   row[7]: usr_data.PhotoVisibility
-   row[8]: usr_data.InsCod
+   row[2]: usr_data.Password
+   row[3]: usr_data.Surname1
+   row[4]: usr_data.Surname2
+   row[5]: usr_data.FirstName
+   row[6]: usr_data.Sex
+   row[7]: usr_data.Photo
+   row[8]: usr_data.PhotoVisibility
+   row[9]: usr_data.InsCod
    */
 
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -6060,7 +6066,7 @@ void Usr_ListAllDataGsts (void)
    Sco_SetScopesForListingGuests ();
    Sco_GetScope ("ScopeUsr");
 
-   /****** Get and order list of guests ******/
+   /****** Get list of guests ******/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
@@ -6187,7 +6193,7 @@ void Usr_ListAllDataStds (void)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
      }
 
-   /****** Get and order list of students in current course ******/
+   /****** Get list of students in current course ******/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
@@ -6416,7 +6422,7 @@ void Usr_ListAllDataTchs (void)
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get and order list of teachers *****/
+   /***** Get list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
@@ -6644,7 +6650,7 @@ void Usr_ListDataAdms (void)
    Gbl.Scope.Default = Sco_SCOPE_DEG;
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get and order list of administrators *****/
+   /***** Get list of administrators *****/
    Usr_GetAdmsLst (Gbl.Scope.Current);
 
    /***** Start frame with list of administrators *****/
@@ -7118,7 +7124,7 @@ void Usr_SeeGuests (void)
    Sco_SetScopesForListingGuests ();
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get and order list of students in current scope *****/
+   /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs,NULL))
@@ -7270,7 +7276,7 @@ void Usr_SeeStudents (void)
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** Get and order list of students *****/
+   /***** Get list of students *****/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
    /***** Start frame *****/
@@ -7440,7 +7446,7 @@ void Usr_SeeTeachers (void)
    Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
-   /***** Get and order list of teachers *****/
+   /***** Get list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs,NULL))
@@ -7738,7 +7744,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    Sco_SetScopesForListingGuests ();
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get and order list of students *****/
+   /***** Get list of guests *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
@@ -7780,7 +7786,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    /****** Get groups to show ******/
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
-   /***** Get and order list of students *****/
+   /***** Get list of students *****/
    Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
@@ -7836,7 +7842,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ("ScopeUsr");
 
-   /***** Get and order list of teachers *****/
+   /***** Get list of teachers *****/
    Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
 
    if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
