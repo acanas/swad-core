@@ -37,7 +37,7 @@
 
 #define Nck_MAX_BYTES_NICKNAME_FROM_FORM	(128 - 1)	// For variables that store characters typed in a form
 
-#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICKNAME_FROM_FORM+2)*Cfg_MAX_USRS_IN_LIST)
+#define Nck_MAX_BYTES_LIST_NICKS		((Nck_MAX_BYTES_NICKNAME_FROM_FORM + 2) * Cfg_MAX_USRS_IN_LIST)
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

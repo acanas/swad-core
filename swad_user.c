@@ -94,7 +94,7 @@ const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
 #define Usr_NUM_ALL_FIELDS_DATA_TCH	11
 const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
-#define Usr_MAX_LENGTH_QUERY_GET_LIST_USRS (16*1024 - 1)
+#define Usr_MAX_LENGTH_QUERY_GET_LIST_USRS (16 * 1024 - 1)
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -450,7 +450,7 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
   {
    extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    char Query[1024];
@@ -1001,14 +1001,19 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
-   bool HeIsAStudentInCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STUDENT;
-   bool IBelongToCurrentCrs = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
-	                      Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER;
-   bool IAmLoggedAsSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+   if (UsrDat->RoleInCurrentCrsDB != Rol_STUDENT)	// Not a student in the current course
+      return false;
 
-   return HeIsAStudentInCurrentCrs &&	// Course is selected and user is student in it
-          (IBelongToCurrentCrs ||	// I am student or teacher in current course
-	   IAmLoggedAsSysAdm);		// I am logged as system admin
+   // The user is a student in the current course
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_STUDENT:
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
+	 return true;
+      default:
+	 return false;
+     }
   }
 
 /*****************************************************************************/
@@ -1793,7 +1798,7 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
 
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
 
    /***** Get the institutions a user belongs to from database *****/
@@ -2097,7 +2102,7 @@ void Usr_WelcomeUsr (void)
    extern const char *Txt_Welcome_X_and_happy_birthday[Usr_NUM_SEXS];
    extern const char *Txt_Welcome_X[Usr_NUM_SEXS];
    extern const char *Txt_Welcome[Usr_NUM_SEXS];
-   extern const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
    bool CongratulateMyBirthday;
 
    if (Gbl.Usrs.Me.Logged)
@@ -2239,7 +2244,7 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *Txt_Role;
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    char UsrName[Usr_MAX_BYTES_NAME + 1];
 
    /***** User's role *****/
@@ -2261,7 +2266,7 @@ void Usr_WriteLoggedUsrHead (void)
      }
 
    /***** Show my photo *****/
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
                 	                             NULL,
                      "PHOTO18x24",Pho_ZOOM,false);
@@ -2417,7 +2422,7 @@ void Usr_PutParamOtherUsrCodEncrypted (void)
    Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
   }
 
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    Par_PutHiddenParamString ("OtherUsrCod",EncryptedUsrCod);
   }
@@ -3189,7 +3194,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
      {
       /***** Show user's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_ZOOM,false);
@@ -3223,7 +3228,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
 
 static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    struct Instit Ins;
    struct Centre Ctr;
@@ -3237,7 +3242,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
       /***** Show guest's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
                Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
@@ -3321,7 +3326,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    unsigned NumGrpTyp,NumField;
    MYSQL_RES *mysql_res;
@@ -3339,7 +3344,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
       /***** Show student's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
                Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
@@ -3441,7 +3446,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
 
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    struct Instit Ins;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
@@ -3458,7 +3463,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
       /***** Show teacher's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
                Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_NO_ZOOM,false);
@@ -3519,7 +3524,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
 
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    struct Instit Ins;
 
@@ -3537,7 +3542,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
       /***** Show administrator's photo *****/
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\">",
                Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_ZOOM,false);
@@ -3607,7 +3612,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
 static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
   {
    bool ShowEmail;
-   char MailLink[7+Usr_MAX_BYTES_USR_EMAIL+1];	// mailto:mail_address
+   char MailLink[7 + Usr_MAX_BYTES_USR_EMAIL + 1];	// mailto:mail_address
 
    if (UsrDat->Email[0])
      {
@@ -3935,7 +3940,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    unsigned NumGrpSel;
    long GrpCod;
    unsigned NumGrpTyp;
@@ -4253,7 +4258,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
-   char Query[4*1024];
+   char Query[4 * 1024];
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
@@ -4499,7 +4504,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 
 void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *SearchQuery)
   {
-   char Query[16*1024];
+   char Query[16 * 1024];
 
    /***** Create temporary table with candidate users *****/
    /*
@@ -5046,7 +5051,7 @@ void Usr_FreeUsrsList (Rol_Role_t Role)
 bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
   {
    bool ShowBigList;
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** If list of users is too big... *****/
    if (NumUsrs > Cfg_MIN_NUM_USERS_TO_CONFIRM_SHOW_BIG_LIST)
@@ -5157,8 +5162,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
       if (Gbl.Usrs.Select.All[0])
          if ((Length = strlen (Gbl.Usrs.Select.All)) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
-            Gbl.Usrs.Select.All[Length  ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select.All[Length+1] = '\0';
+            Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select.All[Length + 1] = '\0';
            }
       Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,
                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
@@ -5170,8 +5175,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
       if (Gbl.Usrs.Select.All[0])
          if ((Length = strlen (Gbl.Usrs.Select.All)) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
-            Gbl.Usrs.Select.All[Length  ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select.All[Length+1] = '\0';
+            Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select.All[Length + 1] = '\0';
            }
       Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Std,
                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
@@ -5193,7 +5198,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    size_t LengthSelectedUsrsCods;
    size_t LengthUsrCod;
    const char *Ptr;
-   char UsrIDNickOrEmail[1024+1];
+   char UsrIDNickOrEmail[1024 + 1];
    struct UsrData UsrDat;
    struct ListUsrCods ListUsrCods;
    bool Error = false;
@@ -5366,7 +5371,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
-   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
    if (Gbl.Usrs.Select.All)
      {
@@ -5880,7 +5885,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if ((GroupNames = (char *) malloc ((Grp_MAX_LENGTH_GROUP_NAME+3)*Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
+      if ((GroupNames = (char *) malloc ((Grp_MAX_LENGTH_GROUP_NAME + 3) *
+                                         Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
       /***** Start table with list of students *****/
@@ -6761,7 +6767,7 @@ void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType)
 
 static bool Usr_GetUsrListTypeFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
@@ -6864,7 +6870,7 @@ void Usr_PutParamColsClassPhoto (void)
 
 static bool Usr_GetParamColsClassPhotoFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /***** Get parameter with number of users per row *****/
    Par_GetParToText ("ColsClassPhoto",UnsignedStr,10);
@@ -6971,7 +6977,7 @@ void Usr_PutParamListWithPhotos (void)
 
 static bool Usr_GetParamListWithPhotosFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get if exists parameter with preference about photos in users' list *****/
    Par_GetParToText ("WithPhotosExists",YN,1);
@@ -7258,7 +7264,6 @@ void Usr_SeeStudents (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
 	              (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
                        Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                       Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
    /***** Get groups to show ******/
@@ -7876,7 +7881,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool UsrIsTheMsgSender;
    const char *ClassPhoto = "PHOTO21x28";	// Default photo size
    int LengthUsrData = 10;	// Maximum number of characters of user data
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
 
    /***** Set width and height of photos *****/
@@ -7933,7 +7938,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 	 Usr_PutCheckboxToSelectUser (&UsrDat,UsrIsTheMsgSender);
 
       /***** Show photo *****/
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
 			ClassPhoto,Pho_ZOOM,false);
@@ -8021,8 +8026,8 @@ void Usr_PutSelectorNumColsClassPhoto (void)
 
 void Usr_ConstructPathUsr (long UsrCod,char *PathUsr)
   {
-   char PathUsrs[PATH_MAX+1];
-   char PathAboveUsr[PATH_MAX+1];
+   char PathUsrs[PATH_MAX + 1];
+   char PathAboveUsr[PATH_MAX + 1];
 
    /***** Path for users *****/
    sprintf (PathUsrs,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_USR);

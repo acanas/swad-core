@@ -248,7 +248,7 @@ void Pre_PutLinkToChangeLanguage (void)
 
 void Pre_PutSelectorToSelectLanguage (void)
   {
-   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    Txt_Language_t Lan;
 
    Act_FormStart (ActReqChgLan);
@@ -275,9 +275,9 @@ void Pre_PutSelectorToSelectLanguage (void)
 
 void Pre_AskChangeLanguage (void)
   {
-   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Switch_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
    Txt_Language_t CurrentLanguage = Gbl.Prefs.Language;
 
    /***** Get param language *****/
@@ -331,7 +331,7 @@ void Pre_ChangeLanguage (void)
 
 void Pre_UpdateMyLanguageToCurrentLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[128];
 
    /***** Set my language to the current language *****/
@@ -351,7 +351,7 @@ void Pre_UpdateMyLanguageToCurrentLanguage (void)
 Txt_Language_t Pre_GetParamLanguage (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Lan",UnsignedStr,10);
@@ -504,7 +504,7 @@ static void Pre_UpdateSideColsOnUsrDataTable (void)
 
 unsigned Pre_GetParamSideCols (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;	// 11 ==> by default, show both side columns
 
    Par_GetParToText ("SideCols",UnsignedStr,10);

@@ -426,7 +426,7 @@ static void DT_PutHeadDegreeTypesForEdition (void)
 static void DT_CreateDegreeType (struct DegreeType *DegTyp)
   {
    extern const char *Txt_Created_new_type_of_degree_X;
-   char Query[128+Deg_MAX_LENGTH_DEGREE_TYPE_NAME];
+   char Query[128 + Deg_MAX_LENGTH_DEGREE_TYPE_NAME];
 
    /***** Create a new degree type *****/
    sprintf (Query,"INSERT INTO deg_types SET DegTypName='%s'",
@@ -598,10 +598,10 @@ static void DT_PutParamOtherDegTypCod (long DegTypCod)
 
 long DT_GetParamOtherDegTypCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of degree type *****/
-   Par_GetParToText ("OthDegTypCod",LongStr,1+10);
+   Par_GetParToText ("OthDegTypCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -728,7 +728,7 @@ void DT_RenameDegreeType (void)
    extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
    struct DegreeType *DegTyp;
    char Query[1024];
-   char NewNameDegTyp[Deg_MAX_LENGTH_DEGREE_TYPE_NAME+1];
+   char NewNameDegTyp[Deg_MAX_LENGTH_DEGREE_TYPE_NAME + 1];
 
    DegTyp = &Gbl.Degs.EditingDegTyp;
 

@@ -295,17 +295,21 @@ static void For_PutParamForumOrder (void);
 static void For_PutFormWhichForums (void);
 static void For_WriteLinkToTopLevelOfForums (void);
 static void For_PutParamsForumInsDegCrs (void);
-static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
+static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinksToPlatformForums (bool IsLastForum,
-                                            bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
-static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
-static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
-static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
-static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
+                                            bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
+static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
+static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
+static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
+static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts,
-                                   unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
+                                   unsigned Level,bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct,const char *Icon,const char *ForumName,bool ShowNumOfPosts,
-                                  unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS]);
+                                  unsigned Level,bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,const char *Time);
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
@@ -467,7 +471,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    if ((Query = malloc (512 +
                         strlen (Subject) +
 			strlen (Content) +
-			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -952,7 +956,7 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
    extern const char *Txt_There_are_new_posts;
    extern const char *Txt_No_new_posts;
    extern const char *Txt_Posts;
-   bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
+   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -1738,7 +1742,7 @@ void For_ShowForumList (void)
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forums;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
-   bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
+   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    unsigned NumMyIns;
    MYSQL_RES *mysql_resCtr;
    MYSQL_RES *mysql_resDeg;
@@ -1957,7 +1961,7 @@ static void For_WriteLinkToTopLevelOfForums (void)
 /************************* Write links to global forums **********************/
 /*****************************************************************************/
 
-static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    /***** Link to forum global *****/
    IsLastItemInLevel[1] = false;
@@ -1977,7 +1981,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1+For_FORUM_MAX_LE
 /*****************************************************************************/
 
 static void For_WriteLinksToPlatformForums (bool IsLastForum,
-                                            bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+                                            bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool ICanSeeTeacherForum;
 
@@ -2003,7 +2007,8 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
 /*****************************************************************************/
 // Returns institution code
 
-static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool ICanSeeTeacherForum;
 
@@ -2036,7 +2041,8 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,bool IsLastIte
 /*****************************************************************************/
 // Returns centre code
 
-static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool ICanSeeTeacherForum;
 
@@ -2069,7 +2075,8 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,bool IsLastIte
 /*****************************************************************************/
 // Returns degree code
 
-static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool ICanSeeTeacherForum;
 
@@ -2102,7 +2109,8 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,bool IsLastIte
 /*****************************************************************************/
 // Returns course code
 
-static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
+                                       bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool ICanSeeTeacherForum;
 
@@ -2135,7 +2143,8 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,bool IsLastIte
 /*****************************************************************************/
 
 static void For_WriteLinkToAForum (For_ForumType_t ForumType,bool ShowNumOfPosts,
-                                   unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+                                   unsigned Level,
+                                   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    char Icon[512];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
@@ -2199,9 +2208,9 @@ void For_SetForumName (For_ForumType_t ForumType,
                        Txt_Language_t Language,bool UseHTMLEntities)
   {
    extern const char *Txt_General;
-   extern const char *Txt_General_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_only_teachers;
-   extern const char *Txt_only_teachers_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES];
 
    switch (ForumType)
      {
@@ -2270,7 +2279,7 @@ void For_SetForumName (For_ForumType_t ForumType,
 /*****************************************************************************/
 
 static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct,const char *Icon,const char *ForumName,bool ShowNumOfPosts,
-                                  unsigned Level,bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS])
+                                  unsigned Level,bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -2281,7 +2290,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    unsigned NumThrsWithNewPosts;
    unsigned NumPosts;
    const char *Style;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (ForumType);
@@ -2529,7 +2538,7 @@ void For_ShowForumThrs (void)
    extern const char *Txt_Unread_BR_msgs;
    extern const char *Txt_WriBRters;
    extern const char *Txt_ReaBRders;
-   bool IsLastItemInLevel[1+For_FORUM_MAX_LEVELS];
+   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    char SubQuery[256];
    char Query[2048];
    MYSQL_RES *mysql_res;
@@ -3718,9 +3727,9 @@ void For_ShowThrPsts (void)
 
 void For_GetParamsForum (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get which forums I want to see *****/
    Par_GetParToText ("WhichForum",UnsignedStr,10);
@@ -3737,22 +3746,22 @@ void For_GetParamsForum (void)
       Gbl.Forum.SelectedOrderType = For_DEFAULT_ORDER;
 
    /***** Get parameter with code of institution *****/
-   Par_GetParToText ("ForInsCod",LongStr,1+10);
+   Par_GetParToText ("ForInsCod",LongStr,1 + 10);
    Gbl.Forum.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
    Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
 
    /***** Get parameter with code of institution *****/
-   Par_GetParToText ("ForCtrCod",LongStr,1+10);
+   Par_GetParToText ("ForCtrCod",LongStr,1 + 10);
    Gbl.Forum.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
    Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
 
    /***** Get parameter with code of degree *****/
-   Par_GetParToText ("ForDegCod",LongStr,1+10);
+   Par_GetParToText ("ForDegCod",LongStr,1 + 10);
    Gbl.Forum.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
    Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
 
    /***** Get parameter with code of course *****/
-   Par_GetParToText ("ForCrsCod",LongStr,1+10);
+   Par_GetParToText ("ForCrsCod",LongStr,1 + 10);
    Gbl.Forum.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);
    Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
   }
@@ -3772,11 +3781,11 @@ void For_PutHiddenParamThrCod (long ThrCod)
 
 static long For_GetParamThrCod (void)
   {
-   char StrThrCod[1+10+1];	// String that holds the thread code
+   char StrThrCod[1 + 10 + 1];	// String that holds the thread code
    long ThrCod;
 
    /* Get thread code */
-   Par_GetParToText ("ThrCod",StrThrCod,1+10);
+   Par_GetParToText ("ThrCod",StrThrCod,1 + 10);
    if (sscanf (StrThrCod,"%ld",&ThrCod) != 1)
       Lay_ShowErrorAndExit ("Wrong thread code.");
 
@@ -3798,11 +3807,11 @@ static void For_PutHiddenParamPstCod (long PstCod)
 
 static long For_GetParamPstCod (void)
   {
-   char StrPstCod[1+10+1];	// String that holds the post code
+   char StrPstCod[1 + 10 + 1];	// String that holds the post code
    long PstCod;
 
    /* Get post code */
-   Par_GetParToText ("PstCod",StrPstCod,1+10);
+   Par_GetParToText ("PstCod",StrPstCod,1 + 10);
    if (sscanf (StrPstCod,"%ld",&PstCod) != 1)
       Lay_ShowErrorAndExit ("Wrong post code.");
 
@@ -3924,7 +3933,7 @@ void For_RecForumPst (void)
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
    struct SocialPublishing SocPub;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
 
    /***** Get order type, degree and course of the forum *****/
@@ -4063,8 +4072,8 @@ void For_DelPst (void)
    long PstCod,ThrCod;
    struct UsrData UsrDat;
    time_t CreatTimeUTC;	// Creation time of a message
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char OriginalContent[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char OriginalContent[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    bool ThreadDeleted = false;
 
@@ -4186,7 +4195,7 @@ void For_DelThr (void)
    extern const char *Txt_Thread_X_removed;
    extern const char *Txt_Thread_removed;
    long ThrCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -4231,7 +4240,7 @@ void For_CutThr (void)
    extern const char *Txt_Thread_X_marked_to_be_moved;
    extern const char *Txt_Thread_marked_to_be_moved;
    long ThrCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();
@@ -4271,7 +4280,7 @@ void For_PasteThr (void)
    extern const char *Txt_Thread_X_moved_to_this_forum;
    extern const char *Txt_Thread_moved_to_this_forum;
    long ThrCod;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
    For_GetParamsForum ();

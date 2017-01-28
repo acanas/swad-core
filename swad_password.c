@@ -67,7 +67,7 @@ extern struct Globals Gbl;
 
 static void Pwd_PutLinkToSendNewPasswdParams (void);
 
-static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1]);
+static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1]);
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
 static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod);
@@ -105,7 +105,7 @@ bool Pwd_CheckCurrentPassword (void)
 
 bool Pwd_CheckPendingPassword (void)
   {
-   char Query[256+Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64];
+   char Query[256 + Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -160,9 +160,9 @@ void Pwd_ActChgMyPwd1 (void)
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    extern const char *Txt_Your_password_has_been_changed_successfully;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
-   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
-   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
-   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    /***** Get plain password from form *****/
    Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
@@ -280,7 +280,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    extern const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    struct ListUsrCods ListUsrCods;
-   char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
+   char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
    int ReturnCode;
 
    /***** Check if user's ID or nickname is not empty *****/
@@ -391,10 +391,10 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 // Gbl.Usrs.Me.UsrDat must be filled
 // Return code returned by command
 
-int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1])
+int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
-   extern const char *Txt_New_password_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES];
    char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
 
@@ -410,8 +410,8 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
 
    /* Message body */
    fprintf (Gbl.Msg.FileMail,Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML,
-	    Cfg_PLATFORM_SHORT_NAME,NewRandomPlainPassword,
-	    Cfg_URL_SWAD_CGI,(unsigned) (Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS/(24L*60L*60L)),
+	    Cfg_PLATFORM_SHORT_NAME,NewRandomPlainPassword,Cfg_URL_SWAD_CGI,
+	    (unsigned) (Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS / (24L * 60L * 60L)),
 	    Gbl.Usrs.Me.UsrDat.Email);
 
    /* Footer note */
@@ -445,7 +445,7 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
 /*********************** Create a new random password ************************/
 /*****************************************************************************/
 
-static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1])
+static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
   {
    Str_CreateRandomAlphanumStr (PlainPassword,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
   }
@@ -454,7 +454,7 @@ static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASS
 /*************************** Set my pending password *************************/
 /*****************************************************************************/
 
-void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1])
+void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
   {
    char Query[512];
 
@@ -483,8 +483,8 @@ void Pwd_UpdateOtherPwd1 (void)
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    extern const char *Txt_The_X_password_has_been_changed_successfully;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
-   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    Gbl.Usrs.Error = true;
 
@@ -578,7 +578,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
   {
-   char Query[128+3*Pwd_MAX_LENGTH_PLAIN_PASSWORD];
+   char Query[128 + 3 * Pwd_MAX_LENGTH_PLAIN_PASSWORD];
    bool Found;
 
    /***** Get if password is found in user's ID from database *****/
@@ -922,9 +922,9 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
   {
    extern const char *Txt_You_have_not_confirmed_the_action;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
-   char YN[1+1];
-   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
-   char EncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1];
+   char YN[1 + 1];
+   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char EncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    /***** Get if consent has been done *****/
    Par_GetParToText ("Consent",YN,1);

@@ -259,8 +259,8 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
                            void (*GetImageFromDB) (int NumImgInForm,struct Image *Image))
   {
    struct ParamUploadImg ParamUploadImg;
-   char Title[Img_MAX_BYTES_TITLE+1];
-   char URL[Img_MAX_BYTES_URL+1];
+   char Title[Img_MAX_BYTES_TITLE + 1];
+   char URL[Img_MAX_BYTES_URL + 1];
    size_t Length;
 
    /***** Set names of parameters depending on number of image in form *****/
@@ -374,7 +374,7 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
 
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Get parameter with the action to perform on image *****/
@@ -395,13 +395,13 @@ Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
 void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFile)
   {
    struct Param *Param;
-   char FileNameImgSrc[PATH_MAX+1];
+   char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
    size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char PathImgPriv[PATH_MAX+1];
-   char FileNameImgOrig[PATH_MAX+1];	// Full name of original uploaded file
-   char FileNameImgTmp[PATH_MAX+1];	// Full name of temporary processed file
+   char PathImgPriv[PATH_MAX + 1];
+   char FileNameImgOrig[PATH_MAX + 1];	// Full name of original uploaded file
+   char FileNameImgTmp[PATH_MAX + 1];	// Full name of temporary processed file
    bool WrongType = false;
 
    /***** Rest image file status *****/
@@ -478,7 +478,7 @@ static void Img_ProcessImage (struct Image *Image,
                               const char *FileNameImgOriginal,
                               const char *FileNameImgProcessed)
   {
-   char Command[1024+PATH_MAX*2];
+   char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
 
    sprintf (Command,"convert %s -resize '%ux%u>' -quality %u %s",
@@ -508,9 +508,9 @@ static void Img_ProcessImage (struct Image *Image,
 
 void Img_MoveImageToDefinitiveDirectory (struct Image *Image)
   {
-   char PathImgPriv[PATH_MAX+1];
-   char FileNameImgTmp[PATH_MAX+1];	// Full name of temporary processed file
-   char FileNameImg[PATH_MAX+1];	// Full name of definitive processed file
+   char PathImgPriv[PATH_MAX + 1];
+   char FileNameImgTmp[PATH_MAX + 1];	// Full name of temporary processed file
+   char FileNameImg[PATH_MAX + 1];	// Full name of definitive processed file
 
    /***** Create subdirectory if it does not exist *****/
    sprintf (PathImgPriv,"%s/%s/%c%c",
@@ -546,9 +546,9 @@ void Img_ShowImage (struct Image *Image,
                     const char *ClassContainer,const char *ClassImg)
   {
    extern const char *Txt_Image_not_found;
-   char FileNameImgPriv[PATH_MAX+1];
-   char FullPathImgPriv[PATH_MAX+1];
-   char URL[PATH_MAX+1];
+   char FileNameImgPriv[PATH_MAX + 1];
+   char FullPathImgPriv[PATH_MAX + 1];
+   char URL[PATH_MAX + 1];
    bool PutLink;
 
    /***** If no image to show ==> nothing to do *****/
@@ -621,7 +621,7 @@ void Img_ShowImage (struct Image *Image,
 
 void Img_RemoveImageFile (const char *ImageName)
   {
-   char FullPathImgPriv[PATH_MAX+1];
+   char FullPathImgPriv[PATH_MAX + 1];
 
    if (ImageName[0])
      {

@@ -112,7 +112,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 void Lay_WriteStartOfPage (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *The_TabOnBgColors[The_NUM_THEMES];
    extern const char *Txt_NEW_YEAR_GREETING;
@@ -412,7 +412,7 @@ static void Lay_WritePageTitle (void)
 static void Lay_WriteRedirToMyLangOnLogIn (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s'\">",
@@ -425,7 +425,7 @@ static void Lay_WriteRedirToMyLangOnLogIn (void)
 static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<meta http-equiv=\"refresh\""
 	              " content=\"0; url='%s/%s?act=%ld&amp;ses=%s&amp;agd=@%s'\">",
@@ -638,7 +638,7 @@ static void Lay_WriteScripts (void)
 
 static void Lay_WriteScriptInit (void)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n");
 
@@ -1817,7 +1817,7 @@ void Lay_AdvertisementMobile (void)
 /*****************************************************************************/
 /*********************** Indent forum or chat title **************************/
 /*****************************************************************************/
-// IsLastItemInLevel[] is a vector with at least 1+Level booleans
+// IsLastItemInLevel[] is a vector with at least 1 + Level booleans
 
 void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
   {
@@ -1888,7 +1888,7 @@ static void Lay_HelpTextEditor (const char *Text,const char *InlineMath,const ch
 
 void Lay_StartHTMLFile (FILE *File,const char *Title)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    fprintf (File,"<!DOCTYPE html>\n"
 		 "<html lang=\"%s\">\n"

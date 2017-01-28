@@ -342,7 +342,7 @@ void Grp_PutParamsCodGrps (void)
 
 void Grp_GetParCodsSeveralGrpsToShowUsrs (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrp;
 
@@ -417,7 +417,7 @@ void Grp_GetParCodsSeveralGrps (void)
 	 for (Ptr = ParamLstCodGrps, NumGrp = 0;
 	      *Ptr;
 	      NumGrp++)
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
 	 Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
 	 if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)	// If I have selected groups...
@@ -429,7 +429,7 @@ void Grp_GetParCodsSeveralGrps (void)
 		 *Ptr;
 		 NumGrp++)
 	      {
-	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	       Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
 	       Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	      }
 	   }
@@ -3084,7 +3084,7 @@ void Grp_RecFormNewGrpTyp (void)
   {
    extern const char *Txt_The_type_of_group_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_type_of_group;
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
@@ -3146,7 +3146,7 @@ void Grp_RecFormNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_group;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /***** Get parameters from form *****/
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
@@ -3691,7 +3691,7 @@ void Grp_ChangeMandatGrpTyp (void)
    extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory;
    extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary;
    char Query[1024];
-   char YN[1+1];
+   char YN[1 + 1];
    bool NewMandatoryEnrollment;
 
    /***** Get parameters of the form *****/
@@ -3746,7 +3746,7 @@ void Grp_ChangeMultiGrpTyp (void)
    extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
    char Query[1024];
-   char YN[1+1];
+   char YN[1 + 1];
    bool NewMultipleEnrollment;
 
    /***** Get parameters from the form *****/
@@ -3842,7 +3842,7 @@ void Grp_ChangeMaxStdsGrp (void)
    struct GroupData GrpDat;
    char Query[1024];
    unsigned NewMaxStds;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /***** Get parameters of the form *****/
    /* Get group code */
@@ -3924,7 +3924,7 @@ void Grp_RenameGroupType (void)
    extern const char *Txt_The_type_of_group_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_group_X_has_not_changed;
    char Query[1024];
-   char NewNameGrpTyp[Grp_MAX_LENGTH_GROUP_TYPE_NAME+1];
+   char NewNameGrpTyp[Grp_MAX_LENGTH_GROUP_TYPE_NAME + 1];
 
    /***** Get parameters from form *****/
    /* Get the code of the group type */
@@ -4064,10 +4064,10 @@ void Grp_RenameGroup (void)
 
 static long Grp_GetParamGrpTypCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of group type *****/
-   Par_GetParToText ("GrpTypCod",LongStr,1+10);
+   Par_GetParToText ("GrpTypCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -4077,10 +4077,10 @@ static long Grp_GetParamGrpTypCod (void)
 
 static long Grp_GetParamGrpCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with group code *****/
-   Par_GetParToText ("GrpCod",LongStr,1+10);
+   Par_GetParToText ("GrpCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -4109,8 +4109,8 @@ void Grp_PutParamGrpCod (long GrpCod)
 void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
   {
    unsigned NumGrpTyp;
-   char Param[8+10+1];
-   char LongStr[1+10+1];
+   char Param[8 + 10 + 1];
+   char LongStr[1 + 10 + 1];
    char **LstStrCodGrps;
    const char *Ptr;
    unsigned NumGrpWanted;
@@ -4126,19 +4126,21 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 	NumGrpTyp++)
      {
       /***** Allocate memory for the list of group codes of this type *****/
-      if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((1+10+1) * Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)) == NULL)
+      if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((1 + 10 + 1) *
+                                                                 Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enrolled.");
 
       /***** Get the multiple parameter code of group of this type *****/
       sprintf (Param,"GrpCod%ld",Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],((1+10+1) * Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
+      Par_GetParMultiToText (Param,LstStrCodGrps[NumGrpTyp],
+                             ((1 + 10 + 1) * Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps) - 1);
       if (LstStrCodGrps[NumGrpTyp][0])
         {
          /***** Count the number of groups selected of this type of LstCodGrps[NumGrpTyp] *****/
          for (Ptr = LstStrCodGrps[NumGrpTyp], NumGrpWanted = 0;
               *Ptr;
               NumGrpWanted++)
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
 
          /***** Add the number of groups selected of this type to the number of groups selected total *****/
          LstGrpsWanted->NumGrps += NumGrpWanted;
@@ -4162,7 +4164,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
               *Ptr;
               NumGrpWanted++)
            {
-            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+            Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
             LstGrpsWanted->GrpCods[NumGrpWanted] = Str_ConvertStrCodToLongCod (LongStr);
            }
          /* Free memory used by the list of group codes of this type */
@@ -4258,7 +4260,7 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 void Grp_GetParamWhichGrps (void)
   {
    static bool FirstTime = true;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    if (FirstTime)

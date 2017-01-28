@@ -66,9 +66,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
 
-static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
-static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm);
 static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t IndicatorsLayout,
                                                   unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -95,7 +95,7 @@ void Ind_ReqIndicatorsCourses (void)
    extern const char *Txt_Show_more_details;
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
-   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
+   unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
    unsigned NumCrssToList;
    unsigned Ind;
 
@@ -237,7 +237,7 @@ void Ind_ShowIndicatorsCourses (void)
   {
    MYSQL_RES *mysql_res;
    unsigned NumCrss;
-   unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS];
+   unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS];
 
    /***** Get parameters *****/
    Ind_GetParamsIndicators ();
@@ -266,7 +266,7 @@ static void Ind_GetParamNumIndicators (void)
   {
    unsigned Ind;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    long Indicator;
 
    /***** Get parameter multiple with list of indicators selected *****/
@@ -287,7 +287,7 @@ static void Ind_GetParamNumIndicators (void)
 	   )
 	{
 	 /* Get next indicator selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
 	 Indicator = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each indicator in list StrIndicatorsSelected as selected */
@@ -494,7 +494,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
 static bool Ind_GetIfShowBigList (unsigned NumCrss)
   {
    bool ShowBigList;
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** If list of courses is too big... *****/
    if (NumCrss <= Cfg_MIN_NUM_COURSES_TO_CONFIRM_SHOW_BIG_LIST)
@@ -543,7 +543,7 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
 /** Get vector with numbers of courses with 0, 1, 2... indicators set to yes */
 /*****************************************************************************/
 
-static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res)
   {
    MYSQL_ROW row;
@@ -580,7 +580,7 @@ static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+
 /** Show table with numbers of courses with 0, 1, 2... indicators set to yes */
 /*****************************************************************************/
 
-static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1+Ind_NUM_INDICATORS],
+static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                               unsigned NumCrss,bool PutForm)
   {
    extern const char *Txt_Indicators;

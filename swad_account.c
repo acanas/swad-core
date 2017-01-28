@@ -172,7 +172,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Check_another_ID;
    extern const char *Txt_Please_enter_your_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
-   char ID[ID_MAX_LENGTH_USR_ID+1];
+   char ID[ID_MAX_LENGTH_USR_ID + 1];
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -331,7 +331,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    extern const char *Txt_HELP_nickname;
    extern const char *Txt_HELP_email;
    extern const char *Txt_Email;
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
@@ -356,7 +356,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
-            1+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
+            1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
             NewNicknameWithArroba);
 
@@ -697,11 +697,11 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char Query[2048];
-   char PathRelUsr[PATH_MAX+1];
+   char PathRelUsr[PATH_MAX + 1];
    unsigned NumID;
 
    /***** Check if user's code is initialized *****/
@@ -780,7 +780,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 
 static void Acc_CreateNewEncryptedUsrCod (struct UsrData *UsrDat)
   {
-   char RandomStr[LENGTH_RANDOM_STR+1];
+   char RandomStr[LENGTH_RANDOM_STR + 1];
    unsigned NumTry;
 
    for (NumTry = 0;
@@ -1106,7 +1106,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
 
 static void Acc_RemoveUsrBriefcase (struct UsrData *UsrDat)
   {
-   char PathRelUsr[PATH_MAX+1];
+   char PathRelUsr[PATH_MAX + 1];
 
    /***** Remove files of the user's briefcase from disc *****/
    Usr_ConstructPathUsr (UsrDat->UsrCod,PathRelUsr);

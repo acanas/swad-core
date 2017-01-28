@@ -173,7 +173,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    extern const char *Txt_New_message;
    extern const char *Txt_MSG_To;
    extern const char *Txt_Send_message;
-   char YN[1+1];
+   char YN[1 + 1];
    unsigned NumUsrsInCrs = 0;	// Initialized to avoid warning
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
@@ -390,11 +390,11 @@ void Msg_PutHiddenParamsSubjectAndContent (void)
 
 static void Msg_ShowOneUniqueRecipient (void)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
 
    /***** Show user's photo *****/
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 					                NULL,
 		     "PHOTO21x28",Pho_ZOOM,false);
@@ -603,7 +603,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 
 void Msg_PutHiddenParamAnotherRecipient (const struct UsrData *UsrDat)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
    Par_PutHiddenParamString ("OtherRecipients",NicknameWithArroba);
@@ -637,7 +637,7 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_The_message_has_been_sent_to_1_recipient;
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
    extern const char *Txt_There_have_been_X_errors_in_sending_the_message;
-   char YN[1+1];
+   char YN[1 + 1];
    bool IsReply;
    bool RecipientHasBannedMe;
    bool Replied = false;
@@ -1011,10 +1011,10 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
 void Msg_GetParamMsgsCrsCod (void)
   {
    extern const char *Txt_any_course;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    struct Course Crs;
 
-   Par_GetParToText ("FilterCrsCod",LongStr,1+10);
+   Par_GetParToText ("FilterCrsCod",LongStr,1 + 10);
    Gbl.Msg.FilterCrsCod = Str_ConvertStrCodToLongCod (LongStr);
    if (Gbl.Msg.FilterCrsCod > 0)	// If origin course specified
      {
@@ -1037,7 +1037,8 @@ void Msg_GetParamMsgsCrsCod (void)
 void Msg_GetParamFilterFromTo (void)
   {
    /***** Get "from"/"to" filter *****/
-   Par_GetParToText ("FilterFromTo",Gbl.Msg.FilterFromTo,Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3);
+   Par_GetParToText ("FilterFromTo",Gbl.Msg.FilterFromTo,
+                     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3);
   }
 
 /*****************************************************************************/
@@ -1047,7 +1048,8 @@ void Msg_GetParamFilterFromTo (void)
 void Msg_GetParamFilterContent (void)
   {
    /***** Get content filter *****/
-   Par_GetParToText ("FilterContent",Gbl.Msg.FilterContent,Msg_MAX_LENGTH_FILTER_CONTENT);
+   Par_GetParToText ("FilterContent",Gbl.Msg.FilterContent,
+                     Msg_MAX_LENGTH_FILTER_CONTENT);
   }
 
 /*****************************************************************************/
@@ -1306,7 +1308,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    if ((Query = malloc (512 +
                         strlen (Subject) +
 			strlen (Content) +
-			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -1350,7 +1352,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long MsgNum,NumMsgs;
@@ -1590,8 +1592,8 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
 
    /***** Get number of unread messages from database *****/
    if (FilterCrsCod >= 0)	// If origin course selected
@@ -1684,7 +1686,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
    char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1879,7 +1881,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY+1];
+   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
    char *PtrQuery;
    const char *StrUnreadMsg;
 
@@ -2600,7 +2602,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
-            Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3,Gbl.Msg.FilterFromTo);
+            Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
 
    /***** Filter message content *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2647,7 +2649,7 @@ static void Msg_ShowFormToShowOnlyUnreadMessages (void)
 
 static void Msg_GetParamOnlyUnreadMsgs (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get parameter to show only unread (received) messages *****/
    Par_GetParToText ("OnlyUnreadMsgs",YN,1);
@@ -3126,7 +3128,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
   {
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool WriteAuthor = false;
 
    /***** Start first column *****/
@@ -3143,7 +3145,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
    if (WriteAuthor)
      {
       /***** First column with author's photo (if author has a web page, put a link to it) *****/
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO30x40",Pho_ZOOM,false);
@@ -3284,7 +3286,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
    extern const char *Txt_MSG_Sent_and_deleted;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Put an icon to show if user has read the message *****/
    fprintf (Gbl.F.Out,"<table>"
@@ -3304,7 +3306,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 
    /***** Put user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\" style=\"width:30px;\">");
-   ShowPhoto = (Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL));
+   ShowPhoto = (Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL));
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO21x28",Pho_ZOOM,false);
@@ -3360,14 +3362,14 @@ static void Msg_WriteMsgTo (long MsgCod)
    unsigned NumRecipientsKnown;
    unsigned NumRecipientsUnknown;
    unsigned NumRecipientsToShow;
-   char YN[1+1];
+   char YN[1 + 1];
    struct UsrData UsrDat;
    bool Deleted;
    bool OpenByDst;
    bool UsrValid;
    bool ShowPhoto;
    const char *Title;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
       ActSeeRcvMsg,
@@ -3454,7 +3456,7 @@ static void Msg_WriteMsgTo (long MsgCod)
 
          /* Put user's photo */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP\" style=\"width:30px;\">");
-         ShowPhoto = (UsrValid ? Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
+         ShowPhoto = (UsrValid ? Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL) :
                                  false);
          Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	               NULL,
@@ -3597,10 +3599,10 @@ void Msg_PutHiddenParamMsgCod (long MsgCod)
 
 static long Msg_GetParamMsgCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of message *****/
-   Par_GetParToText ("MsgCod",LongStr,1+10);
+   Par_GetParToText ("MsgCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -3777,7 +3779,7 @@ void Msg_ListBannedUsrs (void)
    unsigned NumUsr,NumUsrs;
    struct UsrData UsrDat;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Get my banned users *****/
    sprintf (Query,"SELECT msg_banned.FromUsrCod FROM msg_banned,usr_data"
@@ -3828,7 +3830,7 @@ void Msg_ListBannedUsrs (void)
             /* Show photo */
             fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\""
         	               " style=\"width:30px;\">");
-            ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+            ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);

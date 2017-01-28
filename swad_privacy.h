@@ -48,6 +48,6 @@ void Pri_EditMyPrivacy (void);
 Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str);
 Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName);
 
-bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat);
+bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat);
 
 #endif

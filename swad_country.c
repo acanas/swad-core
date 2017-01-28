@@ -80,7 +80,7 @@ static void Cty_PutParamOtherCtyCod (long CtyCod);
 static long Cty_GetParamOtherCtyCod (void);
 
 static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod);
-static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2+1]);
+static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod);
 static void Cty_PutFormToCreateCountry (void);
 static void Cty_PutHeadCountries (void);
@@ -93,7 +93,7 @@ static void Cty_CreateCountry (struct Country *Cty);
 void Cty_SeeCtyWithPendingInss (void)
   {
    extern const char *Hlp_SYSTEM_Pending;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
    extern const char *Txt_Institutions_ABBREVIATION;
@@ -214,7 +214,7 @@ static void Cty_Configuration (bool PrintView)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Country;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Institutions;
    extern const char *Txt_Institutions_of_COUNTRY_X;
@@ -812,7 +812,7 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class)
 
 bool Cty_CheckIfCountryMapExists (struct Country *Cty)
   {
-   char PathMap[PATH_MAX+1];
+   char PathMap[PATH_MAX + 1];
 
    sprintf (PathMap,"%s/%s/%s/%s/%s.png",
 	    Cfg_PATH_SWAD_PUBLIC,
@@ -889,7 +889,7 @@ void Cty_WriteScriptGoogleGeochart (void)
 
 static void Cty_GetParamCtyOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -934,7 +934,7 @@ void Cty_EditCountries (void)
 
 void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char StrField[32];
    char SubQueryNam1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
    char SubQueryNam2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
@@ -1071,7 +1071,8 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	 }
 
                /* Get number of users who claim to belong to this country */
-               if (sscanf (row[1+Txt_NUM_LANGUAGES*2+1],"%u",&Cty->NumUsrsWhoClaimToBelongToCty) != 1)
+               if (sscanf (row[1 + Txt_NUM_LANGUAGES * 2 + 1],"%u",
+                           &Cty->NumUsrsWhoClaimToBelongToCty) != 1)
                   Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
                /* Get number of institutions in this country */
@@ -1106,7 +1107,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 void Cty_WriteSelectorOfCountry (void)
   {
    extern const char *Txt_Country;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1197,7 +1198,7 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
 bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData)
   {
    extern const char *Txt_Another_country;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char StrField[32];
    char SubQueryNam1[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
    char SubQueryNam2[Cty_MAX_LENGTH_SUBQUERY_CTYS + 1];
@@ -1326,7 +1327,8 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	      }
 
 	    /* Get number of users who claim to belong to this country */
-	    if (sscanf (row[Txt_NUM_LANGUAGES*2+1],"%u",&Cty->NumUsrsWhoClaimToBelongToCty) != 1)
+	    if (sscanf (row[Txt_NUM_LANGUAGES * 2 + 1],"%u",
+	                &Cty->NumUsrsWhoClaimToBelongToCty) != 1)
 	       Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
 	    /* Get number of user in courses of this institution */
@@ -1353,7 +1355,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 
 void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1])
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1456,7 +1458,7 @@ static void Cty_ListCountriesForEdition (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_Countries;
-   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
    Txt_Language_t Lan;
@@ -1599,10 +1601,10 @@ long Cty_GetAndCheckParamOtherCtyCod (void)
 
 static long Cty_GetParamOtherCtyCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of country *****/
-   Par_GetParToText ("OthCtyCod",LongStr,1+10);
+   Par_GetParToText ("OthCtyCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1657,11 +1659,11 @@ void Cty_RenameCountry (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_country_X_empty;
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_The_country_X_has_been_renamed_as_Y;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_The_name_of_the_country_X_has_not_changed;
    char Query[512];
    struct Country *Cty;
-   char NewCtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   char NewCtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
    Txt_Language_t Language;
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -1744,7 +1746,7 @@ static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod)
 /*************** Check if an alphabetic country code exists ******************/
 /*****************************************************************************/
 
-static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2+1])
+static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1])
   {
    char Query[512];
 
@@ -1760,7 +1762,7 @@ static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2+1])
 
 static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
 
    /***** Get number of countries with a name from database *****/
@@ -1777,10 +1779,10 @@ static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Na
 void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char Query[256+Cns_MAX_LENGTH_WWW];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
    struct Country *Cty;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
    Txt_Language_t Language;
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -1820,8 +1822,8 @@ void Cty_ChangeCtyWWW (void)
 
 void Cty_ChangeCtyMapAttribution (void)
   {
-   char Query[256+Cty_MAX_LENGTH_MAP_ATTRIBUTION];
-   char NewMapAttribution[Cty_MAX_LENGTH_MAP_ATTRIBUTION+1];
+   char Query[256 + Cty_MAX_LENGTH_MAP_ATTRIBUTION];
+   char NewMapAttribution[Cty_MAX_LENGTH_MAP_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new map attribution for the country */
@@ -1845,8 +1847,8 @@ static void Cty_PutFormToCreateCountry (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_New_country;
-   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Create_country;
    struct Country *Cty;
    Txt_Language_t Lan;
@@ -1996,7 +1998,7 @@ void Cty_RecFormNewCountry (void)
    extern const char *Txt_The_numerical_code_X_already_exists;
    extern const char *Txt_The_alphabetical_code_X_is_not_correct;
    extern const char *Txt_The_alphabetical_code_X_already_exists;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_The_country_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_country_in_all_languages;
    char ParamName[32];
@@ -2098,7 +2100,7 @@ void Cty_RecFormNewCountry (void)
 
 static void Cty_CreateCountry (struct Country *Cty)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Created_new_country_X;
    Txt_Language_t Lan;
    char StrField[32];

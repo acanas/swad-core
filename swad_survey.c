@@ -50,8 +50,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Svy_MAX_LENGTH_ANSWER		1000
-#define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER*Str_MAX_CHARACTER)
-#define Svy_MAX_BYTES_LIST_ANSWER_TYPES		(10+(Svy_NUM_ANS_TYPES-1)*(1+10))
+#define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER * Str_MAX_CHARACTER)
+#define Svy_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
 
 typedef enum
   {
@@ -76,7 +76,7 @@ struct SurveyQuestion
       char *Text;
      } AnsChoice[Svy_MAX_ANSWERS_PER_QUESTION];
    bool AllAnsTypes;
-   char ListAnsTypes[Svy_MAX_BYTES_LIST_ANSWER_TYPES+1];
+   char ListAnsTypes[Svy_MAX_BYTES_LIST_ANSWER_TYPES + 1];
   };
 
 /*****************************************************************************/
@@ -672,7 +672,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 static void Svy_WriteAuthor (struct Survey *Svy)
   {
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    char FirstName[Usr_MAX_BYTES_NAME + 1];
    char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
@@ -683,7 +683,7 @@ static void Svy_WriteAuthor (struct Survey *Svy)
    /***** Get data of author *****/
    UsrDat.UsrCod = Svy->UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get of the database the data of the author
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -799,7 +799,7 @@ static void Svy_WriteStatus (struct Survey *Svy)
 
 static void Svy_GetParamSvyOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Set default order type *****/
@@ -1508,10 +1508,10 @@ static void Svy_PutParamSvyCod (long SvyCod)
 
 static long Svy_GetParamSvyCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of survey *****/
-   Par_GetParToText ("SvyCod",LongStr,1+10);
+   Par_GetParToText ("SvyCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1811,7 +1811,7 @@ void Svy_RequestCreatOrEditSvy (void)
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
    bool ItsANewSurvey;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
    Svy_GetParamSvyOrderType ();
@@ -2111,7 +2111,7 @@ void Svy_RecFormSurvey (void)
    bool ItsANewSurvey;
    bool NewSurveyIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the survey *****/
    ItsANewSurvey = ((NewSvy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
@@ -2192,7 +2192,7 @@ void Svy_RecFormSurvey (void)
    if (NewSvy.TimeUTC[Svy_START_TIME] == 0)
       NewSvy.TimeUTC[Svy_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewSvy.TimeUTC[Svy_END_TIME] == 0)
-      NewSvy.TimeUTC[Svy_END_TIME] = NewSvy.TimeUTC[Svy_START_TIME] + 24*60*60;	// +24 hours
+      NewSvy.TimeUTC[Svy_END_TIME] = NewSvy.TimeUTC[Svy_START_TIME] + 24 * 60 * 60;	// +24 hours
 
    /***** Get users who can answer this survey *****/
    NewSvy.Roles = Rol_GetSelectedRoles ();
@@ -2268,7 +2268,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_survey_X;
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Create a new survey *****/
    sprintf (Query,"INSERT INTO surveys"
@@ -2303,7 +2303,7 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_survey_has_been_modified;
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
    sprintf (Query,"UPDATE surveys"
@@ -2834,10 +2834,10 @@ static void Svy_PutParamQstCod (long QstCod)
 
 static long Svy_GetParamQstCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of survey *****/
-   Par_GetParToText ("QstCod",LongStr,1+10);
+   Par_GetParToText ("QstCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -2976,13 +2976,13 @@ void Svy_ReceiveQst (void)
    extern const char *Txt_You_can_not_leave_empty_intermediate_answers;
    extern const char *Txt_You_must_type_at_least_the_first_two_answers;
    extern const char *Txt_The_survey_has_been_modified;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
-   char Query[512+Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
+   char Query[512 + Cns_MAX_BYTES_TEXT + 1];
    long SvyCod;
    struct SurveyQuestion SvyQst;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned NumAns;
-   char AnsStr[8+10+1];
+   char AnsStr[8 + 10 + 1];
    unsigned NumLastAns;
    bool ThereIsEndOfAnswers;
    bool Error = false;
@@ -3305,7 +3305,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
          fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                             "%u"
                             "</td>",
-                  Gbl.RowEvenOdd,SvyQst->QstInd+1);
+                  Gbl.RowEvenOdd,SvyQst->QstInd + 1);
 
          /* Write the question type (row[2]) */
          SvyQst->AnswerType = Svy_ConvertFromStrAnsTypDBToAnsTyp (row[2]);
@@ -3698,10 +3698,10 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
    unsigned NumQst;
    unsigned NumQsts;
    long QstCod;
-   char ParamName[3+10+6+1];
-   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION*(10+1)];
+   char ParamName[3 + 10 + 6 + 1];
+   char StrAnswersIndexes[Svy_MAX_ANSWERS_PER_QUESTION * (10 + 1)];
    const char *Ptr;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned AnsInd;
 
    /***** Get questions of this survey from database *****/
@@ -3727,7 +3727,8 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
          /* Get possible parameter with the user's answer */
          sprintf (ParamName,"Ans%010u",(unsigned) QstCod);
          // Lay_ShowAlert (Lay_INFO,ParamName);
-         Par_GetParMultiToText (ParamName,StrAnswersIndexes,Svy_MAX_ANSWERS_PER_QUESTION*(10+1));
+         Par_GetParMultiToText (ParamName,StrAnswersIndexes,
+                                Svy_MAX_ANSWERS_PER_QUESTION * (10 + 1));
          Ptr = StrAnswersIndexes;
          while (*Ptr)
            {

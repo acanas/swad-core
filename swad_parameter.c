@@ -293,10 +293,10 @@ static void Par_CreateListOfParamsFromQueryString (void)
 /*****************************************************************************/
 // TODO: Rename Gbl.F.Tmp to Gbl.F.In (InFile, QueryFile)?
 
-#define Par_LENGTH_OF_STR_BEFORE_PARAM	38	// Length of "Content-Disposition: form-data; name=\""
-#define Par_LENGTH_OF_STR_FILENAME	12	// Length of "; filename=\""
-#define Par_LENGTH_OF_STR_CONTENT_TYPE	14	// Length of "Content-Type: "
-#define Par_MAX_BYTES_STR_AUX		(38+1)	// Space to read any of the three preceding strings
+#define Par_LENGTH_OF_STR_BEFORE_PARAM	38		// Length of "Content-Disposition: form-data; name=\""
+#define Par_LENGTH_OF_STR_FILENAME	12		// Length of "; filename=\""
+#define Par_LENGTH_OF_STR_CONTENT_TYPE	14		// Length of "Content-Type: "
+#define Par_MAX_BYTES_STR_AUX		(38 + 1)	// Space to read any of the three preceding strings
 
 static void Par_CreateListOfParamsFromTmpFile (void)
   {
@@ -307,7 +307,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
    struct Param *Param = NULL;	// Initialized to avoid warning
    struct Param *NewParam;
    int Ch;
-   char StrAux[Par_MAX_BYTES_STR_AUX+1];
+   char StrAux[Par_MAX_BYTES_STR_AUX + 1];
 
    /***** Go over the file
           getting start positions and lengths of parameters *****/
@@ -359,7 +359,7 @@ static void Par_CreateListOfParamsFromTmpFile (void)
 	      {
 	       Str_GetNextStrFromFileConvertingToLower (Gbl.F.Tmp,StrAux,
 	                                                Par_LENGTH_OF_STR_FILENAME-1);
-	       if (!strcasecmp (StrAux,StringFilename+1)) // Start of filename
+	       if (!strcasecmp (StrAux,StringFilename + 1))	// Start of filename
 		 {
 		  /* Get filename */
 		  CurPos = (unsigned long) ftell (Gbl.F.Tmp);	// At start of filename
@@ -648,13 +648,13 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName)
 
 void Par_GetMainParameters (void)
   {
-   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
-   char LongStr[1+10+1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char LongStr[1 + 10 + 1];
 
    /***** Reset codes of country, institution, centre, degree and course *****/
    Gbl.CurrentCty.Cty.CtyCod =
@@ -802,7 +802,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get country if exists (from menu) *****/
-   Par_GetParToText ("cty",LongStr,1+10);
+   Par_GetParToText ("cty",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "cty" available
      {
       Gbl.CurrentCty.Cty.CtyCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -813,7 +813,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get institution if exists (from menu) *****/
-   Par_GetParToText ("ins",LongStr,1+10);
+   Par_GetParToText ("ins",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "ins" available
      {
       Gbl.CurrentIns.Ins.InsCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -823,7 +823,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get centre if exists (from menu) *****/
-   Par_GetParToText ("ctr",LongStr,1+10);
+   Par_GetParToText ("ctr",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "ctr" available
      {
       Gbl.CurrentCtr.Ctr.CtrCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -832,7 +832,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical degree code if exists (from menu) *****/
-   Par_GetParToText ("deg",LongStr,1+10);
+   Par_GetParToText ("deg",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "deg" available
      {
       Gbl.CurrentDeg.Deg.DegCod = Str_ConvertStrCodToLongCod (LongStr);
@@ -840,7 +840,7 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get numerical course code if exists (from menu) *****/
-   Par_GetParToText ("crs",LongStr,1+10);
+   Par_GetParToText ("crs",LongStr,1 + 10);
    if (LongStr[0])	// Parameter "crs" available
       Gbl.CurrentCrs.Crs.CrsCod = Str_ConvertStrCodToLongCod (LongStr);	// Overwrite CrsCod from session
 

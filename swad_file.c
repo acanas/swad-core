@@ -72,7 +72,7 @@ extern struct Globals Gbl;
 
 void Fil_CreateFileForHTMLOutput (void)
   {
-   char PathHTMLOutputPriv[PATH_MAX+1];
+   char PathHTMLOutputPriv[PATH_MAX + 1];
 
    /***** Check if exists the directory for HTML output. If not exists, create it *****/
    sprintf (PathHTMLOutputPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_OUT);
@@ -130,7 +130,7 @@ bool Fil_ReadStdinIntoTmpFile (void)
 	TmpFileSize++)
       if (TmpFileSize < Fil_MAX_FILE_SIZE)
         {
-         if (!(TmpFileSize % (64ULL*1024ULL)))	// Check timeout from time to time
+         if (!(TmpFileSize % (64ULL * 1024ULL)))	// Check timeout from time to time
             if (time (NULL) - Gbl.StartExecutionTimeUTC >= Cfg_TIME_TO_ABORT_FILE_UPLOAD)
                TimeExceeded = true;
          fputc (fgetc (stdin),Gbl.F.Tmp);
@@ -441,7 +441,7 @@ void Fil_RemoveTree (const char *Path)
    struct stat FileStatus;
    struct dirent **FileList;
    int NumFile,NumFiles;
-   char PathFileRel[PATH_MAX+1];
+   char PathFileRel[PATH_MAX + 1];
    bool Error;
 
    if (Fil_CheckIfPathExists (Path))
@@ -505,7 +505,7 @@ void Fil_RemoveOldTmpFiles (const char *Path,time_t TimeToRemove,bool RemoveDire
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char Path2[PATH_MAX+1];
+   char Path2[PATH_MAX + 1];
    struct stat FileStatus;
 
    if (lstat (Path,&FileStatus))	// On success ==> 0 is returned

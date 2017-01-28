@@ -181,7 +181,7 @@ void Hld_SeeHolidays (void)
 
 static void Hld_GetParamHldOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -443,7 +443,7 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 
 static Hld_HolidayType_t Hld_GetParamHldType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    Par_GetParToText ("HldTyp",UnsignedStr,10);
    return Hld_GetTypeOfHoliday (UnsignedStr);
@@ -622,10 +622,10 @@ static void Hld_PutParamHldCod (long HldCod)
 
 long Hld_GetParamHldCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of holiday *****/
-   Par_GetParToText ("HldCod",LongStr,1+10);
+   Par_GetParToText ("HldCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -847,7 +847,7 @@ void Hld_RenameHoliday (void)
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
    char Query[512];
    struct Holiday *Hld;
-   char NewHldName[Hld_MAX_LENGTH_HOLIDAY_NAME+1];
+   char NewHldName[Hld_MAX_LENGTH_HOLIDAY_NAME + 1];
 
    Hld = &Gbl.Hlds.EditingHld;
 

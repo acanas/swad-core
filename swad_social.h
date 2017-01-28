@@ -87,7 +87,7 @@ typedef enum
 
   } Soc_NoteType_t;
 
-#define Soc_NUM_TOP_MESSAGES (1+6)
+#define Soc_NUM_TOP_MESSAGES (1 + 6)
 typedef enum
   {
    Soc_TOP_MESSAGE_NONE		= 0,

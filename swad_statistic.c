@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Sta_SECONDS_IN_RECENT_LOG ((time_t)(Cfg_DAYS_IN_RECENT_LOG*24UL*60UL*60UL))	// Remove entries in recent log oldest than this time
+#define Sta_SECONDS_IN_RECENT_LOG ((time_t) (Cfg_DAYS_IN_RECENT_LOG * 24UL * 60UL * 60UL))	// Remove entries in recent log oldest than this time
 
 const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
   {
@@ -745,7 +745,7 @@ static void Sta_WriteSelectorAction (void)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    Tab_Tab_t Tab;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
@@ -807,7 +807,7 @@ void Sta_SeeCrsAccesses (void)
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10+ID_MAX_LENGTH_USR_ID)*5000 - 1)
+#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10 + ID_MAX_LENGTH_USR_ID) * 5000 - 1)
 
 #define Sta_MAX_LENGTH_COUNT_TYPE (256 - 1)
 
@@ -826,12 +826,12 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    long LengthQuery;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    const char *LogTable;
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    struct UsrData UsrDat;
-   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1];
+   char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1];
    unsigned NumUsr = 0;
    const char *Ptr;
    char StrRole[256];
@@ -1545,7 +1545,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    Rol_Role_t RoleFromLog;
    unsigned UniqueId;
    long ActCod;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
 
    /***** Initialize estructura of data of the user *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -1620,7 +1620,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
                       "</td>",
             Txt_Clicks,
             FirstRow,LastRow,Txt_of_PART_OF_A_TOTAL,NumRows,
-            Txt_page,NumPagesBefore+1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
+            Txt_page,NumPagesBefore + 1,Txt_of_PART_OF_A_TOTAL,NumPagsTotal);
 
    /* Put link to jump to next page (more recent clicks) */
    if (LastRow < NumRows)
@@ -1628,10 +1628,10 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
-      Par_PutHiddenParamUnsigned ("FirstRow",(unsigned) (LastRow+1));
-      Par_PutHiddenParamUnsigned ("LastRow",(unsigned) (LastRow+Gbl.Stat.RowsPerPage));
-      Par_PutHiddenParamUnsigned ("RowsPage",(unsigned) Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+      Par_PutHiddenParamUnsigned ("FirstRow" ,(unsigned) (LastRow + 1));
+      Par_PutHiddenParamUnsigned ("LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
+      Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
      }
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
@@ -1810,7 +1810,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
    struct Sta_Hits Hits;
    unsigned BarWidth;
    struct UsrData UsrDat;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
 
    /***** Initialize user's data *****/
@@ -1865,7 +1865,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
       /* Show the photo */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
                         "PHOTO15x20",Pho_ZOOM,false);
@@ -2061,7 +2061,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
 /*****************************************************************************/
 
 #define GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH 25
-#define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH*24)
+#define GRAPH_DISTRIBUTION_PER_HOUR_TOTAL_WIDTH (GRAPH_DISTRIBUTION_PER_HOUR_HOUR_WIDTH * 24)
 
 static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
@@ -2335,7 +2335,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
 static Sta_ColorType_t Sta_GetStatColorType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("ColorType",UnsignedStr,10);
@@ -2808,9 +2808,9 @@ static void Sta_WriteAccessHour (unsigned Hour,struct Sta_Hits *Hits,unsigned Co
 /**** Show a listing with the number of clicks in every minute of the day ***/
 /*****************************************************************************/
 
-#define NUM_MINUTES_PER_DAY		(60*24)			// 1440 minutes in a day
-#define WIDTH_SEMIDIVISION_GRAPHIC	30
-#define NUM_DIVISIONS_X			10
+#define Sta_NUM_MINUTES_PER_DAY		(60 * 24)	// 1440 minutes in a day
+#define Sta_WIDTH_SEMIDIVISION_GRAPHIC	30
+#define Sta_NUM_DIVISIONS_X		10
 
 static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
@@ -2823,7 +2823,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
    unsigned MinuteDayRead = 0;
    unsigned i;
    struct Sta_Hits Hits;
-   float NumClicksPerMin[NUM_MINUTES_PER_DAY];
+   float NumClicksPerMin[Sta_NUM_MINUTES_PER_DAY];
    float Power10LeastOrEqual;
    float MaxX;
    float IncX;
@@ -2833,7 +2833,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
      {
       /***** Compute number of clicks (and máximo) in every minute *****/
       Hits.Max = 0.0;
-      while (MinuteDay < NUM_MINUTES_PER_DAY)
+      while (MinuteDay < Sta_NUM_MINUTES_PER_DAY)
 	{
 	 if (NumRow <= NumRows)	// If not all the result of the query are yet read
 	   {
@@ -2855,7 +2855,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	   }
 	 else
 	    for (i = MinuteDayRead + 1;
-		 i < NUM_MINUTES_PER_DAY;
+		 i < Sta_NUM_MINUTES_PER_DAY;
 		 i++, MinuteDay++)
 	       NumClicksPerMin[i] = 0.0;
 	}
@@ -2868,7 +2868,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	 Power10LeastOrEqual = (float) pow (10.0,floor (log10 ((double) Hits.Max)));
 	 MaxX = ceil (Hits.Max / Power10LeastOrEqual) * Power10LeastOrEqual;
 	}
-      IncX = MaxX / (float) NUM_DIVISIONS_X;
+      IncX = MaxX / (float) Sta_NUM_DIVISIONS_X;
       if (IncX >= 1.0)
 	 Format = "%.0f";
       else if (IncX >= 0.1)
@@ -2885,7 +2885,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 
       /***** Y axis and graphic *****/
       for (i = 0;
-	   i < NUM_MINUTES_PER_DAY;
+	   i < Sta_NUM_MINUTES_PER_DAY;
 	   i++)
 	 Sta_WriteAccessMinute (i,NumClicksPerMin[i],MaxX);
 
@@ -2897,11 +2897,11 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " alt=\"\" title=\"\""
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>",
-	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
-	       WIDTH_SEMIDIVISION_GRAPHIC);
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* All the intermediate divisions */
       for (i = 0;
-	   i < NUM_DIVISIONS_X*2;
+	   i < Sta_NUM_DIVISIONS_X * 2;
 	   i++)
 	 fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                    "<img src=\"%s/ejex24x1.gif\""
@@ -2909,8 +2909,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                    " style=\"display:block;"
 	                    " width:%upx; height:1px;\" />"
 	                    "</td>",
-		  WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
-		  WIDTH_SEMIDIVISION_GRAPHIC);
+		  Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+		  Sta_WIDTH_SEMIDIVISION_GRAPHIC);
       /* Last division (right) */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">"
 	                 "<img src=\"%s/tr24x1.gif\""
@@ -2918,8 +2918,8 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 	                 " style=\"display:block; width:%upx; height:1px;\" />"
 	                 "</td>"
 	                 "</tr>",
-	       WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
-	       WIDTH_SEMIDIVISION_GRAPHIC);
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,
+	       Sta_WIDTH_SEMIDIVISION_GRAPHIC);
 
       /***** Write again the labels of the X axis *****/
       Sta_WriteLabelsXAxisAccMin (IncX,Format);
@@ -2930,7 +2930,7 @@ static void Sta_ShowAverageAccessesPerMinute (unsigned long NumRows,MYSQL_RES *m
 /****** Write labels of the X axis in the graphic of clicks per minute *******/
 /*****************************************************************************/
 
-#define WIDTH_DIVISION_GRAPHIC	(WIDTH_SEMIDIVISION_GRAPHIC*2)	// 60
+#define Sta_WIDTH_DIVISION_GRAPHIC	(Sta_WIDTH_SEMIDIVISION_GRAPHIC * 2)	// 60
 
 static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
   {
@@ -2939,12 +2939,12 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 
    fprintf (Gbl.F.Out,"<tr>");
    for (i = 0, NumX = 0;
-	i <= NUM_DIVISIONS_X;
+	i <= Sta_NUM_DIVISIONS_X;
 	i++, NumX += IncX)
      {
       fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LOG CENTER_BOTTOM\""
 	                 " style=\"width:%upx;\">",
-               WIDTH_DIVISION_GRAPHIC);
+               Sta_WIDTH_DIVISION_GRAPHIC);
       fprintf (Gbl.F.Out,Format,NumX);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -2955,7 +2955,7 @@ static void Sta_WriteLabelsXAxisAccMin (float IncX,const char *Format)
 /***** Write a row of the graphic with number of clicks in every minute ******/
 /*****************************************************************************/
 
-#define WIDTH_GRAPHIC		(WIDTH_DIVISION_GRAPHIC*NUM_DIVISIONS_X)	// 60*10=600
+#define Sta_WIDTH_GRAPHIC	(Sta_WIDTH_DIVISION_GRAPHIC * Sta_NUM_DIVISIONS_X)	// 60 * 10 = 600
 
 static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
   {
@@ -2974,8 +2974,8 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "00h"
 	                 "</td>",
-               WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
-   else if (Minute == (NUM_MINUTES_PER_DAY - 30))
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
+   else if (Minute == (Sta_NUM_MINUTES_PER_DAY - 30))
       // If 23:30
       fprintf (Gbl.F.Out,"<td rowspan=\"30\" class=\"LOG LEFT_BOTTOM\""
 	                 " style=\"width:%upx;"
@@ -2984,7 +2984,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "24h"
 	                 "</td>",
-               WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL);
    else if (!(Minute % 30) && (Minute % 60))
       // If minute is multiple of 30 but not of 60 (i.e.: 30, 90, 150...)
       fprintf (Gbl.F.Out,"<td rowspan=\"60\" class=\"LOG LEFT_MIDDLE\""
@@ -2994,7 +2994,7 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	                 " background-repeat:repeat;\">"
 	                 "%02uh"
 	                 "</td>",
-               WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,(Minute + 30) / 60);
+               Sta_WIDTH_SEMIDIVISION_GRAPHIC,Gbl.Prefs.IconsURL,(Minute + 30) / 60);
 
    /***** Start of cell for the graphic *****/
    fprintf (Gbl.F.Out,"<td colspan=\"%u\" class=\"LEFT_BOTTOM\""
@@ -3002,13 +3002,13 @@ static void Sta_WriteAccessMinute (unsigned Minute,float HitsNum,float MaxX)
 	              " background-image:url('%s/malla%c48x1.gif');"
 	              " background-size:60px 1px;"
 	              " background-repeat:repeat;\">",
-	    NUM_DIVISIONS_X*2,WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
+	    Sta_NUM_DIVISIONS_X * 2,Sta_WIDTH_GRAPHIC,Gbl.Prefs.IconsURL,
 	    (Minute % 60) == 0 ? 'v' :
 		                 'h');
 
    /***** Draw bar with anchura proporcional al number of clicks *****/
    if (HitsNum != 0.0)
-      if ((BarWidth = (unsigned) (((HitsNum * (float) WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
+      if ((BarWidth = (unsigned) (((HitsNum * (float) Sta_WIDTH_GRAPHIC / MaxX)) + 0.5)) != 0)
 	 fprintf (Gbl.F.Out,"<img src=\"%s/b%c1x1.gif\""
 	                    " alt=\"\" title=\"\""
 	                    " style=\"display:block;"
@@ -3036,7 +3036,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    struct Sta_Hits Hits;
    MYSQL_ROW row;
    long ActCod;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3652,7 +3652,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    extern const char *Txt_Course;
    extern const char *Txt_STAT_TYPE_COUNT_CAPS[Sta_NUM_COUNT_TYPES];
    extern const char *Txt_Go_to_X;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];	// Declaration in swad_degree.c
    unsigned long NumRow;
    unsigned long Ranking;
    struct Sta_Hits Hits;
@@ -3976,7 +3976,7 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowNumUsrsPerSideColumns,	// Sta_SIDE_COLUMNS
       Sta_GetAndShowNumUsrsPerPrivacy,		// Sta_PRIVACY
      };
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Get the type of figure ******/
@@ -8514,13 +8514,13 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
    extern const char *Hlp_STATS_Figures_language;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Language;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_No_of_users;
    extern const char *Txt_PERCENT_of_users;
    Txt_Language_t Lan;
    char Query[1024];
-   unsigned NumUsrs[1+Txt_NUM_LANGUAGES];
+   unsigned NumUsrs[1 + Txt_NUM_LANGUAGES];
    unsigned NumUsrsTotal = 0;
 
    /***** Start table *****/
@@ -9420,8 +9420,10 @@ void Sta_WriteTime (char *Str,long TimeInMicroseconds)
       sprintf (Str,"%ld &micro;s",TimeInMicroseconds);
    else if (TimeInMicroseconds < 1000000L)
       sprintf (Str,"%ld ms",TimeInMicroseconds / 1000);
-   else if (TimeInMicroseconds < (60*1000000L))
+   else if (TimeInMicroseconds < (60 * 1000000L))
       sprintf (Str,"%.1f s",(float) TimeInMicroseconds / 1E6);
    else
-      sprintf (Str,"%ld min, %ld s",TimeInMicroseconds / (60*1000000L),(TimeInMicroseconds/1000000L) % 60);
+      sprintf (Str,"%ld min, %ld s",
+               TimeInMicroseconds / (60 * 1000000L),
+               (TimeInMicroseconds / 1000000L) % 60);
   }

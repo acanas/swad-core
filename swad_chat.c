@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
-                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS]);
+                                  unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS]);
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName);
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
 
@@ -100,7 +100,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
-   bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS];
+   bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
    unsigned NumMyDeg;
    struct Degree Deg;
    struct Course Crs;
@@ -108,9 +108,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
-   char ThisRoomCode    [MAX_LENGTH_ROOM_CODE     +1];
-   char ThisRoomShrtName[MAX_LENGTH_ROOM_SHRT_NAME+1];
-   char ThisRoomFullName[MAX_LENGTH_ROOM_FULL_NAME+1];
+   char ThisRoomCode    [MAX_LENGTH_ROOM_CODE      + 1];
+   char ThisRoomShrtName[MAX_LENGTH_ROOM_SHRT_NAME + 1];
+   char ThisRoomFullName[MAX_LENGTH_ROOM_FULL_NAME + 1];
 
    /***** Fill the list with the degrees I belong to *****/ 
    Usr_GetMyDegrees ();
@@ -295,7 +295,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 /*****************************************************************************/
 
 static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
-                                  unsigned Level,bool IsLastItemInLevel[1+Cht_CHAT_MAX_LEVELS])
+                                  unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
 

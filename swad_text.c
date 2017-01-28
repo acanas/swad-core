@@ -105,7 +105,7 @@ const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n t
 // i with tilde: &#297;
 
 /***** Languages *****/
-const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES] = // ISO 639-1 language codes
+const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES] = // ISO 639-1 language codes
 	{
 	"",	// Txt_LANGUAGE_UNKNOWN
 	"ca",	// Txt_LANGUAGE_CA
@@ -139,7 +139,7 @@ const unsigned Txt_Current_CGI_SWAD_Language = Txt_LANGUAGE_PL;
 const unsigned Txt_Current_CGI_SWAD_Language = Txt_LANGUAGE_PT;
 #endif
 
-const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES] =
+const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES] =
 	{
 	"",
 	"Catal&agrave;",
@@ -152,7 +152,7 @@ const char *Txt_STR_LANG_NAME[1+Txt_NUM_LANGUAGES] =
 	"Polski",
 	"Portugu&ecirc;s",
 	};
-const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
+const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
 	{
 	"",
 	"Voleu canviar l'idioma a catal&agrave;?",
@@ -165,7 +165,7 @@ const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1+Txt_NUM_LANGUAG
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar o idioma para portugu&ecirc;s?",
 	};
-const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
+const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
 	{
 	"",
 	"Voleu canviar el seu idioma a catal&agrave;?",
@@ -178,7 +178,7 @@ const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1+Txt_NUM_LANGUA
 	"Czy chcesz zmieni&cacute; j&eogon;zyk na polski?",
 	"Voc&ecirc; quer mudar suo idioma para portugu&ecirc;s?",
 	};
-const char *Txt_Switch_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
+const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
 	{
 	"",
 	"Canviar a catal&agrave;",
@@ -191,7 +191,7 @@ const char *Txt_Switch_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
 	"Prze&lstrok;&aogon;cz na polski",
 	"Mudar para portugu&ecirc;s",
 	};
-const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES] =
+const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES] =
 	{
 	"",
 	"Canviant a catal&agrave;&hellip;",
@@ -261,7 +261,7 @@ const char *Txt_Confirmation_of_your_email_NO_HTML =	// Don't use HTML entities 
 // The following variables are compilated together in all languages because they are used in emails...
 // ...and each email is sent in the language of the recipient
 
-const char *Txt_Course_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Course_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Assignatura",
@@ -275,7 +275,7 @@ const char *Txt_Course_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities
 	"Disciplina",
 	};
 
-const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 {
 	{
 	// Usr_SEX_UNKNOWN
@@ -331,7 +331,7 @@ const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES] =	// Don't use H
 	}
 };
 
-const char *Txt_Forum_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_Forum_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
 	"",
 	"Fòrum",
@@ -345,7 +345,7 @@ const char *Txt_Forum_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities 
 	"Fórum",
 	};
 
-const char *Txt_General_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &eacute; here
+const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &eacute; here
 	{
 	"",
 	"General",
@@ -359,7 +359,7 @@ const char *Txt_General_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entitie
 	"Geral",
 	};
 
-const char *Txt_Go_to_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &agrave; here
+const char *Txt_Go_to_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &agrave; here
 	{
 	"",
 	"Anar a",
@@ -457,7 +457,7 @@ const char *Txt_If_you_just_request_from_X_the_confirmation_of_your_email_Y_NO_H
 	" if you have confirmed your email address.\n\n";	// Necessita de tradução
 #endif
 
-const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Si no desitgeu rebre més avisos per correu,"
@@ -501,7 +501,7 @@ const char *Txt_Institutions_NO_HTML =
 	"Instituções";
 #endif
 
-const char *Txt_MSG_From_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_MSG_From_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"De",
@@ -515,7 +515,7 @@ const char *Txt_MSG_From_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entiti
 	"De",
 	};
 
-const char *Txt_Notifications_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Notificacions",
@@ -529,7 +529,7 @@ const char *Txt_Notifications_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML e
 	"Notificações",
 	};
 
-const char *Txt_New_password_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &ntilde; here.
+const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &ntilde; here.
 	{
 	"",
 	"Nova contrasenya",
@@ -543,7 +543,7 @@ const char *Txt_New_password_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML en
 	"Nova senha",
 	};
 
-const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &uuml; here.
+const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &uuml; here.
 {
 	{
 	// Ntf_EVENT_UNKNOWN
@@ -807,7 +807,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_
 	},
 };
 
-const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
 	"",
 	"Hi ha un nou esdeveniment en %s",
@@ -821,7 +821,7 @@ const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1+Txt_NUM_LANGUAGES] 
 	"Existe um novo evento em %s",
 	};
 
-const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %u and %s in the following sentences
+const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Warning: it is very important to include %u and %s in the following sentences
 	{			// Don't use HTML entities like &uuml; here.
 	"",
 	"Hi ha %u nous esdeveniments en %s",
@@ -835,7 +835,7 @@ const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1+Txt_NUM_LANGUAGES
 	"Há %u novos eventos em %s",
 	};
 
-const char *Txt_only_teachers_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
+const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &oacute; here
 	{
 	"",
 	", professors",
@@ -849,7 +849,7 @@ const char *Txt_only_teachers_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML e
 	", professores",
 	};
 
-const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Si us plau, no respongui a aquest correu generat automàticament.",
@@ -863,7 +863,7 @@ const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTM
 	"Por favor, não responda a este email gerado automaticamente.",
 	 };
 
-const char *Txt_TAB_Messages_NO_HTML[1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_TAB_Messages_NO_HTML[1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 	{
 	"",
 	"Missatges",
@@ -1267,7 +1267,7 @@ const char *Txt_UPLOAD_FILE_Upload_time_too_long_maximum_X_minutes_NO_HTML =	// 
 	"Tempo de upload muito longo (máximo %lu minutos).";
 #endif
 
-const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
+const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES] =	// Don't use HTML entities like &egrave; here
 {
 	{
 	// Usr_SEX_UNKNOWN

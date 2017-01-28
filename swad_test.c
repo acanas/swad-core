@@ -78,7 +78,7 @@ const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-#define Tst_MAX_BYTES_TAGS_LIST		(16*1024)
+#define Tst_MAX_BYTES_TAGS_LIST		(16 * 1024)
 #define Tst_MAX_BYTES_FLOAT_ANSWER	30	// Maximum length of the strings that store an floating point answer
 
 const char *Tst_PluggableDB[Tst_NUM_OPTIONS_PLUGGABLE] =
@@ -497,7 +497,7 @@ void Tst_AssessTest (void)
    extern const char *Txt_The_test_X_has_already_been_assessed_previously;
    extern const char *Txt_There_was_an_error_in_assessing_the_test_X;
    unsigned NumTst;
-   char YN[1+1];
+   char YN[1 + 1];
    long TstCod = -1L;	// Initialized to avoid warning
    unsigned NumQstsNotBlank;
    double TotalScore;
@@ -580,8 +580,8 @@ void Tst_AssessTest (void)
 static void Tst_GetQuestionsAndAnswersFromForm (void)
   {
    unsigned NumQst;
-   char StrQstIndOrAns[3+10+1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
-   char LongStr[1+10+1];
+   char StrQstIndOrAns[3 + 10 + 1];	// "Qstxx...x", "Indxx...x" or "Ansxx...x"
+   char LongStr[1 + 10 + 1];
 
    /***** Get questions and answers *****/
    for (NumQst = 0;
@@ -590,7 +590,7 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
      {
       /* Get question code */
       sprintf (StrQstIndOrAns,"Qst%06u",NumQst);
-      Par_GetParToText (StrQstIndOrAns,LongStr,1+10);
+      Par_GetParToText (StrQstIndOrAns,LongStr,1 + 10);
       if ((Gbl.Test.QstCodes[NumQst] = Str_ConvertStrCodToLongCod (LongStr)) < 0)
 	 Lay_ShowErrorAndExit ("Code of question is missing.");
 
@@ -1418,10 +1418,10 @@ void Tst_DisableTag (void)
 
 static long Tst_GetParamTagCode (void)
   {
-   char StrLong[1+10+1];
+   char StrLong[1 + 10 + 1];
    long TagCod;
 
-   Par_GetParToText ("TagCod",StrLong,1+10);
+   Par_GetParToText ("TagCod",StrLong,1 + 10);
    if ((TagCod = Str_ConvertStrCodToLongCod (StrLong)) < 0)
       Lay_ShowErrorAndExit ("Code of tag is missing.");
 
@@ -1437,9 +1437,9 @@ void Tst_RenameTag (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_tag_X_empty;
    extern const char *Txt_The_tag_X_has_been_renamed_as_Y;
    extern const char *Txt_The_tag_X_has_not_changed;
-   char OldTagTxt[Tst_MAX_BYTES_TAG+1];
-   char NewTagTxt[Tst_MAX_BYTES_TAG+1];
-   char Query[1024+2*Tst_MAX_BYTES_TAG];
+   char OldTagTxt[Tst_MAX_BYTES_TAG + 1];
+   char NewTagTxt[Tst_MAX_BYTES_TAG + 1];
+   char Query[1024 + 2 * Tst_MAX_BYTES_TAG];
    long ExistingTagCod;
    long OldTagCod;
    bool ComplexRenaming;
@@ -1616,7 +1616,7 @@ static void Tst_ShowFormSelTags (unsigned long NumRows,MYSQL_RES *mysql_res,
    MYSQL_ROW row;
    bool TagHidden = false;
    const char *Ptr;
-   char TagText[Tst_MAX_BYTES_TAG+1];
+   char TagText[Tst_MAX_BYTES_TAG + 1];
 
    /***** Label *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2106,7 +2106,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 void Tst_ReceiveConfigTst (void)
   {
    extern const char *Txt_The_test_configuration_has_been_updated;
-   char IntStr[1+10+1];
+   char IntStr[1 + 10 + 1];
    int IntNum;
    long LongNum;
    char Query[512];
@@ -2116,21 +2116,21 @@ void Tst_ReceiveConfigTst (void)
 
    /***** Get number of questions *****/
    /* Get minimum number of questions */
-   Par_GetParToText ("NumQstMin",IntStr,1+10);
+   Par_GetParToText ("NumQstMin",IntStr,1 + 10);
    if (sscanf (IntStr,"%d",&IntNum) != 1)
       Lay_ShowErrorAndExit ("Minimum number of questions is missing.");
    Gbl.Test.Config.Min = (IntNum < 1) ? 1 :
 	                                (unsigned) IntNum;
 
    /* Get default number of questions */
-   Par_GetParToText ("NumQstDef",IntStr,1+10);
+   Par_GetParToText ("NumQstDef",IntStr,1 + 10);
    if (sscanf (IntStr,"%d",&IntNum) != 1)
       Lay_ShowErrorAndExit ("Default number of questions is missing.");
    Gbl.Test.Config.Def = (IntNum < 1) ? 1 :
 	                                (unsigned) IntNum;
 
    /* Get maximum number of questions */
-   Par_GetParToText ("NumQstMax",IntStr,1+10);
+   Par_GetParToText ("NumQstMax",IntStr,1 + 10);
    if (sscanf (IntStr,"%d",&IntNum) != 1)
       Lay_ShowErrorAndExit ("Maximum number of questions is missing.");
    Gbl.Test.Config.Max = (IntNum < 1) ? 1 :
@@ -2140,7 +2140,7 @@ void Tst_ReceiveConfigTst (void)
    Tst_CheckAndCorrectNumbersQst ();
 
    /***** Get minimum time between consecutive tests, per question *****/
-   Par_GetParToText ("MinTimeNxtTstPerQst",IntStr,1+10);
+   Par_GetParToText ("MinTimeNxtTstPerQst",IntStr,1 + 10);
    if (sscanf (IntStr,"%ld",&LongNum) != 1)
       Lay_ShowErrorAndExit ("Minimum time per question between two test is missing.");
    Gbl.Test.Config.MinTimeNxtTstPerQst = (LongNum < 1L) ? 0UL :
@@ -2173,7 +2173,7 @@ void Tst_ReceiveConfigTst (void)
 
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Pluggable",UnsignedStr,10);
@@ -2194,7 +2194,7 @@ static Tst_Pluggable_t Tst_GetPluggableFromForm (void)
 
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Feedback",UnsignedStr,10);
@@ -2249,7 +2249,7 @@ static void Tst_ShowFormAnswerTypes (unsigned NumCols)
    extern const char *Txt_All_types_of_answers;
    extern const char *Txt_TST_STR_ANSWER_TYPES[Tst_NUM_ANS_TYPES];
    Tst_AnswerType_t AnsType;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    const char *Ptr;
 
    /***** Label *****/
@@ -2348,7 +2348,7 @@ void Tst_ListQuestionsToEdit (void)
 /********** Get from the database several test questions for listing *********/
 /*****************************************************************************/
 
-#define Tst_MAX_LENGTH_QUERY_TEST (16*1024 - 1)
+#define Tst_MAX_LENGTH_QUERY_TEST (16 * 1024 - 1)
 
 static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
   {
@@ -2359,10 +2359,10 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    unsigned NumItemInList;
    const char *Ptr;
    char TagText[Tst_MAX_BYTES_TAG + 1];
-   char LongStr[1+10+1];
-   char UnsignedStr[10+1];
+   char LongStr[1 + 10 + 1];
+   char UnsignedStr[10 + 1];
    Tst_AnswerType_t AnsType;
-   char CrsCodStr[1+10+1];
+   char CrsCodStr[1 + 10 + 1];
 
    /***** Select questions *****/
    /* Start query */
@@ -2526,10 +2526,10 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
-   char TagText[Tst_MAX_BYTES_TAG+1];
-   char UnsignedStr[10+1];
+   char TagText[Tst_MAX_BYTES_TAG + 1];
+   char UnsignedStr[10 + 1];
    Tst_AnswerType_t AnsType;
-   char StrNumQsts[10+1];
+   char StrNumQsts[10 + 1];
 
    /***** Select questions without hidden tags *****/
    /*
@@ -3382,7 +3382,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
    MYSQL_ROW row;
    unsigned Index;
    bool ErrorInIndex = false;
-   char ParamName[3+6+1];
+   char ParamName[3 + 6 + 1];
 
    /***** Get answers of a question from database *****/
    Gbl.Test.Answer.NumOptions = Tst_GetAnswersQst (QstCod,&mysql_res,Shuffle);	// Result: AnsInd,Answer,Correct
@@ -3488,7 +3488,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
    extern const char *Txt_TEST_Correct_answer;
    unsigned NumOpt;
    MYSQL_ROW row;
-   char StrOneIndex[10+1];
+   char StrOneIndex[10 + 1];
    const char *Ptr;
    unsigned Indexes[Tst_MAX_OPTIONS_PER_QUESTION];	// Indexes of all answers of this question
    int AnsUsr;
@@ -4192,7 +4192,7 @@ static void Tst_WriteScoreEnd (void)
 
 static void Tst_WriteParamQstCod (unsigned NumQst,long QstCod)
   {
-   char ParamName[3+6+1];
+   char ParamName[3 + 6 + 1];
 
    sprintf (ParamName,"Qst%06u",NumQst);
    Par_PutHiddenParamLong (ParamName,QstCod);
@@ -4274,9 +4274,9 @@ static bool Tst_GetParamsTst (void)
    extern const char *Txt_You_must_select_one_ore_more_tags;
    extern const char *Txt_You_must_select_one_ore_more_types_of_answer;
    extern const char *Txt_The_number_of_questions_must_be_in_the_interval_X;
-   char YN[1+1];
+   char YN[1 + 1];
    bool Error = false;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Tags *****/
@@ -4285,7 +4285,7 @@ static bool Tst_GetParamsTst (void)
    Gbl.Test.Tags.All = (Str_ConvertToUpperLetter (YN[0]) == 'Y');
 
    /* Get the tags */
-   if ((Gbl.Test.Tags.List = malloc (Tst_MAX_BYTES_TAGS_LIST+1)) == NULL)
+   if ((Gbl.Test.Tags.List = malloc (Tst_MAX_BYTES_TAGS_LIST + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store tags.");
    Par_GetParMultiToText ("ChkTag",Gbl.Test.Tags.List,Tst_MAX_BYTES_TAGS_LIST);
 
@@ -4350,7 +4350,7 @@ static bool Tst_GetParamsTst (void)
 
 static unsigned Tst_GetAndCheckParamNumTst (void)
   {
-   char IntStr[1+10+1];
+   char IntStr[1 + 10 + 1];
    int IntNum;
 
    /***** Get number of test *****/
@@ -4375,7 +4375,7 @@ static unsigned Tst_GetAndCheckParamNumTst (void)
 
 static void Tst_GetParamNumQst (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Set default number of questions *****/
@@ -4394,7 +4394,7 @@ static void Tst_GetParamNumQst (void)
 
 static bool Tst_GetCreateXMLFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("CreateXML",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
@@ -4408,7 +4408,7 @@ static int Tst_CountNumTagsInList (void)
   {
    const char *Ptr;
    int NumTags = 0;
-   char TagText[Tst_MAX_BYTES_TAG+1];
+   char TagText[Tst_MAX_BYTES_TAG + 1];
 
    /***** Go over the list Gbl.Test.Tags.List counting the number of tags *****/
    if (Gbl.Test.Tags.List)
@@ -4431,7 +4431,7 @@ static int Tst_CountNumAnswerTypesInList (void)
   {
    const char *Ptr;
    int NumAnsTypes = 0;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /***** Go over the list Gbl.Test.ListAnsTypes counting the number of types of answer *****/
    Ptr = Gbl.Test.ListAnsTypes;
@@ -5280,8 +5280,8 @@ static Tst_AnswerType_t Tst_ConvertFromUnsignedStrToAnsTyp (const char *Unsigned
 
 void Tst_ReceiveQst (void)
   {
-   char Stem[Cns_MAX_BYTES_TEXT+1];
-   char Feedback[Cns_MAX_BYTES_TEXT+1];
+   char Stem[Cns_MAX_BYTES_TEXT + 1];
+   char Feedback[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Create test question *****/
    Tst_QstConstructor ();
@@ -5321,15 +5321,15 @@ void Tst_ReceiveQst (void)
 
 static void Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
-   char UnsignedStr[10+1];
-   char YN[1+1];
+   char UnsignedStr[10 + 1];
+   char YN[1 + 1];
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
-   char TagStr[6+10+1];
-   char AnsStr[6+10+1];
-   char FbStr[5+10+1];
-   char StrMultiAns[Tst_MAX_SIZE_ANSWERS_ONE_QST+1];
+   char TagStr[6 + 10 + 1];
+   char AnsStr[6 + 10 + 1];
+   char FbStr[5 + 10 + 1];
+   char StrMultiAns[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
    const char *Ptr;
    unsigned NumCorrectAns;
 
@@ -5385,7 +5385,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
          if (!Tst_AllocateTextChoiceAnswer (0))
             Lay_ShowErrorAndExit (Gbl.Message);
 
-	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1+10);
+	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1 + 10);
 	 break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
@@ -5778,7 +5778,7 @@ double Tst_GetFloatAnsFromStr (char *Str)
 
 static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
   {
-   char Query[256+Tst_MAX_BYTES_TAG];
+   char Query[256 + Tst_MAX_BYTES_TAG];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -5822,7 +5822,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 
 static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
   {
-   char Query[256+Tst_MAX_BYTES_TAG];
+   char Query[256 + Tst_MAX_BYTES_TAG];
 
    /***** Insert new tag into tst_tags table *****/
    sprintf (Query,"INSERT INTO tst_tags (CrsCod,ChangeTime,TagTxt,TagHidden)"
@@ -5880,7 +5880,7 @@ void Tst_RequestRemoveQst (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_question_X;
    extern const char *Txt_Remove_question;
-   char YN[1+1];
+   char YN[1 + 1];
    bool EditingOnlyThisQst;
 
    /***** Get main parameters from form *****/
@@ -5934,7 +5934,7 @@ void Tst_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
    char Query[512];
-   char YN[1+1];
+   char YN[1 + 1];
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
@@ -5983,7 +5983,7 @@ void Tst_ChangeShuffleQst (void)
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
    char Query[512];
-   char YN[1+1];
+   char YN[1 + 1];
    bool EditingOnlyThisQst;
    bool Shuffle;
 
@@ -6029,9 +6029,9 @@ void Tst_ChangeShuffleQst (void)
 
 static long Tst_GetQstCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
-   Par_GetParToText ("QstCod",LongStr,1+10);
+   Par_GetParToText ("QstCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -6066,7 +6066,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    if ((Query = malloc (512 +
                         Gbl.Test.Stem.Length +
                         Gbl.Test.Feedback.Length +
-                        Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+                        Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
                         Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -6171,7 +6171,7 @@ static void Tst_InsertAnswersIntoDB (void)
    unsigned i;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (256+Tst_MAX_BYTES_ANSWER_OR_FEEDBACK*2)) == NULL)
+   if ((Query = malloc (256 + Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Insert answers in the answers table *****/
@@ -7518,7 +7518,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
   {
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Show user's photo and name *****/
    fprintf (Gbl.F.Out,"<td ");
@@ -7526,7 +7526,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO45x60",Pho_ZOOM,false);
@@ -7573,10 +7573,10 @@ static void Tst_PutParamTstCod (long TstCod)
 
 static long Tst_GetParamTstCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of test *****/
-   Par_GetParToText ("TstCod",LongStr,1+10);
+   Par_GetParToText ("TstCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -7601,7 +7601,7 @@ void Tst_ShowOneTestResult (void)
    unsigned NumQstsNotBlank;
    double TotalScore;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ItsMe;
    bool ICanViewTest;
    bool ICanViewScore;
@@ -7697,7 +7697,7 @@ void Tst_ShowOneTestResult (void)
 	 fprintf (Gbl.F.Out,", %s",
 		  Gbl.Usrs.Other.UsrDat.FirstName);
       fprintf (Gbl.F.Out,"<br />");
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Other.UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,ShowPhoto ? PhotoURL :
 							   NULL,
 			"PHOTO45x60",Pho_ZOOM,false);
@@ -7925,9 +7925,9 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
 
 static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
   {
-   char Query[256+Tst_MAX_SIZE_INDEXES_ONE_QST+Tst_MAX_SIZE_ANSWERS_ONE_QST];
-   char Indexes[Tst_MAX_SIZE_INDEXES_ONE_QST+1];
-   char Answers[Tst_MAX_SIZE_ANSWERS_ONE_QST+1];
+   char Query[256 + Tst_MAX_SIZE_INDEXES_ONE_QST + Tst_MAX_SIZE_ANSWERS_ONE_QST];
+   char Indexes[Tst_MAX_SIZE_INDEXES_ONE_QST + 1];
+   char Answers[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
 
    /***** Replace each separator of multiple parameters by a comma *****/
    /* In database commas are used as separators instead of special chars */

@@ -76,7 +76,8 @@ extern const char Str_BIN_TO_BASE64URL[64];
 /*****************************************************************************/
 
 // Pointers to PlainText and EncryptedText can point to the same place
-void Cry_EncryptSHA256Base64 (const char *PlainText,char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+void Cry_EncryptSHA256Base64 (const char *PlainText,
+                              char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    int i,j;
    unsigned char digest256[SHA256_DIGEST_SIZE];
@@ -89,17 +90,17 @@ void Cry_EncryptSHA256Base64 (const char *PlainText,char EncryptedText[Cry_LENGT
 	i < BYTES_SHA256_ENCRYPTION;
 	i += 3)	// 256 bits, 32 bytes
      {
-      EncryptedText[j++] = Str_BIN_TO_BASE64URL [(digest256[ i ] & 0xFC) >> 2];
+      EncryptedText[j++]    = Str_BIN_TO_BASE64URL [ (digest256[  i  ] & 0xFC) >> 2];
       if (i == (BYTES_SHA256_ENCRYPTION-2))	// i == 30, j == 42, last character to fill in encrypted text
         {
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[ i ] & 0x03) << 4) | ((digest256[i+1] & 0xF0) >> 4)];
-         EncryptedText[ j ] = Str_BIN_TO_BASE64URL [((digest256[i+1] & 0x0F) << 2)                                 ];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[  i  ] & 0x03) << 4) | ((digest256[i + 1] & 0xF0) >> 4)];
+         EncryptedText[ j ] = Str_BIN_TO_BASE64URL [((digest256[i + 1] & 0x0F) << 2)                                 ];
         }
       else
         {
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[ i ] & 0x03) << 4) | ((digest256[i+1] & 0xF0) >> 4)];
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[i+1] & 0x0F) << 2) | ((digest256[i+2] & 0xC0) >> 6)];
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [ (digest256[i+2] & 0x3F)                                       ];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[  i  ] & 0x03) << 4) | ((digest256[i + 1] & 0xF0) >> 4)];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest256[i + 1] & 0x0F) << 2) | ((digest256[i + 2] & 0xC0) >> 6)];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [ (digest256[i + 2] & 0x3F)                                       ];
         }
      }
    EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
@@ -110,9 +111,11 @@ void Cry_EncryptSHA256Base64 (const char *PlainText,char EncryptedText[Cry_LENGT
 /*****************************************************************************/
 
 // Pointers to PlainText and EncryptedText can point to the same place
-void Cry_EncryptSHA512Base64 (const char *PlainText,char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64+1])
+void Cry_EncryptSHA512Base64 (const char *PlainText,
+                              char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1])
   {
-   int i,j;
+   int i;
+   int j;
    unsigned char digest512[SHA512_DIGEST_SIZE];
 
    /* Encrypt function */
@@ -123,14 +126,14 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,char EncryptedText[Cry_LENGT
 	i < BYTES_SHA512_ENCRYPTION;
 	i += 3)	// 512 bits, 64 bytes
      {
-      EncryptedText[j++] = Str_BIN_TO_BASE64URL [(digest512[ i ] & 0xFC) >> 2];
+      EncryptedText[j++]    = Str_BIN_TO_BASE64URL [ (digest512[  i  ] & 0xFC) >> 2];
       if (i == (BYTES_SHA512_ENCRYPTION-1))	// i == 63, j == 85, last character to fill in encrypted text
-         EncryptedText[ j ] = Str_BIN_TO_BASE64URL [(digest512[ i ] & 0x03) << 4];
+         EncryptedText[ j ] = Str_BIN_TO_BASE64URL [ (digest512[  i  ] & 0x03) << 4];
       else
         {
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest512[ i ] & 0x03) << 4) | ((digest512[i+1] & 0xF0) >> 4)];
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest512[i+1] & 0x0F) << 2) | ((digest512[i+2] & 0xC0) >> 6)];
-         EncryptedText[j++] = Str_BIN_TO_BASE64URL [ (digest512[i+2] & 0x3F)                                       ];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest512[  i  ] & 0x03) << 4) | ((digest512[i + 1] & 0xF0) >> 4)];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [((digest512[i + 1] & 0x0F) << 2) | ((digest512[i + 2] & 0xC0) >> 6)];
+         EncryptedText[j++] = Str_BIN_TO_BASE64URL [ (digest512[i + 2] & 0x3F)                                       ];
         }
      }
    EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64] = '\0';
@@ -140,10 +143,10 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,char EncryptedText[Cry_LENGT
 /*** Create a unique name encrypted, different each time function is called **/
 /*****************************************************************************/
 
-void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1])
+void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
-   char UniqueNamePlain[Cns_MAX_LENGTH_IP+1+10+1+10+1+10+1];
+   char UniqueNamePlain[Cns_MAX_LENGTH_IP + 1 + 10 + 1 + 10 + 1 + 10 + 1];
 
    NumCall++;
    sprintf (UniqueNamePlain,"%s-%lx-%x-%x",

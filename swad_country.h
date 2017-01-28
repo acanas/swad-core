@@ -37,8 +37,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_COUNTRY_NAME	    255
-#define Cty_MAX_LENGTH_MAP_ATTRIBUTION	(4*1024)
+#define Cty_MAX_BYTES_COUNTRY_NAME	255
+#define Cty_MAX_LENGTH_MAP_ATTRIBUTION	(4 * 1024)
 
 #define Cty_MAX_COUNTRS_PER_USR	 10	// Used in list of my countries
 

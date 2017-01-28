@@ -167,7 +167,7 @@ void TsI_CreateXML (unsigned long NumRows,MYSQL_RES *mysql_res)
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    extern const char *Txt_NEW_LINE;
    extern const char *Txt_XML_file;
-   char PathPubFile[PATH_MAX+1];
+   char PathPubFile[PATH_MAX + 1];
    unsigned long NumRow;
    MYSQL_ROW row;
    long QstCod;

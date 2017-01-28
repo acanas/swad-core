@@ -83,7 +83,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -124,7 +124,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 /* Google Analytics without cookies.
  * This code comes from http://stackoverflow.com/a/19995629
@@ -182,7 +182,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(60UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (60UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS "<script type=\"text/javascript\">" \
 "  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){" \
@@ -237,7 +237,7 @@
 
 #define Cfg_DEFAULT_COLUMNS			Lay_SHOW_BOTH_COLUMNS
 
-#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t)(30UL*60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
+#define Cfg_TIME_TO_SEND_PENDING_NOTIF 		((time_t) (30UL * 60UL))	// After these seconds after first pending notification, all the pending notifications are sent by email
 
 #define Cfg_GOOGLE_ANALYTICS			""
 
@@ -451,50 +451,50 @@
 #define Cfg_DAYS_IN_RECENT_LOG				  8	// Only accesses in these last days + 1 are stored in recent log.
 								// Important!!! Must be 1 <= Cfg_DAYS_IN_RECENT_LOG <= 29
 #define Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED		  2	// Execute this CGI to refresh connected users about these times per second
-#define Cfg_MIN_TIME_TO_REFRESH_CONNECTED		((time_t)(                   60UL))	// Refresh period of connected users in seconds
-#define Cfg_MAX_TIME_TO_REFRESH_CONNECTED		((time_t)(              15UL*60UL))	// Refresh period of connected users in seconds
+#define Cfg_MIN_TIME_TO_REFRESH_CONNECTED		((time_t)(                     60UL))	// Refresh period of connected users in seconds
+#define Cfg_MAX_TIME_TO_REFRESH_CONNECTED		((time_t)(              15UL * 60UL))	// Refresh period of connected users in seconds
 #define Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_REFRESH	((time_t)(Cfg_MAX_TIME_TO_REFRESH_CONNECTED * 2))	// After these seconds without refresh of connected users, session is closed
-#define Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK	((time_t)(            2*60UL*60UL))	// After these seconds without user's clicks, session is closed
+#define Cfg_TIME_TO_CLOSE_SESSION_FROM_LAST_CLICK	((time_t)(          2 * 60UL * 60UL))	// After these seconds without user's clicks, session is closed
 
-#define Cfg_TIME_TO_REFRESH_LAST_CLICKS			((time_t)(                  500UL))	// Refresh period of last clicks in miliseconds
+#define Cfg_TIME_TO_REFRESH_LAST_CLICKS			((time_t)(                    500UL))	// Refresh period of last clicks in miliseconds
 
-#define Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE		((time_t)(            30UL*1000UL))	// Refresh period of social timeline in miliseconds
+#define Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE		((time_t)(            30UL * 1000UL))	// Refresh period of social timeline in miliseconds
 
-#define Cfg_TIME_TO_CHANGE_BANNER			((time_t)(               5UL*60UL))	// After these seconds, change banner
+#define Cfg_TIME_TO_CHANGE_BANNER			((time_t)(               5UL * 60UL))	// After these seconds, change banner
 #define Cfg_NUMBER_OF_BANNERS				1					// Number of banners to show simultaneously
 
-#define Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY		((time_t)(     7UL*24UL*60UL*60UL))	// After these seconds, a web service key is removed
+#define Cfg_TIME_TO_DELETE_WEB_SERVICE_KEY		((time_t)( 7UL * 24UL * 60UL * 60UL))	// After these seconds, a web service key is removed
 
-#define Cfg_TIME_TO_DELETE_HTML_OUTPUT			((time_t)(              30UL*60UL))	// Remove the HTML output files older than these seconds
+#define Cfg_TIME_TO_DELETE_HTML_OUTPUT			((time_t)(              30UL * 60UL))	// Remove the HTML output files older than these seconds
 
-#define Cfg_TIME_TO_ABORT_FILE_UPLOAD			((time_t)(              55UL*60UL))	// After these seconds uploading data, abort upload.
+#define Cfg_TIME_TO_ABORT_FILE_UPLOAD			((time_t)(              55UL * 60UL))	// After these seconds uploading data, abort upload.
 
-#define Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files are deleted after these seconds
-#define Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS	((time_t)(     7UL*24UL*60UL*60UL))	// Past these seconds, remove expired expanded folders
-#define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL*60UL))	// Paths older than these seconds are removed from clipboard
-#define Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary zip files are deleted after these seconds
+#define Cfg_TIME_TO_DELETE_BROWSER_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files are deleted after these seconds
+#define Cfg_TIME_TO_DELETE_BROWSER_EXPANDED_FOLDERS	((time_t)( 7UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired expanded folders
+#define Cfg_TIME_TO_DELETE_BROWSER_CLIPBOARD		((time_t)(              15UL * 60UL))	// Paths older than these seconds are removed from clipboard
+#define Cfg_TIME_TO_DELETE_BROWSER_ZIP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary zip files are deleted after these seconds
 
-#define Cfg_TIME_TO_DELETE_MARKS_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files with students' marks are deleted after these seconds
+#define Cfg_TIME_TO_DELETE_MARKS_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files with students' marks are deleted after these seconds
 
-#define Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS		((time_t)(              15UL*60UL))  	// Temporary files with params to commands are deleted after these seconds
+#define Cfg_TIME_TO_DELETE_PARAMS_TO_COMMANDS		((time_t)(              15UL * 60UL))  	// Temporary files with params to commands are deleted after these seconds
 
-#define Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to images after these seconds
-#define Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to photos after these seconds
+#define Cfg_TIME_TO_DELETE_IMAGES_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to images after these seconds
+#define Cfg_TIME_TO_DELETE_PHOTOS_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to photos after these seconds
 
-#define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(          2UL*60UL*60UL))  	// Temporary files related to imported test questions after these seconds
+#define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to imported test questions after these seconds
 
-#define Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS		((time_t)(    30UL*24UL*60UL*60UL))	// Past these seconds, remove expired enrollment requests
+#define Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS		((time_t)(30UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired enrollment requests
 
-#define Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD		((time_t)(              15UL*60UL))	// Threads older than these seconds are removed from clipboard
+#define Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD		((time_t)(              15UL * 60UL))	// Threads older than these seconds are removed from clipboard
 
-#define Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS 	((time_t)(         24UL*60UL*60UL))	// Past these seconds, remove expired pending passwords
-#define Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS	 	((time_t)(         24UL*60UL*60UL))	// Past these seconds, remove expired pending emails
+#define Cfg_TIME_TO_DELETE_OLD_PENDING_PASSWORDS 	((time_t)(       24UL * 60UL * 60UL))	// Past these seconds, remove expired pending passwords
+#define Cfg_TIME_TO_DELETE_OLD_PENDING_EMAILS	 	((time_t)(       24UL * 60UL * 60UL))	// Past these seconds, remove expired pending emails
 
-#define Cfg_TIME_TO_DELETE_IP_PREFS			((time_t)(     7UL*24UL*60UL*60UL))	// Past these seconds, remove expired IP preferences
+#define Cfg_TIME_TO_DELETE_IP_PREFS			((time_t)( 7UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired IP preferences
 
-#define Cfg_TIME_TO_DELETE_OLD_NOTIF 			((time_t)(    30UL*24UL*60UL*60UL))	// Past these seconds, remove expired notifications
+#define Cfg_TIME_TO_DELETE_OLD_NOTIF 			((time_t)(30UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired notifications
 
-#define Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO		((time_t)(         12UL*60UL*60UL))	// After these seconds, users can recompute the average photos of a degree
+#define Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO		((time_t)(       12UL * 60UL * 60UL))	// After these seconds, users can recompute the average photos of a degree
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

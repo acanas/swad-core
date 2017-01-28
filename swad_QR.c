@@ -39,7 +39,7 @@
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
 
-#define QR_CODE_SIZE	((6+25+6)*8)
+#define QR_CODE_SIZE	((6 + 25 + 6) * 8)
 #define QR_DEFAULT_TYPE QR_ID
 
 /*****************************************************************************/
@@ -95,7 +95,7 @@ static void QR_PutParamQRString (void)
 
 void QR_PrintQRCode (void)
   {
-   char QRString[Cns_MAX_BYTES_STRING+1];
+   char QRString[Cns_MAX_BYTES_STRING + 1];
 
    /***** Get QR string *****/
    Par_GetParToText ("QRString",QRString,Cns_MAX_BYTES_STRING);
@@ -132,7 +132,7 @@ static void QR_ImageQRCode (const char *QRString)
 void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod)
   {
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    /***** Show QR code with direct link to the current centre *****/
    fprintf (Gbl.F.Out,"<img src=\"https://chart.googleapis.com/chart?cht=qr&amp;chs=%ux%u&amp;chl=%s/%s?%s=%ld\""

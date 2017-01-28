@@ -176,7 +176,7 @@ void Fol_SuggestWhoToFollow (void)
                   " WHERE UsrCod NOT IN"
                   " (SELECT FollowedCod FROM usr_follow"
                   " WHERE FollowerCod='%ld')"
-		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED*2 users
+		  // Get only Fol_MAX_USRS_TO_FOLLOW_SUGGESTED * 2 users
 		  " ORDER BY RAND() LIMIT %u"
                   ")"
                   " UNION "
@@ -211,7 +211,7 @@ void Fol_SuggestWhoToFollow (void)
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
-   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED*2,	// 2/3 likely known users
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED * 2,	// 2/3 likely known users
 
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
@@ -683,14 +683,14 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    extern const char *Txt_Unfollow;
    extern const char *Txt_Follow;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
-   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   char PhotoURL[PATH_MAX + 1];
+   bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR_PHOTO\">");
    if (Visible)
      {
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
 			"PHOTO60x80",Pho_ZOOM,false);
@@ -774,7 +774,7 @@ void Fol_FollowUsr (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
       // Follow only if I can view his/her public profile
-      if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,&Gbl.Usrs.Other.UsrDat))
+      if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,&Gbl.Usrs.Other.UsrDat))
          // Follow only if I do not follow him/her
 	 if (!Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 					Gbl.Usrs.Other.UsrDat.UsrCod))

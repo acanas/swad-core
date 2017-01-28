@@ -73,7 +73,7 @@ void Cfg_GetConfigFromFile (void)
    size_t Length;
    char *Config;
    const char *Ptr;
-   char Str[Cfg_MAX_BYTES_STR+1];
+   char Str[Cfg_MAX_BYTES_STR + 1];
 
    /***** Read config from file to string *****/
    /* Open config file */
@@ -86,7 +86,7 @@ void Cfg_GetConfigFromFile (void)
    fseek (FileCfg,0L,SEEK_SET);
 
    /* Allocate memory for buffer */
-   if ((Config = (char *) malloc (Length+1)) == NULL)
+   if ((Config = (char *) malloc (Length + 1)) == NULL)
      {
       fclose (FileCfg);
       Lay_ShowErrorAndExit ("Not enough memory for config.");

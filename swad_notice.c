@@ -129,7 +129,7 @@ void Not_ReceiveNotice (void)
    long NotCod;
    unsigned NumUsrsToBeNotifiedByEMail;
    struct SocialPublishing SocPub;
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the text of the notice *****/
    Par_GetParAndChangeFormat ("Content",Content,Cns_MAX_BYTES_TEXT,
@@ -160,7 +160,7 @@ void Not_ReceiveNotice (void)
 
 static long Not_InsertNoticeInDB (const char *Content)
   {
-   char Query[256+Cns_MAX_BYTES_TEXT];
+   char Query[256 + Cns_MAX_BYTES_TEXT];
 
    /***** Insert notice in the database *****/
    sprintf (Query,"INSERT INTO notices (CrsCod,UsrCod,CreatTime,Content,Status)"
@@ -345,7 +345,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char StrWidth[10+2+1];
+   char StrWidth[10 + 2 + 1];
    char PathRelRSSFile[PATH_MAX + 1];
    long NotCod;
    unsigned long NumNot;
@@ -996,11 +996,11 @@ void Not_PutHiddenParamNotCod (long NotCod)
 
 static long Not_GetParamNotCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the notice code
+   char LongStr[1 + 10 + 1];	// String that holds the notice code
    long NotCod;
 
    /* Get notice code */
-   Par_GetParToText ("NotCod",LongStr,1+10);
+   Par_GetParToText ("NotCod",LongStr,1 + 10);
    if (sscanf (LongStr,"%ld",&NotCod) != 1)
       Lay_ShowErrorAndExit ("Wrong code of notice.");
 

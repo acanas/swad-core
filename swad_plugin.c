@@ -79,7 +79,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugin;
    unsigned NumPlg;
    struct Plugin *Plg;
-   char URL[Cns_MAX_LENGTH_WWW+Ses_LENGTH_SESSION_ID+1];
+   char URL[Cns_MAX_LENGTH_WWW+Ses_LENGTH_SESSION_ID + 1];
 
    if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
      {
@@ -476,10 +476,10 @@ static void Plg_PutParamPlgCod (long PlgCod)
 
 long Plg_GetParamPlgCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of plugin *****/
-   Par_GetParToText ("PlgCod",LongStr,1+10);
+   Par_GetParToText ("PlgCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -525,7 +525,7 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
    char Query[512];
    struct Plugin *Plg;
-   char NewPlgName[Plg_MAX_LENGTH_PLUGIN_NAME+1];
+   char NewPlgName[Plg_MAX_LENGTH_PLUGIN_NAME + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -609,8 +609,8 @@ void Plg_ChangePlgDescription (void)
    extern const char *Txt_The_new_description_is_X;
    extern const char *Txt_You_can_not_leave_the_description_empty;
    struct Plugin *Plg;
-   char Query[256+Plg_MAX_LENGTH_PLUGIN_DESCRIPTION];
-   char NewDescription[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION+1];
+   char Query[256 + Plg_MAX_LENGTH_PLUGIN_DESCRIPTION];
+   char NewDescription[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -656,8 +656,8 @@ void Plg_ChangePlgLogo (void)
    extern const char *Txt_The_new_logo_is_X;
    extern const char *Txt_You_can_not_leave_the_logo_empty;
    struct Plugin *Plg;
-   char Query[256+Plg_MAX_LENGTH_PLUGIN_LOGO];
-   char NewLogo[Plg_MAX_LENGTH_PLUGIN_LOGO+1];
+   char Query[256 + Plg_MAX_LENGTH_PLUGIN_LOGO];
+   char NewLogo[Plg_MAX_LENGTH_PLUGIN_LOGO + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -700,8 +700,8 @@ void Plg_ChangePlgAppKey (void)
    extern const char *Txt_The_new_logo_is_X;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    extern const char *Txt_You_can_not_leave_the_logo_empty;// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    struct Plugin *Plg;
-   char Query[256+Plg_MAX_LENGTH_PLUGIN_APP_KEY];
-   char NewAppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY+1];
+   char Query[256 + Plg_MAX_LENGTH_PLUGIN_APP_KEY];
+   char NewAppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -744,8 +744,8 @@ void Plg_ChangePlgURL (void)
    extern const char *Txt_The_new_URL_is_X;
    extern const char *Txt_You_can_not_leave_the_URL_empty;
    struct Plugin *Plg;
-   char Query[256+Cns_MAX_LENGTH_WWW];
-   char NewURL[Cns_MAX_LENGTH_WWW+1];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char NewURL[Cns_MAX_LENGTH_WWW + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -788,8 +788,8 @@ void Plg_ChangePlgIP (void)
    extern const char *Txt_The_new_IP_address_is_X;
    extern const char *Txt_You_can_not_leave_the_IP_address_empty;
    struct Plugin *Plg;
-   char Query[256+Cns_MAX_LENGTH_IP];
-   char NewIP[Cns_MAX_LENGTH_IP+1];
+   char Query[256 + Cns_MAX_LENGTH_IP];
+   char NewIP[Cns_MAX_LENGTH_IP + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -1042,12 +1042,12 @@ void Plg_RecFormNewPlg (void)
 static void Plg_CreatePlugin (struct Plugin *Plg)
   {
    extern const char *Txt_Created_new_plugin_X;
-   char Query[512+Plg_MAX_LENGTH_PLUGIN_NAME+
-                  Plg_MAX_LENGTH_PLUGIN_DESCRIPTION+
-                  Plg_MAX_LENGTH_PLUGIN_LOGO+
-                  Plg_MAX_LENGTH_PLUGIN_APP_KEY+
-                  Cns_MAX_LENGTH_WWW+
-                  Cns_MAX_LENGTH_IP];
+   char Query[512 + Plg_MAX_LENGTH_PLUGIN_NAME +
+                    Plg_MAX_LENGTH_PLUGIN_DESCRIPTION +
+                    Plg_MAX_LENGTH_PLUGIN_LOGO +
+                    Plg_MAX_LENGTH_PLUGIN_APP_KEY +
+                    Cns_MAX_LENGTH_WWW +
+                    Cns_MAX_LENGTH_IP];
 
    /***** Create a new plugin *****/
    sprintf (Query,"INSERT INTO plugins (Name,Description,Logo,AppKey,URL,IP)"

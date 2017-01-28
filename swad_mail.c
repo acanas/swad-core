@@ -81,7 +81,8 @@ static void Mai_CreateMailDomain (struct Mail *Mai);
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
 static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email);
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
-static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1]);
+static void Mai_InsertMailKey (const char *Email,
+                               const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
 /*****************************************************************************/
 /************************* List all the mail domains *************************/
@@ -160,7 +161,7 @@ void Mai_SeeMailDomains (void)
 
 static void Mai_GetParamMaiOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -532,10 +533,10 @@ static void Mai_PutParamMaiCod (long MaiCod)
 
 long Mai_GetParamMaiCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of mail *****/
-   Par_GetParToText ("MaiCod",LongStr,1+10);
+   Par_GetParToText ("MaiCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -603,7 +604,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentMaiName = NULL;		// Initialized to avoid warning
-   char NewMaiName[Mai_MAX_LENGTH_MAIL_INFO+1];
+   char NewMaiName[Mai_MAX_LENGTH_MAIL_INFO + 1];
 
    Mai = &Gbl.Mails.EditingMai;
    switch (ShrtOrFullName)
@@ -851,7 +852,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 /****** List the emails of all the students to creates an email message ******/
 /*****************************************************************************/
 
-#define Mai_MAX_LENGTH_STR_ADDR (32*5000)
+#define Mai_MAX_LENGTH_STR_ADDR (32 * 5000)
 
 void Mai_ListEmails (void)
   {
@@ -1366,7 +1367,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
   {
    extern const char *Txt_Email_X_removed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char Email[Usr_MAX_BYTES_USR_EMAIL+1];
+   char Email[Usr_MAX_BYTES_USR_EMAIL + 1];
 
    if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
@@ -1448,7 +1449,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewEmail[Usr_MAX_BYTES_USR_EMAIL+1];
+   char NewEmail[Usr_MAX_BYTES_USR_EMAIL + 1];
 
    if (Usr_AsAdminICanEditOtherUsr (UsrDat))
      {
@@ -1654,9 +1655,10 @@ void Mai_ShowMsgConfirmEmailHasBeenSent (void)
 /************************* Insert mail hey in database ***********************/
 /*****************************************************************************/
 
-static void Mai_InsertMailKey (const char *Email,const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1])
+static void Mai_InsertMailKey (const char *Email,
+                               const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
-   char Query[512+Mai_LENGTH_EMAIL_CONFIRM_KEY];
+   char Query[512 + Mai_LENGTH_EMAIL_CONFIRM_KEY];
 
    /***** Remove expired pending emails from database *****/
    sprintf (Query,"DELETE FROM pending_emails"
@@ -1686,7 +1688,7 @@ void Mai_ConfirmEmail (void)
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY+1];
+   char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
    char Email[Usr_MAX_BYTES_USR_EMAIL + 1];
    bool KeyIsCorrect = false;
@@ -1778,8 +1780,8 @@ void Mai_CreateFileNameMail (void)
 
 void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
   {
-   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Dear_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_user_NO_HTML[Usr_NUM_SEXS][1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s %s:\n",
             Txt_Dear_NO_HTML[UsrDat->Sex][UsrDat->Prefs.Language],
@@ -1793,7 +1795,7 @@ void Mai_WriteWelcomeNoteEMail (struct UsrData *UsrDat)
 
 void Mai_WriteFootNoteEMail (Txt_Language_t Language)
   {
-   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Please_do_not_reply_to_this_automatically_generated_email_NO_HTML[1 + Txt_NUM_LANGUAGES];
 
    fprintf (Gbl.Msg.FileMail,"%s\n"
                              "%s\n"

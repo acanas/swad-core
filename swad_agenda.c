@@ -115,7 +115,7 @@ void Agd_PutFormLogInToShowUsrAgenda (void)
 
 void Agd_PutParamAgd (void)
   {
-   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    sprintf (Nickname,"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
    Par_PutHiddenParamString ("agd",Nickname);
@@ -218,7 +218,7 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
    extern const unsigned Txt_Current_CGI_SWAD_Language;
    extern const char *Txt_Public_agenda_USER;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   extern const char *Txt_Switching_to_LANGUAGE[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_Switching_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
    bool ItsMe;
 
    if (Gbl.Usrs.Me.Logged)
@@ -506,7 +506,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void)
 static void Agd_PutIconToShowQR (void)
   {
    char URL[Cns_MAX_LENGTH_WWW + 1];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    sprintf (URL,"%s/%s?agd=@%s",
             Cfg_URL_SWAD_CGI,
@@ -523,7 +523,7 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    extern const char *Txt_View_record_and_office_hours;
 
    /***** Button to view user's public profile *****/
-   if (Pri_ShowIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
+   if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
 		          &Gbl.Usrs.Other.UsrDat))
       Lay_PutContextualLink (ActSeePubPrf,
 			     Usr_PutParamOtherUsrCodEncrypted,
@@ -582,7 +582,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    extern const char *Txt_Today;
    static unsigned UniqueId = 0;
    struct AgendaEvent AgdEvent;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this event *****/
    AgdEvent.AgdCod = AgdCod;
@@ -693,7 +693,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
 static void Agd_GetParamEventOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    static bool AlreadyGot = false;
 
@@ -1039,10 +1039,10 @@ static void Agd_PutParamAgdCod (long AgdCod)
 
 long Agd_GetParamAgdCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of event *****/
-   Par_GetParToText ("AgdCod",LongStr,1+10);
+   Par_GetParToText ("AgdCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1389,7 +1389,7 @@ void Agd_RecFormEvent (void)
    struct AgendaEvent AgdEvent;
    bool ItsANewEvent;
    bool NewEventIsCorrect = true;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Set author of the event *****/
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
@@ -1414,7 +1414,7 @@ void Agd_RecFormEvent (void)
    if (AgdEvent.TimeUTC[Agd_START_TIME] == 0)
       AgdEvent.TimeUTC[Agd_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (AgdEvent.TimeUTC[Agd_END_TIME] == 0)
-      AgdEvent.TimeUTC[Agd_END_TIME] = AgdEvent.TimeUTC[Agd_START_TIME] + 2*60*60;	// +2 hours
+      AgdEvent.TimeUTC[Agd_END_TIME] = AgdEvent.TimeUTC[Agd_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Location[0])	// If there is no event
@@ -1477,7 +1477,7 @@ void Agd_RecFormEvent (void)
 
 static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
   {
-   char Query[256+Agd_MAX_LENGTH_EVENT];
+   char Query[256 + Agd_MAX_LENGTH_EVENT];
 
    /***** Get number of events with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM agendas"
@@ -1492,7 +1492,7 @@ static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
 
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Create a new event *****/
    sprintf (Query,"INSERT INTO agendas"
@@ -1515,7 +1515,7 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the event *****/
    sprintf (Query,"UPDATE agendas SET "

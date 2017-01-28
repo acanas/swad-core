@@ -59,10 +59,10 @@ extern struct Globals Gbl;
 #define TT_PERCENT_WIDTH_OF_A_DAY		(TT_PERCENT_WIDTH_OF_A_MINICOLUMN*TT_NUM_MINICOLUMNS_PER_DAY)	// Width (%) of each day
 #define TT_PERCENT_WIDTH_OF_ALL_DAYS		(TT_PERCENT_WIDTH_OF_A_DAY*TT_DAYS)				// Width (%) of all days
 #define TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN	  1	// Width (%) of left and right columns (frame)
-#define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100-TT_PERCENT_WIDTH_OF_ALL_DAYS-TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN*2)/2)	// Width (%) of the separation columns
+#define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - TT_PERCENT_WIDTH_OF_ALL_DAYS - TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
 #define TT_MAX_BYTES_STR_CLASS_TYPE		256
-#define TT_MAX_BYTES_STR_DURATION		((2+1+2+1+1)*Str_LENGTH_STR_HEX)	// "hh:mm h"
+#define TT_MAX_BYTES_STR_DURATION		((2 + 1 + 2 + 1 + 1) * Str_LENGTH_STR_HEX)	// "hh:mm h"
 #define TT_MAX_LENGTH_PLACE			 32
 
 /*****************************************************************************/
@@ -106,8 +106,8 @@ struct
   {
    unsigned NumColumns;
    struct TimeTableColumn Columns[TT_MAX_COLUMNS_PER_CELL];
-  } TimeTable[TT_DAYS][TT_HOURS_PER_DAY*2];
-bool TimeTableHoursChecked[TT_HOURS_PER_DAY*2];
+  } TimeTable[TT_DAYS][TT_HOURS_PER_DAY * 2];
+bool TimeTableHoursChecked[TT_HOURS_PER_DAY * 2];
 
 /*****************************************************************************/
 /***************************** Internal prototypes **************************/
@@ -162,10 +162,10 @@ static void TT_ShowTimeTableGrpsSelected (void)
 
 static void TT_GetParamsTimeTable (void)
   {
-   char UnsignedStr[10+1];
-   char LongStr[1+10+1];
-   char StrClassType[TT_MAX_BYTES_STR_CLASS_TYPE+1];
-   char StrDuration[TT_MAX_BYTES_STR_DURATION+1];
+   char UnsignedStr[10 + 1];
+   char LongStr[1 + 10 + 1];
+   char StrClassType[TT_MAX_BYTES_STR_CLASS_TYPE + 1];
+   char StrDuration[TT_MAX_BYTES_STR_DURATION + 1];
    unsigned Hours,Minutes;
 
    /***** Get day (0: monday, 1: tuesday,..., 4: friday *****/
@@ -203,14 +203,14 @@ static void TT_GetParamsTimeTable (void)
    Par_GetParToText ("ModHorGrp",Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
 
    /***** Get group code *****/
-   Par_GetParToText ("ModTTGrpCod",LongStr,1+10);
+   Par_GetParToText ("ModTTGrpCod",LongStr,1 + 10);
    if (LongStr[0])
      {
       if (sscanf (LongStr,"%ld",&Gbl.TimeTable.GrpCod) != 1)
          Lay_ShowErrorAndExit ("Wrong code of group.");
      }
    else
-      Gbl.TimeTable.GrpCod = -1;
+      Gbl.TimeTable.GrpCod = -1L;
 
    /***** Get place *****/
    Par_GetParToText ("ModHorLugar",Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
@@ -879,7 +879,8 @@ static void TT_DrawTimeTable (void)
                             " style=\"width:%u%%; height:40px;\">"
                             "%2u:00"
                             "</td>",
-                  TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR + (Hour+1)/2);
+                  TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
+                  TT_START_HOUR + (Hour + 1) / 2);
 
       /* Empty column used to adjust height */
       TT_DrawCellAlignTimeTable ();
@@ -944,7 +945,8 @@ static void TT_DrawTimeTable (void)
                             " style=\"width:%u%%; height:40px;\">"
                             "%2u:00"
                             "</td>",
-                  TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,TT_START_HOUR + (Hour+1)/2);
+                  TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
+                  TT_START_HOUR + (Hour + 1) / 2);
 
       fprintf (Gbl.F.Out,"</tr>");
      }

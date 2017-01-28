@@ -421,7 +421,7 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char Query[2048];
@@ -711,7 +711,7 @@ void Enr_RemoveOldUsrs (void)
   {
    extern const char *Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z;
    extern const char *Txt_X_users_have_been_eliminated;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned MonthsWithoutAccess;
    time_t SecondsWithoutAccess;
    char Query[1024];
@@ -1246,7 +1246,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    extern const char *Txt_No_user_has_been_enrolled;
    extern const char *Txt_One_user_has_been_enrolled;
    extern const char *Txt_X_users_have_been_enrolled_including_possible_repetitions;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    struct
      {
@@ -1381,7 +1381,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 	}
 
       /***** Get list of users' IDs *****/
-      if ((ListUsrsIDs = (char *) malloc (ID_MAX_BYTES_LIST_USRS_IDS+1)) == NULL)
+      if ((ListUsrsIDs = (char *) malloc (ID_MAX_BYTES_LIST_USRS_IDS + 1)) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store users' IDs.");
       Par_GetParToText ("UsrsIDs",ListUsrsIDs,ID_MAX_BYTES_LIST_USRS_IDS);
 
@@ -1854,7 +1854,7 @@ void Enr_SignUpInCrs (void)
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    Rol_Role_t RoleFromForm;
    long ReqCod = -1L;
    unsigned NumUsrsToBeNotifiedByEMail;
@@ -2166,7 +2166,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    bool UsrExists;
    bool UsrBelongsToCrs;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    Rol_Role_t DesiredRole;
 
    /***** Remove expired enrollment requests *****/
@@ -2749,7 +2749,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
             /***** User photo *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""
         	               " style=\"width:22px;\">");
-            ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+            ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
             Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                         	                  NULL,
                               "PHOTO21x28",Pho_ZOOM,false);

@@ -182,7 +182,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
    bool PhotoExists;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    const char *TitleText;
 
    /***** Link for changing / uploading the photo *****/
@@ -227,7 +227,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (void)
 static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
   {
    extern const char *Txt_Remove_photo;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool PhotoExists;
 
    /***** Link to request the removal of another user's photo *****/
@@ -272,7 +272,7 @@ static void Pho_ReqMyPhoto (void)
 
 static void Pho_ReqOtherUsrPhoto (void)
   {
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Get photo URL *****/
    Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
@@ -466,7 +466,7 @@ void Pho_ReqRemoveUsrPhoto (void)
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -805,8 +805,8 @@ void Pho_UpdateUsrPhoto2 (void)
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
   {
-   char PathPhotoTmp[PATH_MAX+1];        // Full name (including path and .jpg) of the temporary file with the selected face
-   char PathRelPhoto[PATH_MAX+1];
+   char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the temporary file with the selected face
+   char PathRelPhoto[PATH_MAX + 1];
 
    /***** Get the name of the file with the selected face *****/
    Par_GetParToText ("FileName",Gbl.Usrs.FileNamePhoto,NAME_MAX);        // Example of FileNamePhoto: "4924a838630e_016"
@@ -936,12 +936,12 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
 // Returns true if the photo can be shown and false if not.
 // Public photo means two different things depending on the user's type
 
-bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
+bool Pho_ShowingUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
   {
    bool ICanSeePhoto;
 
    /***** Check if I can see the other's photo *****/
-   ICanSeePhoto = Pri_ShowIsAllowed (UsrDat->PhotoVisibility,UsrDat);
+   ICanSeePhoto = Pri_ShowingIsAllowed (UsrDat->PhotoVisibility,UsrDat);
 
    /***** Photo is shown if I can see it, and it exists *****/
    return ICanSeePhoto ? Pho_BuildLinkToPhoto (UsrDat,PhotoURL) :
@@ -956,8 +956,8 @@ bool Pho_ShowUsrPhotoIsAllowed (struct UsrData *UsrDat,char *PhotoURL)
 
 bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
   {
-   char PathPublPhoto[PATH_MAX+1];
-   char PathPrivPhoto[PATH_MAX+1];
+   char PathPublPhoto[PATH_MAX + 1];
+   char PathPrivPhoto[PATH_MAX + 1];
 
    if (UsrDat->Photo[0])
      {
@@ -973,13 +973,8 @@ bool Pho_BuildLinkToPhoto (const struct UsrData *UsrDat,char *PhotoURL)
       /***** Create a symbolic link to the private photo, if not exists *****/
       if (!Fil_CheckIfPathExists (PathPublPhoto))
          if (symlink (PathPrivPhoto,PathPublPhoto) != 0)
-           {
-            sprintf (Gbl.Message,"symlink (%s,%s)",
-                     PathPrivPhoto,PathPublPhoto);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
             Lay_ShowErrorAndExit ("Can not create public link"
                                  " to access to user's private photo");
-           }
 
       /***** Create the public URL of the photo *****/
       sprintf (PhotoURL,"%s/%s/%s.jpg",
@@ -1017,8 +1012,8 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto)
 
 bool Pho_RemovePhoto (struct UsrData *UsrDat)
   {
-   char PathPrivRelPhoto[PATH_MAX+1];
-   char PathPublPhoto[PATH_MAX+1];
+   char PathPrivRelPhoto[PATH_MAX + 1];
+   char PathPublPhoto[PATH_MAX + 1];
    unsigned NumErrors = 0;
 
    if (UsrDat->Photo[0])
@@ -1089,7 +1084,7 @@ static void Pho_ClearPhotoName (long UsrCod)
 void Pho_UpdatePhotoName (struct UsrData *UsrDat)
   {
    char Query[512];
-   char PathPublPhoto[PATH_MAX+1];
+   char PathPublPhoto[PATH_MAX + 1];
 
    /***** Update photo name in database *****/
    sprintf (Query,"UPDATE usr_data SET Photo='%s'"
@@ -1238,11 +1233,11 @@ void Pho_ChangePhotoVisibility (void)
 
 void Pho_CalcPhotoDegree (void)
   {
-   char PathPhotosPublic[PATH_MAX+1];
-   char PathPhotosTmpPriv[PATH_MAX+1];
+   char PathPhotosPublic[PATH_MAX + 1];
+   char PathPhotosTmpPriv[PATH_MAX + 1];
    Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;
    long DegCod = -1L;
-   char DirAvgPhotosRelPath[Pho_NUM_AVERAGE_PHOTO_TYPES][PATH_MAX+1];
+   char DirAvgPhotosRelPath[Pho_NUM_AVERAGE_PHOTO_TYPES][PATH_MAX + 1];
    unsigned NumStds,NumStdsWithPhoto;
    Usr_Sex_t Sex;
    long TotalTimeToComputeAvgPhotoInMicroseconds,PartialTimeToComputeAvgPhotoInMicroseconds;
@@ -1494,9 +1489,9 @@ static void Pho_ComputeAveragePhoto (long DegCod,Usr_Sex_t Sex,Rol_Role_t Role,
   {
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    unsigned NumUsr;
-   char PathPrivRelPhoto[PATH_MAX+1];	// Relative path to private photo, to calculate average face
-   char PathRelAvgPhoto[PATH_MAX+1];
-   char FileNamePhotoNames[PATH_MAX+1];
+   char PathPrivRelPhoto[PATH_MAX + 1];	// Relative path to private photo, to calculate average face
+   char PathRelAvgPhoto[PATH_MAX + 1];
+   char FileNamePhotoNames[PATH_MAX + 1];
    FILE *FilePhotoNames = NULL;	// Initialized to avoid warning
    char StrCallToProgram[256];	// Call to photo processing program
    int ReturnCode;
@@ -1711,7 +1706,7 @@ void Pho_PutHiddenParamTypeOfAvg (void)
 
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("AvgType",UnsignedStr,10);
@@ -1780,7 +1775,7 @@ void Pho_PutHiddenParamPhotoSize (void)
 
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("PhotoSize",UnsignedStr,10);
@@ -1849,7 +1844,7 @@ void Pho_PutHiddenParamOrderDegrees (void)
 
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("OrdDeg",UnsignedStr,10);
@@ -2350,10 +2345,10 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    extern const char *Txt_photos;
    unsigned PhotoWidth;
    unsigned PhotoHeight;
-   char PathRelAvgPhoto[PATH_MAX+1];
-   char PhotoURL[PATH_MAX+1];
+   char PathRelAvgPhoto[PATH_MAX + 1];
+   char PhotoURL[PATH_MAX + 1];
    char PhotoCaption[512];
-   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME+1];	// Short name of degree
+   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];	// Short name of degree
    bool ShowDegPhoto;
    char IdCaption[Act_MAX_LENGTH_ID];
 

@@ -50,8 +50,8 @@
 /***************************** Internal constants ****************************/
 /*****************************************************************************/
 
-#define ZIP_MiB (1024ULL*1024ULL)
-#define ZIP_MAX_SIZE_UNCOMPRESSED (1024ULL*ZIP_MiB)
+#define ZIP_MiB (1024ULL * 1024ULL)
+#define ZIP_MAX_SIZE_UNCOMPRESSED (1024ULL * ZIP_MiB)
 
 const Act_Action_t ZIP_ActZIPFolder[Brw_NUM_TYPES_FILE_BROWSER] =
   {
@@ -140,7 +140,7 @@ static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
 
 bool ZIP_GetCreateZIPFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("CreateZIP",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
@@ -156,14 +156,14 @@ void ZIP_CreateZIPAsgWrk (void)
    extern const char *Txt_works_ZIP_FILE_NAME;
    struct UsrData UsrDat;
    const char *Ptr;
-   char StrZip[100+PATH_MAX*2+1];
-   char Path[PATH_MAX+1];
+   char StrZip[100 + PATH_MAX * 2 + 1];
+   char Path[PATH_MAX + 1];
    int Result;
-   char FileNameZIP[NAME_MAX+1];
-   char PathFileZIP[PATH_MAX+1];
+   char FileNameZIP[NAME_MAX + 1];
+   char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
-   char URLWithSpaces[PATH_MAX+1];
-   char URL[PATH_MAX+1];
+   char URLWithSpaces[PATH_MAX + 1];
+   char URL[PATH_MAX + 1];
 
    /***** Create zip file
 	  with the assignments and works
@@ -258,8 +258,8 @@ void ZIP_CreateZIPAsgWrk (void)
 
 static void ZIP_CreateTmpDirForCompression (void)
   {
-   char PathZipPriv[PATH_MAX+1];
-   char PathDirTmp[PATH_MAX+1];
+   char PathZipPriv[PATH_MAX + 1];
+   char PathDirTmp[PATH_MAX + 1];
 
    /***** If the private directory does not exist, create it *****/
    sprintf (PathZipPriv,"%s/%s",Cfg_PATH_SWAD_PRIVATE,Cfg_FOLDER_ZIP);
@@ -407,15 +407,15 @@ static void ZIP_CompressFolderIntoZIP (void)
    extern const char *Txt_The_folder_is_empty;
    extern const char *Txt_The_contents_of_the_folder_are_too_big;
    unsigned long long UncompressedSize;
-   char StrZip[100+PATH_MAX*2+1];
-   char Path[PATH_MAX+1];
-   char PathCompression[PATH_MAX+1];
+   char StrZip[100 + PATH_MAX * 2 + 1];
+   char Path[PATH_MAX + 1];
+   char PathCompression[PATH_MAX + 1];
    int Result;
-   char FileNameZIP[NAME_MAX+1];
-   char PathFileZIP[PATH_MAX+1];
+   char FileNameZIP[NAME_MAX + 1];
+   char PathFileZIP[PATH_MAX + 1];
    struct stat FileStatus;
-   char URLWithSpaces[PATH_MAX+1];
-   char URL[PATH_MAX+1];
+   char URLWithSpaces[PATH_MAX + 1];
+   char URL[PATH_MAX + 1];
 
    /***** Create temporary private directory
           for the compression of folder *****/
@@ -515,9 +515,9 @@ static unsigned long long ZIP_CloneDir (const char *Path,const char *PathClone,c
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFile[PATH_MAX+1];
-   char PathFileClone[PATH_MAX+1];
-   char PathFileInTree[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathFileClone[PATH_MAX + 1];
+   char PathFileInTree[PATH_MAX + 1];
    struct stat FileStatus;
    Brw_FileType_t FileType;
    bool Hidden;

@@ -86,7 +86,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
 static void Ins_PutButtonToGoToIns (struct Instit *Ins);
 
 static void Ins_PutFormToCreateInstitution (void);
@@ -282,7 +282,7 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Centres;
    extern const char *Txt_Centres_of_INSTITUTION_X;
@@ -908,7 +908,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 
 static void Ins_GetParamInsOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -1556,10 +1556,10 @@ long Ins_GetAndCheckParamOtherInsCod (void)
 
 static long Ins_GetParamOtherInsCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of institution *****/
-   Par_GetParToText ("OthInsCod",LongStr,1+10);
+   Par_GetParToText ("OthInsCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1573,7 +1573,7 @@ void Ins_RemoveInstitution (void)
    extern const char *Txt_Institution_X_removed;
    char Query[128];
    struct Instit Ins;
-   char PathIns[PATH_MAX+1];
+   char PathIns[PATH_MAX + 1];
 
    /***** Get institution code *****/
    Ins.InsCod = Ins_GetAndCheckParamOtherInsCod ();
@@ -1665,7 +1665,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
-   char NewInsName[Ins_MAX_LENGTH_INSTIT_FULL_NAME+1];
+   char NewInsName[Ins_MAX_LENGTH_INSTIT_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
@@ -1733,7 +1733,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
   {
-   char Query[256+Ins_MAX_LENGTH_INSTIT_FULL_NAME];
+   char Query[256 + Ins_MAX_LENGTH_INSTIT_FULL_NAME];
 
    /***** Get number of institutions in current country with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions"
@@ -1748,7 +1748,7 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
-   char Query[128+Ins_MAX_LENGTH_INSTIT_FULL_NAME];
+   char Query[128 + Ins_MAX_LENGTH_INSTIT_FULL_NAME];
 
    /***** Update institution changing old name by new name */
    sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod='%ld'",
@@ -1843,7 +1843,7 @@ void Ins_ChangeInsWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Instit *Ins;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -1883,7 +1883,7 @@ void Ins_ChangeInsWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the institution */
@@ -1912,9 +1912,9 @@ void Ins_ChangeInsWWWInConfig (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
   {
-   char Query[256+Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE institutions SET WWW='%s' WHERE InsCod='%ld'",
@@ -1931,7 +1931,7 @@ void Ins_ChangeInsStatus (void)
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
    struct Instit *Ins;
    char Query[256];
-   char UnsignedNum[10+1];
+   char UnsignedNum[10 + 1];
    Ins_Status_t Status;
    Ins_StatusTxt_t StatusTxt;
 
@@ -2289,9 +2289,9 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
-   char Query[512+
-              Ins_MAX_LENGTH_INSTIT_SHRT_NAME+
-              Ins_MAX_LENGTH_INSTIT_FULL_NAME+
+   char Query[512 +
+              Ins_MAX_LENGTH_INSTIT_SHRT_NAME +
+              Ins_MAX_LENGTH_INSTIT_FULL_NAME +
               Cns_MAX_LENGTH_WWW];
 
    /***** Create a new institution *****/

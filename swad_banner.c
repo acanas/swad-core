@@ -423,10 +423,10 @@ static void Ban_PutParamBanCod (long BanCod)
 
 long Ban_GetParamBanCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of banner *****/
-   Par_GetParToText ("BanCod",LongStr,1+10);
+   Par_GetParToText ("BanCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -553,7 +553,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentBanName = NULL;		// Initialized to avoid warning
-   char NewBanName[Ban_MAX_LENGTH_FULL_NAME+1];
+   char NewBanName[Ban_MAX_LENGTH_FULL_NAME + 1];
 
    Ban = &Gbl.Banners.EditingBan;
    switch (ShrtOrFullName)
@@ -653,8 +653,8 @@ void Ban_ChangeBannerImg (void)
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
    struct Banner *Ban;
-   char Query[256+Ban_MAX_LENGTH_IMAGE];
-   char NewImg[Ban_MAX_LENGTH_IMAGE+1];
+   char Query[256 + Ban_MAX_LENGTH_IMAGE];
+   char NewImg[Ban_MAX_LENGTH_IMAGE + 1];
 
    Ban = &Gbl.Banners.EditingBan;
 
@@ -698,7 +698,7 @@ void Ban_ChangeBannerWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Banner *Ban;
-   char Query[256+Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
    char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Ban = &Gbl.Banners.EditingBan;

@@ -143,7 +143,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Get parameters *****/
    Att_GetParamAttOrderType ();
@@ -356,7 +356,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    extern const char *Txt_Today;
    extern const char *Txt_View_event;
    static unsigned UniqueId = 0;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this attendance event *****/
    Att_GetDataOfAttEventByCodAndCheckCrs (Att);
@@ -475,7 +475,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
   {
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    char FirstName[Usr_MAX_BYTES_NAME + 1];
    char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
@@ -486,7 +486,7 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    /***** Get data of author *****/
    UsrDat.UsrCod = Att->UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get of the database the data of the author
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -522,7 +522,7 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
 
 static void Att_GetParamAttOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -893,10 +893,10 @@ void Att_PutParamAttCod (long AttCod)
 
 long Att_GetParamAttCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of attendance event *****/
-   Par_GetParToText ("AttCod",LongStr,1+10);
+   Par_GetParToText ("AttCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1280,10 +1280,10 @@ void Att_RecFormAttEvent (void)
    extern const char *Txt_The_event_has_been_modified;
    struct AttendanceEvent OldAtt;
    struct AttendanceEvent ReceivedAtt;
-   char YN[1+1];
+   char YN[1 + 1];
    bool ItsANewAttEvent;
    bool ReceivedAttEventIsCorrect = true;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the attendance event *****/
    ItsANewAttEvent = ((ReceivedAtt.AttCod = Att_GetParamAttCod ()) == -1L);
@@ -1314,7 +1314,7 @@ void Att_RecFormAttEvent (void)
    if (ReceivedAtt.TimeUTC[Att_START_TIME] == 0)
       ReceivedAtt.TimeUTC[Att_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (ReceivedAtt.TimeUTC[Att_END_TIME] == 0)
-      ReceivedAtt.TimeUTC[Att_END_TIME] = ReceivedAtt.TimeUTC[Att_START_TIME] + 2*60*60;	// +2 hours // TODO: 2*60*60 should be in a #define in swad_config.h
+      ReceivedAtt.TimeUTC[Att_END_TIME] = ReceivedAtt.TimeUTC[Att_START_TIME] + 2 * 60 * 60;	// +2 hours // TODO: 2 * 60 * 60 should be in a #define in swad_config.h
 
    /***** Check if title is correct *****/
    if (ReceivedAtt.Title[0])	// If there's an attendance event title
@@ -1373,7 +1373,7 @@ void Att_RecFormAttEvent (void)
 
 void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Create a new attendance event *****/
    sprintf (Query,"INSERT INTO att_events"
@@ -1405,7 +1405,7 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the attendance event *****/
    sprintf (Query,"UPDATE att_events SET "
@@ -2045,10 +2045,10 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
    bool Present;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
-   char CommentStd[Cns_MAX_BYTES_TEXT+1];
-   char CommentTch[Cns_MAX_BYTES_TEXT+1];
+   char CommentStd[Cns_MAX_BYTES_TEXT + 1];
+   char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Check if this student is already registered in the current event *****/
    Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
@@ -2097,7 +2097,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
      {
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
 	       Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO45x60",Pho_ZOOM,false);
@@ -2222,9 +2222,9 @@ void Att_RegisterMeAsStdInAttEvent (void)
    extern const char *Txt_Your_comment_has_been_updated;
    struct AttendanceEvent Att;
    bool Present;
-   char CommentParamName[10+10+1];
-   char CommentStd[Cns_MAX_BYTES_TEXT+1];
-   char CommentTch[Cns_MAX_BYTES_TEXT+1];
+   char CommentParamName[10 + 10 + 1];
+   char CommentStd[Cns_MAX_BYTES_TEXT + 1];
+   char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get attendance event code *****/
    if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
@@ -2283,9 +2283,9 @@ void Att_RegisterStudentsInAttEvent (void)
    unsigned NumStdsPresent;
    unsigned NumStdsAbsent;
    struct UsrData UsrData;
-   char CommentParamName[10+10+1];
-   char CommentStd[Cns_MAX_BYTES_TEXT+1];
-   char CommentTch[Cns_MAX_BYTES_TEXT+1];
+   char CommentParamName[10 + 10 + 1];
+   char CommentStd[Cns_MAX_BYTES_TEXT + 1];
+   char CommentTch[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get attendance event code *****/
    if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
@@ -2411,7 +2411,7 @@ static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att)
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList)
   {
    char *Query;
-   char SubQuery[1+1+10+1];
+   char SubQuery[1 + 1 + 10 + 1];
    unsigned NumStd;
    unsigned NumStdsInAttEvent = 0;
    size_t MaxLength;
@@ -2581,7 +2581,7 @@ void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
 static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool Present,
                                                   const char *CommentStd,const char *CommentTch)
   {
-   char Query[256+Cns_MAX_BYTES_TEXT*2];
+   char Query[256 + Cns_MAX_BYTES_TEXT * 2];
 
    /***** Register user as assistant to an event in database *****/
    sprintf (Query,"REPLACE INTO att_usr (AttCod,UsrCod,Present,CommentStd,CommentTch)"
@@ -2719,7 +2719,7 @@ void Usr_PrintMyAttendanceCrs (void)
 static void Usr_ListOrPrintMyAttendanceCrs (Att_TypeOfView_t TypeOfView)
   {
    unsigned NumAttEvent;
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2785,7 +2785,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
    unsigned NumStdsInList;
    long *LstSelectedUsrCods;
    unsigned NumAttEvent;
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_OLDEST_FIRST);
@@ -2893,7 +2893,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumAttEvent;
    const char *Ptr;
    long AttCod;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2903,8 +2903,8 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
    unsigned NumGrpSel;
 
    /***** Allocate memory for list of attendance events selected *****/
-   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1+10+1);
-   if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected+1)) == NULL)
+   MaxSizeListAttCodsSelected = Gbl.AttEvents.Num * (1 + 10 + 1);
+   if ((*StrAttCodsSelected = (char *) malloc (MaxSizeListAttCodsSelected + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store list of attendance events selected.");
 
    /***** Get parameter multiple with list of attendance events selected *****/
@@ -2925,7 +2925,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 	   )
 	{
 	 /* Get next attendance event selected */
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1+10);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,LongStr,1 + 10);
 	 AttCod = Str_ConvertStrCodToLongCod (LongStr);
 
 	 /* Set each event in *StrAttCodsSelected as selected */
@@ -3317,7 +3317,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
   {
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    unsigned NumAttEvent;
    bool Present;
@@ -3339,7 +3339,7 @@ static void Att_WriteRowStdSeveralAttEvents (unsigned NumStd,struct UsrData *Usr
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\""
 	                 " style=\"width:22px;\">",
 	       Gbl.RowEvenOdd);
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                                            NULL,
                         "PHOTO21x28",Pho_ZOOM,false);
@@ -3459,7 +3459,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    extern const char *Txt_Absent;
    extern const char *Txt_Student_comment;
    extern const char *Txt_Teachers_comment;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    unsigned NumAttEvent;
    unsigned UniqueId;
@@ -3483,7 +3483,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE COLOR%u\""
 	              " style=\"width:22px;\">",
             Gbl.RowEvenOdd);
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 				        NULL,
 		     "PHOTO21x28",Pho_ZOOM,false);

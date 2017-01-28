@@ -227,7 +227,7 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 
 Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText (ParamName,UnsignedStr,10);
@@ -248,7 +248,7 @@ Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
 /*****************************************************************************/
 // Returns true if it can be shown and false if not.
 
-bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
+bool Pri_ShowingIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
   {
    /***** It's me? I always can see my things *****/
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)
@@ -263,7 +263,9 @@ bool Pri_ShowIsAllowed (Pri_Visibility_t Visibility,struct UsrData *UsrDat)
      {
       case Pri_VISIBILITY_UNKNOWN:
 	 return false;			// It's not me
-      case Pri_VISIBILITY_USER:		// Only visible by me and my teachers if I am a student or me and my students if I am a teacher
+      case Pri_VISIBILITY_USER:		// Only visible
+					// by me and my teachers if I am a student
+					// or me and my students if I am a teacher
          // Do both users share the same course but whit different role?
 	 return Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (UsrDat->UsrCod);
       case Pri_VISIBILITY_COURSE:	// Visible by users sharing courses with me

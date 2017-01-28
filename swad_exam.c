@@ -116,7 +116,7 @@ void Exa_PutFrmEditAExamAnnouncement (void)
 
 static long Exa_GetParamsExamAnnouncement (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
@@ -545,7 +545,7 @@ void Exa_GetDateToHighlight (void)
   {
    /***** Get the date (in YYYY-MM-DD format)
           of the exam announcements to highlight *****/
-   Par_GetParToText ("Date",Gbl.ExamAnns.HighlightDate,4+1+2+1+2);
+   Par_GetParToText ("Date",Gbl.ExamAnns.HighlightDate,4 + 1 + 2 + 1 + 2);
   }
 
 /*****************************************************************************/
@@ -750,7 +750,7 @@ static long Exa_AddExamAnnouncementToDB (void)
    long ExaCod;
 
    /***** Add exam announcement *****/
-   if ((Query = malloc (512+2*Cns_MAX_BYTES_STRING+7*Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = malloc (512 + 2 * Cns_MAX_BYTES_STRING + 7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"INSERT INTO exam_announcements "
 	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
@@ -794,7 +794,7 @@ static void Exa_ModifyExamAnnouncementInDB (void)
    char *Query;
 
    /***** Modify exam announcement *****/
-   if ((Query = malloc (512+2*Cns_MAX_BYTES_STRING+7*Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = malloc (512 + 2 * Cns_MAX_BYTES_STRING + 7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"UPDATE exam_announcements"
                   " SET CrsFullName='%s',Year='%u',ExamSession='%s',"
@@ -1007,7 +1007,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
   {
    extern const char *Hlp_ASSESSMENT_Announcements_new_announcement;
    extern const char *Hlp_ASSESSMENT_Announcements_edit_announcement;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_EXAM_ANNOUNCEMENT;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
@@ -1033,7 +1033,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    const char *StyleForm   = "CONV_NEG";
    const char *StyleNormal = "CONV";
    struct Instit Ins;
-   char StrExamDate[Cns_MAX_LENGTH_DATE+1];
+   char StrExamDate[Cns_MAX_LENGTH_DATE + 1];
    unsigned Year,Hour,Minute;
    const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
@@ -1611,22 +1611,18 @@ void Exa_PutHiddenParamExaCod (long ExaCod)
 
 static long Exa_GetParamExaCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the exam announcement code
-   long ExaCod;
+   char LongStr[1 + 10 + 1];	// String that holds the exam announcement code
 
    /* Get notice code */
-   Par_GetParToText ("ExaCod",LongStr,1+10);
-   if (sscanf (LongStr,"%ld",&ExaCod) != 1)
-      ExaCod = -1L;
-
-   return ExaCod;
+   Par_GetParToText ("ExaCod",LongStr,1 + 10);
+   return Str_ConvertStrCodToLongCod (LongStr);
   }
 
 /*****************************************************************************/
 /************ Get summary and content about an exam announcement *************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
-// MaxChars must be > 3+(2+Cns_MAX_LENGTH_DATE+6)
+// MaxChars must be > 3 + (2 + Cns_MAX_LENGTH_DATE + 6)
 
 void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                                                char **ContentStr,
@@ -1652,7 +1648,7 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEX
    /* Name of the course */
    if (MaxChars)
       Str_LimitLengthHTMLStr (Gbl.ExamAnns.ExaDat.CrsFullName,
-                              MaxChars-(2+Cns_MAX_LENGTH_DATE+6));
+                              MaxChars - (2 + Cns_MAX_LENGTH_DATE + 6));
 
    /* Date of exam */
    sprintf (SummaryStr,"%s, %04u-%02u-%02u %2u:%02u",
@@ -1675,7 +1671,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
   {
    extern const char *Txt_Institution;
    extern const char *Txt_Degree;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_EXAM_ANNOUNCEMENT_Course;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Year_or_semester;
    extern const char *Txt_EXAM_ANNOUNCEMENT_Session;
@@ -1693,9 +1689,9 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    struct Course Crs;
    struct Degree Deg;
    struct Instit Ins;
-   char StrExamDate[Cns_MAX_LENGTH_DATE+1];
+   char StrExamDate[Cns_MAX_LENGTH_DATE + 1];
 
-   if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT*8)) == NULL)
+   if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT * 8)) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for notification content.");
    (*ContentStr)[0] = '\0';	// Return nothing on error
 

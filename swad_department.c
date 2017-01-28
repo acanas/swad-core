@@ -193,7 +193,7 @@ void Dpt_SeeDepts (void)
 
 static void Dpt_GetParamDptOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -616,10 +616,10 @@ static void Dpt_PutParamDptCod (long DptCod)
 
 long Dpt_GetParamDptCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of department *****/
-   Par_GetParToText ("DptCod",LongStr,1+10);
+   Par_GetParToText ("DptCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -826,8 +826,8 @@ void Dpt_ChangeDptWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Department *Dpt;
-   char Query[256+Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
 

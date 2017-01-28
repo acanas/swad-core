@@ -2910,7 +2910,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemOldBrf      */{1489,-1,TabUnk,ActAdmBrf		,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Brw_RemoveOldFilesBriefcase	,NULL},
   };
 
-Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!
+Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse unique action codes!
 	{
 	ActSeeAdmDocCrsGrp,	//  #0
 	-1,			//  #1 (obsolete action)
@@ -4679,8 +4679,8 @@ void Act_FormStartId (Act_Action_t NextAction,const char *Id)
 static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
 
    if (!Gbl.Form.Inside)
      {
@@ -4716,7 +4716,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
-// Params should have space for 256+256+Ses_LENGTH_SESSION_ID+256 bytes
+// Params should have space for 256 + 256 + Ses_LENGTH_SESSION_ID + 256 bytes
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {

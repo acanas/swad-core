@@ -335,7 +335,7 @@ bool Ses_GetSessionData (void)
 
 void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const char *ParamValue)
   {
-   char Query[512+Cns_MAX_BYTES_TEXT];
+   char Query[512 + Cns_MAX_BYTES_TEXT];
 
    /***** Before of inserting the first hidden parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/

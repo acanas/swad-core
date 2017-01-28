@@ -412,7 +412,7 @@ void Sch_PutMagnifyingGlassButton (const char *Icon)
 
 void Sch_GetParamWhatToSearch (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Get what to search from form *****/
@@ -666,7 +666,7 @@ static void Sch_SearchInDB (void)
 
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
    char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
 
@@ -701,8 +701,8 @@ static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
   {
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_DEG &&
@@ -734,8 +734,8 @@ static unsigned Sch_SearchCentresInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
   {
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
 
    /***** Check scope *****/
    if (Gbl.Scope.Current != Sco_SCOPE_CRS)
@@ -767,8 +767,8 @@ static unsigned Sch_SearchDegreesInDB (const char *RangeQuery)
 
 static unsigned Sch_SearchCoursesInDB (const char *RangeQuery)
   {
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[1024+Sch_MAX_LENGTH_SEARCH_QUERY*2];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COURSES))
@@ -802,7 +802,7 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
   {
    extern const char *Txt_The_search_text_must_be_longer;
    static bool WarningMessageWritten = false;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
 
    /***** Split user string into words *****/
    if (Sch_BuildSearchQuery (SearchQuery,
@@ -830,8 +830,8 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
   {
    extern const char *Txt_open_document;
    extern const char *Txt_open_documents;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*4];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[(512 + Sch_MAX_LENGTH_SEARCH_QUERY) * 4];
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_OPEN_DOCUMENTS))
@@ -942,8 +942,8 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
   {
    extern const char *Txt_document_in_my_courses;
    extern const char *Txt_documents_in_my_courses;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[(1024+Sch_MAX_LENGTH_SEARCH_QUERY)*2];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[(1024 + Sch_MAX_LENGTH_SEARCH_QUERY) * 2];
    unsigned NumDocs;
 
    /***** Check user's permission *****/
@@ -1070,8 +1070,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
   {
    extern const char *Txt_document_from_me;
    extern const char *Txt_documents_from_me;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
-   char Query[(512+Sch_MAX_LENGTH_SEARCH_QUERY)*5];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[(512 + Sch_MAX_LENGTH_SEARCH_QUERY) * 5];
 
    /***** Check user's permission *****/
    if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_MY_DOCUMENTS))
@@ -1230,7 +1230,7 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1],
    size_t LengthWord;
    size_t LengthTotal = 0;
    size_t MaxLengthWord = 0;
-   char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_LENGTH_SEARCH_WORD+1];
+   char SearchWords[Sch_MAX_WORDS_IN_SEARCH][Sch_MAX_LENGTH_SEARCH_WORD + 1];
    bool SearchWordIsValid = true;
 
    if (Gbl.Search.Str[0])

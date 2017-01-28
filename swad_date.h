@@ -35,7 +35,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Dat_SECONDS_IN_ONE_MONTH (30UL*24UL*60UL*60UL)
+#define Dat_SECONDS_IN_ONE_MONTH (30UL * 24UL * 60UL * 60UL)
 
 #define Dat_MAX_BYTES_TIME_ZONE 256
 
@@ -67,7 +67,7 @@ struct DateTime
   {
    struct Date Date;
    struct Time Time;
-   char YYYYMMDDHHMMSS[4+2+2+2+2+2+1];
+   char YYYYMMDDHHMMSS[4 + 2 + 2 + 2 + 2 + 2 + 1];
   };
 
 #define Dat_NUM_TIME_STATUS 3
@@ -121,7 +121,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 
 void Dat_PutHiddenParBrowserTZDiff (void);
-void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1]);
+void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1]);
 
 void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 	                const char *Id,

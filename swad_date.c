@@ -44,7 +44,7 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-const unsigned Dat_NumDaysMonth[1+12] =
+const unsigned Dat_NumDaysMonth[1 + 12] =
   {
     0,
    31,	//  1: January
@@ -519,10 +519,10 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 
 time_t Dat_GetTimeUTCFromForm (const char *ParamName)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /**** Get time ****/
-   Par_GetParToText (ParamName,LongStr,1+10);
+   Par_GetParToText (ParamName,LongStr,1 + 10);
    return Dat_GetUNIXTimeFromStr (LongStr);
   }
 
@@ -553,13 +553,13 @@ void Dat_PutHiddenParBrowserTZDiff (void)
 // when a fixed amount (for example +01:00) is used as destination time zone,
 // because this amount may be different before and after the DST change
 
-void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
+void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool TZNameIsUsable = false;
-   char IntStr[1+10+1];
+   char IntStr[1 + 10 + 1];
    int ClientUTCMinusLocal;	// Time difference between UTC time and client local time, in minutes
 
    /***** 1. Get client time zone name *****/
@@ -594,7 +594,7 @@ void Dat_GetBrowserTimeZone (char BrowserTimeZone[Dat_MAX_BYTES_TIME_ZONE+1])
       // We get client TZ difference using JavaScript getTimezoneOffset() method
       // getTimezoneOffset() returns UTC-time - browser-local-time, in minutes.
       // For example, if browser time zone is GMT+2, -120 will be returned.
-      Par_GetParToText ("BrowserTZDiff",IntStr,1+10);
+      Par_GetParToText ("BrowserTZDiff",IntStr,1 + 10);
       if (sscanf (IntStr,"%d",&ClientUTCMinusLocal) != 1)
 	 ClientUTCMinusLocal = 0;
 
@@ -726,7 +726,7 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /**** Get day ****/
    Par_GetParToText (ParamNameDay,UnsignedStr,10);
@@ -1265,9 +1265,9 @@ void Dat_CalculateWeekOfYear (struct Date *Date)
    (0) Monday                   | December, 30 of Year                       |
    (1) Tuesday                  | December, 29 of Year                       |
    (2) Wednesday                | December, 28 of Year                       |
-   (3) Thursday                 | January,   3 of Year+1                     |
-   (4) Friday                   | January,   4 of Year+1                     |
-   (5) Saturday                 | January,   5 of Year+1                     |
+   (3) Thursday                 | January,   3 of Year + 1                   |
+   (4) Friday                   | January,   4 of Year + 1                   |
+   (5) Saturday                 | January,   5 of Year + 1                   |
    (6) Sunday                   | December, 31 of Year                       |
    */
    int DayThatFirstWeekStarts[7] = {1,0,-1,-2,4,3,2};

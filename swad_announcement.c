@@ -387,11 +387,11 @@ static void Ann_PutParams (void)
 
 static long Ann_GetParamAnnCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the announcement code
+   char LongStr[1 + 10 + 1];	// String that holds the announcement code
    long AnnCod;
 
    /* Get announcement code */
-   Par_GetParToText ("AnnCod",LongStr,1+10);
+   Par_GetParToText ("AnnCod",LongStr,1 + 10);
    if (sscanf (LongStr,"%ld",&AnnCod) != 1)
       Lay_ShowErrorAndExit ("Wrong code of announcement.");
 
@@ -481,8 +481,8 @@ void Ann_ReceiveAnnouncement (void)
   {
    extern const char *Txt_Announcement_created;
    unsigned Roles;
-   char Subject[Cns_MAX_BYTES_SUBJECT+1];
-   char Content[Cns_MAX_BYTES_TEXT+1];
+   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
+   char Content[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data from form *****/
    /* Get the subject of the announcement */
@@ -511,7 +511,7 @@ void Ann_ReceiveAnnouncement (void)
 
 static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const char *Content)
   {
-   char Query[128+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_TEXT];
+   char Query[128 + Cns_MAX_BYTES_SUBJECT + Cns_MAX_BYTES_TEXT];
 
    /***** Select announcements not seen *****/
    sprintf (Query,"INSERT INTO announcements (Roles,Subject,Content)"

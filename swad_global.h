@@ -86,8 +86,8 @@ struct Globals
   {
    struct
      {
-      char DatabasePassword[Cfg_MAX_BYTES_DATABASE_PASSWORD+1];
-      char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD+1];
+      char DatabasePassword[Cfg_MAX_BYTES_DATABASE_PASSWORD + 1];
+      char SMTPPassword[Cfg_MAX_BYTES_SMTP_PASSWORD + 1];
      } Config;
    struct Files F;
    MYSQL mysql;
@@ -96,7 +96,7 @@ struct Globals
      {
       int Num;			// Number of form, used in form submit links
       char Id[32];		// Identifier string used in forms
-      char UniqueId[32+Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+10+1];	// Unique identifier string used in forms
+      char UniqueId[32 + Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
    bool Error;
@@ -114,8 +114,8 @@ struct Globals
 						Act_CONT_DATA (if CONTENT_TYPE==multipart/form-data) */
    struct
      {
-      char StrWithoutCRLF[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
-      char StrWithCRLF   [Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF+1];
+      char StrWithoutCRLF[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF + 1];
+      char StrWithCRLF   [Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF + 1];
       size_t LengthWithoutCRLF;
       size_t LengthWithCRLF;
      } Boundary;
@@ -185,7 +185,7 @@ struct Globals
    const char *XMLPtr;
    struct
      {
-      char FileName[PATH_MAX+1];
+      char FileName[PATH_MAX + 1];
      } HTMLOutput;
    struct
      {
@@ -397,7 +397,7 @@ struct Globals
             time_t TimeDiff;
            } Lst[Cfg_MAX_CONNECTED_SHOWN];
         } Connected;
-      char FileNamePhoto[NAME_MAX+1];	// File name (with no path and no .jpg) of the temporary file with the selected face
+      char FileNamePhoto[NAME_MAX + 1];	// File name (with no path and no .jpg) of the temporary file with the selected face
       bool Error;	// To signal that an error has happened
       Enr_RegRemOneUsrAction_t RegRemAction;	// Enrollment action
      } Usrs;
@@ -444,9 +444,9 @@ struct Globals
    struct
      {
       struct Course Crs;
-      char PathPriv[PATH_MAX+1];   // Absolute path to the private directory of the course
-      char PathRelPubl[PATH_MAX+1];   // Relative path to the public directory of the course
-      char PathURLPubl[PATH_MAX+1];   // Abolute URL to the public part of the course
+      char PathPriv[PATH_MAX + 1];   // Absolute path to the private directory of the course
+      char PathRelPubl[PATH_MAX + 1];   // Relative path to the public directory of the course
+      char PathURLPubl[PATH_MAX + 1];   // Abolute URL to the public part of the course
       struct
         {
          unsigned NumGrps;
@@ -480,17 +480,17 @@ struct Globals
      } CurrentCrs;
    struct
      {
-      char PathDir[PATH_MAX+1];
+      char PathDir[PATH_MAX + 1];
       unsigned NumItem;
       bool EditionIsActive;
       Syl_WhichSyllabus_t WhichSyllabus;
      } Syllabus;
    struct
      {
-      struct Date *Lst;	// List of dates of exam announcements
+      struct Date *Lst;		// List of dates of exam announcements
       unsigned NumExaAnns;	// Number of announcements of exam in the list
-      long HighlightExaCod;		// Exam announcement to be highlighted
-      char HighlightDate[4+1+2+1+2+1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
+      long HighlightExaCod;	// Exam announcement to be highlighted
+      char HighlightDate[4 + 1 + 2 + 1 + 2 + 1];	// Date with exam announcements to be highlighted (in YYYY-MM-DD format)
       struct ExamData ExaDat;
       bool NewExamAnnouncement;
      } ExamAnns;
@@ -597,7 +597,7 @@ struct Globals
         } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
       long FilterCrsCod; 		// Show only messages sent from this course code
       char FilterCrsShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
-      char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME*3 + 1];	// Show only messages from/to these users
+      char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3 + 1];	// Show only messages from/to these users
       char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT + 1];		// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
       long ExpandedMsgCod;	// The current expanded message code
@@ -622,8 +622,8 @@ struct Globals
       unsigned Column;
       TT_ClassType_t ClassType;
       unsigned Duration;
-      char Place[TT_MAX_BYTES_PLACE+1];
-      char Group[TT_MAX_BYTES_GROUP+1];
+      char Place[TT_MAX_BYTES_PLACE + 1];
+      char Group[TT_MAX_BYTES_GROUP + 1];
       long GrpCod;		// Group code (-1 if no group selected)
       struct
         {
@@ -706,8 +706,8 @@ struct Globals
       unsigned long RowsPerPage;
       long DegTypCod;
       long DptCod;
-      char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED+1];
-      bool IndicatorsSelected[1+Ind_NUM_INDICATORS];
+      char StrIndicatorsSelected[Ind_MAX_SIZE_INDICATORS_SELECTED + 1];
+      bool IndicatorsSelected[1 + Ind_NUM_INDICATORS];
       struct
         {
          Pho_AvgPhotoTypeOfAverage_t TypeOfAverage;

@@ -54,9 +54,9 @@ typedef enum
 
 #define Ctr_MAX_CENTRES_PER_USR	 10 // Used in list of my centres
 
-#define Ctr_MAX_LENGTH_CENTRE_SHRT_NAME	     32
-#define Ctr_MAX_LENGTH_CENTRE_FULL_NAME		    127
-#define Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION	(4*1024)
+#define Ctr_MAX_LENGTH_CENTRE_SHRT_NAME		32
+#define Ctr_MAX_LENGTH_CENTRE_FULL_NAME		127
+#define Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION	(4 * 1024)
 
 struct Centre
   {

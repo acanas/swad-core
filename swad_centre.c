@@ -99,7 +99,8 @@ static long Ctr_GetParamOtherCtrCod (void);
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
-static void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
+static void Ctr_UpdateCtrWWWDB (long CtrCod,
+                                const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
 static void Ctr_PutFormToCreateCentre (void);
@@ -272,7 +273,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_Users_of_the_centre;
    extern const char *Txt_Place;
@@ -282,7 +283,7 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumIns;
    struct Place Plc;
-   char PathPhoto[PATH_MAX+1];
+   char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
    char *PhotoAttribution = NULL;
    bool PutLink = !PrintView && Gbl.CurrentCtr.Ctr.WWW[0];
@@ -692,7 +693,7 @@ static void Ctr_PutIconToChangePhoto (void)
   {
    extern const char *Txt_Change_photo;
    extern const char *Txt_Upload_photo;
-   char PathPhoto[PATH_MAX+1];
+   char PathPhoto[PATH_MAX + 1];
    bool PhotoExists;
 
    /***** Link to upload photo of centre *****/
@@ -918,7 +919,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
 static void Ctr_GetParamCtrOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -1677,10 +1678,10 @@ long Ctr_GetAndCheckParamOtherCtrCod (void)
 
 static long Ctr_GetParamOtherCtrCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of centre *****/
-   Par_GetParToText ("OthCtrCod",LongStr,1+10);
+   Par_GetParToText ("OthCtrCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1694,7 +1695,7 @@ void Ctr_RemoveCentre (void)
    extern const char *Txt_Centre_X_removed;
    char Query[512];
    struct Centre Ctr;
-   char PathCtr[PATH_MAX+1];
+   char PathCtr[PATH_MAX + 1];
 
    /***** Get centre code *****/
    Ctr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
@@ -1902,7 +1903,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
-   char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME+1];
+   char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
@@ -1974,7 +1975,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
-   char Query[256+Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
+   char Query[256 + Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
@@ -1992,7 +1993,7 @@ void Ctr_ChangeCtrWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Centre *Ctr;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
 
@@ -2033,7 +2034,7 @@ void Ctr_ChangeCtrWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the centre */
@@ -2062,9 +2063,10 @@ void Ctr_ChangeCtrWWWInConfig (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Ctr_UpdateCtrWWWDB (long CtrCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+static void Ctr_UpdateCtrWWWDB (long CtrCod,
+                                const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
   {
-   char Query[256+Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod='%ld'",
@@ -2081,7 +2083,7 @@ void Ctr_ChangeCtrStatus (void)
    extern const char *Txt_The_status_of_the_centre_X_has_changed;
    struct Centre *Ctr;
    char Query[256];
-   char UnsignedNum[10+1];
+   char UnsignedNum[10 + 1];
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
@@ -2245,17 +2247,17 @@ void Ctr_RequestPhoto (void)
 void Ctr_ReceivePhoto (void)
   {
    extern const char *Txt_Wrong_file_type;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    struct Param *Param;
-   char FileNameImgSrc[PATH_MAX+1];
+   char FileNameImgSrc[PATH_MAX + 1];
    char *PtrExtension;
    size_t LengthExtension;
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char PathImgPriv[PATH_MAX+1];
-   char FileNameImgTmp[PATH_MAX+1];	// Full name (including path and .jpg) of the destination temporary file
-   char FileNameImg[PATH_MAX+1];	// Full name (including path and .jpg) of the destination file
+   char PathImgPriv[PATH_MAX + 1];
+   char FileNameImgTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination temporary file
+   char FileNameImg[PATH_MAX + 1];	// Full name (including path and .jpg) of the destination file
    bool WrongType = false;
-   char Command[1024+PATH_MAX*2];
+   char Command[1024 + PATH_MAX * 2];
    int ReturnCode;
 
    /***** Copy in disk the file received *****/
@@ -2364,8 +2366,8 @@ void Ctr_ReceivePhoto (void)
 
 void Ctr_ChangeCtrPhotoAttribution (void)
   {
-   char Query[256+Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION];
-   char NewPhotoAttribution[Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION+1];
+   char Query[256 + Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION];
+   char NewPhotoAttribution[Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new photo attribution for the centre */
@@ -2731,9 +2733,9 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
-   char Query[512+
-              Ctr_MAX_LENGTH_CENTRE_SHRT_NAME+
-              Ctr_MAX_LENGTH_CENTRE_FULL_NAME+
+   char Query[512 +
+              Ctr_MAX_LENGTH_CENTRE_SHRT_NAME +
+              Ctr_MAX_LENGTH_CENTRE_FULL_NAME +
               Cns_MAX_LENGTH_WWW];
 
    /***** Create a new centre *****/

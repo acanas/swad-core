@@ -305,7 +305,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    extern const char *Txt_No;
    static unsigned UniqueId = 0;
    struct Assignment Asg;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get data of this assignment *****/
    Asg.AsgCod = AsgCod;
@@ -433,7 +433,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
 static void Asg_WriteAsgAuthor (struct Assignment *Asg)
   {
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    char FirstName[Usr_MAX_BYTES_NAME + 1];
    char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
@@ -444,7 +444,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
    /***** Get data of author *****/
    UsrDat.UsrCod = Asg->UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 
    /***** Show photo *****/
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
@@ -523,7 +523,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
 
 static void Asg_GetParamAsgOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -929,10 +929,10 @@ static void Asg_PutParamAsgCod (long AsgCod)
 
 long Asg_GetParamAsgCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of assignment *****/
-   Par_GetParToText ("AsgCod",LongStr,1+10);
+   Par_GetParToText ("AsgCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1116,7 +1116,7 @@ void Asg_RequestCreatOrEditAsg (void)
    extern const char *Txt_Save;
    struct Assignment Asg;
    bool ItsANewAssignment;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
    Asg_GetParamAsgOrderType ();
@@ -1307,7 +1307,7 @@ void Asg_RecFormAssignment (void)
    bool ItsANewAssignment;
    bool NewAssignmentIsCorrect = true;
    unsigned NumUsrsToBeNotifiedByEMail;
-   char Txt[Cns_MAX_BYTES_TEXT+1];
+   char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get the code of the assignment *****/
    NewAsg.AsgCod = Asg_GetParamAsgCod ();
@@ -1345,7 +1345,7 @@ void Asg_RecFormAssignment (void)
    if (NewAsg.TimeUTC[Dat_START_TIME] == 0)
       NewAsg.TimeUTC[Dat_START_TIME] = Gbl.StartExecutionTimeUTC;
    if (NewAsg.TimeUTC[Dat_END_TIME] == 0)
-      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_START_TIME] + 2*60*60;	// +2 hours
+      NewAsg.TimeUTC[Dat_END_TIME] = NewAsg.TimeUTC[Dat_START_TIME] + 2 * 60 * 60;	// +2 hours
 
    /***** Check if title is correct *****/
    if (NewAsg.Title[0])	// If there's an assignment title
@@ -1462,7 +1462,7 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
 
 static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Create a new assignment *****/
    sprintf (Query,"INSERT INTO assignments"
@@ -1490,7 +1490,7 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 
 static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   char Query[1024+Cns_MAX_BYTES_TEXT];
+   char Query[1024 + Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the assignment *****/
    sprintf (Query,"UPDATE assignments SET "

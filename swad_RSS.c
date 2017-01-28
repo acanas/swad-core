@@ -59,8 +59,8 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs);
 
 void RSS_UpdateRSSFileForACrs (struct Course *Crs)
   {
-   char PathRelPublRSSDir[PATH_MAX+1];
-   char PathRelPublRSSFile[PATH_MAX+1];
+   char PathRelPublRSSDir[PATH_MAX + 1];
+   char PathRelPublRSSFile[PATH_MAX + 1];
    FILE *FileRSS;
    struct tm *tm;
 
@@ -249,7 +249,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
    time_t CallTimeUTC;
    long ExaCod;
    unsigned long NumExa,NumExamAnnouncements;
-   // char Content[Cns_MAX_BYTES_TEXT+1];
 
    if (Gbl.DB.DatabaseIsOpen)
      {
@@ -298,11 +297,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 	    fprintf (FileRSS,"<description><![CDATA[<p><em>Fecha examen: %s</em></p>]]></description>\n",
 		     row[2]);
 
-	    /* Write author */
-            // if (UsrDat.Email[0])
-	    //    fprintf (FileRSS,"<author>%s (%s %s %s)</author>\n",
-	    //             UsrDat.Email,UsrDat.FirstName,UsrDat.Surname1,UsrDat.Surname2);
-
 	    /* Write unique string for this item */
 	    fprintf (FileRSS,"<guid isPermaLink=\"false\">%s, course #%ld, exam #%ld</guid>\n",
 		     Cfg_URL_SWAD_CGI,Crs->CrsCod,ExaCod);
@@ -315,8 +309,6 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
 
 	    fprintf (FileRSS,"</item>\n");
 	   }
-
-	 // Usr_UsrDataDestructor (&UsrDat);
 	}
 
       /***** Free structure that stores the query result *****/

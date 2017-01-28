@@ -447,7 +447,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       if (Pagination->RightPage > Pagination->EndPage &&
 	  Pagination->RightPage < Pagination->NumPags)
         {
-         if (Pagination->RightPage > Pagination->EndPage+1)
+         if (Pagination->RightPage > Pagination->EndPage + 1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "&hellip;"
         	               "</td>",
@@ -523,7 +523,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
       /***** Possible link to last page *****/
       if (Pagination->EndPage < Pagination->NumPags)
         {
-         if (Pagination->NumPags > Pagination->RightPage+1)
+         if (Pagination->NumPags > Pagination->RightPage + 1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "&hellip;"
         	               "</td>",
@@ -616,7 +616,7 @@ void Pag_PutHiddenParamPagNum (unsigned NumPage)
 void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
   {
    static bool FirstCall = true;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned NumPage;
 
    if (FirstCall)
@@ -657,7 +657,7 @@ void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
 
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
 
    /***** Save last page of received/sent messages *****/
    sprintf (Query,"UPDATE sessions SET %s='%u' WHERE SessionId='%s'",
@@ -673,7 +673,7 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
 
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;

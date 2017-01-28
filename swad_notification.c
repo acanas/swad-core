@@ -673,7 +673,7 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
 
 static bool Ntf_GetAllNotificationsFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("All",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
@@ -826,7 +826,7 @@ static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("NotifyEvent",UnsignedStr,10);
@@ -1542,16 +1542,16 @@ void Ntf_SendPendingNotifByEMailToAllUsrs (void)
 
 static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsigned *NumNotif,unsigned *NumMails)
   {
-   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Course_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Forum_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_MSG_From_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Go_to_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_TAB_Messages_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_Notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
-   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_is_a_new_event_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_There_are_X_new_events_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Course_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Forum_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_MSG_From_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Go_to_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_TAB_Messages_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_If_you_no_longer_wish_to_receive_email_notifications_NO_HTML[1 + Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1956,7 +1956,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 static void Ntf_GetParamsNotifyEvents (void)
   {
    Ntf_NotifyEvent_t NotifyEvent;
-   char YN[1+1];
+   char YN[1 + 1];
    bool CreateNotifForThisEvent;
 
    Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents = 0;

@@ -669,7 +669,7 @@ void Inf_ChangeIHaveReadInfo (void)
 
 static bool Inf_GetMustBeReadFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get a parameter that indicates if info must be read by students ******/
    Par_GetParToText ("MustBeRead",YN,1);
@@ -682,7 +682,7 @@ static bool Inf_GetMustBeReadFromForm (void)
 
 static bool Inf_GetIfIHaveReadFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    /***** Get a parameter that indicates if I have read a course info ******/
    Par_GetParToText ("IHaveRead",YN,1);
@@ -758,8 +758,8 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 
 static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char PathRelDirHTML[PATH_MAX+1];
-   char PathRelFileHTML[PATH_MAX+1];
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
@@ -788,9 +788,9 @@ static bool Inf_CheckPage (long CrsCod,Inf_InfoType_t InfoType)
 
 static bool Inf_CheckAndShowPage (void)
   {
-   char PathRelDirHTML[PATH_MAX+1];
-   char PathRelFileHTML[PATH_MAX+1];
-   char URL[PATH_MAX+1];
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1];
+   char URL[PATH_MAX + 1];
 
    // TODO !!!!!!!!!!!! If the page is hosted in server ==> it should be created a temporary public directory
    //                                                       and host the page in a private directory !!!!!!!!!!!!!!!!!
@@ -844,8 +844,8 @@ static void Inf_BuildPathPage (long CrsCod,Inf_InfoType_t InfoType,char *PathDir
 
 int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
   {
-   char PathRelDirHTML[PATH_MAX+1];
-   char PathRelFileHTML[PATH_MAX+1];
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1];
    FILE *FileHTML;
    bool FileExists = false;
    size_t Length;
@@ -882,7 +882,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
       fseek (FileHTML,0L,SEEK_SET);
 
       /* Allocate memory for buffer */
-      if ((*HTMLBuffer = (char *) malloc (Length+1)) == NULL)
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTML);
 	 Lay_ShowErrorAndExit ("Not enough memory for buffer.");
@@ -915,7 +915,7 @@ int Inf_WritePageIntoHTMLBuffer (char **HTMLBuffer)
 
 static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
   {
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
@@ -943,7 +943,7 @@ static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
 
 static bool Inf_CheckAndShowURL (void)
   {
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
@@ -983,9 +983,9 @@ static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile
 /*****************************************************************************/
 // This function is called only from web service
 
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_LENGTH_WWW+1])
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_LENGTH_WWW + 1])
   {
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
    /***** Initialize buffer *****/
@@ -1283,7 +1283,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_URL;
    extern const char *Txt_Send_URL;
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    FILE *FileURL;
 
    /***** Build path to file containing URL *****/
@@ -1448,7 +1448,7 @@ static Inf_InfoType_t Inf_AsignInfoType (void)
 
 Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    int InfoSrcInt;
    Inf_InfoSrc_t InfoSrc;
 
@@ -1675,7 +1675,7 @@ Inf_InfoSrc_t Inf_ConvertFromStrDBToInfoSrc (const char *StrInfoSrcDB)
 
 static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
   {
-   char Query[256+Cns_MAX_BYTES_LONG_TEXT];
+   char Query[256 + Cns_MAX_BYTES_LONG_TEXT];
 
    /***** Insert or replace info source for a specific type of course information *****/
    sprintf (Query,"REPLACE INTO crs_info_txt"
@@ -1761,7 +1761,7 @@ static bool Inf_CheckPlainTxt (long CrsCod,Inf_InfoType_t InfoType)
 static bool Inf_CheckAndShowPlainTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
@@ -2000,7 +2000,7 @@ int Inf_WritePlainTextIntoHTMLBuffer (char **HTMLBuffer)
       Length = (size_t) ftell (FileHTMLTmp);
 
       /***** Allocate memory for buffer *****/
-      if ((*HTMLBuffer = (char *) malloc (Length+1)) == NULL)
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
@@ -2037,17 +2037,17 @@ void Inf_EditPlainTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
-      Hlp_COURSE_Links_edit,			// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
+      Hlp_COURSE_Links_edit,		// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
      };
 
    /***** Set info type *****/
@@ -2088,17 +2088,17 @@ void Inf_EditRichTxtInfo (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    extern const char *Txt_Save;
-   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT+1];
+   char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
-      Hlp_COURSE_Links_edit,			// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
+      Hlp_COURSE_Links_edit,		// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
      };
 
    /***** Set info type *****/
@@ -2210,7 +2210,7 @@ void Inf_RecAndChangeRichTxtInfo (void)
 void Inf_ReceiveURLInfo (void)
   {
    extern const char *Txt_The_URL_X_has_been_updated;
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    FILE *FileURL;
    bool URLIsOK = false;
 
@@ -2274,12 +2274,12 @@ void Inf_ReceivePagInfo (void)
    extern const char *Txt_No_file_index_html_index_htm_found_within_the_ZIP_file;
    extern const char *Txt_The_file_type_should_be_HTML_or_ZIP;
    struct Param *Param;
-   char SourceFileName[PATH_MAX+1];
-   char PathRelDirHTML[PATH_MAX+1];
-   char PathRelFileHTML[PATH_MAX+1];
-   char PathRelFileZIP[PATH_MAX+1];
+   char SourceFileName[PATH_MAX + 1];
+   char PathRelDirHTML[PATH_MAX + 1];
+   char PathRelFileHTML[PATH_MAX + 1];
+   char PathRelFileZIP[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char StrUnzip[100+PATH_MAX*2+1];
+   char StrUnzip[100 + PATH_MAX * 2 + 1];
    bool WrongType = false;
    bool FileIsOK = false;
 

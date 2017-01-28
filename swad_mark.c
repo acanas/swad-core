@@ -187,7 +187,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    long Cod = Brw_GetCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -254,9 +254,9 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
   {
    extern const Brw_FileBrowser_t Brw_FileBrowserForDB_files[Brw_NUM_TYPES_FILE_BROWSER];
    extern const char *Txt_The_number_of_rows_is_now_X;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    long Cod;
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    unsigned NumRows;
 
    /***** Get parameters related to file browser *****/
@@ -302,7 +302,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
    extern const char *Txt_There_are_more_than_one_table_in_the_file_of_marks;
    extern const char *Txt_Table_not_found_in_the_file_of_marks;
    // extern const char *Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found;
-   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT+1];
+   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    FILE *FileAllMarks;
    bool EndOfHead = false;
    bool EndOfTable = false;
@@ -406,7 +406,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
 
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
   {
-   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID+1];
+   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID + 1];
    const char *Ptr = CellContent;
    bool UsrIDFound = false;
    bool StuffNotUsrIDFound = false;
@@ -445,9 +445,9 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
   {
    extern const char *Txt_THE_USER_X_is_not_found_in_the_file_of_marks;
    unsigned Row;
-   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT+1];
+   char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    const char *Ptr;
-   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID+1];
+   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID + 1];
    FILE *FileAllMarks;
    unsigned NumID;
    bool UsrIDFound;
@@ -603,10 +603,10 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 void Mrk_ShowMyMarks (void)
   {
    struct MarksProperties Marks;
-   char FileNameUsrMarks[PATH_MAX+1];
+   char FileNameUsrMarks[PATH_MAX + 1];
    FILE *FileUsrMarks;
-   char PathMarksPriv[PATH_MAX+1];
-   char PathPrivate[PATH_MAX+1];
+   char PathMarksPriv[PATH_MAX + 1];
+   char PathPrivate[PATH_MAX + 1];
    struct UsrData *UsrDat;
    bool UsrIsOK = true;
 
@@ -855,14 +855,14 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                      else
                        {
                         fclose (FileUsrMarks);
-                        if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
+                        if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
                            sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                        }
                     }
                   else
                     {
                      sprintf (Gbl.Message,"%s","Can not open file with user's marks!");	// TODO: Need translation!
-                     if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
+                     if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
                         sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                     }
                   unlink (FileNameUsrMarks);	// File with marks is no longer necessary
@@ -870,7 +870,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
                else
                  {
                   sprintf (Gbl.Message,"%s","User's IDs not found!");	// TODO: Need translation!
-                  if ((*ContentStr = (char *) malloc (9+strlen (Gbl.Message)+3+1)))
+                  if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
                      sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
                  }
               }

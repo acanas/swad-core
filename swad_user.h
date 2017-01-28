@@ -67,7 +67,7 @@
 
 #define Usr_MAX_BYTES_USR_EMAIL		(128 - 1)
 
-#define Usr_BIRTHDAY_STR_DB_LENGTH (4+1+2+1+2)	// "'%04u-%02u-%02u'"
+#define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
 
 #define Usr_MAX_LENGTH_PHONE	16
 #define Usr_MAX_BYTES_PHONE	16
@@ -77,7 +77,7 @@
 
 #define Usr_LIST_WITH_PHOTOS_DEF	false
 
-#define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64*Cfg_MAX_USRS_IN_LIST)
+#define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 * Cfg_MAX_USRS_IN_LIST)
 
 #define Usr_NUM_MAIN_FIELDS_DATA_USR	 8
 
@@ -184,7 +184,7 @@ struct UsrLast
 struct UsrInList
   {
    long UsrCod;
-   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1];
+   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
    char Surname1 [Usr_MAX_BYTES_NAME + 1];
    char Surname2 [Usr_MAX_BYTES_NAME + 1];
@@ -300,7 +300,7 @@ void Usr_GetParamUsrIdLogin (void);
 unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *ListUsrCods);
 
 void Usr_PutParamOtherUsrCodEncrypted (void);
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+1]);
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat);
 void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);

@@ -184,7 +184,7 @@ void Plc_SeePlaces (void)
 
 static void Plc_GetParamPlcOrderType (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    Par_GetParToText ("Order",UnsignedStr,10);
@@ -507,10 +507,10 @@ static void Plc_PutParamPlcCod (long PlcCod)
 
 long Plc_GetParamPlcCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of place *****/
-   Par_GetParToText ("PlcCod",LongStr,1+10);
+   Par_GetParToText ("PlcCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -586,7 +586,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentPlcName = NULL;		// Initialized to avoid warning
-   char NewPlcName[Plc_MAX_LENGTH_PLACE_FULL_NAME+1];
+   char NewPlcName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
 
    Plc = &Gbl.Plcs.EditingPlc;
    switch (ShrtOrFullName)

@@ -76,7 +76,7 @@ void Log_DrawLogo (Sco_Scope_t Scope,long Cod,const char *AltText,
       NULL,		// Sco_SCOPE_CRS
      };
    const char *Folder = NULL;	// To avoid warning
-   char PathLogo[PATH_MAX+1];
+   char PathLogo[PATH_MAX + 1];
    bool LogoFound = false;
    long InsCod;
    long CtrCod;
@@ -179,7 +179,7 @@ void Log_PutIconToChangeLogo (Sco_Scope_t Scope)
    Act_Action_t Action;
    long Cod;
    const char *Folder;
-   char PathLogo[PATH_MAX+1];
+   char PathLogo[PATH_MAX + 1];
    bool LogoExists;
 
    /***** Set variables depending on scope *****/
@@ -235,7 +235,7 @@ void Log_RequestLogo (Sco_Scope_t Scope)
    const char *Folder;
    Act_Action_t ActionRec;
    Act_Action_t ActionRem;
-   char PathLogo[PATH_MAX+1];
+   char PathLogo[PATH_MAX + 1];
 
    /***** Set action depending on scope *****/
    switch (Scope)
@@ -317,11 +317,11 @@ void Log_ReceiveLogo (Sco_Scope_t Scope)
    extern const char *Txt_The_file_is_not_X;
    long Cod;
    const char *Folder;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    struct Param *Param;
-   char FileNameLogoSrc[PATH_MAX+1];
+   char FileNameLogoSrc[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
-   char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
+   char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
    bool WrongType = false;
 
    /***** Set variables depending on scope *****/
@@ -399,7 +399,7 @@ void Log_RemoveLogo (Sco_Scope_t Scope)
   {
    long Cod;
    const char *Folder;
-   char FileNameLogo[PATH_MAX+1];        // Full name (including path and .png) of the destination file
+   char FileNameLogo[PATH_MAX + 1];	// Full name (including path and .png) of the destination file
 
    /***** Set variables depending on scope *****/
    switch (Scope)

@@ -71,7 +71,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Rec_WriteHeadingRecordFields (void);
-static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD+1],
+static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
 static void Rec_ShowRecordOneStdCrs (void);
@@ -432,7 +432,7 @@ void Rec_ReceiveFormField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_record_field;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned Vis;
 
    /***** Get parameters from the form *****/
@@ -590,10 +590,10 @@ void Rec_ReqRemField (void)
 
 long Rec_GetFieldCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get the code of the field *****/
-   Par_GetParToText ("FieldCod",LongStr,1+10);
+   Par_GetParToText ("FieldCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -751,7 +751,7 @@ void Rec_RenameField (void)
    extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_field_X_has_not_changed;
    char Query[1024];
-   char NewFieldName[Rec_MAX_LENGTH_NAME_FIELD+1];
+   char NewFieldName[Rec_MAX_LENGTH_NAME_FIELD + 1];
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
@@ -820,7 +820,7 @@ void Rec_ChangeLinesField (void)
    extern const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed;
    extern const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y;
    char Query[1024];
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned NewNumLines;
 
    /***** Get parameters of the form *****/
@@ -870,7 +870,7 @@ void Rec_ChangeVisibilityField (void)
    extern const char *Txt_The_visibility_of_the_record_field_X_has_not_changed;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY];
    char Query[1024];
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned Vis;
    Rec_VisibilityRecordFields_t NewVisibility;
 
@@ -1239,7 +1239,7 @@ static void Rec_ShowRecordOneTchCrs (void)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-   char Width[10+2+1];
+   char Width[10 + 2 + 1];
    bool ShowOfficeHours;
 
    /***** Width for office hours *****/
@@ -1306,7 +1306,7 @@ void Rec_ListRecordsTchs (void)
                                                                            Rec_SHA_RECORD_PRINT;
    struct UsrData UsrDat;
    bool ShowOfficeHours;
-   char Width[10+2+1];
+   char Width[10 + 2 + 1];
 
    /***** Width for office hours *****/
    sprintf (Width,"%upx",Rec_RECORD_WIDTH);
@@ -1442,7 +1442,7 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
 static void Rec_GetParamRecordsPerPage (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    Par_GetParToText ("RecsPerPag",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&Gbl.Usrs.Listing.RecsPerPag) != 1)
@@ -1492,7 +1492,7 @@ static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
 
 static bool Rec_GetParamShowOfficeHours (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("ParamOfficeHours",YN,1);
    if (Str_ConvertToUpperLetter (YN[0]) == 'Y')
@@ -1580,7 +1580,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       Hlp_USERS_Students_course_record_card,	// Rec_CRS_RECORD_LIST
       NULL,					// Rec_CRS_RECORD_PRINT
      };
-   char StrRecordWidth[10+1];
+   char StrRecordWidth[10 + 1];
    unsigned Col1Width = 210;
    unsigned Col2Width;
    bool ItsMe;
@@ -1777,7 +1777,7 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
 void Rec_GetFieldsCrsRecordFromForm (void)
   {
    unsigned NumField;
-   char FieldParamName[5+10+1];
+   char FieldParamName[5 + 10 + 1];
 
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
@@ -1798,7 +1798,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
 void Rec_UpdateCrsRecord (long UsrCod)
   {
    unsigned NumField;
-   char Query[256+Cns_MAX_BYTES_TEXT];
+   char Query[256 + Cns_MAX_BYTES_TEXT];
    MYSQL_RES *mysql_res;
    bool FieldAlreadyExists;
 
@@ -1917,7 +1917,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
       if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
          /* Allocate memory for the texts of the fields */
-         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT+1)) == NULL)
+         if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory to store records of the course.");
   }
 
@@ -2083,7 +2083,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       NULL,					// Rol_INS_ADM
       NULL,					// Rol_SYS_ADM
      };
-   char StrRecordWidth[10+1];
+   char StrRecordWidth[10 + 1];
    const char *ClassForm = "REC_DAT";
    bool ItsMe;
    bool IAmLoggedAsTeacher;
@@ -2365,7 +2365,7 @@ static void Rec_PutIconsCommands (void)
        Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&	// Only in main window
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
-      ICanViewUsrProfile = Pri_ShowIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
+      ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
 				              Gbl.Record.UsrDat);
 
       /***** Start container *****/
@@ -2579,8 +2579,8 @@ static void Rec_ShowInstitutionInHead (struct Instit *Ins,bool PutFormLinks)
 
 static void Rec_ShowPhoto (struct UsrData *UsrDat)
   {
-   char PhotoURL[PATH_MAX+1];
-   bool ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   char PhotoURL[PATH_MAX + 1];
+   bool ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
 
    /***** User's photo *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"3\" class=\"REC_C3_TOP CENTER_TOP\">");
@@ -2628,7 +2628,7 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_View_public_profile;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"
@@ -3527,7 +3527,7 @@ void Rec_UpdateMyRecord (void)
 
 Rol_Role_t Rec_GetRoleFromRecordForm (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    Rol_Role_t Role;
    bool RoleOK = false;
 
@@ -3613,8 +3613,8 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
   {
-   char UnsignedStr[10+1];
-   char LongStr[1+10+1];
+   char UnsignedStr[10 + 1];
+   char LongStr[1 + 10 + 1];
    unsigned UnsignedNum;
 
    /***** Get sex from form *****/
@@ -3625,7 +3625,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
 	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
 
    /***** Get country code *****/
-   Par_GetParToText ("OthCtyCod",LongStr,1+10);
+   Par_GetParToText ("OthCtyCod",LongStr,1 + 10);
    UsrDat->CtyCod = Str_ConvertStrCodToLongCod (LongStr);
 
    Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Cns_MAX_BYTES_STRING);
@@ -4076,7 +4076,7 @@ void Rec_UpdateMyDepartment (void)
 
 void Rec_UpdateMyOffice (void)
   {
-   char Query[128+Cns_MAX_BYTES_STRING];
+   char Query[128 + Cns_MAX_BYTES_STRING];
 
    /***** Get my office *****/
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Cns_MAX_BYTES_STRING);
@@ -4098,7 +4098,7 @@ void Rec_UpdateMyOffice (void)
 
 void Rec_UpdateMyOfficePhone (void)
   {
-   char Query[128+Usr_MAX_BYTES_PHONE];
+   char Query[128 + Usr_MAX_BYTES_PHONE];
 
    /***** Get my office *****/
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);

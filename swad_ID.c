@@ -720,7 +720,7 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char UsrID[ID_MAX_LENGTH_USR_ID+1];
+   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
    bool ICanRemove;
 
    if (Usr_AsAdminICanEditOtherUsr (UsrDat))
@@ -776,7 +776,7 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
-   char Query[256+ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_LENGTH_USR_ID];
 
    /***** Remove one of my user's IDs *****/
    sprintf (Query,"DELETE FROM usr_IDs"
@@ -838,7 +838,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_The_ID_X_has_been_registered_successfully;
    extern const char *Txt_The_ID_X_is_not_valid;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewID[ID_MAX_LENGTH_USR_ID+1];
+   char NewID[ID_MAX_LENGTH_USR_ID + 1];
    unsigned NumID;
    bool AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -918,7 +918,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed)
   {
-   char Query[256+ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_LENGTH_USR_ID];
 
    /***** Update my nickname in database *****/
    sprintf (Query,"INSERT INTO usr_IDs"
@@ -958,7 +958,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char UsrID[ID_MAX_LENGTH_USR_ID+1];
+   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
    bool ICanConfirm;
    bool Found;
    unsigned NumID;
@@ -1040,7 +1040,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
 
 void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
-   char Query[256+ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_LENGTH_USR_ID];
 
    /***** Update database *****/
    sprintf (Query,"UPDATE usr_IDs SET Confirmed='Y'"

@@ -112,7 +112,7 @@ void Prf_SeeSocialProfiles (void)
 
 char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    /***** Build URL using nickname *****/
    sprintf (URL,"%s/%s?usr=@%s",
@@ -269,7 +269,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
      }
 
    /***** Check if I can see the public profile *****/
-   if (Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat))
+   if (Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat))
      {
       if (!ItsMe &&				// If not it's me...
 	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
@@ -1489,8 +1489,8 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
   {
    extern const char *Txt_View_public_profile;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
-   bool Visible = Pri_ShowIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   char PhotoURL[PATH_MAX + 1];
+   bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"
@@ -1506,7 +1506,7 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    if (Visible)
      {
       /***** User's photo *****/
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
 					   NULL,
 			"PHOTO30x40",Pho_ZOOM,false);

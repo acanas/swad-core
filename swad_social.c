@@ -750,7 +750,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
 static long Soc_GetPubCodFromSession (const char *FieldName)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
@@ -778,7 +778,7 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   char Query[256+Ses_LENGTH_SESSION_ID];
+   char Query[256 + Ses_LENGTH_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions"
@@ -794,7 +794,7 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions SET FirstPubCod='%ld' WHERE SessionId='%s'",
@@ -1099,7 +1099,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    struct Degree Deg;
    struct Course Crs;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
    unsigned NumComments;
@@ -1160,7 +1160,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
 			"PHOTO42x56",Pho_ZOOM,true);	// Use unique id
@@ -1973,7 +1973,7 @@ static void Soc_PutFormToWriteNewPost (void)
 
    /***** Left: write author's photo (my photo) *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_LEFT_PHOTO\">");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 						     NULL,
 		     "PHOTO42x56",Pho_ZOOM,false);
@@ -2104,7 +2104,7 @@ void Soc_ReceiveSocialPostUsr (void)
 // Returns the code of the social note just created
 static long Soc_ReceiveSocialPost (void)
   {
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    char *Query;
    long PstCod;
@@ -2129,7 +2129,7 @@ static long Soc_ReceiveSocialPost (void)
       /***** Allocate space for query *****/
       if ((Query = malloc (256 +
 			   strlen (Content) +
-			   Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			   Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
 			   Img_MAX_BYTES_TITLE)) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -2219,7 +2219,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
   {
    extern const char *Txt_New_SOCIAL_comment;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div id=\"%s\""
@@ -2229,7 +2229,7 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
 
    /***** Left: write author's photo (my photo) *****/
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&Gbl.Usrs.Me.UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,ShowPhoto ? PhotoURL :
 					             NULL,
 		     "PHOTO30x40",Pho_ZOOM,true);	// Use unique id
@@ -2359,7 +2359,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
    bool IAmTheAuthor;
    bool IAmAFaverOfThisSocCom = false;
    bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    if (ShowCommentAlone)
      {
@@ -2398,7 +2398,7 @@ static void Soc_WriteSocialComment (struct SocialComment *SocCom,
 
       /***** Left: write author's photo *****/
       fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_PHOTO\">");
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 					    NULL,
 			"PHOTO30x40",Pho_ZOOM,true);	// Use unique id
@@ -2790,11 +2790,11 @@ void Soc_PutHiddenParamPubCod (long PubCod)
 
 static long Soc_GetParamNotCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the social note code
+   char LongStr[1 + 10 + 1];	// String that holds the social note code
    long NotCod;
 
    /* Get social note code */
-   Par_GetParToText ("NotCod",LongStr,1+10);
+   Par_GetParToText ("NotCod",LongStr,1 + 10);
    if (sscanf (LongStr,"%ld",&NotCod) != 1)
       return -1L;
 
@@ -2807,11 +2807,11 @@ static long Soc_GetParamNotCod (void)
 
 static long Soc_GetParamPubCod (void)
   {
-   char LongStr[1+10+1];	// String that holds the code
+   char LongStr[1 + 10 + 1];	// String that holds the code
    long PubCod;
 
    /* Get social comment code */
-   Par_GetParToText ("PubCod",LongStr,1+10);
+   Par_GetParToText ("PubCod",LongStr,1 + 10);
    if (sscanf (LongStr,"%ld",&PubCod) != 1)
       return -1L;
 
@@ -2859,7 +2859,7 @@ void Soc_ReceiveCommentUsr (void)
 static long Soc_ReceiveComment (void)
   {
    extern const char *Txt_The_original_post_no_longer_exists;
-   char Content[Cns_MAX_BYTES_LONG_TEXT+1];
+   char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
    char *Query;
    struct SocialNote SocNot;
@@ -2890,7 +2890,7 @@ static long Soc_ReceiveComment (void)
 	 /***** Allocate space for query *****/
 	 if ((Query = malloc (256 +
 			      strlen (Content) +
-			      Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64+
+			      Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
 			      Img_MAX_BYTES_TITLE)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -4302,7 +4302,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
    unsigned NumUsrsShown = 0;
    struct UsrData UsrDat;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Show number of users who have marked this social note as favourite *****/
    fprintf (Gbl.F.Out,"<span class=\"SOCIAL_NUM_SHARES_FAVS\"> %u</span>",
@@ -4332,7 +4332,7 @@ static void Soc_ShowSharersOrFavers (unsigned NumUsrs,const char *Query)
 	    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
 	      {
                fprintf (Gbl.F.Out,"<div class=\"SOCIAL_SHARER\">");
-	       ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 	                                             NULL,
 	                         "PHOTO15x20",Pho_ZOOM,true);	// Use unique id
@@ -4622,7 +4622,7 @@ void Soc_ClearOldTimelinesDB (void)
 
 static void Soc_ClearTimelineThisSession (void)
   {
-   char Query[128+Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
 
    /***** Remove social timeline for this session *****/
    sprintf (Query,"DELETE FROM social_timelines WHERE SessionId='%s'",
@@ -4636,7 +4636,7 @@ static void Soc_ClearTimelineThisSession (void)
 
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   char Query[256+Ses_LENGTH_SESSION_ID];
+   char Query[256 + Ses_LENGTH_SESSION_ID];
 
    sprintf (Query,"INSERT IGNORE INTO social_timelines (SessionId,NotCod)"
 	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",

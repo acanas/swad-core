@@ -108,7 +108,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1]);
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
 
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
@@ -296,7 +296,7 @@ static void Deg_Configuration (bool PrintView)
    extern const char *Txt_Short_name;
    extern const char *Txt_Web;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_QR_code;
@@ -1165,7 +1165,7 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
-   char Query[512+
+   char Query[512 +
               Deg_MAX_LENGTH_DEGREE_SHRT_NAME +
               Deg_MAX_LENGTH_DEGREE_FULL_NAME +
               Cns_MAX_LENGTH_WWW];
@@ -1660,10 +1660,10 @@ long Deg_GetAndCheckParamOtherDegCod (void)
 
 static long Deg_GetParamOtherDegCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of degree *****/
-   Par_GetParToText ("OthDegCod",LongStr,1+10);
+   Par_GetParToText ("OthDegCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -1854,7 +1854,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
    long CrsCod;
-   char PathDeg[PATH_MAX+1];
+   char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
    sprintf (Query,"SELECT CrsCod FROM courses"
@@ -1950,12 +1950,12 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_degree_X_has_not_changed;
-   char Query[512+Deg_MAX_LENGTH_DEGREE_FULL_NAME];
+   char Query[512 + Deg_MAX_LENGTH_DEGREE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentDegName = NULL;		// Initialized to avoid warning
-   char NewDegName[Deg_MAX_LENGTH_DEGREE_FULL_NAME+1];
+   char NewDegName[Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
@@ -2124,7 +2124,7 @@ void Deg_ChangeDegWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Degree *Deg;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Deg = &Gbl.Degs.EditingDeg;
 
@@ -2164,7 +2164,7 @@ void Deg_ChangeDegWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the degree */
@@ -2193,9 +2193,9 @@ void Deg_ChangeDegWWWInConfig (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW+1])
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
   {
-   char Query[256+Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",
@@ -2212,7 +2212,7 @@ void Deg_ChangeDegStatus (void)
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
    struct Degree *Deg;
    char Query[256];
-   char UnsignedNum[10+1];
+   char UnsignedNum[10 + 1];
    Deg_Status_t Status;
    Deg_StatusTxt_t StatusTxt;
 

@@ -62,12 +62,12 @@
 
 struct Rep_CurrentTimeUTC
   {
-   char StrDate[10+1];	// Example: 2016-10-02
-			//          1234567890
-   char StrTime[8+1];	// Example: 19:03:49
-			//          12345678
-   unsigned Date;	// Example: 20161002
-   unsigned Time;	// Example: 190349
+   char StrDate[10 + 1];	// Example: 2016-10-02
+				//          1234567890
+   char StrTime[8 + 1];		// Example: 19:03:49
+				//          12345678
+   unsigned Date;		// Example: 20161002
+   unsigned Time;		// Example: 190349
   };
 
 struct Rep_Hits
@@ -84,8 +84,8 @@ struct Rep_Report
    struct Rep_CurrentTimeUTC CurrentTimeUTC;
    struct Rep_Hits Hits;
    unsigned long MaxHitsPerYear;
-   char FilenameReport[NAME_MAX+1];
-   char Permalink[PATH_MAX+1];
+   char FilenameReport[NAME_MAX + 1];
+   char Permalink[PATH_MAX + 1];
   };
 
 /*****************************************************************************/
@@ -355,10 +355,10 @@ static void Rep_GetCurrentDateTimeUTC (struct Rep_Report *Report)
 
 static void Rep_CreateNewReportFile (struct Rep_Report *Report)
   {
-   char PathReports[PATH_MAX+1];
-   char PathUniqueDirL[PATH_MAX+1];
-   char PathUniqueDirR[PATH_MAX+1];
-   char PathFileReport[PATH_MAX+1];
+   char PathReports[PATH_MAX + 1];
+   char PathUniqueDirL[PATH_MAX + 1];
+   char PathUniqueDirR[PATH_MAX + 1];
+   char PathFileReport[PATH_MAX + 1];
 
    /***** Path for reports *****/
    sprintf (PathReports,"%s/%s",
@@ -404,7 +404,7 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 
 static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
   {
-   char Query[1024+PATH_MAX*2];
+   char Query[1024 + PATH_MAX * 2];
 
    /***** Insert a new user's usage report into database *****/
    sprintf (Query,"INSERT INTO usr_report"
@@ -520,7 +520,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME+1];
+   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
    struct Instit Ins;
 
    /***** Start of section *****/
@@ -753,7 +753,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
 static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Hits_per_action;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_Other_actions;
@@ -766,7 +766,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    Tab_Tab_t Tab;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
    unsigned long NumClicks;
 
    /***** Start of section *****/
@@ -1133,7 +1133,7 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
                                  struct Rep_Report *Report,
                                  bool WriteNumUsrs)
   {
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_teachers_ABBREVIATION;
    extern const char *Txt_students_ABBREVIATION;
    extern const char *Txt_unknown_removed_course;
@@ -1374,7 +1374,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
    MYSQL_ROW row;
    unsigned NumReports;
    unsigned NumReport;
-   char PathUniqueDirReport[PATH_MAX+1];
+   char PathUniqueDirReport[PATH_MAX + 1];
 
    /***** Get directories for the reports *****/
    sprintf (Query,"SELECT UniqueDirL,UniqueDirR FROM usr_report"

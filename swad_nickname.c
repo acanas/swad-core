@@ -64,7 +64,7 @@ static void Nck_RemoveNicknameFromDB (const char *Nickname);
 
 bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
   {
-   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    unsigned Length;
    const char *Ptr;
 
@@ -197,7 +197,7 @@ void Nck_ShowFormChangeUsrNickname (void)
    MYSQL_ROW row;
    unsigned NumNicks;
    unsigned NumNick;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
@@ -307,7 +307,7 @@ void Nck_RemoveNick (void)
   {
    extern const char *Txt_Nickname_X_removed;
    extern const char *Txt_You_can_not_delete_your_current_nickname;
-   char NicknameWithoutArroba[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+1];
+   char NicknameWithoutArroba[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
 
    /***** Get new nickname from form *****/
    Par_GetParToText ("Nick",NicknameWithoutArroba,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
@@ -354,8 +354,8 @@ void Nck_UpdateNick (void)
    extern const char *Txt_Your_nickname_X_has_been_registered_successfully;
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    char Query[1024];
-   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
-   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    bool Error = false;
 
    /***** Get new nickname from form *****/

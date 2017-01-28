@@ -43,7 +43,7 @@ var countClockConnected = 0;
 function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
 	var today = new Date();
 	var todayYea = today.getFullYear();
-	var todayMon = today.getMonth()+1;
+	var todayMon = today.getMonth() + 1;
 	var todayDay = today.getDate();
 	var d = new Date();
 	var Yea;
@@ -77,7 +77,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
 	var todayYea = today.getFullYear();
-	var todayMon = today.getMonth()+1;
+	var todayMon = today.getMonth() + 1;
 	var todayDay = today.getDate();
 	var d = new Date();
 	var WriteDate;
@@ -264,7 +264,7 @@ function adjustDateForm (id) {
 				}
 	
 		// Create new days at the end if necessary
-		for (var Day=Number(LastDayValue)+1; Day<=Days; Day++) {
+		for (var Day = Number(LastDayValue) + 1; Day <= Days; Day++) {
 			var opt = document.createElement('option');
 			opt.value = opt.text = Day;
 			FormDay.add(opt);
@@ -283,7 +283,7 @@ function adjustDateForm (id) {
 function setDateToYesterday () {
 	var d = new Date();
 
-	d.setTime (d.getTime () - 24*60*60*1000);	// Today - 1 day
+	d.setTime (d.getTime () - 24 * 60 * 60 * 1000);	// Today - 1 day
 	setDateRange(d);
 }
 
@@ -298,7 +298,7 @@ function setDateToToday () {
 function setDateRange (d) {
 	var FormYea;
 	var Yea = d.getFullYear();
-	var Mon = d.getMonth()+1;
+	var Mon = d.getMonth() + 1;
 	var Day = d.getDate();
 
 	FormYea = document.getElementById('StartYear');
@@ -481,16 +481,16 @@ function readConnUsrsData () {
 	if (objXMLHttpReqCon.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqCon.status == 200) {
 			var endOfDelay   = objXMLHttpReqCon.responseText.indexOf('|',0);				// Get separator position
-			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay+1);		// Get separator position
-			var endOfGblCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfNotif+1);		// Get separator position
-			var endOfCrsCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfGblCon+1);	// Get separator position
-			var endOfNumUsrs = objXMLHttpReqCon.responseText.indexOf('|',endOfCrsCon+1);	// Get separator position
+			var endOfNotif   = objXMLHttpReqCon.responseText.indexOf('|',endOfDelay  + 1);	// Get separator position
+			var endOfGblCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfNotif  + 1);	// Get separator position
+			var endOfCrsCon  = objXMLHttpReqCon.responseText.indexOf('|',endOfGblCon + 1);	// Get separator position
+			var endOfNumUsrs = objXMLHttpReqCon.responseText.indexOf('|',endOfCrsCon + 1);	// Get separator position
 
 			var delay = parseInt(objXMLHttpReqCon.responseText.substring(0,endOfDelay));			// Get refresh delay
-			var htmlNotif  = objXMLHttpReqCon.responseText.substring(endOfDelay +1,endOfNotif);		// Get HTML code for new notifications
-			var htmlGblCon = objXMLHttpReqCon.responseText.substring(endOfNotif +1,endOfGblCon);	// Get HTML code for connected
-			var htmlCrsCon = objXMLHttpReqCon.responseText.substring(endOfGblCon+1,endOfCrsCon);	// Get HTML code for course connected
-			var NumUsrsStr = objXMLHttpReqCon.responseText.substring(endOfCrsCon+1,endOfNumUsrs);	// Get number of users
+			var htmlNotif  = objXMLHttpReqCon.responseText.substring(endOfDelay  + 1,endOfNotif);	// Get HTML code for new notifications
+			var htmlGblCon = objXMLHttpReqCon.responseText.substring(endOfNotif  + 1,endOfGblCon);	// Get HTML code for connected
+			var htmlCrsCon = objXMLHttpReqCon.responseText.substring(endOfGblCon + 1,endOfCrsCon);	// Get HTML code for course connected
+			var NumUsrsStr = objXMLHttpReqCon.responseText.substring(endOfCrsCon + 1,endOfNumUsrs);	// Get number of users
 			var startOfUsr;
 			var endOfUsr;
 
@@ -510,7 +510,7 @@ function readConnUsrsData () {
 					countClockConnected = 0;	// Don't refresh again using writeClockConnected until past 10 seconds
 					startOfUsr = endOfNumUsrs + 1;
 					for (var NumUsr=0; NumUsr<NumUsrsCon; NumUsr++) {
-						endOfUsr = objXMLHttpReqCon.responseText.indexOf('|',startOfUsr+1);
+						endOfUsr = objXMLHttpReqCon.responseText.indexOf('|',startOfUsr + 1);
 						ListSeconds[NumUsr] = parseInt(objXMLHttpReqCon.responseText.substring(startOfUsr,endOfUsr));
 						startOfUsr = endOfUsr + 1;
 					}
@@ -530,7 +530,7 @@ function readLastClicksData () {
 			var endOfDelay = objXMLHttpReqLog.responseText.indexOf('|',0);	// Get separator position
 
 			var delay = parseInt(objXMLHttpReqLog.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay+1);		// Get HTML code for last clicks
+			var htmlLastClicks = objXMLHttpReqLog.responseText.substring(endOfDelay + 1);	// Get HTML code for last clicks
 
 			var divLastClicks = document.getElementById('lastclicks');			// Access to last click DIV
 			if (divLastClicks)
@@ -545,9 +545,9 @@ function readLastClicksData () {
 function readNewTimelineData () {
 	if (objXMLHttpReqSoc.readyState == 4) {	// Check if data have been received
 		if (objXMLHttpReqSoc.status == 200) {
-			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
-			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlJustNowTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);// Get HTML code for social timeline
+			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);						// Get separator position
+			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));		// Get refresh delay
+			var htmlJustNowTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay + 1);	// Get HTML code for social timeline
 
 			var justNowTimeline = document.getElementById('just_now_timeline_list');// Access to UL for the just received timeline
 			if (justNowTimeline) {
@@ -590,7 +590,7 @@ function readOldTimelineData () {
 		if (objXMLHttpReqSoc.status == 200) {
 			var endOfDelay = objXMLHttpReqSoc.responseText.indexOf('|',0);					// Get separator position
 			var delay = parseInt(objXMLHttpReqSoc.responseText.substring(0,endOfDelay));	// Get refresh delay
-			var htmlOldTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay+1);	// Get HTML code for social timeline
+			var htmlOldTimeline = objXMLHttpReqSoc.responseText.substring(endOfDelay + 1);	// Get HTML code for social timeline
 
 			var oldTimeline = document.getElementById('old_timeline_list');	// Access to UL with the recent timeline
 			if (oldTimeline) {
@@ -707,8 +707,8 @@ function zoom (img,urlPhoto,idCaption) {
 
 // Exit from zooming a user's photograph
 function noZoom () {
-	var xPos = -(187+15);
-	var yPos = -(250+15+110);
+	var xPos = -(187 + 15);
+	var yPos = -(250 + 15 + 110);
 	document.getElementById('zoomTxt').innerHTML = '';
 	document.getElementById('zoomImg').src='/swad/icon/usr_bl.jpg';
 	document.getElementById('zoomLyr').style.left = xPos + 'px';

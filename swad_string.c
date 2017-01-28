@@ -152,7 +152,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    size_t NumChars2;
    size_t NumBytesToCopy;
    size_t NumBytesToShow;		// Length of the link displayed on screen (may be shorter than actual length)
-   char LimitedURL[MAX_BYTES_LIMITED_URL+1];
+   char LimitedURL[MAX_BYTES_LIMITED_URL + 1];
    unsigned char Ch;
 
    /****** Initialize constant anchors and their lengths *****/
@@ -316,7 +316,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 			                  Gbl.Form.Id,
 		     ParamsStr);
 	    Anchor1NickLength = strlen (Anchor1Nick);
-	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength+1)) == NULL)
+	    if ((Links[NumLinks].Anchor1Nick = (char *) malloc (Anchor1NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
 	    strcpy (Links[NumLinks].Anchor1Nick,Anchor1Nick);
 	    Links[NumLinks].Anchor1NickLength = Anchor1NickLength;
@@ -329,7 +329,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 		     Gbl.Usrs.Me.Logged ? Gbl.Form.UniqueId :
 			                  Gbl.Form.Id);
 	    Anchor2NickLength = strlen (Anchor2Nick);
-	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength+1)) == NULL)
+	    if ((Links[NumLinks].Anchor2Nick = (char *) malloc (Anchor2NickLength + 1)) == NULL)
 	       Lay_ShowErrorAndExit ("Not enough memory to insert link.");
 	    strcpy (Links[NumLinks].Anchor2Nick,Anchor2Nick);
 	    Links[NumLinks].Anchor2NickLength = Anchor2NickLength;
@@ -1102,7 +1102,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			break;
 		     case '%':	/* Change "%XX" --> "&#decimal_number;" */
 			IsSpecialChar = true;
-			sscanf (PtrSrc+1,"%2X",&SpecialChar);
+			sscanf (PtrSrc + 1,"%2X",&SpecialChar);
 			LengthSpecStrSrc = 3;
 			break;
 		     case 0x27:	/* Change single comilla --> "&#39;" to avoid SQL code injection */
@@ -1726,7 +1726,7 @@ void Str_RemoveTrailingSpacesHTML (char *Str)
       break;
      }
 
-   *(Ptr+1) = '\0';
+   *(Ptr + 1) = '\0';
   }
 
 /*****************************************************************************/
@@ -1930,7 +1930,7 @@ bool Str_WriteUntilStrFoundInFileIncludingStr (FILE *FileTgt,FILE *FileSrc,const
 static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
-   char StrAux[1+1];  /* To check "!--" string */
+   char StrAux[1 + 1];  /* To check "!--" string */
 
    Ch = fgetc (FileSrc);
 
@@ -1973,7 +1973,7 @@ static int Str_ReadCharAndSkipComments (FILE *FileSrc,Str_SkipHTMLComments_t Ski
 static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
-   char StrAux[1+1];  /* To check "!--" string */
+   char StrAux[1 + 1];  /* To check "!--" string */
 
    Ch = fgetc (FileSrc);
 
@@ -2017,7 +2017,7 @@ static int Str_ReadCharAndSkipCommentsWriting (FILE *FileSrc,FILE *FileTgt,Str_S
 static int Str_ReadCharAndSkipCommentsBackward (FILE *FileSrc,Str_SkipHTMLComments_t SkipHTMLComments)
   {
    int Ch;
-   char StrAux[3+1];  /* To check "--" string */
+   char StrAux[3 + 1];  /* To check "--" string */
 
    Ch = fgetc (FileSrc);
 
@@ -2063,7 +2063,7 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
    bool EndCellFound = false;
    bool DirectiveFound;
    bool SpaceFound;
-   char StrAux[1+1];  // To find next "/td>" or "nbsp;"
+   char StrAux[1 + 1];  // To find next "/td>" or "nbsp;"
 
    Str[0] = '\0';
 
@@ -2338,7 +2338,7 @@ void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLen
       if (!(isspace ((int) *Ptr) ||
 	    *Ptr == '\xA0'))	// Unicode translation for &nbsp;
          break;
-   *(Ptr+1) = '\0';
+   *(Ptr + 1) = '\0';
   }
 
 /*****************************************************************************/
@@ -2567,11 +2567,11 @@ void Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FILE *FileTgt,const char *St
       /* Is &nbsp;? */
       if (*Str == '&')
         {
-         if (*(Str+1) == 'N' || *(Str+1) == 'n')
-            if (*(Str+2) == 'B' || *(Str+2) == 'b')
-               if (*(Str+3) == 'S' || *(Str+3) == 's')
-                  if (*(Str+4) == 'P' || *(Str+4) == 'p')
-                     if (*(Str+5) == ';')
+         if (*(Str + 1) == 'N' || *(Str + 1) == 'n')
+            if (*(Str + 2) == 'B' || *(Str + 2) == 'b')
+               if (*(Str + 3) == 'S' || *(Str + 3) == 's')
+                  if (*(Str + 4) == 'P' || *(Str + 4) == 'p')
+                     if (*(Str + 5) == ';')
                        {
                         fputc ((int) ' ',FileTgt);
                         Str += 6;
@@ -2581,19 +2581,19 @@ void Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FILE *FileTgt,const char *St
       /* Is <br> or <br />? */
       else if (*Str == '<')
         {
-         if (*(Str+1) == 'B' || *(Str+1) == 'b')
-            if (*(Str+2) == 'R' || *(Str+2) == 'r')
+         if (*(Str + 1) == 'B' || *(Str + 1) == 'b')
+            if (*(Str + 2) == 'R' || *(Str + 2) == 'r')
               {
-               if (*(Str+3) == '>')
+               if (*(Str + 3) == '>')
                  {
                   fputc ((int) '\n',FileTgt);
                   Str += 4;
                   continue;
                  }
-               else if (*(Str+3) == ' ')
+               else if (*(Str + 3) == ' ')
                  {
-                  if (*(Str+4) == '/')
-                     if (*(Str+5) == '>')
+                  if (*(Str + 4) == '/')
+                     if (*(Str + 5) == '>')
                        {
                         fputc ((int) '\n',FileTgt);
                         Str += 6;
@@ -2620,7 +2620,7 @@ If what is read exceed MaxLength, abort and return 0.
 If StrDelimit is not found, return -1.
 */
 
-#define MAX_LENGTH_BOUNDARY_STR 100
+#define Str_MAX_LENGTH_BOUNDARY_STR 100
 
 int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
                                   const char *BoundaryStr,
@@ -2630,7 +2630,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
    unsigned NumBytesIdentical;			// Number of characters identical in each iteration of the loop
    unsigned NumBytesReadButNotDiscarded;	// Number of characters read from the source file...
 						// ...and not fully discarded in search
-   int Buffer[MAX_LENGTH_BOUNDARY_STR+1];
+   int Buffer[Str_MAX_LENGTH_BOUNDARY_STR + 1];
    unsigned StartIndex;
    unsigned i;
    char *Ptr; // Pointer used to go through StrDst writing characters
@@ -2643,7 +2643,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 	 *StrDst = '\0';
       return 1;
      }
-   if (LengthBoundaryStr > MAX_LENGTH_BOUNDARY_STR)
+   if (LengthBoundaryStr > Str_MAX_LENGTH_BOUNDARY_STR)
       Lay_ShowErrorAndExit ("Delimiter string too large.");
    Ptr = StrDst;
 
@@ -2868,7 +2868,7 @@ void Str_ConvertToValidFileName (char *Str)
 /******************* Create a random alphanumeric string *********************/
 /*****************************************************************************/
 
-#define NUM_ALPHANUM_CHARS (10+26+26)
+#define NUM_ALPHANUM_CHARS (10 + 26 + 26)
 
 void Str_CreateRandomAlphanumStr (char *Str,size_t Length)
   {

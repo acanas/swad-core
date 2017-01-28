@@ -93,7 +93,7 @@ void MFU_FreeMFUActions (struct MFU_ListMFUActions *ListMFUActions)
 
 void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxActionsShown)
   {
-   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -134,7 +134,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 
 Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
   {
-   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char Query[512];
    MYSQL_RES *mysql_res;

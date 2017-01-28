@@ -147,7 +147,7 @@ void Ico_ChangeIconSet (void)
 
 Ico_IconSet_t Ico_GetParamIconSet (void)
   {
-   char IconSetId[Ico_MAX_BYTES_ICON_SET_ID+1];
+   char IconSetId[Ico_MAX_BYTES_ICON_SET_ID + 1];
    Ico_IconSet_t IconSet;
 
    Par_GetParToText ("IconSet",IconSetId,Ico_MAX_BYTES_ICON_SET_ID);

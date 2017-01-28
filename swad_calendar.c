@@ -160,7 +160,7 @@ void Cal_ChangeFirstDayOfWeek (void)
 
 static unsigned Cal_GetParamFirstDayOfWeek (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    unsigned FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 
@@ -178,7 +178,7 @@ static unsigned Cal_GetParamFirstDayOfWeek (void)
 
 void Cal_DrawCurrentMonth (void)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
 
    /***** Get list of holidays *****/
@@ -233,8 +233,8 @@ void Cal_DrawCurrentMonth (void)
 void Cal_DrawCalendar (void)
   {
    extern const char *Hlp_ASSESSMENT_Calendar;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
-   char ParamsStr[256+256+Ses_LENGTH_SESSION_ID+256];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
    bool PrintView = (Gbl.Action.Act == ActPrnCal);
 
    /***** Get list of holidays *****/

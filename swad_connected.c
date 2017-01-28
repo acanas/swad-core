@@ -175,7 +175,7 @@ void Con_ShowLastClicks (void)
 void Con_GetAndShowLastClicks (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern Act_Action_t Act_FromActCodToAction[1+Act_MAX_ACTION_COD];
+   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -1072,7 +1072,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
   {
    extern const char *Txt_View_record_for_this_course;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
 	                                                                           "CON");
    struct UsrData UsrDat;
@@ -1094,7 +1094,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 					// is dynamically updated via AJAX
    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
    Act_LinkFormSubmitUnique (UsrDat.FullName,NULL);
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                 	                 NULL,
                      "PHOTO21x28",Pho_ZOOM,false);
@@ -1150,7 +1150,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    bool ThisCrs;
    time_t TimeDiff;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    const char *Font;
    struct UsrData UsrDat;
    bool PutLinkToRecord = (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
@@ -1286,7 +1286,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			       "<td class=\"LEFT_MIDDLE COLOR%u\""
 			       " style=\"width:22px;\">",
 		     Gbl.RowEvenOdd);
-	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
 						  NULL,
 			      "PHOTO21x28",Pho_ZOOM,false);
@@ -1338,7 +1338,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 
 static void Con_WriteHoursMinutesSecondsFromSeconds (time_t Seconds)
   {
-   time_t Hours = Seconds / (60*60);
+   time_t Hours   = Seconds / (60 * 60);
    time_t Minutes = (Seconds / 60) % 60;
 
    Seconds %= 60;

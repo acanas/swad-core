@@ -60,7 +60,7 @@ extern struct Globals Gbl;
 
 #define Syl_WIDTH_NUM_SYLLABUS 20
 
-static const char *StyleSyllabus[1+Syl_MAX_LEVELS_SYLLABUS] =
+static const char *StyleSyllabus[1 + Syl_MAX_LEVELS_SYLLABUS] =
   {
    "",
    "T1",
@@ -82,9 +82,9 @@ static const char *StyleSyllabus[1+Syl_MAX_LEVELS_SYLLABUS] =
 struct ItemSyllabus
   {
    int Level;
-   int CodItem[1+Syl_MAX_LEVELS_SYLLABUS];
+   int CodItem[1 + Syl_MAX_LEVELS_SYLLABUS];
    bool HasChildren;
-   char Text[Syl_MAX_BYTES_TEXT_ITEM+1];
+   char Text[Syl_MAX_BYTES_TEXT_ITEM + 1];
   };
 
 /*****************************************************************************/
@@ -118,7 +118,7 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
 
 void Syl_GetParamWhichSyllabus (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Get which syllabus I want to see *****/
@@ -172,7 +172,7 @@ void Syl_PutFormWhichSyllabus (void)
 
 void Syl_GetParamItemNumber (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    Par_GetParToText ("NumI",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&Gbl.Syllabus.NumItem) != 1)
@@ -359,11 +359,11 @@ static void Syl_SetSyllabusTypeFromAction (void)
 
 void Syl_LoadListItemsSyllabusIntoMemory (long CrsCod)
   {
-   char PathFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
    long PostBeginList;
    unsigned NumItem = 0;
    int N;
-   int CodItem[1+Syl_MAX_LEVELS_SYLLABUS];	// To make numeration
+   int CodItem[1 + Syl_MAX_LEVELS_SYLLABUS];	// To make numeration
    int Result;
    unsigned NumItemsWithChildren = 0;
 
@@ -500,12 +500,12 @@ void Syl_FreeListItemsSyllabus (void)
 int Syl_ReadLevelItemSyllabus (void)
   {
    int Level;
-   char StrlLevel[11+1];
+   char StrlLevel[11 + 1];
 
    if (!Str_FindStrInFile (Gbl.F.XML,"nivel=\"",Str_NO_SKIP_HTML_COMMENTS))
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
    if (Str_ReadFileUntilBoundaryStr (Gbl.F.XML,StrlLevel,"\"",1,
-   	                             (unsigned long long) (11+1)) != 1)
+   	                             (unsigned long long) (11 + 1)) != 1)
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
    if (sscanf (StrlLevel,"%d",&Level) != 1)
       Lay_ShowErrorAndExit ("Wrong syllabus format.");
@@ -773,7 +773,7 @@ static void Syl_ShowRowSyllabus (unsigned NumItem,
 
 int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
   {
-   char FileNameHTMLTmp[PATH_MAX+1];
+   char FileNameHTMLTmp[PATH_MAX + 1];
    FILE *FileHTMLTmp;
    size_t Length;
 
@@ -806,7 +806,7 @@ int Syl_WriteSyllabusIntoHTMLBuffer (char **HTMLBuffer)
       Length = (size_t) ftell (FileHTMLTmp);
 
       /* Allocate memory for buffer */
-      if ((*HTMLBuffer = (char *) malloc (Length+1)) == NULL)
+      if ((*HTMLBuffer = (char *) malloc (Length + 1)) == NULL)
 	{
 	 fclose (FileHTMLTmp);
 	 unlink (FileNameHTMLTmp);
@@ -977,7 +977,7 @@ void Syl_PutParamNumItem (unsigned NumItem)
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
   {
    int N;
-   char InStr[1+10+1];
+   char InStr[1 + 10 + 1];
 
    if (StrDst)
       StrDst[0] = '\0';
@@ -1076,9 +1076,9 @@ void Syl_DownItemSyllabus (void)
 
 void Syl_ChangePlaceItemSyllabus (Syl_ChangePosItem_t UpOrDownPos)
   {
-   char PathFile[PATH_MAX+1];
-   char PathOldFile[PATH_MAX+1];
-   char PathNewFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathOldFile[PATH_MAX + 1];
+   char PathNewFile[PATH_MAX + 1];
    FILE *NewFile;
    unsigned NumItem;
    struct MoveSubtrees Subtree;
@@ -1268,9 +1268,9 @@ void Syl_LeftItemSyllabus (void)
 
 void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
   {
-   char PathFile[PATH_MAX+1];
-   char PathOldFile[PATH_MAX+1];
-   char PathNewFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathOldFile[PATH_MAX + 1];
+   char PathNewFile[PATH_MAX + 1];
    FILE *NewFile;
 
    /***** Set syllabus type depending on current action *****/
@@ -1325,12 +1325,12 @@ void Syl_ChangeLevelItemSyllabus (Syl_ChangeLevelItem_t IncreaseOrDecreaseLevel)
 
 void Syl_InsertItemSyllabus (void)
   {
-   char PathFile[PATH_MAX+1];
-   char PathOldFile[PATH_MAX+1];
-   char PathNewFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathOldFile[PATH_MAX + 1];
+   char PathNewFile[PATH_MAX + 1];
    FILE *NewFile;
    unsigned NumItem;
-   char Txt[Syl_MAX_BYTES_TEXT_ITEM+1];
+   char Txt[Syl_MAX_BYTES_TEXT_ITEM + 1];
 
    /***** Set syllabus type depending on current action *****/
    Syl_SetSyllabusTypeFromAction ();
@@ -1392,9 +1392,9 @@ void Syl_InsertItemSyllabus (void)
 
 void Syl_ModifyItemSyllabus (void)
   {
-   char PathFile[PATH_MAX+1];
-   char PathOldFile[PATH_MAX+1];
-   char PathNewFile[PATH_MAX+1];
+   char PathFile[PATH_MAX + 1];
+   char PathOldFile[PATH_MAX + 1];
+   char PathNewFile[PATH_MAX + 1];
    FILE *NewFile;
 
    /***** Set syllabus type depending on current action *****/

@@ -1042,7 +1042,7 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
   };
 
 /* All quotas must be multiple of 1 GiB (Gibibyte)*/
-#define Brw_GiB (1024ULL*1024ULL*1024ULL)
+#define Brw_GiB (1024ULL * 1024ULL * 1024ULL)
 
 /* Maximum quotas for each type of file browser */
 #define Brw_MAX_QUOTA_DOCUM_INS		(64ULL*Brw_GiB)
@@ -2296,11 +2296,11 @@ void Brw_GetParAndInitFileBrowser (void)
 
 static long Brw_GetGrpSettings (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    long GrpCod;
 
    /***** Get parameter with group code *****/
-   if (Par_GetParToText ("GrpCod",LongStr,1+10))
+   if (Par_GetParToText ("GrpCod",LongStr,1 + 10))
      {
       if ((GrpCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
          GrpCod = -1L;
@@ -2413,10 +2413,10 @@ void Brw_PutHiddenParamFilCod (long FilCod)
 
 long Brw_GetParamFilCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of file *****/
-   Par_GetParToText ("FilCod",LongStr,1+10);
+   Par_GetParToText ("FilCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -2546,7 +2546,7 @@ void Brw_InitializeFileBrowser (void)
 
 static void Brw_SetPathFileBrowser (void)
   {
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
 
    /***** Reset paths. An empty path means that
           we don't have to create that directory *****/
@@ -2698,7 +2698,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
-   char PathFolder[PATH_MAX+1];
+   char PathFolder[PATH_MAX + 1];
    bool FolderExists = false;
 
    /***** Get all the users belonging to current course from database *****/
@@ -2746,7 +2746,7 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows,NumRow;
-   char PathFolderAsg[PATH_MAX+1];
+   char PathFolderAsg[PATH_MAX + 1];
 
    /***** Get assignment folders from database *****/
    // Old behaviour (only create assignment folder if assignment is open) is obsolete since 2015-11-10
@@ -2792,10 +2792,10 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
-   char OldPath[PATH_MAX+1];
-   char NewPath[PATH_MAX+1];
-   char PathOldFolder[PATH_MAX+1];
-   char PathNewFolder[PATH_MAX+1];
+   char OldPath[PATH_MAX + 1];
+   char NewPath[PATH_MAX + 1];
+   char PathOldFolder[PATH_MAX + 1];
+   char PathNewFolder[PATH_MAX + 1];
    bool RenamingIsPossible = true;
    unsigned NumUsrsError = 0;
    unsigned NumUsrsSuccess = 0;
@@ -2913,7 +2913,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    unsigned NumUsrs;
    unsigned NumUsr;
    long UsrCod;
-   char PathFolder[PATH_MAX+1];
+   char PathFolder[PATH_MAX + 1];
 
    /***** Get all the users belonging to current course from database *****/
    sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod='%ld'",
@@ -3391,11 +3391,11 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
   {
    extern const char *Txt_View_record_for_this_course;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:64px;\">");
-   ShowPhoto = Pho_ShowUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
                      "PHOTO60x80",Pho_ZOOM,false);
@@ -4705,7 +4705,7 @@ void Brw_PutHiddenParamFullTreeIfSelected (void)
 
 static bool Brw_GetFullTreeFromForm (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("FullTree",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
@@ -4780,8 +4780,8 @@ void Brw_CreateDirDownloadTmp (void)
   {
    static unsigned NumDir = 0;	// When this function is called several times in the same execution of the program, each time a new directory is created
 				// This happens when the trees of assignments and works of several users are being listed
-   char PathFileBrowserTmpPubl[PATH_MAX+1];
-   char PathPubDirTmp[PATH_MAX+1];
+   char PathFileBrowserTmpPubl[PATH_MAX + 1];
+   char PathPubDirTmp[PATH_MAX + 1];
 
    /* Example: /var/www/html/swad/tmp/SSujCNWsy4ZOdmgMKYBe0sKPAJu6szaZOQlIlJs_QIY */
 
@@ -4980,7 +4980,7 @@ static void Brw_CalcSizeOfDirRecursive (unsigned Level,char *Path)
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX+1];
+   char PathFileRel[PATH_MAX + 1];
    struct stat FileStatus;
 
    /***** Scan the directory *****/
@@ -5036,8 +5036,8 @@ static void Brw_ListDir (unsigned Level,
    int NumFiles;
    int NumFileInSubdir;
    int NumFilesInSubdir;
-   char PathFileRel[PATH_MAX+1];
-   char PathFileInExplTree[PATH_MAX+1];
+   char PathFileRel[PATH_MAX + 1];
+   char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
    Brw_ExpandTree_t ExpandTree = Brw_EXPAND_TREE_NOTHING;	// Initialized to avoid warning
 
@@ -5125,7 +5125,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
    bool LightStyle = false;
    bool IsRecent = false;
    struct FileMetadata FileMetadata;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
    bool SeeDocsZone     = Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_INS ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_CTR ||
 	                  Gbl.FileBrowser.Type == Brw_SHOW_DOCUM_DEG ||
@@ -5194,7 +5194,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
 
    /***** Check if is a recent file or folder *****/
    // If less than a week since last modify ==> indicate the file is recent by writting its name in green
-   if (Gbl.StartExecutionTimeUTC < FileMetadata.Time + (7L*24L*60L*60L))
+   if (Gbl.StartExecutionTimeUTC < FileMetadata.Time + (7L * 24L * 60L * 60L))
       IsRecent = true;
 
    /* Style of the text in this row */
@@ -5408,7 +5408,7 @@ static void Brw_PutIconsRemoveCopyPaste (unsigned Level,
 
 static bool Brw_CheckIfCanPasteIn (unsigned Level)
   {
-   char PathDstWithFile[PATH_MAX+1];
+   char PathDstWithFile[PATH_MAX + 1];
 
    /***** If not in a folder... *****/
    if (Gbl.FileBrowser.FileType != Brw_IS_FOLDER)
@@ -6019,7 +6019,7 @@ static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,
 void Brw_CreateTmpPublicLinkToPrivateFile (const char *FullPathIncludingFile,
                                            const char *FileName)
   {
-   char Link[PATH_MAX+1];
+   char Link[PATH_MAX + 1];
 
    /***** Create, into temporary public directory, a symbolic link to file *****/
    sprintf (Link,"%s/%s/%s/%s",
@@ -6136,7 +6136,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowUsr = false;
    bool ShowPhoto;
-   char PhotoURL[PATH_MAX+1];
+   char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
 
    if (Level && UsrCod > 0)
@@ -6153,7 +6153,7 @@ static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod)
    if (ShowUsr)
      {
       /***** Show photo *****/
-      ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
       Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
                                             NULL,
                         "PHOTO15x20B",Pho_ZOOM,false);
@@ -6183,7 +6183,7 @@ void Brw_AskRemFileFromTree (void)
    extern const char *Txt_Remove_file;
    extern const char *Txt_Remove_link;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -6226,7 +6226,7 @@ void Brw_RemFileFromTree (void)
   {
    extern const char *Txt_FILE_X_removed;
    extern const char *Txt_You_can_not_remove_this_file_or_link;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    struct stat FileStatus;
    char FileNameToShow[NAME_MAX + 1];
 
@@ -6278,7 +6278,7 @@ void Brw_RemFolderFromTree (void)
   {
    extern const char *Txt_Folder_X_removed;
    extern const char *Txt_You_can_not_remove_this_folder;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    struct stat FileStatus;
 
    /***** Get parameters related to file browser *****/
@@ -6354,7 +6354,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
 void Brw_RemSubtreeInFileBrowser (void)
   {
    extern const char *Txt_Folder_X_and_all_its_contents_removed;
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -6473,7 +6473,7 @@ static void Brw_WriteCurrentClipboard (void)
    struct GroupData GrpDat;
    struct UsrData UsrDat;
    char TxtClipboardZone[1024];
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
    const char *TxtFileType[Brw_NUM_FILE_TYPES] =
      {
       Txt_file_folder,	// Brw_IS_UNKNOWN
@@ -6804,7 +6804,7 @@ static void Brw_AddPathToClipboards (void)
   {
    long Cod = Brw_GetCodForClipboard ();
    long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Add path to clipboards *****/
    sprintf (Query,"INSERT INTO clipboard (UsrCod,FileBrowser,"
@@ -6827,7 +6827,7 @@ static void Brw_UpdatePathInClipboard (void)
   {
    long Cod = Brw_GetCodForClipboard ();
    long WorksUsrCod = Brw_GetWorksUsrCodForClipboard ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Update path in my clipboard *****/
    sprintf (Query,"UPDATE clipboard SET FileBrowser='%u',"
@@ -6956,7 +6956,7 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Update path time in table of expanded folders *****/
    // Path must be stored with final '/'
@@ -7016,7 +7016,7 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Remove expanded folders associated to a file browser *****/
@@ -7053,7 +7053,7 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Remove expanded folders associated to a file browser from a course or from a user *****/
@@ -7091,7 +7091,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
                                                const char *OldPath,const char *NewPath)
   {
    long Cod = Brw_GetCodForExpandedFolders ();
-   char Query[512+PATH_MAX*2];
+   char Query[512 + PATH_MAX * 2];
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[FileBrowser];
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
@@ -7158,7 +7158,7 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForExpandedFolders ();
    long WorksUsrCod = Brw_GetWorksUsrCodForExpandedFolders ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    Brw_FileBrowser_t FileBrowserForExpandedFolders = Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type];
 
    /***** Get if a folder is expanded from database *****/
@@ -7429,7 +7429,7 @@ static void Brw_PasteClipboard (void)
    struct Degree Deg;
    struct Course Crs;
    struct GroupData GrpDat;
-   char PathOrg[PATH_MAX+1];
+   char PathOrg[PATH_MAX + 1];
    struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
    struct FileMetadata FileMetadata;
@@ -7863,7 +7863,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 void Brw_ShowFormFileBrowser (void)
   {
    extern const char *Txt_You_can_not_create_folders_files_or_links_here;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -7958,7 +7958,7 @@ static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow)
    extern const char *Txt_Upload_files;
    extern const char *Txt_or_you_can_upload_new_files_to_the_folder_X;
    extern const char *Txt_Select_one_or_more_files_from_your_computer_or_drag_and_drop_here;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Done;
 
    /***** Start frame *****/
@@ -8160,8 +8160,8 @@ void Brw_RecFolderFileBrowser (void)
    extern const char *Txt_The_folder_X_has_been_created_inside_the_folder_Y;
    extern const char *Txt_You_can_not_create_folders_here;
    char Path[PATH_MAX + 1];
-   char PathCompleteInTreeIncludingFolder[PATH_MAX+1];
-   char FileNameToShow[NAME_MAX+1];
+   char PathCompleteInTreeIncludingFolder[PATH_MAX + 1];
+   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8254,10 +8254,10 @@ void Brw_RenFolderFileBrowser (void)
    extern const char *Txt_The_folder_name_X_has_not_changed;
    extern const char *Txt_The_folder_name_X_has_not_changed_because_there_is_already_a_folder_or_a_file_with_the_name_Y;
    extern const char *Txt_You_can_not_rename_this_folder;
-   char OldPathInTree[PATH_MAX+1];
-   char NewPathInTree[PATH_MAX+1];
-   char OldPath[PATH_MAX+1];
-   char NewPath[PATH_MAX+1];
+   char OldPathInTree[PATH_MAX + 1];
+   char NewPathInTree[PATH_MAX + 1];
+   char OldPath[PATH_MAX + 1];
+   char NewPath[PATH_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8273,8 +8273,8 @@ void Brw_RenFolderFileBrowser (void)
             sprintf (OldPath,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,OldPathInTree);
 
             /* Gbl.FileBrowser.NewFilFolLnkName holds the new name of the folder */
-            if (strlen (Gbl.FileBrowser.Priv.PathAboveRootFolder)+1+
-                strlen (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk)+1+
+            if (strlen (Gbl.FileBrowser.Priv.PathAboveRootFolder) + 1 +
+                strlen (Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk) + 1 +
                 strlen (Gbl.FileBrowser.NewFilFolLnkName) > PATH_MAX)
 	       Lay_ShowErrorAndExit ("Path is too long.");
             sprintf (NewPathInTree,"%s/%s",Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,Gbl.FileBrowser.NewFilFolLnkName);
@@ -8409,8 +8409,8 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    struct Param *Param;
    char SrcFileName[PATH_MAX + 1];
    char PathUntilFileName[PATH_MAX + 1];
-   char Path[PATH_MAX+1];
-   char PathTmp[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
+   char PathTmp[PATH_MAX + 1];
    char PathCompleteInTreeIncludingFile[PATH_MAX + 1];
    char MIMEType[Brw_MAX_BYTES_MIME_TYPE + 1];
    bool AdminMarks;
@@ -8837,7 +8837,7 @@ static bool Brw_CheckIfUploadIsAllowed (const char *MIMEType)
 void Brw_SetDocumentAsVisible (void)
   {
    extern const char *Txt_FILE_FOLDER_OR_LINK_X_is_now_visible;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8869,7 +8869,7 @@ void Brw_SetDocumentAsVisible (void)
 void Brw_SetDocumentAsHidden (void)
   {
    extern const char *Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden;
-   char FileNameToShow[NAME_MAX+1];
+   char FileNameToShow[NAME_MAX + 1];
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8902,7 +8902,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool IsHidden = false;
@@ -8938,7 +8938,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
 bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
   {
-   char Query[512+PATH_MAX*2];
+   char Query[512 + PATH_MAX * 2];
 
    /***** Get if a file or folder is under a hidden folder from database *****/
    /*
@@ -8988,7 +8988,7 @@ void Brw_ShowFileMetadata (void)
    struct FileMetadata FileMetadata;
    struct UsrData PublisherUsrDat;
    char FileNameToShow[NAME_MAX + 1];
-   char URL[PATH_MAX+1];
+   char URL[PATH_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
    bool Found;
    bool ICanView = false;
@@ -9141,7 +9141,7 @@ void Brw_ShowFileMetadata (void)
 	 if (FileHasPublisher)
 	   {
 	    /* Show photo */
-	    ShowPhoto = Pho_ShowUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
+	    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&PublisherUsrDat,PhotoURL);
 	    Pho_ShowUsrPhoto (&PublisherUsrDat,ShowPhoto ? PhotoURL :
 	                	                           NULL,
 	                      "PHOTO15x20",Pho_ZOOM,false);
@@ -9385,7 +9385,7 @@ void Brw_DownloadFile (void)
   {
    extern const char *Txt_The_file_of_folder_no_longer_exists_or_is_now_hidden;
    struct FileMetadata FileMetadata;
-   char URL[PATH_MAX+1];
+   char URL[PATH_MAX + 1];
    bool Found;
    bool ICanView = false;
 
@@ -9697,9 +9697,9 @@ static void Brw_WriteSmallLinkToDownloadFile (const char *URL,Brw_FileType_t Fil
 
 void Brw_GetLinkToDownloadFile (const char *PathInTree,const char *FileName,char *URL)
   {
-   char FullPathIncludingFile[PATH_MAX+1];
+   char FullPathIncludingFile[PATH_MAX + 1];
    FILE *FileURL;
-   char URLWithSpaces[PATH_MAX+1];
+   char URLWithSpaces[PATH_MAX + 1];
 
    /***** Construct absolute path to file in the private directory *****/
    sprintf (FullPathIncludingFile,"%s/%s/%s",
@@ -9867,7 +9867,7 @@ void Brw_ChgFileMetadata (void)
 
 static bool Brw_GetParamPublicFile (void)
   {
-   char YN[1+1];
+   char YN[1 + 1];
 
    Par_GetParToText ("PublicFile",YN,1);
    return (Str_ConvertToUpperLetter (YN[0]) == 'Y');
@@ -9879,7 +9879,7 @@ static bool Brw_GetParamPublicFile (void)
 
 static Brw_License_t Brw_GetParLicense (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /* Get file license from form */
@@ -9904,7 +9904,7 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[256+PATH_MAX];
+   char Query[256 + PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long FilCod;
@@ -9945,7 +9945,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned UnsignedNum;
@@ -10206,7 +10206,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
 
 bool Brw_GetFileTypeSizeAndDate (struct FileMetadata *FileMetadata)
   {
-   char Path[PATH_MAX+1];
+   char Path[PATH_MAX + 1];
    struct stat FileStatus;
 
    sprintf (Path,"%s/%s",Gbl.FileBrowser.Priv.PathAboveRootFolder,
@@ -10470,7 +10470,7 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Get if a file or folder is public from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
@@ -10525,7 +10525,7 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Mark file as hidden in database *****/
    sprintf (Query,"UPDATE files SET Hidden='%c'"
@@ -10548,7 +10548,7 @@ static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Change publisher, public and license of file in database *****/
    sprintf (Query,"UPDATE files SET PublisherUsrCod='%ld',Public='%c',License='%u'"
@@ -10709,7 +10709,7 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
 
    /***** Add path to the database *****/
    sprintf (Query,"INSERT INTO files (FileBrowser,Cod,ZoneUsrCod,"
@@ -10735,7 +10735,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
@@ -10780,7 +10780,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX];
+   char Query[512 + PATH_MAX];
    Brw_FileBrowser_t FileBrowser = Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type];
 
    /***** Set possible notifications as removed.
@@ -10826,7 +10826,7 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX*2];
+   char Query[512 + PATH_MAX * 2];
 
    /***** Update file or folder in table of common files *****/
    sprintf (Query,"UPDATE files SET Path='%s'"
@@ -10847,7 +10847,7 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
   {
    long Cod = Brw_GetCodForFiles ();
    long ZoneUsrCod = Brw_GetZoneUsrCodForFiles ();
-   char Query[512+PATH_MAX*2];
+   char Query[512 + PATH_MAX * 2];
    unsigned StartFinalSubpathNotChanged = strlen (OldPath) + 2;
 
    /***** Update children of a folder in table of files *****/
@@ -10968,7 +10968,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
   {
    long Cod = Brw_GetCodForFiles ();
-   char Query[512+PATH_MAX*2];
+   char Query[512 + PATH_MAX * 2];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -11068,7 +11068,7 @@ void Brw_RemoveGrpZonesVerbose (struct GroupData *GrpDat)
 
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
   {
-   char PathGrpFileZones[PATH_MAX+1];
+   char PathGrpFileZones[PATH_MAX + 1];
 
    /***** Set notifications about files in this group zone as removed *****/
    Ntf_MarkNotifFilesInGroupAsRemoved (GrpCod);
@@ -11089,7 +11089,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod)
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose)
   {
    extern const char *Txt_Works_of_X_in_Y_removed;
-   char PathUsrInCrs[PATH_MAX+1];
+   char PathUsrInCrs[PATH_MAX + 1];
 
    /***** Remove user's works in the course from database *****/
    Brw_RemoveWrkFilesFromDB (Crs->CrsCod,UsrDat->UsrCod);
@@ -11158,7 +11158,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-#define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100+(Usr_MAX_BYTES_NAME + 1) * 3 + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
+#define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100 + (Usr_MAX_BYTES_NAME + 1) * 3 + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
                                      long FilCod,unsigned MaxChars,bool GetContent)
@@ -11645,7 +11645,7 @@ void Brw_RemoveOldFilesBriefcase (void)
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned Months;
    struct Brw_NumObjects Removed;
 
@@ -11722,8 +11722,8 @@ static void Brw_ScanDirRemovingOldFiles (unsigned Level,
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX+1];
-   char PathFileInExplTree[PATH_MAX+1];
+   char PathFileRel[PATH_MAX + 1];
+   char PathFileInExplTree[PATH_MAX + 1];
    struct stat FolderStatus;
    struct stat FileStatus;
 

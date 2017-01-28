@@ -127,7 +127,7 @@ extern const char Str_BIN_TO_BASE64URL[64];
 /*****************************************************************************/
 
 // Add new functions at the end
-static const char *Svc_Functions[1+Svc_NUM_FUNCTIONS] =
+static const char *Svc_Functions[1 + Svc_NUM_FUNCTIONS] =
   {
    "?",				// 0 ==> unknown function
    "loginBySession",		// 1
@@ -281,7 +281,7 @@ void Svc_Exit (const char *DetailErrorMessage)
 
 static int Svc_GetPlgCodFromAppKey (const char *appKey)
   {
-   char Query[256+Plg_MAX_LENGTH_PLUGIN_APP_KEY];
+   char Query[256 + Plg_MAX_LENGTH_PLUGIN_APP_KEY];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1083,7 +1083,7 @@ int swad__getNewPassword (struct soap *soap,
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
-   char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD+1];
+   char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
 
    /***** Initializations *****/
    Gbl.soap = soap;
@@ -1459,7 +1459,7 @@ int swad__findUsers (struct soap *soap,
                      struct swad__getUsersOutput *getUsersOut)			// output
   {
    int ReturnCode;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY+1];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
    Rol_Role_t Role;
    bool FilterTooShort = false;
 
@@ -1849,7 +1849,7 @@ int swad__sendMyGroups (struct soap *soap,
    int ReturnCode;
    struct ListCodGrps LstGrpsIWant;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    unsigned NumGrp;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1902,7 +1902,7 @@ int swad__sendMyGroups (struct soap *soap,
       for (NumGrp = 0, Ptr = myGroups;
 	   *Ptr;
 	   NumGrp++)
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
       LstGrpsIWant.NumGrps = NumGrp;
 
       if (LstGrpsIWant.NumGrps)	// If I have selected groups...
@@ -1915,7 +1915,7 @@ int swad__sendMyGroups (struct soap *soap,
               NumGrp++)
 	   {
 	    /* Find next string in text until comma (leading and trailing spaces are removed) */
-            Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+            Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
 	    LstGrpsIWant.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	   }
         }
@@ -2227,7 +2227,7 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    long NumGrps;
    long NumGrp;
    long GrpCod;
-   char GrpCodStr[10+1];
+   char GrpCodStr[10 + 1];
    size_t Length;
 
    /***** Get list of groups *****/
@@ -2446,14 +2446,14 @@ int swad__removeAttendanceEvent (struct soap *soap,
 static void Svc_GetLstGrpsSel (const char *Groups)
   {
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    unsigned NumGrp;
 
    /***** Count number of groups *****/
    for (Ptr = Groups, NumGrp = 0;
 	*Ptr;
 	NumGrp++)
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
    Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = NumGrp;
 
    /***** Create a list of groups selected *****/
@@ -2469,7 +2469,7 @@ static void Svc_GetLstGrpsSel (const char *Groups)
 	   *Ptr;
 	   )
 	{
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
 	 Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp] = Str_ConvertStrCodToLongCod (LongStr);
 	 if (Grp_CheckIfGroupBelongsToCourse (Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrp],Gbl.CurrentCrs.Crs.CrsCod))
 	    NumGrp++;
@@ -2672,7 +2672,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    int ReturnCode;
    struct AttendanceEvent Att;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    long UsrCod;
    unsigned NumCodsInList;
    char SubQuery[256];
@@ -2722,10 +2722,10 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	   *Ptr;
 	   NumCodsInList++)
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
 
       /* Start query used to mark not present users as absent */
-      Length = 256 + NumCodsInList * (1+1+10+1) - 1;
+      Length = 256 + NumCodsInList * (1 + 1 + 10 + 1) - 1;
       if ((Query = (char *) malloc (Length + 1)) == NULL)
 	 return soap_receiver_fault (Gbl.soap,
 	                             "Not enough memory",
@@ -2740,7 +2740,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
       if ((UsrCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
 	 if (Usr_ChkIfUsrCodExists (UsrCod))
 	    // The user must belong to course,
@@ -3028,7 +3028,7 @@ int swad__getNotifications (struct soap *soap,
 
 static int Svc_GetMyLanguage (void)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3075,7 +3075,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
   {
    int ReturnCode;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    unsigned NumNtf;
    unsigned NumNtfsMarkedAsRead = 0;
    long NtfCod;
@@ -3109,7 +3109,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 	   NumNtf++)
 	{
 	 /* Find next string in text until comma (leading and trailing spaces are removed) */
-	 Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+	 Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
          if ((NtfCod = Str_ConvertStrCodToLongCod (LongStr)) > 0)
            {
 	    /***** Mark notification as read in the database *****/
@@ -3134,7 +3134,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 /****************** Send a message to one or more users **********************/
 /*****************************************************************************/
 
-#define Svc_MAX_LENGTH_QUERY_RECIPIENTS (10*1024 - 1)
+#define Svc_MAX_LENGTH_QUERY_RECIPIENTS (10 * 1024 - 1)
 
 int swad__sendMessage (struct soap *soap,
                        char *wsKey,int messageCode,char *to,char *subject,char *body,	// input
@@ -3142,7 +3142,7 @@ int swad__sendMessage (struct soap *soap,
   {
    int ReturnCode;
    long ReplyUsrCod = -1L;
-   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM+1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char Query[Svc_MAX_LENGTH_QUERY_RECIPIENTS + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3248,7 +3248,8 @@ int swad__sendMessage (struct soap *soap,
          Str_RemoveLeadingArrobas (Nickname);
 
 	 /* Check for overflow in query */
-	 if (strlen (Query)+Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA+32 > Svc_MAX_LENGTH_QUERY_RECIPIENTS)
+	 if (strlen (Query) + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 32 >
+	     Svc_MAX_LENGTH_QUERY_RECIPIENTS)
 	    return soap_sender_fault (Gbl.soap,
 				      "Can not send message",
 				      "Too many recipients");
@@ -3345,7 +3346,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
   {
    static bool MsgAlreadyInserted = false;
    static long NewMsgCod;
-   char Query[512+Cns_MAX_BYTES_SUBJECT+Cns_MAX_BYTES_LONG_TEXT];
+   char Query[512 + Cns_MAX_BYTES_SUBJECT + Cns_MAX_BYTES_LONG_TEXT];
 
    /***** Create message *****/
    if (!MsgAlreadyInserted)      // The message is inserted only once in the table of messages sent
@@ -3411,7 +3412,7 @@ int swad__sendNotice (struct soap *soap,
                       struct swad__sendNoticeOutput *sendNoticeOut)	// output
   {
    int ReturnCode;
-   char Query[512+Cns_MAX_BYTES_TEXT];
+   char Query[512 + Cns_MAX_BYTES_TEXT];
    long NotCod;
 
    /***** Initializations *****/
@@ -3691,7 +3692,7 @@ int swad__getTests (struct soap *soap,
 
 static int Svc_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
   {
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -3997,10 +3998,10 @@ int swad__getTrivialQuestion (struct soap *soap,
    extern const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES];
    int ReturnCode;
    const char *Ptr;
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
    char DegreesStr[Svc_MAX_LENGTH_DEGREES_STR + 1];
-   char DegStr[ 1+1+1+  10  +1+ 1];
-   //   DegStr=", ' - number ' \0"
+   char DegStr[ 1 + 1 + 1 + 10 + 1 + 1];
+   //   DegStr=",   '   - number '  \0"
    long DegCod;
    bool FirstDegree = true;
    char Query[4096];
@@ -4038,7 +4039,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 /*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
-	 char QueryDebug[512*1024];
+	 char QueryDebug[512 * 1024];
 
 	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'degrees = %s')",degrees);
 	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
@@ -4047,7 +4048,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    while (*Ptr)
      {
       /* Find next string in text until comma (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilComma (&Ptr,LongStr,1+10);
+      Str_GetNextStringUntilComma (&Ptr,LongStr,1 + 10);
 
       /* Check if degree code from string is a valid code */
       if (sscanf (LongStr,"%ld",&DegCod) == 1)	// Degree code
@@ -4112,7 +4113,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 /*
       if (Gbl.Usrs.Me.UsrDat.UsrCod == 19543)
 	{
-	 char QueryDebug[512*1024];
+	 char QueryDebug[512 * 1024];
 
 	 sprintf (QueryDebug,"INSERT INTO debug (DebugTime,Txt) VALUES (NOW(),'Una pregunta devuelta')");
 	 DB_QueryINSERT (QueryDebug,"Error inserting in debug table");
@@ -4241,8 +4242,8 @@ int swad__getDirectoryTree (struct soap *soap,
   {
    extern const char *Brw_RootFolderInternalNames[Brw_NUM_TYPES_FILE_BROWSER];
    int ReturnCode;
-   char PathXMLPriv[PATH_MAX+1];
-   char XMLFileName[PATH_MAX+1];
+   char PathXMLPriv[PATH_MAX + 1];
+   char XMLFileName[PATH_MAX + 1];
    unsigned long FileSize;
    unsigned long NumBytesRead;
 
@@ -4386,8 +4387,8 @@ static void Svc_ListDir (unsigned Level,const char *Path,const char *PathInTree)
    struct dirent **FileList;
    int NumFile;
    int NumFiles;
-   char PathFileRel[PATH_MAX+1];
-   char PathFileInExplTree[PATH_MAX+1];
+   char PathFileRel[PATH_MAX + 1];
+   char PathFileInExplTree[PATH_MAX + 1];
    struct stat FileStatus;
 
    /***** Scan directory *****/
@@ -4681,7 +4682,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    struct FileMetadata FileMetadata;
-   char SummaryStr[NAME_MAX+1];	// Really not used
+   char SummaryStr[NAME_MAX + 1];	// Really not used
    char *ContentStr;
    size_t Length;
 

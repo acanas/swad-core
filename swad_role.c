@@ -316,7 +316,7 @@ void Rol_PutFormToChangeMyRole (void)
 
 void Rol_ChangeMyRole (void)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Get parameter with the new logged role ******/
@@ -394,9 +394,9 @@ void Rol_PutHiddenParamRoles (unsigned Roles)
 
 unsigned Rol_GetSelectedRoles (void)
   {
-   char StrRoles[(10+1)*2];
+   char StrRoles[(10 + 1) * 2];
    const char *Ptr;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    Rol_Role_t Role;
    unsigned Roles;
@@ -409,7 +409,7 @@ unsigned Rol_GetSelectedRoles (void)
       Roles = 0;
 
    /***** Try to get multiple param "Role" *****/
-   Par_GetParMultiToText ("Role",StrRoles,(10+1)*2);
+   Par_GetParMultiToText ("Role",StrRoles,(10 + 1) * 2);
    for (Ptr = StrRoles;
         *Ptr;)
      {

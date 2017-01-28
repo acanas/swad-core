@@ -191,7 +191,7 @@ void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
 
 void Sco_GetScope (const char *ParamName)
   {
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
 
    /***** Get parameter location range if exists *****/
    Par_GetParToText (ParamName,UnsignedStr,10);

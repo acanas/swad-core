@@ -203,7 +203,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_LENGTH_WWW+1];
+   char URL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_WEBS\">");
@@ -295,7 +295,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_LENGTH_WWW+1];
+   char URL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,Txt_Webs_social_networks,
@@ -392,11 +392,11 @@ void Net_UpdateMyWebsAndSocialNets (void)
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
-   char Query[256+Cns_MAX_LENGTH_WWW];
-   char UnsignedStr[10+1];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
    Net_WebsAndSocialNetworks_t Web;
-   char URL[Cns_MAX_LENGTH_WWW+1];
+   char URL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameter with the type of web / social network *****/
    Par_GetParToText ("Web",UnsignedStr,10);

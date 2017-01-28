@@ -317,7 +317,7 @@ void The_ChangeTheme (void)
 
 The_Theme_t The_GetParamTheme (void)
   {
-   char ThemeId[MAX_THEME_ID+1];
+   char ThemeId[MAX_THEME_ID + 1];
    The_Theme_t Theme;
 
    Par_GetParToText ("Theme",ThemeId,MAX_THEME_ID);

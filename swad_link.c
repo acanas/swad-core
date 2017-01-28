@@ -409,10 +409,10 @@ static void Lnk_PutParamLnkCod (long LnkCod)
 
 long Lnk_GetParamLnkCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of link *****/
-   Par_GetParToText ("LnkCod",LongStr,1+10);
+   Par_GetParToText ("LnkCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -480,7 +480,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentLnkName = NULL;		// Initialized to avoid warning
-   char NewLnkName[Lnk_MAX_LENGTH_LINK_FULL_NAME+1];
+   char NewLnkName[Lnk_MAX_LENGTH_LINK_FULL_NAME + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
    switch (ShrtOrFullName)
@@ -579,8 +579,8 @@ void Lnk_ChangeLinkWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Link *Lnk;
-   char Query[256+Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW+1];
+   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
 

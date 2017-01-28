@@ -163,12 +163,12 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Course;
    extern const char *Txt_Short_name;
    extern const char *Txt_Year_OF_A_DEGREE;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Not_applicable;
    extern const char *Txt_Institutional_code;
    extern const char *Txt_Internal_code;
    extern const char *Txt_Shortcut;
-   extern const char *Txt_STR_LANG_ID[1+Txt_NUM_LANGUAGES];
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
@@ -542,8 +542,8 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumDegs;
    unsigned NumCrs;
    unsigned NumCrss;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT+1];
-   char PathRelRSSFile[PATH_MAX+1];
+   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char PathRelRSSFile[PATH_MAX + 1];
    const char *ClassNormal;
    char ClassHighlight[64];
 
@@ -1268,7 +1268,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
   {
    extern const char *Txt_COURSE_With_users;
    extern const char *Txt_COURSE_Without_users;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Go_to_X;
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    unsigned NumCrs;
@@ -1415,7 +1415,7 @@ static void Crs_ListCoursesForEdition (void)
 
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
   {
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    struct Course *Crs;
    unsigned YearAux;
@@ -1653,7 +1653,7 @@ static void Crs_PutFormToCreateCourse (void)
   {
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_New_course_of_DEGREE_X;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    extern const char *Txt_Create_course;
    struct Course *Crs;
@@ -1886,7 +1886,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
    extern const char *Txt_The_course_X_already_exists;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course;
    extern const char *Txt_The_year_X_is_not_allowed;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    struct Course *Crs;
    struct Degree Deg;
 
@@ -1943,7 +1943,7 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 
 static void Crs_GetParamsNewCourse (struct Course *Crs)
   {
-   char YearStr[2+1];
+   char YearStr[2 + 1];
 
    /***** Get parameters of the course from form *****/
    /* Get institutional code */
@@ -2201,7 +2201,7 @@ void Crs_RemoveCourseCompletely (long CrsCod)
 static void Crs_EmptyCourseCompletely (long CrsCod)
   {
    struct Course Crs;
-   char PathRelCrs[PATH_MAX+1];
+   char PathRelCrs[PATH_MAX + 1];
    char Query[512];
 
    /***** Get course data *****/
@@ -2331,7 +2331,7 @@ void Crs_ChangeInsCrsCodInConfig (void)
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
+   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD + 1];
 
    /***** Get institutional code from form *****/
    Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
@@ -2358,7 +2358,7 @@ void Crs_ChangeInsCrsCod (void)
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD+1];
+   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD + 1];
    struct Course *Crs;
 
    Crs = &Gbl.Degs.EditingCrs;
@@ -2400,7 +2400,7 @@ void Crs_ChangeInsCrsCod (void)
 void Crs_ChangeCrsDegInConfig (void)
   {
    extern const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_course_X_has_been_moved_to_the_degree_Y;
    struct Degree NewDeg;
 
@@ -2482,10 +2482,10 @@ static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
 void Crs_ChangeCrsYearInConfig (void)
   {
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
-   char YearStr[2+1];
+   char YearStr[2 + 1];
    unsigned NewYear;
 
    /***** Get parameter with year/semester *****/
@@ -2533,13 +2533,13 @@ void Crs_ChangeCrsYearInConfig (void)
 void Crs_ChangeCrsYear (void)
   {
    extern const char *Txt_The_course_X_already_exists_in_year_Y;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_The_year_of_the_course_X_has_changed;
    extern const char *Txt_The_year_X_is_not_allowed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
    struct Course *Crs;
    struct Degree Deg;
-   char YearStr[2+1];
+   char YearStr[2 + 1];
    unsigned NewYear;
 
    Crs = &Gbl.Degs.EditingCrs;
@@ -2680,7 +2680,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxLength = 0;		// Initialized to avoid warning
    char *CurrentCrsName = NULL;		// Initialized to avoid warning
-   char NewCrsName[Crs_MAX_LENGTH_COURSE_FULL_NAME+1];
+   char NewCrsName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
@@ -2764,7 +2764,7 @@ void Crs_ChangeCrsStatus (void)
    extern const char *Txt_The_status_of_the_course_X_has_changed;
    struct Course *Crs;
    char Query[256];
-   char UnsignedNum[10+1];
+   char UnsignedNum[10 + 1];
    Crs_Status_t Status;
    Crs_StatusTxt_t StatusTxt;
 
@@ -2985,10 +2985,10 @@ static long Crs_GetAndCheckParamOtherCrsCod (void)
 
 static long Crs_GetParamOtherCrsCod (void)
   {
-   char LongStr[1+10+1];
+   char LongStr[1 + 10 + 1];
 
    /***** Get parameter with code of course *****/
-   Par_GetParToText ("OthCrsCod",LongStr,1+10);
+   Par_GetParToText ("OthCrsCod",LongStr,1 + 10);
    return Str_ConvertStrCodToLongCod (LongStr);
   }
 
@@ -3175,7 +3175,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
    extern const char *Txt_Go_to_X;
-   extern const char *Txt_YEAR_OF_DEGREE[1+Deg_MAX_YEARS_PER_DEGREE];
+   extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    struct Degree Deg;
    long CrsCod;
    unsigned NumTchs;
@@ -3373,7 +3373,7 @@ void Crs_RemoveOldCrss (void)
   {
    extern const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access;
    extern const char *Txt_X_courses_have_been_eliminated;
-   char UnsignedStr[10+1];
+   char UnsignedStr[10 + 1];
    unsigned MonthsWithoutAccess;
    unsigned long SecondsWithoutAccess;
    char Query[1024];
