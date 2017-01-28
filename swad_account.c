@@ -674,8 +674,6 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 
    /***** Step 3/3: Get new password from form *****/
    Par_GetParToText ("Paswd",NewPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
-   Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-		     NewPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD,true);
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {

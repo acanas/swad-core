@@ -847,18 +847,21 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_AsAdminICanEditOtherUsr (UsrDat);
+         return Usr_ICanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }
   }
 
 /*****************************************************************************/
-/************ Check if I (as admin) can edit another user's data *************/
+/***************** Check if I can edit another user's data *******************/
 /*****************************************************************************/
 
-bool Usr_AsAdminICanEditOtherUsr (const struct UsrData *UsrDat)
+bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat)
   {
+   if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
+      return true;
+
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_DEG_ADM:

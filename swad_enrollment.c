@@ -3154,7 +3154,7 @@ static void Enr_ShowFormToEditOtherUsr (void)
    /***** Buttons for edition *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+   if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
      {
       Pwd_PutLinkToChangeOtherUsrPassword ();	// Put link (form) to change user's password
       Mai_PutLinkToChangeOtherUsrEmails ();	// Put link (form) to change user's emails

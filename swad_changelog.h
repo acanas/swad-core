@@ -191,13 +191,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.127.1 (2017-01-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.127.3 (2017-01-28)"
 #define CSS_FILE		"swad16.123.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.127.3: Jan 28, 2017	Fixed bug in permissions to change another user's data. (212127 lines)
+        Version 16.127.2: Jan 28, 2017	Fixed bug creating a new account. (212124 lines)
         Version 16.127.1: Jan 28, 2017	Fixed bug in listing of users. (212125 lines)
         Version 16.127:   Jan 28, 2017	Code refactoring. (212118 lines)
         Version 16.126.6: Jan 27, 2017	Fixed bug related with list of students. (212098 lines)

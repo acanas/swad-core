@@ -439,7 +439,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-         return Usr_AsAdminICanEditOtherUsr (UsrDat);
+         return Usr_ICanEditOtherUsr (UsrDat);
       default:
 	 return false;
      }
@@ -519,7 +519,7 @@ void ID_ShowFormOthIDs (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
@@ -723,7 +723,7 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
    char UsrID[ID_MAX_LENGTH_USR_ID + 1];
    bool ICanRemove;
 
-   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
+   if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get user's ID from form *****/
       Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
@@ -844,7 +844,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
    bool Error = false;
 
-   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
+   if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new user's ID from form *****/
       Par_GetParToText ("NewID",NewID,ID_MAX_LENGTH_USR_ID);

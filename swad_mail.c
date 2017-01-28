@@ -1150,7 +1150,7 @@ void Mai_ShowFormOthEmail (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
@@ -1369,7 +1369,7 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Email[Usr_MAX_BYTES_USR_EMAIL + 1];
 
-   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
+   if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
@@ -1451,7 +1451,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewEmail[Usr_MAX_BYTES_USR_EMAIL + 1];
 
-   if (Usr_AsAdminICanEditOtherUsr (UsrDat))
+   if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
       Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);

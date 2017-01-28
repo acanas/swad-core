@@ -491,7 +491,7 @@ void Pwd_UpdateOtherPwd1 (void)
    /***** Get other user's code from form and get user's data *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
 	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
@@ -813,7 +813,7 @@ void Pwd_ShowFormOthPwd (void)
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
      {
-      if (Usr_AsAdminICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
+      if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
 	 /***** Start frame *****/
          Lay_StartRoundFrame (NULL,Txt_Password,NULL,NULL);

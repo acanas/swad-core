@@ -235,7 +235,7 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod);
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod);
 
 bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat);
-bool Usr_AsAdminICanEditOtherUsr (const struct UsrData *UsrDat);
+bool Usr_ICanEditOtherUsr (const struct UsrData *UsrDat);
 
 unsigned Usr_GetNumCrssOfUsr (long UsrCod);
 unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod);
