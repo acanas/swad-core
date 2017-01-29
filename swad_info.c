@@ -1442,10 +1442,11 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
   {
    /***** Get info source for a specific type of course information
           (introduction, teaching guide, bibliography, FAQ, links or evaluation) *****/
-   return (Inf_InfoSrc_t) Par_GetParToUnsigned ("InfoSrc",
-                                                (unsigned) Inf_INFO_SRC_NONE,
-                                                (unsigned) Inf_INFO_SRC_URL,
-                                                (unsigned) Inf_INFO_SRC_NONE);
+   return (Inf_InfoSrc_t)
+	  Par_GetParToUnsignedLong ("InfoSrc",
+                                    0,
+                                    Inf_NUM_INFO_SOURCES - 1,
+                                    (unsigned long) Inf_INFO_SRC_NONE);
   }
 
 /*****************************************************************************/

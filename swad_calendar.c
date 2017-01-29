@@ -162,8 +162,11 @@ static unsigned Cal_GetParamFirstDayOfWeek (void)
   {
    unsigned FirstDayOfWeek;
 
-   FirstDayOfWeek = Par_GetParToUnsigned ("FirstDayOfWeek",0,6,
-                                          Cal_FIRST_DAY_OF_WEEK_DEFAULT);
+   FirstDayOfWeek = (unsigned)
+	            Par_GetParToUnsignedLong ("FirstDayOfWeek",
+                                              0,
+                                              6,
+                                              Cal_FIRST_DAY_OF_WEEK_DEFAULT);
    if (!Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
       FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 

@@ -58,7 +58,8 @@ typedef enum
   } Crs_Status_Bits_t;
 
 typedef unsigned Crs_Status_t;
-#define Crs_WRONG_STATUS ((Crs_Status_t) UINT_MAX)
+#define Crs_MAX_STATUS		((Crs_Status_t) 3)
+#define Crs_WRONG_STATUS	((Crs_Status_t) (Crs_MAX_STATUS + 1))
 
 #define Crs_NUM_STATUS_TXT	4
 typedef enum

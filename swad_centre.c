@@ -918,10 +918,11 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
 static void Ctr_GetParamCtrOrder (void)
   {
-   Gbl.Ctrs.SelectedOrder = (Ctr_Order_t) Par_GetParToUnsigned ("Order",
-                                                                (unsigned) Ctr_ORDER_BY_CENTRE,
-                                                                (unsigned) Ctr_ORDER_BY_NUM_TCHS,
-                                                                (unsigned) Ctr_ORDER_DEFAULT);
+   Gbl.Ctrs.SelectedOrder = (Ctr_Order_t)
+	                    Par_GetParToUnsignedLong ("Order",
+                                                      0,
+                                                      Ctr_NUM_ORDERS - 1,
+                                                      (unsigned long) Ctr_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -2079,8 +2080,11 @@ void Ctr_ChangeCtrStatus (void)
    Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with status */
-   Status = (Ctr_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
-                                                 (unsigned) Ctr_WRONG_STATUS);
+   Status = (Ctr_Status_t)
+	    Par_GetParToUnsignedLong ("Status",
+	                              0,
+	                              (unsigned long) Ctr_MAX_STATUS,
+                                      (unsigned long) Ctr_WRONG_STATUS);
    if (Status == Ctr_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);

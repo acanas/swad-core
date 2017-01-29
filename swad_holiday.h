@@ -61,12 +61,12 @@ struct Holiday
    char Name[Hld_MAX_LENGTH_HOLIDAY_NAME + 1];
   };
 
+#define Hld_NUM_ORDERS 2
 typedef enum
   {
    Hld_ORDER_BY_PLACE      = 0,
    Hld_ORDER_BY_START_DATE = 1,
   } Hld_Order_t;
-
 #define Hld_DEFAULT_ORDER_TYPE Hld_ORDER_BY_START_DATE
 
 /*****************************************************************************/

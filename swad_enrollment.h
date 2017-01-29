@@ -49,9 +49,10 @@ typedef enum
    Enr_SET_ACCEPTED_TO_TRUE,
   } Enr_KeepOrSetAccepted_t;
 
+#define Enr_REG_REM_ONE_USR_NUM_ACTIONS 11
 typedef enum
   {
-   Enr_ONE_USR_UNKNOWN_ACTION           =  0,
+   Enr_REG_REM_ONE_USR_UNKNOWN_ACTION   =  0,
    Enr_REGISTER_MODIFY_ONE_USR_IN_CRS   =  1,
    Enr_REGISTER_ONE_DEGREE_ADMIN        =  2,
    Enr_REGISTER_ONE_CENTRE_ADMIN        =  3,

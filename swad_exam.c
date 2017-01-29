@@ -129,10 +129,11 @@ static long Exa_GetParamsExamAnnouncement (void)
                 Crs_MAX_LENGTH_COURSE_FULL_NAME);
 
    /***** Get the year *****/
-   Gbl.ExamAnns.ExaDat.Year = Par_GetParToUnsigned ("Year",
-                                                    0,	// N.A.
-                                                    Deg_MAX_YEARS_PER_DEGREE,
-                                                    Gbl.CurrentCrs.Crs.Year);
+   Gbl.ExamAnns.ExaDat.Year = (unsigned)
+	                      Par_GetParToUnsignedLong ("Year",
+                                                        0,	// N.A.
+                                                        Deg_MAX_YEARS_PER_DEGREE,
+                                                        (unsigned long) Gbl.CurrentCrs.Crs.Year);
 
    /***** Get the type of exam announcement *****/
    Par_GetParToText ("ExamSession",Gbl.ExamAnns.ExaDat.Session,Cns_MAX_BYTES_STRING);
@@ -152,16 +153,16 @@ static long Exa_GetParamsExamAnnouncement (void)
      }
 
    /***** Get the hour of the exam *****/
-   Gbl.ExamAnns.ExaDat.StartTime.Hour   = Par_GetParToUnsigned ("ExamHour",
-                                                                0,23,0);
-   Gbl.ExamAnns.ExaDat.StartTime.Minute = Par_GetParToUnsigned ("ExamMinute",
-                                                                0,59,0);
+   Gbl.ExamAnns.ExaDat.StartTime.Hour   = (unsigned) Par_GetParToUnsignedLong ("ExamHour",
+                                                                               0,23,0);
+   Gbl.ExamAnns.ExaDat.StartTime.Minute = (unsigned) Par_GetParToUnsignedLong ("ExamMinute",
+                                                                               0,59,0);
 
    /***** Get the duration of the exam *****/
-   Gbl.ExamAnns.ExaDat.Duration.Hour   = Par_GetParToUnsigned ("DurationHour",
-                                                               0,23,0);
-   Gbl.ExamAnns.ExaDat.Duration.Minute = Par_GetParToUnsigned ("DurationMinute",
-                                                               0,59,0);
+   Gbl.ExamAnns.ExaDat.Duration.Hour    = (unsigned) Par_GetParToUnsignedLong ("DurationHour",
+                                                                               0,23,0);
+   Gbl.ExamAnns.ExaDat.Duration.Minute  = (unsigned) Par_GetParToUnsignedLong ("DurationMinute",
+                                                                               0,59,0);
 
    /***** Get the place where the exam will happen *****/
    Par_GetParToHTML ("Place",Gbl.ExamAnns.ExaDat.Place,Cns_MAX_BYTES_TEXT);

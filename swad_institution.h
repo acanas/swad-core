@@ -41,7 +41,8 @@ typedef enum
   } Ins_Status_Bits_t;
 
 typedef unsigned Ins_Status_t;
-#define Ins_WRONG_STATUS ((Ins_Status_t) UINT_MAX)
+#define Ins_MAX_STATUS		((Ins_Status_t) 3)
+#define Ins_WRONG_STATUS	((Ins_Status_t) (Ins_MAX_STATUS + 1))
 
 #define Ins_NUM_STATUS_TXT	4
 typedef enum
@@ -74,12 +75,12 @@ struct Instit
    unsigned NumUsrs;		// Number of users in courses of this institution
   };
 
+#define Ins_NUM_ORDERS 2
 typedef enum
   {
    Ins_ORDER_BY_INSTITUTION = 0,
    Ins_ORDER_BY_NUM_USRS    = 1,
   } Ins_Order_t;
-
 #define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
 
 typedef enum

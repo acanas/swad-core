@@ -418,10 +418,10 @@ void Sch_GetParamWhatToSearch (void)
 
    /***** Get what to search from form *****/
    WhatToSearch = (Sch_WhatToSearch_t)
-	          Par_GetParToUnsigned ("WhatToSearch",
-	                                0,
-	                                Sch_NUM_WHAT_TO_SEARCH - 1,
-	                                (unsigned) Sch_SEARCH_UNKNOWN);
+	          Par_GetParToUnsignedLong ("WhatToSearch",
+	                                    0,
+	                                    Sch_NUM_WHAT_TO_SEARCH - 1,
+	                                    (unsigned long) Sch_SEARCH_UNKNOWN);
 
    // If parameter WhatToSearch is not present, use parameter from session
    if (WhatToSearch != Sch_SEARCH_UNKNOWN)

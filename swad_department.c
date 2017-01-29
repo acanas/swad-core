@@ -193,10 +193,11 @@ void Dpt_SeeDepts (void)
 
 static void Dpt_GetParamDptOrder (void)
   {
-   Gbl.Dpts.SelectedOrder = (Dpt_Order_t) Par_GetParToUnsigned ("Order",
-                                                                (unsigned) Dpt_ORDER_BY_DEPARTMENT,
-                                                                (unsigned) Dpt_ORDER_BY_NUM_TCHS,
-                                                                (unsigned) Dpt_ORDER_DEFAULT);
+   Gbl.Dpts.SelectedOrder = (Dpt_Order_t)
+	                    Par_GetParToUnsignedLong ("Order",
+                                                      0,
+                                                      Dpt_NUM_ORDERS - 1,
+                                                      (unsigned long) Dpt_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

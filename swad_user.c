@@ -79,13 +79,15 @@ const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
 
 const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
   {
-   "classphoto",
-   "list"
+   "",				// Usr_LIST_UNKNOWN
+   "classphoto",		// Usr_LIST_AS_CLASS_PHOTO
+   "list",			// Usr_LIST_AS_LISTING
   };
 const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
-   "classphoto16x16.gif",
-   "list64x64.gif"
+   "",				// Usr_LIST_UNKNOWN
+   "classphoto16x16.gif",	// Usr_LIST_AS_CLASS_PHOTO
+   "list64x64.gif",		// Usr_LIST_AS_LISTING
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
@@ -170,11 +172,11 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr);
 static void Usr_GetAndUpdateUsrListType (void);
-static bool Usr_GetUsrListTypeFromForm (void);
+static void Usr_GetUsrListTypeFromForm (void);
 static void Usr_GetMyUsrListTypeFromDB (void);
 static void Usr_UpdateMyUsrListTypeInDB (void);
 
-static bool Usr_GetParamColsClassPhotoFromForm (void);
+static void Usr_GetParamColsClassPhotoFromForm (void);
 static void Usr_GetMyColsClassPhotoFromDB (void);
 static void Usr_UpdateMyColsClassPhotoInDB (void);
 
@@ -2333,7 +2335,9 @@ void Usr_GetParamUsrIdLogin (void)
 static void Usr_GetParamOtherUsrIDNickOrEMail (void)
   {
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
-   Par_GetParToText ("OtherUsrIDNickOrEMail",Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,Usr_MAX_BYTES_USR_LOGIN);
+   Par_GetParToText ("OtherUsrIDNickOrEMail",
+                     Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
+                     Usr_MAX_BYTES_USR_LOGIN);
 
    // If it's a user's ID (if does not contain '@')
    if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
@@ -5219,7 +5223,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    Usr_AllocateListOtherRecipients ();
 
    /***** Get recipients written explicetely *****/
-   Par_GetParToText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,Nck_MAX_BYTES_LIST_NICKS);
+   Par_GetParToText ("OtherRecipients",Gbl.Usrs.ListOtherRecipients,
+                     Nck_MAX_BYTES_LIST_NICKS);
 
    /***** Add encrypted users' IDs to the list with all selected users *****/
    if (Gbl.Usrs.ListOtherRecipients[0])
@@ -5516,32 +5521,32 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
   {
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
 
-   /***** Select Usr_CLASS_PHOTO *****/
+   /***** Select Usr_LIST_AS_CLASS_PHOTO *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO ? "PREF_ON" :
-        	                                      "PREF_OFF");
-   Usr_FormToSelectUsrListType (NextAction,Usr_CLASS_PHOTO);
+            Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO ? "PREF_ON" :
+        	                                              "PREF_OFF");
+   Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
    Act_FormStart (NextAction);
    Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (Usr_CLASS_PHOTO);
+   Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutSelectorNumColsClassPhoto ();
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Select Usr_LIST *****/
+   /***** Select Usr_LIST_AS_LISTING *****/
    fprintf (Gbl.F.Out,"<div class=\"%s\">",
-            Gbl.Usrs.Me.ListType == Usr_LIST ? "PREF_ON" :
-        	                               "PREF_OFF");
-   Usr_FormToSelectUsrListType (NextAction,Usr_LIST);
+            Gbl.Usrs.Me.ListType == Usr_LIST_AS_LISTING ? "PREF_ON" :
+        	                                          "PREF_OFF");
+   Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
    Act_FormStart (NextAction);
    Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (Usr_LIST);
+   Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
    Usr_PutExtraParamsUsrList (NextAction);
    Usr_PutCheckboxListWithPhotos ();
    Act_FormEnd ();
@@ -5644,12 +5649,14 @@ void Usr_ListUsersToSelect (Rol_Role_t Role)
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_CLASS_PHOTO:
+      case Usr_LIST_AS_CLASS_PHOTO:
          Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL,Role);
          break;
-      case Usr_LIST:
+      case Usr_LIST_AS_LISTING:
          Usr_ListUsrsForSelection (Role);
          break;
+      default:
+	 break;
      }
   }
 
@@ -5716,9 +5723,9 @@ static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role)
 
 unsigned Usr_GetColumnsForSelectUsrs (void)
   {
-   return (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
-                                                      (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
-                                                                                         Usr_NUM_MAIN_FIELDS_DATA_USR);
+   return (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO) ? Gbl.Usrs.ClassPhoto.Cols :
+                                                             (Gbl.Usrs.Listing.WithPhotos ? 1 + Usr_NUM_MAIN_FIELDS_DATA_USR :
+                                                                                            Usr_NUM_MAIN_FIELDS_DATA_USR);
   }
 
 /*****************************************************************************/
@@ -6752,11 +6759,14 @@ void Usr_GetAndUpdatePrefsAboutUsrList (void)
 static void Usr_GetAndUpdateUsrListType (void)
   {
    /***** Get type of list used to select users from form *****/
-   if (Usr_GetUsrListTypeFromForm ())
+   Usr_GetUsrListTypeFromForm ();
+
+   if (Gbl.Usrs.Me.ListType != Usr_LIST_UNKNOWN)
       /* Save in the database the type of list preferred by me */
       Usr_UpdateMyUsrListTypeInDB ();
    else
-      /* If parameter can't be retrieved from, get my preference from database */
+      /* If parameter can't be retrieved from,
+         get my preference from database */
       Usr_GetMyUsrListTypeFromDB ();
   }
 
@@ -6773,21 +6783,13 @@ void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType)
 /****************** Get from form the type of users' list ********************/
 /*****************************************************************************/
 
-static bool Usr_GetUsrListTypeFromForm (void)
+static void Usr_GetUsrListTypeFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Gbl.Usrs.Me.ListType = Usr_SHOW_USRS_TYPE_DEFAULT;
-
-   /***** Get param with number of users per row *****/
-   Par_GetParToText ("UsrListType",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      return false;
-   if (UnsignedNum >= Usr_NUM_USR_LIST_TYPES)
-      return false;
-   Gbl.Usrs.Me.ListType = UnsignedNum;
-   return true;
+   Gbl.Usrs.Me.ListType = (Usr_ShowUsrsType_t)
+	                  Par_GetParToUnsignedLong ("UsrListType",
+                                                    0,
+                                                    Usr_NUM_USR_LIST_TYPES - 1,
+                                                    (unsigned long) Usr_LIST_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -6855,11 +6857,14 @@ static void Usr_UpdateMyUsrListTypeInDB (void)
 void Usr_GetAndUpdateColsClassPhoto (void)
   {
    /***** Get the number of columns in class photo from form *****/
-   if (Usr_GetParamColsClassPhotoFromForm ())
-      /***** Save the number of columns into the database  *****/
+   Usr_GetParamColsClassPhotoFromForm ();
+
+   if (Gbl.Usrs.ClassPhoto.Cols)
+      /* Save the number of columns into the database */
       Usr_UpdateMyColsClassPhotoInDB ();
    else
-      /***** If parameter can't be retrieved from form, get my preference from database *****/
+      /* If parameter can't be retrieved from form,
+         get my preference from database */
       Usr_GetMyColsClassPhotoFromDB ();
   }
 
@@ -6876,21 +6881,13 @@ void Usr_PutParamColsClassPhoto (void)
 /************* Get from form the number of colums in class photo *************/
 /*****************************************************************************/
 
-static bool Usr_GetParamColsClassPhotoFromForm (void)
+static void Usr_GetParamColsClassPhotoFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-
-   /***** Get parameter with number of users per row *****/
-   Par_GetParToText ("ColsClassPhoto",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.Usrs.ClassPhoto.Cols) != 1)
-     {
-      Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
-      return false;
-     }
-   if (Gbl.Usrs.ClassPhoto.Cols < 1 ||
-       Gbl.Usrs.ClassPhoto.Cols > Usr_CLASS_PHOTO_COLS_MAX)
-      Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
-   return true;
+   Gbl.Usrs.ClassPhoto.Cols = (unsigned)
+	                      Par_GetParToUnsignedLong ("ColsClassPhoto",
+                                                        1,
+                                                        Usr_CLASS_PHOTO_COLS_MAX,
+                                                        0);
   }
 
 /*****************************************************************************/
@@ -6958,12 +6955,13 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
 
 static void Usr_GetAndUpdatePrefAboutListWithPhotos (void)
   {
-   /***** Get he preference about photos in users' list from form *****/
+   /***** Get my preference about photos in users' list from form *****/
    if (Usr_GetParamListWithPhotosFromForm ())
-      /***** Save preference about photos in users' list into the database  *****/
+      /* Save preference about photos in users' list into the database */
       Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB ();
    else
-      /***** If parameter can't be retrieved from form, get my preference from database *****/
+      /* If parameter can't be retrieved from form,
+         get my preference from database */
       Usr_GetMyPrefAboutListWithPhotosFromDB ();
   }
 
@@ -7164,7 +7162,7 @@ void Usr_SeeGuests (void)
          /***** Draw a class photo with guests *****/
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
 	       Lay_WriteHeaderClassPhoto (false,true,
 					  (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
@@ -7172,8 +7170,10 @@ void Usr_SeeGuests (void)
 					  -1L,
 					  -1L);
 	       break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                Usr_PutLinkToShowGstsAllData ();
+               break;
+            default:
                break;
            }
 
@@ -7189,12 +7189,14 @@ void Usr_SeeGuests (void)
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
         	                   Rol__GUEST_);
                break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                Usr_ListMainDataGsts (true);
+               break;
+            default:
                break;
            }
 
@@ -7319,7 +7321,7 @@ void Usr_SeeStudents (void)
          /***** Draw a class photo with students of the course *****/
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
 	       Lay_WriteHeaderClassPhoto (false,true,
 					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					   Gbl.Scope.Current == Sco_SCOPE_DEG ||
@@ -7332,8 +7334,10 @@ void Usr_SeeStudents (void)
 					   Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 										 -1L);
 	       break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                Usr_PutLinkToShowStdsAllData ();
+               break;
+            default:
                break;
            }
 
@@ -7354,13 +7358,15 @@ void Usr_SeeStudents (void)
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
         	                                     Usr_CLASS_PHOTO_SEE,
         	                   Rol_STUDENT);
                break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                Usr_ListMainDataStds (ICanViewRecords);
+               break;
+            default:
                break;
            }
 
@@ -7474,7 +7480,7 @@ void Usr_SeeTeachers (void)
          /***** Draw a class photo with teachers of the course *****/
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
 	       Lay_WriteHeaderClassPhoto (false,true,
 					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 					   Gbl.Scope.Current == Sco_SCOPE_DEG ||
@@ -7487,9 +7493,11 @@ void Usr_SeeTeachers (void)
 					   Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 										 -1L);
 	       break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
                   Usr_PutLinkToShowTchsAllData ();
+               break;
+            default:
                break;
            }
 
@@ -7507,13 +7515,15 @@ void Usr_SeeTeachers (void)
          /***** Draw the classphoto/list  *****/
          switch (Gbl.Usrs.Me.ListType)
            {
-            case Usr_CLASS_PHOTO:
+            case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
         	                                     Usr_CLASS_PHOTO_SEE,
         	                   Rol_TEACHER);
                break;
-            case Usr_LIST:
+            case Usr_LIST_AS_LISTING:
                Usr_ListMainDataTchs (ICanViewRecords);
+               break;
+            default:
                break;
            }
 
@@ -7546,15 +7556,20 @@ void Usr_SeeTeachers (void)
 
 static void Usr_PutIconsListGsts (void)
   {
-   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
-         /***** Put icon to print guests *****/
-	 Usr_PutIconToPrintGsts ();
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+	    /***** Put icon to print guests *****/
+	    Usr_PutIconToPrintGsts ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of guests *****/
+	 Usr_PutIconToShowGstsAllData ();
+	 break;
+      default:
+	 break;
      }
-   else
-      /***** Put icon to show all data of guests *****/
-      Usr_PutIconToShowGstsAllData ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_USERS;
@@ -7567,15 +7582,20 @@ static void Usr_PutIconsListGsts (void)
 
 static void Usr_PutIconsListStds (void)
   {
-   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
-         /***** Put icon to print students *****/
-	 Usr_PutIconToPrintStds ();
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+	    /***** Put icon to print students *****/
+	    Usr_PutIconToPrintStds ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of students *****/
+	 Usr_PutIconToShowStdsAllData ();
+	 break;
+      default:
+	 break;
      }
-   else if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
-      /***** Put icon to show all data of students *****/
-      Usr_PutIconToShowStdsAllData ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_USERS;
@@ -7588,15 +7608,20 @@ static void Usr_PutIconsListStds (void)
 
 static void Usr_PutIconsListTchs (void)
   {
-   if (Gbl.Usrs.Me.ListType == Usr_CLASS_PHOTO)
+   switch (Gbl.Usrs.Me.ListType)
      {
-      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
-         /***** Put icon to print teachers *****/
-	 Usr_PutIconToPrintTchs ();
+      case Usr_LIST_AS_CLASS_PHOTO:
+	 if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+	    /***** Put icon to print teachers *****/
+	    Usr_PutIconToPrintTchs ();
+	 break;
+      case Usr_LIST_AS_LISTING:
+	 /***** Put icon to show all data of teachers *****/
+	 Usr_PutIconToShowTchsAllData ();
+	 break;
+      default:
+	 break;
      }
-   else if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-      /***** Put icon to show all data of teachers *****/
-      Usr_PutIconToShowTchsAllData ();
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_USERS;

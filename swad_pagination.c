@@ -622,8 +622,11 @@ void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
       FirstCall = false;
 
       /***** Try to get parameter with the number of page *****/
-      Gbl.Pag.CurrentPage = Par_GetParToUnsigned ("NumPage",
-                                                  1,UINT_MAX,0);
+      Gbl.Pag.CurrentPage = (unsigned)
+	                    Par_GetParToUnsignedLong ("NumPage",
+                                                      1,
+                                                      UINT_MAX,
+                                                      0);
       if (Gbl.Pag.CurrentPage == 0)
          /***** If there's no parameter page, return a default value *****/
          switch (WhatPaginate)

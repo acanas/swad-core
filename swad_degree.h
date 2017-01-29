@@ -54,7 +54,8 @@ typedef enum
   } Deg_Status_Bits_t;
 
 typedef unsigned Deg_Status_t;
-#define Deg_WRONG_STATUS ((Deg_Status_t) UINT_MAX)
+#define Deg_MAX_STATUS		((Deg_Status_t) 3)
+#define Deg_WRONG_STATUS	((Deg_Status_t) (Deg_MAX_STATUS + 1))
 
 #define Deg_NUM_STATUS_TXT	4
 typedef enum

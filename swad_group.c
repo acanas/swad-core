@@ -3150,10 +3150,11 @@ void Grp_RecFormNewGrp (void)
                         Grp_MAX_LENGTH_GROUP_NAME);
 
       /* Get maximum number of students */
-      Gbl.CurrentCrs.Grps.MaxStudents = Par_GetParToUnsigned ("MaxStudents",
-                                                              0,
-                                                              Grp_MAX_STUDENTS_IN_A_GROUP,
-                                                              Grp_NUM_STUDENTS_NOT_LIMITED);
+      Gbl.CurrentCrs.Grps.MaxStudents = (unsigned)
+	                                Par_GetParToUnsignedLong ("MaxStudents",
+                                                                  0,
+                                                                  Grp_MAX_STUDENTS_IN_A_GROUP,
+                                                                  Grp_NUM_STUDENTS_NOT_LIMITED);
 
       if (Gbl.CurrentCrs.Grps.GrpName[0])	// If there's a group name
         {
@@ -3844,10 +3845,11 @@ void Grp_ChangeMaxStdsGrp (void)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new maximum number of students of the group */
-   NewMaxStds = Par_GetParToUnsigned ("MaxStudents",
-                                      0,
-                                      Grp_MAX_STUDENTS_IN_A_GROUP,
-                                      Grp_NUM_STUDENTS_NOT_LIMITED);
+   NewMaxStds = (unsigned)
+	        Par_GetParToUnsignedLong ("MaxStudents",
+                                          0,
+                                          Grp_MAX_STUDENTS_IN_A_GROUP,
+                                          Grp_NUM_STUDENTS_NOT_LIMITED);
 
    /* Get from the database the type, name, and antiguo maximum of students of the group */
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
@@ -4281,9 +4283,9 @@ void Grp_GetParamWhichGrps (void)
 
       /* Get parameter */
       Gbl.CurrentCrs.Grps.WhichGrps = (Grp_WhichGroups_t)
-	                              Par_GetParToUnsigned ("WhichGrps",
-	                                                    (unsigned) Grp_ONLY_MY_GROUPS,
-	                                                    (unsigned) Grp_ALL_GROUPS,
-	                                                    (unsigned) WhichGroupsDefault);
+	                              Par_GetParToUnsignedLong ("WhichGrps",
+	                                                        0,
+	                                                        Grp_NUM_WHICH_GROUPS - 1,
+	                                                        (unsigned long) WhichGroupsDefault);
      }
   }

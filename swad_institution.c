@@ -909,10 +909,10 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 static void Ins_GetParamInsOrder (void)
   {
    Gbl.Inss.SelectedOrder = (Ins_Order_t)
-	                    Par_GetParToUnsigned ("Order",
-	                                          (unsigned) Ins_ORDER_BY_INSTITUTION,
-	                                          (unsigned) Ins_ORDER_BY_NUM_USRS,
-	                                          (unsigned) Ins_ORDER_DEFAULT);
+	                    Par_GetParToUnsignedLong ("Order",
+	                                              0,
+	                                              Ins_NUM_ORDERS - 1,
+	                                              (unsigned long) Ins_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1935,9 +1935,12 @@ void Ins_ChangeInsStatus (void)
    Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get parameter with status */
-   Status = (Ins_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
-                                                 (unsigned) Ins_WRONG_STATUS);
-   if (Status == Ctr_WRONG_STATUS)
+   Status = (Ins_Status_t)
+	    Par_GetParToUnsignedLong ("Status",
+	                              0,
+	                              (unsigned long) Ins_MAX_STATUS,
+                                      (unsigned long) Ins_WRONG_STATUS);
+   if (Status == Ins_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Status);
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status

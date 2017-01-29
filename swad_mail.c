@@ -162,10 +162,10 @@ void Mai_SeeMailDomains (void)
 static void Mai_GetParamMaiOrder (void)
   {
    Gbl.Mails.SelectedOrder = (Mai_DomainsOrder_t)
-	                     Par_GetParToUnsigned ("Order",
-	                                           (unsigned) Mai_ORDER_BY_DOMAIN,
-	                                           (unsigned) Mai_ORDER_BY_INFO,
-	                                           (unsigned) Mai_ORDER_DEFAULT);
+	                     Par_GetParToUnsignedLong ("Order",
+	                                               0,
+	                                               Mai_NUM_ORDERS - 1,
+	                                               (unsigned long) Mai_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

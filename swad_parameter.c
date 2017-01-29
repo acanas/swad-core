@@ -712,15 +712,15 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get action to perform *****/
-   ActCod = Par_GetParToUnsigned ("act",
-                                  ActUnk,
-                                  Act_MAX_ACTION_COD,
-                                  ActUnk);
+   ActCod = (unsigned) Par_GetParToUnsignedLong ("act",
+                                                 ActUnk,
+                                                 Act_MAX_ACTION_COD,
+                                                 ActUnk);
    if (ActCod == ActUnk)
-      ActCod = Par_GetParToUnsigned ("ActCod",
-				     ActUnk,
-				     Act_MAX_ACTION_COD,
-				     ActUnk);
+      ActCod = (unsigned)  Par_GetParToUnsignedLong ("ActCod",
+				                     ActUnk,
+				                     Act_MAX_ACTION_COD,
+				                     ActUnk);
    if (ActCod != ActUnk)
       Gbl.Action.Act = Act_FromActCodToAction[ActCod];
 
@@ -842,10 +842,11 @@ void Par_GetMainParameters (void)
    Gbl.Action.Tab = TabUnk;
    if (Gbl.Action.Act == ActMnu)
      {
-      Gbl.Action.Tab = (Tab_Tab_t) Par_GetParToUnsigned ("NxtTab",
-                                                         (unsigned) TabUnk,
-                                                         Tab_NUM_TABS - 1,
-                                                         (unsigned) TabUnk);
+      Gbl.Action.Tab = (Tab_Tab_t)
+	               Par_GetParToUnsignedLong ("NxtTab",
+                                                 (unsigned long) TabUnk,
+                                                 Tab_NUM_TABS - 1,
+                                                 (unsigned long) TabUnk);
       Tab_DisableIncompatibleTabs ();
      }
    else	// Set tab depending on current action
@@ -867,19 +868,19 @@ unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxByte
 /****************** Get the unsigned value of a parameter ********************/
 /*****************************************************************************/
 
-unsigned Par_GetParToUnsigned (const char *ParamName,
-                               unsigned Min,
-                               unsigned Max,
-                               unsigned Default)
+unsigned long Par_GetParToUnsignedLong (const char *ParamName,
+                                        unsigned long Min,
+                                        unsigned long Max,
+                                        unsigned long Default)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
+   char UnsignedLongStr[20 + 1];
+   unsigned long UnsignedLongNum;
 
    /***** Get parameter with unsigned number *****/
-   Par_GetParToText (ParamName,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum >= Min && UnsignedNum <= Max)
-         return UnsignedNum;
+   Par_GetParToText (ParamName,UnsignedLongStr,10);
+   if (sscanf (UnsignedLongStr,"%lu",&UnsignedLongNum) == 1)
+      if (UnsignedLongNum >= Min && UnsignedLongNum <= Max)
+         return UnsignedLongNum;
 
    return Default;
   }

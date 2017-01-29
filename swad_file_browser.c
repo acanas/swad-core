@@ -9864,10 +9864,11 @@ static bool Brw_GetParamPublicFile (void)
 
 static Brw_License_t Brw_GetParLicense (void)
   {
-   return (Brw_License_t) Par_GetParToUnsigned ("License",
-                                                (unsigned) Brw_LICENSE_UNKNOWN,
-                                                (unsigned) Brw_LICENSE_CC_BY_NC_ND,
-                                                (unsigned) Brw_LICENSE_UNKNOWN);
+   return (Brw_License_t)
+	  Par_GetParToUnsignedLong ("License",
+                                    0,
+                                    Brw_NUM_LICENSES - 1,
+                                    (unsigned long) Brw_LICENSE_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -11630,10 +11631,11 @@ void Brw_RemoveOldFilesBriefcase (void)
    if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Get parameter with number of months without access *****/
-      Months = Par_GetParToUnsigned ("Months",
-                                     Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES,
-                                     Brw_MAX_MONTHS_IN_BRIEFCASE,
-                                     Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);
+      Months = (unsigned)
+	       Par_GetParToUnsignedLong ("Months",
+                                         Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES,
+                                         Brw_MAX_MONTHS_IN_BRIEFCASE,
+                                         Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);
 
       /***** Remove old files *****/
       Brw_RemoveOldFilesInBrowser (Months,&Removed);

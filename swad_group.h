@@ -38,7 +38,8 @@
 #define Grp_MAX_LENGTH_GROUP_NAME	(256 - 1)
 
 #define Grp_MAX_STUDENTS_IN_A_GROUP	10000	// If max of students in a group is greater than this, it is considered infinite
-#define Grp_NUM_STUDENTS_NOT_LIMITED  INT_MAX	// This number can be stored in database and means that a group has no limit of students
+#define Grp_NUM_STUDENTS_NOT_LIMITED  INT_MAX	// This number can be stored in database as an integer...
+						// ...and means that a group has no limit of students
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -109,6 +110,7 @@ struct ListGrpsAlreadySelec
    bool AlreadySelected;
   };
 
+#define Grp_NUM_WHICH_GROUPS 2
 typedef enum
   {
    Grp_ONLY_MY_GROUPS,

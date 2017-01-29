@@ -56,8 +56,8 @@ extern struct Globals Gbl;
 #define TT_MAX_COLUMNS_PER_CELL			  3	// Maximum number of items (i.e. classes) in a timetable cell (1, 2, 3 or 4)
 #define TT_NUM_MINICOLUMNS_PER_DAY		  6	// Least common multiple of 1,2,3,...,TT_MAX_COLUMNS_PER_CELL
 #define TT_PERCENT_WIDTH_OF_A_MINICOLUMN	  2	// Width (%) of each minicolumn
-#define TT_PERCENT_WIDTH_OF_A_DAY		(TT_PERCENT_WIDTH_OF_A_MINICOLUMN*TT_NUM_MINICOLUMNS_PER_DAY)	// Width (%) of each day
-#define TT_PERCENT_WIDTH_OF_ALL_DAYS		(TT_PERCENT_WIDTH_OF_A_DAY*TT_DAYS)				// Width (%) of all days
+#define TT_PERCENT_WIDTH_OF_A_DAY		(TT_PERCENT_WIDTH_OF_A_MINICOLUMN * TT_NUM_MINICOLUMNS_PER_DAY)	// Width (%) of each day
+#define TT_PERCENT_WIDTH_OF_ALL_DAYS		(TT_PERCENT_WIDTH_OF_A_DAY * TT_DAYS)				// Width (%) of all days
 #define TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN	  1	// Width (%) of left and right columns (frame)
 #define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - TT_PERCENT_WIDTH_OF_ALL_DAYS - TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
@@ -162,29 +162,34 @@ static void TT_ShowTimeTableGrpsSelected (void)
 
 static void TT_GetParamsTimeTable (void)
   {
-   char UnsignedStr[10 + 1];
-   char LongStr[1 + 10 + 1];
    char StrClassType[TT_MAX_BYTES_STR_CLASS_TYPE + 1];
    char StrDuration[TT_MAX_BYTES_STR_DURATION + 1];
-   unsigned Hours,Minutes;
+   unsigned Hours;
+   unsigned Minutes;
 
-   /***** Get day (0: monday, 1: tuesday,..., 4: friday *****/
-   Par_GetParToText ("ModTTDay",UnsignedStr,2);
-   if (sscanf (UnsignedStr,"%u",&Gbl.TimeTable.Day) != 1)
-      Lay_ShowErrorAndExit ("Day is missing.");
+   /***** Get day (0: monday, 1: tuesday,..., 6: sunday *****/
+   Gbl.TimeTable.Day = (unsigned)
+	               Par_GetParToUnsignedLong ("ModTTDay",
+                                                 0,
+                                                 TT_DAYS - 1,
+                                                 0);
 
    /***** Get hour *****/
-   Par_GetParToText ("ModTTHour",UnsignedStr,2);
-   if (sscanf (UnsignedStr,"%u",&Gbl.TimeTable.Hour) != 1)
-      Lay_ShowErrorAndExit ("Hour is missing.");
+   Gbl.TimeTable.Hour = (unsigned)
+	                Par_GetParToUnsignedLong ("ModTTHour",
+                                                  0,
+                                                  TT_HOURS_PER_DAY * 2 - 1,
+                                                  0);
 
    /***** Get number of column *****/
-   Par_GetParToText ("ModTTCol",UnsignedStr,2);
-   if (sscanf (UnsignedStr,"%u",&Gbl.TimeTable.Column) != 1)
-      Lay_ShowErrorAndExit ("Column is missing.");
+   Gbl.TimeTable.Column = (unsigned)
+	                  Par_GetParToUnsignedLong ("ModTTCol",
+                                                    0,
+                                                    TT_MAX_COLUMNS_PER_CELL - 1,
+                                                    0);
 
    /***** Get class type *****/
-   Par_GetParToText ("ModTTCellType",StrClassType,TT_MAX_BYTES_STR_CLASS_TYPE);
+   Par_GetParToText ("ModTTClassType",StrClassType,TT_MAX_BYTES_STR_CLASS_TYPE);
    for (Gbl.TimeTable.ClassType = (TT_ClassType_t) 0;
 	Gbl.TimeTable.ClassType < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
 	Gbl.TimeTable.ClassType++)
@@ -200,20 +205,13 @@ static void TT_GetParamsTimeTable (void)
    Gbl.TimeTable.Duration = Hours * 2 + Minutes / 30;
 
    /***** Get group *****/
-   Par_GetParToText ("ModHorGrp",Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
+   Par_GetParToText ("ModTTGrp",Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
 
    /***** Get group code *****/
-   Par_GetParToText ("ModTTGrpCod",LongStr,1 + 10);
-   if (LongStr[0])
-     {
-      if (sscanf (LongStr,"%ld",&Gbl.TimeTable.GrpCod) != 1)
-         Lay_ShowErrorAndExit ("Wrong code of group.");
-     }
-   else
-      Gbl.TimeTable.GrpCod = -1L;
+   Gbl.TimeTable.GrpCod = Par_GetParToLong ("ModTTGrpCod");
 
    /***** Get place *****/
-   Par_GetParToText ("ModHorLugar",Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
+   Par_GetParToText ("ModTTPlace",Gbl.TimeTable.Place,TT_MAX_BYTES_PLACE);
   }
 
 /*****************************************************************************/
@@ -1252,7 +1250,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
          Par_PutHiddenParamUnsigned ("ModTTCol",Column);
 
 	 /***** Class type *****/
-	 fprintf (Gbl.F.Out,"<select name=\"ModTTCellType\" style=\"width:68px;\""
+	 fprintf (Gbl.F.Out,"<select name=\"ModTTClassType\" style=\"width:68px;\""
 	                    " onchange=\"document.getElementById('%s').submit();\">",
 	          Gbl.Form.Id);
 	 for (CT = (TT_ClassType_t) 0;
@@ -1284,8 +1282,8 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	    else
 	       fprintf (Gbl.F.Out,"0:30");
 	    fprintf (Gbl.F.Out," h\" />");
-            Par_PutHiddenParamString ("ModHorGrp","");
-            Par_PutHiddenParamString ("ModHorLugar","");
+            Par_PutHiddenParamString ("ModTTGrp","");
+            Par_PutHiddenParamString ("ModTTPlace","");
 	   }
 	 else
 	   {
@@ -1353,7 +1351,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label>"
 		                  "%s"
-	                          "<input type=\"text\" name=\"ModHorLugar\""
+	                          "<input type=\"text\" name=\"ModTTPlace\""
 	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />"
 		                  "</label>",
@@ -1361,12 +1359,12 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
-               Par_PutHiddenParamString ("ModHorGrp","");
+               Par_PutHiddenParamString ("ModTTGrp","");
 	       /***** Place *****/
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label class=\"DAT_SMALL\">"
 		                  "%s"
-                                  "<input type=\"text\" name=\"ModHorLugar\""
+                                  "<input type=\"text\" name=\"ModTTPlace\""
                                   " size=\"12\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />"
 		                  "</label>",

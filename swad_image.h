@@ -47,6 +47,7 @@ typedef enum
    Img_ACTION_CHANGE_IMAGE,	// Change existing image by a new image
    Img_ACTION_NO_IMAGE,		// Do not use image (remove current image if exists)
   } Img_Action_t;
+#define Img_ACTION_DEFAULT Img_ACTION_NO_IMAGE
 
 /***** Status of an image file *****/
 /*

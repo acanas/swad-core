@@ -380,12 +380,12 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
 
    /* Statistics */
-   Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
-   Gbl.Stat.CountType   = Sta_TOTAL_CLICKS;
-   Gbl.Stat.Role        = Sta_IDENTIFIED_USRS;
-   Gbl.Stat.NumAction   = ActAll;
-   Gbl.Stat.RowsPerPage = 50;
-   Gbl.Stat.FigureType = Sta_USERS;
+   Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
+   Gbl.Stat.CountType       = Sta_COUNT_TYPE_DEFAULT;
+   Gbl.Stat.Role            = Sta_ROLE_DEFAULT;
+   Gbl.Stat.NumAction       = Sta_NUM_ACTION_DEFAULT;
+   Gbl.Stat.RowsPerPage     = Sta_DEF_ROWS_PER_PAGE;
+   Gbl.Stat.FigureType      = Sta_FIGURE_TYPE_DEF;
 
    Gbl.Scope.Current = Sco_SCOPE_CRS;
 

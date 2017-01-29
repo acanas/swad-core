@@ -43,7 +43,8 @@ typedef enum
   } Ctr_Status_Bits_t;
 
 typedef unsigned Ctr_Status_t;
-#define Ctr_WRONG_STATUS ((Ctr_Status_t) UINT_MAX)
+#define Ctr_MAX_STATUS		((Ctr_Status_t) 3)
+#define Ctr_WRONG_STATUS	((Ctr_Status_t) (Ctr_MAX_STATUS + 1))
 
 #define Ctr_NUM_STATUS_TXT	4
 typedef enum
@@ -76,12 +77,12 @@ struct Centre
    unsigned NumUsrs;		// Number of users in courses of this centre
   };
 
+#define Ctr_NUM_ORDERS 2
 typedef enum
   {
    Ctr_ORDER_BY_CENTRE   = 0,
    Ctr_ORDER_BY_NUM_TCHS = 1,
   } Ctr_Order_t;
-
 #define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
 
 /*****************************************************************************/

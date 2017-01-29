@@ -62,6 +62,7 @@ typedef enum
    Agd_ONLY_PUBLIC_EVENTS,
   } Agd_WhichEvents_t;
 
+#define Agd_NUM_ORDERS 2
 typedef enum
   {
    Agd_ORDER_BY_START_DATE = 0,

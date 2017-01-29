@@ -435,8 +435,9 @@ void Mnu_ChangeMenu (void)
 
 Mnu_Menu_t Mnu_GetParamMenu (void)
   {
-   return (Mnu_Menu_t) Par_GetParToUnsigned ("Menu",
-	                                     (unsigned) Mnu_MENU_HORIZONTAL,
-	                                     (unsigned) Mnu_MENU_VERTICAL,
-	                                     (unsigned) Mnu_MENU_DEFAULT);
+   return (Mnu_Menu_t)
+	  Par_GetParToUnsignedLong ("Menu",
+	                            0,
+	                            Mnu_NUM_MENUS - 1,
+	                            (unsigned long) Mnu_MENU_DEFAULT);
   }

@@ -2773,8 +2773,11 @@ void Crs_ChangeCrsStatus (void)
    Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get parameter with status */
-   Status = (Crs_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
-                                                 (unsigned) Crs_WRONG_STATUS);
+   Status = (Crs_Status_t)
+	    Par_GetParToUnsignedLong ("Status",
+	                              0,
+	                              (unsigned long) Crs_MAX_STATUS,
+                                      (unsigned long) Crs_WRONG_STATUS);
    if (Status == Crs_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Crs_GetStatusTxtFromStatusBits (Status);
@@ -3374,10 +3377,11 @@ void Crs_RemoveOldCrss (void)
    long CrsCod;
 
    /***** Get parameter with number of months without access *****/
-   MonthsWithoutAccess = Par_GetParToUnsigned ("Months",
-                                               Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
-                                               Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
-                                               UINT_MAX);
+   MonthsWithoutAccess = (unsigned)
+	                 Par_GetParToUnsignedLong ("Months",
+                                                   Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                                   Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                                   UINT_MAX);
    if (MonthsWithoutAccess == UINT_MAX)
       Lay_ShowErrorAndExit ("Wrong number of months without clicks.");
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;

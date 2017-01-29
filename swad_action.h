@@ -53,7 +53,7 @@ typedef enum
    Act_DOWNLD_FILE,	// Download a file in a new window. Do not write HTML content.
   } Act_BrowserWindow_t;
 
-typedef int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
+typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
 #define Act_NUM_ACTIONS	(1 + 9 + 51 + 14 + 93 + 73 + 70 + 249 + 189 + 159 + 172 + 36 + 31 + 97)
 

@@ -2101,9 +2101,6 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
 void Tst_ReceiveConfigTst (void)
   {
    extern const char *Txt_The_test_configuration_has_been_updated;
-   char IntStr[1 + 10 + 1];
-   int IntNum;
-   long LongNum;
    char Query[512];
 
    /***** Get whether test are visible via plugins or not *****/
@@ -2111,35 +2108,34 @@ void Tst_ReceiveConfigTst (void)
 
    /***** Get number of questions *****/
    /* Get minimum number of questions */
-   Par_GetParToText ("NumQstMin",IntStr,1 + 10);
-   if (sscanf (IntStr,"%d",&IntNum) != 1)
-      Lay_ShowErrorAndExit ("Minimum number of questions is missing.");
-   Gbl.Test.Config.Min = (IntNum < 1) ? 1 :
-	                                (unsigned) IntNum;
+   Gbl.Test.Config.Min = (unsigned)
+	                 Par_GetParToUnsignedLong ("NumQstMin",
+	                                           1,
+	                                           UINT_MAX,
+	                                           1);
 
    /* Get default number of questions */
-   Par_GetParToText ("NumQstDef",IntStr,1 + 10);
-   if (sscanf (IntStr,"%d",&IntNum) != 1)
-      Lay_ShowErrorAndExit ("Default number of questions is missing.");
-   Gbl.Test.Config.Def = (IntNum < 1) ? 1 :
-	                                (unsigned) IntNum;
+   Gbl.Test.Config.Def = (unsigned)
+	                 Par_GetParToUnsignedLong ("NumQstDef",
+	                                           1,
+	                                           UINT_MAX,
+	                                           1);
 
    /* Get maximum number of questions */
-   Par_GetParToText ("NumQstMax",IntStr,1 + 10);
-   if (sscanf (IntStr,"%d",&IntNum) != 1)
-      Lay_ShowErrorAndExit ("Maximum number of questions is missing.");
-   Gbl.Test.Config.Max = (IntNum < 1) ? 1 :
-	                                (unsigned) IntNum;
+   Gbl.Test.Config.Max = (unsigned)
+	                 Par_GetParToUnsignedLong ("NumQstMax",
+	                                           1,
+	                                           UINT_MAX,
+	                                           1);
 
    /* Check and correct numbers */
    Tst_CheckAndCorrectNumbersQst ();
 
    /***** Get minimum time between consecutive tests, per question *****/
-   Par_GetParToText ("MinTimeNxtTstPerQst",IntStr,1 + 10);
-   if (sscanf (IntStr,"%ld",&LongNum) != 1)
-      Lay_ShowErrorAndExit ("Minimum time per question between two test is missing.");
-   Gbl.Test.Config.MinTimeNxtTstPerQst = (LongNum < 1L) ? 0UL :
-	                                                  (unsigned long) LongNum;
+   Gbl.Test.Config.MinTimeNxtTstPerQst = Par_GetParToUnsignedLong ("MinTimeNxtTstPerQst",
+                                                                   0,
+                                                                   ULONG_MAX,
+                                                                   0);
 
    /***** Get type of feedback from form *****/
    Gbl.Test.Config.FeedbackType = Tst_GetFeedbackTypeFromForm ();
@@ -2168,19 +2164,11 @@ void Tst_ReceiveConfigTst (void)
 
 static Tst_Pluggable_t Tst_GetPluggableFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Pluggable",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         return Tst_PLUGGABLE_UNKNOWN;
-      if (UnsignedNum >= Tst_NUM_TYPES_FEEDBACK)
-         return Tst_PLUGGABLE_UNKNOWN;
-      return (Tst_Pluggable_t) UnsignedNum;
-     }
-   return Tst_PLUGGABLE_UNKNOWN;
+   return (Tst_Pluggable_t)
+	  Par_GetParToUnsignedLong ("Pluggable",
+	                            0,
+                                    Tst_NUM_OPTIONS_PLUGGABLE - 1,
+                                    (unsigned long) Tst_PLUGGABLE_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -2189,19 +2177,11 @@ static Tst_Pluggable_t Tst_GetPluggableFromForm (void)
 
 static Tst_Feedback_t Tst_GetFeedbackTypeFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Feedback",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         return (Tst_Feedback_t) 0;
-      if (UnsignedNum >= Tst_NUM_TYPES_FEEDBACK)
-         return (Tst_Feedback_t) 0;
-      return (Tst_Feedback_t) UnsignedNum;
-     }
-   return (Tst_Feedback_t) 0;
+   return (Tst_Feedback_t)
+	  Par_GetParToUnsignedLong ("Feedback",
+	                            0,
+                                    Tst_NUM_TYPES_FEEDBACK - 1,
+                                    (unsigned long) Tst_FEEDBACK_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -4342,23 +4322,10 @@ static bool Tst_GetParamsTst (void)
 
 static unsigned Tst_GetAndCheckParamNumTst (void)
   {
-   char IntStr[1 + 10 + 1];
-   int IntNum;
-
-   /***** Get number of test *****/
-   Par_GetParToText ("NumTst",IntStr,10);
-   if (!IntStr[0])
-      Lay_ShowErrorAndExit ("Number of test is missing.");
-
-   if (sscanf (IntStr,"%d",&IntNum) == 1)
-     {
-      if (IntNum < (int) 1)
-         Lay_ShowErrorAndExit ("Wrong number of test.");
-     }
-   else
-      Lay_ShowErrorAndExit ("Wrong number of test.");
-
-   return (unsigned) IntNum;
+   return (unsigned) Par_GetParToUnsignedLong ("NumTst",
+                                               1,
+                                               UINT_MAX,
+                                               1);
   }
 
 /*****************************************************************************/
@@ -4367,17 +4334,11 @@ static unsigned Tst_GetAndCheckParamNumTst (void)
 
 static void Tst_GetParamNumQst (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   /***** Set default number of questions *****/
-   Gbl.Test.NumQsts = Gbl.Test.Config.Def;
-
-   /***** Get number of questions from form *****/
-   Par_GetParToText ("NumQst",UnsignedStr,10);
-   if (UnsignedStr[0])
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	 Gbl.Test.NumQsts = UnsignedNum;
+   Gbl.Test.NumQsts = (unsigned)
+	              Par_GetParToUnsignedLong ("NumQst",
+	                                        (unsigned long) Gbl.Test.Config.Min,
+	                                        (unsigned long) Gbl.Test.Config.Max,
+	                                        (unsigned long) Gbl.Test.Config.Def);
   }
 
 /*****************************************************************************/
@@ -5310,10 +5271,10 @@ void Tst_ReceiveQst (void)
 
 static void Tst_GetQstFromForm (char *Stem,char *Feedback)
   {
-   char UnsignedStr[10 + 1];
    unsigned NumTag;
    unsigned NumTagRead;
    unsigned NumOpt;
+   char UnsignedStr[10 + 1];
    char TagStr[6 + 10 + 1];
    char AnsStr[6 + 10 + 1];
    char FbStr[5 + 10 + 1];
@@ -5325,8 +5286,13 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    Gbl.Test.QstCod = Tst_GetQstCod ();
 
    /***** Get answer type *****/
-   Par_GetParToText ("AnswerType",UnsignedStr,10);
-   Gbl.Test.AnswerType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+   Gbl.Test.AnswerType = (Tst_AnswerType_t)
+                         Par_GetParToUnsignedLong ("AnswerType",
+                                                   0,
+                                                   Tst_NUM_ANS_TYPES - 1,
+                                                   (unsigned long) Tst_ANS_ALL);
+   if (Gbl.Test.AnswerType == Tst_ANS_ALL)
+      Lay_ShowErrorAndExit ("Wrong type of answer.");
 
    /***** Get question tags *****/
    for (NumTag = 0;
@@ -5378,11 +5344,13 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
             Lay_ShowErrorAndExit (Gbl.Message);
-	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,Tst_MAX_BYTES_FLOAT_ANSWER);
+	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,
+	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Tst_AllocateTextChoiceAnswer (1))
             Lay_ShowErrorAndExit (Gbl.Message);
-	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,Tst_MAX_BYTES_FLOAT_ANSWER);
+	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,
+	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Tst_ANS_TRUE_FALSE:
 	 Gbl.Test.Answer.TF = Par_GetParToBool ("AnsTF");
@@ -5429,15 +5397,11 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
          /* Get the numbers of correct answers */
          if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE)
            {
-	    Par_GetParToText ("AnsUni",UnsignedStr,10);
-            if (UnsignedStr[0])
-              {
-               if (sscanf (UnsignedStr,"%u",&NumCorrectAns) != 1)
-	          Lay_ShowErrorAndExit ("Wrong selected answer.");
-               if (NumCorrectAns >= Tst_MAX_OPTIONS_PER_QUESTION)
-	          Lay_ShowErrorAndExit ("Wrong selected answer.");
-               Gbl.Test.Answer.Options[NumCorrectAns].Correct = true;
-              }
+	    NumCorrectAns = (unsigned) Par_GetParToUnsignedLong ("AnsUni",
+	                                                         0,
+	                                                         Tst_MAX_OPTIONS_PER_QUESTION - 1,
+	                                                         0);
+            Gbl.Test.Answer.Options[NumCorrectAns].Correct = true;
            }
       	 else if (Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
            {

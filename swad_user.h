@@ -106,13 +106,14 @@ typedef enum
   } Usr_ClassPhotoType_t;
 
 // Related with type of list of users
-#define Usr_NUM_USR_LIST_TYPES 2
+#define Usr_NUM_USR_LIST_TYPES 3
 typedef enum
   {
-   Usr_CLASS_PHOTO,
-   Usr_LIST,
+   Usr_LIST_UNKNOWN        = 0,
+   Usr_LIST_AS_CLASS_PHOTO = 1,
+   Usr_LIST_AS_LISTING     = 2,
   } Usr_ShowUsrsType_t;
-#define Usr_SHOW_USRS_TYPE_DEFAULT Usr_CLASS_PHOTO
+#define Usr_SHOW_USRS_TYPE_DEFAULT Usr_LIST_AS_CLASS_PHOTO
 
 // Related with user's data
 struct UsrData

@@ -523,10 +523,11 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
 
 static void Asg_GetParamAsgOrder (void)
   {
-   Gbl.Asgs.SelectedOrder = (Dat_StartEndTime_t) Par_GetParToUnsigned ("Order",
-                                                                       (unsigned) Dat_START_TIME,
-                                                                       (unsigned) Dat_END_TIME,
-                                                                       (unsigned) Asg_ORDER_DEFAULT);
+   Gbl.Asgs.SelectedOrder = (Dat_StartEndTime_t)
+	                    Par_GetParToUnsignedLong ("Order",
+                                                      0,
+                                                      Dat_NUM_START_END_TIME - 1,
+                                                      (unsigned long) Asg_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

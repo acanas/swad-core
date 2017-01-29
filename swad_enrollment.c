@@ -52,9 +52,10 @@
 /****************************** Internal types *******************************/
 /*****************************************************************************/
 
+#define Enr_NUM_REG_REM_USRS_ACTIONS 6
 typedef enum
   {
-   Enr_USRS_UNKNOWN_ACTION     		  = 0,
+   Enr_REG_REM_USRS_UNKNOWN_ACTION     	  = 0,
    Enr_REGISTER_SPECIFIED_USRS_IN_CRS     = 1,
    Enr_REMOVE_SPECIFIED_USRS_FROM_CRS     = 2,
    Enr_REMOVE_NOT_SPECIFIED_USRS_FROM_CRS = 3,
@@ -722,10 +723,11 @@ void Enr_RemoveOldUsrs (void)
    struct UsrData UsrDat;
 
    /***** Get parameter with number of months without access *****/
-   MonthsWithoutAccess = Par_GetParToUnsigned ("Months",
-                                               Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
-                                               Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
-                                               UINT_MAX);
+   MonthsWithoutAccess = (unsigned)
+	                 Par_GetParToUnsignedLong ("Months",
+                                                   Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
+                                                   Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS,
+                                                   (unsigned long) UINT_MAX);
    if (MonthsWithoutAccess == UINT_MAX)
       Lay_ShowErrorAndExit ("Wrong number of months.");
    SecondsWithoutAccess = (time_t) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
@@ -1289,10 +1291,11 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    WhatToDo.EliminateUsrs = false;
    WhatToDo.RegisterUsrs = false;
 
-   RegRemUsrsAction = (Enr_RegRemUsrsAction_t) Par_GetParToUnsigned ("RegRemAction",
-                                                                     (unsigned) Enr_REGISTER_SPECIFIED_USRS_IN_CRS,
-                                                                     (unsigned) Enr_ELIMINATE_USRS_FROM_PLATFORM,
-                                                                     (unsigned) Enr_USRS_UNKNOWN_ACTION);
+   RegRemUsrsAction = (Enr_RegRemUsrsAction_t)
+	              Par_GetParToUnsignedLong ("RegRemAction",
+                                                0,
+                                                Enr_NUM_REG_REM_USRS_ACTIONS - 1,
+                                                (unsigned long) Enr_REG_REM_USRS_UNKNOWN_ACTION);
    switch (RegRemUsrsAction)
      {
       case Enr_REGISTER_SPECIFIED_USRS_IN_CRS:
@@ -1852,10 +1855,11 @@ void Enr_SignUpInCrs (void)
    else
      {
       /***** Get new role from record form *****/
-      RoleFromForm = (Rol_Role_t) Par_GetParToUnsigned ("Role",
-                                                        0,
-                                                        Rol_NUM_ROLES - 1,
-                                                        (unsigned) Rol_UNKNOWN);
+      RoleFromForm = (Rol_Role_t)
+	             Par_GetParToUnsignedLong ("Role",
+                                               0,
+                                               Rol_NUM_ROLES - 1,
+                                               (unsigned long) Rol_UNKNOWN);
 
       /* Check if role is correct */
       if (!(RoleFromForm == Rol_STUDENT ||
@@ -3641,10 +3645,10 @@ void Enr_ModifyUsr1 (void)
 
       /***** Get the action to do *****/
       Gbl.Usrs.RegRemAction = (Enr_RegRemOneUsrAction_t)
-	                       Par_GetParToUnsigned ("RegRemAction",
-                                                     (unsigned) Enr_REGISTER_MODIFY_ONE_USR_IN_CRS,
-                                                     (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM,
-                                                     (unsigned) Enr_ONE_USR_UNKNOWN_ACTION);
+	                      Par_GetParToUnsignedLong ("RegRemAction",
+                                                        0,
+                                                        Enr_REG_REM_ONE_USR_NUM_ACTIONS - 1,
+                                                        (unsigned long) Enr_REG_REM_ONE_USR_UNKNOWN_ACTION);
       switch (Gbl.Usrs.RegRemAction)
 	{
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:

@@ -319,10 +319,11 @@ void Rol_ChangeMyRole (void)
    Rol_Role_t NewRole;
 
    /***** Get parameter with the new logged role ******/
-   NewRole = (Rol_Role_t) Par_GetParToUnsigned ("MyRole",
-                                                0,
-                                                Rol_NUM_ROLES - 1,
-                                                (unsigned) Rol_UNKNOWN);
+   NewRole = (Rol_Role_t)
+	     Par_GetParToUnsignedLong ("MyRole",
+                                       0,
+                                       Rol_NUM_ROLES - 1,
+                                       (unsigned long) Rol_UNKNOWN);
    if (NewRole != Rol_UNKNOWN)
      {
       /* Check if new role is allowed for me */
@@ -403,10 +404,11 @@ unsigned Rol_GetSelectedRoles (void)
    unsigned Roles;
 
    /***** Try to get param "Roles" with multiple roles *****/
-   Roles = Par_GetParToUnsigned ("Roles",
-                                 0,				// 000...000
-                                 (1 << Rol_NUM_ROLES) - 1,	// 111...111
-                                 0);				// 000...000
+   Roles = (unsigned)
+	   Par_GetParToUnsignedLong ("Roles",
+                                     0,				// 000...000
+                                     (1 << Rol_NUM_ROLES) - 1,	// 111...111
+                                     0);			// 000...000
 
    /***** Try to get multiple param "Role" *****/
    Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (10 + 1));

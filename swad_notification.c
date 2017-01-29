@@ -823,10 +823,11 @@ static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
   {
-   return (Ntf_NotifyEvent_t) Par_GetParToUnsigned ("NotifyEvent",
-                                                    (unsigned) Ntf_EVENT_UNKNOWN,
-                                                    (unsigned) Ntf_EVENT_SURVEY,
-                                                    (unsigned) Ntf_EVENT_UNKNOWN);
+   return (Ntf_NotifyEvent_t)
+	  Par_GetParToUnsignedLong ("NotifyEvent",
+                                    0,
+                                    Ntf_NUM_NOTIFY_EVENTS - 1,
+                                    (unsigned long) Ntf_EVENT_UNKNOWN);
   }
 
 /*****************************************************************************/

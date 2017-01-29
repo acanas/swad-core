@@ -53,11 +53,6 @@ extern struct Globals Gbl;
 #define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER * Str_MAX_CHARACTER)
 #define Svy_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
 
-typedef enum
-  {
-   Svy_ANS_UNIQUE_CHOICE   = 0,
-   Svy_ANS_MULTIPLE_CHOICE = 1,
-  } Svy_AnswerType_t;
 const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =
   {
    "unique_choice",
@@ -138,7 +133,6 @@ static void Svy_PutParamQstCod (long QstCod);
 static long Svy_GetParamQstCod (void);
 static void Svy_RemAnswersOfAQuestion (long QstCod);
 static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTypeBD);
-static Svy_AnswerType_t Svy_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr);
 static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd);
 static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res);
 static int Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned NumAns);
@@ -799,17 +793,11 @@ static void Svy_WriteStatus (struct Survey *Svy)
 
 static void Svy_GetParamSvyOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   /***** Set default order type *****/
-   Gbl.Svys.SelectedOrder = Svy_ORDER_BY_START_DATE;
-
-   /***** Get parameter from form with the order type *****/
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Svy_NUM_ORDERS)
-         Gbl.Svys.SelectedOrder = (Svy_Order_t) UnsignedNum;
+   Gbl.Svys.SelectedOrder = (Svy_Order_t)
+	                    Par_GetParToUnsignedLong ("Order",
+	                                              0,
+	                                              Svy_NUM_ORDERS - 1,
+	                                              (unsigned long) Svy_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -2866,21 +2854,6 @@ static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
   }
 
 /*****************************************************************************/
-/************ Convert a string with an unsigned to answer type ***************/
-/*****************************************************************************/
-
-static Svy_AnswerType_t Svy_ConvertFromUnsignedStrToAnsTyp (const char *UnsignedStr)
-  {
-   unsigned AnsType;
-
-   if (sscanf (UnsignedStr,"%u",&AnsType) != 1)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
-   if (AnsType >= Svy_NUM_ANS_TYPES)
-      Lay_ShowErrorAndExit ("Wrong type of answer.");
-   return (Svy_AnswerType_t) AnsType;
-  }
-
-/*****************************************************************************/
 /*********** Check if an answer of a question exists in database *************/
 /*****************************************************************************/
 
@@ -2974,7 +2947,6 @@ void Svy_ReceiveQst (void)
    char Query[512 + Cns_MAX_BYTES_TEXT + 1];
    long SvyCod;
    struct SurveyQuestion SvyQst;
-   char UnsignedStr[10 + 1];
    unsigned NumAns;
    char AnsStr[8 + 10 + 1];
    unsigned NumLastAns;
@@ -2993,8 +2965,11 @@ void Svy_ReceiveQst (void)
    SvyQst.QstCod = Svy_GetParamQstCod ();
 
    /* Get answer type */
-   Par_GetParToText ("AnswerType",UnsignedStr,10);
-   SvyQst.AnswerType = Svy_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
+   SvyQst.AnswerType = (Svy_AnswerType_t)
+	               Par_GetParToUnsignedLong ("AnswerType",
+	                                         0,
+	                                         Svy_NUM_ANS_TYPES - 1,
+                                                 (unsigned long) Svy_ANSWER_TYPE_DEFAULT);
 
    /* Get question text */
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);

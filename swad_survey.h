@@ -72,8 +72,15 @@ typedef enum
    Svy_ORDER_BY_START_DATE = 0,
    Svy_ORDER_BY_END_DATE   = 1,
   } Svy_Order_t;
+#define Svy_ORDER_DEFAULT Svy_ORDER_BY_START_DATE
 
 #define Svy_NUM_ANS_TYPES	2
+typedef enum
+  {
+   Svy_ANS_UNIQUE_CHOICE   = 0,
+   Svy_ANS_MULTIPLE_CHOICE = 1,
+  } Svy_AnswerType_t;
+#define Svy_ANSWER_TYPE_DEFAULT Svy_ANS_UNIQUE_CHOICE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

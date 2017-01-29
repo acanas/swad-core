@@ -77,6 +77,8 @@ struct ForumThread
    unsigned NumWriters;
    unsigned NumReaders;
   };
+
+#define For_NUM_ORDERS 2
 typedef enum
   {
    For_FIRST_MSG = 0,

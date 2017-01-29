@@ -2212,8 +2212,11 @@ void Deg_ChangeDegStatus (void)
    Deg->DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /* Get parameter with status */
-   Status = (Deg_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
-                                                 (unsigned) Deg_WRONG_STATUS);
+   Status = (Deg_Status_t)
+	    Par_GetParToUnsignedLong ("Status",
+	                              0,
+	                              (unsigned long) Deg_MAX_STATUS,
+                                      (unsigned long) Deg_WRONG_STATUS);
    if (Status == Deg_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Status);

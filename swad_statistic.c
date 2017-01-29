@@ -403,11 +403,18 @@ void Sta_AskShowCrsHits (void)
    extern const char *Txt_No_teachers_or_students_found;
    static unsigned long RowsPerPage[] =
      {
-      10,20,30,40,50,
-      100,500,
-      1000,5000,
-      10000,50000,
-      100000
+      Sta_MIN_ROWS_PER_PAGE * 1,
+      Sta_MIN_ROWS_PER_PAGE * 2,
+      Sta_MIN_ROWS_PER_PAGE * 3,
+      Sta_MIN_ROWS_PER_PAGE * 4,
+      Sta_MIN_ROWS_PER_PAGE * 5,
+      Sta_MIN_ROWS_PER_PAGE * 10,
+      Sta_MIN_ROWS_PER_PAGE * 50,
+      Sta_MIN_ROWS_PER_PAGE * 100,
+      Sta_MIN_ROWS_PER_PAGE * 500,
+      Sta_MIN_ROWS_PER_PAGE * 1000,
+      Sta_MIN_ROWS_PER_PAGE * 5000,
+      Sta_MAX_ROWS_PER_PAGE,
      };
 #define NUM_OPTIONS_ROWS_PER_PAGE (sizeof (RowsPerPage) / sizeof (RowsPerPage[0]))
    unsigned NumTotalUsrs;
@@ -484,7 +491,7 @@ void Sta_AskShowCrsHits (void)
          if ((Gbl.Stat.ClicksGroupedBy < Sta_CLICKS_CRS_PER_USR ||
               Gbl.Stat.ClicksGroupedBy > Sta_CLICKS_CRS_PER_ACTION) &&
               Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-            Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_PER_USR;
+            Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_GROUPED_BY_DEFAULT;
 
          fprintf (Gbl.F.Out,"<input type=\"radio\""
                             " name=\"GroupedOrDetailed\" value=\"%u\"",
@@ -826,8 +833,6 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    long LengthQuery;
    MYSQL_RES *mysql_res;
    unsigned long NumRows;
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
    const char *LogTable;
    Sta_ClicksDetailedOrGrouped_t DetailedOrGrouped = Sta_CLICKS_GROUPED;
    struct UsrData UsrDat;
@@ -850,56 +855,50 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Set table where to find depending on initial date *****/
    // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
-   LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.Now.Date) <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
-	                                                                                                           "log_full";
+   LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.Now.Date)
+	       <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
+	                                    "log_full";
 
    /***** Get the type of stat of clicks ******/
-   Par_GetParToText ("GroupedOrDetailed",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Sta_NUM_CLICKS_DETAILED_OR_GROUPED)
-         DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t) UnsignedNum;
+   DetailedOrGrouped = (Sta_ClicksDetailedOrGrouped_t)
+	               Par_GetParToUnsignedLong ("GroupedOrDetailed",
+	                                         0,
+	                                         Sta_NUM_CLICKS_DETAILED_OR_GROUPED - 1,
+	                                         (unsigned long) Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT);
 
    if (DetailedOrGrouped == Sta_CLICKS_DETAILED)
       Gbl.Stat.ClicksGroupedBy = Sta_CLICKS_CRS_DETAILED_LIST;
    else	// DetailedOrGrouped == Sta_CLICKS_GROUPED
-     {
-      Par_GetParToText ("GroupedBy",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-	 Lay_ShowErrorAndExit ("Type of grouping is missing.");
-      if (UnsignedNum >= Sta_NUM_CLICKS_GROUPED_BY)
-	 Lay_ShowErrorAndExit ("Type of grouping is missing.");
-      Gbl.Stat.ClicksGroupedBy = (Sta_ClicksGroupedBy_t) UnsignedNum;
-     }
+      Gbl.Stat.ClicksGroupedBy = (Sta_ClicksGroupedBy_t)
+			         Par_GetParToUnsignedLong ("GroupedBy",
+						           0,
+						           Sta_NUM_CLICKS_GROUPED_BY - 1,
+						           (unsigned long) Sta_CLICKS_GROUPED_BY_DEFAULT);
 
    /***** Get the type of count of clicks *****/
    if (Gbl.Stat.ClicksGroupedBy != Sta_CLICKS_CRS_DETAILED_LIST)
-     {
-      Par_GetParToText ("CountType",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Type of count is missing.");
-      if (UnsignedNum >= Sta_NUM_COUNT_TYPES)
-         Lay_ShowErrorAndExit ("Type of count is missing.");
-      Gbl.Stat.CountType = (Sta_CountType_t) UnsignedNum;
-     }
+      Gbl.Stat.CountType = (Sta_CountType_t)
+	                   Par_GetParToUnsignedLong ("CountType",
+	                                             0,
+	                                             Sta_NUM_COUNT_TYPES - 1,
+	                                             (unsigned long) Sta_COUNT_TYPE_DEFAULT);
 
    /***** Get action *****/
-   Par_GetParToText ("StatAct",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Action is missing.");
-   if (UnsignedNum >= Act_NUM_ACTIONS)
-      Lay_ShowErrorAndExit ("Action is missing.");
-   Gbl.Stat.NumAction = (Act_Action_t) UnsignedNum;
+   Gbl.Stat.NumAction = (Act_Action_t)
+			Par_GetParToUnsignedLong ("StatAct",
+					          0,
+					          Act_NUM_ACTIONS - 1,
+					          (unsigned long) Sta_NUM_ACTION_DEFAULT);
 
    switch (GlobalOrCourse)
      {
       case Sta_SHOW_GLOBAL_ACCESSES:
 	 /***** Get the type of user of clicks *****/
-	 Par_GetParToText ("Role",UnsignedStr,10);
-	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-	    Lay_ShowErrorAndExit ("Type of users is missing.");
-	 if (UnsignedNum >= Sta_NUM_ROLES_STAT)
-	    Lay_ShowErrorAndExit ("Type of users is missing.");
-	 Gbl.Stat.Role = (Sta_Role_t) UnsignedNum;
+	 Gbl.Stat.Role = (Sta_Role_t)
+			 Par_GetParToUnsignedLong ("Role",
+				                   0,
+					           Sta_NUM_ROLES_STAT - 1,
+				                   (unsigned long) Sta_ROLE_DEFAULT);
 
 	 /***** Get users range for access statistics *****/
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
@@ -929,19 +928,22 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	   {
 	    /****** Get the number of the first row to show ******/
-	    Par_GetParToText ("FirstRow",UnsignedStr,10);
-	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.FirstRow) != 1)
-	       Lay_ShowErrorAndExit ("Number of start row is missing.");
+	    Gbl.Stat.FirstRow = Par_GetParToUnsignedLong ("FirstRow",
+	                                                  1,
+	                                                  ULONG_MAX,
+	                                                  0);
 
 	    /****** Get the number of the last row to show ******/
-	    Par_GetParToText ("LastRow",UnsignedStr,10);
-	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.LastRow) != 1)
-	       Lay_ShowErrorAndExit ("Number of end row is missing.");
+	    Gbl.Stat.LastRow = Par_GetParToUnsignedLong ("LastRow",
+	                                                 1,
+	                                                 ULONG_MAX,
+	                                                 0);
 
 	    /****** Get the number of rows per page ******/
-	    Par_GetParToText ("RowsPage",UnsignedStr,10);
-	    if (sscanf (UnsignedStr,"%lu",&Gbl.Stat.RowsPerPage) != 1)
-	       Lay_ShowErrorAndExit ("Number of rows per page is missing.");
+	    Gbl.Stat.RowsPerPage = Par_GetParToUnsignedLong ("RowsPage",
+	                                                     Sta_MIN_ROWS_PER_PAGE,
+	                                                     Sta_MAX_ROWS_PER_PAGE,
+	                                                     Sta_DEF_ROWS_PER_PAGE);
 	   }
 
 	 /***** Show form again *****/
@@ -1592,9 +1594,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
-      Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
-      Par_PutHiddenParamLong ("FirstRow",FirstRow-Gbl.Stat.RowsPerPage);
-      Par_PutHiddenParamLong ("LastRow",FirstRow-1);
+      Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
+      Par_PutHiddenParamLong ("FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
+      Par_PutHiddenParamLong ("LastRow" ,FirstRow - 1);
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
      }
@@ -2100,7 +2102,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
-   Par_PutHiddenParamUnsigned ("StatAct",(unsigned) Gbl.Stat.NumAction);
+   Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
    else // Gbl.Action.Act == ActSeeAccGbl
@@ -2335,19 +2337,11 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
 
 static Sta_ColorType_t Sta_GetStatColorType (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("ColorType",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Type of color is missing.");
-      if (UnsignedNum >= Sta_NUM_COLOR_TYPES)
-         Lay_ShowErrorAndExit ("Type of color is missing.");
-      return (Sta_ColorType_t) UnsignedNum;
-     }
-   return (Sta_ColorType_t) 0;
+   return (Sta_ColorType_t)
+	  Par_GetParToUnsignedLong ("ColorType",
+	                            0,
+	                            Sta_NUM_COLOR_TYPES - 1,
+	                            (unsigned long) Sta_COLOR_TYPE_DEF);
   }
 
 /*****************************************************************************/
@@ -3976,16 +3970,13 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowNumUsrsPerSideColumns,	// Sta_SIDE_COLUMNS
       Sta_GetAndShowNumUsrsPerPrivacy,		// Sta_PRIVACY
      };
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
 
    /***** Get the type of figure ******/
-   Par_GetParToText ("FigureType",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Type of stat is missing.");
-   if (UnsignedNum >= Sta_NUM_FIGURES)
-      Lay_ShowErrorAndExit ("Type of stat is missing.");
-   Gbl.Stat.FigureType = (Sta_FigureType_t) UnsignedNum;
+   Gbl.Stat.FigureType = (Sta_FigureType_t)
+	                 Par_GetParToUnsignedLong ("FigureType",
+	                                           0,
+	                                           Sta_NUM_FIGURES - 1,
+	                                           (unsigned long) Sta_FIGURE_TYPE_DEF);
 
    /***** Show again the form to see use of the platform *****/
    Sta_ReqShowFigures ();
@@ -5079,7 +5070,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
       /* Draw the classphoto/list */
       switch (Gbl.Usrs.Me.ListType)
 	{
-	 case Usr_CLASS_PHOTO:
+	 case Usr_LIST_AS_CLASS_PHOTO:
 	    /***** Draw institutions as a class photo *****/
 	    for (NumIns = 0;
 		 NumIns < NumInss;)
@@ -5113,7 +5104,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 	       fprintf (Gbl.F.Out,"</tr>");
 
 	    break;
-	 case Usr_LIST:
+	 case Usr_LIST_AS_LISTING:
 	    /***** Draw institutions as a list *****/
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<th></th>"
@@ -5171,6 +5162,8 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
 
 	       NumberLastRow = NumberThisRow;
 	      }
+	    break;
+	 default:
 	    break;
 	}
      }

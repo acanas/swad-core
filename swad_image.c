@@ -375,10 +375,11 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
   {
    /***** Get parameter with the action to perform on image *****/
-   return (Img_Action_t) Par_GetParToUnsigned (ParamAction,
-                                               (unsigned) Img_ACTION_NEW_IMAGE,
-                                               (unsigned) Img_ACTION_NO_IMAGE,
-                                               (unsigned) Img_ACTION_NO_IMAGE);	// Default action if none supplied
+   return (Img_Action_t)
+	  Par_GetParToUnsignedLong (ParamAction,
+                                    0,
+                                    Img_NUM_ACTIONS - 1,
+                                    (unsigned long) Img_ACTION_DEFAULT);
   }
 
 /*****************************************************************************/

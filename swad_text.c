@@ -50080,6 +50080,8 @@ const char *Txt_usr =		// Abbreviation of user (three characters + dot)
 
 const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
    {
+	 ""	// Usr_LIST_UNKNOWN
+	 ,	// Usr_LIST_AS_CLASS_PHOTO
 #if   L==1
 	 "Orla"
 #elif L==2
@@ -50099,7 +50101,7 @@ const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES] =
 #elif L==9
 	 "Foto de formatura"
 #endif
-	 ,
+	 ,	// Usr_LIST_AS_LISTING
 #if   L==1
 	 "Llista"
 #elif L==2

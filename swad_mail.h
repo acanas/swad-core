@@ -36,13 +36,13 @@
 #define Mai_MAX_LENGTH_MAIL_DOMAIN	(128 - 1)
 #define Mai_MAX_LENGTH_MAIL_INFO	(128 - 1)
 
+#define Mai_NUM_ORDERS 3
 typedef enum
   {
    Mai_ORDER_BY_DOMAIN = 0,
    Mai_ORDER_BY_INFO   = 1,
    Mai_ORDER_BY_USERS  = 2,
   } Mai_DomainsOrder_t;
-
 #define Mai_ORDER_DEFAULT Mai_ORDER_BY_USERS
 
 struct Mail

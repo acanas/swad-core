@@ -352,10 +352,11 @@ Txt_Language_t Pre_GetParamLanguage (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
 
-   return (Txt_Language_t) Par_GetParToUnsigned ("Lan",
-                                                 1,
-                                                 Txt_NUM_LANGUAGES,
-                                                 Txt_Current_CGI_SWAD_Language);
+   return (Txt_Language_t)
+	  Par_GetParToUnsignedLong ("Lan",
+                                    1,
+                                    Txt_NUM_LANGUAGES,
+                                    (unsigned long) Txt_Current_CGI_SWAD_Language);
   }
 
 /*****************************************************************************/
@@ -499,8 +500,8 @@ static void Pre_UpdateSideColsOnUsrDataTable (void)
 
 unsigned Pre_GetParamSideCols (void)
   {
-   return Par_GetParToUnsigned ("SideCols",
-                                0,
-                                Lay_SHOW_BOTH_COLUMNS,
-                                Cfg_DEFAULT_COLUMNS);
+   return (unsigned) Par_GetParToUnsignedLong ("SideCols",
+                                               0,
+                                               Lay_SHOW_BOTH_COLUMNS,
+                                               Cfg_DEFAULT_COLUMNS);
   }

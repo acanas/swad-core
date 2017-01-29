@@ -77,6 +77,7 @@ typedef enum
    Net_WIKIPEDIA,
    Net_YOUTUBE,
   } Net_WebsAndSocialNetworks_t;
+#define Net_WEB_SOCIAL_NET_DEFAULT Net_WWW
 
 #define Net_MAX_LENGTH_NETWORK_NAME 32
 
@@ -397,10 +398,11 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    char URL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameter with the type of web / social network *****/
-   Web = (Net_WebsAndSocialNetworks_t) Par_GetParToUnsigned ("Web",
-                                                             (unsigned) Net_WWW,
-                                                             (unsigned) Net_YOUTUBE,
-                                                             (unsigned) Net_WWW);
+   Web = (Net_WebsAndSocialNetworks_t)
+	 Par_GetParToUnsignedLong ("Web",
+                                   0,
+                                   Net_NUM_WEBS_AND_SOCIAL_NETWORKS - 1,
+                                   (unsigned long) Net_WEB_SOCIAL_NET_DEFAULT);
 
    /***** Get URL *****/
    Par_GetParToText ("URL",URL,Cns_MAX_LENGTH_WWW);

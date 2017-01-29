@@ -697,10 +697,11 @@ static void Agd_GetParamEventOrder (void)
 
    if (!AlreadyGot)
      {
-      Gbl.Agenda.SelectedOrder = (Agd_Order_t) Par_GetParToUnsigned ("Order",
-                                                                     (unsigned) Agd_ORDER_BY_START_DATE,
-                                                                     (unsigned) Agd_ORDER_BY_END_DATE,
-                                                                     (unsigned) Agd_ORDER_DEFAULT);
+      Gbl.Agenda.SelectedOrder = (Agd_Order_t)
+	                         Par_GetParToUnsignedLong ("Order",
+                                                           0,
+                                                           Agd_NUM_ORDERS - 1,
+                                                           (unsigned long) Agd_ORDER_DEFAULT);
       AlreadyGot = true;
      }
   }

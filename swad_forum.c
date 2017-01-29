@@ -3729,17 +3729,17 @@ void For_GetParamsForum (void)
   {
    /***** Get which forums I want to see *****/
    Gbl.Forum.WhichForums = (For_WhichForums_t)
-	                   Par_GetParToUnsigned ("WhichForum",
-                                                 (unsigned) For_ONLY_CURRENT_FORUMS,
-                                                 (unsigned) For_ALL_MY_FORUMS,
-                                                 (unsigned) For_DEFAULT_WHICH_FORUMS);
+	                   Par_GetParToUnsignedLong ("WhichForum",
+                                                     0,
+                                                     For_NUM_WHICH_FORUMS - 1,
+                                                     (unsigned long) For_DEFAULT_WHICH_FORUMS);
 
    /***** Get order type *****/
    Gbl.Forum.SelectedOrder = (For_Order_t)
-	                     Par_GetParToUnsigned ("Order",
-                                                   (unsigned) For_FIRST_MSG,
-                                                   (unsigned) For_LAST_MSG,
-                                                   (unsigned) For_DEFAULT_ORDER);
+	                     Par_GetParToUnsignedLong ("Order",
+                                                       0,
+                                                       For_NUM_ORDERS - 1,
+                                                       (unsigned long) For_DEFAULT_ORDER);
 
    /***** Get parameter with code of institution *****/
    Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");

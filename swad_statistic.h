@@ -48,6 +48,9 @@ typedef enum
    Sta_UNKNOWN_USRS    =  9,
    Sta_ME              = 10,
   } Sta_Role_t;
+#define Sta_ROLE_DEFAULT Sta_IDENTIFIED_USRS
+
+#define Sta_NUM_ACTION_DEFAULT ActAll
 
 #define Sta_NUM_COUNT_TYPES	5
 typedef enum
@@ -58,6 +61,7 @@ typedef enum
    Sta_GENERATION_TIME  = 3,
    Sta_SEND_TIME	= 4,
   } Sta_CountType_t;
+#define Sta_COUNT_TYPE_DEFAULT Sta_TOTAL_CLICKS
 
 #define Sta_NUM_CLICKS_DETAILED_OR_GROUPED	2
 typedef enum
@@ -65,6 +69,7 @@ typedef enum
    Sta_CLICKS_DETAILED	= 0,
    Sta_CLICKS_GROUPED	= 1,
   } Sta_ClicksDetailedOrGrouped_t;
+#define Sta_CLICKS_DETAILED_OR_GROUPED_DEFAULT Sta_CLICKS_GROUPED
 
 #define Sta_NUM_CLICKS_GROUPED_BY	24
 typedef enum
@@ -96,6 +101,7 @@ typedef enum
    Sta_CLICKS_GBL_PER_DEGREE			= 22,
    Sta_CLICKS_GBL_PER_COURSE			= 23,
   } Sta_ClicksGroupedBy_t;
+#define Sta_CLICKS_GROUPED_BY_DEFAULT Sta_CLICKS_CRS_PER_USR
 
 #define Sta_NUM_FIGURES 23
 typedef enum
@@ -124,6 +130,11 @@ typedef enum
    Sta_SIDE_COLUMNS,		// Number of users per layout of columns
    Sta_PRIVACY,			// Number of users per privacity
   } Sta_FigureType_t;
+#define Sta_FIGURE_TYPE_DEF Sta_USERS
+
+#define Sta_MIN_ROWS_PER_PAGE 10
+#define Sta_MAX_ROWS_PER_PAGE (Sta_MIN_ROWS_PER_PAGE * 10000)
+#define Sta_DEF_ROWS_PER_PAGE (Sta_MIN_ROWS_PER_PAGE * 5)
 
 #define Sta_NUM_COLOR_TYPES 3
 typedef enum
@@ -132,6 +143,7 @@ typedef enum
    Sta_BLACK_TO_WHITE,
    Sta_WHITE_TO_BLACK,
   } Sta_ColorType_t;
+#define Sta_COLOR_TYPE_DEF Sta_COLOR
 
 #define Sta_NUM_STAT_CRS_FILE_ZONES 11
 

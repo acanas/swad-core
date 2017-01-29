@@ -113,20 +113,17 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
 static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem);
 
 /*****************************************************************************/
-/******************** Get parameter to select a syllabus *********************/
+/************* Get parameter about which syllabus I want to see **************/
 /*****************************************************************************/
 
 void Syl_GetParamWhichSyllabus (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
    /***** Get which syllabus I want to see *****/
-   Par_GetParToText ("WhichSyllabus",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Syllabus.WhichSyllabus = (Syl_WhichSyllabus_t) UnsignedNum;
-   else
-      Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
+   Gbl.Syllabus.WhichSyllabus = (Syl_WhichSyllabus_t)
+	                        Par_GetParToUnsignedLong ("WhichSyllabus",
+	                                                  0,
+	                                                  Syl_NUM_WHICH_SYLLABUS - 1,
+	                                                  (unsigned long) Syl_DEFAULT_WHICH_SYLLABUS);
   }
 
 /*****************************************************************************/
@@ -167,16 +164,16 @@ void Syl_PutFormWhichSyllabus (void)
   }
 
 /*****************************************************************************/
-/************** Get parameter item number in program edition *****************/
+/************ Get parameter item number in edition of syllabus ***************/
 /*****************************************************************************/
 
 void Syl_GetParamItemNumber (void)
   {
-   char UnsignedStr[10 + 1];
-
-   Par_GetParToText ("NumI",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.Syllabus.NumItem) != 1)
-      Lay_ShowErrorAndExit ("Item is missing.");
+   Gbl.Syllabus.NumItem = (unsigned)
+	                  Par_GetParToUnsignedLong ("NumI",
+	                                            0,
+	                                            UINT_MAX,
+	                                            0);
   }
 
 /*****************************************************************************/
@@ -1409,7 +1406,8 @@ void Syl_ModifyItemSyllabus (void)
    Syl_GetParamItemNumber ();
 
    /***** Get item body *****/
-   Par_GetParToHTML ("Txt",LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Text,Syl_MAX_BYTES_TEXT_ITEM);
+   Par_GetParToHTML ("Txt",LstItemsSyllabus.Lst[Gbl.Syllabus.NumItem].Text,
+                     Syl_MAX_BYTES_TEXT_ITEM);
 
    /***** Create a new file where make the update *****/
    Syl_BuildPathFileSyllabus (PathFile);

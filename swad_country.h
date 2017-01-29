@@ -56,12 +56,12 @@ struct Country
    unsigned NumUsrs;	// Number of users in courses of the institution
   };
 
+#define Cty_NUM_ORDERS 2
 typedef enum
   {
    Cty_ORDER_BY_COUNTRY  = 0,
    Cty_ORDER_BY_NUM_USRS = 1,
   } Cty_Order_t;
-
 #define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
 
 typedef enum

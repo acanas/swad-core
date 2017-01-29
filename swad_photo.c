@@ -1643,12 +1643,14 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Draw the classphoto/list *****/
    switch (Gbl.Usrs.Me.ListType)
      {
-      case Usr_CLASS_PHOTO:
+      case Usr_LIST_AS_CLASS_PHOTO:
          Pho_ShowOrPrintClassPhotoDegrees (SeeOrPrint);
          break;
-      case Usr_LIST:
+      case Usr_LIST_AS_LISTING:
          Pho_ShowOrPrintListDegrees (SeeOrPrint);
          break;
+      default:
+	 break;
      }
   }
 
@@ -1707,10 +1709,10 @@ void Pho_PutHiddenParamTypeOfAvg (void)
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
    return (Pho_AvgPhotoTypeOfAverage_t)
-	  Par_GetParToUnsigned ("AvgType",
-                                (unsigned) Pho_PHOTO_MEDIAN_ALL,
-                                (unsigned) Pho_PHOTO_AVERAGE_ALL,
-                                (unsigned) Pho_PHOTO_AVG_DEFAULT);
+	  Par_GetParToUnsignedLong ("AvgType",
+                                    0,
+                                    Pho_NUM_AVERAGE_PHOTO_TYPES - 1,
+                                    (unsigned long) Pho_PHOTO_AVG_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1768,10 +1770,10 @@ void Pho_PutHiddenParamPhotoSize (void)
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
    return (Pho_HowComputePhotoSize_t)
-	  Par_GetParToUnsigned ("PhotoSize",
-                                (unsigned) Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS,
-                                (unsigned) Pho_UNIQUE_SIZE,
-                                (unsigned) Pho_PHOTO_SIZE_DEFAULT);
+	  Par_GetParToUnsignedLong ("PhotoSize",
+                                    0,
+                                    Pho_NUM_HOW_COMPUTE_PHOTO_SIZES - 1,
+                                    (unsigned long) Pho_PHOTO_SIZE_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1829,10 +1831,10 @@ void Pho_PutHiddenParamOrderDegrees (void)
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
    return (Pho_HowOrderDegrees_t)
-	  Par_GetParToUnsigned ("Order",
-                                (unsigned) Pho_NUMBER_OF_STUDENTS,
-                                (unsigned) Pho_DEGREE_NAME,
-                                (unsigned) Pho_ORDER_DEFAULT);
+	  Par_GetParToUnsignedLong ("Order",
+                                    0,
+                                    Pho_NUM_HOW_ORDER_DEGREES - 1,
+                                    (unsigned long) Pho_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

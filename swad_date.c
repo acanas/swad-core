@@ -724,13 +724,13 @@ void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,co
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
    /**** Get day ****/
-   *Day   = Par_GetParToUnsigned (ParamNameDay  ,1,31,0);
+   *Day   = (unsigned) Par_GetParToUnsignedLong (ParamNameDay  ,1,31,0);
 
    /**** Get month ****/
-   *Month = Par_GetParToUnsigned (ParamNameMonth,1,12,0);
+   *Month = (unsigned) Par_GetParToUnsignedLong (ParamNameMonth,1,12,0);
 
    /**** Get year ****/
-   *Year  = Par_GetParToUnsigned (ParamNameYear ,0,UINT_MAX,0);
+   *Year  = (unsigned) Par_GetParToUnsignedLong (ParamNameYear ,0,UINT_MAX,0);
   }
 
 /*****************************************************************************/

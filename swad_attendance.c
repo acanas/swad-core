@@ -522,10 +522,11 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
 
 static void Att_GetParamAttOrder (void)
   {
-   Gbl.AttEvents.SelectedOrder = (Dat_StartEndTime_t) Par_GetParToUnsigned ("Order",
-                                                                            (unsigned) Dat_START_TIME,
-                                                                            (unsigned) Dat_END_TIME,
-                                                                            (unsigned) Att_ORDER_DEFAULT);
+   Gbl.AttEvents.SelectedOrder = (Dat_StartEndTime_t)
+	                         Par_GetParToUnsignedLong ("Order",
+                                                           0,
+                                                           Dat_NUM_START_END_TIME - 1,
+                                                           (unsigned long) Att_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

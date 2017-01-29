@@ -43,12 +43,12 @@ struct Place
    unsigned NumCtrs;
   };
 
+#define Plc_NUM_ORDERS 2
 typedef enum
   {
    Plc_ORDER_BY_PLACE    = 0,
    Plc_ORDER_BY_NUM_CTRS = 1,
   } Plc_Order_t;
-
 #define Plc_ORDER_DEFAULT Plc_ORDER_BY_NUM_CTRS
 
 /*****************************************************************************/

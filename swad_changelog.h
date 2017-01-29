@@ -191,13 +191,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.131 (2017-01-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.132 (2017-01-29)"
 #define CSS_FILE		"swad16.123.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.132:   Jan 29, 2017	Code refactoring in unsigned parameters. (211915 lines)
         Version 16.131:   Jan 29, 2017	Code refactoring in unsigned parameters. Not finished. (211856 lines)
         Version 16.130:   Jan 29, 2017	Code refactoring in unsigned parameters. Not finished. (211843 lines)
         Version 16.129:   Jan 28, 2017	Code refactoring in Y/N parameters. (211974 lines)

@@ -438,17 +438,18 @@ void Rec_ReceiveFormField (void)
    Par_GetParToText ("FieldName",Gbl.CurrentCrs.Records.Field.Name,Rec_MAX_LENGTH_NAME_FIELD);
 
    /* Get the number of lines */
-   Gbl.CurrentCrs.Records.Field.NumLines = Par_GetParToUnsigned ("NumLines",
-                                                                 Rec_MIN_LINES_IN_EDITION_FIELD,
-                                                                 Rec_MAX_LINES_IN_EDITION_FIELD,
-                                                                 Rec_DEF_LINES_IN_EDITION_FIELD);
+   Gbl.CurrentCrs.Records.Field.NumLines = (unsigned)
+	                                   Par_GetParToUnsignedLong ("NumLines",
+                                                                     Rec_MIN_LINES_IN_EDITION_FIELD,
+                                                                     Rec_MAX_LINES_IN_EDITION_FIELD,
+                                                                     Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get the field visibility by students */
    Gbl.CurrentCrs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
-	                                     Par_GetParToUnsigned ("Visibility",
-                                                                   0,
-                                                                   Rec_NUM_TYPES_VISIBILITY - 1,
-                                                                   Rec_VISIBILITY_DEFAULT);
+	                                     Par_GetParToUnsignedLong ("Visibility",
+                                                                       0,
+                                                                       Rec_NUM_TYPES_VISIBILITY - 1,
+                                                                       (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    if (Gbl.CurrentCrs.Records.Field.Name[0])	// If there's a name
      {
@@ -823,10 +824,11 @@ void Rec_ChangeLinesField (void)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new number of lines */
-   NewNumLines = Par_GetParToUnsigned ("NumLines",
-                                       Rec_MIN_LINES_IN_EDITION_FIELD,
-                                       Rec_MAX_LINES_IN_EDITION_FIELD,
-                                       Rec_DEF_LINES_IN_EDITION_FIELD);
+   NewNumLines = (unsigned)
+	         Par_GetParToUnsignedLong ("NumLines",
+                                           Rec_MIN_LINES_IN_EDITION_FIELD,
+                                           Rec_MAX_LINES_IN_EDITION_FIELD,
+                                           Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get from the database the number of lines of the field */
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
@@ -875,10 +877,10 @@ void Rec_ChangeVisibilityField (void)
 
    /* Get the new visibility of the field */
    NewVisibility = (Rec_VisibilityRecordFields_t)
-	           Par_GetParToUnsigned ("Visibility",
-                                         0,
-                                         Rec_NUM_TYPES_VISIBILITY - 1,
-                                         Rec_VISIBILITY_DEFAULT);
+	           Par_GetParToUnsignedLong ("Visibility",
+                                             0,
+                                             Rec_NUM_TYPES_VISIBILITY - 1,
+                                             (unsigned long) Rec_VISIBILITY_DEFAULT);
 
    /* Get from the database the visibility of the field */
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
@@ -1434,10 +1436,11 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
 static void Rec_GetParamRecordsPerPage (void)
   {
-   Gbl.Usrs.Listing.RecsPerPag = Par_GetParToUnsigned ("RecsPerPag",
-                                                       Rec_MIN_RECORDS_PER_PAGE,
-                                                       Rec_MAX_RECORDS_PER_PAGE,
-                                                       Rec_DEF_RECORDS_PER_PAGE);
+   Gbl.Usrs.Listing.RecsPerPag = (unsigned)
+	                         Par_GetParToUnsignedLong ("RecsPerPag",
+                                                           Rec_MIN_RECORDS_PER_PAGE,
+                                                           Rec_MAX_RECORDS_PER_PAGE,
+                                                           Rec_DEF_RECORDS_PER_PAGE);
   }
 
 /*****************************************************************************/
@@ -3517,10 +3520,11 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
    bool RoleOK = false;
 
    /***** Get role as a parameter from form *****/
-   Role = (Rol_Role_t) Par_GetParToUnsigned ("Role",
-					     0,
-				             Rol_NUM_ROLES - 1,
-				             (unsigned) Rol_UNKNOWN);
+   Role = (Rol_Role_t)
+	  Par_GetParToUnsignedLong ("Role",
+				    0,
+				    Rol_NUM_ROLES - 1,
+				    (unsigned long) Rol_UNKNOWN);
 
    /***** Check if I can register a user
           with the received role in current course *****/
@@ -3601,10 +3605,11 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
   {
    /***** Get sex from form *****/
-   UsrDat->Sex = (Usr_Sex_t) Par_GetParToUnsigned ("Sex",
-                                                   (unsigned) Usr_SEX_FEMALE,
-                                                   (unsigned) Usr_SEX_MALE,
-                                                   (unsigned) Usr_SEX_UNKNOWN);
+   UsrDat->Sex = (Usr_Sex_t)
+	         Par_GetParToUnsignedLong ("Sex",
+                                           (unsigned long) Usr_SEX_FEMALE,
+                                           (unsigned long) Usr_SEX_MALE,
+                                           (unsigned long) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
    UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");

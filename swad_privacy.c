@@ -228,10 +228,10 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
   {
    return (Pri_Visibility_t)
-	  Par_GetParToUnsigned (ParamName,
-                                0,
-                                Pri_NUM_OPTIONS_PRIVACY - 1,
-                                (unsigned) Pri_VISIBILITY_UNKNOWN);
+	  Par_GetParToUnsignedLong (ParamName,
+                                    0,
+                                    Pri_NUM_OPTIONS_PRIVACY - 1,
+                                    (unsigned long) Pri_VISIBILITY_UNKNOWN);
   }
 
 /*****************************************************************************/

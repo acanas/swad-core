@@ -193,10 +193,10 @@ void Sco_GetScope (const char *ParamName)
   {
    /***** Get parameter with scope *****/
    Gbl.Scope.Current = (Sco_Scope_t)
-	               Par_GetParToUnsigned (ParamName,
-                                             0,
-                                             Sco_NUM_SCOPES - 1,
-                                             (Sco_Scope_t) Sco_SCOPE_UNK);
+	               Par_GetParToUnsignedLong (ParamName,
+                                                 0,
+                                                 Sco_NUM_SCOPES - 1,
+                                                 (unsigned long) Sco_SCOPE_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
    Sco_AdjustScope ();

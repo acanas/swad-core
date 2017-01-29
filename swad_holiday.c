@@ -182,10 +182,10 @@ void Hld_SeeHolidays (void)
 static void Hld_GetParamHldOrder (void)
   {
    Gbl.Hlds.SelectedOrder = (Hld_Order_t)
-	                    Par_GetParToUnsigned ("Order",
-	                                          (unsigned) Hld_ORDER_BY_PLACE,
-	                                          (unsigned) Hld_ORDER_BY_START_DATE,
-	                                          (unsigned) Hld_DEFAULT_ORDER_TYPE);
+	                    Par_GetParToUnsignedLong ("Order",
+	                                              0,
+	                                              Hld_NUM_ORDERS - 1,
+	                                              (unsigned long) Hld_DEFAULT_ORDER_TYPE);
   }
 
 /*****************************************************************************/
@@ -440,10 +440,11 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 
 static Hld_HolidayType_t Hld_GetParamHldType (void)
   {
-   return (Hld_HolidayType_t) Par_GetParToUnsigned ("HldTyp",
-	                                            (unsigned) Hld_HOLIDAY,
-	                                            (unsigned) Hld_NON_SCHOOL_PERIOD,
-	                                            (unsigned) Hld_HOLIDAY_TYPE_DEFAULT);
+   return (Hld_HolidayType_t)
+	  Par_GetParToUnsignedLong ("HldTyp",
+	                            0,
+	                            Hld_NUM_TYPES_HOLIDAY - 1,
+	                            (unsigned long) Hld_HOLIDAY_TYPE_DEFAULT);
   }
 
 /*****************************************************************************/

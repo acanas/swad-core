@@ -185,10 +185,10 @@ void Plc_SeePlaces (void)
 static void Plc_GetParamPlcOrder (void)
   {
    Gbl.Plcs.SelectedOrder = (Plc_Order_t)
-	                    Par_GetParToUnsigned ("Order",
-                                                  (unsigned) Plc_ORDER_BY_PLACE,
-                                                  (unsigned) Plc_ORDER_BY_NUM_CTRS,
-                                                  (unsigned) Plc_ORDER_DEFAULT);
+	                    Par_GetParToUnsignedLong ("Order",
+                                                      0,
+                                                      Plc_NUM_ORDERS - 1,
+                                                      (unsigned long) Plc_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
