@@ -6986,13 +6986,13 @@ static bool Usr_GetParamListWithPhotosFromForm (void)
    /***** Get if exists parameter with preference about photos in users' list *****/
    if (Par_GetParToBool ("WithPhotosExists"))
      {
-      Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
-      return false;
+      /***** Parameter with preference about photos in users' list exists, so get it *****/
+      Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
+      return true;
      }
 
-   /***** Parameter with preference about photos in users' list exists, so get it *****/
-   Gbl.Usrs.Listing.WithPhotos = Par_GetParToBool ("WithPhotos");
-   return true;
+   Gbl.Usrs.Listing.WithPhotos = Usr_LIST_WITH_PHOTOS_DEF;
+   return false;
   }
 
 /*****************************************************************************/
