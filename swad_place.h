@@ -47,9 +47,9 @@ typedef enum
   {
    Plc_ORDER_BY_PLACE    = 0,
    Plc_ORDER_BY_NUM_CTRS = 1,
-  } Plc_PlcsOrderType_t;
+  } Plc_Order_t;
 
-#define Plc_DEFAULT_ORDER_TYPE Plc_ORDER_BY_NUM_CTRS
+#define Plc_ORDER_DEFAULT Plc_ORDER_BY_NUM_CTRS
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

@@ -25,7 +25,6 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
-#include <limits.h>		// For INT_MAX, LONG_MAX
 #include <linux/stddef.h>	// For NULL
 #include <locale.h>		// For setlocale
 #include <stdlib.h>		// For exit, system, malloc, calloc, free, etc
@@ -237,7 +236,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Inss.Num = 0;
    Gbl.Inss.Lst = NULL;
-   Gbl.Inss.SelectedOrderType = Ins_DEFAULT_ORDER_TYPE;
+   Gbl.Inss.SelectedOrder = Ins_ORDER_DEFAULT;
    Gbl.Inss.EditingIns.InsCod = -1L;
    Gbl.Inss.EditingIns.CtyCod = -1L;
    Gbl.Inss.EditingIns.ShrtName[0] = '\0';
@@ -248,7 +247,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Ctys.Num = 0;
    Gbl.Ctys.Lst = NULL;
-   Gbl.Ctys.SelectedOrderType = Cty_DEFAULT_ORDER_TYPE;
+   Gbl.Ctys.SelectedOrder = Cty_ORDER_DEFAULT;
    Gbl.Ctys.EditingCty.CtyCod = -1L;
    for (Lan = (Txt_Language_t) 1;
 	Lan <= Txt_NUM_LANGUAGES;
@@ -257,7 +256,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Ctrs.Num = 0;
    Gbl.Ctrs.Lst = NULL;
-   Gbl.Ctrs.SelectedOrderType = Ctr_DEFAULT_ORDER_TYPE;
+   Gbl.Ctrs.SelectedOrder = Ctr_ORDER_DEFAULT;
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
    Gbl.Ctrs.EditingCtr.InsCod = -1L;
    Gbl.Ctrs.EditingCtr.CtrCod = -1L;
@@ -267,7 +266,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Dpts.Num = 0;
    Gbl.Dpts.Lst = NULL;
-   Gbl.Dpts.SelectedOrderType = Dpt_DEFAULT_ORDER_TYPE;
+   Gbl.Dpts.SelectedOrder = Dpt_ORDER_DEFAULT;
    Gbl.Dpts.EditingDpt.DptCod = -1L;
    Gbl.Dpts.EditingDpt.ShrtName[0] = '\0';
    Gbl.Dpts.EditingDpt.FullName[0] = '\0';
@@ -275,7 +274,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Plcs.Num = 0;
    Gbl.Plcs.Lst = NULL;
-   Gbl.Plcs.SelectedOrderType = Plc_DEFAULT_ORDER_TYPE;
+   Gbl.Plcs.SelectedOrder = Plc_ORDER_DEFAULT;
    Gbl.Plcs.EditingPlc.PlcCod = -1L;
    Gbl.Plcs.EditingPlc.ShrtName[0] = '\0';
    Gbl.Plcs.EditingPlc.FullName[0] = '\0';
@@ -283,7 +282,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Hlds.LstIsRead = false;	// List is not read
    Gbl.Hlds.Num = 0;
    Gbl.Hlds.Lst = NULL;
-   Gbl.Hlds.SelectedOrderType = Hld_DEFAULT_ORDER_TYPE;
+   Gbl.Hlds.SelectedOrder = Hld_DEFAULT_ORDER_TYPE;
    Gbl.Hlds.EditingHld.HldCod = -1L;
    Gbl.Hlds.EditingHld.PlcCod = -1L;
    Gbl.Hlds.EditingHld.HldTyp = Hld_HOLIDAY;
@@ -311,7 +310,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Degs.EditingCrs.FullName[0]  = '\0';
 
    Gbl.CurrentCrs.Grps.NumGrps = 0;
-   Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
+   Gbl.CurrentCrs.Grps.WhichGrps = Grp_WHICH_GROUPS_DEFAULT;
    Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes = NULL;
    Gbl.CurrentCrs.Grps.GrpTypes.Num = 0;
    Gbl.CurrentCrs.Grps.GrpTypes.NestedCalls = 0;
@@ -322,7 +321,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.CurrentCrs.Grps.GrpCod = -1L; // -1L stands for the whole course
    Gbl.CurrentCrs.Grps.GrpName[0] = '\0';
-   Gbl.CurrentCrs.Grps.MaxStudents = INT_MAX;
+   Gbl.CurrentCrs.Grps.MaxStudents = Grp_NUM_STUDENTS_NOT_LIMITED;
    Gbl.CurrentCrs.Grps.Open = false;
    Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods  = NULL;
    Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps = 0;
@@ -341,23 +340,23 @@ void Gbl_InitializeGlobals (void)
    Gbl.Syllabus.EditionIsActive = false;
    Gbl.Syllabus.WhichSyllabus = Syl_DEFAULT_WHICH_SYLLABUS;
 
-   Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;
+   Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    Gbl.Search.Str[0] = '\0';
 
    Gbl.Asgs.LstIsRead = false;	// List is not read
    Gbl.Asgs.Num = 0;
    Gbl.Asgs.LstAsgCods = NULL;
-   Gbl.Asgs.SelectedOrderType = Asg_DEFAULT_ORDER_TYPE;
+   Gbl.Asgs.SelectedOrder = Asg_ORDER_DEFAULT;
 
    Gbl.AttEvents.LstIsRead = false;	// List is not read
    Gbl.AttEvents.Num = 0;
    Gbl.AttEvents.Lst = NULL;
-   Gbl.AttEvents.SelectedOrderType = Att_DEFAULT_ORDER_TYPE;
+   Gbl.AttEvents.SelectedOrder = Att_ORDER_DEFAULT;
    Gbl.AttEvents.AttCod = -1L;
 
    Gbl.Mails.Num = 0;
    Gbl.Mails.Lst = NULL;
-   Gbl.Mails.SelectedOrderType = Mai_DEFAULT_ORDER_TYPE;
+   Gbl.Mails.SelectedOrder = Mai_ORDER_DEFAULT;
 
    Gbl.Banners.Num = 0;
    Gbl.Banners.Lst = NULL;
@@ -375,7 +374,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Links.EditingLnk.WWW[0] = '\0';
 
    Gbl.Usrs.Listing.RecsUsrs   = Rec_RECORD_USERS_UNKNOWN;
-   Gbl.Usrs.Listing.RecsPerPag = 1;
+   Gbl.Usrs.Listing.RecsPerPag = Rec_DEF_RECORDS_PER_PAGE;
    Gbl.Usrs.Listing.WithPhotos = true;
 
    Gbl.Usrs.ClassPhoto.Cols = Usr_CLASS_PHOTO_COLS_DEF;
@@ -406,7 +405,7 @@ void Gbl_InitializeGlobals (void)
    /* Forums */
    Gbl.Forum.ForumType = (For_ForumType_t) 0;
    Gbl.Forum.WhichForums = For_DEFAULT_WHICH_FORUMS;
-   Gbl.Forum.SelectedOrderType = For_DEFAULT_ORDER;
+   Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
 
    /* User nickname */

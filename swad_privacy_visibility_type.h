@@ -33,7 +33,6 @@
 
 /***** Visibility (who can see user's photo / public profile) *****/
 #define Pri_NUM_OPTIONS_PRIVACY 5
-
 typedef enum
   {
    Pri_VISIBILITY_UNKNOWN = 0,	// Only visible by me and my teachers if I am a student or my students if I am a teacher

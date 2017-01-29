@@ -71,7 +71,7 @@ typedef enum
   {
    Svy_ORDER_BY_START_DATE = 0,
    Svy_ORDER_BY_END_DATE   = 1,
-  } tSvysOrderType;
+  } Svy_Order_t;
 
 #define Svy_NUM_ANS_TYPES	2
 
@@ -81,7 +81,7 @@ typedef enum
 
 void Svy_SeeAllSurveys (void);
 void Svy_SeeOneSurvey (void);
-void Svy_PutHiddenParamSvyOrderType (void);
+void Svy_PutHiddenParamSvyOrder (void);
 void Svy_RequestCreatOrEditSvy (void);
 void Svy_GetListSurveys (void);
 void Svy_GetDataOfSurveyByCod (struct Survey *Svy);

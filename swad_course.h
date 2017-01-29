@@ -56,7 +56,9 @@ typedef enum
    Crs_STATUS_BIT_PENDING = (1 << 0),	// Course is requested, but not yet activated
    Crs_STATUS_BIT_REMOVED = (1 << 1),	// Course has been removed
   } Crs_Status_Bits_t;
+
 typedef unsigned Crs_Status_t;
+#define Crs_WRONG_STATUS ((Crs_Status_t) UINT_MAX)
 
 #define Crs_NUM_STATUS_TXT	4
 typedef enum

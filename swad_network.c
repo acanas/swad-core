@@ -393,18 +393,14 @@ void Net_UpdateMyWebsAndSocialNets (void)
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
    char Query[256 + Cns_MAX_LENGTH_WWW];
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
    Net_WebsAndSocialNetworks_t Web;
    char URL[Cns_MAX_LENGTH_WWW + 1];
 
    /***** Get parameter with the type of web / social network *****/
-   Par_GetParToText ("Web",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      Lay_ShowErrorAndExit ("Web / social network is missing.");
-   if (UnsignedNum >= Net_NUM_WEBS_AND_SOCIAL_NETWORKS)
-      Lay_ShowErrorAndExit ("Wrong web / social network.");
-   Web = (Net_WebsAndSocialNetworks_t) UnsignedNum;
+   Web = (Net_WebsAndSocialNetworks_t) Par_GetParToUnsigned ("Web",
+                                                             (unsigned) Net_WWW,
+                                                             (unsigned) Net_YOUTUBE,
+                                                             (unsigned) Net_WWW);
 
    /***** Get URL *****/
    Par_GetParToText ("URL",URL,Cns_MAX_LENGTH_WWW);

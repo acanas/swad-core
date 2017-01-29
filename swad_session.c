@@ -157,6 +157,9 @@ void Ses_InsertSessionInDB (void)
    char Query[1024];
 
    /***** Insert session in the database *****/
+   if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
+      Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+
    sprintf (Query,"INSERT INTO sessions (SessionId,UsrCod,Password,Role,"
                   "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                   " VALUES ('%s','%ld','%s','%u',"
@@ -310,10 +313,12 @@ bool Ses_GetSessionData (void)
       if (Gbl.Action.Act != ActLogOut)	// When closing session, last search will not be needed
 	{
 	 /* Get what to search (row[8]) */
-	 Gbl.Search.WhatToSearch = Sch_SEARCH_ALL;
+	 Gbl.Search.WhatToSearch = Sch_SEARCH_UNKNOWN;
 	 if (sscanf (row[8],"%u",&UnsignedNum) == 1)
 	    if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
 	       Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
+	 if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
+	    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
 	 /* Get search string (row[9]) */
 	 Str_Copy (Gbl.Search.Str,row[9],

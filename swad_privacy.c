@@ -227,20 +227,11 @@ Pri_Visibility_t Pri_GetVisibilityFromStr (const char *Str)
 
 Pri_Visibility_t Pri_GetParamVisibility (const char *ParamName)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText (ParamName,UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Visibility is missing.");
-      if (UnsignedNum >= Pri_NUM_OPTIONS_PRIVACY)
-         Lay_ShowErrorAndExit ("Visibility is missing.");
-      return (Pri_Visibility_t) UnsignedNum;
-     }
-
-   return Pri_VISIBILITY_UNKNOWN;
+   return (Pri_Visibility_t)
+	  Par_GetParToUnsigned (ParamName,
+                                0,
+                                Pri_NUM_OPTIONS_PRIVACY - 1,
+                                (unsigned) Pri_VISIBILITY_UNKNOWN);
   }
 
 /*****************************************************************************/

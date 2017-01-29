@@ -1536,7 +1536,7 @@ static void For_PutParamWhichForum (void)
 
 static void For_PutParamForumOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Forum.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Forum.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -2545,7 +2545,7 @@ void For_ShowForumThrs (void)
    MYSQL_ROW row;
    unsigned NumThr,NumThrs;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
-   For_ForumOrderType_t Order;
+   For_Order_t Order;
    long ThrCods[Pag_ITEMS_PER_PAGE];
    struct Pagination PaginationThrs;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
@@ -2590,7 +2590,7 @@ void For_ShowForumThrs (void)
       	 SubQuery[0] = '\0';
       	 break;
      }
-   switch (Gbl.Forum.SelectedOrderType)
+   switch (Gbl.Forum.SelectedOrder)
      {
       case For_FIRST_MSG:
          sprintf (Query,"SELECT forum_thread.ThrCod"
@@ -2685,10 +2685,10 @@ void For_ShowForumThrs (void)
          For_PutParamsForumInsDegCrs ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
-         if (Order == Gbl.Forum.SelectedOrderType)
+         if (Order == Gbl.Forum.SelectedOrder)
             fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);
-         if (Order == Gbl.Forum.SelectedOrderType)
+         if (Order == Gbl.Forum.SelectedOrder)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Act_FormEnd ();
@@ -3392,7 +3392,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
    unsigned UniqueId;
    struct ForumThread Thr;
    struct UsrData UsrDat;
-   For_ForumOrderType_t Order;
+   For_Order_t Order;
    time_t TimeUTC;
    struct Pagination PaginationPsts;
    const char *Style;
@@ -3580,7 +3580,7 @@ void For_GetThrData (struct ForumThread *Thr)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
-   For_ForumOrderType_t Order;
+   For_Order_t Order;
 
    /***** Get data of a thread from database *****/
    sprintf (Query,"SELECT m0.PstCod,m1.PstCod,m0.UsrCod,m1.UsrCod,"
@@ -3727,22 +3727,19 @@ void For_ShowThrPsts (void)
 
 void For_GetParamsForum (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
    /***** Get which forums I want to see *****/
-   Par_GetParToText ("WhichForum",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Forum.WhichForums = (For_ForumOrderType_t) UnsignedNum;
-   else
-      Gbl.Forum.WhichForums = For_DEFAULT_WHICH_FORUMS;
+   Gbl.Forum.WhichForums = (For_WhichForums_t)
+	                   Par_GetParToUnsigned ("WhichForum",
+                                                 (unsigned) For_ONLY_CURRENT_FORUMS,
+                                                 (unsigned) For_ALL_MY_FORUMS,
+                                                 (unsigned) For_DEFAULT_WHICH_FORUMS);
 
    /***** Get order type *****/
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Forum.SelectedOrderType = (For_ForumOrderType_t) UnsignedNum;
-   else
-      Gbl.Forum.SelectedOrderType = For_DEFAULT_ORDER;
+   Gbl.Forum.SelectedOrder = (For_Order_t)
+	                     Par_GetParToUnsigned ("Order",
+                                                   (unsigned) For_FIRST_MSG,
+                                                   (unsigned) For_LAST_MSG,
+                                                   (unsigned) For_DEFAULT_ORDER);
 
    /***** Get parameter with code of institution *****/
    Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");

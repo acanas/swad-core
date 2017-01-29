@@ -823,18 +823,10 @@ static void Ntf_PutHiddenParamNotifyEvent (Ntf_NotifyEvent_t NotifyEvent)
 
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("NotifyEvent",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Ntf_NUM_NOTIFY_EVENTS)
-	    return (Ntf_NotifyEvent_t) UnsignedNum;
-     }
-
-   return Ntf_EVENT_UNKNOWN;
+   return (Ntf_NotifyEvent_t) Par_GetParToUnsigned ("NotifyEvent",
+                                                    (unsigned) Ntf_EVENT_UNKNOWN,
+                                                    (unsigned) Ntf_EVENT_SURVEY,
+                                                    (unsigned) Ntf_EVENT_UNKNOWN);
   }
 
 /*****************************************************************************/

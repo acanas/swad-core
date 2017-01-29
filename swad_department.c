@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Dpt_GetParamDptOrderType (void);
+static void Dpt_GetParamDptOrder (void);
 static void Dpt_PutIconToEditDpts (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
@@ -83,7 +83,7 @@ void Dpt_SeeDepts (void)
    extern const char *Txt_DEPARTMENTS_ORDER[2];
    extern const char *Txt_Other_departments;
    extern const char *Txt_Department_unspecified;
-   tDptsOrderType Order;
+   Dpt_Order_t Order;
    unsigned NumDpt;
    unsigned NumTchsInsWithDpt = 0;	// Number of teachers from the current institution with department
    unsigned NumTchsInOtherDpts;
@@ -91,7 +91,7 @@ void Dpt_SeeDepts (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
      {
       /***** Get parameter with the type of order in the list of departments *****/
-      Dpt_GetParamDptOrderType ();
+      Dpt_GetParamDptOrder ();
 
       /***** Get list of departments *****/
       Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
@@ -110,10 +110,10 @@ void Dpt_SeeDepts (void)
 	 Act_FormStart (ActSeeDpt);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_DEPARTMENTS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Dpts.SelectedOrderType)
+	 if (Order == Gbl.Dpts.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_DEPARTMENTS_ORDER[Order]);
-	 if (Order == Gbl.Dpts.SelectedOrderType)
+	 if (Order == Gbl.Dpts.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -191,16 +191,12 @@ void Dpt_SeeDepts (void)
 /******** Get parameter with the type or order in list of departments ********/
 /*****************************************************************************/
 
-static void Dpt_GetParamDptOrderType (void)
+static void Dpt_GetParamDptOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Dpts.SelectedOrderType = (tDptsOrderType) UnsignedNum;
-   else
-      Gbl.Dpts.SelectedOrderType = Dpt_DEFAULT_ORDER_TYPE;
+   Gbl.Dpts.SelectedOrder = (Dpt_Order_t) Par_GetParToUnsigned ("Order",
+                                                                (unsigned) Dpt_ORDER_BY_DEPARTMENT,
+                                                                (unsigned) Dpt_ORDER_BY_NUM_TCHS,
+                                                                (unsigned) Dpt_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -273,7 +269,7 @@ void Dpt_GetListDepartments (long InsCod)
    struct Department *Dpt;
 
    /***** Get departments from database *****/
-   switch (Gbl.Dpts.SelectedOrderType)
+   switch (Gbl.Dpts.SelectedOrder)
      {
       case Dpt_ORDER_BY_DEPARTMENT:
          sprintf (OrderBySubQuery,"FullName");

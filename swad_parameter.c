@@ -651,8 +651,7 @@ void Par_GetMainParameters (void)
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
+   unsigned ActCod;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char LongStr[1 + 10 + 1];
 
@@ -713,22 +712,17 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get action to perform *****/
-   Par_GetParToText ("act",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-         if (UnsignedNum <= Act_MAX_ACTION_COD)
-            Gbl.Action.Act = Act_FromActCodToAction[UnsignedNum];
-     }
-   else
-     {
-      // Try old parameter "ActCod" (allowed for compatibility, to be removed soon)
-      Par_GetParToText ("ActCod",UnsignedStr,10);
-      if (UnsignedStr[0])
-	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum <= Act_MAX_ACTION_COD)
-	       Gbl.Action.Act = Act_FromActCodToAction[UnsignedNum];
-     }
+   ActCod = Par_GetParToUnsigned ("act",
+                                  ActUnk,
+                                  Act_MAX_ACTION_COD,
+                                  ActUnk);
+   if (ActCod == ActUnk)
+      ActCod = Par_GetParToUnsigned ("ActCod",
+				     ActUnk,
+				     Act_MAX_ACTION_COD,
+				     ActUnk);
+   if (ActCod != ActUnk)
+      Gbl.Action.Act = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
    if (Gbl.Action.Act == ActRefCon          ||
@@ -848,14 +842,11 @@ void Par_GetMainParameters (void)
    Gbl.Action.Tab = TabUnk;
    if (Gbl.Action.Act == ActMnu)
      {
-      Par_GetParToText ("NxtTab",UnsignedStr,10);
-      if (UnsignedStr[0])
-	 if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Tab_NUM_TABS)
-	      {
-	       Gbl.Action.Tab = (Tab_Tab_t) UnsignedNum;
-	       Tab_DisableIncompatibleTabs ();
-	      }
+      Gbl.Action.Tab = (Tab_Tab_t) Par_GetParToUnsigned ("NxtTab",
+                                                         (unsigned) TabUnk,
+                                                         Tab_NUM_TABS - 1,
+                                                         (unsigned) TabUnk);
+      Tab_DisableIncompatibleTabs ();
      }
    else	// Set tab depending on current action
       Tab_SetCurrentTab ();
@@ -870,6 +861,27 @@ unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxByte
   {
    return Par_GetParAndChangeFormat (ParamName,ParamValue,MaxBytes,
                                      Str_TO_TEXT,true);
+  }
+
+/*****************************************************************************/
+/****************** Get the unsigned value of a parameter ********************/
+/*****************************************************************************/
+
+unsigned Par_GetParToUnsigned (const char *ParamName,
+                               unsigned Min,
+                               unsigned Max,
+                               unsigned Default)
+  {
+   char UnsignedStr[10 + 1];
+   unsigned UnsignedNum;
+
+   /***** Get parameter with unsigned number *****/
+   Par_GetParToText (ParamName,UnsignedStr,10);
+   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum >= Min && UnsignedNum <= Max)
+         return UnsignedNum;
+
+   return Default;
   }
 
 /*****************************************************************************/

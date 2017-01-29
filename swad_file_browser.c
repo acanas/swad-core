@@ -2296,17 +2296,11 @@ void Brw_GetParAndInitFileBrowser (void)
 
 static long Brw_GetGrpSettings (void)
   {
-   char LongStr[1 + 10 + 1];
    long GrpCod;
 
-   /***** Get parameter with group code *****/
-   if (Par_GetParToText ("GrpCod",LongStr,1 + 10))
-     {
-      if ((GrpCod = Str_ConvertStrCodToLongCod (LongStr)) <= 0)
-         GrpCod = -1L;
+   if ((GrpCod = Par_GetParToLong ("GrpCod")) > 0)
       return GrpCod;
-     }
-   else	// Parameter GrpCod not found!
+   else
       /***** Try to get group code from database *****/
       switch (Gbl.Action.Act)
 	{
@@ -9870,19 +9864,10 @@ static bool Brw_GetParamPublicFile (void)
 
 static Brw_License_t Brw_GetParLicense (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   /* Get file license from form */
-   Par_GetParToText ("License",UnsignedStr,10);
-
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      return Brw_LICENSE_UNKNOWN;
-
-   if (UnsignedNum < Brw_NUM_LICENSES)
-      return (Brw_License_t) UnsignedNum;
-
-   return Brw_LICENSE_UNKNOWN;
+   return (Brw_License_t) Par_GetParToUnsigned ("License",
+                                                (unsigned) Brw_LICENSE_UNKNOWN,
+                                                (unsigned) Brw_LICENSE_CC_BY_NC_ND,
+                                                (unsigned) Brw_LICENSE_UNKNOWN);
   }
 
 /*****************************************************************************/
@@ -11603,8 +11588,8 @@ void Brw_AskRemoveOldFiles (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Remove_files_older_than_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
-   for (Months = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
-        Months < Brw_MAX_MONTHS_IN_BRIEFCASE;
+   for (Months  = Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES;
+        Months <= Brw_MAX_MONTHS_IN_BRIEFCASE;
         Months++)
      {
       fprintf (Gbl.F.Out,"<option");
@@ -11636,7 +11621,6 @@ void Brw_RemoveOldFilesBriefcase (void)
    extern const char *Txt_Files_removed;
    extern const char *Txt_Links_removed;
    extern const char *Txt_Folders_removed;
-   char UnsignedStr[10 + 1];
    unsigned Months;
    struct Brw_NumObjects Removed;
 
@@ -11646,12 +11630,10 @@ void Brw_RemoveOldFilesBriefcase (void)
    if (Brw_GetIfCrsAssigWorksFileBrowser ())
      {
       /***** Get parameter with number of months without access *****/
-      Par_GetParToText ("Months",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&Months) != 1)
-	 Lay_ShowErrorAndExit ("Number of months is missing.");
-      if (Months <  Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES ||
-	  Months >= Brw_MAX_MONTHS_IN_BRIEFCASE)
-	 Lay_ShowErrorAndExit ("Wrong number of months.");
+      Months = Par_GetParToUnsigned ("Months",
+                                     Brw_MIN_MONTHS_TO_REMOVE_OLD_FILES,
+                                     Brw_MAX_MONTHS_IN_BRIEFCASE,
+                                     Brw_DEF_MONTHS_TO_REMOVE_OLD_FILES);
 
       /***** Remove old files *****/
       Brw_RemoveOldFilesInBrowser (Months,&Removed);

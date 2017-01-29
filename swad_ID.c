@@ -296,7 +296,8 @@ void ID_GetParamOtherUsrIDPlain (void)
    ID_ReallocateListIDs (&Gbl.Usrs.Other.UsrDat,1);
 
    /***** Get parameter *****/
-   Par_GetParToText ("OtherUsrID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,ID_MAX_LENGTH_USR_ID);
+   Par_GetParToText ("OtherUsrID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
+                     ID_MAX_LENGTH_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);

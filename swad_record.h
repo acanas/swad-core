@@ -32,7 +32,7 @@
 #include "swad_user.h"
 
 /*****************************************************************************/
-/*********************** Public constants and types **************************/
+/***************************** Public constants ******************************/
 /*****************************************************************************/
 
 #define Rec_RECORD_WIDTH	560
@@ -40,6 +40,11 @@
 #define Rec_MAX_LENGTH_NAME_FIELD	255
 #define Rec_MIN_LINES_IN_EDITION_FIELD	  1
 #define Rec_MAX_LINES_IN_EDITION_FIELD	 50
+#define Rec_DEF_LINES_IN_EDITION_FIELD Rec_MIN_LINES_IN_EDITION_FIELD
+
+#define Rec_MIN_RECORDS_PER_PAGE  1
+#define Rec_MAX_RECORDS_PER_PAGE 10
+#define Rec_DEF_RECORDS_PER_PAGE Rec_MIN_RECORDS_PER_PAGE
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -79,13 +84,15 @@ typedef enum {
   } Rec_UsrsType_t;
 
 // Related with user's index card
-#define Rec_NUM_TYPES_VISIBILITY	  3
+#define Rec_NUM_TYPES_VISIBILITY 3
 typedef enum
   {
    Rec_HIDDEN_FIELD   = 0,
    Rec_VISIBLE_FIELD  = 1,
    Rec_EDITABLE_FIELD = 2,
   } Rec_VisibilityRecordFields_t;
+#define Rec_VISIBILITY_DEFAULT Rec_HIDDEN_FIELD
+
 struct RecordField
   {
    long FieldCod;		// FieldCode
@@ -94,6 +101,7 @@ struct RecordField
    Rec_VisibilityRecordFields_t Visibility;		// Hidden, visible or editable by students?
    char *Text;			// Filed text
   };
+
 struct LstRecordFields
   {
    struct RecordField *Lst;	// List of card fields

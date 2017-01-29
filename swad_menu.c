@@ -435,13 +435,8 @@ void Mnu_ChangeMenu (void)
 
 Mnu_Menu_t Mnu_GetParamMenu (void)
   {
-   char UnsignedStr[1 + 10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Menu",UnsignedStr,1 + 10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Mnu_NUM_MENUS)
-         return (Mnu_Menu_t) UnsignedNum;
-
-   return Mnu_MENU_DEFAULT;
+   return (Mnu_Menu_t) Par_GetParToUnsigned ("Menu",
+	                                     (unsigned) Mnu_MENU_HORIZONTAL,
+	                                     (unsigned) Mnu_MENU_VERTICAL,
+	                                     (unsigned) Mnu_MENU_DEFAULT);
   }

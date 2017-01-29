@@ -103,7 +103,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                                bool ShowOnlyThisSvyComplete);
 static void Svy_WriteAuthor (struct Survey *Svy);
 static void Svy_WriteStatus (struct Survey *Svy);
-static void Svy_GetParamSvyOrderType (void);
+static void Svy_GetParamSvyOrder (void);
 
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible);
 static void Svy_PutParams (void);
@@ -172,7 +172,7 @@ void Svy_SeeAllSurveys (void)
    struct SurveyQuestion SvyQst;
 
    /***** Get parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -193,7 +193,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    extern const char *Txt_Survey;
    extern const char *Txt_Status;
    extern const char *Txt_No_surveys;
-   tSvysOrderType Order;
+   Svy_Order_t Order;
    struct Pagination Pagination;
    unsigned NumSvy;
 
@@ -239,10 +239,10 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Svys.SelectedOrderType)
+	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-	 if (Order == Gbl.Svys.SelectedOrderType)
+	 if (Order == Gbl.Svys.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -359,7 +359,7 @@ static void Svy_PutButtonToCreateNewSvy (void)
 
 static void Svy_PutParamsToCreateNewSvy (void)
   {
-   Svy_PutHiddenParamSvyOrderType ();
+   Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -377,7 +377,7 @@ static void Svy_PutFormToSelectWhichGroupsToShow (void)
 
 static void Svy_ParamsWhichGroupsToShow (void)
   {
-   Svy_PutHiddenParamSvyOrderType ();
+   Svy_PutHiddenParamSvyOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -391,7 +391,7 @@ void Svy_SeeOneSurvey (void)
    struct SurveyQuestion SvyQst;
 
    /***** Get parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -486,7 +486,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Put form to view survey */
    Act_FormStart (ActSeeOneSvy);
    Svy_PutParamSvyCod (SvyCod);
-   Svy_PutHiddenParamSvyOrderType ();
+   Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
    Act_LinkFormSubmit (Txt_View_survey,
@@ -522,7 +522,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
 	 Act_FormStart (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
-	 Svy_PutHiddenParamSvyOrderType ();
+	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Lay_PutCreateButtonInline (Txt_Answer_survey);
@@ -537,7 +537,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
 	 Act_FormStart (ActSeeOneSvy);
 	 Svy_PutParamSvyCod (Svy.SvyCod);
-	 Svy_PutHiddenParamSvyOrderType ();
+	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Lay_PutConfirmButtonInline (Txt_View_survey_results);
@@ -797,28 +797,28 @@ static void Svy_WriteStatus (struct Survey *Svy)
 /********* Get parameter with the type or order in list of surveys ***********/
 /*****************************************************************************/
 
-static void Svy_GetParamSvyOrderType (void)
+static void Svy_GetParamSvyOrder (void)
   {
    char UnsignedStr[10 + 1];
    unsigned UnsignedNum;
 
    /***** Set default order type *****/
-   Gbl.Svys.SelectedOrderType = Svy_ORDER_BY_START_DATE;
+   Gbl.Svys.SelectedOrder = Svy_ORDER_BY_START_DATE;
 
    /***** Get parameter from form with the order type *****/
    Par_GetParToText ("Order",UnsignedStr,10);
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
       if (UnsignedNum < Svy_NUM_ORDERS)
-         Gbl.Svys.SelectedOrderType = (tSvysOrderType) UnsignedNum;
+         Gbl.Svys.SelectedOrder = (Svy_Order_t) UnsignedNum;
   }
 
 /*****************************************************************************/
 /***** Put a hidden parameter with the type of order in list of surveys ******/
 /*****************************************************************************/
 
-void Svy_PutHiddenParamSvyOrderType (void)
+void Svy_PutHiddenParamSvyOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Svys.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Svys.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -878,7 +878,7 @@ static void Svy_PutParams (void)
   {
    if (Gbl.Svys.SvyCodToEdit > 0)
       Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -972,7 +972,7 @@ void Svy_GetListSurveys (void)
    /* Build query */
    if (SubQueryFilled)
      {
-      switch (Gbl.Svys.SelectedOrderType)
+      switch (Gbl.Svys.SelectedOrder)
 	{
 	 case Svy_ORDER_BY_START_DATE:
 	    sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
@@ -1524,7 +1524,7 @@ void Svy_AskRemSurvey (void)
    struct SurveyQuestion SvyQst;
 
    /***** Get parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -1621,7 +1621,7 @@ void Svy_AskResetSurvey (void)
    struct SurveyQuestion SvyQst;
 
    /***** Get parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -1811,7 +1811,7 @@ void Svy_RequestCreatOrEditSvy (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 
@@ -2599,7 +2599,7 @@ void Svy_RequestEditQuestion (void)
    SvyQst.QstCod = Svy_GetParamQstCod ();
 
    /***** Get other parameters *****/
-   Svy_GetParamSvyOrderType ();
+   Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_SURVEYS);
 

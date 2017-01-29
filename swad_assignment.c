@@ -73,7 +73,7 @@ static void Asg_ParamsWhichGroupsToShow (void);
 static void Asg_ShowOneAssignment (long AsgCod);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
 static void Asg_WriteAssignmentFolder (struct Assignment *Asg);
-static void Asg_GetParamAsgOrderType (void);
+static void Asg_GetParamAsgOrder (void);
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
 static void Asg_PutParams (void);
@@ -99,7 +99,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod);
 void Asg_SeeAssignments (void)
   {
    /***** Get parameters *****/
-   Asg_GetParamAsgOrderType ();
+   Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
@@ -161,10 +161,10 @@ static void Asg_ShowAllAssignments (void)
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Asgs.SelectedOrderType)
+	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-	 if (Order == Gbl.Asgs.SelectedOrderType)
+	 if (Order == Gbl.Asgs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -271,7 +271,7 @@ static void Asg_PutButtonToCreateNewAsg (void)
 
 static void Asg_PutParamsToCreateNewAsg (void)
   {
-   Asg_PutHiddenParamAsgOrderType ();
+   Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -289,7 +289,7 @@ static void Asg_PutFormToSelectWhichGroupsToShow (void)
 
 static void Asg_ParamsWhichGroupsToShow (void)
   {
-   Asg_PutHiddenParamAsgOrderType ();
+   Asg_PutHiddenParamAsgOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -521,25 +521,21 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
 /******* Get parameter with the type or order in list of assignments *********/
 /*****************************************************************************/
 
-static void Asg_GetParamAsgOrderType (void)
+static void Asg_GetParamAsgOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Asgs.SelectedOrderType = (Dat_StartEndTime_t) UnsignedNum;
-   else
-      Gbl.Asgs.SelectedOrderType = Asg_DEFAULT_ORDER_TYPE;
+   Gbl.Asgs.SelectedOrder = (Dat_StartEndTime_t) Par_GetParToUnsigned ("Order",
+                                                                       (unsigned) Dat_START_TIME,
+                                                                       (unsigned) Dat_END_TIME,
+                                                                       (unsigned) Asg_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
 /*** Put a hidden parameter with the type of order in list of assignments ****/
 /*****************************************************************************/
 
-void Asg_PutHiddenParamAsgOrderType (void)
+void Asg_PutHiddenParamAsgOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Asgs.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Asgs.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -591,7 +587,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 static void Asg_PutParams (void)
   {
    Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
-   Asg_PutHiddenParamAsgOrderType ();
+   Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -624,7 +620,7 @@ void Asg_GetListAssignments (void)
          sprintf (HiddenSubQuery,"AND Hidden='N'");
          break;
      }
-   switch (Gbl.Asgs.SelectedOrderType)
+   switch (Gbl.Asgs.SelectedOrder)
      {
       case Dat_START_TIME:
          sprintf (OrderBySubQuery,"StartTime DESC,EndTime DESC,Title DESC");
@@ -944,7 +940,7 @@ void Asg_ReqRemAssignment (void)
    struct Assignment Asg;
 
    /***** Get parameters *****/
-   Asg_GetParamAsgOrderType ();
+   Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
@@ -958,7 +954,7 @@ void Asg_ReqRemAssignment (void)
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemAsg);
    Asg_PutParamAsgCod (Asg.AsgCod);
-   Asg_PutHiddenParamAsgOrderType ();
+   Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
@@ -1116,7 +1112,7 @@ void Asg_RequestCreatOrEditAsg (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Asg_GetParamAsgOrderType ();
+   Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
@@ -1153,7 +1149,7 @@ void Asg_RequestCreatOrEditAsg (void)
       Act_FormStart (ActChgAsg);
       Asg_PutParamAsgCod (Asg.AsgCod);
      }
-   Asg_PutHiddenParamAsgOrderType ();
+   Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 

@@ -25,7 +25,6 @@
 /*********************************** Headers *********************************/
 /*****************************************************************************/
 
-#include <limits.h>		// For INT_MAX
 #include <linux/stddef.h>	// For NULL
 #include <stdlib.h>		// For exit, system, malloc, free, rand, etc.
 #include <string.h>		// For string functions
@@ -3085,7 +3084,8 @@ void Grp_RecFormNewGrpTyp (void)
 
    /***** Get parameters from form *****/
    /* Get the name of group type */
-   Par_GetParToText ("GrpTypName",Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+   Par_GetParToText ("GrpTypName",Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
+                     Grp_MAX_LENGTH_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type */
    Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = Par_GetParToBool ("MandatoryEnrollment");
@@ -3141,17 +3141,19 @@ void Grp_RecFormNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_group;
-   char UnsignedStr[10 + 1];
 
    /***** Get parameters from form *****/
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
      {
       /* Get group name */
-      Par_GetParToText ("GrpName",Gbl.CurrentCrs.Grps.GrpName,Grp_MAX_LENGTH_GROUP_NAME);
+      Par_GetParToText ("GrpName",Gbl.CurrentCrs.Grps.GrpName,
+                        Grp_MAX_LENGTH_GROUP_NAME);
 
       /* Get maximum number of students */
-      Par_GetParToText ("MaxStudents",UnsignedStr,10);
-      Gbl.CurrentCrs.Grps.MaxStudents = Grp_ConvertToNumMaxStdsGrp (UnsignedStr);
+      Gbl.CurrentCrs.Grps.MaxStudents = Par_GetParToUnsigned ("MaxStudents",
+                                                              0,
+                                                              Grp_MAX_STUDENTS_IN_A_GROUP,
+                                                              Grp_NUM_STUDENTS_NOT_LIMITED);
 
       if (Gbl.CurrentCrs.Grps.GrpName[0])	// If there's a group name
         {
@@ -3249,7 +3251,9 @@ static void Grp_CreateGroup (void)
    /*****  Create a new group *****/
    sprintf (Query,"INSERT INTO crs_grp (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
                   " VALUES ('%ld','%s','%u','N','N')",
-            Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,Gbl.CurrentCrs.Grps.GrpName,Gbl.CurrentCrs.Grps.MaxStudents);
+            Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
+            Gbl.CurrentCrs.Grps.GrpName,
+            Gbl.CurrentCrs.Grps.MaxStudents);
    DB_QueryINSERT (Query,"can not create group");
 
    /***** Write success message *****/
@@ -3833,7 +3837,6 @@ void Grp_ChangeMaxStdsGrp (void)
    struct GroupData GrpDat;
    char Query[1024];
    unsigned NewMaxStds;
-   char UnsignedStr[10 + 1];
 
    /***** Get parameters of the form *****/
    /* Get group code */
@@ -3841,8 +3844,10 @@ void Grp_ChangeMaxStdsGrp (void)
       Lay_ShowErrorAndExit ("Code of group is missing.");
 
    /* Get the new maximum number of students of the group */
-   Par_GetParToText ("MaxStudents",UnsignedStr,10);
-   NewMaxStds = Grp_ConvertToNumMaxStdsGrp (UnsignedStr);
+   NewMaxStds = Par_GetParToUnsigned ("MaxStudents",
+                                      0,
+                                      Grp_MAX_STUDENTS_IN_A_GROUP,
+                                      Grp_NUM_STUDENTS_NOT_LIMITED);
 
    /* Get from the database the type, name, and antiguo maximum of students of the group */
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
@@ -3863,7 +3868,7 @@ void Grp_ChangeMaxStdsGrp (void)
       DB_QueryUPDATE (Query,"can not update the maximum number of students in a group");
 
       /***** Write message to show the change made *****/
-      if (NewMaxStds == (unsigned) INT_MAX)
+      if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
          sprintf (Gbl.Message,Txt_The_group_X_now_has_no_limit_of_students,
                   GrpDat.GrpName);
       else
@@ -3898,9 +3903,9 @@ unsigned Grp_ConvertToNumMaxStdsGrp (const char *StrMaxStudents)
    unsigned MaxStudents;
 
    if (sscanf (StrMaxStudents,"%u",&MaxStudents) != 1)
-      return INT_MAX;
+      return Grp_NUM_STUDENTS_NOT_LIMITED;
    else if (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP)
-      return INT_MAX;
+      return Grp_NUM_STUDENTS_NOT_LIMITED;
    return MaxStudents;
   }
 
@@ -4245,43 +4250,40 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 void Grp_GetParamWhichGrps (void)
   {
    static bool FirstTime = true;
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
+   Grp_WhichGroups_t WhichGroupsDefault;
 
    if (FirstTime)
      {
       FirstTime = false;
 
       /***** Get which grous (my groups or all groups) *****/
-      Par_GetParToText ("WhichGrps",UnsignedStr,1);
-      if (UnsignedStr[0])
-        {
-         if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-            Lay_ShowErrorAndExit ("Which groups to show is missing.");
-         if (UnsignedNum >= 2)
-            Lay_ShowErrorAndExit ("Wrong parameter with which groups to show.");
-         Gbl.CurrentCrs.Grps.WhichGrps = (Grp_WhichGroups_t) UnsignedNum;
-        }
-      else	// This parameter does not exist ==> set default value
-         switch (Gbl.Action.Act)
-           {
-            case ActSeeCrsTT:
-            case ActPrnCrsTT:
-            case ActChgCrsTT1stDay:
-            case ActSeeAsg:
-            case ActSeeAtt:
-            case ActSeeAllSvy:
-               Gbl.CurrentCrs.Grps.WhichGrps = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_ONLY_MY_GROUPS :	// If I belong to this course ==> see only my groups
-                                                                                 Grp_ALL_GROUPS;	// If I don't belong to this course ==> see all groups
-	       break;
-            case ActSeeMyTT:
-            case ActPrnMyTT:
-            case ActChgMyTT1stDay:
-               Gbl.CurrentCrs.Grps.WhichGrps = Grp_ONLY_MY_GROUPS;	// By default, see only my groups
-	       break;
-            default:	// Control never should enter here
-               Gbl.CurrentCrs.Grps.WhichGrps = Grp_ALL_GROUPS;
-               break;
-           }
+      /* Set default */
+      switch (Gbl.Action.Act)
+	{
+	 case ActSeeCrsTT:
+	 case ActPrnCrsTT:
+	 case ActChgCrsTT1stDay:
+	 case ActSeeAsg:
+	 case ActSeeAtt:
+	 case ActSeeAllSvy:
+	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_ONLY_MY_GROUPS :	// If I belong to this course ==> see only my groups
+							           Grp_ALL_GROUPS;	// If I don't belong to this course ==> see all groups
+	    break;
+	 case ActSeeMyTT:
+	 case ActPrnMyTT:
+	 case ActChgMyTT1stDay:
+	    WhichGroupsDefault = Grp_ONLY_MY_GROUPS;	// By default, see only my groups
+	    break;
+	 default:	// Control never should enter here
+	    WhichGroupsDefault = Grp_WHICH_GROUPS_DEFAULT;
+	    break;
+	}
+
+      /* Get parameter */
+      Gbl.CurrentCrs.Grps.WhichGrps = (Grp_WhichGroups_t)
+	                              Par_GetParToUnsigned ("WhichGrps",
+	                                                    (unsigned) Grp_ONLY_MY_GROUPS,
+	                                                    (unsigned) Grp_ALL_GROUPS,
+	                                                    (unsigned) WhichGroupsDefault);
      }
   }

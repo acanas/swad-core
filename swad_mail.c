@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Mai_GetParamMaiOrderType (void);
+static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
 static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMAIL + 1]);
@@ -94,11 +94,11 @@ void Mai_SeeMailDomains (void)
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
-   Mai_MailDomainsOrderType_t Order;
+   Mai_DomainsOrder_t Order;
    unsigned NumMai;
 
    /***** Get parameter with the type of order in the list of mail domains *****/
-   Mai_GetParamMaiOrderType ();
+   Mai_GetParamMaiOrder ();
 
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
@@ -117,10 +117,10 @@ void Mai_SeeMailDomains (void)
       Act_FormStart (ActSeeMai);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_EMAIL_DOMAIN_HELP_ORDER[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Mails.SelectedOrderType)
+      if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_EMAIL_DOMAIN_ORDER[Order]);
-      if (Order == Gbl.Mails.SelectedOrderType)
+      if (Order == Gbl.Mails.SelectedOrder)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
@@ -159,16 +159,13 @@ void Mai_SeeMailDomains (void)
 /******* Get parameter with the type or order in list of mail domains ********/
 /*****************************************************************************/
 
-static void Mai_GetParamMaiOrderType (void)
+static void Mai_GetParamMaiOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Mails.SelectedOrderType = (Mai_MailDomainsOrderType_t) UnsignedNum;
-   else
-      Gbl.Mails.SelectedOrderType = Mai_DEFAULT_ORDER_TYPE;
+   Gbl.Mails.SelectedOrder = (Mai_DomainsOrder_t)
+	                     Par_GetParToUnsigned ("Order",
+	                                           (unsigned) Mai_ORDER_BY_DOMAIN,
+	                                           (unsigned) Mai_ORDER_BY_INFO,
+	                                           (unsigned) Mai_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -245,7 +242,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
       DB_ExitOnMySQLError ("can not create temporary table");
 
    /***** Get mail domains from database *****/
-   switch (Gbl.Mails.SelectedOrderType)
+   switch (Gbl.Mails.SelectedOrder)
      {
       case Mai_ORDER_BY_DOMAIN:
          sprintf (OrderBySubQuery,"Domain,Info,N DESC");

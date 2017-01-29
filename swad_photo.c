@@ -1706,19 +1706,11 @@ void Pho_PutHiddenParamTypeOfAvg (void)
 
 static Pho_AvgPhotoTypeOfAverage_t Pho_GetPhotoAvgTypeFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("AvgType",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Type of average is missing.");
-      if (UnsignedNum >= Pho_NUM_AVERAGE_PHOTO_TYPES)
-         Lay_ShowErrorAndExit ("Type of average is missing.");
-      return (Pho_AvgPhotoTypeOfAverage_t) UnsignedNum;
-     }
-   return (Pho_AvgPhotoTypeOfAverage_t) 0;
+   return (Pho_AvgPhotoTypeOfAverage_t)
+	  Par_GetParToUnsigned ("AvgType",
+                                (unsigned) Pho_PHOTO_MEDIAN_ALL,
+                                (unsigned) Pho_PHOTO_AVERAGE_ALL,
+                                (unsigned) Pho_PHOTO_AVG_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1775,19 +1767,11 @@ void Pho_PutHiddenParamPhotoSize (void)
 
 static Pho_HowComputePhotoSize_t Pho_GetHowComputePhotoSizeFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("PhotoSize",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Size of photo is missing.");
-      if (UnsignedNum >= Pho_NUM_HOW_COMPUTE_PHOTO_SIZES)
-         Lay_ShowErrorAndExit ("Size of photo is missing.");
-      return (Pho_HowComputePhotoSize_t) UnsignedNum;
-     }
-   return (Pho_HowComputePhotoSize_t) 0;
+   return (Pho_HowComputePhotoSize_t)
+	  Par_GetParToUnsigned ("PhotoSize",
+                                (unsigned) Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS,
+                                (unsigned) Pho_UNIQUE_SIZE,
+                                (unsigned) Pho_PHOTO_SIZE_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -1803,7 +1787,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"OrdDeg\" class=\"%s\">%s:</label>"
+	              "<label for=\"Order\" class=\"%s\">%s:</label>"
 	              "</td>"
 	              "<td class=\"LEFT_MIDDLE\">",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_Sort_degrees_by);
@@ -1811,7 +1795,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Usr_PutParamColsClassPhoto ();
-   fprintf (Gbl.F.Out,"<select id=\"OrdDeg\" name=\"OrdDeg\""
+   fprintf (Gbl.F.Out,"<select id=\"Order\" name=\"Order\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
    for (Order = (Pho_HowOrderDegrees_t) 0;
@@ -1835,7 +1819,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
 
 void Pho_PutHiddenParamOrderDegrees (void)
   {
-   Par_PutHiddenParamUnsigned ("OrdDeg",(unsigned) Gbl.Stat.DegPhotos.HowOrderDegrees);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Stat.DegPhotos.HowOrderDegrees);
   }
 
 /*****************************************************************************/
@@ -1844,19 +1828,11 @@ void Pho_PutHiddenParamOrderDegrees (void)
 
 static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("OrdDeg",UnsignedStr,10);
-   if (UnsignedStr[0])
-     {
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Sort order is missing.");
-      if (UnsignedNum >= Pho_NUM_HOW_ORDER_DEGREES)
-         Lay_ShowErrorAndExit ("Sort order is missing.");
-      return (Pho_HowOrderDegrees_t) UnsignedNum;
-     }
-   return (Pho_HowOrderDegrees_t) 0;
+   return (Pho_HowOrderDegrees_t)
+	  Par_GetParToUnsigned ("Order",
+                                (unsigned) Pho_NUMBER_OF_STUDENTS,
+                                (unsigned) Pho_DEGREE_NAME,
+                                (unsigned) Pho_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/

@@ -922,7 +922,6 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
   {
    extern const char *Txt_You_have_not_confirmed_the_action;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
-   char YN[1 + 1];
    char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
    char EncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 

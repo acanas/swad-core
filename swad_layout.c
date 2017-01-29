@@ -497,7 +497,7 @@ static void Lay_WriteScripts (void)
       /***** Get list of holidays *****/
       if (!Gbl.Hlds.LstIsRead)
 	{
-	 Gbl.Hlds.SelectedOrderType = Hld_ORDER_BY_START_DATE;
+	 Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
 	 Hld_GetListHolidays ();
 	}
 

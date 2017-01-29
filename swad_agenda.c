@@ -90,7 +90,7 @@ static void Agd_PutIconsOtherPublicAgenda (void);
 static void Agd_PutButtonToCreateNewEvent (void);
 static void Agd_PutParamsToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
-static void Agd_GetParamEventOrderType (void);
+static void Agd_GetParamEventOrder (void);
 
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
 static void Agd_PutParams (void);
@@ -279,7 +279,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
      };
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrderType ();
+   Agd_GetParamEventOrder ();
    Pag_GetParamPagNum (WhatPaginate[AgendaType]);
 
    /***** Get list of events *****/
@@ -342,7 +342,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
    unsigned NumEvent;
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrderType ();
+   Agd_GetParamEventOrder ();
 
    /***** Get list of events *****/
    Agd_GetListEvents (AgendaType);
@@ -424,10 +424,10 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
       Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Agenda.SelectedOrderType)
+      if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-      if (Order == Gbl.Agenda.SelectedOrderType)
+      if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
@@ -567,7 +567,7 @@ static void Agd_PutButtonToCreateNewEvent (void)
 
 static void Agd_PutParamsToCreateNewEvent (void)
   {
-   Agd_PutHiddenParamEventsOrderType ();
+   Agd_PutHiddenParamEventsOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -691,20 +691,16 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 /********** Get parameter with the type or order in list of events ***********/
 /*****************************************************************************/
 
-static void Agd_GetParamEventOrderType (void)
+static void Agd_GetParamEventOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
    static bool AlreadyGot = false;
 
    if (!AlreadyGot)
      {
-      Par_GetParToText ("Order",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	 Gbl.Agenda.SelectedOrderType = (Agd_Order_t) UnsignedNum;
-      else
-	 Gbl.Agenda.SelectedOrderType = Agd_DEFAULT_ORDER_TYPE;
-
+      Gbl.Agenda.SelectedOrder = (Agd_Order_t) Par_GetParToUnsigned ("Order",
+                                                                     (unsigned) Agd_ORDER_BY_START_DATE,
+                                                                     (unsigned) Agd_ORDER_BY_END_DATE,
+                                                                     (unsigned) Agd_ORDER_DEFAULT);
       AlreadyGot = true;
      }
   }
@@ -713,9 +709,9 @@ static void Agd_GetParamEventOrderType (void)
 /****** Put a hidden parameter with the type of order in list of events ******/
 /*****************************************************************************/
 
-void Agd_PutHiddenParamEventsOrderType (void)
+void Agd_PutHiddenParamEventsOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -777,7 +773,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 static void Agd_PutParams (void)
   {
    Agd_PutParamAgdCod (Gbl.Agenda.AgdCodToEdit);
-   Agd_PutHiddenParamEventsOrderType ();
+   Agd_PutHiddenParamEventsOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -798,7 +794,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
       Agd_FreeListEvents ();
 
    /***** Get list of events from database *****/
-   switch (Gbl.Agenda.SelectedOrderType)
+   switch (Gbl.Agenda.SelectedOrder)
      {
       case Agd_ORDER_BY_START_DATE:
          sprintf (OrderBySubQuery,"StartTime,"
@@ -1054,7 +1050,7 @@ void Agd_AskRemEvent (void)
    struct AgendaEvent AgdEvent;
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrderType ();
+   Agd_GetParamEventOrder ();
    Pag_GetParamPagNum (Pag_MY_FULL_AGENDA);
 
    /***** Get event code *****/
@@ -1068,7 +1064,7 @@ void Agd_AskRemEvent (void)
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemEvtMyAgd);
    Agd_PutParamAgdCod (AgdEvent.AgdCod);
-   Agd_PutHiddenParamEventsOrderType ();
+   Agd_PutHiddenParamEventsOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
@@ -1265,7 +1261,7 @@ void Agd_RequestCreatOrEditEvent (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrderType ();
+   Agd_GetParamEventOrder ();
    Pag_GetParamPagNum (Pag_MY_FULL_AGENDA);
 
    /***** Get the code of the event *****/
@@ -1300,7 +1296,7 @@ void Agd_RequestCreatOrEditEvent (void)
       Act_FormStart (ActChgEvtMyAgd);
       Agd_PutParamAgdCod (AgdEvent.AgdCod);
      }
-   Agd_PutHiddenParamEventsOrderType ();
+   Agd_PutHiddenParamEventsOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
    /***** Table start *****/

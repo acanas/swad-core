@@ -1440,17 +1440,12 @@ static Inf_InfoType_t Inf_AsignInfoType (void)
 
 Inf_InfoSrc_t Inf_GetInfoSrcFromForm (void)
   {
-   char UnsignedStr[10 + 1];
-   int InfoSrcInt;
-   Inf_InfoSrc_t InfoSrc;
-
    /***** Get info source for a specific type of course information
           (introduction, teaching guide, bibliography, FAQ, links or evaluation) *****/
-   Par_GetParToText ("InfoSrc",UnsignedStr,2);
-   if (sscanf (UnsignedStr,"%d",&InfoSrcInt) != 1)
-      return Inf_INFO_SRC_NONE;
-   InfoSrc = (Inf_InfoSrc_t) InfoSrcInt;
-   return InfoSrc;
+   return (Inf_InfoSrc_t) Par_GetParToUnsigned ("InfoSrc",
+                                                (unsigned) Inf_INFO_SRC_NONE,
+                                                (unsigned) Inf_INFO_SRC_URL,
+                                                (unsigned) Inf_INFO_SRC_NONE);
   }
 
 /*****************************************************************************/

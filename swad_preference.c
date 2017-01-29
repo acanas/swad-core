@@ -351,16 +351,11 @@ void Pre_UpdateMyLanguageToCurrentLanguage (void)
 Txt_Language_t Pre_GetParamLanguage (void)
   {
    extern const unsigned Txt_Current_CGI_SWAD_Language;
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
 
-   Par_GetParToText ("Lan",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum >= 1 &&
-	  UnsignedNum <= Txt_NUM_LANGUAGES)
-         return (Txt_Language_t) UnsignedNum;
-
-   return Txt_Current_CGI_SWAD_Language;
+   return (Txt_Language_t) Par_GetParToUnsigned ("Lan",
+                                                 1,
+                                                 Txt_NUM_LANGUAGES,
+                                                 Txt_Current_CGI_SWAD_Language);
   }
 
 /*****************************************************************************/
@@ -504,19 +499,8 @@ static void Pre_UpdateSideColsOnUsrDataTable (void)
 
 unsigned Pre_GetParamSideCols (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;	// 11 ==> by default, show both side columns
-
-   Par_GetParToText ("SideCols",UnsignedStr,10);
-
-   if (!UnsignedStr[0])
-      return Cfg_DEFAULT_COLUMNS;
-
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) != 1)
-      return Cfg_DEFAULT_COLUMNS;
-
-   if (UnsignedNum > 3)
-      return Cfg_DEFAULT_COLUMNS;
-
-   return UnsignedNum;
+   return Par_GetParToUnsigned ("SideCols",
+                                0,
+                                Lay_SHOW_BOTH_COLUMNS,
+                                Cfg_DEFAULT_COLUMNS);
   }

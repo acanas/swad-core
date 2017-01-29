@@ -2472,7 +2472,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
    Str_Concat (Query," GROUP BY tst_questions.QstCod",
                Tst_MAX_LENGTH_QUERY_TEST);
 
-   switch (Gbl.Test.SelectedOrderType)
+   switch (Gbl.Test.SelectedOrder)
      {
       case Tst_ORDER_STEM:
          Str_Concat (Query," ORDER BY tst_questions.Stem",
@@ -2764,13 +2764,13 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Tst_WriteParamEditQst ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
          Act_LinkFormSubmit (Txt_TST_STR_ORDER_FULL[Order],"TIT_TBL",NULL);
-         if (Order == Gbl.Test.SelectedOrderType)
+         if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"<u>");
         }
       fprintf (Gbl.F.Out,"%s",Txt_TST_STR_ORDER_SHORT[Order]);
       if (NumRows > 1)
         {
-         if (Order == Gbl.Test.SelectedOrderType)
+         if (Order == Gbl.Test.SelectedOrder)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Act_FormEnd ();
@@ -2885,7 +2885,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
          Tst_WriteParamEditQst ();
          if (NumRows == 1)
 	    Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If editing only one question, don't edit others
-         Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrderType);
+         Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Test.SelectedOrder);
          fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"Shuffle\" value=\"Y\"");
          if (row[3][0] == 'Y')
             fprintf (Gbl.F.Out," checked=\"checked\"");
@@ -4324,10 +4324,10 @@ static bool Tst_GetParamsTst (void)
       /* Get ordering criteria */
       Par_GetParMultiToText ("Order",UnsignedStr,10);
       if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-         Gbl.Test.SelectedOrderType = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
+         Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) ((UnsignedNum < Tst_NUM_TYPES_ORDER_QST) ? UnsignedNum :
                                                                                                         0);
       else
-         Gbl.Test.SelectedOrderType = (Tst_QuestionsOrder_t) 0;
+         Gbl.Test.SelectedOrder = (Tst_QuestionsOrder_t) 0;
 
       /* Get whether we must create the XML file or not */
       Gbl.Test.XML.CreateXML = Tst_GetCreateXMLFromForm ();

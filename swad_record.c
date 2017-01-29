@@ -245,7 +245,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
          if (Vis < Rec_NUM_TYPES_VISIBILITY)
             Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Visibility = (Rec_VisibilityRecordFields_t) Vis;
          else
-            Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Visibility = Rec_HIDDEN_FIELD;
+            Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Visibility = Rec_VISIBILITY_DEFAULT;
         }
      }
 
@@ -432,25 +432,23 @@ void Rec_ReceiveFormField (void)
   {
    extern const char *Txt_The_record_field_X_already_exists;
    extern const char *Txt_You_must_specify_the_name_of_the_new_record_field;
-   char UnsignedStr[10 + 1];
-   unsigned Vis;
 
    /***** Get parameters from the form *****/
    /* Get the name of the field */
    Par_GetParToText ("FieldName",Gbl.CurrentCrs.Records.Field.Name,Rec_MAX_LENGTH_NAME_FIELD);
 
    /* Get the number of lines */
-   Par_GetParToText ("NumLines",UnsignedStr,10);
-   Gbl.CurrentCrs.Records.Field.NumLines = Rec_ConvertToNumLinesField (UnsignedStr);
+   Gbl.CurrentCrs.Records.Field.NumLines = Par_GetParToUnsigned ("NumLines",
+                                                                 Rec_MIN_LINES_IN_EDITION_FIELD,
+                                                                 Rec_MAX_LINES_IN_EDITION_FIELD,
+                                                                 Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get the field visibility by students */
-   Par_GetParToText ("Visibility",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Vis) != 1)
-      Lay_ShowErrorAndExit ("Visibility is missing.");
-   if (Vis < Rec_NUM_TYPES_VISIBILITY)
-      Gbl.CurrentCrs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t) Vis;
-   else
-      Gbl.CurrentCrs.Records.Field.Visibility = Rec_HIDDEN_FIELD;
+   Gbl.CurrentCrs.Records.Field.Visibility = (Rec_VisibilityRecordFields_t)
+	                                     Par_GetParToUnsigned ("Visibility",
+                                                                   0,
+                                                                   Rec_NUM_TYPES_VISIBILITY - 1,
+                                                                   Rec_VISIBILITY_DEFAULT);
 
    if (Gbl.CurrentCrs.Records.Field.Name[0])	// If there's a name
      {
@@ -480,7 +478,7 @@ unsigned Rec_ConvertToNumLinesField (const char *StrNumLines)
    int NumLines;
 
    if (sscanf (StrNumLines,"%d",&NumLines) != 1)
-      return Rec_MIN_LINES_IN_EDITION_FIELD;
+      return Rec_DEF_LINES_IN_EDITION_FIELD;
    else if (NumLines < Rec_MIN_LINES_IN_EDITION_FIELD)
       return Rec_MIN_LINES_IN_EDITION_FIELD;
    else if (NumLines > Rec_MAX_LINES_IN_EDITION_FIELD)
@@ -717,7 +715,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD
    if (Vis < Rec_NUM_TYPES_VISIBILITY)
       *Visibility = (Rec_VisibilityRecordFields_t) Vis;
    else
-      *Visibility = Rec_HIDDEN_FIELD;
+      *Visibility = Rec_VISIBILITY_DEFAULT;
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -817,7 +815,6 @@ void Rec_ChangeLinesField (void)
    extern const char *Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed;
    extern const char *Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y;
    char Query[1024];
-   char UnsignedStr[10 + 1];
    unsigned NewNumLines;
 
    /***** Get parameters of the form *****/
@@ -826,8 +823,10 @@ void Rec_ChangeLinesField (void)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new number of lines */
-   Par_GetParToText ("NumLines",UnsignedStr,10);
-   NewNumLines = Rec_ConvertToNumLinesField (UnsignedStr);
+   NewNumLines = Par_GetParToUnsigned ("NumLines",
+                                       Rec_MIN_LINES_IN_EDITION_FIELD,
+                                       Rec_MAX_LINES_IN_EDITION_FIELD,
+                                       Rec_DEF_LINES_IN_EDITION_FIELD);
 
    /* Get from the database the number of lines of the field */
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
@@ -867,8 +866,6 @@ void Rec_ChangeVisibilityField (void)
    extern const char *Txt_The_visibility_of_the_record_field_X_has_not_changed;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MSG[Rec_NUM_TYPES_VISIBILITY];
    char Query[1024];
-   char UnsignedStr[10 + 1];
-   unsigned Vis;
    Rec_VisibilityRecordFields_t NewVisibility;
 
    /***** Get parameters of the form *****/
@@ -877,13 +874,11 @@ void Rec_ChangeVisibilityField (void)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new visibility of the field */
-   Par_GetParToText ("Visibility",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Vis) != 1)
-      Lay_ShowErrorAndExit ("Visibility of field is missing.");
-   if (Vis < Rec_NUM_TYPES_VISIBILITY)
-      NewVisibility = (Rec_VisibilityRecordFields_t) Vis;
-   else
-      NewVisibility = Rec_HIDDEN_FIELD;
+   NewVisibility = (Rec_VisibilityRecordFields_t)
+	           Par_GetParToUnsigned ("Visibility",
+                                         0,
+                                         Rec_NUM_TYPES_VISIBILITY - 1,
+                                         Rec_VISIBILITY_DEFAULT);
 
    /* Get from the database the visibility of the field */
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
@@ -1419,8 +1414,8 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
                       "<label class=\"%s\">"
                       "(<select name=\"RecsPerPag\">",
 	    The_ClassForm[Gbl.Prefs.Theme]);
-   for (i = 1;
-        i <= 10;
+   for (i = Rec_MIN_RECORDS_PER_PAGE;
+        i <= Rec_MAX_RECORDS_PER_PAGE;
         i++)
      {
       fprintf (Gbl.F.Out,"<option");
@@ -1439,11 +1434,10 @@ static void Rec_ShowLinkToPrintPreviewOfRecords (void)
 
 static void Rec_GetParamRecordsPerPage (void)
   {
-   char UnsignedStr[10 + 1];
-
-   Par_GetParToText ("RecsPerPag",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.Usrs.Listing.RecsPerPag) != 1)
-      Lay_ShowErrorAndExit ("Number of rows per page is missing.");
+   Gbl.Usrs.Listing.RecsPerPag = Par_GetParToUnsigned ("RecsPerPag",
+                                                       Rec_MIN_RECORDS_PER_PAGE,
+                                                       Rec_MAX_RECORDS_PER_PAGE,
+                                                       Rec_DEF_RECORDS_PER_PAGE);
   }
 
 /*****************************************************************************/
@@ -3058,7 +3052,7 @@ static void Rec_ShowCountry (struct UsrData *UsrDat,
    /***** If list of countries is empty, try to get it *****/
    if (!Gbl.Ctys.Num)
      {
-      Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+      Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
       Cty_GetListCountries (Cty_GET_BASIC_DATA);
      }
 
@@ -3519,13 +3513,14 @@ void Rec_UpdateMyRecord (void)
 
 Rol_Role_t Rec_GetRoleFromRecordForm (void)
   {
-   char UnsignedStr[10 + 1];
    Rol_Role_t Role;
    bool RoleOK = false;
 
    /***** Get role as a parameter from form *****/
-   Par_GetParToText ("Role",UnsignedStr,10);
-   Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
+   Role = (Rol_Role_t) Par_GetParToUnsigned ("Role",
+					     0,
+				             Rol_NUM_ROLES - 1,
+				             (unsigned) Rol_UNKNOWN);
 
    /***** Check if I can register a user
           with the received role in current course *****/
@@ -3605,15 +3600,11 @@ void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
 
 static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
    /***** Get sex from form *****/
-   Par_GetParToText ("Sex",UnsignedStr,10);
-   UsrDat->Sex = Usr_SEX_UNKNOWN;
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum <= Usr_SEX_MALE)
-	 UsrDat->Sex = (Usr_Sex_t) UnsignedNum;
+   UsrDat->Sex = (Usr_Sex_t) Par_GetParToUnsigned ("Sex",
+                                                   (unsigned) Usr_SEX_FEMALE,
+                                                   (unsigned) Usr_SEX_MALE,
+                                                   (unsigned) Usr_SEX_UNKNOWN);
 
    /***** Get country code *****/
    UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");
@@ -3730,7 +3721,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
    /* If list of countries is empty, try to get it */
    if (!Gbl.Ctys.Num)
      {
-      Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+      Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
       Cty_GetListCountries (Cty_GET_BASIC_DATA);
      }
 

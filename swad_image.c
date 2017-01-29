@@ -374,18 +374,11 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
 
 Img_Action_t Img_GetImageActionFromForm (const char *ParamAction)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
    /***** Get parameter with the action to perform on image *****/
-   Par_GetParToText (ParamAction,UnsignedStr,10);
-   if (UnsignedStr[0])
-      if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-	 if (UnsignedNum < Img_NUM_ACTIONS)
-	    return (Img_Action_t) UnsignedNum;
-
-   /***** Default action if none supplied *****/
-   return Img_ACTION_NO_IMAGE;
+   return (Img_Action_t) Par_GetParToUnsigned (ParamAction,
+                                               (unsigned) Img_ACTION_NEW_IMAGE,
+                                               (unsigned) Img_ACTION_NO_IMAGE,
+                                               (unsigned) Img_ACTION_NO_IMAGE);	// Default action if none supplied
   }
 
 /*****************************************************************************/

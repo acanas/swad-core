@@ -41,7 +41,9 @@ typedef enum
    Ctr_STATUS_BIT_PENDING = (1 << 0),	// Centre is requested, but not yet activated
    Ctr_STATUS_BIT_REMOVED = (1 << 1),	// Centre has been removed
   } Ctr_Status_Bits_t;
+
 typedef unsigned Ctr_Status_t;
+#define Ctr_WRONG_STATUS ((Ctr_Status_t) UINT_MAX)
 
 #define Ctr_NUM_STATUS_TXT	4
 typedef enum
@@ -78,9 +80,9 @@ typedef enum
   {
    Ctr_ORDER_BY_CENTRE   = 0,
    Ctr_ORDER_BY_NUM_TCHS = 1,
-  } tCtrsOrderType;
+  } Ctr_Order_t;
 
-#define Ctr_DEFAULT_ORDER_TYPE Ctr_ORDER_BY_CENTRE
+#define Ctr_ORDER_DEFAULT Ctr_ORDER_BY_CENTRE
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/

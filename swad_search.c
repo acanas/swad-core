@@ -214,6 +214,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
+	"",							// Sch_SEARCH_UNKNOWN
 	Txt_all,						// Sch_SEARCH_ALL
 	Txt_institutions,					// Sch_SEARCH_INSTITS
 	Txt_centres,						// Sch_SEARCH_CENTRES
@@ -293,6 +294,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
   {
    unsigned Permissions[Sch_NUM_WHAT_TO_SEARCH] =
      {
+      0x000,	// Sch_SEARCH_UNKNOWN
       0x1FF,	// Sch_SEARCH_ALL
       0x1FF,	// Sch_SEARCH_INSTITS
       0x1FF,	// Sch_SEARCH_CENTRES
@@ -412,16 +414,18 @@ void Sch_PutMagnifyingGlassButton (const char *Icon)
 
 void Sch_GetParamWhatToSearch (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
+   Sch_WhatToSearch_t WhatToSearch;
 
    /***** Get what to search from form *****/
-   Par_GetParToText ("WhatToSearch",UnsignedStr,10);
+   WhatToSearch = (Sch_WhatToSearch_t)
+	          Par_GetParToUnsigned ("WhatToSearch",
+	                                0,
+	                                Sch_NUM_WHAT_TO_SEARCH - 1,
+	                                (unsigned) Sch_SEARCH_UNKNOWN);
 
    // If parameter WhatToSearch is not present, use parameter from session
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
-         Gbl.Search.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
+   if (WhatToSearch != Sch_SEARCH_UNKNOWN)
+      Gbl.Search.WhatToSearch = WhatToSearch;
   }
 
 /*****************************************************************************/
@@ -606,6 +610,8 @@ static void Sch_SearchInDB (void)
          break;
      }
 
+   if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
+      Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    switch (Gbl.Search.WhatToSearch)
      {
       case Sch_SEARCH_ALL:
@@ -652,6 +658,9 @@ static void Sch_SearchInDB (void)
 	 break;
       case Sch_SEARCH_MY_DOCUMENTS:
 	 NumResults = Sch_SearchMyDocumentsInDB (RangeQuery);
+	 break;
+      default:
+	 NumResults = 0;
 	 break;
      }
 
@@ -1319,6 +1328,9 @@ static void Sch_SaveLastSearchIntoSession (void)
 
    if (Gbl.Usrs.Me.Logged)
      {
+      if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
+	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
+
       /***** Save last search in session *****/
       sprintf (Query,"UPDATE sessions SET WhatToSearch='%u',SearchString='%s'"
 		     " WHERE SessionId='%s'",

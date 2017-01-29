@@ -73,7 +73,7 @@ static void Ins_PutIconsListInstitutions (void);
 static void Ins_PutIconToEditInstitutions (void);
 static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns);
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
-static void Ins_GetParamInsOrderType (void);
+static void Ins_GetParamInsOrder (void);
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Instit *Ins);
 static Ins_StatusTxt_t Ins_GetStatusTxtFromStatusBits (Ins_Status_t Status);
@@ -642,7 +642,7 @@ void Ins_ShowInssOfCurrentCty (void)
    if (Gbl.CurrentCty.Cty.CtyCod > 0)
      {
       /***** Get parameter with the type of order in the list of institutions *****/
-      Ins_GetParamInsOrderType ();
+      Ins_GetParamInsOrder ();
 
       /***** Get list of institutions *****/
       Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
@@ -846,7 +846,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Departments_ABBREVIATION;
    extern const char *Txt_Status;
-   Ins_InssOrderType_t Order;
+   Ins_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>");
@@ -862,13 +862,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 	 Act_FormStart (ActSeeIns);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_INSTITUTIONS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Inss.SelectedOrderType)
+	 if (Order == Gbl.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_INSTITUTIONS_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Inss.SelectedOrderType)
+	 if (Order == Gbl.Inss.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -906,16 +906,13 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
 /******* Get parameter with the type or order in list of institutions ********/
 /*****************************************************************************/
 
-static void Ins_GetParamInsOrderType (void)
+static void Ins_GetParamInsOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Inss.SelectedOrderType = (Ins_InssOrderType_t) UnsignedNum;
-   else
-      Gbl.Inss.SelectedOrderType = Ins_DEFAULT_ORDER_TYPE;
+   Gbl.Inss.SelectedOrder = (Ins_Order_t)
+	                    Par_GetParToUnsigned ("Order",
+	                                          (unsigned) Ins_ORDER_BY_INSTITUTION,
+	                                          (unsigned) Ins_ORDER_BY_NUM_USRS,
+	                                          (unsigned) Ins_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -964,7 +961,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 		  CtyCod);
          break;
       case Ins_GET_EXTRA_DATA:
-         switch (Gbl.Inss.SelectedOrderType)
+         switch (Gbl.Inss.SelectedOrder)
            {
             case Ins_ORDER_BY_INSTITUTION:
                sprintf (OrderBySubQuery,"FullName");
@@ -1928,7 +1925,6 @@ void Ins_ChangeInsStatus (void)
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
    struct Instit *Ins;
    char Query[256];
-   char UnsignedNum[10 + 1];
    Ins_Status_t Status;
    Ins_StatusTxt_t StatusTxt;
 
@@ -1939,8 +1935,9 @@ void Ins_ChangeInsStatus (void)
    Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get parameter with status */
-   Par_GetParToText ("Status",UnsignedNum,1);
-   if (sscanf (UnsignedNum,"%u",&Status) != 1)
+   Status = (Ins_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
+                                                 (unsigned) Ins_WRONG_STATUS);
+   if (Status == Ctr_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Ins_GetStatusTxtFromStatusBits (Status);
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status

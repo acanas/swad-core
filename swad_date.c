@@ -723,22 +723,14 @@ void Dat_WriteFormDate (unsigned FirstYear,unsigned LastYear,
 void Dat_GetDateFromForm (const char *ParamNameDay,const char *ParamNameMonth,const char *ParamNameYear,
                           unsigned *Day,unsigned *Month,unsigned *Year)
   {
-   char UnsignedStr[10 + 1];
-
    /**** Get day ****/
-   Par_GetParToText (ParamNameDay,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",Day) != 1)
-      *Day = 0;
+   *Day   = Par_GetParToUnsigned (ParamNameDay  ,1,31,0);
 
    /**** Get month ****/
-   Par_GetParToText (ParamNameMonth,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",Month) != 1)
-      *Month = 0;
+   *Month = Par_GetParToUnsigned (ParamNameMonth,1,12,0);
 
    /**** Get year ****/
-   Par_GetParToText (ParamNameYear,UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",Year) != 1)
-      *Year = 0;
+   *Year  = Par_GetParToUnsigned (ParamNameYear ,0,UINT_MAX,0);
   }
 
 /*****************************************************************************/

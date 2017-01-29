@@ -2202,7 +2202,6 @@ void Deg_ChangeDegStatus (void)
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
    struct Degree *Deg;
    char Query[256];
-   char UnsignedNum[10 + 1];
    Deg_Status_t Status;
    Deg_StatusTxt_t StatusTxt;
 
@@ -2213,8 +2212,9 @@ void Deg_ChangeDegStatus (void)
    Deg->DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /* Get parameter with status */
-   Par_GetParToText ("Status",UnsignedNum,1);
-   if (sscanf (UnsignedNum,"%u",&Status) != 1)
+   Status = (Deg_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
+                                                 (unsigned) Deg_WRONG_STATUS);
+   if (Status == Deg_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Status);
    Status = Deg_GetStatusBitsFromStatusTxt (StatusTxt);	// New status

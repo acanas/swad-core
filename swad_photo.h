@@ -55,6 +55,7 @@ typedef enum
    Pho_PHOTO_MEDIAN_ALL  = 0,
    Pho_PHOTO_AVERAGE_ALL = 1,
   } Pho_AvgPhotoTypeOfAverage_t;
+#define Pho_PHOTO_AVG_DEFAULT Pho_PHOTO_MEDIAN_ALL
 
 #define Pho_NUM_HOW_COMPUTE_PHOTO_SIZES 4
 typedef enum
@@ -64,6 +65,7 @@ typedef enum
    Pho_PROPORTIONAL_TO_PERCENT            = 2,
    Pho_UNIQUE_SIZE                        = 3,
   } Pho_HowComputePhotoSize_t;
+#define Pho_PHOTO_SIZE_DEFAULT Pho_PROPORTIONAL_TO_NUMBER_OF_STUDENTS
 
 #define Pho_NUM_HOW_ORDER_DEGREES 4
 typedef enum
@@ -73,6 +75,7 @@ typedef enum
    Pho_PERCENT            = 2,
    Pho_DEGREE_NAME        = 3,
   } Pho_HowOrderDegrees_t;
+#define Pho_ORDER_DEFAULT Pho_NUMBER_OF_STUDENTS
 
 #define Pho_MAX_CLICKS_WITHOUT_PHOTO	 50
 

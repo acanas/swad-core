@@ -67,14 +67,14 @@ typedef enum
    Att_OLDEST_FIRST,
   } Att_OrderTime_t;
 
-#define Att_DEFAULT_ORDER_TYPE Dat_START_TIME
+#define Att_ORDER_DEFAULT Dat_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Att_SeeAttEvents (void);
-void Att_PutHiddenParamAttOrderType (void);
+void Att_PutHiddenParamAttOrder (void);
 void Att_RequestCreatOrEditAttEvent (void);
 bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att);
 void Att_FreeListAttEvents (void);

@@ -116,7 +116,6 @@ void Exa_PutFrmEditAExamAnnouncement (void)
 
 static long Exa_GetParamsExamAnnouncement (void)
   {
-   char UnsignedStr[10 + 1];
    long ExaCod;
 
    /***** Get the code of the exam announcement *****/
@@ -130,11 +129,10 @@ static long Exa_GetParamsExamAnnouncement (void)
                 Crs_MAX_LENGTH_COURSE_FULL_NAME);
 
    /***** Get the year *****/
-   Par_GetParToText ("Year",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnns.ExaDat.Year) != 1)
-      Gbl.ExamAnns.ExaDat.Year = Gbl.CurrentCrs.Crs.Year;
-   if (Gbl.ExamAnns.ExaDat.Year > Deg_MAX_YEARS_PER_DEGREE)
-      Gbl.ExamAnns.ExaDat.Year = Gbl.CurrentCrs.Crs.Year;
+   Gbl.ExamAnns.ExaDat.Year = Par_GetParToUnsigned ("Year",
+                                                    0,	// N.A.
+                                                    Deg_MAX_YEARS_PER_DEGREE,
+                                                    Gbl.CurrentCrs.Crs.Year);
 
    /***** Get the type of exam announcement *****/
    Par_GetParToText ("ExamSession",Gbl.ExamAnns.ExaDat.Session,Cns_MAX_BYTES_STRING);
@@ -154,28 +152,16 @@ static long Exa_GetParamsExamAnnouncement (void)
      }
 
    /***** Get the hour of the exam *****/
-   Par_GetParToText ("ExamHour",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnns.ExaDat.StartTime.Hour) != 1)
-      Gbl.ExamAnns.ExaDat.StartTime.Hour = 0;
-   if (Gbl.ExamAnns.ExaDat.StartTime.Hour > 23)
-      Gbl.ExamAnns.ExaDat.StartTime.Hour = 0;
-   Par_GetParToText ("ExamMinute",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnns.ExaDat.StartTime.Minute) != 1)
-      Gbl.ExamAnns.ExaDat.StartTime.Minute = 0;
-   if (Gbl.ExamAnns.ExaDat.StartTime.Minute > 59)
-      Gbl.ExamAnns.ExaDat.StartTime.Minute = 0;
+   Gbl.ExamAnns.ExaDat.StartTime.Hour   = Par_GetParToUnsigned ("ExamHour",
+                                                                0,23,0);
+   Gbl.ExamAnns.ExaDat.StartTime.Minute = Par_GetParToUnsigned ("ExamMinute",
+                                                                0,59,0);
 
    /***** Get the duration of the exam *****/
-   Par_GetParToText ("DurationHour",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnns.ExaDat.Duration.Hour) != 1)
-      Gbl.ExamAnns.ExaDat.Duration.Hour = 0;
-   if (Gbl.ExamAnns.ExaDat.Duration.Hour > 23)
-      Gbl.ExamAnns.ExaDat.Duration.Hour = 0;
-   Par_GetParToText ("DurationMinute",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&Gbl.ExamAnns.ExaDat.Duration.Minute) != 1)
-      Gbl.ExamAnns.ExaDat.Duration.Minute = 0;
-   if (Gbl.ExamAnns.ExaDat.Duration.Minute > 59)
-      Gbl.ExamAnns.ExaDat.Duration.Minute = 0;
+   Gbl.ExamAnns.ExaDat.Duration.Hour   = Par_GetParToUnsigned ("DurationHour",
+                                                               0,23,0);
+   Gbl.ExamAnns.ExaDat.Duration.Minute = Par_GetParToUnsigned ("DurationMinute",
+                                                               0,59,0);
 
    /***** Get the place where the exam will happen *****/
    Par_GetParToHTML ("Place",Gbl.ExamAnns.ExaDat.Place,Cns_MAX_BYTES_TEXT);

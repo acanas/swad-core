@@ -67,8 +67,7 @@ typedef enum
    Agd_ORDER_BY_START_DATE = 0,
    Agd_ORDER_BY_END_DATE   = 1,
   } Agd_Order_t;
-
-#define Agd_DEFAULT_ORDER_TYPE Agd_ORDER_BY_START_DATE
+#define Agd_ORDER_DEFAULT Agd_ORDER_BY_START_DATE
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -82,7 +81,7 @@ void Agd_ShowMyPublicAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowOtherAgendaAfterLogIn (void);
 
-void Agd_PutHiddenParamEventsOrderType (void);
+void Agd_PutHiddenParamEventsOrder (void);
 void Agd_RequestCreatOrEditEvent (void);
 void Agd_FreeListEvents (void);
 

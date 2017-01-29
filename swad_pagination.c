@@ -128,13 +128,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_ASSIGNMENTS:
                Act_FormStart (ActSeeAsg);
                Pag_PutHiddenParamPagNum (1);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (1);
-               Att_PutHiddenParamAttOrderType ();
+               Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
@@ -161,23 +161,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_SURVEYS:
                Act_FormStart (ActSeeAllSvy);
                Pag_PutHiddenParamPagNum (1);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -221,13 +221,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_ASSIGNMENTS:
                Act_FormStart (ActSeeAsg);
                Pag_PutHiddenParamPagNum (1);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (1);
-               Att_PutHiddenParamAttOrderType ();
+               Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
@@ -254,23 +254,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_SURVEYS:
                Act_FormStart (ActSeeAllSvy);
                Pag_PutHiddenParamPagNum (1);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -297,13 +297,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_ASSIGNMENTS:
                Act_FormStart (ActSeeAsg);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Att_PutHiddenParamAttOrderType ();
+               Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
@@ -330,23 +330,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_SURVEYS:
                Act_FormStart (ActSeeAllSvy);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Agd_PutHiddenParamEventsOrderType ();
+               Agd_PutHiddenParamEventsOrder ();
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -380,13 +380,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                case Pag_ASSIGNMENTS:
                   Act_FormStart (ActSeeAsg);
                   Pag_PutHiddenParamPagNum (NumPage);
-                  Asg_PutHiddenParamAsgOrderType ();
+                  Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_ATT_EVENTS:
                   Act_FormStart (ActSeeAtt);
                   Pag_PutHiddenParamPagNum (NumPage);
-                  Att_PutHiddenParamAttOrderType ();
+                  Att_PutHiddenParamAttOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_MESSAGES_RECEIVED:
@@ -413,23 +413,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                case Pag_SURVEYS:
                   Act_FormStart (ActSeeAllSvy);
                   Pag_PutHiddenParamPagNum (NumPage);
-                  Asg_PutHiddenParamAsgOrderType ();
+                  Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
 	       case Pag_MY_FULL_AGENDA:
 		  Act_FormStart (ActSeeMyAgd);
 		  Pag_PutHiddenParamPagNum (NumPage);
-		  Agd_PutHiddenParamEventsOrderType ();
+		  Agd_PutHiddenParamEventsOrder ();
 		  break;
 	       case Pag_MY_PUBLIC_AGENDA:
 		  Act_FormStart (ActSeeMyPubAgd);
 		  Pag_PutHiddenParamPagNum (NumPage);
-		  Agd_PutHiddenParamEventsOrderType ();
+		  Agd_PutHiddenParamEventsOrder ();
 		  break;
 	       case Pag_OTHER_PUBLIC_AGENDA:
 		  Act_FormStart (ActSeeUsrAgd);
 		  Pag_PutHiddenParamPagNum (NumPage);
-		  Agd_PutHiddenParamEventsOrderType ();
+		  Agd_PutHiddenParamEventsOrder ();
 		  Usr_PutParamOtherUsrCodEncrypted ();
 		  break;
               }
@@ -459,13 +459,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_ASSIGNMENTS:
                Act_FormStart (ActSeeAsg);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
-               Att_PutHiddenParamAttOrderType ();
+               Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
@@ -492,23 +492,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_SURVEYS:
                Act_FormStart (ActSeeAllSvy);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
 	    case Pag_MY_FULL_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       break;
 	    case Pag_MY_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeMyPubAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       break;
 	    case Pag_OTHER_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
@@ -535,13 +535,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_ASSIGNMENTS:
                Act_FormStart (ActSeeAsg);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
                Act_FormStart (ActSeeAtt);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
-               Att_PutHiddenParamAttOrderType ();
+               Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
@@ -568,23 +568,23 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             case Pag_SURVEYS:
                Act_FormStart (ActSeeAllSvy);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrderType ();
+               Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
 	    case Pag_MY_FULL_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       break;
 	    case Pag_MY_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeMyPubAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       break;
 	    case Pag_OTHER_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
-	       Agd_PutHiddenParamEventsOrderType ();
+	       Agd_PutHiddenParamEventsOrder ();
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
@@ -616,18 +616,15 @@ void Pag_PutHiddenParamPagNum (unsigned NumPage)
 void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate)
   {
    static bool FirstCall = true;
-   char UnsignedStr[10 + 1];
-   unsigned NumPage;
 
    if (FirstCall)
      {
       FirstCall = false;
 
       /***** Try to get parameter with the number of page *****/
-      Par_GetParToText ("NumPage",UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&NumPage) == 1)
-         Gbl.Pag.CurrentPage = NumPage;
-      else
+      Gbl.Pag.CurrentPage = Par_GetParToUnsigned ("NumPage",
+                                                  1,UINT_MAX,0);
+      if (Gbl.Pag.CurrentPage == 0)
          /***** If there's no parameter page, return a default value *****/
          switch (WhatPaginate)
            {

@@ -85,7 +85,7 @@ static bool Ctr_CheckIfICanCreateCentres (void);
 static void Ctr_PutIconsListCentres (void);
 static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
-static void Ctr_GetParamCtrOrderType (void);
+static void Ctr_GetParamCtrOrder (void);
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
 static void Ctr_ListCentresForEdition (void);
@@ -718,7 +718,7 @@ void Ctr_ShowCtrsOfCurrentIns (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Get parameter with the type of order in the list of centres *****/
-      Ctr_GetParamCtrOrderType ();
+      Ctr_GetParamCtrOrder ();
 
       /***** Get list of centres *****/
       Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
@@ -916,16 +916,12 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 /********** Get parameter with the type or order in list of centres **********/
 /*****************************************************************************/
 
-static void Ctr_GetParamCtrOrderType (void)
+static void Ctr_GetParamCtrOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Ctrs.SelectedOrderType = (tCtrsOrderType) UnsignedNum;
-   else
-      Gbl.Ctrs.SelectedOrderType = Ctr_DEFAULT_ORDER_TYPE;
+   Gbl.Ctrs.SelectedOrder = (Ctr_Order_t) Par_GetParToUnsigned ("Order",
+                                                                (unsigned) Ctr_ORDER_BY_CENTRE,
+                                                                (unsigned) Ctr_ORDER_BY_NUM_TCHS,
+                                                                (unsigned) Ctr_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -971,7 +967,7 @@ void Ctr_GetListCentres (long InsCod)
    struct Centre *Ctr;
 
    /***** Get centres from database *****/
-   switch (Gbl.Ctrs.SelectedOrderType)
+   switch (Gbl.Ctrs.SelectedOrder)
      {
       case Ctr_ORDER_BY_CENTRE:
          sprintf (OrderBySubQuery,"FullName");
@@ -2073,7 +2069,6 @@ void Ctr_ChangeCtrStatus (void)
    extern const char *Txt_The_status_of_the_centre_X_has_changed;
    struct Centre *Ctr;
    char Query[256];
-   char UnsignedNum[10 + 1];
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
@@ -2084,8 +2079,9 @@ void Ctr_ChangeCtrStatus (void)
    Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with status */
-   Par_GetParToText ("Status",UnsignedNum,1);
-   if (sscanf (UnsignedNum,"%u",&Status) != 1)
+   Status = (Ctr_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
+                                                 (unsigned) Ctr_WRONG_STATUS);
+   if (Status == Ctr_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Status);
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
@@ -2516,7 +2512,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Status;
-   tCtrsOrderType Order;
+   Ctr_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>");
@@ -2532,13 +2528,13 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
 	 Act_FormStart (ActSeeCtr);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_CENTRES_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Ctrs.SelectedOrderType)
+	 if (Order == Gbl.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	}
       fprintf (Gbl.F.Out,"%s",Txt_CENTRES_ORDER[Order]);
       if (OrderSelectable)
 	{
-	 if (Order == Gbl.Ctrs.SelectedOrderType)
+	 if (Order == Gbl.Ctrs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();

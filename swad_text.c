@@ -53761,27 +53761,6 @@ const char *Txt_You_must_send_your_photo_because_ =
 	" allowed without photo.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_must_specify_in_step_2_the_action_to_perform =
-#if   L==1
-	"S'ha d'especificar en el pas 2 l'acci&oacute; a realitzar.";
-#elif L==2
-	"Sie m&uuml;ssen in Schritt 2 die auszuf&uuml;hrende Aktion festzulegen.";
-#elif L==3
-	"You must specify in step 2 the action to perform.";
-#elif L==4
-	"Debe especificar en el paso 2 la acci&oacute;n a realizar.";
-#elif L==5
-	"Vous devez sp&eacute;cifier &agrave; l'&eacute;tape 2 l'action &agrave; effectuer.";
-#elif L==6
-	"Debe especificar en el paso 2 la acci&oacute;n a realizar.";	// Okoteve traducción
-#elif L==7
-	"&Egrave; necessario specificare al punto 2 l'azione da eseguire.";
-#elif L==8
-	"You must specify in step 2 the action to perform.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Voc&ecirc; deve especificar no passo 2 a a&ccedil;&atilde;o a ser executada.";
-#endif
-
 const char *Txt_You_must_specify_the_image_of_the_new_banner =
 #if   L==1
 	"Debe especificar la imagen"

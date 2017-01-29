@@ -78,7 +78,7 @@ static void Att_PutButtonToCreateNewAttEvent (void);
 static void Att_PutParamsToCreateNewAttEvent (void);
 static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAttEventComplete);
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att);
-static void Att_GetParamAttOrderType (void);
+static void Att_GetParamAttOrder (void);
 
 static void Att_PutFormToListMyAttendance (void);
 static void Att_PutFormToListStdsAttendance (void);
@@ -146,7 +146,7 @@ void Att_SeeAttEvents (void)
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Get parameters *****/
-   Att_GetParamAttOrderType ();
+   Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
@@ -243,10 +243,10 @@ static void Att_ShowAllAttEvents (void)
 	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.AttEvents.SelectedOrderType)
+	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-	 if (Order == Gbl.AttEvents.SelectedOrderType)
+	 if (Order == Gbl.AttEvents.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -302,7 +302,7 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
 
 static void Att_ParamsWhichGroupsToShow (void)
   {
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
@@ -341,7 +341,7 @@ static void Att_PutButtonToCreateNewAttEvent (void)
 
 static void Att_PutParamsToCreateNewAttEvent (void)
   {
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -520,25 +520,21 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
 /**** Get parameter with the type or order in list of attendance events ******/
 /*****************************************************************************/
 
-static void Att_GetParamAttOrderType (void)
+static void Att_GetParamAttOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.AttEvents.SelectedOrderType = (Dat_StartEndTime_t) UnsignedNum;
-   else
-      Gbl.AttEvents.SelectedOrderType = Att_DEFAULT_ORDER_TYPE;
+   Gbl.AttEvents.SelectedOrder = (Dat_StartEndTime_t) Par_GetParToUnsigned ("Order",
+                                                                            (unsigned) Dat_START_TIME,
+                                                                            (unsigned) Dat_END_TIME,
+                                                                            (unsigned) Att_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
 /*** Put a hidden parameter with the type of order in list of att. events ****/
 /*****************************************************************************/
 
-void Att_PutHiddenParamAttOrderType (void)
+void Att_PutHiddenParamAttOrder (void)
   {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.AttEvents.SelectedOrderType);
+   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.AttEvents.SelectedOrder);
   }
 
 /*****************************************************************************/
@@ -571,7 +567,7 @@ static void Att_PutFormToListStdsAttendance (void)
 
 static void Att_PutFormToListStdsParams (void)
   {
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -624,7 +620,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 static void Att_PutParams (void)
   {
    Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
@@ -657,7 +653,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
          sprintf (HiddenSubQuery,"AND Hidden='N'");
          break;
      }
-   switch (Gbl.AttEvents.SelectedOrderType)
+   switch (Gbl.AttEvents.SelectedOrder)
      {
       case Dat_START_TIME:
 	 if (Order == Att_NEWEST_FIRST)
@@ -908,7 +904,7 @@ void Att_AskRemAttEvent (void)
    struct AttendanceEvent Att;
 
    /***** Get parameters *****/
-   Att_GetParamAttOrderType ();
+   Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
@@ -922,7 +918,7 @@ void Att_AskRemAttEvent (void)
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemAtt);
    Att_PutParamAttCod (Att.AttCod);
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
@@ -1083,7 +1079,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Att_GetParamAttOrderType ();
+   Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
@@ -1122,7 +1118,7 @@ void Att_RequestCreatOrEditAttEvent (void)
       Act_FormStart (ActChgAtt);
       Att_PutParamAttCod (Att.AttCod);
      }
-   Att_PutHiddenParamAttOrderType ();
+   Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
 
@@ -1845,7 +1841,7 @@ void Att_SeeOneAttEvent (void)
          Lay_ShowErrorAndExit ("Code of attendance event is missing.");
 
    /***** Get parameters *****/
-   Att_GetParamAttOrderType ();
+   Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
    Pag_GetParamPagNum (Pag_ATT_EVENTS);
 

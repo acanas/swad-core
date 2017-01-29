@@ -316,28 +316,30 @@ void Rol_PutFormToChangeMyRole (void)
 
 void Rol_ChangeMyRole (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
+   Rol_Role_t NewRole;
 
    /***** Get parameter with the new logged role ******/
-   Par_GetParToText ("MyRole",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
+   NewRole = (Rol_Role_t) Par_GetParToUnsigned ("MyRole",
+                                                0,
+                                                Rol_NUM_ROLES - 1,
+                                                (unsigned) Rol_UNKNOWN);
+   if (NewRole != Rol_UNKNOWN)
      {
-      /* Check if new role is a correct type *****/
-      if (UnsignedNum >= Rol_NUM_ROLES)
-         return;
-
       /* Check if new role is allowed for me */
-      if (!(Gbl.Usrs.Me.AvailableRoles & (1 << UnsignedNum)))
+      if (!(Gbl.Usrs.Me.AvailableRoles & (1 << NewRole)))
          return;
 
-      /* New role is correct and is allowed for me,
-         so change my logged user type */
-      Gbl.Usrs.Me.LoggedRole = (Rol_Role_t) UnsignedNum;
-      Gbl.Usrs.Me.RoleHasChanged = true;
+      /* New role is correct and is allowed for me */
+      if (NewRole != Gbl.Usrs.Me.LoggedRole)
+	{
+         /* New role is distinct to current role,
+            so change my role... */
+	 Gbl.Usrs.Me.LoggedRole = NewRole;
+	 Gbl.Usrs.Me.RoleHasChanged = true;
 
-      /* Update logged role in session */
-      Ses_UpdateSessionDataInDB ();
+	 /* ...and update logged role in session */
+	 Ses_UpdateSessionDataInDB ();
+	}
      }
   }
 
@@ -394,29 +396,27 @@ void Rol_PutHiddenParamRoles (unsigned Roles)
 
 unsigned Rol_GetSelectedRoles (void)
   {
-   char StrRoles[(10 + 1) * 2];
+   char StrRoles[Rol_NUM_ROLES * (10 + 1)];
    const char *Ptr;
    char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
    Rol_Role_t Role;
    unsigned Roles;
 
    /***** Try to get param "Roles" with multiple roles *****/
-   Par_GetParToText ("Roles",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Roles = UnsignedNum;
-   else
-      Roles = 0;
+   Roles = Par_GetParToUnsigned ("Roles",
+                                 0,				// 000...000
+                                 (1 << Rol_NUM_ROLES) - 1,	// 111...111
+                                 0);				// 000...000
 
    /***** Try to get multiple param "Role" *****/
-   Par_GetParMultiToText ("Role",StrRoles,(10 + 1) * 2);
+   Par_GetParMultiToText ("Role",StrRoles,Rol_NUM_ROLES * (10 + 1));
    for (Ptr = StrRoles;
         *Ptr;)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
-      if (sscanf (UnsignedStr,"%u",&Role) != 1)
-         Lay_ShowErrorAndExit ("can not get user's role");
-      Roles |= (1 << Role);
+      Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
+      if (Role != Rol_UNKNOWN)
+         Roles |= (1 << Role);
      }
 
    return Roles;

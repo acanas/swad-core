@@ -42,6 +42,7 @@ typedef enum
    Hld_HOLIDAY           = 0,
    Hld_NON_SCHOOL_PERIOD = 1,
   } Hld_HolidayType_t;
+#define Hld_HOLIDAY_TYPE_DEFAULT Hld_HOLIDAY
 
 typedef enum
   {
@@ -64,7 +65,7 @@ typedef enum
   {
    Hld_ORDER_BY_PLACE      = 0,
    Hld_ORDER_BY_START_DATE = 1,
-  } Hld_OrderType_t;
+  } Hld_Order_t;
 
 #define Hld_DEFAULT_ORDER_TYPE Hld_ORDER_BY_START_DATE
 

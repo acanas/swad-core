@@ -191,11 +191,12 @@ void Sco_PutParamScope (const char *ParamName,Sco_Scope_t Scope)
 
 void Sco_GetScope (const char *ParamName)
   {
-   char UnsignedStr[10 + 1];
-
-   /***** Get parameter location range if exists *****/
-   Par_GetParToText (ParamName,UnsignedStr,10);
-   Gbl.Scope.Current = Sco_GetScopeFromUnsignedStr (UnsignedStr);
+   /***** Get parameter with scope *****/
+   Gbl.Scope.Current = (Sco_Scope_t)
+	               Par_GetParToUnsigned (ParamName,
+                                             0,
+                                             Sco_NUM_SCOPES - 1,
+                                             (Sco_Scope_t) Sco_SCOPE_UNK);
 
    /***** Adjust scope avoiding impossible or forbidden scopes *****/
    Sco_AdjustScope ();

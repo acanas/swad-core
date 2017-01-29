@@ -41,9 +41,9 @@ typedef enum
    Mai_ORDER_BY_DOMAIN = 0,
    Mai_ORDER_BY_INFO   = 1,
    Mai_ORDER_BY_USERS  = 2,
-  } Mai_MailDomainsOrderType_t;
+  } Mai_DomainsOrder_t;
 
-#define Mai_DEFAULT_ORDER_TYPE Mai_ORDER_BY_USERS
+#define Mai_ORDER_DEFAULT Mai_ORDER_BY_USERS
 
 struct Mail
   {

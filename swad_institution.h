@@ -39,7 +39,9 @@ typedef enum
    Ins_STATUS_BIT_PENDING = (1 << 0),	// Institution is requested, but not yet activated
    Ins_STATUS_BIT_REMOVED = (1 << 1),	// Institution has been removed
   } Ins_Status_Bits_t;
+
 typedef unsigned Ins_Status_t;
+#define Ins_WRONG_STATUS ((Ins_Status_t) UINT_MAX)
 
 #define Ins_NUM_STATUS_TXT	4
 typedef enum
@@ -76,9 +78,9 @@ typedef enum
   {
    Ins_ORDER_BY_INSTITUTION = 0,
    Ins_ORDER_BY_NUM_USRS    = 1,
-  } Ins_InssOrderType_t;
+  } Ins_Order_t;
 
-#define Ins_DEFAULT_ORDER_TYPE Ins_ORDER_BY_NUM_USRS
+#define Ins_ORDER_DEFAULT Ins_ORDER_BY_NUM_USRS
 
 typedef enum
   {

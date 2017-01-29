@@ -160,14 +160,12 @@ void Cal_ChangeFirstDayOfWeek (void)
 
 static unsigned Cal_GetParamFirstDayOfWeek (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-   unsigned FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
+   unsigned FirstDayOfWeek;
 
-   Par_GetParToText ("FirstDayOfWeek",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
-	 FirstDayOfWeek = UnsignedNum;
+   FirstDayOfWeek = Par_GetParToUnsigned ("FirstDayOfWeek",0,6,
+                                          Cal_FIRST_DAY_OF_WEEK_DEFAULT);
+   if (!Cal_DayIsValidAsFirstDayOfWeek[FirstDayOfWeek])
+      FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
 
    return FirstDayOfWeek;
   }
@@ -184,7 +182,7 @@ void Cal_DrawCurrentMonth (void)
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
      {
-      Gbl.Hlds.SelectedOrderType = Hld_ORDER_BY_START_DATE;
+      Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
       Hld_GetListHolidays ();
      }
 
@@ -240,7 +238,7 @@ void Cal_DrawCalendar (void)
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
      {
-      Gbl.Hlds.SelectedOrderType = Hld_ORDER_BY_START_DATE;
+      Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
       Hld_GetListHolidays ();
      }
 

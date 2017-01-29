@@ -72,7 +72,7 @@ static void Cty_PutIconsListCountries (void);
 static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
-static void Cty_GetParamCtyOrderType (void);
+static void Cty_GetParamCtyOrder (void);
 static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
 static void Cty_FreeMapAttribution (char **MapAttribution);
 static void Cty_ListCountriesForEdition (void);
@@ -498,7 +498,7 @@ void Cty_ListCountries (void)
 void Cty_ListCountries1 (void)
   {
    /***** Get parameter with the type of order in the list of countries *****/
-   Cty_GetParamCtyOrderType ();
+   Cty_GetParamCtyOrder ();
 
    /***** Get list of countries *****/
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
@@ -518,7 +518,7 @@ void Cty_ListCountries2 (void)
    extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
-   Cty_CtysOrderType_t Order;
+   Cty_Order_t Order;
    unsigned NumCty;
    const char *BgColor;
 
@@ -536,10 +536,10 @@ void Cty_ListCountries2 (void)
       Act_FormStart (ActSeeCty);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
       Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Ctys.SelectedOrderType)
+      if (Order == Gbl.Ctys.SelectedOrder)
          fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
-      if (Order == Gbl.Ctys.SelectedOrderType)
+      if (Order == Gbl.Ctys.SelectedOrder)
          fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
@@ -887,16 +887,12 @@ void Cty_WriteScriptGoogleGeochart (void)
 /******** Get parameter with the type or order in list of countries **********/
 /*****************************************************************************/
 
-static void Cty_GetParamCtyOrderType (void)
+static void Cty_GetParamCtyOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Ctys.SelectedOrderType = (Cty_CtysOrderType_t) UnsignedNum;
-   else
-      Gbl.Ctys.SelectedOrderType = Cty_DEFAULT_ORDER_TYPE;
+   Gbl.Ctys.SelectedOrder = (Cty_Order_t) Par_GetParToUnsigned ("Order",
+                                                                (unsigned) Cty_ORDER_BY_COUNTRY,
+                                                                (unsigned) Cty_ORDER_BY_NUM_USRS,
+                                                                (unsigned) Cty_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -908,7 +904,7 @@ void Cty_EditCountries (void)
    extern const char *Txt_No_countries_have_been_created;
 
    /***** Get list of countries *****/
-   Gbl.Ctys.SelectedOrderType = Cty_ORDER_BY_COUNTRY;
+   Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
    if (!Gbl.Ctys.Num)
@@ -986,7 +982,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                         Cty_MAX_LENGTH_SUBQUERY_CTYS);
            }
 
-         switch (Gbl.Ctys.SelectedOrderType)
+         switch (Gbl.Ctys.SelectedOrder)
            {
             case Cty_ORDER_BY_COUNTRY:
                sprintf (OrderBySubQuery,"Name_%s",

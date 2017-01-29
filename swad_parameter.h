@@ -72,6 +72,10 @@ unsigned Par_GetParameter (tParamType ParamType,const char *ParamName,
 void Par_GetMainParameters (void);
 
 unsigned Par_GetParToText (const char *ParamName,char *ParamValue,size_t MaxBytes);
+unsigned Par_GetParToUnsigned (const char *ParamName,
+                               unsigned Min,
+                               unsigned Max,
+                               unsigned Default);
 long Par_GetParToLong (const char *ParamName);
 bool Par_GetParToBool (const char *ParamName);
 unsigned Par_GetParToHTML (const char *ParamName,char *ParamValue,size_t MaxBytes);

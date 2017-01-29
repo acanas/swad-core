@@ -52,7 +52,9 @@ typedef enum
    Deg_STATUS_BIT_PENDING = (1 << 0),	// Degree is requested, but not yet activated
    Deg_STATUS_BIT_REMOVED = (1 << 1),	// Degree has been removed
   } Deg_Status_Bits_t;
+
 typedef unsigned Deg_Status_t;
+#define Deg_WRONG_STATUS ((Deg_Status_t) UINT_MAX)
 
 #define Deg_NUM_STATUS_TXT	4
 typedef enum

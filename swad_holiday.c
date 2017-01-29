@@ -57,7 +57,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Hld_GetParamHldOrderType (void);
+static void Hld_GetParamHldOrder (void);
 static void Hld_PutIconToEditHlds (void);
 
 static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld);
@@ -84,13 +84,13 @@ void Hld_SeeHolidays (void)
    extern const char *Txt_End_date;
    extern const char *Txt_Holiday;
    extern const char *Txt_All_places;
-   Hld_OrderType_t Order;
+   Hld_Order_t Order;
    unsigned NumHld;
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Get parameter with the type of order in the list of holidays *****/
-      Hld_GetParamHldOrderType ();
+      Hld_GetParamHldOrder ();
 
       /***** Get list of holidays *****/
       Hld_GetListHolidays ();
@@ -109,10 +109,10 @@ void Hld_SeeHolidays (void)
 	 Act_FormStart (ActSeeHld);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Hlds.SelectedOrderType)
+	 if (Order == Gbl.Hlds.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
-	 if (Order == Gbl.Hlds.SelectedOrderType)
+	 if (Order == Gbl.Hlds.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -179,16 +179,13 @@ void Hld_SeeHolidays (void)
 /********* Get parameter with the type or order in list of holidays **********/
 /*****************************************************************************/
 
-static void Hld_GetParamHldOrderType (void)
+static void Hld_GetParamHldOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Hlds.SelectedOrderType = (Hld_OrderType_t) UnsignedNum;
-   else
-      Gbl.Hlds.SelectedOrderType = Hld_DEFAULT_ORDER_TYPE;
+   Gbl.Hlds.SelectedOrder = (Hld_Order_t)
+	                    Par_GetParToUnsigned ("Order",
+	                                          (unsigned) Hld_ORDER_BY_PLACE,
+	                                          (unsigned) Hld_ORDER_BY_START_DATE,
+	                                          (unsigned) Hld_DEFAULT_ORDER_TYPE);
   }
 
 /*****************************************************************************/
@@ -256,7 +253,7 @@ void Hld_GetListHolidays (void)
 	 Hld_FreeListHolidays ();
 
       /***** Get holidays from database *****/
-      switch (Gbl.Hlds.SelectedOrderType)
+      switch (Gbl.Hlds.SelectedOrder)
 	{
 	 case Hld_ORDER_BY_PLACE:
 	    sprintf (OrderBySubQuery,"Place,StartDate");
@@ -443,10 +440,10 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 
 static Hld_HolidayType_t Hld_GetParamHldType (void)
   {
-   char UnsignedStr[10 + 1];
-
-   Par_GetParToText ("HldTyp",UnsignedStr,10);
-   return Hld_GetTypeOfHoliday (UnsignedStr);
+   return (Hld_HolidayType_t) Par_GetParToUnsigned ("HldTyp",
+	                                            (unsigned) Hld_HOLIDAY,
+	                                            (unsigned) Hld_NON_SCHOOL_PERIOD,
+	                                            (unsigned) Hld_HOLIDAY_TYPE_DEFAULT);
   }
 
 /*****************************************************************************/

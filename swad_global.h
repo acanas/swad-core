@@ -192,35 +192,35 @@ struct Globals
       unsigned Num;		// Number of institutions
       struct Instit *Lst;	// List of institutions
       struct Instit EditingIns;
-      Ins_InssOrderType_t SelectedOrderType;
+      Ins_Order_t SelectedOrder;
      } Inss;
    struct
      {
       unsigned Num;		// Number of centres
       struct Centre *Lst;	// List of centres
       struct Centre EditingCtr;
-      tCtrsOrderType SelectedOrderType;
+      Ctr_Order_t SelectedOrder;
      } Ctrs;
    struct
      {
       unsigned Num;		// Number of countries
       struct Country *Lst;	// List of countries
       struct Country EditingCty;
-      Cty_CtysOrderType_t SelectedOrderType;
+      Cty_Order_t SelectedOrder;
      } Ctys;
    struct
      {
       unsigned Num;		// Number of departments
       struct Department *Lst;	// List of departments
       struct Department EditingDpt;
-      tDptsOrderType SelectedOrderType;
+      Dpt_Order_t SelectedOrder;
      } Dpts;
    struct
      {
       unsigned Num;		// Number of places
       struct Place *Lst;	// List of places
       struct Place EditingPlc;
-      Plc_PlcsOrderType_t SelectedOrderType;
+      Plc_Order_t SelectedOrder;
      } Plcs;
    struct
      {
@@ -228,14 +228,14 @@ struct Globals
       unsigned Num;		// Number of holidays
       struct Holiday *Lst;	// List of holidays
       struct Holiday EditingHld;
-      Hld_OrderType_t SelectedOrderType;
+      Hld_Order_t SelectedOrder;
      } Hlds;
    struct
      {
       unsigned Num;		// Number of mail domains
       struct Mail *Lst;		// List of mail domains
       struct Mail EditingMai;
-      Mai_MailDomainsOrderType_t SelectedOrderType;
+      Mai_DomainsOrder_t SelectedOrder;
      } Mails;
    struct
      {
@@ -411,7 +411,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of events
       long *LstAgdCods;	// List of agenda codes
-      Agd_Order_t SelectedOrderType;
+      Agd_Order_t SelectedOrder;
       long AgdCodToEdit;	// Used as parameter in contextual links
      } Agenda;
    struct
@@ -454,7 +454,7 @@ struct Globals
          struct GroupType GrpTyp;
          long GrpCod;
          char GrpName[Grp_MAX_LENGTH_GROUP_NAME + 1];
-         int MaxStudents;
+         unsigned MaxStudents;
          bool Open;
          bool FileZones;
          struct ListCodGrps LstGrpsSel;
@@ -552,7 +552,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of assignments
       long *LstAsgCods;	// List of assigment codes
-      Dat_StartEndTime_t SelectedOrderType;
+      Dat_StartEndTime_t SelectedOrder;
       long AsgCodToEdit;	// Used as parameter in contextual links
      } Asgs;
    struct
@@ -560,7 +560,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of attendance events
       struct AttendanceEvent *Lst;	// List of attendance events
-      Dat_StartEndTime_t SelectedOrderType;
+      Dat_StartEndTime_t SelectedOrder;
       long AttCod;
       bool ShowDetails;
       char *StrAttCodsSelected;
@@ -575,7 +575,7 @@ struct Globals
       struct Degree Deg;
       struct Course Crs;
       int Level;
-      For_ForumOrderType_t SelectedOrderType;
+      For_Order_t SelectedOrder;
       char PathRelOld[PATH_MAX + 1];
       long ThreadToMove;
      } Forum;
@@ -672,7 +672,7 @@ struct Globals
          double FloatingPoint[2];
         } Answer;
       char ListAnsTypes[Tst_MAX_BYTES_LIST_ANSWER_TYPES + 1];
-      Tst_QuestionsOrder_t SelectedOrderType;
+      Tst_QuestionsOrder_t SelectedOrder;
       struct
         {
          bool CreateXML;					// Create an XML file and Export questions into it?
@@ -690,7 +690,7 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of surveys
       long *LstSvyCods;	// List of survey codes
-      tSvysOrderType SelectedOrderType;
+      Svy_Order_t SelectedOrder;
       long SvyCodToEdit;	// Used as parameter in contextual links
       long SvyQstCodToEdit;	// Used as parameter in contextual links
      } Svys;

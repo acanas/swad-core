@@ -81,7 +81,7 @@ typedef enum
   {
    For_FIRST_MSG = 0,
    For_LAST_MSG  = 1,
-  } For_ForumOrderType_t;
+  } For_Order_t;
 #define For_DEFAULT_ORDER For_LAST_MSG
 
 #define For_MAX_BYTES_FORUM_NAME (512 - 1)

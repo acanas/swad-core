@@ -60,9 +60,9 @@ typedef enum
   {
    Cty_ORDER_BY_COUNTRY  = 0,
    Cty_ORDER_BY_NUM_USRS = 1,
-  } Cty_CtysOrderType_t;
+  } Cty_Order_t;
 
-#define Cty_DEFAULT_ORDER_TYPE Cty_ORDER_BY_NUM_USRS
+#define Cty_ORDER_DEFAULT Cty_ORDER_BY_NUM_USRS
 
 typedef enum
   {
@@ -89,7 +89,7 @@ void Cty_DrawCountryMap (struct Country *Cty,const char *Class);
 bool Cty_CheckIfCountryMapExists (struct Country *Cty);
 
 void Cty_WriteScriptGoogleGeochart (void);
-void Cty_PutHiddenParamCtyOrderType (void);
+void Cty_PutHiddenParamCtyOrder (void);
 void Cty_EditCountries (void);
 void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData);
 void Cty_FreeListCountries (void);

@@ -2763,7 +2763,6 @@ void Crs_ChangeCrsStatus (void)
    extern const char *Txt_The_status_of_the_course_X_has_changed;
    struct Course *Crs;
    char Query[256];
-   char UnsignedNum[10 + 1];
    Crs_Status_t Status;
    Crs_StatusTxt_t StatusTxt;
 
@@ -2774,8 +2773,9 @@ void Crs_ChangeCrsStatus (void)
    Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get parameter with status */
-   Par_GetParToText ("Status",UnsignedNum,1);
-   if (sscanf (UnsignedNum,"%u",&Status) != 1)
+   Status = (Crs_Status_t) Par_GetParToUnsigned ("Status",0,UINT_MAX,
+                                                 (unsigned) Crs_WRONG_STATUS);
+   if (Status == Crs_WRONG_STATUS)
       Lay_ShowErrorAndExit ("Wrong status.");
    StatusTxt = Crs_GetStatusTxtFromStatusBits (Status);
    Status = Crs_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
@@ -3363,7 +3363,6 @@ void Crs_RemoveOldCrss (void)
   {
    extern const char *Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access;
    extern const char *Txt_X_courses_have_been_eliminated;
-   char UnsignedStr[10 + 1];
    unsigned MonthsWithoutAccess;
    unsigned long SecondsWithoutAccess;
    char Query[1024];
@@ -3375,11 +3374,11 @@ void Crs_RemoveOldCrss (void)
    long CrsCod;
 
    /***** Get parameter with number of months without access *****/
-   Par_GetParToText ("Months",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&MonthsWithoutAccess) != 1)
-      Lay_ShowErrorAndExit ("Number of months without clicks is missing.");
-   if (MonthsWithoutAccess < Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS ||
-       MonthsWithoutAccess > Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS)
+   MonthsWithoutAccess = Par_GetParToUnsigned ("Months",
+                                               Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                               Crs_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS,
+                                               UINT_MAX);
+   if (MonthsWithoutAccess == UINT_MAX)
       Lay_ShowErrorAndExit ("Wrong number of months without clicks.");
    SecondsWithoutAccess = (unsigned long) MonthsWithoutAccess * Dat_SECONDS_IN_ONE_MONTH;
 

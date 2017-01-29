@@ -38,6 +38,7 @@
 #define Grp_MAX_LENGTH_GROUP_NAME	(256 - 1)
 
 #define Grp_MAX_STUDENTS_IN_A_GROUP	10000	// If max of students in a group is greater than this, it is considered infinite
+#define Grp_NUM_STUDENTS_NOT_LIMITED  INT_MAX	// This number can be stored in database and means that a group has no limit of students
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -63,6 +64,7 @@ struct GroupData
    bool FileZones;				// Group has file zones?
    bool MultipleEnrollment;
   };
+
 struct Group
   {
    long GrpCod;					// Code of group
@@ -73,6 +75,7 @@ struct Group
    bool FileZones;				// Group has file zones?
    bool ShowFileZone;				// Show file zone of this group?
   };
+
 struct GroupType
   {
    long GrpTypCod;					// Code of type of group
@@ -84,6 +87,7 @@ struct GroupType
    unsigned NumGrps;					// Number of groups of this type
    struct Group *LstGrps;				// List of groups of this type
   };
+
 struct GroupTypes
   {
    struct GroupType *LstGrpTypes;		// List of types of group
@@ -91,22 +95,27 @@ struct GroupTypes
    unsigned NumGrpsTotal;			// Number of groups of any type
    int NestedCalls;				// Number of nested calls to the function that allocates memory for this list
   };
+
 struct ListCodGrps
   {
    long *GrpCods;
    unsigned NumGrps;
    int NestedCalls;				// Number of nested calls to the function that allocates memory for this list
   };
+
 struct ListGrpsAlreadySelec
   {
    long GrpTypCod;
    bool AlreadySelected;
   };
+
 typedef enum
   {
    Grp_ONLY_MY_GROUPS,
    Grp_ALL_GROUPS,
   } Grp_WhichGroups_t;
+#define Grp_WHICH_GROUPS_DEFAULT Grp_ALL_GROUPS
+
 typedef enum
   {
    Grp_ASSIGNMENT,

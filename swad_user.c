@@ -315,7 +315,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
 
 void Usr_ResetMyLastData (void)
   {
-   Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_ALL;
+   Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    Gbl.Usrs.Me.UsrLast.LastCrs      = -1L;
    Gbl.Usrs.Me.UsrLast.LastTab      = TabUnk;
    Gbl.Usrs.Me.UsrLast.LastAccNotif = 0;
@@ -667,10 +667,12 @@ static void Usr_GetMyLastData (void)
       row = mysql_fetch_row (mysql_res);
 
       /* Get last type of search */
-      Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_ALL;
+      Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_SEARCH_UNKNOWN;
       if (sscanf (row[0],"%u",&UnsignedNum) == 1)
          if (UnsignedNum < Sch_NUM_WHAT_TO_SEARCH)
             Gbl.Usrs.Me.UsrLast.WhatToSearch = (Sch_WhatToSearch_t) UnsignedNum;
+      if (Gbl.Usrs.Me.UsrLast.WhatToSearch == Sch_SEARCH_UNKNOWN)
+	 Gbl.Usrs.Me.UsrLast.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /* Get last course */
       Gbl.Usrs.Me.UsrLast.LastCrs = Str_ConvertStrCodToLongCod (row[1]);

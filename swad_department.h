@@ -48,9 +48,9 @@ typedef enum
   {
    Dpt_ORDER_BY_DEPARTMENT = 0,
    Dpt_ORDER_BY_NUM_TCHS   = 1,
-  } tDptsOrderType;
+  } Dpt_Order_t;
 
-#define Dpt_DEFAULT_ORDER_TYPE Dpt_ORDER_BY_DEPARTMENT
+#define Dpt_ORDER_DEFAULT Dpt_ORDER_BY_DEPARTMENT
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/

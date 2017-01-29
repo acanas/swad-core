@@ -58,7 +58,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Plc_GetParamPlcOrderType (void);
+static void Plc_GetParamPlcOrder (void);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
@@ -80,7 +80,7 @@ void Plc_SeePlaces (void)
    extern const char *Txt_PLACES_ORDER[2];
    extern const char *Txt_Other_places;
    extern const char *Txt_Place_unspecified;
-   Plc_PlcsOrderType_t Order;
+   Plc_Order_t Order;
    unsigned NumPlc;
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
@@ -88,7 +88,7 @@ void Plc_SeePlaces (void)
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
       /***** Get parameter with the type of order in the list of places *****/
-      Plc_GetParamPlcOrderType ();
+      Plc_GetParamPlcOrder ();
 
       /***** Get list of places *****/
       Plc_GetListPlaces ();
@@ -107,10 +107,10 @@ void Plc_SeePlaces (void)
 	 Act_FormStart (ActSeePlc);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_PLACES_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Plcs.SelectedOrderType)
+	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_PLACES_ORDER[Order]);
-	 if (Order == Gbl.Plcs.SelectedOrderType)
+	 if (Order == Gbl.Plcs.SelectedOrder)
 	    fprintf (Gbl.F.Out,"</u>");
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
@@ -182,16 +182,13 @@ void Plc_SeePlaces (void)
 /********** Get parameter with the type or order in list of places ***********/
 /*****************************************************************************/
 
-static void Plc_GetParamPlcOrderType (void)
+static void Plc_GetParamPlcOrder (void)
   {
-   char UnsignedStr[10 + 1];
-   unsigned UnsignedNum;
-
-   Par_GetParToText ("Order",UnsignedStr,10);
-   if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      Gbl.Plcs.SelectedOrderType = (Plc_PlcsOrderType_t) UnsignedNum;
-   else
-      Gbl.Plcs.SelectedOrderType = Plc_DEFAULT_ORDER_TYPE;
+   Gbl.Plcs.SelectedOrder = (Plc_Order_t)
+	                    Par_GetParToUnsigned ("Order",
+                                                  (unsigned) Plc_ORDER_BY_PLACE,
+                                                  (unsigned) Plc_ORDER_BY_NUM_CTRS,
+                                                  (unsigned) Plc_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -249,7 +246,7 @@ void Plc_GetListPlaces (void)
    struct Place *Plc;
 
    /***** Get places from database *****/
-   switch (Gbl.Plcs.SelectedOrderType)
+   switch (Gbl.Plcs.SelectedOrder)
      {
       case Plc_ORDER_BY_PLACE:
          sprintf (OrderBySubQuery,"FullName");

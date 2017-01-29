@@ -61,14 +61,14 @@ struct Assignment
 				// I belong to any of the groups)
   };
 
-#define Asg_DEFAULT_ORDER_TYPE Dat_START_TIME
+#define Asg_ORDER_DEFAULT Dat_START_TIME
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
 void Asg_SeeAssignments (void);
-void Asg_PutHiddenParamAsgOrderType (void);
+void Asg_PutHiddenParamAsgOrder (void);
 void Asg_RequestCreatOrEditAsg (void);
 void Asg_GetListAssignments (void);
 void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
