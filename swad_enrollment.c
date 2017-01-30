@@ -1720,10 +1720,13 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 
 void Enr_AskRemAllStdsThisCrs (void)
   {
+   extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
-   extern const char *Txt_Remove_students;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumStds;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,NULL);
 
    if ((NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Gbl.CurrentCrs.Crs.CrsCod)))
      {
@@ -1736,7 +1739,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormStart (ActRemAllStdCrs);
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
-      Lay_PutRemoveButton (Txt_Remove_students);
+      Lay_PutRemoveButton (Txt_Remove_all_students);
       Act_FormEnd ();
      }
    else
@@ -1745,6 +1748,9 @@ void Enr_AskRemAllStdsThisCrs (void)
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

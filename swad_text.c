@@ -31180,27 +31180,6 @@ const char *Txt_Remove_record_field =
 	"Remover campo de cart&atilde;o";
 #endif
 
-const char *Txt_Remove_students =
-#if   L==1
-	"Eliminar estudiants";
-#elif L==2
-	"Entfernen Studenten";
-#elif L==3
-	"Remove students";
-#elif L==4
-	"Eliminar estudiantes";
-#elif L==5
-	"Enlever &eacute;tudiants";
-#elif L==6
-	"Eliminar estudiantes";	// Okoteve traducción
-#elif L==7
-	"Rimuovere studenti";
-#elif L==8
-	"Usu&nacute; student&oacute;w";
-#elif L==9
-	"Tirar estudantes";
-#endif
-
 const char *Txt_Remove_survey =
 #if   L==1
 	"Eliminar encuesta";	// Necessita traduccio

@@ -191,14 +191,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.132.6 (2017-01-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.132.7 (2017-01-31)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.132.6: Jan 31, 2017	Help on adminitration of students. (211895 lines)
+        Version 16.132.7: Jan 31, 2017	Changes in layout of removal of all students in a course. (211880 lines)
+        Version 16.132.6: Jan 31, 2017	Help on administration of students. (211895 lines)
         Version 16.132.5: Jan 30, 2017	Fixed bug in checking consent on dangerous action. (211888 lines)
         Version 16.132.4: Jan 30, 2017	Changes in connected users. (211887 lines)
         Version 16.132.3: Jan 30, 2017	Code refactoring in connected users. (211881 lines)
