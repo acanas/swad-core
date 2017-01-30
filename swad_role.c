@@ -338,8 +338,11 @@ void Rol_ChangeMyRole (void)
 	 Gbl.Usrs.Me.LoggedRole = NewRole;
 	 Gbl.Usrs.Me.RoleHasChanged = true;
 
-	 /* ...and update logged role in session */
+	 /* ...update logged role in session... */
 	 Ses_UpdateSessionDataInDB ();
+
+	 /* ...and update logged role in list of connected */
+	 Con_UpdateMeInConnectedList ();
 	}
      }
   }

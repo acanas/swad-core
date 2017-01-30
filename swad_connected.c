@@ -348,10 +348,18 @@ void Con_ShowGlobalConnectedUsrs (void)
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
-   unsigned StdsTotal = Con_GetConnectedUsrsTotal (Rol_STUDENT);
-   unsigned TchsTotal = Con_GetConnectedUsrsTotal (Rol_TEACHER);
-   unsigned GstsTotal = Con_GetConnectedUsrsTotal (Rol__GUEST_);
-   unsigned UsrsTotal = StdsTotal + TchsTotal + GstsTotal;
+   Rol_Role_t Role;
+   unsigned NumUsrs[Rol_NUM_ROLES];
+   unsigned NumUsrsTotal;
+
+   /***** Get number of connected users *****/
+   for (Role  = Rol__GUEST_, NumUsrsTotal = 0;
+	Role <= Rol_SYS_ADM;
+	Role++)
+     {
+      NumUsrs[Role] = Con_GetConnectedUsrsTotal (Role);
+      NumUsrsTotal += NumUsrs[Role];
+     }
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
@@ -372,24 +380,21 @@ void Con_ShowGlobalConnectedUsrs (void)
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
 
-   if (UsrsTotal)
+   if (NumUsrsTotal)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONNECTED_LIST\">");
 
       /***** Write total number of users *****/
       fprintf (Gbl.F.Out,"%u %s:",
-	       UsrsTotal,
-	       (UsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
-				  Txt_users[Usr_SEX_UNKNOWN]);
+	       NumUsrsTotal,
+	       (NumUsrsTotal == 1) ? Txt_user[Usr_SEX_UNKNOWN] :
+				     Txt_users[Usr_SEX_UNKNOWN]);
 
-      /***** Write total number of students *****/
-      Con_ShowGlobalConnectedUsrsRole (Rol_STUDENT,StdsTotal);
-
-      /***** Write total number of teachers *****/
-      Con_ShowGlobalConnectedUsrsRole (Rol_TEACHER,TchsTotal);
-
-      /***** Write total number of users who do not belong to any course *****/
-      Con_ShowGlobalConnectedUsrsRole (Rol__GUEST_,GstsTotal);
+      /***** Write total number of users with each role *****/
+      for (Role  = Rol__GUEST_, NumUsrsTotal = 0;
+	   Role <= Rol_SYS_ADM;
+	   Role++)
+	 Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -709,20 +714,15 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 
 void Con_UpdateMeInConnectedList (void)
   {
-   char Query[512];
-   Rol_Role_t MyRoleInConnected;
+   char Query[256];
 
-   /***** Which role will be stored in connected table? *****/
-   MyRoleInConnected = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-                        Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ? Gbl.Usrs.Me.LoggedRole :
-                                                                 Gbl.Usrs.Me.MaxRole;
-
-   /***** Update my entry in connected list. The role which is stored is the role of the last click *****/
+   /***** Update my entry in connected list.
+          The role which is stored is the role of the last click *****/
    sprintf (Query,"REPLACE INTO connected"
 	          " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
                   " VALUES ('%ld','%u','%ld',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            (unsigned) MyRoleInConnected,
+            (unsigned) Gbl.Usrs.Me.LoggedRole,
             Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryREPLACE (Query,"can not update list of connected users");
   }

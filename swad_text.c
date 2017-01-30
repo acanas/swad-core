@@ -32406,245 +32406,245 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	"Administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"Administrator of degree"
+	"Admin. degree"
 #elif L==4
-	"Administrador/a de titulaci&oacute;n"
+	"Admin. titulaci&oacute;n"
 #elif L==5
-	"Administrateur/se d'&eacute;tude"
+	"Admin. &eacute;tude"
 #elif L==6
-	"Administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"Admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di laurea"
+	"Ammin. laurea"
 #elif L==8
-	"Administrator stopien"
+	"Admin. stopien"
 #elif L==9
-	"Administrador/a de titula&ccedil;&atilde;o"
+	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
-	"Administradora de titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"Administrator of degree"
+	"Admin. degree"
 #elif L==4
-	"Administradora de titulaci&oacute;n"
+	"Admin. titulaci&oacute;n"
 #elif L==5
-	"Administrateuse d'&eacute;tude"
+	"Admin. &eacute;tude"
 #elif L==6
-	"Administradora de titulaci&oacute;n"	// Okoteve traducción
+	"Admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di laurea"
+	"Ammin. laurea"
 #elif L==8
-	"Administratorka stopien"
+	"Admin. stopien"
 #elif L==9
-	"Administradora de titula&ccedil;&atilde;o"
+	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	"Administrador de titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"Administrator of degree"
+	"Admin. degree"
 #elif L==4
-	"Administrador de titulaci&oacute;n"
+	"Admin. titulaci&oacute;n"
 #elif L==5
-	"Administrateur d'&eacute;tude"
+	"Admin. &eacute;tude"
 #elif L==6
-	"Administrador de titulaci&oacute;n"	// Okoteve traducción
+	"Admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di laurea"
+	"Ammin. laurea"
 #elif L==8
-	"Administrator stopien"
+	"Admin. stopien"
 #elif L==9
-	"Administrador de titula&ccedil;&atilde;o"
+	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	"Administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"Administrator of degree"
+	"Admin. degree"
 #elif L==4
-	"Administrador/a de titulaci&oacute;n"
+	"Admin. titulaci&oacute;n"
 #elif L==5
-	"Administrateur/se d'&eacute;tude"
+	"Admin. &eacute;tude"
 #elif L==6
-	"Administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"Admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di laurea"
+	"Ammin. laurea"
 #elif L==8
-	"Administratorzy stopien"
+	"Admin. stopien"
 #elif L==9
-	"Administrador/a de titula&ccedil;&atilde;o"
+	"Admin. titula&ccedil;&atilde;o"
 #endif
 	},
 	{
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	"Administrador/a de centro"	// Necessita traduccio
+	"Admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"Administrator of centre"
+	"Admin. centre"
 #elif L==4
-	"Administrador/a de centro"
+	"Admin. centro"
 #elif L==5
-	"Administrateur/se de centre"
+	"Admin. centre"
 #elif L==6
-	"Administrador/a de centro"	// Okoteve traducción
+	"Admin. centro"	// Okoteve traducción
 #elif L==7
-	"Amministratore di centro"
+	"Ammin. centro"
 #elif L==8
-	"Administrator centrum"
+	"Admin. centrum"
 #elif L==9
-	"Administrador/a de centro"
+	"Admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
-	"Administradora de centro"	// Necessita traduccio
+	"Admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"Administrator of centre"
+	"Admin. centre"
 #elif L==4
-	"Administradora de centro"
+	"Admin. centro"
 #elif L==5
-	"Administrateuse de centre"
+	"Admin. centre"
 #elif L==6
-	"Administradora de centro"	// Okoteve traducción
+	"Admin. centro"	// Okoteve traducción
 #elif L==7
-	"Amministratore di centro"
+	"Ammin. centro"
 #elif L==8
-	"Administratorka centrum"
+	"Admin. centrum"
 #elif L==9
-	"Administradora de centro"
+	"Admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	"Administrador de centro"	// Necessita traduccio
+	"Admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"Administrator of centre"
+	"Admin. centre"
 #elif L==4
-	"Administrador de centro"
+	"Admin. centro"
 #elif L==5
-	"Administrateur de centre"
+	"Admin. centre"
 #elif L==6
-	"Administrador de centro"	// Okoteve traducción
+	"Admin. centro"	// Okoteve traducción
 #elif L==7
-	"Amministratore di centro"
+	"Ammin. centro"
 #elif L==8
-	"Administrator centrum"
+	"Admin. centrum"
 #elif L==9
-	"Administrador de centro"
+	"Admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	"Administrador/a de centro"	// Necessita traduccio
+	"Admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"Administrator of centre"
+	"Admin. centre"
 #elif L==4
-	"Administrador/a de centro"
+	"Admin. centro"
 #elif L==5
-	"Administrateur/se de centre"
+	"Admin. centre"
 #elif L==6
-	"Administrador/a de centro"	// Okoteve traducción
+	"Admin. centro"	// Okoteve traducción
 #elif L==7
-	"Amministratore di centro"
+	"Ammin. centro"
 #elif L==8
-	"Administratorzy centrum"
+	"Admin. centrum"
 #elif L==9
-	"Administrador/a de centro"
+	"Admin. centro"
 #endif
 	},
 	{
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	"Administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"Administrator of institution"
+	"Admin. institution"
 #elif L==4
-	"Administrador/a de instituci&oacute;n"
+	"Admin. instituci&oacute;n"
 #elif L==5
-	"Administrateur/se d'&eacute;tablissement"
+	"Admin. &eacute;tablissement"
 #elif L==6
-	"Administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"Admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di istituzione"
+	"Ammin. istituzione"
 #elif L==8
-	"Administrator instytucji"
+	"Admin. instytucji"
 #elif L==9
-	"Administrador/a de institu&ccedil;&atilde;o"
+	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
-	"Administradora de instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"Administrator of institution"
+	"Admin. institution"
 #elif L==4
-	"Administradora de instituci&oacute;n"
+	"Admin. instituci&oacute;n"
 #elif L==5
-	"Administrateuse d'&eacute;tablissement"
+	"Admin. &eacute;tablissement"
 #elif L==6
-	"Administradora de instituci&oacute;n"	// Okoteve traducción
+	"Admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di istituzione"
+	"Ammin. istituzione"
 #elif L==8
-	"Administratorka instytucji"
+	"Admin. instytucji"
 #elif L==9
-	"Administradora de institu&ccedil;&atilde;o"
+	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
-	"Administrador de instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"Administrator of institution"
+	"Admin. institution"
 #elif L==4
-	"Administrador de instituci&oacute;n"
+	"Admin. instituci&oacute;n"
 #elif L==5
-	"Administrateur d'&eacute;tablissement"
+	"Admin. &eacute;tablissement"
 #elif L==6
-	"Administrador de instituci&oacute;n"	// Okoteve traducción
+	"Admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di istituzione"
+	"Ammin. istituzione"
 #elif L==8
-	"Administrator instytucji"
+	"Admin. instytucji"
 #elif L==9
-	"Administrador de institu&ccedil;&atilde;o"
+	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	"Administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"Administrator of institution"
+	"Admin. institution"
 #elif L==4
-	"Administrador/a de instituci&oacute;n"
+	"Admin. instituci&oacute;n"
 #elif L==5
-	"Administrateur/se d'&eacute;tablissement"
+	"Admin. &eacute;tablissement"
 #elif L==6
-	"Administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"Admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"Amministratore di istituzione"
+	"Ammin. istituzione"
 #elif L==8
-	"Administratorzy instytucji"
+	"Admin. instytucji"
 #elif L==9
-	"Administrador/a de institu&ccedil;&atilde;o"
+	"Admin. institu&ccedil;&atilde;o"
 #endif
 	},
 	{
@@ -33138,213 +33138,213 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
-	"administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"administrator of degree"
+	"admin. degree"
 #elif L==4
-	"administrador/a de titulaci&oacute;n"
+	"admin. titulaci&oacute;n"
 #elif L==5
-	"administrateur/se d'&eacute;tude"
+	"admin. &eacute;tude"
 #elif L==6
-	"administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di laurea"
+	"ammin. laurea"
 #elif L==8
-	"administrator stopien"
+	"admin. stopien"
 #elif L==9
-	"administrador/a de titula&ccedil;&atilde;o"
+	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
-	"administradora de titulaci&oacute;n"	// Necessita traduccio
+	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"administrator of degree"
+	"admin. degree"
 #elif L==4
-	"administradora de titulaci&oacute;n"
+	"admin. titulaci&oacute;n"
 #elif L==5
-	"administrateuse d'&eacute;tude"
+	"admin. &eacute;tude"
 #elif L==6
-	"administradora de titulaci&oacute;n"	// Okoteve traducción
+	"admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di laurea"
+	"ammin. laurea"
 #elif L==8
-	"administratorka stopien"
+	"admin. stopien"
 #elif L==9
-	"administradora de titula&ccedil;&atilde;o"
+	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
-	"administrador de titulaci&oacute;n"	// Necessita traduccio
+	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"administrator of degree"
+	"admin. degree"
 #elif L==4
-	"administrador de titulaci&oacute;n"
+	"admin. titulaci&oacute;n"
 #elif L==5
-	"administrateur d'&eacute;tude"
+	"admin. &eacute;tude"
 #elif L==6
-	"administrador de titulaci&oacute;n"	// Okoteve traducción
+	"admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di laurea"
+	"ammin. laurea"
 #elif L==8
-	"administrator stopien"
+	"admin. stopien"
 #elif L==9
-	"administrador de titula&ccedil;&atilde;o"
+	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
-	"administrador/a de titulaci&oacute;n"	// Necessita traduccio
+	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Studiengang"
+	"Admin. Studiengang"
 #elif L==3
-	"administrator of degree"
+	"admin. degree"
 #elif L==4
-	"administrador/a de titulaci&oacute;n"
+	"admin. titulaci&oacute;n"
 #elif L==5
-	"administrateur/se d'&eacute;tude"
+	"admin. &eacute;tude"
 #elif L==6
-	"administrador/a de titulaci&oacute;n"	// Okoteve traducción
+	"admin. titulaci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di laurea"
+	"ammin. laurea"
 #elif L==8
-	"administratorzy stopien"
+	"admin. stopien"
 #elif L==9
-	"administrador/a de titula&ccedil;&atilde;o"
+	"admin. titula&ccedil;&atilde;o"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
-	"administrador/a de centro"	// Necessita traduccio
+	"admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"administrator of centre"
+	"admin. centre"
 #elif L==4
-	"administrador/a de centro"
+	"admin. centro"
 #elif L==5
-	"administrateur/se de centre"
+	"admin. centre"
 #elif L==6
-	"administrador/a de centro"	// Okoteve traducción
+	"admin. centro"	// Okoteve traducción
 #elif L==7
-	"amministratore di centro"
+	"ammin. centro"
 #elif L==8
-	"administrator centrum"
+	"admin. centrum"
 #elif L==9
-	"administrador/a de centro"
+	"admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
-	"administradora de centro"	// Necessita traduccio
+	"admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"administrator of centre"
+	"admin. centre"
 #elif L==4
-	"administradora de centro"
+	"admin. centro"
 #elif L==5
-	"administrateuse de centre"
+	"admin. centre"
 #elif L==6
-	"administradora de centro"	// Okoteve traducción
+	"admin. centro"	// Okoteve traducción
 #elif L==7
-	"amministratore di centro"
+	"ammin. centro"
 #elif L==8
-	"administratorka centrum"
+	"admin. centrum"
 #elif L==9
-	"administradora de centro"
+	"admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
-	"administrador de centro"	// Necessita traduccio
+	"admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"administrator of centre"
+	"admin. centre"
 #elif L==4
-	"administrador de centro"
+	"admin. centro"
 #elif L==5
-	"administrateur de centre"
+	"admin. centre"
 #elif L==6
-	"administrador de centro"	// Okoteve traducción
+	"admin. centro"	// Okoteve traducción
 #elif L==7
-	"amministratore di centro"
+	"ammin. centro"
 #elif L==8
-	"administrator centrum"
+	"admin. centrum"
 #elif L==9
-	"administrador de centro"
+	"admin. centro"
 #endif
 	,
 #if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
-	"administrador/a de centro"	// Necessita traduccio
+	"admin. centro"	// Necessita traduccio
 #elif L==2
-	"Administrator der Lehrinstitut"
+	"Admin. Lehrinstitut"
 #elif L==3
-	"administrator of centre"
+	"admin. centre"
 #elif L==4
-	"administrador/a de centro"
+	"admin. centro"
 #elif L==5
-	"administrateur/se de centre"
+	"admin. centre"
 #elif L==6
-	"administrador/a de centro"	// Okoteve traducción
+	"admin. centro"	// Okoteve traducción
 #elif L==7
-	"amministratore di centro"
+	"ammin. centro"
 #elif L==8
-	"administratorzy centrum"
+	"admin. centrum"
 #elif L==9
-	"administrador/a de centro"
+	"admin. centro"
 #endif
 	},
 	{
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
-	"administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"administrator of institution"
+	"admin. institution"
 #elif L==4
-	"administrador/a de instituci&oacute;n"
+	"admin. instituci&oacute;n"
 #elif L==5
-	"administrateur/se d'&eacute;tablissement"
+	"admin. &eacute;tablissement"
 #elif L==6
-	"administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di istituzione"
+	"ammin. istituzione"
 #elif L==8
-	"administrator instytucji"
+	"admin. instytucji"
 #elif L==9
-	"administrador/a de institu&ccedil;&atilde;o"
+	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
-	"administradora de instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"administrator of institution"
+	"admin. institution"
 #elif L==4
-	"administradora de instituci&oacute;n"
+	"admin. instituci&oacute;n"
 #elif L==5
-	"administrateuse d'&eacute;tablissement"
+	"admin. &eacute;tablissement"
 #elif L==6
-	"administradora de instituci&oacute;n"	// Okoteve traducción
+	"admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di istituzione"
+	"ammin. istituzione"
 #elif L==8
-	"administratorka instytucji"
+	"admin. instytucji"
 #elif L==9
-	"administradora de institu&ccedil;&atilde;o"
+	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
 	"administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"administrator of institution"
+	"admin. institution"
 #elif L==4
 	"administrador de instituci&oacute;n"
 #elif L==5
@@ -33352,7 +33352,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==6
 	"administrador de instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di istituzione"
+	"ammin.istituzione"
 #elif L==8
 	"administrator instytucji"
 #elif L==9
@@ -33360,23 +33360,23 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
-	"administrador/a de instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
-	"Administrator der Hochschule"
+	"Admin. Hochschule"
 #elif L==3
-	"administrator of institution"
+	"admin. institution"
 #elif L==4
-	"administrador/a de instituci&oacute;n"
+	"admin. instituci&oacute;n"
 #elif L==5
-	"administrateur/se d'&eacute;tablissement"
+	"admin. &eacute;tablissement"
 #elif L==6
-	"administrador/a de instituci&oacute;n"	// Okoteve traducción
+	"admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"amministratore di istituzione"
+	"ammin.istituzione"
 #elif L==8
 	"administratorzy instytucji"
 #elif L==9
-	"administrador/a de institu&ccedil;&atilde;o"
+	"admin. institu&ccedil;&atilde;o"
 #endif
 	 },
 	 {
