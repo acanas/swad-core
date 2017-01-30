@@ -191,13 +191,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.132.4 (2017-01-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.132.5 (2017-01-30)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.132.5: Jan 30, 2017	Fixed bug in checking consent on dangerous action. (211888 lines)
         Version 16.132.4: Jan 30, 2017	Changes in connected users. (211887 lines)
         Version 16.132.3: Jan 30, 2017	Code refactoring in connected users. (211881 lines)
         Version 16.132.2: Jan 30, 2017	Fixed bug in file browser. (211911 lines)
