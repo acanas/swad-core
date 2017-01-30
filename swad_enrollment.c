@@ -554,9 +554,10 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
 
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
   {
+   extern const char *Hlp_USERS_Administration_administer_multiple_users;
    extern const char *The_ClassTitle[The_NUM_THEMES];
-   extern const char *Txt_Admin_several_students;
-   extern const char *Txt_Admin_several_teachers;
+   extern const char *Txt_Administer_multiple_students;
+   extern const char *Txt_Administer_multiple_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
    extern const char *Txt_Step_2_Select_the_desired_action;
@@ -585,9 +586,10 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
-                        Role == Rol_STUDENT ? Txt_Admin_several_students :
-	                                      Txt_Admin_several_teachers,
-	                NULL,NULL);
+                        Role == Rol_STUDENT ? Txt_Administer_multiple_students :
+	                                      Txt_Administer_multiple_teachers,
+	                NULL,
+	                Hlp_USERS_Administration_administer_multiple_users);
 
    /***** Step 1: List of students to be enrolled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
@@ -2868,10 +2870,10 @@ static void Enr_RemoveExpiredEnrollmentRequests (void)
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
-   extern const char *Txt_Admin_me;
-   extern const char *Txt_Admin_one_user;
-   const char *TitleText = Enr_ICanAdminOtherUsrs () ? Txt_Admin_one_user :
-                        	                              Txt_Admin_me;
+   extern const char *Txt_Administer_me;
+   extern const char *Txt_Administer_one_user;
+   const char *TitleText = Enr_ICanAdminOtherUsrs () ? Txt_Administer_one_user :
+                        	                              Txt_Administer_me;
 
    Lay_PutContextualLink (NextAction,NULL,
                           "config64x64.gif",
@@ -2885,10 +2887,10 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
-   extern const char *Txt_Admin_several_students;
-   extern const char *Txt_Admin_several_teachers;
-   const char *TitleText = (Role == Rol_STUDENT) ? Txt_Admin_several_students :
-	                	                   Txt_Admin_several_teachers;
+   extern const char *Txt_Administer_multiple_students;
+   extern const char *Txt_Administer_multiple_teachers;
+   const char *TitleText = (Role == Rol_STUDENT) ? Txt_Administer_multiple_students :
+	                	                   Txt_Administer_multiple_teachers;
 
    Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
@@ -2956,10 +2958,12 @@ static bool Enr_ICanAdminOtherUsrs (void)
 
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
-   extern const char *Txt_Admin_one_user;
+   extern const char *Hlp_USERS_Administration_administer_one_user;
+   extern const char *Txt_Administer_one_user;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Admin_one_user,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Administer_one_user,NULL,
+                        Hlp_USERS_Administration_administer_one_user);
 
    /***** Write form to request another user's ID *****/
    Enr_WriteFormToReqAnotherUsrID ( Role == Rol_STUDENT ? ActReqMdfStd :

@@ -1995,34 +1995,13 @@ const char *Txt_Action =
 	"A&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Admin_one_user =
-#if   L==1
-	"Administrar un usuari";
-#elif L==2
-	"Verwalten eines Benutzer";
-#elif L==3
-	"Admin one user";
-#elif L==4
-	"Administrar un usuario";
-#elif L==5
-	"G&eacute;rer un utilisateur";
-#elif L==6
-	"Administrar un usuario";	// Okoteve traducción
-#elif L==7
-	"Gestire un utente";
-#elif L==8
-	"Zarz&aogon;dzaj u&zdot;ytkownika";
-#elif L==9
-	"Gerenciar um utilizador";
-#endif
-
-const char *Txt_Admin_me =
+const char *Txt_Administer_me =
 #if   L==1
 	"Administrarme";
 #elif L==2
 	"Verwalten Sie mich";
 #elif L==3
-	"Admin me";
+	"Administer me";
 #elif L==4
 	"Administrarme";
 #elif L==5
@@ -2037,34 +2016,13 @@ const char *Txt_Admin_me =
 	"Gerenciar me";
 #endif
 
-const char *Txt_Admin_user =
-#if   L==1
-	"Administrar usuari";
-#elif L==2
-	"Verwalten Benutzer";
-#elif L==3
-	"Admin user";
-#elif L==4
-	"Administrar usuario";
-#elif L==5
-	"G&eacute;rer utilisateur";
-#elif L==6
-	"Administrar usuario";	// Okoteve traducción
-#elif L==7
-	"Gestire utente";
-#elif L==8
-	"Zarz&aogon;dzaj u&zdot;ytkownika";
-#elif L==9
-	"Gerenciar utilizador";
-#endif
-
-const char *Txt_Admin_several_students =
+const char *Txt_Administer_multiple_students =
 #if   L==1
 	"Administrar diversos estudiants";
 #elif L==2
 	"Verwalten Sie mehrere Studenten";
 #elif L==3
-	"Admin several students";
+	"Administer multiple students";
 #elif L==4
 	"Administrar varios estudiantes";
 #elif L==5
@@ -2079,13 +2037,13 @@ const char *Txt_Admin_several_students =
 	"Gerenciar v&aacute;rios estudantes";
 #endif
 
-const char *Txt_Admin_several_teachers =
+const char *Txt_Administer_multiple_teachers =
 #if   L==1
 	"Administrar diversos professors";
 #elif L==2
 	"Verwalten Sie mehrere Lehrkr&auml;fte";
 #elif L==3
-	"Admin several teachers";
+	"Administer multiple teachers";
 #elif L==4
 	"Administrar varios profesores";
 #elif L==5
@@ -2098,6 +2056,48 @@ const char *Txt_Admin_several_teachers =
 	"Zarz&aogon;dzaj wielu nauczycieli";
 #elif L==9
 	"Gerenciar v&aacute;rios professores";
+#endif
+
+const char *Txt_Administer_one_user =
+#if   L==1
+	"Administrar un usuari";
+#elif L==2
+	"Verwalten eines Benutzer";
+#elif L==3
+	"Administer one user";
+#elif L==4
+	"Administrar un usuario";
+#elif L==5
+	"G&eacute;rer un utilisateur";
+#elif L==6
+	"Administrar un usuario";	// Okoteve traducción
+#elif L==7
+	"Gestire un utente";
+#elif L==8
+	"Zarz&aogon;dzaj u&zdot;ytkownika";
+#elif L==9
+	"Gerenciar um utilizador";
+#endif
+
+const char *Txt_Administer_user =
+#if   L==1
+	"Administrar usuari";
+#elif L==2
+	"Verwalten Benutzer";
+#elif L==3
+	"Administer user";
+#elif L==4
+	"Administrar usuario";
+#elif L==5
+	"G&eacute;rer utilisateur";
+#elif L==6
+	"Administrar usuario";	// Okoteve traducción
+#elif L==7
+	"Gestire utente";
+#elif L==8
+	"Zarz&aogon;dzaj u&zdot;ytkownika";
+#elif L==9
+	"Gerenciar utilizador";
 #endif
 
 const char *Txt_all =

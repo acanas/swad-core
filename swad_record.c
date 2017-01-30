@@ -2337,7 +2337,7 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_Show_agenda;
-   extern const char *Txt_Admin_user;
+   extern const char *Txt_Administer_user;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_test_results;
@@ -2416,7 +2416,7 @@ static void Rec_PutIconsCommands (void)
 	                        	                                                ActReqMdfOth),
 				Rec_PutParamUsrCodEncrypted,
 				"config64x64.gif",
-			        Txt_Admin_user,NULL,
+			        Txt_Administer_user,NULL,
 		                NULL);
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// A course is selected

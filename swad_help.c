@@ -158,6 +158,9 @@ const char *Hlp_USERS_Students                    = WIKI "USERS.Students";
 const char *Hlp_USERS_Students_shared_record_card = WIKI "USERS.Students#shared-record-card";
 const char *Hlp_USERS_Students_course_record_card = WIKI "USERS.Students#course-record-card";
 
+const char *Hlp_USERS_Administration_administer_one_user       = WIKI "USERS.Administration#administer-one-user";
+const char *Hlp_USERS_Administration_administer_multiple_users = WIKI "USERS.Administration#administer-multiple-users";
+
 const char *Hlp_USERS_Teachers                    = WIKI "USERS.Teachers";
 const char *Hlp_USERS_Teachers_shared_record_card = WIKI "USERS.Teachers#shared-record-card";
 const char *Hlp_USERS_Teachers_timetable          = WIKI "USERS.Teachers#timetable";
