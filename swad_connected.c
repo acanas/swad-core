@@ -56,14 +56,15 @@ extern struct Globals Gbl;
 
 static void Con_PutIconToUpdateConnected (void);
 
+static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal);
+
 static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsBelongingToLocation (void);
 
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role);
-static unsigned Con_GetConnectedGuestsTotal (void);
-static unsigned Con_GetConnectedStdsTotal (void);
-static unsigned Con_GetConnectedTchsTotal (void);
+static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role);
+
 static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t Role,struct ConnectedUsrs *Usrs);
 static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role);
 static void Con_ShowConnectedUsrsCurrentCrsOneByOneOnRightColumn (Rol_Role_t Role);
@@ -347,12 +348,10 @@ void Con_ShowGlobalConnectedUsrs (void)
    extern const char *Txt_sessions;
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned StdsTotal = Con_GetConnectedStdsTotal ();
-   unsigned TchsTotal = Con_GetConnectedTchsTotal ();
-   unsigned WithoutCoursesTotal = Con_GetConnectedGuestsTotal ();
-   unsigned UsrsTotal = StdsTotal + TchsTotal + WithoutCoursesTotal;
+   unsigned StdsTotal = Con_GetConnectedUsrsTotal (Rol_STUDENT);
+   unsigned TchsTotal = Con_GetConnectedUsrsTotal (Rol_TEACHER);
+   unsigned GstsTotal = Con_GetConnectedUsrsTotal (Rol__GUEST_);
+   unsigned UsrsTotal = StdsTotal + TchsTotal + GstsTotal;
 
    /***** Container start *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
@@ -384,34 +383,32 @@ void Con_ShowGlobalConnectedUsrs (void)
 				  Txt_users[Usr_SEX_UNKNOWN]);
 
       /***** Write total number of students *****/
-      if (StdsTotal)
-	 fprintf (Gbl.F.Out,"<br />"
-			    "%u %s",
-		  StdsTotal,
-		  (StdsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN] :
-				     Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN]);
+      Con_ShowGlobalConnectedUsrsRole (Rol_STUDENT,StdsTotal);
 
       /***** Write total number of teachers *****/
-      if (TchsTotal)
-	 fprintf (Gbl.F.Out,"<br />"
-			    "%u %s",
-		  TchsTotal,
-		  (TchsTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN] :
-				     Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN]);
+      Con_ShowGlobalConnectedUsrsRole (Rol_TEACHER,TchsTotal);
 
       /***** Write total number of users who do not belong to any course *****/
-      if (WithoutCoursesTotal)
-	 fprintf (Gbl.F.Out,"<br />"
-			    "%u %s",
-		  WithoutCoursesTotal,
-		  (WithoutCoursesTotal == 1) ? Txt_ROLES_SINGUL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN] :
-					       Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+      Con_ShowGlobalConnectedUsrsRole (Rol__GUEST_,GstsTotal);
 
       fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Container end *****/
    fprintf (Gbl.F.Out,"</div>");
+  }
+
+static void Con_ShowGlobalConnectedUsrsRole (Rol_Role_t Role,unsigned UsrsTotal)
+  {
+   extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   if (UsrsTotal)
+      fprintf (Gbl.F.Out,"<br />"
+			 "%u %s",
+	       UsrsTotal,
+	       (UsrsTotal == 1) ? Txt_ROLES_SINGUL_abc[Role][Usr_SEX_UNKNOWN] :
+				  Txt_ROLES_PLURAL_abc[Role][Usr_SEX_UNKNOWN]);
   }
 
 /*****************************************************************************/
@@ -718,12 +715,15 @@ void Con_UpdateMeInConnectedList (void)
    /***** Which role will be stored in connected table? *****/
    MyRoleInConnected = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
                         Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ? Gbl.Usrs.Me.LoggedRole :
-                                                                      Gbl.Usrs.Me.MaxRole;
+                                                                 Gbl.Usrs.Me.MaxRole;
 
    /***** Update my entry in connected list. The role which is stored is the role of the last click *****/
-   sprintf (Query,"REPLACE INTO connected (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
+   sprintf (Query,"REPLACE INTO connected"
+	          " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
                   " VALUES ('%ld','%u','%ld',NOW())",
-            Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) MyRoleInConnected,Gbl.CurrentCrs.Crs.CrsCod);
+            Gbl.Usrs.Me.UsrDat.UsrCod,
+            (unsigned) MyRoleInConnected,
+            Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryREPLACE (Query,"can not update list of connected users");
   }
 
@@ -742,55 +742,20 @@ void Con_RemoveOldConnected (void)
   }
 
 /*****************************************************************************/
-/*************************** Get connected guests ***************************/
+/********************* Get connected users with a role ***********************/
 /*****************************************************************************/
 
-static unsigned Con_GetConnectedGuestsTotal (void)
+static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
   {
    char Query[128];
 
    if (!Gbl.DB.DatabaseIsOpen)
       return 0;
 
-   /***** Get number of connected users not belonging to any course *****/
-   sprintf (Query,"SELECT COUNT(*) FROM connected"
-	          " WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol__GUEST_);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected users who not belong to any course");
-  }
-
-/*****************************************************************************/
-/*************************** Get connected students **************************/
-/*****************************************************************************/
-
-static unsigned Con_GetConnectedStdsTotal (void)
-  {
-   char Query[128];
-
-   if (!Gbl.DB.DatabaseIsOpen)
-      return 0;
-
-   /***** Get number of connected students from database *****/
+   /***** Get number of connected users with a role from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_STUDENT);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected students");
-  }
-
-/*****************************************************************************/
-/*************************** Get connected teachers **************************/
-/*****************************************************************************/
-
-static unsigned Con_GetConnectedTchsTotal (void)
-  {
-   char Query[256];
-
-   if (!Gbl.DB.DatabaseIsOpen)
-      return 0;
-
-   /***** Get number of connected teachers from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs='%u'",
-            (unsigned) Rol_TEACHER);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected teachers");
+            (unsigned) Role);
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected users");
   }
 
 /*****************************************************************************/
