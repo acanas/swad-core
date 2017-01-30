@@ -651,7 +651,7 @@ void Par_GetMainParameters (void)
    extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   unsigned ActCod;
+   long ActCod;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char LongStr[1 + 10 + 1];
 
@@ -712,16 +712,10 @@ void Par_GetMainParameters (void)
      }
 
    /***** Get action to perform *****/
-   ActCod = (unsigned) Par_GetParToUnsignedLong ("act",
-                                                 ActUnk,
-                                                 Act_MAX_ACTION_COD,
-                                                 ActUnk);
-   if (ActCod == ActUnk)
-      ActCod = (unsigned)  Par_GetParToUnsignedLong ("ActCod",
-				                     ActUnk,
-				                     Act_MAX_ACTION_COD,
-				                     ActUnk);
-   if (ActCod != ActUnk)
+   ActCod = Par_GetParToLong ("act");
+   if (ActCod < 0)
+      ActCod = Par_GetParToLong ("ActCod");
+   if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
       Gbl.Action.Act = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
