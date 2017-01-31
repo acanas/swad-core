@@ -1991,6 +1991,7 @@ static void Pho_GetMaxStdsPerDegree (void)
 
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern const char *Hlp_STATS_Degrees;
    extern const char *Txt_Degrees;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
@@ -2012,7 +2013,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    Lay_StartRoundFrame (NULL,Txt_Degrees,
                         SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
                                                         NULL,
-                        NULL);
+                        SeeOrPrint == Pho_DEGREES_SEE ? Hlp_STATS_Degrees :
+                                                        NULL);
 
    if (NumRows)	// Degrees with students found
      {
@@ -2081,6 +2083,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern const char *Hlp_STATS_Degrees;
    extern const char *Txt_Degrees;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
@@ -2105,7 +2108,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    Lay_StartRoundFrame (NULL,Txt_Degrees,
                         SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
                                                         NULL,
-                        NULL);
+                        SeeOrPrint == Pho_DEGREES_SEE ? Hlp_STATS_Degrees :
+                                                        NULL);
 
    if (NumRows)	// Degrees with students found
      {
