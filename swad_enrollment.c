@@ -1720,13 +1720,15 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
 
 void Enr_AskRemAllStdsThisCrs (void)
   {
+   extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumStds;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,
+                        Hlp_USERS_Administration_remove_all_students);
 
    if ((NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Gbl.CurrentCrs.Crs.CrsCod)))
      {
