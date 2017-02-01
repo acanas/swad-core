@@ -19324,7 +19324,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2
 	"Anmeldungen"
 #elif L==3
-	"Logins"
+	"Visits"
 #elif L==4
 	"Accesos"
 #elif L==5

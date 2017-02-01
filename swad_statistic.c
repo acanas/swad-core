@@ -392,6 +392,7 @@ void Sta_RemoveOldEntriesRecentLog (void)
 
 void Sta_AskShowCrsHits (void)
   {
+   extern const char *Hlp_STATS_Visits_visits_to_course;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Statistics_of_visits_to_the_course_X;
    extern const char *Txt_Users;
@@ -438,7 +439,7 @@ void Sta_AskShowCrsHits (void)
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
 	    Gbl.CurrentCrs.Crs.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Visits_visits_to_course);
 
    /***** Show form to select the groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
@@ -588,6 +589,7 @@ void Sta_AskShowCrsHits (void)
 
 void Sta_AskShowGblHits (void)
   {
+   extern const char *Hlp_STATS_Visits_global_visits;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Visits_to_course;
    extern const char *Txt_Statistics_of_all_visits;
@@ -623,7 +625,8 @@ void Sta_AskShowGblHits (void)
 
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<section id=\"stat_form\">");
-   Lay_StartRoundFrameTable (NULL,Txt_Statistics_of_all_visits,NULL,NULL,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Statistics_of_all_visits,NULL,
+                             Hlp_STATS_Visits_global_visits,2);
 
    /***** Start and end dates for the search *****/
    Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
