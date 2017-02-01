@@ -85,6 +85,7 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod);
 
 void Ind_ReqIndicatorsCourses (void)
   {
+   extern const char *Hlp_STATS_Indicators;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Scope;
    extern const char *Txt_Types_of_degree;
@@ -103,7 +104,8 @@ void Ind_ReqIndicatorsCourses (void)
    Ind_GetParamsIndicators ();
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Indicators_of_courses,NULL,
+                        Hlp_STATS_Indicators);
 
    /***** Form to update indicators *****/
    /* Start form */

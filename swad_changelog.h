@@ -191,13 +191,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.132.10 (2017-02-01)"
+#define Log_PLATFORM_VERSION	"SWAD 16.132.11 (2017-02-01)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.132.11:Feb 01, 2017	Help on indicators of courses. (211900 lines)
         Version 16.132.10:Feb 01, 2017	Help on stats about visits. (211896 lines)
         Version 16.132.9: Jan 31, 2017	Help on degrees stats. (211890 lines)
         Version 16.132.8: Jan 31, 2017	Help on remove all students in a course. (211884 lines)

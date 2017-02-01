@@ -243,6 +243,8 @@ const char *Hlp_STATS_Figures_privacy                        = WIKI "STATS.Figur
 
 const char *Hlp_STATS_Degrees = WIKI "STATS.Degrees";
 
+const char *Hlp_STATS_Indicators = WIKI "STATS.Indicators";
+
 const char *Hlp_STATS_Visits_global_visits    = WIKI "STATS.Visits#global-visits";
 const char *Hlp_STATS_Visits_visits_to_course = WIKI "STATS.Visits#visits-to-course";
 
