@@ -372,6 +372,7 @@ void Usr_ListAllDataTchs (void);
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery);
 void Usr_ListDataAdms (void);
 
+void Usr_PutParamsPrefsAboutUsrList (void);
 void Usr_GetAndUpdatePrefsAboutUsrList (void);
 void Usr_PutParamUsrListType (Usr_ShowUsrsType_t ListType);
 void Usr_GetAndUpdateColsClassPhoto (void);

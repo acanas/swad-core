@@ -1674,7 +1674,7 @@ static void Pho_PutSelectorForTypeOfAvg (void)
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
-   Usr_PutParamColsClassPhoto ();
+   Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"AvgType\" name=\"AvgType\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
@@ -1735,7 +1735,7 @@ static void Pho_PutSelectorForHowComputePhotoSize (void)
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamOrderDegrees ();
-   Usr_PutParamColsClassPhoto ();
+   Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"PhotoSize\" name=\"PhotoSize\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
@@ -1796,7 +1796,7 @@ static void Pho_PutSelectorForHowOrderDegrees (void)
    Act_FormStart (ActSeePhoDeg);
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
-   Usr_PutParamColsClassPhoto ();
+   Usr_PutParamsPrefsAboutUsrList ();
    fprintf (Gbl.F.Out,"<select id=\"Order\" name=\"Order\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
@@ -1856,9 +1856,7 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
    Pho_PutHiddenParamTypeOfAvg ();
    Pho_PutHiddenParamPhotoSize ();
    Pho_PutHiddenParamOrderDegrees ();
-   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Usr_PutParamColsClassPhoto ();
-   Usr_PutParamListWithPhotos ();
+   Usr_PutParamsPrefsAboutUsrList ();
   }
 
 /*****************************************************************************/
@@ -1895,9 +1893,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
       Pho_PutHiddenParamTypeOfAvg ();
       Pho_PutHiddenParamPhotoSize ();
       Pho_PutHiddenParamOrderDegrees ();
-      Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-      Usr_PutParamColsClassPhoto ();
-      Usr_PutParamListWithPhotos ();
+      Usr_PutParamsPrefsAboutUsrList ();
       Act_LinkFormSubmitAnimated (Txt_Calculate_average_photo_of_a_degree,
                                   The_ClassFormBold[Gbl.Prefs.Theme],
                                   NULL);

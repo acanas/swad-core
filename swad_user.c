@@ -5097,9 +5097,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char
    /***** Put form to confirm that I want to see the big list *****/
    Act_FormStartOnSubmit (Gbl.Action.Act,OnSubmit);
    Grp_PutParamsCodGrps ();
-   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-   Usr_PutParamColsClassPhoto ();
-   Usr_PutParamListWithPhotos ();
+   Usr_PutParamsPrefsAboutUsrList ();
    Usr_PutExtraParamsUsrList (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
 
@@ -5566,8 +5564,8 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 
    Act_FormStart (NextAction);
    Grp_PutParamsCodGrps ();
-   Usr_PutParamListWithPhotos ();
    Usr_PutParamUsrListType (ListType);
+   Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
                        The_ClassFormNoWrap[Gbl.Prefs.Theme],
@@ -6735,6 +6733,19 @@ void Usr_ListDataAdms (void)
   }
 
 /*****************************************************************************/
+/****************** Put hidden parameters with type of list, *****************/
+/****************** number of columns in class photo *************************/
+/****************** and preference about view photos *************************/
+/*****************************************************************************/
+
+void Usr_PutParamsPrefsAboutUsrList (void)
+  {
+   Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
+   Usr_PutParamColsClassPhoto ();
+   Usr_PutParamListWithPhotos ();
+  }
+
+/*****************************************************************************/
 /********************* Get and update type of list,     **********************/
 /********************* number of columns in class photo **********************/
 /********************* and preference about view photos **********************/
@@ -7140,9 +7151,7 @@ void Usr_SeeGuests (void)
 	 case Rol_SYS_ADM:
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActLstGst);
-	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-	    Usr_PutParamColsClassPhoto ();
-	    Usr_PutParamListWithPhotos ();
+	    Usr_PutParamsPrefsAboutUsrList ();
 	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	    Sco_PutSelectorScope ("ScopeUsr",true);
@@ -7299,9 +7308,7 @@ void Usr_SeeStudents (void)
 	 case Rol_SYS_ADM:
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Act_FormStart (ActLstStd);
-	    Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-	    Usr_PutParamColsClassPhoto ();
-	    Usr_PutParamListWithPhotos ();
+	    Usr_PutParamsPrefsAboutUsrList ();
 	    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 		     The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
 	    Sco_PutSelectorScope ("ScopeUsr",true);
@@ -7462,9 +7469,7 @@ void Usr_SeeTeachers (void)
       /***** Form to select scope *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActLstTch);
-      Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-      Usr_PutParamColsClassPhoto ();
-      Usr_PutParamListWithPhotos ();
+      Usr_PutParamsPrefsAboutUsrList ();
       fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
 	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
       Sco_PutSelectorScope ("ScopeUsr",true);

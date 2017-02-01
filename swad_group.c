@@ -251,9 +251,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
       Act_FormStart (NextAction);
-      Usr_PutParamUsrListType (Gbl.Usrs.Me.ListType);
-      Usr_PutParamColsClassPhoto ();
-      Usr_PutParamListWithPhotos ();
+      Usr_PutParamsPrefsAboutUsrList ();
 
       /***** Put parameters needed depending on the action *****/
       Usr_PutExtraParamsUsrList (NextAction);
