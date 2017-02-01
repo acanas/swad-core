@@ -997,10 +997,13 @@ static void Lay_ShowRightColumn (void)
    Ban_WriteMenuWithBanners ();
 
    /***** Number of connected users in the whole platform *****/
-   fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
-	              " class=\"LEFT_RIGHT_CELL\">");
-   Con_ShowGlobalConnectedUsrs ();
-   fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      fprintf (Gbl.F.Out,"<div id=\"globalconnected\""	// Used for AJAX based refresh
+			 " class=\"LEFT_RIGHT_CELL\">");
+      Con_ShowGlobalConnectedUsrs ();
+      fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+     }
 
    /***** Number of connected users in the current course *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// There is a course selected
