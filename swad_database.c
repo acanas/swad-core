@@ -1294,7 +1294,7 @@ mysql> DESCRIBE institutions;
 | FullName        | text         | NO   |     | NULL    |                |
 | WWW             | varchar(255) | NO   |     | NULL    |                |
 +-----------------+--------------+------+-----+---------+----------------+
-7 rows in set (0.01 sec)
+7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS institutions ("
                    "InsCod INT NOT NULL AUTO_INCREMENT,"

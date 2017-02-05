@@ -173,7 +173,8 @@ struct Globals
      {
       Tab_Tab_t Tab;
       Act_Action_t Act;
-      bool UsesAJAX;
+      bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
+      bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
    time_t StartExecutionTimeUTC;
    struct DateTime Now;

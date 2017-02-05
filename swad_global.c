@@ -180,6 +180,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Action.Act = ActUnk;
    Gbl.Action.UsesAJAX = false;
+   Gbl.Action.IsAJAXAutoRefresh = false;
    Gbl.Action.Tab = TabUnk;
 
    for (Role = (Rol_Role_t) 0;
@@ -437,8 +438,7 @@ void Gbl_Cleanup (void)
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
-       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW &&
-       !Gbl.HiddenParamsInsertedIntoDB)
+       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
       Ses_RemoveHiddenParFromThisSession ();
    Usr_FreeMyCourses ();
    Usr_FreeMyDegrees ();

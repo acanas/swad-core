@@ -344,8 +344,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
 
    /***** Before of inserting the first hidden parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
-   if (!Gbl.HiddenParamsInsertedIntoDB)
-      Ses_RemoveHiddenParFromThisSession ();
+   Ses_RemoveHiddenParFromThisSession ();
 
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
    if (!Ses_CheckIfHiddenParIsAlreadyInDB (Action,ParamName))
@@ -365,9 +364,10 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
 
 void Ses_RemoveHiddenParFromThisSession (void)
   {
-   char Query[512];
+   char Query[128 + Ses_LENGTH_SESSION_ID];
 
-   if (Gbl.Session.IsOpen)
+   if (Gbl.Session.IsOpen &&			// There is an open session
+       !Gbl.HiddenParamsInsertedIntoDB)		// No params just inserted
      {
       /***** Remove hidden parameters of this session *****/
       sprintf (Query,"DELETE FROM hidden_params WHERE SessionId='%s'",

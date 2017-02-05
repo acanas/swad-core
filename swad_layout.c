@@ -1473,7 +1473,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Page is generated (except </body> and </html>).
           Compute time to generate page *****/
-   if (!Gbl.Action.UsesAJAX)
+   if (!Gbl.Action.IsAJAXAutoRefresh)
       Sta_ComputeTimeToGeneratePage ();
 
    if (Gbl.WebService.IsWebService)		// Serving a plugin request
@@ -1491,7 +1491,7 @@ void Lay_ShowErrorAndExit (const char *Message)
       Fil_FastCopyOfOpenFiles (Gbl.F.Out,stdout);
       Fil_CloseAndRemoveFileForHTMLOutput ();
 
-      if (!Gbl.Action.UsesAJAX)
+      if (!Gbl.Action.IsAJAXAutoRefresh)
 	{
 	 /***** Compute time to send page *****/
 	 Sta_ComputeTimeToSendPage ();

@@ -2510,7 +2510,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 
    if (Gbl.Session.HasBeenDisconnected)
      {
-      if (Gbl.Action.Act != ActRefCon)
+      if (!Gbl.Action.UsesAJAX)
 	{
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
@@ -2549,7 +2549,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	       Gbl.Usrs.Me.Logged = true;
 	       Usr_SetUsrRoleAndPrefs ();
 
-	       if (Gbl.Action.Act == ActRefCon)	// If refreshing connected users ==> don't refresh session
+	       if (Gbl.Action.IsAJAXAutoRefresh)	// If refreshing ==> don't refresh LastTime in session
 		  Ses_UpdateSessionLastRefreshInDB ();
 	       else
 		 {
@@ -2613,7 +2613,7 @@ void Usr_ChkUsrAndGetUsrData (void)
      }
 
    /***** Adjust tab and action *****/
-   if (Gbl.Action.Act != ActRefCon)
+   if (!Gbl.Action.UsesAJAX)
      {
       if (Gbl.Usrs.Me.Logged)
 	{

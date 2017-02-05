@@ -719,12 +719,20 @@ void Par_GetMainParameters (void)
       Gbl.Action.Act = Act_FromActCodToAction[ActCod];
 
    /***** Some preliminary adjusts depending on action *****/
+   Gbl.Action.UsesAJAX = false;
+   Gbl.Action.IsAJAXAutoRefresh = false;
    if (Gbl.Action.Act == ActRefCon          ||
        Gbl.Action.Act == ActRefLstClk       ||
        Gbl.Action.Act == ActRefNewSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubGbl ||
        Gbl.Action.Act == ActRefOldSocPubUsr)
+     {
       Gbl.Action.UsesAJAX = true;
+      if (Gbl.Action.Act == ActRefCon       ||
+	  Gbl.Action.Act == ActRefLstClk    ||
+	  Gbl.Action.Act == ActRefNewSocPubGbl)
+         Gbl.Action.IsAJAXAutoRefresh = true;
+     }
 
    /***** Get session identifier, if exists *****/
    Par_GetParToText ("ses",Gbl.Session.Id,Ses_LENGTH_SESSION_ID);
