@@ -134,7 +134,6 @@ extern struct Globals Gbl;
 static void Soc_ShowTimelineGblHighlightingNot (long NotCod);
 static void Soc_ShowTimelineUsrHighlightingNot (long NotCod);
 
-static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl);
 
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
@@ -399,31 +398,25 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
 
 void Soc_RefreshNewTimelineGbl (void)
   {
-   // Send, before the HTML, the refresh time
-   fprintf (Gbl.F.Out,"%lu|",
-            Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
-
-   Soc_GetAndShowNewTimeline (Soc_TIMELINE_GBL);
-  }
-
-/*****************************************************************************/
-/****************** Get and show new publishings in timeline *****************/
-/*****************************************************************************/
-
-static void Soc_GetAndShowNewTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
-  {
    char Query[1024];
 
-   /***** Build query to get timeline *****/
-   Soc_BuildQueryToGetTimeline (TimelineUsrOrGbl,
-                                Soc_GET_ONLY_NEW_PUBS,
-                                Query);
+   if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+     {
+      /***** Send, before the HTML, the refresh time *****/
+      fprintf (Gbl.F.Out,"%lu|",
+	       Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
 
-   /***** Show new timeline *****/
-   Soc_InsertNewPubsInTimeline (Query);
+      /***** Build query to get timeline *****/
+      Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
+				   Soc_GET_ONLY_NEW_PUBS,
+				   Query);
 
-   /***** Drop temporary tables *****/
-   Soc_DropTemporaryTablesUsedToQueryTimeline ();
+      /***** Show new timeline *****/
+      Soc_InsertNewPubsInTimeline (Query);
+
+      /***** Drop temporary tables *****/
+      Soc_DropTemporaryTablesUsedToQueryTimeline ();
+     }
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;

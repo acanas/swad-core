@@ -1656,9 +1656,14 @@ void Lay_RefreshNotifsAndConnected (void)
 
 void Lay_RefreshLastClicks (void)
   {
-   // Send, before the HTML, the refresh time
-   fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   Con_GetAndShowLastClicks ();
+   if (Gbl.Session.IsOpen)	// If session has been closed, do not write anything
+     {
+      /***** Send, before the HTML, the refresh time *****/
+      fprintf (Gbl.F.Out,"%lu|",Cfg_TIME_TO_REFRESH_LAST_CLICKS);
+
+      /***** Get and show last clicks *****/
+      Con_GetAndShowLastClicks ();
+     }
 
    /***** All the output is made, so don't write anymore *****/
    Gbl.Layout.DivsEndWritten = Gbl.Layout.HTMLEndWritten = true;
