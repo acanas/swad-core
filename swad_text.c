@@ -18375,28 +18375,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	//  4: ActSeeCrsTT
-#if   L==1
-	"Horari"
-#elif L==2
-	"Stundenplan"
-#elif L==3
-	"Timetable"
-#elif L==4
-	"Horario"
-#elif L==5
-	"Horaire"
-#elif L==6
-	"Horario"	// Okoteve traducción
-#elif L==7
-	"Orario"
-#elif L==8
-	"Plan"
-#elif L==9
-	"Hor&aacute;rio"
-#endif
-	,
-	//  5: ActSeeBib
+	//  4: ActSeeBib
 #if   L==1
 	"Bibliografia"
 #elif L==2
@@ -18417,7 +18396,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  6: ActSeeFAQ
+	//  5: ActSeeFAQ
 #if   L==1
 	"FAQ"	// Necessita traduccio
 #elif L==2
@@ -18438,7 +18417,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	//  7: ActSeeCrsLnk
+	//  6: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18457,6 +18436,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Linki"
 #elif L==9
 	"Liga&ccedil;&otilde;es"
+#endif
+	,
+	//  7: ActSeeCrsTT
+#if   L==1
+	"Horari"
+#elif L==2
+	"Stundenplan"
+#elif L==3
+	"Timetable"
+#elif L==4
+	"Horario"
+#elif L==5
+	"Horaire"
+#elif L==6
+	"Horario"	// Okoteve traducción
+#elif L==7
+	"Orario"
+#elif L==8
+	"Plan"
+#elif L==9
+	"Hor&aacute;rio"
 #endif
 	,
 	NULL,	//  8
@@ -20292,28 +20292,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	//  4: ActSeeCrsTT
-#if   L==1
-	"Horari de classes de l'assignatura"
-#elif L==2
-	"Stundenplan"
-#elif L==3
-	"Class timetable"
-#elif L==4
-	"Horario de clases de la asignatura"
-#elif L==5
-	"Horaire"
-#elif L==6
-	"Horario de clases de la asignatura"	// Okoteve traducción
-#elif L==7
-	"Orario del corso"
-#elif L==8
-	"Harmonogram klasy"
-#elif L==9
-	"Hor&aacute;rio"
-#endif
-	,
-	//  5: ActSeeBib
+	//  4: ActSeeBib
 #if   L==1
 	"Bibliografia relacionada amb els continguts de l'assignatura"
 #elif L==2
@@ -20334,7 +20313,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  6: ActSeeFAQ
+	//  5: ActSeeFAQ
 #if   L==1
 	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
 #elif L==2
@@ -20355,7 +20334,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	//  7: ActSeeCrsLnk
+	//  6: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
 #elif L==2
@@ -20374,6 +20353,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Linki"
 #elif L==9
 	"Liga&ccedil;&otilde;es"
+#endif
+	,
+	//  7: ActSeeCrsTT
+#if   L==1
+	"Horari de classes de l'assignatura"
+#elif L==2
+	"Stundenplan"
+#elif L==3
+	"Class timetable"
+#elif L==4
+	"Horario de clases de la asignatura"
+#elif L==5
+	"Horaire"
+#elif L==6
+	"Horario de clases de la asignatura"	// Okoteve traducción
+#elif L==7
+	"Orario del corso"
+#elif L==8
+	"Harmonogram klasy"
+#elif L==9
+	"Hor&aacute;rio"
 #endif
 	,
 	NULL,	//  8

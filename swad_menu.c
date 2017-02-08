@@ -164,10 +164,10 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCrsInf,		//  1
 		ActSeeTchGui,		//  2
 		ActSeeSyl,		//  3
-		ActSeeCrsTT,		//  4
-		ActSeeBib,		//  5
-		ActSeeFAQ,		//  6
-		ActSeeCrsLnk,		//  7
+		ActSeeBib,		//  4
+		ActSeeFAQ,		//  5
+		ActSeeCrsLnk,		//  6
+		ActSeeCrsTT,		//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10

@@ -196,13 +196,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.133 (2017-02-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.133.1 (2017-02-08)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.133.1: Feb 08, 2017	Timetable option moved to the end of the menu. (212071 lines)
         Version 16.133:   Feb 08, 2017	New tab "Files".
 					New permissions for actions. (212070 lines)
         Version 16.132.15:Feb 06, 2017	Bug fixing related to AJAX and automatic refresh. (211916 lines)

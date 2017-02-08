@@ -450,10 +450,10 @@ Course:
 
 	318. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
 	319. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
-	320. ActSeeCrsTT		Show the timetable
 	321. ActSeeBib			Show the bibliography
 	322. ActSeeFAQ			Show the FAQ
 	323. ActSeeCrsLnk		Show links related to the course
+	320. ActSeeCrsTT		Show the timetable
 
 	324. ActCrsSch			Search for courses, teachers, documents...
 
@@ -465,10 +465,6 @@ Course:
 	330. ActChgCrsYeaCfg		Change year/semester in course configuration
 	331. ActEdiCrsInf		Edit general information about the course
 	332. ActEdiTchGui		Edit teaching guide of the course
-	333. ActPrnCrsTT		Show print view of the timetable
-	334. ActEdiCrsTT		Edit the timetable
-	335. ActChgCrsTT		Modify the timetable of the course
-        336. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
 	337. ActEdiSylLec		Edit the syllabus of lectures
 	338. ActEdiSylPra		Edit the syllabus of practicals
 	339. ActDelItmSylLec		Remove a item from syllabus of lectures
@@ -705,6 +701,11 @@ Course:
 	557. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
 	558. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
 	559. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
+
+	333. ActPrnCrsTT		Show print view of the timetable
+	334. ActEdiCrsTT		Edit the timetable
+	335. ActChgCrsTT		Modify the timetable of the course
+        336. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
 Assessment:
 	560. ActSeeAss			Show the assessment system
 	561. ActSeeAsg			Show assignments
@@ -1686,10 +1687,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowIntroduction		,"info64x64.gif"	},
    /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"guide64x64.gif"	},
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"presentation64x64.gif"},
-   /* ActSeeCrsTT	*/{  25, 4,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeBib		*/{  32, 5,TabCrs,ActSeeBib		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"books64x64.gif"	},
-   /* ActSeeFAQ		*/{  54, 6,TabCrs,ActSeeFAQ		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},
-   /* ActSeeCrsLnk	*/{   9, 7,TabCrs,ActSeeCrsLnk		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"link64x64.gif"	},
+   /* ActSeeBib		*/{  32, 4,TabCrs,ActSeeBib		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"books64x64.gif"	},
+   /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},
+   /* ActSeeCrsLnk	*/{   9, 6,TabCrs,ActSeeCrsLnk		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"link64x64.gif"	},
+   /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
 
    // Actions not in menu:
    /* ActDegSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
@@ -1703,11 +1704,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActEdiCrsInf	*/{ 848,-1,TabUnk,ActSeeCrsInf		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
 
    /* ActEdiTchGui	*/{ 785,-1,TabUnk,ActSeeTchGui		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
-
-   /* ActPrnCrsTT	*/{ 152,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
-   /* ActEdiCrsTT	*/{  45,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
-   /* ActChgCrsTT	*/{  53,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
-   /* ActChgCrsTT1stDay	*/{1486,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
    /* ActSeeSylLec	*/{  28,-1,TabUnk,ActSeeSyl		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,NULL},
    /* ActSeeSylPra	*/{  20,-1,TabUnk,ActSeeSyl		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,NULL},
@@ -1811,6 +1807,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvRchTxtBib	*/{1105,-1,TabUnk,ActSeeBib		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
    /* ActRcvRchTxtFAQ	*/{1106,-1,TabUnk,ActSeeFAQ		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
    /* ActRcvRchTxtCrsLnk*/{1107,-1,TabUnk,ActSeeCrsLnk		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_RecAndChangeRichTxtInfo	,NULL},
+
+   /* ActPrnCrsTT	*/{ 152,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,TT_ShowClassTimeTable		,NULL},
+   /* ActEdiCrsTT	*/{  45,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT	*/{  53,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
+   /* ActChgCrsTT1stDay	*/{1486,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
    // TabAss ******************************************************************
    // Actions in menu:
