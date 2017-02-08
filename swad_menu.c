@@ -81,6 +81,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabSys *******************
 		{
@@ -95,6 +96,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActLstPlg,		//  8
 		ActSetUp,		//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabCty *******************
 		{
@@ -109,6 +111,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabIns *******************
 		{
@@ -118,39 +121,42 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeDpt,		//  3
 		ActSeePlc,		//  4
 		ActSeeHld,		//  5
-		ActSeeAdmDocIns,	//  6
-		ActAdmShaIns,		//  7
+		0,			//  6
+		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabCtr *******************
 		{
 		ActCtrReqSch,		//  0
 		ActSeeCtrInf,		//  1
 		ActSeeDeg,		//  2
-		ActSeeAdmDocCtr,	//  3
-		ActAdmShaCtr,		//  4
+		0,			//  3
+		0,			//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabDeg *******************
 		{
 		ActDegReqSch,		//  0
 		ActSeeDegInf,		//  1
 		ActSeeCrs,		//  2
-		ActSeeAdmDocDeg,	//  3
-		ActAdmShaDeg,		//  4
+		0,			//  3
+		0,			//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabCrs *******************
 		{
@@ -158,27 +164,44 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCrsInf,		//  1
 		ActSeeTchGui,		//  2
 		ActSeeSyl,		//  3
-		ActSeeAdmDocCrsGrp,	//  4
-		ActAdmTchCrsGrp,	//  5
-		ActAdmShaCrsGrp,	//  6
-		ActSeeCrsTT,		//  7
-		ActSeeBib,		//  8
-		ActSeeFAQ,		//  9
-		ActSeeCrsLnk,		// 10
+		ActSeeCrsTT,		//  4
+		ActSeeBib,		//  5
+		ActSeeFAQ,		//  6
+		ActSeeCrsLnk,		//  7
+		0,			//  8
+		0,			//  9
+		0,			// 10
+		0,			// 11
 		},
 		// TabAss *******************
 		{
 		ActSeeAss,		//  0
 		ActSeeAsg,		//  1
-		ActAdmAsgWrkUsr,	//  2
-		ActReqAsgWrkCrs,	//  3
-		ActReqTst,		//  4
-		ActSeeCal,		//  5
-		ActSeeAllExaAnn,	//  6
-		ActSeeAdmMrk,		//  7
+		ActReqTst,		//  2
+		ActSeeCal,		//  3
+		ActSeeAllExaAnn,	//  4
+		0,			//  5
+		0,			//  6
+		0,			//  7
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
+		},
+		// TabFil *******************
+		{
+		ActSeeAdmDocIns,	//  0
+		ActAdmShaIns,		//  1
+		ActSeeAdmDocCtr,	//  2
+		ActAdmShaCtr,		//  3
+		ActSeeAdmDocDeg,	//  4
+		ActAdmShaDeg,		//  5
+		ActSeeAdmDocCrsGrp,	//  6
+		ActAdmTchCrsGrp,	//  7
+		ActAdmShaCrsGrp,	//  8
+		ActAdmAsgWrkUsr,	//  9
+		ActReqAsgWrkCrs,	// 10
+		ActSeeAdmMrk,		// 11
 		},
 		// TabUsr *******************
 		{
@@ -193,6 +216,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabSoc *******************
 		{
@@ -207,6 +231,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabMsg *******************
 		{
@@ -221,6 +246,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabSta *******************
 		{
@@ -235,6 +261,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		0,			//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 		// TabPrf *******************
 		{
@@ -249,6 +276,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActAdmBrf,		//  8
 		0,			//  9
 		0,			// 10
+		0,			// 11
 		},
 	};
 

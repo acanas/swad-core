@@ -17712,6 +17712,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSys *****************************************************
@@ -17926,6 +17927,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #endif
 	,
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCty *****************************************************
@@ -18000,6 +18002,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabIns *****************************************************
@@ -18129,51 +18132,12 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"F&eacute;rias"
 #endif
 	,
-	//  6: ActSeeAdmDocIns
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents"
-#elif L==4
-	"Documentos"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Kuatia"
-#elif L==7
-	"Documenti"
-#elif L==8
-	"Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  7: ActAdmShaIns
-#if   L==1
-	"Compartits"
-#elif L==2
-	"Freigegebene"
-#elif L==3
-	"Shared"
-#elif L==4
-	"Compartidos"
-#elif L==5
-	"Partag&eacute;s"
-#elif L==6
-	"Compartidos"	// Okoteve traducción
-#elif L==7
-	"Condivisi"
-#elif L==8
-	"Udost&eogon;pnione"
-#elif L==9
-	"Compartilhados"
-#endif
-	,
+	NULL,	//  6
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCtr *****************************************************
@@ -18240,54 +18204,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	//  3: ActSeeAdmDocCtr
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents"
-#elif L==4
-	"Documentos"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Kuatia"
-#elif L==7
-	"Documenti"
-#elif L==8
-	"Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  4: ActAdmShaCtr
-#if   L==1
-	"Compartits"
-#elif L==2
-	"Freigegebene"
-#elif L==3
-	"Shared"
-#elif L==4
-	"Compartidos"
-#elif L==5
-	"Partag&eacute;s"
-#elif L==6
-	"Compartidos"	// Okoteve traducción
-#elif L==7
-	"Condivisi"
-#elif L==8
-	"Udost&eogon;pnione"
-#elif L==9
-	"Compartilhados"
-#endif
-	,
+	NULL,	//  3
+	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabDeg *****************************************************
@@ -18354,54 +18279,15 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas"
 #endif
 	,
-	//  3: ActSeeAdmDocDeg
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents"
-#elif L==4
-	"Documentos"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Kuatia"
-#elif L==7
-	"Documenti"
-#elif L==8
-	"Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  4: ActAdmShaDeg
-#if   L==1
-	"Compartits"
-#elif L==2
-	"Freigegebene"
-#elif L==3
-	"Shared"
-#elif L==4
-	"Compartidos"
-#elif L==5
-	"Partag&eacute;s"
-#elif L==6
-	"Compartidos"	// Okoteve traducción
-#elif L==7
-	"Condivisi"
-#elif L==8
-	"Udost&eogon;pnione"
-#elif L==9
-	"Compartilhados"
-#endif
-	,
+	NULL,	//  3
+	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCrs *****************************************************
@@ -18489,70 +18375,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	//  4: ActSeeAdmDocCrsGrp
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents"
-#elif L==4
-	"Documentos"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Kuatia"
-#elif L==7
-	"Documenti"
-#elif L==8
-	"Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  5: ActAdmTchCrsGrp
-#if   L==1
-	"Privats"
-#elif L==2
-	"Private"
-#elif L==3
-	"Private"
-#elif L==4
-	"Privados"
-#elif L==5
-	"Priv&eacute;s"
-#elif L==6
-	"Privados"	// Okoteve traducción
-#elif L==7
-	"Privati"
-#elif L==8
-	"Prywatne"
-#elif L==9
-	"Privados"
-#endif
-	,
-	//  6: ActAdmShaCrsGrp
-#if   L==1
-	"Compartits"
-#elif L==2
-	"Freigegebene"
-#elif L==3
-	"Shared"
-#elif L==4
-	"Compartidos"
-#elif L==5
-	"Partag&eacute;s"
-#elif L==6
-	"Compartidos"	// Okoteve traducción
-#elif L==7
-	"Condivisi"
-#elif L==8
-	"Udost&eogon;pnione"
-#elif L==9
-	"Compartilhados"
-#endif
-	,
-	//  7: ActSeeCrsTT
+	//  4: ActSeeCrsTT
 #if   L==1
 	"Horari"
 #elif L==2
@@ -18573,7 +18396,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	//  8: ActSeeBib
+	//  5: ActSeeBib
 #if   L==1
 	"Bibliografia"
 #elif L==2
@@ -18594,7 +18417,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  9: ActSeeFAQ
+	//  6: ActSeeFAQ
 #if   L==1
 	"FAQ"	// Necessita traduccio
 #elif L==2
@@ -18615,7 +18438,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	// 10: ActSeeCrsLnk
+	//  7: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18635,31 +18458,36 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Liga&ccedil;&otilde;es"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabAss *****************************************************
 	//  0: ActSeeAss
 #if   L==1
-	"Sistema"
+	 "Sistema"
 #elif L==2
-	"System"
+	 "System"
 #elif L==3
-	"System"
+	 "System"
 #elif L==4
-	"Sistema"
+	 "Sistema"
 #elif L==5
-	"Syst&egrave;me"
+	 "Syst&egrave;me"
 #elif L==6
-	"Sistema"	// Okoteve traducción
+	 "Sistema"	// Okoteve traducción
 #elif L==7
-	"Sistema"
+	 "Sistema"
 #elif L==8
-	"System"
+	 "System"
 #elif L==9
-	"Sistema"
+	 "Sistema"
 #endif
 	,
-	// 1: ActSeeAsg
+	//  1: ActSeeAsg
 #if   L==1
 	"Activitats"
 #elif L==2
@@ -18680,49 +18508,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	//  2: ActAdmAsgWrkUsr
-#if   L==1
-	"Treballs"
-#elif L==2
-	"Hausarbeiten"
-#elif L==3
-	"Homework"
-#elif L==4
-	"Trabajos"
-#elif L==5
-	"Travaux"
-#elif L==6
-	"Tembiapo"
-#elif L==7
-	"Lavori"
-#elif L==8
-	"Zadanie"
-#elif L==9
-	"Trabalhos"
-#endif
-	,
-	//  3: ActReqAsgWrkCrs
-#if   L==1
-	"Treballs"
-#elif L==2
-	"Hausarbeiten"
-#elif L==3
-	"Homework"
-#elif L==4
-	"Trabajos"
-#elif L==5
-	"Travaux"
-#elif L==6
-	"Tembiapo"
-#elif L==7
-	"Lavori"
-#elif L==8
-	"Zadanie"
-#elif L==9
-	"Trabalhos"
-#endif
-	,
-	//  4: ActReqTst
+	//  2: ActReqTst
 #if   L==1
 	"Tests"
 #elif L==2
@@ -18743,7 +18529,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  5: ActSeeCal
+	//  3: ActSeeCal
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18764,7 +18550,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	//  6: ActSeeAllExaAnn
+	//  4: ActSeeAllExaAnn
 #if   L==1
 	"Convocat&ograve;ries"
 #elif L==2
@@ -18785,7 +18571,248 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	//  7: ActSeeMrk
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	},
+	{
+	// TabFil *****************************************************
+	//  0: ActSeeAdmDocIns
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents"
+#elif L==4
+	"Documentos"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Kuatia"
+#elif L==7
+	"Documenti"
+#elif L==8
+	"Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  1: ActAdmShaIns
+#if   L==1
+	"Compartits"
+#elif L==2
+	"Freigegebene"
+#elif L==3
+	"Shared"
+#elif L==4
+	"Compartidos"
+#elif L==5
+	"Partag&eacute;s"
+#elif L==6
+	"Compartidos"	// Okoteve traducción
+#elif L==7
+	"Condivisi"
+#elif L==8
+	"Udost&eogon;pnione"
+#elif L==9
+	"Compartilhados"
+#endif
+	,
+	//  2: ActSeeAdmDocCtr
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents"
+#elif L==4
+	"Documentos"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Kuatia"
+#elif L==7
+	"Documenti"
+#elif L==8
+	"Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  3: ActAdmShaCtr
+#if   L==1
+	"Compartits"
+#elif L==2
+	"Freigegebene"
+#elif L==3
+	"Shared"
+#elif L==4
+	"Compartidos"
+#elif L==5
+	"Partag&eacute;s"
+#elif L==6
+	"Compartidos"	// Okoteve traducción
+#elif L==7
+	"Condivisi"
+#elif L==8
+	"Udost&eogon;pnione"
+#elif L==9
+	"Compartilhados"
+#endif
+	,
+	//  4: ActSeeAdmDocDeg
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents"
+#elif L==4
+	"Documentos"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Kuatia"
+#elif L==7
+	"Documenti"
+#elif L==8
+	"Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  5: ActAdmShaDeg
+#if   L==1
+	"Compartits"
+#elif L==2
+	"Freigegebene"
+#elif L==3
+	"Shared"
+#elif L==4
+	"Compartidos"
+#elif L==5
+	"Partag&eacute;s"
+#elif L==6
+	"Compartidos"	// Okoteve traducción
+#elif L==7
+	"Condivisi"
+#elif L==8
+	"Udost&eogon;pnione"
+#elif L==9
+	"Compartilhados"
+#endif
+	,
+	//  6: ActSeeAdmDocCrsGrp
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents"
+#elif L==4
+	"Documentos"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Kuatia"
+#elif L==7
+	"Documenti"
+#elif L==8
+	"Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  7: ActAdmTchCrsGrp
+#if   L==1
+	"Privats"
+#elif L==2
+	"Private"
+#elif L==3
+	"Private"
+#elif L==4
+	"Privados"
+#elif L==5
+	"Priv&eacute;s"
+#elif L==6
+	"Privados"	// Okoteve traducción
+#elif L==7
+	"Privati"
+#elif L==8
+	"Prywatne"
+#elif L==9
+	"Privados"
+#endif
+	,
+	//  8: ActAdmShaCrsGrp
+#if   L==1
+	"Compartits"
+#elif L==2
+	"Freigegebene"
+#elif L==3
+	"Shared"
+#elif L==4
+	"Compartidos"
+#elif L==5
+	"Partag&eacute;s"
+#elif L==6
+	"Compartidos"	// Okoteve traducción
+#elif L==7
+	"Condivisi"
+#elif L==8
+	"Udost&eogon;pnione"
+#elif L==9
+	"Compartilhados"
+#endif
+	,
+	//  9: ActAdmAsgWrkUsr
+#if   L==1
+	"Treballs"
+#elif L==2
+	"Hausarbeiten"
+#elif L==3
+	"Homework"
+#elif L==4
+	"Trabajos"
+#elif L==5
+	"Travaux"
+#elif L==6
+	"Tembiapo"
+#elif L==7
+	"Lavori"
+#elif L==8
+	"Zadanie"
+#elif L==9
+	"Trabalhos"
+#endif
+	,
+	//  10: ActReqAsgWrkCrs
+#if   L==1
+	"Treballs"
+#elif L==2
+	"Hausarbeiten"
+#elif L==3
+	"Homework"
+#elif L==4
+	"Trabajos"
+#elif L==5
+	"Travaux"
+#elif L==6
+	"Tembiapo"
+#elif L==7
+	"Lavori"
+#elif L==8
+	"Zadanie"
+#elif L==9
+	"Trabalhos"
+#endif
+	,
+	//  11: ActSeeMrk
 #if   L==1
 	"Qualificacions"
 #elif L==2
@@ -18805,10 +18832,6 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Notas"
 #endif
-	,
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
 	},
 	{
 	// TabUsr *****************************************************
@@ -18983,6 +19006,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSoc *****************************************************
@@ -19077,6 +19101,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabMsg *****************************************************
@@ -19231,6 +19256,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSta **********************************************************************
@@ -19385,6 +19411,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabPrf *****************************************************
@@ -19579,6 +19606,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	}
 };
 
@@ -19597,6 +19625,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSys *****************************************************
@@ -19815,6 +19844,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #endif
 	,
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCty *****************************************************
@@ -19889,6 +19919,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabIns *****************************************************
@@ -20018,55 +20049,12 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Feriados e dias sem escola"
 #endif
 	,
-	//  6: ActSeeAdmDocIns
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents of the institution uploaded by administrators"
-#elif L==4
-	"Documentos de la instituci&oacute;n subidos por administradores"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Documentos de la instituci&oacute;n subidos por administradores"	// Okoteve traducción
-#elif L==7
-	"Area documenti"
-#elif L==8
-	"Obszar Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  7: ActAdmShaIns
-#if   L==1
-	"Arxius compartits per professors i estudiants"
-	" de l'instituci&oacute;"
-#elif L==2
-	"Freigegebene Dateien"
-#elif L==3
-	"Files shared by teachers and students"
-	" of the institution"
-#elif L==4
-	"Archivos compartidos por profesores y estudiantes"
-	" de la instituci&oacute;n"
-#elif L==5
-	"Fichiers partag&eacute;s"
-#elif L==6
-	"Archivos compartidos por profesores y estudiantes"
-	" de la instituci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"File condivisi"
-#elif L==8
-	"Pliki udost&eogon;pnione"
-#elif L==9
-	"Arquivos compartilhados"
-#endif
-	,
+	NULL,	//  6
+	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCtr *****************************************************
@@ -20133,58 +20121,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	//  3: ActSeeAdmDocCtr
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents of the centre uploaded by administrators"
-#elif L==4
-	"Documentos del centro subidos por administradores"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Documentos del centro subidos por administradores"	// Okoteve traducción
-#elif L==7
-	"Area documenti"
-#elif L==8
-	"Obszar Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  4: ActAdmShaCtr
-#if   L==1
-	"Arxius compartits per professors i estudiants"
-	" del centre"
-#elif L==2
-	"Freigegebene Dateien"
-#elif L==3
-	"Files shared by teachers and students"
-	" of the centre"
-#elif L==4
-	"Archivos compartidos por profesores y estudiantes"
-	" del centro"
-#elif L==5
-	"Fichiers partag&eacute;s"
-#elif L==6
-	"Archivos compartidos por profesores y estudiantes"
-	" del centro"	// Okoteve traducción
-#elif L==7
-	"File condivisi"
-#elif L==8
-	"Pliki udost&eogon;pnione"
-#elif L==9
-	"Arquivos compartilhados"
-#endif
-	,
+	NULL,	//  3
+	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabDeg *****************************************************
@@ -20251,58 +20196,15 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Disciplinas nesta titula&ccedil;&atilde;o"
 #endif
 	,
-	//  3: ActSeeAdmDocDeg
-#if   L==1
-	"Documents"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents of the degree uploaded by administrators"
-#elif L==4
-	"Documentos de la titulaci&oacute;n subidos por administradores"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Documentos de la titulaci&oacute;n subidos por administradores"	// Okoteve traducción
-#elif L==7
-	"Area documenti"
-#elif L==8
-	"Obszar Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  4: ActAdmShaDeg
-#if   L==1
-	"Arxius compartits per professors i estudiants"
-	" de la titulaci&oacute;"
-#elif L==2
-	"Freigegebene Dateien"
-#elif L==3
-	"Files shared by teachers and students"
-	" of the degree"
-#elif L==4
-	"Archivos compartidos por profesores y estudiantes"
-	" de la titulaci&oacute;n"
-#elif L==5
-	"Fichiers partag&eacute;s"
-#elif L==6
-	"Archivos compartidos por profesores y estudiantes"
-	" de la titulaci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"File condivisi"
-#elif L==8
-	"Pliki udost&eogon;pnione"
-#elif L==9
-	"Arquivos compartilhados"
-#endif
-	,
+	NULL,	//  3
+	NULL,	//  4
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabCrs *****************************************************
@@ -20390,74 +20292,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Programa"
 #endif
 	,
-	//  4: ActSeeAdmDocCrsGrp
-#if   L==1
-	"Documents de l'assignatura o d'un grup enviats per professors"
-#elif L==2
-	"Dokumente"
-#elif L==3
-	"Documents of the course or a group uploaded by teachers"
-#elif L==4
-	"Documentos de la asignatura o de un grupo subidos por profesores"
-#elif L==5
-	"Documents"
-#elif L==6
-	"Documentos de la asignatura o de un grupo subidos por profesores"// Okoteve traducción
-#elif L==7
-	"Area documenti"
-#elif L==8
-	"Obszar Dokument&oacute;w"
-#elif L==9
-	"Documentos"
-#endif
-	,
-	//  5: ActAdmTchCrsGrp
-#if   L==1
-	"Arxius privats, nom&eacute;s per als professors de l'assignatura"
-#elif L==2
-	"Privat-Dateien, nur f&uuml;r die Lehrer des Kurses"
-#elif L==3
-	"Private files, only for teachers of the course"
-#elif L==4
-	"Archivos privados, solo para los profesores de la asignatura"
-#elif L==5
-	"Fichiers priv&eacute;s, seulement pour les enseignants du cours"
-#elif L==6
-	"Archivos privados, solo para los profesores de la asignatura"// Okoteve traducción
-#elif L==7
-	"File privati, solo per gli insegnanti del corso"
-#elif L==8
-	"Pliki prywatne, tylko dla nauczycieli przedmiotu"
-#elif L==9
-	"Arquivos privados, apenas para os professores do curso"
-#endif
-	,
-	//  6: ActAdmShaCrsGrp
-#if   L==1
-	"Arxius compartits per professors i estudiants"
-	" de l'assignatura o d'un grup"
-#elif L==2
-	"Freigegebene Dateien"
-#elif L==3
-	"Files shared by teachers and students"
-	" of the course or group"
-#elif L==4
-	"Archivos compartidos por profesores y estudiantes"
-	" de la asignatura o de un grupo"
-#elif L==5
-	"Fichiers partag&eacute;s"
-#elif L==6
-	"Archivos compartidos por profesores y estudiantes"
-	" de la asignatura o de un grupo"// Okoteve traducción
-#elif L==7
-	"File condivisi"
-#elif L==8
-	"Pliki udost&eogon;pnione"
-#elif L==9
-	"Arquivos compartilhados"
-#endif
-	,
-	//  7: ActSeeCrsTT
+	//  4: ActSeeCrsTT
 #if   L==1
 	"Horari de classes de l'assignatura"
 #elif L==2
@@ -20478,7 +20313,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Hor&aacute;rio"
 #endif
 	,
-	//  8: ActSeeBib
+	//  5: ActSeeBib
 #if   L==1
 	"Bibliografia relacionada amb els continguts de l'assignatura"
 #elif L==2
@@ -20499,7 +20334,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Bibliografia"
 #endif
 	,
-	//  9: ActSeeFAQ
+	//  6: ActSeeFAQ
 #if   L==1
 	"FAQ (preguntes freq&uuml;entment formulades i les seves respostes)"
 #elif L==2
@@ -20520,7 +20355,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"FAQ"
 #endif
 	,
-	// 10: ActSeeCrsLnk
+	//  7: ActSeeCrsLnk
 #if   L==1
 	"Enlla&ccedil;os relacionats amb els continguts de l'assignatura"
 #elif L==2
@@ -20540,6 +20375,11 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==9
 	"Liga&ccedil;&otilde;es"
 #endif
+	,
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabAss *****************************************************
@@ -20588,49 +20428,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Atividades"
 #endif
 	,
-	//  2: ActAdmAsgWrkUsr
-#if   L==1
-	"Els meus documents d'activitats i altres treballs en aquesta assignatura"
-#elif L==2
-	"Eingereichte Hausarbeiten"
-#elif L==3
-	"My homework"
-#elif L==4
-	"Mis documentos de actividades y otros trabajos en esta asignatura"
-#elif L==5
-	"Mes travaux"
-#elif L==6
-	"Mis documentos de actividades y otros trabajos en esta asignatura"// Okoteve traducción
-#elif L==7
-	"Miei lavori"
-#elif L==8
-	"Moje zadanie domowe"
-#elif L==9
-	"Os meus trabalhos"
-#endif
-	,
-	//  3: ActReqAsgWrkCrs
-#if   L==1
-	"Activitats i altres treballs enviats pels usuaris d'aquesta assignatura"
-#elif L==2
-	"Hausarbeiten der Benutzer"
-#elif L==3
-	"Users' homework"
-#elif L==4
-	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"
-#elif L==5
-	"Travails d'utilisateurs"
-#elif L==6
-	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"// Okoteve traducción
-#elif L==7
-	"Lavori di utenti"
-#elif L==8
-	"Uzytkownik&oacute;w domowych"
-#elif L==9
-	"Trabalhos de utilizadores"
-#endif
-	,
-	//  4: ActReqTst
+	//  2: ActReqTst
 #if   L==1
 	"Tests sobre els continguts d'aquesta assignatura"
 #elif L==2
@@ -20651,7 +20449,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  5: ActSeeCal
+	//  3: ActSeeCal
 #if   L==1
 	"Calendari acad&egrave;mic (els dies festius"
 	" corresponen al lloc del centre seleccionada)"
@@ -20675,7 +20473,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
-	//  6: ActSeeAllExaAnn
+	//  4: ActSeeAllExaAnn
 #if   L==1
 	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
 #elif L==2
@@ -20696,7 +20494,264 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	//  7: ActSeeMrk
+	NULL,	//  5
+	NULL,	//  6
+	NULL,	//  7
+	NULL,	//  8
+	NULL,	//  9
+	NULL,	// 10
+	NULL,	// 11
+	},
+	{
+	// TabFil *****************************************************
+	//  0: ActSeeAdmDocIns
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents of the institution uploaded by administrators"
+#elif L==4
+	"Documentos de la instituci&oacute;n subidos por administradores"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Documentos de la instituci&oacute;n subidos por administradores"	// Okoteve traducción
+#elif L==7
+	"Area documenti"
+#elif L==8
+	"Obszar Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  1: ActAdmShaIns
+#if   L==1
+	"Arxius compartits per professors i estudiants"
+	" de l'instituci&oacute;"
+#elif L==2
+	"Freigegebene Dateien"
+#elif L==3
+	"Files shared by teachers and students"
+	" of the institution"
+#elif L==4
+	"Archivos compartidos por profesores y estudiantes"
+	" de la instituci&oacute;n"
+#elif L==5
+	"Fichiers partag&eacute;s"
+#elif L==6
+	"Archivos compartidos por profesores y estudiantes"
+	" de la instituci&oacute;n"	// Okoteve traducción
+#elif L==7
+	"File condivisi"
+#elif L==8
+	"Pliki udost&eogon;pnione"
+#elif L==9
+	"Arquivos compartilhados"
+#endif
+	,
+	//  2: ActSeeAdmDocCtr
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents of the centre uploaded by administrators"
+#elif L==4
+	"Documentos del centro subidos por administradores"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Documentos del centro subidos por administradores"	// Okoteve traducción
+#elif L==7
+	"Area documenti"
+#elif L==8
+	"Obszar Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  3: ActAdmShaCtr
+#if   L==1
+	"Arxius compartits per professors i estudiants"
+	" del centre"
+#elif L==2
+	"Freigegebene Dateien"
+#elif L==3
+	"Files shared by teachers and students"
+	" of the centre"
+#elif L==4
+	"Archivos compartidos por profesores y estudiantes"
+	" del centro"
+#elif L==5
+	"Fichiers partag&eacute;s"
+#elif L==6
+	"Archivos compartidos por profesores y estudiantes"
+	" del centro"	// Okoteve traducción
+#elif L==7
+	"File condivisi"
+#elif L==8
+	"Pliki udost&eogon;pnione"
+#elif L==9
+	"Arquivos compartilhados"
+#endif
+	,
+	//  4: ActSeeAdmDocDeg
+#if   L==1
+	"Documents"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents of the degree uploaded by administrators"
+#elif L==4
+	"Documentos de la titulaci&oacute;n subidos por administradores"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Documentos de la titulaci&oacute;n subidos por administradores"	// Okoteve traducción
+#elif L==7
+	"Area documenti"
+#elif L==8
+	"Obszar Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  5: ActAdmShaDeg
+#if   L==1
+	"Arxius compartits per professors i estudiants"
+	" de la titulaci&oacute;"
+#elif L==2
+	"Freigegebene Dateien"
+#elif L==3
+	"Files shared by teachers and students"
+	" of the degree"
+#elif L==4
+	"Archivos compartidos por profesores y estudiantes"
+	" de la titulaci&oacute;n"
+#elif L==5
+	"Fichiers partag&eacute;s"
+#elif L==6
+	"Archivos compartidos por profesores y estudiantes"
+	" de la titulaci&oacute;n"	// Okoteve traducción
+#elif L==7
+	"File condivisi"
+#elif L==8
+	"Pliki udost&eogon;pnione"
+#elif L==9
+	"Arquivos compartilhados"
+#endif
+	,
+	//  6: ActSeeAdmDocCrsGrp
+#if   L==1
+	"Documents de l'assignatura o d'un grup enviats per professors"
+#elif L==2
+	"Dokumente"
+#elif L==3
+	"Documents of the course or a group uploaded by teachers"
+#elif L==4
+	"Documentos de la asignatura o de un grupo subidos por profesores"
+#elif L==5
+	"Documents"
+#elif L==6
+	"Documentos de la asignatura o de un grupo subidos por profesores"// Okoteve traducción
+#elif L==7
+	"Area documenti"
+#elif L==8
+	"Obszar Dokument&oacute;w"
+#elif L==9
+	"Documentos"
+#endif
+	,
+	//  7: ActAdmTchCrsGrp
+#if   L==1
+	"Arxius privats, nom&eacute;s per als professors de l'assignatura"
+#elif L==2
+	"Privat-Dateien, nur f&uuml;r die Lehrer des Kurses"
+#elif L==3
+	"Private files, only for teachers of the course"
+#elif L==4
+	"Archivos privados, solo para los profesores de la asignatura"
+#elif L==5
+	"Fichiers priv&eacute;s, seulement pour les enseignants du cours"
+#elif L==6
+	"Archivos privados, solo para los profesores de la asignatura"// Okoteve traducción
+#elif L==7
+	"File privati, solo per gli insegnanti del corso"
+#elif L==8
+	"Pliki prywatne, tylko dla nauczycieli przedmiotu"
+#elif L==9
+	"Arquivos privados, apenas para os professores do curso"
+#endif
+	,
+	//  8: ActAdmShaCrsGrp
+#if   L==1
+	"Arxius compartits per professors i estudiants"
+	" de l'assignatura o d'un grup"
+#elif L==2
+	"Freigegebene Dateien"
+#elif L==3
+	"Files shared by teachers and students"
+	" of the course or group"
+#elif L==4
+	"Archivos compartidos por profesores y estudiantes"
+	" de la asignatura o de un grupo"
+#elif L==5
+	"Fichiers partag&eacute;s"
+#elif L==6
+	"Archivos compartidos por profesores y estudiantes"
+	" de la asignatura o de un grupo"// Okoteve traducción
+#elif L==7
+	"File condivisi"
+#elif L==8
+	"Pliki udost&eogon;pnione"
+#elif L==9
+	"Arquivos compartilhados"
+#endif
+	,
+	//  9: ActAdmAsgWrkUsr
+#if   L==1
+	"Els meus documents d'activitats i altres treballs en aquesta assignatura"
+#elif L==2
+	"Eingereichte Hausarbeiten"
+#elif L==3
+	"My homework"
+#elif L==4
+	"Mis documentos de actividades y otros trabajos en esta asignatura"
+#elif L==5
+	"Mes travaux"
+#elif L==6
+	"Mis documentos de actividades y otros trabajos en esta asignatura"// Okoteve traducción
+#elif L==7
+	"Miei lavori"
+#elif L==8
+	"Moje zadanie domowe"
+#elif L==9
+	"Os meus trabalhos"
+#endif
+	,
+	// 10: ActReqAsgWrkCrs
+#if   L==1
+	"Activitats i altres treballs enviats pels usuaris d'aquesta assignatura"
+#elif L==2
+	"Hausarbeiten der Benutzer"
+#elif L==3
+	"Users' homework"
+#elif L==4
+	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"
+#elif L==5
+	"Travails d'utilisateurs"
+#elif L==6
+	"Actividades y otros trabajos enviados por los usuarios de esta asignatura"// Okoteve traducción
+#elif L==7
+	"Lavori di utenti"
+#elif L==8
+	"Uzytkownik&oacute;w domowych"
+#elif L==9
+	"Trabalhos de utilizadores"
+#endif
+	,
+	// 11: ActSeeMrk
 #if   L==1
 	"Consulta individualitzada de qualificacions"
 	" (cada estudiant nom&eacute;s veu les seves qualificacions)"
@@ -20725,10 +20780,6 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Consulta individualizada de notas"
 	" (somente cada aluno v&ecirc; suas notas)"
 #endif
-	,
-	NULL,	//  8
-	NULL,	//  9
-	NULL,	// 10
 	},
 	{
 	// TabUsr *****************************************************
@@ -20907,6 +20958,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSoc *****************************************************
@@ -21004,6 +21056,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabMsg *****************************************************
@@ -21167,6 +21220,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabSta *****************************************************
@@ -21327,6 +21381,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	},
 	{
 	// TabPrf *****************************************************
@@ -21521,6 +21576,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	NULL,	//  9
 	NULL,	// 10
+	NULL,	// 11
 	}
 };
 
@@ -40620,6 +40676,27 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	 "Ocena"
 #elif L==9
 	 "Avalia&ccedil;&atilde;o"
+#endif
+	 ,
+	 // TabFil
+#if   L==1
+	"Fitxers"
+#elif L==2
+	"Dateien"
+#elif L==3
+	"Files"
+#elif L==4
+	"Archivos"
+#elif L==5
+	"Fichiers"
+#elif L==6
+	"Archivos"	// Okoteve traducción
+#elif L==7
+	"File"
+#elif L==8
+	"Pliki"
+#elif L==9
+	"Arquivos"
 #endif
 	 ,
 	 // TabUsr
