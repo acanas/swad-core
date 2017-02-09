@@ -128,7 +128,6 @@ void Dup_ListDuplicateUsrs (void)
    extern const char *Hlp_USERS_Duplicates_possibly_duplicate_users;
    extern const char *Txt_Possibly_duplicate_users;
    extern const char *Txt_Informants;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -223,7 +222,8 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else	// There are no users
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_UNKNOWN]);
+      /***** Show warning indicating no users found *****/
+      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -248,7 +248,6 @@ static void Dup_ListSimilarUsrs (void)
   {
    extern const char *Hlp_USERS_Duplicates_possibly_similar_users;
    extern const char *Txt_Similar_users;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct UsrData UsrDat;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -363,7 +362,8 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else	// There are no users
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_UNKNOWN]);
+      /***** Show warning indicating no users found *****/
+      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

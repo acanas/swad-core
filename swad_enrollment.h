@@ -70,6 +70,7 @@ typedef enum
 /*****************************************************************************/
 
 void Enr_PutButtonToEnrollStudents (void);
+void Enr_PutButtonToEnrollTeachers (void);
 
 void Enr_PutLinkToRequestSignUp (void);
 

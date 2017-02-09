@@ -5941,7 +5941,13 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       free ((void *) GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
+     {
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+
+      /***** Button to enroll students *****/
+      Enr_PutButtonToEnrollStudents ();
+     }
 
    /***** Free memory for students list *****/
    Usr_FreeUsrsList (Rol_STUDENT);
@@ -5953,7 +5959,6 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
 static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
   {
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumColumns;
    unsigned NumCol;
    unsigned NumUsr;
@@ -6012,7 +6017,13 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
+     {
+      /***** Show warning indicating no teachers found *****/
+      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+
+      /***** Button to enroll teachers *****/
+      Enr_PutButtonToEnrollTeachers ();
+     }
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TEACHER);
@@ -6394,7 +6405,6 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumColumns;
    unsigned NumCol;
    unsigned NumUsr;
@@ -6478,7 +6488,8 @@ void Usr_ListAllDataTchs (void)
       fprintf (Gbl.F.Out,"</table>");
      }
    else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
+      /***** Show warning indicating no teachers found *****/
+      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TEACHER);
@@ -6604,7 +6615,6 @@ void Usr_ListDataAdms (void)
    extern const char *Txt_First_name;
    extern const char *Txt_Email;
    extern const char *Txt_Institution;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumCol;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -6723,7 +6733,8 @@ void Usr_ListDataAdms (void)
       fprintf (Gbl.F.Out,"</table>");
      }
    else        // Gbl.Usrs.LstUsrs[Rol_DEG_ADM].NumUsrs == 0
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_DEG_ADM]);
+      /***** Show warning indicating no admins found *****/
+      Usr_ShowWarningNoUsersFound (Rol_DEG_ADM);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -7394,10 +7405,8 @@ void Usr_SeeStudents (void)
 	 /***** Show warning indicating no students found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
-	 /***** Form to enroll several students *****/
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
-	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)		// I am a teacher in current course
-	    Enr_PutButtonToEnrollStudents ();
+	 /***** Button to enroll students *****/
+	 Enr_PutButtonToEnrollStudents ();
 	}
      }
 
@@ -7422,7 +7431,6 @@ void Usr_SeeTeachers (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Scope;
    extern const char *Txt_Show_records;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
@@ -7545,7 +7553,13 @@ void Usr_SeeTeachers (void)
            }
 	}
       else
-	 Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
+	{
+	 /***** Show warning indicating no teachers found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+
+	 /***** Button to enroll teachers *****/
+	 Enr_PutButtonToEnrollTeachers ();
+	}
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -7853,8 +7867,6 @@ void Usr_SeeStdClassPhotoPrn (void)
 
 void Usr_SeeTchClassPhotoPrn (void)
   {
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
-
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
@@ -7894,7 +7906,8 @@ void Usr_SeeTchClassPhotoPrn (void)
       Lay_EndRoundFrame ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_TEACHER]);
+      /***** Show warning indicating no teachers found *****/
+      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TEACHER);

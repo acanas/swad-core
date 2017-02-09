@@ -2004,7 +2004,6 @@ static void Pho_GetMaxStdsPerDegree (void)
 
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2071,7 +2070,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       fprintf (Gbl.F.Out,"</table>");
      }
    else	// No degrees with students found
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2086,7 +2086,6 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2186,7 +2185,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       fprintf (Gbl.F.Out,"</table>");
      }
    else	// No degrees with students found!
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

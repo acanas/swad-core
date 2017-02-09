@@ -2266,7 +2266,6 @@ void Att_RegisterStudentsInAttEvent (void)
   {
    extern const char *Txt_Presents;
    extern const char *Txt_Absents;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    struct AttendanceEvent Att;
    char Format[256];
    unsigned NumStd;
@@ -2371,7 +2370,8 @@ void Att_RegisterStudentsInAttEvent (void)
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
-      Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** Show the attendance event again *****/
    Gbl.AttEvents.AttCod = Att.AttCod;

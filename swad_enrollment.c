@@ -143,9 +143,32 @@ void Enr_PutButtonToEnrollStudents (void)
   {
    extern const char *Txt_Register_students;
 
-   Act_FormStart (ActReqEnrSevStd);
-   Lay_PutConfirmButton (Txt_Register_students);
-   Act_FormEnd ();
+   /***** Form to enroll several students *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)	// I am logged as teacher
+     {
+      Act_FormStart (ActReqEnrSevStd);
+      Lay_PutConfirmButton (Txt_Register_students);
+      Act_FormEnd ();
+     }
+  }
+
+/*****************************************************************************/
+/**************** Show form with button to enroll teachers *******************/
+/*****************************************************************************/
+
+void Enr_PutButtonToEnrollTeachers (void)
+  {
+   extern const char *Txt_Register_teachers;
+
+   /***** Form to enroll several students *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
+     {
+      Act_FormStart (ActReqEnrSevTch);
+      Lay_PutConfirmButton (Txt_Register_teachers);
+      Act_FormEnd ();
+     }
   }
 
 /*****************************************************************************/
@@ -1723,7 +1746,6 @@ void Enr_AskRemAllStdsThisCrs (void)
    extern const char *Hlp_USERS_Administration_remove_all_students;
    extern const char *Txt_Remove_all_students;
    extern const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumStds;
 
    /***** Start frame *****/
@@ -1745,11 +1767,8 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormEnd ();
      }
    else
-     {
-      sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
-               Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
-     }
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -1762,7 +1781,6 @@ void Enr_AskRemAllStdsThisCrs (void)
 void Enr_RemAllStdsThisCrs (void)
   {
    extern const char *Txt_The_X_students_who_belonged_to_the_course_Y_have_been_removed_from_it;
-   extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    unsigned NumStdsInCrs;
 
    if (Pwd_GetConfirmationOnDangerousAction ())
@@ -1774,11 +1792,8 @@ void Enr_RemAllStdsThisCrs (void)
 	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	}
       else
-	{
-	 sprintf (Gbl.Message,Txt_No_users_found[Rol_STUDENT],
-		  Gbl.CurrentCrs.Crs.FullName);
-	 Lay_ShowAlert (Lay_INFO,Gbl.Message);
-	}
+	 /***** Show warning indicating no students found *****/
+	 Usr_ShowWarningNoUsersFound (Rol_STUDENT);
      }
   }
 
