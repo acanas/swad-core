@@ -190,6 +190,7 @@ void Cal_DrawCurrentMonth (void)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
+   Act_Action_t ActionSeeCalendar;
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -212,7 +213,19 @@ void Cal_DrawCurrentMonth (void)
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,ActSeeCalCrs,true);
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+      ActionSeeCalendar = ActSeeCalCrs;
+   else if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
+      ActionSeeCalendar = ActSeeCalDeg;
+   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
+      ActionSeeCalendar = ActSeeCalCtr;
+   else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
+      ActionSeeCalendar = ActSeeCalIns;
+   else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
+      ActionSeeCalendar = ActSeeCalCty;
+   else
+      ActionSeeCalendar = ActSeeCalSys;
+   Act_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
    Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"

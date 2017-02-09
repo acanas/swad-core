@@ -193,19 +193,25 @@
 // TODO: Ver solución de Guillermo Gómez Trenado cuando se pulsa con el botón derecho para abrir una descarga en otra ventana
 
 // TODO: Check icons in course and files tabs
-// TODO: Link from current month to calendar depending on scope
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.134 (2017-02-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.134.1 (2017-02-09)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.134.1: Feb 09, 2017	Link from current month to calendar depending on scope. (212446 lines)
+Copy the following icons to icon public directory:
+sudo cp icon/iconset/awesome/action64x64/crs64x64.gif /var/www/html/swad/icon/iconset/awesome/action64x64/crs64x64.gif
+sudo cp icon/iconset/nuvola/action64x64/crs64x64.gif /var/www/html/swad/icon/iconset/nuvola/action64x64/crs64x64.gif
+sudo cp icon/iconset/awesome/action64x64/fil64x64.gif /var/www/html/swad/icon/iconset/awesome/action64x64/fil64x64.gif
+sudo cp icon/iconset/nuvola/action64x64/fil64x64.gif /var/www/html/swad/icon/iconset/nuvola/action64x64/fil64x64.gif
+
         Version 16.134:   Feb 09, 2017	New calendars options. (212428 lines)
 					18 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1622','es','N','Ver calendario plataforma');
