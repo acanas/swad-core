@@ -28,6 +28,7 @@
 #include <string.h>		// For string functions
 #include <time.h>		// For time functions (mktime...)
 
+#include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_database.h"
 #include "swad_date.h"
@@ -169,7 +170,7 @@ void Dat_ShowClientLocalTime (void)
 
    /* Month with link to calendar */
    fprintf (Gbl.F.Out,"<div id=\"current_month\">");
-   Act_FormStart (ActSeeCalCrs);
+   Act_FormStart (Cal_GetActionToSeeCalendar ());
    Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
                       "</span>"

@@ -491,8 +491,10 @@ static void Lay_WriteScripts (void)
 
    /***** Prepare script to draw months *****/
    if ((Gbl.Prefs.SideCols & Lay_SHOW_LEFT_COLUMN) ||		// Left column visible
-       Gbl.Action.Act == ActSeeCalCrs ||
-       Gbl.Action.Act == ActPrnCalCrs)
+       Gbl.Action.Act == ActSeeCalIns || Gbl.Action.Act == ActPrnCalIns ||
+       Gbl.Action.Act == ActSeeCalCtr || Gbl.Action.Act == ActPrnCalCtr ||
+       Gbl.Action.Act == ActSeeCalDeg || Gbl.Action.Act == ActPrnCalDeg ||
+       Gbl.Action.Act == ActSeeCalCrs || Gbl.Action.Act == ActPrnCalCrs)
      {
       /***** Get list of holidays *****/
       if (!Gbl.Hlds.LstIsRead)
