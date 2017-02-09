@@ -182,16 +182,12 @@ Country:
 
 Institution:
 	 75. ActInsReqSch		Request search in institution tab
-
 	 76. ActSeeInsInf		Show information on the current institution
 	 77. ActSeeCtr			List centres
 	 78. ActSeeDpt			List departments
 	 79. ActSeePlc			List places
 	 80. ActSeeHld			List holidays
 	565. ActSeeCalIns		Show the academic calendar
-
-	 81. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
-	 82. ActAdmShaIns		Admin the shared files zone of the institution
 
 	 83. ActInsSch			Search for courses, teachers, documents...
 
@@ -236,6 +232,268 @@ Institution:
 	118. ActChgHldStrDat		Change start date of a holiday
 	119. ActChgHldEndDat		Change end date of a holiday
 	120. ActRenHld			Change name of a holiday
+
+	682. ActPrnInsCrs		Show print view of the academic calendar
+	683. ActChgInsCrs1stDay		Change first day of week and show academic calendar
+
+Centre:
+	168. ActCtrReqSch		Request search in centre tab
+	169. ActSeeCtrInf		Show information on the current centre
+	170. ActSeeDeg			List degrees of a type
+	565. ActSeeCalCtr		Show the academic calendar
+
+	173. ActCtrSch			Search for courses, teachers, documents...
+
+	174. ActPrnCtrInf		Print information on the current centre
+	175. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
+	176. ActRenCtrShoCfg		Change short name centre in centre configuration
+	177. ActRenCtrFulCfg		Change full name centre in centre configuration
+	178. ActChgCtrWWWCfg		Change web of centre in centre configuration
+	179. ActReqCtrLog		Show form to send the logo of the current centre
+	180. ActRecCtrLog		Receive and store the logo of the current centre
+	181. ActRemCtrLog		Remove the logo of the current centre
+	182. ActReqCtrPho		Show form to send the photo of the current centre
+	183. ActRecCtrPho		Receive and store the photo of the current centre
+	184. ActChgCtrPhoAtt		Change attribution of centre photo
+
+	185. ActEdiDeg			Request edition of degrees of a type
+	186. ActReqDeg			Request the creation of a request for a new degree (a teacher makes the petition to an administrator)
+	187. ActNewDeg			Request the creation of a degree
+	188. ActRemDeg			Request the removal of a degree
+	189. ActRenDegSho		Request change of the short name of a degree
+	190. ActRenDegFul		Request change of the full name of a degree
+	191. ActChgDegTyp		Request change of the type of a degree
+	192. ActChgDegWWW		Request change of the web of a degree
+	193. ActChgDegSta		Request change of status of a degree
+
+	682. ActPrnCtrCrs		Show print view of the academic calendar
+	683. ActChgCtrCrs1stDay		Change first day of week and show academic calendar
+
+Degree:
+	241. ActDegReqSch		Request search in degree tab
+	242. ActSeeDegInf		Show information on the current degree
+	243. ActSeeCrs			List courses of a degree
+	565. ActSeeCalDeg		Show the academic calendar
+
+	246. ActDegSch			Search for courses, teachers, documents...
+
+	247. ActPrnDegInf		Print information on the current degree
+	248. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
+	249. ActRenDegShoCfg		Request change of the short name of a degree in degree configuration
+	250. ActRenDegFulCfg		Request change of the full name of a degree in degree configuration
+	251. ActChgDegWWWCfg		Request change of the web of a degree in degree configuration
+	252. ActReqDegLog		Show form to send the logo of the current degree
+	253. ActRecDegLog		Receive and store the logo of the current degree
+	254. ActRemDegLog		Remove the logo of the current degree
+
+	255. ActEdiCrs			Request edition of courses of a degree
+	256. ActReqCrs			Request the creation of a request for a new course (a teacher makes the petition to an administrator)
+	257. ActNewCrs			Request the creation of a course
+	258. ActRemCrs			Request the removal of a course
+	259. ActChgInsCrsCod		Request change of institutional code of a course
+	260. ActChgCrsYea		Request change of year of a course inside of its degree
+	261. ActRenCrsSho		Request change of short name of a course
+	262. ActRenCrsFul		Request change of full name of a course
+	263. ActChgCrsSta		Request change of status of a course
+
+	682. ActPrnDegCrs		Show print view of the academic calendar
+	683. ActChgDegCrs1stDay		Change first day of week and show academic calendar
+
+Course:
+	311. ActCrsReqSch		Request search in course tab
+
+	312. ActSeeCrsInf		Show information on the current course
+	313. ActSeeTchGui		Show teaching guide of the course
+	314. ActSeeSyl			Show syllabus (lectures or practicals)
+	315. ActSeeSylLec		Show the syllabus of lectures
+	316. ActSeeSylPra		Show the syllabus of practicals
+	321. ActSeeBib			Show the bibliography
+	322. ActSeeFAQ			Show the FAQ
+	323. ActSeeCrsLnk		Show links related to the course
+	320. ActSeeCrsTT		Show the timetable
+	565. ActSeeCalCrs		Show the academic calendar of the course with exam announcements
+
+	324. ActCrsSch			Search for courses, teachers, documents...
+
+	325. ActPrnCrsInf		Print information on the course
+	326. ActChgCrsDegCfg		Request change of degree in course configuration
+	327. ActRenCrsShoCfg		Request change of short name of a course in course configuration
+	328. ActRenCrsFulCfg		Request change of full name of a course in course configuration
+	329. ActChgInsCrsCodCfg		Change institutional code in course configuration
+	330. ActChgCrsYeaCfg		Change year/semester in course configuration
+	331. ActEdiCrsInf		Edit general information about the course
+	332. ActEdiTchGui		Edit teaching guide of the course
+	337. ActEdiSylLec		Edit the syllabus of lectures
+	338. ActEdiSylPra		Edit the syllabus of practicals
+	339. ActDelItmSylLec		Remove a item from syllabus of lectures
+	340. ActDelItmSylPra		Remove a item from syllabus of practicals
+	341. ActUp_IteSylLec		Subir the posición of a subtree of the syllabus of lectures
+	342. ActUp_IteSylPra		Subir the posición of a subtree of the syllabus of practicals
+	343. ActDwnIteSylLec		Bajar the posición of a subtree of the syllabus of lectures
+	344. ActDwnIteSylPra		Bajar the posición of a subtree of the syllabus of practicals
+	345. ActRgtIteSylLec		Aumentar the level of a item of the syllabus of lectures
+	346. ActRgtIteSylPra		Aumentar the level of a item of the syllabus of practicals
+	347. ActLftIteSylLec		Disminuir the level of a item of the syllabus of lectures
+	348. ActLftIteSylPra		Disminuir the level of a item of the syllabus of practicals
+	349. ActInsIteSylLec		Insertar a new item in the syllabus of lectures
+	350. ActInsIteSylPra		Insertar a new item in the syllabus of practicals
+	351. ActModIteSylLec		Modify a item of the syllabus of lectures
+	352. ActModIteSylPra		Modify a item of the syllabus of practicals
+
+	487. ActEdiBib			Edit the bibliography
+	488. ActEdiFAQ			Edit the FAQ
+	489. ActEdiCrsLnk		Edit the links relacionados with the course
+	490. ActChgFrcReaCrsInf		Change force students to read course info
+	491. ActChgFrcReaTchGui		Change force students to read teaching guide
+	492. ActChgFrcReaSylLec		Change force students to read lectures syllabus
+	493. ActChgFrcReaSylPra		Change force students to read practicals syllabus
+	494. ActChgFrcReaBib		Change force students to read bibliography
+	495. ActChgFrcReaFAQ		Change force students to read FAQ
+	496. ActChgFrcReaCrsLnk		Change force students to read links
+	497. ActChgHavReaCrsInf		Change if I have read course info
+	498. ActChgHavReaTchGui		Change if I have read teaching guide
+	499. ActChgHavReaSylLec		Change if I have read lectures syllabus
+	500. ActChgHavReaSylPra		Change if I have read practicals syllabus
+	501. ActChgHavReaBib		Change if I have read bibliography
+	502. ActChgHavReaFAQ		Change if I have read FAQ
+	503. ActChgHavReaCrsLnk		Change if I have read links
+	504. ActSelInfSrcCrsInf		Select the type of info shown in the general information about the course
+	505. ActSelInfSrcTchGui		Select the type of info shown in the teaching guide
+	506. ActSelInfSrcSylLec		Select the type of info shown in the lectures syllabus
+	507. ActSelInfSrcSylPra		Select the type of info shown in the practicals syllabus
+	508. ActSelInfSrcBib		Select the type of info shown in the bibliography
+	509. ActSelInfSrcFAQ		Select the type of info shown in the FAQ
+	510. ActSelInfSrcCrsLnk		Select the type of info shown in the links
+	511. ActRcvURLCrsInf		Receive a link a the general information about the course
+	512. ActRcvURLTchGui		Receive a link a the teaching guide
+	513. ActRcvURLSylLec		Receive a link al syllabus of lectures
+	514. ActRcvURLSylPra		Receive a link al syllabus of practicals
+	515. ActRcvURLBib		Receive a link a bibliography
+	516. ActRcvURLFAQ		Receive a link a FAQ
+	517. ActRcvURLCrsLnk		Receive a link a links
+	518. ActRcvPagCrsInf		Receive a page with the general information about the course
+	519. ActRcvPagTchGui		Receive a page with the teaching guide
+	520. ActRcvPagSylLec		Receive a page with the syllabus of lectures
+	521. ActRcvPagSylPra		Receive a page with the syllabus of practicals
+	522. ActRcvPagBib		Receive a page with bibliography
+	523. ActRcvPagFAQ		Receive a page with FAQ
+	524. ActRcvPagCrsLnk		Receive a page with links
+	525. ActEditorCrsInf		Integrated editor of the general information about the course
+	526. ActEditorTchGui		Integrated editor of the teaching guide
+	527. ActEditorSylLec		Integrated editor of the syllabus of lectures
+	528. ActEditorSylPra		Integrated editor of the syllabus of practicals
+	529. ActEditorBib		Integrated editor of bibliography
+	530. ActEditorFAQ		Integrated editor of FAQ
+	531. ActEditorCrsLnk		Integrated editor of links
+	532. ActPlaTxtEdiCrsInf		Editor of plain text of the general information about the course
+	533. ActPlaTxtEdiTchGui		Editor of plain text of the teaching guide
+	534. ActPlaTxtEdiSylLec		Editor of plain text of the syllabus of lectures
+	535. ActPlaTxtEdiSylPra		Editor of plain text of the syllabus of practicals
+	536. ActPlaTxtEdiBib		Editor of plain text of the bibliography
+	537. ActPlaTxtEdiFAQ		Editor of plain text of the FAQ
+	538. ActPlaTxtEdiCrsLnk		Editor of plain text of the links
+	539. ActRchTxtEdiCrsInf		Editor of plain text of the general information about the course
+	540. ActRchTxtEdiTchGui		Editor of plain text of the teaching guide
+	541. ActRchTxtEdiSylLec		Editor of plain text of the syllabus of lectures
+	542. ActRchTxtEdiSylPra		Editor of plain text of the syllabus of practicals
+	543. ActRchTxtEdiBib		Editor of plain text of the bibliography
+	544. ActRchTxtEdiFAQ		Editor of plain text of the FAQ
+	545. ActRchTxtEdiCrsLnk		Editor of plain text of the links
+	546. ActRcvPlaTxtCrsInf		Receive and change the plain text of the general information about the course
+	547. ActRcvPlaTxtTchGui		Receive and change the plain text of the teaching guide
+	548. ActRcvPlaTxtSylLec		Receive and change the plain text of the syllabus of lectures
+	549. ActRcvPlaTxtSylPra		Receive and change the plain text of the syllabus of practicals
+	550. ActRcvPlaTxtBib		Receive and change the plain text of the bibliography
+	551. ActRcvPlaTxtFAQ		Receive and change the plain text of the FAQ
+	552. ActRcvPlaTxtCrsLnk		Receive and change the plain text of the links
+	553. ActRcvPlaTxtCrsInf		Receive and change the rich text of the general information about the course
+	554. ActRcvPlaTxtTchGui		Receive and change the rich text of the teaching guide
+	555. ActRcvPlaTxtSylLec		Receive and change the rich text of the syllabus of lectures
+	556. ActRcvPlaTxtSylPra		Receive and change the rich text of the syllabus of practicals
+	557. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
+	558. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
+	559. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
+
+	333. ActPrnCrsTT		Show print view of the timetable
+	334. ActEdiCrsTT		Edit the timetable
+	335. ActChgCrsTT		Modify the timetable of the course
+        336. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
+
+	682. ActPrnCalCrs		Show print view of the academic calendar of the course
+	683. ActChgCalCrs1stDay		Change first day of week and show academic calendar of the course
+
+Assessment:
+	560. ActSeeAss			Show the assessment system
+	561. ActSeeAsg			Show assignments
+	564. ActReqTst			Request a test of self-assesment
+	566. ActSeeAllExaAnn		Show the exam announcements
+
+	568. ActEdiAss			Edit the assessment system
+	569. ActChgFrcReaAss		Change force students to read assessment system
+	570. ActChgHavReaAss		Change if I have read assessment system
+	571. ActSelInfSrcAss		Selec. type of assessment
+	572. ActRcvURLAss		Receive a link a assessment
+	573. ActRcvPagAss		Receive a page with assessment
+	574. ActEditorAss		Integrated editor of assessment
+	575. ActPlaTxtEdiAss		Editor of plain text of assessment
+	576. ActRchTxtEdiAss		Editor of rich text of assessment
+	577. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
+	578. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
+	579. ActFrmNewAsg		Form to create a new assignment
+	580. ActEdiOneAsg		Edit one assignment
+	581. ActNewAsg			Create new assignment
+	582. ActChgAsg			Modify data of an existing assignment
+	583. ActReqRemAsg		Request the removal of an assignment
+	584. ActRemAsg			Remove assignment
+	585. ActHidAsg			Hide assignment
+	586. ActShoAsg			Show assignment
+
+	660. ActSeeTst			Show the seft-assessment test
+	661. ActAssTst			Assess a self-assessment test
+	662. ActEdiTstQst		Request the edition of self-assessment questions
+	663. ActEdiOneTstQst		Edit one self-assesment test question
+	664. ActReqImpTstQst		Put form to ask for an XML with test questions to import
+	665. ActImpTstQst		Import test questions from XML file
+	666. ActLstTstQst		List for edition several self-assessment test questions
+	667. ActRcvTstQst		Receive a question of self-assessment
+	668. ActShfTstQst		Change shuffle of of a question of self-assessment
+	669. ActReqRemTstQst		Request removing a self-assesment test question
+	670. ActRemTstQst		Remove a self-assesment test question
+	671. ActCfgTst			Request renaming of tags of questions of self-assesment
+	672. ActEnableTag		Enable a tag
+	673. ActDisableTag		Disable a tag
+	674. ActRenTag			Rename a tag
+	675. ActRcvCfgTst		Receive configuration of test
+	676. ActReqSeeMyTstRes		Select range of dates to see my test results
+	677. ActSeeMyTstRes		Show my test results
+	678. ActReqSeeUsrTstRes		Select users and range of dates to see test results
+	679. ActSeeUsrTstRes		Show test results of several users
+	680. ActSeeOneTstResMe		Show one test result of me as student
+	681. ActSeeOneTstResOth		Show one test result of other user
+
+	684. ActSeeOneExaAnn		Show one exam announcement
+	685. ActSeeDatExaAnn		Show exam announcements of a given date
+	686. ActEdiExaAnn		Edit an exam announcement
+	687. ActRcvExaAnn		Receive an exam announcement
+	688. ActPrnExaAnn		Show an exam announcement ready to be printed
+	NEW. ActReqRemExaAnn		Request the removal of an exam announcement
+	689. ActRemExaAnn		Remove an exam announcement
+	NEW. ActHidExaAnn		Hide exam announcement
+	NEW. ActShoExaAnn		Show exam announcement
+
+Files:
+	 81. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
+	 82. ActAdmShaIns		Admin the shared files zone of the institution
+	171. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
+	172. ActAdmShaCtr		Admin the shared files zone of the centre
+	244. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
+	245. ActAdmShaDeg		Admin the shared files zone of the degree
+	317. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
+	318. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
+	319. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
+        562. ActAdmAsgWrkUsr		One user sends works of the course
+        563. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
+	567. ActSeeAdmMrk		Marks zone (see or admin)
 
 	121. ActChgToSeeDocIns		Change to see institution documents
 
@@ -289,43 +547,6 @@ Institution:
 	166. ActChgDatShaIns		Change metadata of a file of the shared zone of the institution
 	167. ActDowShaIns		Download a file of the shared zone of the institution
 
-	682. ActPrnInsCrs		Show print view of the academic calendar
-	683. ActChgInsCrs1stDay		Change first day of week and show academic calendar
-
-Centre:
-	168. ActCtrReqSch		Request search in centre tab
-
-	169. ActSeeCtrInf		Show information on the current centre
-	170. ActSeeDeg			List degrees of a type
-	565. ActSeeCalCtr		Show the academic calendar
-
-	171. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
-	172. ActAdmShaCtr		Admin the shared files zone of the centre
-
-	173. ActCtrSch			Search for courses, teachers, documents...
-
-	174. ActPrnCtrInf		Print information on the current centre
-	175. ActChgCtrInsCfg		Request change of the institution of a centre in centre configuration
-	176. ActRenCtrShoCfg		Change short name centre in centre configuration
-	177. ActRenCtrFulCfg		Change full name centre in centre configuration
-	178. ActChgCtrWWWCfg		Change web of centre in centre configuration
-	179. ActReqCtrLog		Show form to send the logo of the current centre
-	180. ActRecCtrLog		Receive and store the logo of the current centre
-	181. ActRemCtrLog		Remove the logo of the current centre
-	182. ActReqCtrPho		Show form to send the photo of the current centre
-	183. ActRecCtrPho		Receive and store the photo of the current centre
-	184. ActChgCtrPhoAtt		Change attribution of centre photo
-
-	185. ActEdiDeg			Request edition of degrees of a type
-	186. ActReqDeg			Request the creation of a request for a new degree (a teacher makes the petition to an administrator)
-	187. ActNewDeg			Request the creation of a degree
-	188. ActRemDeg			Request the removal of a degree
-	189. ActRenDegSho		Request change of the short name of a degree
-	190. ActRenDegFul		Request change of the full name of a degree
-	191. ActChgDegTyp		Request change of the type of a degree
-	192. ActChgDegWWW		Request change of the web of a degree
-	193. ActChgDegSta		Request change of status of a degree
-
 	194. ActChgToSeeDocCtr		Change to see centre documents
 
 	195. ActSeeDocCtr		See the files of the documents zone of the centre
@@ -378,40 +599,6 @@ Centre:
 	239. ActChgDatShaCtr		Change metadata of a file of the shared zone of the centre
 	240. ActDowShaCtr		Download a file of the shared zone of the centre
 
-	682. ActPrnCtrCrs		Show print view of the academic calendar
-	683. ActChgCtrCrs1stDay		Change first day of week and show academic calendar
-
-Degree:
-	241. ActDegReqSch		Request search in degree tab
-
-	242. ActSeeDegInf		Show information on the current degree
-	243. ActSeeCrs			List courses of a degree
-	565. ActSeeCalDeg		Show the academic calendar
-
-	244. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
-	245. ActAdmShaDeg		Admin the shared files zone of the degree
-
-	246. ActDegSch			Search for courses, teachers, documents...
-
-	247. ActPrnDegInf		Print information on the current degree
-	248. ActChgDegCtrCfg		Request change of the centre of a degree in degree configuration
-	249. ActRenDegShoCfg		Request change of the short name of a degree in degree configuration
-	250. ActRenDegFulCfg		Request change of the full name of a degree in degree configuration
-	251. ActChgDegWWWCfg		Request change of the web of a degree in degree configuration
-	252. ActReqDegLog		Show form to send the logo of the current degree
-	253. ActRecDegLog		Receive and store the logo of the current degree
-	254. ActRemDegLog		Remove the logo of the current degree
-
-	255. ActEdiCrs			Request edition of courses of a degree
-	256. ActReqCrs			Request the creation of a request for a new course (a teacher makes the petition to an administrator)
-	257. ActNewCrs			Request the creation of a course
-	258. ActRemCrs			Request the removal of a course
-	259. ActChgInsCrsCod		Request change of institutional code of a course
-	260. ActChgCrsYea		Request change of year of a course inside of its degree
-	261. ActRenCrsSho		Request change of short name of a course
-	262. ActRenCrsFul		Request change of full name of a course
-	263. ActChgCrsSta		Request change of status of a course
-
 	264. ActChgToSeeDocDeg		Change to see degree documents
 
 	265. ActSeeDocDeg		See the files of the documents zone of the degree
@@ -463,53 +650,6 @@ Degree:
 	308. ActReqDatShaDeg		Ask for metadata of a file of the shared zone of the degree
 	309. ActChgDatShaDeg		Change metadata of a file of the shared zone of the degree
 	310. ActDowShaDeg		Download a file of the shared zone of the degree
-
-	682. ActPrnDegCrs		Show print view of the academic calendar
-	683. ActChgDegCrs1stDay		Change first day of week and show academic calendar
-
-Course:
-	311. ActCrsReqSch		Request search in course tab
-
-	312. ActSeeCrsInf		Show information on the current course
-	313. ActSeeTchGui		Show teaching guide of the course
-	314. ActSeeSyl			Show syllabus (lectures or practicals)
-	315. ActSeeSylLec		Show the syllabus of lectures
-	316. ActSeeSylPra		Show the syllabus of practicals
-	317. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
-	318. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
-	319. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
-	321. ActSeeBib			Show the bibliography
-	322. ActSeeFAQ			Show the FAQ
-	323. ActSeeCrsLnk		Show links related to the course
-	320. ActSeeCrsTT		Show the timetable
-	565. ActSeeCalCrs		Show the academic calendar of the course with exam announcements
-
-	324. ActCrsSch			Search for courses, teachers, documents...
-
-	325. ActPrnCrsInf		Print information on the course
-	326. ActChgCrsDegCfg		Request change of degree in course configuration
-	327. ActRenCrsShoCfg		Request change of short name of a course in course configuration
-	328. ActRenCrsFulCfg		Request change of full name of a course in course configuration
-	329. ActChgInsCrsCodCfg		Change institutional code in course configuration
-	330. ActChgCrsYeaCfg		Change year/semester in course configuration
-	331. ActEdiCrsInf		Edit general information about the course
-	332. ActEdiTchGui		Edit teaching guide of the course
-	337. ActEdiSylLec		Edit the syllabus of lectures
-	338. ActEdiSylPra		Edit the syllabus of practicals
-	339. ActDelItmSylLec		Remove a item from syllabus of lectures
-	340. ActDelItmSylPra		Remove a item from syllabus of practicals
-	341. ActUp_IteSylLec		Subir the posición of a subtree of the syllabus of lectures
-	342. ActUp_IteSylPra		Subir the posición of a subtree of the syllabus of practicals
-	343. ActDwnIteSylLec		Bajar the posición of a subtree of the syllabus of lectures
-	344. ActDwnIteSylPra		Bajar the posición of a subtree of the syllabus of practicals
-	345. ActRgtIteSylLec		Aumentar the level of a item of the syllabus of lectures
-	346. ActRgtIteSylPra		Aumentar the level of a item of the syllabus of practicals
-	347. ActLftIteSylLec		Disminuir the level of a item of the syllabus of lectures
-	348. ActLftIteSylPra		Disminuir the level of a item of the syllabus of practicals
-	349. ActInsIteSylLec		Insertar a new item in the syllabus of lectures
-	350. ActInsIteSylPra		Insertar a new item in the syllabus of practicals
-	351. ActModIteSylLec		Modify a item of the syllabus of lectures
-	352. ActModIteSylPra		Modify a item of the syllabus of practicals
 
 	353. ActChgToSeeDocCrs		Change to see course/group documents
 
@@ -657,116 +797,6 @@ Course:
 	485. ActChgDatShaGrp		Change metadata of a file of the shared zone of a group
 	486. ActDowShaGrp		Download a file of the shared zone of a group
 
-	487. ActEdiBib			Edit the bibliography
-	488. ActEdiFAQ			Edit the FAQ
-	489. ActEdiCrsLnk		Edit the links relacionados with the course
-	490. ActChgFrcReaCrsInf		Change force students to read course info
-	491. ActChgFrcReaTchGui		Change force students to read teaching guide
-	492. ActChgFrcReaSylLec		Change force students to read lectures syllabus
-	493. ActChgFrcReaSylPra		Change force students to read practicals syllabus
-	494. ActChgFrcReaBib		Change force students to read bibliography
-	495. ActChgFrcReaFAQ		Change force students to read FAQ
-	496. ActChgFrcReaCrsLnk		Change force students to read links
-	497. ActChgHavReaCrsInf		Change if I have read course info
-	498. ActChgHavReaTchGui		Change if I have read teaching guide
-	499. ActChgHavReaSylLec		Change if I have read lectures syllabus
-	500. ActChgHavReaSylPra		Change if I have read practicals syllabus
-	501. ActChgHavReaBib		Change if I have read bibliography
-	502. ActChgHavReaFAQ		Change if I have read FAQ
-	503. ActChgHavReaCrsLnk		Change if I have read links
-	504. ActSelInfSrcCrsInf		Select the type of info shown in the general information about the course
-	505. ActSelInfSrcTchGui		Select the type of info shown in the teaching guide
-	506. ActSelInfSrcSylLec		Select the type of info shown in the lectures syllabus
-	507. ActSelInfSrcSylPra		Select the type of info shown in the practicals syllabus
-	508. ActSelInfSrcBib		Select the type of info shown in the bibliography
-	509. ActSelInfSrcFAQ		Select the type of info shown in the FAQ
-	510. ActSelInfSrcCrsLnk		Select the type of info shown in the links
-	511. ActRcvURLCrsInf		Receive a link a the general information about the course
-	512. ActRcvURLTchGui		Receive a link a the teaching guide
-	513. ActRcvURLSylLec		Receive a link al syllabus of lectures
-	514. ActRcvURLSylPra		Receive a link al syllabus of practicals
-	515. ActRcvURLBib		Receive a link a bibliography
-	516. ActRcvURLFAQ		Receive a link a FAQ
-	517. ActRcvURLCrsLnk		Receive a link a links
-	518. ActRcvPagCrsInf		Receive a page with the general information about the course
-	519. ActRcvPagTchGui		Receive a page with the teaching guide
-	520. ActRcvPagSylLec		Receive a page with the syllabus of lectures
-	521. ActRcvPagSylPra		Receive a page with the syllabus of practicals
-	522. ActRcvPagBib		Receive a page with bibliography
-	523. ActRcvPagFAQ		Receive a page with FAQ
-	524. ActRcvPagCrsLnk		Receive a page with links
-	525. ActEditorCrsInf		Integrated editor of the general information about the course
-	526. ActEditorTchGui		Integrated editor of the teaching guide
-	527. ActEditorSylLec		Integrated editor of the syllabus of lectures
-	528. ActEditorSylPra		Integrated editor of the syllabus of practicals
-	529. ActEditorBib		Integrated editor of bibliography
-	530. ActEditorFAQ		Integrated editor of FAQ
-	531. ActEditorCrsLnk		Integrated editor of links
-	532. ActPlaTxtEdiCrsInf		Editor of plain text of the general information about the course
-	533. ActPlaTxtEdiTchGui		Editor of plain text of the teaching guide
-	534. ActPlaTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	535. ActPlaTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	536. ActPlaTxtEdiBib		Editor of plain text of the bibliography
-	537. ActPlaTxtEdiFAQ		Editor of plain text of the FAQ
-	538. ActPlaTxtEdiCrsLnk		Editor of plain text of the links
-	539. ActRchTxtEdiCrsInf		Editor of plain text of the general information about the course
-	540. ActRchTxtEdiTchGui		Editor of plain text of the teaching guide
-	541. ActRchTxtEdiSylLec		Editor of plain text of the syllabus of lectures
-	542. ActRchTxtEdiSylPra		Editor of plain text of the syllabus of practicals
-	543. ActRchTxtEdiBib		Editor of plain text of the bibliography
-	544. ActRchTxtEdiFAQ		Editor of plain text of the FAQ
-	545. ActRchTxtEdiCrsLnk		Editor of plain text of the links
-	546. ActRcvPlaTxtCrsInf		Receive and change the plain text of the general information about the course
-	547. ActRcvPlaTxtTchGui		Receive and change the plain text of the teaching guide
-	548. ActRcvPlaTxtSylLec		Receive and change the plain text of the syllabus of lectures
-	549. ActRcvPlaTxtSylPra		Receive and change the plain text of the syllabus of practicals
-	550. ActRcvPlaTxtBib		Receive and change the plain text of the bibliography
-	551. ActRcvPlaTxtFAQ		Receive and change the plain text of the FAQ
-	552. ActRcvPlaTxtCrsLnk		Receive and change the plain text of the links
-	553. ActRcvPlaTxtCrsInf		Receive and change the rich text of the general information about the course
-	554. ActRcvPlaTxtTchGui		Receive and change the rich text of the teaching guide
-	555. ActRcvPlaTxtSylLec		Receive and change the rich text of the syllabus of lectures
-	556. ActRcvPlaTxtSylPra		Receive and change the rich text of the syllabus of practicals
-	557. ActRcvPlaTxtBib		Receive and change the rich text of the bibliography
-	558. ActRcvPlaTxtFAQ		Receive and change the rich text of the FAQ
-	559. ActRcvPlaTxtCrsLnk		Receive and change the rich text of the links
-
-	333. ActPrnCrsTT		Show print view of the timetable
-	334. ActEdiCrsTT		Edit the timetable
-	335. ActChgCrsTT		Modify the timetable of the course
-        336. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
-
-	682. ActPrnCalCrs		Show print view of the academic calendar of the course
-	683. ActChgCalCrs1stDay		Change first day of week and show academic calendar of the course
-
-Assessment:
-	560. ActSeeAss			Show the assessment system
-	561. ActSeeAsg			Show assignments
-        562. ActAdmAsgWrkUsr		One user sends works of the course
-        563. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
-	564. ActReqTst			Request a test of self-assesment
-	566. ActSeeAllExaAnn		Show the exam announcements
-	567. ActSeeAdmMrk		Marks zone (see or admin)
-
-	568. ActEdiAss			Edit the assessment system
-	569. ActChgFrcReaAss		Change force students to read assessment system
-	570. ActChgHavReaAss		Change if I have read assessment system
-	571. ActSelInfSrcAss		Selec. type of assessment
-	572. ActRcvURLAss		Receive a link a assessment
-	573. ActRcvPagAss		Receive a page with assessment
-	574. ActEditorAss		Integrated editor of assessment
-	575. ActPlaTxtEdiAss		Editor of plain text of assessment
-	576. ActRchTxtEdiAss		Editor of rich text of assessment
-	577. ActRcvPlaTxtAss		Receive and change the plain text of the assessment system
-	578. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
-	579. ActFrmNewAsg		Form to create a new assignment
-	580. ActEdiOneAsg		Edit one assignment
-	581. ActNewAsg			Create new assignment
-	582. ActChgAsg			Modify data of an existing assignment
-	583. ActReqRemAsg		Request the removal of an assignment
-	584. ActRemAsg			Remove assignment
-	585. ActHidAsg			Hide assignment
-	586. ActShoAsg			Show assignment
         587. ActAdmAsgWrkCrs		Edit all the works sent to the course
 	588. ActReqRemFilAsgUsr		Request removal of a file of assignments from a user
 	589. ActRemFilAsgUsr		Remove a file of assignments from a user
@@ -840,38 +870,6 @@ Assessment:
 	657. ActReqDatWrkCrs		Ask for metadata of a file of works in a course
 	658. ActChgDatWrkCrs		Change metadata of a file of works in a course
 	659. ActDowWrkCrs		Download a file of works in a course
-	660. ActSeeTst			Show the seft-assessment test
-	661. ActAssTst			Assess a self-assessment test
-	662. ActEdiTstQst		Request the edition of self-assessment questions
-	663. ActEdiOneTstQst		Edit one self-assesment test question
-	664. ActReqImpTstQst		Put form to ask for an XML with test questions to import
-	665. ActImpTstQst		Import test questions from XML file
-	666. ActLstTstQst		List for edition several self-assessment test questions
-	667. ActRcvTstQst		Receive a question of self-assessment
-	668. ActShfTstQst		Change shuffle of of a question of self-assessment
-	669. ActReqRemTstQst		Request removing a self-assesment test question
-	670. ActRemTstQst		Remove a self-assesment test question
-	671. ActCfgTst			Request renaming of tags of questions of self-assesment
-	672. ActEnableTag		Enable a tag
-	673. ActDisableTag		Disable a tag
-	674. ActRenTag			Rename a tag
-	675. ActRcvCfgTst		Receive configuration of test
-	676. ActReqSeeMyTstRes		Select range of dates to see my test results
-	677. ActSeeMyTstRes		Show my test results
-	678. ActReqSeeUsrTstRes		Select users and range of dates to see test results
-	679. ActSeeUsrTstRes		Show test results of several users
-	680. ActSeeOneTstResMe		Show one test result of me as student
-	681. ActSeeOneTstResOth		Show one test result of other user
-
-	684. ActSeeOneExaAnn		Show one exam announcement
-	685. ActSeeDatExaAnn		Show exam announcements of a given date
-	686. ActEdiExaAnn		Edit an exam announcement
-	687. ActRcvExaAnn		Receive an exam announcement
-	688. ActPrnExaAnn		Show an exam announcement ready to be printed
-	NEW. ActReqRemExaAnn		Request the removal of an exam announcement
-	689. ActRemExaAnn		Remove an exam announcement
-	NEW. ActHidExaAnn		Hide exam announcement
-	NEW. ActShoExaAnn		Show exam announcement
 
 	690. ActChgToSeeMrk		Change to see marks in course/group
 

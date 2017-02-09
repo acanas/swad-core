@@ -192,19 +192,18 @@
 
 // TODO: Ver solución de Guillermo Gómez Trenado cuando se pulsa con el botón derecho para abrir una descarga en otra ventana
 
-// TODO: Check icons in course and files tabs
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.134.2 (2017-02-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.134.3 (2017-02-09)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.134.3: Feb 09, 2017	Changes in visible tabs depending on scope. (212451 lines)
         Version 16.134.2: Feb 09, 2017	Changed country, institution, centre and degree configuration icons. (212447 lines)
         Version 16.134.1: Feb 09, 2017	Link from current month to calendar depending on scope. (212446 lines)
 Copy the following icons to icon public directory:

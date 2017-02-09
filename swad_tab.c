@@ -185,7 +185,10 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
 	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&
 	         Gbl.CurrentCrs.Crs.CrsCod <= 0);
       case TabCrs:
+      case TabAss:
 	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
+      case TabFil:
+	 return (Gbl.CurrentIns.Ins.InsCod > 0);
       default:
 	 return true;
      }
