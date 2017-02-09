@@ -1584,8 +1584,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCty ******************************************************************
    // Actions in menu:
    /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtySearch		,"search64x64.gif"	},
-
-   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ShowConfiguration		,"cty64x64.gif"		},
+   /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowInssOfCurrentCty	,"institution64x64.gif"	},
    /* ActSeeCalCty	*/{1625, 3,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCty		,"date64x64.gif"	},
 
@@ -1610,8 +1609,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabIns ******************************************************************
    // Actions in menu:
    /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqInsSearch		,"search64x64.gif"	},
-
-   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowConfiguration		,"ins64x64.gif"		},
+   /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
    /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
@@ -1669,7 +1667,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCtr ******************************************************************
    // Actions in menu:
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtrSearch		,"search64x64.gif"	},
-   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowConfiguration		,"ctr64x64.gif"		},
+   /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
    /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCtr		,"date64x64.gif"	},
 
@@ -1704,8 +1702,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabDeg ******************************************************************
    // Actions in menu:
    /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqDegSearch		,"search64x64.gif"	},
-
-   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowConfiguration		,"deg64x64.gif"		},
+   /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowCrssOfCurrentDeg	,"coursesdegree64x64.gif"},
    /* ActSeeCalDeg	*/{1634, 3,TabDeg,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarDeg		,"date64x64.gif"	},
 
@@ -1737,7 +1734,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabCrs ******************************************************************
    // Actions in menu:
    /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCrsSearch		,"search64x64.gif"	},
-
    /* ActSeeCrsInf	*/{ 847, 1,TabCrs,ActSeeCrsInf		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowIntroduction		,"info64x64.gif"	},
    /* ActSeeTchGui	*/{ 784, 2,TabCrs,ActSeeTchGui		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"guide64x64.gif"	},
    /* ActSeeSyl		*/{1242, 3,TabCrs,ActSeeSyl		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"presentation64x64.gif"},
