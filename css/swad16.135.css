@@ -564,7 +564,7 @@ a:hover						/* Default ==> underlined */
 		font-size:9pt;
 		font-weight:bold;
 		line-height:100%;
-		max-width:32px;
+		max-width:30px;
 		white-space:nowrap;
 		overflow:hidden;
 		margin:0 auto;
@@ -613,7 +613,7 @@ a:hover						/* Default ==> underlined */
 		font-size:9pt;
 		font-weight:bold;
 		line-height:100%;
-		max-width:60px;
+		max-width:50px;
 		white-space:nowrap;
 		overflow:hidden;
 		margin:0 auto;
@@ -662,7 +662,7 @@ a:hover						/* Default ==> underlined */
 		font-size:9pt;
 		font-weight:bold;
 		line-height:100%;
-		max-width:100px;
+		max-width:90px;
 		white-space:nowrap;
 		overflow:hidden;
 		margin:0 auto;
