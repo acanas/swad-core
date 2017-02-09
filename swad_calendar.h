@@ -49,6 +49,13 @@ void Cal_ShowFormToSelFirstDayOfWeek (Act_Action_t Action,void (*FuncParams) (),
 void Cal_ChangeFirstDayOfWeek (void);
 
 void Cal_DrawCurrentMonth (void);
-void Cal_DrawCalendar (void);
+
+void Cal_DrawCalendarSys (void);
+void Cal_DrawCalendarCty (void);
+void Cal_DrawCalendarIns (void);
+void Cal_DrawCalendarCtr (void);
+void Cal_DrawCalendarDeg (void);
+void Cal_DrawCalendarCrs (void);
+void Cal_PrintCalendar (void);
 
 #endif

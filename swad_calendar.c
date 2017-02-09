@@ -63,7 +63,16 @@ static void Cal_PutIconsFirstDayOfWeek (void);
 
 static unsigned Cal_GetParamFirstDayOfWeek (void);
 
-static void Cal_PutIconToPrintCalendar (void);
+static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
+                              Act_Action_t ActionChangeCalendar1stDay,
+                              void (*FunctionToDrawContextualIcons) (void),
+                              bool PrintView);
+static void Cal_PutIconToPrintCalendarSys (void);
+static void Cal_PutIconToPrintCalendarCty (void);
+static void Cal_PutIconToPrintCalendarIns (void);
+static void Cal_PutIconToPrintCalendarCtr (void);
+static void Cal_PutIconToPrintCalendarDeg (void);
+static void Cal_PutIconToPrintCalendarCrs (void);
 
 /*****************************************************************************/
 /************** Put icons to select the first day of the week ****************/
@@ -203,7 +212,7 @@ void Cal_DrawCurrentMonth (void)
 	    Gbl.CurrentCtr.Ctr.PlcCod,
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,ActSeeCal,true);
+   Act_SetParamsForm (ParamsStr,ActSeeCalCrs,true);
    fprintf (Gbl.F.Out,"'%s',",ParamsStr);
    Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
    fprintf (Gbl.F.Out,"'%s');"
@@ -213,30 +222,50 @@ void Cal_DrawCurrentMonth (void)
 /*****************************************************************************/
 /************************ Draw an academic calendar **************************/
 /*****************************************************************************/
-/* Current     Starting
-    month       month
-      1    ->    10
-      2    ->    10
-      3    ->    10
 
-      4    ->     1
-      5    ->     1
-      6    ->     1
+void Cal_DrawCalendarSys (void)
+  {
+   Cal_DrawCalendar (ActSeeCalSys,ActChgCalSys1stDay,Cal_PutIconToPrintCalendarSys,false);
+  }
 
-      7    ->     4
-      8    ->     4
-      9    ->     4
+void Cal_DrawCalendarCty (void)
+  {
+   Cal_DrawCalendar (ActSeeCalCty,ActChgCalCty1stDay,Cal_PutIconToPrintCalendarCty,false);
+  }
 
-     10    ->     7
-     11    ->     7
-     12    ->     7
-*/
-void Cal_DrawCalendar (void)
+void Cal_DrawCalendarIns (void)
+  {
+   Cal_DrawCalendar (ActSeeCalIns,ActChgCalIns1stDay,Cal_PutIconToPrintCalendarIns,false);
+  }
+
+void Cal_DrawCalendarCtr (void)
+  {
+   Cal_DrawCalendar (ActSeeCalCtr,ActChgCalCtr1stDay,Cal_PutIconToPrintCalendarCtr,false);
+  }
+
+void Cal_DrawCalendarDeg (void)
+  {
+   Cal_DrawCalendar (ActSeeCalDeg,ActChgCalDeg1stDay,Cal_PutIconToPrintCalendarDeg,false);
+  }
+
+void Cal_DrawCalendarCrs (void)
+  {
+   Cal_DrawCalendar (ActSeeCalCrs,ActChgCalCrs1stDay,Cal_PutIconToPrintCalendarCrs,false);
+  }
+
+void Cal_PrintCalendar (void)
+  {
+   Cal_DrawCalendar (ActUnk,ActUnk,NULL,true);
+  }
+
+static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
+                              Act_Action_t ActionChangeCalendar1stDay,
+                              void (*FunctionToDrawContextualIcons) (void),
+                              bool PrintView)
   {
    extern const char *Hlp_ASSESSMENT_Calendar;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
-   bool PrintView = (Gbl.Action.Act == ActPrnCal);
 
    /***** Get list of holidays *****/
    if (!Gbl.Hlds.LstIsRead)
@@ -247,8 +276,7 @@ void Cal_DrawCalendar (void)
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,NULL,
-                        PrintView ? NULL :
-	                            Cal_PutIconToPrintCalendar,
+                        FunctionToDrawContextualIcons,
 	                PrintView ? NULL :
 	                            Hlp_ASSESSMENT_Calendar);
    Lay_WriteHeaderClassPhoto (PrintView,false,
@@ -259,7 +287,7 @@ void Cal_DrawCalendar (void)
    /***** Draw several months *****/
    /* Show form to change first day of week */
    if (!PrintView)
-      Cal_ShowFormToSelFirstDayOfWeek (ActChgCal1stDay,NULL,"ICO25x25");
+      Cal_ShowFormToSelFirstDayOfWeek (ActionChangeCalendar1stDay,NULL,"ICO25x25");
 
    /* JavaScript will write HTML here */
    fprintf (Gbl.F.Out,"<div id=\"calendar\">"
@@ -272,11 +300,11 @@ void Cal_DrawCalendar (void)
 	    Gbl.Prefs.FirstDayOfWeek,
 	    (long) Gbl.StartExecutionTimeUTC,
 	    Gbl.CurrentCtr.Ctr.PlcCod,
-	    (Gbl.Action.Act == ActPrnCal) ? "true" :
-		                            "false",
+	    PrintView ? "true" :
+		        "false",
 	    Cfg_URL_SWAD_CGI,
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Act_SetParamsForm (ParamsStr,ActSeeCal,true);
+   Act_SetParamsForm (ParamsStr,ActionSeeCalendar,true);
    fprintf (Gbl.F.Out,"'%s',",
             ParamsStr);
    Act_SetParamsForm (ParamsStr,ActSeeDatExaAnn,true);
@@ -292,11 +320,61 @@ void Cal_DrawCalendar (void)
 /************************ Put icon to print calendar *************************/
 /*****************************************************************************/
 
-static void Cal_PutIconToPrintCalendar (void)
+static void Cal_PutIconToPrintCalendarSys (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnCal,NULL,
+   Lay_PutContextualLink (ActPrnCalSys,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+static void Cal_PutIconToPrintCalendarCty (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCalCty,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+static void Cal_PutIconToPrintCalendarIns (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCalIns,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+static void Cal_PutIconToPrintCalendarCtr (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCalCtr,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+static void Cal_PutIconToPrintCalendarDeg (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCalDeg,NULL,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+static void Cal_PutIconToPrintCalendarCrs (void)
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (ActPrnCalCrs,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);

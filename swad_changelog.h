@@ -192,17 +192,41 @@
 
 // TODO: Ver solución de Guillermo Gómez Trenado cuando se pulsa con el botón derecho para abrir una descarga en otra ventana
 
+// TODO: Check icons in course and files tabs
+// TODO: Link from current month to calendar depending on scope
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.133.1 (2017-02-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.134 (2017-02-09)"
 #define CSS_FILE		"swad16.132.4.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.134:   Feb 09, 2017	New calendars options. (212428 lines)
+					18 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1622','es','N','Ver calendario plataforma');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1623','es','N','Imprimir calendario plataforma');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1624','es','N','Cambiar 1er. d&iacute;a calendario plataforma');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1625','es','N','Ver calendario pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1626','es','N','Imprimir calendario pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1627','es','N','Cambiar 1er. d&iacute;a calendario pa&iacute;s');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1628','es','N','Ver calendario instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1629','es','N','Imprimir calendario instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1630','es','N','Cambiar 1er. d&iacute;a calendario instituci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1631','es','N','Ver calendario centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1632','es','N','Imprimir calendario centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1633','es','N','Cambiar 1er. d&iacute;a calendario centro');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1634','es','N','Ver calendario titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1635','es','N','Imprimir calendario titulaci&oacute;n');
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1636','es','N','Cambiar 1er. d&iacute;a calendario titulaci&oacute;n');
+UPDATE actions SET Txt='Ver calendario asignatura' WHERE ActCod='16' AND Language='es';
+UPDATE actions SET Txt='Imprimir calendario asignatura' WHERE ActCod='71' AND Language='es';
+UPDATE actions SET Txt='Cambiar 1er. d&iacute;a calendario asignatura' WHERE ActCod='1485' AND Language='es';
+
         Version 16.133.1: Feb 08, 2017	Timetable option moved to the end of the menu. (212071 lines)
         Version 16.133:   Feb 08, 2017	New tab "Files".
 					New permissions for actions. (212070 lines)

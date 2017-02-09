@@ -169,7 +169,7 @@ void Dat_ShowClientLocalTime (void)
 
    /* Month with link to calendar */
    fprintf (Gbl.F.Out,"<div id=\"current_month\">");
-   Act_FormStart (ActSeeCal);
+   Act_FormStart (ActSeeCalCrs);
    Act_LinkFormSubmit (Txt_Show_calendar,"CURRENT_MONTH",NULL);
    fprintf (Gbl.F.Out,"<span id=\"current_month_txt\">"	// JavaScript will write HTML here
                       "</span>"

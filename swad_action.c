@@ -93,6 +93,7 @@ extern struct Globals Gbl;
 	  7. ActRefOldSocPubGbl		View old social timeline with users I follow via AJAX
 	  8. ActRefOldSocPubUsr		View old social timeline of a user via AJAX
 	  9. ActWebSvc			Call plugin function
+
 System:
 	 10. ActSysReqSch		Request search in system tab
 	 11. ActSeeCty			List countries
@@ -104,6 +105,7 @@ System:
 	 17. ActSeeLnk			See institutional links
 	 18. ActLstPlg			List plugins
 	 19. ActSetUp			Initial set up
+	565. ActSeeCalSys		Show the academic calendar
 
 	 20. ActSysSch			Search for courses, teachers, documents...
 	 21. ActEdiDegTyp		Request edition of types of degrees
@@ -150,11 +152,16 @@ System:
 	 58. ActChgPlgAppKey		Change the application key of a plugin
 	 59. ActChgPlgURL		Change the URL of a plugin
 	 60. ActChgPlgIP		Change the IP address of a plugin
+
+	682. ActPrnSysCrs		Show print view of the academic calendar
+	683. ActChgSysCrs1stDay		Change first day of week and show academic calendar
+
 Country:
 	 61. ActCtyReqSch		Request search in country tab
 
 	 62. ActSeeCtyInf		Show information on the current country
 	 63. ActSeeIns			List institutions
+	565. ActSeeCalCty		Show the academic calendar
 
 	 64. ActCtySch			Search for courses, teachers, documents...
 
@@ -169,6 +176,10 @@ Country:
 	 72. ActRenInsFul		Change full name of institution
 	 73. ActChgInsWWW		Change web of institution
 	 74. ActChgInsSta		Request change of status of an institution
+
+	682. ActPrnCtyCrs		Show print view of the academic calendar
+	683. ActChgCtyCrs1stDay		Change first day of week and show academic calendar
+
 Institution:
 	 75. ActInsReqSch		Request search in institution tab
 
@@ -177,6 +188,8 @@ Institution:
 	 78. ActSeeDpt			List departments
 	 79. ActSeePlc			List places
 	 80. ActSeeHld			List holidays
+	565. ActSeeCalIns		Show the academic calendar
+
 	 81. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
 	 82. ActAdmShaIns		Admin the shared files zone of the institution
 
@@ -275,11 +288,17 @@ Institution:
 	165. ActReqDatShaIns		Ask for metadata of a file of the shared zone of the institution
 	166. ActChgDatShaIns		Change metadata of a file of the shared zone of the institution
 	167. ActDowShaIns		Download a file of the shared zone of the institution
+
+	682. ActPrnInsCrs		Show print view of the academic calendar
+	683. ActChgInsCrs1stDay		Change first day of week and show academic calendar
+
 Centre:
 	168. ActCtrReqSch		Request search in centre tab
 
 	169. ActSeeCtrInf		Show information on the current centre
 	170. ActSeeDeg			List degrees of a type
+	565. ActSeeCalCtr		Show the academic calendar
+
 	171. ActSeeAdmDocCtr		Documents zone of the centre (see or admin)
 	172. ActAdmShaCtr		Admin the shared files zone of the centre
 
@@ -358,11 +377,17 @@ Centre:
 	238. ActReqDatShaCtr		Ask for metadata of a file of the shared zone of the centre
 	239. ActChgDatShaCtr		Change metadata of a file of the shared zone of the centre
 	240. ActDowShaCtr		Download a file of the shared zone of the centre
+
+	682. ActPrnCtrCrs		Show print view of the academic calendar
+	683. ActChgCtrCrs1stDay		Change first day of week and show academic calendar
+
 Degree:
 	241. ActDegReqSch		Request search in degree tab
 
 	242. ActSeeDegInf		Show information on the current degree
 	243. ActSeeCrs			List courses of a degree
+	565. ActSeeCalDeg		Show the academic calendar
+
 	244. ActSeeAdmDocDeg		Documents zone of the degree (see or admin)
 	245. ActAdmShaDeg		Admin the shared files zone of the degree
 
@@ -438,6 +463,10 @@ Degree:
 	308. ActReqDatShaDeg		Ask for metadata of a file of the shared zone of the degree
 	309. ActChgDatShaDeg		Change metadata of a file of the shared zone of the degree
 	310. ActDowShaDeg		Download a file of the shared zone of the degree
+
+	682. ActPrnDegCrs		Show print view of the academic calendar
+	683. ActChgDegCrs1stDay		Change first day of week and show academic calendar
+
 Course:
 	311. ActCrsReqSch		Request search in course tab
 
@@ -447,13 +476,13 @@ Course:
 	315. ActSeeSylLec		Show the syllabus of lectures
 	316. ActSeeSylPra		Show the syllabus of practicals
 	317. ActSeeAdmDocCrsGrp		Documents zone of the course (see or admin)
-
 	318. ActAdmTchCrsGrp		Request the administration of the files of the teachers' zone of the course or of a group
 	319. ActAdmShaCrsGrp		Request the administration of the files of the shared zone of the course or of a group
 	321. ActSeeBib			Show the bibliography
 	322. ActSeeFAQ			Show the FAQ
 	323. ActSeeCrsLnk		Show links related to the course
 	320. ActSeeCrsTT		Show the timetable
+	565. ActSeeCalCrs		Show the academic calendar of the course with exam announcements
 
 	324. ActCrsSch			Search for courses, teachers, documents...
 
@@ -706,13 +735,16 @@ Course:
 	334. ActEdiCrsTT		Edit the timetable
 	335. ActChgCrsTT		Modify the timetable of the course
         336. ActChgCrsTT1stDay		Change first day of week and show timetable of the course
+
+	682. ActPrnCalCrs		Show print view of the academic calendar of the course
+	683. ActChgCalCrs1stDay		Change first day of week and show academic calendar of the course
+
 Assessment:
 	560. ActSeeAss			Show the assessment system
 	561. ActSeeAsg			Show assignments
         562. ActAdmAsgWrkUsr		One user sends works of the course
         563. ActReqAsgWrkCrs		A teacher requests edition of works sent to the course
 	564. ActReqTst			Request a test of self-assesment
-	565. ActSeeCal			Show the academic calendar of the course with exam announcements
 	566. ActSeeAllExaAnn		Show the exam announcements
 	567. ActSeeAdmMrk		Marks zone (see or admin)
 
@@ -831,9 +863,6 @@ Assessment:
 	680. ActSeeOneTstResMe		Show one test result of me as student
 	681. ActSeeOneTstResOth		Show one test result of other user
 
-	682. ActPrnCal			Show print view of the academic calendar of the course
-	683. ActChgCal1stDay		Change first day of week and show academic calendar of the course
-
 	684. ActSeeOneExaAnn		Show one exam announcement
 	685. ActSeeDatExaAnn		Show exam announcements of a given date
 	686. ActEdiExaAnn		Edit an exam announcement
@@ -905,6 +934,7 @@ Assessment:
 	743. ActDowAdmMrkGrp		Download a file in marks administration in group
 	744. ActChgNumRowHeaGrp		Change the number of rows of cabecera of a file of marks in group
 	745. ActChgNumRowFooGrp		Change the number of rows of pie of a file of marks in group
+
 Users:
 	746. ActReqSelGrp		Request the selection of groups of students
 	747. ActLstStd			Show class photo or list of students
@@ -1083,6 +1113,7 @@ Users:
 	903. ActRemDupUsr		Remove user from list of possible duplicate users
 
         904. ActLstClk			List last clicks in real time
+
 Social:
         905. ActSeeSocTmlGbl		Show social timeline (global)
         906. ActSeeSocPrf		Suggest list of users to follow
@@ -1262,6 +1293,7 @@ Social:
        1074. ActDisPstForSWATch		Disable a message of forum of teachers of the platform
 
        1075. ActCht			Enter in a chat room to chat
+
 Messages:
        1076. ActSeeNtf			Show my recent notifications
        1077. ActSeeAnn			Show global announcements
@@ -1299,6 +1331,7 @@ Messages:
        1109. ActBanUsrMsg		Ban the sender of a message when showing received messages
        1110. ActUnbUsrMsg		Unban the sender of a message when showing received messages
        1111. ActUnbUsrLst		Unban a user when listing banned users
+
 Statistics:
        1112. ActSeeAllSvy		List all surveys in pages
        1113. ActReqUseGbl		Request showing use of the platform
@@ -1332,6 +1365,7 @@ Statistics:
        1140. ActSeeAccCrs		Query clicks to current course
        1141. ActSeeAllStaCrs		Show statistics of courses
        1142. ActSeeMyUsgRep		Show my usage report
+
 Profile:
        1143. ActFrmLogIn		Show landing page (forms to log in and to create a new account)
        1144. ActFrmRolSes		Show form to log out and to change current role in this session
@@ -1492,6 +1526,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
    /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
    /* ActSetUp		*/{ 840, 9,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
+   /* ActSeeCalSys	*/{1622,10,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
@@ -1543,12 +1578,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgPlgURL	*/{ 783,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgURL		,NULL},
    /* ActChgPlgIP	*/{ 780,-1,TabUnk,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ChangePlgIP		,NULL},
 
+   /* ActPrnCalSys	*/{1623,-1,TabUnk,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalSys1stDay*/{1624,-1,TabUnk,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarSys		,NULL},
+
    // TabCty ******************************************************************
    // Actions in menu:
    /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtySearch		,"search64x64.gif"	},
 
    /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ShowConfiguration		,"cty64x64.gif"		},
    /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowInssOfCurrentCty	,"institution64x64.gif"	},
+   /* ActSeeCalCty	*/{1625, 3,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCty		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActCtySch		*/{1181,-1,TabUnk,ActCtyReqSch		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtySearch			,NULL},
@@ -1565,6 +1604,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgInsWWW	*/{ 700,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x1FE,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ChangeInsWWW		,NULL},
    /* ActChgInsSta	*/{1211,-1,TabUnk,ActSeeIns		,    0,    0,    0,    0,    0,0x1FE,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ChangeInsStatus		,NULL},
 
+   /* ActPrnCalCty	*/{1626,-1,TabUnk,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalCty1stDay*/{1627,-1,TabUnk,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCty		,NULL},
+
    // TabIns ******************************************************************
    // Actions in menu:
    /* ActInsReqSch	*/{1177, 0,TabIns,ActInsReqSch		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqInsSearch		,"search64x64.gif"	},
@@ -1574,6 +1616,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
    /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
    /* ActSeeHld		*/{ 707, 5,TabIns,ActSeeHld		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,"date64x64.gif"	},
+   /* ActSeeCalIns	*/{1628, 6,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
@@ -1620,11 +1663,15 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeEndDate		,NULL},
    /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RenameHoliday		,NULL},
 
+   /* ActPrnCalIns	*/{1629,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalIns1stDay*/{1630,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarIns		,NULL},
+
    // TabCtr ******************************************************************
    // Actions in menu:
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtrSearch		,"search64x64.gif"	},
    /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowConfiguration		,"ctr64x64.gif"		},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
+   /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCtr		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActCtrSch		*/{1183,-1,TabUnk,ActCtrReqSch		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
@@ -1651,12 +1698,16 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgDegWWW	*/{ 554,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1FE,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ChangeDegWWW		,NULL},
    /* ActChgDegSta	*/{1207,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1C0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ChangeDegStatus		,NULL},
 
+   /* ActPrnCalCtr	*/{1632,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalCtr1stDay*/{1633,-1,TabUnk,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCtr		,NULL},
+
    // TabDeg ******************************************************************
    // Actions in menu:
    /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqDegSearch		,"search64x64.gif"	},
 
    /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowConfiguration		,"deg64x64.gif"		},
    /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowCrssOfCurrentDeg	,"coursesdegree64x64.gif"},
+   /* ActSeeCalDeg	*/{1634, 3,TabDeg,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarDeg		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActDegSch		*/{1184,-1,TabUnk,ActDegReqSch		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
@@ -1680,6 +1731,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenCrsFul	*/{ 564,-1,TabUnk,ActSeeCrs		,    0,    0,0x1FE,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RenameCourseFull		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActChgCrsSta	*/{1055,-1,TabUnk,ActSeeCrs		,    0,    0,0x1E0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsStatus		,Crs_ContEditAfterChgCrs	,NULL},
 
+   /* ActPrnCalDeg	*/{1635,-1,TabUnk,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalDeg1stDay*/{1636,-1,TabUnk,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarDeg		,NULL},
+
    // TabCrs ******************************************************************
    // Actions in menu:
    /* ActCrsReqSch	*/{1180, 0,TabCrs,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCrsSearch		,"search64x64.gif"	},
@@ -1691,6 +1745,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},
    /* ActSeeCrsLnk	*/{   9, 6,TabCrs,ActSeeCrsLnk		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"link64x64.gif"	},
    /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
+   /* ActSeeCalCrs	*/{  16, 8,TabCrs,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCrs		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActDegSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
@@ -1813,13 +1868,15 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCrsTT	*/{  53,-1,TabUnk,ActSeeCrsTT		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_EditCrsTimeTable		,NULL},
    /* ActChgCrsTT1stDay	*/{1486,-1,TabUnk,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,TT_ShowClassTimeTable		,NULL},
 
+   /* ActPrnCalCrs	*/{  71,-1,TabUnk,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
+   /* ActChgCalCrs1stDay*/{1485,-1,TabUnk,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarCrs		,NULL},
+
    // TabAss ******************************************************************
    // Actions in menu:
    /* ActSeeAss		*/{  15, 0,TabAss,ActSeeAss		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"infogrades64x64.gif"	},
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
    /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
-   /* ActSeeCal		*/{  16, 3,TabAss,ActSeeCal		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendar		,"date64x64.gif"	},
-   /* ActSeeAllExaAnn	*/{  85, 4,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActSeeAllExaAnn	*/{  85, 3,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
 
    // Actions not in menu:
    /* ActEdiAss		*/{  69,-1,TabUnk,ActSeeAss		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
@@ -1868,9 +1925,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
    /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsTestResults	,NULL},
    /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
-
-   /* ActPrnCal		*/{  71,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_DrawCalendar		,NULL},
-   /* ActChgCal1stDay	*/{1485,-1,TabUnk,ActSeeCal		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendar		,NULL},
 
    /* ActSeeOneExaAnn	*/{1572,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetExaCodToHighlight	,Exa_ListExamAnnouncementsSee	,NULL},
    /* ActSeeDatExaAnn	*/{1571,-1,TabUnk,ActSeeAllExaAnn	,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_GetDateToHighlight		,Exa_ListExamAnnouncementsSee	,NULL},
@@ -2953,7 +3007,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #13 (obsolete action)
 	-1,			// #14 (obsolete action)
 	ActSeeAss,		// #15
-	ActSeeCal,		// #16
+	ActSeeCalCrs,		// #16
 	ActSeeAdmMrk,		// #17
 	-1,			// #18 (obsolete action)
 	-1,			// #19 (obsolete action)
@@ -3008,7 +3062,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	-1,			// #68 (obsolete action)
 	ActEdiAss,		// #69
 	ActSeeSntMsg,		// #70
-	ActPrnCal,		// #71
+	ActPrnCalCrs,		// #71
 	-1,			// #72 (obsolete action)
 	ActRemNot,		// #73
 	ActEdiSylPra,		// #74
@@ -4422,7 +4476,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActNewMaiStd,		// #1482
 	ActNewMaiTch,		// #1483
 	ActChg1stDay,		// #1484
-	ActChgCal1stDay,	// #1485
+	ActChgCalCrs1stDay,	// #1485
 	ActChgCrsTT1stDay,	// #1486
 	ActChgMyTT1stDay,	// #1487
 	ActReqRemOldBrf,	// #1488
@@ -4559,6 +4613,21 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqRemExaAnn,	// #1619
 	ActHidExaAnn,		// #1620
 	ActShoExaAnn,		// #1621
+	ActSeeCalSys,		// #1622
+	ActPrnCalSys,		// #1623
+	ActChgCalSys1stDay,	// #1624
+	ActSeeCalCty,		// #1625
+	ActPrnCalCty,		// #1626
+	ActChgCalCty1stDay,	// #1627
+	ActSeeCalIns,		// #1628
+	ActPrnCalIns,		// #1629
+	ActChgCalIns1stDay,	// #1630
+	ActSeeCalCtr,		// #1631
+	ActPrnCalCtr,		// #1632
+	ActChgCalCtr1stDay,	// #1633
+	ActSeeCalDeg,		// #1634
+	ActPrnCalDeg,		// #1635
+	ActChgCalDeg1stDay,	// #1636
 	};
 
 /*****************************************************************************/
