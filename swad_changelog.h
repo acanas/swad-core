@@ -196,13 +196,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.135.1 (2017-02-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.135.2 (2017-02-09)"
 #define CSS_FILE		"swad16.135.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.135.2: Feb 09, 2017	Changes in layout of stats on degrees. (212456 lines)
         Version 16.135.1: Feb 09, 2017	Link from current date to calendar depending on scope. (212461 lines)
         Version 16.135:   Feb 09, 2017	Changes in layout of tabs. (212452 lines)
         Version 16.134.3: Feb 09, 2017	Changes in visible tabs depending on scope. (212451 lines)

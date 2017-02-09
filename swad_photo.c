@@ -1604,6 +1604,9 @@ void Pho_PrintPhotoDegree (void)
 
 void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
+   extern const char *Hlp_STATS_Degrees;
+   extern const char *Txt_Degrees;
+
    /***** Get photo size from form *****/
    Gbl.Stat.DegPhotos.HowComputePhotoSize = Pho_GetHowComputePhotoSizeFromForm ();
 
@@ -1615,24 +1618,35 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
           and preference about view photos *****/
    Usr_GetAndUpdatePrefsAboutUsrList ();
 
-   if (SeeOrPrint == Pho_DEGREES_SEE)
+   switch (SeeOrPrint)
      {
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"margin:0 auto;\">");
+      case Pho_DEGREES_SEE:
+	 /***** Link to computation of average photos *****/
+	 Pho_PutLinkToCalculateDegreeStats ();
 
-      /***** Put a selector for the type of average *****/
-      Pho_PutSelectorForTypeOfAvg ();
+	 /***** Start frame *****/
+	 Lay_StartRoundFrame (NULL,Txt_Degrees,
+			      Pho_PutIconToPrintDegreeStats,
+			      Hlp_STATS_Degrees);
 
-      /***** Put a selector for the size of photos *****/
-      Pho_PutSelectorForHowComputePhotoSize ();
+	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
+			    " style=\"margin:0 auto;\">");
 
-      /***** Put a selector for the order of degrees *****/
-      Pho_PutSelectorForHowOrderDegrees ();
+	 /***** Put a selector for the type of average *****/
+	 Pho_PutSelectorForTypeOfAvg ();
 
-      fprintf (Gbl.F.Out,"</table>");
+	 /***** Put a selector for the size of photos *****/
+	 Pho_PutSelectorForHowComputePhotoSize ();
 
-      /***** Link to computation of average photos *****/
-      Pho_PutLinkToCalculateDegreeStats ();
+	 /***** Put a selector for the order of degrees *****/
+	 Pho_PutSelectorForHowOrderDegrees ();
+
+	 fprintf (Gbl.F.Out,"</table>");
+	 break;
+      case Pho_DEGREES_PRINT:
+	 /***** Start frame *****/
+	 Lay_StartRoundFrame (NULL,Txt_Degrees,NULL,NULL);
+	 break;
      }
 
    /***** Get maximum number of students
@@ -1652,6 +1666,9 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
       default:
 	 break;
      }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1987,8 +2004,6 @@ static void Pho_GetMaxStdsPerDegree (void)
 
 static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *Hlp_STATS_Degrees;
-   extern const char *Txt_Degrees;
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2004,13 +2019,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Degrees,
-                        SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
-                                                        NULL,
-                        SeeOrPrint == Pho_DEGREES_SEE ? Hlp_STATS_Degrees :
-                                                        NULL);
 
    if (NumRows)	// Degrees with students found
      {
@@ -2065,12 +2073,8 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
    else	// No degrees with students found
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
 
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
-
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-
   }
 
 /*****************************************************************************/
@@ -2079,8 +2083,6 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
 
 static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
   {
-   extern const char *Hlp_STATS_Degrees;
-   extern const char *Txt_Degrees;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Degree;
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
@@ -2099,13 +2101,6 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
    /***** Get degrees from database *****/
    Pho_BuildQueryOfDegrees (Query);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
-
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Degrees,
-                        SeeOrPrint == Pho_DEGREES_SEE ? Pho_PutIconToPrintDegreeStats :
-                                                        NULL,
-                        SeeOrPrint == Pho_DEGREES_SEE ? Hlp_STATS_Degrees :
-                                                        NULL);
 
    if (NumRows)	// Degrees with students found
      {
@@ -2192,9 +2187,6 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      }
    else	// No degrees with students found!
       Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Rol_STUDENT]);
-
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
