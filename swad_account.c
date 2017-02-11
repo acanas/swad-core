@@ -149,7 +149,8 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 		      "%s:&nbsp;"
 		      "<input type=\"text\" name=\"ID\""
-		      " size=\"18\" maxlength=\"%u\" value=\"\" />"
+		      " size=\"18\" maxlength=\"%u\" value=\"\""
+		      " required=\"required\" />"
 		      "</label>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
 	    ID_MAX_LENGTH_USR_ID);

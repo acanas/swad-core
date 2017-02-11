@@ -11681,8 +11681,14 @@ ALTER TABLE surveys ADD PRIMARY KEY(SvyCod);
 DROP INDEX SvyCod ON surveys;
 ALTER TABLE surveys ADD UNIQUE INDEX(Scope,Cod);
 
+----- Listar dominios usados pero aún no contemplados en la lista de dominios permitidos -----
+
+SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS mail_domain,COUNT(*) AS N FROM usr_emails WHERE SUBSTRING_INDEX(E_mail,'@',-1) NOT IN (SELECT Domain COLLATE latin1_general_ci FROM mail_domains) GROUP BY mail_domain ORDER BY N DESC;
 
 ----- TODO: Eliminar columnas sin uso en futuras versiones -----
 
 ALTER TABLE surveys DROP COLUMN DegCod;
 ALTER TABLE surveys DROP COLUMN CrsCod;
+
+
+
