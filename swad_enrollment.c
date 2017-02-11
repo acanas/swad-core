@@ -157,16 +157,16 @@ void Enr_PutButtonToEnrollStudents (void)
 /**************** Show form with button to enroll teachers *******************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrollTeachers (void)
+void Enr_PutButtonToEnrollOneTeacher (void)
   {
-   extern const char *Txt_Register_teachers;
+   extern const char *Txt_Register_teacher;
 
    /***** Form to enroll several students *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
        Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
      {
-      Act_FormStart (ActReqEnrSevTch);
-      Lay_PutConfirmButton (Txt_Register_teachers);
+      Act_FormStart (ActReqMdfOneTch);
+      Lay_PutConfirmButton (Txt_Register_teacher);
       Act_FormEnd ();
      }
   }

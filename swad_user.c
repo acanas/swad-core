@@ -6021,8 +6021,8 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
-      /***** Button to enroll teachers *****/
-      Enr_PutButtonToEnrollTeachers ();
+      /***** Button to enroll a teacher *****/
+      Enr_PutButtonToEnrollOneTeacher ();
      }
 
    /***** Free memory for teachers list *****/
@@ -7557,8 +7557,8 @@ void Usr_SeeTeachers (void)
 	 /***** Show warning indicating no teachers found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
-	 /***** Button to enroll teachers *****/
-	 Enr_PutButtonToEnrollTeachers ();
+	 /***** Button to enroll a teacher *****/
+	 Enr_PutButtonToEnrollOneTeacher ();
 	}
 
       /***** End frame *****/

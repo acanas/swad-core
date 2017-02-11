@@ -30695,25 +30695,25 @@ const char *Txt_Register_the_users_indicated_in_step_1_and_remove_the_users_not_
 	" e registrar os utilizadores que est&atilde;o na lista";
 #endif
 
-const char *Txt_Register_teachers =
+const char *Txt_Register_teacher =
 #if   L==1
-	"Inscriure professors";
+	"Inscriure professor/a";
 #elif L==2
-	"Anmeldung Lehrkr&auml;fte";
+	"Anmeldung Lehrkraft";
 #elif L==3
-	"Register teachers";
+	"Register teacher";
 #elif L==4
-	"Inscribir profesores";
+	"Inscribir profesor/a";
 #elif L==5
-	"Inscrire enseignants";
+	"Inscrire enseignant/e";
 #elif L==6
-	"Inscribir profesores";	// Okoteve traducción
+	"Inscribir profesor/a";	// Okoteve traducción
 #elif L==7
-	"Registrare professori";
+	"Registrare professore/ssa";
 #elif L==8
-	"Rejestracja nauczycieli";
+	"Rejestracja nauczyciel";
 #elif L==9
-	"Registrar professores";
+	"Registrar professor/a";
 #endif
 
 const char *Txt_Register_user_IN_A_COURSE_OR_DEGREE =
