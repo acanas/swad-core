@@ -190,18 +190,20 @@
 // TODO: Ver solución de Guillermo Gómez Trenado cuando se pulsa con el botón derecho para abrir una descarga en otra ventana
 
 // TODO: En los detalles de asistencia debería salir la fecha de cada sesión
+// TODO: System admin should view link "Visits to course"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.135.5 (2017-02-11)"
+#define Log_PLATFORM_VERSION	"SWAD 16.135.6 (2017-02-13)"
 #define CSS_FILE		"swad16.135.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.135.6: Feb 13, 2017	Changes in contextual help after changes in tabs. (212501 lines)
         Version 16.135.5: Feb 11, 2017	Change in button to register teacher when no teachers found.
 					Changed color in statistics of countries. (212503 lines)
         Version 16.135.4: Feb 11, 2017	Force filling of ID in form to check if account exists. (212502 lines)

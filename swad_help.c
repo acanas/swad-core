@@ -39,7 +39,9 @@
 
 #define WIKI "https://github.com/acanas/swad-core/wiki/"
 
-const char *Hlp_Search = WIKI "Search";
+const char *Hlp_Search   = WIKI "Search";
+//const char *Hlp_Calendar = WIKI "ASSESSMENT.Calendar";
+const char *Hlp_Calendar = WIKI "Calendar";
 
 /***** SYSTEM tab *****/
 
@@ -81,24 +83,15 @@ const char *Hlp_INSTITUTION_Places_edit = WIKI "INSTITUTION.Places#edit";
 const char *Hlp_INSTITUTION_Holidays      = WIKI "INSTITUTION.Holidays";
 const char *Hlp_INSTITUTION_Holidays_edit = WIKI "INSTITUTION.Holidays#edit";
 
-const char *Hlp_INSTITUTION_Documents = WIKI "INSTITUTION.Documents";
-const char *Hlp_INSTITUTION_Shared    = WIKI "INSTITUTION.Shared";
-
 /***** CENTRE tab *****/
 
 const char *Hlp_CENTRE_Information = WIKI "CENTRE.Information";
 const char *Hlp_CENTRE_Degrees     = WIKI "CENTRE.Degrees";
 
-const char *Hlp_CENTRE_Documents = WIKI "CENTRE.Documents";
-const char *Hlp_CENTRE_Shared    = WIKI "CENTRE.Shared";
-
 /***** DEGREE tab *****/
 
 const char *Hlp_DEGREE_Information = WIKI "DEGREE.Information";
 const char *Hlp_DEGREE_Courses     = WIKI "DEGREE.Courses";
-
-const char *Hlp_DEGREE_Documents = WIKI "DEGREE.Documents";
-const char *Hlp_DEGREE_Shared    = WIKI "DEGREE.Shared";
 
 /***** COURSE tab *****/
 
@@ -111,10 +104,6 @@ const char *Hlp_COURSE_Guide_edit = WIKI "COURSE.Guide#edit";
 
 const char *Hlp_COURSE_Syllabus      = WIKI "COURSE.Syllabus";
 const char *Hlp_COURSE_Syllabus_edit = WIKI "COURSE.Syllabus#edit";
-
-const char *Hlp_COURSE_Documents = WIKI "COURSE.Documents";
-const char *Hlp_COURSE_Private   = WIKI "COURSE.Private";
-const char *Hlp_COURSE_Shared    = WIKI "COURSE.Shared";
 
 const char *Hlp_COURSE_Timetable = WIKI "COURSE.Timetable";
 
@@ -136,19 +125,23 @@ const char *Hlp_ASSESSMENT_Assignments                 = WIKI "ASSESSMENT.Assign
 const char *Hlp_ASSESSMENT_Assignments_new_assignment  = WIKI "ASSESSMENT.Assignments#new-assignment";
 const char *Hlp_ASSESSMENT_Assignments_edit_assignment = WIKI "ASSESSMENT.Assignments#edit-assignment";
 
-const char *Hlp_ASSESSMENT_Homework_for_students = WIKI "ASSESSMENT.Homework#for-students";
-const char *Hlp_ASSESSMENT_Homework_for_teachers = WIKI "ASSESSMENT.Homework#for-teachers";
-
 const char *Hlp_ASSESSMENT_Tests              = WIKI "ASSESSMENT.Tests";
 const char *Hlp_ASSESSMENT_Tests_test_results = WIKI "ASSESSMENT.Tests#test-results";
-
-const char *Hlp_ASSESSMENT_Calendar = WIKI "ASSESSMENT.Calendar";
 
 const char *Hlp_ASSESSMENT_Announcements                   = WIKI "ASSESSMENT.Announcements";
 const char *Hlp_ASSESSMENT_Announcements_new_announcement  = WIKI "ASSESSMENT.Announcements#new-announcement";
 const char *Hlp_ASSESSMENT_Announcements_edit_announcement = WIKI "ASSESSMENT.Announcements#edit-announcement";
 
-const char *Hlp_ASSESSMENT_Marks = WIKI "ASSESSMENT.Marks";
+/***** FILES tab *****/
+
+const char *Hlp_FILES_Documents = WIKI "FILES.Documents";
+const char *Hlp_FILES_Private   = WIKI "FILES.Private";
+const char *Hlp_FILES_Shared    = WIKI "FILES.Shared";
+
+const char *Hlp_FILES_Homework_for_students = WIKI "FILES.Homework#for-students";
+const char *Hlp_FILES_Homework_for_teachers = WIKI "FILES.Homework#for-teachers";
+
+const char *Hlp_FILES_Marks = WIKI "FILES.Marks";
 
 /***** USERS tab *****/
 
