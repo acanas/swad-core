@@ -67,6 +67,8 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static unsigned Fol_GetUsrsWhoToFollow (MYSQL_RES **mysql_res);
+
 static void Fol_PutIconsWhoToFollow (void);
 static void Fol_PutIconToUpdateWhoToFollow (void);
 
@@ -103,10 +105,8 @@ void Fol_PutLinkWhoToFollow (void)
 void Fol_SuggestWhoToFollow (void)
   {
    extern const char *Hlp_SOCIAL_Profiles_who_to_follow;
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
    extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
-   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -116,7 +116,61 @@ void Fol_SuggestWhoToFollow (void)
    /***** Put link to request user's profile *****/
    Prf_PutLinkRequestUserProfile ();
 
-   /***** First try: build query to get users to follow *****/
+   /***** Get users *****/
+   if ((NumUsrs = Fol_GetUsrsWhoToFollow (&mysql_res)))
+     {
+      /***** Start frame *****/
+      Lay_StartRoundFrameTable ("560px",Txt_Who_to_follow,
+                                Fol_PutIconsWhoToFollow,
+                                Hlp_SOCIAL_Profiles_who_to_follow,2);
+
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
+
+      /***** List users *****/
+      for (NumUsr = 0;
+	   NumUsr < NumUsrs;
+	   NumUsr++)
+	{
+	 /***** Get user *****/
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get user's code (row[0]) */
+	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /***** Show user *****/
+	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
+	    fprintf (Gbl.F.Out,"<tr>");
+	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+	    Fol_ShowFollowedOrFollower (&UsrDat);
+	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
+	     NumUsr == NumUsrs - 1)
+	    fprintf (Gbl.F.Out,"</tr>");
+	}
+
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
+
+      /***** End frame *****/
+      Lay_EndRoundFrameTable ();
+     }
+   else
+      Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+  }
+
+/*****************************************************************************/
+/*************************** Get users to follow *****************************/
+/*****************************************************************************/
+
+static unsigned Fol_GetUsrsWhoToFollow (MYSQL_RES **mysql_res)
+  {
+   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
+   char Query[2048];
+
+   /***** Build query to get users to follow *****/
    // Get only users with surname 1 and first name
    sprintf (Query,"SELECT DISTINCT UsrCod FROM"
                   " ("
@@ -217,54 +271,11 @@ void Fol_SuggestWhoToFollow (void)
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
    Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
    Gbl.Usrs.Me.UsrDat.UsrCod,
-   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED,	// 1/3 likely unknown users
+   Fol_MAX_USRS_TO_FOLLOW_SUGGESTED,		// 1/3 likely unknown users
 
    Fol_MAX_USRS_TO_FOLLOW_SUGGESTED);
 
-   /***** Get users *****/
-   NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
-   if (NumUsrs)
-     {
-      /***** Start frame *****/
-      Lay_StartRoundFrameTable ("560px",Txt_Who_to_follow,
-                                Fol_PutIconsWhoToFollow,
-                                Hlp_SOCIAL_Profiles_who_to_follow,2);
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
-      /***** List users *****/
-      for (NumUsr = 0;
-	   NumUsr < NumUsrs;
-	   NumUsr++)
-	{
-	 /***** Get user *****/
-	 row = mysql_fetch_row (mysql_res);
-
-	 /* Get user's code (row[0]) */
-	 UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
-
-	 /***** Show user *****/
-	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == 0)
-	    fprintf (Gbl.F.Out,"<tr>");
-	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
-	    Fol_ShowFollowedOrFollower (&UsrDat);
-	 if ((NumUsr % Fol_NUM_COLUMNS_FOLLOW) == (Fol_NUM_COLUMNS_FOLLOW-1) ||
-	     NumUsr == NumUsrs - 1)
-	    fprintf (Gbl.F.Out,"</tr>");
-	}
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
-
-      /***** End frame *****/
-      Lay_EndRoundFrameTable ();
-     }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
+   return DB_QuerySELECT (Query,mysql_res,"can not get users to follow");
   }
 
 /*****************************************************************************/
