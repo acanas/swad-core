@@ -135,14 +135,6 @@ const char *The_ClassCourse[The_NUM_THEMES] =
    "YELLOW_COURSE",
   };
 
-const char *The_ClassConnected[The_NUM_THEMES] =
-  {
-   "WHITE_CONNECTED",
-   "GREY_CONNECTED",
-   "BLUE_CONNECTED",
-   "YELLOW_CONNECTED",
-  };
-
 const char *The_ClassTxtMenuOff[The_NUM_THEMES] =
   {
    "WHITE_MENU_OFF",

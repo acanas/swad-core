@@ -1074,6 +1074,11 @@ a:hover						/* Default ==> underlined */
 	white-space:nowrap;
 	overflow:hidden;
 	}
+.CONNECTED_TXT
+	{
+	color:#398000;
+	font-size:12pt;
+	}
 
 /*************************** Most frequent actions ***************************/
 #MFU_actions
@@ -1711,11 +1716,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .GREY_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
 .BLUE_USR		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
 .YELLOW_USR		{color:#B3B0B3; font-size:15pt; font-weight:bold; white-space:nowrap;}
-
-.WHITE_CONNECTED	{color:#398000; font-size:12pt;}
-.GREY_CONNECTED		{color:#398000; font-size:12pt;}
-.BLUE_CONNECTED		{color:#398000; font-size:12pt;}
-.YELLOW_CONNECTED	{color:#398000; font-size:12pt;}
 
 .WHITE_TITLE		{color:#505050; font-size:18pt;}
 .GREY_TITLE		{color:#505050; font-size:18pt;}

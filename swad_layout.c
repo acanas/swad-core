@@ -36,6 +36,7 @@
 #include "swad_connected.h"
 #include "swad_database.h"
 #include "swad_exam.h"
+#include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_hierarchy.h"
 #include "swad_logo.h"
@@ -1015,6 +1016,13 @@ static void Lay_ShowRightColumn (void)
       Gbl.Scope.Current = Sco_SCOPE_CRS;
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
+     }
+   else
+     {
+      /***** Suggest one user to follow *****/
+      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      Fol_SuggestUsrsToFollowMainZoneOnRightColumn ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** SWADroid advertisement *****/

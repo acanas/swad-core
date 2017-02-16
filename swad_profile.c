@@ -101,7 +101,7 @@ static void Prf_GetAndShowRankingFigure (const char *FieldName);
 void Prf_SeeSocialProfiles (void)
   {
    if (Gbl.Usrs.Me.Logged)
-      Fol_SuggestWhoToFollow ();
+      Fol_SuggestUsrsToFollowMainZone ();
    else
       Prf_RequestUserProfile ();
   }

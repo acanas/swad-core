@@ -342,7 +342,6 @@ void Con_GetAndShowLastClicks (void)
 
 void Con_ShowGlobalConnectedUsrs (void)
   {
-   extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_session;
    extern const char *Txt_sessions;
@@ -369,7 +368,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    Act_FormStartUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 
    /* Write total number of sessions */
    fprintf (Gbl.F.Out,"%u %s",
@@ -458,7 +457,6 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 
 static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
-   extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_from;
    char LocationName[Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR + 1];
    struct ConnectedUsrs Usrs;
@@ -515,8 +513,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
-   fprintf (Gbl.F.Out,"<div class=\"%s\">%u %s ",
-	    The_ClassConnected[Gbl.Prefs.Theme],
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">%u %s ",
 	    Usrs.NumUsrs,
 	    Txt_from);
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
@@ -552,7 +549,6 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
 void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
-   extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
    char CourseName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
@@ -569,7 +565,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Act_FormStartUnique (ActLstCon);	// Must be unique because
 					// the list of connected users
 					// is dynamically updated via AJAX
-   Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+   Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 
    /* Write total number of connected users belonging to the current course */
    Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
@@ -659,7 +655,6 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 
 static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_Role_t Role)
   {
-   extern const char *The_ClassConnected[The_NUM_THEMES];
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Connected_users;
@@ -695,7 +690,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 						// the list of connected users
 						// is dynamically updated via AJAX
 	 Sco_PutParamScope ("ScopeCon",Sco_SCOPE_CRS);
-	 Act_LinkFormSubmitUnique (Txt_Connected_users,The_ClassConnected[Gbl.Prefs.Theme]);
+	 Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
 	 fprintf (Gbl.F.Out,"<img src=\"%s/ellipsis32x32.gif\""
 			    " alt=\"%s\" title=\"%s\" class=\"ICO40x40\" />"
 			    "</a>",

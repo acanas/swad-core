@@ -44,7 +44,8 @@
 /*****************************************************************************/
 
 void Fol_PutLinkWhoToFollow (void);
-void Fol_SuggestWhoToFollow (void);
+void Fol_SuggestUsrsToFollowMainZone (void);
+void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void);
 
 bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod);
 unsigned Fol_GetNumFollowing (long UsrCod);

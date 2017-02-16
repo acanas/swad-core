@@ -192,21 +192,21 @@
 // TODO: En los detalles de asistencia debería salir la fecha de cada sesión
 // TODO: System admin should view link "Visits to course"
 
-// TODO: En "A quien seguir" poner el país de cada usuario.
-// TODO: Sugerir un usuario al que seguir debajo del banner de la derecha, para aumentar número de seguidores.
+// TODO: Bajo la foto de cada usuario el país
 // TODO: Permitir elegir entre "Ver actividad de quienes sigo" o "Ver actividad de todos"
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.135.7 (2017-02-16)"
-#define CSS_FILE		"swad16.135.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.136 (2017-02-16)"
+#define CSS_FILE		"swad16.136.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.136:   Feb 16, 2017	Sggested users to follow on right column. (212646 lines)
         Version 16.135.7: Feb 16, 2017	Code refactoring in users to follow. (212512 lines)
         Version 16.135.6: Feb 13, 2017	Changes in contextual help after changes in tabs. (212501 lines)
         Version 16.135.5: Feb 11, 2017	Change in button to register teacher when no teachers found.
