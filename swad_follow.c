@@ -66,6 +66,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
+                                        bool OnlyUsrsWithPhotos,
                                         MYSQL_RES **mysql_res);
 
 static void Fol_PutIconsWhoToFollow (void);
@@ -124,6 +125,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
 
    /***** Get users *****/
    if ((NumUsrs = Fol_GetUsrsWhoToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,
+                                          false,
                                           &mysql_res)))
      {
       /***** Start frame *****/
@@ -186,6 +188,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 
    /***** Get users *****/
    if ((NumUsrs = Fol_GetUsrsWhoToFollow (Fol_MAX_USRS_TO_FOLLOW_RIGHT_COLUMN,
+                                          true,
                                           &mysql_res)))
      {
       /***** Start container *****/
@@ -238,10 +241,51 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
 /*****************************************************************************/
 
 static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
+                                        bool OnlyUsrsWithPhotos,
                                         MYSQL_RES **mysql_res)
   {
    extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   char Query[2048];
+   char Query[4096];
+   char SubQuery1[256];
+   char SubQuery2[256];
+   char SubQuery3[256];
+   char SubQuery4[256];
+
+   /***** Build subqueries related to photos *****/
+   if (OnlyUsrsWithPhotos)
+     {
+      // Photo visibility should be >= profile visibility in every subquery
+      sprintf (SubQuery1,
+               " AND usr_data.PhotoVisibility IN ('%s','%s')"
+               " AND usr_data.Photo<>''",
+	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+      sprintf (SubQuery2,
+               " AND usr_data.PhotoVisibility IN ('%s','%s','%s')"
+               " AND usr_data.Photo<>''",
+	       Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+      sprintf (SubQuery3,
+               " AND usr_data.PhotoVisibility IN ('%s','%s','%s','%s')"
+               " AND usr_data.Photo<>''",
+	       Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+	       Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
+	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+	       Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+      sprintf (SubQuery4,
+               " AND usr_data.PhotoVisibility IN ('%s','%s')"
+               " AND usr_data.Photo<>''",
+	       Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
+               Pri_VisibilityDB[Pri_VISIBILITY_WORLD ]);
+     }
+   else
+     {
+      SubQuery1[0] = '\0';
+      SubQuery2[0] = '\0';
+      SubQuery3[0] = '\0';
+      SubQuery4[0] = '\0';
+     }
 
    /***** Build query to get users to follow *****/
    // Get only users with surname 1 and first name
@@ -264,6 +308,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   " AND usr_data.ProfileVisibility IN ('%s','%s')"
 		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 		  " AND usr_data.FirstName<>''"	// First name not empty
+                  "%s"				// SubQuery1
                   ")"
                   " UNION "
 		  // Users who share any course with me
@@ -281,6 +326,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
 		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 		  " AND usr_data.FirstName<>''"	// First name not empty
+                  "%s"				// SubQuery2
                   ")"
                   " UNION "
 		  // Users who share any course with me with another role
@@ -297,6 +343,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   " AND usr_data.ProfileVisibility='%s'"
 		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
 		  " AND usr_data.FirstName<>''"	// First name not empty
+                  "%s"				// SubQuery3
                   ")"
                   ") AS LikelyKnownUsrsToFollow"
 		  // Do not select my followed
@@ -314,8 +361,9 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
 		  "SELECT UsrCod FROM usr_data"
 		  " WHERE UsrCod<>'%ld'"
 		  " AND ProfileVisibility IN ('%s','%s')"
-		  " AND Surname1<>''"	// Surname 1 not empty
-		  " AND FirstName<>''"	// First name not empty
+		  " AND Surname1<>''"		// Surname 1 not empty
+		  " AND FirstName<>''"		// First name not empty
+                  "%s"				// SubQuery4
 		  // Do not select my followed
 		  " AND UsrCod NOT IN"
 		  " (SELECT FollowedCod FROM usr_follow"
@@ -331,19 +379,23 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
    Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+   SubQuery1,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_COURSE],
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
    Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+   SubQuery2,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_USER  ],
+   SubQuery3,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    MaxUsrsToShow * 2,		// 2/3 likely known users
 
    Gbl.Usrs.Me.UsrDat.UsrCod,
    Pri_VisibilityDB[Pri_VISIBILITY_SYSTEM],
    Pri_VisibilityDB[Pri_VISIBILITY_WORLD ],
+   SubQuery4,
    Gbl.Usrs.Me.UsrDat.UsrCod,
    MaxUsrsToShow,		// 1/3 likely unknown users
 
@@ -921,11 +973,11 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
    extern const char *Txt_Unfollow;
 
    /* Form to follow */
-   Act_FormStart (ActFolUsr);
+   Act_FormStart (ActUnfUsr);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (Txt_Unfollow,NULL,NULL);
    fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_ICO ICO_HIGHLIGHT\">"
-		      "<img src=\"%s/follow64x64.png\""
+		      "<img src=\"%s/following64x64.png\""
 		      " alt=\"%s\" title=\"%s\""
 		      " class=\"ICO20x20\" />"
 		      "</div>"
@@ -939,13 +991,11 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 /***************************** Follow another user ***************************/
 /*****************************************************************************/
 
-void Fol_FollowUsr (void)
+void Fol_FollowUsr1 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    bool CreateNotif;
    bool NotifyByEmail;
-   bool Error;
 
    /***** Get user to be followed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -976,14 +1026,20 @@ void Fol_FollowUsr (void)
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }
-
-      /***** Show user's profile again *****/
-      Error = !Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
      }
    else
-      Error = true;
+      Gbl.Error = true;
+  }
 
-   if (Error)
+void Fol_FollowUsr2 (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (!Gbl.Error)
+      /***** Show user's profile again *****/
+      Gbl.Error = !Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+
+   if (Gbl.Error)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
@@ -991,9 +1047,8 @@ void Fol_FollowUsr (void)
 /***************************** Unfollow another user *************************/
 /*****************************************************************************/
 
-void Fol_UnfollowUsr (void)
+void Fol_UnfollowUsr1 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
 
    /***** Get user to be unfollowed *****/
@@ -1010,7 +1065,18 @@ void Fol_UnfollowUsr (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
         }
+     }
+   else
+      Gbl.Error = true;
+  }
 
+void Fol_UnfollowUsr2 (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Get user to be unfollowed *****/
+   if (!Gbl.Error)
+     {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
 	 /* 1) I followed a user when I had permission

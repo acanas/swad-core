@@ -56,8 +56,10 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 void Fol_ListFollowing (void);
 void Fol_ListFollowers (void);
 
-void Fol_FollowUsr (void);
-void Fol_UnfollowUsr (void);
+void Fol_FollowUsr1 (void);
+void Fol_FollowUsr2 (void);
+void Fol_UnfollowUsr1 (void);
+void Fol_UnfollowUsr2 (void);
 
 void Fol_GetAndShowRankingFollowers (void);
 

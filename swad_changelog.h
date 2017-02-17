@@ -195,19 +195,18 @@
 // TODO: Bajo la foto de cada usuario el país
 // TODO: Permitir elegir entre "Ver actividad de quienes sigo" o "Ver actividad de todos"
 
-// TODO: On right column show only users to follow who have photo (pass a parameter to function)
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.137 (2017-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 16.138 (2017-02-17)"
 #define CSS_FILE		"swad16.136.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.138:   Feb 17, 2017	On right column show only users to follow with visible photo. (212873 lines)
         Version 16.137:   Feb 17, 2017	Link to view my public profile. (212808 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1637','es','N','Ver mi perfil p&uacute;blico');

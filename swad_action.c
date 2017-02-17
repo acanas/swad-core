@@ -2629,8 +2629,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCalNumForPst	*/{1408,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
    /* ActCalNumMsgSnt	*/{1407,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
 
-   /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_FollowUsr			,NULL},
-   /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_UnfollowUsr		,NULL},
+   /* ActFolUsr		*/{1410,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Fol_FollowUsr1			,Fol_FollowUsr2			,NULL},
+   /* ActUnfUsr		*/{1411,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Fol_UnfollowUsr1		,Fol_UnfollowUsr2		,NULL},
    /* ActSeeFlg		*/{1412,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_ListFollowing		,NULL},
    /* ActSeeFlr		*/{1413,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Fol_ListFollowers		,NULL},
 
