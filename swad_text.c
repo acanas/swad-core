@@ -2604,6 +2604,27 @@ const char *Txt_Another_ID =
 	"Outro n&ordm; de identif.";
 #endif
 
+const char *Txt_Another_user_s_profile =
+#if   L==1
+	"Perfil d'un altre usuari";
+#elif L==2
+	"Profil eines anderen Benutzers";
+#elif L==3
+	"Another user's profile";
+#elif L==4
+	"Perfil de otro usuario";
+#elif L==5
+	"Profil d'un autre utilisateur";
+#elif L==6
+	"Perfil de otro usuario";	// Okoteve traducción
+#elif L==7
+	"Altro profilo di utente";
+#elif L==8
+	"Profil innego u&zdot;ytkownika";
+#elif L==9
+	"Perfil de outro usu&aacute;rio";
+#endif
+
 const char *Txt_Add_this_ID =
 #if   L==1
 	"Afegir aquest ID";
@@ -23647,6 +23668,27 @@ const char *Txt_My_groups =
 	"Moje grupy";
 #elif L==9
 	"Meus grupos";
+#endif
+
+const char *Txt_My_public_profile =
+#if   L==1
+	"El meu perfil p&uacute;blic";
+#elif L==2
+	"Mein &ouml;ffentliches Profil";
+#elif L==3
+	"My public profile";
+#elif L==4
+	"Mi perfil p&uacute;blico";
+#elif L==5
+	"Mon profil public";
+#elif L==6
+	"Mi perfil p&uacute;blico";	// Okoteve traducción
+#elif L==7
+	"Il mio profilo pubblico";
+#elif L==8
+	"M&oacute;j profil publiczny";
+#elif L==9
+	"Meu perfil p&uacute;blico";
 #endif
 
 const char *Txt_My_views =
@@ -50551,27 +50593,6 @@ const char *Txt_View_in_a_new_window =
 	"View in a new window";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"Ver em uma nova janela";
-#endif
-
-const char *Txt_View_public_profile =
-#if   L==1
-	"Veure perfil p&uacute;blic";
-#elif L==2
-	"&Ouml;ffentliches Profile anzeigen";
-#elif L==3
-	"View public profile";
-#elif L==4
-	"Ver perfil p&uacute;blico";
-#elif L==5
-	"Voir profil public";
-#elif L==6
-	"Ver perfil p&uacute;blico";	// Okoteve traducción
-#elif L==7
-	"Mostra profilo pubblico";
-#elif L==8
-	"Zobacz profil publiczny";
-#elif L==9
-	"Ver perfil p&uacute;blico";
 #endif
 
 const char *Txt_View_record_and_office_hours =

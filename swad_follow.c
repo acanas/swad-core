@@ -93,12 +93,10 @@ void Fol_PutLinkWhoToFollow (void)
   {
    extern const char *Txt_Who_to_follow;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActSeeSocPrf,NULL,
                           "follow64x64.png",
                           Txt_Who_to_follow,Txt_Who_to_follow,
                           NULL);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -118,8 +116,11 @@ void Fol_SuggestUsrsToFollowMainZone (void)
    unsigned NumUsr;
    struct UsrData UsrDat;
 
-   /***** Put link to request user's profile *****/
-   Prf_PutLinkRequestUserProfile ();
+   /***** Put links to request my public profile and another user's profile *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Prf_PutLinkMyPublicProfile ();
+   Prf_PutLinkRequestAnotherUserProfile ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Get users *****/
    if ((NumUsrs = Fol_GetUsrsWhoToFollow (Fol_MAX_USRS_TO_FOLLOW_MAIN_ZONE,
@@ -762,7 +763,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 
 static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
@@ -783,9 +784,9 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Act_FormStart (ActSeePubPrf);
+      Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"DAT",NULL);
+      Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,10);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
@@ -814,7 +815,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
 
 static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
@@ -840,9 +841,9 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    if (Visible)
      {
       /* Put form to go to public profile */
-      Act_FormStart (ActSeePubPrf);
+      Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"CON_CRS",NULL);
+      Act_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,10);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();

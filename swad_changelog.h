@@ -195,18 +195,24 @@
 // TODO: Bajo la foto de cada usuario el país
 // TODO: Permitir elegir entre "Ver actividad de quienes sigo" o "Ver actividad de todos"
 
+// TODO: On right column show only users to follow who have photo (pass a parameter to function)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.136 (2017-02-16)"
+#define Log_PLATFORM_VERSION	"SWAD 16.137 (2017-02-17)"
 #define CSS_FILE		"swad16.136.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.136:   Feb 16, 2017	Sggested users to follow on right column. (212646 lines)
+        Version 16.137:   Feb 17, 2017	Link to view my public profile. (212808 lines)
+					1 change necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1637','es','N','Ver mi perfil p&uacute;blico');
+
+        Version 16.136:   Feb 16, 2017	Suggested users to follow on right column. (212646 lines)
         Version 16.135.7: Feb 16, 2017	Code refactoring in users to follow. (212512 lines)
         Version 16.135.6: Feb 13, 2017	Changes in contextual help after changes in tabs. (212501 lines)
         Version 16.135.5: Feb 11, 2017	Change in button to register teacher when no teachers found.

@@ -754,7 +754,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
          if (UsrDat->EncryptedUsrCod[0])	// User's code found ==>
 					// go to user's public profile
            {
-            Act_FormStart (ActSeePubPrf);
+            Act_FormStart (ActSeeOthPubPrf);
             /* Put param to go to follower's profile */
             Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
            }

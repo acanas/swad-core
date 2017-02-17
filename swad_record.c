@@ -2333,7 +2333,8 @@ static void Rec_PutIconsCommands (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_Edit_my_personal_data;
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_My_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_Show_agenda;
@@ -2355,24 +2356,29 @@ static void Rec_PutIconsCommands (void)
        Gbl.Usrs.Me.Logged)						// Only if I am logged
      {
       ICanViewUsrProfile = Pri_ShowingIsAllowed (Gbl.Record.UsrDat->ProfileVisibility,
-				              Gbl.Record.UsrDat);
+				                 Gbl.Record.UsrDat);
 
       /***** Start container *****/
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
 
-      /***** Button to edit my record card *****/
       if (ItsMe)
+	{
+         /***** Buttons to edit my record card and to view my profile *****/
 	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,
 	                        "edit64x64.png",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
-
-      /***** Button to view user's public profile *****/
-      if (ICanViewUsrProfile)
-         Lay_PutContextualLink (ActSeePubPrf,
+         Lay_PutContextualLink (ActSeeMyPubPrf,NULL,
+				"usr64x64.gif",
+				Txt_My_public_profile,NULL,
+				NULL);
+	}
+      else if (ICanViewUsrProfile)
+         /***** Button to view another user's profile *****/
+         Lay_PutContextualLink (ActSeeOthPubPrf,
 			        Rec_PutParamUsrCodEncrypted,
 				"usr64x64.gif",
-				Txt_View_public_profile,NULL,
+				Txt_Another_user_s_profile,NULL,
 				NULL);
 
       /***** Button to view user's record card *****/
@@ -2616,8 +2622,10 @@ static void Rec_ShowFullName (struct UsrData *UsrDat)
 
 static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_My_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   bool ItsMe;
 
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"
@@ -2627,9 +2635,19 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
       if (PutFormLinks)
 	{
 	 /* Put form to go to public profile */
-	 Act_FormStart (ActSeePubPrf);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	 Act_LinkFormSubmit (Txt_View_public_profile,"REC_NICK",NULL);
+         ItsMe = (Gbl.Usrs.Me.Logged &&
+	          UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+	 if (ItsMe)
+	   {
+	    Act_FormStart (ActSeeMyPubPrf);
+	    Act_LinkFormSubmit (Txt_My_public_profile,"REC_NICK",NULL);
+	   }
+	 else
+	   {
+	    Act_FormStart (ActSeeOthPubPrf);
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    Act_LinkFormSubmit (Txt_Another_user_s_profile,"REC_NICK",NULL);
+	   }
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (PutFormLinks)

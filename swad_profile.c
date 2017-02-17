@@ -124,19 +124,31 @@ char *Prf_GetURLPublicProfile (char *URL,const char *NicknameWithoutArroba)
   }
 
 /*****************************************************************************/
-/******************* Put link to request a user's profile ********************/
+/******************** Put link to view my public profile *********************/
 /*****************************************************************************/
 
-void Prf_PutLinkRequestUserProfile (void)
+void Prf_PutLinkMyPublicProfile (void)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_My_public_profile;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActReqPubPrf,NULL,
+   Lay_PutContextualLink (ActSeeMyPubPrf,NULL,
                           "usr64x64.gif",
-                          Txt_View_public_profile,Txt_View_public_profile,
+                          Txt_My_public_profile,Txt_My_public_profile,
 		          NULL);
-   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/***************** Put link to request another user's profile ****************/
+/*****************************************************************************/
+
+void Prf_PutLinkRequestAnotherUserProfile (void)
+  {
+   extern const char *Txt_Another_user_s_profile;
+
+   Lay_PutContextualLink (ActReqOthPubPrf,NULL,
+                          "usr64x64.gif",
+                          Txt_Another_user_s_profile,Txt_Another_user_s_profile,
+		          NULL);
   }
 
 /*****************************************************************************/
@@ -145,9 +157,14 @@ void Prf_PutLinkRequestUserProfile (void)
 
 void Prf_RequestUserProfile (void)
   {
-   /***** Put link to show users to follow *****/
    if (Gbl.Usrs.Me.Logged)
+     {
+      /***** Put link to show my public profile and users to follow *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Prf_PutLinkMyPublicProfile ();
       Fol_PutLinkWhoToFollow ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
 
    /* By default, the nickname is filled with my nickname
       If no user logged ==> the nickname is empty */
@@ -161,16 +178,16 @@ void Prf_RequestUserProfile (void)
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
   {
    extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Nickname;
    extern const char *Txt_Continue;
 
    /***** Start form *****/
-   Act_FormStart (ActSeePubPrf);
+   Act_FormStart (ActSeeOthPubPrf);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_View_public_profile,NULL,Hlp_SOCIAL_Profiles_view_public_profile);
+   Lay_StartRoundFrame (NULL,Txt_Another_user_s_profile,NULL,Hlp_SOCIAL_Profiles_view_public_profile);
 
    /***** Form to request user's @nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -188,6 +205,19 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
 
    /***** End form *****/
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/************************** Show my public profile ***************************/
+/*****************************************************************************/
+
+void Prf_ShowMyProfile (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   if (!Prf_ShowUserProfile (&Gbl.Usrs.Me.UsrDat))
+      /* Show error message */
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -254,18 +284,21 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    /***** Contextual links *****/
    if (Gbl.Usrs.Me.Logged)
      {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       if (ItsMe)	// It's me
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-	 Rec_PutLinkToChangeMyInsCtrDpt ();			// Put link (form) to change my institution, centre, department...
-	 Net_PutLinkToChangeMySocialNetworks ();		// Put link (form) to change my social networks
+	 Rec_PutLinkToChangeMyInsCtrDpt ();		// Put link (form) to change my institution, centre, department...
+	 Net_PutLinkToChangeMySocialNetworks ();	// Put link (form) to change my social networks
 	 Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
-	 Pri_PutLinkToChangeMyPrivacy ();			// Put link (form) to change my privacy
-	 fprintf (Gbl.F.Out,"</div>");
+	 Pri_PutLinkToChangeMyPrivacy ();		// Put link (form) to change my privacy
 	}
       else
-	 /***** Put link to show users to follow *****/
+	{
+	 /***** Put link to show my public profile and users to follow *****/
+	 Prf_PutLinkMyPublicProfile ();
 	 Fol_PutLinkWhoToFollow ();
+	}
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Check if I can see the public profile *****/
@@ -1487,10 +1520,12 @@ void Prf_GetAndShowRankingClicksPerDay (void)
 
 void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
+   bool ItsMe = (Gbl.Usrs.Me.Logged &&
+	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"
@@ -1519,9 +1554,14 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    /***** Put form to go to public profile *****/
    if (Visible)
      {
-      Act_FormStart (ActSeePubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmit (Txt_View_public_profile,"DAT_SMALL",NULL);
+      if (ItsMe)
+         Act_FormStart (ActSeeMyPubPrf);
+      else
+	{
+	 Act_FormStart (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	}
+      Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();

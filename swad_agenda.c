@@ -518,17 +518,17 @@ static void Agd_PutIconToShowQR (void)
 
 static void Agd_PutIconsOtherPublicAgenda (void)
   {
-   extern const char *Txt_View_public_profile;
+   extern const char *Txt_Another_user_s_profile;
    extern const char *Txt_View_record_for_this_course;
    extern const char *Txt_View_record_and_office_hours;
 
    /***** Button to view user's public profile *****/
    if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
-		          &Gbl.Usrs.Other.UsrDat))
-      Lay_PutContextualLink (ActSeePubPrf,
+		             &Gbl.Usrs.Other.UsrDat))
+      Lay_PutContextualLink (ActSeeOthPubPrf,
 			     Usr_PutParamOtherUsrCodEncrypted,
 			     "usr64x64.gif",
-			     Txt_View_public_profile,NULL,
+			     Txt_Another_user_s_profile,NULL,
 			     NULL);
 
    /***** Button to view user's record card *****/

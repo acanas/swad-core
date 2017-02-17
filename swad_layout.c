@@ -723,7 +723,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 			 "var RefreshParamUsr = \"\";\n",	// No user specified
 	       Act_Actions[ActRefNewSocPubGbl].ActCod,
 	       Act_Actions[ActRefOldSocPubGbl].ActCod);
-   else if (Gbl.Action.Act == ActSeePubPrf       ||
+   else if (Gbl.Action.Act == ActSeeOthPubPrf    ||
             Gbl.Action.Act == ActRcvSocPstUsr    ||
             Gbl.Action.Act == ActRcvSocComUsr    ||
             Gbl.Action.Act == ActShaSocNotUsr    ||
@@ -1017,7 +1017,7 @@ static void Lay_ShowRightColumn (void)
       Con_ShowConnectedUsrsBelongingToCurrentCrs ();
       fprintf (Gbl.F.Out,"</div>");			// Used for AJAX based refresh
      }
-   else
+   else if (Gbl.Usrs.Me.Logged)		// I am logged
      {
       /***** Suggest one user to follow *****/
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");

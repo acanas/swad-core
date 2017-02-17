@@ -1131,7 +1131,7 @@ Social:
 	939. ActReqRemSocComGbl		Request the removal of a comment in a social note (global)
 	940. ActRemSocComGbl		Remove of a comment in a social note (global)
 
-	941. ActReqPubPrf		Request @nickname to show a public user's profile
+	941. ActReqOthPubPrf		Request @nickname to show a public user's profile
 
 	942. ActRcvSocPstUsr		Receive a public social post to be displayed in the timeline (user)
 	943. ActRcvSocComUsr		Comment a social note in the timeline (user)
@@ -2606,7 +2606,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1505,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RequestRemSocialComGbl	,NULL},
    /* ActRemSocComGbl	*/{1507,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_MarkMyNotifAsSeen		,Soc_RemoveSocialComGbl		,NULL},
 
-   /* ActReqPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_RequestUserProfile		,NULL},
+   /* ActReqOthPubPrf	*/{1401,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_RequestUserProfile		,NULL},
 
    /* ActRcvSocPstUsr	*/{1498,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Soc_ReceiveSocialPostUsr	,NULL},
    /* ActRcvSocComUsr	*/{1504,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Soc_ReceiveCommentUsr		,NULL},
@@ -2621,7 +2621,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1506,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RequestRemSocialComUsr	,NULL},
    /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActSeePubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
+   /* ActSeeMyPubPrf	*/{1637,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_ShowMyProfile		,NULL},
+   /* ActSeeOthPubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
    /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
    /* ActCalNumFilVie	*/{1409,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
@@ -4386,8 +4387,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqDatShaIns,	// #1398
 	ActChgDatShaIns,	// #1399
 	ActDowShaIns,		// #1400
-	ActReqPubPrf,		// #1401
-	ActSeePubPrf,		// #1402
+	ActReqOthPubPrf,	// #1401
+	ActSeeOthPubPrf,	// #1402
 	ActEdiPri,		// #1403
 	ActChgPriPrf,		// #1404
 	ActCal1stClkTim,	// #1405
@@ -4622,6 +4623,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeCalDeg,		// #1634
 	ActPrnCalDeg,		// #1635
 	ActChgCalDeg1stDay,	// #1636
+	ActSeeMyPubPrf,		// #1637
 	};
 
 /*****************************************************************************/

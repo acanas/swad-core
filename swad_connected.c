@@ -1035,31 +1035,39 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    char PhotoURL[PATH_MAX + 1];
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
 	                                                                           "CON");
-   struct UsrData UsrDat;
+   long UsrCod;
+   struct UsrData OtherUsrDat;
+   struct UsrData *UsrDat;
+   bool ItsMe;
 
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
+   /***** Get user's code from list *****/
+   UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
+   ItsMe = (Gbl.Usrs.Me.Logged &&
+	    UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);	// It's me
 
-   /***** Get user's data *****/
-   UsrDat.UsrCod = Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].UsrCod;
-   Usr_GetAllUsrDataFromUsrCod (&UsrDat);
+   if (ItsMe)
+      UsrDat = &Gbl.Usrs.Me.UsrDat;
+   else
+     {
+      /***** Initialize structure with user's data *****/
+      OtherUsrDat.UsrCod = UsrCod;
+      Usr_UsrDataConstructor (&OtherUsrDat);
+
+      /***** Get user's data *****/
+      Usr_GetAllUsrDataFromUsrCod (&OtherUsrDat);
+
+      UsrDat = &OtherUsrDat;
+     }
 
    /***** Show photo *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"LEFT_MIDDLE COLOR%u\""
 	              " style=\"width:22px;\">",
 	    Gbl.RowEvenOdd);
-   Act_FormStartUnique (ActSeePubPrf);	// Must be unique because
-					// the list of connected users
-					// is dynamically updated via AJAX
-   Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-   Act_LinkFormSubmitUnique (UsrDat.FullName,NULL);
-   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
-                     "PHOTO21x28",Pho_ZOOM,false);
-   fprintf (Gbl.F.Out,"</a>");
-   Act_FormEnd ();
+   ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
+   Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
+                	                NULL,
+                     "PHOTO21x28",Pho_ZOOM,true);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
@@ -1070,9 +1078,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 	                                        ActSeeRecOneTch);	// Must be unique because
 									// the list of connected users
 									// is dynamically updated via AJAX
-   Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
-   Usr_RestrictLengthAndWriteName (&UsrDat,8);
+   Usr_RestrictLengthAndWriteName (UsrDat,8);
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
@@ -1090,8 +1098,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
+   if (!ItsMe)
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&OtherUsrDat);
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

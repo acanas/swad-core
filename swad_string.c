@@ -306,7 +306,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
 	       sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
 
 	    /* Store first part of anchor */
-	    Act_SetParamsForm (ParamsStr,ActSeePubPrf,true);
+	    Act_SetParamsForm (ParamsStr,ActSeeOthPubPrf,true);
 	    sprintf (Anchor1Nick,"<form method=\"post\" action=\"%s/%s\" id=\"%s\">"
 				 "%s"
 				 "<input type=\"hidden\" name=\"usr\" value=\"",
