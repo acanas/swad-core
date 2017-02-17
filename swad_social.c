@@ -2491,8 +2491,6 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
    Str_LimitLengthHTMLStr (UsrDat->FullName,12);
-   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
-   Act_FormEnd ();
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 
