@@ -692,10 +692,7 @@ void Par_GetMainParameters (void)
 	 // and to refresh old publishings in user's timeline
 	 // If user does not exist ==> UsrCod = -1
 	 Gbl.Usrs.Other.UsrDat.UsrCod = Nck_GetUsrCodFromNickname (Gbl.Usrs.Other.UsrDat.Nickname);
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
-	    Gbl.Action.Act = ActSeeOthPubPrf;	// Set default action if no other is specified
-         else
-            Gbl.Usrs.Other.UsrDat.UsrCod = -1L;
+         Gbl.Action.Act = ActSeeOthPubPrf;	// Set default action if no other is specified
 	}
      }
    else if (Par_GetParToText ("agd",Nickname,Nck_MAX_BYTES_NICKNAME_FROM_FORM))

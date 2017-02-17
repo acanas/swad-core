@@ -435,9 +435,9 @@ void Soc_RefreshOldTimelineGbl (void)
 
 void Soc_RefreshOldTimelineUsr (void)
   {
-   /***** If user exists, show old publishings *****/
-   // User's code is already taken from nickname in Par_GetMainParameters ()
-   if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))        // Existing user
+   /***** Get user whom profile is displayed *****/
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())	// Existing user
+      /***** If user exists, show old publishings *****/
       Soc_GetAndShowOldTimeline (Soc_TIMELINE_USR);
   }
 

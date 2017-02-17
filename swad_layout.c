@@ -724,7 +724,7 @@ static void Lay_WriteScriptParamsAJAX (void)
 	       Act_Actions[ActRefNewSocPubGbl].ActCod,
 	       Act_Actions[ActRefOldSocPubGbl].ActCod);
    else if (Gbl.Action.Act == ActSeeOthPubPrf    ||
-            Gbl.Action.Act == ActRcvSocPstUsr    ||
+	    Gbl.Action.Act == ActRcvSocPstUsr    ||
             Gbl.Action.Act == ActRcvSocComUsr    ||
             Gbl.Action.Act == ActShaSocNotUsr    ||
             Gbl.Action.Act == ActUnsSocNotUsr    ||
@@ -745,9 +745,9 @@ static void Lay_WriteScriptParamsAJAX (void)
 	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
 				    Gbl.Usrs.Other.UsrDat.Nickname);
       fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			 "var RefreshParamUsr = \"usr=@%s\";\n",
+			 "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
 	       Act_Actions[ActRefOldSocPubUsr].ActCod,
-	       Gbl.Usrs.Other.UsrDat.Nickname);
+	       Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
      }
 
    /***** Parameters with code of session and current course code *****/
