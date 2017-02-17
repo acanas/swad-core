@@ -199,13 +199,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.139.1 (2017-02-17)"
+#define Log_PLATFORM_VERSION	"SWAD 16.139.2 (2017-02-17)"
 #define CSS_FILE		"swad16.136.css"
 #define JS_FILE			"swad16.123.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.139.2: Feb 17, 2017	Code refactoring in actions. (212836 lines)
         Version 16.139.1: Feb 17, 2017	Code refactoring in parameters related to social timeline. (212817 lines)
         Version 16.139:   Feb 17, 2017	Fixed bugs showing my public profile.
 					Fixed bugs in user timeline. (212819 lines)

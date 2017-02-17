@@ -203,29 +203,35 @@ void Lay_WriteStartOfPage (void)
    // css/dropzone.css
    // images/spritemap@2x.png
    // images/spritemap.png
-   if (Gbl.Action.Act == ActFrmCreDocIns ||	// Brw_ADMI_DOCUM_INS
-       Gbl.Action.Act == ActFrmCreShaIns ||	// Brw_ADMI_SHARE_INS
-       Gbl.Action.Act == ActFrmCreDocCtr ||	// Brw_ADMI_DOCUM_CTR
-       Gbl.Action.Act == ActFrmCreShaCtr ||	// Brw_ADMI_SHARE_CTR
-       Gbl.Action.Act == ActFrmCreDocDeg ||	// Brw_ADMI_DOCUM_DEG
-       Gbl.Action.Act == ActFrmCreShaDeg ||	// Brw_ADMI_SHARE_DEG
-       Gbl.Action.Act == ActFrmCreDocCrs ||	// Brw_ADMI_DOCUM_CRS
-       Gbl.Action.Act == ActFrmCreDocGrp ||	// Brw_ADMI_DOCUM_GRP
-       Gbl.Action.Act == ActFrmCreTchCrs ||	// Brw_ADMI_TEACH_CRS
-       Gbl.Action.Act == ActFrmCreTchGrp ||	// Brw_ADMI_TEACH_GRP
-       Gbl.Action.Act == ActFrmCreShaCrs ||	// Brw_ADMI_SHARE_CRS
-       Gbl.Action.Act == ActFrmCreShaGrp ||	// Brw_ADMI_SHARE_GRP
-       Gbl.Action.Act == ActFrmCreAsgUsr ||	// Brw_ADMI_ASSIG_USR
-       Gbl.Action.Act == ActFrmCreAsgCrs ||	// Brw_ADMI_ASSIG_CRS
-       Gbl.Action.Act == ActFrmCreWrkUsr ||	// Brw_ADMI_WORKS_USR
-       Gbl.Action.Act == ActFrmCreWrkCrs ||	// Brw_ADMI_WORKS_CRS
-       Gbl.Action.Act == ActFrmCreMrkCrs ||	// Brw_ADMI_MARKS_CRS
-       Gbl.Action.Act == ActFrmCreMrkGrp ||	// Brw_ADMI_MARKS_GRP
-       Gbl.Action.Act == ActFrmCreBrf)		// Brw_ADMI_BRIEF_USR
-      fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
-	                 " href=\"%s/dropzone/css/dropzone.css\""
-	                 " type=\"text/css\" />\n",
-               Cfg_URL_SWAD_PUBLIC);
+   switch (Gbl.Action.Act)
+     {
+      case ActFrmCreDocIns:	// Brw_ADMI_DOCUM_INS
+      case ActFrmCreShaIns:	// Brw_ADMI_SHARE_INS
+      case ActFrmCreDocCtr:	// Brw_ADMI_DOCUM_CTR
+      case ActFrmCreShaCtr:	// Brw_ADMI_SHARE_CTR
+      case ActFrmCreDocDeg:	// Brw_ADMI_DOCUM_DEG
+      case ActFrmCreShaDeg:	// Brw_ADMI_SHARE_DEG
+      case ActFrmCreDocCrs:	// Brw_ADMI_DOCUM_CRS
+      case ActFrmCreDocGrp:	// Brw_ADMI_DOCUM_GRP
+      case ActFrmCreTchCrs:	// Brw_ADMI_TEACH_CRS
+      case ActFrmCreTchGrp:	// Brw_ADMI_TEACH_GRP
+      case ActFrmCreShaCrs:	// Brw_ADMI_SHARE_CRS
+      case ActFrmCreShaGrp:	// Brw_ADMI_SHARE_GRP
+      case ActFrmCreAsgUsr:	// Brw_ADMI_ASSIG_USR
+      case ActFrmCreAsgCrs:	// Brw_ADMI_ASSIG_CRS
+      case ActFrmCreWrkUsr:	// Brw_ADMI_WORKS_USR
+      case ActFrmCreWrkCrs:	// Brw_ADMI_WORKS_CRS
+      case ActFrmCreMrkCrs:	// Brw_ADMI_MARKS_CRS
+      case ActFrmCreMrkGrp:	// Brw_ADMI_MARKS_GRP
+      case ActFrmCreBrf:		// Brw_ADMI_BRIEF_USR
+	 fprintf (Gbl.F.Out,"<link rel=\"StyleSheet\""
+			    " href=\"%s/dropzone/css/dropzone.css\""
+			    " type=\"text/css\" />\n",
+		  Cfg_URL_SWAD_PUBLIC);
+	 break;
+      default:
+	 break;
+     }
 
    /* Redirect to correct language */
    if (Gbl.Usrs.Me.Logged &&							// I am logged
@@ -662,22 +668,29 @@ static void Lay_WriteScriptInit (void)
       // Refresh timeline via AJAX
       fprintf (Gbl.F.Out,"	setTimeout(\"refreshLastClicks()\",%lu);\n",
                Cfg_TIME_TO_REFRESH_LAST_CLICKS);
-   else if (Gbl.Action.Act == ActSeeSocTmlGbl    ||
-            Gbl.Action.Act == ActRcvSocPstGbl    ||
-            Gbl.Action.Act == ActRcvSocComGbl    ||
-            Gbl.Action.Act == ActShaSocNotGbl    ||
-            Gbl.Action.Act == ActUnsSocNotGbl    ||
-            Gbl.Action.Act == ActFavSocNotGbl    ||
-            Gbl.Action.Act == ActUnfSocNotGbl    ||
-            Gbl.Action.Act == ActFavSocComGbl    ||
-            Gbl.Action.Act == ActUnfSocComGbl    ||
-            Gbl.Action.Act == ActReqRemSocPubGbl ||
-            Gbl.Action.Act == ActRemSocPubGbl    ||
-            Gbl.Action.Act == ActReqRemSocComGbl ||
-            Gbl.Action.Act == ActRemSocComGbl)
-      // Refresh timeline via AJAX
-      fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
-               Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+   else
+      switch (Gbl.Action.Act)
+        {
+	 case ActSeeSocTmlGbl:
+	 case ActRcvSocPstGbl:
+	 case ActRcvSocComGbl:
+	 case ActShaSocNotGbl:
+	 case ActUnsSocNotGbl:
+	 case ActFavSocNotGbl:
+	 case ActUnfSocNotGbl:
+	 case ActFavSocComGbl:
+	 case ActUnfSocComGbl:
+	 case ActReqRemSocPubGbl:
+	 case ActRemSocPubGbl:
+	 case ActReqRemSocComGbl:
+	 case ActRemSocComGbl:
+	    // Refresh timeline via AJAX
+	    fprintf (Gbl.F.Out,"	setTimeout(\"refreshNewTimeline()\",%lu);\n",
+		     Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
+            break;
+	 default:
+	    break;
+        }
 
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
@@ -702,52 +715,57 @@ static void Lay_WriteScriptParamsAJAX (void)
    fprintf (Gbl.F.Out,"var RefreshParamNxtActLog = \"act=%ld\";\n",
             Act_Actions[ActRefLstClk].ActCod);
 
-   /***** Parameters related with refreshing of social timeline *****/
-   if (Gbl.Action.Act == ActSeeSocTmlGbl    ||
-       Gbl.Action.Act == ActRcvSocPstGbl    ||
-       Gbl.Action.Act == ActRcvSocComGbl    ||
-       Gbl.Action.Act == ActShaSocNotGbl    ||
-       Gbl.Action.Act == ActUnsSocNotGbl    ||
-       Gbl.Action.Act == ActFavSocNotGbl    ||
-       Gbl.Action.Act == ActUnfSocNotGbl    ||
-       Gbl.Action.Act == ActFavSocComGbl    ||
-       Gbl.Action.Act == ActUnfSocComGbl    ||
-       Gbl.Action.Act == ActReqRemSocPubGbl ||
-       Gbl.Action.Act == ActRemSocPubGbl    ||
-       Gbl.Action.Act == ActReqRemSocComGbl ||
-       Gbl.Action.Act == ActRemSocComGbl)
-      /* In all the actions related to view or editing global timeline ==>
-         put parameters used by AJAX */
-      fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
-			 "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			 "var RefreshParamUsr = \"\";\n",	// No user specified
-	       Act_Actions[ActRefNewSocPubGbl].ActCod,
-	       Act_Actions[ActRefOldSocPubGbl].ActCod);
-   else if (Gbl.Action.Act == ActSeeOthPubPrf    ||
-	    Gbl.Action.Act == ActRcvSocPstUsr    ||
-            Gbl.Action.Act == ActRcvSocComUsr    ||
-            Gbl.Action.Act == ActShaSocNotUsr    ||
-            Gbl.Action.Act == ActUnsSocNotUsr    ||
-            Gbl.Action.Act == ActFavSocNotUsr    ||
-            Gbl.Action.Act == ActUnfSocNotUsr    ||
-            Gbl.Action.Act == ActFavSocComUsr    ||
-            Gbl.Action.Act == ActUnfSocComUsr    ||
-            Gbl.Action.Act == ActReqRemSocPubUsr ||
-            Gbl.Action.Act == ActRemSocPubUsr    ||
-            Gbl.Action.Act == ActReqRemSocComUsr ||
-            Gbl.Action.Act == ActRemSocComUsr)
+   /***** Parameters related with social timeline refreshing *****/
+   switch (Gbl.Action.Act)
      {
-      /* In all the actions related to view or editing user's timeline ==>
-         put parameters used by AJAX */
-      if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
-	 Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-      if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
-	 Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
-				    Gbl.Usrs.Other.UsrDat.Nickname);
-      fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			 "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
-	       Act_Actions[ActRefOldSocPubUsr].ActCod,
-	       Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+      case ActSeeSocTmlGbl:
+      case ActRcvSocPstGbl:
+      case ActRcvSocComGbl:
+      case ActShaSocNotGbl:
+      case ActUnsSocNotGbl:
+      case ActFavSocNotGbl:
+      case ActUnfSocNotGbl:
+      case ActFavSocComGbl:
+      case ActUnfSocComGbl:
+      case ActReqRemSocPubGbl:
+      case ActRemSocPubGbl:
+      case ActReqRemSocComGbl:
+      case ActRemSocComGbl:
+	 /* In all the actions related to view or editing global timeline ==>
+	    put parameters used by AJAX */
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
+			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+			    "var RefreshParamUsr = \"\";\n",	// No user specified
+		  Act_Actions[ActRefNewSocPubGbl].ActCod,
+		  Act_Actions[ActRefOldSocPubGbl].ActCod);
+	 break;
+      case ActSeeOthPubPrf:
+      case ActRcvSocPstUsr:
+      case ActRcvSocComUsr:
+      case ActShaSocNotUsr:
+      case ActUnsSocNotUsr:
+      case ActFavSocNotUsr:
+      case ActUnfSocNotUsr:
+      case ActFavSocComUsr:
+      case ActUnfSocComUsr:
+      case ActReqRemSocPubUsr:
+      case ActRemSocPubUsr:
+      case ActReqRemSocComUsr:
+      case ActRemSocComUsr:
+	 /* In all the actions related to view or editing user's timeline ==>
+	    put parameters used by AJAX */
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
+	    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
+	 if (!Gbl.Usrs.Other.UsrDat.Nickname[0])
+	    Nck_GetNicknameFromUsrCod (Gbl.Usrs.Other.UsrDat.UsrCod,
+				       Gbl.Usrs.Other.UsrDat.Nickname);
+	 fprintf (Gbl.F.Out,"var RefreshParamNxtActOldPub = \"act=%ld\";\n"
+			    "var RefreshParamUsr = \"OtherUsrCod=%s\";\n",
+		  Act_Actions[ActRefOldSocPubUsr].ActCod,
+		  Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+	 break;
+      default:
+	 break;
      }
 
    /***** Parameters with code of session and current course code *****/
