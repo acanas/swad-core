@@ -2426,6 +2426,11 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 /********* Put hidden parameter encrypted user's code of other user **********/
 /*****************************************************************************/
 
+void Usr_PutParamMyUsrCodEncrypted (void)
+  {
+   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
+  }
+
 void Usr_PutParamOtherUsrCodEncrypted (void)
   {
    Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);

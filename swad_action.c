@@ -2621,7 +2621,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqRemSocComGbl*/{1506,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RequestRemSocialComUsr	,NULL},
    /* ActRemSocComGbl	*/{1508,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Soc_RemoveSocialComUsr		,NULL},
 
-   /* ActSeeMyPubPrf	*/{1637,-1,TabUnk,ActSeeSocPrf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_ShowMyProfile		,NULL},
    /* ActSeeOthPubPrf	*/{1402,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_GetUsrDatAndShowUserProfile,NULL},
    /* ActCal1stClkTim	*/{1405,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
    /* ActCalNumClk	*/{1406,-1,TabUnk,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_CalculateFigures		,NULL},
@@ -4623,7 +4622,6 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeCalDeg,		// #1634
 	ActPrnCalDeg,		// #1635
 	ActChgCalDeg1stDay,	// #1636
-	ActSeeMyPubPrf,		// #1637
 	};
 
 /*****************************************************************************/

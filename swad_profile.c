@@ -73,6 +73,8 @@ extern struct Globals Gbl;
 
 static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
 
+static void Prf_ShowUserProfileAndTimeline (void);
+
 static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
@@ -131,7 +133,8 @@ void Prf_PutLinkMyPublicProfile (void)
   {
    extern const char *Txt_My_public_profile;
 
-   Lay_PutContextualLink (ActSeeMyPubPrf,NULL,
+   Lay_PutContextualLink (ActSeeOthPubPrf,
+                          Usr_PutParamMyUsrCodEncrypted,
                           "usr64x64.gif",
                           Txt_My_public_profile,Txt_My_public_profile,
 		          NULL);
@@ -208,64 +211,61 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
   }
 
 /*****************************************************************************/
-/************************** Show my public profile ***************************/
-/*****************************************************************************/
-
-void Prf_ShowMyProfile (void)
-  {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   if (!Prf_ShowUserProfile (&Gbl.Usrs.Me.UsrDat))
-      /* Show error message */
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-  }
-
-/*****************************************************************************/
 /******************** Get user and show a user's profile *********************/
 /*****************************************************************************/
 // Gbl.Usrs.Other.UsrDat.UsrCod may be already taken. If not ==> try to get it
 
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   bool Error;
-
    /***** Get user's data *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
-   Error = !Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
    /***** Show profile and timeline *****/
-   if (!Error)
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
       /* Show profile */
-      Error = !Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
-
-   if (Error)
-     {
-      /* Show error message */
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-
-      /* Request nickname again */
-      Prf_RequestUserProfileWithDefaultNickname ("");
-     }
-   else if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
-     {
-      /* Start section */
-      fprintf (Gbl.F.Out,"<section id=\"timeline\">");
-
-      /* Show public social activity (timeline) of this user */
-      Soc_ShowTimelineUsr ();
-
-      /* End section */
-      fprintf (Gbl.F.Out,"</section>");
-     }
+      Prf_ShowUserProfileAndTimeline ();
 
    /***** If it's not me, mark possible notification as seen *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+   if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
       Ntf_MarkNotifAsSeen (Ntf_EVENT_FOLLOWER,
                            Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
 			   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
+
+/*****************************************************************************/
+/************* Show a user's profile followed by his/her timeline ************/
+/*****************************************************************************/
+
+static void Prf_ShowUserProfileAndTimeline (void)
+  {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+
+   /***** Show profile *****/
+   if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
+     {
+      if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
+	{
+	 /***** Show timeline *****/
+	 /* Start section */
+	 fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+
+	 /* Show public social activity (timeline) of this user */
+	 Soc_ShowTimelineUsr ();
+
+	 /* End section */
+	 fprintf (Gbl.F.Out,"</section>");
+	}
+     }
+   else
+     {
+      /* Show error message */
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+      /* Request nickname */
+      Prf_RequestUserProfileWithDefaultNickname ("");
+     }
+   }
 
 /*****************************************************************************/
 /*************************** Show a user's profile ***************************/
@@ -1524,8 +1524,6 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    fprintf (Gbl.F.Out,"<td class=\"RANK RIGHT_MIDDLE COLOR%u\""
 	              " style=\"height:50px;\">"
@@ -1554,13 +1552,8 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
    /***** Put form to go to public profile *****/
    if (Visible)
      {
-      if (ItsMe)
-         Act_FormStart (ActSeeMyPubPrf);
-      else
-	{
-	 Act_FormStart (ActSeeOthPubPrf);
-	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	}
+      Act_FormStart (ActSeeOthPubPrf);
+      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
       Usr_RestrictLengthAndWriteName (UsrDat,8);
       fprintf (Gbl.F.Out,"</a>");

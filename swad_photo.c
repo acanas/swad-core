@@ -1121,32 +1121,20 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                       Zoom == Pho_ZOOM &&						// Make zoom
                       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
    char IdCaption[Act_MAX_LENGTH_ID];
-   bool ItsMe = (Gbl.Usrs.Me.Logged &&
-	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
      {
       if (FormUnique)
 	{
-	 if (ItsMe)
-	    Act_FormStartUnique (ActSeeMyPubPrf);
-	 else
-	   {
-	    Act_FormStartUnique (ActSeeOthPubPrf);
-            Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	   }
-        Act_LinkFormSubmitUnique (NULL,NULL);
-       }
+	 Act_FormStartUnique (ActSeeOthPubPrf);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+         Act_LinkFormSubmitUnique (NULL,NULL);
+        }
       else
 	{
-	 if (ItsMe)
-	    Act_FormStart (ActSeeMyPubPrf);
-	 else
-	   {
-	    Act_FormStart (ActSeeOthPubPrf);
-            Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	   }
+	 Act_FormStart (ActSeeOthPubPrf);
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
          Act_LinkFormSubmit (NULL,NULL,NULL);
 	}
      }

@@ -2362,23 +2362,18 @@ static void Rec_PutIconsCommands (void)
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO\">");
 
       if (ItsMe)
-	{
-         /***** Buttons to edit my record card and to view my profile *****/
+         /***** Button to edit my record card *****/
 	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,
 	                        "edit64x64.png",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
-         Lay_PutContextualLink (ActSeeMyPubPrf,NULL,
-				"usr64x64.gif",
-				Txt_My_public_profile,NULL,
-				NULL);
-	}
-      else if (ICanViewUsrProfile)
-         /***** Button to view another user's profile *****/
+      if (ICanViewUsrProfile)
+         /***** Button to view user's profile *****/
          Lay_PutContextualLink (ActSeeOthPubPrf,
 			        Rec_PutParamUsrCodEncrypted,
 				"usr64x64.gif",
-				Txt_Another_user_s_profile,NULL,
+				ItsMe ? Txt_My_public_profile :
+			                Txt_Another_user_s_profile,NULL,
 				NULL);
 
       /***** Button to view user's record card *****/
@@ -2637,17 +2632,11 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	 /* Put form to go to public profile */
          ItsMe = (Gbl.Usrs.Me.Logged &&
 	          UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-	 if (ItsMe)
-	   {
-	    Act_FormStart (ActSeeMyPubPrf);
-	    Act_LinkFormSubmit (Txt_My_public_profile,"REC_NICK",NULL);
-	   }
-	 else
-	   {
-	    Act_FormStart (ActSeeOthPubPrf);
-	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-	    Act_LinkFormSubmit (Txt_Another_user_s_profile,"REC_NICK",NULL);
-	   }
+	 Act_FormStart (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 Act_LinkFormSubmit (ItsMe ? Txt_My_public_profile :
+			             Txt_Another_user_s_profile,
+			     "REC_NICK",NULL);
 	}
       fprintf (Gbl.F.Out,"@%s",UsrDat->Nickname);
       if (PutFormLinks)

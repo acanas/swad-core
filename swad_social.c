@@ -347,7 +347,9 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
    if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
      {
       /***** Put link to show users to follow *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Fol_PutLinkWhoToFollow ();
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** Show warning if I do not follow anyone *****/
       Lay_ShowAlert (Lay_WARNING,Txt_You_dont_follow_any_user);
@@ -1374,38 +1376,24 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
    struct UsrData UsrDat;
    bool ItsMe = (Gbl.Usrs.Me.Logged &&
 	        UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
-   bool UsrOK;
 
    if (TopMessage != Soc_TOP_MESSAGE_NONE)
      {
-      if (ItsMe)
-	 UsrOK = true;
-      else
-	{
-	 /***** Initialize structure with user's data *****/
-	 Usr_UsrDataConstructor (&UsrDat);
+      /***** Initialize structure with user's data *****/
+      Usr_UsrDataConstructor (&UsrDat);
 
-	 /***** Get user's data *****/
-	 UsrDat.UsrCod = UsrCod;
-	 UsrOK = Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);	// Really we only need EncryptedUsrCod and FullName
-	}
-
-      if (UsrOK)
+      /***** Get user's data *****/
+      UsrDat.UsrCod = UsrCod;
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Really we only need EncryptedUsrCod and FullName
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"SOCIAL_TOP_CONTAINER SOCIAL_TOP_PUBLISHER\">");
 
 	 /***** Show user's name inside form to go to user's public profile *****/
-	 if (ItsMe)
-	   {
-	    Act_FormStartUnique (ActSeeMyPubPrf);
-	    Act_LinkFormSubmitUnique (Txt_My_public_profile,"SOCIAL_TOP_PUBLISHER");
-	   }
-	 else
-	   {
-	    Act_FormStartUnique (ActSeeOthPubPrf);
-	    Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	    Act_LinkFormSubmitUnique (Txt_Another_user_s_profile,"SOCIAL_TOP_PUBLISHER");
-	   }
+	 Act_FormStartUnique (ActSeeOthPubPrf);
+	 Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
+	 Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+					   Txt_Another_user_s_profile,
+				   "SOCIAL_TOP_PUBLISHER");
 	 Str_LimitLengthHTMLStr (UsrDat.FullName,40);
 	 fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
 	 Act_FormEnd ();
@@ -1415,9 +1403,8 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
                   Txt_SOCIAL_NOTE_TOP_MESSAGES[TopMessage]);
 	}
 
-      if (!ItsMe)
-	 /***** Free memory used for user's data *****/
-	 Usr_UsrDataDestructor (&UsrDat);
+      /***** Free memory used for user's data *****/
+      Usr_UsrDataDestructor (&UsrDat);
      }
   }
 
@@ -1436,33 +1423,21 @@ static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   if (ItsMe)
-     {
-      Act_FormStartUnique (ActSeeMyPubPrf);
-      Act_LinkFormSubmitUnique (Txt_My_public_profile,"DAT_N_BOLD");
-     }
-   else
-     {
-      Act_FormStartUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitUnique (Txt_Another_user_s_profile,"DAT_N_BOLD");
-     }
+   Act_FormStartUnique (ActSeeOthPubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+				     Txt_Another_user_s_profile,
+			     "DAT_N_BOLD");
    Str_LimitLengthHTMLStr (UsrDat->FullName,16);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   if (ItsMe)
-     {
-      Act_FormStartUnique (ActSeeMyPubPrf);
-      Act_LinkFormSubmitUnique (Txt_My_public_profile,"DAT_N_BOLD");
-     }
-   else
-     {
-      Act_FormStartUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitUnique (Txt_Another_user_s_profile,"DAT_LIGHT");
-     }
+   Act_FormStartUnique (ActSeeOthPubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+				     Txt_Another_user_s_profile,
+			     "DAT_LIGHT");
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 
@@ -2500,33 +2475,24 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_AUTHOR\">");
 
    /***** Show user's name inside form to go to user's public profile *****/
-   if (ItsMe)
-     {
-      Act_FormStartUnique (ActSeeMyPubPrf);
-      Act_LinkFormSubmitUnique (Txt_My_public_profile,"DAT_N_BOLD");
-     }
-   else
-     {
-      Act_FormStartUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitUnique (Txt_Another_user_s_profile,"DAT_BOLD");
-     }
+   Act_FormStartUnique (ActSeeOthPubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+				     Txt_Another_user_s_profile,
+			     "DAT_BOLD");
    Str_LimitLengthHTMLStr (UsrDat->FullName,12);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
    /***** Show user's nickname inside form to go to user's public profile *****/
-   if (ItsMe)
-     {
-      Act_FormStartUnique (ActSeeMyPubPrf);
-      Act_LinkFormSubmitUnique (Txt_My_public_profile,"DAT_LIGHT");
-     }
-   else
-     {
-      Act_FormStartUnique (ActSeeOthPubPrf);
-      Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      Act_LinkFormSubmitUnique (Txt_Another_user_s_profile,"DAT_LIGHT");
-     }
+   Act_FormStartUnique (ActSeeOthPubPrf);
+   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
+				     Txt_Another_user_s_profile,
+			     "DAT_LIGHT");
+   Str_LimitLengthHTMLStr (UsrDat->FullName,12);
+   fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
+   Act_FormEnd ();
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 
