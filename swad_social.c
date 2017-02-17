@@ -4834,8 +4834,7 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 	 if (IsNickname)
 	   {
 	    /* Copy nickname */
-	    Str_Copy (UsrDat.Nickname,Nickname.PtrStart,
-	              Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+	    strncpy (UsrDat.Nickname,Nickname.PtrStart,Nickname.Length);
 
 	    if ((UsrDat.UsrCod = Nck_GetUsrCodFromNickname (UsrDat.Nickname)) > 0)
 	       if (UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// It's not me
