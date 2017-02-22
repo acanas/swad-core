@@ -285,19 +285,17 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    if (Gbl.Usrs.Me.Logged)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
       if (ItsMe)	// It's me
-	{
-	 Rec_PutLinkToChangeMyInsCtrDpt ();		// Put link (form) to change my institution, centre, department...
-	 Net_PutLinkToChangeMySocialNetworks ();	// Put link (form) to change my social networks
-	 Pho_PutLinkToChangeMyPhoto ();			// Put link (form) to change my photo
-	 Pri_PutLinkToChangeMyPrivacy ();		// Put link (form) to change my privacy
-	}
-      else
-	{
-	 /***** Put link to show my public profile and users to follow *****/
+	 /* Put link to show another user's profile */
+         Prf_PutLinkRequestAnotherUserProfile ();
+      else		// Not me
+	 /* Put link to show my public profile */
 	 Prf_PutLinkMyPublicProfile ();
-	 Fol_PutLinkWhoToFollow ();
-	}
+
+      /* Put link to show users to follow */
+      Fol_PutLinkWhoToFollow ();
+
       fprintf (Gbl.F.Out,"</div>");
      }
 
