@@ -1894,7 +1894,7 @@ void For_ShowForumList (void)
   }
 
 /*****************************************************************************/
-/**************** Write title and link to top level of forums ****************/
+/*************** Put form to select which forums I want to see ***************/
 /*****************************************************************************/
 
 static void For_PutFormWhichForums (void)
@@ -1902,22 +1902,23 @@ static void For_PutFormWhichForums (void)
    extern const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS];
    For_WhichForums_t WhichForums;
 
-   /***** Form to select which forums I want to see
-          (all my forums or only the forums of current institution/degree/course) *****/
+   /***** Form to select which forums I want to see:
+          - all my forums
+          - only the forums of current institution/degree/course *****/
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
    For_PutParamsForumInsDegCrs ();
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	              "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
+	              "<ul>");
 
    for (WhichForums = (For_WhichForums_t) 0;
 	WhichForums < For_NUM_WHICH_FORUMS;
 	WhichForums++)
      {
-      fprintf (Gbl.F.Out,"<li class=\"LEFT_MIDDLE\""
-	                 " style=\"display:inline;\">"
-                         "<label class=\"DAT\">"
-                         "<input type=\"radio\" name=\"WhichForum\" value=\"%u\"",
+      fprintf (Gbl.F.Out,"<li>"
+                         "<label>"
+                         "<input type=\"radio\" name=\"WhichForum\""
+                         " value=\"%u\"",
                (unsigned) WhichForums);
       if (WhichForums == Gbl.Forum.WhichForums)
          fprintf (Gbl.F.Out," checked=\"checked\"");

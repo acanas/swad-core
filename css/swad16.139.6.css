@@ -1551,6 +1551,34 @@ table.CELLS_PAD_5	> tbody > tr > td {padding: 5px;}
 table.CELLS_PAD_10	> tbody > tr > th {padding:10px;}
 table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 
+/******************** Selector below the title of a frame ********************/
+.SEL_BELOW_TITLE
+	{
+	text-align:center;
+	vertical-align:middle;
+	margin-bottom:12px;
+	}
+.SEL_BELOW_TITLE ul
+	{
+	display:inline-block;
+	list-style-type:none;
+	padding:0;
+	margin:0;
+	text-align:left;
+	vertical-align:middle;
+	}
+.SEL_BELOW_TITLE li
+	{
+	display:inline;
+	text-align:left;
+	vertical-align:middle;
+	}
+.SEL_BELOW_TITLE label
+	{
+	color:#404040;
+	font-size:13pt;
+	}
+
 /*********************************** Title ***********************************/
 .TIT
 	{
