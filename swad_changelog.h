@@ -197,19 +197,22 @@
 
 // TODO: Un administrador de institución, ¿debería poder cambiar la contraseña de un usuario de esa institución? No lo tengo claro.
 
-// TODO: Put hidden parameter "WhichUsrs" in all actions related to global timeline
+// TODO: Fix bug reported by Nuria Torres Rosell: Ayer y hoy he intentado crear preguntas test con la opción V/F y, pese a seleccionar como respuesta correcta una de las dos, no me deja crear la pregunta. Constantemente me dice que debo seleccionar V o F.
+// Por ahora me voy "apañando" con opción única y las respuestas Si o No. Pero resulta un poco raro.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.140 (2017-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.140.1 (2017-02-24)"
 #define CSS_FILE		"swad16.139.6.css"
 #define JS_FILE			"swad16.140.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.140.1: Feb 24, 2017	Hidden parameter with users to view in all actions related to global timeline.
+					Code refactoring of forms in social timeline. (212993 lines)
         Version 16.140:   Feb 24, 2017	Two global timelines available: users I follow and all users. Not finished. (213039 lines)
         Version 16.139.6: Feb 24, 2017	Code refactoring in selector of which forums to display. (? lines)
         Version 16.139.5: Feb 22, 2017	Changed contextual links in my profile. (212832 lines)

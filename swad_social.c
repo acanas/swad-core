@@ -148,7 +148,10 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight);
 static void Soc_PutIconsTimeline (void);
 
+static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr);
+
 static void Soc_PutFormWhichUsrs (void);
+static void Soc_PutParamWhichUsrs (void);
 static void Soc_GetParamsWhichUsrs (void);
 
 static void Soc_InsertNewPubsInTimeline (const char *Query);
@@ -1005,6 +1008,24 @@ static void Soc_PutIconsTimeline (void)
   }
 
 /*****************************************************************************/
+/***************** Start a form in global or user timeline *******************/
+/*****************************************************************************/
+
+static void Soc_FormStart (Act_Action_t ActionGbl,Act_Action_t ActionUsr)
+  {
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+     {
+      Act_FormStartAnchor (ActionUsr,"timeline");
+      Usr_PutParamOtherUsrCodEncrypted ();
+     }
+   else
+     {
+      Act_FormStart (ActionGbl);
+      Soc_PutParamWhichUsrs ();
+     }
+  }
+
+/*****************************************************************************/
 /******** Put form to select users whom public activity is displayed *********/
 /*****************************************************************************/
 
@@ -1040,6 +1061,15 @@ static void Soc_PutFormWhichUsrs (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
    Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/***** Put hidden parameter with which users to view in global timeline ******/
+/*****************************************************************************/
+
+static void Soc_PutParamWhichUsrs (void)
+  {
+   Par_PutHiddenParamUnsigned ("WhichUsrs",Gbl.Social.WhichUsrs);
   }
 
 /*****************************************************************************/
@@ -2123,26 +2153,21 @@ static void Soc_PutFormToWriteNewPost (void)
 		      "</div>",
 	    FullName,Gbl.Usrs.Me.UsrDat.Nickname);
 
-   /***** Start container *****/
+   /***** Form to write the post *****/
+   /* Start container */
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_FORM_NEW_POST\">");
 
    /* Start form to write the post */
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartAnchor (ActRcvSocPstUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStart (ActRcvSocPstGbl);
+   Soc_FormStart (ActRcvSocPstGbl,ActRcvSocPstUsr);
 
-   /***** Textarea and button *****/
+   /* Textarea and button */
    Soc_PutTextarea (Txt_New_SOCIAL_post,
                     "SOCIAL_TEXTAREA_POST","SOCIAL_POST_IMG_TIT_URL");
 
-   /***** End form *****/
+   /* End form */
    Act_FormEnd ();
 
-   /***** End container *****/
+   /* End container */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End list *****/
@@ -2367,26 +2392,21 @@ static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Right: form to write the comment *****/
+   /* Start right container */
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_COMMENT_RIGHT_CONTAINER\">");
 
-   /***** Start form to write the post *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActRcvSocComUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActRcvSocComGbl);
+   /* Start form to write the post */
+   Soc_FormStart (ActRcvSocComGbl,ActRcvSocComUsr);
    Soc_PutHiddenParamNotCod (NotCod);
 
-   /***** Textarea and button *****/
+   /* Textarea and button */
    Soc_PutTextarea (Txt_New_SOCIAL_comment,
                     "SOCIAL_TEXTAREA_COMMENT","SOCIAL_COMMENT_IMG_TIT_URL");
 
-   /***** End form *****/
+   /* End form */
    Act_FormEnd ();
 
-   /***** End right container *****/
+   /* End right container */
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End container *****/
@@ -2631,13 +2651,7 @@ static void Soc_PutFormToRemoveComment (long PubCod)
    extern const char *Txt_Remove;
 
    /***** Form to remove social publishing *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActReqRemSocComUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActReqRemSocComGbl);
+   Soc_FormStart (ActReqRemSocComGbl,ActReqRemSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2661,13 +2675,7 @@ static void Soc_PutFormToFavSocialComment (long PubCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form to mark social comment as favourite *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActFavSocComUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActFavSocComGbl);
+   Soc_FormStart (ActFavSocComGbl,ActFavSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2740,13 +2748,7 @@ static void Soc_PutFormToShareSocialNote (long NotCod)
    extern const char *Txt_Share;
 
    /***** Form to share social note *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActShaSocNotUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActShaSocNotGbl);
+   Soc_FormStart (ActShaSocNotGbl,ActShaSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2769,13 +2771,7 @@ static void Soc_PutFormToFavSocialNote (long NotCod)
    extern const char *Txt_Mark_as_favourite;
 
    /***** Form to mark social note as favourite *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActFavSocNotUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActFavSocNotGbl);
+   Soc_FormStart (ActFavSocNotGbl,ActFavSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2798,13 +2794,7 @@ static void Soc_PutFormToUnshareSocialNote (long NotCod)
    extern const char *Txt_SOCIAL_NOTE_Shared;
 
    /***** Form to share social publishing *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActUnsSocNotUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActUnsSocNotGbl);
+   Soc_FormStart (ActUnsSocNotGbl,ActUnsSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_SHARE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2827,13 +2817,7 @@ static void Soc_PutFormToUnfavSocialNote (long NotCod)
    extern const char *Txt_SOCIAL_NOTE_Favourite;
 
    /***** Form to unfav social note *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActUnfSocNotUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActUnfSocNotGbl);
+   Soc_FormStart (ActUnfSocNotGbl,ActUnfSocNotUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2856,13 +2840,7 @@ static void Soc_PutFormToUnfavSocialComment (long PubCod)
    extern const char *Txt_SOCIAL_NOTE_Favourite;
 
    /***** Form to unfav social comment *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActUnfSocComUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActUnfSocComGbl);
+   Soc_FormStart (ActUnfSocComGbl,ActUnfSocComUsr);
    Soc_PutHiddenParamPubCod (PubCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_FAV ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -2885,13 +2863,7 @@ static void Soc_PutFormToRemoveSocialPublishing (long NotCod)
    extern const char *Txt_Remove;
 
    /***** Form to remove social publishing *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-     {
-      Act_FormStartUniqueAnchor (ActReqRemSocPubUsr,"timeline");
-      Usr_PutParamOtherUsrCodEncrypted ();
-     }
-   else
-      Act_FormStartUnique (ActReqRemSocPubGbl);
+   Soc_FormStart (ActReqRemSocPubGbl,ActReqRemSocPubUsr);
    Soc_PutHiddenParamNotCod (NotCod);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_ICO_REMOVE ICO_HIGHLIGHT\">"
 		      "<input type=\"image\""
@@ -3673,17 +3645,8 @@ static void Soc_RequestRemovalSocialNote (void)
 
 
 	 /***** Form to ask for confirmation to remove this social post *****/
-	 /* Start form */
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	   {
-	    Act_FormStartAnchor (ActRemSocPubUsr,"timeline");
-	    Usr_PutParamOtherUsrCodEncrypted ();
-	   }
-	 else
-	    Act_FormStart (ActRemSocPubGbl);
+         Soc_FormStart (ActRemSocPubGbl,ActRemSocPubUsr);
 	 Soc_PutHiddenParamNotCod (SocNot.NotCod);
-
-	 /* End form */
 	 Lay_PutRemoveButton (Txt_Remove);
 	 Act_FormEnd ();
 	}
@@ -4002,17 +3965,8 @@ static void Soc_RequestRemovalSocialComment (void)
 				 true);
 
 	 /***** Form to ask for confirmation to remove this social comment *****/
-	 /* Start form */
-	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	   {
-	    Act_FormStartAnchor (ActRemSocComUsr,"timeline");
-	    Usr_PutParamOtherUsrCodEncrypted ();
-	   }
-	 else
-	    Act_FormStart (ActRemSocComGbl);
+         Soc_FormStart (ActRemSocComGbl,ActRemSocComUsr);
 	 Soc_PutHiddenParamPubCod (SocCom.PubCod);
-
-	 /* End form */
 	 Lay_PutRemoveButton (Txt_Remove);
 	 Act_FormEnd ();
 	}
