@@ -68,6 +68,7 @@
 #include "swad_record.h"
 #include "swad_search.h"
 #include "swad_session.h"
+#include "swad_social.h"
 #include "swad_survey.h"
 #include "swad_syllabus.h"
 #include "swad_test.h"
@@ -567,6 +568,10 @@ struct Globals
       char *StrAttCodsSelected;
       long AttCodToEdit;	// Used as parameter in contextual links
      } AttEvents;
+   struct
+     {
+      Soc_WhichUsrs_t WhichUsrs;
+     } Social;
    struct
      {
       For_WhichForums_t WhichForums;

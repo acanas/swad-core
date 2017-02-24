@@ -147,6 +147,10 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void);
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight);
 static void Soc_PutIconsTimeline (void);
+
+static void Soc_PutFormWhichUsrs (void);
+static void Soc_GetParamsWhichUsrs (void);
+
 static void Soc_InsertNewPubsInTimeline (const char *Query);
 static void Soc_ShowOldPubsInTimeline (const char *Query);
 
@@ -263,7 +267,16 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
 /***** Show social activity (timeline) including all the users I follow ******/
 /*****************************************************************************/
 
-void Soc_ShowTimelineGbl (void)
+void Soc_ShowTimelineGbl1 (void)
+  {
+   /***** Mark all my notifications about timeline as seen *****/
+   Soc_MarkMyNotifAsSeen ();
+
+   /***** Get which users *****/
+   Soc_GetParamsWhichUsrs ();
+  }
+
+void Soc_ShowTimelineGbl2 (void)
   {
    long PubCod;
    struct SocialNote SocNot;
@@ -408,6 +421,9 @@ void Soc_RefreshNewTimelineGbl (void)
       fprintf (Gbl.F.Out,"%lu|",
 	       Cfg_TIME_TO_REFRESH_SOCIAL_TIMELINE);
 
+      /***** Get which users *****/
+      Soc_GetParamsWhichUsrs ();
+
       /***** Build query to get timeline *****/
       Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
 				   Soc_GET_ONLY_NEW_PUBS,
@@ -425,11 +441,15 @@ void Soc_RefreshNewTimelineGbl (void)
   }
 
 /*****************************************************************************/
-/************ View new publishings in social timeline via AJAX ***************/
+/************ View old publishings in social timeline via AJAX ***************/
 /*****************************************************************************/
 
 void Soc_RefreshOldTimelineGbl (void)
   {
+   /***** Get which users *****/
+   Soc_GetParamsWhichUsrs ();
+
+   /***** Show old publishings *****/
    Soc_GetAndShowOldTimeline (Soc_TIMELINE_GBL);
   }
 
@@ -467,7 +487,7 @@ static void Soc_GetAndShowOldTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl)
 /*****************************************************************************/
 /************ Mark all my notifications about timeline as seen ***************/
 /*****************************************************************************/
-// Executed as a priori function
+// Must be executed as a priori function
 
 void Soc_MarkMyNotifAsSeen (void)
   {
@@ -540,21 +560,29 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    switch (TimelineUsrOrGbl)
      {
       case Soc_TIMELINE_USR:	// Show the timeline of a user
-	 sprintf (SubQueryPublishers,"PublisherCod='%ld'",
+	 sprintf (SubQueryPublishers,"PublisherCod='%ld' AND ",
 	          Gbl.Usrs.Other.UsrDat.UsrCod);
 	 break;
-      case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	 sprintf (Query,"CREATE TEMPORARY TABLE publishers "
-		        "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
-		        " SELECT '%ld' AS UsrCod"
-		        " UNION"
-		        " SELECT FollowedCod AS UsrCod"
-		        " FROM usr_follow WHERE FollowerCod='%ld'",
-	          Gbl.Usrs.Me.UsrDat.UsrCod,
-	          Gbl.Usrs.Me.UsrDat.UsrCod);
-	 if (mysql_query (&Gbl.mysql,Query))
-	    DB_ExitOnMySQLError ("can not create temporary table");
-	 sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod");
+      case Soc_TIMELINE_GBL:	// Show the global timeline
+	 switch (Gbl.Social.WhichUsrs)
+	   {
+	    case Soc_FOLLOWED:	// Show the timeline of the users I follow
+	       sprintf (Query,"CREATE TEMPORARY TABLE publishers "
+			      "(UsrCod INT NOT NULL,UNIQUE INDEX(UsrCod)) ENGINE=MEMORY"
+			      " SELECT '%ld' AS UsrCod"
+			      " UNION"
+			      " SELECT FollowedCod AS UsrCod"
+			      " FROM usr_follow WHERE FollowerCod='%ld'",
+			Gbl.Usrs.Me.UsrDat.UsrCod,
+			Gbl.Usrs.Me.UsrDat.UsrCod);
+	       if (mysql_query (&Gbl.mysql,Query))
+		  DB_ExitOnMySQLError ("can not create temporary table");
+	       sprintf (SubQueryPublishers,"social_pubs.PublisherCod=publishers.UsrCod AND ");
+	       break;
+	    case Soc_ALL_USRS:	// Show the timeline of all users
+	       SubQueryPublishers[0] = '\0';
+	       break;
+	   }
 	 break;
      }
 
@@ -567,13 +595,13 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
             case Soc_GET_ONLY_NEW_PUBS:
             case Soc_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " AND NotCod NOT IN"
+	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
 			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " AND NotCod NOT IN"
+	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
 			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
@@ -585,13 +613,13 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
             case Soc_GET_ONLY_NEW_PUBS:
             case Soc_GET_RECENT_TIMELINE:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " AND social_pubs.NotCod NOT IN"
+	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
 			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
-	                 " AND social_pubs.NotCod NOT IN"
+	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
 			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
 	       break;
@@ -658,17 +686,44 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
      {
       /* Create subqueries with range of publishings to get from social_pubs */
       if (RangePubsToGet.Bottom > 0)
-	 sprintf (SubQueryRangeBottom,
-		  TimelineUsrOrGbl == Soc_TIMELINE_USR ? "PubCod>'%ld' AND " :
-							 "social_pubs.PubCod>'%ld' AND ",
-		  RangePubsToGet.Bottom);
+	 switch (TimelineUsrOrGbl)
+	   {
+	    case Soc_TIMELINE_USR:	// Show the timeline of a user
+	       sprintf (SubQueryRangeBottom,"PubCod>'%ld' AND ",RangePubsToGet.Bottom);
+	       break;
+	    case Soc_TIMELINE_GBL:	// Show the global timeline
+	       switch (Gbl.Social.WhichUsrs)
+		 {
+		  case Soc_FOLLOWED:	// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeBottom,"social_pubs.PubCod>'%ld' AND ",RangePubsToGet.Bottom);
+		     break;
+		  case Soc_ALL_USRS:	// Show the timeline of all users
+		     sprintf (SubQueryRangeBottom,"PubCod>'%ld' AND ",RangePubsToGet.Bottom);
+		     break;
+		 }
+	       break;
+	   }
       else
 	 SubQueryRangeBottom[0] = '\0';
+
       if (RangePubsToGet.Top > 0)
-	 sprintf (SubQueryRangeTop,
-		  TimelineUsrOrGbl == Soc_TIMELINE_USR ? "PubCod<'%ld' AND " :
-							 "social_pubs.PubCod<'%ld' AND ",
-		  RangePubsToGet.Top);
+	 switch (TimelineUsrOrGbl)
+	   {
+	    case Soc_TIMELINE_USR:	// Show the timeline of a user
+	       sprintf (SubQueryRangeTop,"PubCod<'%ld' AND ",RangePubsToGet.Top);
+	       break;
+	    case Soc_TIMELINE_GBL:	// Show the global timeline
+	       switch (Gbl.Social.WhichUsrs)
+		 {
+		  case Soc_FOLLOWED:	// Show the timeline of the users I follow
+		     sprintf (SubQueryRangeTop,"social_pubs.PubCod<'%ld' AND ",RangePubsToGet.Top);
+		     break;
+		  case Soc_ALL_USRS:	// Show the timeline of all users
+		     sprintf (SubQueryRangeTop,"PubCod<'%ld' AND ",RangePubsToGet.Top);
+		     break;
+		 }
+	       break;
+	   }
       else
 	 SubQueryRangeTop[0] = '\0';
 
@@ -683,13 +738,25 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 		     SubQueryPublishers,
 		     SubQueryAlreadyExists);
 	    break;
-	 case Soc_TIMELINE_GBL:	// Show the timeline of the users I follow
-	    sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs,publishers"
-			   " WHERE %s%s%s%s"
-			   " ORDER BY social_pubs.PubCod DESC LIMIT 1",
-		     SubQueryRangeBottom,SubQueryRangeTop,
-		     SubQueryPublishers,
-		     SubQueryAlreadyExists);
+	 case Soc_TIMELINE_GBL:	// Show the global timeline
+	    switch (Gbl.Social.WhichUsrs)
+	      {
+	       case Soc_FOLLOWED:	// Show the timeline of the users I follow
+		  sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs,publishers"
+				 " WHERE %s%s%s%s"
+				 " ORDER BY social_pubs.PubCod DESC LIMIT 1",
+			   SubQueryRangeBottom,SubQueryRangeTop,
+			   SubQueryPublishers,
+			   SubQueryAlreadyExists);
+		  break;
+	       case Soc_ALL_USRS:	// Show the timeline of all users
+		  sprintf (Query,"SELECT PubCod,NotCod FROM social_pubs"
+				 " WHERE %s%s%s"
+				 " ORDER BY PubCod DESC LIMIT 1",
+			   SubQueryRangeBottom,SubQueryRangeTop,
+			   SubQueryAlreadyExists);
+		  break;
+	      }
 	    break;
 	}
       if (DB_QuerySELECT (Query,&mysql_res,"can not get publishing") == 1)
@@ -853,6 +920,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    unsigned long NumPub;
    struct SocialPublishing SocPub;
    struct SocialNote SocNot;
+   bool GlobalTimeline = (Gbl.Usrs.Other.UsrDat.UsrCod <= 0);
 
    /***** Get publishings from database *****/
    NumPubsGot = DB_QuerySELECT (Query,&mysql_res,"can not get timeline");
@@ -861,13 +929,17 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
    Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,
                         Soc_PutIconsTimeline,Hlp_SOCIAL_Activity);
 
+   /***** Put form to select users whom public activity is displayed *****/
+   if (GlobalTimeline)
+      Soc_PutFormWhichUsrs ();
+
    /***** Form to write a new post *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0 ||				// Global timeline
+   if (GlobalTimeline ||
        Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Soc_PutFormToWriteNewPost ();
 
    /***** New publishings refreshed dynamically via AJAX *****/
-   if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)				// Global timeline
+   if (GlobalTimeline)
      {
       /* Link to view new publishings via AJAX */
       Soc_PutLinkToViewNewPublishings ();
@@ -930,6 +1002,58 @@ static void Soc_PutIconsTimeline (void)
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_SOCIAL_ACTIVITY;
    Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/******** Put form to select users whom public activity is displayed *********/
+/*****************************************************************************/
+
+static void Soc_PutFormWhichUsrs (void)
+  {
+   extern const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS];
+   Soc_WhichUsrs_t WhichUsrs;
+
+   /***** Form to select which users I want to see in timeline:
+          - only the users I follow
+          - all users *****/
+   Act_FormStart (ActSeeSocTmlGbl);
+   fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
+	              "<ul>");
+
+   for (WhichUsrs = (Soc_WhichUsrs_t) 0;
+	WhichUsrs < Soc_NUM_WHICH_USRS;
+	WhichUsrs++)
+     {
+      fprintf (Gbl.F.Out,"<li>"
+                         "<label>"
+                         "<input type=\"radio\" name=\"WhichUsrs\""
+                         " value=\"%u\"",
+               (unsigned) WhichUsrs);
+      if (WhichUsrs == Gbl.Social.WhichUsrs)
+         fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
+	                 "%s"
+                         "</label>"
+                         "</li>",
+               Gbl.Form.Id,Txt_TIMELINE_WHICH_USERS[WhichUsrs]);
+     }
+   fprintf (Gbl.F.Out,"</ul>"
+	              "</div>");
+   Act_FormEnd ();
+  }
+
+/*****************************************************************************/
+/********* Get parameter with which users to view in global timeline *********/
+/*****************************************************************************/
+
+static void Soc_GetParamsWhichUsrs (void)
+  {
+   /***** Get which users I want to see *****/
+   Gbl.Social.WhichUsrs = (Soc_WhichUsrs_t)
+	                   Par_GetParToUnsignedLong ("WhichUsrs",
+                                                     0,
+                                                     Soc_NUM_WHICH_USRS - 1,
+                                                     (unsigned long) Soc_DEFAULT_WHICH_USRS);
   }
 
 /*****************************************************************************/
@@ -3498,7 +3622,7 @@ void Soc_RequestRemSocialNoteGbl (void)
    Soc_RequestRemovalSocialNote ();
 
    /***** Write timeline again (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGbl2 ();
   }
 
 void Soc_RequestRemSocialNoteUsr (void)
@@ -3578,7 +3702,7 @@ void Soc_RemoveSocialNoteGbl (void)
    Soc_RemoveSocialNote ();
 
    /***** Write updated timeline after removing (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGbl2 ();
   }
 
 void Soc_RemoveSocialNoteUsr (void)
@@ -3825,7 +3949,7 @@ void Soc_RequestRemSocialComGbl (void)
    Soc_RequestRemovalSocialComment ();
 
    /***** Write timeline again (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGbl2 ();
   }
 
 void Soc_RequestRemSocialComUsr (void)
@@ -3910,7 +4034,7 @@ void Soc_RemoveSocialComGbl (void)
    Soc_RemoveSocialComment ();
 
    /***** Write updated timeline after removing (global) *****/
-   Soc_ShowTimelineGbl ();
+   Soc_ShowTimelineGbl2 ();
   }
 
 void Soc_RemoveSocialComUsr (void)

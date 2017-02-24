@@ -403,6 +403,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Test.Tags.All  = false;
    Gbl.Test.Tags.List = NULL;
 
+   /* Public activity */
+   Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
+
    /* Forums */
    Gbl.Forum.ForumType = (For_ForumType_t) 0;
    Gbl.Forum.WhichForums = For_DEFAULT_WHICH_FORUMS;

@@ -322,6 +322,7 @@ static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumU
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
 static void For_WriteThrSubject (long ThrCod);
+static void For_GetParamsForum (void);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
@@ -3726,7 +3727,7 @@ void For_ShowThrPsts (void)
 /********************* Get parameters related to a forum *********************/
 /*****************************************************************************/
 
-void For_GetParamsForum (void)
+static void For_GetParamsForum (void)
   {
    /***** Get which forums I want to see *****/
    Gbl.Forum.WhichForums = (For_WhichForums_t)

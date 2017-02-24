@@ -13152,6 +13152,7 @@ const char *Txt_FORUM_THREAD_ORDER[2] =
 
 const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS] =
    {
+	 // For_ONLY_CURRENT_FORUMS
 #if   L==1
 	 "F&ograve;rums d'aquest lloc"
 #elif L==2
@@ -13172,6 +13173,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS] =
 	 "F&oacute;runs deste site"
 #endif
 	 ,
+	 // For_ALL_MY_FORUMS
 #if   L==1
 	 "Tots els meus f&ograve;rums"
 #elif L==2
@@ -13187,7 +13189,7 @@ const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS] =
 #elif L==7
 	 "Tutti i miei forum"
 #elif L==8
-	 "wszystkie moje forum"
+	 "Wszystkie moje forum"
 #elif L==9
 	 "Todos os meus f&oacute;runs"
 #endif
@@ -47776,6 +47778,51 @@ const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
 #elif L==9
 	"Fuso hor&aacute;rio utilizado no c&aacute;lculo dessas estat&iacute;sticas";
 #endif
+
+const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
+   {
+	 // Soc_FOLLOWED
+#if   L==1
+	"Seguits"
+#elif L==2
+	"Gefolgt"
+#elif L==3
+	"Followed"
+#elif L==4
+	"Seguidos"
+#elif L==5
+	"Suivis"
+#elif L==6
+	"Seguidos"	// Okoteve traducción
+#elif L==7
+	"Seguiti"
+#elif L==8
+	"Obserwowani"
+#elif L==9
+	"Seguidos"
+#endif
+	 ,
+	 // Soc_ALL_USRS
+#if   L==1
+	 "Tots"
+#elif L==2
+	 "Alle"
+#elif L==3
+	 "All"
+#elif L==4
+	 "Todos"
+#elif L==5
+	 "Tous"
+#elif L==6
+	 "Todos"	// Okoteve traducción
+#elif L==7
+	 "Tutti"
+#elif L==8
+	 "Wszystkie"
+#elif L==9
+	 "Todos"
+#endif
+	};
 
 const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	{

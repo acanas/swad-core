@@ -433,7 +433,8 @@ function refreshNewTimeline () {
 	objXMLHttpReqSoc = AJAXCreateObject();
 	if (objXMLHttpReqSoc) {
 		var RefreshParams = RefreshParamNxtActNewPub + '&' +
-							RefreshParamIdSes;
+							RefreshParamIdSes + '&' +
+							RefreshParamWhichUsrs;
 
 		objXMLHttpReqSoc.onreadystatechange = readNewTimelineData;	// onreadystatechange must be lowercase
 		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
@@ -447,7 +448,9 @@ var objXMLHttpReqSoc = false;
 function refreshOldTimeline () {
 	objXMLHttpReqSoc = AJAXCreateObject ();
 	if (objXMLHttpReqSoc) {
-		var RefreshParams = RefreshParamNxtActOldPub + '&' + RefreshParamIdSes;
+		var RefreshParams = RefreshParamNxtActOldPub + '&' +
+							RefreshParamIdSes + '&' +
+							RefreshParamWhichUsrs;
 		if (RefreshParamUsr)
 			if (RefreshParamUsr.length)
 				RefreshParams += '&' + RefreshParamUsr;

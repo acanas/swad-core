@@ -35,6 +35,14 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+#define Soc_NUM_WHICH_USRS 2
+typedef enum
+  {
+   Soc_FOLLOWED	= 0,
+   Soc_ALL_USRS = 1,
+  } Soc_WhichUsrs_t;	// Which users I want to see: only users I follow or all users
+#define Soc_DEFAULT_WHICH_USRS Soc_FOLLOWED
+
 #define Soc_NUM_PUB_TYPES	4
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones in database table social_notes
@@ -113,7 +121,8 @@ struct SocialPublishing
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Soc_ShowTimelineGbl (void);
+void Soc_ShowTimelineGbl1 (void);
+void Soc_ShowTimelineGbl2 (void);
 void Soc_ShowTimelineUsr (void);
 
 void Soc_RefreshNewTimelineGbl (void);

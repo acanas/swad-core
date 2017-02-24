@@ -735,9 +735,11 @@ static void Lay_WriteScriptParamsAJAX (void)
 	    put parameters used by AJAX */
 	 fprintf (Gbl.F.Out,"var RefreshParamNxtActNewPub = \"act=%ld\";\n"
 			    "var RefreshParamNxtActOldPub = \"act=%ld\";\n"
-			    "var RefreshParamUsr = \"\";\n",	// No user specified
+			    "var RefreshParamUsr = \"\";\n"	// No user specified
+			    "var RefreshParamWhichUsrs = \"WhichUsrs=%u\";\n",
 		  Act_Actions[ActRefNewSocPubGbl].ActCod,
-		  Act_Actions[ActRefOldSocPubGbl].ActCod);
+		  Act_Actions[ActRefOldSocPubGbl].ActCod,
+		  (unsigned) Gbl.Social.WhichUsrs);
 	 break;
       case ActSeeOthPubPrf:
       case ActRcvSocPstUsr:
