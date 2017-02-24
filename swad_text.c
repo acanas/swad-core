@@ -47783,44 +47783,44 @@ const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =
    {
 	 // Soc_FOLLOWED
 #if   L==1
-	"Seguits"
+	"Usuaris que segueixo"
 #elif L==2
-	"Gefolgt"
+	"Benutzer Ich folge"
 #elif L==3
-	"Followed"
+	"Users I'm following"
 #elif L==4
-	"Seguidos"
+	"Usuarios que sigo"
 #elif L==5
-	"Suivis"
+	"Utilisateurs qui je suis"
 #elif L==6
-	"Seguidos"	// Okoteve traducción
+	"Usuarios que sigo"	// Okoteve traducción
 #elif L==7
-	"Seguiti"
+	"Utenti che sto seguenti"
 #elif L==8
-	"Obserwowani"
+	"U&zdot;ytkownicy, kt&oacute;rzy mam nast&eogon;puj&aogon;ce"
 #elif L==9
-	"Seguidos"
+	"Usu&aacute;rios que estou seguindo"
 #endif
 	 ,
 	 // Soc_ALL_USRS
 #if   L==1
-	 "Tots"
+	 "Tots els usuaris"
 #elif L==2
-	 "Alle"
+	 "Alle Benutzer"
 #elif L==3
-	 "All"
+	 "All users"
 #elif L==4
-	 "Todos"
+	 "Todos los usuarios"
 #elif L==5
-	 "Tous"
+	 "Tous les utilisateurs"
 #elif L==6
-	 "Todos"	// Okoteve traducción
+	 "Todos los usuarios"	// Okoteve traducción
 #elif L==7
-	 "Tutti"
+	 "Tutti gli utenti"
 #elif L==8
-	 "Wszystkie"
+	 "Wszyscy u&zdot;ytkownicy"
 #elif L==9
-	 "Todos"
+	 "Todos os usu&aacute;rios"
 #endif
 	};
 
