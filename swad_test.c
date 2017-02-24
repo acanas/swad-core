@@ -5279,6 +5279,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    char AnsStr[6 + 10 + 1];
    char FbStr[5 + 10 + 1];
    char StrMultiAns[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
+   char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
 
@@ -5353,7 +5354,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
       case Tst_ANS_TRUE_FALSE:
-	 Gbl.Test.Answer.TF = Par_GetParToBool ("AnsTF");
+	 Par_GetParToText ("AnsTF",TF,1);
+	 Gbl.Test.Answer.TF = TF[0];
 	 break;
       case Tst_ANS_UNIQUE_CHOICE:
       case Tst_ANS_MULTIPLE_CHOICE:

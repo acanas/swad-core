@@ -204,13 +204,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.140.3 (2017-02-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.140.4 (2017-02-24)"
 #define CSS_FILE		"swad16.139.6.css"
 #define JS_FILE			"swad16.140.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.140.4: Feb 24, 2017	Fixed bug in T/F test questions, reported by Nuria Torres Rosell. (213009 lines)
         Version 16.140.3: Feb 24, 2017	Changed refreshing of timeline from 30 to 10 seconds.
 					Code refactoring in timeline when I do not follow any user. (213006 lines)
         Version 16.140.2: Feb 24, 2017	Changed text of users to view in global timeline. (212994 lines)
