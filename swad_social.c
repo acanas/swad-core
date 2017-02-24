@@ -154,6 +154,8 @@ static void Soc_PutFormWhichUsrs (void);
 static void Soc_PutParamWhichUsrs (void);
 static void Soc_GetParamsWhichUsrs (void);
 
+static void Soc_ShowWarningYouDontFollowAnyUser (void);
+
 static void Soc_InsertNewPubsInTimeline (const char *Query);
 static void Soc_ShowOldPubsInTimeline (const char *Query);
 
@@ -356,20 +358,7 @@ void Soc_ShowTimelineGbl2 (void)
 static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
   {
    extern const char *Txt_Public_activity;
-   extern const char *Txt_You_dont_follow_any_user;
    char Query[1024];
-
-   /***** Check if I follow someone *****/
-   if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
-     {
-      /***** Put link to show users to follow *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-      Fol_PutLinkWhoToFollow ();
-      fprintf (Gbl.F.Out,"</div>");
-
-      /***** Show warning if I do not follow anyone *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_follow_any_user);
-     }
 
    /***** Build query to get timeline *****/
    Soc_BuildQueryToGetTimeline (Soc_TIMELINE_GBL,
@@ -1061,6 +1050,10 @@ static void Soc_PutFormWhichUsrs (void)
    fprintf (Gbl.F.Out,"</ul>"
 	              "</div>");
    Act_FormEnd ();
+
+   /***** Show warning if I do not follow anyone *****/
+   if (Gbl.Social.WhichUsrs == Soc_FOLLOWED)
+      Soc_ShowWarningYouDontFollowAnyUser ();
   }
 
 /*****************************************************************************/
@@ -1084,6 +1077,27 @@ static void Soc_GetParamsWhichUsrs (void)
                                                      0,
                                                      Soc_NUM_WHICH_USRS - 1,
                                                      (unsigned long) Soc_DEFAULT_WHICH_USRS);
+  }
+
+/*****************************************************************************/
+/********* Get parameter with which users to view in global timeline *********/
+/*****************************************************************************/
+
+static void Soc_ShowWarningYouDontFollowAnyUser (void)
+  {
+   extern const char *Txt_You_dont_follow_any_user;
+
+   /***** Check if I follow someone *****/
+   if (!Fol_GetNumFollowing (Gbl.Usrs.Me.UsrDat.UsrCod))
+     {
+      /***** Show warning if I do not follow anyone *****/
+      Lay_ShowAlert (Lay_WARNING,Txt_You_dont_follow_any_user);
+
+      /***** Put link to show users to follow *****/
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+      Fol_PutLinkWhoToFollow ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
   }
 
 /*****************************************************************************/
