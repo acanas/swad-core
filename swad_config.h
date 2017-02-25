@@ -446,9 +446,7 @@
 #define Cfg_LOG_START_MONTH	  01	// Month where the log started in the database
 #define Cfg_LOG_START_DAY	  01	// Day   where the log started in the database
 
-#define Cfg_MIN_TIME_BETWEEN_2_CLICKS_FROM_THE_SAME_IP	  1	// In seconds (>= 1, recommended 1)
-
-#define Cfg_DAYS_IN_RECENT_LOG				  8	// Only accesses in these last days + 1 are stored in recent log.
+#define Cfg_DAYS_IN_RECENT_LOG				 15	// Only accesses in these last days + 1 are stored in recent log.
 								// Important!!! Must be 1 <= Cfg_DAYS_IN_RECENT_LOG <= 29
 #define Cfg_TIMES_PER_SECOND_REFRESH_CONNECTED		  2	// Execute this CGI to refresh connected users about these times per second
 #define Cfg_MIN_TIME_TO_REFRESH_CONNECTED		((time_t)(                     60UL))	// Refresh period of connected users in seconds

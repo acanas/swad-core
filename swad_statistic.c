@@ -857,7 +857,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    Dat_GetBrowserTimeZone (BrowserTimeZone);
 
    /***** Set table where to find depending on initial date *****/
-   // If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG, then use recent log table, else use historic log table */
+   /* If initial day is older than current day minus Cfg_DAYS_IN_RECENT_LOG,
+      then use recent log table, else use historic log table */
    LogTable = (Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.Now.Date)
 	       <= Cfg_DAYS_IN_RECENT_LOG) ? "log_recent" :
 	                                    "log_full";
