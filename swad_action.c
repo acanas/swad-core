@@ -1742,7 +1742,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCalCrs	*/{  16, 8,TabCrs,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCrs		,"date64x64.gif"	},
 
    // Actions not in menu:
-   /* ActDegSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
+   /* ActCrsSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
 
    /* ActPrnCrsInf	*/{1028,-1,TabUnk,ActSeeCrsInf		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Crs_PrintConfiguration		,NULL},
    /* ActChgCrsDegCfg	*/{1587,-1,TabUnk,ActSeeCrsInf		,0x1C0,0x1C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_ChangeCrsDegInConfig	,Crs_ContEditAfterChgCrsInConfig,NULL},

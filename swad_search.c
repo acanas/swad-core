@@ -320,47 +320,30 @@ void Sch_PutFormToSearchInPageTopHeading (void)
   {
    Act_Action_t ActionSearch;
 
-   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
+   /***** Set scope *****/
+   /*
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
 	               1 << Sco_SCOPE_CTY |
 		       1 << Sco_SCOPE_INS |
 		       1 << Sco_SCOPE_CTR |
 		       1 << Sco_SCOPE_DEG |
 		       1 << Sco_SCOPE_CRS;
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-     {
-      ActionSearch = ActCrsSch;
-      Gbl.Scope.Default = Sco_SCOPE_CRS;
-     }
-   else if (Gbl.CurrentDeg.Deg.DegCod > 0)
-     {
-      ActionSearch = ActDegSch;
-      Gbl.Scope.Default = Sco_SCOPE_DEG;
-     }
-   else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
-     {
-      ActionSearch = ActCtrSch;
-      Gbl.Scope.Default = Sco_SCOPE_CTR;
-     }
-   else if (Gbl.CurrentIns.Ins.InsCod > 0)
-     {
-      ActionSearch = ActInsSch;
-      Gbl.Scope.Default = Sco_SCOPE_INS;
-     }
-   else if (Gbl.CurrentCty.Cty.CtyCod > 0)
-     {
-      ActionSearch = ActCtySch;
-      Gbl.Scope.Default = Sco_SCOPE_CTY;
-     }
-   else
-     {
-      ActionSearch = ActSysSch;
-      Gbl.Scope.Default = Sco_SCOPE_SYS;
-     }
+   Gbl.Scope.Default = Sco_SCOPE_SYS;
+   Sco_GetScope ("ScopeSch"); */
 
+   /***** Set action *****/
+   ActionSearch = (Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
+                  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
+                  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
+                  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
+                  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
+                                                   ActSysSch)))));
+
+   /***** Put form *****/
+   fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart (ActionSearch);
-   Sco_GetScope ("ScopeSch");
-   Sco_PutParamScope ("ScopeSch",Gbl.Scope.Current);
+   // Sco_PutParamScope ("ScopeSch",Gbl.Scope.Current);
+   Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white64x64.png");
    Act_FormEnd ();
