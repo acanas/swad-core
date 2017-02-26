@@ -271,6 +271,7 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS00000
                       "<td class=\"LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_START_END_TIME[Dat_START_TIME]);
+
    /* Date-time */
    Dat_WriteFormClientLocalDateTimeFromTimeUTC ("Start",
                                                 "Start",
@@ -523,10 +524,12 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
    switch (SetHMS)
      {
       case Dat_HMS_TO_000000:
-	 fprintf (Gbl.F.Out,"setHMSTo000000('%s');",Id);
+	 // Set HH:MM:SS form selectors to 00:00:00
+	 fprintf (Gbl.F.Out,"setHMSTo000000('%s');",Id);	// Hidden TimeUTC is also adjusted
 	 break;
       case Dat_HMS_TO_235959:
-	 fprintf (Gbl.F.Out,"setHMSTo235959('%s');",Id);
+	 // Set HH:MM:SS form selectors to 23:59:59
+	 fprintf (Gbl.F.Out,"setHMSTo235959('%s');",Id);	// Hidden TimeUTC is also adjusted
 	 break;
       default:
 	 break;

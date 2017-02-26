@@ -170,6 +170,7 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	if (TimeUTC) {
 		d = new Date();
 		d.setTime(TimeUTC * 1000);
+
 		Year = d.getFullYear();
 		for (var i=0; i<FormYea.options.length && !YearIsValid; i++)
 			if (FormYea.options[i].value == Year) {
@@ -318,7 +319,6 @@ function setDateRange (idStart,idEnd,d) {
 	adjustDateForm (idStart);	// Adjust date form correcting days in the month
 	document.getElementById(idStart+'Day').options[Day-1].selected = true;
 	setHMSTo000000(idStart);
-	setUTCFromLocalDateTimeForm(idStart);
 
 	FormYea = document.getElementById(idEnd+'Year');
 	for (var i=0; i<FormYea.options.length; i++)
@@ -330,7 +330,6 @@ function setDateRange (idStart,idEnd,d) {
 	adjustDateForm (idEnd);		// Adjust date form correcting days in the month
 	document.getElementById(idEnd+'Day').options[Day-1].selected = true;
 	setHMSTo235959(idEnd);
-	setUTCFromLocalDateTimeForm(idEnd);
 }
 
 // Set hour, minute and second in a form to 00:00:00
@@ -338,6 +337,7 @@ function setHMSTo000000 (id) {
 	document.getElementById(id+'Hour'  ).options[0].selected = true;
 	document.getElementById(id+'Minute').options[0].selected = true;
 	document.getElementById(id+'Second').options[0].selected = true;
+	setUTCFromLocalDateTimeForm(id);
 }
 
 //Set hour, minute and second in a form to 23:59:59
@@ -345,6 +345,7 @@ function setHMSTo235959 (id) {
 	document.getElementById(id+'Hour'  ).options[23].selected = true;
 	document.getElementById(id+'Minute').options[59].selected = true;
 	document.getElementById(id+'Second').options[59].selected = true;
+	setUTCFromLocalDateTimeForm(id);
 }
 
 // Write clock in client local time updated every minute
