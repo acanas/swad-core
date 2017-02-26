@@ -76,7 +76,11 @@ const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
   };
 
 /*****************************************************************************/
-/***************************** Private prototypes ****************************/
+/****************************** Internal types *******************************/
+/*****************************************************************************/
+
+/*****************************************************************************/
+/**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -252,7 +256,7 @@ void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr)
 /*************** Show forms to enter initial and ending dates ****************/
 /*****************************************************************************/
 
-void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -274,15 +278,17 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
-				                false);
+				                SetHMS000000To235959 ? Dat_HMS_TO_000000 :	// Set hour, minute and second to 00:00:00
+				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second to 00:00:00
+				                false);						// Don't submit on change
 
    /***** "Yesterday" and "Today" buttons *****/
    fprintf (Gbl.F.Out,"</td>"
                       "<td rowspan=\"2\" class=\"LEFT_MIDDLE\">"
 	              "<input type=\"button\" name=\"Yesterday\" value=\"%s\""
-                      " onclick=\"setDateToYesterday();\" />"
+                      " onclick=\"setDateToYesterday('Start','End');\" />"
 	              "<input type=\"button\" name=\"Today\" value=\"%s\""
-                      " onclick=\"setDateToToday();\" />"
+                      " onclick=\"setDateToToday('Start','End');\" />"
                       "</td>"
                       "</tr>",
             Txt_Yesterday,
@@ -303,8 +309,9 @@ void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void)
                                                 Cfg_LOG_START_YEAR,
 				                Gbl.Now.Date.Year,
 				                Dat_FORM_SECONDS_ON,
-				                false);
-
+				                SetHMS000000To235959 ? Dat_HMS_TO_235959 :	// Set hour, minute and second to 23:59:59
+				                                       Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
+				                false);						// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
   }
@@ -347,8 +354,8 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	                                           Gbl.Now.Date.Year - 1,
 	                                           Gbl.Now.Date.Year + 1,
 				                   FormSeconds,
-                                                   false);
-
+				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
+				                   false);		// Don't submit on change
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>"
@@ -367,6 +374,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   unsigned FirstYear,
                                                   unsigned LastYear,
                                                   Dat_FormSeconds FormSeconds,
+                                                  Dat_SetHMS SetHMS,
                                                   bool SubmitFormOnChange)
   {
    extern const char *Txt_MONTHS_SMALL[12];
@@ -503,15 +511,27 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
 	              "</table>");
 
    /***** Hidden field with UTC time (seconds since 1970) used to send time *****/
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
+   fprintf (Gbl.F.Out,"<input type=\"hidden\""
+	              " id=\"%sTimeUTC\" name=\"%sTimeUTC\" value=\"%ld\" />",
             Id,ParamName,(long) TimeUTC);
 
    /***** Script to set selectors to local date and time from UTC time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "setLocalDateTimeFormFromUTC('%s',%ld);"
-	              "adjustDateForm('%s');"
-		      "</script>",
+	              "adjustDateForm('%s');",
 	    Id,(long) TimeUTC,Id);
+   switch (SetHMS)
+     {
+      case Dat_HMS_TO_000000:
+	 fprintf (Gbl.F.Out,"setHMSTo000000('%s');",Id);
+	 break;
+      case Dat_HMS_TO_235959:
+	 fprintf (Gbl.F.Out,"setHMSTo235959('%s');",Id);
+	 break;
+      default:
+	 break;
+     }
+   fprintf (Gbl.F.Out,"</script>");
   }
 
 /*****************************************************************************/

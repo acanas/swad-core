@@ -163,7 +163,9 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 	var d;
 	var Year;
 	var YearIsValid = false;
+	var Hou;
 	var Min;
+	var Sec;
 
 	if (TimeUTC) {
 		d = new Date();
@@ -175,9 +177,11 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 				YearIsValid = true;
 			}
 		if (YearIsValid) {
-			FormMon.options[d.getMonth() ].selected = true;
+			FormMon.options[d.getMonth()].selected = true;
 			FormDay.options[d.getDate()-1].selected = true;
-			FormHou.options[d.getHours() ].selected = true;
+			
+			Hou = d.getHours();
+			FormHou.options[Hou].selected = true;
 			
 			Min = d.getMinutes();
 			for (var i=FormMin.options.length-1; i>=0; i--)
@@ -185,8 +189,11 @@ function setLocalDateTimeFormFromUTC (id,TimeUTC) {
 					FormMin.options[i].selected = true;
 					break;
 				}
-			if (FormSec)
+
+			if (FormSec) {
+				Sec = d.getSeconds();
 				FormSec.options[d.getSeconds()].selected = true;
+			}
 		}
 	}
 	
@@ -280,54 +287,64 @@ function adjustDateForm (id) {
 }
 
 // Set a date range form to yesterday
-function setDateToYesterday () {
+function setDateToYesterday (idStart,idEnd) {
 	var d = new Date();
 
 	d.setTime (d.getTime () - 24 * 60 * 60 * 1000);	// Today - 1 day
-	setDateRange(d);
+	setDateRange(idStart,idEnd,d);
 }
 
 // Set a date range form to today
-function setDateToToday () {
+function setDateToToday (idStart,idEnd) {
 	var d = new Date();
 
-	setDateRange(d);
+	setDateRange(idStart,idEnd,d);
 }
 
 // Set a date range form to a specific day
-function setDateRange (d) {
+function setDateRange (idStart,idEnd,d) {
 	var FormYea;
 	var Yea = d.getFullYear();
 	var Mon = d.getMonth() + 1;
 	var Day = d.getDate();
 
-	FormYea = document.getElementById('StartYear');
+	FormYea = document.getElementById(idStart+'Year');
 	for (var i=0; i<FormYea.options.length; i++)
 		if (FormYea.options[i].value == Yea) {
 			FormYea.options[i].selected = true;
 			break;
 		}
-	document.getElementById('StartMonth' ).options[Mon-1].selected = true;
-	adjustDateForm ('Start');	// Adjust date form correcting days in the month
-	document.getElementById('StartDay'   ).options[Day-1].selected = true;
-	document.getElementById('StartHour'  ).options[0    ].selected = true;
-	document.getElementById('StartMinute').options[0    ].selected = true;
-	document.getElementById('StartSecond').options[0    ].selected = true;
-	setUTCFromLocalDateTimeForm('Start');
+	document.getElementById(idStart+'Month').options[Mon-1].selected = true;
+	adjustDateForm (idStart);	// Adjust date form correcting days in the month
+	document.getElementById(idStart+'Day').options[Day-1].selected = true;
+	setHMSTo000000(idStart);
+	setUTCFromLocalDateTimeForm(idStart);
 
-	FormYea = document.getElementById('EndYear');
+	FormYea = document.getElementById(idEnd+'Year');
 	for (var i=0; i<FormYea.options.length; i++)
 		if (FormYea.options[i].value == Yea) {
 			FormYea.options[i].selected = true;
 			break;
 		}
-	document.getElementById('EndMonth' ).options[Mon-1].selected = true;
-	adjustDateForm ('End');		// Adjust date form correcting days in the month
-	document.getElementById('EndDay'   ).options[Day-1].selected = true;
-	document.getElementById('EndHour'  ).options[23   ].selected = true;
-	document.getElementById('EndMinute').options[59   ].selected = true;
-	document.getElementById('EndSecond').options[59   ].selected = true;
-	setUTCFromLocalDateTimeForm('End');
+	document.getElementById(idEnd+'Month').options[Mon-1].selected = true;
+	adjustDateForm (idEnd);		// Adjust date form correcting days in the month
+	document.getElementById(idEnd+'Day').options[Day-1].selected = true;
+	setHMSTo235959(idEnd);
+	setUTCFromLocalDateTimeForm(idEnd);
+}
+
+// Set hour, minute and second in a form to 00:00:00
+function setHMSTo000000 (id) {
+	document.getElementById(id+'Hour'  ).options[0].selected = true;
+	document.getElementById(id+'Minute').options[0].selected = true;
+	document.getElementById(id+'Second').options[0].selected = true;
+}
+
+//Set hour, minute and second in a form to 23:59:59
+function setHMSTo235959 (id) {
+	document.getElementById(id+'Hour'  ).options[23].selected = true;
+	document.getElementById(id+'Minute').options[59].selected = true;
+	document.getElementById(id+'Second').options[59].selected = true;
 }
 
 // Write clock in client local time updated every minute
@@ -761,7 +778,7 @@ function uncheckChildren (MainCheckbox, GroupCheckboxes) {
 }
 
 // Change text of a test descriptor
-function changeTxtTag (NumTag){
+function changeTxtTag (NumTag) {
 	var Sel = document.getElementById('SelDesc' + NumTag);
 
 	document.getElementById('TagTxt' + NumTag).value = Sel.options[Sel.selectedIndex].value;

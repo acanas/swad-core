@@ -202,13 +202,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.140.5 (2017-02-25)"
+#define Log_PLATFORM_VERSION	"SWAD 16.141 (2017-02-26)"
 #define CSS_FILE		"swad16.139.6.css"
-#define JS_FILE			"swad16.140.js"
+#define JS_FILE			"swad16.141.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.141  : Feb 26, 2017	Default range of dates for stats starts at HH:MM:SS=00:00:00 and ends at HH:MM:SS=23:59:59. (213053 lines)
         Version 16.140.5: Feb 25, 2017	Days in recent log changed from 8 to 15. (213008 lines)
         Version 16.140.4: Feb 24, 2017	Fixed bug in T/F test questions, reported by Nuria Torres Rosell. (213006 lines)
         Version 16.140.3: Feb 24, 2017	Changed refreshing of timeline from 30 to 10 seconds.

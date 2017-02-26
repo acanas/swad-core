@@ -478,7 +478,7 @@ void Sta_AskShowCrsHits (void)
                             "</tr>");
 
          /***** Initial and final dates of the search *****/
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccCrs);
 
          /***** Selection of action *****/
          Sta_WriteSelectorAction ();
@@ -629,7 +629,7 @@ void Sta_AskShowGblHits (void)
                              Hlp_STATS_Visits_global_visits,2);
 
    /***** Start and end dates for the search *****/
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (Gbl.Action.Act == ActReqAccGbl);
 
    /***** Users' roles whose accesses we want to see *****/
    fprintf (Gbl.F.Out,"<tr>"

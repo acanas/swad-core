@@ -92,6 +92,13 @@ typedef enum
    Dat_FORM_SECONDS_ON,
   } Dat_FormSeconds;
 
+typedef enum
+  {
+   Dat_HMS_DO_NOT_SET = 0,
+   Dat_HMS_TO_000000  = 1,
+   Dat_HMS_TO_235959  = 2,
+  } Dat_SetHMS;
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
@@ -107,7 +114,7 @@ void Dat_ShowClientLocalTime (void);
 struct tm *Dat_GetLocalTimeFromClock (const time_t *timep);
 void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr);
 
-void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (void);
+void Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (bool SetHMS000000To235959);
 void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
                                               Dat_FormSeconds FormSeconds);
 
@@ -117,6 +124,7 @@ void Dat_WriteFormClientLocalDateTimeFromTimeUTC (const char *Id,
                                                   unsigned FirstYear,
                                                   unsigned LastYear,
                                                   Dat_FormSeconds FormSeconds,
+                                                  Dat_SetHMS SetHMS,
                                                   bool SubmitFormOnChange);
 time_t Dat_GetTimeUTCFromForm (const char *ParamName);
 

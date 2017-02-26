@@ -1190,7 +1190,8 @@ static void Grp_ListGroupTypesForEdition (void)
 						   Gbl.Now.Date.Year,
 						   Gbl.Now.Date.Year + 1,
 				                   Dat_FORM_SECONDS_ON,
-						   true);
+				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
+				                   true);		// Submit on change
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>"
 	                 "</table>");
@@ -2133,7 +2134,8 @@ static void Grp_PutFormToCreateGroupType (void)
                                                 Gbl.Now.Date.Year,
                                                 Gbl.Now.Date.Year + 1,
 				                Dat_FORM_SECONDS_ON,
-                                                false);
+				                Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
+				                false);			// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>"
                       "</table>"

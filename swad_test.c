@@ -1274,7 +1274,7 @@ void Tst_ShowFormAskEditTsts (void)
       Tst_ShowFormAnswerTypes (2);
 
       /***** Starting and ending dates in the search *****/
-      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
+      Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
       fprintf (Gbl.F.Out,"</table>");
 
       /***** Send button *****/
@@ -6948,7 +6948,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                             "</tr>");
 
          /***** Starting and ending dates in the search *****/
-         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
+         Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
          fprintf (Gbl.F.Out,"</table>");
 
@@ -6992,7 +6992,7 @@ void Tst_SelDatesToSeeMyTestResults (void)
    /***** Starting and ending dates in the search *****/
    Lay_StartRoundFrameTable (NULL,Txt_Test_results,
                              NULL,Hlp_ASSESSMENT_Tests_test_results,2);
-   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday ();
+   Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CONFIRM_BUTTON,Txt_View_test_results);
