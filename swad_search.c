@@ -66,6 +66,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
 static void Sch_GetParamSearch (char *SearchStr,size_t MaxLength);
 static void Sch_SearchInDB (void);
+static unsigned Sch_SearchCountriesInDB (const char *RangeQuery);
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery);
 static unsigned Sch_SearchCentresInDB (const char *RangeQuery);
 static unsigned Sch_SearchDegreesInDB (const char *RangeQuery);
@@ -202,6 +203,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_Scope;
    extern const char *Txt_SEARCH_X_in_Y;
    extern const char *Txt_all;
+   extern const char *Txt_countries;
    extern const char *Txt_institutions;
    extern const char *Txt_centres;
    extern const char *Txt_degrees;
@@ -216,6 +218,7 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
      {
 	"",							// Sch_SEARCH_UNKNOWN
 	Txt_all,						// Sch_SEARCH_ALL
+	Txt_countries,						// Sch_SEARCH_COUNTRIES
 	Txt_institutions,					// Sch_SEARCH_INSTITS
 	Txt_centres,						// Sch_SEARCH_CENTRES
 	Txt_degrees,						// Sch_SEARCH_DEGREES
@@ -296,6 +299,7 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
      {
       0x000,	// Sch_SEARCH_UNKNOWN
       0x1FF,	// Sch_SEARCH_ALL
+      0x1FF,	// Sch_SEARCH_COUNTRIES
       0x1FF,	// Sch_SEARCH_INSTITS
       0x1FF,	// Sch_SEARCH_CENTRES
       0x1FF,	// Sch_SEARCH_DEGREES
@@ -318,31 +322,17 @@ static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch)
 
 void Sch_PutFormToSearchInPageTopHeading (void)
   {
-   Act_Action_t ActionSearch;
-
-   /***** Set scope *****/
-   /*
-   Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
-	               1 << Sco_SCOPE_CTY |
-		       1 << Sco_SCOPE_INS |
-		       1 << Sco_SCOPE_CTR |
-		       1 << Sco_SCOPE_DEG |
-		       1 << Sco_SCOPE_CRS;
-   Gbl.Scope.Default = Sco_SCOPE_SYS;
-   Sco_GetScope ("ScopeSch"); */
-
-   /***** Set action *****/
-   ActionSearch = (Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
-                  (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
-                  (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
-                  (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
-                  (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
-                                                   ActSysSch)))));
+   Act_Action_t ActionSearch =
+      (Gbl.CurrentCrs.Crs.CrsCod > 0 ? ActCrsSch :
+      (Gbl.CurrentDeg.Deg.DegCod > 0 ? ActDegSch :
+      (Gbl.CurrentCtr.Ctr.CtrCod > 0 ? ActCtrSch :
+      (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsSch :
+      (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtySch :
+                                       ActSysSch)))));
 
    /***** Put form *****/
    fprintf (Gbl.F.Out,"<div id=\"head_row_1_search\">");
    Act_FormStart (ActionSearch);
-   // Sco_PutParamScope ("ScopeSch",Gbl.Scope.Current);
    Sco_PutParamScope ("ScopeSch",Sco_SCOPE_SYS);
    Sch_PutInputStringToSearch ("head_search_text");
    Sch_PutMagnifyingGlassButton ("search-white64x64.png");
@@ -574,7 +564,7 @@ static void Sch_SearchInDB (void)
          RangeQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
-         sprintf (RangeQuery," AND institutions.CtyCod='%ld'",
+         sprintf (RangeQuery," AND countries.CtyCod='%ld'",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
@@ -600,7 +590,8 @@ static void Sch_SearchInDB (void)
    switch (Gbl.Search.WhatToSearch)
      {
       case Sch_SEARCH_ALL:
-	 NumResults  = Sch_SearchInstitutionsInDB (RangeQuery);
+	 NumResults  = Sch_SearchCountriesInDB (RangeQuery);
+	 NumResults += Sch_SearchInstitutionsInDB (RangeQuery);
 	 NumResults += Sch_SearchCentresInDB (RangeQuery);
 	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
@@ -610,6 +601,9 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
+	 break;
+      case Sch_SEARCH_COUNTRIES:
+	 NumResults = Sch_SearchCountriesInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_INSTITS:
 	 NumResults = Sch_SearchInstitutionsInDB (RangeQuery);
@@ -651,6 +645,44 @@ static void Sch_SearchInDB (void)
 
    if (NumResults == 0)
       Lay_ShowAlert (Lay_INFO,Txt_No_results);
+  }
+
+/*****************************************************************************/
+/************************ Search countries in database ***********************/
+/*****************************************************************************/
+// Returns number of countries found
+
+static unsigned Sch_SearchCountriesInDB (const char *RangeQuery)
+  {
+   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
+   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char Query[1024 + Sch_MAX_LENGTH_SEARCH_QUERY * 2];
+   char FieldName[4+1+2+1];	// Example: Name_en
+
+   /***** Check scope *****/
+   if (Gbl.Scope.Current != Sco_SCOPE_INS &&
+       Gbl.Scope.Current != Sco_SCOPE_CTR &&
+       Gbl.Scope.Current != Sco_SCOPE_DEG &&
+       Gbl.Scope.Current != Sco_SCOPE_CRS)
+      /***** Check user's permission *****/
+      if (Sch_CheckIfIHavePermissionToSearch (Sch_SEARCH_COUNTRIES))
+	{
+	 /***** Split countries string into words *****/
+	 sprintf (FieldName,"Name_%s",Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	 if (Sch_BuildSearchQuery (SearchQuery,FieldName,NULL,NULL))
+	   {
+	    /***** Query database and list institutions found *****/
+	    sprintf (Query,"SELECT CtyCod"
+			   " FROM countries"
+			   " WHERE %s%s"
+			   " ORDER BY Name_%s",
+		     SearchQuery,RangeQuery,
+		     Txt_STR_LANG_ID[Gbl.Prefs.Language]);
+	    return Cty_ListCtysFound (Query);
+	   }
+	}
+
+   return 0;
   }
 
 /*****************************************************************************/

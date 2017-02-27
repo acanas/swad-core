@@ -5360,6 +5360,27 @@ const char *Txt_Countries =
 	"Pa&iacute;ses";
 #endif
 
+const char *Txt_countries =
+#if   L==1
+	"pa&iuml;sos";
+#elif L==2
+	"L&auml;nder";
+#elif L==3
+	"countries";
+#elif L==4
+	"pa&iacute;ses";
+#elif L==5
+	"pays";
+#elif L==6
+	"tet&atilde;";
+#elif L==7
+	"paesi";
+#elif L==8
+	"kraje";
+#elif L==9
+	"pa&iacute;ses";
+#endif
+
 const char *Txt_COUNTRIES_HELP_ORDER[2] =
    {
 #if   L==1
@@ -5486,6 +5507,27 @@ const char *Txt_Country =
 	"Kraj";
 #elif L==9
 	"Pa&iacute;s";
+#endif
+
+const char *Txt_country =
+#if   L==1
+	"pa&iacute;s";
+#elif L==2
+	"Land";
+#elif L==3
+	"country";
+#elif L==4
+	"pa&iacute;s";
+#elif L==5
+	"pays;";
+#elif L==6
+	"tet&atilde;";
+#elif L==7
+	"paese";
+#elif L==8
+	"kraj";
+#elif L==9
+	"pa&iacute;s";
 #endif
 
 const char *Txt_Country_of_your_institution =

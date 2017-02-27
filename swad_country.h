@@ -112,4 +112,6 @@ unsigned Cty_GetNumCtysWithDegs (const char *SubQuery);
 unsigned Cty_GetNumCtysWithCrss (const char *SubQuery);
 unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery);
 
+unsigned Cty_ListCtysFound (const char *Query);
+
 #endif

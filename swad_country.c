@@ -66,6 +66,9 @@ extern struct Globals Gbl;
 static void Cty_Configuration (bool PrintView);
 static void Cty_PutIconToPrint (void);
 
+static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
+static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
+
 static bool Cty_CheckIfICanEditCountries (void);
 
 static void Cty_PutIconsListCountries (void);
@@ -83,7 +86,7 @@ static bool Cty_CheckIfNumericCountryCodeExists (long CtyCod);
 static bool Cty_CheckIfAlpha2CountryCodeExists (const char Alpha2[2 + 1]);
 static bool Cty_CheckIfCountryNameExists (Txt_Language_t Language,const char *Name,long CtyCod);
 static void Cty_PutFormToCreateCountry (void);
-static void Cty_PutHeadCountries (void);
+static void Cty_PutHeadCountriesForEdition (void);
 static void Cty_CreateCountry (struct Country *Cty);
 
 /*****************************************************************************/
@@ -508,119 +511,32 @@ void Cty_ListCountries2 (void)
   {
    extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_Countries;
-   extern const char *Txt_COUNTRIES_HELP_ORDER[2];
-   extern const char *Txt_COUNTRIES_ORDER[2];
-   extern const char *Txt_Institutions_ABBREVIATION;
-   extern const char *Txt_Centres_ABBREVIATION;
-   extern const char *Txt_Degrees_ABBREVIATION;
-   extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
    extern const char *Txt_Other_countries;
    extern const char *Txt_Country_unspecified;
-   Cty_Order_t Order;
    unsigned NumCty;
-   const char *BgColor;
 
    /***** Table head *****/
    Lay_StartRoundFrameTable (NULL,Txt_Countries,
                              Cty_PutIconsListCountries,Hlp_SYSTEM_Countries,2);
-   fprintf (Gbl.F.Out,"<tr>");
-   for (Order = Cty_ORDER_BY_COUNTRY;
-	Order <= Cty_ORDER_BY_NUM_USRS;
-	Order++)
-     {
-      fprintf (Gbl.F.Out,"<th class=\"%s\">",
-               Order == Cty_ORDER_BY_COUNTRY ? "LEFT_MIDDLE" :
-        	                               "RIGHT_MIDDLE");
-      Act_FormStart (ActSeeCty);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Ctys.SelectedOrder)
-         fprintf (Gbl.F.Out,"<u>");
-      fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
-      if (Order == Gbl.Ctys.SelectedOrder)
-         fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</th>");
-     }
-   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-	              "%s"
-	              "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s+<br />%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Institutions_ABBREVIATION,
-            Txt_Centres_ABBREVIATION,
-            Txt_Degrees_ABBREVIATION,
-            Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
+   Cty_PutHeadCountriesForSeeing (true);	// Order selectable
 
    /***** Write all the countries and their number of users and institutions *****/
    for (NumCty = 0;
 	NumCty < Gbl.Ctys.Num;
 	NumCty++)
-     {
-      BgColor = (Gbl.Ctys.Lst[NumCty].CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
-                                                                             Gbl.ColorRows[Gbl.RowEvenOdd];
-
-      /***** Country map (and link to WWW if exists) *****/
-      fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"LEFT_MIDDLE %s\">",
-	       BgColor);
-      Cty_DrawCountryMapAndNameWithLink (&Gbl.Ctys.Lst[NumCty],ActSeeIns,
-                                         "DAT_N","COUNTRY_MAP_SMALL");
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Write stats of this country */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
-	                 "%u"
-	                 "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-                         "<td class=\"DAT RIGHT_MIDDLE %s\">"
-                         "%u"
-                         "</td>"
-			 "</tr>",
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrsWhoClaimToBelongToCty,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumInss,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumCtrs,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumDegs,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumCrss,
-	       BgColor,Gbl.Ctys.Lst[NumCty].NumUsrs);
-      Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-     }
+      Cty_ListOneCountryForSeeing (&Gbl.Ctys.Lst[NumCty],NumCty + 1);
 
    /***** Separation row *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td colspan=\"7\" class=\"DAT CENTER_MIDDLE\">"
+                      "<td colspan=\"8\" class=\"DAT CENTER_MIDDLE\">"
                       "&nbsp;"
                       "</td>"
                       "</tr>");
 
    /***** Write users and institutions in other countries *****/
    fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
@@ -653,6 +569,8 @@ void Cty_ListCountries2 (void)
 
    /***** Write users and institutions with unknown country *****/
    fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "</td>"
                       "<td class=\"DAT LEFT_MIDDLE\">"
                       "%s"
                       "</td>"
@@ -690,12 +608,133 @@ void Cty_ListCountries2 (void)
    if (Gbl.Action.Act == ActSeeCty)
      {
       fprintf (Gbl.F.Out,"<div id=\"chart_div\""
-	                 " style=\"width:500px; margin:12px auto;\">"
+	                 " style=\"width:600px; margin:12px auto;\">"
                          "</div>");
      }
 
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
+  }
+
+/*****************************************************************************/
+/******************* Write header with fields of a country *******************/
+/*****************************************************************************/
+
+static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
+  {
+   extern const char *Txt_COUNTRIES_HELP_ORDER[2];
+   extern const char *Txt_COUNTRIES_ORDER[2];
+   extern const char *Txt_Institutions_ABBREVIATION;
+   extern const char *Txt_Centres_ABBREVIATION;
+   extern const char *Txt_Degrees_ABBREVIATION;
+   extern const char *Txt_Courses_ABBREVIATION;
+   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_Students_ABBREVIATION;
+   Cty_Order_t Order;
+
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<th></th>");
+   for (Order = Cty_ORDER_BY_COUNTRY;
+	Order <= Cty_ORDER_BY_NUM_USRS;
+	Order++)
+     {
+      fprintf (Gbl.F.Out,"<th class=\"%s\">",
+               Order == Cty_ORDER_BY_COUNTRY ? "LEFT_MIDDLE" :
+        	                               "RIGHT_MIDDLE");
+      if (OrderSelectable)
+	{
+	 Act_FormStart (ActSeeCty);
+	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Act_LinkFormSubmit (Txt_COUNTRIES_HELP_ORDER[Order],"TIT_TBL",NULL);
+	 if (Order == Gbl.Ctys.SelectedOrder)
+	    fprintf (Gbl.F.Out,"<u>");
+	}
+      fprintf (Gbl.F.Out,"%s",Txt_COUNTRIES_ORDER[Order]);
+      if (OrderSelectable)
+	{
+	 if (Order == Gbl.Ctys.SelectedOrder)
+	    fprintf (Gbl.F.Out,"</u>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+      fprintf (Gbl.F.Out,"</th>");
+     }
+   fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+	              "%s"
+	              "</th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s+<br />%s"
+                      "</th>"
+                      "</tr>",
+            Txt_Institutions_ABBREVIATION,
+            Txt_Centres_ABBREVIATION,
+            Txt_Degrees_ABBREVIATION,
+            Txt_Courses_ABBREVIATION,
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
+  }
+
+/*****************************************************************************/
+/************************ List one country for seeing ************************/
+/*****************************************************************************/
+
+static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
+  {
+   const char *BgColor;
+
+   BgColor = (Cty->CtyCod == Gbl.CurrentCty.Cty.CtyCod) ? "LIGHT_BLUE" :
+							  Gbl.ColorRows[Gbl.RowEvenOdd];
+
+   /***** Number of country in this list *****/
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+                      "%u"
+                      "</td>",
+	    BgColor,NumCty);
+
+   /***** Country map (and link to WWW if exists) *****/
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
+	    BgColor);
+   Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
+				      "DAT_N","COUNTRY_MAP_SMALL");
+   fprintf (Gbl.F.Out,"</td>");
+
+   /* Write stats of this country */
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "<td class=\"DAT RIGHT_MIDDLE %s\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    BgColor,Cty->NumUsrsWhoClaimToBelongToCty,
+	    BgColor,Cty->NumInss,
+	    BgColor,Cty->NumCtrs,
+	    BgColor,Cty->NumDegs,
+	    BgColor,Cty->NumCrss,
+	    BgColor,Cty->NumUsrs);
+
+   Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
 
 /*****************************************************************************/
@@ -870,11 +909,11 @@ void Cty_WriteScriptGoogleGeochart (void)
    /***** Write end of the script *****/
    fprintf (Gbl.F.Out,"	]);\n"
                       "	var options = {\n"
-                      "		width:500,\n"
-                      "		height:300,\n"
+                      "		width:600,\n"
+                      "		height:360,\n"
                       "		backgroundColor:'white',\n"
                       "		datalessRegionColor:'white',\n"
-                      "		colorAxis:{colors:['white','#4D88A1'],minValue:0,maxValue:%u}};\n"
+                      "		colorAxis:{colors:['#EAF1F4','#4D88A1'],minValue:0,maxValue:%u}};\n"
                       "	var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));\n"
                       "	chart.draw(data, options);\n"
                       "	};\n"
@@ -1463,7 +1502,7 @@ static void Cty_ListCountriesForEdition (void)
    Lay_StartRoundFrameTable (NULL,Txt_Countries,NULL,Hlp_SYSTEM_Countries,2);
 
    /***** Table head *****/
-   Cty_PutHeadCountries ();
+   Cty_PutHeadCountriesForEdition ();
 
    /***** Write all the countries *****/
    for (NumCty = 0;
@@ -1856,7 +1895,7 @@ static void Cty_PutFormToCreateCountry (void)
    Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,Hlp_SYSTEM_Countries,2);
 
    /***** Write heading *****/
-   Cty_PutHeadCountries ();
+   Cty_PutHeadCountriesForEdition ();
 
    /***** Firts columns for CtyCod *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1943,7 +1982,7 @@ static void Cty_PutFormToCreateCountry (void)
 /******************* Write header with fields of a country *******************/
 /*****************************************************************************/
 
-static void Cty_PutHeadCountries (void)
+static void Cty_PutHeadCountriesForEdition (void)
   {
    extern const char *Txt_Numeric_BR_code_BR_ISO_3166_1;
    extern const char *Txt_Alphabetic_BR_code_BR_ISO_3166_1;
@@ -2254,3 +2293,58 @@ unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with users");
   }
+
+/*****************************************************************************/
+/***************************** List countries found **************************/
+/*****************************************************************************/
+// Returns number of countries found
+
+unsigned Cty_ListCtysFound (const char *Query)
+  {
+   extern const char *Txt_country;
+   extern const char *Txt_countries;
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned NumCtys;
+   unsigned NumCty;
+   struct Country Cty;
+
+   /***** Query database *****/
+   if ((NumCtys = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get countries")))
+     {
+      /***** Write heading *****/
+      /* Number of countries found */
+      sprintf (Gbl.Title,"%u %s",
+               NumCtys,NumCtys == 1 ? Txt_country :
+				      Txt_countries);
+      Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
+      Cty_PutHeadCountriesForSeeing (false);	// Order not selectable
+
+      /***** List the countries (one row per country) *****/
+      for (NumCty = 1;
+	   NumCty <= NumCtys;
+	   NumCty++)
+	{
+	 /* Get next country */
+	 row = mysql_fetch_row (mysql_res);
+
+	 /* Get country code (row[0]) */
+	 Cty.CtyCod = Str_ConvertStrCodToLongCod (row[0]);
+
+	 /* Get data of country */
+	 Cty_GetDataOfCountryByCod (&Cty,Cty_GET_EXTRA_DATA);
+
+	 /* Write data of this country */
+	 Cty_ListOneCountryForSeeing (&Cty,NumCty);
+	}
+
+      /***** End table *****/
+      Lay_EndRoundFrameTable ();
+     }
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return NumCtys;
+  }
+

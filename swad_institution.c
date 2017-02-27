@@ -2435,7 +2435,7 @@ unsigned Ins_ListInssFound (const char *Query)
       Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
       Ins_PutHeadInstitutionsForSeeing (false);	// Order not selectable
 
-      /***** List the institutions (one row per centre) *****/
+      /***** List the institutions (one row per institution) *****/
       for (NumIns = 1;
 	   NumIns <= NumInss;
 	   NumIns++)
@@ -2449,7 +2449,7 @@ unsigned Ins_ListInssFound (const char *Query)
 	 /* Get data of institution */
 	 Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_EXTRA_DATA);
 
-	 /* Write data of this centre */
+	 /* Write data of this institution */
 	 Ins_ListOneInstitutionForSeeing (&Ins,NumIns);
 	}
 

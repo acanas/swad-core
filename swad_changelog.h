@@ -196,19 +196,18 @@
 
 // TODO: Un administrador de institución, ¿debería poder cambiar la contraseña de un usuario de esa institución? No lo tengo claro.
 
-// TODO: Register anonymously searches from users for system admins
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.142.1 (2017-02-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.143 (2017-02-28)"
 #define CSS_FILE		"swad16.139.6.css"
 #define JS_FILE			"swad16.141.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.143:   Feb 28, 2017	Search countries. (213231 lines)
         Version 16.142.1: Feb 27, 2017	Public activity is renamed as timeline. (213085 lines)
         Version 16.142:   Feb 27, 2017	Searches are registered anonymously. (213077 lines)
 					1 change necessary in database:

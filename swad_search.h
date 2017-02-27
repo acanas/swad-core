@@ -40,22 +40,23 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Sch_NUM_WHAT_TO_SEARCH	13
+#define Sch_NUM_WHAT_TO_SEARCH	14
 typedef enum
   {
    Sch_SEARCH_UNKNOWN			=  0,
    Sch_SEARCH_ALL			=  1,
-   Sch_SEARCH_INSTITS			=  2,
-   Sch_SEARCH_CENTRES			=  3,
-   Sch_SEARCH_DEGREES			=  4,
-   Sch_SEARCH_COURSES			=  5,
-   Sch_SEARCH_USERS			=  6,
-   Sch_SEARCH_TEACHERS			=  7,
-   Sch_SEARCH_STUDENTS			=  8,
-   Sch_SEARCH_GUESTS			=  9,
-   Sch_SEARCH_OPEN_DOCUMENTS		= 10,
-   Sch_SEARCH_DOCUM_IN_MY_COURSES	= 11,
-   Sch_SEARCH_MY_DOCUMENTS		= 12,
+   Sch_SEARCH_COUNTRIES			=  2,
+   Sch_SEARCH_INSTITS			=  3,
+   Sch_SEARCH_CENTRES			=  4,
+   Sch_SEARCH_DEGREES			=  5,
+   Sch_SEARCH_COURSES			=  6,
+   Sch_SEARCH_USERS			=  7,
+   Sch_SEARCH_TEACHERS			=  8,
+   Sch_SEARCH_STUDENTS			=  9,
+   Sch_SEARCH_GUESTS			= 10,
+   Sch_SEARCH_OPEN_DOCUMENTS		= 11,
+   Sch_SEARCH_DOCUM_IN_MY_COURSES	= 12,
+   Sch_SEARCH_MY_DOCUMENTS		= 13,
   } Sch_WhatToSearch_t;
 #define Sch_WHAT_TO_SEARCH_DEFAULT Sch_SEARCH_ALL
 
