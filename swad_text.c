@@ -19135,23 +19135,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabSoc *****************************************************
 	//  0: ActSeeSocTmlGbl
 #if   L==1
-	 "Activitat"
+	 "Timeline"
 #elif L==2
-	 "Aktivit&auml;t"
+	 "Timeline"
 #elif L==3
-	 "Activity"
+	 "Timeline"
 #elif L==4
-	 "Actividad"
+	 "Timeline"
 #elif L==5
-	 "Activit&eacute;"
+	 "Chronologie"
 #elif L==6
-	 "Actividad"	// Okoteve traducción
+	 "Timeline"	// Okoteve traducción
 #elif L==7
-	 "Attivit&agrave;"
+	 "Timeline"
 #elif L==8
-	 "Aktywno&sacute;&cacute;"
+	 "Timeline"
 #elif L==9
-	 "Atividade"
+	 "Timeline"
 #endif
 	,
 	//  1: ActSeeSocPrf
@@ -21193,23 +21193,23 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	// TabSoc *****************************************************
 	//  0: ActSeeSocTmlGbl
 #if   L==1
-	 "Activitat p&uacute;blica dels usuaris que segueixo"
+	 "Timeline dels usuaris que segueixo o de tots els usuaris"
 #elif L==2
-	 "&Ouml;ffentliche Aktivit&auml;t der Nutzer Ich folge"
+	 "Timeline der Benutzer Ich folge oder alle Benutzern"
 #elif L==3
-	 "Public activity of the users I follow"
+	 "Timeline of users I follow or all users"
 #elif L==4
-	 "Actividad p&uacute;blica de los usuarios que sigo"
+	 "Timeline de los usuarios que sigo o de todos los usuarios"
 #elif L==5
-	 "Activit&eacute; publique des utilisateurs je suivre"
+	 "Chronologie des utilisateurs que je suis ou de tous les utilisateurs"
 #elif L==6
-	 "Actividad p&uacute;blica de los usuarios que sigo"	// Okoteve traducción
+	 "Timeline de los usuarios que sigo o de todos los usuarios"	// Okoteve traducción
 #elif L==7
-	 "Attivit&agrave; pubblica degli utenti che seguo"
+	 "Timeline degli utenti che seguo o tutti gli utenti"
 #elif L==8
-	 "Aktywno&sacute;&cacute; publiczna u&zdot;ytkownik&oacute;w &sacute;ledz&eogon;"
+	 "Timeline u&zdot;ytkownik&oacute;w &sacute;ledz&eogon; lub wszystkich u&zdot;ytkownik&oacute;w"
 #elif L==9
-	 "Atividade p&uacute;blica dos usu&aacute;rios que eu sigo"
+	 "Timeline dos usu&aacute;rios que eu sigo ou de todos os usu&aacute;rios"
 #endif
 	,
 	 //  1: ActSeeSocPrf
@@ -29861,48 +29861,6 @@ const char *Txt_posts =
 	"posty";
 #elif L==9
 	"posts";
-#endif
-
-const char *Txt_Public_activity =
-#if   L==1
-	 "Activitat p&uacute;blica";
-#elif L==2
-	 "&Ouml;ffentliche Aktivit&auml;t";
-#elif L==3
-	 "Public activity";
-#elif L==4
-	 "Actividad p&uacute;blica";
-#elif L==5
-	 "Activit&eacute; public";
-#elif L==6
-	 "Actividad p&uacute;blica";	// Okoteve traducción
-#elif L==7
-	 "Attivit&agrave; pubblica";
-#elif L==8
-	 "Aktywno&sacute;&cacute; publiczne";
-#elif L==9
-	 "Atividade p&uacute;blica";
-#endif
-
-const char *Txt_Public_activity_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	 "Activitat p&uacute;blica de %s";
-#elif L==2
-	 "%s &ouml;ffentliche Aktivit&auml;t";
-#elif L==3
-	 "%s public activity";
-#elif L==4
-	 "Actividad p&uacute;blica de %s";
-#elif L==5
-	 "Activit&eacute; public de %s";
-#elif L==6
-	 "Actividad p&uacute;blica de %s";	// Okoteve traducción
-#elif L==7
-	 "Attivit&agrave; pubblica di %s";
-#elif L==8
-	 "Aktywno&sacute;&cacute; publiczna %s";
-#elif L==9
-	 "Atividade p&uacute;blica de %s";
 #endif
 
 const char *Txt_Public_agenda_USER =	// Warning: it is very important to include %s in the following sentences
@@ -39551,23 +39509,23 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #endif
 	 ,
 #if   L==1				// Sta_SOCIAL_ACTIVITY
-	 "Activitat p&uacute;blica"
+	 "Timeline"
 #elif L==2
-	 "&Ouml;ffentliche Aktivit&auml;t"
+	 "Timeline"
 #elif L==3
-	 "Public activity"
+	 "Timeline"
 #elif L==4
-	 "Actividad p&uacute;blica"
+	 "Timeline"
 #elif L==5
-	 "Activit&eacute; public"
+	 "Chronologie"
 #elif L==6
-	 "Actividad p&uacute;blica"	// Okoteve traducción
+	 "Timeline"	// Okoteve traducción
 #elif L==7
-	 "Attivit&agrave; pubblica"
+	 "Timeline"
 #elif L==8
-	 "Aktywno&sacute;&cacute; publiczne"
+	 "Timeline"
 #elif L==9
-	 "Atividade p&uacute;blica"
+	 "Timeline"
 #endif
 	 ,
 #if   L==1				// Sta_FOLLOW
@@ -47777,6 +47735,48 @@ const char *Txt_Time_zone_used_in_the_calculation_of_these_statistics =
 	"Strefa czasowa u&zdot;ywana w obliczeniach tych statystyk";
 #elif L==9
 	"Fuso hor&aacute;rio utilizado no c&aacute;lculo dessas estat&iacute;sticas";
+#endif
+
+const char *Txt_Timeline =
+#if   L==1
+	 "Timeline";
+#elif L==2
+	 "Timeline";
+#elif L==3
+	 "Timeline";
+#elif L==4
+	 "Timeline";
+#elif L==5
+	 "Chronologie";
+#elif L==6
+	 "Timeline";	// Okoteve traducción
+#elif L==7
+	 "Timeline";
+#elif L==8
+	 "Timeline";
+#elif L==9
+	 "Timeline";
+#endif
+
+const char *Txt_Timeline_OF_A_USER =	// Warning: it is very important to include %s in the following sentences
+#if   L==1
+	 "Timeline de %s";
+#elif L==2
+	 "%s timeline";
+#elif L==3
+	 "%s timeline";
+#elif L==4
+	 "Timeline de %s";
+#elif L==5
+	 "Chronologie de %s";
+#elif L==6
+	 "Timeline de %s";	// Okoteve traducción
+#elif L==7
+	 "Timeline di %s";
+#elif L==8
+	 "Timeline %s";
+#elif L==9
+	 "Timeline de %s";
 #endif
 
 const char *Txt_TIMELINE_WHICH_USERS[Soc_NUM_WHICH_USRS] =

@@ -357,7 +357,7 @@ void Soc_ShowTimelineGbl2 (void)
 
 static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
   {
-   extern const char *Txt_Public_activity;
+   extern const char *Txt_Timeline;
    char Query[1024];
 
    /***** Build query to get timeline *****/
@@ -366,7 +366,7 @@ static void Soc_ShowTimelineGblHighlightingNot (long NotCod)
                                 Query);
 
    /***** Show timeline *****/
-   Soc_ShowTimeline (Query,Txt_Public_activity,NotCod);
+   Soc_ShowTimeline (Query,Txt_Timeline,NotCod);
 
    /***** Drop temporary tables *****/
    Soc_DropTemporaryTablesUsedToQueryTimeline ();
@@ -383,7 +383,7 @@ void Soc_ShowTimelineUsr (void)
 
 static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
   {
-   extern const char *Txt_Public_activity_OF_A_USER;
+   extern const char *Txt_Timeline_OF_A_USER;
    char Query[1024];
 
    /***** Build query to show timeline with publishings of a unique user *****/
@@ -392,7 +392,7 @@ static void Soc_ShowTimelineUsrHighlightingNot (long NotCod)
                                 Query);
 
    /***** Show timeline *****/
-   sprintf (Gbl.Title,Txt_Public_activity_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
+   sprintf (Gbl.Title,Txt_Timeline_OF_A_USER,Gbl.Usrs.Other.UsrDat.FirstName);
    Soc_ShowTimeline (Query,Gbl.Title,NotCod);
 
    /***** Drop temporary tables *****/

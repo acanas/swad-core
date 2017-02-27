@@ -94,7 +94,7 @@ void Pri_EditMyPrivacy (void)
    extern const char *Txt_Privacy;
    extern const char *Txt_Photo;
    extern const char *Txt_Public_profile;
-   extern const char *Txt_Public_activity;
+   extern const char *Txt_Timeline;
 
    /***** If any of my preferences about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
@@ -125,7 +125,7 @@ void Pri_EditMyPrivacy (void)
                           (1 << Pri_VISIBILITY_WORLD));
 
    /***** Edit public activity (timeline) visibility *****/
-   Pri_PutFormVisibility (Txt_Public_activity,
+   Pri_PutFormVisibility (Txt_Timeline,
                           ActUnk,"VisTml",
                           Pri_VISIBILITY_SYSTEM,
                           (1 << Pri_VISIBILITY_SYSTEM));

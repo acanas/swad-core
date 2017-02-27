@@ -678,6 +678,13 @@ CREATE TABLE IF NOT EXISTS log_recent (
 	INDEX(UsrCod),
 	INDEX(ClickTime,Role));
 --
+-- Table log_search: stores the log of search strings
+--
+CREATE TABLE IF NOT EXISTS log_search (
+	LogCod INT NOT NULL,
+	SearchStr VARCHAR(255) NOT NULL,
+	UNIQUE INDEX(LogCod));
+--
 -- Table log_ws: stores the log of calls to web service from plugins
 --
 CREATE TABLE IF NOT EXISTS log_ws (
