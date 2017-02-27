@@ -563,6 +563,8 @@ static void Sch_SearchInDB (void)
    char RangeQuery[256];
    unsigned NumResults = 0;	// Initialized to avoid warning
 
+   Gbl.Search.LogSearch = true;
+
    /***** Select courses in all the degrees or in current degree *****/
    switch (Gbl.Scope.Current)
      {

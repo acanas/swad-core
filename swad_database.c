@@ -1456,6 +1456,22 @@ mysql> DESCRIBE log_recent;
                    "INDEX(UsrCod),"
                    "INDEX(ClickTime,Role))");
 
+   /***** Table log_search *****/
+/*
+mysql> DESCRIBE log_search;
++-----------+--------------+------+-----+---------+-------+
+| Field     | Type         | Null | Key | Default | Extra |
++-----------+--------------+------+-----+---------+-------+
+| LogCod    | int(11)      | NO   | PRI | NULL    |       |
+| SearchStr | varchar(255) | NO   |     | NULL    |       |
++-----------+--------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
+*/
+   DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_search ("
+                   "LogCod INT NOT NULL,"
+                   "SearchStr VARCHAR(255) NOT NULL,"
+                   "UNIQUE INDEX(LogCod))");
+
    /***** Table log_ws *****/
 /*
 mysql> DESCRIBE log_ws;

@@ -267,6 +267,7 @@ struct Globals
      {
       Sch_WhatToSearch_t WhatToSearch;
       char Str[Sch_MAX_LENGTH_STRING_TO_FIND + 1];
+      bool LogSearch;
      } Search;
   struct
      {

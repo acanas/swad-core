@@ -11685,10 +11685,13 @@ ALTER TABLE surveys ADD UNIQUE INDEX(Scope,Cod);
 
 SELECT SUBSTRING_INDEX(E_mail,'@',-1) AS mail_domain,COUNT(*) AS N FROM usr_emails WHERE SUBSTRING_INDEX(E_mail,'@',-1) NOT IN (SELECT Domain COLLATE latin1_general_ci FROM mail_domains) GROUP BY mail_domain ORDER BY N DESC;
 
+----- swad-core 16.142 (2017/02/27) -----
+
+CREATE TABLE IF NOT EXISTS log_search (LogCod INT NOT NULL,SearchStr VARCHAR(255) NOT NULL,UNIQUE INDEX(LogCod));
+
 ----- TODO: Eliminar columnas sin uso en futuras versiones -----
 
 ALTER TABLE surveys DROP COLUMN DegCod;
 ALTER TABLE surveys DROP COLUMN CrsCod;
-
 
 

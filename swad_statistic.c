@@ -347,6 +347,25 @@ void Sta_LogAccess (const char *Comments)
          DB_QueryINSERT (Query,"can not log access (comments)");
      }
 
+   if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
+     {
+      /* Log search string */
+      sprintf (Query,"INSERT INTO log_search (LogCod,SearchStr)"
+                     " VALUES ('%ld','",
+	       LogCod);
+      Str_AddStrToQuery (Query,Gbl.Search.Str,sizeof (Query));
+      Str_Concat (Query,"')",
+                  Sta_MAX_LENGTH_QUERY_LOG);
+
+      if (Gbl.WebService.IsWebService)
+        {
+         if (mysql_query (&Gbl.mysql,Query))
+            Svc_Exit ("can not log access (search)");
+        }
+      else
+         DB_QueryINSERT (Query,"can not log access (search)");
+     }
+
    if (Gbl.WebService.IsWebService)
      {
       /* Log web service plugin and function */

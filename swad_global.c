@@ -343,6 +343,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
    Gbl.Search.Str[0] = '\0';
+   Gbl.Search.LogSearch = false;
 
    Gbl.Asgs.LstIsRead = false;	// List is not read
    Gbl.Asgs.Num = 0;
