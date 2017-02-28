@@ -200,13 +200,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.143.1 (2017-02-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.143.2 (2017-02-28)"
 #define CSS_FILE		"swad16.139.6.css"
-#define JS_FILE			"swad16.141.1.js"
+#define JS_FILE			"swad16.143.2.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.143.2: Feb 28, 2017	Fixed bug in user timeline. (213237 lines)
         Version 16.143.1: Feb 28, 2017	Changed link to help on timeline. (213232 lines)
         Version 16.143:   Feb 28, 2017	Search countries. (213231 lines)
         Version 16.142.1: Feb 27, 2017	Public activity is renamed as timeline. (213085 lines)

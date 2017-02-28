@@ -467,11 +467,15 @@ function refreshOldTimeline () {
 	objXMLHttpReqSoc = AJAXCreateObject ();
 	if (objXMLHttpReqSoc) {
 		var RefreshParams = RefreshParamNxtActOldPub + '&' +
-							RefreshParamIdSes + '&' +
-							RefreshParamWhichUsrs;
-		if (RefreshParamUsr)
+							RefreshParamIdSes;
+		if (RefreshParamUsr) {
 			if (RefreshParamUsr.length)
 				RefreshParams += '&' + RefreshParamUsr;
+		}
+		else {
+			if (RefreshParamWhichUsrs.length)
+				RefreshParams += '&' + RefreshParamWhichUsrs;
+		}
 
 		objXMLHttpReqSoc.onreadystatechange = readOldTimelineData;	// onreadystatechange must be lowercase
 		objXMLHttpReqSoc.open('POST',ActionAJAX,true);
