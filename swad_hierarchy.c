@@ -376,10 +376,10 @@ void Hie_WriteBigNameCtyInsCtrDegCrs (void)
    else if (Gbl.CurrentCty.Cty.CtyCod > 0)
       Cty_DrawCountryMap (&Gbl.CurrentCty.Cty,"COUNTRY_MAP_TITLE");
    else
-      fprintf (Gbl.F.Out,"<img src=\"%s/%s\""
+      fprintf (Gbl.F.Out,"<img src=\"%s/swad64x64.png\""
                          " alt=\"%s\" title=\"%s\""
-                         " class=\"TOP_LOGO\" />",
-               Gbl.Prefs.IconsURL,Cfg_PLATFORM_LOGO_SMALL_FILENAME,
+                         " class=\"ICO40x40 TOP_LOGO\" />",
+               Gbl.Prefs.IconsURL,
                Cfg_PLATFORM_SHORT_NAME,Cfg_PLATFORM_FULL_NAME);
 
    /***** Text *****/

@@ -41252,44 +41252,44 @@ const char *Txt_TAGLINE_BR =
 
 const char *Txt_TAGLINE =
 # if   L==1
-	"plataforma de suport a la doc&egrave;ncia (UGR)";
+	"plataforma de suport a la doc&egrave;ncia / UGR /";
 # elif L==2
-	"Plattform zur Unterst&uuml;tzung der Lehre (UGR)";
+	"Plattform zur Unterst&uuml;tzung der Lehre / UGR /";
 # elif L==3
-	"platform to support teaching (UGR)";
+	"platform to support teaching / UGR /";
 # elif L==4
-	"plataforma de apoyo a la docencia (UGR)";
+	"plataforma de apoyo a la docencia / UGR /";
 # elif L==5
-	"plate-forme pour appuyer l'enseignement (UGR)";
+	"plate-forme pour appuyer l'enseignement / UGR /";
 # elif L==6
-	"plataforma de apoyo a la docencia (UGR)";	// Okoteve traducción
+	"plataforma de apoyo a la docencia / UGR /";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere l'insegnamento (UGR)";
+	"piattaforma per sostenere l'insegnamento / UGR /";
 # elif L==8
-	"platforma do wspierania nauczania (UGR)";
+	"platforma do wspierania nauczania / UGR /";
 # elif L==9
-	"plataforma de apoio ao ensino (UGR)";
+	"plataforma de apoio ao ensino / UGR /";
 # endif
 
 const char *Txt_TAGLINE_BR =
 # if   L==1
-	"plataforma de suport<br />a la doc&egrave;ncia (UGR)";
+	"/ UGR / plataforma de<br />suport a la doc&egrave;ncia";
 # elif L==2
-	"Plattform zur Unterst&uuml;tzung<br />der Lehre (UGR)";
+	"/ UGR / Plattform zur<br />Unterst&uuml;tzung der Lehre";
 # elif L==3
-	"platform to support<br />teaching (UGR)";
+	"/ UGR / platform to<br />support teaching";
 # elif L==4
-	"plataforma de apoyo<br />a la docencia (UGR)";
+	"/ UGR / plataforma de<br />apoyo a la docencia";
 # elif L==5
-	"plate-forme pour appuyer<br />l'enseignement (UGR)";
+	"/ UGR / plate-forme pour<br />appuyer l'enseignement";
 # elif L==6
-	"plataforma de apoyo<br />a la docencia (UGR)";	// Okoteve traducción
+	"/ UGR / plataforma de<br />apoyo a la docencia";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere<br />l'insegnamento (UGR)";
+	"/ UGR / piattaforma per<br />sostenere l'insegnamento";
 # elif L==8
-	"platforma do wspierania<br />nauczania (UGR)";
+	"/ UGR / platforma do<br />wspierania nauczania";
 # elif L==9
-	"plataforma de apoio<br />ao ensino (UGR)";
+	"/ UGR / plataforma<br />de apoio ao ensino";
 # endif
 
 #elif defined SWADBERRY_UGR_ES		// swadberry.ugr.es *******************

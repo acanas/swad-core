@@ -160,7 +160,7 @@
 #define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr128x64.png"				// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		80
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr280x64.png"
+#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr350x80.png"
 #define Cfg_PLATFORM_LOGO_BIG_WIDTH		175
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
@@ -176,7 +176,7 @@
 // Footer of page with info about the institution where this platform is installed
 #define Cfg_ABOUT_NAME				"Universidad de Granada"
 #define Cfg_ABOUT_URL				"http://www.ugr.es/"
-#define Cfg_ABOUT_LOGO				"ugr100x32.png"
+#define Cfg_ABOUT_LOGO				"ugr200x64.png"
 #define Cfg_ABOUT_LOGO_WIDTH			100
 #define Cfg_ABOUT_LOGO_HEIGHT			32
 
