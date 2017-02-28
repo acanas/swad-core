@@ -2347,4 +2347,3 @@ unsigned Cty_ListCtysFound (const char *Query)
 
    return NumCtys;
   }
-

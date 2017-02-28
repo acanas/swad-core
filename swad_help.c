@@ -179,7 +179,7 @@ const char *Hlp_USERS_Connected_last_clicks = WIKI "USERS.Connected#last-clicks"
 
 /***** SOCIAL tab *****/
 
-const char *Hlp_SOCIAL_Activity = WIKI "SOCIAL.Activity";
+const char *Hlp_SOCIAL_Timeline = WIKI "SOCIAL.Timeline";
 
 const char *Hlp_SOCIAL_Profiles_view_public_profile = WIKI "SOCIAL.Profiles#view-public-profile";
 const char *Hlp_SOCIAL_Profiles_who_to_follow       = WIKI "SOCIAL.Profiles#who-to-follow";

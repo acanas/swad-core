@@ -905,7 +905,7 @@ static void Soc_DropTemporaryTablesUsedToQueryTimeline (void)
 static void Soc_ShowTimeline (const char *Query,const char *Title,
                               long NotCodToHighlight)
   {
-   extern const char *Hlp_SOCIAL_Activity;
+   extern const char *Hlp_SOCIAL_Timeline;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumPubsGot;
@@ -919,7 +919,7 @@ static void Soc_ShowTimeline (const char *Query,const char *Title,
 
    /***** Start frame *****/
    Lay_StartRoundFrame (Soc_WIDTH_TIMELINE,Title,
-                        Soc_PutIconsTimeline,Hlp_SOCIAL_Activity);
+                        Soc_PutIconsTimeline,Hlp_SOCIAL_Timeline);
 
    /***** Put form to select users whom public activity is displayed *****/
    if (GlobalTimeline)
