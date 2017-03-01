@@ -157,11 +157,11 @@
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"			// Main public directory for public SWAD pages, icons, etc.
 #define Cfg_PATH_SWAD_PRIVATE			"/var/www/swad"				// Main private directory for SWAD private data
 
-#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr128x64.png"				// Logo displayed in the top of the page
+#define Cfg_PLATFORM_LOGO_SMALL_FILENAME	"swad-ugr160x80.png"				// Logo displayed in the top of the page
 #define Cfg_PLATFORM_LOGO_SMALL_WIDTH		80
 #define Cfg_PLATFORM_LOGO_SMALL_HEIGHT		40
-#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr350x80.png"
-#define Cfg_PLATFORM_LOGO_BIG_WIDTH		175
+#define Cfg_PLATFORM_LOGO_BIG_FILENAME		"swad-ugr530x80.png"
+#define Cfg_PLATFORM_LOGO_BIG_WIDTH		265
 #define Cfg_PLATFORM_LOGO_BIG_HEIGHT		40
 
 #define Cfg_PLATFORM_RESPONSIBLE_NAME		"UGR"					// Main responsible for the platform

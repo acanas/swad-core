@@ -40,6 +40,7 @@
 /*****************************************************************************/
 
 void QR_PutLinkToPrintQRCode (Act_Action_t Action,bool PrintText);
+void QR_PutParamQRString (void);
 
 void QR_PrintQRCode (void);
 

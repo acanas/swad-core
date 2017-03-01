@@ -2339,12 +2339,14 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_record_and_office_hours;
    extern const char *Txt_Show_agenda;
    extern const char *Txt_Administer_user;
+   extern const char *Txt_QR_code;
    extern const char *Txt_Write_a_message;
    extern const char *Txt_View_homework;
    extern const char *Txt_View_test_results;
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
+   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
@@ -2461,6 +2463,20 @@ static void Rec_PutIconsCommands (void)
 				   "rollcall64x64.png",
 				   Txt_View_attendance,NULL,
 				   NULL);
+	}
+
+      /***** Button to print QR code *****/
+      if (ItsMe || IAmLoggedAsSysAdm ||
+	  (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// A course is selected
+	   Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
+	   IAmLoggedAsTeacher))						// I am a teacher in the current course
+	{
+	 sprintf (NicknameWithArroba,"@%s",Gbl.Record.UsrDat->Nickname);
+	 Gbl.QR.Str = NicknameWithArroba;
+	 Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,
+				"qr64x64.gif",
+				Txt_QR_code,NULL,
+				NULL);
 	}
 
       /***** Button to send a message *****/
@@ -2619,7 +2635,6 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    bool ItsMe;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2643,11 +2658,6 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	{
 	 fprintf (Gbl.F.Out,"</a>");
 	 Act_FormEnd ();
-
-         /* Link to QR code */
-	 sprintf (NicknameWithArroba,"@%s",UsrDat->Nickname);
-	 Gbl.QR.Str = NicknameWithArroba;
-	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,false);
 	}
      }
    fprintf (Gbl.F.Out,"</div>"

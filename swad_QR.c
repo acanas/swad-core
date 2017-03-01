@@ -60,8 +60,6 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void QR_PutParamQRString (void);
-
 static void QR_ImageQRCode (const char *QRString);
 
 /*****************************************************************************/
@@ -84,7 +82,7 @@ void QR_PutLinkToPrintQRCode (Act_Action_t Action,bool PrintText)
 /************************* Put parameter QR string ***************************/
 /*****************************************************************************/
 
-static void QR_PutParamQRString (void)
+void QR_PutParamQRString (void)
   {
    Par_PutHiddenParamString ("QRString",Gbl.QR.Str);
   }
