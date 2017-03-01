@@ -800,7 +800,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
      {
       long UsrCod;
       bool IsSuperuser;
-     } Cache =
+     } Cached =
      {
       -1L,
       false
@@ -809,20 +809,20 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
    if (UsrCod <= 0)
      {
       /***** Trivial case *****/
-      Cache.UsrCod = -1L;
-      Cache.IsSuperuser = false;
+      Cached.UsrCod = -1L;
+      Cached.IsSuperuser = false;
      }
-   else if (UsrCod != Cache.UsrCod)	// If not cached...
+   else if (UsrCod != Cached.UsrCod)	// If not cached...
      {
       /***** Get if a user is superuser from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM admin"
 		     " WHERE UsrCod='%ld' AND Scope='%s'",
 	       UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
-      Cache.UsrCod = UsrCod;
-      Cache.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
+      Cached.UsrCod = UsrCod;
+      Cached.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
      }
 
-   return Cache.IsSuperuser;
+   return Cached.IsSuperuser;
   }
 
 /*****************************************************************************/
@@ -1544,7 +1544,7 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
       long UsrCod;
       long InsCod;
       bool Belongs;
-     } Cache =
+     } Cached =
      {
       -1L,
       -1L,
@@ -1555,12 +1555,12 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
        InsCod <= 0)
      {
       /***** Trivial case *****/
-      Cache.UsrCod = -1L;
-      Cache.InsCod = -1L;
-      Cache.Belongs = false;
+      Cached.UsrCod = -1L;
+      Cached.InsCod = -1L;
+      Cached.Belongs = false;
      }
-   else if (UsrCod != Cache.UsrCod ||
-            InsCod != Cache.InsCod)	// If not cached...
+   else if (UsrCod != Cached.UsrCod ||
+            InsCod != Cached.InsCod)	// If not cached...
      {
       /***** Get is a user belongs to an institution from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
@@ -1572,12 +1572,12 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
 		     " AND degrees.CtrCod=centres.CtrCod"
 		     " AND centres.InsCod='%ld'",
 	       UsrCod,InsCod);
-      Cache.UsrCod = UsrCod;
-      Cache.InsCod = InsCod;
-      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
+      Cached.UsrCod = UsrCod;
+      Cached.InsCod = InsCod;
+      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to an institution") != 0);
      }
 
-   return Cache.Belongs;
+   return Cached.Belongs;
   }
 
 /*****************************************************************************/
@@ -1592,7 +1592,7 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
       long UsrCod;
       long CtrCod;
       bool Belongs;
-     } Cache =
+     } Cached =
      {
       -1L,
       -1L,
@@ -1603,12 +1603,12 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
        CtrCod <= 0)
      {
       /***** Trivial case *****/
-      Cache.UsrCod = -1L;
-      Cache.CtrCod = -1L;
-      Cache.Belongs = false;
+      Cached.UsrCod = -1L;
+      Cached.CtrCod = -1L;
+      Cached.Belongs = false;
      }
-   else if (UsrCod != Cache.UsrCod ||
-            CtrCod != Cache.CtrCod)	// If not cached...
+   else if (UsrCod != Cached.UsrCod ||
+            CtrCod != Cached.CtrCod)	// If not cached...
      {
       /***** Get is a user belongs to a centre from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
@@ -1619,12 +1619,12 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
 		     " AND courses.DegCod=degrees.DegCod"
 		     " AND degrees.CtrCod='%ld'",
 	       UsrCod,CtrCod);
-      Cache.UsrCod = UsrCod;
-      Cache.CtrCod = CtrCod;
-      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
+      Cached.UsrCod = UsrCod;
+      Cached.CtrCod = CtrCod;
+      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a centre") != 0);
      }
 
-   return Cache.Belongs;
+   return Cached.Belongs;
   }
 
 /*****************************************************************************/
@@ -1639,7 +1639,7 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
       long UsrCod;
       long DegCod;
       bool Belongs;
-     } Cache =
+     } Cached =
      {
       -1L,
       -1L,
@@ -1650,12 +1650,12 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
        DegCod <= 0)
      {
       /***** Trivial case *****/
-      Cache.UsrCod = -1L;
-      Cache.DegCod = -1L;
-      Cache.Belongs = false;
+      Cached.UsrCod = -1L;
+      Cached.DegCod = -1L;
+      Cached.Belongs = false;
      }
-   else if (UsrCod != Cache.UsrCod ||
-            DegCod != Cache.DegCod)	// If not cached...
+   else if (UsrCod != Cached.UsrCod ||
+            DegCod != Cached.DegCod)	// If not cached...
      {
       /***** Get is a user belongs to a degree from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
@@ -1665,12 +1665,12 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
 		     " AND crs_usr.CrsCod=courses.CrsCod"
 		     " AND courses.DegCod='%ld'",
 	       UsrCod,DegCod);
-      Cache.UsrCod = UsrCod;
-      Cache.DegCod = DegCod;
-      Cache.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
+      Cached.UsrCod = UsrCod;
+      Cached.DegCod = DegCod;
+      Cached.Belongs = (DB_QueryCOUNT (Query,"can not check if a user belongs to a degree") != 0);
      }
 
-   return Cache.Belongs;
+   return Cached.Belongs;
   }
 
 /*****************************************************************************/

@@ -1397,28 +1397,46 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-
-   /***** Default value: empty name *****/
-   CtyName[0] = '\0';
+   static struct
+     {
+      long CtyCod;
+      char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+     } Cached =
+     {
+      -1L,
+      {'\0'}
+     };
 
    /***** Check if country code is correct *****/
-   if (CtyCod > 0)
+   if (CtyCod <= 0)
+      CtyName[0] = '\0';	// Empty name
+   else
      {
-      /***** Get name of the country from database *****/
-      sprintf (Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
-               Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get the name of a country")) // Country found...
-        {
-         /* Get row */
-         row = mysql_fetch_row (mysql_res);
+      if (CtyCod != Cached.CtyCod)	// If not cached...
+	{
+	 Cached.CtyCod = CtyCod;
 
-         /* Get the name of the country */
-         Str_Copy (CtyName,row[0],
-                   Cty_MAX_BYTES_COUNTRY_NAME);
-        }
+	 /***** Get name of the country from database *****/
+	 sprintf (Query,"SELECT Name_%s FROM countries WHERE CtyCod='%03ld'",
+		  Txt_STR_LANG_ID[Gbl.Prefs.Language],CtyCod);
+	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the name of a country")) // Country found...
+	   {
+	    /* Get row */
+	    row = mysql_fetch_row (mysql_res);
 
-      /***** Free structure that stores the query result *****/
-      DB_FreeMySQLResult (&mysql_res);
+	    /* Get the name of the country */
+	    Str_Copy (Cached.CtyName,row[0],
+		      Cty_MAX_BYTES_COUNTRY_NAME);
+	   }
+	 else
+	    Cached.CtyName[0] = '\0';
+
+	 /***** Free structure that stores the query result *****/
+	 DB_FreeMySQLResult (&mysql_res);
+	}
+
+      Str_Copy (CtyName,Cached.CtyName,
+		Cty_MAX_BYTES_COUNTRY_NAME);
      }
   }
 

@@ -1114,8 +1114,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
                                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
-   bool PutZoomCode = PhotoURL &&							// Photo exists
-                      Zoom == Pho_ZOOM &&						// Make zoom
+   bool PutZoomCode = Zoom == Pho_ZOOM &&						// Make zoom
                       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
    char IdCaption[Act_MAX_LENGTH_ID];
 
@@ -1185,8 +1184,15 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
 
    /***** Image zoom *****/
    if (PutZoomCode)
-      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\" onmouseout=\"noZoom();\"",
-               PhotoURL,IdCaption);
+     {
+      fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'");
+      if (PhotoExists)
+	 fprintf (Gbl.F.Out,"%s",PhotoURL);
+      else
+	 fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
+      fprintf (Gbl.F.Out,"','%s');\" onmouseout=\"noZoom();\"",
+               IdCaption);
+     }
 
    /***** End image *****/
    fprintf (Gbl.F.Out," />");
