@@ -1155,8 +1155,15 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
          fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
       fprintf (Gbl.F.Out,"</div>");
 
-      /* Country */
-      if (UsrDat->CtyCod > 0)
+      /* Institution  full name and institution country */
+      if (UsrDat->InsCod > 0)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
+	 Ins_WriteInstitutionNameAndCty (UsrDat->InsCod);
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+      /* User's country */
+      else if (UsrDat->CtyCod > 0)
 	{
 	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
 	 Cty_WriteCountryName (UsrDat->CtyCod,

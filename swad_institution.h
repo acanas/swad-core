@@ -105,9 +105,12 @@ void Ins_PrintConfiguration (void);
 void Ins_ShowInssOfCurrentCty (void);
 void Ins_EditInstitutions (void);
 void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData);
+
+void Ins_WriteInstitutionNameAndCty (long InsCod);
 bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
                                     Ins_GetExtraData_t GetExtraData);
 void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins);
+
 void Ins_FreeListInstitutions (void);
 void Ins_WriteSelectorOfInstitution (void);
 void Ins_PutParamInsCod (long InsCod);
