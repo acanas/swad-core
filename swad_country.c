@@ -1200,13 +1200,15 @@ void Cty_WriteSelectorOfCountry (void)
 /*****************************************************************************/
 /**************************** Get country full name **************************/
 /*****************************************************************************/
+// If ClassLink == NULL ==> do not put link
 
-void Cty_WriteCountryName (long CtyCod,const char *Class)
+void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
-   bool PutForm = !Gbl.Form.Inside &&						// Only if not inside another form
+   bool PutForm = ClassLink &&
+	          !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
 
    /***** Get country name *****/
@@ -1218,7 +1220,7 @@ void Cty_WriteCountryName (long CtyCod,const char *Class)
       Act_FormStart (ActSeeCtyInf);
       Cty_PutParamCtyCod (CtyCod);
       Act_LinkFormSubmit (Act_GetActionTextFromDB (Act_Actions[ActSeeCtyInf].ActCod,ActTxt),
-		          Class,NULL);
+		          ClassLink,NULL);
       fprintf (Gbl.F.Out,"%s</a>",CtyName);
       Act_FormEnd ();
      }

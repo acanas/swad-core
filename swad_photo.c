@@ -1111,9 +1111,6 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                        bool FormUnique)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char FullName [Usr_MAX_BYTES_FULL_NAME + 1];
-   char ShortName[Usr_MAX_BYTES_FULL_NAME + 1];
-   char Surnames [Usr_MAX_BYTES_SURNAMES + 1];
    bool PhotoExists;
    bool PutLinkToPublicProfile = !Gbl.Form.Inside &&						// Only if not inside another form
                                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
@@ -1140,35 +1137,35 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
      }
 
    /***** Hidden div to pass user's name to Javascript *****/
-   Str_Copy (FullName,UsrDat->FullName,
-             Usr_MAX_BYTES_FULL_NAME);
    if (PutZoomCode)
      {
-      Str_Copy (ShortName,UsrDat->FirstName,
-                Usr_MAX_BYTES_FULL_NAME);
-      Str_LimitLengthHTMLStr (ShortName,23);
-      Surnames[0] = '\0';
-      if (UsrDat->Surname1[0])
-         Str_Copy (Surnames,UsrDat->Surname1,
-                   Usr_MAX_BYTES_SURNAMES);
-      if (UsrDat->Surname2[0])
-        {
-         Str_Concat (Surnames," ",
-                     Usr_MAX_BYTES_SURNAMES);
-         Str_Concat (Surnames,UsrDat->Surname2,
-                     Usr_MAX_BYTES_SURNAMES);
-        }
-      Str_LimitLengthHTMLStr (Surnames,23);
-      Str_Concat (ShortName,"<br />",
-                  Usr_MAX_BYTES_FULL_NAME);
-      Str_Concat (ShortName,Surnames,
-                  Usr_MAX_BYTES_FULL_NAME);
-
       Act_SetUniqueId (IdCaption);
-      fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+      fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">",
+      	       IdCaption);
+
+      /* First name */
+      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">"
 	                 "%s"
 	                 "</div>",
-	       IdCaption,ShortName);
+	       UsrDat->FirstName);
+
+      /* Surnames */
+      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">%s",
+               UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+         fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</div>");
+
+      /* Country */
+      if (UsrDat->CtyCod > 0)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_SMALL\">");
+	 Cty_WriteCountryName (UsrDat->CtyCod,
+	                       NULL);	// Don't put link to country
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Start image *****/
@@ -1183,7 +1180,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       fprintf (Gbl.F.Out,"%s/usr_bl.jpg",Gbl.Prefs.IconsURL);
    fprintf (Gbl.F.Out,"\" alt=\"%s\" title=\"%s\""
 	              " class=\"%s\"",
-            FullName,FullName,
+            UsrDat->FullName,UsrDat->FullName,
 	    ClassPhoto);
 
    /***** Image zoom *****/

@@ -725,9 +725,7 @@ function zoom (img,urlPhoto,idCaption) {
 	document.getElementById('zoomLyr').style.left = xPos + 'px';
 	document.getElementById('zoomLyr').style.top  = yPos + 'px';
 	document.getElementById('zoomImg').src = urlPhoto;
-	document.getElementById('zoomTxt').innerHTML = '<span class="ZOOM_TXT">' +
-													document.getElementById(idCaption).innerHTML +
-													'</span>';
+	document.getElementById('zoomTxt').innerHTML = document.getElementById(idCaption).innerHTML;
 }
 
 // Exit from zooming a user's photograph

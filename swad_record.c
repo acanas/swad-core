@@ -2674,7 +2674,8 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData)
    fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_DAT_BOLD LEFT_TOP\">");
    if (ShowData && UsrDat->CtyCod > 0)
       /* Link to see country information */
-      Cty_WriteCountryName (UsrDat->CtyCod,"REC_DAT_BOLD");
+      Cty_WriteCountryName (UsrDat->CtyCod,
+                            "REC_DAT_BOLD");	// Put link to country
    fprintf (Gbl.F.Out,"</td>");
   }
 

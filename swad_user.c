@@ -3969,6 +3969,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
       "usr_data.Sex,"
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
+      "usr_data.CtyCod,"
       "usr_data.InsCod,"
       "crs_usr.Role,"
       "crs_usr.Accepted";
@@ -3982,9 +3983,10 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    row[ 6]: usr_data.Sex
    row[ 7]: usr_data.Photo
    row[ 8]: usr_data.PhotoVisibility
-   row[ 9]: usr_data.InsCod
-   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
+   row[11]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[12]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** If there are no groups selected, don't do anything *****/
@@ -4143,6 +4145,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
       "usr_data.Sex,"
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
+      "usr_data.CtyCod,"
       "usr_data.InsCod";
    /*
    row[ 0]: usr_data.UsrCod
@@ -4154,9 +4157,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
    row[ 6]: usr_data.Sex
    row[ 7]: usr_data.Photo
    row[ 8]: usr_data.PhotoVisibility
-   row[ 9]: usr_data.InsCod
-   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
+   row[11]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[12]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
 
    /***** Build query *****/
@@ -4267,7 +4271,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   }
 
 /*****************************************************************************/
-/********* Search list of users with a given role in current scope ***********/
+/*********** Search for users with a given role in current scope *************/
 /*****************************************************************************/
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
@@ -4283,6 +4287,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
       "usr_data.Sex,"
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
+      "usr_data.CtyCod,"
       "usr_data.InsCod";
    /*
    row[ 0]: usr_data.UsrCod
@@ -4294,9 +4299,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    row[ 6]: usr_data.Sex
    row[ 7]: usr_data.Photo
    row[ 8]: usr_data.PhotoVisibility
-   row[ 9]: usr_data.InsCod
-   row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-   row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
+   row[11]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+   row[12]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
    */
    const char *OrderQuery = "candidate_users.UsrCod=usr_data.UsrCod"
 			    " ORDER BY "
@@ -4565,18 +4571,20 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
       "Sex,"
       "Photo,"
       "PhotoVisibility,"
+      "CtyCod,"
       "InsCod";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Password
-   row[3]: usr_data.Surname1
-   row[4]: usr_data.Surname2
-   row[5]: usr_data.FirstName
-   row[6]: usr_data.Sex
-   row[7]: usr_data.Photo
-   row[8]: usr_data.PhotoVisibility
-   row[9]: usr_data.InsCod
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Password
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
    */
 
    /***** Build query *****/
@@ -4726,18 +4734,20 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
       "Sex,"
       "Photo,"
       "PhotoVisibility,"
+      "CtyCod,"
       "InsCod";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Password
-   row[3]: usr_data.Surname1
-   row[4]: usr_data.Surname2
-   row[5]: usr_data.FirstName
-   row[6]: usr_data.Sex
-   row[7]: usr_data.Photo
-   row[8]: usr_data.PhotoVisibility
-   row[9]: usr_data.InsCod
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Password
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
    */
 
    /***** Build query *****/
@@ -4799,18 +4809,20 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
       "usr_data.Sex,"
       "usr_data.Photo,"
       "usr_data.PhotoVisibility,"
+      "usr_data.CtyCod,"
       "usr_data.InsCod";
    /*
-   row[0]: usr_data.UsrCod
-   row[1]: usr_data.EncryptedUsrCod
-   row[2]: usr_data.Password
-   row[3]: usr_data.Surname1
-   row[4]: usr_data.Surname2
-   row[5]: usr_data.FirstName
-   row[6]: usr_data.Sex
-   row[7]: usr_data.Photo
-   row[8]: usr_data.PhotoVisibility
-   row[9]: usr_data.InsCod
+   row[ 0]: usr_data.UsrCod
+   row[ 1]: usr_data.EncryptedUsrCod
+   row[ 2]: usr_data.Password
+   row[ 3]: usr_data.Surname1
+   row[ 4]: usr_data.Surname2
+   row[ 5]: usr_data.FirstName
+   row[ 6]: usr_data.Sex
+   row[ 7]: usr_data.Photo
+   row[ 8]: usr_data.PhotoVisibility
+   row[ 9]: usr_data.CtyCod
+   row[10]: usr_data.InsCod
    */
 
    Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
@@ -4879,9 +4891,10 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             row[ 6]: usr_data.Sex
             row[ 7]: usr_data.Photo
             row[ 8]: usr_data.PhotoVisibility
-	    row[ 9]: usr_data.InsCod
-	    row[10]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
-	    row[11]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
+	    row[ 9]: usr_data.CtyCod
+	    row[10]: usr_data.InsCod
+	    row[11]: crs_usr.Role	(only if Scope == Sco_SCOPE_CRS)
+	    row[12]: crs_usr.Accepted	(only if Scope == Sco_SCOPE_CRS)
 	    */
             UsrInList = &Gbl.Usrs.LstUsrs[Role].Lst[NumUsr];
 
@@ -4918,11 +4931,14 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             /* Get user's photo visibility (row[8]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
 
-            /* Get user's institution code (row[9]) */
-	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[9]);
+            /* Get user's country code (row[9]) */
+	    UsrInList->CtyCod = Str_ConvertStrCodToLongCod (row[9]);
+
+            /* Get user's institution code (row[10]) */
+	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[10]);
 
             /* Get user's role and acceptance of enrollment in course(s)
-               (row[10], row[11] if Scope == Sco_SCOPE_CRS) */
+               (row[11], row[12] if Scope == Sco_SCOPE_CRS) */
             switch (Role)
               {
                case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any user
@@ -4949,8 +4965,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[10]);
-			UsrInList->Accepted = (row[11][0] == 'Y');
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
+			UsrInList->Accepted = (row[12][0] == 'Y');
 			break;
 		    }
         	  break;
@@ -4979,8 +4995,8 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		     case Sco_SCOPE_CRS:	// Course
 			// Query result has a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[10]);
-			UsrInList->Accepted = (row[11][0] == 'Y');
+			UsrInList->RoleInCurrentCrsDB = Rol_ConvertUnsignedStrToRole (row[11]);
+			UsrInList->Accepted = (row[12][0] == 'Y');
 			break;
 		    }
         	  break;
@@ -5021,6 +5037,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    Str_Copy (UsrDat->Photo,UsrInList->Photo,
              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
+   UsrDat->CtyCod                = UsrInList->CtyCod;
    UsrDat->InsCod                = UsrInList->InsCod;
    UsrDat->RoleInCurrentCrsDB    = UsrInList->RoleInCurrentCrsDB;
    UsrDat->Accepted              = UsrInList->Accepted;

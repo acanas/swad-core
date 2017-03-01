@@ -193,6 +193,7 @@ struct UsrInList
    Usr_Sex_t Sex;
    char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
+   long CtyCod;		// Country
    long InsCod;		// Institution
    Rol_Role_t RoleInCurrentCrsDB;	// Role in current course in database
    bool Accepted;	// User has accepted joining to one/all courses?
