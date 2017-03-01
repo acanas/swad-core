@@ -1513,6 +1513,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    extern const char *Txt_Change_my_groups;
    extern const char *Txt_Enroll_in_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
+   extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
@@ -1565,6 +1566,14 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
       sprintf (Gbl.Message,Txt_No_groups_have_been_created_in_the_course_X,
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
+
+      /***** Button to create group *****/
+      if (ICanEdit)
+	{
+	 Act_FormStart (ActReqEdiGrp);
+	 Lay_PutConfirmButton (Txt_Create_group);
+	 Act_FormEnd ();
+	}
      }
 
    /***** End frame *****/
