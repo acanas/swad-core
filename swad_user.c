@@ -8514,12 +8514,24 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
 
 void Usr_PrintUsrQRCode (void)
   {
-   /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Gbl.Usrs.Me.UsrDat.FullName,NULL,NULL);
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
-   /***** Print QR code ****/
-   QR_PrintQRCode ();
+   if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
+     {
+      /***** Start frame *****/
+      Lay_StartRoundFrame (NULL,Gbl.Usrs.Other.UsrDat.FullName,NULL,NULL);
 
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
+      /***** Show QR code *****/
+      if (Gbl.Usrs.Other.UsrDat.Nickname[0])
+	{
+	 sprintf (NewNicknameWithArroba,"@%s",Gbl.Usrs.Other.UsrDat.Nickname);
+	 QR_ImageQRCode (NewNicknameWithArroba);
+	}
+
+      /***** End frame *****/
+      Lay_EndRoundFrame ();
+     }
+   else
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }

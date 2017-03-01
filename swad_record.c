@@ -2346,7 +2346,6 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_View_attendance;
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
    bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
    bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
@@ -2470,14 +2469,10 @@ static void Rec_PutIconsCommands (void)
 	  (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// A course is selected
 	   Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
 	   IAmLoggedAsTeacher))						// I am a teacher in the current course
-	{
-	 sprintf (NicknameWithArroba,"@%s",Gbl.Record.UsrDat->Nickname);
-	 Gbl.QR.Str = NicknameWithArroba;
-	 Lay_PutContextualLink (ActPrnUsrQR,QR_PutParamQRString,
+	 Lay_PutContextualLink (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted,
 				"qr64x64.gif",
 				Txt_QR_code,NULL,
 				NULL);
-	}
 
       /***** Button to send a message *****/
       Lay_PutContextualLink (ActReqMsgUsr,Rec_PutParamsMsgUsr,

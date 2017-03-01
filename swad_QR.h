@@ -39,10 +39,11 @@
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action,bool PrintText);
+void QR_PutLinkToPrintQRCode (Act_Action_t Action);
 void QR_PutParamQRString (void);
 
 void QR_PrintQRCode (void);
+void QR_ImageQRCode (const char *QRString);
 
 void QR_LinkTo (unsigned Size,const char *ParamStr,long Cod);
 void QR_ExamAnnnouncement (void);

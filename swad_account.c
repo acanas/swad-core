@@ -520,8 +520,9 @@ static void Acc_PutLinkToRemoveMyAccount (void)
 
 static void Acc_PutParamsToRemoveMyAccount (void)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Me.UsrDat.EncryptedUsrCod);
-   Par_PutHiddenParamUnsigned ("RegRemAction",(unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
+   Usr_PutParamMyUsrCodEncrypted ();
+   Par_PutHiddenParamUnsigned ("RegRemAction",
+                               (unsigned) Enr_ELIMINATE_ONE_USR_FROM_PLATFORM);
   }
 
 /*****************************************************************************/

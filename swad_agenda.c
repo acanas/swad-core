@@ -513,7 +513,7 @@ static void Agd_PutIconToShowQR (void)
             Txt_STR_LANG_ID[Gbl.Prefs.Language],
             Gbl.Usrs.Me.UsrDat.Nickname);
    Gbl.QR.Str = URL;
-   QR_PutLinkToPrintQRCode (ActPrnAgdQR,false);
+   QR_PutLinkToPrintQRCode (ActPrnAgdQR);
   }
 
 static void Agd_PutIconsOtherPublicAgenda (void)

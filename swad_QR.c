@@ -60,21 +60,18 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
-static void QR_ImageQRCode (const char *QRString);
-
 /*****************************************************************************/
 /***************** Put a link to a print view of a QR code *******************/
 /*****************************************************************************/
 
-void QR_PutLinkToPrintQRCode (Act_Action_t Action,bool PrintText)
+void QR_PutLinkToPrintQRCode (Act_Action_t Action)
   {
    extern const char *Txt_QR_code;
 
    /***** Link to print QR *****/
    Lay_PutContextualLink (Action,QR_PutParamQRString,
                           "qr64x64.gif",
-                          Txt_QR_code,PrintText ? Txt_QR_code :
-	                                          NULL,
+                          Txt_QR_code,NULL,
 		          NULL);
   }
 
@@ -106,7 +103,7 @@ void QR_PrintQRCode (void)
 /******************** Write an QR (image) based on a string ******************/
 /*****************************************************************************/
 
-static void QR_ImageQRCode (const char *QRString)
+void QR_ImageQRCode (const char *QRString)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 	              " style=\"margin:0 auto; width:%upx;\">"

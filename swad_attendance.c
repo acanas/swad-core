@@ -143,7 +143,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat);
 
 void Att_SeeAttEvents (void)
   {
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
+   extern const char *Txt_QR_code;
 
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
@@ -175,12 +175,10 @@ void Att_SeeAttEvents (void)
 	   }
 
       /* Put link to my QR code */
-      if (Gbl.Usrs.Me.UsrDat.Nickname[0])
-	{
-	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
-	 Gbl.QR.Str = NicknameWithArroba;
-	 QR_PutLinkToPrintQRCode (ActPrnUsrQR,true);
-	}
+      Lay_PutContextualLink (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted,
+			     "qr64x64.gif",
+			     Txt_QR_code,Txt_QR_code,
+			     NULL);
 
       fprintf (Gbl.F.Out,"</div>");
      }

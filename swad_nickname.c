@@ -187,6 +187,7 @@ void Nck_ShowFormChangeUsrNickname (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Current_nickname;
    extern const char *Txt_Other_nicknames;
+   extern const char *Txt_QR_code;
    extern const char *Txt_Use_this_nickname;
    extern const char *Txt_New_nickname;
    extern const char *Txt_Nickname;
@@ -197,7 +198,6 @@ void Nck_ShowFormChangeUsrNickname (void)
    MYSQL_ROW row;
    unsigned NumNicks;
    unsigned NumNick;
-   char NicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
@@ -253,11 +253,10 @@ void Nck_ShowFormChangeUsrNickname (void)
 
       /* Link to QR code */
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
-	{
-	 sprintf (NicknameWithArroba,"@%s",Gbl.Usrs.Me.UsrDat.Nickname);
-	 Gbl.QR.Str = NicknameWithArroba;
-         QR_PutLinkToPrintQRCode (ActPrnUsrQR,false);
-	}
+         Lay_PutContextualLink (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted,
+				"qr64x64.gif",
+				Txt_QR_code,NULL,
+				NULL);
 
       fprintf (Gbl.F.Out,"</div>");
 
