@@ -80,13 +80,18 @@ void Plc_SeePlaces (void)
    extern const char *Txt_PLACES_ORDER[2];
    extern const char *Txt_Other_places;
    extern const char *Txt_Place_unspecified;
+   extern const char *Txt_Create_another_place;
+   extern const char *Txt_Create_place;
    Plc_Order_t Order;
    unsigned NumPlc;
    unsigned NumCtrsWithPlc = 0;
    unsigned NumCtrsInOtherPlcs;
+   bool ICanEdit;
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
+      ICanEdit = (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM);
+
       /***** Get parameter with the type of order in the list of places *****/
       Plc_GetParamPlcOrder ();
 
@@ -94,11 +99,12 @@ void Plc_SeePlaces (void)
       Plc_GetListPlaces ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Places,
-                                Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Plc_PutIconToEditPlaces :
-                        	                                        NULL,
-                                Hlp_INSTITUTION_Places,2);
-      fprintf (Gbl.F.Out,"<tr>");
+      Lay_StartRoundFrame (NULL,Txt_Places,
+                           ICanEdit ? Plc_PutIconToEditPlaces :
+                        	      NULL,
+                           Hlp_INSTITUTION_Places);
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+                         "<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
@@ -170,8 +176,19 @@ void Plc_SeePlaces (void)
 	       Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod) -
 	       NumCtrsWithPlc);
 
+      fprintf (Gbl.F.Out,"</table>");
+
+      /***** Button to create place *****/
+      if (ICanEdit)
+	{
+	 Act_FormStart (ActEdiPlc);
+	 Lay_PutConfirmButton (Gbl.Plcs.Num ? Txt_Create_another_place :
+	                                      Txt_Create_place);
+	 Act_FormEnd ();
+	}
+
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      Lay_EndRoundFrame ();
 
       /***** Free list of places *****/
       Plc_FreeListPlaces ();

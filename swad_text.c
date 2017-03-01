@@ -6033,6 +6033,27 @@ const char *Txt_Create_another_institution =
 	"Criar uma outra institu&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_another_place =
+#if   L==1
+	"Crear un altre lloc";
+#elif L==2
+	"Erstellen Sie einen anderen Standort";
+#elif L==3
+	"Create another place";
+#elif L==4
+	"Crear otro lugar";
+#elif L==5
+	"Cr&eacute;er un autre emplacement";
+#elif L==6
+	"Crear otro lugar";	// Okoteve traducción
+#elif L==7
+	"Crea una altra localit&grave;";
+#elif L==8
+	"Tworzenie innego miejsca";
+#elif L==9
+	"Criar uma outra localiza&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Create_assignment =
 #if   L==1
 	"Crear actividad";	// Necessita traduccio
@@ -6413,7 +6434,7 @@ const char *Txt_Create_password =
 
 const char *Txt_Create_place =
 #if   L==1
-	"Crear lugar";	// Necessita traduccio
+	"Crear lloc";
 #elif L==2
 	"Standort eingeben";
 #elif L==3
