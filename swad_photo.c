@@ -1142,15 +1142,10 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">",
       	       IdCaption);
 
-      /* First name */
+      /* First name and surnames */
       fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">"
-	                 "%s"
-	                 "</div>",
-	       UsrDat->FirstName);
-
-      /* Surnames */
-      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">%s",
-               UsrDat->Surname1);
+	                 "%s<br />%s",
+	       UsrDat->FirstName,UsrDat->Surname1);
       if (UsrDat->Surname2[0])
          fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
       fprintf (Gbl.F.Out,"</div>");
