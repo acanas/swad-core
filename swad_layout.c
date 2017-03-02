@@ -38,6 +38,7 @@
 #include "swad_exam.h"
 #include "swad_follow.h"
 #include "swad_global.h"
+#include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_logo.h"
 #include "swad_MFU.h"
@@ -1405,7 +1406,7 @@ static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
      }
    if (HelpLink)
       fprintf (Gbl.F.Out,"<div class=\"FRAME_ICO_RIGHT\">"
-                         "<a href=\"%s\" target=\"_blank\">"
+                         "<a href=\"%s%s\" target=\"_blank\">"
                          "<div class=\"CONTEXT_OPT HLP_HIGHLIGHT\">"
 	                 "<img src=\"%s/help64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
@@ -1413,7 +1414,7 @@ static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
                          "</div>"
                          "</a>"
                          "</div>",
-	       HelpLink,
+	       Hlp_WIKI,HelpLink,
                Gbl.Prefs.IconsURL,
                Txt_Help,Txt_Help);
    fprintf (Gbl.F.Out,"</div>");

@@ -70,48 +70,49 @@ CFLAGS = -Wall -Wextra -mtune=native -O2 -s
 all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt
 
 swad_ca: $(OBJS) $(SOAPOBJS) $(SHAOBJS)
+	$(CC) $(CFLAGS) -c -D L=1 swad_help_URL.c
 	$(CC) $(CFLAGS) -c -D L=1 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_de: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=2 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=2 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_en: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=3 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=3 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_es: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=4 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=4 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_fr: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=5 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=5 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_gn: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=6 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=6 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_it: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=7 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=7 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_pl: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=8 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=8 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 swad_pt: $(OBJS) $(SOAPOBJS)
-	$(CC) $(CFLAGS) -c -D L=9 swad_text.c
-	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
+	$(CC) $(CFLAGS) -c -D L=9 swad_help_URL.c swad_text.c
+	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 
 .PHONY: clean

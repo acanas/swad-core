@@ -94,6 +94,10 @@
 /******************************** Constants **********************************/
 /*****************************************************************************/
 
+#ifndef L
+#define L 3	// English
+#endif
+
 const char *Txt_NEW_LINE = "\r\n";	// End of line in a file. If we put only \n the file does not look good in some Windows text editors
 
 // The HTML entity for "ß" is &szlig; It stands for "S-Z ligature", because this symbol comes from the ligature of a Gothic S and a Z.
