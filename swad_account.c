@@ -136,13 +136,13 @@ void Acc_ShowFormMyAccount (void)
 
 static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
   {
-   extern const char *Hlp_PROFILE_Sign_up;
+   extern const char *Hlp_PROFILE_SignUp;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_ID;
    extern const char *Txt_Check;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Title,NULL,Hlp_PROFILE_Sign_up);
+   Lay_StartRoundFrame (NULL,Title,NULL,Hlp_PROFILE_SignUp);
 
    /***** Form to request user's ID for possible account already created *****/
    Act_FormStart (ActChkUsrAcc);
@@ -325,7 +325,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWithoutArroba,
                                                      const char *NewEmail)
   {
-   extern const char *Hlp_PROFILE_Sign_up;
+   extern const char *Hlp_PROFILE_SignUp;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_account;
    extern const char *Txt_Nickname;
@@ -337,7 +337,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
    /***** Form to enter some data of the new user *****/
    Act_FormStart (ActCreUsrAcc);
    Lay_StartRoundFrameTable (NULL,Txt_Create_account,
-                             NULL,Hlp_PROFILE_Sign_up,2);
+                             NULL,Hlp_PROFILE_SignUp,2);
 
    /***** Nickname *****/
    if (NewNicknameWithoutArroba[0])
@@ -393,13 +393,13 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
 
 void Acc_ShowFormGoToRequestNewAccount (void)
   {
-   extern const char *Hlp_PROFILE_Sign_up;
+   extern const char *Hlp_PROFILE_SignUp;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,Cfg_PLATFORM_SHORT_NAME);
-   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_PROFILE_Sign_up);
+   Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_PROFILE_SignUp);
 
    /***** Button to go to request the creation of a new account *****/
    Act_FormStart (ActFrmMyAcc);

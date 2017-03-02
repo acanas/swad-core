@@ -1622,25 +1622,25 @@ const char *Hlp_USERS_Attendance_attendance_list =
 	"USERS.Attendance#attendance-list";
 #endif
 
-const char *Hlp_USERS_Signup =
+const char *Hlp_USERS_SignUp =
 #if   L==1
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==2
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==3
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==4
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==5
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==6
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==7
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==8
-	"USERS.Sign up";
+	"USERS.SignUp";
 #elif L==9
-	"USERS.Sign up";
+	"USERS.SignUp";
 #endif
 
 const char *Hlp_USERS_Requests =
@@ -2701,46 +2701,46 @@ const char *Hlp_STATS_Frequent =
 
 /***** PROFILE tab *****/
 
-const char *Hlp_PROFILE_Log_in =
+const char *Hlp_PROFILE_LogIn =
 #if   L==1
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==2
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==3
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==4
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==5
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==6
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==7
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==8
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #elif L==9
-	"PROFILE.Log%20in";
+	"PROFILE.LogIn";
 #endif
 
-const char *Hlp_PROFILE_Sign_up =
+const char *Hlp_PROFILE_SignUp =
 #if   L==1
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==2
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==3
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==4
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==5
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==6
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==7
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==8
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #elif L==9
-	"PROFILE.Sign%20up";
+	"PROFILE.SignUp";
 #endif
 
 const char *Hlp_PROFILE_Account =

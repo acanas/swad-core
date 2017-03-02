@@ -2030,7 +2030,7 @@ void Usr_PutLinkToLogin (void)
 
 void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
   {
-   extern const char *Hlp_PROFILE_Log_in;
+   extern const char *Hlp_PROFILE_LogIn;
    extern const char *Txt_Log_in;
    extern const char *Txt_User[Usr_NUM_SEXS];
    extern const char *Txt_nick_email_or_ID;
@@ -2054,7 +2054,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
       FuncParams ();
 
    /***** Start frame and table *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,Hlp_PROFILE_Log_in,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Log_in,NULL,Hlp_PROFILE_LogIn,2);
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_MIDDLE\">"

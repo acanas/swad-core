@@ -2035,7 +2035,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
                               struct UsrData *UsrDat)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Hlp_USERS_Signup;
+   extern const char *Hlp_USERS_SignUp;
    extern const char *Hlp_PROFILE_Record;
    extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
    extern const char *Hlp_USERS_Guests;
@@ -2047,7 +2047,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    extern const char *Txt_Confirm;
    const char *Rec_RecordHelp[Rec_SHARED_NUM_VIEW_TYPES] =
      {
-      Hlp_USERS_Signup,				// Rec_SHA_SIGN_UP_FORM
+      Hlp_USERS_SignUp,				// Rec_SHA_SIGN_UP_FORM
 
       Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_FORM
       Hlp_PROFILE_Record,			// Rec_SHA_MY_RECORD_CHECK
