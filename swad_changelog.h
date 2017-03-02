@@ -197,13 +197,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.145.1 (2017-03-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.145.2 (2017-03-02)"
 #define CSS_FILE		"swad16.144.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.145.2: Mar 02, 2017	Some help URLs translated to spanish. (216338 lines)
         Version 16.145.1: Mar 02, 2017	Changes in several help URLs. (216337 lines)
         Version 16.145:   Mar 02, 2017	Support for languages in help.
 					New module swad_help_URL.c. (216336 lines)

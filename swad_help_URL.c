@@ -26,7 +26,7 @@
 /*****************************************************************************/
 
 #ifndef L
-#define L 3	// English
+#define L 4	// Spanish
 #endif
 
 const char *Hlp_Search =
@@ -2709,7 +2709,7 @@ const char *Hlp_PROFILE_LogIn =
 #elif L==3
 	"PROFILE.LogIn";
 #elif L==4
-	"PROFILE.LogIn";
+	"PROFILE.LogIn.es";
 #elif L==5
 	"PROFILE.LogIn";
 #elif L==6
@@ -2730,7 +2730,7 @@ const char *Hlp_PROFILE_SignUp =
 #elif L==3
 	"PROFILE.SignUp";
 #elif L==4
-	"PROFILE.SignUp";
+	"PROFILE.SignUp.es";
 #elif L==5
 	"PROFILE.SignUp";
 #elif L==6
