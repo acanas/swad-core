@@ -1984,11 +1984,34 @@ a:hover img.CENTRE_PHOTO_SHOW
 .REC_DAT	{color:#808080; font-size:13pt; line-height:110%;}
 .REC_DAT_BOLD	{color:black;   font-size:13pt; line-height:110%;}
 
+/******************************** Class photo ********************************/
+.CLASSPHOTO_TITLE
+	{
+	color:#606060;
+	font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif;
+	font-size:13pt;
+	}
+.CLASSPHOTO
+	{
+	color:#606060;
+	font-size:10pt;
+	line-height:110%;
+	white-space:nowrap;
+	}
+.CLASSPHOTO_CAPTION
+	{
+	display:block;
+	box-sizing:border-box;
+	max-width:60px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	margin:0 auto;
+	}
+
 /*****************************************************************************/
 .MSJ_AVISO		{color:#632921; font-size:12pt;}
 .TIT_TBL		{color:#4D88A1; font-size:12pt; font-weight:bold;}
-.TIT_CLASSPHOTO		{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#606060; font-size:13pt;}
-.CLASSPHOTO		{color:#606060; font-size:10pt; line-height:110%; white-space:nowrap;}
 
 .GRP_TITLE		{color:#4D88A1; font-size:15pt; font-weight:bold;}
 

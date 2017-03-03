@@ -142,7 +142,7 @@ static void TT_ShowTimeTableGrpsSelected (void)
    extern const char *Txt_Groups_OF_A_USER;
    extern const char *Txt_All_groups;
 
-   fprintf (Gbl.F.Out,"<div class=\"TIT_CLASSPHOTO CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
    switch (Gbl.CurrentCrs.Grps.WhichGrps)
      {
       case Grp_ONLY_MY_GROUPS:

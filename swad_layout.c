@@ -1761,11 +1761,12 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Second column: class photo title *****/
-   fprintf (Gbl.F.Out,"<td class=\"TIT_CLASSPHOTO CENTER_MIDDLE\">");
+   fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO_TITLE CENTER_MIDDLE\">");
    if (InsCod > 0)
      {
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+                            " class=\"CLASSPHOTO_TITLE\">",
                   Ins.WWW);
       fprintf (Gbl.F.Out,"%s",Ins.FullName);
       if (!PrintView)
@@ -1776,7 +1777,8 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
       if (Ins.InsCod > 0)
          fprintf (Gbl.F.Out," - ");
       if (!PrintView)
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\" class=\"TIT_CLASSPHOTO\">",
+         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+                            " class=\"CLASSPHOTO_TITLE\">",
                   Deg.WWW);
       fprintf (Gbl.F.Out,"%s",Deg.FullName);
       if (!PrintView)
@@ -1800,7 +1802,7 @@ void Lay_WriteHeaderClassPhoto (bool PrintView,bool DrawingClassPhoto,
      {
       if (!PrintView)
          fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
-                            " class=\"TIT_CLASSPHOTO\">",
+                            " class=\"CLASSPHOTO_TITLE\">",
                   Deg.WWW);
       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,40,NULL,true);
       if (!PrintView)

@@ -1971,8 +1971,10 @@ static void Pho_GetMaxStdsPerDegree (void)
    unsigned long NumRows;
 
    /***** Get maximum number of students in a degree from database *****/
-   sprintf (Query,"SELECT MAX(NumStds),MAX(NumStdsWithPhoto),MAX(NumStdsWithPhoto/NumStds)"
-                  " FROM sta_degrees WHERE Sex='all' AND NumStds>'0'");
+   sprintf (Query,"SELECT MAX(NumStds),MAX(NumStdsWithPhoto),"
+	          "MAX(NumStdsWithPhoto/NumStds)"
+                  " FROM sta_degrees"
+                  " WHERE Sex='all' AND NumStds>'0'");
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get maximum number of students in a degree");
 
    /***** Count number of rows in result *****/
@@ -2177,7 +2179,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	   {
 	    /***** Show average photo of students belonging to this degree *****/
 	    Pho_GetNumStdsInDegree (Deg.DegCod,Sex,&NumStds,&NumStdsWithPhoto);
-	    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE COLOR%u\">",
+	    fprintf (Gbl.F.Out,"<td class=\"CLASSPHOTO CENTER_MIDDLE COLOR%u\">",
 		     Gbl.RowEvenOdd);
 	    if (Gbl.Usrs.Listing.WithPhotos)
 	       Pho_ShowDegreeAvgPhotoAndStat (&Deg,SeeOrPrint,Sex,NumStds,NumStdsWithPhoto);
@@ -2325,7 +2327,6 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    char PathRelAvgPhoto[PATH_MAX + 1];
    char PhotoURL[PATH_MAX + 1];
    char PhotoCaption[512];
-   char CopyOfDegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];	// Short name of degree
    bool ShowDegPhoto;
    char IdCaption[Act_MAX_LENGTH_ID];
 
@@ -2333,15 +2334,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    PhotoURL[0] = '\0';
    PhotoCaption[0] = '\0';
 
-   /***** Compute photo width and height to be proportional to number of students *****/
+   /***** Compute photo width and height
+          to be proportional to number of students *****/
    Pho_ComputePhotoSize (NumStds,NumStdsWithPhoto,&PhotoWidth,&PhotoHeight);
-
-   /***** Make a copy of the degree short name *****/
-   Str_Copy (CopyOfDegShortName,Deg->ShrtName,
-             Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
-   Str_LimitLengthHTMLStr (CopyOfDegShortName,
-                           SeeOrPrint == Pho_DEGREES_SEE ? 10 :
-                        	                           15);
 
    /***** Put link to degree *****/
    if (SeeOrPrint == Pho_DEGREES_SEE)
@@ -2385,7 +2380,9 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
 				   0);
 	    Act_SetUniqueId (IdCaption);
 	    fprintf (Gbl.F.Out,"<div id=\"%s\" class=\"NOT_SHOWN\">"
+	                       "<div class=\"ZOOM_TXT_LINE DAT_N\">"
 			       "%s"
+	                       "</div>"
 			       "</div>",
 		     IdCaption,PhotoCaption);
 	   }
@@ -2398,7 +2395,8 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
      {
       fprintf (Gbl.F.Out,"%s\"",PhotoURL);
       if (PhotoCaption[0])
-	 fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\" onmouseout=\"noZoom();\"",
+	 fprintf (Gbl.F.Out," onmouseover=\"zoom(this,'%s','%s');\""
+	                    " onmouseout=\"noZoom();\"",
 		  PhotoURL,IdCaption);
      }
    else
@@ -2409,10 +2407,13 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
             PhotoWidth,PhotoHeight);
 
    /***** Caption *****/
-   if (SeeOrPrint == Pho_DEGREES_PRINT)
-      fprintf (Gbl.F.Out,"<span class=\"CLASSPHOTO\">");
-   fprintf (Gbl.F.Out,"<br />%s<br />%d&nbsp;%s<br />%d&nbsp;%s<br />(%d%%)",
-            CopyOfDegShortName,
+   fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_CAPTION\">"
+	              "%s<br />"
+	              "%d&nbsp;%s<br />"
+	              "%d&nbsp;%s<br />"
+	              "(%d%%)"
+	              "</div>",
+            Deg->ShrtName,
             NumStds,Txt_students_ABBREVIATION,
             NumStdsWithPhoto,Txt_photos,
             NumStds > 0 ? (int) (((NumStdsWithPhoto * 100.0) / NumStds) + 0.5) :
@@ -2422,8 +2423,6 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
       fprintf (Gbl.F.Out,"</a>");
       Act_FormEnd ();
      }
-   else
-      fprintf (Gbl.F.Out,"</span>");
   }
 
 /*****************************************************************************/

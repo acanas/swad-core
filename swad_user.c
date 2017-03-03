@@ -7949,7 +7949,6 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
    bool ShowPhoto;
    bool UsrIsTheMsgSender;
    const char *ClassPhoto = "PHOTO21x28";	// Default photo size
-   int LengthUsrData = 10;	// Maximum number of characters of user data
    char PhotoURL[PATH_MAX + 1];
    struct UsrData UsrDat;
 
@@ -7958,16 +7957,13 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
      {
       case Usr_CLASS_PHOTO_SEL:
 	 ClassPhoto = "PHOTO21x28";
-         LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_SEL_SEE:
       case Usr_CLASS_PHOTO_SEE:
 	 ClassPhoto = "PHOTO45x60";
-         LengthUsrData = 10;
          break;
       case Usr_CLASS_PHOTO_PRN:
 	 ClassPhoto = "PHOTO45x60";
-         LengthUsrData = 15;
          break;
      }
 
@@ -8013,32 +8009,25 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 			ClassPhoto,Pho_ZOOM,false);
 
       /***** Photo foot *****/
-      fprintf (Gbl.F.Out,"<br />");
+      fprintf (Gbl.F.Out,"<div class=\"CLASSPHOTO_CAPTION\">");
 
       /* Name */
       if (UsrDat.FirstName[0])
-	{
-	 Str_LimitLengthHTMLStr (UsrDat.FirstName,LengthUsrData);
 	 fprintf (Gbl.F.Out,"%s",UsrDat.FirstName);
-	}
       else
 	 fprintf (Gbl.F.Out,"&nbsp;");
       fprintf (Gbl.F.Out,"<br />");
       if (UsrDat.Surname1[0])
-	{
-	 Str_LimitLengthHTMLStr (UsrDat.Surname1,LengthUsrData);
 	 fprintf (Gbl.F.Out,"%s",UsrDat.Surname1);
-	}
       else
 	 fprintf (Gbl.F.Out,"&nbsp;");
       fprintf (Gbl.F.Out,"<br />");
       if (UsrDat.Surname2[0])
-	{
-	 Str_LimitLengthHTMLStr (UsrDat.Surname2,LengthUsrData);
 	 fprintf (Gbl.F.Out,"%s",UsrDat.Surname2);
-	}
       else
 	 fprintf (Gbl.F.Out,"&nbsp;");
+
+      fprintf (Gbl.F.Out,"</div>");
 
       /***** End of user's cell *****/
       fprintf (Gbl.F.Out,"</td>");
