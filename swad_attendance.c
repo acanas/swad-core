@@ -506,8 +506,8 @@ static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
-            Att->Hidden ? "MSG_AUT_LIGHT" :
-        	          "MSG_AUT",
+            Att->Hidden ? "AUTHOR_TXT_LIGHT" :
+        	          "AUTHOR_TXT",
             FirstName,Surnames);
 
    /***** Free memory used for user's data *****/

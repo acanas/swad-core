@@ -2279,6 +2279,23 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:12pt;
 	}
 
+/**************** Author of assignments, messages, surveys... ****************/
+.AUTHOR
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	max-width:100px;
+	height:20px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.AUTHOR_TXT		{color:#4D88A1; font-size:11pt;}
+.AUTHOR_TXT_LIGHT	{color:#AFC4CC; font-size:11pt;}
+.AUTHOR_TXT_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
+
 /******************************** Social activity ****************************/
 #view_new_posts_container,#view_old_posts_container
 	{
@@ -2603,9 +2620,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#AFC4CC;
 	font-size:13pt;
 	}
-.MSG_AUT		{color:#4D88A1; font-size:11pt;}
-.MSG_AUT_LIGHT		{color:#AFC4CC; font-size:11pt;}
-.MSG_AUT_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 .MSG_AUT_BG
 	{
 	background-image:-webkit-linear-gradient(#eaf3f6 0,#eaf3f6 80%,white 100%);	/* Safari */

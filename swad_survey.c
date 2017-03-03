@@ -699,8 +699,8 @@ static void Svy_WriteAuthor (struct Survey *Svy)
    Str_LimitLengthHTMLStr (FirstName,8);
    Str_LimitLengthHTMLStr (Surnames,8);
    fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
-            Svy->Status.Visible ? "MSG_AUT" :
-        	                  "MSG_AUT_LIGHT",
+            Svy->Status.Visible ? "AUTHOR_TXT" :
+        	                  "AUTHOR_TXT_LIGHT",
             FirstName,Surnames);
 
    /***** Free memory used for user's data *****/

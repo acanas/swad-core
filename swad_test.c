@@ -7484,7 +7484,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   Act_LinkFormSubmit (UsrDat->FullName,"MSG_AUT",NULL);
+   Act_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
    ID_WriteUsrIDs (UsrDat);

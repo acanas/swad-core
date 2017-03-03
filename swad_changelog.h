@@ -197,13 +197,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.146 (2017-03-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.146.1 (2017-03-03)"
 #define CSS_FILE		"swad16.146.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.146.1: Mar 02, 2017	Changes in layout of assigments. (216350 lines)
         Version 16.146:   Mar 02, 2017	Changes in layout of class photos. (216351 lines)
         Version 16.145.2: Mar 02, 2017	Some help URLs translated to spanish. (216338 lines)
         Version 16.145.1: Mar 02, 2017	Changes in several help URLs. (216337 lines)

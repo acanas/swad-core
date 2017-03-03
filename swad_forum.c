@@ -1313,7 +1313,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /* Write author */
    fprintf (Gbl.F.Out,"<tr>");
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,125,16,"MSG_AUT",Enabled,NULL);
+   Msg_WriteMsgAuthor (&UsrDat,125,16,"AUTHOR_TXT",Enabled,NULL);
    fprintf (Gbl.F.Out,"</tr>");
    if (Enabled)
      {
@@ -1464,7 +1464,7 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
    unsigned NumPsts;
 
    /***** Star table cell *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"MSG_AUT CENTER_TOP\""
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT CENTER_TOP\""
 	              " style=\"width:150px;\">");
 
    /***** Get number of posts from database *****/
@@ -3417,8 +3417,8 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       /***** Get the data of this thread *****/
       Thr.ThrCod = ThrCods[NumThrInScreen];
       For_GetThrData (&Thr);
-      Style = (Thr.NumUnreadPosts ? "MSG_AUT_NEW" :
-	                            "MSG_AUT");
+      Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
+	                            "AUTHOR_TXT");
       BgColor = (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
                                                       Gbl.ColorRows[Gbl.RowEvenOdd];
 

@@ -3191,7 +3191,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
         {
          ThereIsOrgCrs = true;
          if ((FromThisCrs = (CrsCod == Gbl.CurrentCrs.Crs.CrsCod)))	// Message sent from current course
-             fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+             fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
         	                "(%s)"
         	                "</div>",
                       Txt_from_this_course);
@@ -3200,10 +3200,10 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
             /* Write course, including link */
             Act_FormGoToStart (ActSeeCrsInf);
             Crs_PutParamCrsCod (Crs.CrsCod);
-            fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+            fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
         	               "(");
             sprintf (Gbl.Title,Txt_Go_to_X,Crs.FullName);
-            Act_LinkFormSubmit (Gbl.Title,"MSG_AUT",NULL);
+            Act_LinkFormSubmit (Gbl.Title,"AUTHOR_TXT",NULL);
             fprintf (Gbl.F.Out,"%s</a>)"
         	               "</div>",
         	     Crs.ShrtName);
@@ -3212,7 +3212,7 @@ bool Msg_WriteCrsOrgMsg (long CrsCod)
 	}
      }
    if (!ThereIsOrgCrs)	// It's an old message without origin source specified, or is a message sent from none course
-      fprintf (Gbl.F.Out,"<div class=\"MSG_AUT\">"
+      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT\">"
 	                 "(%s)"
 	                 "</div>",
                Txt_no_course_of_origin);
@@ -3300,7 +3300,7 @@ static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted)
 
    /***** Write user's name *****/
    fprintf (Gbl.F.Out,"</td>"
-	              "<td class=\"MSG_AUT LEFT_MIDDLE\">");
+	              "<td class=\"AUTHOR_TXT LEFT_MIDDLE\">");
    if (UsrDat->UsrCod > 0)
      {
       fprintf (Gbl.F.Out,"%s",UsrDat->FullName);
@@ -3448,8 +3448,8 @@ static void Msg_WriteMsgTo (long MsgCod)
          /* Write user's name */
          fprintf (Gbl.F.Out,"</td>"
                             "<td class=\"%s LEFT_MIDDLE\">",
-                  OpenByDst ? "MSG_AUT" :
-                	      "MSG_AUT_NEW");
+                  OpenByDst ? "AUTHOR_TXT" :
+                	      "AUTHOR_TXT_NEW");
          if (UsrValid)
             fprintf (Gbl.F.Out,"%s",UsrDat.FullName);
          else
@@ -3462,7 +3462,7 @@ static void Msg_WriteMsgTo (long MsgCod)
       if ((NumRecipientsUnknown = NumRecipientsTotal - NumRecipientsKnown))
          /***** Start form to show all the users *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"3\" class=\"MSG_AUT LEFT_MIDDLE\">"
+                            "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">"
                             "[%u %s]"
                             "</td>"
                             "</tr>",
@@ -3476,13 +3476,13 @@ static void Msg_WriteMsgTo (long MsgCod)
         {
          /***** Start form to show all the users *****/
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td colspan=\"3\" class=\"MSG_AUT LEFT_MIDDLE\">");
+                            "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
          Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
          Msg_PutHiddenParamsMsgsFilters ();
          Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
          Msg_PutHiddenParamMsgCod (MsgCod);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
-         Act_LinkFormSubmit (Txt_View_all_recipients,"MSG_AUT",NULL);
+         Act_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
                   NumRecipientsKnown - NumRecipientsToShow);
          fprintf (Gbl.F.Out,"</a>");

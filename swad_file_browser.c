@@ -3393,7 +3393,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
-   fprintf (Gbl.F.Out,"<td class=\"MSG_AUT LEFT_TOP\" style=\"width:180px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_TOP\" style=\"width:180px;\">");
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3403,7 +3403,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");
-   Act_LinkFormSubmit (Txt_View_record_for_this_course,"MSG_AUT",NULL);
+   Act_LinkFormSubmit (Txt_View_record_for_this_course,"AUTHOR_TXT",NULL);
    fprintf (Gbl.F.Out,"%s",UsrDat->Surname1);
    if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
@@ -3416,7 +3416,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
      {
       fprintf (Gbl.F.Out,"<br />"
 	                 "<a href=\"mailto:%s\" target=\"_blank\""
-	                 " class=\"MSG_AUT\">",
+	                 " class=\"AUTHOR_TXT\">",
                UsrDat->Email);
       Str_LimitLengthHTMLStr (UsrDat->Email,25);
       fprintf (Gbl.F.Out,"%s</a>",UsrDat->Email);
