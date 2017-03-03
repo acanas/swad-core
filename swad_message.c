@@ -2910,7 +2910,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
    /***** Write message author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,100,11,
+   Msg_WriteMsgAuthor (&UsrDat,
 	               Open ? "MSG_AUT_BG" :
 	        	      "MSG_AUT_BG_NEW",	// Style
 	               true,NULL);
@@ -3110,7 +3110,6 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
 // Input: UsrDat must hold user's data
 
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
-                         unsigned WidthOfNameColumn,unsigned MaxCharsInName,
                          const char *Style,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;
@@ -3142,10 +3141,19 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",Style);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">",WidthOfNameColumn);
+      fprintf (Gbl.F.Out,"\">");
 
       /* Restrict length of firstname and surnames */
-      Usr_RestrictLengthAndWriteName (UsrDat,MaxCharsInName);
+      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_2_LINES %s\">"
+	                 "%s<br />"
+	                 "%s",
+	       Style,
+               UsrDat->FirstName,
+               UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+	 fprintf (Gbl.F.Out,"%s",
+		  UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</div>");
      }
    else
      {
@@ -3159,11 +3167,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
                Style);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
-      fprintf (Gbl.F.Out,"\" style=\"width:%upx;\">",
-	       WidthOfNameColumn);
+      fprintf (Gbl.F.Out,"\">");
      }
 
-   /***** End seconf column *****/
+   /***** End second column *****/
    fprintf (Gbl.F.Out,"</td>");
   }
 

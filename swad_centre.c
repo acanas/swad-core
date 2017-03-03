@@ -1572,7 +1572,7 @@ static void Ctr_ListCentresForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
 			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,100,6,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
       fprintf (Gbl.F.Out,"</tr>"
 			 "</table>"
 			 "</td>"
@@ -2489,7 +2489,7 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
 		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
 		      "<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,100,6,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
 		      "</td>"

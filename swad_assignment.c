@@ -450,7 +450,7 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 	             "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR %s\">%s</div>",
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
             Asg->Hidden ? "AUTHOR_TXT_LIGHT" :
         	          "AUTHOR_TXT",
             UsrDat.FullName);

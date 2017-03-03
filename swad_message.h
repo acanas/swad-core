@@ -100,7 +100,6 @@ void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);
 void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
-                         unsigned WidthOfNameColumn,unsigned MaxCharsInName,
                          const char *Style,bool Enabled,const char *BgColor);
 bool Msg_WriteCrsOrgMsg (long CrsCod);
 void Msg_WriteListUsrsDstMsg (long MsgCod);

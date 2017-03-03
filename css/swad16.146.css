@@ -2279,13 +2279,25 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:12pt;
 	}
 
-/**************** Author of assignments, messages, surveys... ****************/
-.AUTHOR
+/********** Author of assignments, attendance, messages, surveys... **********/
+.AUTHOR_1_LINE
 	{
 	display:inline-block;
 	box-sizing:border-box;
 	max-width:100px;
 	height:20px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.AUTHOR_2_LINES
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	max-width:60px;
+	height:40px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;

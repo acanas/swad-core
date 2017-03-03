@@ -1313,7 +1313,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
    /* Write author */
    fprintf (Gbl.F.Out,"<tr>");
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,125,16,"AUTHOR_TXT",Enabled,NULL);
+   Msg_WriteMsgAuthor (&UsrDat,"AUTHOR_TXT",Enabled,NULL);
    fprintf (Gbl.F.Out,"</tr>");
    if (Enabled)
      {
@@ -3514,7 +3514,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            Msg_WriteMsgAuthor (&UsrDat,68,9,Style,Thr.Enabled[Order],BgColor);
+            Msg_WriteMsgAuthor (&UsrDat,Style,Thr.Enabled[Order],BgColor);
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];
