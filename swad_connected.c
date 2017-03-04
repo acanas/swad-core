@@ -556,35 +556,6 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (
 	       (Usrs.NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Usrs.Sex] :
 				     Txt_ROLES_PLURAL_abc[Role][Usrs.Sex]);
 
-      /***** List connected users belonging to this location *****/
-      switch (Gbl.Scope.Current)
-	{
-	 case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-	 case Sco_SCOPE_CTY:		// Show connected users in the current country
-	    if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
-	       return;
-	    break;
-	 case Sco_SCOPE_INS:		// Show connected users in the current institution
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_INS_ADM)
-	       return;
-	    break;
-	 case Sco_SCOPE_CTR:		// Show connected users in the current centre
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_CTR_ADM)
-	       return;
-	    break;
-	 case Sco_SCOPE_DEG:		// Show connected users in the current degree
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)
-	       return;
-	    break;
-	 case Sco_SCOPE_CRS:		// Show connected users in the current course
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_STUDENT)
-	       return;
-	    break;
-	 default:
-	    Lay_ShowErrorAndExit ("Wrong scope.");
-	    break;
-	}
-
       /***** I can see connected users *****/
       Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Role);
      }

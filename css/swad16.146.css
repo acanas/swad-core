@@ -2349,6 +2349,25 @@ a:hover img.CENTRE_PHOTO_SHOW
 .AUTHOR_TXT_LIGHT	{color:#AFC4CC; font-size:11pt;}
 .AUTHOR_TXT_NEW		{color:#4D88A1; font-size:11pt; font-weight:bold;}
 
+/************************** Owner of assignments and works *******************/
+.OWNER_WORKS_PHOTO
+	{
+	box-sizing:border-box;
+	width:64px;
+	text-align:left;
+	vertical-align:top;
+	}
+.OWNER_WORKS_DATA
+	{
+	box-sizing:border-box;
+	width:100px;
+	text-align:left;
+	vertical-align:top;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+
 /******************************** Social activity ****************************/
 #view_new_posts_container,#view_old_posts_container
 	{

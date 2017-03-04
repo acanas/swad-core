@@ -3385,7 +3385,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    char PhotoURL[PATH_MAX + 1];
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\" style=\"width:64px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"OWNER_WORKS_PHOTO\">");
    ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
    Pho_ShowUsrPhoto (UsrDat,ShowPhoto ? PhotoURL :
                 	                NULL,
@@ -3393,7 +3393,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
-   fprintf (Gbl.F.Out,"<td class=\"AUTHOR_TXT LEFT_TOP\" style=\"width:180px;\">");
+   fprintf (Gbl.F.Out,"<td class=\"OWNER_WORKS_DATA AUTHOR_TXT\">");
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3413,14 +3413,10 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    /***** Show user's email *****/
    if (UsrDat->Email[0])
-     {
       fprintf (Gbl.F.Out,"<br />"
 	                 "<a href=\"mailto:%s\" target=\"_blank\""
-	                 " class=\"AUTHOR_TXT\">",
-               UsrDat->Email);
-      Str_LimitLengthHTMLStr (UsrDat->Email,25);
-      fprintf (Gbl.F.Out,"%s</a>",UsrDat->Email);
-     }
+	                 " class=\"AUTHOR_TXT\">%s</a>",
+	      UsrDat->Email,UsrDat->Email);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
   }
