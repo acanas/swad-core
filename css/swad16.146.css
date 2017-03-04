@@ -1598,6 +1598,30 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /************************** Map and name of country **************************/
+.COUNTRY_SMALL
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	max-width:300px;
+	margin-left:4px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.COUNTRY_TINY
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	max-width:120px;
+	margin-left:4px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
 .COUNTRY_MAP_TITLE
 	{
 	box-sizing:border-box;
@@ -1606,18 +1630,18 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	margin-right:10px;
 	vertical-align:top;
 	}
-.COUNTRY_MAP_TINY
-	{
-	box-sizing:border-box;
-	width:20px;
-	height:20px;
-	vertical-align:middle;
-	}
 .COUNTRY_MAP_SMALL
 	{
 	box-sizing:border-box;
 	width:64px;
 	height:64px;
+	vertical-align:middle;
+	}
+.COUNTRY_MAP_TINY
+	{
+	box-sizing:border-box;
+	width:20px;
+	height:20px;
 	vertical-align:middle;
 	}
 .COUNTRY_MAP_SHOW
@@ -1634,12 +1658,12 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	height:625px;
 	margin:12px;
 	}
-.COUNTRY_TXT
+
+/********************* List of my courses ************************************/
+.MY_CRSS_LNK
 	{
-	display:inline-block;
 	box-sizing:border-box;
-	max-width:100px;
-	margin-left:4px;
+	max-width:500px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;

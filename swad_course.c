@@ -519,10 +519,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    struct Centre Ctr;
    struct Degree Deg;
    struct Course Crs;
-   char InsFullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME + 1];
-   char CtrFullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
-   char DegFullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1];
-   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
    bool IsLastItemInLevel[1 + 5];
    bool Highlight;	// Highlight because degree, course, etc. is selected
    MYSQL_RES *mysql_resCty;
@@ -542,7 +538,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumCrs;
    unsigned NumCrss;
    char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
-   char PathRelRSSFile[PATH_MAX + 1];
    const char *ClassNormal;
    char ClassHighlight[64];
 
@@ -631,7 +626,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	 /***** Write link to institution *****/
 	 Highlight = (Gbl.CurrentCtr.Ctr.CtrCod <= 0 &&
 	              Gbl.CurrentIns.Ins.InsCod == Ins.InsCod);
-	 fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	 fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	          Highlight ? ClassHighlight :
 			      ClassNormal);
 	 IsLastItemInLevel[2] = (NumIns == NumInss - 1);
@@ -642,10 +637,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                     Highlight ? ClassHighlight :
         	                         ClassNormal,NULL);
 	 Log_DrawLogo (Sco_SCOPE_INS,Ins.InsCod,Ins.ShrtName,20,NULL,true);
-	 Str_Copy (InsFullName,Ins.FullName,
-	           Ins_MAX_LENGTH_INSTIT_FULL_NAME);
-         Str_LimitLengthHTMLStr (InsFullName,Crs_MAX_BYTES_TXT_LINK);
-	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",InsFullName);
+	 fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ins.FullName);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</li>");
 
@@ -667,7 +659,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	    /***** Write link to centre *****/
 	    Highlight = (Gbl.CurrentDeg.Deg.DegCod <= 0 &&
 			 Gbl.CurrentCtr.Ctr.CtrCod == Ctr.CtrCod);
-	    fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	    fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	             Highlight ? ClassHighlight :
 			         ClassNormal);
 	    IsLastItemInLevel[3] = (NumCtr == NumCtrs - 1);
@@ -678,10 +670,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                        Highlight ? ClassHighlight :
         	                            ClassNormal,NULL);
 	    Log_DrawLogo (Sco_SCOPE_CTR,Ctr.CtrCod,Ctr.ShrtName,20,NULL,true);
-	    Str_Copy (CtrFullName,Ctr.FullName,
-	              Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
-            Str_LimitLengthHTMLStr (CtrFullName,Crs_MAX_BYTES_TXT_LINK);
-	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",CtrFullName);
+	    fprintf (Gbl.F.Out,"&nbsp;%s</a>",Ctr.FullName);
 	    Act_FormEnd ();
 	    fprintf (Gbl.F.Out,"</li>");
 
@@ -703,7 +692,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	       /***** Write link to degree *****/
 	       Highlight = (Gbl.CurrentCrs.Crs.CrsCod <= 0 &&
 			    Gbl.CurrentDeg.Deg.DegCod == Deg.DegCod);
-	       fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+	       fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	                Highlight ? ClassHighlight :
 			            ClassNormal);
 	       IsLastItemInLevel[4] = (NumDeg == NumDegs - 1);
@@ -714,10 +703,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 	                           Highlight ? ClassHighlight :
         	                               ClassNormal,NULL);
 	       Log_DrawLogo (Sco_SCOPE_DEG,Deg.DegCod,Deg.ShrtName,20,NULL,true);
-	       Str_Copy (DegFullName,Deg.FullName,
-	                 Deg_MAX_LENGTH_DEGREE_FULL_NAME);
-               Str_LimitLengthHTMLStr (DegFullName,Crs_MAX_BYTES_TXT_LINK);
-	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",DegFullName);
+	       fprintf (Gbl.F.Out,"&nbsp;%s</a>",Deg.FullName);
 	       Act_FormEnd ();
 	       fprintf (Gbl.F.Out,"</li>");
 
@@ -738,7 +724,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 
 		  /***** Write link to course *****/
 		  Highlight = (Gbl.CurrentCrs.Crs.CrsCod == Crs.CrsCod);
-		  fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
+		  fprintf (Gbl.F.Out,"<li class=\"MY_CRSS_LNK %s\" style=\"height:25px;\">",
 	                   Highlight ? ClassHighlight :
 			               ClassNormal);
 		  IsLastItemInLevel[5] = (NumCrs == NumCrss - 1);
@@ -751,30 +737,14 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
         	                                  ClassNormal,NULL);
 		  fprintf (Gbl.F.Out,"<img src=\"%s/dot64x64.png\""
 			             " alt=\"%s\" title=\"%s\""
-			             " class=\"ICO20x20\" />",
+			             " class=\"ICO20x20\" />"
+			             "&nbsp;%s"
+			             "</a>",
 		           Gbl.Prefs.IconsURL,
 		           Crs.ShrtName,
+		           Crs.FullName,
 		           Crs.FullName);
-	          Str_Copy (CrsFullName,Crs.FullName,
-	                    Crs_MAX_LENGTH_COURSE_FULL_NAME);
-                  Str_LimitLengthHTMLStr (CrsFullName,Crs_MAX_BYTES_TXT_LINK);
-		  fprintf (Gbl.F.Out,"&nbsp;%s</a>",CrsFullName);
 		  Act_FormEnd ();
-
-		  /***** Write link to RSS file *****/
-		  sprintf (PathRelRSSFile,"%s/%s/%ld/%s/%s",
-			   Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_CRS,Crs.CrsCod,Cfg_RSS_FOLDER,Cfg_RSS_FILE);
-		  if (!Fil_CheckIfPathExists (PathRelRSSFile))
-		     RSS_UpdateRSSFileForACrs (&Crs);
-		  fprintf (Gbl.F.Out," <a href=\"");
-		  RSS_WriteRSSLink (Gbl.F.Out,Crs.CrsCod);
-		  fprintf (Gbl.F.Out,"\" target=\"_blank\">"
-				     "<img src=\"%s/rss16x16.gif\""
-				     " alt=\"RSS\" title=\"RSS\""
-				     " class=\"ICO20x20\" />"
-				     "</a>",
-			   Gbl.Prefs.IconsURL);
-
 		  fprintf (Gbl.F.Out,"</li>");
 		 }
 

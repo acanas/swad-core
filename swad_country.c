@@ -164,7 +164,9 @@ void Cty_SeeCtyWithPendingInss (void)
 	                    "<td class=\"LEFT_MIDDLE %s\">",
                   BgColor);
          Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeIns,
-                                            "DAT_NOBR","COUNTRY_MAP_SMALL");
+                                            "COUNTRY_SMALL",
+                                            "COUNTRY_MAP_SMALL",
+                                            "DAT");
          fprintf (Gbl.F.Out,"</td>");
 
          /* Number of pending institutions (row[1]) */
@@ -703,7 +705,9 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
    /***** Country map (and link to WWW if exists) *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
-				      "DAT_N","COUNTRY_MAP_SMALL");
+				      "COUNTRY_SMALL",
+				      "COUNTRY_MAP_SMALL",
+				      "DAT_N");
    fprintf (Gbl.F.Out,"</td>");
 
    /* Write stats of this country */
@@ -794,7 +798,9 @@ static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
 /*****************************************************************************/
 
 void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
-                                        const char *ClassLink,const char *ClassMap)
+                                        const char *ClassContainer,
+                                        const char *ClassMap,
+                                        const char *ClassLink)
   {
    extern const char *Txt_Go_to_X;
    char CountryName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
@@ -802,6 +808,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Start form *****/
    Act_FormGoToStart (Action);
    Cty_PutParamCtyCod (Cty->CtyCod);
+   fprintf (Gbl.F.Out,"<div class=\"%s\">",ClassContainer);
 
    /***** Link to action *****/
    sprintf (Gbl.Title,Txt_Go_to_X,Cty->Name[Gbl.Prefs.Language]);
@@ -813,8 +820,9 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Write country name and end link *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_COUNTRY_NAME);
-   fprintf (Gbl.F.Out,"<div class=\"COUNTRY_TXT\">%s (%s)</div>"
-	              "</a>",
+   fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)"
+	              "</a>"
+	              "</div>",
 	    CountryName,
 	    Cty->Alpha2);
 

@@ -3361,7 +3361,9 @@ static void Sta_WriteCountry (long CtyCod)
 
       /***** Form to go to country *****/
       Cty_DrawCountryMapAndNameWithLink (&Cty,ActSeeCtyInf,
-                                         "LOG","COUNTRY_MAP_TINY");
+                                         "COUNTRY_TINY",
+                                         "COUNTRY_MAP_TINY",
+                                         "LOG");
      }
    else			// Hit with no country selected
       /***** No country selected *****/
