@@ -192,7 +192,7 @@ void Fol_SuggestUsrsToFollowMainZoneOnRightColumn (void)
                                           &mysql_res)))
      {
       /***** Start container *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
+      fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
 
       /***** Title with link to suggest more users to follow *****/
       Act_FormStart (ActSeeSocPrf);

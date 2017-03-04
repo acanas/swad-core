@@ -715,11 +715,6 @@ a:hover						/* Default ==> underlined */
 	text-align:center;
 	vertical-align:top;
 	}
-.LEFT_RIGHT_CONTENT_WIDTH
-	{
-	box-sizing:border-box;
-	width:148px;
-	}
 
 @media only screen and (max-width: 1280px)
 	{	/* For mobile phones and tablets */
@@ -1053,6 +1048,7 @@ a:hover						/* Default ==> underlined */
 .CONNECTED
 	{
 	box-sizing:border-box;
+	width:148px;
 	margin:0 auto;
 	background:white;
 	border-style:solid;
@@ -1062,6 +1058,9 @@ a:hover						/* Default ==> underlined */
 	border-radius:4px;
 	font-size:12pt;
 	color:#398000;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .CONNECTED_LIST
 	{
@@ -1603,7 +1602,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	display:inline-block;
 	box-sizing:border-box;
 	max-width:300px;
-	margin-left:4px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;
@@ -1615,7 +1613,6 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	display:inline-block;
 	box-sizing:border-box;
 	max-width:120px;
-	margin-left:4px;
 	text-align:left;
 	vertical-align:middle;
 	white-space:nowrap;

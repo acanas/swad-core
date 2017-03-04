@@ -361,7 +361,7 @@ void Con_ShowGlobalConnectedUsrs (void)
      }
 
    /***** Container start *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
 
    /***** Number of sessions *****/
    /* Link to view more details about connected users */
@@ -458,54 +458,7 @@ static void Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_Role_t R
 static void Con_ShowConnectedUsrsBelongingToLocation (void)
   {
    extern const char *Txt_from;
-   char LocationName[Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR + 1];
    struct ConnectedUsrs Usrs;
-
-   /***** Set location name depending on scope *****/
-   switch (Gbl.Scope.Current)
-     {
-      case Sco_SCOPE_SYS:		// Show connected users in the whole platform
-         Str_Copy (LocationName,Cfg_PLATFORM_SHORT_NAME,
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      case Sco_SCOPE_CTY:		// Show connected users in the current country
-         if (Gbl.CurrentCty.Cty.CtyCod <= 0)	// There is no country selected
-            return;
-
-         Str_Copy (LocationName,Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language],
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      case Sco_SCOPE_INS:		// Show connected users in the current institution
-         if (Gbl.CurrentIns.Ins.InsCod <= 0)	// There is no institution selected
-            return;
-
-         Str_Copy (LocationName,Gbl.CurrentIns.Ins.ShrtName,
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      case Sco_SCOPE_CTR:		// Show connected users in the current centre
-         if (Gbl.CurrentCtr.Ctr.CtrCod <= 0)	// There is no centre selected
-            return;
-
-         Str_Copy (LocationName,Gbl.CurrentCtr.Ctr.ShrtName,
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      case Sco_SCOPE_DEG:		// Show connected users in the current degree
-         if (Gbl.CurrentDeg.Deg.DegCod <= 0)	// There is no degree selected
-            return;
-
-         Str_Copy (LocationName,Gbl.CurrentDeg.Deg.ShrtName,
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      case Sco_SCOPE_CRS:		// Show connected users in the current course
-         if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
-            return;
-
-         Str_Copy (LocationName,Gbl.CurrentCrs.Crs.ShrtName,
-                   Hie_MAX_LENGTH_LOCATION_SHORT_NAME_SPEC_CHAR);
-         break;
-      default:
-	 return;
-     }
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
@@ -516,19 +469,12 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">%u %s ",
 	    Usrs.NumUsrs,
 	    Txt_from);
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
-     {
-      /* Put form to change scope */
-      Act_FormStart (ActLstCon);
-      Sco_PutSelectorScope ("ScopeCon",true);
-      Act_FormEnd ();
-     }
-   else
-     {
-      /* Write location name depending on the scope */
-      Str_LimitLengthHTMLStr (LocationName,40);
-      fprintf (Gbl.F.Out,"%s",LocationName);
-     }
+
+   /* Put form to change scope */
+   Act_FormStart (ActLstCon);
+   Sco_PutSelectorScope ("ScopeCon",true);
+   Act_FormEnd ();
+
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Number of teachers and students *****/
@@ -558,7 +504,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
       return;
 
    /***** Start container *****/
-   fprintf (Gbl.F.Out,"<div class=\"CONNECTED LEFT_RIGHT_CONTENT_WIDTH\">");
+   fprintf (Gbl.F.Out,"<div class=\"CONNECTED\">");
 
    /***** Number of connected users who belong to course *****/
    /* Link to view more details about connected users */
@@ -566,17 +512,12 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 					// the list of connected users
 					// is dynamically updated via AJAX
    Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
-
-   /* Write total number of connected users belonging to the current course */
    Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
              Crs_MAX_LENGTH_COURSE_SHRT_NAME);
-   Str_LimitLengthHTMLStr (CourseName,12);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
-   fprintf (Gbl.F.Out,"%u %s %s",
+   fprintf (Gbl.F.Out,"%u %s %s"
+	              "</a>",
             Usrs.NumUsrs,Txt_from,CourseName);
-
-   /* End of link to view more details about connected users */
-   fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
 
    /***** Number of teachers and students *****/
@@ -670,7 +611,7 @@ static void Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Ro
 	 Gbl.Usrs.Connected.NumUsrsToList = Cfg_MAX_CONNECTED_SHOWN;
 
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"3\" class=\"CENTER_TOP LEFT_RIGHT_CONTENT_WIDTH\">"
+			 "<td colspan=\"3\" class=\"CENTER_TOP\">"
 			 "%u %s"
 			 "</td>"
 			 "</tr>",
