@@ -701,8 +701,7 @@ static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty)
 	    BgColor,NumCty);
 
    /***** Country map (and link to WWW if exists) *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",
-	    BgColor);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Cty_DrawCountryMapAndNameWithLink (Cty,ActSeeIns,
 				      "DAT_N","COUNTRY_MAP_SMALL");
    fprintf (Gbl.F.Out,"</td>");
@@ -814,8 +813,8 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
    /***** Write country name and end link *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
              Cty_MAX_BYTES_COUNTRY_NAME);
-   Str_LimitLengthHTMLStr (CountryName,30);
-   fprintf (Gbl.F.Out,"&nbsp;%s (%s)</a>",
+   fprintf (Gbl.F.Out,"<div class=\"COUNTRY_TXT\">%s (%s)</div>"
+	              "</a>",
 	    CountryName,
 	    Cty->Alpha2);
 

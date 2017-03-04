@@ -3327,7 +3327,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
 
       /* Write ranking of this country */
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"LOG RIGHT_TOP\">");
+	                 "<td class=\"LOG RIGHT_MIDDLE\">");
       if (CtyCod > 0)
          fprintf (Gbl.F.Out,"%lu",++Ranking);
       fprintf (Gbl.F.Out,"&nbsp;"
