@@ -616,8 +616,8 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
 
    /***** Link to download the file *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td colspan=\"2\" class=\"FILENAME CENTER_MIDDLE\">"
-                      "<a href=\"%s\" class=\"FILENAME\" title=\"%s\" target=\"_blank\">"
+		      "<td colspan=\"2\" class=\"FILENAME_TXT CENTER_MIDDLE\">"
+                      "<a href=\"%s\" class=\"FILENAME_TXT\" title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/%s32x32/zip32x32.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO40x40\" />"

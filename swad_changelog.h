@@ -197,19 +197,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.146.9 (2017-03-04)"
-#define CSS_FILE		"swad16.146.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.147 (2017-03-04)"
+#define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.146.9: Mar 03, 2017	Changes in layout of assignments and works. (216271 lines)
-        Version 16.146.8: Mar 03, 2017	Changes in layout of connected users. (216284 lines)
-        Version 16.146.7: Mar 03, 2017	Changes in layout of my courses. (216339 lines)
-        Version 16.146.6: Mar 03, 2017	Changes in layout of countries. (216331 lines)
-        Version 16.146.5: Mar 03, 2017	Code refactoring related with author of assignments, attendance events and surveys. (216319 lines)
-        Version 16.146.4: Mar 03, 2017	Changes in layout of surveys. (216349 lines)
+        Version 16.147:   Mar 04, 2017	Changes in layout of file browser. (216292 lines)
+        Version 16.146.9: Mar 04, 2017	Changes in layout of assignments and works. (216271 lines)
+        Version 16.146.8: Mar 04, 2017	Changes in layout of connected users. (216284 lines)
+        Version 16.146.7: Mar 04, 2017	Changes in layout of my courses. (216339 lines)
+        Version 16.146.6: Mar 04, 2017	Changes in layout of countries. (216331 lines)
+        Version 16.146.5: Mar 04, 2017	Code refactoring related with author of assignments, attendance events and surveys. (216319 lines)
+        Version 16.146.4: Mar 04, 2017	Changes in layout of surveys. (216349 lines)
         Version 16.146.3: Mar 04, 2017	Changes in layout of edition of institutions, centres and degrees. (216363 lines)
         Version 16.146.2: Mar 04, 2017	Changes in layout of authors. (216354 lines)
         Version 16.146.1: Mar 03, 2017	Changes in layout of assigments. (216350 lines)

@@ -265,8 +265,8 @@ static void Rep_PutLinkToMyUsageReport (struct Rep_Report *Report)
    Req_TitleReport (&Report->CurrentTimeUTC);
 
    /***** Put anchor and report filename *****/
-   fprintf (Gbl.F.Out,"<div class=\"FILENAME CENTER_MIDDLE\">"
-                      "<a href=\"%s\" class=\"FILENAME\""
+   fprintf (Gbl.F.Out,"<div class=\"FILENAME_TXT CENTER_MIDDLE\">"
+                      "<a href=\"%s\" class=\"FILENAME_TXT\""
 		      " title=\"%s\" target=\"_blank\">"
                       "<img src=\"%s/report64x64.png\" alt=\"%s\""
 	              " class=\"ICO64x64\" /><br />"

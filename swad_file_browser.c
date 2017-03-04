@@ -1520,12 +1520,14 @@ static void Brw_PutIconFileWithLinkToViewMetadata (unsigned Size,
 static void Brw_PutIconFile (unsigned Size,Brw_FileType_t FileType,const char *FileName);
 static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                                const char *PathInTree,const char *FileName,const char *FileNameToShow);
-static void Brw_GetFileNameToShow (Brw_FileBrowser_t FileBrowser,unsigned Level,
-                                   Brw_FileType_t FileType,
-                                   const char *FileName,char *FileNameToShow);
-static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,
-                                           const char FileName[NAME_MAX + 1],
-                                           char FileNameToShow[NAME_MAX + 1]);
+static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
+                                                   unsigned Level,
+                                                   Brw_FileType_t FileType,
+                                                   const char *FileName,
+                                                   char *FileNameToShow);
+static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
+                                   const char FileName[NAME_MAX + 1],
+                                   char FileNameToShow[NAME_MAX + 1]);
 static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
@@ -3393,7 +3395,10 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Start form to send a message to this user *****/
-   fprintf (Gbl.F.Out,"<td class=\"OWNER_WORKS_DATA AUTHOR_TXT\">");
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP\">");
+
+   fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
+
    Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3418,6 +3423,10 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 	                 " class=\"AUTHOR_TXT\">%s</a>",
 	      UsrDat->Email,UsrDat->Email);
    Act_FormEnd ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
+
    fprintf (Gbl.F.Out,"</td>");
   }
 
@@ -5208,7 +5217,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
       Gbl.FileBrowser.Asg.AsgCod = -1L;
 
    /***** Get the name of the file to show *****/
-   Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Level,
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Level,
                           Gbl.FileBrowser.FileType,
                           FileName,FileNameToShow);
 
@@ -5880,6 +5889,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
          fprintf (Gbl.F.Out," LIGHT_GREEN");
       fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">");
 
+      fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
+
       /***** Form to rename folder *****/
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
@@ -5894,7 +5905,7 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
-      	                    " size=\"30\" maxlength=\"40\" value=\"%s\""
+      	                    " maxlength=\"30\" value=\"%s\""
                             " class=\"%s %s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
 		  FileName,Gbl.FileBrowser.InputStyle,
@@ -5918,6 +5929,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
         }
 
       /***** End of cell *****/
+      fprintf (Gbl.F.Out,"</div>");
+
       fprintf (Gbl.F.Out,"</td>");
      }
    else	// File or link
@@ -5927,6 +5940,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.Clipboard.IsThisFile)
          fprintf (Gbl.F.Out," LIGHT_GREEN");
       fprintf (Gbl.F.Out,"\" style=\"width:99%%;\">&nbsp;");
+
+      fprintf (Gbl.F.Out,"<div class=\"FILENAME\">");
 
       Act_FormStart (Brw_ActDowFile[Gbl.FileBrowser.Type]);
       Brw_PutParamsFileBrowser (Brw_ActDowFile[Gbl.FileBrowser.Type],
@@ -5952,6 +5967,8 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
                   Txt_Public_open_educational_resource_OER_for_everyone,
                   Txt_Public_open_educational_resource_OER_for_everyone);
 
+      fprintf (Gbl.F.Out,"</div>");
+
       fprintf (Gbl.F.Out,"</td>");
      }
   }
@@ -5960,40 +5977,31 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
 /*********************** Which filename must be shown? ***********************/
 /*****************************************************************************/
 
-static void Brw_GetFileNameToShow (Brw_FileBrowser_t FileBrowser,unsigned Level,
-                                   Brw_FileType_t FileType,
-                                   const char *FileName,char *FileNameToShow)
+static void Brw_GetFileNameToShowDependingOnLevel (Brw_FileBrowser_t FileBrowser,
+                                                   unsigned Level,
+                                                   Brw_FileType_t FileType,
+                                                   const char *FileName,
+                                                   char *FileNameToShow)
   {
    extern const char *Txt_ROOT_FOLDER_EXTERNAL_NAMES[Brw_NUM_TYPES_FILE_BROWSER];
 
-   Brw_LimitLengthFileNameToShow (FileType,
-                                  Level ? FileName :
-					  Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser],
-				  FileNameToShow);
+   Brw_GetFileNameToShow (FileType,
+                          Level ? FileName :
+				  Txt_ROOT_FOLDER_EXTERNAL_NAMES[FileBrowser],
+			  FileNameToShow);
   }
 
-/*****************************************************************************/
-/*************** Limit the length of the filename to be shown ****************/
-/*****************************************************************************/
-
-static void Brw_LimitLengthFileNameToShow (Brw_FileType_t FileType,
-                                           const char FileName[NAME_MAX + 1],
-                                           char FileNameToShow[NAME_MAX + 1])
+static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
+                                   const char FileName[NAME_MAX + 1],
+                                   char FileNameToShow[NAME_MAX + 1])
   {
-   size_t NumChars;
-
    /***** Copy file name *****/
    Str_Copy (FileNameToShow,FileName,
              NAME_MAX);
 
    /***** Remove .url if link *****/
-   NumChars = strlen (FileNameToShow);
    if (FileType == Brw_IS_LINK)	// It's a link (URL inside a .url file)
-      NumChars -= 4;	// Remove .url
-   FileNameToShow[NumChars] = '\0';
-
-   /***** Limit length of the file name to show *****/
-   Str_LimitLengthHTMLStr (FileNameToShow,60);
+      FileNameToShow[strlen (FileNameToShow) - 4] = '\0';	// Remove .url
   }
 
 /*****************************************************************************/
@@ -6183,7 +6191,7 @@ void Brw_AskRemFileFromTree (void)
                                 Gbl.FileBrowser.FileType,-1L);
 
       /* Show question */
-      Brw_GetFileNameToShow (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
                              Gbl.FileBrowser.FileType,
                              Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
@@ -6227,9 +6235,9 @@ void Brw_RemFileFromTree (void)
       else if (S_ISREG (FileStatus.st_mode))		// It's a file or a link
         {
 	 /* Name of the file/link to be shown */
-	 Brw_LimitLengthFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnkName,"url") ? Brw_IS_LINK :
-											   Brw_IS_FILE,
-					Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
+	 Brw_GetFileNameToShow (Str_FileIs (Gbl.FileBrowser.FilFolLnkName,"url") ? Brw_IS_LINK :
+										   Brw_IS_FILE,
+				Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 
 	 /* Remove file/link from disk and database */
 	 Brw_RemoveFileFromDiskAndDB (Path,
@@ -6630,7 +6638,7 @@ static void Brw_WriteCurrentClipboard (void)
    if (Gbl.FileBrowser.Clipboard.Level)		// Is the root folder?
      {
       // Not the root folder
-      Brw_GetFileNameToShow (Gbl.FileBrowser.Clipboard.FileBrowser,
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Clipboard.FileBrowser,
                              Gbl.FileBrowser.Clipboard.Level,
                              Gbl.FileBrowser.Clipboard.FileType,
                              Gbl.FileBrowser.Clipboard.FileName,FileNameToShow);
@@ -7661,7 +7669,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned LevelOrg,
 	                                          Brw_IS_FILE;	// It's a file
 
    /***** Name of the file/folder/link to be shown ****/
-   Brw_LimitLengthFileNameToShow (FileType,FileNameOrg,FileNameToShow);
+   Brw_GetFileNameToShow (FileType,FileNameOrg,FileNameToShow);
 
    /***** Construct the name of the destination file or folder *****/
    if (LevelOrg == 0)	// Origin of copy is the root folder,
@@ -7856,7 +7864,7 @@ void Brw_ShowFormFileBrowser (void)
    if (Brw_CheckIfICanCreateIntoFolder (Gbl.FileBrowser.Level))
      {
       /***** Name of the folder to be shown ****/
-      Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
                              Gbl.FileBrowser.FileType,
                              Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 
@@ -7920,7 +7928,7 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s: "
                       "<input type=\"text\" name=\"NewFolderName\""
-                      " size=\"30\" maxlength=\"40\" value=\"\""
+                      " size=\"30\" maxlength=\"30\" value=\"\""
                       " required=\"required\" />"
 	              "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Folder);
@@ -8103,7 +8111,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"url\""
                       " id=\"NewLinkURL\" name=\"NewLinkURL\""
-                      " size=\"40\" maxlength=\"%u\" value=\"\""
+                      " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
@@ -8120,7 +8128,7 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
-                      " size=\"40\" maxlength=\"100\" value=\"\" />"
+                      " size=\"30\" maxlength=\"100\" value=\"\" />"
                       "</td>"
                       "</tr>"
                       "</table>",
@@ -8192,7 +8200,7 @@ void Brw_RecFolderFileBrowser (void)
                                 PathCompleteInTreeIncludingFolder,false,Brw_LICENSE_DEFAULT);
 
 	       /* The folder has been created sucessfully */
-               Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+               Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
                                       Brw_IS_FOLDER,
                                       Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 	       sprintf (Gbl.Message,Txt_The_folder_X_has_been_created_inside_the_folder_Y,
@@ -8495,7 +8503,7 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
                            /* Show message of confirmation */
                            if (UploadType == Brw_CLASSIC_UPLOAD)
                              {
-			      Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+			      Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
 			                             Brw_IS_FOLDER,
 			                             Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 			      sprintf (Gbl.Message,Txt_The_file_X_has_been_placed_inside_the_folder_Y,
@@ -8680,7 +8688,7 @@ void Brw_RecLinkFileBrowser (void)
 					       PathCompleteInTreeIncludingFile,false,Brw_LICENSE_DEFAULT);
 
 		     /* Show message of confirmation */
-		     Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+		     Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
 		                            Brw_IS_FOLDER,
 					    Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
 		     sprintf (Gbl.Message,Txt_The_link_X_has_been_placed_inside_the_folder_Y,
@@ -8835,7 +8843,7 @@ void Brw_SetDocumentAsVisible (void)
    Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write message of confirmation *****/
-   Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
                           Gbl.FileBrowser.FileType,
                           Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
    sprintf (Gbl.Message,Txt_FILE_FOLDER_OR_LINK_X_is_now_visible,
@@ -8868,7 +8876,7 @@ void Brw_SetDocumentAsHidden (void)
    Brw_RemoveAffectedClipboards (Gbl.FileBrowser.Type,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Write confirmation message *****/
-   Brw_GetFileNameToShow (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
+   Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Gbl.FileBrowser.Level,
                           Gbl.FileBrowser.FileType,
                           Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
    sprintf (Gbl.Message,Txt_FILE_FOLDER_OR_LINK_X_is_now_hidden,FileNameToShow);
@@ -9061,9 +9069,9 @@ void Brw_ShowFileMetadata (void)
 	 ICanEdit = Brw_CheckIfICanEditFileMetadata (IAmTheOwner);
 
 	 /***** Name of the file/link to be shown *****/
-	 Brw_LimitLengthFileNameToShow (FileMetadata.FileType,
-	                                FileMetadata.FilFolLnkName,
-	                                FileNameToShow);
+	 Brw_GetFileNameToShow (FileMetadata.FileType,
+	                        FileMetadata.FilFolLnkName,
+	                        FileNameToShow);
 
 	 /***** Start form to update the metadata of a file *****/
 	 if (ICanEdit)	// I can edit file properties
@@ -9099,7 +9107,7 @@ void Brw_ShowFileMetadata (void)
 	 /***** Link to download the file *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td colspan=\"2\""
-			    " class=\"FILENAME CENTER_MIDDLE\">");
+			    " class=\"FILENAME_TXT CENTER_MIDDLE\">");
 	 Brw_WriteBigLinkToDownloadFile (URL,&FileMetadata,FileNameToShow);
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
@@ -9607,7 +9615,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
 
       /* Link begin */
       sprintf (Gbl.Title,Txt_Check_marks_in_file_X,FileNameToShow);
-      Act_LinkFormSubmit (Gbl.Title,"FILENAME",NULL);
+      Act_LinkFormSubmit (Gbl.Title,"FILENAME_TXT",NULL);
       Brw_PutIconFile (32,FileMetadata->FileType,FileMetadata->FilFolLnkName);
 
       /* Name of the file of marks, link end and form end */
@@ -9623,7 +9631,7 @@ static void Brw_WriteBigLinkToDownloadFile (const char *URL,
    else
      {
       /* Put anchor and filename */
-      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME\""
+      fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"FILENAME_TXT\""
                          " title=\"%s\" target=\"_blank\">",
 	       URL,
 	       (FileMetadata->FileType == Brw_IS_LINK) ? URL :	// If it's a link, show full URL in title
@@ -11471,9 +11479,9 @@ static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row)
                BgColor,Title);
 
       /***** Get the name of the file to show *****/
-      Brw_LimitLengthFileNameToShow (FileMetadata.FileType,
-                                     FileMetadata.FilFolLnkName,
-                                     FileNameToShow);
+      Brw_GetFileNameToShow (FileMetadata.FileType,
+                             FileMetadata.FilFolLnkName,
+                             FileNameToShow);
 
       /***** Write file name using path (row[1]) *****/
       fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_TOP %s\">",
