@@ -432,31 +432,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
 static void Asg_WriteAsgAuthor (struct Assignment *Asg)
   {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   struct UsrData UsrDat;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Get data of author *****/
-   UsrDat.UsrCod = Asg->UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-
-   /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
-	             "PHOTO15x20",Pho_ZOOM,false);
-
-   /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
-            Asg->Hidden ? "AUTHOR_TXT_LIGHT" :
-        	          "AUTHOR_TXT",
-            UsrDat.FullName);
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
+   Usr_WriteAuthor1Line (Asg->UsrCod,Asg->Hidden);
   }
 
 /*****************************************************************************/

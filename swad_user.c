@@ -8524,3 +8524,36 @@ void Usr_PrintUsrQRCode (void)
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
+
+/*****************************************************************************/
+/********************* Write the author of an assignment *********************/
+/*****************************************************************************/
+
+void Usr_WriteAuthor1Line (long UsrCod,bool Hidden)
+  {
+   bool ShowPhoto = false;
+   char PhotoURL[PATH_MAX + 1];
+   struct UsrData UsrDat;
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** Get data of author *****/
+   UsrDat.UsrCod = UsrCod;
+   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))
+      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
+
+   /***** Show photo *****/
+   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
+                	                 NULL,
+	             "PHOTO15x20",Pho_ZOOM,false);
+
+   /***** Write name *****/
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
+            Hidden ? "AUTHOR_TXT_LIGHT" :
+        	     "AUTHOR_TXT",
+            UsrDat.FullName);
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
+  }

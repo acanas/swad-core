@@ -402,4 +402,6 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod);
 
 void Usr_PrintUsrQRCode (void);
 
+void Usr_WriteAuthor1Line (long UsrCod,bool Hidden);
+
 #endif

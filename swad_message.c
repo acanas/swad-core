@@ -3141,10 +3141,8 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",Style);
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
-      fprintf (Gbl.F.Out,"\">");
-
-      /* Restrict length of firstname and surnames */
-      fprintf (Gbl.F.Out,"<div class=\"AUTHOR_2_LINES %s\">"
+      fprintf (Gbl.F.Out,"\">"
+                         "<div class=\"AUTHOR_2_LINES %s\">"
 	                 "%s<br />"
 	                 "%s",
 	       Style,

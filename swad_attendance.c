@@ -472,31 +472,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
 static void Att_WriteAttEventAuthor (struct AttendanceEvent *Att)
   {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   struct UsrData UsrDat;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Get data of author *****/
-   UsrDat.UsrCod = Att->UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get of the database the data of the author
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-
-   /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
-                     "PHOTO15x20",Pho_ZOOM,false);
-
-   /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
-            Att->Hidden ? "AUTHOR_TXT_LIGHT" :
-        	          "AUTHOR_TXT",
-            UsrDat.FullName);
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
+   Usr_WriteAuthor1Line (Att->UsrCod,Att->Hidden);
   }
 
 /*****************************************************************************/

@@ -665,31 +665,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
 static void Svy_WriteAuthor (struct Survey *Svy)
   {
-   bool ShowPhoto = false;
-   char PhotoURL[PATH_MAX + 1];
-   struct UsrData UsrDat;
-
-   /***** Initialize structure with user's data *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
-   /***** Get data of author *****/
-   UsrDat.UsrCod = Svy->UsrCod;
-   if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))	// Get of the database the data of the author
-      ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);
-
-   /***** Show photo *****/
-   Pho_ShowUsrPhoto (&UsrDat,ShowPhoto ? PhotoURL :
-                	                 NULL,
-                     "PHOTO15x20",Pho_ZOOM,false);
-
-   /***** Write name *****/
-   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
-            Svy->Status.Visible ? "AUTHOR_TXT" :
-        	                  "AUTHOR_TXT_LIGHT",
-            UsrDat.FullName);
-
-   /***** Free memory used for user's data *****/
-   Usr_UsrDataDestructor (&UsrDat);
+   Usr_WriteAuthor1Line (Svy->UsrCod,!Svy->Status.Visible);
   }
 
 /*****************************************************************************/
