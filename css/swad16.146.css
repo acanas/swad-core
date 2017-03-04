@@ -1636,7 +1636,15 @@ table.CELLS_PAD_10	> tbody > tr > td {padding:10px;}
 	}
 
 /******************* Web of institution, centre, degree **********************/
-.EXTERNAL_WWW
+.EXTERNAL_WWW_SHORT
+	{
+	box-sizing:border-box;
+	max-width:100px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.EXTERNAL_WWW_LONG
 	{
 	box-sizing:border-box;
 	max-width:250px;

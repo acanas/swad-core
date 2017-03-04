@@ -449,7 +449,7 @@ static void Ins_Configuration (bool PrintView)
 	 Act_FormEnd ();
 	}
       else	// I can not change institution WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
+	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
 			    "</a>"
@@ -1383,8 +1383,6 @@ void Ins_WriteSelectorOfInstitution (void)
 /************************* List all the institutions *************************/
 /*****************************************************************************/
 
-#define Ins_MAX_LENGTH_WWW_ON_SCREEN 15
-
 static void Ins_ListInstitutionsForEdition (void)
   {
    extern const char *Hlp_COUNTRY_Institutions;
@@ -1502,11 +1500,12 @@ static void Ins_ListInstitutionsForEdition (void)
 	{
          Str_Copy (WWW,Ins->WWW,
                    Cns_MAX_LENGTH_WWW);
-         Str_LimitLengthHTMLStr (WWW,Ins_MAX_LENGTH_WWW_ON_SCREEN);
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
+                            "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>",
+                            "</a>"
+                            "</div>",
                   Ins->WWW,Ins->WWW,WWW);
 	}
       fprintf (Gbl.F.Out,"</td>");

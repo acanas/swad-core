@@ -457,7 +457,7 @@ static void Deg_Configuration (bool PrintView)
 	 Act_FormEnd ();
 	}
       else	// I can not change degree WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
+	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
 			    "</a>"
@@ -676,8 +676,6 @@ void Deg_ShowDegsOfCurrentCtr (void)
 /********************* List current degrees for edition **********************/
 /*****************************************************************************/
 
-#define Deg_MAX_LENGTH_WWW_ON_SCREEN 15
-
 static void Deg_ListDegreesForEdition (void)
   {
    extern const char *Hlp_CENTRE_Degrees;
@@ -823,11 +821,12 @@ static void Deg_ListDegreesForEdition (void)
 	{
          Str_Copy (WWW,Deg->WWW,
                    Cns_MAX_LENGTH_WWW);
-         Str_LimitLengthHTMLStr (WWW,Deg_MAX_LENGTH_WWW_ON_SCREEN);
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
+                            "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>",
+                            "</a>"
+                            "</div>",
                   Deg->WWW,Deg->WWW,WWW);
 	}
       fprintf (Gbl.F.Out,"</td>");

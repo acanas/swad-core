@@ -500,7 +500,7 @@ static void Ctr_Configuration (bool PrintView)
 	 Act_FormEnd ();
 	}
       else	// I can not change centre WWW
-	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW\">"
+	 fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_LONG\">"
 			    "<a href=\"%s\" target=\"_blank\" class=\"DAT\">"
 	                    "%s"
 			    "</a>"
@@ -1366,8 +1366,6 @@ void Ctr_WriteSelectorOfCentre (void)
 /*************************** List all the centres ****************************/
 /*****************************************************************************/
 
-#define Ctr_MAX_LENGTH_WWW_ON_SCREEN 15
-
 static void Ctr_ListCentresForEdition (void)
   {
    extern const char *Hlp_INSTITUTION_Centres;
@@ -1515,11 +1513,12 @@ static void Ctr_ListCentresForEdition (void)
 	{
          Str_Copy (WWW,Ctr->WWW,
                    Cns_MAX_LENGTH_WWW);
-         Str_LimitLengthHTMLStr (WWW,Ctr_MAX_LENGTH_WWW_ON_SCREEN);
-         fprintf (Gbl.F.Out,"<a href=\"%s\" target=\"_blank\""
+         fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
+                            "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
                             "%s"
-                            "</a>",
+                            "</a>"
+                            "</div>",
                   Ctr->WWW,Ctr->WWW,WWW);
 	}
       fprintf (Gbl.F.Out,"</td>");
