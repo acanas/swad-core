@@ -667,8 +667,6 @@ static void Svy_WriteAuthor (struct Survey *Svy)
   {
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
-   char FirstName[Usr_MAX_BYTES_NAME + 1];
-   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
    struct UsrData UsrDat;
 
    /***** Initialize structure with user's data *****/
@@ -685,23 +683,10 @@ static void Svy_WriteAuthor (struct Survey *Svy)
                      "PHOTO15x20",Pho_ZOOM,false);
 
    /***** Write name *****/
-   Str_Copy (FirstName,UsrDat.FirstName,
-             Usr_MAX_BYTES_NAME);
-   Str_Copy (Surnames,UsrDat.Surname1,
-             Usr_MAX_BYTES_SURNAMES);
-   if (UsrDat.Surname2[0])
-     {
-      Str_Concat (Surnames," ",
-                  Usr_MAX_BYTES_SURNAMES);
-      Str_Concat (Surnames,UsrDat.Surname2,
-                  Usr_MAX_BYTES_SURNAMES);
-     }
-   Str_LimitLengthHTMLStr (FirstName,8);
-   Str_LimitLengthHTMLStr (Surnames,8);
-   fprintf (Gbl.F.Out,"<span class=\"%s\">%s %s</span>",
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_1_LINE %s\">%s</div>",
             Svy->Status.Visible ? "AUTHOR_TXT" :
         	                  "AUTHOR_TXT_LIGHT",
-            FirstName,Surnames);
+            UsrDat.FullName);
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
