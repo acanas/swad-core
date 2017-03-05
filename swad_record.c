@@ -2173,7 +2173,9 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
    fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's nickname *****/
+   fprintf (Gbl.F.Out,"<tr>");
    Rec_ShowNickname (UsrDat,PutFormLinks);
+   fprintf (Gbl.F.Out,"</tr>");
 
    /***** User's country, web and social networks *****/
    fprintf (Gbl.F.Out,"<tr>");
@@ -2597,29 +2599,20 @@ static void Rec_ShowPhoto (struct UsrData *UsrDat)
 
 static void Rec_ShowFullName (struct UsrData *UsrDat)
   {
-   char Name[Usr_MAX_BYTES_NAME + 1];	// To shorten length of FirstName, Surname1, Surname2
-
-   fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID REC_NAME LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID LEFT_TOP\">"
+	              "<div class=\"REC_NAME\">");
 
    /***** First name *****/
-   Str_Copy (Name,UsrDat->FirstName,
-             Usr_MAX_BYTES_NAME);
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s<br />",Name);
+   fprintf (Gbl.F.Out,"%s<br />",UsrDat->FirstName);
 
    /***** Surname 1 *****/
-   Str_Copy (Name,UsrDat->Surname1,
-             Usr_MAX_BYTES_NAME);
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s<br />",Name);
+   fprintf (Gbl.F.Out,"%s<br />",UsrDat->Surname1);
 
    /***** Surname 2 *****/
-   Str_Copy (Name,UsrDat->Surname2,
-             Usr_MAX_BYTES_NAME);
-   Str_LimitLengthHTMLStr (Name,20);
-   fprintf (Gbl.F.Out,"%s",Name);
+   fprintf (Gbl.F.Out,"%s",UsrDat->Surname2);
 
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>"
+	              "</td>");
   }
 
 /*****************************************************************************/
@@ -2632,8 +2625,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
    extern const char *Txt_Another_user_s_profile;
    bool ItsMe;
 
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"REC_C2_MID REC_NAME LEFT_BOTTOM\">"
+   fprintf (Gbl.F.Out,"<td class=\"REC_C2_MID LEFT_BOTTOM\">"
 	              "<div class=\"REC_NICK\">");
    if (UsrDat->Nickname[0])
      {
@@ -2656,8 +2648,7 @@ static void Rec_ShowNickname (struct UsrData *UsrDat,bool PutFormLinks)
 	}
      }
    fprintf (Gbl.F.Out,"</div>"
-	              "</td>"
-	              "</tr>");
+	              "</td>");
   }
 
 /*****************************************************************************/

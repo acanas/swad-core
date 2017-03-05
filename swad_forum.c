@@ -685,7 +685,6 @@ static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
    row = mysql_fetch_row (mysql_res);
    Str_Copy (Subject,row[0],
              Cns_MAX_BYTES_SUBJECT);
-   Str_LimitLengthHTMLStr (Subject,20);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -3495,7 +3494,6 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       PaginationPsts.NumItems = Thr.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
-      Str_LimitLengthHTMLStr (Thr.Subject,80);
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,Thr.ThrCod,&PaginationPsts,
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,

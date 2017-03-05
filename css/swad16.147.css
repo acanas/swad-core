@@ -2022,15 +2022,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 .REC_C2_TOP
 	{
 	box-sizing:border-box;
-	width:282px;
+	width:278px;
 	height:68px;
 	padding-top:8px !important;
-	}
+		}
 .REC_C3_TOP
 	{
 	box-sizing:border-box;
 	width:190px;
-	}
+		}
 
 .REC_C1_MID
 	{
@@ -2040,8 +2040,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 .REC_C2_MID
 	{
 	box-sizing:border-box;
-	width:282px;
-	}
+	width:278px;
+		}
 .REC_C3_MID
 	{
 	box-sizing:border-box;
@@ -2052,7 +2052,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:170px;
-	}
+		}
 .REC_C2_BOT
 	{
 	box-sizing:border-box;
@@ -2065,7 +2065,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 
 .REC_HEAD	{font-family:Georgia,"DejaVu LGC Serif","Bitstream Vera Serif",serif; color:#808080; font-size:12pt;}
-.REC_NAME	{color:#808080; font-size:20pt; font-weight:bold;}
+.REC_NAME
+	{
+	box-sizing:border-box;
+	max-width:274px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	color:#808080;
+	font-size:20pt;
+	font-weight:bold;
+		}
 .REC_NICK	{color:#808080; font-size:15pt; font-weight:bold;}
 .REC_WEBS
 	{
