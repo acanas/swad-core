@@ -821,7 +821,7 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    bool Visible = Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat);
 
    /***** Show user's photo *****/
-   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR_PHOTO\">");
+   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_PHOTO\">");
    if (Visible)
      {
       ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (UsrDat,PhotoURL);
@@ -832,15 +832,19 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Show user's name and icon to follow/unfollow *****/
-   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR_NAME\">");
+   fprintf (Gbl.F.Out,"<td class=\"FOLLOW_USR\">");
    if (Visible)
      {
       /* Put form to go to public profile */
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// To limit width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
-      Usr_RestrictLengthAndWriteName (UsrDat,10);
-      fprintf (Gbl.F.Out,"</a>");
+      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+	 fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</a>"
+	                 "</div>");
       Act_FormEnd ();
      }
 
@@ -887,7 +891,7 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_CRS LEFT_MIDDLE COLOR%u\""
+   fprintf (Gbl.F.Out,"<td class=\"CON_USR CON_CRS COLOR%u\""
 	              " style=\"width:68px;\">",
 	    Gbl.RowEvenOdd);
    if (Visible)
@@ -895,9 +899,13 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"<div class=\"CON_NAME\">");	// To limit width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
-      Usr_RestrictLengthAndWriteName (UsrDat,10);
-      fprintf (Gbl.F.Out,"</a>");
+      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+	 fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</a>"
+	                 "</div>");
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"</td>");

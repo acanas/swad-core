@@ -946,7 +946,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
    const char *Font = (Gbl.Usrs.Connected.Lst[Gbl.Usrs.Connected.NumUsr].ThisCrs ? "CON_CRS" :
-	                                                                           "CON");
+	                                                                           "CON_NO_CRS");
    long UsrCod;
    struct UsrData OtherUsrDat;
    struct UsrData *UsrDat;
@@ -983,17 +983,20 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write full name and link *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
-	              " style=\"width:68px;\">",
+   fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW %s COLOR%u\">",
 	    Font,Gbl.RowEvenOdd);
    Act_FormStartUnique ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
 	                                        ActSeeRecOneTch);	// Must be unique because
 									// the list of connected users
 									// is dynamically updated via AJAX
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// To limit width
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
-   Usr_RestrictLengthAndWriteName (UsrDat,8);
-   fprintf (Gbl.F.Out,"</a>");
+   fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
+   if (UsrDat->Surname2[0])
+      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+   fprintf (Gbl.F.Out,"</a>"
+	              "</div>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
@@ -1156,7 +1159,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    /* Get course code (row[1]) */
 	    ThisCrs = (Str_ConvertStrCodToLongCod (row[1]) == Gbl.CurrentCrs.Crs.CrsCod);
 	    Font = (ThisCrs ? "CON_CRS" :
-			      "CON");
+			      "CON_NO_CRS");
 
 	    /* Compute time from last access */
 	    if (sscanf (row[2],"%ld",&TimeDiff) != 1)
@@ -1174,22 +1177,25 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write full name and link *****/
-	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE COLOR%u\""
-			       " style=\"width:320px;\">",
+	    fprintf (Gbl.F.Out,"<td class=\"CON_USR_WIDE %s COLOR%u\">",
 		     Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
 	       Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
-							   ActSeeRecOneTch);
+						      ActSeeRecOneTch);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
-	       Act_LinkFormSubmit (UsrDat.FullName,Font,NULL);
 	      }
-	    Usr_RestrictLengthAndWriteName (&UsrDat,40);
+            fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// To limit width
 	    if (PutLinkToRecord)
-	      {
+	       Act_LinkFormSubmit (UsrDat.FullName,Font,NULL);
+	    fprintf (Gbl.F.Out,"%s<br />%s",UsrDat.FirstName,UsrDat.Surname1);
+	    if (UsrDat.Surname2[0])
+	       fprintf (Gbl.F.Out," %s",UsrDat.Surname2);
+	    if (PutLinkToRecord)
 	       fprintf (Gbl.F.Out,"</a>");
+	    fprintf (Gbl.F.Out,"</div>");
+	    if (PutLinkToRecord)
 	       Act_FormEnd ();
-	      }
 	    fprintf (Gbl.F.Out,"</td>");
 
 	    /***** Write time from last access *****/

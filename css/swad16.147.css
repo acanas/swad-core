@@ -1044,7 +1044,7 @@ a:hover						/* Default ==> underlined */
 .BLUE_SUBTITLE_ACTION	{color:#4D88A1; font-size:12pt;}
 .YELLOW_SUBTITLE_ACTION	{color:#BD4815; font-size:12pt;}
 
-/************************* Users connected globally **************************/
+/***************************** Users connected *******************************/
 .CONNECTED
 	{
 	box-sizing:border-box;
@@ -1078,6 +1078,34 @@ a:hover						/* Default ==> underlined */
 	color:#398000;
 	font-size:12pt;
 	}
+.CON_USR_NARROW
+	{
+	width:68px;
+	text-align:left;
+	vertical-align:middle;
+	}
+.CON_USR_WIDE
+	{
+	width:320px;
+	text-align:left;
+	vertical-align:middle;
+	}
+.CON_NAME_NARROW
+	{
+	max-width:68px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.CON_NAME_WIDE
+	{
+	max-width:320px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.CON_NO_CRS	{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
+.CON_CRS	{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
 
 /*************************** Most frequent actions ***************************/
 #MFU_actions
@@ -2890,7 +2918,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:30pt;
 	font-weight:bold;
 	}
-.FOLLOW_USR_PHOTO
+.FOLLOW_PHOTO
 	{
 	box-sizing:border-box;
 	width:72px;
@@ -2898,21 +2926,26 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:left;
 	vertical-align:bottom;
 	}
+.FOLLOW_USR
+	{
+	box-sizing:border-box;
+	width:100px;
+	height:90px;
+	}
 .FOLLOW_USR_NAME
 	{
 	box-sizing:border-box;
-	min-width:106px;
-	height:90px;
+	max-width:100px;
 	text-align:left;
 	vertical-align:bottom;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
 	}
 .FOLLOW_USR_ICO
 	{
 	padding:4px;
 	}
-
-.CON			{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
-.CON_CRS		{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
 
 /****************************** Users ranking ********************************/
 .RANK_USR
