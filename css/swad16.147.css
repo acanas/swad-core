@@ -1376,19 +1376,26 @@ a:hover						/* Default ==> underlined */
 	color:#4070A0;
 	overflow:hidden;
 	}
+.NOTICE_AUTHOR
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	float:right;
+	max-width:120px;
+	text-align:right;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	font-size:12pt;
+	}
 .NOTICE_AUTHOR_ACTIVE
 	{
 	color:#404040;
-	font-size:12pt;
-	text-align:right;
-	overflow:hidden;
 	}
 .NOTICE_AUTHOR_OBSOLETE
 	{
 	color:#808080;
-	font-size:12pt;
-	text-align:right;
-	overflow:hidden;
 	}
 
 /**************************** Institutional links ****************************/
@@ -2907,7 +2914,19 @@ a:hover img.CENTRE_PHOTO_SHOW
 .CON			{color:#B8D070; font-size:11pt; line-height:110%; white-space:nowrap;}
 .CON_CRS		{color:#398000; font-size:11pt; line-height:110%; white-space:nowrap;}
 
-/*************************** Indicators about courses ************************/
+/****************************** Users ranking ********************************/
+.RANK_USR
+	{
+	box-sizing:border-box;
+	max-width:50px;
+	text-align:left;
+	vertical-align:middle;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+
+/************************* Indicators about courses **************************/
 .INDICATORS td,.INDICATORS th
 	{
 	border:1px solid silver;

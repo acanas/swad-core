@@ -1552,9 +1552,13 @@ void Prf_ShowUsrInRanking (struct UsrData *UsrDat,unsigned Rank)
      {
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      fprintf (Gbl.F.Out,"<div class=\"RANK_USR\">");
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT_SMALL",NULL);
-      Usr_RestrictLengthAndWriteName (UsrDat,8);
-      fprintf (Gbl.F.Out,"</a>");
+      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
+      if (UsrDat->Surname2[0])
+	 fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"</a>"
+	                 "</div>");
       Act_FormEnd ();
      }
 

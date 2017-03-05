@@ -197,13 +197,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.147 (2017-03-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.147.2 (2017-03-04)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.147.2: Mar 05, 2017	Changes in layout of notice author. (216316 lines)
+        Version 16.147.1: Mar 05, 2017	Changes in layout of notice author. (216300 lines)
         Version 16.147:   Mar 04, 2017	Changes in layout of file browser. (216292 lines)
         Version 16.146.9: Mar 04, 2017	Changes in layout of assignments and works. (216271 lines)
         Version 16.146.8: Mar 04, 2017	Changes in layout of connected users. (216284 lines)

@@ -3143,14 +3143,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
          fprintf (Gbl.F.Out," %s",BgColor);
       fprintf (Gbl.F.Out,"\">"
                          "<div class=\"AUTHOR_2_LINES %s\">"
-	                 "%s<br />"
-	                 "%s",
-	       Style,
-               UsrDat->FirstName,
-               UsrDat->Surname1);
+	                 "%s<br />%s",
+	       Style,UsrDat->FirstName,UsrDat->Surname1);
       if (UsrDat->Surname2[0])
-	 fprintf (Gbl.F.Out,"%s",
-		  UsrDat->Surname2);
+	 fprintf (Gbl.F.Out,"%s",UsrDat->Surname2);
       fprintf (Gbl.F.Out,"</div>");
      }
    else

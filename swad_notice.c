@@ -727,12 +727,16 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
 	       TextClass[Status],Content);
 
    /***** Write the author *****/
-   fprintf (Gbl.F.Out,"<div class=\"%s\">",
+   fprintf (Gbl.F.Out,"<div class=\"NOTICE_AUTHOR %s\">",
             AuthorClass[Status]);
    Usr_UsrDataConstructor (&UsrDat);
    UsrDat.UsrCod = UsrCod;
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat)) // Get from the database the data of the autor
-      Usr_RestrictLengthAndWriteName (&UsrDat,16);
+     {
+      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat.FirstName,UsrDat.Surname1);
+      if (UsrDat.Surname2[0])
+	 fprintf (Gbl.F.Out," %s",UsrDat.Surname2);
+     }
    Usr_UsrDataDestructor (&UsrDat);
    fprintf (Gbl.F.Out,"</div>");
 
