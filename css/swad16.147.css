@@ -2290,6 +2290,13 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100%;
 	margin:0 auto;
 	}
+.TT_CELL
+	{
+	max-width:50px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	margin:0 auto;
+	}
 .TT_TXT
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;

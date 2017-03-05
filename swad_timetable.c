@@ -1204,7 +1204,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
       case TT_TUT_SHOW:
 	 if (HourType != TT_FREE_HOUR) // If cell is not empty...
 	   {
-	    fprintf (Gbl.F.Out,"<span class=\"TT_TXT\">");
+	    fprintf (Gbl.F.Out,"<div class=\"TT_CELL TT_TXT\">");
 	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
@@ -1228,19 +1228,15 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 		     fprintf (Gbl.F.Out,"<br />%s",Group);
                  }
                else
-                 {
-                  Str_LimitLengthHTMLStr (GrpDat.GrpTypName,12);
-                  Str_LimitLengthHTMLStr (GrpDat.GrpName,12);
 		  fprintf (Gbl.F.Out,"<br />%s %s",
                            GrpDat.GrpTypName,GrpDat.GrpName);
-                 }
 	       if (Place[0])
 		  fprintf (Gbl.F.Out,"<br />%s",Place);
 	      }
 	    else	// TimeTableView == TT_TUT_SHOW
 	       if (Place[0])
 		  fprintf (Gbl.F.Out,"<br />%s",Place);
-            fprintf (Gbl.F.Out,"</span>");
+            fprintf (Gbl.F.Out,"</div>");
 	   }
 	 break;
       case TT_CRS_EDIT:
@@ -1338,8 +1334,6 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	        	      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpCod);
 	             if (GrpCod == Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpCod)
 		        fprintf (Gbl.F.Out," selected=\"selected\"");
-                     Str_LimitLengthHTMLStr (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,8);
-                     Str_LimitLengthHTMLStr (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpName,8);
 	             fprintf (Gbl.F.Out,">%s %s</option>",
 	        	      Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                               Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrp].GrpName);
