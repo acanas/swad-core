@@ -169,7 +169,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
                                  bool Highlight,
                                  bool ShowNoteAlone);
 static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod);
-static void Soc_WriteAuthorNote (struct UsrData *UsrDat);
+static void Soc_WriteAuthorNote (const struct UsrData *UsrDat);
 static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
@@ -1562,7 +1562,6 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 	 Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 					   Txt_Another_user_s_profile,
 				   "SOCIAL_TOP_PUBLISHER");
-	 Str_LimitLengthHTMLStr (UsrDat.FullName,40);
 	 fprintf (Gbl.F.Out,"%s</a>",UsrDat.FullName);
 	 Act_FormEnd ();
 
@@ -1581,7 +1580,7 @@ static void Soc_WriteTopMessage (Soc_TopMessage_t TopMessage,long UsrCod)
 /*****************************************************************************/
 // All forms in this function and nested functions must have unique identifiers
 
-static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
+static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
   {
    extern const char *Txt_My_public_profile;
    extern const char *Txt_Another_user_s_profile;
@@ -1596,7 +1595,6 @@ static void Soc_WriteAuthorNote (struct UsrData *UsrDat)
    Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_N_BOLD");
-   Str_LimitLengthHTMLStr (UsrDat->FullName,16);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
@@ -2140,7 +2138,6 @@ static void Soc_PutFormToWriteNewPost (void)
    extern const char *Txt_New_SOCIAL_post;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   char FullName[Usr_MAX_BYTES_FULL_NAME + 2];
 
    /***** Start list *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">"
@@ -2158,14 +2155,11 @@ static void Soc_PutFormToWriteNewPost (void)
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_NOTE_RIGHT_CONTAINER\">");
 
    /* Write author's full name and nickname */
-   Str_Copy (FullName,Gbl.Usrs.Me.UsrDat.FullName,
-             Usr_MAX_BYTES_FULL_NAME);
-   Str_LimitLengthHTMLStr (FullName,16);
    fprintf (Gbl.F.Out,"<div class=\"SOCIAL_RIGHT_AUTHOR\">"
 		      "<span class=\"DAT_N_BOLD\">%s</span>"
 		      "<span class=\"DAT_LIGHT\"> @%s</span>"
 		      "</div>",
-	    FullName,Gbl.Usrs.Me.UsrDat.Nickname);
+	    Gbl.Usrs.Me.UsrDat.FullName,Gbl.Usrs.Me.UsrDat.Nickname);
 
    /***** Form to write the post *****/
    /* Start container */
@@ -2638,7 +2632,6 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
    Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_BOLD");
-   Str_LimitLengthHTMLStr (UsrDat->FullName,12);
    fprintf (Gbl.F.Out,"%s</a>",UsrDat->FullName);
    Act_FormEnd ();
 
@@ -2648,7 +2641,6 @@ static void Soc_WriteAuthorComment (struct UsrData *UsrDat)
    Act_LinkFormSubmitUnique (ItsMe ? Txt_My_public_profile :
 				     Txt_Another_user_s_profile,
 			     "DAT_LIGHT");
-   Str_LimitLengthHTMLStr (UsrDat->FullName,12);
    fprintf (Gbl.F.Out," @%s</a>",UsrDat->Nickname);
    Act_FormEnd ();
 

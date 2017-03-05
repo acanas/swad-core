@@ -2509,6 +2509,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:536px;
 	padding-top:10px;
 	text-align:left;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .SOCIAL_TOP_PUBLISHER
 	{
@@ -2540,6 +2543,9 @@ a:hover img.CENTRE_PHOTO_SHOW
         width:320px;
 	text-align:left;
 	vertical-align:top;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
         }
 .SOCIAL_RIGHT_TIME
 	{
@@ -2678,6 +2684,9 @@ a:hover img.CENTRE_PHOTO_SHOW
         width:280px;
 	text-align:left;
 	vertical-align:top;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
         }
 .SOCIAL_FORM_NEW_COMMENT
 	{
@@ -2981,9 +2990,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 	max-width:100px;
 	text-align:left;
 	vertical-align:bottom;
-		white-space:nowrap;
-		overflow:hidden;
-		text-overflow:ellipsis;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .FOLLOW_USR_ICO
 	{
