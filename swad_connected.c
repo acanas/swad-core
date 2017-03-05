@@ -990,11 +990,9 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
 									// the list of connected users
 									// is dynamically updated via AJAX
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// To limit width
+   fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
-   fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
-   if (UsrDat->Surname2[0])
-      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+   Usr_WriteFirstNameBRSurnames (UsrDat);
    fprintf (Gbl.F.Out,"</a>"
 	              "</div>");
    Act_FormEnd ();
@@ -1185,12 +1183,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 						      ActSeeRecOneTch);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }
-            fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// To limit width
+            fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// Limited width
 	    if (PutLinkToRecord)
 	       Act_LinkFormSubmit (UsrDat.FullName,Font,NULL);
-	    fprintf (Gbl.F.Out,"%s<br />%s",UsrDat.FirstName,UsrDat.Surname1);
-	    if (UsrDat.Surname2[0])
-	       fprintf (Gbl.F.Out," %s",UsrDat.Surname2);
+            Usr_WriteFirstNameBRSurnames (&UsrDat);
 	    if (PutLinkToRecord)
 	       fprintf (Gbl.F.Out,"</a>");
 	    fprintf (Gbl.F.Out,"</div>");

@@ -740,32 +740,17 @@ void Usr_BuildFullName (struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/******** Restrict length of firstname and surnames and write then ***********/
+/********* Write user name in two lines. 1: first name, 2: surnames **********/
 /*****************************************************************************/
 
-void Usr_RestrictLengthAndWriteName (const struct UsrData *UsrDat,unsigned MaxChars)
+void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
   {
-   char FirstName[Usr_MAX_BYTES_NAME + 1];
-   char Surnames[Usr_MAX_BYTES_SURNAMES + 1];
+   /***** Write first name and surname 1 *****/
+   fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
 
-   /***** Restrict length of firstname and surnames *****/
-   Str_Copy (FirstName,UsrDat->FirstName,
-             Usr_MAX_BYTES_NAME);
-   Str_LimitLengthHTMLStr (FirstName,MaxChars);
-
-   Str_Copy (Surnames,UsrDat->Surname1,
-             Usr_MAX_BYTES_SURNAMES);
+   /***** Write surname2 if exists *****/
    if (UsrDat->Surname2[0])
-     {
-      Str_Concat (Surnames," ",
-                  Usr_MAX_BYTES_SURNAMES);
-      Str_Concat (Surnames,UsrDat->Surname2,
-                  Usr_MAX_BYTES_SURNAMES);
-     }
-   Str_LimitLengthHTMLStr (Surnames,MaxChars);
-
-   /***** Write shorted firstname, then return, then shorted surnames *****/
-   fprintf (Gbl.F.Out,"%s<br />%s",FirstName,Surnames);
+      fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
   }
 
 /*****************************************************************************/

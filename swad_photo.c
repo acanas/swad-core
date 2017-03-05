@@ -1143,11 +1143,8 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
       	       IdCaption);
 
       /* First name and surnames */
-      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">"
-	                 "%s<br />%s",
-	       UsrDat->FirstName,UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-         fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      fprintf (Gbl.F.Out,"<div class=\"ZOOM_TXT_LINE DAT_N\">");	// Limited width
+      Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</div>");
 
       /* Institution  full name and institution country */

@@ -1794,10 +1794,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	display:block;
 	width:186px;
+	margin:0 auto;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;
-	margin:0 auto;
 	}
 
 .NO_BR	{white-space:nowrap;}
@@ -2414,6 +2414,16 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:100px;
 	text-align:left;
 	vertical-align:top;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+
+/**************************** Enrollment requests ****************************/
+.REQUESTER_NAME
+	{
+	box-sizing:border-box;
+	max-width:100px;
 	white-space:nowrap;
 	overflow:hidden;
 	text-overflow:ellipsis;

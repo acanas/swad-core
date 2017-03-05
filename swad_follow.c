@@ -838,11 +838,9 @@ static void Fol_ShowFollowedOrFollower (struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// To limit width
+      fprintf (Gbl.F.Out,"<div class=\"FOLLOW_USR_NAME\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"DAT",NULL);
-      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-	 fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
       Act_FormEnd ();
@@ -899,11 +897,9 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
       /* Put form to go to public profile */
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"CON_NAME\">");	// To limit width
+      fprintf (Gbl.F.Out,"<div class=\"CON_NAME\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
-      fprintf (Gbl.F.Out,"%s<br />%s",UsrDat->FirstName,UsrDat->Surname1);
-      if (UsrDat->Surname2[0])
-	 fprintf (Gbl.F.Out," %s",UsrDat->Surname2);
+      Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"
 	                 "</div>");
       Act_FormEnd ();
