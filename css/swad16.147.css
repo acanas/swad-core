@@ -2025,12 +2025,12 @@ a:hover img.CENTRE_PHOTO_SHOW
 	width:278px;
 	height:68px;
 	padding-top:8px !important;
-		}
+	}
 .REC_C3_TOP
 	{
 	box-sizing:border-box;
 	width:190px;
-		}
+	}
 
 .REC_C1_MID
 	{
@@ -2041,7 +2041,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:278px;
-		}
+	}
 .REC_C3_MID
 	{
 	box-sizing:border-box;
@@ -2052,7 +2052,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	box-sizing:border-box;
 	width:170px;
-		}
+	}
 .REC_C2_BOT
 	{
 	box-sizing:border-box;
@@ -2075,15 +2075,38 @@ a:hover img.CENTRE_PHOTO_SHOW
 	color:#808080;
 	font-size:20pt;
 	font-weight:bold;
-		}
-.REC_NICK	{color:#808080; font-size:15pt; font-weight:bold;}
+	}
+.REC_NICK
+	{
+	color:#808080;
+	font-size:15pt;
+	font-weight:bold;
+	}
 .REC_WEBS
 	{
 	width:180px;
 	margin:0 auto;
 	}
-.REC_DAT	{color:#808080; font-size:13pt; line-height:110%;}
-.REC_DAT_BOLD	{color:black;   font-size:13pt; line-height:110%;}
+.REC_EMAIL
+	{
+	box-sizing:border-box;
+	max-width:358px;
+	white-space:nowrap;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+.REC_DAT
+	{
+	color:#808080;
+	font-size:13pt;
+	line-height:110%;
+	}
+.REC_DAT_BOLD
+	{
+	color:black;
+	font-size:13pt;
+	line-height:110%;
+	}
 
 /******************************** Class photo ********************************/
 .CLASSPHOTO_TITLE

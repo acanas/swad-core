@@ -2694,16 +2694,16 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 	    ClassForm,Txt_Email);
    if (UsrDat->Email[0])
      {
+      fprintf (Gbl.F.Out,"<div class=\"REC_EMAIL\">");	// Limited width
       if (Mai_ICanSeeOtherUsrEmail (UsrDat))
-	{
-	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\"",
+	 fprintf (Gbl.F.Out,"<a href=\"mailto:%s\" class=\"REC_DAT_BOLD\">"
+			    "%s"
+			    "</a>",
+		  UsrDat->Email,
 		  UsrDat->Email);
-	 Str_LimitLengthHTMLStr (UsrDat->Email,36);
-	 fprintf (Gbl.F.Out," class=\"REC_DAT_BOLD\">%s</a>",
-		  UsrDat->Email);
-	}
       else
 	 fprintf (Gbl.F.Out,"********");
+      fprintf (Gbl.F.Out,"</div>");
      }
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
