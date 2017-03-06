@@ -1401,10 +1401,9 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                        char **ContentStr,
-                                       long PstCod,
-                                       unsigned MaxChars,bool GetContent)
+                                       long PstCod,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1426,10 +1425,16 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            Str_Copy (SummaryStr,row[0],
-                      Cns_MAX_BYTES_TEXT);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+            // TODO: Do only direct copy when Subject will be VARCHAR(255)
+            if (strlen (row[0]) > Cns_MAX_BYTES_SUMMARY_STRING)
+              {
+               strncpy (SummaryStr,row[0],
+			Cns_MAX_BYTES_SUMMARY_STRING);
+               SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING] = '\0';
+              }
+            else
+	       Str_Copy (SummaryStr,row[0],
+			 Cns_MAX_BYTES_SUMMARY_STRING);
 
             /***** Copy content *****/
             if (GetContent)

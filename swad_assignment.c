@@ -830,8 +830,9 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
 /*****************************************************************************/
 // This function may be called inside a web service
 
-void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
-                             long AsgCod,unsigned MaxChars,bool GetContent)
+void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                             char **ContentStr,
+                             long AsgCod,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -854,9 +855,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **Cont
 
             /***** Get summary *****/
             Str_Copy (SummaryStr,row[0],
-                      Cns_MAX_BYTES_TEXT);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+                      Cns_MAX_BYTES_SUMMARY_STRING);
 
             /***** Get content *****/
             if (GetContent)

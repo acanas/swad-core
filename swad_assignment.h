@@ -75,8 +75,9 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg);
 void Asg_FreeListAssignments (void);
 
-void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
-                             long AsgCod,unsigned MaxChars,bool GetContent);
+void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                             char **ContentStr,
+                             long AsgCod,bool GetContent);
 
 long Asg_GetParamAsgCod (void);
 void Asg_ReqRemAssignment (void);

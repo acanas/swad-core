@@ -101,10 +101,9 @@ unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 
-void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                        char **ContentStr,
-                                       long PstCod,
-                                       unsigned MaxChars,bool GetContent);
+                                       long PstCod,bool GetContent);
 
 void For_PutAllHiddenParamsForum (void);
 void For_SetForumTypeAndRestrictAccess (void);

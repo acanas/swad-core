@@ -68,9 +68,9 @@ void Not_RemoveNotice (void);
 
 void Not_GetNotCodToHighlight (void);
 void Not_ShowNotices (Not_Listing_t TypeNoticesListing);
-void Not_GetSummaryAndContentNotice (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
-                                     char **ContentStr,long NotCod,
-                                     unsigned MaxChars,bool GetContent);
+void Not_GetSummaryAndContentNotice (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                                     char **ContentStr,
+                                     long NotCod,bool GetContent);
 unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumNotif);
 unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif);
 

@@ -11141,8 +11141,9 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 
 #define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100 + (Usr_MAX_BYTES_NAME + 1) * 3 + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
 
-void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
-                                     long FilCod,unsigned MaxChars,bool GetContent)
+void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                                     char **ContentStr,
+                                     long FilCod,bool GetContent)
   {
    extern const char *Txt_Filename;
    extern const char *Txt_Folder;
@@ -11163,9 +11164,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],cha
 
    /***** Copy file name into summary string *****/
    Str_Copy (SummaryStr,FileMetadata.FilFolLnkName,
-             Cns_MAX_BYTES_TEXT);
-   if (MaxChars)
-      Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+             Cns_MAX_BYTES_SUMMARY_STRING);
 
    /***** Copy some file metadata into content string *****/
    if (GetContent && ContentStr)

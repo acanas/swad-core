@@ -193,17 +193,23 @@
 // TODO: System admin should view link "Visits to course"
 // TODO: Un administrador de institución, ¿debería poder cambiar la contraseña de un usuario de esa institución? No lo tengo claro.
 
+// TODO: Subject in forum_post should be VARCHAR(255) in order to be copied directly to SummaryStr
+// TODO: Add a Subject (VARCHAR(255)) to notices to be used as SummaryStr
+// TODO: Subject in msg_content and msg_content_deleted should be VARCHAR(255) in order to be copied directly to SummaryStr
+// TODO: Check how to get a summary of a social post or comments
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.147.11 (2017-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.148 (2017-03-06)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.148:   Mar 06, 2017	Code refactoring in notifications. (216393 lines)
         Version 16.147.11:Mar 06, 2017	Changes in names of zipped files. (216388 lines)
         Version 16.147.10:Mar 06, 2017	Changes in layout of users' listing. (216394 lines)
         Version 16.147.9: Mar 06, 2017	Changes in layout of header. (216389 lines)

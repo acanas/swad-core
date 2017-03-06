@@ -709,10 +709,9 @@ void Mrk_ShowMyMarks (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                           char **ContentStr,
-                          long MrkCod,long UsrCod,
-                          unsigned MaxChars,bool GetContent)
+                          long MrkCod,long UsrCod,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -783,8 +782,6 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
         	                                  FileName);
             Str_Copy (SummaryStr,FileName,
                       Cns_MAX_BYTES_TEXT);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
 
             if (GetContent)
               {

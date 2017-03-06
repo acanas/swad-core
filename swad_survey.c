@@ -1400,8 +1400,9 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
-                         char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent)
+void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                         char **ContentStr,
+                         long SvyCod,bool GetContent)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -1424,9 +1425,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 
             /***** Get summary *****/
             Str_Copy (SummaryStr,row[0],
-                      Cns_MAX_BYTES_TEXT);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+                      Cns_MAX_BYTES_SUMMARY_STRING);
 
             /***** Get content *****/
             if (GetContent)

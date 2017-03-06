@@ -247,8 +247,9 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
 void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
 
-void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],char **ContentStr,
-                                     long FilCod,unsigned MaxChars,bool GetContent);
+void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                                     char **ContentStr,
+                                     long FilCod,bool GetContent);
 
 unsigned Brw_ListDocsFound (const char *Query,
                             const char *TitleSingular,const char *TitlePlural);

@@ -1605,14 +1605,13 @@ static long Exa_GetParamExaCod (void)
 /*****************************************************************************/
 /************ Get summary and content about an exam announcement *************/
 /*****************************************************************************/
-// This function may be called inside a web service, so don't report error
-// MaxChars must be > 3 + (2 + Cns_MAX_LENGTH_DATE + 6)
 
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                                char **ContentStr,
-                                               long ExaCod,unsigned MaxChars,bool GetContent)
+                                               long ExaCod,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
+   char CrsNameAndDate[Crs_MAX_LENGTH_COURSE_FULL_NAME + (2 + Cns_MAX_LENGTH_DATE + 6) + 1];
 
    /***** Initializations *****/
    Gbl.ExamAnns.ExaDat.ExaCod = ExaCod;
@@ -1629,19 +1628,16 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEX
       Exa_GetNotifContentExamAnnouncement (ContentStr);
 
    /***** Summary *****/
-   /* Name of the course */
-   if (MaxChars)
-      Str_LimitLengthHTMLStr (Gbl.ExamAnns.ExaDat.CrsFullName,
-                              MaxChars - (2 + Cns_MAX_LENGTH_DATE + 6));
-
-   /* Date of exam */
-   sprintf (SummaryStr,"%s, %04u-%02u-%02u %2u:%02u",
+   /* Name of the course and date of exam */
+   sprintf (CrsNameAndDate,"%s, %04u-%02u-%02u %2u:%02u",
             Gbl.ExamAnns.ExaDat.CrsFullName,
             Gbl.ExamAnns.ExaDat.ExamDate.Year,
             Gbl.ExamAnns.ExaDat.ExamDate.Month,
             Gbl.ExamAnns.ExaDat.ExamDate.Day,
             Gbl.ExamAnns.ExaDat.StartTime.Hour,
             Gbl.ExamAnns.ExaDat.StartTime.Minute);
+   Str_Copy (SummaryStr,CrsNameAndDate,
+             Cns_MAX_BYTES_SUMMARY_STRING);
 
    /***** Free memory of the exam announcement *****/
    Exa_FreeMemExamAnnouncement ();

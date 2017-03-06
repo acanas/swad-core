@@ -1176,10 +1176,10 @@ void Fol_GetAndShowRankingFollowers (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Fol_GetNotifFollower (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Fol_GetNotifFollower (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                            char **ContentStr)
   {
-   SummaryStr[0] = '\0';
+   SummaryStr[0] = '\0';	// Return nothing on error
 
    if ((*ContentStr = (char *) malloc (1)))
       *ContentStr[0] = '\0';

@@ -54,7 +54,6 @@
 #define Soc_WIDTH_TIMELINE		"560px"
 #define Soc_MAX_SHARERS_FAVERS_SHOWN	7	// Maximum number of users shown who have share/fav a social note
 
-#define Soc_MAX_BYTES_SUMMARY	1000
 #define Soc_MAX_CHARS_IN_POST	1000
 
 // Number of recent publishings got and shown the first time, before refreshing
@@ -174,7 +173,7 @@ static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Cns_MAX_BYTES_TEXT + 1],unsigned MaxChars);
+                                char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1]);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
@@ -1264,7 +1263,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
+   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
    unsigned NumComments;
    char IdNewComment[Act_MAX_LENGTH_ID];
 
@@ -1435,7 +1434,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 	      }
 
 	 /* Write note summary */
-	 Soc_GetNoteSummary (SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+	 Soc_GetNoteSummary (SocNot,SummaryStr);
 	 fprintf (Gbl.F.Out,"<div class=\"DAT\">%s</div>",SummaryStr);
 	}
 
@@ -1872,7 +1871,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 /*****************************************************************************/
 
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Cns_MAX_BYTES_TEXT + 1],unsigned MaxChars)
+                                char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1])
   {
    SummaryStr[0] = '\0';
 
@@ -1888,19 +1887,19 @@ static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
       case Soc_NOTE_DEG_SHA_PUB_FILE:
       case Soc_NOTE_CRS_DOC_PUB_FILE:
       case Soc_NOTE_CRS_SHA_PUB_FILE:
-	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case Soc_NOTE_EXAM_ANNOUNCEMENT:
-         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
+         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case Soc_NOTE_SOCIAL_POST:
 	 // Not applicable
          break;
       case Soc_NOTE_FORUM_POST:
-         For_GetSummaryAndContentForumPst (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
+         For_GetSummaryAndContentForumPst (SummaryStr,NULL,SocNot->Cod,false);
          break;
       case Soc_NOTE_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,NULL,SocNot->Cod,MaxChars,false);
+         Not_GetSummaryAndContentNotice (SummaryStr,NULL,SocNot->Cod,false);
          break;
      }
   }
@@ -4733,9 +4732,9 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 /******************* Get notification of a new social post *******************/
 /*****************************************************************************/
 
-void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
-                                   char **ContentStr,long PubCod,
-                                   unsigned MaxChars,bool GetContent)
+void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                                   char **ContentStr,
+                                   long PubCod,bool GetContent)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -4748,7 +4747,7 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 
    /***** Return nothing on error *****/
    SocPub.PubType = Soc_PUB_UNKNOWN;
-   SummaryStr[0] = '\0';
+   SummaryStr[0] = '\0';	// Return nothing on error
    Content[0] = '\0';
 
    /***** Get summary and content from social post from database *****/
@@ -4809,12 +4808,12 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	      }
 
 	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content,MaxChars);
+	    Str_LimitLengthHTMLStr (Content,Cns_MAX_BYTES_SUMMARY_STRING);
 	    Str_Copy (SummaryStr,Content,
-	              Cns_MAX_BYTES_TEXT);
+	              Cns_MAX_BYTES_SUMMARY_STRING);
 	   }
 	 else
-	    Soc_GetNoteSummary (&SocNot,SummaryStr,Soc_MAX_BYTES_SUMMARY);
+	    Soc_GetNoteSummary (&SocNot,SummaryStr);
 	 break;
       case Soc_PUB_COMMENT_TO_NOTE:
 	 /***** Get content of social post from database *****/
@@ -4848,9 +4847,9 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
 	   }
 
 	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content,MaxChars);
+	 Str_LimitLengthHTMLStr (Content,Cns_MAX_BYTES_SUMMARY_STRING);
 	 Str_Copy (SummaryStr,Content,
-	           Cns_MAX_BYTES_TEXT);
+	           Cns_MAX_BYTES_SUMMARY_STRING);
 	 break;
      }
 

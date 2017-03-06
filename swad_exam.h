@@ -99,8 +99,8 @@ void Exa_GetDateToHighlight (void);
 
 void Exa_CreateListDatesOfExamAnnouncements (void);
 void Exa_PutHiddenParamExaCod (long ExaCod);
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                                char **ContentStr,
-                                               long ExaCod,unsigned MaxChars,bool GetContent);
+                                               long ExaCod,bool GetContent);
 
 #endif

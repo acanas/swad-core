@@ -3004,9 +3004,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
-                          char **ContentStr,long MsgCod,
-                          unsigned MaxChars,bool GetContent)
+void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                          char **ContentStr,long MsgCod,bool GetContent)
   {
    extern const char *Txt_MSG_Subject;
    char Query[128];
@@ -3029,10 +3028,16 @@ void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
             row = mysql_fetch_row (mysql_res);
 
             /***** Copy subject *****/
-            Str_Copy (SummaryStr,row[0],
-                      Cns_MAX_BYTES_TEXT);
-            if (MaxChars)
-               Str_LimitLengthHTMLStr (SummaryStr,MaxChars);
+            // TODO: Do only direct copy when Subject will be VARCHAR(255)
+            if (strlen (row[0]) > Cns_MAX_BYTES_SUMMARY_STRING)
+              {
+               strncpy (SummaryStr,row[0],
+			Cns_MAX_BYTES_SUMMARY_STRING);
+               SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING] = '\0';
+              }
+            else
+	       Str_Copy (SummaryStr,row[0],
+			 Cns_MAX_BYTES_SUMMARY_STRING);
 
             /***** Copy subject *****/
             if (GetContent)

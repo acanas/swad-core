@@ -52,9 +52,8 @@ void Mrk_ChangeNumRowsFooter (void);
 
 bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks);
 void Mrk_ShowMyMarks (void);
-void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                           char **ContentStr,
-                          long MrkCod,long UsrCod,
-                          unsigned MaxChars,bool GetContent);
+                          long MrkCod,long UsrCod,bool GetContent);
 
 #endif

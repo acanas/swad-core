@@ -324,7 +324,7 @@ void Ntf_ShowMyNotifications (void)
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
    Ntf_StatusTxt_t StatusTxt;
-   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
+   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
    char *ContentStr;
    const char *ClassBackground;
    const char *ClassAnchor;
@@ -604,7 +604,7 @@ void Ntf_ShowMyNotifications (void)
             ContentStr = NULL;
             Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                            Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                           Cfg_MAX_CHARS_NOTIF_SUMMARY_SWAD,false);
+                                           false);
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
                                "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
@@ -853,11 +853,11 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
 /******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
-void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
-                                    unsigned MaxChars,bool GetContent)
+                                    bool GetContent)
   {
    SummaryStr[0] = '\0';
 
@@ -868,49 +868,49 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
       case Ntf_EVENT_DOCUMENT_FILE:
       case Ntf_EVENT_TEACHERS_FILE:
       case Ntf_EVENT_SHARED_FILE:
-	 Brw_GetSummaryAndContentOfFile (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Brw_GetSummaryAndContentOfFile (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_ASSIGNMENT:
-         Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         Asg_GetNotifAssignment (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
-         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         Exa_GetSummaryAndContentExamAnnouncement (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_MARKS_FILE:
-         Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,MaxChars,GetContent);
+         Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);
          break;
       case Ntf_EVENT_ENROLLMENT_STUDENT:
       case Ntf_EVENT_ENROLLMENT_TEACHER:
-	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod,MaxChars);
+	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod);
          break;
       case Ntf_EVENT_ENROLLMENT_REQUEST:
-	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:
       case Ntf_EVENT_TIMELINE_FAV:
       case Ntf_EVENT_TIMELINE_SHARE:
       case Ntf_EVENT_TIMELINE_MENTION:
 	 // Cod is the code of the social publishing
-	 Soc_GetNotifSocialPublishing (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+	 Soc_GetNotifSocialPublishing (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_FOLLOWER:
          Fol_GetNotifFollower (SummaryStr,ContentStr);
          break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-         For_GetSummaryAndContentForumPst (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         For_GetSummaryAndContentForumPst (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_NOTICE:
-         Not_GetSummaryAndContentNotice (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         Not_GetSummaryAndContentNotice (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_MESSAGE:
-         Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         Msg_GetNotifMessage (SummaryStr,ContentStr,Cod,GetContent);
          if (Gbl.WebService.IsWebService)
             /* Set the message as open by me, because I can read it in an extern application */
             Msg_SetReceivedMsgAsOpen (Cod,UsrCod);
          break;
       case Ntf_EVENT_SURVEY:
-         Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,MaxChars,GetContent);
+         Svy_GetNotifSurvey (SummaryStr,ContentStr,Cod,GetContent);
          break;
      }
   }

@@ -43,6 +43,8 @@
 #define Cns_MAX_LENGTH_SUBJECT	(256 - 1)
 #define Cns_MAX_BYTES_SUBJECT	(Cns_MAX_LENGTH_SUBJECT * Str_MAX_CHARACTER)
 
+#define Cns_MAX_BYTES_SUMMARY_STRING	(256 - 1)
+
 #define Cns_MAX_BYTES_TEXT	( 64 * 1024 - 1)	// Used for subjects and other medium texts
 #define Cns_MAX_BYTES_LONG_TEXT	(256 * 1024 - 1)	// Used for big contents
 

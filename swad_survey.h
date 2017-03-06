@@ -94,8 +94,9 @@ void Svy_GetListSurveys (void);
 void Svy_GetDataOfSurveyByCod (struct Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Survey *Svy);
 void Svy_FreeListSurveys (void);
-void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_TEXT + 1],
-                         char **ContentStr,long SvyCod,unsigned MaxChars,bool GetContent);
+void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+                         char **ContentStr,
+                         long SvyCod,bool GetContent);
 void Svy_AskRemSurvey (void);
 void Svy_RemoveSurvey (void);
 void Svy_AskResetSurvey (void);

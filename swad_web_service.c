@@ -2815,7 +2815,7 @@ int swad__getNotifications (struct soap *soap,
    struct Course Crs;
    long Cod;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Cns_MAX_BYTES_TEXT + 1];
+   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
    char *ContentStr;
    Ntf_Status_t Status;
    size_t Length;
@@ -2982,7 +2982,7 @@ int swad__getNotifications (struct soap *soap,
          ContentStr = NULL;
          Ntf_GetNotifSummaryAndContent (SummaryStr,&ContentStr,NotifyEvent,
                                         Cod,Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                                        Cfg_MAX_CHARS_NOTIF_SUMMARY_WEB_SERVICE,true);
+                                        true);
 
          Length = strlen (SummaryStr);
          getNotificationsOut->notificationsArray.__ptr[NumNotif].summary = (char *) soap_malloc (Gbl.soap,Length + 1);
@@ -4682,7 +4682,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    struct FileMetadata FileMetadata;
-   char SummaryStr[NAME_MAX + 1];	// Really not used
+   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];	// Not used
    char *ContentStr;
    size_t Length;
 
@@ -4747,9 +4747,9 @@ int swad__getMarks (struct soap *soap,
 
    /***** Get content *****/
    ContentStr = NULL;
-   Mrk_GetNotifMyMarks (SummaryStr,&ContentStr,
-                        FileMetadata.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-                        0,true);
+   Mrk_GetNotifMyMarks (SummaryStr,	// Not used
+                        &ContentStr,
+                        FileMetadata.FilCod,Gbl.Usrs.Me.UsrDat.UsrCod,true);
    if (ContentStr != NULL)
      {
       Length = strlen (ContentStr);
