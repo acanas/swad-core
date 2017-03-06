@@ -206,12 +206,38 @@ a:hover						/* Default ==> underlined */
 
 @media only screen and (max-width: 480px)
 	{	/* For mobile phones */
-	.SEL_ROLE	{width:55px;};
+	.SEL_ROLE	{width:55px;}
+	.HEAD_USR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		max-width:200px;
+		text-align:left;
+		vertical-align:middle;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
 	}
 @media only screen and (min-width: 480px)
 	{	/* For mobile phones */
-	.SEL_ROLE	{width:130px;};
+	.SEL_ROLE	{width:130px;}
+	.HEAD_USR
+		{
+		display:inline-block;
+		box-sizing:border-box;
+		max-width:320px;
+		text-align:left;
+		vertical-align:middle;
+		white-space:nowrap;
+		overflow:hidden;
+		text-overflow:ellipsis;
+		}
 	}
+.WHITE_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.GREY_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
+.BLUE_USR		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
+.YELLOW_USR		{color:#B3B0B3; font-size:15pt; font-weight:bold; white-space:nowrap;}
 
 #head_row_1_right
 	{
@@ -222,7 +248,7 @@ a:hover						/* Default ==> underlined */
 #login_box
 	{
 	display:inline;
-	padding:0 20px;
+	padding:0 10px;
 	}
 @media only screen and (max-width: 1024px)
 	{	/* For mobile phones and tablets */
@@ -1820,11 +1846,6 @@ a:hover img.CENTRE_PHOTO_SHOW
 .USR_LIST_NUM_N	{color:#404040; font-size:15pt; font-weight:bold;}
 
 /*****************************************************************************/
-.WHITE_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.GREY_USR		{color:#E0E0E0; font-size:15pt; font-weight:bold; white-space:nowrap;}
-.BLUE_USR		{color:white;   font-size:15pt; font-weight:bold; white-space:nowrap;}
-.YELLOW_USR		{color:#B3B0B3; font-size:15pt; font-weight:bold; white-space:nowrap;}
-
 .WHITE_TITLE		{color:#505050; font-size:18pt;}
 .GREY_TITLE		{color:#505050; font-size:18pt;}
 .BLUE_TITLE		{color:#4D88A1; font-size:18pt;}

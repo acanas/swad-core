@@ -2237,24 +2237,25 @@ void Usr_WriteLoggedUsrHead (void)
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
-   char UsrName[Usr_MAX_BYTES_NAME + 1];
+   unsigned NumAvailableRoles = Rol_GetNumAvailableRoles ();
+
+   fprintf (Gbl.F.Out,"<div class=\"HEAD_USR %s\">",
+	    The_ClassUsr[Gbl.Prefs.Theme]);
 
    /***** User's role *****/
-   if (Rol_GetNumAvailableRoles () == 1)
+   if (NumAvailableRoles == 1)
      {
       Act_FormStart (ActFrmRolSes);
       Act_LinkFormSubmit (Txt_Role,The_ClassUsr[Gbl.Prefs.Theme],NULL);
       fprintf (Gbl.F.Out,"%s</a>",
                Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"<span class=\"%s\">:&nbsp;</span>",
-               The_ClassUsr[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,":&nbsp;");
      }
    else
      {
       Rol_PutFormToChangeMyRole ();
-      fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;</span>",
-               The_ClassUsr[Gbl.Prefs.Theme]);
+      fprintf (Gbl.F.Out,"&nbsp;");
      }
 
    /***** Show my photo *****/
@@ -2264,19 +2265,10 @@ void Usr_WriteLoggedUsrHead (void)
                      "PHOTO18x24",Pho_ZOOM,false);
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<span class=\"%s\">&nbsp;",
-            The_ClassUsr[Gbl.Prefs.Theme]);
+   if (Gbl.Usrs.Me.UsrDat.FirstName[0])
+      fprintf (Gbl.F.Out,"&nbsp;%s",Gbl.Usrs.Me.UsrDat.FirstName);
 
-   /* Name */
-   if (Gbl.Usrs.Me.UsrDat.FullName[0])
-     {
-      Str_Copy (UsrName,Gbl.Usrs.Me.UsrDat.FirstName,
-                Usr_MAX_BYTES_NAME);
-      Str_LimitLengthHTMLStr (UsrName,12);
-      fprintf (Gbl.F.Out,"%s",UsrName);
-     }
-
-   fprintf (Gbl.F.Out,"</span>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
