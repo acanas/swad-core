@@ -140,7 +140,6 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat);
 static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames);
 static void Usr_WriteRowTchAllData (struct UsrData *UsrDat);
 static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat);
-static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat);
 static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
                                              const char *BgColor);
 static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor);
@@ -3203,7 +3202,6 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    /***** Write rest of main user's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_RestrictLengthUsrName (UsrDat);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,BgColor);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",BgColor);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
@@ -3551,7 +3549,6 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    /***** Write rest of main administrator's data *****/
    Ins.InsCod = UsrDat->InsCod;
    Ins_GetDataOfInstitutionByCod (&Ins,Ins_GET_BASIC_DATA);
-   Usr_RestrictLengthUsrName (UsrDat);
    Usr_WriteMainUsrDataExceptUsrID (UsrDat,Gbl.ColorRows[Gbl.RowEvenOdd]);
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE %s\">",Gbl.ColorRows[Gbl.RowEvenOdd]);
    Ins_DrawInstitutionLogoWithLink (&Ins,25);
@@ -3562,17 +3559,6 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
    Hie_GetAndWriteInsCtrDegAdminBy (UsrDat->UsrCod,
                                     Gbl.Usrs.Listing.WithPhotos ? Usr_NUM_MAIN_FIELDS_DATA_ADM :
                                 	                          Usr_NUM_MAIN_FIELDS_DATA_ADM-1);
-  }
-
-/*****************************************************************************/
-/***************** Restrict the length of the user's name ********************/
-/*****************************************************************************/
-
-static void Usr_RestrictLengthUsrName (struct UsrData *UsrDat)
-  {
-   Str_LimitLengthHTMLStr (UsrDat->FirstName,10);
-   Str_LimitLengthHTMLStr (UsrDat->Surname1,10);
-   Str_LimitLengthHTMLStr (UsrDat->Surname2,10);
   }
 
 /*****************************************************************************/
@@ -3630,23 +3616,36 @@ static void Usr_WriteUsrData (const char *BgColor,
                               const char *Data,const char *Link,
                               bool NonBreak,bool Accepted)
   {
+   /***** Start table cell *****/
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
             Accepted ? (NonBreak ? "DAT_SMALL_NOBR_N" :
         	                   "DAT_SMALL_N") :
                        (NonBreak ? "DAT_SMALL_NOBR" :
                 	           "DAT_SMALL"),
             BgColor);
-   if (Link != NULL)
+
+   /***** Container to limit length *****/
+   fprintf (Gbl.F.Out,"<div class=\"USR_DAT\">");
+
+   /***** Start link *****/
+   if (Link)
       fprintf (Gbl.F.Out,"<a href=\"%s\" class=\"%s\" target=\"_blank\">",
                Link,
                Accepted ? "DAT_SMALL_NOBR_N" :
 			  "DAT_SMALL_NOBR");
+
+   /***** Write data *****/
    fprintf (Gbl.F.Out,"%s",Data);
    if (NonBreak)
       fprintf (Gbl.F.Out,"&nbsp;");
-   if (Link != NULL)
+
+   /***** End link *****/
+   if (Link)
       fprintf (Gbl.F.Out,"</a>");
-   fprintf (Gbl.F.Out,"</td>");
+
+   /***** End container and table cell *****/
+   fprintf (Gbl.F.Out,"</div>"
+	              "</td>");
   }
 
 /*****************************************************************************/

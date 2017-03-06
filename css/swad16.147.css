@@ -2480,6 +2480,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-overflow:ellipsis;
 	}
 
+/***************************** Listing of users ******************************/
+.USR_DAT
+	{
+	box-sizing:border-box;
+	max-width:120px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+	}
+
 /**************************** Enrollment requests ****************************/
 .REQUESTER_NAME
 	{

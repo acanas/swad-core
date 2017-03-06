@@ -197,13 +197,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.147.9 (2017-03-06)"
+#define Log_PLATFORM_VERSION	"SWAD 16.147.10 (2017-03-06)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.147.10:Mar 06, 2017	Changes in layout of users' listing. (216394 lines)
         Version 16.147.9: Mar 06, 2017	Changes in layout of header. (216389 lines)
         Version 16.147.8: Mar 05, 2017	Changes in layout of timetable. (216374 lines)
         Version 16.147.7: Mar 05, 2017	Changes in layout of social timeline. (216372 lines)
