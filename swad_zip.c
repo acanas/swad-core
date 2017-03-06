@@ -281,11 +281,9 @@ static void ZIP_CreateTmpDirForCompression (void)
 /**************** in the temporary directory of compression ******************/
 /*****************************************************************************/
 
-#define ZIP_MAX_LENGTH_FULL_NAME_AND_ID (Usr_MAX_BYTES_FULL_NAME + 1 + ID_MAX_LENGTH_USR_ID + 10)
-
 static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
   {
-   char FullNameAndUsrID[ZIP_MAX_LENGTH_FULL_NAME_AND_ID + 1];
+   char FullNameAndUsrID[NAME_MAX + 1];
    char PathFolderUsrInsideCrs[PATH_MAX + 1];
    char LinkTmpUsr[PATH_MAX + 1];
    char Link[PATH_MAX + 1];
@@ -297,30 +295,29 @@ static void ZIP_CreateDirCompressionUsr (struct UsrData *UsrDat)
           of the assignments and works *****/
    /* Create link name for this user */
    Str_Copy (FullNameAndUsrID,UsrDat->Surname1,
-             ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+             NAME_MAX);
    if (UsrDat->Surname1[0] &&
        UsrDat->Surname2[0])
       Str_Concat (FullNameAndUsrID,"_",	// Separation between surname 1 and surname 2
-                  ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+                  NAME_MAX);
    Str_Concat (FullNameAndUsrID,UsrDat->Surname2,
-               ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+               NAME_MAX);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0]) &&
        UsrDat->FirstName[0])
       Str_Concat (FullNameAndUsrID,"_",	// Separation between surnames and first name
-                  ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+                  NAME_MAX);
    Str_Concat (FullNameAndUsrID,UsrDat->FirstName,
-               ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
+               NAME_MAX);
    if ((UsrDat->Surname1[0] ||
 	UsrDat->Surname2[0] ||
 	UsrDat->FirstName[0]) &&
        UsrDat->IDs.Num)
       Str_Concat (FullNameAndUsrID,"-",	// Separation between name and ID
-                  ZIP_MAX_LENGTH_FULL_NAME_AND_ID);
-   Str_LimitLengthHTMLStr (FullNameAndUsrID,50);
+                  NAME_MAX);
    if (UsrDat->IDs.Num)	// If this user has at least one ID
       Str_Concat (FullNameAndUsrID,UsrDat->IDs.List[0].ID,
-                  ZIP_MAX_LENGTH_FULL_NAME_AND_ID);	// First user's ID
+                  NAME_MAX);	// First user's ID
    Str_ConvertToValidFileName (FullNameAndUsrID);
 
    /* Create path to folder and link */
@@ -446,7 +443,7 @@ static void ZIP_CompressFolderIntoZIP (void)
 
       /***** Create public zip file with the assignment and works *****/
       sprintf (FileNameZIP,"%s.zip",strcmp (Gbl.FileBrowser.FilFolLnkName,".") ? Gbl.FileBrowser.FilFolLnkName :
-										    Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
+										 Txt_ROOT_FOLDER_EXTERNAL_NAMES[Gbl.FileBrowser.Type]);
       sprintf (PathFileZIP,"%s/%s/%s/%s",
 	       Cfg_PATH_SWAD_PUBLIC,
 	       Cfg_FOLDER_FILE_BROWSER_TMP,
@@ -603,13 +600,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
    extern const char *Txt_Filename;
    extern const char *Txt_File_size;
    extern const char *Txt_FILE_uncompressed;
-   char FileNameShort[NAME_MAX + 1];
    char FileSizeStr[Fil_MAX_BYTES_FILE_SIZE_STRING + 1];
-
-   /***** Limit length of the name of the file *****/
-   Str_Copy (FileNameShort,FileName,
-             NAME_MAX);
-   Str_LimitLengthHTMLStr (FileNameShort,50);
 
    /***** Start frame *****/
    Lay_StartRoundFrameTableShadow (NULL,NULL,NULL,NULL,2);
@@ -632,7 +623,7 @@ static void ZIP_ShowLinkToDownloadZIP (const char *FileName,const char *URL,
             Gbl.Prefs.IconsURL,Cfg_ICON_FOLDER_FILEXT,
             Txt_ZIP_file,
             Txt_ZIP_file,
-	    FileNameShort,
+	    FileName,
 	    Gbl.Prefs.IconsURL,
 	    Txt_Download,
 	    Txt_Download);
