@@ -311,7 +311,7 @@ static void DT_ListDegreeTypesForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"DegTypName\""
 	                 " size=\"25\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Deg_MAX_LENGTH_DEGREE_TYPE_NAME,
+               Deg_MAX_CHARS_DEGREE_TYPE_NAME,
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName,
                Gbl.Form.Id);
       Act_FormEnd ();
@@ -361,7 +361,7 @@ static void DT_PutFormToCreateDegreeType (void)
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                      "</td>",
-            Deg_MAX_LENGTH_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
+            Deg_MAX_CHARS_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
@@ -426,7 +426,7 @@ static void DT_PutHeadDegreeTypesForEdition (void)
 static void DT_CreateDegreeType (struct DegreeType *DegTyp)
   {
    extern const char *Txt_Created_new_type_of_degree_X;
-   char Query[128 + Deg_MAX_LENGTH_DEGREE_TYPE_NAME];
+   char Query[128 + Deg_MAX_BYTES_DEGREE_TYPE_NAME];
 
    /***** Create a new degree type *****/
    sprintf (Query,"INSERT INTO deg_types SET DegTypName='%s'",
@@ -482,7 +482,7 @@ void DT_GetListDegreeTypes (void)
 
          /* Get degree type name (row[1]) */
          Str_Copy (Gbl.Degs.DegTypes.Lst[NumRow].DegTypName,row[1],
-                   Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+                   Deg_MAX_BYTES_DEGREE_TYPE_NAME);
 
          /* Number of degrees of this type (row[2]) */
          if (sscanf (row[2],"%u",&Gbl.Degs.DegTypes.Lst[NumRow].NumDegs) != 1)
@@ -523,7 +523,7 @@ void DT_RecFormNewDegreeType (void)
 
    /***** Get parameters from form *****/
    /* Get the name of degree type */
-   Par_GetParToText ("DegTypName",DegTyp->DegTypName,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+   Par_GetParToText ("DegTypName",DegTyp->DegTypName,Deg_MAX_BYTES_DEGREE_TYPE_NAME);
 
    if (DegTyp->DegTypName[0])	// If there's a degree type name
      {
@@ -648,7 +648,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 
       /* Get the name of the degree type (row[0]) */
       Str_Copy (DegTyp->DegTypName,row[0],
-                Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+                Deg_MAX_BYTES_DEGREE_TYPE_NAME);
 
       /* Count number of degrees of this type */
       DegTyp->NumDegs = DT_CountNumDegsOfType (DegTyp->DegTypCod);
@@ -725,7 +725,7 @@ void DT_RenameDegreeType (void)
    extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
    struct DegreeType *DegTyp;
    char Query[1024];
-   char NewNameDegTyp[Deg_MAX_LENGTH_DEGREE_TYPE_NAME + 1];
+   char NewNameDegTyp[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    DegTyp = &Gbl.Degs.EditingDegTyp;
 
@@ -735,7 +735,7 @@ void DT_RenameDegreeType (void)
       Lay_ShowErrorAndExit ("Code of type of degree is missing.");
 
    /* Get the new name for the degree type */
-   Par_GetParToText ("DegTypName",NewNameDegTyp,Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+   Par_GetParToText ("DegTypName",NewNameDegTyp,Deg_MAX_BYTES_DEGREE_TYPE_NAME);
 
    /***** Get from the database the old name of the degree type *****/
    if (!DT_GetDataOfDegreeTypeByCod (DegTyp))
@@ -784,7 +784,7 @@ void DT_RenameDegreeType (void)
 
    /***** Show the form again *****/
    Str_Copy (DegTyp->DegTypName,NewNameDegTyp,
-             Deg_MAX_LENGTH_DEGREE_TYPE_NAME);
+             Deg_MAX_BYTES_DEGREE_TYPE_NAME);
    DT_ReqEditDegreeTypes ();
   }
 

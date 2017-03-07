@@ -322,7 +322,7 @@ bool Ses_GetSessionData (void)
 
 	 /* Get search string (row[9]) */
 	 Str_Copy (Gbl.Search.Str,row[9],
-	           Sch_MAX_LENGTH_STRING_TO_FIND);
+	           Sch_MAX_BYTES_STRING_TO_FIND);
 	}
 
       Result = true;

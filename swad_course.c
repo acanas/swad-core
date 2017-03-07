@@ -67,8 +67,6 @@ extern struct Globals Gbl;
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
-#define Crs_MAX_LENGTH_FULL_NAME_COURSE_ON_LIST_OF_MY_COURSES	60
-
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
@@ -106,8 +104,8 @@ static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod);
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_GetShortNamesByCod (long CrsCod,
-                                    char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1],
-                                    char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1]);
+                                    char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1],
+                                    char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1]);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -278,7 +276,7 @@ static void Crs_Configuration (bool PrintView)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Crs_MAX_LENGTH_COURSE_FULL_NAME,
+	       Crs_MAX_CHARS_COURSE_FULL_NAME,
 	       Gbl.CurrentCrs.Crs.FullName,
 	       Gbl.Form.Id);
       Act_FormEnd ();
@@ -307,7 +305,7 @@ static void Crs_Configuration (bool PrintView)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Crs_MAX_LENGTH_COURSE_SHRT_NAME,
+	       Crs_MAX_CHARS_COURSE_SHRT_NAME,
 	       Gbl.CurrentCrs.Crs.ShrtName,
 	       Gbl.Form.Id);
       Act_FormEnd ();
@@ -366,8 +364,8 @@ static void Crs_Configuration (bool PrintView)
                             " id=\"InsCrsCod\" name=\"InsCrsCod\""
                             " size=\"%u\" maxlength=\"%u\" value=\"%s\""
 	                    " onchange=\"document.getElementById('%s').submit();\" />",
-                  Crs_LENGTH_INSTITUTIONAL_CRS_COD,
-                  Crs_LENGTH_INSTITUTIONAL_CRS_COD,
+                  Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
+                  Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
                   Gbl.CurrentCrs.Crs.InstitutionalCrsCod,
                   Gbl.Form.Id);
          Act_FormEnd ();
@@ -1068,8 +1066,8 @@ void Crs_WriteSelectorMyCourses (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
-   char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];
+   char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
+   char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
@@ -1437,7 +1435,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_INS_CODE\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_LENGTH_INSTITUTIONAL_CRS_COD,
+		     Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
 		     Crs->InstitutionalCrsCod,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
@@ -1481,7 +1479,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_SHORT_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_MAX_LENGTH_COURSE_SHRT_NAME,Crs->ShrtName,
+		     Crs_MAX_CHARS_COURSE_SHRT_NAME,Crs->ShrtName,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
 	   }
@@ -1499,7 +1497,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_FULL_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName,
+		     Crs_MAX_CHARS_COURSE_FULL_NAME,Crs->FullName,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
 	   }
@@ -1660,7 +1658,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_INS_CODE\" />"
                       "</td>",
-            Crs_LENGTH_INSTITUTIONAL_CRS_COD,
+            Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD,
             Crs->InstitutionalCrsCod);
 
    /***** Year *****/
@@ -1684,7 +1682,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Crs_MAX_LENGTH_COURSE_SHRT_NAME,Crs->ShrtName);
+            Crs_MAX_CHARS_COURSE_SHRT_NAME,Crs->ShrtName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1693,7 +1691,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Crs_MAX_LENGTH_COURSE_FULL_NAME,Crs->FullName);
+            Crs_MAX_CHARS_COURSE_FULL_NAME,Crs->FullName);
 
    /***** Current number of teachers in this course *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1916,17 +1914,17 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
 
    /***** Get parameters of the course from form *****/
    /* Get institutional code */
-   Par_GetParToText ("InsCrsCod",Crs->InstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+   Par_GetParToText ("InsCrsCod",Crs->InstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get year */
    Par_GetParToText ("OthCrsYear",YearStr,2);
    Crs->Year = Deg_ConvStrToYear (YearStr);
 
    /* Get course short name */
-   Par_GetParToText ("ShortName",Crs->ShrtName,Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Crs->ShrtName,Crs_MAX_BYTES_COURSE_SHRT_NAME);
 
    /* Get course full name */
-   Par_GetParToText ("FullName",Crs->FullName,Crs_MAX_LENGTH_COURSE_FULL_NAME);
+   Par_GetParToText ("FullName",Crs->FullName,Crs_MAX_BYTES_COURSE_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1954,8 +1952,8 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
    char Query[512 +
-              Crs_MAX_LENGTH_COURSE_SHRT_NAME +
-              Crs_MAX_LENGTH_COURSE_FULL_NAME];
+              Crs_MAX_BYTES_COURSE_SHRT_NAME +
+              Crs_MAX_BYTES_COURSE_FULL_NAME];
 
    /***** Insert new course into pending requests *****/
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
@@ -2076,7 +2074,7 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 
    /***** Get institutional course code (row[3]) *****/
    Str_Copy (Crs->InstitutionalCrsCod,row[3],
-             Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+             Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /***** Get course status (row[4]) *****/
    if (sscanf (row[4],"%u",&(Crs->Status)) != 1)
@@ -2087,11 +2085,11 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 
    /***** Get the short name of the course (row[6]) *****/
    Str_Copy (Crs->ShrtName,row[6],
-             Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+             Crs_MAX_BYTES_COURSE_SHRT_NAME);
 
    /***** Get the full name of the course (row[7]) *****/
    Str_Copy (Crs->FullName,row[7],
-             Crs_MAX_LENGTH_COURSE_FULL_NAME);
+             Crs_MAX_BYTES_COURSE_FULL_NAME);
 
    /***** Get number of teachers *****/
    Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
@@ -2108,8 +2106,8 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 /*****************************************************************************/
 
 static void Crs_GetShortNamesByCod (long CrsCod,
-                                    char CrsShortName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1],
-                                    char DegShortName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1])
+                                    char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1],
+                                    char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2131,9 +2129,9 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (CrsShortName,row[0],
-	           Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+	           Crs_MAX_BYTES_COURSE_SHRT_NAME);
 	 Str_Copy (DegShortName,row[1],
-	           Deg_MAX_LENGTH_DEGREE_SHRT_NAME);
+	           Deg_MAX_BYTES_DEGREE_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2300,10 +2298,10 @@ void Crs_ChangeInsCrsCodInConfig (void)
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD + 1];
+   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
 
    /***** Get institutional code from form *****/
-   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /***** Change the institutional course code *****/
    if (strcmp (NewInstitutionalCrsCod,Gbl.CurrentCrs.Crs.InstitutionalCrsCod))
@@ -2327,7 +2325,7 @@ void Crs_ChangeInsCrsCod (void)
    extern const char *Txt_The_institutional_code_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_institutional_code_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char NewInstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD + 1];
+   char NewInstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];
    struct Course *Crs;
 
    Crs = &Gbl.Degs.EditingCrs;
@@ -2337,7 +2335,7 @@ void Crs_ChangeInsCrsCod (void)
    Crs->CrsCod = Crs_GetAndCheckParamOtherCrsCod ();
 
    /* Get institutional code */
-   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+   Par_GetParToText ("InsCrsCod",NewInstitutionalCrsCod,Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
 
    /* Get data of the course */
    Crs_GetDataOfCourseByCod (Crs);
@@ -2600,7 +2598,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
 
    /***** Copy institutional course code *****/
    Str_Copy (Crs->InstitutionalCrsCod,NewInstitutionalCrsCod,
-             Crs_LENGTH_INSTITUTIONAL_CRS_COD);
+             Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD);
   }
 
 /*****************************************************************************/
@@ -2644,32 +2642,32 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char Query[128 + Crs_MAX_LENGTH_COURSE_FULL_NAME];
+   char Query[128 + Crs_MAX_BYTES_COURSE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentCrsName = NULL;		// Initialized to avoid warning
-   char NewCrsName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
+   char NewCrsName[Crs_MAX_BYTES_COURSE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Crs_MAX_LENGTH_COURSE_SHRT_NAME;
+         MaxBytes = Crs_MAX_BYTES_COURSE_SHRT_NAME;
          CurrentCrsName = Crs->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Crs_MAX_LENGTH_COURSE_FULL_NAME;
+         MaxBytes = Crs_MAX_BYTES_COURSE_FULL_NAME;
          CurrentCrsName = Crs->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the new name for the course */
-   Par_GetParToText (ParamName,NewCrsName,MaxLength);
+   Par_GetParToText (ParamName,NewCrsName,MaxBytes);
 
    /***** Get from the database the data of the degree *****/
    Crs_GetDataOfCourseByCod (Crs);
@@ -2709,7 +2707,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
 
                /* Change current course name in order to display it properly */
                Str_Copy (CurrentCrsName,NewCrsName,
-                         MaxLength);
+                         MaxBytes);
               }
            }
          else	// The same name

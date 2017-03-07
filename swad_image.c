@@ -411,8 +411,8 @@ void Img_GetAndProcessImageFileFromForm (struct Image *Image,const char *ParamFi
       return;
 
    LengthExtension = strlen (PtrExtension);
-   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
-       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
+   if (LengthExtension < Fil_MIN_BYTES_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_BYTES_FILE_EXTENSION)
       return;
 
    /* Check if the file type is image/ or application/octet-stream */

@@ -146,7 +146,7 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,
 void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
-   char UniqueNamePlain[Cns_MAX_LENGTH_IP + 1 + 10 + 1 + 10 + 1 + 10 + 1];
+   char UniqueNamePlain[Cns_MAX_BYTES_IP + 1 + 10 + 1 + 10 + 1 + 10 + 1];
 
    NumCall++;
    sprintf (UniqueNamePlain,"%s-%lx-%x-%x",

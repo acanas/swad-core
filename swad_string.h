@@ -36,7 +36,8 @@
 /*****************************************************************************/
 
 #define Str_LENGTH_STR_HEX		3 // Length of the string #XX
-#define Str_MAX_LENGTH_SPEC_CHAR_HTML	8 // Length of the string &#DDDDD;
+#define Str_MAX_LENGTH_SPEC_CHAR_HTML	8 // Length of the string &#ddddd;
+
 #define Str_MAX_BYTES_PER_CHAR		8 // max (Str_LENGTH_STR_HEX,Str_MAX_LENGTH_SPEC_CHAR_HTML)
 
 /*****************************************************************************/

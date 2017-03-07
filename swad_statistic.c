@@ -256,7 +256,7 @@ void Sta_GetRemoteAddr (void)
   {
    if (getenv ("REMOTE_ADDR"))
       Str_Copy (Gbl.IP,getenv ("REMOTE_ADDR"),
-                Cns_MAX_LENGTH_IP);
+                Cns_MAX_BYTES_IP);
    else
       Gbl.IP[0] = '\0';
   }

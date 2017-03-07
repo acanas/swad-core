@@ -136,9 +136,10 @@ struct FileMetadata
 
 #define Brw_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
 
-#define Brw_MAX_BYTES_MIME_TYPE	(256 - 1)	// Maximum length of "image/jpeg", "text/html", etc.
+#define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// Maximum size in bytes of "image/jpeg", "text/html", etc.
 
-#define Brw_MAX_LENGTH_LICENSE	(256 - 1)
+#define Brw_MAX_CHARS_LICENSE	(128 - 1)
+#define Brw_MAX_BYTES_LICENSE	(Brw_MAX_CHARS_LICENSE * Str_MAX_BYTES_PER_CHAR)
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES	"sha"

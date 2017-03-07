@@ -31,7 +31,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_LENGTH_DEGREE_TYPE_NAME	32
+#define Deg_MAX_CHARS_DEGREE_TYPE_NAME	32
+#define Deg_MAX_BYTES_DEGREE_TYPE_NAME	(Deg_MAX_CHARS_DEGREE_TYPE_NAME * Str_MAX_BYTES_PER_CHAR)
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -39,9 +40,9 @@
 
 struct DegreeType
   {
-   long DegTypCod;						// Degree type code
-   char DegTypName[Deg_MAX_LENGTH_DEGREE_TYPE_NAME + 1];	// Degree type name
-   unsigned NumDegs;						// Number of degrees of this type
+   long DegTypCod;					// Degree type code
+   char DegTypName[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];	// Degree type name
+   unsigned NumDegs;					// Number of degrees of this type
   };
 
 /*****************************************************************************/

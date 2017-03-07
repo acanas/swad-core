@@ -5896,7 +5896,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
-      if ((GroupNames = (char *) malloc ((Grp_MAX_LENGTH_GROUP_NAME + 3) *
+      if ((GroupNames = (char *) malloc ((Grp_MAX_BYTES_GROUP_NAME + 3) *
                                          Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 
@@ -6231,7 +6231,7 @@ void Usr_ListAllDataStds (void)
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
 	{
-	 Length = (Grp_MAX_LENGTH_GROUP_NAME + 2) * Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
+	 Length = (Grp_MAX_BYTES_GROUP_NAME + 2) * Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal;
          if ((GroupNames = (char *) malloc (Length + 1)) == NULL)
             Lay_ShowErrorAndExit ("Not enough memory to store names of groups.");
 	}

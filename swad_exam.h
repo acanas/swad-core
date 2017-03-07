@@ -58,7 +58,7 @@ struct ExamData
    long ExaCod;
    long CrsCod;
    Exa_ExamAnnouncementStatus_t Status;
-   char CrsFullName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];
+   char CrsFullName[Crs_MAX_BYTES_COURSE_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
    char Session[Cns_MAX_BYTES_STRING + 1];	// Exam session is june, september, etc.
    struct Date CallDate;

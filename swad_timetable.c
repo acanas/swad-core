@@ -62,7 +62,7 @@ extern struct Globals Gbl;
 #define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - TT_PERCENT_WIDTH_OF_ALL_DAYS - TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
 #define TT_MAX_BYTES_STR_CLASS_TYPE		256
-#define TT_MAX_BYTES_STR_DURATION		((2 + 1 + 2 + 1 + 1) * Str_LENGTH_STR_HEX)	// "hh:mm h"
+#define TT_MAX_BYTES_STR_DURATION		(2 + 1 + 2 + 1 + 1)	// "hh:mm h"
 #define TT_MAX_LENGTH_PLACE			 32
 
 /*****************************************************************************/

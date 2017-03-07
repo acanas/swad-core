@@ -248,7 +248,7 @@ static void Plg_GetListPlugins (void)
 
          /* Get the IP of the plugin (row[6]) */
          Str_Copy (Plg->IP,row[6],
-                   Cns_MAX_LENGTH_IP);
+                   Cns_MAX_BYTES_IP);
         }
      }
    else
@@ -315,7 +315,7 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
 
       /* Get the IP of the plugin (row[5]) */
       Str_Copy (Plg->IP,row[5],
-                Cns_MAX_LENGTH_IP);
+                Cns_MAX_BYTES_IP);
      }
    else
       PluginFound = false;
@@ -452,7 +452,8 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"IP\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_IP,Plg->IP,Gbl.Form.Id);
+               Cns_MAX_CHARS_IP,Plg->IP,
+               Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
@@ -785,8 +786,8 @@ void Plg_ChangePlgIP (void)
    extern const char *Txt_The_new_IP_address_is_X;
    extern const char *Txt_You_can_not_leave_the_IP_address_empty;
    struct Plugin *Plg;
-   char Query[256 + Cns_MAX_LENGTH_IP];
-   char NewIP[Cns_MAX_LENGTH_IP + 1];
+   char Query[256 + Cns_MAX_BYTES_IP];
+   char NewIP[Cns_MAX_BYTES_IP + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -796,7 +797,7 @@ void Plg_ChangePlgIP (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new IP for the plugin */
-   Par_GetParToText ("IP",NewIP,Cns_MAX_LENGTH_IP);
+   Par_GetParToText ("IP",NewIP,Cns_MAX_BYTES_IP);
 
    /***** Check if new IP is empty *****/
    if (NewIP[0])
@@ -816,7 +817,7 @@ void Plg_ChangePlgIP (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->IP,NewIP,
-             Cns_MAX_LENGTH_IP);
+             Cns_MAX_BYTES_IP);
    Plg_EditPlugins ();
   }
 
@@ -919,7 +920,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_LENGTH_IP,Plg->IP);
+            Cns_MAX_CHARS_IP,Plg->IP);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_plugin);
@@ -1006,7 +1007,7 @@ void Plg_RecFormNewPlg (void)
    Par_GetParToText ("URL",Plg->URL,Cns_MAX_BYTES_WWW);
 
    /* Get plugin IP address */
-   Par_GetParToText ("IP",Plg->IP,Cns_MAX_LENGTH_IP);
+   Par_GetParToText ("IP",Plg->IP,Cns_MAX_BYTES_IP);
 
    if (Plg->Name[0])	// If there's a plugin name
      {
@@ -1044,7 +1045,7 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
                     Plg_MAX_LENGTH_PLUGIN_LOGO +
                     Plg_MAX_LENGTH_PLUGIN_APP_KEY +
                     Cns_MAX_BYTES_WWW +
-                    Cns_MAX_LENGTH_IP];
+                    Cns_MAX_BYTES_IP];
 
    /***** Create a new plugin *****/
    sprintf (Query,"INSERT INTO plugins (Name,Description,Logo,AppKey,URL,IP)"

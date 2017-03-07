@@ -31,10 +31,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Sch_MAX_LENGTH_STRING_TO_FIND	255
+#define Sch_MAX_CHARS_STRING_TO_FIND	(128 - 1)
+#define Sch_MAX_BYTES_STRING_TO_FIND	(Sch_MAX_CHARS_STRING_TO_FIND * Str_MAX_BYTES_PER_CHAR)
+
 #define Sch_MAX_WORDS_IN_SEARCH		 10
-#define Sch_MAX_LENGTH_SEARCH_WORD	255
-#define Sch_MAX_LENGTH_SEARCH_QUERY	(Sch_MAX_WORDS_IN_SEARCH*Sch_MAX_LENGTH_SEARCH_WORD)
+
+#define Sch_MAX_CHARS_SEARCH_WORD	(128 - 1)
+#define Sch_MAX_BYTES_SEARCH_WORD	(Sch_MAX_CHARS_SEARCH_WORD * Str_MAX_BYTES_PER_CHAR)
+
+#define Sch_MAX_BYTES_SEARCH_QUERY	(Sch_MAX_WORDS_IN_SEARCH * Sch_MAX_BYTES_SEARCH_WORD)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -84,7 +89,7 @@ void Sch_CtrSearch (void);
 void Sch_DegSearch (void);
 void Sch_CrsSearch (void);
 
-bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1],
+bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
                            const char *FieldName,
                            const char *CharSet,const char *Collate);
 

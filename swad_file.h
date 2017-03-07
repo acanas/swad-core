@@ -35,8 +35,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Fil_MIN_LENGTH_FILE_EXTENSION 1
-#define Fil_MAX_LENGTH_FILE_EXTENSION 5
+#define Fil_MIN_BYTES_FILE_EXTENSION 1
+#define Fil_MAX_BYTES_FILE_EXTENSION 5
 
 #define Fil_NAME_OF_PARAM_FILENAME_ORG "file"
 

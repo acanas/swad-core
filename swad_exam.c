@@ -126,7 +126,7 @@ static long Exa_GetParamsExamAnnouncement (void)
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!Gbl.ExamAnns.ExaDat.CrsFullName[0])
       Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName,
-                Crs_MAX_LENGTH_COURSE_FULL_NAME);
+                Crs_MAX_BYTES_COURSE_FULL_NAME);
 
    /***** Get the year *****/
    Gbl.ExamAnns.ExaDat.Year = (unsigned)
@@ -926,7 +926,7 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
 
    /* Name of the course (row[2]) */
    Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,row[2],
-             Crs_MAX_LENGTH_COURSE_FULL_NAME);
+             Crs_MAX_BYTES_COURSE_FULL_NAME);
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&Gbl.ExamAnns.ExaDat.Year) != 1)
@@ -1020,7 +1020,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    const char *StyleForm   = "CONV_NEG";
    const char *StyleNormal = "CONV";
    struct Instit Ins;
-   char StrExamDate[Cns_MAX_LENGTH_DATE + 1];
+   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
    unsigned Year,Hour,Minute;
    const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
@@ -1136,7 +1136,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
      {
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"CrsName\" name=\"CrsName\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_LENGTH_STRING,Gbl.ExamAnns.ExaDat.CrsFullName);
+               Cns_MAX_CHARS_STRING,Gbl.ExamAnns.ExaDat.CrsFullName);
      }
    else
       fprintf (Gbl.F.Out,"<strong>%s</strong>",
@@ -1189,7 +1189,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"ExamSession\" name=\"ExamSession\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_LENGTH_STRING,Gbl.ExamAnns.ExaDat.Session);
+               Cns_MAX_CHARS_STRING,Gbl.ExamAnns.ExaDat.Session);
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);
    fprintf (Gbl.F.Out,"</td>"
@@ -1611,7 +1611,7 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUM
                                                long ExaCod,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
-   char CrsNameAndDate[Crs_MAX_LENGTH_COURSE_FULL_NAME + (2 + Cns_MAX_LENGTH_DATE + 6) + 1];
+   char CrsNameAndDate[Crs_MAX_BYTES_COURSE_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 6) + 1];
 
    /***** Initializations *****/
    Gbl.ExamAnns.ExaDat.ExaCod = ExaCod;
@@ -1669,7 +1669,7 @@ static void Exa_GetNotifContentExamAnnouncement (char **ContentStr)
    struct Course Crs;
    struct Degree Deg;
    struct Instit Ins;
-   char StrExamDate[Cns_MAX_LENGTH_DATE + 1];
+   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    if ((*ContentStr = (char *) malloc (Cns_MAX_BYTES_TEXT * 8)) == NULL)
       Lay_ShowErrorAndExit ("Error allocating memory for notification content.");

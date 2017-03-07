@@ -115,8 +115,8 @@ struct Globals
 						Act_CONT_DATA (if CONTENT_TYPE==multipart/form-data) */
    struct
      {
-      char StrWithoutCRLF[Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF + 1];
-      char StrWithCRLF   [Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF + 1];
+      char StrWithoutCRLF[Par_MAX_BYTES_BOUNDARY_WITH_CR_LF + 1];
+      char StrWithCRLF   [Par_MAX_BYTES_BOUNDARY_WITH_CR_LF + 1];
       size_t LengthWithoutCRLF;
       size_t LengthWithCRLF;
      } Boundary;
@@ -145,7 +145,7 @@ struct Globals
    long TimeGenerationInMicroseconds;
    long TimeSendInMicroseconds;
 
-   char IP[Cns_MAX_LENGTH_IP + 1];
+   char IP[Cns_MAX_BYTES_IP + 1];
    char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 
    struct
@@ -266,7 +266,7 @@ struct Globals
    struct
      {
       Sch_WhatToSearch_t WhatToSearch;
-      char Str[Sch_MAX_LENGTH_STRING_TO_FIND + 1];
+      char Str[Sch_MAX_BYTES_STRING_TO_FIND + 1];
       bool LogSearch;
      } Search;
   struct
@@ -456,7 +456,7 @@ struct Globals
          struct GroupTypes GrpTypes;
          struct GroupType GrpTyp;
          long GrpCod;
-         char GrpName[Grp_MAX_LENGTH_GROUP_NAME + 1];
+         char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
          unsigned MaxStudents;
          bool Open;
          bool FileZones;
@@ -600,10 +600,10 @@ struct Globals
       struct
         {
          long CrsCod;
-         char ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
+         char ShrtName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
         } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
       long FilterCrsCod; 		// Show only messages sent from this course code
-      char FilterCrsShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
+      char FilterCrsShrtName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
       char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3 + 1];	// Show only messages from/to these users
       char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT + 1];		// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)

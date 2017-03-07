@@ -34,7 +34,7 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF 100
+#define Par_MAX_BYTES_BOUNDARY_WITH_CR_LF (128 - 1)
 
 struct StartLength
   {

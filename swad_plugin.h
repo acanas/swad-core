@@ -48,7 +48,7 @@ struct Plugin
    char Logo[Plg_MAX_LENGTH_PLUGIN_LOGO + 1];
    char AppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY + 1];
    char URL[Cns_MAX_BYTES_WWW + 1];
-   char IP[Cns_MAX_LENGTH_IP + 1];
+   char IP[Cns_MAX_BYTES_IP + 1];
   };
 
 /*****************************************************************************/

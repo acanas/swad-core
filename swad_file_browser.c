@@ -2383,9 +2383,9 @@ static void Brw_GetDataCurrentGrp (void)
 	{
 	 Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod           = GrpDat.GrpTypCod;
 	 Str_Copy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,GrpDat.GrpTypName,
-	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 	 Str_Copy (Gbl.CurrentCrs.Grps.GrpName,GrpDat.GrpName,
-	           Grp_MAX_LENGTH_GROUP_NAME);
+	           Grp_MAX_BYTES_GROUP_NAME);
 	 Gbl.CurrentCrs.Grps.MaxStudents                = GrpDat.MaxStudents;
 	 Gbl.CurrentCrs.Grps.Open                       = GrpDat.Open;
 	 Gbl.CurrentCrs.Grps.FileZones                  = GrpDat.FileZones;

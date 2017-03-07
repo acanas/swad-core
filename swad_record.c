@@ -3124,7 +3124,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 	                    " id=\"OriginPlace\" name=\"OriginPlace\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_LENGTH_STRING,
+		  Cns_MAX_CHARS_STRING,
 		  UsrDat->OriginPlace);
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
@@ -3189,7 +3189,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 	                    " id=\"LocalAddress\" name=\"LocalAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_LENGTH_STRING,
+		  Cns_MAX_CHARS_STRING,
 		  UsrDat->LocalAddress);
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
@@ -3259,7 +3259,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 	                    " id=\"FamilyAddress\" name=\"FamilyAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_LENGTH_STRING,
+		  Cns_MAX_CHARS_STRING,
 		  UsrDat->FamilyAddress);
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
@@ -3912,7 +3912,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_STRING,
+               Cns_MAX_CHARS_STRING,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.Form.Id);
       Act_FormEnd ();

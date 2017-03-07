@@ -1013,11 +1013,11 @@ void Msg_GetParamMsgsCrsCod (void)
       Crs_GetDataOfCourseByCod (&Crs);
 
       Str_Copy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName,
-                Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+                Crs_MAX_BYTES_COURSE_SHRT_NAME);
      }
    else
       Str_Copy (Gbl.Msg.FilterCrsShrtName,Txt_any_course,
-                Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+                Crs_MAX_BYTES_COURSE_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2512,7 +2512,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
            {
             Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
             Str_Copy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName,
-                      Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+                      Crs_MAX_BYTES_COURSE_SHRT_NAME);
             Gbl.Msg.NumCourses++;
            }
      }

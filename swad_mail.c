@@ -67,8 +67,8 @@ extern struct Globals Gbl;
 static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
-static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMAIL + 1]);
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain);
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1]);
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
@@ -317,14 +317,14 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
   {
-   char MailDomain[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1];
 
    /***** Check #1: is my email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
       return false;
 
    /***** Check #2: if my mail domain allowed? *****/
-   Mai_GetMailBox (UsrDat->Email,MailDomain);
+   Mai_GetMailDomain (UsrDat->Email,MailDomain);
    return Mai_CheckIfMailDomainIsAllowedForNotif (MailDomain);
   }
 
@@ -332,19 +332,19 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
 /********************** Get mailbox from email address ***********************/
 /*****************************************************************************/
 
-static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMAIL + 1])
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1])
   {
    const char *Ptr;
 
-   MailBox[0] = '\0';	// Return empty mailbox on error
+   MailDomain[0] = '\0';	// Return empty mailbox on error
 
    if ((Ptr = strchr (Email,(int) '@')))	// Find first '@' in address
       if (Ptr != Email)				// '@' is not the first character in Email
         {
          Ptr++;					// Skip '@'
          if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
-            Str_Copy (MailBox,Ptr,
-                      Usr_MAX_BYTES_USR_EMAIL);
+            Str_Copy (MailDomain,Ptr,
+                      Mai_MAX_LENGTH_MAIL_DOMAIN);
         }
   }
 
@@ -352,7 +352,7 @@ static void Mai_GetMailBox (const char *Email,char MailBox[Usr_MAX_BYTES_USR_EMA
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char *MailDomain)
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1])
   {
    char Query[512];
 
@@ -1310,7 +1310,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	              "<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
 	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
-            Usr_MAX_BYTES_USR_EMAIL,
+            Usr_MAX_CHARS_USR_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
    Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save);		// User has no email address yet

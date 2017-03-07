@@ -53,9 +53,6 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
-#define Usr_MAX_LENGTH_USR_LOGIN		(128 - 1)	// @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN			(128 - 1)
-
 #define Usr_MAX_LENGTH_USR_NAME_OR_SURNAME	 32
 #define Usr_MAX_BYTES_NAME			 32
 
@@ -65,7 +62,11 @@
 						// Surname1         +' '+ Surname2           +  ','+' ' + FirstName
 						// Surname1         +' '+ Surname2           + '<br />' + FirstName
 
-#define Usr_MAX_BYTES_USR_EMAIL		(128 - 1)
+#define Usr_MAX_CHARS_USR_EMAIL		(128 - 1)
+#define Usr_MAX_BYTES_USR_EMAIL		Usr_MAX_CHARS_USR_EMAIL
+
+#define Usr_MAX_LENGTH_USR_LOGIN	(128 - 1)	// @nick, email or ID
+#define Usr_MAX_BYTES_USR_LOGIN		(128 - 1)
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
 
@@ -146,11 +147,11 @@ struct UsrData
    long CtyCod;		// Country
    char OriginPlace	[Cns_MAX_BYTES_STRING + 1];
    struct Date Birthday;
-   char StrBirthday	[Cns_MAX_LENGTH_DATE  + 1];
+   char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
    char LocalAddress	[Cns_MAX_BYTES_STRING + 1];
-   char LocalPhone	[Usr_MAX_BYTES_PHONE  + 1];
+   char LocalPhone	[Usr_MAX_BYTES_PHONE + 1];
    char FamilyAddress	[Cns_MAX_BYTES_STRING + 1];
-   char FamilyPhone	[Usr_MAX_BYTES_PHONE  + 1];
+   char FamilyPhone	[Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
    long InsCod;		// Institution

@@ -174,7 +174,7 @@ static void Par_GetBoundary (void)
    PtrToBoundary = strstr (getenv ("CONTENT_TYPE"),"boundary=") + strlen ("boundary=");
 
    /***** Check that boundary string is not too long *****/
-   if (2 + 2 + strlen (PtrToBoundary) > Par_MAX_LENGTH_BOUNDARY_WITH_CR_LF)
+   if (2 + 2 + strlen (PtrToBoundary) > Par_MAX_BYTES_BOUNDARY_WITH_CR_LF)
       Lay_ShowErrorAndExit ("Delimiter string too long.");
 
    /***** Create boundary strings *****/

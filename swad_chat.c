@@ -51,15 +51,20 @@ extern struct Globals Gbl;
 
 #define Cht_CHAT_MAX_LEVELS 3
 
-#define MAX_LENGTH_ROOM_CODE	    16	// Maximum length of the code of a chat room
-#define MAX_LENGTH_ROOM_SHRT_NAME 128	// Maximum length of the short name of a chat room
-#define MAX_LENGTH_ROOM_FULL_NAME  256	// Maximum length of the full name of a chat room
+#define Cht_MAX_CHARS_ROOM_CODE	16	// Maximum number of chars of the code of a chat room
+#define Cht_MAX_BYTES_ROOM_CODE	Cht_MAX_CHARS_ROOM_CODE
+
+#define Cht_MAX_CHARS_ROOM_SHRT_NAME	(128 - 1)	// Maximum number of chars of the short name of a chat room
+#define Cht_MAX_BYTES_ROOM_SHRT_NAME	(Cht_MAX_CHARS_ROOM_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Cht_MAX_CHARS_ROOM_FULL_NAME	(256 - 1)	// Maximum number of chars of the full name of a chat room
+#define Cht_MAX_BYTES_ROOM_FULL_NAME	(Cht_MAX_CHARS_ROOM_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
+static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS]);
 static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName);
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
@@ -108,9 +113,9 @@ void Cht_ShowListOfAvailableChatRooms (void)
    MYSQL_ROW row;
    unsigned long NumRow;
    unsigned long NumRows;
-   char ThisRoomCode    [MAX_LENGTH_ROOM_CODE      + 1];
-   char ThisRoomShrtName[MAX_LENGTH_ROOM_SHRT_NAME + 1];
-   char ThisRoomFullName[MAX_LENGTH_ROOM_FULL_NAME + 1];
+   char ThisRoomCode    [Cht_MAX_BYTES_ROOM_CODE + 1];
+   char ThisRoomShrtName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
+   char ThisRoomFullName[Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
 
    /***** Fill the list with the degrees I belong to *****/ 
    Usr_GetMyDegrees ();
@@ -294,7 +299,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 /******************** Write title and link to a chat room ********************/
 /*****************************************************************************/
 
-static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName,const char *RoomFullName,
+static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName,
                                   unsigned Level,bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS])
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -302,7 +307,7 @@ static void Cht_WriteLinkToChat1 (const char *RoomCode,const char *RoomShortName
    fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
    Act_FormStart (ActCht);
-   Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShortName,RoomFullName);
+   Cht_WriteParamsRoomCodeAndNames (RoomCode,RoomShrtName,RoomFullName);
    Act_LinkFormSubmit (RoomFullName,The_ClassForm[Gbl.Prefs.Theme],NULL);
   }
 
@@ -332,10 +337,10 @@ static void Cht_WriteLinkToChat2 (const char *RoomCode,const char *RoomFullName)
 /*** Write parameters with code and names (short and full) of a chat room ****/
 /*****************************************************************************/
 
-void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShortName,const char *RoomFullName)
+void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtName,const char *RoomFullName)
   {
    Par_PutHiddenParamString ("RoomCode",RoomCode);
-   Par_PutHiddenParamString ("RoomShortName",RoomShortName);
+   Par_PutHiddenParamString ("RoomShrtName",RoomShrtName);
    Par_PutHiddenParamString ("RoomFullName",RoomFullName);
   }
 
@@ -372,9 +377,9 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
 /******************************* Enter a chat room ***************************/
 /*****************************************************************************/
 
-#define Cht_MAX_LENGTH_ROOM_CODES      ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_CODE)
-#define Cht_MAX_LENGTH_ROOM_SHRT_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_SHRT_NAME)
-#define Cht_MAX_LENGTH_ROOM_FULL_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * MAX_LENGTH_ROOM_FULL_NAME)
+#define Cht_MAX_BYTES_ROOM_CODES      ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_CODE)
+#define Cht_MAX_BYTES_ROOM_SHRT_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_SHRT_NAME)
+#define Cht_MAX_BYTES_ROOM_FULL_NAMES ((2 + Deg_MAX_DEGREES_PER_USR + Crs_MAX_COURSES_PER_USR) * Cht_MAX_BYTES_ROOM_FULL_NAME)
 
 void Cht_OpenChatWindow (void)
   {
@@ -386,30 +391,30 @@ void Cht_OpenChatWindow (void)
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
-   char RoomCode     [MAX_LENGTH_ROOM_CODE      + 1];
-   char RoomShortName[MAX_LENGTH_ROOM_SHRT_NAME + 1];
-   char RoomFullName [MAX_LENGTH_ROOM_FULL_NAME + 1];
+   char RoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
+   char RoomShrtName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
+   char RoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
    char UsrName[Usr_MAX_BYTES_FULL_NAME + 1];
    unsigned NumMyDeg;
    unsigned NumMyCrs;
    struct Degree Deg;
    struct Course Crs;
-   char ThisRoomCode     [MAX_LENGTH_ROOM_CODE      + 1];
-   char ThisRoomShortName[MAX_LENGTH_ROOM_SHRT_NAME + 1];
-   char ThisRoomFullName [MAX_LENGTH_ROOM_FULL_NAME + 1];
-   char ListRoomCodes     [Cht_MAX_LENGTH_ROOM_CODES      + 1];
-   char ListRoomShortNames[Cht_MAX_LENGTH_ROOM_SHRT_NAMES + 1];
-   char ListRoomFullNames [Cht_MAX_LENGTH_ROOM_FULL_NAMES + 1];
+   char ThisRoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
+   char ThisRoomShortName[Cht_MAX_BYTES_ROOM_SHRT_NAME + 1];
+   char ThisRoomFullName [Cht_MAX_BYTES_ROOM_FULL_NAME + 1];
+   char ListRoomCodes     [Cht_MAX_BYTES_ROOM_CODES      + 1];
+   char ListRoomShrtNames[Cht_MAX_BYTES_ROOM_SHRT_NAMES + 1];
+   char ListRoomFullNames [Cht_MAX_BYTES_ROOM_FULL_NAMES + 1];
    FILE *FileChat;
 
    /***** Get the code and the nombre of the room *****/
-   Par_GetParToText ("RoomCode",RoomCode,MAX_LENGTH_ROOM_CODE);
+   Par_GetParToText ("RoomCode",RoomCode,Cht_MAX_BYTES_ROOM_CODE);
 
-   Par_GetParToText ("RoomShortName",RoomShortName,MAX_LENGTH_ROOM_SHRT_NAME);
+   Par_GetParToText ("RoomShrtName",RoomShrtName,Cht_MAX_BYTES_ROOM_SHRT_NAME);
 
-   Par_GetParToText ("RoomFullName",RoomFullName,MAX_LENGTH_ROOM_FULL_NAME);
+   Par_GetParToText ("RoomFullName",RoomFullName,Cht_MAX_BYTES_ROOM_FULL_NAME);
 
-   if (!RoomCode[0] || !RoomShortName[0] || !RoomFullName[0])
+   if (!RoomCode[0] || !RoomShrtName[0] || !RoomFullName[0])
       Lay_ShowErrorAndExit ("Wrong code or name of chat room.");
    if (strcspn (RoomCode," \t\n\r") != strlen (RoomCode)) // If RoomCode contiene espacios
       Lay_ShowErrorAndExit ("Wrong code of chat room.");
@@ -435,56 +440,56 @@ void Cht_OpenChatWindow (void)
 
    /***** Build the lists of available rooms *****/
    sprintf (ListRoomCodes,"#%s",RoomCode);
-   Str_Copy (ListRoomShortNames,RoomShortName,
-             Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+   Str_Copy (ListRoomShrtNames,RoomShrtName,
+             Cht_MAX_BYTES_ROOM_SHRT_NAMES);
    Str_Copy (ListRoomFullNames ,RoomFullName,
-             Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+             Cht_MAX_BYTES_ROOM_FULL_NAMES);
 
    if (strcmp (RoomCode,"GBL_USR"))
      {
       Str_Concat (ListRoomCodes,"|#GBL_USR",
-                  Cht_MAX_LENGTH_ROOM_CODES);
+                  Cht_MAX_BYTES_ROOM_CODES);
 
-      sprintf (RoomShortName,"|%s",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL]);
-      Str_Concat (ListRoomShortNames,RoomShortName,
-                  Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+      sprintf (RoomShrtName,"|%s",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL]);
+      Str_Concat (ListRoomShrtNames,RoomShrtName,
+                  Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
       sprintf (RoomFullName,"|%s (%s)",
                Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
       Str_Concat (ListRoomFullNames,RoomFullName,
-                  Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+                  Cht_MAX_BYTES_ROOM_FULL_NAMES);
      }
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
       if (strcmp (RoomCode,"GBL_STD"))
         {
          Str_Concat (ListRoomCodes,"|#GBL_STD",
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShortName,"|%s",Txt_Students_ABBREVIATION);
-         Str_Concat (ListRoomShortNames,RoomShortName,
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+         sprintf (RoomShrtName,"|%s",Txt_Students_ABBREVIATION);
+         Str_Concat (ListRoomShrtNames,RoomShrtName,
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
          sprintf (RoomFullName,"|%s (%s)",Txt_General,
                   Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_ALL]);
 	 Str_Concat (ListRoomFullNames,RoomFullName,
-	             Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
       if (strcmp (RoomCode,"GBL_TCH"))
         {
          Str_Concat (ListRoomCodes,"|#GBL_TCH",
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShortName,"|%s",Txt_Teachers_ABBREVIATION);
-         Str_Concat (ListRoomShortNames,RoomShortName,
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+         sprintf (RoomShrtName,"|%s",Txt_Teachers_ABBREVIATION);
+         Str_Concat (ListRoomShrtNames,RoomShrtName,
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
          sprintf (RoomFullName,"|%s (%s)",
                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_ALL]);
 	 Str_Concat (ListRoomFullNames,RoomFullName,
-	             Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
 
    for (NumMyDeg = 0;
@@ -495,25 +500,25 @@ void Cht_OpenChatWindow (void)
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
          Str_Concat (ListRoomCodes,ThisRoomCode,
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
 
          /* Get data of this degree */
          Deg.DegCod = Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod;
          Deg_GetDataOfDegreeByCod (&Deg);
 
          sprintf (ThisRoomShortName,"%s",Deg.ShrtName);
-         Str_Concat (ListRoomShortNames,"|",
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
-         Str_Concat (ListRoomShortNames,ThisRoomShortName,
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+         Str_Concat (ListRoomShrtNames,"|",
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
+         Str_Concat (ListRoomShrtNames,ThisRoomShortName,
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Degree,Deg.ShrtName);
          Str_Concat (ListRoomFullNames,"|",
-                     Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+                     Cht_MAX_BYTES_ROOM_FULL_NAMES);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,
-                     Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+                     Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
      }
 
@@ -525,25 +530,25 @@ void Cht_OpenChatWindow (void)
       if (strcmp (RoomCode,ThisRoomCode))
         {
          Str_Concat (ListRoomCodes,"|#",
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
          Str_Concat (ListRoomCodes,ThisRoomCode,
-                     Cht_MAX_LENGTH_ROOM_CODES);
+                     Cht_MAX_BYTES_ROOM_CODES);
 
          /* Get data of this course */
          Crs.CrsCod = Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod;
          Crs_GetDataOfCourseByCod (&Crs);
 
          sprintf (ThisRoomShortName,"%s",Crs.ShrtName);
-         Str_Concat (ListRoomShortNames,"|",
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
-         Str_Concat (ListRoomShortNames,ThisRoomShortName,
-                     Cht_MAX_LENGTH_ROOM_SHRT_NAMES);
+         Str_Concat (ListRoomShrtNames,"|",
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
+         Str_Concat (ListRoomShrtNames,ThisRoomShortName,
+                     Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
          sprintf (ThisRoomFullName,"%s %s",Txt_Course,Crs.ShrtName);
          Str_Concat (ListRoomFullNames,"|",
-                     Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+                     Cht_MAX_BYTES_ROOM_FULL_NAMES);
          Str_Concat (ListRoomFullNames,ThisRoomFullName,
-                     Cht_MAX_LENGTH_ROOM_FULL_NAMES);
+                     Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
      }
 
@@ -579,7 +584,7 @@ void Cht_OpenChatWindow (void)
    fprintf (Gbl.F.Out,"\n<param name=\"channel_name\" value=\"%s\">",
 	    ListRoomCodes);
    fprintf (Gbl.F.Out,"\n<param name=\"tab\" value=\"%s\">",
-	    ListRoomShortNames);
+	    ListRoomShrtNames);
    fprintf (Gbl.F.Out,"\n<param name=\"topic\" value=\"%s\">",
 	    ListRoomFullNames);
 

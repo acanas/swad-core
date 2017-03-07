@@ -2457,8 +2457,8 @@ bool Str_FileIs (const char *FileName,const char *Extension)
    size_t LengthExtension = strlen (Extension);
 
    /***** Check length of extension. Extension valid are, for example "zip", "html", "mhtml" *****/
-   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
-       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
+   if (LengthExtension < Fil_MIN_BYTES_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_BYTES_FILE_EXTENSION)
       return false;
 
    /***** Check the extension *****/

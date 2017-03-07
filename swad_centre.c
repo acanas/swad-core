@@ -436,7 +436,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,
+		  Ctr_MAX_CHARS_CENTRE_FULL_NAME,
 		  Gbl.CurrentCtr.Ctr.FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -465,7 +465,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,
+		  Ctr_MAX_CHARS_CENTRE_SHRT_NAME,
 		  Gbl.CurrentCtr.Ctr.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1036,11 +1036,11 @@ void Ctr_GetListCentres (long InsCod)
 
          /* Get the short name of the centre (row[5]) */
          Str_Copy (Ctr->ShrtName,row[5],
-                   Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+                   Ctr_MAX_BYTES_CENTRE_SHRT_NAME);
 
          /* Get the full name of the centre (row[6]) */
          Str_Copy (Ctr->FullName,row[6],
-                   Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+                   Ctr_MAX_BYTES_CENTRE_FULL_NAME);
 
          /* Get the URL of the centre (row[7]) */
          Str_Copy (Ctr->WWW,row[7],
@@ -1134,11 +1134,11 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 
          /* Get the short name of the centre (row[4]) */
          Str_Copy (Ctr->ShrtName,row[4],
-                   Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+                   Ctr_MAX_BYTES_CENTRE_SHRT_NAME);
 
          /* Get the full name of the centre (row[5]) */
          Str_Copy (Ctr->FullName,row[5],
-                   Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+                   Ctr_MAX_BYTES_CENTRE_FULL_NAME);
 
          /* Get the URL of the centre (row[6]) */
          Str_Copy (Ctr->WWW,row[6],
@@ -1221,7 +1221,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (Ctr->ShrtName,row[0],
-	           Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+	           Ctr_MAX_BYTES_CENTRE_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1470,7 +1470,7 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
+		  Ctr_MAX_CHARS_CENTRE_SHRT_NAME,Ctr->ShrtName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1488,7 +1488,7 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
+		  Ctr_MAX_CHARS_CENTRE_FULL_NAME,Ctr->FullName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	 fprintf (Gbl.F.Out,"</td>");
 	}
@@ -1884,32 +1884,32 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_centre_X_has_not_changed;
-   char Query[128 + Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
+   char Query[128 + Ctr_MAX_BYTES_CENTRE_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned NaxBytes = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
-   char NewCtrName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
+   char NewCtrName[Ctr_MAX_BYTES_CENTRE_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Ctr_MAX_LENGTH_CENTRE_SHRT_NAME;
+         NaxBytes = Ctr_MAX_BYTES_CENTRE_SHRT_NAME;
          CurrentCtrName = Ctr->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Ctr_MAX_LENGTH_CENTRE_FULL_NAME;
+         NaxBytes = Ctr_MAX_BYTES_CENTRE_FULL_NAME;
          CurrentCtrName = Ctr->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the new name for the centre */
-   Par_GetParToText (ParamName,NewCtrName,MaxLength);
+   Par_GetParToText (ParamName,NewCtrName,NaxBytes);
 
    /***** Get from the database the old names of the centre *****/
    Ctr_GetDataOfCentreByCod (Ctr);
@@ -1946,7 +1946,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 	    /* Change current centre name in order to display it properly */
 	    Str_Copy (CurrentCtrName,NewCtrName,
-	              MaxLength);
+	              NaxBytes);
            }
         }
       else	// The same name
@@ -1961,7 +1961,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod)
   {
-   char Query[256 + Ctr_MAX_LENGTH_CENTRE_FULL_NAME];
+   char Query[256 + Ctr_MAX_BYTES_CENTRE_FULL_NAME];
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
@@ -2283,8 +2283,8 @@ void Ctr_ReceivePhoto (void)
       return;
      }
    LengthExtension = strlen (PtrExtension);
-   if (LengthExtension < Fil_MIN_LENGTH_FILE_EXTENSION ||
-       LengthExtension > Fil_MAX_LENGTH_FILE_EXTENSION)
+   if (LengthExtension < Fil_MIN_BYTES_FILE_EXTENSION ||
+       LengthExtension > Fil_MAX_BYTES_FILE_EXTENSION)
      {
       Lay_ShowAlert (Lay_WARNING,Txt_Wrong_file_type);
       return;
@@ -2355,12 +2355,12 @@ void Ctr_ReceivePhoto (void)
 
 void Ctr_ChangeCtrPhotoAttribution (void)
   {
-   char Query[256 + Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION];
-   char NewPhotoAttribution[Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION + 1];
+   char Query[256 + Ctr_MAX_BYTES_PHOTO_ATTRIBUTION];
+   char NewPhotoAttribution[Ctr_MAX_BYTES_PHOTO_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new photo attribution for the centre */
-   Par_GetParToText ("Attribution",NewPhotoAttribution,Ctr_MAX_LENGTH_PHOTO_ATTRIBUTION);
+   Par_GetParToText ("Attribution",NewPhotoAttribution,Ctr_MAX_BYTES_PHOTO_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    sprintf (Query,"UPDATE centres SET PhotoAttribution='%s'"
@@ -2443,7 +2443,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ctr_MAX_LENGTH_CENTRE_SHRT_NAME,Ctr->ShrtName);
+            Ctr_MAX_CHARS_CENTRE_SHRT_NAME,Ctr->ShrtName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2452,7 +2452,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ctr_MAX_LENGTH_CENTRE_FULL_NAME,Ctr->FullName);
+            Ctr_MAX_CHARS_CENTRE_FULL_NAME,Ctr->FullName);
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2671,10 +2671,10 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
       Lay_ShowAlert (Lay_ERROR,"Wrong place.");
 
    /* Get centre short name */
-   Par_GetParToText ("ShortName",Ctr->ShrtName,Ctr_MAX_LENGTH_CENTRE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ctr->ShrtName,Ctr_MAX_BYTES_CENTRE_SHRT_NAME);
 
    /* Get centre full name */
-   Par_GetParToText ("FullName",Ctr->FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
+   Par_GetParToText ("FullName",Ctr->FullName,Ctr_MAX_BYTES_CENTRE_FULL_NAME);
 
    /* Get centre WWW */
    Par_GetParToText ("WWW",Ctr->WWW,Cns_MAX_BYTES_WWW);
@@ -2723,8 +2723,8 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
    char Query[512 +
-              Ctr_MAX_LENGTH_CENTRE_SHRT_NAME +
-              Ctr_MAX_LENGTH_CENTRE_FULL_NAME +
+              Ctr_MAX_BYTES_CENTRE_SHRT_NAME +
+              Ctr_MAX_BYTES_CENTRE_FULL_NAME +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new centre *****/

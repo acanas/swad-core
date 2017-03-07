@@ -375,7 +375,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Email,
-            Usr_MAX_BYTES_USR_EMAIL,
+            Usr_MAX_CHARS_USR_EMAIL,
             Txt_HELP_email,
             NewEmail);
 

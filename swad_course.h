@@ -39,9 +39,14 @@
 
 #define Crs_MAX_COURSES_PER_USR		100 // Used in list of my courses and list of distinct courses in sent or received messages
 
-#define Crs_LENGTH_INSTITUTIONAL_CRS_COD  7
-#define Crs_MAX_LENGTH_COURSE_SHRT_NAME	 32
-#define Crs_MAX_LENGTH_COURSE_FULL_NAME	(128 - 1)
+#define Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD  8
+#define Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD  (Crs_MAX_CHARS_INSTITUTIONAL_CRS_COD * Str_MAX_BYTES_PER_CHAR)
+
+#define Crs_MAX_CHARS_COURSE_SHRT_NAME	32
+#define Crs_MAX_BYTES_COURSE_SHRT_NAME	(Crs_MAX_CHARS_COURSE_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Crs_MAX_CHARS_COURSE_FULL_NAME	(128 - 1)
+#define Crs_MAX_BYTES_COURSE_FULL_NAME	(Crs_MAX_CHARS_COURSE_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 #define Crs_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS  6
 #define Crs_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_CRSS 12
@@ -79,13 +84,13 @@ typedef enum
 struct Course
   {
    long CrsCod;
-   char InstitutionalCrsCod[Crs_LENGTH_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
+   char InstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
    long DegCod;
    unsigned Year;					// Year: 0 (optatives), 1, 2, 3...
    Crs_Status_t Status;					// Course status
    long RequesterUsrCod;				// User code of the person who requested the creation of this course
-   char ShrtName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];	// Short name of course
-   char FullName[Crs_MAX_LENGTH_COURSE_FULL_NAME + 1];	// Full name of course
+   char ShrtName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];	// Short name of course
+   char FullName[Crs_MAX_BYTES_COURSE_FULL_NAME + 1];	// Full name of course
    unsigned NumUsrs;					// Number of users (students + teachers)
    unsigned NumTchs;					// Number of teachers
    unsigned NumStds;					// Number of students

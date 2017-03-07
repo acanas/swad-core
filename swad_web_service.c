@@ -955,8 +955,8 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
-   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1);
-   loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Crs_MAX_LENGTH_COURSE_FULL_NAME + 1);
+   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Deg_MAX_BYTES_DEGREE_FULL_NAME + 1);
+   loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_FULL_NAME + 1);
 
    /***** Default values returned on error *****/
    loginBySessionKeyOut->userCode          = -1;
@@ -1001,7 +1001,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Crs_GetDataOfCourseByCod (&Gbl.CurrentCrs.Crs);
       loginBySessionKeyOut->courseCode = (int) Gbl.CurrentCrs.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.CurrentCrs.Crs.FullName,
-                Crs_MAX_LENGTH_COURSE_FULL_NAME);
+                Crs_MAX_BYTES_COURSE_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -1012,7 +1012,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Deg_GetDataOfDegreeByCod (&Gbl.CurrentDeg.Deg);
       loginBySessionKeyOut->degreeCode = (int) Gbl.CurrentDeg.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.CurrentDeg.Deg.FullName,
-                Deg_MAX_LENGTH_DEGREE_FULL_NAME);
+                Deg_MAX_BYTES_DEGREE_FULL_NAME);
      }
    else
       UsrFound = false;
@@ -1225,14 +1225,14 @@ int swad__getCourses (struct soap *soap,
 	 getCoursesOut->coursesArray.__ptr[NumRow].courseCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get course short name (row[1]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName = (char *) soap_malloc (Gbl.soap,Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_SHRT_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,row[1],
-	           Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+	           Crs_MAX_BYTES_COURSE_SHRT_NAME);
 
          /* Get course full name (row[2]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName = (char *) soap_malloc (Gbl.soap,Crs_MAX_LENGTH_COURSE_FULL_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,row[2],
-	           Crs_MAX_LENGTH_COURSE_FULL_NAME);
+	           Crs_MAX_BYTES_COURSE_FULL_NAME);
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
@@ -1459,7 +1459,7 @@ int swad__findUsers (struct soap *soap,
                      struct swad__getUsersOutput *getUsersOut)			// output
   {
    int ReturnCode;
-   char SearchQuery[Sch_MAX_LENGTH_SEARCH_QUERY + 1];
+   char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1];
    Rol_Role_t Role;
    bool FilterTooShort = false;
 
@@ -1515,7 +1515,7 @@ int swad__findUsers (struct soap *soap,
 
    /***** Query users beloging to course or group from database *****/
    Str_Copy (Gbl.Search.Str,filter,
-             Sch_MAX_LENGTH_STRING_TO_FIND);
+             Sch_MAX_BYTES_STRING_TO_FIND);
 
    if (Gbl.Search.Str[0])	// Search some users
      {
@@ -1686,9 +1686,9 @@ int swad__getGroupTypes (struct soap *soap,
 	 getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_LENGTH_GROUP_TYPE_NAME + 1);
+         getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName,row[1],
-	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get whether enrollment is mandatory ('Y') or voluntary ('N') (row[2]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumRow].mandatory = (row[2][0] == 'Y') ? 1 :
@@ -1797,18 +1797,18 @@ int swad__getGroups (struct soap *soap,
 	 getGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_LENGTH_GROUP_TYPE_NAME + 1);
+         getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
-	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get group code (row[2]) */
 	 GrpCod = Str_ConvertStrCodToLongCod (row[2]);
 	 getGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         getGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_LENGTH_GROUP_NAME + 1);
+         getGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (getGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
-	           Grp_MAX_LENGTH_GROUP_NAME);
+	           Grp_MAX_BYTES_GROUP_NAME);
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
@@ -1958,18 +1958,18 @@ int swad__sendMyGroups (struct soap *soap,
 	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get group type name (row[1]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_LENGTH_GROUP_TYPE_NAME + 1);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_TYPE_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupTypeName,row[1],
-	           Grp_MAX_LENGTH_GROUP_TYPE_NAME);
+	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Get group code (row[2]) */
 	 GrpCod = Str_ConvertStrCodToLongCod (row[2]);
 	 SendMyGroupsOut->groupsArray.__ptr[NumRow].groupCode = (int) GrpCod;
 
          /* Get group name (row[3]) */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_LENGTH_GROUP_NAME + 1);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName = (char *) soap_malloc (Gbl.soap,Grp_MAX_BYTES_GROUP_NAME + 1);
 	 Str_Copy (SendMyGroupsOut->groupsArray.__ptr[NumRow].groupName,row[3],
-	           Grp_MAX_LENGTH_GROUP_NAME);
+	           Grp_MAX_BYTES_GROUP_NAME);
 
          /* Get max number of students of group (row[4]) and number of current students */
          MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[4]);
@@ -4535,7 +4535,7 @@ int swad__getFile (struct soap *soap,
    /***** Allocate space for strings *****/
    getFileOut->fileName        = (char *) soap_malloc (Gbl.soap,NAME_MAX + 1);
    getFileOut->URL             = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
-   getFileOut->license         = (char *) soap_malloc (Gbl.soap,Brw_MAX_LENGTH_LICENSE + 1);
+   getFileOut->license         = (char *) soap_malloc (Gbl.soap,Brw_MAX_BYTES_LICENSE + 1);
    getFileOut->publisherName   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FULL_NAME + 1);
    getFileOut->publisherPhoto  = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
 
@@ -4654,7 +4654,7 @@ int swad__getFile (struct soap *soap,
    getFileOut->time = (int) FileMetadata.Time;
 
    Str_Copy (getFileOut->license,Txt_LICENSES[FileMetadata.License],
-             Brw_MAX_LENGTH_LICENSE);
+             Brw_MAX_BYTES_LICENSE);
 
    if ((Gbl.Usrs.Other.UsrDat.UsrCod = FileMetadata.PublisherUsrCod) > 0)
       /* Get publisher's data */

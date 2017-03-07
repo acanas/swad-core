@@ -497,7 +497,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
   {
    extern const char *Txt_Connected_users;
    extern const char *Txt_from;
-   char CourseName[Crs_MAX_LENGTH_COURSE_SHRT_NAME + 1];
+   char CourseName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
    struct ConnectedUsrs Usrs;
 
    if (Gbl.CurrentCrs.Crs.CrsCod <= 0)	// There is no course selected
@@ -513,7 +513,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
 					// is dynamically updated via AJAX
    Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
    Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
-             Crs_MAX_LENGTH_COURSE_SHRT_NAME);
+             Crs_MAX_BYTES_COURSE_SHRT_NAME);
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s"
 	              "</a>",

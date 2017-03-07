@@ -204,13 +204,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.149 (2017-03-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.150 (2017-03-07)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.150:   Mar 07, 2017	Code refactoring related to number of chars and bytes. (216409 lines)
         Version 16.149:   Mar 07, 2017	Code refactoring related to number of chars and bytes. (216385 lines)
         Version 16.148:   Mar 06, 2017	Code refactoring in notifications. (216393 lines)
         Version 16.147.11:Mar 06, 2017	Changes in names of zipped files. (216388 lines)
