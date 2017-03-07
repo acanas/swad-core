@@ -33,7 +33,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Msg_MAX_LENGTH_FILTER_CONTENT 80
+#define Msg_MAX_CHARS_FILTER_CONTENT (128 - 1)
+#define Msg_MAX_BYTES_FILTER_CONTENT (Msg_MAX_CHARS_FILTER_CONTENT * Str_MAX_BYTES_PER_CHAR)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

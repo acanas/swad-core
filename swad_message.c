@@ -56,7 +56,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Msg_MAX_LENGTH_MESSAGES_QUERY 4096
+#define Msg_MAX_BYTES_MESSAGES_QUERY (4 * 1024 - 1)
 
 // Forum images will be saved with:
 // - maximum width of Msg_IMAGE_SAVED_MAX_HEIGHT
@@ -103,7 +103,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void);
 static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs);
 
-static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1]);
+static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1]);
 
 static void Msg_ExpandSentMsg (long MsgCod);
 static void Msg_ExpandReceivedMsg (long MsgCod);
@@ -641,7 +641,6 @@ void Msg_RecMsgFromUsr (void)
    unsigned NumRecipientsToBeNotifiedByEMail = 0;
    struct UsrData UsrDstData;
    int NumErrors = 0;
-   char *ListUsrsDst;
    long NewMsgCod = -1L;	// Initiliazed to avoid warning
    bool MsgAlreadyInserted = false;
    bool CreateNotif;
@@ -700,12 +699,6 @@ void Msg_RecMsgFromUsr (void)
       Msg_PutFormMsgUsrs (Content);
       return;
      }
-
-   /***** Allocate space to store a list of recipients with the following format:
-	  "FirstName Surname1 Surname2; FirstName Surname1 Surname2; FirstName Surname1 Surname2" *****/
-   if ((ListUsrsDst = (char *) malloc (((Usr_MAX_BYTES_NAME + 1) * 3 + 1)*NumRecipients)) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store email addresses of recipients.");
-   ListUsrsDst[0] = '\0';
 
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDstData);
@@ -799,9 +792,6 @@ void Msg_RecMsgFromUsr (void)
    Usr_UsrDataDestructor (&UsrDstData);
 
    /***** Free memory *****/
-   /* Free memory used for list of recipients' names */
-   free (ListUsrsDst);
-
    /* Free memory used for list of users */
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedUsrsCods ();
@@ -941,7 +931,7 @@ void Msg_ReqDelAllSntMsgs (void)
 
 void Msg_DelAllRecMsgs (void)
   {
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Get parameters *****/
@@ -963,7 +953,7 @@ void Msg_DelAllRecMsgs (void)
 
 void Msg_DelAllSntMsgs (void)
   {
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    unsigned long NumMsgs;
 
    /***** Get parameters *****/
@@ -1028,7 +1018,7 @@ void Msg_GetParamFilterFromTo (void)
   {
    /***** Get "from"/"to" filter *****/
    Par_GetParToText ("FilterFromTo",Gbl.Msg.FilterFromTo,
-                     Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3);
+                     Usr_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1039,17 +1029,17 @@ void Msg_GetParamFilterContent (void)
   {
    /***** Get content filter *****/
    Par_GetParToText ("FilterContent",Gbl.Msg.FilterContent,
-                     Msg_MAX_LENGTH_FILTER_CONTENT);
+                     Msg_MAX_BYTES_FILTER_CONTENT);
   }
 
 /*****************************************************************************/
 /************************* Make "from"/"to" subquery *************************/
 /*****************************************************************************/
 
-static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1])
+static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1])
   {
    const char *Ptr;
-   char SearchWord[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME + 1];
+   char SearchWord[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
 
    /***** Split "from"/"to" string into words *****/
    if (Gbl.Msg.FilterFromTo[0])
@@ -1057,19 +1047,20 @@ static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_LENG
       Ptr = Gbl.Msg.FilterFromTo;
       Str_Copy (FilterFromToSubquery,
                 " AND CONCAT(usr_data.FirstName,usr_data.Surname1,usr_data.Surname2) LIKE '",
-                Msg_MAX_LENGTH_MESSAGES_QUERY);
+                Msg_MAX_BYTES_MESSAGES_QUERY);
       while (*Ptr)
         {
-         Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_LENGTH_USR_NAME_OR_SURNAME);
-         if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 > Msg_MAX_LENGTH_MESSAGES_QUERY)	// Prevent string overflow
+         Str_GetNextStringUntilSpace (&Ptr,SearchWord,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
+         if (strlen (FilterFromToSubquery) + strlen (SearchWord) + 512 >
+             Msg_MAX_BYTES_MESSAGES_QUERY)	// Prevent string overflow
             break;
          Str_Concat (FilterFromToSubquery,"%",
-                     Msg_MAX_LENGTH_MESSAGES_QUERY);
+                     Msg_MAX_BYTES_MESSAGES_QUERY);
          Str_Concat (FilterFromToSubquery,SearchWord,
-                     Msg_MAX_LENGTH_MESSAGES_QUERY);
+                     Msg_MAX_BYTES_MESSAGES_QUERY);
         }
       Str_Concat (FilterFromToSubquery,"%'",
-                  Msg_MAX_LENGTH_MESSAGES_QUERY);
+                  Msg_MAX_BYTES_MESSAGES_QUERY);
      }
    else
       FilterFromToSubquery[0] = '\0';
@@ -1342,7 +1333,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
 static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMessages,long UsrCod,
                                                  long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long MsgNum,NumMsgs;
@@ -1582,8 +1573,8 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 
 static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
 
    /***** Get number of unread messages from database *****/
    if (FilterCrsCod >= 0)	// If origin course selected
@@ -1675,8 +1666,8 @@ static void Msg_ShowSentOrReceivedMessages (void)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Filter;
    extern const char *Txt_Update_messages;
-   char FilterFromToSubquery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
-   char Query[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char FilterFromToSubquery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
+   char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1871,7 +1862,7 @@ static void Msg_PutLinkToViewBannedUsers(void)
 static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCod,
                                                           long FilterCrsCod,const char *FilterFromToSubquery)
   {
-   char SubQuery[Msg_MAX_LENGTH_MESSAGES_QUERY + 1];
+   char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    char *PtrQuery;
    const char *StrUnreadMsg;
 
@@ -2592,7 +2583,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             TxtFromTo[Gbl.Msg.TypeOfMessages],
-            Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
+            Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * 3,Gbl.Msg.FilterFromTo);
 
    /***** Filter message content *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2604,7 +2595,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Message,
-            Msg_MAX_LENGTH_FILTER_CONTENT,Gbl.Msg.FilterContent);
+            Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** End table *****/
    fprintf (Gbl.F.Out,"</tr>"

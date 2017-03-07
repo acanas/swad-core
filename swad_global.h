@@ -602,10 +602,10 @@ struct Globals
          long CrsCod;
          char ShrtName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
         } Courses[Crs_MAX_COURSES_PER_USR];	// Distinct courses in my messages sent or received
-      long FilterCrsCod; 		// Show only messages sent from this course code
+      long FilterCrsCod;	// Show only messages sent from this course code
       char FilterCrsShrtName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
-      char FilterFromTo[Usr_MAX_LENGTH_USR_NAME_OR_SURNAME * 3 + 1];	// Show only messages from/to these users
-      char FilterContent[Msg_MAX_LENGTH_FILTER_CONTENT + 1];		// Show only messages that match this content
+      char FilterFromTo[Usr_MAX_BYTES_FULL_NAME + 1];		// Show only messages from/to these users
+      char FilterContent[Msg_MAX_BYTES_FILTER_CONTENT + 1];	// Show only messages that match this content
       bool ShowOnlyUnreadMsgs;	// Show only unread messages (this option is applicable only for received messages)
       long ExpandedMsgCod;	// The current expanded message code
       struct

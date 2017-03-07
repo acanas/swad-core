@@ -53,20 +53,20 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
-#define Usr_MAX_LENGTH_USR_NAME_OR_SURNAME	 32
-#define Usr_MAX_BYTES_NAME			 32
+#define Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME	 32
+#define Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME	 (Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * Str_MAX_BYTES_PER_CHAR)
 
-#define Usr_MAX_BYTES_SURNAMES			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME)
-						// Surname1         +' '+ Surname2
-#define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_NAME + 1 + Usr_MAX_BYTES_NAME +     6    + Usr_MAX_BYTES_NAME)
-						// Surname1         +' '+ Surname2           +  ','+' ' + FirstName
-						// Surname1         +' '+ Surname2           + '<br />' + FirstName
+#define Usr_MAX_BYTES_SURNAMES			(Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1 + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME)
+						// Surname1                         +' '+ Surname2
+#define Usr_MAX_BYTES_FULL_NAME			(Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1 + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME +     6    + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME)
+						// Surname1                         +' '+ Surname2                           +  ','+' ' + FirstName
+						// Surname1                         +' '+ Surname2                           + '<br />' + FirstName
 
-#define Usr_MAX_CHARS_USR_EMAIL		(128 - 1)
-#define Usr_MAX_BYTES_USR_EMAIL		Usr_MAX_CHARS_USR_EMAIL
+#define Usr_MAX_CHARS_USR_EMAIL	(128 - 1)
+#define Usr_MAX_BYTES_USR_EMAIL	Usr_MAX_CHARS_USR_EMAIL
 
-#define Usr_MAX_LENGTH_USR_LOGIN	(128 - 1)	// @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN		(128 - 1)
+#define Usr_MAX_CHARS_USR_LOGIN	Usr_MAX_CHARS_USR_EMAIL	// Maximum number of chars of @nick, email or ID
+#define Usr_MAX_BYTES_USR_LOGIN	(Usr_MAX_CHARS_USR_LOGIN * Str_MAX_BYTES_PER_CHAR)
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
 
@@ -134,9 +134,9 @@ struct UsrData
 			// >=0 ==> filled/calculated
 			//  <0 ==> not yet filled/calculated
    bool Accepted;	// User has accepted joining to current course?
-   char Surname1	[Usr_MAX_BYTES_NAME + 1];
-   char Surname2	[Usr_MAX_BYTES_NAME + 1];
-   char FirstName	[Usr_MAX_BYTES_NAME + 1];
+   char Surname1	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char Surname2	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FirstName	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char FullName	[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
    char Email		[Usr_MAX_BYTES_USR_EMAIL + 1];
@@ -188,9 +188,9 @@ struct UsrInList
    long UsrCod;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
-   char Surname1 [Usr_MAX_BYTES_NAME + 1];
-   char Surname2 [Usr_MAX_BYTES_NAME + 1];
-   char FirstName[Usr_MAX_BYTES_NAME + 1];
+   char Surname1 [Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char Surname2 [Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
+   char FirstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    Usr_Sex_t Sex;
    char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo

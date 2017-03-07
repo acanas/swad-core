@@ -55,7 +55,7 @@ extern struct Globals Gbl;
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-// strings are limited to Ntf_MAX_LENGTH_NOTIFY_EVENT characters
+// strings are limited to Ntf_MAX_BYTES_NOTIFY_EVENT characters
 
 const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {

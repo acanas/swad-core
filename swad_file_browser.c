@@ -11139,7 +11139,7 @@ void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t Qu
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-#define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100 + (Usr_MAX_BYTES_NAME + 1) * 3 + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
+#define Brw_MAX_BYTES_FILE_CONTENT_STR (100 + NAME_MAX + 100 + PATH_MAX + 100 + Usr_MAX_BYTES_FULL_NAME + 100 + Fil_MAX_BYTES_FILE_SIZE_STRING)
 
 void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
                                      char **ContentStr,

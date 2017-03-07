@@ -233,11 +233,11 @@ void Lnk_GetListLinks (void)
 
 	    /* Get the short name of the link (row[1]) */
 	    Str_Copy (Lnk->ShrtName,row[1],
-	              Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+	              Lnk_MAX_BYTES_LINK_SHRT_NAME);
 
 	    /* Get the full name of the link (row[2]) */
 	    Str_Copy (Lnk->FullName,row[2],
-	              Lnk_MAX_LENGTH_LINK_FULL_NAME);
+	              Lnk_MAX_BYTES_LINK_FULL_NAME);
 
 	    /* Get the URL of the link (row[3]) */
 	    Str_Copy (Lnk->WWW,row[3],
@@ -281,11 +281,11 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
 
          /* Get the short name of the link (row[0]) */
          Str_Copy (Lnk->ShrtName,row[0],
-                   Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+                   Lnk_MAX_BYTES_LINK_SHRT_NAME);
 
          /* Get the full name of the link (row[1]) */
          Str_Copy (Lnk->FullName,row[1],
-                   Lnk_MAX_LENGTH_LINK_FULL_NAME);
+                   Lnk_MAX_BYTES_LINK_FULL_NAME);
 
          /* Get the URL of the link (row[2]) */
          Str_Copy (Lnk->WWW,row[2],
@@ -358,7 +358,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Lnk_MAX_LENGTH_LINK_SHRT_NAME,Lnk->ShrtName,
+               Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -371,7 +371,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName,
+               Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -475,9 +475,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    struct Link *Lnk;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentLnkName = NULL;		// Initialized to avoid warning
-   char NewLnkName[Lnk_MAX_LENGTH_LINK_FULL_NAME + 1];
+   char NewLnkName[Lnk_MAX_BYTES_LINK_FULL_NAME + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
    switch (ShrtOrFullName)
@@ -485,13 +485,13 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Lnk_MAX_LENGTH_LINK_SHRT_NAME;
+         MaxBytes = Lnk_MAX_BYTES_LINK_SHRT_NAME;
          CurrentLnkName = Lnk->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Lnk_MAX_LENGTH_LINK_FULL_NAME;
+         MaxBytes = Lnk_MAX_BYTES_LINK_FULL_NAME;
          CurrentLnkName = Lnk->FullName;
          break;
      }
@@ -502,7 +502,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
       Lay_ShowErrorAndExit ("Code of institutional link is missing.");
 
    /* Get the new name for the link */
-   Par_GetParToText (ParamName,NewLnkName,MaxLength);
+   Par_GetParToText (ParamName,NewLnkName,MaxBytes);
 
    /***** Get from the database the old names of the link *****/
    Lnk_GetDataOfLinkByCod (Lnk);
@@ -549,7 +549,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Show the form again *****/
    Str_Copy (CurrentLnkName,NewLnkName,
-             MaxLength);
+             MaxBytes);
    Lnk_EditLinks ();
   }
 
@@ -645,7 +645,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Lnk_MAX_LENGTH_LINK_SHRT_NAME,Lnk->ShrtName);
+            Lnk_MAX_CHARS_LINK_SHRT_NAME,Lnk->ShrtName);
 
    /***** Link full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -654,7 +654,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Lnk_MAX_LENGTH_LINK_FULL_NAME,Lnk->FullName);
+            Lnk_MAX_CHARS_LINK_FULL_NAME,Lnk->FullName);
 
    /***** Link WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -720,10 +720,10 @@ void Lnk_RecFormNewLink (void)
 
    /***** Get parameters from form *****/
    /* Get link short name */
-   Par_GetParToText ("ShortName",Lnk->ShrtName,Lnk_MAX_LENGTH_LINK_SHRT_NAME);
+   Par_GetParToText ("ShortName",Lnk->ShrtName,Lnk_MAX_BYTES_LINK_SHRT_NAME);
 
    /* Get link full name */
-   Par_GetParToText ("FullName",Lnk->FullName,Lnk_MAX_LENGTH_LINK_FULL_NAME);
+   Par_GetParToText ("FullName",Lnk->FullName,Lnk_MAX_BYTES_LINK_FULL_NAME);
 
    /* Get link URL */
    Par_GetParToText ("WWW",Lnk->WWW,Cns_MAX_BYTES_WWW);

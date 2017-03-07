@@ -261,7 +261,7 @@ void Pwd_ShowFormSendNewPwd (void)
                       " size=\"8\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
-            Usr_MAX_LENGTH_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
+            Usr_MAX_CHARS_USR_LOGIN,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);

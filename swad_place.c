@@ -317,11 +317,11 @@ void Plc_GetListPlaces (void)
 
          /* Get the short name of the place (row[1]) */
          Str_Copy (Plc->ShrtName,row[1],
-                   Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+                   Plc_MAX_BYTES_PLACE_SHRT_NAME);
 
          /* Get the full name of the place (row[2]) */
          Str_Copy (Plc->FullName,row[2],
-                   Plc_MAX_LENGTH_PLACE_FULL_NAME);
+                   Plc_MAX_BYTES_PLACE_FULL_NAME);
 
          /* Get number of centres in this place (row[3]) */
          if (sscanf (row[3],"%u",&Plc->NumCtrs) != 1)
@@ -357,16 +357,16 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
    if (Plc->PlcCod < 0)
      {
       Str_Copy (Plc->ShrtName,Txt_Place_unspecified,
-                Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+                Plc_MAX_BYTES_PLACE_SHRT_NAME);
       Str_Copy (Plc->FullName,Txt_Place_unspecified,
-                Plc_MAX_LENGTH_PLACE_FULL_NAME);
+                Plc_MAX_BYTES_PLACE_FULL_NAME);
      }
    else if (Plc->PlcCod == 0)
      {
       Str_Copy (Plc->ShrtName,Txt_Another_place,
-                Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+                Plc_MAX_BYTES_PLACE_SHRT_NAME);
       Str_Copy (Plc->FullName,Txt_Another_place,
-                Plc_MAX_LENGTH_PLACE_FULL_NAME);
+                Plc_MAX_BYTES_PLACE_FULL_NAME);
      }
    else if (Plc->PlcCod > 0)
      {
@@ -396,11 +396,11 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
 
          /* Get the short name of the place (row[0]) */
          Str_Copy (Plc->ShrtName,row[0],
-                   Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+                   Plc_MAX_BYTES_PLACE_SHRT_NAME);
 
          /* Get the full name of the place (row[1]) */
          Str_Copy (Plc->FullName,row[1],
-                   Plc_MAX_LENGTH_PLACE_FULL_NAME);
+                   Plc_MAX_BYTES_PLACE_FULL_NAME);
 
          /* Get number of centres in this place (row[2]) */
          if (sscanf (row[2],"%u",&Plc->NumCtrs) != 1)
@@ -479,7 +479,7 @@ static void Plc_ListPlacesForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_LENGTH_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
+               Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -491,7 +491,7 @@ static void Plc_ListPlacesForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
+               Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -595,9 +595,9 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    struct Place *Plc;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentPlcName = NULL;		// Initialized to avoid warning
-   char NewPlcName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
+   char NewPlcName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
 
    Plc = &Gbl.Plcs.EditingPlc;
    switch (ShrtOrFullName)
@@ -605,13 +605,13 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Plc_MAX_LENGTH_PLACE_SHRT_NAME;
+         MaxBytes = Plc_MAX_BYTES_PLACE_SHRT_NAME;
          CurrentPlcName = Plc->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Plc_MAX_LENGTH_PLACE_FULL_NAME;
+         MaxBytes = Plc_MAX_BYTES_PLACE_FULL_NAME;
          CurrentPlcName = Plc->FullName;
          break;
      }
@@ -622,7 +622,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
       Lay_ShowErrorAndExit ("Code of place is missing.");
 
    /* Get the new name for the place */
-   Par_GetParToText (ParamName,NewPlcName,MaxLength);
+   Par_GetParToText (ParamName,NewPlcName,MaxBytes);
 
    /***** Get from the database the old names of the place *****/
    Plc_GetDataOfPlaceByCod (Plc);
@@ -669,7 +669,7 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Show the form again *****/
    Str_Copy (CurrentPlcName,NewPlcName,
-             MaxLength);
+             MaxBytes);
    Plc_EditPlaces ();
   }
 
@@ -730,7 +730,7 @@ static void Plc_PutFormToCreatePlace (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Plc_MAX_LENGTH_PLACE_SHRT_NAME,Plc->ShrtName);
+            Plc_MAX_CHARS_PLACE_SHRT_NAME,Plc->ShrtName);
 
    /***** Place full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -740,7 +740,7 @@ static void Plc_PutFormToCreatePlace (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Plc_MAX_LENGTH_PLACE_FULL_NAME,Plc->FullName);
+            Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
@@ -795,10 +795,10 @@ void Plc_RecFormNewPlace (void)
 
    /***** Get parameters from form *****/
    /* Get place short name */
-   Par_GetParToText ("ShortName",Plc->ShrtName,Plc_MAX_LENGTH_PLACE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Plc->ShrtName,Plc_MAX_BYTES_PLACE_SHRT_NAME);
 
    /* Get place full name */
-   Par_GetParToText ("FullName",Plc->FullName,Plc_MAX_LENGTH_PLACE_FULL_NAME);
+   Par_GetParToText ("FullName",Plc->FullName,Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    if (Plc->ShrtName[0] && Plc->FullName[0])	// If there's a place name
      {

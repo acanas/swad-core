@@ -70,18 +70,18 @@ static bool Par_CheckIsParamCanBeUsedInGETMethod (const char *ParamName);
 /*** Read all parameters passed to this CGI and store for later processing ***/
 /*****************************************************************************/
 
-#define Par_MAX_LENGTH_METHOD		(256 - 1)
-#define Par_MAX_LENGTH_CONTENT_TYPE	(256 - 1)
+#define Par_MAX_BYTES_METHOD		(128 - 1)
+#define Par_MAX_BYTES_CONTENT_TYPE	(128 - 1)
 
 bool Par_GetQueryString (void)
   {
-   char Method[Par_MAX_LENGTH_METHOD + 1];
-   char ContentType[Par_MAX_LENGTH_CONTENT_TYPE + 1];
+   char Method[Par_MAX_BYTES_METHOD + 1];
+   char ContentType[Par_MAX_BYTES_CONTENT_TYPE + 1];
    char UnsignedLongStr[10 + 1];
    unsigned long UnsignedLong;
 
    Str_Copy (Method,getenv ("REQUEST_METHOD"),
-             Par_MAX_LENGTH_METHOD);
+             Par_MAX_BYTES_METHOD);
 
    if (!strcmp (Method,"GET"))
      {
@@ -122,7 +122,7 @@ bool Par_GetQueryString (void)
          return false;
 
       Str_Copy (ContentType,getenv ("CONTENT_TYPE"),
-                Par_MAX_LENGTH_CONTENT_TYPE);
+                Par_MAX_BYTES_CONTENT_TYPE);
 
       if (!strncmp (ContentType,"multipart/form-data",strlen ("multipart/form-data")))
         {

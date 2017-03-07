@@ -31,15 +31,18 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Plc_MAX_LENGTH_PLACE_SHRT_NAME	32
-#define Plc_MAX_LENGTH_PLACE_FULL_NAME	127
+#define Plc_MAX_CHARS_PLACE_SHRT_NAME	32
+#define Plc_MAX_BYTES_PLACE_SHRT_NAME	(Plc_MAX_CHARS_PLACE_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Plc_MAX_CHARS_PLACE_FULL_NAME	(128 - 1)
+#define Plc_MAX_BYTES_PLACE_FULL_NAME	(Plc_MAX_CHARS_PLACE_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 struct Place
   {
    long PlcCod;
    long InsCod;
-   char ShrtName[Plc_MAX_LENGTH_PLACE_SHRT_NAME + 1];
-   char FullName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
+   char ShrtName[Plc_MAX_BYTES_PLACE_SHRT_NAME + 1];
+   char FullName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
    unsigned NumCtrs;
   };
 

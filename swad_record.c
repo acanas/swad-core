@@ -2959,7 +2959,7 @@ static void Rec_ShowSurname1 (struct UsrData *UsrDat,
 	                 " id=\"Surname1\" name=\"Surname1\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\"",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 	       UsrDat->Surname1);
       if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
          fprintf (Gbl.F.Out," required=\"required\"");
@@ -2995,7 +2995,7 @@ static void Rec_ShowSurname2 (struct UsrData *UsrDat,
 	                 " id=\"Surname2\" name=\"Surname2\""
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\" />",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 	       UsrDat->Surname2);
    else if (UsrDat->Surname2[0])
       fprintf (Gbl.F.Out,"<strong>%s</strong>",UsrDat->Surname2);
@@ -3032,7 +3032,7 @@ static void Rec_ShowFirstName (struct UsrData *UsrDat,
 	                 " id=\"FirstName\" name=\"FirstName\""
                          " maxlength=\"%u\" value=\"%s\""
 			 " class=\"REC_C2_BOT_INPUT\"",
-	       Usr_MAX_LENGTH_USR_NAME_OR_SURNAME,
+	       Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME,
 	       UsrDat->FirstName);
       if (TypeOfView == Rec_SHA_MY_RECORD_FORM)
          fprintf (Gbl.F.Out," required=\"required\"");
@@ -3581,26 +3581,31 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 
 void Rec_GetUsrNameFromRecordForm (struct UsrData *UsrDat)
   {
-   char Surname1 [Usr_MAX_BYTES_NAME + 1];	// Temporary surname 1
-   char FirstName[Usr_MAX_BYTES_NAME + 1];	// Temporary first name
+   char Surname1 [Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];	// Temporary surname 1
+   char FirstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];	// Temporary first name
 
    /***** Get surname 1 *****/
-   Par_GetParToText ("Surname1",Surname1,Usr_MAX_BYTES_NAME);
+   Par_GetParToText ("Surname1",Surname1,
+                     Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (Surname1);
    // Surname 1 is mandatory, so avoid overwriting surname 1 with empty string
    if (Surname1[0])		// New surname 1 not empty
-      Str_Copy (UsrDat->Surname1,Surname1,Usr_MAX_BYTES_NAME);
+      Str_Copy (UsrDat->Surname1,Surname1,
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
    /***** Get surname 2 *****/
-   Par_GetParToText ("Surname2",UsrDat->Surname2,Usr_MAX_BYTES_NAME);
+   Par_GetParToText ("Surname2",UsrDat->Surname2,
+                     Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (UsrDat->Surname2);
 
    /***** Get first name *****/
-   Par_GetParToText ("FirstName",FirstName,Usr_MAX_BYTES_NAME);
+   Par_GetParToText ("FirstName",FirstName,
+                     Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_ConvertToTitleType (FirstName);
    // First name is mandatory, so avoid overwriting first name with empty string
    if (Surname1[0])		// New first name not empty
-      Str_Copy (UsrDat->FirstName,FirstName,Usr_MAX_BYTES_NAME);
+      Str_Copy (UsrDat->FirstName,FirstName,
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
    /***** Build full name *****/
    Usr_BuildFullName (UsrDat);

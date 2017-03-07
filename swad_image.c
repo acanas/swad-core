@@ -351,13 +351,13 @@ void Img_SetParamNames (struct ParamUploadImg *ParamUploadImg,int NumImgInForm)
    if (NumImgInForm < 0)	// One unique image in form ==> no suffix needed
      {
       Str_Copy (ParamUploadImg->Action,"ImgAct",
-                Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+                Img_MAX_BYTES_PARAM_UPLOAD_IMG);
       Str_Copy (ParamUploadImg->File  ,"ImgFil",
-                Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+                Img_MAX_BYTES_PARAM_UPLOAD_IMG);
       Str_Copy (ParamUploadImg->Title ,"ImgTit",
-                Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+                Img_MAX_BYTES_PARAM_UPLOAD_IMG);
       Str_Copy (ParamUploadImg->URL   ,"ImgURL",
-                Img_MAX_LENGTH_PARAM_UPLOAD_IMG);
+                Img_MAX_BYTES_PARAM_UPLOAD_IMG);
      }
    else				// Several images in form ==> add suffix
      {

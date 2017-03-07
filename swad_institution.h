@@ -55,8 +55,11 @@ typedef enum
 
 #define Ins_MAX_INSTITS_PER_USR	 10	// Used in list of my institutions
 
-#define Ins_MAX_LENGTH_INSTIT_SHRT_NAME	32
-#define Ins_MAX_LENGTH_INSTIT_FULL_NAME	1024
+#define Ins_MAX_CHARS_INSTIT_SHRT_NAME	32
+#define Ins_MAX_BYTES_INSTIT_SHRT_NAME	(Ins_MAX_CHARS_INSTIT_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Ins_MAX_CHARS_INSTIT_FULL_NAME	(128 - 1)
+#define Ins_MAX_BYTES_INSTIT_FULL_NAME	(Ins_MAX_CHARS_INSTIT_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 struct Instit
   {
@@ -64,8 +67,8 @@ struct Instit
    long CtyCod;
    Ins_Status_t Status;		// Institution status
    long RequesterUsrCod;	// User code of the person who requested the creation of this institution
-   char ShrtName[Ins_MAX_LENGTH_INSTIT_SHRT_NAME + 1];
-   char FullName[Ins_MAX_LENGTH_INSTIT_FULL_NAME + 1];
+   char ShrtName[Ins_MAX_BYTES_INSTIT_SHRT_NAME + 1];
+   char FullName[Ins_MAX_BYTES_INSTIT_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToIns;
    unsigned NumCtrs;

@@ -79,7 +79,7 @@ typedef enum
   } Net_WebsAndSocialNetworks_t;
 #define Net_WEB_SOCIAL_NET_DEFAULT Net_WWW
 
-#define Net_MAX_LENGTH_NETWORK_NAME 32
+#define Net_MAX_BYTES_NETWORK_NAME 32
 
 const char *Net_WebsAndSocialNetworksDB[Net_NUM_WEBS_AND_SOCIAL_NETWORKS] =
   {
@@ -443,7 +443,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    unsigned NumRows;
    unsigned NumRow;
    Net_WebsAndSocialNetworks_t Web;
-   char NetName[Net_MAX_LENGTH_NETWORK_NAME + 1];
+   char NetName[Net_MAX_BYTES_NETWORK_NAME + 1];
    unsigned NumUsrsTotalInPlatform;
    unsigned NumUsrs;
 
@@ -555,7 +555,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
 
       /* Get web / social network (row[0]) */
       Str_Copy (NetName,row[0],
-                Net_MAX_LENGTH_NETWORK_NAME);
+                Net_MAX_BYTES_NETWORK_NAME);
       for (Web = (Net_WebsAndSocialNetworks_t) 0;
 	   Web < Net_NUM_WEBS_AND_SOCIAL_NETWORKS;
 	   Web++)

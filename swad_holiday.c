@@ -310,7 +310,7 @@ void Hld_GetListHolidays (void)
 
 	    /* Get the full name of the place (row[2]) */
 	    Str_Copy (Hld->PlaceFullName,row[2],
-	              Plc_MAX_LENGTH_PLACE_FULL_NAME);
+	              Plc_MAX_BYTES_PLACE_FULL_NAME);
 
 	    /* Get type (row[3]) */
 	    Hld->HldTyp = Hld_GetTypeOfHoliday (row[3]);
@@ -335,7 +335,7 @@ void Hld_GetListHolidays (void)
 
 	    /* Get the name of the holiday/non school period (row[6]) */
 	    Str_Copy (Hld->Name,row[6],
-	              Hld_MAX_LENGTH_HOLIDAY_NAME);
+	              Hld_MAX_BYTES_HOLIDAY_NAME);
 	   }
 	}
 
@@ -402,7 +402,7 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 
       /* Get the full name of the place (row[1]) */
       Str_Copy (Hld->PlaceFullName,row[1],
-                Plc_MAX_LENGTH_PLACE_FULL_NAME);
+                Plc_MAX_BYTES_PLACE_FULL_NAME);
 
       /* Get type (row[2]) */
       Hld->HldTyp = Hld_GetTypeOfHoliday (row[2]);
@@ -427,7 +427,7 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
 
       /* Get the name of the holiday/non school period (row[5]) */
       Str_Copy (Hld->Name,row[5],
-                Hld_MAX_LENGTH_HOLIDAY_NAME);
+                Hld_MAX_BYTES_HOLIDAY_NAME);
      }
 
   /***** Free structure that stores the query result *****/
@@ -596,7 +596,7 @@ static void Hld_ListHolidaysForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
 	                 " size=\"20\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name,Gbl.Form.Id);
+               Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
@@ -694,7 +694,7 @@ void Hld_ChangeHolidayPlace (void)
    /***** Show the form again *****/
    Hld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
-             Plc_MAX_LENGTH_PLACE_FULL_NAME);
+             Plc_MAX_BYTES_PLACE_FULL_NAME);
    Hld_EditHolidays ();
   }
 
@@ -842,7 +842,7 @@ void Hld_RenameHoliday (void)
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
    char Query[512];
    struct Holiday *Hld;
-   char NewHldName[Hld_MAX_LENGTH_HOLIDAY_NAME + 1];
+   char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
    Hld = &Gbl.Hlds.EditingHld;
 
@@ -852,7 +852,7 @@ void Hld_RenameHoliday (void)
       Lay_ShowErrorAndExit ("Code of holiday is missing.");
 
    /* Get the new name for the holiday */
-   Par_GetParToText ("Name",NewHldName,Hld_MAX_LENGTH_HOLIDAY_NAME);
+   Par_GetParToText ("Name",NewHldName,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Get from the database the old names of the holiday *****/
    Hld_GetDataOfHolidayByCod (Hld);
@@ -890,7 +890,7 @@ void Hld_RenameHoliday (void)
 
    /***** Show the form again *****/
    Str_Copy (Hld->Name,NewHldName,
-             Hld_MAX_LENGTH_HOLIDAY_NAME);
+             Hld_MAX_BYTES_HOLIDAY_NAME);
    Hld_EditHolidays ();
   }
 
@@ -1005,7 +1005,7 @@ static void Hld_PutFormToCreateHoliday (void)
                       "</td>"
                       "<td></td>"
                       "</tr>",
-            Hld_MAX_LENGTH_HOLIDAY_NAME,Hld->Name);
+            Hld_MAX_CHARS_HOLIDAY_NAME,Hld->Name);
 
    /***** Send button and end of frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_holiday);
@@ -1099,7 +1099,7 @@ void Hld_RecFormNewHoliday (void)
      }
 
    /***** Get holiday name *****/
-   Par_GetParToText ("Name",Hld->Name,Hld_MAX_LENGTH_HOLIDAY_NAME);
+   Par_GetParToText ("Name",Hld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
 
    /***** Create the new holiday or write warning message *****/
    if (Hld->Name[0])	// If there's a holiday name

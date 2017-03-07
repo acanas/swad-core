@@ -33,9 +33,10 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Ntf_MAX_LENGTH_NOTIFY_EVENT 32
+#define Ntf_MAX_BYTES_NOTIFY_EVENT 32
 
-#define Ntf_MAX_LENGTH_NOTIFY_LOCATION (1024 - 1)
+#define Ntf_MAX_CHARS_NOTIFY_LOCATION	(128 - 1)
+#define Ntf_MAX_BYTES_NOTIFY_LOCATION	(1024 + Ntf_MAX_CHARS_NOTIFY_LOCATION * Str_MAX_BYTES_PER_CHAR)
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

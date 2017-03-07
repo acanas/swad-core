@@ -1884,7 +1884,8 @@ static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)
 /*************** Put a link to calculate the stats of degrees ****************/
 /*****************************************************************************/
 
-#define Pho_MAX_LENGTH_ESTIMATED_TIME (64 - 1)
+#define Pho_MAX_BYTES_ESTIMATED_TIME (128 - 1)
+
 static void Pho_PutLinkToCalculateDegreeStats (void)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -1896,7 +1897,7 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
    unsigned NumDeg;
    struct Degree Deg;
    long EstimatedTimeToComputeAvgPhotoInMicroseconds;
-   char StrEstimatedTimeToComputeAvgPhoto[Pho_MAX_LENGTH_ESTIMATED_TIME + 1];
+   char StrEstimatedTimeToComputeAvgPhoto[Pho_MAX_BYTES_ESTIMATED_TIME + 1];
 
    if ((Deg.DegCod = Pho_GetDegWithAvgPhotoLeastRecentlyUpdated ()) > 0)
      {
@@ -1931,9 +1932,10 @@ static void Pho_PutLinkToCalculateDegreeStats (void)
          EstimatedTimeToComputeAvgPhotoInMicroseconds = Pho_GetTimeToComputeAvgPhoto (Degs.Lst[NumDeg].DegCod);
          if (EstimatedTimeToComputeAvgPhotoInMicroseconds == -1L)
             Str_Copy (StrEstimatedTimeToComputeAvgPhoto,Txt_unknown_TIME,
-                      Pho_MAX_LENGTH_ESTIMATED_TIME);
+                      Pho_MAX_BYTES_ESTIMATED_TIME);
          else
-            Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,EstimatedTimeToComputeAvgPhotoInMicroseconds);
+            Sta_WriteTime (StrEstimatedTimeToComputeAvgPhoto,
+                           EstimatedTimeToComputeAvgPhotoInMicroseconds);
 
          fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s (%s: %s)</option>",
                   Degs.Lst[NumDeg].DegCod,

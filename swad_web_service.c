@@ -554,11 +554,11 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 
    /* Get user's name */
    Str_Copy (UsrDat->Surname1,row[0],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->Surname2,row[1],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->FirstName,row[2],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
    /* Get user's photo */
    Str_Copy (UsrDat->Photo,row[3],
@@ -784,9 +784,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_LENGTH_WS_KEY + 1);
    loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
    loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
-   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginByUserPasswordKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginByUserPasswordKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginByUserPasswordKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
    loginByUserPasswordKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
 
@@ -888,13 +888,13 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 
       Str_Copy (loginByUserPasswordKeyOut->userSurname1,
                 Gbl.Usrs.Me.UsrDat.Surname1,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
       Str_Copy (loginByUserPasswordKeyOut->userSurname2,
                 Gbl.Usrs.Me.UsrDat.Surname2,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
       Str_Copy (loginByUserPasswordKeyOut->userFirstname,
                 Gbl.Usrs.Me.UsrDat.FirstName,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       Str_Copy (loginByUserPasswordKeyOut->userPhoto,PhotoURL,
@@ -950,9 +950,9 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_LENGTH_WS_KEY + 1);
    loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
    loginBySessionKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
-   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
-   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+   loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginBySessionKeyOut->userSurname1   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
+   loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
    loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Deg_MAX_BYTES_DEGREE_FULL_NAME + 1);
@@ -1041,13 +1041,13 @@ int swad__loginBySessionKey (struct soap *soap,
 
       Str_Copy (loginBySessionKeyOut->userSurname1,
                 Gbl.Usrs.Me.UsrDat.Surname1,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
       Str_Copy (loginBySessionKeyOut->userSurname2,
                 Gbl.Usrs.Me.UsrDat.Surname2,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
       Str_Copy (loginBySessionKeyOut->userFirstname,
                 Gbl.Usrs.Me.UsrDat.FirstName,
-                Usr_MAX_BYTES_NAME);
+                Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
       Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,PhotoURL);
       Str_Copy (loginBySessionKeyOut->userPhoto,PhotoURL,
@@ -2871,10 +2871,10 @@ int swad__getNotifications (struct soap *soap,
 
          /* Get notification event type (row[1]) */
          NotifyEvent = Ntf_GetNotifyEventFromDB ((const char *) row[1]);
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType = (char *) soap_malloc (Gbl.soap,Ntf_MAX_LENGTH_NOTIFY_EVENT + 1);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType = (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_EVENT + 1);
          Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].eventType,
                    Ntf_WSNotifyEvents[NotifyEvent],
-                   Ntf_MAX_LENGTH_NOTIFY_EVENT);
+                   Ntf_MAX_BYTES_NOTIFY_EVENT);
 
          /* Get time of the event (row[2]) */
          EventTime = 0L;
@@ -2896,20 +2896,20 @@ int swad__getNotifications (struct soap *soap,
                       Gbl.Usrs.Other.UsrDat.Nickname,
                       Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname1,
                       Gbl.Usrs.Other.UsrDat.Surname1,
-                      Usr_MAX_BYTES_NAME);
+                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userSurname2,
                       Gbl.Usrs.Other.UsrDat.Surname2,
-                      Usr_MAX_BYTES_NAME);
+                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
-            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_NAME + 1);
+            getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].userFirstname,
                       Gbl.Usrs.Other.UsrDat.FirstName,
-                      Usr_MAX_BYTES_NAME);
+                      Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
             getNotificationsOut->notificationsArray.__ptr[NumNotif].userPhoto = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
@@ -2943,7 +2943,7 @@ int swad__getNotifications (struct soap *soap,
          getNotificationsOut->notificationsArray.__ptr[NumNotif].eventCode = (int) Cod;
 
          /* Set location */
-         getNotificationsOut->notificationsArray.__ptr[NumNotif].location = (char *) soap_malloc (Gbl.soap,Ntf_MAX_LENGTH_NOTIFY_LOCATION + 1);
+         getNotificationsOut->notificationsArray.__ptr[NumNotif].location = (char *) soap_malloc (Gbl.soap,Ntf_MAX_BYTES_NOTIFY_LOCATION + 1);
 
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
@@ -2971,7 +2971,7 @@ int swad__getNotifications (struct soap *soap,
                      Txt_Institution,Ins.ShrtName);
          else
             Str_Copy (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"-",
-                      Ntf_MAX_LENGTH_NOTIFY_LOCATION);
+                      Ntf_MAX_BYTES_NOTIFY_LOCATION);
 
          /* Get status (row[9]) */
          if (sscanf (row[9],"%u",&Status) != 1)

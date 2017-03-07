@@ -34,7 +34,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Hld_MAX_LENGTH_HOLIDAY_NAME	127
+#define Hld_MAX_CHARS_HOLIDAY_NAME	(128 - 1)
+#define Hld_MAX_BYTES_HOLIDAY_NAME	(Hld_MAX_CHARS_HOLIDAY_NAME * Str_MAX_BYTES_PER_CHAR)
 
 #define Hld_NUM_TYPES_HOLIDAY 2
 typedef enum
@@ -54,11 +55,11 @@ struct Holiday
   {
    long HldCod;
    long PlcCod;
-   char PlaceFullName[Plc_MAX_LENGTH_PLACE_FULL_NAME + 1];
+   char PlaceFullName[Plc_MAX_BYTES_PLACE_FULL_NAME + 1];
    Hld_HolidayType_t HldTyp;
    struct Date StartDate;
    struct Date EndDate;
-   char Name[Hld_MAX_LENGTH_HOLIDAY_NAME + 1];
+   char Name[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
   };
 
 #define Hld_NUM_ORDERS 2

@@ -31,9 +31,12 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Plg_MAX_LENGTH_PLUGIN_NAME		 127
+#define Plg_MAX_LENGTH_PLUGIN_NAME		(128 - 1)
+
 #define Plg_MAX_LENGTH_PLUGIN_DESCRIPTION       1023
+
 #define Plg_MAX_LENGTH_PLUGIN_LOGO		  16
+
 #define Plg_MAX_LENGTH_PLUGIN_APP_KEY		  16
 
 /*****************************************************************************/

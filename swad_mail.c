@@ -67,8 +67,8 @@ extern struct Globals Gbl;
 static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1]);
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1]);
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1]);
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
@@ -288,11 +288,11 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
          /* Get the mail domain (row[1]) */
          Str_Copy (Mai->Domain,row[1],
-                   Mai_MAX_LENGTH_MAIL_DOMAIN);
+                   Mai_MAX_BYTES_MAIL_DOMAIN);
 
          /* Get the mail domain info (row[2]) */
          Str_Copy (Mai->Info,row[2],
-                   Mai_MAX_LENGTH_MAIL_INFO);
+                   Mai_MAX_BYTES_MAIL_INFO);
 
          /* Get number of users (row[3]) */
          if (sscanf (row[3],"%u",&(Mai->NumUsrs)) != 1)
@@ -317,7 +317,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
   {
-   char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1];
+   char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1];
 
    /***** Check #1: is my email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
@@ -332,7 +332,7 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
 /********************** Get mailbox from email address ***********************/
 /*****************************************************************************/
 
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1])
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1])
   {
    const char *Ptr;
 
@@ -344,7 +344,7 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_
          Ptr++;					// Skip '@'
          if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
             Str_Copy (MailDomain,Ptr,
-                      Mai_MAX_LENGTH_MAIL_DOMAIN);
+                      Mai_MAX_BYTES_MAIL_DOMAIN);
         }
   }
 
@@ -352,7 +352,7 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_LENGTH_
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_LENGTH_MAIL_DOMAIN + 1])
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1])
   {
    char Query[512];
 
@@ -414,11 +414,11 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
 
          /* Get the short name of the mail (row[0]) */
          Str_Copy (Mai->Domain,row[0],
-                   Mai_MAX_LENGTH_MAIL_DOMAIN);
+                   Mai_MAX_BYTES_MAIL_DOMAIN);
 
          /* Get the full name of the mail (row[1]) */
          Str_Copy (Mai->Info,row[1],
-                   Mai_MAX_LENGTH_MAIL_INFO);
+                   Mai_MAX_BYTES_MAIL_INFO);
         }
 
       /***** Free structure that stores the query result *****/
@@ -487,7 +487,7 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain,
+               Mai_MAX_CHARS_MAIL_DOMAIN,Mai->Domain,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -499,7 +499,7 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Info\""
 	                 " size=\"40\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Mai_MAX_LENGTH_MAIL_INFO,Mai->Info,
+               Mai_MAX_CHARS_MAIL_INFO,Mai->Info,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -596,9 +596,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    struct Mail *Mai;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentMaiName = NULL;		// Initialized to avoid warning
-   char NewMaiName[Mai_MAX_LENGTH_MAIL_INFO + 1];
+   char NewMaiName[Mai_MAX_BYTES_MAIL_INFO + 1];
 
    Mai = &Gbl.Mails.EditingMai;
    switch (ShrtOrFullName)
@@ -606,13 +606,13 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "Domain";
          FieldName = "Domain";
-         MaxLength = Mai_MAX_LENGTH_MAIL_DOMAIN;
+         MaxBytes = Mai_MAX_BYTES_MAIL_DOMAIN;
          CurrentMaiName = Mai->Domain;
          break;
       case Cns_FULL_NAME:
          ParamName = "Info";
          FieldName = "Info";
-         MaxLength = Mai_MAX_LENGTH_MAIL_INFO;
+         MaxBytes = Mai_MAX_BYTES_MAIL_INFO;
          CurrentMaiName = Mai->Info;
          break;
      }
@@ -623,7 +623,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       Lay_ShowErrorAndExit ("Code of mail domain is missing.");
 
    /* Get the new name for the mail */
-   Par_GetParToText (ParamName,NewMaiName,MaxLength);
+   Par_GetParToText (ParamName,NewMaiName,MaxBytes);
 
    /***** Get from the database the old names of the mail *****/
    Mai_GetDataOfMailDomainByCod (Mai);
@@ -670,7 +670,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Show the form again *****/
    Str_Copy (CurrentMaiName,NewMaiName,
-             MaxLength);
+             MaxBytes);
    Mai_EditMailDomains ();
   }
 
@@ -728,7 +728,7 @@ static void Mai_PutFormToCreateMailDomain (void)
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Mai_MAX_LENGTH_MAIL_DOMAIN,Mai->Domain);
+            Mai_MAX_CHARS_MAIL_DOMAIN,Mai->Domain);
 
    /***** Mail domain info *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -738,7 +738,7 @@ static void Mai_PutFormToCreateMailDomain (void)
                       "</td>"
                       "<td></td>"
                       "</tr>",
-            Mai_MAX_LENGTH_MAIL_INFO,Mai->Info);
+            Mai_MAX_CHARS_MAIL_INFO,Mai->Info);
 
 
    /***** Send button and end frame *****/
@@ -792,10 +792,10 @@ void Mai_RecFormNewMailDomain (void)
 
    /***** Get parameters from form *****/
    /* Get mail short name */
-   Par_GetParToText ("Domain",Mai->Domain,Mai_MAX_LENGTH_MAIL_DOMAIN);
+   Par_GetParToText ("Domain",Mai->Domain,Mai_MAX_BYTES_MAIL_DOMAIN);
 
    /* Get mail full name */
-   Par_GetParToText ("Info",Mai->Info,Mai_MAX_LENGTH_MAIL_INFO);
+   Par_GetParToText ("Info",Mai->Info,Mai_MAX_BYTES_MAIL_INFO);
 
    if (Mai->Domain[0] && Mai->Info[0])	// If there's a mail name
      {
@@ -846,7 +846,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
 /****** List the emails of all the students to creates an email message ******/
 /*****************************************************************************/
 
-#define Mai_MAX_LENGTH_STR_ADDR (32 * 5000)
+#define Mai_MAX_BYTES_STR_ADDR (256 * 1024 - 1)
 
 void Mai_ListEmails (void)
   {
@@ -859,7 +859,7 @@ void Mai_ListEmails (void)
    unsigned NumUsr;
    unsigned NumStdsWithEmail;
    unsigned NumAcceptedStdsWithEmail;
-   char StrAddresses[Mai_MAX_LENGTH_STR_ADDR + 1];
+   char StrAddresses[Mai_MAX_BYTES_STR_ADDR + 1];	// TODO: Use malloc depending on the number of students
    unsigned int LengthStrAddr = 0;
    struct UsrData UsrDat;
 
@@ -906,16 +906,16 @@ void Mai_ListEmails (void)
 		    {
 		     fprintf (Gbl.F.Out,", ");
 		     LengthStrAddr ++;
-		     if (LengthStrAddr > Mai_MAX_LENGTH_STR_ADDR)
+		     if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 			Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		     Str_Concat (StrAddresses,",",
-		                 Mai_MAX_LENGTH_STR_ADDR);
+		                 Mai_MAX_BYTES_STR_ADDR);
 		    }
 		  LengthStrAddr += strlen (UsrDat.Email);
-		  if (LengthStrAddr > Mai_MAX_LENGTH_STR_ADDR)
+		  if (LengthStrAddr > Mai_MAX_BYTES_STR_ADDR)
 		     Lay_ShowErrorAndExit ("The space allocated to store email addresses is full.");
 		  Str_Concat (StrAddresses,UsrDat.Email,
-		              Mai_MAX_LENGTH_STR_ADDR);
+		              Mai_MAX_BYTES_STR_ADDR);
 		  fprintf (Gbl.F.Out,"<a href=\"mailto:%s?subject=%s\">%s</a>",
 			   UsrDat.Email,Gbl.CurrentCrs.Crs.FullName,UsrDat.Email);
 

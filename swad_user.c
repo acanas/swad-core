@@ -500,11 +500,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get name */
    Str_Copy (UsrDat->Surname1,row[2],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->Surname2,row[3],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->FirstName,row[4],
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
    /* Get sex */
    UsrDat->Sex = Usr_GetSexFromStr (row[5]);
@@ -2054,7 +2054,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Gbl.Prefs.IconsURL,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
-            Usr_MAX_LENGTH_USR_LOGIN,
+            Usr_MAX_CHARS_USR_LOGIN,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin);
 
@@ -4887,15 +4887,15 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 
             /* Get user's surname 1 (row[3]) */
 	    Str_Copy (UsrInList->Surname1,row[3],
-	              Usr_MAX_BYTES_NAME);
+	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             /* Get user's surname 2 (row[4]) */
 	    Str_Copy (UsrInList->Surname2,row[4],
-	              Usr_MAX_BYTES_NAME);
+	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             /* Get user's first name (row[5]) */
 	    Str_Copy (UsrInList->FirstName,row[5],
-	              Usr_MAX_BYTES_NAME);
+	              Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
 
             /* Get user's sex (row[6]) */
             UsrInList->Sex = Usr_GetSexFromStr (row[6]);
@@ -5004,11 +5004,11 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
    Str_Copy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod,
              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    Str_Copy (UsrDat->Surname1,UsrInList->Surname1,
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->Surname2,UsrInList->Surname2,
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    Str_Copy (UsrDat->FirstName,UsrInList->FirstName,
-             Usr_MAX_BYTES_NAME);
+             Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME);
    UsrDat->Sex                   = UsrInList->Sex;
    Str_Copy (UsrDat->Photo,UsrInList->Photo,
              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
