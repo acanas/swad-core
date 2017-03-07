@@ -77,7 +77,7 @@ extern const char Str_BIN_TO_BASE64URL[64];
 
 // Pointers to PlainText and EncryptedText can point to the same place
 void Cry_EncryptSHA256Base64 (const char *PlainText,
-                              char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
+                              char EncryptedText[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    int i,j;
    unsigned char digest256[SHA256_DIGEST_SIZE];
@@ -103,7 +103,7 @@ void Cry_EncryptSHA256Base64 (const char *PlainText,
          EncryptedText[j++] = Str_BIN_TO_BASE64URL [ (digest256[i + 2] & 0x3F)                                       ];
         }
      }
-   EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64] = '\0';
+   EncryptedText[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64] = '\0';
   }
 
 /*****************************************************************************/
@@ -143,7 +143,7 @@ void Cry_EncryptSHA512Base64 (const char *PlainText,
 /*** Create a unique name encrypted, different each time function is called **/
 /*****************************************************************************/
 
-void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
+void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    static unsigned NumCall = 0;	// When this function is called several times in the same execution of the program, each time a new name is created
    char UniqueNamePlain[Cns_MAX_LENGTH_IP + 1 + 10 + 1 + 10 + 1 + 10 + 1];

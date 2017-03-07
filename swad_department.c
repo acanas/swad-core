@@ -357,7 +357,7 @@ void Dpt_GetListDepartments (long InsCod)
 
          /* Get the URL of the department (row[4]) */
          Str_Copy (Dpt->WWW,row[4],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get number of teachers in this department (row[5]) */
          if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
@@ -435,7 +435,7 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
 
          /* Get the URL of the department (row[3]) */
          Str_Copy (Dpt->WWW,row[3],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get number of teachers in this department (row[4]) */
          if (sscanf (row[4],"%u",&Dpt->NumTchs) != 1)
@@ -583,7 +583,7 @@ static void Dpt_ListDepartmentsForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Dpt->WWW,Gbl.Form.Id);
+               Cns_MAX_CHARS_WWW,Dpt->WWW,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -820,8 +820,8 @@ void Dpt_ChangeDptWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Department *Dpt;
-   char Query[256 + Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char Query[256 + Cns_MAX_BYTES_WWW];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
 
@@ -831,7 +831,7 @@ void Dpt_ChangeDptWWW (void)
       Lay_ShowErrorAndExit ("Code of department is missing.");
 
    /* Get the new WWW for the department */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -854,7 +854,7 @@ void Dpt_ChangeDptWWW (void)
 
    /***** Show the form again *****/
    Str_Copy (Dpt->WWW,NewWWW,
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
    Dpt_EditDepartments ();
   }
 
@@ -949,7 +949,7 @@ static void Dpt_PutFormToCreateDepartment (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_LENGTH_WWW,Dpt->WWW);
+            Cns_MAX_CHARS_WWW,Dpt->WWW);
 
    /***** Send button and end of frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_department);
@@ -1025,7 +1025,7 @@ void Dpt_RecFormNewDpt (void)
    Par_GetParToText ("FullName",Dpt->FullName,Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME);
 
    /* Get department WWW */
-   Par_GetParToText ("WWW",Dpt->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Dpt->WWW,Cns_MAX_BYTES_WWW);
 
    if (Dpt->ShrtName[0] && Dpt->FullName[0])	// If there's a department name
      {

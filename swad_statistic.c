@@ -774,7 +774,7 @@ static void Sta_WriteSelectorAction (void)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    Tab_Tab_t Tab;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
@@ -836,7 +836,7 @@ void Sta_SeeCrsAccesses (void)
 /******************** Compute and show access statistics ********************/
 /*****************************************************************************/
 
-#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10 + ID_MAX_LENGTH_USR_ID) * 5000 - 1)
+#define Sta_MAX_LENGTH_QUERY_ACCESS (1024 + (10 + ID_MAX_BYTES_USR_ID) * 5000 - 1)
 
 #define Sta_MAX_LENGTH_COUNT_TYPE (256 - 1)
 
@@ -1289,7 +1289,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Ptr = Gbl.Usrs.Select.All;
 	 while (*Ptr)
 	   {
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
             Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 	    if (UsrDat.UsrCod > 0)
 	      {
@@ -1570,7 +1570,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    Rol_Role_t RoleFromLog;
    unsigned UniqueId;
    long ActCod;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Initialize estructura of data of the user *****/
    Usr_UsrDataConstructor (&UsrDat);
@@ -3053,7 +3053,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    struct Sta_Hits Hits;
    MYSQL_ROW row;
    long ActCod;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

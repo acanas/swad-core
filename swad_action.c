@@ -4696,7 +4696,7 @@ const char *Act_GetSubtitleAction (Act_Action_t Action)
 /*****************************************************************************/
 
 char *Act_GetActionTextFromDB (long ActCod,
-                               char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1])
+                               char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[1024];
@@ -4712,7 +4712,7 @@ char *Act_GetActionTextFromDB (long ActCod,
       /***** Get text *****/
       row = mysql_fetch_row (mysql_res);
       Str_Copy (ActTxt,row[0],
-                Act_MAX_LENGTH_ACTION_TXT);
+                Act_MAX_BYTES_ACTION_TXT);
      }
    else	// ActCod-Language not found on database
       ActTxt[0] = '\0';
@@ -4951,7 +4951,7 @@ void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
 /***************************** Get unique Id *********************************/
 /*****************************************************************************/
 
-void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID])
+void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID])
   {
    static unsigned CountForThisExecution = 0;
 

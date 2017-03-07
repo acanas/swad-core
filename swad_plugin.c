@@ -79,7 +79,7 @@ void Plg_ListPlugins (void)
    extern const char *Txt_Plugin;
    unsigned NumPlg;
    struct Plugin *Plg;
-   char URL[Cns_MAX_LENGTH_WWW+Ses_LENGTH_SESSION_ID + 1];
+   char URL[Cns_MAX_BYTES_WWW + Ses_LENGTH_SESSION_ID + 1];
 
    if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM)
      {
@@ -244,7 +244,7 @@ static void Plg_GetListPlugins (void)
 
          /* Get the URL of the plugin (row[5]) */
          Str_Copy (Plg->URL,row[5],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get the IP of the plugin (row[6]) */
          Str_Copy (Plg->IP,row[6],
@@ -311,7 +311,7 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
 
       /* Get the URL of the plugin (row[4]) */
       Str_Copy (Plg->URL,row[4],
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /* Get the IP of the plugin (row[5]) */
       Str_Copy (Plg->IP,row[5],
@@ -441,7 +441,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"url\" name=\"URL\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Plg->URL,Gbl.Form.Id);
+               Cns_MAX_CHARS_WWW,Plg->URL,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -741,8 +741,8 @@ void Plg_ChangePlgURL (void)
    extern const char *Txt_The_new_URL_is_X;
    extern const char *Txt_You_can_not_leave_the_URL_empty;
    struct Plugin *Plg;
-   char Query[256 + Cns_MAX_LENGTH_WWW];
-   char NewURL[Cns_MAX_LENGTH_WWW + 1];
+   char Query[256 + Cns_MAX_BYTES_WWW];
+   char NewURL[Cns_MAX_BYTES_WWW + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -752,7 +752,7 @@ void Plg_ChangePlgURL (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new URL for the plugin */
-   Par_GetParToText ("URL",NewURL,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("URL",NewURL,Cns_MAX_BYTES_WWW);
 
    /***** Check if new URL is empty *****/
    if (NewURL[0])
@@ -772,7 +772,7 @@ void Plg_ChangePlgURL (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->URL,NewURL,
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
    Plg_EditPlugins ();
   }
 
@@ -910,7 +910,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_LENGTH_WWW,Plg->URL);
+            Cns_MAX_CHARS_WWW,Plg->URL);
 
    /***** Plugin IP address *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -1003,7 +1003,7 @@ void Plg_RecFormNewPlg (void)
    Par_GetParToText ("AppKey",Plg->AppKey,Plg_MAX_LENGTH_PLUGIN_APP_KEY);
 
    /* Get plugin URL */
-   Par_GetParToText ("URL",Plg->URL,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("URL",Plg->URL,Cns_MAX_BYTES_WWW);
 
    /* Get plugin IP address */
    Par_GetParToText ("IP",Plg->IP,Cns_MAX_LENGTH_IP);
@@ -1043,7 +1043,7 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
                     Plg_MAX_LENGTH_PLUGIN_DESCRIPTION +
                     Plg_MAX_LENGTH_PLUGIN_LOGO +
                     Plg_MAX_LENGTH_PLUGIN_APP_KEY +
-                    Cns_MAX_LENGTH_WWW +
+                    Cns_MAX_BYTES_WWW +
                     Cns_MAX_LENGTH_IP];
 
    /***** Create a new plugin *****/

@@ -119,7 +119,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
 
 	    /* Get ID from row[0] */
             Str_Copy (UsrDat->IDs.List[NumID].ID,row[0],
-                      ID_MAX_LENGTH_USR_ID);
+                      ID_MAX_BYTES_USR_ID);
 
             /* Get if ID is confirmed from row[1] */
             UsrDat->IDs.List[NumID].Confirmed = (row[1][0] == 'Y');
@@ -190,7 +190,7 @@ unsigned ID_GetListUsrCodsFromUsrID (struct UsrData *UsrDat,
 	    CheckPassword = true;
 
       /***** Allocate memory for query string *****/
-      MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_LENGTH_USR_ID + 1) - 1;
+      MaxLength = 512 + UsrDat->IDs.Num * (1 + ID_MAX_BYTES_USR_ID + 1) - 1;
       if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of user's IDs.");
 
@@ -297,7 +297,7 @@ void ID_GetParamOtherUsrIDPlain (void)
 
    /***** Get parameter *****/
    Par_GetParToText ("OtherUsrID",Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
-                     ID_MAX_LENGTH_USR_ID);
+                     ID_MAX_BYTES_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
@@ -310,7 +310,7 @@ void ID_GetParamOtherUsrIDPlain (void)
 /*****************************************************************************/
 // Returns true if the user's ID string is valid, or false if not
 // A valid user's ID must...:
-// 1. Must be ID_MIN_LENGTH_USR_ID <= characters <= ID_MAX_LENGTH_USR_ID.
+// 1. Must be ID_MIN_BYTES_USR_ID <= characters <= ID_MAX_BYTES_USR_ID.
 // 2. All characters must be digits or letters
 // 3. Must have a minimum number of digits
 
@@ -346,9 +346,9 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
    if (!UsrID[0])
       return false;
    Length = strlen (UsrID);
-   if (Length < ID_MIN_LENGTH_USR_ID ||
-       Length > ID_MAX_LENGTH_USR_ID)
-      return false;			// 1. Must be ID_MIN_LENGTH_USR_ID <= characters <= ID_MAX_LENGTH_USR_ID
+   if (Length < ID_MIN_BYTES_USR_ID ||
+       Length > ID_MAX_BYTES_USR_ID)
+      return false;			// 1. Must be ID_MIN_BYTES_USR_ID <= characters <= ID_MAX_BYTES_USR_ID
 
    /**** Loop through user's ID *****/
    for (Ptr = UsrID;
@@ -650,7 +650,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
                          "<input type=\"text\" id=\"NewID\" name=\"NewID\""
 	                 " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	                 "</div>",
-	       ID_MAX_LENGTH_USR_ID,
+	       ID_MAX_BYTES_USR_ID,
 	       UsrDat->IDs.Num ? UsrDat->IDs.List[UsrDat->IDs.Num - 1].ID :
 		                 "");	// Show the most recent ID
       Lay_PutCreateButtonInline (Txt_Add_this_ID);
@@ -721,13 +721,13 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_ID_X_removed;
    extern const char *Txt_You_can_not_delete_this_ID;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanRemove;
 
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get user's ID from form *****/
-      Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
+      Par_GetParToText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrID);
       Str_ConvertToUpperText (UsrID);
@@ -777,7 +777,7 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
   {
-   char Query[256 + ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_BYTES_USR_ID];
 
    /***** Remove one of my user's IDs *****/
    sprintf (Query,"DELETE FROM usr_IDs"
@@ -839,7 +839,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_The_ID_X_has_been_registered_successfully;
    extern const char *Txt_The_ID_X_is_not_valid;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewID[ID_MAX_LENGTH_USR_ID + 1];
+   char NewID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumID;
    bool AlreadyExists;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
@@ -848,7 +848,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new user's ID from form *****/
-      Par_GetParToText ("NewID",NewID,ID_MAX_LENGTH_USR_ID);
+      Par_GetParToText ("NewID",NewID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (NewID);
       Str_ConvertToUpperText (NewID);
@@ -919,7 +919,7 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed)
   {
-   char Query[256 + ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_BYTES_USR_ID];
 
    /***** Update my nickname in database *****/
    sprintf (Query,"INSERT INTO usr_IDs"
@@ -959,7 +959,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
    bool Found;
    unsigned NumID;
@@ -975,7 +975,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
    if (ICanConfirm)
      {
       /***** Get user's ID from form *****/
-      Par_GetParToText ("UsrID",UsrID,ID_MAX_LENGTH_USR_ID);
+      Par_GetParToText ("UsrID",UsrID,ID_MAX_BYTES_USR_ID);
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrID);
       Str_ConvertToUpperText (UsrID);
@@ -1041,7 +1041,7 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
 
 void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
   {
-   char Query[256 + ID_MAX_LENGTH_USR_ID];
+   char Query[256 + ID_MAX_BYTES_USR_ID];
 
    /***** Update database *****/
    sprintf (Query,"UPDATE usr_IDs SET Confirmed='Y'"

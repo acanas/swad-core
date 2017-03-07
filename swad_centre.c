@@ -99,7 +99,7 @@ static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
-                                const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
+                                const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
 
 static void Ctr_PutFormToCreateCentre (void);
@@ -494,7 +494,7 @@ static void Ctr_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,
+		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentCtr.Ctr.WWW,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1044,7 +1044,7 @@ void Ctr_GetListCentres (long InsCod)
 
          /* Get the URL of the centre (row[7]) */
          Str_Copy (Ctr->WWW,row[7],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get number of users who claim to belong to this centre (row[8]) */
          if (sscanf (row[8],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1142,7 +1142,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 
          /* Get the URL of the centre (row[6]) */
          Str_Copy (Ctr->WWW,row[6],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get number of users who claim to belong to this centre (row[7]) */
          if (sscanf (row[7],"%u",&Ctr->NumUsrsWhoClaimToBelongToCtr) != 1)
@@ -1375,7 +1375,7 @@ static void Ctr_ListCentresForEdition (void)
    unsigned NumCtr;
    struct Centre *Ctr;
    unsigned NumPlc;
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
    Ctr_StatusTxt_t StatusTxt;
@@ -1506,13 +1506,13 @@ static void Ctr_ListCentresForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,Ctr->WWW,Gbl.Form.Id);
+		  Cns_MAX_CHARS_WWW,Ctr->WWW,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
 	{
          Str_Copy (WWW,Ctr->WWW,
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
          fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
@@ -1979,7 +1979,7 @@ void Ctr_ChangeCtrWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Centre *Ctr;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Ctr = &Gbl.Ctrs.EditingCtr;
 
@@ -1988,7 +1988,7 @@ void Ctr_ChangeCtrWWW (void)
    Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get the new WWW for the centre */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
    Ctr_GetDataOfCentreByCod (Ctr);
@@ -2000,7 +2000,7 @@ void Ctr_ChangeCtrWWW (void)
       Ctr_UpdateCtrWWWDB (Ctr->CtrCod,NewWWW);
 
       Str_Copy (Ctr->WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2020,11 +2020,11 @@ void Ctr_ChangeCtrWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the centre */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -2032,7 +2032,7 @@ void Ctr_ChangeCtrWWWInConfig (void)
       /***** Update database changing old WWW by new WWW *****/
       Ctr_UpdateCtrWWWDB (Gbl.CurrentCtr.Ctr.CtrCod,NewWWW);
       Str_Copy (Gbl.CurrentCtr.Ctr.WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2050,9 +2050,9 @@ void Ctr_ChangeCtrWWWInConfig (void)
 /*****************************************************************************/
 
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
-                                const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
+                                const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod='%ld'",
@@ -2461,7 +2461,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_LENGTH_WWW,Ctr->WWW);
+            Cns_MAX_CHARS_WWW,Ctr->WWW);
 
    /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -2677,7 +2677,7 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
    Par_GetParToText ("FullName",Ctr->FullName,Ctr_MAX_LENGTH_CENTRE_FULL_NAME);
 
    /* Get centre WWW */
-   Par_GetParToText ("WWW",Ctr->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Ctr->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ctr->ShrtName[0] && Ctr->FullName[0])	// If there's a centre name
      {
@@ -2725,7 +2725,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
    char Query[512 +
               Ctr_MAX_LENGTH_CENTRE_SHRT_NAME +
               Ctr_MAX_LENGTH_CENTRE_FULL_NAME +
-              Cns_MAX_LENGTH_WWW];
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new centre *****/
    sprintf (Query,"INSERT INTO centres (InsCod,PlcCod,Status,RequesterUsrCod,"

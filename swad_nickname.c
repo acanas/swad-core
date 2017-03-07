@@ -79,9 +79,9 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
    Length = strlen (NicknameWithoutArroba);
 
    /***** A nick (without arroba) must have a number of characters
-          Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA *****/
-   if (Length < Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA ||
-       Length > Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA)
+          Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA *****/
+   if (Length < Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA ||
+       Length > Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA)
       return false;
 
    /***** A nick can have digits, letters and '_'  *****/
@@ -102,7 +102,7 @@ bool Nck_CheckIfNickWithArrobaIsValid (const char *NicknameWithArroba)
 /*****************************************************************************/
 
 bool Nck_GetNicknameFromUsrCod (long UsrCod,
-                                char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1])
+                                char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1])
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -118,7 +118,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
       /* Get nickname */
       row = mysql_fetch_row (mysql_res);
       Str_Copy (Nickname,row[0],
-                Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+                Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
       Found = true;
      }
    else
@@ -289,7 +289,7 @@ void Nck_ShowFormChangeUsrNickname (void)
                       "<input type=\"text\" id=\"NewNick\" name=\"NewNick\""
 	              " size=\"18\" maxlength=\"%u\" value=\"@%s\" />"
 	              "</div>",
-            1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
+            1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Gbl.Usrs.Me.UsrDat.Nickname);
    Lay_PutCreateButtonInline (NumNicks ? Txt_Change_nickname :	// I already have a nickname
         	                         Txt_Save);			// I have no nickname yet);
@@ -306,10 +306,10 @@ void Nck_RemoveNick (void)
   {
    extern const char *Txt_Nickname_X_removed;
    extern const char *Txt_You_can_not_delete_your_current_nickname;
-   char NicknameWithoutArroba[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
+   char NicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
 
    /***** Get new nickname from form *****/
-   Par_GetParToText ("Nick",NicknameWithoutArroba,Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+   Par_GetParToText ("Nick",NicknameWithoutArroba,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
    if (strcasecmp (NicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.Nickname))	// Only if not my current nickname
      {
@@ -398,7 +398,7 @@ void Nck_UpdateNick (void)
          // Now we know the new nickname is not already in database and is diffent to the current one
          Nck_UpdateMyNick (NewNicknameWithoutArroba);
          Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
-                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+                   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
          sprintf (Gbl.Message,Txt_Your_nickname_X_has_been_registered_successfully,
                   NewNicknameWithoutArroba);
@@ -409,8 +409,8 @@ void Nck_UpdateNick (void)
       Error = true;
       sprintf (Gbl.Message,Txt_The_nickname_entered_X_is_not_valid_,
                NewNicknameWithArroba,
-               Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA,
-               Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+               Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+               Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
      }
 
    /***** Show message *****/

@@ -97,7 +97,7 @@ struct Globals
      {
       int Num;			// Number of form, used in form submit links
       char Id[32];		// Identifier string used in forms
-      char UniqueId[32 + Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
+      char UniqueId[32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
    bool Error;
@@ -146,7 +146,7 @@ struct Globals
    long TimeSendInMicroseconds;
 
    char IP[Cns_MAX_LENGTH_IP + 1];
-   char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
+   char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Used for session id, temporary directory names, etc.
 
    struct
      {
@@ -294,7 +294,7 @@ struct Globals
          Rol_Role_t MaxRole;
          bool RoleHasChanged;	// Set when I have changed my role
 	 char UsrIdLogin[Usr_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email entered in the user's login
-         char LoginPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+         char LoginPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
          char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
          char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 	 char PathDir[PATH_MAX + 1];
@@ -466,7 +466,7 @@ struct Globals
       struct
 	{
          Inf_InfoType_t Type;
-	 char URL[Cns_MAX_LENGTH_WWW + 1];
+	 char URL[Cns_MAX_BYTES_WWW + 1];
          bool MustBeRead[Inf_NUM_INFO_TYPES];	// Students must read info?
          bool ShowMsgMustBeRead;
 	} Info;

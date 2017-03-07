@@ -75,7 +75,7 @@ struct Degree
    long RequesterUsrCod;				// User code of the person who requested the creation of this degree
    char ShrtName[Deg_MAX_LENGTH_DEGREE_SHRT_NAME + 1];	// Short name of degree
    char FullName[Deg_MAX_LENGTH_DEGREE_FULL_NAME + 1];	// Full name of degree
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Course *LstCrss;				// List of courses in this degree
   };
 

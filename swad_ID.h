@@ -34,16 +34,21 @@
 /*****************************************************************************/
 
 #define ID_MIN_DIGITS_AUTOMATIC_DETECT_USR_ID	 6	// Used for detect automatically users' IDs inside a text
-#define ID_MIN_DIGITS_USR_ID			 1	// A user's ID must have at least these digits
-#define ID_MIN_LENGTH_USR_ID			 5	// This number MUST be >= 3
-#define ID_MAX_LENGTH_USR_ID			16
 
-#define ID_MAX_BYTES_LIST_USRS_IDS	(ID_MAX_LENGTH_USR_ID * Cfg_MAX_USRS_IN_LIST * 10)
+#define ID_MIN_DIGITS_USR_ID			 1	// A user's ID must have at least these digits
+
+#define ID_MIN_CHARS_USR_ID			 5	// This number MUST be >= 3
+#define ID_MIN_BYTES_USR_ID			ID_MIN_CHARS_USR_ID
+
+#define ID_MAX_CHARS_USR_ID			16
+#define ID_MAX_BYTES_USR_ID			ID_MAX_CHARS_USR_ID
+
+#define ID_MAX_BYTES_LIST_USRS_IDS	(ID_MAX_BYTES_USR_ID * Cfg_MAX_USRS_IN_LIST * 10)
 
 struct ListIDs
   {
    bool Confirmed;
-   char ID[ID_MAX_LENGTH_USR_ID + 1];
+   char ID[ID_MAX_BYTES_USR_ID + 1];
   };
 
 /*****************************************************************************/

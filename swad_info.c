@@ -916,7 +916,7 @@ static bool Inf_CheckURL (long CrsCod,Inf_InfoType_t InfoType)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_LENGTH_WWW,FileURL) == NULL)
+      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
 	 Gbl.CurrentCrs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -944,7 +944,7 @@ static bool Inf_CheckAndShowURL (void)
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_LENGTH_WWW,FileURL) == NULL)
+      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
 	 Gbl.CurrentCrs.Info.URL[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -975,7 +975,7 @@ static void Inf_BuildPathURL (long CrsCod,Inf_InfoType_t InfoType,char *PathFile
 /*****************************************************************************/
 // This function is called only from web service
 
-void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_LENGTH_WWW + 1])
+void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_BYTES_WWW + 1])
   {
    char PathFile[PATH_MAX + 1];
    FILE *FileURL;
@@ -989,7 +989,7 @@ void Inf_WriteURLIntoTxtBuffer (char TxtBuffer[Cns_MAX_LENGTH_WWW + 1])
    /***** Check if file with URL exists *****/
    if ((FileURL = fopen (PathFile,"rb")))
      {
-      if (fgets (TxtBuffer,Cns_MAX_LENGTH_WWW,FileURL) == NULL)
+      if (fgets (TxtBuffer,Cns_MAX_BYTES_WWW,FileURL) == NULL)
 	 TxtBuffer[0] = '\0';
       /* File is not longer needed  ==> close it */
       fclose (FileURL);
@@ -1295,7 +1295,7 @@ void Inf_FormToSendURL (Inf_InfoSrc_t InfoSrc)
       fprintf (Gbl.F.Out,"http://");
    else
      {
-      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_LENGTH_WWW,FileURL) == NULL)
+      if (fgets (Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW,FileURL) == NULL)
          Gbl.CurrentCrs.Info.URL[0] = '\0';
       /* File is not needed now. Close it */
       fclose (FileURL);
@@ -2206,7 +2206,7 @@ void Inf_ReceiveURLInfo (void)
    Gbl.CurrentCrs.Info.Type  = Inf_AsignInfoType ();
 
    /***** Get parameter with URL *****/
-   Par_GetParToText ("InfoSrcURL",Gbl.CurrentCrs.Info.URL,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("InfoSrcURL",Gbl.CurrentCrs.Info.URL,Cns_MAX_BYTES_WWW);
 
    /***** Build path to file containing URL *****/
    Inf_BuildPathURL (Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Info.Type,PathFile);

@@ -50,7 +50,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define Svy_MAX_LENGTH_ANSWER		1000
-#define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER * Str_MAX_CHARACTER)
+#define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER * Str_MAX_BYTES_PER_CHAR)
 #define Svy_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
 
 const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =

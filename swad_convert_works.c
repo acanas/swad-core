@@ -52,7 +52,7 @@ int main (void)
    unsigned NumUsr;
    long CrsCod;
    long UsrCod;
-   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrID[ID_MAX_BYTES_USR_ID + 1];
    char OldPathUsrs[PATH_MAX + 1];
    char OldPathUsr[PATH_MAX + 1];
    char Path02u[PATH_MAX + 1];
@@ -127,7 +127,7 @@ int main (void)
 				    if (row[1])
 				      {
 				       Str_Copy (UsrID,row[1],
-				                 ID_MAX_LENGTH_USR_ID,62);		// UsrID
+				                 ID_MAX_BYTES_USR_ID,62);	// UsrID
 				       sprintf (OldPathUsr,"%s_backup/%s",OldPathUsrs,UsrID);
 				       if (CheckIfPathExists (OldPathUsr))
 					 {

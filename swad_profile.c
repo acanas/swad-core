@@ -404,7 +404,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
    unsigned NumCrssUsrIsStudent;
    unsigned NumFiles;
    unsigned NumPublicFiles;
-   char IdFirstClickTime[Act_MAX_LENGTH_ID];
+   char IdFirstClickTime[Act_MAX_BYTES_ID];
 
    /***** Start left list *****/
    fprintf (Gbl.F.Out,"<div class=\"PRF_FIG_LEFT_CONTAINER\">"

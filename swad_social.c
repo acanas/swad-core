@@ -182,10 +182,10 @@ static void Soc_PutTextarea (const char *Placeholder,
 
 static long Soc_ReceiveSocialPost (void);
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_LENGTH_ID]);
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID]);
 static void Soc_PutIconCommentDisabled (void);
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_LENGTH_ID]);
+                                                            const char IdNewComment[Act_MAX_BYTES_ID]);
 static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod);
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot);
 static void Soc_WriteSocialComment (struct SocialComment *SocCom,
@@ -1265,7 +1265,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
    unsigned NumComments;
-   char IdNewComment[Act_MAX_LENGTH_ID];
+   char IdNewComment[Act_MAX_BYTES_ID];
 
    /***** Start frame ****/
    if (ShowNoteAlone)
@@ -1617,7 +1617,7 @@ static void Soc_WriteAuthorNote (const struct UsrData *UsrDat)
 static void Soc_WriteDateTime (time_t TimeUTC)
   {
    extern const char *Txt_Today;
-   char IdDateTime[Act_MAX_LENGTH_ID];
+   char IdDateTime[Act_MAX_BYTES_ID];
 
    /***** Create unique Id *****/
    Act_SetUniqueId (IdDateTime);
@@ -2190,7 +2190,7 @@ static void Soc_PutTextarea (const char *Placeholder,
                              const char *ClassTextArea,const char *ClassImgTit)
   {
    extern const char *Txt_Post;
-   char IdDivImgButton[Act_MAX_LENGTH_ID];
+   char IdDivImgButton[Act_MAX_BYTES_ID];
 
    /***** Set unique id for the hidden div *****/
    Act_SetUniqueId (IdDivImgButton);
@@ -2292,7 +2292,7 @@ static long Soc_ReceiveSocialPost (void)
       /***** Allocate space for query *****/
       if ((Query = malloc (256 +
 			   strlen (Content) +
-			   Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
+			   Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 			   Img_MAX_BYTES_TITLE)) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -2336,7 +2336,7 @@ static long Soc_ReceiveSocialPost (void)
 /****** Put an icon to toggle on/off the form to comment a social note *******/
 /*****************************************************************************/
 
-static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_LENGTH_ID])
+static void Soc_PutIconToToggleCommentSocialNote (const char UniqueId[Act_MAX_BYTES_ID])
   {
    extern const char *Txt_Comment;
 
@@ -2378,7 +2378,7 @@ static void Soc_PutIconCommentDisabled (void)
 // All forms in this function and nested functions must have unique identifiers
 
 static void Soc_PutHiddenFormToWriteNewCommentToSocialNote (long NotCod,
-                                                            const char IdNewComment[Act_MAX_LENGTH_ID])
+                                                            const char IdNewComment[Act_MAX_BYTES_ID])
   {
    extern const char *Txt_New_SOCIAL_comment;
    bool ShowPhoto = false;
@@ -2992,7 +2992,7 @@ static long Soc_ReceiveComment (void)
 	 /***** Allocate space for query *****/
 	 if ((Query = malloc (256 +
 			      strlen (Content) +
-			      Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
+			      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 			      Img_MAX_BYTES_TITLE)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -4910,9 +4910,9 @@ static void Str_AnalyzeTxtAndStoreNotifyEventToMentionedUsrs (long PubCod,const 
          Nickname.Length = (size_t) (Ptr - Nickname.PtrStart);
 
 	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA */
-	 IsNickname = (Nickname.Length >= Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA &&
-	               Nickname.Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
+	 IsNickname = (Nickname.Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
+	               Nickname.Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
 	 if (IsNickname)
 	   {

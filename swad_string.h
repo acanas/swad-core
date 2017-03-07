@@ -36,8 +36,8 @@
 /*****************************************************************************/
 
 #define Str_LENGTH_STR_HEX		3 // Length of the string #XX
-#define Str_MAX_LENGTH_SPEC_CHAR_HTML	6 // Length of the string &#DDD;
-#define Str_MAX_CHARACTER		6 // max (Str_LENGTH_STR_HEX,Str_MAX_LENGTH_SPEC_CHAR_HTML)
+#define Str_MAX_LENGTH_SPEC_CHAR_HTML	8 // Length of the string &#DDDDD;
+#define Str_MAX_BYTES_PER_CHAR		8 // max (Str_LENGTH_STR_HEX,Str_MAX_LENGTH_SPEC_CHAR_HTML)
 
 /*****************************************************************************/
 /******************************* Public types *******************************/
@@ -97,7 +97,6 @@ char *Str_GetCellFromHTMLTableSkipComments (FILE *FileSrc,char *Str,int MaxLengt
 char *Str_GetNextStrFromFileConvertingToLower (FILE *FileSrc,char *Str, int N);
 void Str_GetNextStringUntilSpace (const char **StrSrc,char *StrDst,size_t MaxLength);
 void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t MaxLength);
-void Str_GetNextStringFromFileUntilSeparator (FILE *FileSrc,char *StrDst);
 void Str_GetNextStringUntilComma (const char **StrSrc,char *StrDst,size_t MaxLength);
 void Str_ReplaceSeveralSpacesForOne (char *Str);
 void Str_CopyStrChangingSpaces (const char *StringWithSpaces,char *StringWithoutSpaces,unsigned MaxLength);

@@ -537,7 +537,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    unsigned NumDegs;
    unsigned NumCrs;
    unsigned NumCrss;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    const char *ClassNormal;
    char ClassHighlight[64];
 

@@ -204,7 +204,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_LENGTH_WWW + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"REC_WEBS\">");
@@ -229,7 +229,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
 	 /* Get URL */
 	 row = mysql_fetch_row (mysql_res);
 	 Str_Copy (URL,row[0],
-	           Cns_MAX_LENGTH_WWW);
+	           Cns_MAX_BYTES_WWW);
 
 	 /* Show the web / social network */
 	 Net_ShowAWebOrSocialNet (URL,
@@ -296,7 +296,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
-   char URL[Cns_MAX_LENGTH_WWW + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,Txt_Webs_social_networks,
@@ -320,7 +320,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 
 	 /* Get URL */
 	 Str_Copy (URL,row[0],
-	           Cns_MAX_LENGTH_WWW);
+	           Cns_MAX_BYTES_WWW);
 	}
       else
 	 URL[0] = '\0';
@@ -352,7 +352,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
 			 " maxlength=\"%u\" value=\"%s\" style=\"width:%upx;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
 	       (unsigned) NumURL,
-	       Cns_MAX_LENGTH_WWW,URL,Net_COL2_WIDTH - 20,
+	       Cns_MAX_CHARS_WWW,URL,Net_COL2_WIDTH - 20,
 	       Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -393,9 +393,9 @@ void Net_UpdateMyWebsAndSocialNets (void)
 
 static void Net_GetMyWebsAndSocialNetsFromForm (void)
   {
-   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_BYTES_WWW];
    Net_WebsAndSocialNetworks_t Web;
-   char URL[Cns_MAX_LENGTH_WWW + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameter with the type of web / social network *****/
    Web = (Net_WebsAndSocialNetworks_t)
@@ -405,7 +405,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
                                    (unsigned long) Net_WEB_SOCIAL_NET_DEFAULT);
 
    /***** Get URL *****/
-   Par_GetParToText ("URL",URL,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("URL",URL,Cns_MAX_BYTES_WWW);
    if (URL[0])
      {
       /***** Insert or replace web / social network *****/

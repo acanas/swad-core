@@ -153,7 +153,7 @@ static void Acc_ShowFormCheckIfIHaveAccount (const char *Title)
 		      " required=\"required\" />"
 		      "</label>",
 	    The_ClassForm[Gbl.Prefs.Theme],Txt_ID,
-	    ID_MAX_LENGTH_USR_ID);
+	    ID_MAX_CHARS_USR_ID);
    Lay_PutConfirmButton (Txt_Check);
    Act_FormEnd ();
 
@@ -173,7 +173,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    extern const char *Txt_Check_another_ID;
    extern const char *Txt_Please_enter_your_ID;
    extern const char *Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID;
-   char ID[ID_MAX_LENGTH_USR_ID + 1];
+   char ID[ID_MAX_BYTES_USR_ID + 1];
    unsigned NumUsrs;
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -189,7 +189,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get new user's ID from form *****/
-   Par_GetParToText ("ID",ID,ID_MAX_LENGTH_USR_ID);
+   Par_GetParToText ("ID",ID,ID_MAX_BYTES_USR_ID);
    // Users' IDs are always stored internally in capitals and without leading zeros
    Str_RemoveLeadingZeros (ID);
    Str_ConvertToUpperText (ID);
@@ -357,7 +357,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
-            1 + Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA,
+            1 + Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA,
             Txt_HELP_nickname,
             NewNicknameWithArroba);
 
@@ -571,7 +571,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
       /***** Save nickname *****/
       Nck_UpdateMyNick (NewNicknameWithoutArroba);
       Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
-                Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+                Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
       /***** Save email *****/
       if (Mai_UpdateEmailInDB (&Gbl.Usrs.Me.UsrDat,NewEmail))
@@ -608,7 +608,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    char Query[1024];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char NewPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;
 
    /***** Step 1/3: Get new nickname from form *****/
@@ -643,8 +643,8 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
       Error = true;
       sprintf (Gbl.Message,Txt_The_nickname_entered_X_is_not_valid_,
                NewNicknameWithArroba,
-               Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA,
-               Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+               Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
+               Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
 
@@ -675,7 +675,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      }
 
    /***** Step 3/3: Get new password from form *****/
-   Par_GetParToText ("Paswd",NewPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+   Par_GetParToText ("Paswd",NewPlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
    Cry_EncryptSHA512Base64 (NewPlainPassword,NewEncryptedPassword);
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {

@@ -37,7 +37,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Act_MAX_LENGTH_ACTION_TXT	255
+#define Act_MAX_CHARS_ACTION_TXT	(256 - 1)
+#define Act_MAX_BYTES_ACTION_TXT	Act_MAX_CHARS_ACTION_TXT
 
 typedef enum
   {
@@ -61,7 +62,7 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
-#define Act_MAX_LENGTH_ID (32 + Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1)
+#define Act_MAX_BYTES_ID (32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1)
 
 /*****************************************************************************/
 /************************* Not asociates with tabs ***************************/
@@ -1545,7 +1546,7 @@ bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);
 const char *Act_GetSubtitleAction (Act_Action_t Action);
 char *Act_GetActionTextFromDB (long ActCod,
-                               char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1]);
+                               char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1]);
 
 void Act_FormGoToStart (Act_Action_t NextAction);
 void Act_FormStart (Act_Action_t NextAction);
@@ -1565,7 +1566,7 @@ void Act_LinkFormSubmitId (const char *Title,const char *LinkStyle,
 void Act_LinkFormSubmitAnimated (const char *Title,const char *LinkStyle,
                                  const char *OnSubmit);
 
-void Act_SetUniqueId (char UniqueId[Act_MAX_LENGTH_ID]);
+void Act_SetUniqueId (char UniqueId[Act_MAX_BYTES_ID]);
 
 void Act_AdjustActionWhenNoUsrLogged (void);
 void Act_AdjustCurrentAction (void);

@@ -2500,7 +2500,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
       if (Gbl.FileBrowser.Level == 1)
          // We are in this case: assignments/assignment-folder
          Str_Copy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnkName,
-                   Asg_MAX_LENGTH_FOLDER);
+                   Asg_MAX_BYTES_FOLDER);
       else
         {
          // We are in this case: assignments/assignment-folder/rest-of-path
@@ -2510,7 +2510,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
          if (*Ptr == '/')
             Ptr++;	// Skip '/'
          for (i = 0;
-              i < Asg_MAX_LENGTH_FOLDER && *Ptr && *Ptr != '/';
+              i < Asg_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
               i++, Ptr++)
             Gbl.FileBrowser.Asg.Folder[i] = *Ptr;	// Copy assignment folder
          Gbl.FileBrowser.Asg.Folder[i] = '\0';
@@ -3191,7 +3191,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
-	                                    Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))	// Get of the database the data of the user
 	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
@@ -5206,7 +5206,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
       if (Level == 1)	// Main folder of the assignment
 	{
 	 Str_Copy (Gbl.FileBrowser.Asg.Folder,FileName,
-	           Asg_MAX_LENGTH_FOLDER);
+	           Asg_MAX_BYTES_FOLDER);
 	 Asg_GetDataOfAssignmentByFolder (&Gbl.FileBrowser.Asg);
 	 // The data of this assignment remains in Gbl.FileBrowser.Asg
 	 // for all subsequent rows with Level > 1 (files or folders inside this folder),

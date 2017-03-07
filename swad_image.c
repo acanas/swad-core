@@ -144,7 +144,7 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 
    /***** Copy image name to struct *****/
    Str_Copy (Image->Name,Name,
-             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
    /***** Set status of image file *****/
    Image->Status = Image->Name[0] ? Img_NAME_STORED_IN_DB :
@@ -197,7 +197,7 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
    extern const char *Txt_Image_title_attribution;
    extern const char *Txt_Link;
    struct ParamUploadImg ParamUploadImg;
-   char Id[Act_MAX_LENGTH_ID];
+   char Id[Act_MAX_BYTES_ID];
 
    /***** Set names of parameters depending on number of image in form *****/
    Img_SetParamNames (&ParamUploadImg,NumImgInForm);

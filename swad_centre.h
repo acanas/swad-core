@@ -70,7 +70,7 @@ struct Centre
    long RequesterUsrCod;	// User code of the person who requested the creation of this centre
    char ShrtName[Ctr_MAX_LENGTH_CENTRE_SHRT_NAME + 1];
    char FullName[Ctr_MAX_LENGTH_CENTRE_FULL_NAME + 1];
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCtr;	// Number of users who claim to belong in this centre
    struct ListDegrees Degs;	// List of degrees in this centre
    unsigned NumCrss;		// Number of courses in this centre

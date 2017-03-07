@@ -205,19 +205,19 @@ static void Ban_GetListBanners (const char *Query)
 
 	    /* Get the short name of the banner (row[2]) */
 	    Str_Copy (Ban->ShrtName,row[2],
-	              Ban_MAX_LENGTH_SHRT_NAME);
+	              Ban_MAX_BYTES_SHRT_NAME);
 
 	    /* Get the full name of the banner (row[3]) */
 	    Str_Copy (Ban->FullName,row[3],
-	              Ban_MAX_LENGTH_FULL_NAME);
+	              Ban_MAX_BYTES_FULL_NAME);
 
 	    /* Get the image of the banner (row[4]) */
 	    Str_Copy (Ban->Img,row[4],
-	              Ban_MAX_LENGTH_IMAGE);
+	              Ban_MAX_BYTES_IMAGE);
 
 	    /* Get the URL of the banner (row[5]) */
 	    Str_Copy (Ban->WWW,row[5],
-	              Cns_MAX_LENGTH_WWW);
+	              Cns_MAX_BYTES_WWW);
 	   }
 	}
       else
@@ -262,19 +262,19 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
 
          /* Get the short name of the banner (row[1]) */
          Str_Copy (Ban->ShrtName,row[1],
-                   Ban_MAX_LENGTH_SHRT_NAME);
+                   Ban_MAX_BYTES_SHRT_NAME);
 
          /* Get the full name of the banner (row[2]) */
          Str_Copy (Ban->FullName,row[2],
-                   Ban_MAX_LENGTH_FULL_NAME);
+                   Ban_MAX_BYTES_FULL_NAME);
 
          /* Get the image of the banner (row[3]) */
          Str_Copy (Ban->Img,row[3],
-                   Ban_MAX_LENGTH_IMAGE);
+                   Ban_MAX_BYTES_IMAGE);
 
          /* Get the URL of the banner (row[4]) */
          Str_Copy (Ban->WWW,row[4],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
         }
 
       /***** Free structure that stores the query result *****/
@@ -364,7 +364,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_SHORT_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
+               Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -376,7 +376,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_FULL_NAME\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_FULL_NAME,Ban->FullName,Gbl.Form.Id);
+               Ban_MAX_CHARS_FULL_NAME,Ban->FullName,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -387,7 +387,7 @@ static void Ban_ListBannersForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Img\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Ban_MAX_LENGTH_IMAGE,Ban->Img,Gbl.Form.Id);
+               Ban_MAX_CHARS_IMAGE,Ban->Img,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -399,7 +399,7 @@ static void Ban_ListBannersForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Ban->WWW,Gbl.Form.Id);
+               Cns_MAX_CHARS_WWW,Ban->WWW,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
                          "</tr>");
@@ -548,9 +548,9 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
    struct Banner *Ban;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned MaxLength = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentBanName = NULL;		// Initialized to avoid warning
-   char NewBanName[Ban_MAX_LENGTH_FULL_NAME + 1];
+   char NewBanName[Ban_MAX_BYTES_FULL_NAME + 1];
 
    Ban = &Gbl.Banners.EditingBan;
    switch (ShrtOrFullName)
@@ -558,13 +558,13 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxLength = Ban_MAX_LENGTH_SHRT_NAME;
+         MaxBytes = Ban_MAX_BYTES_SHRT_NAME;
          CurrentBanName = Ban->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxLength = Ban_MAX_LENGTH_FULL_NAME;
+         MaxBytes = Ban_MAX_BYTES_FULL_NAME;
          CurrentBanName = Ban->FullName;
          break;
      }
@@ -575,7 +575,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new name for the banner */
-   Par_GetParToText (ParamName,NewBanName,MaxLength);
+   Par_GetParToText (ParamName,NewBanName,MaxBytes);
 
    /***** Get from the database the old names of the banner *****/
    Ban_GetDataOfBannerByCod (Ban);
@@ -622,7 +622,7 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
    /***** Show the form again *****/
    Str_Copy (CurrentBanName,NewBanName,
-             MaxLength);
+             MaxBytes);
 
    Ban_EditBanners ();
   }
@@ -650,8 +650,8 @@ void Ban_ChangeBannerImg (void)
    extern const char *Txt_The_new_image_is_X;
    extern const char *Txt_You_can_not_leave_the_image_empty;
    struct Banner *Ban;
-   char Query[256 + Ban_MAX_LENGTH_IMAGE];
-   char NewImg[Ban_MAX_LENGTH_IMAGE + 1];
+   char Query[256 + Ban_MAX_BYTES_IMAGE];
+   char NewImg[Ban_MAX_BYTES_IMAGE + 1];
 
    Ban = &Gbl.Banners.EditingBan;
 
@@ -661,7 +661,7 @@ void Ban_ChangeBannerImg (void)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new WWW for the banner */
-   Par_GetParToText ("Img",NewImg,Ban_MAX_LENGTH_IMAGE);
+   Par_GetParToText ("Img",NewImg,Ban_MAX_BYTES_IMAGE);
 
    /***** Check if new image is empty *****/
    if (NewImg[0])
@@ -681,7 +681,7 @@ void Ban_ChangeBannerImg (void)
 
    /***** Show the form again *****/
    Str_Copy (Ban->Img,NewImg,
-             Ban_MAX_LENGTH_IMAGE);
+             Ban_MAX_BYTES_IMAGE);
 
    Ban_EditBanners ();
   }
@@ -695,8 +695,8 @@ void Ban_ChangeBannerWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Banner *Ban;
-   char Query[256 + Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char Query[256 + Cns_MAX_BYTES_WWW];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Ban = &Gbl.Banners.EditingBan;
 
@@ -706,7 +706,7 @@ void Ban_ChangeBannerWWW (void)
       Lay_ShowErrorAndExit ("Code of banner is missing.");
 
    /* Get the new WWW for the banner */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -726,7 +726,7 @@ void Ban_ChangeBannerWWW (void)
 
    /***** Show the form again *****/
    Str_Copy (Ban->WWW,NewWWW,
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
 
    Ban_EditBanners ();
   }
@@ -767,7 +767,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_LENGTH_SHRT_NAME,Ban->ShrtName);
+            Ban_MAX_CHARS_SHRT_NAME,Ban->ShrtName);
 
    /***** Banner full name *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -776,7 +776,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_LENGTH_FULL_NAME,Ban->FullName);
+            Ban_MAX_CHARS_FULL_NAME,Ban->FullName);
 
    /***** Banner image *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -784,7 +784,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " size=\"12\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Ban_MAX_LENGTH_IMAGE,Ban->Img);
+            Ban_MAX_CHARS_IMAGE,Ban->Img);
 
    /***** Banner WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -794,7 +794,7 @@ static void Ban_PutFormToCreateBanner (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_LENGTH_WWW,Ban->WWW);
+            Cns_MAX_CHARS_WWW,Ban->WWW);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_banner);
@@ -847,16 +847,16 @@ void Ban_RecFormNewBanner (void)
 
    /***** Get parameters from form *****/
    /* Get banner short name */
-   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_LENGTH_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ban->ShrtName,Ban_MAX_BYTES_SHRT_NAME);
 
    /* Get banner full name */
-   Par_GetParToText ("FullName",Ban->FullName,Ban_MAX_LENGTH_FULL_NAME);
+   Par_GetParToText ("FullName",Ban->FullName,Ban_MAX_BYTES_FULL_NAME);
 
    /* Get banner image */
-   Par_GetParToText ("Img",Ban->Img,Ban_MAX_LENGTH_IMAGE);
+   Par_GetParToText ("Img",Ban->Img,Ban_MAX_BYTES_IMAGE);
 
    /* Get banner URL */
-   Par_GetParToText ("WWW",Ban->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Ban->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ban->ShrtName[0] && Ban->FullName[0])	// If there's a banner name
      {
@@ -894,7 +894,7 @@ void Ban_RecFormNewBanner (void)
 static void Ban_CreateBanner (struct Banner *Ban)
   {
    extern const char *Txt_Created_new_banner_X;
-   char Query[256 + Ban_MAX_LENGTH_SHRT_NAME + Ban_MAX_LENGTH_FULL_NAME + Ban_MAX_LENGTH_IMAGE + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Ban_MAX_BYTES_SHRT_NAME + Ban_MAX_BYTES_FULL_NAME + Ban_MAX_BYTES_IMAGE + Cns_MAX_BYTES_WWW];
 
    /***** Create a new banner *****/
    sprintf (Query,"INSERT INTO banners (Hidden,ShortName,FullName,Img,WWW)"

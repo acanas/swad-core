@@ -178,7 +178,7 @@ void ZIP_CreateZIPAsgWrk (void)
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
-					 Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+					 Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 
 

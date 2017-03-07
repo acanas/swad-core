@@ -241,7 +241,7 @@ void Lnk_GetListLinks (void)
 
 	    /* Get the URL of the link (row[3]) */
 	    Str_Copy (Lnk->WWW,row[3],
-	              Cns_MAX_LENGTH_WWW);
+	              Cns_MAX_BYTES_WWW);
 	   }
 	}
       else
@@ -289,7 +289,7 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
 
          /* Get the URL of the link (row[2]) */
          Str_Copy (Lnk->WWW,row[2],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
         }
 
       /***** Free structure that stores the query result *****/
@@ -384,7 +384,7 @@ static void Lnk_ListLinksForEdition (void)
 	                 " maxlength=\"%u\" value=\"%s\""
                          " class=\"INPUT_WWW\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_LENGTH_WWW,Lnk->WWW,
+               Cns_MAX_CHARS_WWW,Lnk->WWW,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"
@@ -576,8 +576,8 @@ void Lnk_ChangeLinkWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Link *Lnk;
-   char Query[256 + Cns_MAX_LENGTH_WWW];
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char Query[256 + Cns_MAX_BYTES_WWW];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Lnk = &Gbl.Links.EditingLnk;
 
@@ -587,7 +587,7 @@ void Lnk_ChangeLinkWWW (void)
       Lay_ShowErrorAndExit ("Code of institutional link is missing.");
 
    /* Get the new WWW for the link */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -607,7 +607,7 @@ void Lnk_ChangeLinkWWW (void)
 
    /***** Show the form again *****/
    Str_Copy (Lnk->WWW,NewWWW,
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
    Lnk_EditLinks ();
   }
 
@@ -664,7 +664,7 @@ static void Lnk_PutFormToCreateLink (void)
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
-            Cns_MAX_LENGTH_WWW,Lnk->WWW);
+            Cns_MAX_CHARS_WWW,Lnk->WWW);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_link);
@@ -726,7 +726,7 @@ void Lnk_RecFormNewLink (void)
    Par_GetParToText ("FullName",Lnk->FullName,Lnk_MAX_LENGTH_LINK_FULL_NAME);
 
    /* Get link URL */
-   Par_GetParToText ("WWW",Lnk->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Lnk->WWW,Cns_MAX_BYTES_WWW);
 
    if (Lnk->ShrtName[0] && Lnk->FullName[0])	// If there's a link name
      {

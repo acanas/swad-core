@@ -406,7 +406,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
 
 static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
   {
-   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
    const char *Ptr = CellContent;
    bool UsrIDFound = false;
    bool StuffNotUsrIDFound = false;
@@ -416,7 +416,7 @@ static bool Mrk_CheckIfCellContainsOnlyIDs (const char *CellContent)
    while (*Ptr && !StuffNotUsrIDFound)
      {
       /* Find next string in text until space, comma or semicolon (leading and trailing spaces are removed) */
-      Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+      Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
       // Users' IDs are always stored internally in capitals and without leading zeros
       Str_RemoveLeadingZeros (UsrIDFromTable);
@@ -447,7 +447,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    unsigned Row;
    char CellContent[Mrk_MAX_BYTES_IN_CELL_CONTENT + 1];
    const char *Ptr;
-   char UsrIDFromTable[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrIDFromTable[ID_MAX_BYTES_USR_ID + 1];
    FILE *FileAllMarks;
    unsigned NumID;
    bool UsrIDFound;
@@ -484,7 +484,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 	 while (*Ptr && !UsrIDFound)
 	   {
 	    /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-            Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+            Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
 	    // Users' IDs are always stored internally in capitals and without leading zeros
 	    Str_RemoveLeadingZeros (UsrIDFromTable);
@@ -534,7 +534,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 	    while (*Ptr && !UsrIDFound)
 	      {
 	       /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_LENGTH_USR_ID);
+	       Str_GetNextStringUntilSeparator (&Ptr,UsrIDFromTable,ID_MAX_BYTES_USR_ID);
 
 	       // Users' IDs are always stored internally in capitals and without leading zeros
 	       Str_RemoveLeadingZeros (UsrIDFromTable);

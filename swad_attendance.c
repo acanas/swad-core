@@ -748,7 +748,7 @@ bool Att_GetDataOfAttEventByCod (struct AttendanceEvent *Att)
 
 	 /* Get the title of the attendance event (row[8]) */
 	 Str_Copy (Att->Title,row[8],
-	           Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
+	           Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1103,7 +1103,7 @@ void Att_RequestCreatOrEditAttEvent (void)
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
-            Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE,Att.Title);
+            Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE,Att.Title);
 
    /***** Assignment start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Att.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -1256,7 +1256,7 @@ void Att_RecFormAttEvent (void)
    ReceivedAtt.CommentTchVisible = Par_GetParToBool ("ComTchVisible");
 
    /***** Get attendance event title *****/
-   Par_GetParToText ("Title",ReceivedAtt.Title,Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE);
+   Par_GetParToText ("Title",ReceivedAtt.Title,Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE);
 
    /***** Get attendance event text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -2269,7 +2269,7 @@ void Att_RegisterStudentsInAttEvent (void)
       Ptr = Gbl.Usrs.Select.Std;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
 	 if (UsrData.UsrCod > 0)	// Student exists in database
 	    /***** Mark student to not be removed *****/
@@ -2821,7 +2821,7 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
 	NumStd < NumStdsInList && *Ptr;
 	NumStd++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       (*LstSelectedUsrCods)[NumStd] = UsrDat.UsrCod;
      }

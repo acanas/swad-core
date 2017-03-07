@@ -77,7 +77,7 @@
 
 #define Usr_LIST_WITH_PHOTOS_DEF	false
 
-#define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 * Cfg_MAX_USRS_IN_LIST)
+#define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 * Cfg_MAX_USRS_IN_LIST)
 
 #define Usr_NUM_MAIN_FIELDS_DATA_USR	 8
 
@@ -119,14 +119,14 @@ typedef enum
 struct UsrData
   {
    long UsrCod;
-   char EncryptedUsrCod [Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char EncryptedUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
       unsigned Num;
      } IDs;
-   char Nickname        [Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
+   char Nickname        [Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
    char Password        [Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
    Rol_Role_t RoleInCurrentCrsDB;
    int Roles;		// Check always if filled/calculated
@@ -140,7 +140,7 @@ struct UsrData
    Usr_Sex_t Sex;
    char Email		[Usr_MAX_BYTES_USR_EMAIL + 1];
    bool EmailConfirmed;
-   char Photo		[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
+   char Photo		[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t ProfileVisibility;	// Who can see user's public profile
    long CtyCod;		// Country
@@ -185,13 +185,13 @@ struct UsrLast
 struct UsrInList
   {
    long UsrCod;
-   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
    char Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
    char Surname1 [Usr_MAX_BYTES_NAME + 1];
    char Surname2 [Usr_MAX_BYTES_NAME + 1];
    char FirstName[Usr_MAX_BYTES_NAME + 1];
    Usr_Sex_t Sex;
-   char Photo[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
+   char Photo[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;				// Who can see user's photo
    long CtyCod;		// Country
    long InsCod;		// Institution
@@ -303,7 +303,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 
 void Usr_PutParamMyUsrCodEncrypted (void);
 void Usr_PutParamOtherUsrCodEncrypted (void);
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat);
 void Usr_GetParamOtherUsrCodEncryptedAndGetListIDs (void);
 bool Usr_GetParamOtherUsrCodEncryptedAndGetUsrData (void);

@@ -27,7 +27,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 43	// 42,66 base-64 characters store 256 bits
+#define Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 43	// 42,66 base-64 characters store 256 bits
 #define Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 86	// 85,33 base-64 characters store 512 bits
 
 /*****************************************************************************/
@@ -43,10 +43,10 @@
 /*****************************************************************************/
 
 void Cry_EncryptSHA256Base64 (const char *PlainText,
-                              char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+                              char EncryptedText[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 void Cry_EncryptSHA512Base64 (const char *PlainText,
                               char EncryptedText[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1]);
 
-void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+void Cry_CreateUniqueNameEncrypted (char UniqueNameEncrypted[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
 
 #endif

@@ -90,7 +90,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 static void Ins_PutButtonToGoToIns (struct Instit *Ins);
 
 static void Ins_PutFormToCreateInstitution (void);
@@ -443,7 +443,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,
+		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentIns.Ins.WWW,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1038,7 +1038,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
          /* Get the URL of the institution (row[6]) */
          Str_Copy (Ins->WWW,row[6],
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
 
          /* Get extra data */
          switch (GetExtraData)
@@ -1153,7 +1153,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 
 	 /* Get the URL of the institution (row[5]) */
 	 Str_Copy (Ins->WWW,row[5],
-	           Cns_MAX_LENGTH_WWW);
+	           Cns_MAX_BYTES_WWW);
 
 	 /* Get extra data */
 	 if (GetExtraData == Ins_GET_EXTRA_DATA)
@@ -1390,7 +1390,7 @@ static void Ins_ListInstitutionsForEdition (void)
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Instit *Ins;
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
    Ins_StatusTxt_t StatusTxt;
@@ -1490,7 +1490,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,
+		  Cns_MAX_CHARS_WWW,
 		  Ins->WWW,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1499,7 +1499,7 @@ static void Ins_ListInstitutionsForEdition (void)
       else
 	{
          Str_Copy (WWW,Ins->WWW,
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
          fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
@@ -1945,7 +1945,7 @@ void Ins_ChangeInsWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Instit *Ins;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Ins = &Gbl.Inss.EditingIns;
 
@@ -1954,7 +1954,7 @@ void Ins_ChangeInsWWW (void)
    Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get the new WWW for the institution */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
    Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
@@ -1965,7 +1965,7 @@ void Ins_ChangeInsWWW (void)
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Ins->InsCod,NewWWW);
       Str_Copy (Ins->WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -1985,11 +1985,11 @@ void Ins_ChangeInsWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the institution */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -1997,7 +1997,7 @@ void Ins_ChangeInsWWWInConfig (void)
       /***** Update database changing old WWW by new WWW *****/
       Ins_UpdateInsWWWDB (Gbl.CurrentIns.Ins.InsCod,NewWWW);
       Str_Copy (Gbl.CurrentIns.Ins.WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2014,9 +2014,9 @@ void Ins_ChangeInsWWWInConfig (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
+static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE institutions SET WWW='%s' WHERE InsCod='%ld'",
@@ -2214,7 +2214,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_LENGTH_WWW,Ins->WWW);
+            Cns_MAX_CHARS_WWW,Ins->WWW);
 
    /***** Number of users who claim to belong to this institution ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -2355,7 +2355,7 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
    Par_GetParToText ("FullName",Ins->FullName,Ins_MAX_LENGTH_INSTIT_FULL_NAME);
 
    /* Get institution WWW */
-   Par_GetParToText ("WWW",Ins->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Ins->WWW,Cns_MAX_BYTES_WWW);
 
    if (Ins->ShrtName[0] && Ins->FullName[0])	// If there's a institution name
      {
@@ -2397,7 +2397,7 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
    char Query[512 +
               Ins_MAX_LENGTH_INSTIT_SHRT_NAME +
               Ins_MAX_LENGTH_INSTIT_FULL_NAME +
-              Cns_MAX_LENGTH_WWW];
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new institution *****/
    sprintf (Query,"INSERT INTO institutions (CtyCod,Status,RequesterUsrCod,"

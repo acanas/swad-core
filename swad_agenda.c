@@ -505,7 +505,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void)
 
 static void Agd_PutIconToShowQR (void)
   {
-   char URL[Cns_MAX_LENGTH_WWW + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
 
    sprintf (URL,"%s/%s?agd=@%s",
@@ -946,11 +946,11 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
 
       /* Get the event (row[7]) */
       Str_Copy (AgdEvent->Event,row[7],
-                Agd_MAX_LENGTH_EVENT);
+                Agd_MAX_BYTES_EVENT);
 
       /* Get the event (row[8]) */
       Str_Copy (AgdEvent->Location,row[8],
-                Agd_MAX_LENGTH_LOCATION);
+                Agd_MAX_BYTES_LOCATION);
      }
    else
      {
@@ -1322,7 +1322,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Event,
-            Agd_MAX_LENGTH_EVENT,AgdEvent.Event);
+            Agd_MAX_CHARS_EVENT,AgdEvent.Event);
 
    /***** Location *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1337,7 +1337,7 @@ void Agd_RequestCreatOrEditEvent (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Location,
-            Agd_MAX_LENGTH_LOCATION,AgdEvent.Location);
+            Agd_MAX_CHARS_LOCATION,AgdEvent.Location);
 
    /***** Start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (AgdEvent.TimeUTC,
@@ -1396,10 +1396,10 @@ void Agd_RecFormEvent (void)
    AgdEvent.TimeUTC[Agd_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get event *****/
-   Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_LENGTH_LOCATION);
+   Par_GetParToText ("Location",AgdEvent.Location,Agd_MAX_BYTES_LOCATION);
 
    /***** Get event *****/
-   Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_LENGTH_EVENT);
+   Par_GetParToText ("Event",AgdEvent.Event,Agd_MAX_BYTES_EVENT);
 
    /***** Get text *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -1471,7 +1471,7 @@ void Agd_RecFormEvent (void)
 
 static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
   {
-   char Query[256 + Agd_MAX_LENGTH_EVENT];
+   char Query[256 + Agd_MAX_BYTES_EVENT];
 
    /***** Get number of events with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM agendas"

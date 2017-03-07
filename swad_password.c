@@ -67,7 +67,7 @@ extern struct Globals Gbl;
 
 static void Pwd_PutLinkToSendNewPasswdParams (void);
 
-static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1]);
+static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword);
 static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPassword,long UsrCod);
@@ -79,7 +79,8 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
 void Pwd_GetParamUsrPwdLogin (void)
   {
    /***** Get plain password from form *****/
-   Par_GetParToText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+   Par_GetParToText ("UsrPwd",Gbl.Usrs.Me.LoginPlainPassword,
+                     Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Encrypt password *****/
    Cry_EncryptSHA512Base64 (Gbl.Usrs.Me.LoginPlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);
@@ -160,12 +161,12 @@ void Pwd_ActChgMyPwd1 (void)
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    extern const char *Txt_Your_password_has_been_changed_successfully;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
-   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
-   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
+   char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    /***** Get plain password from form *****/
-   Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+   Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /***** Encrypt password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.LoginEncryptedPassword);
@@ -173,8 +174,8 @@ void Pwd_ActChgMyPwd1 (void)
    Gbl.Usrs.Error = true;
    if (Pwd_CheckCurrentPassword ())
      {
-      Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
-      Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+      Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+      Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
       /***** Check if I have written twice the same password *****/
       if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
@@ -183,7 +184,7 @@ void Pwd_ActChgMyPwd1 (void)
       else
         {
          Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD,true);
+                           NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD,true);
          Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
          if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
            {
@@ -280,7 +281,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    extern const char *Txt_If_you_have_written_your_ID_nickname_or_email_correctly_;
    extern const char *Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email;
    struct ListUsrCods ListUsrCods;
-   char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    int ReturnCode;
 
    /***** Check if user's ID or nickname is not empty *****/
@@ -328,7 +329,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 
 	 // User has typed a user's ID
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
-	           ID_MAX_LENGTH_USR_ID);
+	           ID_MAX_BYTES_USR_ID);
          Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Get users' codes for this ID */
@@ -391,7 +392,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 // Gbl.Usrs.Me.UsrDat must be filled
 // Return code returned by command
 
-int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
+int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
    extern const char *Txt_The_following_password_has_been_assigned_to_you_to_log_in_X_NO_HTML;
    extern const char *Txt_New_password_NO_HTML[1 + Txt_NUM_LANGUAGES];
@@ -445,16 +446,16 @@ int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN
 /*********************** Create a new random password ************************/
 /*****************************************************************************/
 
-static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
+static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
-   Str_CreateRandomAlphanumStr (PlainPassword,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+   Str_CreateRandomAlphanumStr (PlainPassword,Pwd_MIN_CHARS_PLAIN_PASSWORD);
   }
 
 /*****************************************************************************/
 /*************************** Set my pending password *************************/
 /*****************************************************************************/
 
-void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1])
+void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
    char Query[512];
 
@@ -483,7 +484,7 @@ void Pwd_UpdateOtherPwd1 (void)
    extern const char *Txt_You_have_not_written_twice_the_same_new_password;
    extern const char *Txt_The_X_password_has_been_changed_successfully;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewPlainPassword[2][Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    Gbl.Usrs.Error = true;
@@ -493,8 +494,8 @@ void Pwd_UpdateOtherPwd1 (void)
      {
       if (Usr_ICanEditOtherUsr (&Gbl.Usrs.Other.UsrDat))
 	{
-	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
-	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+	 Par_GetParToText ("Paswd1",NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD);
+	 Par_GetParToText ("Paswd2",NewPlainPassword[1],Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
 	 if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
 	    // Paswords don't match
@@ -502,7 +503,7 @@ void Pwd_UpdateOtherPwd1 (void)
 	 else
 	   {
 	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-			      NewPlainPassword[0],Pwd_MAX_LENGTH_PLAIN_PASSWORD,true);
+			      NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD,true);
 	    Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
 	    if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Other.UsrDat.UsrCod))        // Good password
 	      {
@@ -578,7 +579,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
 
 static bool Pwd_CheckIfPasswdIsUsrIDorName (const char *PlainPassword)
   {
-   char Query[128 + 3 * Pwd_MAX_LENGTH_PLAIN_PASSWORD];
+   char Query[128 + 3 * Pwd_MAX_BYTES_PLAIN_PASSWORD];
    bool Found;
 
    /***** Get if password is found in user's ID from database *****/
@@ -632,10 +633,10 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    bool ItsANumber;
 
    /***** Check length of password *****/
-   if (LengthPassword < Pwd_MIN_LENGTH_PLAIN_PASSWORD)	// PlainPassword too short
+   if (LengthPassword < Pwd_MIN_BYTES_PLAIN_PASSWORD)	// PlainPassword too short
      {
       sprintf (Gbl.Message,Txt_The_password_must_be_at_least_X_characters,
-               Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+               Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
      }
 
@@ -708,13 +709,13 @@ void Pwd_ShowFormChgPwd (void)
                          "</tr>",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_Current_password,
-               Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+               Pwd_MAX_CHARS_PLAIN_PASSWORD);
 
    /* Help message */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\">");
    sprintf (Gbl.Message,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
-            Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+            Pwd_MIN_CHARS_PLAIN_PASSWORD);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
@@ -741,7 +742,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
-   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Passwd\" class=\"%s\">%s:</label>"
@@ -754,7 +755,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Password,
-            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Gbl.Message);
   }
 
@@ -769,7 +770,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
 
-   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_LENGTH_PLAIN_PASSWORD);
+   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"
@@ -792,11 +793,11 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_New_password,
-            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Gbl.Message,
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Retype_new_password,
-            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Gbl.Message);
   }
 
@@ -910,7 +911,7 @@ void Pwd_AskForConfirmationOnDangerousAction (void)
 	    Txt_I_understand_that_this_action_can_not_be_undone,
             The_ClassForm[Gbl.Prefs.Theme],
 	    Txt_For_security_enter_your_password,
-	    Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+	    Pwd_MAX_CHARS_PLAIN_PASSWORD);
   }
 
 /*****************************************************************************/
@@ -922,7 +923,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
   {
    extern const char *Txt_You_have_not_confirmed_the_action;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
-   char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1];
+   char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char EncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    /***** Get if consent has been done *****/
@@ -934,7 +935,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
 
    /***** Get my password *****/
    /* Get plain password from form */
-   Par_GetParToText ("OthUsrPwd",PlainPassword,Pwd_MAX_LENGTH_PLAIN_PASSWORD);
+   Par_GetParToText ("OthUsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
 
    /* Encrypt password */
    Cry_EncryptSHA512Base64 (PlainPassword,EncryptedPassword);

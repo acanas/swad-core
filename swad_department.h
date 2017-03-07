@@ -40,7 +40,7 @@ struct Department
    long InsCod;
    char ShrtName[Dpt_MAX_LENGTH_DEPARTMENT_SHRT_NAME + 1];
    char FullName[Dpt_MAX_LENGTH_DEPARTMENT_FULL_NAME + 1];
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    unsigned NumTchs;
   };
 

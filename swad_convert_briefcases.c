@@ -48,7 +48,7 @@ int main (void)
    unsigned NumUsrs = 0;
    unsigned i;
    long UsrCod;
-   char UsrID[ID_MAX_LENGTH_USR_ID + 1];
+   char UsrID[ID_MAX_BYTES_USR_ID + 1];
    char OldPathUsr[PATH_MAX + 1];
    char Command[1024 + PATH_MAX * 2];
 
@@ -97,7 +97,7 @@ int main (void)
 		  if (row[1])
 		    {
                      Str_Copy (UsrID,row[1],
-                               ID_MAX_LENGTH_USR_ID);		// UsrID
+                               ID_MAX_BYTES_USR_ID);	// UsrID
                      sprintf (OldPathUsr,"%s/%s_backup/%c/%s",
                 	      PATH_SWAD_PRIVATE,FOLDER_USR,UsrID[strlen (UsrID)-1],UsrID);
                      if (CheckIfPathExists (OldPathUsr))

@@ -193,7 +193,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
          /* Write title (first characters) of the notice */
          Str_Copy (Content,row[3],
                    Cns_MAX_BYTES_TEXT);
-         Str_LimitLengthHTMLStr (Content,40);
+         Str_LimitLengthHTMLStr (Content,40);	// Remove when notice has a Subject
          fprintf (FileRSS,"<title>%s: ",Txt_Notice);
          Str_FilePrintStrChangingBRToRetAndNBSPToSpace (FileRSS,Content);
          fprintf (FileRSS,"</title>\n");

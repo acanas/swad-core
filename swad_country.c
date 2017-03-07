@@ -1110,7 +1110,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                   Str_Copy (Cty->Name[Lan],row[1 + Lan],
                             Cty_MAX_BYTES_COUNTRY_NAME);
                   Str_Copy (Cty->WWW[Lan],row[1 + Txt_NUM_LANGUAGES + Lan],
-                            Cns_MAX_LENGTH_WWW);
+                            Cns_MAX_BYTES_WWW);
         	 }
 
                /* Get number of users who claim to belong to this country */
@@ -1213,7 +1213,7 @@ void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    bool PutForm = ClassLink &&
 	          !Gbl.Form.Inside &&						// Only if not inside another form
                   Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
@@ -1357,7 +1357,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	    Str_Copy (Cty->Name[Gbl.Prefs.Language],row[1],
 	              Cty_MAX_BYTES_COUNTRY_NAME);
 	    Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],
-	              Cns_MAX_LENGTH_WWW);
+	              Cns_MAX_BYTES_WWW);
 	    break;
 	 case Cty_GET_EXTRA_DATA:
 	    /* Get name and WWW of the country in several languages */
@@ -1368,7 +1368,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	       Str_Copy (Cty->Name[Lan],row[Lan],
 	                 Cty_MAX_BYTES_COUNTRY_NAME);
 	       Str_Copy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES + Lan],
-	                 Cns_MAX_LENGTH_WWW);
+	                 Cns_MAX_BYTES_WWW);
 	      }
 
 	    /* Get number of users who claim to belong to this country */
@@ -1618,7 +1618,7 @@ static void Cty_ListCountriesForEdition (void)
                             " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  Cns_MAX_LENGTH_WWW,
+                  Cns_MAX_CHARS_WWW,
                   Cty->WWW[Lan],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
@@ -1840,9 +1840,9 @@ void Cty_ChangeCtyWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_BYTES_WWW];
    struct Country *Cty;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
    Txt_Language_t Language;
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -1872,7 +1872,7 @@ void Cty_ChangeCtyWWW (void)
 
    /***** Show the form again *****/
    Str_Copy (Cty->WWW[Language],NewWWW,
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
    Cty_EditCountries ();
   }
 
@@ -1994,7 +1994,7 @@ static void Cty_PutFormToCreateCountry (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_STR_LANG_ID[Lan],
-	       Cns_MAX_LENGTH_WWW,
+	       Cns_MAX_CHARS_WWW,
 	       Cty->WWW[Lan]);
      }
 
@@ -2138,7 +2138,7 @@ void Cty_RecFormNewCountry (void)
                  }
 
                sprintf (ParamName,"WWW_%s",Txt_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty->WWW[Lan],Cns_MAX_LENGTH_WWW);
+               Par_GetParToText (ParamName,Cty->WWW[Lan],Cns_MAX_BYTES_WWW);
               }
            }
         }
@@ -2156,7 +2156,7 @@ void Cty_RecFormNewCountry (void)
 /*****************************************************************************/
 
 #define Cty_MAX_LENGTH_SUBQUERY_CTYS_NAME	((1 + Txt_NUM_LANGUAGES) * Cty_MAX_BYTES_COUNTRY_NAME)
-#define Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW	((1 + Txt_NUM_LANGUAGES) * Cns_MAX_LENGTH_WWW)
+#define Cty_MAX_LENGTH_SUBQUERY_CTYS_WWW	((1 + Txt_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
 
 static void Cty_CreateCountry (struct Country *Cty)
   {

@@ -34,9 +34,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Asg_MAX_LENGTH_ASSIGNMENT_TITLE	(256-1)
+#define Asg_MAX_CHARS_ASSIGNMENT_TITLE	(256 - 1)
+#define Asg_MAX_BYTES_ASSIGNMENT_TITLE	(Asg_MAX_CHARS_ASSIGNMENT_TITLE * Str_MAX_BYTES_PER_CHAR)
 
-#define Asg_MAX_LENGTH_FOLDER 32
+#define Asg_MAX_CHARS_FOLDER	32
+#define Asg_MAX_BYTES_FOLDER	Asg_MAX_CHARS_FOLDER
 
 #define Asg_NUM_TYPES_SEND_WORK 2
 typedef enum
@@ -52,9 +54,9 @@ struct Assignment
    long UsrCod;
    time_t TimeUTC[Dat_NUM_START_END_TIME];
    bool Open;
-   char Title[Asg_MAX_LENGTH_ASSIGNMENT_TITLE + 1];
+   char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
-   char Folder[Asg_MAX_LENGTH_FOLDER + 1];
+   char Folder[Asg_MAX_BYTES_FOLDER + 1];
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups
 				// or, if associated to groups,

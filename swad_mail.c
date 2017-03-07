@@ -50,7 +50,7 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Mai_LENGTH_EMAIL_CONFIRM_KEY Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64
+#define Mai_LENGTH_EMAIL_CONFIRM_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
 /*****************************************************************************/
 /******************************* Private types *******************************/

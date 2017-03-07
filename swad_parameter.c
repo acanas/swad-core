@@ -686,7 +686,7 @@ void Par_GetMainParameters (void)
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
          Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
-                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+                   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
 	 // This user's code is used to go to public profile
 	 // and to refresh old publishings in user's timeline
@@ -702,7 +702,7 @@ void Par_GetMainParameters (void)
 	 /* Set another user's nickname */
 	 Str_RemoveLeadingArrobas (Nickname);
          Str_Copy (Gbl.Usrs.Other.UsrDat.Nickname,Nickname,	// without arroba
-                   Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+                   Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
 	 // This user's code is used to go to public agenda
 	 // If user does not exist ==> UsrCod = -1

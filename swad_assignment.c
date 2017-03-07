@@ -739,11 +739,11 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
 
       /* Get the title of the assignment (row[6]) */
       Str_Copy (Asg->Title,row[6],
-                Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
+                Asg_MAX_CHARS_ASSIGNMENT_TITLE);
 
       /* Get the folder for the assignment files (row[7]) */
       Str_Copy (Asg->Folder,row[7],
-                Asg_MAX_LENGTH_FOLDER);
+                Asg_MAX_BYTES_FOLDER);
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
@@ -1135,7 +1135,7 @@ void Asg_RequestCreatOrEditAsg (void)
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Title,
-            Asg_MAX_LENGTH_ASSIGNMENT_TITLE,Asg.Title);
+            Asg_MAX_CHARS_ASSIGNMENT_TITLE,Asg.Title);
 
    /***** Assignment start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Asg.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -1155,7 +1155,7 @@ void Asg_RequestCreatOrEditAsg (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Upload_files_QUESTION,
             Txt_Folder,
-            Asg_MAX_LENGTH_FOLDER,Asg_MAX_LENGTH_FOLDER,Asg.Folder);
+            Asg_MAX_CHARS_FOLDER,Asg_MAX_CHARS_FOLDER,Asg.Folder);
 
    /***** Assignment text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1285,10 +1285,10 @@ void Asg_RecFormAssignment (void)
    NewAsg.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get assignment title *****/
-   Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_LENGTH_ASSIGNMENT_TITLE);
+   Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /***** Get folder name where to send works of the assignment *****/
-   Par_GetParToText ("Folder",NewAsg.Folder,Asg_MAX_LENGTH_FOLDER);
+   Par_GetParToText ("Folder",NewAsg.Folder,Asg_MAX_BYTES_FOLDER);
    NewAsg.SendWork = (NewAsg.Folder[0]) ? Asg_SEND_WORK :
 	                                  Asg_DO_NOT_SEND_WORK;
 

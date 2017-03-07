@@ -33,18 +33,23 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Ban_MAX_LENGTH_SHRT_NAME	 32
-#define Ban_MAX_LENGTH_FULL_NAME	127
-#define Ban_MAX_LENGTH_IMAGE		255
+#define Ban_MAX_CHARS_SHRT_NAME	 32
+#define Ban_MAX_BYTES_SHRT_NAME	(Ban_MAX_CHARS_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Ban_MAX_CHARS_FULL_NAME	(128 - 1)
+#define Ban_MAX_BYTES_FULL_NAME	(Ban_MAX_CHARS_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
+
+#define Ban_MAX_CHARS_IMAGE	(256 - 1)
+#define Ban_MAX_BYTES_IMAGE	Ban_MAX_CHARS_IMAGE
 
 struct Banner
   {
    long BanCod;
    bool Hidden;
-   char ShrtName[Ban_MAX_LENGTH_SHRT_NAME + 1];
-   char FullName[Ban_MAX_LENGTH_FULL_NAME + 1];
-   char Img[Ban_MAX_LENGTH_IMAGE + 1];
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char ShrtName[Ban_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Ban_MAX_BYTES_FULL_NAME + 1];
+   char Img[Ban_MAX_BYTES_IMAGE + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
   };
 
 /*****************************************************************************/

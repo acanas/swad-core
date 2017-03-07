@@ -434,7 +434,7 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
       /***** Get encrypted user's code *****/
       row = mysql_fetch_row (mysql_res);
       Str_Copy (UsrDat->EncryptedUsrCod,row[0],
-                Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+                Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
@@ -483,7 +483,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get encrypted user's code */
    Str_Copy (UsrDat->EncryptedUsrCod,row[0],
-            Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+            Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
    /* Get encrypted password */
    Str_Copy (UsrDat->Password,row[1],
@@ -550,7 +550,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get rest of data */
    Str_Copy (UsrDat->Photo,row[10],
-             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
    UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
    UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
@@ -2070,7 +2070,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Gbl.Prefs.IconsURL,
             Txt_Password,
             Txt_Password,
-            Pwd_MAX_LENGTH_PLAIN_PASSWORD,
+            Pwd_MAX_CHARS_PLAIN_PASSWORD,
             Txt_password);
 
    /***** Send button and end table and frame *****/
@@ -2374,7 +2374,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
 
 	    Str_Copy (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID,
 	              Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-	              ID_MAX_LENGTH_USR_ID);
+	              ID_MAX_BYTES_USR_ID);
 	    Str_ConvertToUpperText (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);
 
 	    /* Check if user's ID exists in database */
@@ -2412,7 +2412,7 @@ void Usr_PutParamOtherUsrCodEncrypted (void)
    Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
   }
 
-void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1])
+void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
   {
    Par_PutHiddenParamString ("OtherUsrCod",EncryptedUsrCod);
   }
@@ -2424,7 +2424,7 @@ void Usr_PutParamUsrCodEncrypted (const char EncryptedUsrCod[Cry_LENGTH_ENCRYPTE
 void Usr_GetParamOtherUsrCodEncrypted (struct UsrData *UsrDat)
   {
    Par_GetParToText ("OtherUsrCod",UsrDat->EncryptedUsrCod,
-                     Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+                     Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    if (UsrDat->EncryptedUsrCod[0])        // If parameter exists...
      {
       Usr_GetUsrCodFromEncryptedUsrCod (UsrDat);
@@ -2681,7 +2681,7 @@ static bool Usr_ChkUsrAndGetUsrDataFromDirectLogin (void)
 	 ID_ReallocateListIDs (&Gbl.Usrs.Me.UsrDat,1);
 
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID,Gbl.Usrs.Me.UsrIdLogin,
-	           ID_MAX_LENGTH_USR_ID);
+	           ID_MAX_BYTES_USR_ID);
 	 Str_ConvertToUpperText (Gbl.Usrs.Me.UsrDat.IDs.List[0].ID);
 
 	 /* Check if user's ID exists in database, and get user's data */
@@ -4879,7 +4879,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 
             /* Get encrypted user's code (row[1]) */
 	    Str_Copy (UsrInList->EncryptedUsrCod,row[1],
-	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
             /* Get encrypted password (row[2]) */
 	    Str_Copy (UsrInList->Password,row[2],
@@ -4902,7 +4902,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 
             /* Get user's photo (row[7]) */
 	    Str_Copy (UsrInList->Photo,row[7],
-	              Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 
             /* Get user's photo visibility (row[8]) */
             UsrInList->PhotoVisibility = Pri_GetVisibilityFromStr (row[8]);
@@ -5002,7 +5002,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
   {
    UsrDat->UsrCod                = UsrInList->UsrCod;
    Str_Copy (UsrDat->EncryptedUsrCod,UsrInList->EncryptedUsrCod,
-             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    Str_Copy (UsrDat->Surname1,UsrInList->Surname1,
              Usr_MAX_BYTES_NAME);
    Str_Copy (UsrDat->Surname2,UsrInList->Surname2,
@@ -5011,7 +5011,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
              Usr_MAX_BYTES_NAME);
    UsrDat->Sex                   = UsrInList->Sex;
    Str_Copy (UsrDat->Photo,UsrInList->Photo,
-             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
    UsrDat->PhotoVisibility       = UsrInList->PhotoVisibility;
    UsrDat->CtyCod                = UsrInList->CtyCod;
    UsrDat->InsCod                = UsrInList->InsCod;
@@ -5292,7 +5292,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		  ID_ReallocateListIDs (&UsrDat,1);
 
 		  Str_Copy (UsrDat.IDs.List[0].ID,UsrIDNickOrEmail,
-		            ID_MAX_LENGTH_USR_ID);
+		            ID_MAX_BYTES_USR_ID);
 
 		  /***** Check if a user exists having this user's ID *****/
 		  if (ID_GetListUsrCodsFromUsrID (&UsrDat,NULL,&ListUsrCods,false))
@@ -5380,14 +5380,14 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
-   char EncryptedUsrCod[Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
    if (Gbl.Usrs.Select.All)
      {
       Ptr = Gbl.Usrs.Select.All;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
 	    return true;        // Found!
 	}
@@ -5409,7 +5409,7 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
    Ptr = Gbl.Usrs.Select.All;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
          NumUsrs++;

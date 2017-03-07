@@ -6009,7 +6009,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
    if ((Query = malloc (512 +
                         Gbl.Test.Stem.Length +
                         Gbl.Test.Feedback.Length +
-                        Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
+                        Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
                         Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -7070,7 +7070,7 @@ void Tst_ShowUsrsTestResults (void)
       Ptr = Gbl.Usrs.Select.All;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&Gbl.Usrs.Other.UsrDat);
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))               // Get of the database the data of the user
 	    if (Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,

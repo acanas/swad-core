@@ -31,8 +31,11 @@
 /************************* Public types and constants ************************/
 /*****************************************************************************/
 
-#define Pwd_MIN_LENGTH_PLAIN_PASSWORD	  8
-#define Pwd_MAX_LENGTH_PLAIN_PASSWORD	256
+#define Pwd_MIN_CHARS_PLAIN_PASSWORD	  8
+#define Pwd_MIN_BYTES_PLAIN_PASSWORD	Pwd_MIN_CHARS_PLAIN_PASSWORD
+
+#define Pwd_MAX_CHARS_PLAIN_PASSWORD	(256 - 1)
+#define Pwd_MAX_BYTES_PLAIN_PASSWORD	Pwd_MAX_CHARS_PLAIN_PASSWORD
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
@@ -50,8 +53,8 @@ void Pwd_ActChgMyPwd2 (void);
 void Pwd_PutLinkToSendNewPasswd (void);
 void Pwd_ShowFormSendNewPwd (void);
 void Pwd_ChkIdLoginAndSendNewPwd (void);
-int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1]);
-void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_LENGTH_PLAIN_PASSWORD + 1]);
+int Pwd_SendNewPasswordByEmail (char NewRandomPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
+void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1]);
 
 void Pwd_UpdateOtherPwd1 (void);
 void Pwd_UpdateOtherPwd2 (void);

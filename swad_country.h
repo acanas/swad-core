@@ -47,7 +47,7 @@ struct Country
    long CtyCod;
    char Alpha2[2 + 1];
    char Name[1 + Txt_NUM_LANGUAGES][Cty_MAX_BYTES_COUNTRY_NAME + 1];
-   char WWW [1 + Txt_NUM_LANGUAGES][Cns_MAX_LENGTH_WWW + 1];
+   char WWW [1 + Txt_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCty;
    unsigned NumInss;
    unsigned NumCtrs;

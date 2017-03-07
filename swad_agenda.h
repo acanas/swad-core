@@ -34,8 +34,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Agd_MAX_LENGTH_LOCATION	(256-1)
-#define Agd_MAX_LENGTH_EVENT	(256-1)
+#define Agd_MAX_CHARS_LOCATION	(256 - 1)
+#define Agd_MAX_BYTES_LOCATION	(Agd_MAX_CHARS_LOCATION * Str_MAX_BYTES_PER_CHAR)
+
+#define Agd_MAX_CHARS_EVENT	(256 - 1)
+#define Agd_MAX_BYTES_EVENT	(Agd_MAX_CHARS_EVENT * Str_MAX_BYTES_PER_CHAR)
 
 #define Agd_NUM_DATES 2
 typedef enum
@@ -52,8 +55,8 @@ struct AgendaEvent
    bool Hidden;
    time_t TimeUTC[Agd_NUM_DATES];
    Dat_TimeStatus_t TimeStatus;
-   char Event[Agd_MAX_LENGTH_EVENT + 1];
-   char Location[Agd_MAX_LENGTH_LOCATION + 1];
+   char Event[Agd_MAX_BYTES_EVENT + 1];
+   char Location[Agd_MAX_BYTES_LOCATION + 1];
   };
 
 typedef enum

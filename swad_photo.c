@@ -1099,7 +1099,7 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 
    /***** Update photo name in user's data *****/
    Str_Copy (UsrDat->Photo,Gbl.UniqueNameEncrypted,
-             Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
   }
 
 /*****************************************************************************/
@@ -1116,7 +1116,7 @@ void Pho_ShowUsrPhoto (const struct UsrData *UsrDat,const char *PhotoURL,
                                  Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
    bool PutZoomCode = Zoom == Pho_ZOOM &&						// Make zoom
                       Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW;	// Only in main window
-   char IdCaption[Act_MAX_LENGTH_ID];
+   char IdCaption[Act_MAX_BYTES_ID];
 
    /***** Start form to go to public profile *****/
    if (PutLinkToPublicProfile)
@@ -2325,7 +2325,7 @@ static void Pho_ShowDegreeAvgPhotoAndStat (struct Degree *Deg,
    char PhotoURL[PATH_MAX + 1];
    char PhotoCaption[512];
    bool ShowDegPhoto;
-   char IdCaption[Act_MAX_LENGTH_ID];
+   char IdCaption[Act_MAX_BYTES_ID];
 
    /***** Initializations *****/
    PhotoURL[0] = '\0';

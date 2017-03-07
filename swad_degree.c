@@ -107,7 +107,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1]);
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 /*****************************************************************************/
 /********** List pending institutions, centres, degrees and courses **********/
@@ -451,7 +451,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,
+		  Cns_MAX_CHARS_WWW,
 		  Gbl.CurrentDeg.Deg.WWW,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -685,7 +685,7 @@ static void Deg_ListDegreesForEdition (void)
    struct DegreeType *DegTyp;
    struct Degree *Deg;
    unsigned NumDegTyp;
-   char WWW[Cns_MAX_LENGTH_WWW + 1];
+   char WWW[Cns_MAX_BYTES_WWW + 1];
    struct UsrData UsrDat;
    bool ICanEdit;
    Deg_StatusTxt_t StatusTxt;
@@ -814,13 +814,13 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_WWW\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Cns_MAX_LENGTH_WWW,Deg->WWW,Gbl.Form.Id);
+		  Cns_MAX_CHARS_WWW,Deg->WWW,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
 	{
          Str_Copy (WWW,Deg->WWW,
-                   Cns_MAX_LENGTH_WWW);
+                   Cns_MAX_BYTES_WWW);
          fprintf (Gbl.F.Out,"<div class=\"EXTERNAL_WWW_SHORT\">"
                             "<a href=\"%s\" target=\"_blank\""
                             " class=\"DAT\" title=\"%s\">"
@@ -1023,7 +1023,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_LENGTH_WWW,Deg->WWW);
+            Cns_MAX_CHARS_WWW,Deg->WWW);
 
    /***** Current number of courses in this degree *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1166,7 +1166,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
    char Query[512 +
               Deg_MAX_LENGTH_DEGREE_SHRT_NAME +
               Deg_MAX_LENGTH_DEGREE_FULL_NAME +
-              Cns_MAX_LENGTH_WWW];
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new degree *****/
    sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
@@ -1551,7 +1551,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
       Lay_ShowAlert (Lay_ERROR,"Wrong type of degree.");
 
    /* Get degree WWW */
-   Par_GetParToText ("WWW",Deg->WWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",Deg->WWW,Cns_MAX_BYTES_WWW);
 
    if (Deg->ShrtName[0] && Deg->FullName[0])	// If there's a degree name
      {
@@ -1736,7 +1736,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
    /***** Get WWW (row[7]) *****/
    Str_Copy (Deg->WWW,row[7],
-             Cns_MAX_LENGTH_WWW);
+             Cns_MAX_BYTES_WWW);
   }
 
 /*****************************************************************************/
@@ -2113,7 +2113,7 @@ void Deg_ChangeDegWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Degree *Deg;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Deg = &Gbl.Degs.EditingDeg;
 
@@ -2122,7 +2122,7 @@ void Deg_ChangeDegWWW (void)
    Deg->DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /* Get the new WWW for the degree */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of degree *****/
    Deg_GetDataOfDegreeByCod (Deg);
@@ -2133,7 +2133,7 @@ void Deg_ChangeDegWWW (void)
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Deg->DegCod,NewWWW);
       Str_Copy (Deg->WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2153,11 +2153,11 @@ void Deg_ChangeDegWWWInConfig (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   char NewWWW[Cns_MAX_LENGTH_WWW + 1];
+   char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    /***** Get parameters from form *****/
    /* Get the new WWW for the degree */
-   Par_GetParToText ("WWW",NewWWW,Cns_MAX_LENGTH_WWW);
+   Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
@@ -2165,7 +2165,7 @@ void Deg_ChangeDegWWWInConfig (void)
       /***** Update the table changing old WWW by new WWW *****/
       Deg_UpdateDegWWWDB (Gbl.CurrentDeg.Deg.DegCod,NewWWW);
       Str_Copy (Gbl.CurrentDeg.Deg.WWW,NewWWW,
-                Cns_MAX_LENGTH_WWW);
+                Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
@@ -2182,9 +2182,9 @@ void Deg_ChangeDegWWWInConfig (void)
 /**************** Update database changing old WWW by new WWW ****************/
 /*****************************************************************************/
 
-static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_LENGTH_WWW + 1])
+static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char Query[256 + Cns_MAX_LENGTH_WWW];
+   char Query[256 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",

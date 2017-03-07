@@ -114,7 +114,7 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
    char Anchor1Nick[256 + 256 + 256 + Ses_LENGTH_SESSION_ID + 256 + 256];
-   char Anchor2Nick[256 + Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64];
+   char Anchor2Nick[256 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
    size_t TxtLength;
    size_t TxtLengthWithInsertedAnchors;
 
@@ -286,10 +286,10 @@ void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScre
          Links[NumLinks].NumActualBytes = (size_t) (PtrSrc - Links[NumLinks].PtrStart);
 
 	 /* A nick (without arroba) must have a number of characters
-            Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA */
+            Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA <= Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA */
 	 Length = Links[NumLinks].NumActualBytes - 1;	// Do not count the initial @
-	 IsNickname = (Length >= Nck_MIN_LENGTH_NICKNAME_WITHOUT_ARROBA &&
-	               Length <= Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA);
+	 IsNickname = (Length >= Nck_MIN_BYTES_NICKNAME_WITHOUT_ARROBA &&
+	               Length <= Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
 	 if (IsNickname)
 	   {
@@ -2259,38 +2259,6 @@ void Str_GetNextStringUntilSeparator (const char **StrSrc,char *StrDst,size_t Ma
 	 StrDst[i++] = (char) Ch;
       if ((Ch = (int) **StrSrc) != 0)
 	 (*StrSrc)++;
-     }
-   StrDst[i] = '\0';
-  }
-
-/*****************************************************************************/
-/********** Get from file FileSrc the next string until separator ************/
-/*****************************************************************************/
-
-void Str_GetNextStringFromFileUntilSeparator (FILE *FileSrc,char *StrDst)
-  {
-   int i = 0;
-   int Ch;
-
-   /***** Skip separators *****/
-   do
-      Ch = fgetc (FileSrc);
-   while (Ch != EOF &&
-	  (isspace (Ch)    ||
-	   Ch == 0xA0      ||	// Unicode translation for &nbsp;
-	   Ch == (int) ',' ||
-	   Ch == (int) ';')); // Skip spaces, puntuación, etc.
-
-   /***** Copy string while no separator found *****/
-   while (Ch != EOF &&
-	  !(isspace (Ch)    ||
-	    Ch == 0xA0      ||	// Unicode translation for &nbsp;
-	    Ch == (int) ',' ||
-	    Ch == (int) ';'))
-     {
-      if (i < ID_MAX_LENGTH_USR_ID)
-	 StrDst[i++] = (char) Ch;
-      Ch = fgetc (FileSrc);
      }
    StrDst[i] = '\0';
   }

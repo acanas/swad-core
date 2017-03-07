@@ -766,7 +766,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
    Act_Action_t Action;
    Act_Action_t SuperAction;
    Tab_Tab_t Tab;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    unsigned long NumClicks;
 
    /***** Start of section *****/

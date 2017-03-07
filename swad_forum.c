@@ -315,8 +315,6 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
-static void For_PutSubjectContent (const char *Label,const char *Field,
-                                   unsigned NumRows,const char *Content);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
@@ -472,7 +470,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    if ((Query = malloc (512 +
                         strlen (Subject) +
 			strlen (Content) +
-			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
+			Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
@@ -2296,7 +2294,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,Act_Action_t NextAct
    unsigned NumThrsWithNewPosts;
    unsigned NumPosts;
    const char *Style;
-   char ActTxt[Act_MAX_LENGTH_ACTION_TXT + 1];
+   char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (ForumType);
@@ -3866,9 +3864,36 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /***** Subject and content *****/
    // If writing a reply to a message of an existing thread ==> write subject
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
-   For_PutSubjectContent (Txt_MSG_Subject,"Subject", 2,IsReply ? Subject :
-                                                                 NULL);
-   For_PutSubjectContent (Txt_MSG_Message,"Content",15,NULL);
+
+   /* Subject */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_MIDDLE\">"
+	              "<label for=\"Subject\" class=\"%s\">%s:</label>"
+	              "</td>"
+                      "<td class=\"LEFT_MIDDLE\">"
+                      "<input type=\"text\" id=\"Subject\" name=\"Subject\""
+                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " required=\"required\" />"
+                      "</td>"
+                      "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Subject,
+            Cns_MAX_CHARS_SUBJECT,
+            IsReply ? Subject :
+        	      "");
+
+   /* Content */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"RIGHT_TOP\">"
+	              "<label for=\"Content\" class=\"%s\">%s:&nbsp;</label>"
+	              "</td>"
+                      "<td class=\"LEFT_TOP\">"
+                      "<textarea id=\"Content\" name=\"Content\""
+                      " cols=\"72\" rows=\"15\">"
+                      "</textarea>"
+	              "</td>"
+	              "</tr>",
+            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
+
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Help for text editor *****/
@@ -3885,32 +3910,6 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-  }
-
-/*****************************************************************************/
-/****************** Put form field for subject or content ********************/
-/*****************************************************************************/
-
-static void For_PutSubjectContent (const char *Label,const char *Field,
-                                   unsigned NumRows,const char *Content)
-  {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"%s\" class=\"%s\">%s:&nbsp;</label>"
-	              "</td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<textarea id=\"%s\" name=\"%s\""
-                      " cols=\"72\" rows=\"%u\">",
-            Field,The_ClassForm[Gbl.Prefs.Theme],Label,
-            Field,Field,
-            NumRows);
-   if (Content)
-      fprintf (Gbl.F.Out,"%s",Content);
-   fprintf (Gbl.F.Out,"</textarea>"
-	              "</td>"
-	              "</tr>");
   }
 
 /*****************************************************************************/

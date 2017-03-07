@@ -420,7 +420,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
    extern const char *Txt_Other_recipients;
    extern const char *Txt_Recipients;
    extern const char *Txt_nicks_emails_or_IDs_separated_by_commas;
-   char Nickname[Nck_MAX_LENGTH_NICKNAME_WITHOUT_ARROBA + 1];
+   char Nickname[Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
    unsigned Colspan;
    bool StdsAndTchsWritten = Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// If there is a course selected
                              (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// I belong to it
@@ -728,7 +728,7 @@ void Msg_RecMsgFromUsr (void)
 
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData))		// Get recipient's data from the database
         {
@@ -1298,7 +1298,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    if ((Query = malloc (512 +
                         strlen (Subject) +
 			strlen (Content) +
-			Cry_LENGTH_ENCRYPTED_STR_SHA256_BASE64 +
+			Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 

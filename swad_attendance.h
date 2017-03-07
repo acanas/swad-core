@@ -34,7 +34,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE	(256-1)
+#define Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE	(256 - 1)
+#define Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE	(Att_MAX_CHARS_ATTENDANCE_EVENT_TITLE * Str_MAX_BYTES_PER_CHAR)
 
 #define Att_NUM_DATES 2
 typedef enum
@@ -52,7 +53,7 @@ struct AttendanceEvent
    long UsrCod;
    time_t TimeUTC[Att_NUM_DATES];
    bool Open;
-   char Title[Att_MAX_LENGTH_ATTENDANCE_EVENT_TITLE + 1];
+   char Title[Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE + 1];
    bool CommentTchVisible;
 
    /* Fields computed, not associated to the event in database */
