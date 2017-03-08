@@ -187,8 +187,8 @@ mysql> DESCRIBE agendas;
 | Hidden    | enum('N','Y') | NO   |     | N       |                |
 | StartTime | datetime      | NO   |     | NULL    |                |
 | EndTime   | datetime      | NO   |     | NULL    |                |
-| Event     | varchar(255)  | NO   |     | NULL    |                |
-| Location  | varchar(255)  | NO   |     | NULL    |                |
+| Event     | varchar(2047) | NO   |     | NULL    |                |
+| Location  | varchar(2047) | NO   |     | NULL    |                |
 | Txt       | text          | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
 9 rows in set (0,00 sec)
@@ -200,8 +200,8 @@ mysql> DESCRIBE agendas;
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Event VARCHAR(255) NOT NULL,"			// Agd_MAX_BYTES_EVENT
-			"Location VARCHAR(255) NOT NULL,"
+			"Event VARCHAR(2047) NOT NULL,"			// Agd_MAX_BYTES_EVENT
+			"Location VARCHAR(2047) NOT NULL,"		// Agd_MAX_BYTES_LOCATION
 			"Txt TEXT NOT NULL,"
 		   "UNIQUE INDEX(AgdCod),"
 		   "INDEX(UsrCod,Public,Hidden))");

@@ -38,8 +38,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Act_MAX_CHARS_ACTION_TXT	(64 - 1)	// 63
-#define Act_MAX_BYTES_ACTION_TXT	((Act_MAX_CHARS_ACTION_TXT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 1023
+#define Act_MAX_CHARS_ACTION_TXT	(256 - 1)			// 255
+#define Act_MAX_BYTES_ACTION_TXT	Act_MAX_CHARS_ACTION_TXT	// 255
 
 typedef enum
   {
