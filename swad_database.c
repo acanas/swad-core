@@ -289,7 +289,7 @@ mysql> DESCRIBE assignments;
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"Title VARCHAR(2047) NOT NULL,"		// Asg_MAX_BYTES_ASSIGNMENT_TITLE
-			"Folder VARBINARY(255) NOT NULL,"	// Asg_MAX_BYTES_FOLDER
+			"Folder VARBINARY(255) NOT NULL,"	// Brw_MAX_BYTES_FOLDER
 			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AsgCod),"
 		   "INDEX(CrsCod,Hidden))");
@@ -313,15 +313,15 @@ mysql> DESCRIBE att_events;
 9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_events ("
-                   "AttCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UsrCod INT NOT NULL,"
-                   "StartTime DATETIME NOT NULL,"
-                   "EndTime DATETIME NOT NULL,"
-                   "CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Title VARCHAR(255) NOT NULL,"
-                   "Txt TEXT NOT NULL,"
+			"AttCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Title VARCHAR(255) NOT NULL,"
+			"Txt TEXT NOT NULL,"
                    "UNIQUE INDEX(AttCod),"
                    "INDEX(CrsCod,Hidden))");
 

@@ -28,6 +28,7 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_file_browser.h"
 #include "swad_notification.h"
 #include "swad_user.h"
 
@@ -37,9 +38,6 @@
 
 #define Asg_MAX_CHARS_ASSIGNMENT_TITLE	(128 - 1)	// 127
 #define Asg_MAX_BYTES_ASSIGNMENT_TITLE	((Asg_MAX_CHARS_ASSIGNMENT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
-#define Asg_MAX_CHARS_FOLDER	NAME_MAX		// 255
-#define Asg_MAX_BYTES_FOLDER	Asg_MAX_CHARS_FOLDER	// 255
 
 #define Asg_NUM_TYPES_SEND_WORK 2
 typedef enum
@@ -57,7 +55,7 @@ struct Assignment
    bool Open;
    char Title[Asg_MAX_BYTES_ASSIGNMENT_TITLE + 1];
    Asg_SendWork_t SendWork;
-   char Folder[Asg_MAX_BYTES_FOLDER + 1];
+   char Folder[Brw_MAX_BYTES_FOLDER + 1];
    bool IBelongToCrsOrGrps;	// I can do this assignment
 				// (it is associated to no groups
 				// or, if associated to groups,

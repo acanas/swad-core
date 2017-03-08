@@ -1565,7 +1565,7 @@ static bool Brw_PasteTreeIntoFolder (unsigned Level,
                                      const char PathDstInTree[PATH_MAX + 1],
                                      struct Brw_NumObjects *Pasted,
                                      long *FirstFilCod);
-static void Brw_PutFormToCreateAFolder (const char *FileNameToShow);
+static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1]);
 static void Brw_PutFormToUploadFilesUsingDropzone (const char *FileNameToShow);
 static void Brw_PutFormToUploadOneFileClassic (const char *FileNameToShow);
 static void Brw_PutFormToPasteAFileOrFolder (const char *FileNameToShow);
@@ -2500,7 +2500,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
       if (Gbl.FileBrowser.Level == 1)
          // We are in this case: assignments/assignment-folder
          Str_Copy (Gbl.FileBrowser.Asg.Folder,Gbl.FileBrowser.FilFolLnkName,
-                   Asg_MAX_BYTES_FOLDER);
+                   Brw_MAX_BYTES_FOLDER);
       else
         {
          // We are in this case: assignments/assignment-folder/rest-of-path
@@ -2510,7 +2510,7 @@ static void Brw_GetParamsPathInTreeAndFileName (void)
          if (*Ptr == '/')
             Ptr++;	// Skip '/'
          for (i = 0;
-              i < Asg_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
+              i < Brw_MAX_BYTES_FOLDER && *Ptr && *Ptr != '/';
               i++, Ptr++)
             Gbl.FileBrowser.Asg.Folder[i] = *Ptr;	// Copy assignment folder
          Gbl.FileBrowser.Asg.Folder[i] = '\0';
@@ -5206,7 +5206,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
       if (Level == 1)	// Main folder of the assignment
 	{
 	 Str_Copy (Gbl.FileBrowser.Asg.Folder,FileName,
-	           Asg_MAX_BYTES_FOLDER);
+	           Brw_MAX_BYTES_FOLDER);
 	 Asg_GetDataOfAssignmentByFolder (&Gbl.FileBrowser.Asg);
 	 // The data of this assignment remains in Gbl.FileBrowser.Asg
 	 // for all subsequent rows with Level > 1 (files or folders inside this folder),
@@ -5905,10 +5905,11 @@ static void Brw_WriteFileName (unsigned Level,bool IsPublic,
       if (Gbl.FileBrowser.ICanEditFileOrFolder)	// Can I rename this folder?
 	{
       	 fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewFolderName\""
-      	                    " maxlength=\"30\" value=\"%s\""
+      	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"%s %s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-		  FileName,Gbl.FileBrowser.InputStyle,
+                  Brw_MAX_CHARS_FOLDER,FileName,
+                  Gbl.FileBrowser.InputStyle,
                   Gbl.FileBrowser.Clipboard.IsThisFile ? "LIGHT_GREEN" :
                 	                                 Gbl.ColorRows[Gbl.RowEvenOdd],
                   Gbl.Form.Id);
@@ -7904,7 +7905,7 @@ void Brw_ShowFormFileBrowser (void)
 /************* Put form to create a new folder in a file browser *************/
 /*****************************************************************************/
 
-static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
+static void Brw_PutFormToCreateAFolder (const char FileNameToShow[NAME_MAX + 1])
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Create_folder;
@@ -7928,10 +7929,11 @@ static void Brw_PutFormToCreateAFolder (const char *FileNameToShow)
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
 	              "%s: "
                       "<input type=\"text\" name=\"NewFolderName\""
-                      " size=\"30\" maxlength=\"30\" value=\"\""
+                      " size=\"30\" maxlength=\"%u\" value=\"\""
                       " required=\"required\" />"
 	              "</label>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Folder);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Folder,
+            Brw_MAX_CHARS_FOLDER);
 
    /* Button to send and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_folder);
@@ -8128,11 +8130,12 @@ static void Brw_PutFormToCreateALink (const char *FileNameToShow)
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\""
                       " id=\"NewLinkName\" name=\"NewLinkName\""
-                      " size=\"30\" maxlength=\"100\" value=\"\" />"
+                      " size=\"30\" maxlength=\"%u\" value=\"\" />"
                       "</td>"
                       "</tr>"
                       "</table>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_Save_as,Txt_optional,
+            Brw_MAX_CHARS_FOLDER);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CREATE_BUTTON,Txt_Create_link);

@@ -33,8 +33,11 @@
 #include "swad_notification.h"
 
 /*****************************************************************************/
-/******************************* Public types ********************************/
+/************************ Public types and constants *************************/
 /*****************************************************************************/
+
+#define Brw_MAX_CHARS_FOLDER	30		// 30
+#define Brw_MAX_BYTES_FOLDER	NAME_MAX	// 255
 
 #define Brw_NUM_TYPES_FILE_BROWSER 27
 // The following types are stored in several database tables as numeric fields,

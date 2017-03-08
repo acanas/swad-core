@@ -447,9 +447,11 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
    if (Asg->SendWork == Asg_SEND_WORK)
      {
       /***** Folder icon *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
-	  Asg->Open &&
-	  Asg->IBelongToCrsOrGrps)	// I can send files to this assignment folder
+      if (!Asg->Hidden &&				// It's visible (not hidden)
+	  Asg->Open &&					// It's open (inside dates)
+	  Asg->IBelongToCrsOrGrps &&			// I belong to course or groups
+	  Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
+	 // I can send files to this assignment folder
         {
          /* Form to create a new file or folder */
          Act_FormStart (ActFrmCreAsgUsr);
@@ -739,11 +741,11 @@ static void Asg_GetDataOfAssignment (struct Assignment *Asg,const char *Query)
 
       /* Get the title of the assignment (row[6]) */
       Str_Copy (Asg->Title,row[6],
-                Asg_MAX_CHARS_ASSIGNMENT_TITLE);
+                Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
       /* Get the folder for the assignment files (row[7]) */
       Str_Copy (Asg->Folder,row[7],
-                Asg_MAX_BYTES_FOLDER);
+                Brw_MAX_BYTES_FOLDER);
       Asg->SendWork = (Asg->Folder[0] != '\0');
 
       /* Can I do this assignment? */
@@ -1148,14 +1150,14 @@ void Asg_RequestCreatOrEditAsg (void)
                       "<td class=\"LEFT_MIDDLE\">"
 	              "<label class=\"DAT\">%s:"
                       "<input type=\"text\" name=\"Folder\""
-                      " size=\"%u\" maxlength=\"%u\" value=\"%s\" />"
+                      " size=\"30\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>"
                       "</td>"
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Upload_files_QUESTION,
             Txt_Folder,
-            Asg_MAX_CHARS_FOLDER,Asg_MAX_CHARS_FOLDER,Asg.Folder);
+            Brw_MAX_CHARS_FOLDER,Asg.Folder);
 
    /***** Assignment text *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1288,7 +1290,7 @@ void Asg_RecFormAssignment (void)
    Par_GetParToText ("Title",NewAsg.Title,Asg_MAX_BYTES_ASSIGNMENT_TITLE);
 
    /***** Get folder name where to send works of the assignment *****/
-   Par_GetParToText ("Folder",NewAsg.Folder,Asg_MAX_BYTES_FOLDER);
+   Par_GetParToText ("Folder",NewAsg.Folder,Brw_MAX_BYTES_FOLDER);
    NewAsg.SendWork = (NewAsg.Folder[0]) ? Asg_SEND_WORK :
 	                                  Asg_DO_NOT_SEND_WORK;
 
