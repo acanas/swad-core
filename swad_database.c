@@ -103,12 +103,12 @@ mysql> DESCRIBE IP_prefs;
 8 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
-			"IP CHAR(15) NOT NULL,"				// Cns_MAX_BYTES_IP
+			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"UsrCod INT NOT NULL DEFAULT -1,"
 			"LastChange DATETIME NOT NULL,"
 			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-			"Theme CHAR(16) NOT NULL,"			// The_MAX_BYTES_THEME_ID
-			"IconSet CHAR(16) NOT NULL,"			// Ico_MAX_BYTES_ICON_SET_ID
+			"Theme CHAR(16) NOT NULL,"	// The_MAX_BYTES_THEME_ID
+			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
 			"Menu TINYINT NOT NULL DEFAULT 0,"
 			"SideCols TINYINT NOT NULL,"
 		   "PRIMARY KEY (IP),"
@@ -132,7 +132,7 @@ mysql> DESCRIBE actions;
 			"ActCod INT NOT NULL DEFAULT -1,"
 			"Language CHAR(2) NOT NULL,"
 			"Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Txt VARCHAR(255) NOT NULL,"			// Act_MAX_BYTES_ACTION_TXT
+			"Txt VARCHAR(255) NOT NULL,"	// Act_MAX_BYTES_ACTION_TXT
 		   "UNIQUE INDEX(ActCod,Language),"
 		   "INDEX(Txt))");
 
@@ -200,8 +200,8 @@ mysql> DESCRIBE agendas;
 			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
-			"Event VARCHAR(2047) NOT NULL,"			// Agd_MAX_BYTES_EVENT
-			"Location VARCHAR(2047) NOT NULL,"		// Agd_MAX_BYTES_LOCATION
+			"Event VARCHAR(2047) NOT NULL,"		// Agd_MAX_BYTES_EVENT
+			"Location VARCHAR(2047) NOT NULL,"	// Agd_MAX_BYTES_LOCATION
 			"Txt TEXT NOT NULL,"
 		   "UNIQUE INDEX(AgdCod),"
 		   "INDEX(UsrCod,Public,Hidden))");
@@ -218,8 +218,8 @@ mysql> DESCRIBE ann_seen;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ann_seen ("
-		   "AnnCod INT NOT NULL,"
-		   "UsrCod INT NOT NULL,"
+			"AnnCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(AnnCod,UsrCod))");
 
    /***** Table announcements *****/
@@ -237,13 +237,13 @@ mysql> DESCRIBE announcements;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS announcements ("
-                   "AnnCod INT NOT NULL AUTO_INCREMENT,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "Roles INT NOT NULL DEFAULT 0,"
-                   "Subject TEXT NOT NULL,"
-                   "Content TEXT NOT NULL,"
-                   "UNIQUE INDEX(AnnCod),"
-                   "INDEX(Status))");
+			"AnnCod INT NOT NULL AUTO_INCREMENT,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"Roles INT NOT NULL DEFAULT 0,"
+			"Subject TEXT NOT NULL,"	// Cns_MAX_BYTES_SUBJECT
+			"Content TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(AnnCod),"
+		   "INDEX(Status))");
 
    /***** Table asg_grp *****/
 /*
@@ -257,42 +257,42 @@ mysql> DESCRIBE asg_grp;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS asg_grp ("
-                   "AsgCod INT NOT NULL,"
-                   "GrpCod INT NOT NULL,"
-                   "UNIQUE INDEX(AsgCod,GrpCod))");
+			"AsgCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(AsgCod,GrpCod))");
 
    /***** Table assignments *****/
 /*
 mysql> DESCRIBE assignments;
-+-----------+---------------+------+-----+---------+----------------+
-| Field     | Type          | Null | Key | Default | Extra          |
-+-----------+---------------+------+-----+---------+----------------+
-| AsgCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
-| CrsCod    | int(11)       | NO   | MUL | -1      |                |
-| Hidden    | enum('N','Y') | NO   |     | N       |                |
-| NumNotif  | int(11)       | NO   |     | 0       |                |
-| UsrCod    | int(11)       | NO   |     | NULL    |                |
-| StartTime | datetime      | NO   |     | NULL    |                |
-| EndTime   | datetime      | NO   |     | NULL    |                |
-| Title     | varchar(255)  | NO   |     | NULL    |                |
-| Folder    | varbinary(32) | NO   |     | NULL    |                |
-| Txt       | text          | NO   |     | NULL    |                |
-+-----------+---------------+------+-----+---------+----------------+
-10 rows in set (0.00 sec)
++-----------+----------------+------+-----+---------+----------------+
+| Field     | Type           | Null | Key | Default | Extra          |
++-----------+----------------+------+-----+---------+----------------+
+| AsgCod    | int(11)        | NO   | PRI | NULL    | auto_increment |
+| CrsCod    | int(11)        | NO   | MUL | -1      |                |
+| Hidden    | enum('N','Y')  | NO   |     | N       |                |
+| NumNotif  | int(11)        | NO   |     | 0       |                |
+| UsrCod    | int(11)        | NO   |     | NULL    |                |
+| StartTime | datetime       | NO   |     | NULL    |                |
+| EndTime   | datetime       | NO   |     | NULL    |                |
+| Title     | varchar(2047)  | NO   |     | NULL    |                |
+| Folder    | varbinary(255) | NO   |     | NULL    |                |
+| Txt       | text           | NO   |     | NULL    |                |
++-----------+----------------+------+-----+---------+----------------+
+10 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS assignments ("
-                   "AsgCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "NumNotif INT NOT NULL DEFAULT 0,"
-                   "UsrCod INT NOT NULL,"
-                   "StartTime DATETIME NOT NULL,"
-                   "EndTime DATETIME NOT NULL,"
-                   "Title VARCHAR(255) NOT NULL,"
-                   "Folder VARBINARY(32) NOT NULL,"
-                   "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(AsgCod),"
-                   "INDEX(CrsCod,Hidden))");
+			"AsgCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"		// Asg_MAX_BYTES_ASSIGNMENT_TITLE
+			"Folder VARBINARY(255) NOT NULL,"	// Asg_MAX_BYTES_FOLDER
+			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(AsgCod),"
+		   "INDEX(CrsCod,Hidden))");
 
    /***** Table att_events *****/
 /*
