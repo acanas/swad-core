@@ -53,10 +53,10 @@ extern struct Globals Gbl;
 
 #define Syl_MAX_LEVELS_SYLLABUS		  10
 
-#define Syl_MAX_LENGTH_ITEM_COD			(Syl_MAX_LEVELS_SYLLABUS * (10 + 1) - 1)
+#define Syl_MAX_BYTES_ITEM_COD		(Syl_MAX_LEVELS_SYLLABUS * (10 + 1) - 1)
 
-#define Syl_MAX_LENGTH_TEXT_ITEM	1024
-#define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_LENGTH_TEXT_ITEM*Str_MAX_BYTES_PER_CHAR)
+#define Syl_MAX_CHARS_TEXT_ITEM		1000
+#define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_CHARS_TEXT_ITEM * Str_MAX_BYTES_PER_CHAR)
 
 #define Syl_WIDTH_NUM_SYLLABUS 20
 
@@ -948,7 +948,7 @@ static void Syl_PutFormItemSyllabus (bool NewItem,unsigned NumItem,int Level,int
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Txt\""
 	              " size=\"80\" maxlength=\"%u\" value=\"%s\""
                       " placeholder=\"%s\"",
-	    Syl_MAX_LENGTH_TEXT_ITEM,Text,
+	    Syl_MAX_CHARS_TEXT_ITEM,Text,
 	    Txt_Enter_a_new_item_here);
    if (NewItem)
       fprintf (Gbl.F.Out," autofocus=\"autofocus\"");
@@ -987,14 +987,14 @@ static void Syl_WriteNumItem (char *StrDst,FILE *FileTgt,int Level,int *CodItem)
 	{
 	 if (StrDst)
 	    Str_Concat (StrDst,".",
-	                Syl_MAX_LENGTH_ITEM_COD);
+	                Syl_MAX_BYTES_ITEM_COD);
 	 if (FileTgt)
 	    fprintf (FileTgt,".");
 	}
       sprintf (InStr,"%d",CodItem[N]);
       if (StrDst)
 	 Str_Concat (StrDst,InStr,
-	             Syl_MAX_LENGTH_ITEM_COD);
+	             Syl_MAX_BYTES_ITEM_COD);
       if (FileTgt)
 	 fprintf (FileTgt,"%s",InStr);
      }

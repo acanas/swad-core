@@ -49,9 +49,10 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Svy_MAX_LENGTH_ANSWER		1000
-#define Svy_MAX_BYTES_ANSWER		(Svy_MAX_LENGTH_ANSWER * Str_MAX_BYTES_PER_CHAR)
-#define Svy_MAX_BYTES_LIST_ANSWER_TYPES		(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
+#define Svy_MAX_CHARS_ANSWER	1000
+#define Svy_MAX_BYTES_ANSWER	(Svy_MAX_CHARS_ANSWER * Str_MAX_BYTES_PER_CHAR)
+
+#define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
 
 const char *Svy_StrAnswerTypesDB[Svy_NUM_ANS_TYPES] =
   {
@@ -1202,7 +1203,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
 
       /* Get the title of the survey (row[9]) */
       Str_Copy (Svy->Title,row[9],
-                Svy_MAX_LENGTH_SURVEY_TITLE);
+                Svy_MAX_BYTES_SURVEY_TITLE);
 
       /* Get number of questions and number of users who have already answer this survey */
       Svy->NumQsts = Svy_GetNumQstsSvy (Svy->SvyCod);
@@ -1842,7 +1843,7 @@ void Svy_RequestCreatOrEditSvy (void)
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Title,
-            Svy_MAX_LENGTH_SURVEY_TITLE,Svy.Title);
+            Svy_MAX_CHARS_SURVEY_TITLE,Svy.Title);
 
    /***** Survey start and end dates *****/
    Dat_PutFormStartEndClientLocalDateTimes (Svy.TimeUTC,Dat_FORM_SECONDS_ON);
@@ -2128,7 +2129,7 @@ void Svy_RecFormSurvey (void)
    NewSvy.TimeUTC[Dat_END_TIME  ] = Dat_GetTimeUTCFromForm ("EndTimeUTC"  );
 
    /***** Get survey title *****/
-   Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_LENGTH_SURVEY_TITLE);
+   Par_GetParToText ("Title",NewSvy.Title,Svy_MAX_BYTES_SURVEY_TITLE);
 
    /***** Get survey text and insert links *****/
    Par_GetParToHTML ("Txt",Txt,Cns_MAX_BYTES_TEXT);	// Store in HTML format (not rigorous)
@@ -3319,7 +3320,7 @@ static void Svy_WriteQstStem (const char *Stem)
    size_t Length;
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
-   Length = strlen (Stem) * Str_MAX_BYTES_SPEC_CHAR_HTML;
+   Length = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (HeadingRigorousHTML,Stem,

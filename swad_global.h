@@ -630,7 +630,7 @@ struct Globals
       TT_ClassType_t ClassType;
       unsigned Duration;
       char Place[TT_MAX_BYTES_PLACE + 1];
-      char Group[TT_MAX_BYTES_GROUP + 1];
+      char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
       long GrpCod;		// Group code (-1 if no group selected)
       struct
         {

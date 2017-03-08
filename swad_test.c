@@ -53,7 +53,7 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-// strings are limited to Tst_MAX_LENGTH_FEEDBACK_TYPE characters
+// strings are limited to Tst_MAX_BYTES_FEEDBACK_TYPE bytes
 const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
   {
    "nothing",
@@ -63,7 +63,7 @@ const char *Tst_FeedbackXML[Tst_NUM_TYPES_FEEDBACK] =
    "fullFeedback",
   };
 
-// strings are limited to Tst_MAX_LENGTH_ANSWER_TYPE characters
+// strings are limited to Tst_MAX_BYTES_ANSWER_TYPE characters
 const char *Tst_StrAnswerTypesXML[Tst_NUM_ANS_TYPES] =
   {
    "int",
@@ -1020,7 +1020,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
    char *StemRigorousHTML;
 
    /***** Convert the stem, that is in HTML, to rigorous HTML *****/
-   StemLength = strlen (Stem) * Str_MAX_BYTES_SPEC_CHAR_HTML;
+   StemLength = strlen (Stem) * Str_MAX_BYTES_PER_CHAR;
    if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (StemRigorousHTML,Stem,
@@ -1150,7 +1150,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
       if (Feedback[0])
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
-	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_SPEC_CHAR_HTML;
+	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_PER_CHAR;
 	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
 	 Str_Copy (FeedbackRigorousHTML,Feedback,
@@ -1737,7 +1737,7 @@ static void Tst_ShowFormEditTags (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"NewTagTxt\""
                             " size=\"36\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  Tst_MAX_LENGTH_TAG,row[1],Gbl.Form.Id);
+                  Tst_MAX_CHARS_TAG,row[1],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -2323,13 +2323,13 @@ void Tst_ListQuestionsToEdit (void)
 /********** Get from the database several test questions for listing *********/
 /*****************************************************************************/
 
-#define Tst_MAX_LENGTH_QUERY_TEST (16 * 1024 - 1)
+#define Tst_MAX_BYTES_QUERY_TEST (16 * 1024 - 1)
 
 static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
   {
    extern const char *Txt_No_questions_found_matching_your_search_criteria;
    unsigned long NumRows;
-   char Query[Tst_MAX_LENGTH_QUERY_TEST + 1];
+   char Query[Tst_MAX_BYTES_QUERY_TEST + 1];
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -2367,25 +2367,25 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
                  " FROM tst_questions");
    if (!Gbl.Test.Tags.All)
       Str_Concat (Query,",tst_question_tags,tst_tags",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
 
    Str_Concat (Query," WHERE tst_questions.CrsCod='",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    sprintf (CrsCodStr,"%ld",Gbl.CurrentCrs.Crs.CrsCod);
    Str_Concat (Query,CrsCodStr,
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"' AND tst_questions.EditTime>=FROM_UNIXTIME('",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[0]);
    Str_Concat (Query,LongStr,
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"') AND tst_questions.EditTime<=FROM_UNIXTIME('",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    sprintf (LongStr,"%ld",(long) Gbl.DateRange.TimeUTC[1]);
    Str_Concat (Query,LongStr,
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    Str_Concat (Query,"')",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
 
    /* Add the tags selected */
    if (!Gbl.Test.Tags.All)
@@ -2393,11 +2393,11 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
       Str_Concat (Query," AND tst_questions.QstCod=tst_question_tags.QstCod"
 	                " AND tst_question_tags.TagCod=tst_tags.TagCod"
                         " AND tst_tags.CrsCod='",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
       Str_Concat (Query,CrsCodStr,
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
       Str_Concat (Query,"'",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
       LengthQuery = strlen (Query);
       NumItemInList = 0;
       Ptr = Gbl.Test.Tags.List;
@@ -2405,20 +2405,20 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
-         if (LengthQuery > Tst_MAX_LENGTH_QUERY_TEST - 256)
+         if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,TagText,
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,"'",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
       Str_Concat (Query,")",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add the types of answer selected */
@@ -2432,53 +2432,53 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tst_MAX_BYTES_TAG);
 	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
-         if (LengthQuery > Tst_MAX_LENGTH_QUERY_TEST - 256)
+         if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 256)
             Lay_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,"'",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
       Str_Concat (Query,")",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End the query */
    Str_Concat (Query," GROUP BY tst_questions.QstCod",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
 
    switch (Gbl.Test.SelectedOrder)
      {
       case Tst_ORDER_STEM:
          Str_Concat (Query," ORDER BY tst_questions.Stem",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS:
          Str_Concat (Query," ORDER BY tst_questions.NumHits DESC,"
                            "tst_questions.Stem",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE:
          Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHits DESC,"
                            "tst_questions.NumHits DESC,"
                            "tst_questions.Stem",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_NUM_HITS_NOT_BLANK:
          Str_Concat (Query," ORDER BY tst_questions.NumHitsNotBlank DESC,"
                            "tst_questions.Stem",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          break;
       case Tst_ORDER_AVERAGE_SCORE_NOT_BLANK:
          Str_Concat (Query," ORDER BY tst_questions.Score/tst_questions.NumHitsNotBlank DESC,"
                            "tst_questions.NumHitsNotBlank DESC,"
                            "tst_questions.Stem",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          break;
      }
 
@@ -2497,7 +2497,7 @@ static unsigned long Tst_GetQuestionsForEdit (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
   {
-   char Query[Tst_MAX_LENGTH_QUERY_TEST + 1];
+   char Query[Tst_MAX_BYTES_QUERY_TEST + 1];
    long LengthQuery;
    unsigned NumItemInList;
    const char *Ptr;
@@ -2558,20 +2558,20 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
         {
          Par_GetNextStrUntilSeparParamMult (&Ptr,TagText,Tst_MAX_BYTES_TAG);
          LengthQuery = LengthQuery + 35 + strlen (TagText) + 1;
-         if (LengthQuery > Tst_MAX_LENGTH_QUERY_TEST - 128)
+         if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_tags.TagTxt='" :
                                      " AND (tst_tags.TagTxt='",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,TagText,
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,"'",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
       Str_Concat (Query,")",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* Add answer types selected */
@@ -2585,28 +2585,28 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
          Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,Tst_MAX_BYTES_TAG);
 	 AnsType = Tst_ConvertFromUnsignedStrToAnsTyp (UnsignedStr);
          LengthQuery = LengthQuery + 35 + strlen (Tst_StrAnswerTypesDB[AnsType]) + 1;
-         if (LengthQuery > Tst_MAX_LENGTH_QUERY_TEST - 128)
+         if (LengthQuery > Tst_MAX_BYTES_QUERY_TEST - 128)
             Lay_ShowErrorAndExit ("Query size exceed.");
          Str_Concat (Query,
                      NumItemInList ? " OR tst_questions.AnsType='" :
                                      " AND (tst_questions.AnsType='",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,Tst_StrAnswerTypesDB[AnsType],
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          Str_Concat (Query,"'",
-                     Tst_MAX_LENGTH_QUERY_TEST);
+                     Tst_MAX_BYTES_QUERY_TEST);
          NumItemInList++;
         }
       Str_Concat (Query,")",
-                  Tst_MAX_LENGTH_QUERY_TEST);
+                  Tst_MAX_BYTES_QUERY_TEST);
      }
 
    /* End query */
    Str_Concat (Query," ORDER BY RAND(NOW()) LIMIT ",
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
    sprintf (StrNumQsts,"%u",Gbl.Test.NumQsts);
    Str_Concat (Query,StrNumQsts,
-               Tst_MAX_LENGTH_QUERY_TEST);
+               Tst_MAX_BYTES_QUERY_TEST);
 /*
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
@@ -3062,7 +3062,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             row = mysql_fetch_row (mysql_res);
 
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
-            LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_SPEC_CHAR_HTML;
+            LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_PER_CHAR;
             if ((Answer = malloc (LengthAnswer + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (Answer,row[1],
@@ -3076,7 +3076,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             if (row[2])
                if (row[2][0])
         	 {
-		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_SPEC_CHAR_HTML;
+		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_PER_CHAR;
 		  if ((Feedback = malloc (LengthFeedback + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (Feedback,row[2],
@@ -4556,7 +4556,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
                          " class=\"TAG_TXT\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"changeSelTag('%u')\" />"
                          "</td>",
-	       NumTag,NumTag,Tst_MAX_LENGTH_TAG,Gbl.Test.Tags.Txt[NumTag],NumTag);
+	       NumTag,NumTag,Tst_MAX_CHARS_TAG,Gbl.Test.Tags.Txt[NumTag],NumTag);
 
       fprintf (Gbl.F.Out,"</tr>");
      }
@@ -5373,7 +5373,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 
             /* Get answer */
             sprintf (AnsStr,"AnsStr%u",NumOpt);
-	    Par_GetParToHTML (AnsStr,Gbl.Test.Answer.Options[NumOpt].Text,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	    Par_GetParToHTML (AnsStr,Gbl.Test.Answer.Options[NumOpt].Text,
+	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 	    if (Gbl.Test.AnswerType == Tst_ANS_TEXT)
 	       /* In order to compare student answer to stored answer,
 	          the text answers are stored avoiding two or more consecurive spaces */
@@ -5381,7 +5382,8 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
 
             /* Get feedback */
             sprintf (FbStr,"FbStr%u",NumOpt);
-	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
+	    Par_GetParToHTML (FbStr,Gbl.Test.Answer.Options[NumOpt].Feedback,
+	                      Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
 
 	    /* Get image associated to the answer (action, file and title) */
 	    if (Gbl.Test.AnswerType == Tst_ANS_UNIQUE_CHOICE ||

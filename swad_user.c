@@ -96,7 +96,7 @@ const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
 #define Usr_NUM_ALL_FIELDS_DATA_TCH	11
 const char *Usr_UsrDatMainFieldNames[Usr_NUM_MAIN_FIELDS_DATA_USR];
 
-#define Usr_MAX_LENGTH_QUERY_GET_LIST_USRS (16 * 1024 - 1)
+#define Usr_MAX_BYTES_QUERY_GET_LIST_USRS (16 * 1024 - 1)
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/
@@ -148,7 +148,7 @@ static void Usr_WriteUsrData (const char *BgColor,
                               bool NonBreak,bool Accepted);
 
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
-                                           char Query[Usr_MAX_LENGTH_QUERY_GET_LIST_USRS + 1]);
+                                           char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1]);
 
 static void Usr_GetAdmsLst (Sco_Scope_t Scope);
 static void Usr_GetGstsLst (Sco_Scope_t Scope);
@@ -3120,14 +3120,14 @@ static void Usr_InsertMyLastData (void)
 /*********** Write a row of a table with the main data of a user *************/
 /*****************************************************************************/
 
-#define Usr_MAX_LENGTH_BG_COLOR (16 - 1)
+#define Usr_MAX_BYTES_BG_COLOR (16 - 1)
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr)
   {
    extern const char *Txt_Enrollment_confirmed;
    extern const char *Txt_Enrollment_not_confirmed;
-   char BgColor[Usr_MAX_LENGTH_BG_COLOR + 1];
+   char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
    bool UsrIsTheMsgSender = PutCheckBoxToSelectUsr &&
@@ -3141,7 +3141,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    // Two colors are used alternatively to better distinguish the rows
    if (UsrIsTheMsgSender)
       Str_Copy (BgColor,"LIGHT_GREEN",
-                Usr_MAX_LENGTH_BG_COLOR);
+                Usr_MAX_BYTES_BG_COLOR);
    else
       sprintf (BgColor,"COLOR%u",Gbl.RowEvenOdd);
 
@@ -3926,7 +3926,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
 /*****************************************************************************/
 
 static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
-                                           char Query[Usr_MAX_LENGTH_QUERY_GET_LIST_USRS + 1])
+                                           char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1])
   {
    unsigned NumPositiveCods = 0;
    unsigned NumNegativeCods = 0;
@@ -4033,7 +4033,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
            {
             Str_Concat (Query," AND (crs_usr.UsrCod IN"
                               " (SELECT DISTINCT UsrCod FROM crs_grp_usr WHERE",
-                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumPositiveCods = 0;
             for (NumGrpSel = 0;
                  NumGrpSel < Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps;
@@ -4042,16 +4042,16 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                  {
                   Str_Concat (Query,NumPositiveCods ? " OR GrpCod='" :
                 	                              " GrpCod='",
-                	      Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                	      Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   sprintf (LongStr,"%ld",GrpCod);
                   Str_Concat (Query,LongStr,
-                              Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                              Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   Str_Concat (Query,"'",
-                              Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                              Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
                   NumPositiveCods++;
                  }
             Str_Concat (Query,")",
-                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
            }
         }
 
@@ -4063,27 +4063,27 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
            {
             if (NumPositiveCods || NumNegativeCods)
                Str_Concat (Query," OR ",
-                           Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                           Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             else
                Str_Concat (Query," AND (",
-                           Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                           Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             /* Select all the students of the course who don't belong to any group of type GrpTypCod */
             Str_Concat (Query,"crs_usr.UsrCod NOT IN"
                               " (SELECT DISTINCT crs_grp_usr.UsrCod"
                               " FROM crs_grp,crs_grp_usr"
                               " WHERE crs_grp.GrpTypCod='",
-                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             sprintf (LongStr,"%ld",Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
             Str_Concat (Query,LongStr,
-                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             Str_Concat (Query,"' AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
-                        Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                        Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
             NumNegativeCods++;
            }
       if (NumPositiveCods ||
           NumNegativeCods)
          Str_Concat (Query,")",
-                     Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+                     Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
 
       /***** Free memory used by the list of booleans AddStdsWithoutGroupOf *****/
       free ((void *) AddStdsWithoutGroupOf);
@@ -4098,7 +4098,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 	             "usr_data.Surname2,"
 	             "usr_data.FirstName,"
 	             "usr_data.UsrCod",
-	       Usr_MAX_LENGTH_QUERY_GET_LIST_USRS);
+	       Usr_MAX_BYTES_QUERY_GET_LIST_USRS);
   }
 
 /*****************************************************************************/
@@ -4110,7 +4110,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
-   char Query[Usr_MAX_LENGTH_QUERY_GET_LIST_USRS + 1];	// Big query when the course has lot of groups
+   char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1];	// Big query when the course has lot of groups
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"

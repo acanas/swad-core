@@ -1123,7 +1123,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
            {
             /* Convert the answer, that is in HTML, to rigorous HTML */
             AnswerTextLength = strlen (Gbl.Test.Answer.Options[NumOpt].Text) *
-        	               Str_MAX_BYTES_SPEC_CHAR_HTML;
+        	               Str_MAX_BYTES_PER_CHAR;
             if ((AnswerText = malloc (AnswerTextLength + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (AnswerText,Gbl.Test.Answer.Options[NumOpt].Text,
@@ -1138,7 +1138,7 @@ static void TsI_WriteRowImportedQst (struct XMLElement *StemElem,
                if (Gbl.Test.Answer.Options[NumOpt].Feedback[0])
 		 {
 	          AnswerFeedbackLength = strlen (Gbl.Test.Answer.Options[NumOpt].Feedback) *
-					 Str_MAX_BYTES_SPEC_CHAR_HTML;
+					 Str_MAX_BYTES_PER_CHAR;
 	          if ((AnswerFeedback = malloc (AnswerFeedbackLength + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (AnswerFeedback,

@@ -62,8 +62,7 @@ extern struct Globals Gbl;
 #define TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN 	 ((100 - TT_PERCENT_WIDTH_OF_ALL_DAYS - TT_PERCENT_WIDTH_OF_A_SEPARATION_COLUMN * 2) / 2)	// Width (%) of the separation columns
 
 #define TT_MAX_BYTES_STR_CLASS_TYPE		256
-#define TT_MAX_BYTES_STR_DURATION		(2 + 1 + 2 + 1 + 1)	// "hh:mm h"
-#define TT_MAX_LENGTH_PLACE			 32
+#define TT_MAX_BYTES_STR_DURATION		 32	// "hh:mm h"
 
 /*****************************************************************************/
 /******************************* Internal types ******************************/
@@ -100,7 +99,7 @@ struct TimeTableColumn
    TT_ClassType_t ClassType;
    unsigned Duration;
    char Place[TT_MAX_BYTES_PLACE + 1];
-   char Group[TT_MAX_BYTES_GROUP + 1];
+   char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
   };
 struct
   {
@@ -203,9 +202,6 @@ static void TT_GetParamsTimeTable (void)
    if (sscanf (StrDuration,"%u:%u",&Hours,&Minutes) != 2)
       Lay_ShowErrorAndExit ("Duration is missing.");
    Gbl.TimeTable.Duration = Hours * 2 + Minutes / 30;
-
-   /***** Get group *****/
-   Par_GetParToText ("ModTTGrp",Gbl.TimeTable.Group,TT_MAX_BYTES_GROUP);
 
    /***** Get group code *****/
    Gbl.TimeTable.GrpCod = Par_GetParToLong ("ModTTGrpCod");
@@ -742,7 +738,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                                                                  Gbl.CurrentCrs.Crs.CrsCod);
                      Str_Copy (TimeTable[Day][Hour].Columns[FirstFreeColumn].Group,
                                row[5],
-                               TT_MAX_BYTES_GROUP);
+                               Grp_MAX_BYTES_GROUP_NAME);
                      TimeTable[Day][Hour].Columns[FirstFreeColumn].GrpCod = GrpCod;
                      // no break;
                   case TT_TUTOR_TIMETABLE:
@@ -799,7 +795,7 @@ static void TT_ModifTimeTable (void)
       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Duration  = Gbl.TimeTable.Duration;
       Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Group,
                 Gbl.TimeTable.Group,
-                TT_MAX_BYTES_GROUP);
+                Grp_MAX_BYTES_GROUP_NAME);
       Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.Hour].Columns[Gbl.TimeTable.Column].Place,
                 Gbl.TimeTable.Place,
                 TT_MAX_BYTES_PLACE);
@@ -1278,8 +1274,6 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	    else
 	       fprintf (Gbl.F.Out,"0:30");
 	    fprintf (Gbl.F.Out," h\" />");
-            Par_PutHiddenParamString ("ModTTGrp","");
-            Par_PutHiddenParamString ("ModTTPlace","");
 	   }
 	 else
 	   {
@@ -1302,7 +1296,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	       fprintf (Gbl.F.Out,"<option");
 	       if (Dur == Duration)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
-	       fprintf (Gbl.F.Out,">%d:%02d h</option>",
+	       fprintf (Gbl.F.Out,">%u:%02u h</option>",
 		        Dur / 2,
 		        Dur % 2 ? 30 :
 		                  0);
@@ -1349,11 +1343,10 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
 	                          " size=\"1\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />"
 		                  "</label>",
-		        Txt_Classroom,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
+		        Txt_Classroom,TT_MAX_CHARS_PLACE,Place,Gbl.Form.Id);
 	      }
 	    else // TimeTableView == TT_TUT_EDIT
 	      {
-               Par_PutHiddenParamString ("ModTTGrp","");
 	       /***** Place *****/
 	       fprintf (Gbl.F.Out,"<br />"
 		                  "<label class=\"DAT_SMALL\">"
@@ -1362,7 +1355,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
                                   " size=\"12\" maxlength=\"%u\" value=\"%s\""
 		                  " onchange=\"document.getElementById('%s').submit();\" />"
 		                  "</label>",
-		        Txt_Place,TT_MAX_LENGTH_PLACE,Place,Gbl.Form.Id);
+		        Txt_Place,TT_MAX_CHARS_PLACE,Place,Gbl.Form.Id);
 	      }
 	   }
 	 break;

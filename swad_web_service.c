@@ -3134,7 +3134,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
 /****************** Send a message to one or more users **********************/
 /*****************************************************************************/
 
-#define Svc_MAX_LENGTH_QUERY_RECIPIENTS (10 * 1024 - 1)
+#define Svc_MAX_BYTES_QUERY_RECIPIENTS (10 * 1024 - 1)
 
 int swad__sendMessage (struct soap *soap,
                        char *wsKey,int messageCode,char *to,char *subject,char *body,	// input
@@ -3143,7 +3143,7 @@ int swad__sendMessage (struct soap *soap,
    int ReturnCode;
    long ReplyUsrCod = -1L;
    char Nickname[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char Query[Svc_MAX_LENGTH_QUERY_RECIPIENTS + 1];
+   char Query[Svc_MAX_BYTES_QUERY_RECIPIENTS + 1];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRow,NumRows;
@@ -3249,7 +3249,7 @@ int swad__sendMessage (struct soap *soap,
 
 	 /* Check for overflow in query */
 	 if (strlen (Query) + Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 32 >
-	     Svc_MAX_LENGTH_QUERY_RECIPIENTS)
+	     Svc_MAX_BYTES_QUERY_RECIPIENTS)
 	    return soap_sender_fault (Gbl.soap,
 				      "Can not send message",
 				      "Too many recipients");
@@ -3259,25 +3259,25 @@ int swad__sendMessage (struct soap *soap,
 	   {
 	    if (ReplyUsrCod > 0)
 	       Str_Concat (Query," UNION ",
-	                   Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	                   Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	    Str_Concat (Query,"SELECT UsrCod FROM usr_nicknames"
 			      " WHERE Nickname IN ('",
-			Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+			Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	    FirstNickname = false;
 	    ThereAreNicknames = true;
 	   }
 	 else
 	    Str_Concat (Query,",'",
-	                Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	                Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	 Str_Concat (Query,Nickname,
-	             Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	             Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	 Str_Concat (Query,"'",
-	             Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+	             Svc_MAX_BYTES_QUERY_RECIPIENTS);
 	}
      }
    if (ThereAreNicknames)
       Str_Concat (Query,")",
-                  Svc_MAX_LENGTH_QUERY_RECIPIENTS);
+                  Svc_MAX_BYTES_QUERY_RECIPIENTS);
 
    /***** Initialize output structure *****/
    sendMessageOut->numUsers = 0;
@@ -3521,7 +3521,7 @@ int swad__getTestConfig (struct soap *soap,
 
    /***** Set default result to empty *****/
    getTestConfigOut->numQuestions = getTestConfigOut->minQuestions = getTestConfigOut->defQuestions = getTestConfigOut->maxQuestions = 0;
-   getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,Tst_MAX_LENGTH_FEEDBACK_TYPE + 1);
+   getTestConfigOut->feedback = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_FEEDBACK_TYPE + 1);
    getTestConfigOut->feedback[0] = '\0';
 
    /***** Get test configuration *****/
@@ -3534,7 +3534,7 @@ int swad__getTestConfig (struct soap *soap,
    getTestConfigOut->maxQuestions = (int) Gbl.Test.Config.Max;
    Str_Copy (getTestConfigOut->feedback,
              Tst_FeedbackXML[Gbl.Test.Config.FeedbackType],
-             Tst_MAX_LENGTH_FEEDBACK_TYPE);
+             Tst_MAX_BYTES_FEEDBACK_TYPE);
 
    /***** Get number of tests *****/
    if (Gbl.Test.Config.Pluggable == Tst_PLUGGABLE_YES &&
@@ -3798,10 +3798,10 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
 
          /* Get answer type (row[1]) */
          AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-         getTestsOut->questionsArray.__ptr[NumRow].answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_LENGTH_ANSWER_TYPE + 1);
+         getTestsOut->questionsArray.__ptr[NumRow].answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
 	 Str_Copy (getTestsOut->questionsArray.__ptr[NumRow].answerType,
 	           Tst_StrAnswerTypesXML[AnswerType],
-	           Tst_MAX_LENGTH_ANSWER_TYPE);
+	           Tst_MAX_BYTES_ANSWER_TYPE);
 
          /* Get shuffle (row[2]) */
          getTestsOut->questionsArray.__ptr[NumRow].shuffle = (row[2][0] == 'Y') ? 1 :
@@ -3984,12 +3984,11 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
    return SOAP_OK;
   }
 
-
 /*****************************************************************************/
 /***************** Return one test question for Trivial game *****************/
 /*****************************************************************************/
 
-#define Svc_MAX_LENGTH_DEGREES_STR (1024 - 1)
+#define Svc_MAX_BYTES_DEGREES_STR (1024 - 1)
 
 int swad__getTrivialQuestion (struct soap *soap,
                               char *wsKey,char *degrees,float lowerScore,float upperScore,	// input
@@ -3999,7 +3998,7 @@ int swad__getTrivialQuestion (struct soap *soap,
    int ReturnCode;
    const char *Ptr;
    char LongStr[1 + 10 + 1];
-   char DegreesStr[Svc_MAX_LENGTH_DEGREES_STR + 1];
+   char DegreesStr[Svc_MAX_BYTES_DEGREES_STR + 1];
    char DegStr[ 1 + 1 + 1 + 10 + 1 + 1];
    //   DegStr=",   '   - number '  \0"
    long DegCod;
@@ -4064,7 +4063,7 @@ int swad__getTrivialQuestion (struct soap *soap,
 	      {
 	       sprintf (DegStr,",'%ld'",DegCod);
 	       Str_Concat (DegreesStr,DegStr,
-	                   Svc_MAX_LENGTH_DEGREES_STR);
+	                   Svc_MAX_BYTES_DEGREES_STR);
 	      }
 	   }
      }
@@ -4128,10 +4127,10 @@ int swad__getTrivialQuestion (struct soap *soap,
 
       /* Get answer type (row[1]) */
       AnswerType = Tst_ConvertFromStrAnsTypDBToAnsTyp (row[1]);
-      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_LENGTH_ANSWER_TYPE + 1);
+      getTrivialQuestionOut->question.answerType = (char *) soap_malloc (Gbl.soap,Tst_MAX_BYTES_ANSWER_TYPE + 1);
       Str_Copy (getTrivialQuestionOut->question.answerType,
                 Tst_StrAnswerTypesXML[AnswerType],
-                Tst_MAX_LENGTH_ANSWER_TYPE);
+                Tst_MAX_BYTES_ANSWER_TYPE);
 
       /* Get shuffle (row[2]) */
       getTrivialQuestionOut->question.shuffle = (row[2][0] == 'Y') ? 1 :

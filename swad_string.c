@@ -1100,8 +1100,18 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 			LengthSpecStrSrc = 1;
 			SpecialChar = 0x20;
 			break;
-		     case '%':	/* Change "%XX" --> "&#decimal_number;" */
+		     case '%':	/* Change "%XX" --> "&#decimal_number;" (from 0 to 255) */
 			IsSpecialChar = true;
+			/* Some special characters, like a chinese character,
+			   are received from a form in a format like this:
+                           %26%2335753%3B --> %26 %23 3 5 7 5 3 %3B --> &#35753;
+                                               ^   ^             ^
+                                               |   |             |
+                                      SpecialChar SpecialChar SpecialChar
+			   Here one chinese character is converted
+			   to 2 special chars + 5 normal chars + 1 special char,
+			   and finally is stored as the following 8 bytes: &#35753;
+			*/
 			sscanf (PtrSrc + 1,"%2X",&SpecialChar);
 			LengthSpecStrSrc = 3;
 			break;
@@ -1226,7 +1236,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x23:  /* "%23" --> "#" */
-		  StrSpecialChar[0] = '#';
+		  StrSpecialChar[0] = '#';	// '#' must be converted to '#' to allow HTML entities like &#20998;
 		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
@@ -1268,7 +1278,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                   ThereIsSpaceChar = false;
                   break;
                case 0x3B:  /* "%3B" --> ";" */
-		  StrSpecialChar[0] = ';';
+		  StrSpecialChar[0] = ';';	// ';' must be converted to ';' to allow HTML entities like &#20998;
 		  StrSpecialChar[1] = '\0';
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
