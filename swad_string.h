@@ -35,10 +35,10 @@
 /***************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Str_LENGTH_STR_HEX		3 // Length of the string #XX
-#define Str_MAX_LENGTH_SPEC_CHAR_HTML	8 // Length of the string &#ddddd;
+#define Str_BYTES_STR_HEX		 3 // Number of bytes of the string %XX
+#define Str_MAX_BYTES_SPEC_CHAR_HTML	10 // Number of bytes of the string from &#0; to max UTF8 &#1114111; (= &#x10FFFF;)
 
-#define Str_MAX_BYTES_PER_CHAR		8 // max (Str_LENGTH_STR_HEX,Str_MAX_LENGTH_SPEC_CHAR_HTML)
+#define Str_MAX_BYTES_PER_CHAR		10 // max (Str_BYTES_STR_HEX,Str_MAX_BYTES_SPEC_CHAR_HTML)
 
 /*****************************************************************************/
 /******************************* Public types *******************************/

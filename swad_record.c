@@ -71,7 +71,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Rec_WriteHeadingRecordFields (void);
-static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD + 1],
+static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
 static void Rec_ShowRecordOneStdCrs (void);
@@ -234,7 +234,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
 
          /* Name of the field (row[1]) */
          Str_Copy (Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].Name,row[1],
-                   Rec_MAX_LENGTH_NAME_FIELD);
+                   Rec_MAX_BYTES_NAME_FIELD);
 
          /* Number of lines (row[2]) */
          Gbl.CurrentCrs.Records.LstFields.Lst[NumRow].NumLines = Rec_ConvertToNumLinesField (row[2]);
@@ -288,7 +288,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"FieldName\""
 	                 " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Rec_MAX_LENGTH_NAME_FIELD,
+               Rec_MAX_CHARS_NAME_FIELD,
                Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name,
                Gbl.Form.Id);
       Act_FormEnd ();
@@ -362,7 +362,7 @@ void Rec_ShowFormCreateRecordField (void)
                       " style=\"width:500px;\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Rec_MAX_LENGTH_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
+            Rec_MAX_CHARS_NAME_FIELD,Gbl.CurrentCrs.Records.Field.Name);
 
    /***** Number of lines in form ******/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -435,7 +435,7 @@ void Rec_ReceiveFormField (void)
 
    /***** Get parameters from the form *****/
    /* Get the name of the field */
-   Par_GetParToText ("FieldName",Gbl.CurrentCrs.Records.Field.Name,Rec_MAX_LENGTH_NAME_FIELD);
+   Par_GetParToText ("FieldName",Gbl.CurrentCrs.Records.Field.Name,Rec_MAX_BYTES_NAME_FIELD);
 
    /* Get the number of lines */
    Gbl.CurrentCrs.Records.Field.NumLines = (unsigned)
@@ -682,7 +682,7 @@ void Rec_RemoveFieldFromDB (void)
 /************** Get the data of a field of records from its code *************/
 /*****************************************************************************/
 
-static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD + 1],
+static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility)
   {
    char Query[512];
@@ -705,7 +705,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_LENGTH_NAME_FIELD
 
    /* Name of the field */
    Str_Copy (Name,row[0],
-             Rec_MAX_LENGTH_NAME_FIELD);
+             Rec_MAX_BYTES_NAME_FIELD);
 
    /* Number of lines of the field (row[1]) */
    *NumLines = Rec_ConvertToNumLinesField (row[1]);
@@ -747,7 +747,7 @@ void Rec_RenameField (void)
    extern const char *Txt_The_record_field_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_field_X_has_not_changed;
    char Query[1024];
-   char NewFieldName[Rec_MAX_LENGTH_NAME_FIELD + 1];
+   char NewFieldName[Rec_MAX_BYTES_NAME_FIELD + 1];
 
    /***** Get parameters of the form *****/
    /* Get the code of the field */
@@ -755,7 +755,7 @@ void Rec_RenameField (void)
       Lay_ShowErrorAndExit ("Code of field is missing.");
 
    /* Get the new group name */
-   Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_LENGTH_NAME_FIELD);
+   Par_GetParToText ("FieldName",NewFieldName,Rec_MAX_BYTES_NAME_FIELD);
 
    /***** Get from the database the antiguo group name *****/
    Rec_GetFieldByCod (Gbl.CurrentCrs.Records.Field.FieldCod,Gbl.CurrentCrs.Records.Field.Name,&Gbl.CurrentCrs.Records.Field.NumLines,&Gbl.CurrentCrs.Records.Field.Visibility);
@@ -803,7 +803,7 @@ void Rec_RenameField (void)
 
    /***** Show the form again *****/
    Str_Copy (Gbl.CurrentCrs.Records.Field.Name,NewFieldName,
-             Rec_MAX_LENGTH_NAME_FIELD);
+             Rec_MAX_BYTES_NAME_FIELD);
    Rec_ReqEditRecordFields ();
   }
 
@@ -3223,7 +3223,7 @@ static void Rec_ShowLocalPhone (struct UsrData *UsrDat,
 	                    " id=\"LocalPhone\" name=\"LocalPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_LENGTH_PHONE,
+		  Usr_MAX_CHARS_PHONE,
 		  UsrDat->LocalPhone);
       else if (UsrDat->LocalPhone[0])
 	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
@@ -3293,7 +3293,7 @@ static void Rec_ShowFamilyPhone (struct UsrData *UsrDat,
 	                    " id=\"FamilyPhone\" name=\"FamilyPhone\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Usr_MAX_LENGTH_PHONE,
+		  Usr_MAX_CHARS_PHONE,
 		  UsrDat->FamilyPhone);
       else if (UsrDat->FamilyPhone[0])
 	 fprintf (Gbl.F.Out,"<a href=\"tel:%s\" class=\"REC_DAT_BOLD\">%s</a>",
@@ -3940,7 +3940,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Usr_MAX_LENGTH_PHONE,
+	       Usr_MAX_CHARS_PHONE,
 	       Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	       Gbl.Form.Id);
       Act_FormEnd ();

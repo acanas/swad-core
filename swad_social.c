@@ -493,7 +493,7 @@ void Soc_MarkMyNotifAsSeen (void)
 /*****************************************************************************/
 // Query must have space for at least 1024 chars
 
-#define Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS (256 - 1)
+#define Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS (256 - 1)
 
 static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl,
                                          Soc_WhatToGetFromTimeline_t WhatToGetFromTimeline,
@@ -502,7 +502,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
    char SubQueryPublishers[128];
    char SubQueryRangeBottom[128];
    char SubQueryRangeTop[128];
-   char SubQueryAlreadyExists[Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS + 1];
+   char SubQueryAlreadyExists[Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS + 1];
    struct
      {
       long Top;
@@ -588,13 +588,13 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
-			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
+			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
-			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
+			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;
@@ -606,13 +606,13 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM not_codes)",
-			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
+			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
             case Soc_GET_ONLY_OLD_PUBS:
 	       Str_Copy (SubQueryAlreadyExists,
 	                 " social_pubs.NotCod NOT IN"
 			 " (SELECT NotCod FROM current_timeline)",
-			 Soc_MAX_LENGTH_SUBQUERY_ALREADY_EXISTS);
+			 Soc_MAX_BYTES_SUBQUERY_ALREADY_EXISTS);
 	       break;
            }
 	 break;

@@ -228,19 +228,19 @@ static void Plg_GetListPlugins (void)
 
          /* Get the name of the plugin (row[1]) */
          Str_Copy (Plg->Name,row[1],
-                   Plg_MAX_LENGTH_PLUGIN_NAME);
+                   Plg_MAX_BYTES_PLUGIN_NAME);
 
          /* Get the description of the plugin (row[2]) */
          Str_Copy (Plg->Description,row[2],
-                   Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+                   Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
          /* Get the logo of the plugin (row[3]) */
          Str_Copy (Plg->Logo,row[3],
-                   Plg_MAX_LENGTH_PLUGIN_LOGO);
+                   Plg_MAX_BYTES_PLUGIN_LOGO);
 
          /* Get the application key of the plugin (row[4]) */
          Str_Copy (Plg->AppKey,row[4],
-                   Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+                   Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
          /* Get the URL of the plugin (row[5]) */
          Str_Copy (Plg->URL,row[5],
@@ -295,19 +295,19 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
 
       /* Get the name of the plugin (row[0]) */
       Str_Copy (Plg->Name,row[0],
-                Plg_MAX_LENGTH_PLUGIN_NAME);
+                Plg_MAX_BYTES_PLUGIN_NAME);
 
       /* Get the description of the plugin (row[1]) */
       Str_Copy (Plg->Description,row[1],
-                Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+                Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
       /* Get the logo of the plugin (row[2]) */
       Str_Copy (Plg->Logo,row[2],
-                Plg_MAX_LENGTH_PLUGIN_LOGO);
+                Plg_MAX_BYTES_PLUGIN_LOGO);
 
       /* Get the application key of the plugin (row[3]) */
       Str_Copy (Plg->AppKey,row[3],
-                Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+                Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
       /* Get the URL of the plugin (row[4]) */
       Str_Copy (Plg->URL,row[4],
@@ -397,7 +397,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
 	                 " size=\"10\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
+               Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -408,7 +408,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Description\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
+               Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -419,7 +419,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Logo\""
 	                 " size=\"4\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
+               Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -430,7 +430,7 @@ static void Plg_ListPluginsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"AppKey\""
 	                 " size=\"16\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
+               Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey,Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 
@@ -523,7 +523,7 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
    char Query[512];
    struct Plugin *Plg;
-   char NewPlgName[Plg_MAX_LENGTH_PLUGIN_NAME + 1];
+   char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -533,7 +533,7 @@ void Plg_RenamePlugin (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new name for the plugin */
-   Par_GetParToText ("Name",NewPlgName,Plg_MAX_LENGTH_PLUGIN_NAME);
+   Par_GetParToText ("Name",NewPlgName,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /***** Get from the database the old name of the plugin *****/
    Plg_GetDataOfPluginByCod (Plg);
@@ -580,7 +580,7 @@ void Plg_RenamePlugin (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->Name,NewPlgName,
-             Plg_MAX_LENGTH_PLUGIN_NAME);
+             Plg_MAX_BYTES_PLUGIN_NAME);
    Plg_EditPlugins ();
   }
 
@@ -607,8 +607,8 @@ void Plg_ChangePlgDescription (void)
    extern const char *Txt_The_new_description_is_X;
    extern const char *Txt_You_can_not_leave_the_description_empty;
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_LENGTH_PLUGIN_DESCRIPTION];
-   char NewDescription[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION + 1];
+   char Query[256 + Plg_MAX_BYTES_PLUGIN_DESCRIPTION];
+   char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -618,7 +618,7 @@ void Plg_ChangePlgDescription (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new description for the plugin */
-   Par_GetParToText ("Description",NewDescription,Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+   Par_GetParToText ("Description",NewDescription,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /***** Check if new description is empty *****/
    if (NewDescription[0])
@@ -641,7 +641,7 @@ void Plg_ChangePlgDescription (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->Description,NewDescription,
-             Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+             Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
    Plg_EditPlugins ();
   }
 
@@ -654,8 +654,8 @@ void Plg_ChangePlgLogo (void)
    extern const char *Txt_The_new_logo_is_X;
    extern const char *Txt_You_can_not_leave_the_logo_empty;
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_LENGTH_PLUGIN_LOGO];
-   char NewLogo[Plg_MAX_LENGTH_PLUGIN_LOGO + 1];
+   char Query[256 + Plg_MAX_BYTES_PLUGIN_LOGO];
+   char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -665,7 +665,7 @@ void Plg_ChangePlgLogo (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new logo for the plugin */
-   Par_GetParToText ("Logo",NewLogo,Plg_MAX_LENGTH_PLUGIN_LOGO);
+   Par_GetParToText ("Logo",NewLogo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /***** Check if new logo is empty *****/
    if (NewLogo[0])
@@ -685,7 +685,7 @@ void Plg_ChangePlgLogo (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->Logo,NewLogo,
-             Plg_MAX_LENGTH_PLUGIN_LOGO);
+             Plg_MAX_BYTES_PLUGIN_LOGO);
    Plg_EditPlugins ();
   }
 
@@ -698,8 +698,8 @@ void Plg_ChangePlgAppKey (void)
    extern const char *Txt_The_new_logo_is_X;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    extern const char *Txt_You_can_not_leave_the_logo_empty;// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_LENGTH_PLUGIN_APP_KEY];
-   char NewAppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY + 1];
+   char Query[256 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
+   char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
 
@@ -709,7 +709,7 @@ void Plg_ChangePlgAppKey (void)
       Lay_ShowErrorAndExit ("Code of plugin is missing.");
 
    /* Get the new logo for the plugin */
-   Par_GetParToText ("AppKey",NewAppKey,Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+   Par_GetParToText ("AppKey",NewAppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /***** Check if new logo is empty *****/
    if (NewAppKey[0])
@@ -729,7 +729,7 @@ void Plg_ChangePlgAppKey (void)
 
    /***** Show the form again *****/
    Str_Copy (Plg->AppKey,NewAppKey,
-             Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+             Plg_MAX_BYTES_PLUGIN_APP_KEY);
    Plg_EditPlugins ();
   }
 
@@ -879,7 +879,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"10\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_LENGTH_PLUGIN_NAME,Plg->Name);
+            Plg_MAX_CHARS_PLUGIN_NAME,Plg->Name);
 
    /***** Plugin description *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -887,7 +887,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"30\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_LENGTH_PLUGIN_DESCRIPTION,Plg->Description);
+            Plg_MAX_CHARS_PLUGIN_DESCRIPTION,Plg->Description);
 
    /***** Plugin logo *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -895,7 +895,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"4\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Plg_MAX_LENGTH_PLUGIN_LOGO,Plg->Logo);
+            Plg_MAX_CHARS_PLUGIN_LOGO,Plg->Logo);
 
    /***** Plugin application key *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -903,7 +903,7 @@ static void Plg_PutFormToCreatePlugin (void)
                       " size=\"16\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
 		      "</td>",
-	    Plg_MAX_LENGTH_PLUGIN_APP_KEY,Plg->AppKey);
+	    Plg_MAX_CHARS_PLUGIN_APP_KEY,Plg->AppKey);
 
    /***** Plugin URL *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -992,16 +992,16 @@ void Plg_RecFormNewPlg (void)
 
    /***** Get parameters from form *****/
    /* Get plugin name */
-   Par_GetParToText ("Name",Plg->Name,Plg_MAX_LENGTH_PLUGIN_NAME);
+   Par_GetParToText ("Name",Plg->Name,Plg_MAX_BYTES_PLUGIN_NAME);
 
    /* Get plugin description */
-   Par_GetParToText ("Description",Plg->Description,Plg_MAX_LENGTH_PLUGIN_DESCRIPTION);
+   Par_GetParToText ("Description",Plg->Description,Plg_MAX_BYTES_PLUGIN_DESCRIPTION);
 
    /* Get plugin logo */
-   Par_GetParToText ("Logo",Plg->Logo,Plg_MAX_LENGTH_PLUGIN_LOGO);
+   Par_GetParToText ("Logo",Plg->Logo,Plg_MAX_BYTES_PLUGIN_LOGO);
 
    /* Get plugin application key */
-   Par_GetParToText ("AppKey",Plg->AppKey,Plg_MAX_LENGTH_PLUGIN_APP_KEY);
+   Par_GetParToText ("AppKey",Plg->AppKey,Plg_MAX_BYTES_PLUGIN_APP_KEY);
 
    /* Get plugin URL */
    Par_GetParToText ("URL",Plg->URL,Cns_MAX_BYTES_WWW);
@@ -1040,10 +1040,10 @@ void Plg_RecFormNewPlg (void)
 static void Plg_CreatePlugin (struct Plugin *Plg)
   {
    extern const char *Txt_Created_new_plugin_X;
-   char Query[512 + Plg_MAX_LENGTH_PLUGIN_NAME +
-                    Plg_MAX_LENGTH_PLUGIN_DESCRIPTION +
-                    Plg_MAX_LENGTH_PLUGIN_LOGO +
-                    Plg_MAX_LENGTH_PLUGIN_APP_KEY +
+   char Query[512 + Plg_MAX_BYTES_PLUGIN_NAME +
+                    Plg_MAX_BYTES_PLUGIN_DESCRIPTION +
+                    Plg_MAX_BYTES_PLUGIN_LOGO +
+                    Plg_MAX_BYTES_PLUGIN_APP_KEY +
                     Cns_MAX_BYTES_WWW +
                     Cns_MAX_BYTES_IP];
 

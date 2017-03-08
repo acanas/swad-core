@@ -1012,7 +1012,7 @@ For example the string "Nueva++de+San+Ant%F3n"
       "Nueva  de San Antón"			if ChangeTo == Str_TO_HTML
       "Nueva  de San Antón"			if ChangeTo == Str_TO_TEXT
 */
-#define Str_MAX_LENGTH_SPECIAL_CHAR (256 - 1)
+#define Str_MAX_BYTES_SPECIAL_CHAR (256 - 1)
 
 void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                        char *Str,size_t MaxLengthStr,bool RemoveLeadingAndTrailingSpaces)
@@ -1030,7 +1030,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    unsigned NumPrintableCharsFromReturn = 0;	// To substitute tabs for spaces
    bool IsSpecialChar = false;
    bool ThereIsSpaceChar = true;	// Indicates if the character before was a space. Set to true to respect the initial spaces.
-   char StrSpecialChar[Str_MAX_LENGTH_SPECIAL_CHAR + 1];
+   char StrSpecialChar[Str_MAX_BYTES_SPECIAL_CHAR + 1];
 
 /*
   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
@@ -1163,12 +1163,12 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                      Str_Concat (StrSpecialChar,
                                  ThereIsSpaceChar ? "&nbsp;" :
                         	                    " ",	// The first space
-                                 Str_MAX_LENGTH_SPECIAL_CHAR);
+                                 Str_MAX_BYTES_SPECIAL_CHAR);
                      for (i = 1;
                 	  i < NumSpacesTab;
                 	  i++)					// Rest of spaces, except the first
                         Str_Concat (StrSpecialChar,"&nbsp;",	// Add a space
-                                    Str_MAX_LENGTH_SPECIAL_CHAR);
+                                    Str_MAX_BYTES_SPECIAL_CHAR);
                      NumPrintableCharsFromReturn += NumSpacesTab;
                     }
                   else
@@ -1181,7 +1181,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                case 0x0A:  /* \n */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML)
                      Str_Copy (StrSpecialChar,"<br />",
-                               Str_MAX_LENGTH_SPECIAL_CHAR);
+                               Str_MAX_BYTES_SPECIAL_CHAR);
         	  else
                     {
                      StrSpecialChar[0] = Str_LF[0];
@@ -1204,7 +1204,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
                case 0x20:  /* Space */
         	  if (ChangeTo == Str_TO_RIGOROUS_HTML && ThereIsSpaceChar)
                      Str_Copy (StrSpecialChar,"&nbsp;",
-                               Str_MAX_LENGTH_SPECIAL_CHAR);
+                               Str_MAX_BYTES_SPECIAL_CHAR);
         	  else
                     {
                      StrSpecialChar[0] = ' ';
@@ -1281,7 +1281,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#60;", // "<" is stored as HTML code to avoid problems when displaying it
-                               Str_MAX_LENGTH_SPECIAL_CHAR);
+                               Str_MAX_BYTES_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1293,7 +1293,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
         	     Str_Copy (StrSpecialChar,"&#62;", // ">" is stored as HTML code to avoid problems when displaying it
-        	               Str_MAX_LENGTH_SPECIAL_CHAR);
+        	               Str_MAX_BYTES_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -1318,7 +1318,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
         	    }
         	  else
                      Str_Copy (StrSpecialChar,"&#92;", // "\" is stored as HTML code to avoid problems when displaying it
-                               Str_MAX_LENGTH_SPECIAL_CHAR);
+                               Str_MAX_BYTES_SPECIAL_CHAR);
                   NumPrintableCharsFromReturn++;
                   ThereIsSpaceChar = false;
                   break;
@@ -2588,7 +2588,7 @@ If what is read exceed MaxLength, abort and return 0.
 If StrDelimit is not found, return -1.
 */
 
-#define Str_MAX_LENGTH_BOUNDARY_STR 100
+#define Str_MAX_BYTES_BOUNDARY_STR 100
 
 int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
                                   const char *BoundaryStr,
@@ -2598,7 +2598,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
    unsigned NumBytesIdentical;			// Number of characters identical in each iteration of the loop
    unsigned NumBytesReadButNotDiscarded;	// Number of characters read from the source file...
 						// ...and not fully discarded in search
-   int Buffer[Str_MAX_LENGTH_BOUNDARY_STR + 1];
+   int Buffer[Str_MAX_BYTES_BOUNDARY_STR + 1];
    unsigned StartIndex;
    unsigned i;
    char *Ptr; // Pointer used to go through StrDst writing characters
@@ -2611,7 +2611,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 	 *StrDst = '\0';
       return 1;
      }
-   if (LengthBoundaryStr > Str_MAX_LENGTH_BOUNDARY_STR)
+   if (LengthBoundaryStr > Str_MAX_BYTES_BOUNDARY_STR)
       Lay_ShowErrorAndExit ("Delimiter string too large.");
    Ptr = StrDst;
 

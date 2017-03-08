@@ -37,7 +37,9 @@
 
 #define Rec_RECORD_WIDTH	560
 
-#define Rec_MAX_LENGTH_NAME_FIELD	255
+#define Rec_MAX_CHARS_NAME_FIELD	(128 - 1)
+#define Rec_MAX_BYTES_NAME_FIELD	(Rec_MAX_CHARS_NAME_FIELD * Str_MAX_BYTES_PER_CHAR)
+
 #define Rec_MIN_LINES_IN_EDITION_FIELD	  1
 #define Rec_MAX_LINES_IN_EDITION_FIELD	 50
 #define Rec_DEF_LINES_IN_EDITION_FIELD Rec_MIN_LINES_IN_EDITION_FIELD
@@ -96,7 +98,7 @@ typedef enum
 struct RecordField
   {
    long FieldCod;		// FieldCode
-   char Name[Rec_MAX_LENGTH_NAME_FIELD + 1];	// Field name
+   char Name[Rec_MAX_BYTES_NAME_FIELD + 1];	// Field name
    unsigned NumLines;		// Number of rows of form used to edit the filed (always >= 2)
    Rec_VisibilityRecordFields_t Visibility;		// Hidden, visible or editable by students?
    char *Text;			// Filed text

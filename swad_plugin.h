@@ -31,13 +31,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Plg_MAX_LENGTH_PLUGIN_NAME		(128 - 1)
+#define Plg_MAX_CHARS_PLUGIN_NAME	(128 - 1)
+#define Plg_MAX_BYTES_PLUGIN_NAME	(Plg_MAX_CHARS_PLUGIN_NAME * Str_MAX_BYTES_PER_CHAR)
 
-#define Plg_MAX_LENGTH_PLUGIN_DESCRIPTION       1023
+#define Plg_MAX_CHARS_PLUGIN_DESCRIPTION	(128 - 1)
+#define Plg_MAX_BYTES_PLUGIN_DESCRIPTION	(Plg_MAX_CHARS_PLUGIN_DESCRIPTION * Str_MAX_BYTES_PER_CHAR)
 
-#define Plg_MAX_LENGTH_PLUGIN_LOGO		  16
+#define Plg_MAX_CHARS_PLUGIN_LOGO	32
+#define Plg_MAX_BYTES_PLUGIN_LOGO	Plg_MAX_CHARS_PLUGIN_LOGO
 
-#define Plg_MAX_LENGTH_PLUGIN_APP_KEY		  16
+#define Plg_MAX_CHARS_PLUGIN_APP_KEY	32
+#define Plg_MAX_BYTES_PLUGIN_APP_KEY	Plg_MAX_CHARS_PLUGIN_APP_KEY
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -46,10 +50,10 @@
 struct Plugin
   {
    long PlgCod;
-   char Name[Plg_MAX_LENGTH_PLUGIN_NAME + 1];
-   char Description[Plg_MAX_LENGTH_PLUGIN_DESCRIPTION + 1];
-   char Logo[Plg_MAX_LENGTH_PLUGIN_LOGO + 1];
-   char AppKey[Plg_MAX_LENGTH_PLUGIN_APP_KEY + 1];
+   char Name[Plg_MAX_BYTES_PLUGIN_NAME + 1];
+   char Description[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
+   char Logo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
+   char AppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
    char URL[Cns_MAX_BYTES_WWW + 1];
    char IP[Cns_MAX_BYTES_IP + 1];
   };

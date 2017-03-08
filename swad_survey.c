@@ -3319,7 +3319,7 @@ static void Svy_WriteQstStem (const char *Stem)
    size_t Length;
 
    /* Convert the stem, that is in HTML, to rigorous HTML */
-   Length = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+   Length = strlen (Stem) * Str_MAX_BYTES_SPEC_CHAR_HTML;
    if ((HeadingRigorousHTML = malloc (Length + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (HeadingRigorousHTML,Stem,

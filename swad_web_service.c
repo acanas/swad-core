@@ -281,7 +281,7 @@ void Svc_Exit (const char *DetailErrorMessage)
 
 static int Svc_GetPlgCodFromAppKey (const char *appKey)
   {
-   char Query[256 + Plg_MAX_LENGTH_PLUGIN_APP_KEY];
+   char Query[256 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 

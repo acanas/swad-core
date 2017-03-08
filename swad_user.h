@@ -70,8 +70,8 @@
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
 
-#define Usr_MAX_LENGTH_PHONE	16
-#define Usr_MAX_BYTES_PHONE	16
+#define Usr_MAX_CHARS_PHONE	16
+#define Usr_MAX_BYTES_PHONE	Usr_MAX_CHARS_PHONE
 
 #define Usr_CLASS_PHOTO_COLS_DEF	10	// Default number of columns in a class photo
 #define Usr_CLASS_PHOTO_COLS_MAX	50	// Maximum number of columns in a class photo

@@ -1020,7 +1020,7 @@ void Tst_WriteQstStem (const char *Stem,const char *ClassStem)
    char *StemRigorousHTML;
 
    /***** Convert the stem, that is in HTML, to rigorous HTML *****/
-   StemLength = strlen (Stem) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+   StemLength = strlen (Stem) * Str_MAX_BYTES_SPEC_CHAR_HTML;
    if ((StemRigorousHTML = malloc (StemLength + 1)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
    Str_Copy (StemRigorousHTML,Stem,
@@ -1150,7 +1150,7 @@ void Tst_WriteQstFeedback (const char *Feedback,const char *ClassFeedback)
       if (Feedback[0])
 	{
 	 /***** Convert the feedback, that is in HTML, to rigorous HTML *****/
-	 FeedbackLength = strlen (Feedback) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+	 FeedbackLength = strlen (Feedback) * Str_MAX_BYTES_SPEC_CHAR_HTML;
 	 if ((FeedbackRigorousHTML = malloc (FeedbackLength + 1)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store stem of question.");
 	 Str_Copy (FeedbackRigorousHTML,Feedback,
@@ -3062,7 +3062,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             row = mysql_fetch_row (mysql_res);
 
             /* Convert the answer (row[1]), that is in HTML, to rigorous HTML */
-            LengthAnswer = strlen (row[1]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+            LengthAnswer = strlen (row[1]) * Str_MAX_BYTES_SPEC_CHAR_HTML;
             if ((Answer = malloc (LengthAnswer + 1)) == NULL)
                Lay_ShowErrorAndExit ("Not enough memory to store answer.");
             Str_Copy (Answer,row[1],
@@ -3076,7 +3076,7 @@ static void Tst_WriteAnswersOfAQstEdit (long QstCod)
             if (row[2])
                if (row[2][0])
         	 {
-		  LengthFeedback = strlen (row[2]) * Str_MAX_LENGTH_SPEC_CHAR_HTML;
+		  LengthFeedback = strlen (row[2]) * Str_MAX_BYTES_SPEC_CHAR_HTML;
 		  if ((Feedback = malloc (LengthFeedback + 1)) == NULL)
 		     Lay_ShowErrorAndExit ("Not enough memory to store feedback.");
 		  Str_Copy (Feedback,row[2],
