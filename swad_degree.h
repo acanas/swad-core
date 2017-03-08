@@ -29,6 +29,7 @@
 
 #include "swad_action.h"
 #include "swad_constant.h"
+#include "swad_hierarchy.h"
 #include "swad_role_type.h"
 #include "swad_string.h"
 
@@ -39,12 +40,6 @@
 #define Deg_MAX_YEARS_PER_DEGREE	12 // Max number of academic years per degree
 
 #define Deg_MAX_DEGREES_PER_USR		20 // Used in list of my degrees
-
-#define Deg_MAX_CHARS_DEGREE_SHRT_NAME	32
-#define Deg_MAX_BYTES_DEGREE_SHRT_NAME	(Deg_MAX_CHARS_DEGREE_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
-
-#define Deg_MAX_CHARS_DEGREE_FULL_NAME	(128 - 1)
-#define Deg_MAX_BYTES_DEGREE_FULL_NAME	(Deg_MAX_CHARS_DEGREE_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -76,8 +71,8 @@ struct Degree
    long CtrCod;						// Centre code
    Deg_Status_t Status;					// Degree status
    long RequesterUsrCod;				// User code of the person who requested the creation of this degree
-   char ShrtName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1];	// Short name of degree
-   char FullName[Deg_MAX_BYTES_DEGREE_FULL_NAME + 1];	// Full name of degree
+   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
+   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
    char WWW[Cns_MAX_BYTES_WWW + 1];
    struct Course *LstCrss;				// List of courses in this degree
   };

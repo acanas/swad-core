@@ -235,14 +235,14 @@ void Img_PutImageUploader (int NumImgInForm,const char *ClassImgTitURL)
                       " class=\"%s\" maxlength=\"%u\" value=\"\" />",
             ParamUploadImg.Title,
             Txt_Image_title_attribution,Txt_optional,
-            ClassImgTitURL,Img_MAX_BYTES_TITLE);
+            ClassImgTitURL,Img_MAX_CHARS_TITLE);
    fprintf (Gbl.F.Out,"<br />"
                       "<input type=\"url\" name=\"%s\""
                       " placeholder=\"%s (%s)\""
                       " class=\"%s\" maxlength=\"%u\" value=\"\" />",
             ParamUploadImg.URL,
             Txt_Link,Txt_optional,
-            ClassImgTitURL,Img_MAX_BYTES_URL);
+            ClassImgTitURL,Cns_MAX_CHARS_WWW);
    fprintf (Gbl.F.Out,"</div>");
 
    /***** End container *****/
@@ -260,7 +260,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
   {
    struct ParamUploadImg ParamUploadImg;
    char Title[Img_MAX_BYTES_TITLE + 1];
-   char URL[Img_MAX_BYTES_URL + 1];
+   char URL[Cns_MAX_BYTES_WWW + 1];
    size_t Length;
 
    /***** Set names of parameters depending on number of image in form *****/
@@ -325,7 +325,7 @@ void Img_GetImageFromForm (int NumImgInForm,struct Image *Image,
      }
 
    /***** By last, get image URL from form *****/
-   Par_GetParToText (ParamUploadImg.URL,URL,Img_MAX_BYTES_URL);
+   Par_GetParToText (ParamUploadImg.URL,URL,Cns_MAX_BYTES_WWW);
    /* If the URL coming from the form is empty, keep current image URL unchanged
       If not empty, copy it to current image URL */
    if ((Length = strlen (URL)) > 0)

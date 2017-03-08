@@ -28,14 +28,15 @@
 /*****************************************************************************/
 
 #include "swad_date.h"
+#include "swad_notification.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Asg_MAX_CHARS_ASSIGNMENT_TITLE	(256 - 1)
-#define Asg_MAX_BYTES_ASSIGNMENT_TITLE	(Asg_MAX_CHARS_ASSIGNMENT_TITLE * Str_MAX_BYTES_PER_CHAR)
+#define Asg_MAX_CHARS_ASSIGNMENT_TITLE	(128 - 1)	// 127
+#define Asg_MAX_BYTES_ASSIGNMENT_TITLE	((Asg_MAX_CHARS_ASSIGNMENT_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Asg_MAX_CHARS_FOLDER	32
 #define Asg_MAX_BYTES_FOLDER	Asg_MAX_CHARS_FOLDER
@@ -77,7 +78,7 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg);
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg);
 void Asg_FreeListAssignments (void);
 
-void Asg_GetNotifAssignment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              char **ContentStr,
                              long AsgCod,bool GetContent);
 

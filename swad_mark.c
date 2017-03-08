@@ -709,7 +709,7 @@ void Mrk_ShowMyMarks (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Mrk_GetNotifMyMarks (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,
                           long MrkCod,long UsrCod,bool GetContent)
   {

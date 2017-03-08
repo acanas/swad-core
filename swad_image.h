@@ -31,8 +31,11 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Img_MAX_BYTES_TITLE 255
-#define Img_MAX_BYTES_URL   255
+#define Img_MAX_CHARS_TITLE	(128 - 1)	// 127
+#define Img_MAX_BYTES_TITLE	((Img_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
+#define Img_MAX_CHARS_ATTRIBUTION	(256 - 1)	// 255
+#define Img_MAX_BYTES_ATTRIBUTION	((Img_MAX_CHARS_ATTRIBUTION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

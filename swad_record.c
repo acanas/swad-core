@@ -3124,7 +3124,7 @@ static void Rec_ShowOriginPlace (struct UsrData *UsrDat,
 	                    " id=\"OriginPlace\" name=\"OriginPlace\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_CHARS_STRING,
+		  Usr_MAX_CHARS_ADDRESS,
 		  UsrDat->OriginPlace);
       else if (UsrDat->OriginPlace[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->OriginPlace);
@@ -3189,7 +3189,7 @@ static void Rec_ShowLocalAddress (struct UsrData *UsrDat,
 	                    " id=\"LocalAddress\" name=\"LocalAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_CHARS_STRING,
+		  Usr_MAX_CHARS_ADDRESS,
 		  UsrDat->LocalAddress);
       else if (UsrDat->LocalAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->LocalAddress);
@@ -3259,7 +3259,7 @@ static void Rec_ShowFamilyAddress (struct UsrData *UsrDat,
 	                    " id=\"FamilyAddress\" name=\"FamilyAddress\""
 			    " maxlength=\"%u\" value=\"%s\""
 			    " class=\"REC_C2_BOT_INPUT\" />",
-		  Cns_MAX_CHARS_STRING,
+		  Usr_MAX_CHARS_ADDRESS,
 		  UsrDat->FamilyAddress);
       else if (UsrDat->FamilyAddress[0])
 	 fprintf (Gbl.F.Out,"%s",UsrDat->FamilyAddress);
@@ -3623,7 +3623,7 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
    /***** Get country code *****/
    UsrDat->CtyCod = Par_GetParToLong ("OthCtyCod");
 
-   Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("OriginPlace",UsrDat->OriginPlace,Usr_MAX_BYTES_ADDRESS);
    Str_ConvertToTitleType (UsrDat->OriginPlace);
 
    Dat_GetDateFromForm ("BirthDay","BirthMonth","BirthYear",
@@ -3632,11 +3632,11 @@ static void Rec_GetUsrExtraDataFromRecordForm (struct UsrData *UsrDat)
                         &(UsrDat->Birthday.Year ));
    Dat_ConvDateToDateStr (&(UsrDat->Birthday),UsrDat->StrBirthday);
 
-   Par_GetParToText ("LocalAddress",UsrDat->LocalAddress,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("LocalAddress",UsrDat->LocalAddress,Usr_MAX_BYTES_ADDRESS);
 
    Par_GetParToText ("LocalPhone",UsrDat->LocalPhone,Usr_MAX_BYTES_PHONE);
 
-   Par_GetParToText ("FamilyAddress",UsrDat->FamilyAddress,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("FamilyAddress",UsrDat->FamilyAddress,Usr_MAX_BYTES_ADDRESS);
 
    Par_GetParToText ("FamilyPhone",UsrDat->FamilyPhone,Usr_MAX_BYTES_PHONE);
 
@@ -3917,7 +3917,7 @@ void Rec_ShowFormMyInsCtrDpt (void)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " style=\"width:500px;\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-               Cns_MAX_CHARS_STRING,
+               Usr_MAX_CHARS_ADDRESS,
 	       Gbl.Usrs.Me.UsrDat.Tch.Office,
 	       Gbl.Form.Id);
       Act_FormEnd ();
@@ -4071,10 +4071,10 @@ void Rec_UpdateMyDepartment (void)
 
 void Rec_UpdateMyOffice (void)
   {
-   char Query[128 + Cns_MAX_BYTES_STRING];
+   char Query[128 + Usr_MAX_BYTES_ADDRESS];
 
    /***** Get my office *****/
-   Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
    sprintf (Query,"UPDATE usr_data SET Office='%s'"

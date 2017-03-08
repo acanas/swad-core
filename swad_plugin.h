@@ -31,17 +31,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Plg_MAX_CHARS_PLUGIN_NAME	(128 - 1)
-#define Plg_MAX_BYTES_PLUGIN_NAME	(Plg_MAX_CHARS_PLUGIN_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Plg_MAX_CHARS_PLUGIN_NAME	(32 - 1)	// 31
+#define Plg_MAX_BYTES_PLUGIN_NAME	((Plg_MAX_CHARS_PLUGIN_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
-#define Plg_MAX_CHARS_PLUGIN_DESCRIPTION	(128 - 1)
-#define Plg_MAX_BYTES_PLUGIN_DESCRIPTION	(Plg_MAX_CHARS_PLUGIN_DESCRIPTION * Str_MAX_BYTES_PER_CHAR)
+#define Plg_MAX_CHARS_PLUGIN_DESCRIPTION	(128 - 1)	// 127
+#define Plg_MAX_BYTES_PLUGIN_DESCRIPTION	(Plg_MAX_CHARS_PLUGIN_DESCRIPTION * Str_MAX_BYTES_PER_CHAR)	// 2047
 
-#define Plg_MAX_CHARS_PLUGIN_LOGO	32
-#define Plg_MAX_BYTES_PLUGIN_LOGO	Plg_MAX_CHARS_PLUGIN_LOGO
+#define Plg_MAX_CHARS_PLUGIN_LOGO	(32 - 1)	// 31
+#define Plg_MAX_BYTES_PLUGIN_LOGO	Plg_MAX_CHARS_PLUGIN_LOGO	// 31
 
-#define Plg_MAX_CHARS_PLUGIN_APP_KEY	32
-#define Plg_MAX_BYTES_PLUGIN_APP_KEY	Plg_MAX_CHARS_PLUGIN_APP_KEY
+#define Plg_MAX_CHARS_PLUGIN_APP_KEY	(32 - 1)	// 31
+#define Plg_MAX_BYTES_PLUGIN_APP_KEY	Plg_MAX_CHARS_PLUGIN_APP_KEY	// 31
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

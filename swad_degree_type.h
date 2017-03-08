@@ -31,8 +31,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Deg_MAX_CHARS_DEGREE_TYPE_NAME	32
-#define Deg_MAX_BYTES_DEGREE_TYPE_NAME	(Deg_MAX_CHARS_DEGREE_TYPE_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Deg_MAX_CHARS_DEGREE_TYPE_NAME	(32 - 1)	// 31
+#define Deg_MAX_BYTES_DEGREE_TYPE_NAME	((Deg_MAX_CHARS_DEGREE_TYPE_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
 /*****************************************************************************/
 /******************************* Public types ********************************/

@@ -33,13 +33,13 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Ban_MAX_CHARS_SHRT_NAME	 32
-#define Ban_MAX_BYTES_SHRT_NAME	(Ban_MAX_CHARS_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Ban_MAX_CHARS_SHRT_NAME	(32 - 1)	// 31
+#define Ban_MAX_BYTES_SHRT_NAME	((Ban_MAX_CHARS_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
-#define Ban_MAX_CHARS_FULL_NAME	(128 - 1)
-#define Ban_MAX_BYTES_FULL_NAME	(Ban_MAX_CHARS_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Ban_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
+#define Ban_MAX_BYTES_FULL_NAME	((Ban_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Ban_MAX_CHARS_IMAGE	(256 - 1)
+#define Ban_MAX_CHARS_IMAGE	NAME_MAX
 #define Ban_MAX_BYTES_IMAGE	Ban_MAX_CHARS_IMAGE
 
 struct Banner

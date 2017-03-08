@@ -33,8 +33,8 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Svy_MAX_CHARS_SURVEY_TITLE	(256 - 1)
-#define Svy_MAX_BYTES_SURVEY_TITLE	(Svy_MAX_CHARS_SURVEY_TITLE * Str_MAX_BYTES_PER_CHAR)
+#define Svy_MAX_CHARS_SURVEY_TITLE	(128 - 1)	// 127
+#define Svy_MAX_BYTES_SURVEY_TITLE	((Svy_MAX_CHARS_SURVEY_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Svy_NUM_DATES 2
 typedef enum
@@ -95,7 +95,7 @@ void Svy_GetListSurveys (void);
 void Svy_GetDataOfSurveyByCod (struct Survey *Svy);
 void Svy_GetDataOfSurveyByFolder (struct Survey *Svy);
 void Svy_FreeListSurveys (void);
-void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent);
 void Svy_AskRemSurvey (void);

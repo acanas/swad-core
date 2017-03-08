@@ -53,8 +53,8 @@
 #define Usr_DEF_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 12
 #define Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS 60
 
-#define Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME	 32
-#define Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME	 (Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME * Str_MAX_BYTES_PER_CHAR)
+#define Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME	(32 - 1)	// 31
+#define Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME	((Usr_MAX_CHARS_FIRSTNAME_OR_SURNAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
 #define Usr_MAX_BYTES_SURNAMES			(Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1 + Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME)
 						// Surname1                         +' '+ Surname2
@@ -62,13 +62,16 @@
 						// Surname1                         +' '+ Surname2                           +  ','+' ' + FirstName
 						// Surname1                         +' '+ Surname2                           + '<br />' + FirstName
 
-#define Usr_MAX_CHARS_USR_EMAIL	(128 - 1)
-#define Usr_MAX_BYTES_USR_EMAIL	Usr_MAX_CHARS_USR_EMAIL
+#define Usr_MAX_CHARS_USR_EMAIL	(128 - 1)		// 127
+#define Usr_MAX_BYTES_USR_EMAIL	Usr_MAX_CHARS_USR_EMAIL	// 127
 
-#define Usr_MAX_CHARS_USR_LOGIN	Usr_MAX_CHARS_USR_EMAIL	// Maximum number of chars of @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN	(Usr_MAX_CHARS_USR_LOGIN * Str_MAX_BYTES_PER_CHAR)
+#define Usr_MAX_CHARS_USR_LOGIN	Usr_MAX_CHARS_USR_EMAIL	// 127, maximum number of chars of @nick, email or ID
+#define Usr_MAX_BYTES_USR_LOGIN	((Usr_MAX_CHARS_USR_LOGIN + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
+
+#define Usr_MAX_CHARS_ADDRESS	(128 - 1)	// 127
+#define Usr_MAX_BYTES_ADDRESS	((Usr_MAX_CHARS_ADDRESS + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Usr_MAX_CHARS_PHONE	16
 #define Usr_MAX_BYTES_PHONE	Usr_MAX_CHARS_PHONE
@@ -145,12 +148,12 @@ struct UsrData
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo
    Pri_Visibility_t ProfileVisibility;	// Who can see user's public profile
    long CtyCod;		// Country
-   char OriginPlace	[Cns_MAX_BYTES_STRING + 1];
+   char OriginPlace	[Usr_MAX_BYTES_ADDRESS + 1];
    struct Date Birthday;
    char StrBirthday	[Cns_MAX_BYTES_DATE + 1];
-   char LocalAddress	[Cns_MAX_BYTES_STRING + 1];
+   char LocalAddress	[Usr_MAX_BYTES_ADDRESS + 1];
    char LocalPhone	[Usr_MAX_BYTES_PHONE + 1];
-   char FamilyAddress	[Cns_MAX_BYTES_STRING + 1];
+   char FamilyAddress	[Usr_MAX_BYTES_ADDRESS + 1];
    char FamilyPhone	[Usr_MAX_BYTES_PHONE + 1];
    char *Comments;
    long InsCtyCod;	// Country of the institution
@@ -159,7 +162,7 @@ struct UsrData
      {
       long CtrCod;	// Centre
       long DptCod;	// Department
-      char Office	[Cns_MAX_BYTES_STRING + 1];
+      char Office	[Usr_MAX_BYTES_ADDRESS + 1];
       char OfficePhone	[Usr_MAX_BYTES_PHONE  + 1];
      } Tch;
    struct

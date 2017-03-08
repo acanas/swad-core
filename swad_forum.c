@@ -1399,7 +1399,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
                                        long PstCod,bool GetContent)
   {
@@ -1424,15 +1424,15 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STR
 
             /***** Copy subject *****/
             // TODO: Do only direct copy when Subject will be VARCHAR(255)
-            if (strlen (row[0]) > Cns_MAX_BYTES_SUMMARY_STRING)
+            if (strlen (row[0]) > Ntf_MAX_BYTES_SUMMARY)
               {
                strncpy (SummaryStr,row[0],
-			Cns_MAX_BYTES_SUMMARY_STRING);
-               SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING] = '\0';
+			Ntf_MAX_BYTES_SUMMARY);
+               SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
               }
             else
 	       Str_Copy (SummaryStr,row[0],
-			 Cns_MAX_BYTES_SUMMARY_STRING);
+			 Ntf_MAX_BYTES_SUMMARY);
 
             /***** Copy content *****/
             if (GetContent)

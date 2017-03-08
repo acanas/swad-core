@@ -31,11 +31,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Lnk_MAX_CHARS_LINK_SHRT_NAME	32
-#define Lnk_MAX_BYTES_LINK_SHRT_NAME	(Lnk_MAX_CHARS_LINK_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Lnk_MAX_CHARS_LINK_SHRT_NAME	(32 - 1)	// 31
+#define Lnk_MAX_BYTES_LINK_SHRT_NAME	((Lnk_MAX_CHARS_LINK_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
-#define Lnk_MAX_CHARS_LINK_FULL_NAME	(128 - 1)
-#define Lnk_MAX_BYTES_LINK_FULL_NAME	(Lnk_MAX_CHARS_LINK_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Lnk_MAX_CHARS_LINK_FULL_NAME	(128 - 1)	// 127
+#define Lnk_MAX_BYTES_LINK_FULL_NAME	((Lnk_MAX_CHARS_LINK_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Link
   {

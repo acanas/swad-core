@@ -33,8 +33,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Msg_MAX_CHARS_FILTER_CONTENT (128 - 1)
-#define Msg_MAX_BYTES_FILTER_CONTENT (Msg_MAX_CHARS_FILTER_CONTENT * Str_MAX_BYTES_PER_CHAR)
+#define Msg_MAX_CHARS_FILTER_CONTENT (128 - 1)	// 127
+#define Msg_MAX_BYTES_FILTER_CONTENT ((Msg_MAX_CHARS_FILTER_CONTENT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -95,7 +95,7 @@ void Msg_GetDistinctCoursesInMyMessages (void);
 void Msg_ShowFormSelectCourseSentOrRecMsgs (void);
 void Msg_ShowFormToFilterMsgs (void);
 void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
-void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,bool GetContent);
 
 void Msg_WriteMsgNumber (unsigned long MsgNum,bool NewMsg);

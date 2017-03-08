@@ -33,11 +33,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Mai_MAX_CHARS_MAIL_DOMAIN	(128 - 1)
-#define Mai_MAX_BYTES_MAIL_DOMAIN	(Mai_MAX_CHARS_MAIL_DOMAIN * Str_MAX_BYTES_PER_CHAR)
+#define Mai_MAX_CHARS_MAIL_DOMAIN	(128 - 1)	// 127
+#define Mai_MAX_BYTES_MAIL_DOMAIN	((Mai_MAX_CHARS_MAIL_DOMAIN + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Mai_MAX_CHARS_MAIL_INFO		(128 - 1)
-#define Mai_MAX_BYTES_MAIL_INFO		(Mai_MAX_CHARS_MAIL_INFO * Str_MAX_BYTES_PER_CHAR)
+#define Mai_MAX_CHARS_MAIL_INFO		(128 - 1)	// 127
+#define Mai_MAX_BYTES_MAIL_INFO		((Mai_MAX_CHARS_MAIL_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Mai_NUM_ORDERS 3
 typedef enum

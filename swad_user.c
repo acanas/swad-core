@@ -560,20 +560,20 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
    UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
    Str_Copy (UsrDat->Tch.Office,row[18],
-             Cns_MAX_BYTES_STRING);
+             Usr_MAX_BYTES_ADDRESS);
    Str_Copy (UsrDat->Tch.OfficePhone,row[19],
              Usr_MAX_BYTES_PHONE);
 
    Str_Copy (UsrDat->LocalAddress,row[20],
-             Cns_MAX_BYTES_STRING);
+             Usr_MAX_BYTES_ADDRESS);
    Str_Copy (UsrDat->LocalPhone,row[21],
              Usr_MAX_BYTES_PHONE);
    Str_Copy (UsrDat->FamilyAddress,row[22],
-             Cns_MAX_BYTES_STRING);
+             Usr_MAX_BYTES_ADDRESS);
    Str_Copy (UsrDat->FamilyPhone,row[23],
              Usr_MAX_BYTES_PHONE);
    Str_Copy (UsrDat->OriginPlace,row[24],
-             Cns_MAX_BYTES_STRING);
+             Usr_MAX_BYTES_ADDRESS);
 
    Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[25]);
 

@@ -520,7 +520,7 @@ static void Rep_WriteSectionUsrInfo (void)
    extern const char *Txt_Email;
    extern const char *Txt_Country;
    extern const char *Txt_Institution;
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    struct Instit Ins;
 
    /***** Start of section *****/

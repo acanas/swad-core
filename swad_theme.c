@@ -46,7 +46,7 @@ extern struct Globals Gbl;
 /******************************** Private constants **************************/
 /*****************************************************************************/
 
-#define MAX_THEME_ID 16
+#define The_MAX_BYTES_THEME_ID 16
 
 const char *The_ThemeId[The_NUM_THEMES] =
   {
@@ -309,10 +309,10 @@ void The_ChangeTheme (void)
 
 The_Theme_t The_GetParamTheme (void)
   {
-   char ThemeId[MAX_THEME_ID + 1];
+   char ThemeId[The_MAX_BYTES_THEME_ID + 1];
    The_Theme_t Theme;
 
-   Par_GetParToText ("Theme",ThemeId,MAX_THEME_ID);
+   Par_GetParToText ("Theme",ThemeId,The_MAX_BYTES_THEME_ID);
    for (Theme = (The_Theme_t) 0;
 	Theme < The_NUM_THEMES;
 	Theme++)

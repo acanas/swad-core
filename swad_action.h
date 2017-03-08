@@ -30,6 +30,7 @@
 #include <stdbool.h>		// For boolean type
 
 #include "swad_cryptography.h"
+#include "swad_string.h"
 #include "swad_tab.h"
 #include "swad_text.h"
 
@@ -37,8 +38,8 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Act_MAX_CHARS_ACTION_TXT	(256 - 1)
-#define Act_MAX_BYTES_ACTION_TXT	Act_MAX_CHARS_ACTION_TXT
+#define Act_MAX_CHARS_ACTION_TXT	(64 - 1)	// 63
+#define Act_MAX_BYTES_ACTION_TXT	((Act_MAX_CHARS_ACTION_TXT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 1023
 
 typedef enum
   {

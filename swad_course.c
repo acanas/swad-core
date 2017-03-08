@@ -104,8 +104,8 @@ static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod);
 static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear);
 
 static void Crs_GetShortNamesByCod (long CrsCod,
-                                    char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1],
-                                    char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1]);
+                                    char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
+                                    char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1]);
 
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
@@ -276,7 +276,7 @@ static void Crs_Configuration (bool PrintView)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_FULL_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Crs_MAX_CHARS_COURSE_FULL_NAME,
+	       Hie_MAX_CHARS_FULL_NAME,
 	       Gbl.CurrentCrs.Crs.FullName,
 	       Gbl.Form.Id);
       Act_FormEnd ();
@@ -305,7 +305,7 @@ static void Crs_Configuration (bool PrintView)
 			 " maxlength=\"%u\" value=\"%s\""
 			 " class=\"INPUT_SHORT_NAME\""
 			 " onchange=\"document.getElementById('%s').submit();\" />",
-	       Crs_MAX_CHARS_COURSE_SHRT_NAME,
+	       Hie_MAX_CHARS_SHRT_NAME,
 	       Gbl.CurrentCrs.Crs.ShrtName,
 	       Gbl.Form.Id);
       Act_FormEnd ();
@@ -1066,8 +1066,8 @@ void Crs_WriteSelectorMyCourses (void)
    long CrsCod;
    long DegCod;
    long LastDegCod;
-   char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1];
-   char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1];
+   char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1];
 
    /***** Fill the list with the courses I belong to, if not filled *****/
    if (Gbl.Usrs.Me.Logged)
@@ -1479,7 +1479,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_SHORT_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_MAX_CHARS_COURSE_SHRT_NAME,Crs->ShrtName,
+		     Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
 	   }
@@ -1497,7 +1497,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			       " maxlength=\"%u\" value=\"%s\""
 			       " class=\"INPUT_FULL_NAME\""
 			       " onchange=\"document.getElementById('%s').submit();\" />",
-		     Crs_MAX_CHARS_COURSE_FULL_NAME,Crs->FullName,
+		     Hie_MAX_CHARS_FULL_NAME,Crs->FullName,
 		     Gbl.Form.Id);
 	    Act_FormEnd ();
 	   }
@@ -1682,7 +1682,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Crs_MAX_CHARS_COURSE_SHRT_NAME,Crs->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Crs->ShrtName);
 
    /***** Course full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1691,7 +1691,7 @@ static void Crs_PutFormToCreateCourse (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Crs_MAX_CHARS_COURSE_FULL_NAME,Crs->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Crs->FullName);
 
    /***** Current number of teachers in this course *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1921,10 +1921,10 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
    Crs->Year = Deg_ConvStrToYear (YearStr);
 
    /* Get course short name */
-   Par_GetParToText ("ShortName",Crs->ShrtName,Crs_MAX_BYTES_COURSE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Crs->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get course full name */
-   Par_GetParToText ("FullName",Crs->FullName,Crs_MAX_BYTES_COURSE_FULL_NAME);
+   Par_GetParToText ("FullName",Crs->FullName,Hie_MAX_BYTES_FULL_NAME);
   }
 
 /*****************************************************************************/
@@ -1952,8 +1952,8 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
   {
    extern const char *Txt_Created_new_course_X;
    char Query[512 +
-              Crs_MAX_BYTES_COURSE_SHRT_NAME +
-              Crs_MAX_BYTES_COURSE_FULL_NAME];
+              Hie_MAX_BYTES_SHRT_NAME +
+              Hie_MAX_BYTES_FULL_NAME];
 
    /***** Insert new course into pending requests *****/
    sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
@@ -2085,11 +2085,11 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 
    /***** Get the short name of the course (row[6]) *****/
    Str_Copy (Crs->ShrtName,row[6],
-             Crs_MAX_BYTES_COURSE_SHRT_NAME);
+             Hie_MAX_BYTES_SHRT_NAME);
 
    /***** Get the full name of the course (row[7]) *****/
    Str_Copy (Crs->FullName,row[7],
-             Crs_MAX_BYTES_COURSE_FULL_NAME);
+             Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get number of teachers *****/
    Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
@@ -2106,8 +2106,8 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 /*****************************************************************************/
 
 static void Crs_GetShortNamesByCod (long CrsCod,
-                                    char CrsShortName[Crs_MAX_BYTES_COURSE_SHRT_NAME + 1],
-                                    char DegShortName[Deg_MAX_BYTES_DEGREE_SHRT_NAME + 1])
+                                    char CrsShortName[Hie_MAX_BYTES_SHRT_NAME + 1],
+                                    char DegShortName[Hie_MAX_BYTES_SHRT_NAME + 1])
   {
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -2129,9 +2129,9 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (CrsShortName,row[0],
-	           Crs_MAX_BYTES_COURSE_SHRT_NAME);
+	           Hie_MAX_BYTES_SHRT_NAME);
 	 Str_Copy (DegShortName,row[1],
-	           Deg_MAX_BYTES_DEGREE_SHRT_NAME);
+	           Hie_MAX_BYTES_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -2642,25 +2642,25 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char Query[128 + Crs_MAX_BYTES_COURSE_FULL_NAME];
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentCrsName = NULL;		// Initialized to avoid warning
-   char NewCrsName[Crs_MAX_BYTES_COURSE_FULL_NAME + 1];
+   char NewCrsName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Crs_MAX_BYTES_COURSE_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentCrsName = Crs->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Crs_MAX_BYTES_COURSE_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentCrsName = Crs->FullName;
          break;
      }

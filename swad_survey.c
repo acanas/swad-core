@@ -49,8 +49,8 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define Svy_MAX_CHARS_ANSWER	1000
-#define Svy_MAX_BYTES_ANSWER	(Svy_MAX_CHARS_ANSWER * Str_MAX_BYTES_PER_CHAR)
+#define Svy_MAX_CHARS_ANSWER	(1024 - 1)	// 1023
+#define Svy_MAX_BYTES_ANSWER	((Svy_MAX_CHARS_ANSWER + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Svy_MAX_BYTES_LIST_ANSWER_TYPES	(10 + (Svy_NUM_ANS_TYPES - 1) * (1 + 10))
 
@@ -1401,7 +1401,7 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent)
   {
@@ -1426,7 +1426,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
 
             /***** Get summary *****/
             Str_Copy (SummaryStr,row[0],
-                      Cns_MAX_BYTES_SUMMARY_STRING);
+                      Ntf_MAX_BYTES_SUMMARY);
 
             /***** Get content *****/
             if (GetContent)

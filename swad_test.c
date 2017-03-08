@@ -1119,7 +1119,9 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
 	       ParamUploadImg.Title,Txt_Image_title_attribution,Txt_optional,
-	       ClassImgTitURL,Img_MAX_BYTES_TITLE,Image->Title ? Image->Title : "");
+	       ClassImgTitURL,Img_MAX_CHARS_TITLE,
+	       Image->Title ? Image->Title :
+		              "");
 
       /***** Image URL *****/
       fprintf (Gbl.F.Out,"<br />"
@@ -1127,7 +1129,9 @@ static void Tst_PutFormToEditQstImage (struct Image *Image,int NumImgInForm,
 			 " placeholder=\"%s (%s)\""
 			 " class=\"%s\" maxlength=\"%u\" value=\"%s\">",
 	       ParamUploadImg.URL,Txt_Link,Txt_optional,
-	       ClassImgTitURL,Img_MAX_BYTES_URL,Image->URL ? Image->URL : "");
+	       ClassImgTitURL,Cns_MAX_CHARS_WWW,
+	       Image->URL ? Image->URL :
+		            "");
 
       /***** End container *****/
       fprintf (Gbl.F.Out,"</div>");

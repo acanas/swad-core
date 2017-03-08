@@ -955,8 +955,8 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2   = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
    loginBySessionKeyOut->userPhoto      = (char *) soap_malloc (Gbl.soap,Cns_MAX_BYTES_WWW + 1);
    loginBySessionKeyOut->userBirthday   = (char *) soap_malloc (Gbl.soap,Dat_LENGTH_YYYYMMDD + 1);
-   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Deg_MAX_BYTES_DEGREE_FULL_NAME + 1);
-   loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_FULL_NAME + 1);
+   loginBySessionKeyOut->degreeName     = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
+   loginBySessionKeyOut->courseName     = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
 
    /***** Default values returned on error *****/
    loginBySessionKeyOut->userCode          = -1;
@@ -1001,7 +1001,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Crs_GetDataOfCourseByCod (&Gbl.CurrentCrs.Crs);
       loginBySessionKeyOut->courseCode = (int) Gbl.CurrentCrs.Crs.CrsCod;
       Str_Copy (loginBySessionKeyOut->courseName,Gbl.CurrentCrs.Crs.FullName,
-                Crs_MAX_BYTES_COURSE_FULL_NAME);
+                Hie_MAX_BYTES_FULL_NAME);
 
       /***** Get user code (row[0]) *****/
       Gbl.Usrs.Me.UsrDat.UsrCod = Str_ConvertStrCodToLongCod (row[0]);
@@ -1012,7 +1012,7 @@ int swad__loginBySessionKey (struct soap *soap,
       Deg_GetDataOfDegreeByCod (&Gbl.CurrentDeg.Deg);
       loginBySessionKeyOut->degreeCode = (int) Gbl.CurrentDeg.Deg.DegCod;
       Str_Copy (loginBySessionKeyOut->degreeName,Gbl.CurrentDeg.Deg.FullName,
-                Deg_MAX_BYTES_DEGREE_FULL_NAME);
+                Hie_MAX_BYTES_FULL_NAME);
      }
    else
       UsrFound = false;
@@ -1225,14 +1225,14 @@ int swad__getCourses (struct soap *soap,
 	 getCoursesOut->coursesArray.__ptr[NumRow].courseCode = (int) Str_ConvertStrCodToLongCod (row[0]);
 
          /* Get course short name (row[1]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_SHRT_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseShortName = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_SHRT_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseShortName,row[1],
-	           Crs_MAX_BYTES_COURSE_SHRT_NAME);
+	           Hie_MAX_BYTES_SHRT_NAME);
 
          /* Get course full name (row[2]) */
-         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName = (char *) soap_malloc (Gbl.soap,Crs_MAX_BYTES_COURSE_FULL_NAME + 1);
+         getCoursesOut->coursesArray.__ptr[NumRow].courseFullName = (char *) soap_malloc (Gbl.soap,Hie_MAX_BYTES_FULL_NAME + 1);
 	 Str_Copy (getCoursesOut->coursesArray.__ptr[NumRow].courseFullName,row[2],
-	           Crs_MAX_BYTES_COURSE_FULL_NAME);
+	           Hie_MAX_BYTES_FULL_NAME);
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
@@ -2815,7 +2815,7 @@ int swad__getNotifications (struct soap *soap,
    struct Course Crs;
    long Cod;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
    Ntf_Status_t Status;
    size_t Length;
@@ -4681,7 +4681,7 @@ int swad__getMarks (struct soap *soap,
   {
    int ReturnCode;
    struct FileMetadata FileMetadata;
-   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];	// Not used
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];	// Not used
    char *ContentStr;
    size_t Length;
 

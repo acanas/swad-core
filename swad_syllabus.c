@@ -55,8 +55,8 @@ extern struct Globals Gbl;
 
 #define Syl_MAX_BYTES_ITEM_COD		(Syl_MAX_LEVELS_SYLLABUS * (10 + 1) - 1)
 
-#define Syl_MAX_CHARS_TEXT_ITEM		1000
-#define Syl_MAX_BYTES_TEXT_ITEM		(Syl_MAX_CHARS_TEXT_ITEM * Str_MAX_BYTES_PER_CHAR)
+#define Syl_MAX_CHARS_TEXT_ITEM		(1024 - 1)	// 1023
+#define Syl_MAX_BYTES_TEXT_ITEM		((Syl_MAX_CHARS_TEXT_ITEM + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 16383
 
 #define Syl_WIDTH_NUM_SYLLABUS 20
 

@@ -45,11 +45,11 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-#define MFU_MAX_CHARS_TAB	(128 - 1)
-#define MFU_MAX_BYTES_TAB	(MFU_MAX_CHARS_TAB * Str_MAX_BYTES_PER_CHAR)
+#define MFU_MAX_CHARS_TAB	(128 - 1)	// 127
+#define MFU_MAX_BYTES_TAB	((MFU_MAX_CHARS_TAB + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define MFU_MAX_CHARS_MENU	(128 - 1)
-#define MFU_MAX_BYTES_MENU	(MFU_MAX_CHARS_MENU * Str_MAX_BYTES_PER_CHAR)
+#define MFU_MAX_CHARS_MENU	(128 - 1)	// 127
+#define MFU_MAX_BYTES_MENU	((MFU_MAX_CHARS_MENU + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 /*****************************************************************************/
 /****************************** Internal types *******************************/

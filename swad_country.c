@@ -803,7 +803,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
                                         const char *ClassLink)
   {
    extern const char *Txt_Go_to_X;
-   char CountryName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char CountryName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    /***** Start form *****/
    Act_FormGoToStart (Action);
@@ -819,7 +819,7 @@ void Cty_DrawCountryMapAndNameWithLink (struct Country *Cty,Act_Action_t Action,
 
    /***** Write country name and end link *****/
    Str_Copy (CountryName,Cty->Name[Gbl.Prefs.Language],
-             Cty_MAX_BYTES_COUNTRY_NAME);
+             Hie_MAX_BYTES_FULL_NAME);
    fprintf (Gbl.F.Out,"&nbsp;%s&nbsp;(%s)"
 	              "</a>"
 	              "</div>",
@@ -1099,7 +1099,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
 
                /* Get the name of the country in current language */
                Str_Copy (Cty->Name[Gbl.Prefs.Language],row[2],
-                         Cty_MAX_BYTES_COUNTRY_NAME);
+                         Hie_MAX_BYTES_FULL_NAME);
                break;
             case Cty_GET_EXTRA_DATA:
                /* Get the name of the country in several languages */
@@ -1108,7 +1108,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
         	    Lan++)
         	 {
                   Str_Copy (Cty->Name[Lan],row[1 + Lan],
-                            Cty_MAX_BYTES_COUNTRY_NAME);
+                            Hie_MAX_BYTES_FULL_NAME);
                   Str_Copy (Cty->WWW[Lan],row[1 + Txt_NUM_LANGUAGES + Lan],
                             Cns_MAX_BYTES_WWW);
         	 }
@@ -1212,7 +1212,7 @@ void Cty_WriteSelectorOfCountry (void)
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    bool PutForm = ClassLink &&
 	          !Gbl.Form.Inside &&						// Only if not inside another form
@@ -1279,7 +1279,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	   Lan++)
          if (Lan == Gbl.Prefs.Language)
             Str_Copy (Cty->Name[Lan],Txt_Another_country,
-                      Cty_MAX_BYTES_COUNTRY_NAME);
+                      Hie_MAX_BYTES_FULL_NAME);
          else
             Cty->Name[Lan][0] = '\0';
       return false;
@@ -1355,7 +1355,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	 case Cty_GET_BASIC_DATA:
 	    /* Get name and WWW of the country in current language */
 	    Str_Copy (Cty->Name[Gbl.Prefs.Language],row[1],
-	              Cty_MAX_BYTES_COUNTRY_NAME);
+	              Hie_MAX_BYTES_FULL_NAME);
 	    Str_Copy (Cty->WWW[Gbl.Prefs.Language],row[2],
 	              Cns_MAX_BYTES_WWW);
 	    break;
@@ -1366,7 +1366,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 		 Lan++)
 	      {
 	       Str_Copy (Cty->Name[Lan],row[Lan],
-	                 Cty_MAX_BYTES_COUNTRY_NAME);
+	                 Hie_MAX_BYTES_FULL_NAME);
 	       Str_Copy (Cty->WWW[Lan],row[Txt_NUM_LANGUAGES + Lan],
 	                 Cns_MAX_BYTES_WWW);
 	      }
@@ -1398,7 +1398,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 /***************************** Get country name ******************************/
 /*****************************************************************************/
 
-void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1])
+void Cty_GetCountryName (long CtyCod,char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[128];
@@ -1407,7 +1407,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1
    static struct
      {
       long CtyCod;
-      char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+      char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
      } Cached =
      {
       -1L,
@@ -1433,7 +1433,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1
 
 	    /* Get the name of the country */
 	    Str_Copy (Cached.CtyName,row[0],
-		      Cty_MAX_BYTES_COUNTRY_NAME);
+		      Hie_MAX_BYTES_FULL_NAME);
 	   }
 	 else
 	    Cached.CtyName[0] = '\0';
@@ -1443,7 +1443,7 @@ void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1
 	}
 
       Str_Copy (CtyName,Cached.CtyName,
-		Cty_MAX_BYTES_COUNTRY_NAME);
+		Hie_MAX_BYTES_FULL_NAME);
      }
   }
 
@@ -1604,7 +1604,7 @@ static void Cty_ListCountriesForEdition (void)
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Name\""
                             " size=\"15\" maxlength=\"%u\" value=\"%s\""
                             " onchange=\"document.getElementById('%s').submit();\" />",
-                  Cty_MAX_CHARS_COUNTRY_NAME,
+                  Hie_MAX_CHARS_FULL_NAME,
                   Cty->Name[Lan],Gbl.Form.Id);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
@@ -1723,7 +1723,7 @@ void Cty_RenameCountry (void)
    extern const char *Txt_The_name_of_the_country_X_has_not_changed;
    char Query[512];
    struct Country *Cty;
-   char NewCtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char NewCtyName[Hie_MAX_BYTES_FULL_NAME + 1];
    Txt_Language_t Language;
 
    Cty = &Gbl.Ctys.EditingCty;
@@ -1736,7 +1736,7 @@ void Cty_RenameCountry (void)
    Language = Pre_GetParamLanguage ();
 
    /* Get the new name for the country */
-   Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_COUNTRY_NAME);
+   Par_GetParToText ("Name",NewCtyName,Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get from the database the data of the country *****/
    Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
@@ -1784,7 +1784,7 @@ void Cty_RenameCountry (void)
 
    /***** Show the form again *****/
    Str_Copy (Cty->Name[Language],NewCtyName,
-             Cty_MAX_BYTES_COUNTRY_NAME);
+             Hie_MAX_BYTES_FULL_NAME);
    Cty_EditCountries ();
   }
 
@@ -1855,7 +1855,7 @@ void Cty_ChangeCtyWWW (void)
    Language = Pre_GetParamLanguage ();
 
    /* Get the new WWW for the country */
-   Par_GetParToText ("WWW",NewWWW,Cty_MAX_BYTES_COUNTRY_NAME);
+   Par_GetParToText ("WWW",NewWWW,Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get from the database the data of the country *****/
    Cty_GetDataOfCountryByCod (Cty,Cty_GET_EXTRA_DATA);
@@ -1882,12 +1882,12 @@ void Cty_ChangeCtyWWW (void)
 
 void Cty_ChangeCtyMapAttribution (void)
   {
-   char Query[256 + Cty_MAX_BYTES_MAP_ATTRIBUTION];
-   char NewMapAttribution[Cty_MAX_BYTES_MAP_ATTRIBUTION + 1];
+   char Query[256 + Img_MAX_BYTES_ATTRIBUTION];
+   char NewMapAttribution[Img_MAX_BYTES_ATTRIBUTION + 1];
 
    /***** Get parameters from form *****/
    /* Get the new map attribution for the country */
-   Par_GetParToText ("Attribution",NewMapAttribution,Cty_MAX_BYTES_MAP_ATTRIBUTION);
+   Par_GetParToText ("Attribution",NewMapAttribution,Img_MAX_BYTES_ATTRIBUTION);
 
    /***** Update the table changing old attribution by new attribution *****/
    sprintf (Query,"UPDATE countries SET MapAttribution='%s'"
@@ -1983,7 +1983,7 @@ static void Cty_PutFormToCreateCountry (void)
                          " required=\"required\" />"
                          "</td>",
                Txt_STR_LANG_ID[Lan],
-               Cty_MAX_CHARS_COUNTRY_NAME,
+               Hie_MAX_CHARS_FULL_NAME,
                Cty->Name[Lan]);
 
       /* WWW */
@@ -2116,7 +2116,7 @@ void Cty_RecFormNewCountry (void)
         	 Lan++)
               {
                sprintf (ParamName,"Name_%s",Txt_STR_LANG_ID[Lan]);
-               Par_GetParToText (ParamName,Cty->Name[Lan],Cty_MAX_BYTES_COUNTRY_NAME);
+               Par_GetParToText (ParamName,Cty->Name[Lan],Hie_MAX_BYTES_FULL_NAME);
 
                if (Cty->Name[Lan][0])	// If there's a country name
                  {
@@ -2155,7 +2155,7 @@ void Cty_RecFormNewCountry (void)
 /**************************** Create a new country ***************************/
 /*****************************************************************************/
 
-#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Txt_NUM_LANGUAGES) * Cty_MAX_BYTES_COUNTRY_NAME)
+#define Cty_MAX_BYTES_SUBQUERY_CTYS_NAME	((1 + Txt_NUM_LANGUAGES) * Hie_MAX_BYTES_FULL_NAME)
 #define Cty_MAX_BYTES_SUBQUERY_CTYS_WWW		((1 + Txt_NUM_LANGUAGES) * Cns_MAX_BYTES_WWW)
 
 static void Cty_CreateCountry (struct Country *Cty)

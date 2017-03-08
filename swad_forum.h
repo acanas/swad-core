@@ -30,6 +30,7 @@
 #include "swad_centre.h"
 #include "swad_degree.h"
 #include "swad_institution.h"
+#include "swad_notification.h"
 #include "swad_pagination.h"
 #include "swad_scope.h"
 #include "swad_string.h"
@@ -101,7 +102,7 @@ unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 
-void For_GetSummaryAndContentForumPst (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                        char **ContentStr,
                                        long PstCod,bool GetContent);
 

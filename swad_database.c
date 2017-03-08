@@ -103,17 +103,17 @@ mysql> DESCRIBE IP_prefs;
 8 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
-                   "IP CHAR(15) NOT NULL,"
-                   "UsrCod INT NOT NULL DEFAULT -1,"
-                   "LastChange DATETIME NOT NULL,"
-		   "FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-                   "Theme CHAR(16) NOT NULL,"
-                   "IconSet CHAR(16) NOT NULL,"
-                   "Menu TINYINT NOT NULL DEFAULT 0,"
-                   "SideCols TINYINT NOT NULL,"
-                   "PRIMARY KEY (IP),"
-                   "INDEX(UsrCod),"
-                   "INDEX(LastChange))");
+			"IP CHAR(15) NOT NULL,"				// Cns_MAX_BYTES_IP
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"LastChange DATETIME NOT NULL,"
+			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
+			"Theme CHAR(16) NOT NULL,"			// The_MAX_BYTES_THEME_ID
+			"IconSet CHAR(16) NOT NULL,"			// Ico_MAX_BYTES_ICON_SET_ID
+			"Menu TINYINT NOT NULL DEFAULT 0,"
+			"SideCols TINYINT NOT NULL,"
+		   "PRIMARY KEY (IP),"
+		   "INDEX(UsrCod),"
+		   "INDEX(LastChange))");
 
    /***** Table actions *****/
 /*
@@ -129,12 +129,12 @@ mysql> DESCRIBE actions;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS actions ("
-                   "ActCod INT NOT NULL DEFAULT -1,"
-                   "Language CHAR(2) NOT NULL,"
-                   "Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Txt VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(ActCod,Language),"
-                   "INDEX(Txt))");
+			"ActCod INT NOT NULL DEFAULT -1,"
+			"Language CHAR(2) NOT NULL,"
+			"Obsolete ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Txt VARCHAR(255) NOT NULL,"			// Act_MAX_BYTES_ACTION_TXT
+		   "UNIQUE INDEX(ActCod,Language),"
+		   "INDEX(Txt))");
 
    /***** Table actions_MFU *****/
 /*
@@ -150,11 +150,11 @@ mysql> DESCRIBE actions_MFU;
 4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS actions_MFU ("
-                   "UsrCod INT NOT NULL,"
-                   "ActCod INT NOT NULL,"
-                   "Score FLOAT NOT NULL,"
-                   "LastClick DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,ActCod))");
+			"UsrCod INT NOT NULL,"
+			"ActCod INT NOT NULL,"
+			"Score FLOAT NOT NULL,"
+			"LastClick DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,ActCod))");
 
 /***** Table admin *****/
 /*
@@ -169,11 +169,11 @@ mysql> DESCRIBE admin;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS admin ("
-	           "UsrCod INT NOT NULL,"
-	           "Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
-	           "Cod INT NOT NULL,"
-	           "UNIQUE INDEX(UsrCod,Scope,Cod),"
-	           "INDEX (Scope,Cod))");
+			"UsrCod INT NOT NULL,"
+			"Scope ENUM('Sys','Ins','Ctr','Deg') NOT NULL,"
+			"Cod INT NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,Scope,Cod),"
+		   "INDEX (Scope,Cod))");
 
    /***** Table agendas *****/
 /*
@@ -194,17 +194,17 @@ mysql> DESCRIBE agendas;
 9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS agendas ("
-                   "AgdCod INT NOT NULL AUTO_INCREMENT,"
-                   "UsrCod INT NOT NULL,"
-                   "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "StartTime DATETIME NOT NULL,"
-                   "EndTime DATETIME NOT NULL,"
-                   "Event VARCHAR(255) NOT NULL,"
-                   "Location VARCHAR(255) NOT NULL,"
-                   "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(AgdCod),"
-                   "INDEX(UsrCod,Public,Hidden))");
+			"AgdCod INT NOT NULL AUTO_INCREMENT,"
+			"UsrCod INT NOT NULL,"
+			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Event VARCHAR(255) NOT NULL,"			// Agd_MAX_BYTES_EVENT
+			"Location VARCHAR(255) NOT NULL,"
+			"Txt TEXT NOT NULL,"
+		   "UNIQUE INDEX(AgdCod),"
+		   "INDEX(UsrCod,Public,Hidden))");
 
    /***** Table ann_seen *****/
 /*

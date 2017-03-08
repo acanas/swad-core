@@ -31,13 +31,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Sch_MAX_CHARS_STRING_TO_FIND	(128 - 1)
-#define Sch_MAX_BYTES_STRING_TO_FIND	(Sch_MAX_CHARS_STRING_TO_FIND * Str_MAX_BYTES_PER_CHAR)
+#define Sch_MAX_CHARS_STRING_TO_FIND	(128 - 1)	// 127
+#define Sch_MAX_BYTES_STRING_TO_FIND	((Sch_MAX_CHARS_STRING_TO_FIND + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Sch_MAX_WORDS_IN_SEARCH		 10
 
-#define Sch_MAX_CHARS_SEARCH_WORD	(128 - 1)
-#define Sch_MAX_BYTES_SEARCH_WORD	(Sch_MAX_CHARS_SEARCH_WORD * Str_MAX_BYTES_PER_CHAR)
+#define Sch_MAX_CHARS_SEARCH_WORD	(128 - 1)	// 127
+#define Sch_MAX_BYTES_SEARCH_WORD	((Sch_MAX_CHARS_SEARCH_WORD - 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Sch_MAX_BYTES_SEARCH_QUERY	(Sch_MAX_WORDS_IN_SEARCH * Sch_MAX_BYTES_SEARCH_WORD)
 

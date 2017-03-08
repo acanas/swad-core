@@ -122,11 +122,11 @@ static long Exa_GetParamsExamAnnouncement (void)
    ExaCod = Exa_GetParamExaCod ();
 
    /***** Get the name of the course (it is allowed to be different from the official name of the course) *****/
-   Par_GetParToText ("CrsName",Gbl.ExamAnns.ExaDat.CrsFullName,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("CrsName",Gbl.ExamAnns.ExaDat.CrsFullName,Hie_MAX_BYTES_FULL_NAME);
    // If the parameter is not present or is empty, initialize the string to the full name of the current course
    if (!Gbl.ExamAnns.ExaDat.CrsFullName[0])
       Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,Gbl.CurrentCrs.Crs.FullName,
-                Crs_MAX_BYTES_COURSE_FULL_NAME);
+                Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get the year *****/
    Gbl.ExamAnns.ExaDat.Year = (unsigned)
@@ -136,7 +136,7 @@ static long Exa_GetParamsExamAnnouncement (void)
                                                         (unsigned long) Gbl.CurrentCrs.Crs.Year);
 
    /***** Get the type of exam announcement *****/
-   Par_GetParToText ("ExamSession",Gbl.ExamAnns.ExaDat.Session,Cns_MAX_BYTES_STRING);
+   Par_GetParToText ("ExamSession",Gbl.ExamAnns.ExaDat.Session,Exa_MAX_BYTES_SESSION);
 
    /***** Get the data of the exam *****/
    Dat_GetDateFromForm ("ExamDay","ExamMonth","ExamYear",
@@ -737,7 +737,10 @@ static long Exa_AddExamAnnouncementToDB (void)
    long ExaCod;
 
    /***** Add exam announcement *****/
-   if ((Query = malloc (512 + 2 * Cns_MAX_BYTES_STRING + 7 * Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = malloc (512 +
+                        Hie_MAX_BYTES_FULL_NAME +
+                        Exa_MAX_BYTES_SESSION +
+                        7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"INSERT INTO exam_announcements "
 	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
@@ -781,7 +784,10 @@ static void Exa_ModifyExamAnnouncementInDB (void)
    char *Query;
 
    /***** Modify exam announcement *****/
-   if ((Query = malloc (512 + 2 * Cns_MAX_BYTES_STRING + 7 * Cns_MAX_BYTES_TEXT)) == NULL)
+   if ((Query = malloc (512 +
+                        Hie_MAX_BYTES_FULL_NAME +
+                        Exa_MAX_BYTES_SESSION +
+                        7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"UPDATE exam_announcements"
                   " SET CrsFullName='%s',Year='%u',ExamSession='%s',"
@@ -926,7 +932,7 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
 
    /* Name of the course (row[2]) */
    Str_Copy (Gbl.ExamAnns.ExaDat.CrsFullName,row[2],
-             Crs_MAX_BYTES_COURSE_FULL_NAME);
+             Hie_MAX_BYTES_FULL_NAME);
 
    /* Year (row[3]) */
    if (sscanf (row[3],"%u",&Gbl.ExamAnns.ExaDat.Year) != 1)
@@ -934,7 +940,7 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
 
    /* Exam session (row[4]) */
    Str_Copy (Gbl.ExamAnns.ExaDat.Session,row[4],
-             Cns_MAX_BYTES_STRING);
+             Exa_MAX_BYTES_SESSION);
 
    /* Date of exam announcement (row[5]) */
    if (sscanf (row[5],"%04u-%02u-%02u %02u:%02u:%02u",
@@ -1136,7 +1142,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
      {
       fprintf (Gbl.F.Out,"<input type=\"text\" id=\"CrsName\" name=\"CrsName\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_CHARS_STRING,Gbl.ExamAnns.ExaDat.CrsFullName);
+               Hie_MAX_CHARS_FULL_NAME,Gbl.ExamAnns.ExaDat.CrsFullName);
      }
    else
       fprintf (Gbl.F.Out,"<strong>%s</strong>",
@@ -1189,7 +1195,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
       fprintf (Gbl.F.Out,"<input type=\"text\""
 	                 " id=\"ExamSession\" name=\"ExamSession\""
 	                 " size=\"30\" maxlength=\"%u\" value=\"%s\" />",
-               Cns_MAX_CHARS_STRING,Gbl.ExamAnns.ExaDat.Session);
+               Exa_MAX_CHARS_SESSION,Gbl.ExamAnns.ExaDat.Session);
    else
       fprintf (Gbl.F.Out,"%s",Gbl.ExamAnns.ExaDat.Session);
    fprintf (Gbl.F.Out,"</td>"
@@ -1606,12 +1612,12 @@ static long Exa_GetParamExaCod (void)
 /************ Get summary and content about an exam announcement *************/
 /*****************************************************************************/
 
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                                char **ContentStr,
                                                long ExaCod,bool GetContent)
   {
    extern const char *Txt_hours_ABBREVIATION;
-   char CrsNameAndDate[Crs_MAX_BYTES_COURSE_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 6) + 1];
+   char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 6) + 1];
 
    /***** Initializations *****/
    Gbl.ExamAnns.ExaDat.ExaCod = ExaCod;
@@ -1637,7 +1643,7 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUM
             Gbl.ExamAnns.ExaDat.StartTime.Hour,
             Gbl.ExamAnns.ExaDat.StartTime.Minute);
    Str_Copy (SummaryStr,CrsNameAndDate,
-             Cns_MAX_BYTES_SUMMARY_STRING);
+             Ntf_MAX_BYTES_SUMMARY);
 
    /***** Free memory of the exam announcement *****/
    Exa_FreeMemExamAnnouncement ();

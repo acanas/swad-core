@@ -173,7 +173,7 @@ static void Soc_WriteDateTime (time_t TimeUTC);
 static void Soc_GetAndWriteSocialPost (long PstCod);
 static void Soc_PutFormGoToAction (const struct SocialNote *SocNot);
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1]);
+                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1]);
 static void Soc_PublishSocialNoteInTimeline (struct SocialPublishing *SocPub);
 
 static void Soc_PutFormToWriteNewPost (void);
@@ -1263,7 +1263,7 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
-   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    unsigned NumComments;
    char IdNewComment[Act_MAX_BYTES_ID];
 
@@ -1871,7 +1871,7 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 /*****************************************************************************/
 
 static void Soc_GetNoteSummary (const struct SocialNote *SocNot,
-                                char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1])
+                                char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1])
   {
    SummaryStr[0] = '\0';
 
@@ -4732,7 +4732,7 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
 /******************* Get notification of a new social post *******************/
 /*****************************************************************************/
 
-void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Soc_GetNotifSocialPublishing (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                    char **ContentStr,
                                    long PubCod,bool GetContent)
   {
@@ -4808,9 +4808,9 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING 
 	      }
 
 	    /***** Copy summary string *****/
-	    Str_LimitLengthHTMLStr (Content,Cns_MAX_BYTES_SUMMARY_STRING);
+	    Str_LimitLengthHTMLStr (Content,Ntf_MAX_BYTES_SUMMARY);
 	    Str_Copy (SummaryStr,Content,
-	              Cns_MAX_BYTES_SUMMARY_STRING);
+	              Ntf_MAX_BYTES_SUMMARY);
 	   }
 	 else
 	    Soc_GetNoteSummary (&SocNot,SummaryStr);
@@ -4847,9 +4847,9 @@ void Soc_GetNotifSocialPublishing (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING 
 	   }
 
 	 /***** Copy summary string *****/
-	 Str_LimitLengthHTMLStr (Content,Cns_MAX_BYTES_SUMMARY_STRING);
+	 Str_LimitLengthHTMLStr (Content,Ntf_MAX_BYTES_SUMMARY);
 	 Str_Copy (SummaryStr,Content,
-	           Cns_MAX_BYTES_SUMMARY_STRING);
+	           Ntf_MAX_BYTES_SUMMARY);
 	 break;
      }
 

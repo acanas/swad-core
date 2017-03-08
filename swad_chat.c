@@ -54,11 +54,11 @@ extern struct Globals Gbl;
 #define Cht_MAX_CHARS_ROOM_CODE	16	// Maximum number of chars of the code of a chat room
 #define Cht_MAX_BYTES_ROOM_CODE	Cht_MAX_CHARS_ROOM_CODE
 
-#define Cht_MAX_CHARS_ROOM_SHRT_NAME	(128 - 1)	// Maximum number of chars of the short name of a chat room
-#define Cht_MAX_BYTES_ROOM_SHRT_NAME	(Cht_MAX_CHARS_ROOM_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Cht_MAX_CHARS_ROOM_SHRT_NAME	(128 - 1)	// 127, maximum number of chars of the short name of a chat room
+#define Cht_MAX_BYTES_ROOM_SHRT_NAME	((Cht_MAX_CHARS_ROOM_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Cht_MAX_CHARS_ROOM_FULL_NAME	(256 - 1)	// Maximum number of chars of the full name of a chat room
-#define Cht_MAX_BYTES_ROOM_FULL_NAME	(Cht_MAX_CHARS_ROOM_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Cht_MAX_CHARS_ROOM_FULL_NAME	(256 - 1)	// 255, maximum number of chars of the full name of a chat room
+#define Cht_MAX_BYTES_ROOM_FULL_NAME	((Cht_MAX_CHARS_ROOM_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /*****************************************************************************/
 /***************************** Private prototypes ****************************/

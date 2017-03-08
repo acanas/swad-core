@@ -27,6 +27,7 @@
 /********************************** Headers **********************************/
 /*****************************************************************************/
 
+#include "swad_notification.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -81,7 +82,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);
 
 void Enr_ReqAcceptRegisterInCrs (void);
-void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Enr_GetNotifEnrollment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              long CrsCod,long UsrCod);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_FilterUsrDat (struct UsrData *UsrDat);
@@ -105,7 +106,7 @@ void Enr_RemAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Course *Crs);
 void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);
-void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     long ReqCod,bool GetContent);
 void Enr_AskIfRejectSignUp (void);

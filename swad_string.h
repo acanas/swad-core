@@ -51,7 +51,8 @@
    So, each char from a form may be transformed finally into a sequence of 1 to 10 bytes,
    but temporarily it may need 16 bytes
 */
-#define Str_MAX_BYTES_PER_CHAR	16	// Maximum number of bytes of a char
+#define Str_MAX_BYTES_PER_CHAR	16	// Maximum number of bytes of a char.
+					// Do not change (or change carefully) because it is used to compute size of database fields
 
 /*****************************************************************************/
 /******************************* Public types *******************************/

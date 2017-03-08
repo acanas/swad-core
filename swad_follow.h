@@ -29,6 +29,7 @@
 
 #include <stdlib.h>		// For malloc
 
+#include "swad_notification.h"
 #include "swad_user.h"
 
 /*****************************************************************************/
@@ -63,7 +64,7 @@ void Fol_UnfollowUsr2 (void);
 
 void Fol_GetAndShowRankingFollowers (void);
 
-void Fol_GetNotifFollower (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Fol_GetNotifFollower (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                            char **ContentStr);
 
 void Fol_RemoveUsrFromUsrFollow (long UsrCod);

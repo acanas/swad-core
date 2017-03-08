@@ -30,6 +30,7 @@
 #include <linux/limits.h>	// For PATH_MAX
 
 #include "swad_group.h"
+#include "swad_notification.h"
 
 /*****************************************************************************/
 /******************************* Public types ********************************/
@@ -136,10 +137,10 @@ struct FileMetadata
 
 #define Brw_MAX_DIR_LEVELS	10	// Maximum number of subdirectory levels in file browsers
 
-#define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// Maximum size in bytes of "image/jpeg", "text/html", etc.
+#define Brw_MAX_BYTES_MIME_TYPE	(128 - 1)	// 127: maximum size in bytes of "image/jpeg", "text/html", etc.
 
-#define Brw_MAX_CHARS_LICENSE	(128 - 1)
-#define Brw_MAX_BYTES_LICENSE	(Brw_MAX_CHARS_LICENSE * Str_MAX_BYTES_PER_CHAR)
+#define Brw_MAX_CHARS_LICENSE	(128 - 1)	// 127
+#define Brw_MAX_BYTES_LICENSE	((Brw_MAX_CHARS_LICENSE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_DOCUMENTS		"doc"
 #define Brw_INTERNAL_NAME_ROOT_FOLDER_SHARED_FILES	"sha"
@@ -248,7 +249,7 @@ void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);
 void Brw_RemoveUsrWorksInAllCrss (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrVerbose);
 
-void Brw_GetSummaryAndContentOfFile (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                      char **ContentStr,
                                      long FilCod,bool GetContent);
 

@@ -324,7 +324,7 @@ void Ntf_ShowMyNotifications (void)
    time_t DateTimeUTC;	// Date-time of the event
    Ntf_Status_t Status;
    Ntf_StatusTxt_t StatusTxt;
-   char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1];
+   char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
    const char *ClassBackground;
    const char *ClassAnchor;
@@ -853,7 +853,7 @@ Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status)
 /******************* Get notification summary and content ********************/
 /*****************************************************************************/
 
-void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,

@@ -1003,11 +1003,11 @@ void Msg_GetParamMsgsCrsCod (void)
       Crs_GetDataOfCourseByCod (&Crs);
 
       Str_Copy (Gbl.Msg.FilterCrsShrtName,Crs.ShrtName,
-                Crs_MAX_BYTES_COURSE_SHRT_NAME);
+                Hie_MAX_BYTES_SHRT_NAME);
      }
    else
       Str_Copy (Gbl.Msg.FilterCrsShrtName,Txt_any_course,
-                Crs_MAX_BYTES_COURSE_SHRT_NAME);
+                Hie_MAX_BYTES_SHRT_NAME);
   }
 
 /*****************************************************************************/
@@ -2503,7 +2503,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
            {
             Gbl.Msg.Courses[Gbl.Msg.NumCourses].CrsCod = Crs.CrsCod;
             Str_Copy (Gbl.Msg.Courses[Gbl.Msg.NumCourses].ShrtName,Crs.ShrtName,
-                      Crs_MAX_BYTES_COURSE_SHRT_NAME);
+                      Hie_MAX_BYTES_SHRT_NAME);
             Gbl.Msg.NumCourses++;
            }
      }
@@ -2995,7 +2995,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                           char **ContentStr,long MsgCod,bool GetContent)
   {
    extern const char *Txt_MSG_Subject;
@@ -3020,15 +3020,15 @@ void Msg_GetNotifMessage (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
 
             /***** Copy subject *****/
             // TODO: Do only direct copy when Subject will be VARCHAR(255)
-            if (strlen (row[0]) > Cns_MAX_BYTES_SUMMARY_STRING)
+            if (strlen (row[0]) > Ntf_MAX_BYTES_SUMMARY)
               {
                strncpy (SummaryStr,row[0],
-			Cns_MAX_BYTES_SUMMARY_STRING);
-               SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING] = '\0';
+			Ntf_MAX_BYTES_SUMMARY);
+               SummaryStr[Ntf_MAX_BYTES_SUMMARY] = '\0';
               }
             else
 	       Str_Copy (SummaryStr,row[0],
-			 Cns_MAX_BYTES_SUMMARY_STRING);
+			 Ntf_MAX_BYTES_SUMMARY);
 
             /***** Copy subject *****/
             if (GetContent)

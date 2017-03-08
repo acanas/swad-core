@@ -392,7 +392,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_CHARS_DEGREE_FULL_NAME,
+		  Hie_MAX_CHARS_FULL_NAME,
 		  Gbl.CurrentDeg.Deg.FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -422,7 +422,7 @@ static void Deg_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_CHARS_DEGREE_SHRT_NAME,
+		  Hie_MAX_CHARS_SHRT_NAME,
 		  Gbl.CurrentDeg.Deg.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -748,7 +748,7 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_CHARS_DEGREE_SHRT_NAME,Deg->ShrtName,Gbl.Form.Id);
+		  Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -765,7 +765,7 @@ static void Deg_ListDegreesForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Deg_MAX_CHARS_DEGREE_FULL_NAME,Deg->FullName,Gbl.Form.Id);
+		  Hie_MAX_CHARS_FULL_NAME,Deg->FullName,Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
       else
@@ -988,7 +988,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Deg_MAX_CHARS_DEGREE_SHRT_NAME,Deg->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Deg->ShrtName);
 
    /***** Degree full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -997,7 +997,7 @@ static void Deg_PutFormToCreateDegree (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Deg_MAX_CHARS_DEGREE_FULL_NAME,Deg->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Deg->FullName);
 
    /***** Degree type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -1164,8 +1164,8 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
   {
    extern const char *Txt_Created_new_degree_X;
    char Query[512 +
-              Deg_MAX_BYTES_DEGREE_SHRT_NAME +
-              Deg_MAX_BYTES_DEGREE_FULL_NAME +
+              Hie_MAX_BYTES_SHRT_NAME +
+              Hie_MAX_BYTES_FULL_NAME +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new degree *****/
@@ -1541,10 +1541,10 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
    Deg->CtrCod = Gbl.CurrentCtr.Ctr.CtrCod;
 
    /* Get degree short name */
-   Par_GetParToText ("ShortName",Deg->ShrtName,Deg_MAX_BYTES_DEGREE_SHRT_NAME);
+   Par_GetParToText ("ShortName",Deg->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get degree full name */
-   Par_GetParToText ("FullName",Deg->FullName,Deg_MAX_BYTES_DEGREE_FULL_NAME);
+   Par_GetParToText ("FullName",Deg->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get degree type */
    if ((Deg->DegTypCod = DT_GetParamOtherDegTypCod ()) <= 0)
@@ -1728,11 +1728,11 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
    /***** Get degree short name (row[5]) *****/
    Str_Copy (Deg->ShrtName,row[5],
-             Deg_MAX_BYTES_DEGREE_SHRT_NAME);
+             Hie_MAX_BYTES_SHRT_NAME);
 
    /***** Get degree full name (row[6]) *****/
    Str_Copy (Deg->FullName,row[6],
-             Deg_MAX_BYTES_DEGREE_FULL_NAME);
+             Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get WWW (row[7]) *****/
    Str_Copy (Deg->WWW,row[7],
@@ -1762,7 +1762,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
 	 row = mysql_fetch_row (mysql_res);
 
 	 Str_Copy (Deg->ShrtName,row[0],
-	           Deg_MAX_BYTES_DEGREE_SHRT_NAME);
+	           Hie_MAX_BYTES_SHRT_NAME);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -1939,25 +1939,25 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_degree_X_has_not_changed;
-   char Query[512 + Deg_MAX_BYTES_DEGREE_FULL_NAME];
+   char Query[512 + Hie_MAX_BYTES_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentDegName = NULL;		// Initialized to avoid warning
-   char NewDegName[Deg_MAX_BYTES_DEGREE_FULL_NAME + 1];
+   char NewDegName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Deg_MAX_BYTES_DEGREE_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentDegName = Deg->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Deg_MAX_BYTES_DEGREE_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentDegName = Deg->FullName;
          break;
      }

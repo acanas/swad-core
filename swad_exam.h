@@ -32,6 +32,7 @@
 #include "swad_constant.h"
 #include "swad_course.h"
 #include "swad_date.h"
+#include "swad_notification.h"
 
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
@@ -53,14 +54,17 @@ typedef enum
    Exa_DELETED_EXAM_ANNOUNCEMENT = 2,
   } Exa_ExamAnnouncementStatus_t;	// Don't change these numbers because they are used in database
 
+#define Exa_MAX_CHARS_SESSION	(128 - 1)	// 127
+#define Exa_MAX_BYTES_SESSION	((Exa_MAX_CHARS_SESSION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
+
 struct ExamData
   {
    long ExaCod;
    long CrsCod;
    Exa_ExamAnnouncementStatus_t Status;
-   char CrsFullName[Crs_MAX_BYTES_COURSE_FULL_NAME + 1];
+   char CrsFullName[Hie_MAX_BYTES_FULL_NAME + 1];
    unsigned Year; // Number of year (0 (N.A.), 1, 2, 3, 4, 5, 6) in the degree
-   char Session[Cns_MAX_BYTES_STRING + 1];	// Exam session is june, september, etc.
+   char Session[Exa_MAX_BYTES_SESSION + 1];	// Exam session is june, september, etc.
    struct Date CallDate;
    struct Date ExamDate;
    struct Hour StartTime;
@@ -99,7 +103,7 @@ void Exa_GetDateToHighlight (void);
 
 void Exa_CreateListDatesOfExamAnnouncements (void);
 void Exa_PutHiddenParamExaCod (long ExaCod);
-void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                                char **ContentStr,
                                                long ExaCod,bool GetContent);
 

@@ -27,22 +27,18 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_hierarchy.h"
+
 /*****************************************************************************/
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
-
-#define Dpt_MAX_CHARS_DEPARTMENT_SHRT_NAME	32
-#define Dpt_MAX_BYTES_DEPARTMENT_SHRT_NAME	(Dpt_MAX_CHARS_DEPARTMENT_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
-
-#define Dpt_MAX_CHARS_DEPARTMENT_FULL_NAME	(128 - 1)
-#define Dpt_MAX_BYTES_DEPARTMENT_FULL_NAME	(Dpt_MAX_CHARS_DEPARTMENT_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
 
 struct Department
   {
    long DptCod;
    long InsCod;
-   char ShrtName[Dpt_MAX_BYTES_DEPARTMENT_SHRT_NAME + 1];
-   char FullName[Dpt_MAX_BYTES_DEPARTMENT_FULL_NAME + 1];
+   char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
+   char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
    unsigned NumTchs;
   };

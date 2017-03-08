@@ -31,11 +31,11 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Plc_MAX_CHARS_PLACE_SHRT_NAME	32
-#define Plc_MAX_BYTES_PLACE_SHRT_NAME	(Plc_MAX_CHARS_PLACE_SHRT_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Plc_MAX_CHARS_PLACE_SHRT_NAME	(32 - 1)	// 31
+#define Plc_MAX_BYTES_PLACE_SHRT_NAME	((Plc_MAX_CHARS_PLACE_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
-#define Plc_MAX_CHARS_PLACE_FULL_NAME	(128 - 1)
-#define Plc_MAX_BYTES_PLACE_FULL_NAME	(Plc_MAX_CHARS_PLACE_FULL_NAME * Str_MAX_BYTES_PER_CHAR)
+#define Plc_MAX_CHARS_PLACE_FULL_NAME	(128 - 1)	// 127
+#define Plc_MAX_BYTES_PLACE_FULL_NAME	((Plc_MAX_CHARS_PLACE_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
 struct Place
   {

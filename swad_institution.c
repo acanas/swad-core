@@ -76,7 +76,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
 static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
-                                               char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1]);
+                                               char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
 static void Ins_ListInstitutionsForEdition (void);
 static bool Ins_CheckIfICanEdit (struct Instit *Ins);
@@ -385,7 +385,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_CHARS_INSTIT_FULL_NAME,
+		  Hie_MAX_CHARS_FULL_NAME,
 		  Gbl.CurrentIns.Ins.FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -414,7 +414,7 @@ static void Ins_Configuration (bool PrintView)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_CHARS_INSTIT_SHRT_NAME,
+		  Hie_MAX_CHARS_SHRT_NAME,
 		  Gbl.CurrentIns.Ins.ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1030,11 +1030,11 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 
          /* Get the short name of the institution (row[4]) */
          Str_Copy (Ins->ShrtName,row[4],
-                   Ins_MAX_BYTES_INSTIT_SHRT_NAME);
+                   Hie_MAX_BYTES_SHRT_NAME);
 
          /* Get the full name of the institution (row[5]) */
          Str_Copy (Ins->FullName,row[5],
-                   Ins_MAX_BYTES_INSTIT_FULL_NAME);
+                   Hie_MAX_BYTES_FULL_NAME);
 
          /* Get the URL of the institution (row[6]) */
          Str_Copy (Ins->WWW,row[6],
@@ -1086,7 +1086,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
 void Ins_WriteInstitutionNameAndCty (long InsCod)
   {
    struct Instit Ins;
-   char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+   char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    /***** Get institution full name *****/
    Ins.InsCod = InsCod;
@@ -1145,11 +1145,11 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 
 	 /* Get the short name of the institution (row[3]) */
 	 Str_Copy (Ins->ShrtName,row[3],
-	           Ins_MAX_BYTES_INSTIT_SHRT_NAME);
+	           Hie_MAX_BYTES_SHRT_NAME);
 
 	 /* Get the full name of the institution (row[4]) */
 	 Str_Copy (Ins->FullName,row[4],
-	           Ins_MAX_BYTES_INSTIT_FULL_NAME);
+	           Hie_MAX_BYTES_FULL_NAME);
 
 	 /* Get the URL of the institution (row[5]) */
 	 Str_Copy (Ins->WWW,row[5],
@@ -1194,7 +1194,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
    static struct
      {
       long InsCod;
-      char ShrtName[Ins_MAX_BYTES_INSTIT_SHRT_NAME + 1];
+      char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
      } Cached =
      {
       -1L,
@@ -1217,7 +1217,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
 	    row = mysql_fetch_row (mysql_res);
 
 	    Str_Copy (Cached.ShrtName,row[0],
-		      Ins_MAX_BYTES_INSTIT_SHRT_NAME);
+		      Hie_MAX_BYTES_SHRT_NAME);
 	   }
 	 else
 	    Cached.ShrtName[0] = '\0';
@@ -1227,7 +1227,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
 	}
 
       Str_Copy (Ins->ShrtName,Cached.ShrtName,
-		Ins_MAX_BYTES_INSTIT_SHRT_NAME);
+		Hie_MAX_BYTES_SHRT_NAME);
      }
   }
 
@@ -1236,7 +1236,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
 /*****************************************************************************/
 
 static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
-                                               char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1])
+                                               char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    char Query[256];
@@ -1245,8 +1245,8 @@ static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
    static struct
      {
       long InsCod;
-      char FullName[Ins_MAX_BYTES_INSTIT_FULL_NAME + 1];
-      char CtyName[Cty_MAX_BYTES_COUNTRY_NAME + 1];
+      char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
+      char CtyName[Hie_MAX_BYTES_FULL_NAME + 1];
      } Cached =
      {
       -1L,
@@ -1276,11 +1276,11 @@ static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
 
 	    /* Get the full name of this institution (row[0]) */
 	    Str_Copy (Cached.FullName,row[0],
-		      Ins_MAX_BYTES_INSTIT_FULL_NAME);
+		      Hie_MAX_BYTES_FULL_NAME);
 
 	    /* Get the name of the country (row[1]) */
 	    Str_Copy (Cached.CtyName,row[1],
-		      Cty_MAX_BYTES_COUNTRY_NAME);
+		      Hie_MAX_BYTES_FULL_NAME);
 	   }
 	 else
 	   {
@@ -1293,9 +1293,9 @@ static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
 	}
 
       Str_Copy (Ins->FullName,Cached.FullName,
-		Ins_MAX_BYTES_INSTIT_FULL_NAME);
+		Hie_MAX_BYTES_FULL_NAME);
       Str_Copy (CtyName,Cached.CtyName,
-		Cty_MAX_BYTES_COUNTRY_NAME);
+		Hie_MAX_BYTES_FULL_NAME);
      }
   }
 
@@ -1453,7 +1453,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_SHORT_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_CHARS_INSTIT_SHRT_NAME,Ins->ShrtName,
+		  Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
 	}
@@ -1471,7 +1471,7 @@ static void Ins_ListInstitutionsForEdition (void)
 	                    " maxlength=\"%u\" value=\"%s\""
                             " class=\"INPUT_FULL_NAME\""
 			    " onchange=\"document.getElementById('%s').submit();\" />",
-		  Ins_MAX_CHARS_INSTIT_FULL_NAME,
+		  Hie_MAX_CHARS_FULL_NAME,
 		  Ins->FullName,
 		  Gbl.Form.Id);
 	 Act_FormEnd ();
@@ -1767,20 +1767,20 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentInsName = NULL;		// Initialized to avoid warning
-   char NewInsName[Ins_MAX_BYTES_INSTIT_FULL_NAME + 1];
+   char NewInsName[Hie_MAX_BYTES_FULL_NAME + 1];
 
    switch (ShrtOrFullName)
      {
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         MaxBytes = Ins_MAX_BYTES_INSTIT_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentInsName = Ins->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         MaxBytes = Ins_MAX_BYTES_INSTIT_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentInsName = Ins->FullName;
          break;
      }
@@ -1835,7 +1835,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
 
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod)
   {
-   char Query[256 + Ins_MAX_BYTES_INSTIT_FULL_NAME];
+   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Get number of institutions in current country with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions"
@@ -1850,7 +1850,7 @@ static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Nam
 
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName)
   {
-   char Query[128 + Ins_MAX_BYTES_INSTIT_FULL_NAME];
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Update institution changing old name by new name */
    sprintf (Query,"UPDATE institutions SET %s='%s' WHERE InsCod='%ld'",
@@ -2196,7 +2196,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ins_MAX_CHARS_INSTIT_SHRT_NAME,Ins->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName);
 
    /***** Institution full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2205,7 +2205,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Ins_MAX_CHARS_INSTIT_FULL_NAME,Ins->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Ins->FullName);
 
    /***** Institution WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2349,10 +2349,10 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
    Ins->CtyCod = Gbl.CurrentCty.Cty.CtyCod;
 
    /* Get institution short name */
-   Par_GetParToText ("ShortName",Ins->ShrtName,Ins_MAX_BYTES_INSTIT_SHRT_NAME);
+   Par_GetParToText ("ShortName",Ins->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get institution full name */
-   Par_GetParToText ("FullName",Ins->FullName,Ins_MAX_BYTES_INSTIT_FULL_NAME);
+   Par_GetParToText ("FullName",Ins->FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get institution WWW */
    Par_GetParToText ("WWW",Ins->WWW,Cns_MAX_BYTES_WWW);
@@ -2395,8 +2395,8 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
    char Query[512 +
-              Ins_MAX_BYTES_INSTIT_SHRT_NAME +
-              Ins_MAX_BYTES_INSTIT_FULL_NAME +
+              Hie_MAX_BYTES_SHRT_NAME +
+              Hie_MAX_BYTES_FULL_NAME +
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new institution *****/

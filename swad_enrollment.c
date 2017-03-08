@@ -385,7 +385,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Enr_GetNotifEnrollment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                              long CrsCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -422,7 +422,7 @@ void Enr_GetNotifEnrollment (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
             /* Role (row[0]) */
             Role = Rol_ConvertUnsignedStrToRole (row[0]);
             Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[Role][UsrDat.Sex],
-                      Cns_MAX_BYTES_SUMMARY_STRING);
+                      Ntf_MAX_BYTES_SUMMARY);
 
             /* Free memory used for user's data */
             Usr_UsrDataDestructor (&UsrDat);
@@ -1947,7 +1947,7 @@ void Enr_SignUpInCrs (void)
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     long ReqCod,bool GetContent)
   {
@@ -1985,7 +1985,7 @@ void Enr_GetNotifEnrollmentRequest (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING
             /* Role (row[1]) */
             DesiredRole = Rol_ConvertUnsignedStrToRole (row[1]);
             Str_Copy (SummaryStr,Txt_ROLES_SINGUL_Abc[DesiredRole][UsrDat.Sex],
-                      Cns_MAX_BYTES_SUMMARY_STRING);
+                      Ntf_MAX_BYTES_SUMMARY);
 
             if (GetContent)
                if ((*ContentStr = (char *) malloc (256)))

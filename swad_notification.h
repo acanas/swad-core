@@ -33,10 +33,13 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Ntf_MAX_BYTES_NOTIFY_EVENT 32
+#define Ntf_MAX_BYTES_NOTIFY_EVENT	(32 - 1)	// 31
 
-#define Ntf_MAX_CHARS_NOTIFY_LOCATION	(128 - 1)
-#define Ntf_MAX_BYTES_NOTIFY_LOCATION	(1024 + Ntf_MAX_CHARS_NOTIFY_LOCATION * Str_MAX_BYTES_PER_CHAR)
+#define Ntf_MAX_CHARS_NOTIFY_LOCATION	(128 - 1)	// 127
+#define Ntf_MAX_BYTES_NOTIFY_LOCATION	(2048 + (Ntf_MAX_CHARS_NOTIFY_LOCATION + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
+
+#define Ntf_MAX_CHARS_SUMMARY	(256 - 1)	// 255
+#define Ntf_MAX_BYTES_SUMMARY	((Ntf_MAX_CHARS_SUMMARY + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 
 /*****************************************************************************/
 /******************************** Public types *******************************/
@@ -112,7 +115,7 @@ void Ntf_ShowMyNotifications (void);
 Ntf_NotifyEvent_t Ntf_GetParamNotifyEvent (void);
 
 Ntf_StatusTxt_t Ntf_GetStatusTxtFromStatusBits (Ntf_Status_t Status);
-void Ntf_GetNotifSummaryAndContent (char SummaryStr[Cns_MAX_BYTES_SUMMARY_STRING + 1],
+void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                                     char **ContentStr,
                                     Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,long CrsCod,long UsrCod,
