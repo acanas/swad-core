@@ -204,13 +204,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.154.3 (2017-03-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.154.4 (2017-03-09)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.154.4: Mar 09, 2017	Adjusting size of database fields.
+					Bug fixing related to agendas, assignments and attendance events. (216504 lines)
+					1 change necessary in database:
+ALTER TABLE att_events CHANGE COLUMN Title Title VARCHAR(2047) NOT NULL;
+
         Version 16.154.3: Mar 08, 2017	Bug fixing related to folders in assignments and file browsers. (216473 lines)
         Version 16.154.2: Mar 08, 2017	Adjusting size of database fields. (216466 lines)
 					2 changes necessary in database:

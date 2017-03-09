@@ -634,7 +634,8 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
                      " WHERE CrsCod='%ld'%s"
                      " AND (AttCod NOT IN (SELECT AttCod FROM att_grp) OR"
                      " AttCod IN (SELECT att_grp.AttCod FROM att_grp,crs_grp_usr"
-                     " WHERE crs_grp_usr.UsrCod='%ld' AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
+                     " WHERE crs_grp_usr.UsrCod='%ld'"
+                     " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
                      " ORDER BY %s",
                Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
@@ -1007,7 +1008,7 @@ void Att_ShowAttEvent (void)
 
 static bool Att_CheckIfSimilarAttEventExists (const char *Field,const char *Value,long AttCod)
   {
-   char Query[512];
+   char Query[256 + Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE];
 
    /***** Get number of attendance events with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM att_events"
@@ -1324,7 +1325,9 @@ void Att_RecFormAttEvent (void)
 
 void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Create a new attendance event *****/
    sprintf (Query,"INSERT INTO att_events"
@@ -1356,7 +1359,9 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
 
 void Att_UpdateAttEvent (struct AttendanceEvent *Att,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the attendance event *****/
    sprintf (Query,"UPDATE att_events SET "
@@ -1450,7 +1455,8 @@ void Att_RemoveGroupsOfType (long GrpTypCod)
 
    /***** Remove group from all the attendance events *****/
    sprintf (Query,"DELETE FROM att_grp USING crs_grp,att_grp"
-                  " WHERE crs_grp.GrpTypCod='%ld' AND crs_grp.GrpCod=att_grp.GrpCod",
+                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " AND crs_grp.GrpCod=att_grp.GrpCod",
             GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type from the associations between attendance events and groups");
   }
@@ -1470,7 +1476,8 @@ static void Att_CreateGrps (long AttCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO att_grp (AttCod,GrpCod) VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO att_grp (AttCod,GrpCod)"
+	             " VALUES ('%ld','%ld')",
                AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an attendance event");
      }
@@ -1495,7 +1502,8 @@ static void Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (struct AttendanceEve
    /***** Get groups associated to an attendance event from database *****/
    sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
 	          " FROM att_grp,crs_grp,crs_grp_types"
-                  " WHERE att_grp.AttCod='%ld' AND att_grp.GrpCod=crs_grp.GrpCod"
+                  " WHERE att_grp.AttCod='%ld'"
+                  " AND att_grp.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             Att->AttCod);
@@ -1578,7 +1586,8 @@ void Att_RemoveUsrFromCrsAttEvents (long UsrCod,long CrsCod)
    /***** Remove group from all the attendance events *****/
    sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
                   " WHERE att_events.CrsCod='%ld'"
-                  " AND att_events.AttCod=att_usr.AttCod AND att_usr.UsrCod='%ld'",
+                  " AND att_events.AttCod=att_usr.AttCod"
+                  " AND att_usr.UsrCod='%ld'",
             CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove user from attendance events of a course");
   }
@@ -1607,13 +1616,15 @@ void Att_RemoveCrsAttEvents (long CrsCod)
 
    /***** Remove students *****/
    sprintf (Query,"DELETE FROM att_usr USING att_events,att_usr"
-                  " WHERE att_events.CrsCod='%ld' AND att_events.AttCod=att_usr.AttCod",
+                  " WHERE att_events.CrsCod='%ld'"
+                  " AND att_events.AttCod=att_usr.AttCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the students registered in events of a course");
 
    /***** Remove groups *****/
    sprintf (Query,"DELETE FROM att_grp USING att_events,att_grp"
-                  " WHERE att_events.CrsCod='%ld' AND att_events.AttCod=att_grp.AttCod",
+                  " WHERE att_events.CrsCod='%ld'"
+                  " AND att_events.AttCod=att_grp.AttCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the groups associated to attendance events of a course");
 
@@ -2506,7 +2517,7 @@ static bool Att_CheckIfUsrIsPresentInAttEventAndGetComments (long AttCod,long Us
 void Att_RegUsrInAttEventNotChangingComments (long AttCod,long UsrCod)
   {
    bool Present;
-   char Query[128];
+   char Query[256];
 
    /***** Check if user is already in table att_usr (present or not) *****/
    if (Att_CheckIfUsrIsInTableAttUsr (AttCod,UsrCod,&Present))	// User is in table att_usr
@@ -2535,7 +2546,8 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
    char Query[256 + Cns_MAX_BYTES_TEXT * 2];
 
    /***** Register user as assistant to an event in database *****/
-   sprintf (Query,"REPLACE INTO att_usr (AttCod,UsrCod,Present,CommentStd,CommentTch)"
+   sprintf (Query,"REPLACE INTO att_usr"
+	          " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
                   " VALUES ('%ld','%ld','%c','%s','%s')",
             AttCod,UsrCod,
             Present ? 'Y' :

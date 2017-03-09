@@ -678,7 +678,7 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
 
 void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
   {
-   char Query[1024];
+   char Query[1024 + Brw_MAX_BYTES_FOLDER];
 
    if (Asg->Folder[0])
      {
@@ -1044,7 +1044,7 @@ void Asg_ShowAssignment (void)
 
 static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Value,long AsgCod)
   {
-   char Query[512];
+   char Query[256 + Asg_MAX_BYTES_ASSIGNMENT_TITLE];
 
    /***** Get number of assignments with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM assignments"
@@ -1418,7 +1418,9 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
 
 static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Asg_MAX_BYTES_ASSIGNMENT_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Create a new assignment *****/
    sprintf (Query,"INSERT INTO assignments"
@@ -1446,7 +1448,9 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
 
 static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Asg_MAX_BYTES_ASSIGNMENT_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the assignment *****/
    sprintf (Query,"UPDATE assignments SET "
@@ -1491,10 +1495,11 @@ static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod)
 
 bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get if an assignment is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM asg_grp WHERE AsgCod='%ld' AND GrpCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM asg_grp"
+	          " WHERE AsgCod='%ld' AND GrpCod='%ld'",
             AsgCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if an assignment is associated to a group") != 0);
   }
@@ -1535,7 +1540,8 @@ void Asg_RemoveGroupsOfType (long GrpTypCod)
 
    /***** Remove group from all the assignments *****/
    sprintf (Query,"DELETE FROM asg_grp USING crs_grp,asg_grp"
-                  " WHERE crs_grp.GrpTypCod='%ld' AND crs_grp.GrpCod=asg_grp.GrpCod",
+                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " AND crs_grp.GrpCod=asg_grp.GrpCod",
             GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type from the associations between assignments and groups");
   }
@@ -1555,7 +1561,8 @@ static void Asg_CreateGrps (long AsgCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO asg_grp (AsgCod,GrpCod) VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO asg_grp (AsgCod,GrpCod)"
+	             " VALUES ('%ld','%ld')",
                AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an assignment");
      }
@@ -1580,7 +1587,8 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    /***** Get groups associated to an assignment from database *****/
    sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
 	          " FROM asg_grp,crs_grp,crs_grp_types"
-                  " WHERE asg_grp.AsgCod='%ld' AND asg_grp.GrpCod=crs_grp.GrpCod"
+                  " WHERE asg_grp.AsgCod='%ld'"
+                  " AND asg_grp.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             Asg->AsgCod);
@@ -1637,7 +1645,8 @@ void Asg_RemoveCrsAssignments (long CrsCod)
 
    /***** Remove groups *****/
    sprintf (Query,"DELETE FROM asg_grp USING assignments,asg_grp"
-                  " WHERE assignments.CrsCod='%ld' AND assignments.AsgCod=asg_grp.AsgCod",
+                  " WHERE assignments.CrsCod='%ld'"
+                  " AND assignments.AsgCod=asg_grp.AsgCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the groups associated to assignments of a course");
 

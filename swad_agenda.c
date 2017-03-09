@@ -1486,7 +1486,10 @@ static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
 
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Agd_MAX_BYTES_EVENT +
+              Agd_MAX_BYTES_LOCATION +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Create a new event *****/
    sprintf (Query,"INSERT INTO agendas"
@@ -1509,7 +1512,10 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
   {
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Agd_MAX_BYTES_EVENT +
+              Agd_MAX_BYTES_LOCATION +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the event *****/
    sprintf (Query,"UPDATE agendas SET "

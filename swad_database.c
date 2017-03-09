@@ -307,10 +307,10 @@ mysql> DESCRIBE att_events;
 | StartTime         | datetime      | NO   |     | NULL    |                |
 | EndTime           | datetime      | NO   |     | NULL    |                |
 | CommentTchVisible | enum('N','Y') | NO   |     | N       |                |
-| Title             | varchar(255)  | NO   |     | NULL    |                |
+| Title             | varchar(2047) | NO   |     | NULL    |                |
 | Txt               | text          | NO   |     | NULL    |                |
 +-------------------+---------------+------+-----+---------+----------------+
-9 rows in set (0.00 sec)
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_events ("
 			"AttCod INT NOT NULL AUTO_INCREMENT,"
@@ -320,8 +320,8 @@ mysql> DESCRIBE att_events;
 			"StartTime DATETIME NOT NULL,"
 			"EndTime DATETIME NOT NULL,"
 			"CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N',"
-			"Title VARCHAR(255) NOT NULL,"
-			"Txt TEXT NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE
+			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
                    "UNIQUE INDEX(AttCod),"
                    "INDEX(CrsCod,Hidden))");
 
