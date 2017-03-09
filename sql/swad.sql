@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS centres (
 -- Table chat: stored number of users in each chat room (this table is not used now)
 --
 CREATE TABLE IF NOT EXISTS chat (
-	RoomCode VARCHAR(255) NOT NULL,
+	RoomCode VARCHAR(16) NOT NULL,
 	NumUsrs INT NOT NULL,
 	UNIQUE INDEX(RoomCode));
 --

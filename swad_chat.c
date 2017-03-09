@@ -51,8 +51,8 @@ extern struct Globals Gbl;
 
 #define Cht_CHAT_MAX_LEVELS 3
 
-#define Cht_MAX_CHARS_ROOM_CODE	16	// Maximum number of chars of the code of a chat room
-#define Cht_MAX_BYTES_ROOM_CODE	Cht_MAX_CHARS_ROOM_CODE
+#define Cht_MAX_CHARS_ROOM_CODE	16	// 16, maximum number of chars of the code of a chat room
+#define Cht_MAX_BYTES_ROOM_CODE	Cht_MAX_CHARS_ROOM_CODE	// 16
 
 #define Cht_MAX_CHARS_ROOM_SHRT_NAME	(128 - 1)	// 127, maximum number of chars of the short name of a chat room
 #define Cht_MAX_BYTES_ROOM_SHRT_NAME	((Cht_MAX_CHARS_ROOM_SHRT_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
@@ -244,7 +244,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
    extern const char *Txt_Rooms_with_users;
    extern const char *Txt_CHAT_Room_code;
    extern const char *Txt_No_of_users;
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -350,7 +350,7 @@ void Cht_WriteParamsRoomCodeAndNames (const char *RoomCode,const char *RoomShrtN
 
 static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode)
   {
-   char Query[512];
+   char Query[128 + Cht_MAX_BYTES_ROOM_CODE];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs = 0;

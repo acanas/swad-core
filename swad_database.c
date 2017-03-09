@@ -443,18 +443,18 @@ mysql> DESCRIBE centres;
    /***** Table chat *****/
 /*
 mysql> DESCRIBE chat;
-+----------+--------------+------+-----+---------+-------+
-| Field    | Type         | Null | Key | Default | Extra |
-+----------+--------------+------+-----+---------+-------+
-| RoomCode | varchar(255) | NO   | PRI | NULL    |       |
-| NumUsrs  | int(11)      | NO   |     | NULL    |       |
-+----------+--------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| RoomCode | varchar(16) | NO   | PRI | NULL    |       |
+| NumUsrs  | int(11)     | NO   |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS chat ("\
-                   "RoomCode VARCHAR(255) NOT NULL,"
-                   "NumUsrs INT NOT NULL,"
-                   "UNIQUE INDEX(RoomCode))");
+			"RoomCode VARCHAR(16) NOT NULL,"	// Cht_MAX_BYTES_ROOM_CODE
+			"NumUsrs INT NOT NULL,"
+		   "UNIQUE INDEX(RoomCode))");
 
    /***** Table clicks_without_photo *****/
 /*
