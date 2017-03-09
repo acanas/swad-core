@@ -204,13 +204,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.154.4 (2017-03-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155 (2017-03-09)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155:   Mar 09, 2017	Adjusting size of database fields.
+					Code refactoring related with renaming some fields. (216583 lines)
+					2 changes necessary in database:
+ALTER TABLE banners CHANGE COLUMN ShortName ShortName VARCHAR(511) NOT NULL;
+ALTER TABLE banners CHANGE COLUMN FullName FullName VARCHAR(2047) NOT NULL;
+
         Version 16.154.4: Mar 09, 2017	Adjusting size of database fields.
 					Bug fixing related to agendas, assignments and attendance events. (216504 lines)
 					1 change necessary in database:

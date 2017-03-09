@@ -63,8 +63,11 @@ static void Lnk_WriteListOfLinks (void);
 
 static void Lnk_ListLinksForEdition (void);
 static void Lnk_PutParamLnkCod (long LnkCod);
+
 static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod);
+static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName);
+
 static void Lnk_PutFormToCreateLink (void);
 static void Lnk_PutHeadLinks (void);
 static void Lnk_CreateLink (struct Link *Lnk);
@@ -471,7 +474,6 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_link_X_already_exists;
    extern const char *Txt_The_link_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_link_X_has_not_changed;
-   char Query[512];
    struct Link *Lnk;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
@@ -529,11 +531,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE links SET %s='%s' WHERE LnkCod='%ld'",
-                     FieldName,NewLnkName,Lnk->LnkCod);
-            DB_QueryUPDATE (Query,"can not update the name of an institutional link");
+            Lnk_UpdateLnkNameDB (Lnk->LnkCod,FieldName,NewLnkName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_link_X_has_been_renamed_as_Y,
                      CurrentLnkName,NewLnkName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -559,12 +559,26 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,long LnkCod)
   {
-   char Query[512];
+   char Query[256 + Lnk_MAX_BYTES_LINK_FULL_NAME];
 
    /***** Get number of links with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>'%ld'",
             FieldName,Name,LnkCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of an institutional link already existed") != 0);
+  }
+
+/*****************************************************************************/
+/************ Update link name in table of institutional links ***************/
+/*****************************************************************************/
+
+static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *NewLnkName)
+  {
+   char Query[128 + Lnk_MAX_BYTES_LINK_FULL_NAME];
+
+   /***** Update institutional link changing old name by new name */
+   sprintf (Query,"UPDATE links SET %s='%s' WHERE LnkCod='%ld'",
+	    FieldName,NewLnkName,LnkCod);
+   DB_QueryUPDATE (Query,"can not update the name of an institutional link");
   }
 
 /*****************************************************************************/

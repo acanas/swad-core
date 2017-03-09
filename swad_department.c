@@ -65,8 +65,11 @@ static void Dpt_GetParamDptOrder (void);
 static void Dpt_PutIconToEditDpts (void);
 static void Dpt_ListDepartmentsForEdition (void);
 static void Dpt_PutParamDptCod (long DptCod);
+
 static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod);
+static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName);
+
 static void Dpt_PutFormToCreateDepartment (void);
 static void Dpt_PutHeadDepartments (void);
 static void Dpt_CreateDepartment (struct Department *Dpt);
@@ -714,7 +717,6 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_department_X_already_exists;
    extern const char *Txt_The_department_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_department_X_has_not_changed;
-   char Query[512];
    struct Department *Dpt;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
@@ -772,11 +774,9 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE departments SET %s='%s' WHERE DptCod='%ld'",
-                     FieldName,NewDptName,Dpt->DptCod);
-            DB_QueryUPDATE (Query,"can not update the name of a department");
+            Dpt_UpdateDegNameDB (Dpt->DptCod,FieldName,NewDptName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_department_X_has_been_renamed_as_Y,
                      CurrentDptName,NewDptName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -802,13 +802,27 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *Name,long DptCod)
   {
-   char Query[512];
+   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Get number of departments with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM departments"
 	          " WHERE %s='%s' AND DptCod<>'%ld'",
             FieldName,Name,DptCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a department already existed") != 0);
+  }
+
+/*****************************************************************************/
+/************* Update department name in table of departments ****************/
+/*****************************************************************************/
+
+static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *NewDptName)
+  {
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+
+   /***** Update department changing old name by new name *****/
+   sprintf (Query,"UPDATE departments SET %s='%s' WHERE DptCod='%ld'",
+	    FieldName,NewDptName,DptCod);
+   DB_QueryUPDATE (Query,"can not update the name of a department");
   }
 
 /******************************************************************************/

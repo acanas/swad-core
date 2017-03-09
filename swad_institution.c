@@ -89,6 +89,7 @@ static long Ins_GetParamOtherInsCod (void);
 static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ins_CheckIfInsNameExistsInCty (const char *FieldName,const char *Name,long InsCod,long CtyCod);
 static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *NewInsName);
+
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 static void Ins_PutButtonToGoToIns (struct Instit *Ins);
@@ -1815,12 +1816,13 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
             /* Update the table changing old name by new name */
             Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
-            /* Write message to show the change made */
+            /* Create message to show the change made */
             sprintf (Gbl.Message,Txt_The_institution_X_has_been_renamed_as_Y,
                      CurrentInsName,NewInsName);
 
 	    /* Change current institution name in order to display it properly */
-	    Str_Copy (CurrentInsName,NewInsName,MaxBytes);
+	    Str_Copy (CurrentInsName,NewInsName,
+	              MaxBytes);
            }
         }
       else	// The same name

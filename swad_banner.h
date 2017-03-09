@@ -39,8 +39,8 @@
 #define Ban_MAX_CHARS_FULL_NAME	(128 - 1)	// 127
 #define Ban_MAX_BYTES_FULL_NAME	((Ban_MAX_CHARS_FULL_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Ban_MAX_CHARS_IMAGE	NAME_MAX
-#define Ban_MAX_BYTES_IMAGE	Ban_MAX_CHARS_IMAGE
+#define Ban_MAX_CHARS_IMAGE	NAME_MAX		// 255
+#define Ban_MAX_BYTES_IMAGE	Ban_MAX_CHARS_IMAGE	// 255
 
 struct Banner
   {

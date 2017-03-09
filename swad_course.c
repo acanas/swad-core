@@ -94,8 +94,7 @@ static void Crs_PutHeadCoursesForSeeing (void);
 static void Crs_PutHeadCoursesForEdition (void);
 static void Crs_RecFormRequestOrCreateCrs (unsigned Status);
 static void Crs_GetParamsNewCourse (struct Course *Crs);
-static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
-                                                 long DegCod,unsigned Year);
+
 static void Crs_CreateCourse (struct Course *Crs,unsigned Status);
 static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row);
 
@@ -110,6 +109,10 @@ static void Crs_GetShortNamesByCod (long CrsCod,
 static void Crs_EmptyCourseCompletely (long CrsCod);
 
 static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFullName);
+static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                                 long DegCod,unsigned Year);
+static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName);
+
 static void Crs_PutButtonToGoToCrs (struct Course *Crs);
 static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
 
@@ -1928,23 +1931,6 @@ static void Crs_GetParamsNewCourse (struct Course *Crs)
   }
 
 /*****************************************************************************/
-/********** Check if the name of course exists in existing courses ***********/
-/*****************************************************************************/
-
-static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
-                                                 long DegCod,unsigned Year)
-  {
-   char Query[512];
-
-   /***** Get number of courses in a year of a degree and with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses"
-                  " WHERE DegCod='%ld' AND Year='%u'"
-                  " AND %s='%s' AND CrsCod<>'%ld'",
-            DegCod,Year,FieldName,Name,CrsCod);
-   return (DB_QueryCOUNT (Query,"can not check if the name of a course already existed") != 0);
-  }
-
-/*****************************************************************************/
 /************* Add a new requested course to pending requests ****************/
 /*****************************************************************************/
 
@@ -2642,7 +2628,6 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_name_of_the_course_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_course_X_has_not_changed;
    extern const char *Txt_You_dont_have_permission_to_edit_this_course;
-   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -2697,9 +2682,7 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
             else
               {
                /* Update the table changing old name by new name */
-               sprintf (Query,"UPDATE courses SET %s='%s' WHERE CrsCod='%ld'",
-                        FieldName,NewCrsName,Crs->CrsCod);
-               DB_QueryUPDATE (Query,"can not update the name of a course");
+               Crs_UpdateCrsNameDB (Crs->CrsCod,FieldName,NewCrsName);
 
                /* Create message to show the change made */
                sprintf (Gbl.Message,Txt_The_name_of_the_course_X_has_changed_to_Y,
@@ -2720,6 +2703,37 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
       Gbl.Error = true;
       sprintf (Gbl.Message,"%s",Txt_You_dont_have_permission_to_edit_this_course);
      }
+  }
+
+/*****************************************************************************/
+/********** Check if the name of course exists in existing courses ***********/
+/*****************************************************************************/
+
+static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const char *Name,long CrsCod,
+                                                 long DegCod,unsigned Year)
+  {
+   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
+
+   /***** Get number of courses in a year of a degree and with a name from database *****/
+   sprintf (Query,"SELECT COUNT(*) FROM courses"
+                  " WHERE DegCod='%ld' AND Year='%u'"
+                  " AND %s='%s' AND CrsCod<>'%ld'",
+            DegCod,Year,FieldName,Name,CrsCod);
+   return (DB_QueryCOUNT (Query,"can not check if the name of a course already existed") != 0);
+  }
+
+/*****************************************************************************/
+/***************** Update course name in table of courses ********************/
+/*****************************************************************************/
+
+static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName)
+  {
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+
+   /***** Update course changing old name by new name *****/
+   sprintf (Query,"UPDATE courses SET %s='%s' WHERE CrsCod='%ld'",
+	    FieldName,NewCrsName,CrsCod);
+   DB_QueryUPDATE (Query,"can not update the name of a course");
   }
 
 /*****************************************************************************/

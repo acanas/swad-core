@@ -96,8 +96,11 @@ static Ctr_Status_t Ctr_GetStatusBitsFromStatusTxt (Ctr_StatusTxt_t StatusTxt);
 static void Ctr_PutParamOtherCtrCod (long CtrCod);
 
 static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod);
+
 static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Name,long CtrCod,long InsCod);
+static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName);
+
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
@@ -1884,10 +1887,9 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_The_centre_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_centre_X_has_not_changed;
-   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
-   unsigned NaxBytes = 0;		// Initialized to avoid warning
+   unsigned MaxBytes = 0;		// Initialized to avoid warning
    char *CurrentCtrName = NULL;		// Initialized to avoid warning
    char NewCtrName[Hie_MAX_BYTES_FULL_NAME + 1];
 
@@ -1896,20 +1898,20 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
       case Cns_SHRT_NAME:
          ParamName = "ShortName";
          FieldName = "ShortName";
-         NaxBytes = Hie_MAX_BYTES_SHRT_NAME;
+         MaxBytes = Hie_MAX_BYTES_SHRT_NAME;
          CurrentCtrName = Ctr->ShrtName;
          break;
       case Cns_FULL_NAME:
          ParamName = "FullName";
          FieldName = "FullName";
-         NaxBytes = Hie_MAX_BYTES_FULL_NAME;
+         MaxBytes = Hie_MAX_BYTES_FULL_NAME;
          CurrentCtrName = Ctr->FullName;
          break;
      }
 
    /***** Get parameters from form *****/
    /* Get the new name for the centre */
-   Par_GetParToText (ParamName,NewCtrName,NaxBytes);
+   Par_GetParToText (ParamName,NewCtrName,MaxBytes);
 
    /***** Get from the database the old names of the centre *****/
    Ctr_GetDataOfCentreByCod (Ctr);
@@ -1936,9 +1938,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE centres SET %s='%s' WHERE CtrCod='%ld'",
-                     FieldName,NewCtrName,Ctr->CtrCod);
-            DB_QueryUPDATE (Query,"can not update the name of a centre");
+            Ctr_UpdateInsNameDB (Ctr->CtrCod,FieldName,NewCtrName);
 
             /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_centre_X_has_been_renamed_as_Y,
@@ -1946,7 +1946,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
 
 	    /* Change current centre name in order to display it properly */
 	    Str_Copy (CurrentCtrName,NewCtrName,
-	              NaxBytes);
+	              MaxBytes);
            }
         }
       else	// The same name
@@ -1968,6 +1968,20 @@ static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Nam
 	          " WHERE InsCod='%ld' AND %s='%s' AND CtrCod<>'%ld'",
             InsCod,FieldName,Name,CtrCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a centre already existed") != 0);
+  }
+
+/*****************************************************************************/
+/****************** Update centre name in table of centres *******************/
+/*****************************************************************************/
+
+static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *NewCtrName)
+  {
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+
+   /***** Update centre changing old name by new name */
+   sprintf (Query,"UPDATE centres SET %s='%s' WHERE CtrCod='%ld'",
+	    FieldName,NewCtrName,CtrCod);
+   DB_QueryUPDATE (Query,"can not update the name of a centre");
   }
 
 /*****************************************************************************/

@@ -104,8 +104,11 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
 static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row);
+
 static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod);
+static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName);
+
 static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
@@ -1939,7 +1942,6 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    extern const char *Txt_The_degree_X_already_exists;
    extern const char *Txt_The_name_of_the_degree_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_degree_X_has_not_changed;
-   char Query[512 + Hie_MAX_BYTES_FULL_NAME];
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
    unsigned MaxBytes = 0;		// Initialized to avoid warning
@@ -1991,9 +1993,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE degrees SET %s='%s' WHERE DegCod='%ld'",
-                     FieldName,NewDegName,Deg->DegCod);
-            DB_QueryUPDATE (Query,"can not update the name of a degree");
+            Deg_UpdateDegNameDB (Deg->DegCod,FieldName,NewDegName);
 
             /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_name_of_the_degree_X_has_changed_to_Y,
@@ -2016,13 +2016,27 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
 
 static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Name,long DegCod,long CtrCod)
   {
-   char Query[512];
+   char Query[256 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Get number of degrees with a type and a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees"
                   " WHERE CtrCod='%ld' AND %s='%s' AND DegCod<>'%ld'",
             CtrCod,FieldName,Name,DegCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a degree already existed") != 0);
+  }
+
+/*****************************************************************************/
+/***************** Update degree name in table of degrees ********************/
+/*****************************************************************************/
+
+static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *NewDegName)
+  {
+   char Query[128 + Hie_MAX_BYTES_FULL_NAME];
+
+   /***** Update degree changing old name by new name *****/
+   sprintf (Query,"UPDATE degrees SET %s='%s' WHERE DegCod='%ld'",
+	    FieldName,NewDegName,DegCod);
+   DB_QueryUPDATE (Query,"can not update the name of a degree");
   }
 
 /*****************************************************************************/

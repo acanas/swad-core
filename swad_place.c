@@ -62,8 +62,11 @@ static void Plc_GetParamPlcOrder (void);
 static void Plc_PutIconToEditPlaces (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
+
 static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod);
+static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName);
+
 static void Plc_PutFormToCreatePlace (void);
 static void Plc_PutHeadPlaces (void);
 static void Plc_CreatePlace (struct Place *Plc);
@@ -591,7 +594,6 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_place_X_already_exists;
    extern const char *Txt_The_place_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_place_X_has_not_changed;
-   char Query[512];
    struct Place *Plc;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
@@ -649,11 +651,9 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE places SET %s='%s' WHERE PlcCod='%ld'",
-                     FieldName,NewPlcName,Plc->PlcCod);
-            DB_QueryUPDATE (Query,"can not update the name of a place");
+            Plc_UpdatePlcNameDB (Plc->PlcCod,FieldName,NewPlcName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_place_X_has_been_renamed_as_Y,
                      CurrentPlcName,NewPlcName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -679,13 +679,27 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,long PlcCod)
   {
-   char Query[512];
+   char Query[256 + Plc_MAX_BYTES_PLACE_FULL_NAME];
 
    /***** Get number of places with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM places"
 	          " WHERE InsCod='%ld' AND %s='%s' AND PlcCod<>'%ld'",
             Gbl.CurrentIns.Ins.InsCod,FieldName,Name,PlcCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a place already existed") != 0);
+  }
+
+/*****************************************************************************/
+/****************** Update place name in table of places *********************/
+/*****************************************************************************/
+
+static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *NewPlcName)
+  {
+   char Query[128 + Plc_MAX_BYTES_PLACE_FULL_NAME];
+
+   /***** Update place changing old name by new name */
+   sprintf (Query,"UPDATE places SET %s='%s' WHERE PlcCod='%ld'",
+	    FieldName,NewPlcName,PlcCod);
+   DB_QueryUPDATE (Query,"can not update the name of a place");
   }
 
 /*****************************************************************************/

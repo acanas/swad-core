@@ -322,8 +322,8 @@ mysql> DESCRIBE att_events;
 			"CommentTchVisible ENUM('N','Y') NOT NULL DEFAULT 'N',"
 			"Title VARCHAR(2047) NOT NULL,"	// Att_MAX_BYTES_ATTENDANCE_EVENT_TITLE
 			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
-                   "UNIQUE INDEX(AttCod),"
-                   "INDEX(CrsCod,Hidden))");
+		   "UNIQUE INDEX(AttCod),"
+		   "INDEX(CrsCod,Hidden))");
 
    /***** Table att_grp *****/
 /*
@@ -337,9 +337,9 @@ mysql> DESCRIBE att_grp;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_grp ("
-                   "AttCod INT NOT NULL,"
-                   "GrpCod INT NOT NULL,"
-                   "UNIQUE INDEX(AttCod,GrpCod))");
+			"AttCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(AttCod,GrpCod))");
 
    /***** Table att_usr *****/
 /*
@@ -356,13 +356,13 @@ mysql> DESCRIBE att_usr;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS att_usr ("
-                   "AttCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "Present ENUM('N','Y') NOT NULL DEFAULT 'Y',"
-                   "CommentStd TEXT NOT NULL,"
-                   "CommentTch TEXT NOT NULL,"
-                   "UNIQUE INDEX(AttCod,UsrCod),"
-                   "INDEX(UsrCod))");
+			"AttCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Present ENUM('N','Y') NOT NULL DEFAULT 'Y',"
+			"CommentStd TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+			"CommentTch TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(AttCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table banners *****/
 /*
@@ -372,22 +372,22 @@ mysql> DESCRIBE banners;
 +-----------+---------------+------+-----+---------+----------------+
 | BanCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
 | Hidden    | enum('N','Y') | NO   | MUL | N       |                |
-| ShortName | varchar(32)   | NO   |     | NULL    |                |
-| FullName  | varchar(127)  | NO   |     | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
 | Img       | varchar(255)  | NO   |     | NULL    |                |
 | WWW       | varchar(255)  | NO   |     | NULL    |                |
 +-----------+---------------+------+-----+---------+----------------+
-6 rows in set (0.00 sec)
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS banners ("
-                   "BanCod INT NOT NULL AUTO_INCREMENT,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "Img VARCHAR(255) NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(BanCod),"
-                   "INDEX(Hidden))");
+			"BanCod INT NOT NULL AUTO_INCREMENT,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"ShortName VARCHAR(511) NOT NULL,"	// Ban_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Ban_MAX_BYTES_FULL_NAME
+			"Img VARCHAR(255) NOT NULL,"		// Ban_MAX_BYTES_IMAGE
+			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(BanCod),"
+		   "INDEX(Hidden))");
 
    /***** Table birthdays_today *****/
    // Stores birthdays already congratulated today

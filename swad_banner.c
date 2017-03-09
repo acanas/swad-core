@@ -64,8 +64,11 @@ static void Ban_GetListBanners (const char *Query);
 static void Ban_ListBannersForEdition (void);
 static void Ban_PutParamBanCod (long BanCod);
 static void Ban_ShowOrHideBanner (bool Hide);
+
 static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod);
+static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *NewBanName);
+
 static void Ban_PutFormToCreateBanner (void);
 static void Ban_PutHeadBanners (void);
 static void Ban_CreateBanner (struct Banner *Ban);
@@ -544,7 +547,6 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_banner_X_already_exists;
    extern const char *Txt_The_banner_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_banner_X_has_not_changed;
-   char Query[512];
    struct Banner *Ban;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
@@ -602,11 +604,9 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE banners SET %s='%s' WHERE BanCod='%ld'",
-                     FieldName,NewBanName,Ban->BanCod);
-            DB_QueryUPDATE (Query,"can not update the name of a banner");
+            Ban_UpdateBanNameDB (Ban->BanCod,FieldName,NewBanName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_banner_X_has_been_renamed_as_Y,
                      CurrentBanName,NewBanName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -633,12 +633,26 @@ static void Ban_RenameBanner (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,long BanCod)
   {
-   char Query[512];
+   char Query[128 + Ban_MAX_BYTES_FULL_NAME];
 
    /***** Get number of banners with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM banners WHERE %s='%s' AND BanCod<>'%ld'",
             FieldName,Name,BanCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a banner already existed") != 0);
+  }
+
+/*****************************************************************************/
+/***************** Update banner name in table of banners ********************/
+/*****************************************************************************/
+
+static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *NewBanName)
+  {
+   char Query[128 + Ban_MAX_BYTES_FULL_NAME];
+
+   /***** Update banner changing old name by new name *****/
+   sprintf (Query,"UPDATE banners SET %s='%s' WHERE BanCod='%ld'",
+	    FieldName,NewBanName,BanCod);
+   DB_QueryUPDATE (Query,"can not update the name of a banner");
   }
 
 /*****************************************************************************/

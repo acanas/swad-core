@@ -72,8 +72,11 @@ static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MA
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
+
 static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName);
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod);
+static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName);
+
 static void Mai_PutFormToCreateMailDomain (void);
 static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
@@ -592,7 +595,6 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    extern const char *Txt_The_email_domain_X_already_exists;
    extern const char *Txt_The_email_domain_X_has_been_renamed_as_Y;
    extern const char *Txt_The_email_domain_X_has_not_changed;
-   char Query[512];
    struct Mail *Mai;
    const char *ParamName = NULL;	// Initialized to avoid warning
    const char *FieldName = NULL;	// Initialized to avoid warning
@@ -650,11 +652,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod='%ld'",
-                     FieldName,NewMaiName,Mai->MaiCod);
-            DB_QueryUPDATE (Query,"can not update the name of a mail domain");
+            Mai_UpdateMailDomainNameDB (Mai->MaiCod,FieldName,NewMaiName);
 
-            /***** Write message to show the change made *****/
+            /* Write message to show the change made */
             sprintf (Gbl.Message,Txt_The_email_domain_X_has_been_renamed_as_Y,
                      CurrentMaiName,NewMaiName);
             Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -680,12 +680,27 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
 
 static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *Name,long MaiCod)
   {
-   char Query[512];
+   char Query[256 + Mai_MAX_BYTES_MAIL_INFO];
 
    /***** Get number of mail_domains with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM mail_domains WHERE %s='%s' AND MaiCod<>'%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM mail_domains"
+	          " WHERE %s='%s' AND MaiCod<>'%ld'",
             FieldName,Name,MaiCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a mail domain already existed") != 0);
+  }
+
+/*****************************************************************************/
+/****************** Update name in table of mail domains *********************/
+/*****************************************************************************/
+
+static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const char *NewMaiName)
+  {
+   char Query[128 + Mai_MAX_BYTES_MAIL_INFO];
+
+   /***** Update mail domain changing old name by new name */
+   sprintf (Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod='%ld'",
+	    FieldName,NewMaiName,MaiCod);
+   DB_QueryUPDATE (Query,"can not update the name of a mail domain");
   }
 
 /*****************************************************************************/
