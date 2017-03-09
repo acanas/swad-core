@@ -137,7 +137,8 @@ void Ctr_SeeCtrWithPendingDegs (void)
          sprintf (Query,"SELECT degrees.CtrCod,COUNT(*)"
                         " FROM degrees,ctr_admin,centres"
                         " WHERE (degrees.Status & %u)<>0"
-                        " AND degrees.CtrCod=ctr_admin.CtrCod AND ctr_admin.UsrCod='%ld'"
+                        " AND degrees.CtrCod=ctr_admin.CtrCod"
+                        " AND ctr_admin.UsrCod='%ld'"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
                   (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1087,12 +1088,12 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
    Ctr->Status = (Ctr_Status_t) 0;
    Ctr->RequesterUsrCod = -1L;
    Ctr->ShrtName[0] = '\0';
-   Ctr->FullName[0]  = '\0';
-   Ctr->WWW[0]       = '\0';
+   Ctr->FullName[0] = '\0';
+   Ctr->WWW[0]      = '\0';
    Ctr->NumUsrsWhoClaimToBelongToCtr = 0;
    Ctr->Degs.Num =
    Ctr->NumCrss  = 0;
-   Ctr->NumUsrs = 0;
+   Ctr->NumUsrs  = 0;
 
    /***** Check if centre code is correct *****/
    if (Ctr->CtrCod > 0)
@@ -1594,9 +1595,9 @@ static void Ctr_ListCentresForEdition (void)
 
 static bool Ctr_CheckIfICanEditACentre (struct Centre *Ctr)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||			// I am an institution administrator or higher
-                  ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&		// Centre is not yet activated
-                   Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));		// I am the requester
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ||		// I am an institution administrator or higher
+                  ((Ctr->Status & Ctr_STATUS_BIT_PENDING) != 0 &&	// Centre is not yet activated
+                   Gbl.Usrs.Me.UsrDat.UsrCod == Ctr->RequesterUsrCod));	// I am the requester
   }
 
 /*****************************************************************************/
@@ -1750,13 +1751,19 @@ void Ctr_ChangeCtrInsInConfig (void)
       Ins_GetDataOfInstitutionByCod (&NewIns,Ins_GET_BASIC_DATA);
 
       /***** Check if it already exists a centre with the same name in the new institution *****/
-      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.CurrentCtr.Ctr.ShrtName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
+      if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",
+                                         Gbl.CurrentCtr.Ctr.ShrtName,
+                                         Gbl.CurrentCtr.Ctr.CtrCod,
+                                         NewIns.InsCod))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
 		  Gbl.CurrentCtr.Ctr.ShrtName);
 	}
-      else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.CurrentCtr.Ctr.FullName,Gbl.CurrentCtr.Ctr.CtrCod,NewIns.InsCod))
+      else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",
+                                              Gbl.CurrentCtr.Ctr.FullName,
+                                              Gbl.CurrentCtr.Ctr.CtrCod,
+                                              NewIns.InsCod))
 	{
 	 Gbl.Error = true;
 	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,

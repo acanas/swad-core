@@ -889,15 +889,14 @@ static void Fol_WriteRowUsrToFollowOnRightColumn (struct UsrData *UsrDat)
    fprintf (Gbl.F.Out,"</td>");
 
    /***** User's name *****/
-   fprintf (Gbl.F.Out,"<td class=\"CON_USR CON_CRS COLOR%u\""
-	              " style=\"width:68px;\">",
+   fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW CON_CRS COLOR%u\">",
 	    Gbl.RowEvenOdd);
    if (Visible)
      {
       /* Put form to go to public profile */
       Act_FormStart (ActSeeOthPubPrf);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
-      fprintf (Gbl.F.Out,"<div class=\"CON_NAME\">");	// Limited width
+      fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
       Act_LinkFormSubmit (Txt_Another_user_s_profile,"CON_CRS",NULL);
       Usr_WriteFirstNameBRSurnames (UsrDat);
       fprintf (Gbl.F.Out,"</a>"

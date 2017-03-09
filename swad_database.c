@@ -402,43 +402,43 @@ mysql> DESCRIBE birthdays_today;
 2 rows in set (0.09 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS birthdays_today ("
-                   "UsrCod INT NOT NULL,"
-                   "Today DATE NOT NULL,"
-                   "UNIQUE INDEX(UsrCod),"
-                   "INDEX(Today))");
+			"UsrCod INT NOT NULL,"
+			"Today DATE NOT NULL,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(Today))");
 
    /***** Table centres *****/
 /*
 mysql> DESCRIBE centres;
-+------------------+--------------+------+-----+---------+----------------+
-| Field            | Type         | Null | Key | Default | Extra          |
-+------------------+--------------+------+-----+---------+----------------+
-| CtrCod           | int(11)      | NO   | PRI | NULL    | auto_increment |
-| InsCod           | int(11)      | NO   | MUL | NULL    |                |
-| PlcCod           | int(11)      | NO   | MUL | -1      |                |
-| Status           | tinyint(4)   | NO   | MUL | 0       |                |
-| RequesterUsrCod  | int(11)      | NO   |     | -1      |                |
-| ShortName        | varchar(32)  | NO   |     | NULL    |                |
-| FullName         | varchar(127) | NO   |     | NULL    |                |
-| WWW              | varchar(255) | NO   |     | NULL    |                |
-| PhotoAttribution | text         | NO   |     | NULL    |                |
-+------------------+--------------+------+-----+---------+----------------+
-9 rows in set (0.00 sec)
++------------------+---------------+------+-----+---------+----------------+
+| Field            | Type          | Null | Key | Default | Extra          |
++------------------+---------------+------+-----+---------+----------------+
+| CtrCod           | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InsCod           | int(11)       | NO   | MUL | NULL    |                |
+| PlcCod           | int(11)       | NO   | MUL | -1      |                |
+| Status           | tinyint(4)    | NO   | MUL | 0       |                |
+| RequesterUsrCod  | int(11)       | NO   |     | -1      |                |
+| ShortName        | varchar(511)  | NO   |     | NULL    |                |
+| FullName         | varchar(2047) | NO   |     | NULL    |                |
+| WWW              | varchar(255)  | NO   |     | NULL    |                |
+| PhotoAttribution | text          | NO   |     | NULL    |                |
++------------------+---------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS centres ("
-                   "CtrCod INT NOT NULL AUTO_INCREMENT,"
-                   "InsCod INT NOT NULL,"
-                   "PlcCod INT NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
-                   "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
-                   "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "PhotoAttribution TEXT NOT NULL,"
-                   "UNIQUE INDEX(CtrCod),"
-                   "INDEX(InsCod),"
-                   "INDEX(PlcCod),"
-                   "INDEX(Status))");
+			"CtrCod INT NOT NULL AUTO_INCREMENT,"
+			"InsCod INT NOT NULL,"
+			"PlcCod INT NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+			"PhotoAttribution TEXT NOT NULL,"
+		   "UNIQUE INDEX(CtrCod),"
+		   "INDEX(InsCod),"
+		   "INDEX(PlcCod),"
+		   "INDEX(Status))");
 
    /***** Table chat *****/
 /*
