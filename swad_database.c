@@ -434,7 +434,7 @@ mysql> DESCRIBE centres;
 			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
 			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
 			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
-			"PhotoAttribution TEXT NOT NULL,"
+			"PhotoAttribution TEXT NOT NULL,"				// Img_MAX_BYTES_ATTRIBUTION
 		   "UNIQUE INDEX(CtrCod),"
 		   "INDEX(InsCod),"
 		   "INDEX(PlcCod),"
@@ -468,9 +468,9 @@ mysql> DESCRIBE clicks_without_photo;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS clicks_without_photo ("
-                   "UsrCod INT NOT NULL,"
-                   "NumClicks INT NOT NULL,"
-                   "UNIQUE INDEX(UsrCod))");
+			"UsrCod INT NOT NULL,"
+			"NumClicks INT NOT NULL,"
+		   "UNIQUE INDEX(UsrCod))");
 
    /***** Table clipboard *****/
 /*
@@ -489,16 +489,16 @@ mysql> DESCRIBE clipboard;
 7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS clipboard ("
-                   "UsrCod INT NOT NULL,"
-                   "FileBrowser TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "WorksUsrCod INT NOT NULL,"
-                   "FileType TINYINT NOT NULL DEFAULT 0,"
-                   "Path TEXT COLLATE latin1_bin NOT NULL,"
-                   "CopyTime TIMESTAMP,"
-                   "UNIQUE INDEX(UsrCod),"
-                   "INDEX(FileBrowser,Cod),"
-                   "INDEX(WorksUsrCod))");
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"WorksUsrCod INT NOT NULL,"
+			"FileType TINYINT NOT NULL DEFAULT 0,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"CopyTime TIMESTAMP,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(FileBrowser,Cod),"
+		   "INDEX(WorksUsrCod))");
 
    /***** Table connected *****/
 /*
@@ -514,13 +514,13 @@ mysql> DESCRIBE connected;
 4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS connected ("
-                   "UsrCod INT NOT NULL,"
-                   "RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
-                   "LastCrsCod INT NOT NULL DEFAULT -1,"
-                   "LastTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod),"
-                   "INDEX(RoleInLastCrs),"
-                   "INDEX(LastCrsCod))");
+			"UsrCod INT NOT NULL,"
+			"RoleInLastCrs TINYINT NOT NULL DEFAULT 0,"
+			"LastCrsCod INT NOT NULL DEFAULT -1,"
+			"LastTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(RoleInLastCrs),"
+		   "INDEX(LastCrsCod))");
 
    /***** Table countries *****/
 /*
@@ -531,15 +531,15 @@ mysql> DESCRIBE countries;
 | CtyCod         | int(11)      | NO   | PRI | NULL    |       |
 | Alpha2         | char(2)      | NO   | UNI | NULL    |       |
 | MapAttribution | text         | NO   |     | NULL    |       |
-| Name_ca        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_de        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_en        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_es        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_fr        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_gn        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_it        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_pl        | varchar(255) | NO   | MUL | NULL    |       |
-| Name_pt        | varchar(255) | NO   | MUL | NULL    |       |
+| Name_ca        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_de        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_en        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_es        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_fr        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_gn        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_it        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_pl        | varchar(767) | NO   | MUL | NULL    |       |
+| Name_pt        | varchar(767) | NO   | MUL | NULL    |       |
 | WWW_ca         | varchar(255) | NO   |     | NULL    |       |
 | WWW_de         | varchar(255) | NO   |     | NULL    |       |
 | WWW_en         | varchar(255) | NO   |     | NULL    |       |
@@ -550,40 +550,40 @@ mysql> DESCRIBE countries;
 | WWW_pl         | varchar(255) | NO   |     | NULL    |       |
 | WWW_pt         | varchar(255) | NO   |     | NULL    |       |
 +----------------+--------------+------+-----+---------+-------+
-21 rows in set (0.00 sec)
+21 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS countries ("
-                   "CtyCod INT NOT NULL,"
-                   "Alpha2 CHAR(2) NOT NULL,"
-                   "MapAttribution TEXT NOT NULL,"
-                   "Name_ca VARCHAR(255) NOT NULL,"
-                   "Name_de VARCHAR(255) NOT NULL,"
-                   "Name_en VARCHAR(255) NOT NULL,"
-                   "Name_es VARCHAR(255) NOT NULL,"
-                   "Name_fr VARCHAR(255) NOT NULL,"
-                   "Name_gn VARCHAR(255) NOT NULL,"
-                   "Name_it VARCHAR(255) NOT NULL,"
-                   "Name_pl VARCHAR(255) NOT NULL,"
-                   "Name_pt VARCHAR(255) NOT NULL,"
-                   "WWW_ca VARCHAR(255) NOT NULL,"
-                   "WWW_de VARCHAR(255) NOT NULL,"
-                   "WWW_en VARCHAR(255) NOT NULL,"
-                   "WWW_es VARCHAR(255) NOT NULL,"
-                   "WWW_fr VARCHAR(255) NOT NULL,"
-                   "WWW_gn VARCHAR(255) NOT NULL,"
-                   "WWW_it VARCHAR(255) NOT NULL,"
-                   "WWW_pl VARCHAR(255) NOT NULL,"
-                   "WWW_pt VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(CtyCod),UNIQUE INDEX(Alpha2),"
-                   "INDEX(Name_ca),"
-                   "INDEX(Name_de),"
-                   "INDEX(Name_en),"
-                   "INDEX(Name_es),"
-                   "INDEX(Name_fr),"
-                   "INDEX(Name_gn),"
-                   "INDEX(Name_it),"
-                   "INDEX(Name_pl),"
-                   "INDEX(Name_pt))");	// ISO 3166-1 country codes
+			"CtyCod INT NOT NULL,"
+			"Alpha2 CHAR(2) NOT NULL,"
+			"MapAttribution TEXT NOT NULL,"		// Img_MAX_BYTES_ATTRIBUTION
+			"Name_ca VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_de VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_en VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_es VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_fr VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_gn VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_it VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_pl VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"Name_pt VARCHAR(767) NOT NULL,"	// Cty_MAX_BYTES_NAME
+			"WWW_ca VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_de VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_en VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_es VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_fr VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_gn VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_it VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_pl VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"WWW_pt VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(CtyCod),UNIQUE INDEX(Alpha2),"
+		   "INDEX(Name_ca),"
+		   "INDEX(Name_de),"
+		   "INDEX(Name_en),"
+		   "INDEX(Name_es),"
+		   "INDEX(Name_fr),"
+		   "INDEX(Name_gn),"
+		   "INDEX(Name_it),"
+		   "INDEX(Name_pl),"
+		   "INDEX(Name_pt))");	// ISO 3166-1 country codes
 
    /***** Table courses *****/
 /*

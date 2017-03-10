@@ -40,11 +40,14 @@
 
 #define Cty_MAX_COUNTRS_PER_USR	 10	// Used in list of my countries
 
+#define Cty_MAX_CHARS_NAME	(48 - 1)	// 47
+#define Cty_MAX_BYTES_NAME	((Cty_MAX_CHARS_NAME + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 767
+
 struct Country
   {
    long CtyCod;
    char Alpha2[2 + 1];
-   char Name[1 + Txt_NUM_LANGUAGES][Hie_MAX_BYTES_FULL_NAME + 1];
+   char Name[1 + Txt_NUM_LANGUAGES][Cty_MAX_BYTES_NAME + 1];
    char WWW [1 + Txt_NUM_LANGUAGES][Cns_MAX_BYTES_WWW + 1];
    unsigned NumUsrsWhoClaimToBelongToCty;
    unsigned NumInss;
@@ -96,7 +99,7 @@ void Cty_FreeListCountries (void);
 void Cty_WriteSelectorOfCountry (void);
 void Cty_WriteCountryName (long CtyCod,const char *ClassLink);
 bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraData);
-void Cty_GetCountryName (long CtyCod,char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
+void Cty_GetCountryName (long CtyCod,char CtyName[Cty_MAX_BYTES_NAME + 1]);
 void Cty_PutParamCtyCod (long CtyCod);
 long Cty_GetAndCheckParamOtherCtyCod (void);
 void Cty_RemoveCountry (void);

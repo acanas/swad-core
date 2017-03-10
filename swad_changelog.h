@@ -204,13 +204,26 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.2 (2017-03-09)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.3 (2017-03-09)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155.3: Mar 10, 2017	Adjusting size of database fields.
+					Code refactoring related with renaming country name. (216620 lines)
+					9 changes necessary in database:
+ALTER TABLE countries CHANGE COLUMN Name_ca Name_ca VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_de Name_de VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_en Name_en VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_es Name_es VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_fr Name_fr VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_gn Name_gn VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_it Name_it VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_pl Name_pl VARCHAR(767) NOT NULL;
+ALTER TABLE countries CHANGE COLUMN Name_pt Name_pt VARCHAR(767) NOT NULL;
+
         Version 16.155.2: Mar 09, 2017	Adjusting size of database fields. (216596 lines)
 					1 change necessary in database:
 ALTER TABLE chat CHANGE COLUMN RoomCode RoomCode VARCHAR(16) NOT NULL;
