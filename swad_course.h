@@ -80,14 +80,14 @@ struct Course
    long CrsCod;
    char InstitutionalCrsCod[Crs_MAX_BYTES_INSTITUTIONAL_CRS_COD + 1];	// Institutional code of the course
    long DegCod;
-   unsigned Year;					// Year: 0 (optatives), 1, 2, 3...
-   Crs_Status_t Status;					// Course status
-   long RequesterUsrCod;				// User code of the person who requested the creation of this course
+   unsigned Year;				// Year: 0 (optatives), 1, 2, 3...
+   Crs_Status_t Status;				// Course status
+   long RequesterUsrCod;			// User code of the person who requested the creation of this course
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of course
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of course
-   unsigned NumUsrs;					// Number of users (students + teachers)
-   unsigned NumTchs;					// Number of teachers
-   unsigned NumStds;					// Number of students
+   unsigned NumUsrs;				// Number of users (students + teachers)
+   unsigned NumTchs;				// Number of teachers
+   unsigned NumStds;				// Number of students
   };
 
 /*****************************************************************************/

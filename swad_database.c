@@ -604,18 +604,18 @@ mysql> DESCRIBE courses;
 9 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
-                   "CrsCod INT NOT NULL AUTO_INCREMENT,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "Year TINYINT NOT NULL DEFAULT 0,"
-                   "InsCrsCod CHAR(7) NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
-                   "ShortName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL,"
-                   "FullName VARCHAR(127) COLLATE latin1_spanish_ci NOT NULL,"
-                   "NumIndicators INT NOT NULL DEFAULT -1,"
-                   "UNIQUE INDEX(CrsCod),"
-                   "INDEX(DegCod,Year),"
-                   "INDEX(Status))");
+			"CrsCod INT NOT NULL AUTO_INCREMENT,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"Year TINYINT NOT NULL DEFAULT 0,"
+			"InsCrsCod CHAR(7) NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"NumIndicators INT NOT NULL DEFAULT -1,"
+		   "UNIQUE INDEX(CrsCod),"
+		   "INDEX(DegCod,Year),"
+		   "INDEX(Status))");
 
    /***** Table crs_grp *****/
 /*
