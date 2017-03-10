@@ -588,20 +588,20 @@ mysql> DESCRIBE countries;
    /***** Table courses *****/
 /*
 mysql> DESCRIBE courses;
-+-----------------+--------------+------+-----+---------+----------------+
-| Field           | Type         | Null | Key | Default | Extra          |
-+-----------------+--------------+------+-----+---------+----------------+
-| CrsCod          | int(11)      | NO   | PRI | NULL    | auto_increment |
-| DegCod          | int(11)      | NO   | MUL | -1      |                |
-| Year            | tinyint(4)   | NO   |     | 0       |                |
-| InsCrsCod       | char(7)      | NO   |     | NULL    |                |
-| Status          | tinyint(4)   | NO   | MUL | 0       |                |
-| RequesterUsrCod | int(11)      | NO   |     | -1      |                |
-| ShortName       | varchar(32)  | NO   |     | NULL    |                |
-| FullName        | varchar(127) | NO   |     | NULL    |                |
-| NumIndicators   | int(11)      | NO   |     | -1      |                |
-+-----------------+--------------+------+-----+---------+----------------+
-9 rows in set (0.00 sec)
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| CrsCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| DegCod          | int(11)       | NO   | MUL | -1      |                |
+| Year            | tinyint(4)    | NO   |     | 0       |                |
+| InsCrsCod       | char(7)       | NO   |     | NULL    |                |
+| Status          | tinyint(4)    | NO   | MUL | 0       |                |
+| RequesterUsrCod | int(11)       | NO   |     | -1      |                |
+| ShortName       | varchar(511)  | NO   |     | NULL    |                |
+| FullName        | varchar(2047) | NO   |     | NULL    |                |
+| NumIndicators   | int(11)       | NO   |     | -1      |                |
++-----------------+---------------+------+-----+---------+----------------+
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS courses ("
 			"CrsCod INT NOT NULL AUTO_INCREMENT,"
@@ -625,22 +625,22 @@ mysql> DESCRIBE crs_grp;
 +-------------+---------------+------+-----+---------+----------------+
 | GrpCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
 | GrpTypCod   | int(11)       | NO   | MUL | NULL    |                |
-| GrpName     | varchar(255)  | NO   |     | NULL    |                |
+| GrpName     | varchar(2047) | NO   |     | NULL    |                |
 | MaxStudents | int(11)       | NO   |     | NULL    |                |
 | Open        | enum('N','Y') | NO   |     | N       |                |
 | FileZones   | enum('N','Y') | NO   |     | N       |                |
 +-------------+---------------+------+-----+---------+----------------+
-6 rows in set (0.01 sec)
+6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp ("
-                   "GrpCod INT NOT NULL AUTO_INCREMENT,"
-                   "GrpTypCod INT NOT NULL,"
-                   "GrpName VARCHAR(255) NOT NULL,"
-                   "MaxStudents INT NOT NULL,"
-                   "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(GrpCod),"
-                   "INDEX(GrpTypCod))");
+			"GrpCod INT NOT NULL AUTO_INCREMENT,"
+			"GrpTypCod INT NOT NULL,"
+			"GrpName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
+			"MaxStudents INT NOT NULL,"
+			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"FileZones ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(GrpCod),"
+		   "INDEX(GrpTypCod))");
 
    /***** Table crs_grp_types *****/
 /*
@@ -650,24 +650,24 @@ mysql> DESCRIBE crs_grp_types;
 +--------------+---------------+------+-----+---------+----------------+
 | GrpTypCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod       | int(11)       | NO   | MUL | -1      |                |
-| GrpTypName   | varchar(255)  | NO   |     | NULL    |                |
+| GrpTypName   | varchar(2047) | NO   |     | NULL    |                |
 | Mandatory    | enum('N','Y') | NO   |     | NULL    |                |
 | Multiple     | enum('N','Y') | NO   |     | NULL    |                |
 | MustBeOpened | enum('N','Y') | NO   |     | N       |                |
 | OpenTime     | datetime      | NO   |     | NULL    |                |
 +--------------+---------------+------+-----+---------+----------------+
-7 rows in set (0.01 sec)
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_types ("
-                   "GrpTypCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "GrpTypName VARCHAR(255) NOT NULL,"
-                   "Mandatory ENUM('N','Y') NOT NULL,"
-                   "Multiple ENUM('N','Y') NOT NULL,"
-                   "MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "OpenTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(GrpTypCod),"
-                   "INDEX(CrsCod))");
+			"GrpTypCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"GrpTypName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_TYPE_NAME
+			"Mandatory ENUM('N','Y') NOT NULL,"
+			"Multiple ENUM('N','Y') NOT NULL,"
+			"MustBeOpened ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"OpenTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(GrpTypCod),"
+		   "INDEX(CrsCod))");
 
    /***** Table crs_grp_usr *****/
 /*

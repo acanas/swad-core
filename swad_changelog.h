@@ -207,13 +207,18 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.4 (2017-03-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.5 (2017-03-11)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155.5: Mar 11, 2017	Adjusting size of database fields. (216663 lines)
+					2 changes necessary in database:
+ALTER TABLE crs_grp CHANGE COLUMN GrpName GrpName VARCHAR(2047) NOT NULL;
+ALTER TABLE crs_grp_types CHANGE COLUMN GrpTypName GrpTypName VARCHAR(2047) NOT NULL;
+
         Version 16.155.4: Mar 10, 2017	Adjusting size of database fields. (216626 lines)
 					2 changes necessary in database:
 ALTER TABLE courses CHANGE COLUMN ShortName ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL;
