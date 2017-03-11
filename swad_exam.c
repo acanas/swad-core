@@ -744,8 +744,8 @@ static long Exa_AddExamAnnouncementToDB (void)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"INSERT INTO exam_announcements "
 	          "(CrsCod,Status,NumNotif,CrsFullName,Year,ExamSession,"
-	          "CallDate,ExamDate,Duration,Place,"
-                  "ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
+	          "CallDate,ExamDate,Duration,"
+	          "Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
                   " VALUES "
                   "('%ld','%u','0','%s','%u','%s',"
                   "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
