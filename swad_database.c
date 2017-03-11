@@ -1002,15 +1002,15 @@ mysql> DESCRIBE expanded_folders;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS expanded_folders ("
-                   "UsrCod INT NOT NULL,"
-                   "FileBrowser TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "WorksUsrCod INT NOT NULL,"
-                   "Path TEXT COLLATE latin1_bin NOT NULL,"
-                   "ClickTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod,FileBrowser,Cod),"
-                   "INDEX(FileBrowser,Cod),"
-                   "INDEX(WorksUsrCod))");
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"WorksUsrCod INT NOT NULL,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"ClickTime DATETIME NOT NULL,"
+		   "INDEX(UsrCod,FileBrowser,Cod),"
+		   "INDEX(FileBrowser,Cod),"
+		   "INDEX(WorksUsrCod))");
 
    /***** Table file_browser_last *****/
 /*
@@ -1026,11 +1026,11 @@ mysql> DESCRIBE file_browser_last;
 4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_last ("
-                   "UsrCod INT NOT NULL,"
-                   "FileBrowser TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-	           "LastClick DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
+			"UsrCod INT NOT NULL,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+		   "LastClick DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,FileBrowser,Cod))");
 
    /***** Table file_browser_size *****/
 /*
@@ -1049,15 +1049,15 @@ mysql> DESCRIBE file_browser_size;
 7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_browser_size ("
-                   "FileBrowser TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "ZoneUsrCod INT NOT NULL DEFAULT -1,"
-                   "NumLevels INT NOT NULL,"
-                   "NumFolders INT NOT NULL,"
-                   "NumFiles INT NOT NULL,"
-                   "TotalSize BIGINT NOT NULL,"
-                   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
-                   "INDEX(ZoneUsrCod))");
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
+			"NumLevels INT NOT NULL,"
+			"NumFolders INT NOT NULL,"
+			"NumFiles INT NOT NULL,"
+			"TotalSize BIGINT NOT NULL,"
+		   "UNIQUE INDEX(FileBrowser,Cod,ZoneUsrCod),"
+		   "INDEX(ZoneUsrCod))");
 
    /***** Table file_view *****/
 /*
@@ -1072,9 +1072,9 @@ mysql> DESCRIBE file_view;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS file_view ("
-		   "FilCod INT NOT NULL,"
-		   "UsrCod INT NOT NULL,"
-		   "NumViews INT NOT NULL DEFAULT 0,"
+			"FilCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"NumViews INT NOT NULL DEFAULT 0,"
 		   "UNIQUE INDEX(FilCod,UsrCod),"
 		   "INDEX(UsrCod))");
 
@@ -1098,20 +1098,20 @@ mysql> DESCRIBE files;
 10 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS files ("
-		   "FilCod INT NOT NULL AUTO_INCREMENT,"
-                   "FileBrowser TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "ZoneUsrCod INT NOT NULL DEFAULT -1,"
-                   "PublisherUsrCod INT NOT NULL,"
-                   "FileType TINYINT NOT NULL DEFAULT 0,"
-                   "Path TEXT COLLATE latin1_bin NOT NULL,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "License TINYINT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(FilCod),"
-                   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
-                   "INDEX(ZoneUsrCod),"
-                   "INDEX(PublisherUsrCod))");
+			"FilCod INT NOT NULL AUTO_INCREMENT,"
+			"FileBrowser TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"ZoneUsrCod INT NOT NULL DEFAULT -1,"
+			"PublisherUsrCod INT NOT NULL,"
+			"FileType TINYINT NOT NULL DEFAULT 0,"
+			"Path TEXT COLLATE latin1_bin NOT NULL,"	// PATH_MAX
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Public ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"License TINYINT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(FilCod),"
+		   "INDEX(FileBrowser,Cod,ZoneUsrCod),"
+		   "INDEX(ZoneUsrCod),"
+		   "INDEX(PublisherUsrCod))");
 
    /***** Table forum_disabled_post *****/
 /*
@@ -1126,48 +1126,48 @@ mysql> DESCRIBE forum_disabled_post;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_disabled_post ("
-                   "PstCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "DisableTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(PstCod))");
+			"PstCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"DisableTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(PstCod))");
 
    /***** Table forum_post *****/
 /*
 mysql> DESCRIBE forum_post;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| PstCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
-| ThrCod     | int(11)      | NO   | MUL | NULL    |                |
-| UsrCod     | int(11)      | NO   | MUL | NULL    |                |
-| CreatTime  | datetime     | NO   | MUL | NULL    |                |
-| ModifTime  | datetime     | NO   | MUL | NULL    |                |
-| NumNotif   | int(11)      | NO   |     | 0       |                |
-| Subject    | text         | NO   |     | NULL    |                |
-| Content    | longtext     | NO   |     | NULL    |                |
-| ImageName  | varchar(43)  | NO   |     | NULL    |                |
-| ImageTitle | varchar(255) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255) | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
-11 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ThrCod     | int(11)       | NO   | MUL | NULL    |                |
+| UsrCod     | int(11)       | NO   | MUL | NULL    |                |
+| CreatTime  | datetime      | NO   | MUL | NULL    |                |
+| ModifTime  | datetime      | NO   | MUL | NULL    |                |
+| NumNotif   | int(11)       | NO   |     | 0       |                |
+| Subject    | text          | NO   |     | NULL    |                |
+| Content    | longtext      | NO   |     | NULL    |                |
+| ImageName  | varchar(43)   | NO   |     | NULL    |                |
+| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
+| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+11 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_post ("
-                   "PstCod INT NOT NULL AUTO_INCREMENT,"
-                   "ThrCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "ModifTime DATETIME NOT NULL,"
-                   "NumNotif INT NOT NULL DEFAULT 0,"
-                   "Subject TEXT NOT NULL,"
-                   "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(PstCod),"
-                   "INDEX(ThrCod),"
-                   "INDEX(UsrCod),"
-                   "INDEX(CreatTime),"
-                   "INDEX(ModifTime))");
+			"PstCod INT NOT NULL AUTO_INCREMENT,"
+			"ThrCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+			"ModifTime DATETIME NOT NULL,"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"Subject TEXT NOT NULL,"		// Cns_MAX_BYTES_SUBJECT
+			"Content LONGTEXT NOT NULL,"		// Cns_MAX_BYTES_LONG_TEXT
+			"ImageName VARCHAR(43) NOT NULL,"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(PstCod),"
+		   "INDEX(ThrCod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(CreatTime),"
+		   "INDEX(ModifTime))");
 
    /***** Table forum_thr_clip *****/
 /*

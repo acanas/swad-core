@@ -395,11 +395,10 @@ void For_DisPst (void)
 
 static bool For_GetIfForumPstExists (long PstCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get if a forum post exists from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post"
-	          " WHERE PstCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE PstCod='%ld'",
 	    PstCod);
    return (DB_QueryCOUNT (Query,"can not check if a post of a forum already existed") != 0);	// Post exists if it appears in table of forum posts
   }
@@ -430,11 +429,10 @@ static bool For_GetIfPstIsEnabled (long PstCod)
 
 static void For_DeletePstFromDisabledPstTable (long PstCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove post from disabled posts table *****/
-   sprintf (Query,"DELETE FROM forum_disabled_post"
-                  " WHERE PstCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_disabled_post WHERE PstCod='%ld'",
             PstCod);
    DB_QueryDELETE (Query,"can not unban a post of a forum");
   }
@@ -445,7 +443,7 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
 
 static void For_InsertPstIntoBannedPstTable (long PstCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove post from banned posts table *****/
    sprintf (Query,"REPLACE INTO forum_disabled_post"
@@ -471,7 +469,8 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
                         strlen (Subject) +
 			strlen (Content) +
 			Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-			Img_MAX_BYTES_TITLE)) == NULL)
+			Img_MAX_BYTES_TITLE +
+			Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Check if image is received and processed *****/
@@ -506,7 +505,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 
 static bool For_RemoveForumPst (long PstCod,struct Image *Image)
   {
-   char Query[512];
+   char Query[128];
    long ThrCod;
    bool ThreadDeleted = false;
 
@@ -623,7 +622,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
 
 static void For_RemoveThreadOnly (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Indicate that this thread has not been read by anyone *****/
    For_DeleteThrFromReadThrs (ThrCod);
@@ -730,7 +729,7 @@ For_ForumType_t For_GetForumTypeOfAPost (long PstCod)
 
 static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update the code of the first and last posts of a thread *****/
    sprintf (Query,"UPDATE forum_thread SET FirstPstCod='%ld',LastPstCod='%ld'"
@@ -745,7 +744,7 @@ static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long Last
 
 static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Update the code of the last post of a thread *****/
    sprintf (Query,"UPDATE forum_thread SET LastPstCod='%ld' WHERE ThrCod='%ld'",
@@ -759,7 +758,7 @@ static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
 
 static long For_GetLastPstCod (long ThrCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long LastPstCod;
@@ -802,7 +801,7 @@ static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC)
 
 static unsigned For_GetNumOfReadersOfThr (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of distinct readers of a thread from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod='%ld'",
@@ -816,14 +815,15 @@ static unsigned For_GetNumOfReadersOfThr (long ThrCod)
 
 static unsigned For_GetNumOfWritersInThr (long ThrCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumWriters;
 
    /***** Get number of distinct writers in a thread from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM forum_post"
-                  " WHERE ThrCod='%ld'",ThrCod);
+                  " WHERE ThrCod='%ld'",
+            ThrCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of writers in a thread of a forum");
 
    /* Get row with number of writers */
@@ -845,11 +845,10 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod)
 
 static unsigned For_GetNumPstsInThr (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of posts in a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post"
-	          " WHERE ThrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod='%ld'",
             ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a thread of a forum");
   }
@@ -860,7 +859,7 @@ static unsigned For_GetNumPstsInThr (long ThrCod)
 
 static unsigned For_GetNumMyPstInThr (long ThrCod)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Get if I have write posts in a thread from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post"
@@ -889,7 +888,7 @@ unsigned long For_GetNumPostsUsr (long UsrCod)
 
 static time_t For_GetThrReadTime (long ThrCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    time_t ReadTimeUTC;
@@ -956,7 +955,7 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
    extern const char *Txt_Posts;
    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
@@ -1018,8 +1017,7 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
    For_WriteThrSubject (ThrCod);
 
    /***** Get posts of a thread from database *****/
-   sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
-	          " FROM forum_post"
+   sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime) FROM forum_post"
                   " WHERE ThrCod='%ld' ORDER BY PstCod",
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get posts of a thread");
@@ -1403,7 +1401,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
                                        char **ContentStr,
                                        long PstCod,bool GetContent)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -2441,7 +2439,7 @@ unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned Nu
 static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,const char *Time)
   {
    char SubQuery[256];
-   char Query[2048];
+   char Query[1024];
 
    /***** Get number of threads with a last message modify time
           > specified time from database *****/
@@ -2485,7 +2483,7 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
 
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr)
   {
-   char Query[2048];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -2517,7 +2515,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   {
-   char Query[2048];
+   char Query[256];
 
    /***** Get the number of posts in thread with a modify time > a specified time from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post"
@@ -3371,7 +3369,8 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_thread,forum_post "
-                  " WHERE forum_thread.ForumType='%u'%s AND forum_thread.ThrCod=forum_post.ThrCod",
+                  " WHERE forum_thread.ForumType='%u'%s"
+                  " AND forum_thread.ThrCod=forum_post.ThrCod",
             (unsigned) ForumType,SubQuery);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a forum");
   }
@@ -4044,7 +4043,7 @@ void For_RecForumPst (void)
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update number of users notified *****/
    sprintf (Query,"UPDATE forum_post SET NumNotif=NumNotif+'%u'"
@@ -4317,7 +4316,7 @@ void For_PasteThr (void)
 
 long For_GetThrInMyClipboard (void)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -4370,7 +4369,8 @@ bool For_CheckIfThrBelongsToForum (long ThrCod,For_ForumType_t ForumType)
          SubQuery[0] = '\0';
          break;
      }
-   sprintf (Query,"SELECT COUNT(*) FROM forum_thread WHERE ThrCod='%ld' AND ForumType='%u'%s",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_thread"
+	          " WHERE ThrCod='%ld' AND ForumType='%u'%s",
             ThrCod,(unsigned) ForumType,SubQuery);
    return (DB_QueryCOUNT (Query,"can not get if a thread belong to current forum") != 0);
   }
@@ -4388,23 +4388,33 @@ void For_MoveThrToCurrentForum (long ThrCod)
      {
       case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
       case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
-         sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='-1' WHERE ThrCod='%ld'",
+         sprintf (Query,"UPDATE forum_thread"
+                        " SET ForumType='%u',Location='-1'"
+                        " WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,ThrCod);
          break;
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
-         sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='%ld' WHERE ThrCod='%ld'",
+         sprintf (Query,"UPDATE forum_thread"
+                        " SET ForumType='%u',Location='%ld'"
+                        " WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Ins.InsCod,ThrCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='%ld' WHERE ThrCod='%ld'",
+         sprintf (Query,"UPDATE forum_thread"
+                        " SET ForumType='%u',Location='%ld'"
+                        " WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Ctr.CtrCod,ThrCod);
          break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='%ld' WHERE ThrCod='%ld'",
+         sprintf (Query,"UPDATE forum_thread"
+                        " SET ForumType='%u',Location='%ld'"
+                        " WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Deg.DegCod,ThrCod);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (Query,"UPDATE forum_thread SET ForumType='%u',Location='%ld' WHERE ThrCod='%ld'",
+         sprintf (Query,"UPDATE forum_thread"
+                        " SET ForumType='%u',Location='%ld'"
+                        " WHERE ThrCod='%ld'",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Crs.CrsCod,ThrCod);
          break;
      }
@@ -4417,7 +4427,7 @@ void For_MoveThrToCurrentForum (long ThrCod)
 
 void For_InsertThrInClipboard (long ThrCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove expired thread clipboards *****/
    For_RemoveExpiredThrsClipboards ();
@@ -4435,7 +4445,7 @@ void For_InsertThrInClipboard (long ThrCod)
 
 void For_RemoveExpiredThrsClipboards (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM forum_thr_clip"
@@ -4450,10 +4460,11 @@ void For_RemoveExpiredThrsClipboards (void)
 
 void For_RemoveThrCodFromThrClipboard (long ThrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove thread from thread clipboard *****/
-   sprintf (Query,"DELETE FROM forum_thr_clip WHERE ThrCod='%ld'",ThrCod);
+   sprintf (Query,"DELETE FROM forum_thr_clip WHERE ThrCod='%ld'",
+            ThrCod);
    DB_QueryDELETE (Query,"can not remove a thread from clipboard");
   }
 
@@ -4463,10 +4474,11 @@ void For_RemoveThrCodFromThrClipboard (long ThrCod)
 
 void For_RemoveUsrFromThrClipboard (long UsrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove clipboard of specified user *****/
-   sprintf (Query,"DELETE FROM forum_thr_clip WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM forum_thr_clip WHERE UsrCod='%ld'",
+            UsrCod);
    DB_QueryDELETE (Query,"can not remove a thread from the clipboard of a user");
   }
 

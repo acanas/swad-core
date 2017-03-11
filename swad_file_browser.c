@@ -2747,7 +2747,8 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
                   " WHERE CrsCod='%ld' AND Hidden='N' AND Folder<>''"
                   " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
                   " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod='%ld' AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
+                  " WHERE crs_grp_usr.UsrCod='%ld'"
+                  " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
             Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get folders of assignments");
 
@@ -4898,7 +4899,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
 
 static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -7244,7 +7245,7 @@ static long Brw_GetWorksUsrCodForExpandedFolders (void)
 
 void Brw_RemoveExpiredExpandedFolders (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
@@ -7259,7 +7260,7 @@ void Brw_RemoveExpiredExpandedFolders (void)
 
 static void Brw_RemoveExpiredClipboards (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove all expired clipboards *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM clipboard"
@@ -7275,7 +7276,7 @@ static void Brw_RemoveExpiredClipboards (void)
 static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
                                           long MyUsrCod,long WorksUsrCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove clipboards associated to a file browser
           from a course or from a user *****/

@@ -27,8 +27,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-#define Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 43	// 42,66 base-64 characters store 256 bits
-#define Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 86	// 85,33 base-64 characters store 512 bits
+#define Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64	43	// 42,66 base-64 characters store 256 bits
+#define Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64	86	// 85,33 base-64 characters store 512 bits
 
 /*****************************************************************************/
 /********************************* Headers ***********************************/
