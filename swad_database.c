@@ -918,25 +918,25 @@ mysql> DESCRIBE degrees;
    /***** Table departments *****/
 /*
 mysql> DESCRIBE departments;
-+-----------+--------------+------+-----+---------+----------------+
-| Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
-| DptCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
-| InsCod    | int(11)      | NO   | MUL | NULL    |                |
-| ShortName | varchar(32)  | NO   |     | NULL    |                |
-| FullName  | varchar(127) | NO   |     | NULL    |                |
-| WWW       | varchar(255) | NO   |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| DptCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InsCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| WWW       | varchar(255)  | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS departments ("
-                   "DptCod INT NOT NULL AUTO_INCREMENT,"
-                   "InsCod INT NOT NULL,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(DptCod),"
-                   "INDEX(InsCod))");
+			"DptCod INT NOT NULL AUTO_INCREMENT,"
+			"InsCod INT NOT NULL,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(DptCod),"
+		   "INDEX(InsCod))");
 
    /***** Table exam_announcements *****/
 /*

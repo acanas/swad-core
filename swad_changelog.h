@@ -216,6 +216,11 @@
 /*
         Version 16.155.8: Mar 11, 2017	Adjusting size of database fields. (216684 lines)
 					2 changes necessary in database:
+ALTER TABLE departments CHANGE COLUMN ShortName ShortName VARCHAR(511) NOT NULL;
+ALTER TABLE departments CHANGE COLUMN FullName FullName VARCHAR(2047) NOT NULL;
+
+        Version 16.155.8: Mar 11, 2017	Adjusting size of database fields. (216684 lines)
+					2 changes necessary in database:
 ALTER TABLE degrees CHANGE COLUMN ShortName ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL;
 ALTER TABLE degrees CHANGE COLUMN FullName FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL;
 

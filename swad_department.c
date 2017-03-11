@@ -474,8 +474,7 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
    char Query[128];
 
    /***** Get number of departments in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM departments"
-	          " WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod='%ld'",
 	    InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of departments in an institution");
   }
@@ -628,7 +627,7 @@ void Dpt_RemoveDepartment (void)
   {
    extern const char *Txt_To_remove_a_department_you_must_first_remove_all_teachers_in_the_department;
    extern const char *Txt_Department_X_removed;
-   char Query[512];
+   char Query[128];
    struct Department Dpt;
 
    /***** Get department code *****/
@@ -644,12 +643,12 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      sprintf (Query,"DELETE FROM departments WHERE DptCod='%ld'",Dpt.DptCod);
+      sprintf (Query,"DELETE FROM departments WHERE DptCod='%ld'",
+               Dpt.DptCod);
       DB_QueryDELETE (Query,"can not remove a department");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_Department_X_removed,
-               Dpt.FullName);
+      sprintf (Gbl.Message,Txt_Department_X_removed,Dpt.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
@@ -665,7 +664,7 @@ void Dpt_ChangeDepartIns (void)
   {
    extern const char *Txt_The_institution_of_the_department_has_changed;
    struct Department *Dpt;
-   char Query[512];
+   char Query[128];
 
    Dpt = &Gbl.Dpts.EditingDpt;
 
@@ -834,7 +833,7 @@ void Dpt_ChangeDptWWW (void)
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
    struct Department *Dpt;
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char Query[128 + Cns_MAX_BYTES_WWW];
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
 
    Dpt = &Gbl.Dpts.EditingDpt;
@@ -1084,7 +1083,10 @@ void Dpt_RecFormNewDpt (void)
 static void Dpt_CreateDepartment (struct Department *Dpt)
   {
    extern const char *Txt_Created_new_department_X;
-   char Query[1024];
+   char Query[256 +
+              Hie_MAX_BYTES_SHRT_NAME +
+              Hie_MAX_BYTES_FULL_NAME +
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new department *****/
    sprintf (Query,"INSERT INTO departments (InsCod,ShortName,FullName,WWW)"
@@ -1104,7 +1106,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
 
 unsigned Dpt_GetTotalNumberOfDepartments (void)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of departments from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM departments");
@@ -1117,11 +1119,11 @@ unsigned Dpt_GetTotalNumberOfDepartments (void)
 
 unsigned Dpt_GetNumberOfDepartmentsInInstitution (long InsCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get departments in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM departments"
-                  " WHERE InsCod='%ld'",InsCod);
+   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod='%ld'",
+            InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of departments in an institution");
   }
 
