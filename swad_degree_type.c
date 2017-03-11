@@ -453,11 +453,13 @@ void DT_GetListDegreeTypes (void)
    /***** Get types of degree from database *****/
    sprintf (Query,"(SELECT deg_types.DegTypCod,deg_types.DegTypName AS DegTypName,"
                   " COUNT(degrees.DegCod)"
-                  " FROM deg_types,degrees WHERE deg_types.DegTypCod=degrees.DegTypCod"
+                  " FROM deg_types,degrees"
+                  " WHERE deg_types.DegTypCod=degrees.DegTypCod"
                   " GROUP BY degrees.DegTypCod)"
                   " UNION "
                   "(SELECT DegTypCod,DegTypName,'0'"
-                  " FROM deg_types WHERE DegTypCod NOT IN (SELECT DegTypCod FROM degrees))"
+                  " FROM deg_types"
+                  " WHERE DegTypCod NOT IN (SELECT DegTypCod FROM degrees))"
                   " ORDER BY DegTypName");
    Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get types of degree");
 
@@ -608,7 +610,7 @@ long DT_GetParamOtherDegTypCod (void)
 
 static unsigned DT_CountNumDegsOfType (long DegTypCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of degrees of a type from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE DegTypCod='%ld'",
@@ -622,7 +624,7 @@ static unsigned DT_CountNumDegsOfType (long DegTypCod)
 
 bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -678,7 +680,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
 
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -724,7 +726,7 @@ void DT_RenameDegreeType (void)
    extern const char *Txt_The_type_of_degree_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_type_of_degree_X_has_not_changed;
    struct DegreeType *DegTyp;
-   char Query[1024];
+   char Query[128 + Deg_MAX_BYTES_DEGREE_TYPE_NAME];
    char NewNameDegTyp[Deg_MAX_BYTES_DEGREE_TYPE_NAME + 1];
 
    DegTyp = &Gbl.Degs.EditingDegTyp;
@@ -794,7 +796,7 @@ void DT_RenameDegreeType (void)
 
 static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod)
   {
-   char Query[512];
+   char Query[256 + Deg_MAX_BYTES_DEGREE_TYPE_NAME];
 
    /***** Get number of degree types with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM deg_types"
@@ -812,7 +814,7 @@ void DT_ChangeDegreeType (void)
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
    struct Degree *Deg;
    long NewDegTypCod;
-   char Query[512];
+   char Query[128];
 
    Deg = &Gbl.Degs.EditingDeg;
 

@@ -392,7 +392,7 @@ CREATE TABLE IF NOT EXISTS debug (
 --
 CREATE TABLE IF NOT EXISTS deg_types (
 	DegTypCod INT NOT NULL AUTO_INCREMENT,
-	DegTypName VARCHAR(32) NOT NULL,
+	DegTypName VARCHAR(511) NOT NULL,
 	UNIQUE INDEX(DegTypCod));
 --
 -- Table degrees: stores the degrees

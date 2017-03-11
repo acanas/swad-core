@@ -798,10 +798,10 @@ mysql> DESCRIBE crs_records;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_records ("
-                    "FieldCod INT NOT NULL,"
-                    "UsrCod INT NOT NULL,"
-                    "Txt TEXT NOT NULL,"
-                    "UNIQUE INDEX(FieldCod,UsrCod))");
+			"FieldCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Txt TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(FieldCod,UsrCod))");
 
    /***** Table crs_usr *****/
 /*
@@ -826,23 +826,23 @@ mysql> DESCRIBE crs_usr;
 13 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr ("
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "Role TINYINT NOT NULL DEFAULT 0,"
-                   "Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "LastDowGrpCod INT NOT NULL DEFAULT -1,"
-                   "LastComGrpCod INT NOT NULL DEFAULT -1,"
-                   "LastAssGrpCod INT NOT NULL DEFAULT -1,"
-                   "NumAccTst INT NOT NULL DEFAULT 0,"
-                   "LastAccTst DATETIME NOT NULL,"
-                   "NumQstsLastTst INT NOT NULL DEFAULT 0,"
-                   "UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
-                   "ColsClassPhoto TINYINT NOT NULL,"
-                   "ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
-                   "UNIQUE INDEX(CrsCod,UsrCod,Role),"
-                   "UNIQUE INDEX(UsrCod,CrsCod,Role),"
-                   "INDEX(CrsCod,Role),"
-                   "INDEX(UsrCod,Role))");
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"Role TINYINT NOT NULL DEFAULT 0,"
+			"Accepted ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"LastDowGrpCod INT NOT NULL DEFAULT -1,"
+			"LastComGrpCod INT NOT NULL DEFAULT -1,"
+			"LastAssGrpCod INT NOT NULL DEFAULT -1,"
+			"NumAccTst INT NOT NULL DEFAULT 0,"
+			"LastAccTst DATETIME NOT NULL,"
+			"NumQstsLastTst INT NOT NULL DEFAULT 0,"
+			"UsrListType ENUM('classphoto','list') NOT NULL DEFAULT 'classphoto',"
+			"ColsClassPhoto TINYINT NOT NULL,"
+			"ListWithPhotos ENUM('N','Y') NOT NULL DEFAULT 'Y',"
+		   "UNIQUE INDEX(CrsCod,UsrCod,Role),"
+		   "UNIQUE INDEX(UsrCod,CrsCod,Role),"
+		   "INDEX(CrsCod,Role),"
+		   "INDEX(UsrCod,Role))");
 
    /***** Table crs_usr_requests *****/
 /*
@@ -859,30 +859,30 @@ mysql> DESCRIBE crs_usr_requests;
 5 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_usr_requests ("
-	           "ReqCod INT NOT NULL AUTO_INCREMENT,"
-	           "CrsCod INT NOT NULL DEFAULT -1,"
-	           "UsrCod INT NOT NULL,"
-	           "Role TINYINT NOT NULL DEFAULT 0,"
-	           "RequestTime DATETIME NOT NULL,"
-	           "UNIQUE INDEX(ReqCod),"
-	           "UNIQUE INDEX(CrsCod,UsrCod),"
-	           "INDEX(UsrCod))");
+			"ReqCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"Role TINYINT NOT NULL DEFAULT 0,"
+			"RequestTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(ReqCod),"
+		   "UNIQUE INDEX(CrsCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table deg_types *****/
 /*
 mysql> DESCRIBE deg_types;
-+------------+-------------+------+-----+---------+----------------+
-| Field      | Type        | Null | Key | Default | Extra          |
-+------------+-------------+------+-----+---------+----------------+
-| DegTypCod  | int(11)     | NO   | PRI | NULL    | auto_increment |
-| DegTypName | varchar(32) | NO   |     | NULL    |                |
-+------------+-------------+------+-----+---------+----------------+
-2 rows in set (0.00 sec)
++------------+--------------+------+-----+---------+----------------+
+| Field      | Type         | Null | Key | Default | Extra          |
++------------+--------------+------+-----+---------+----------------+
+| DegTypCod  | int(11)      | NO   | PRI | NULL    | auto_increment |
+| DegTypName | varchar(511) | NO   |     | NULL    |                |
++------------+--------------+------+-----+---------+----------------+
+2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS deg_types ("
-                   "DegTypCod INT NOT NULL AUTO_INCREMENT,"
-                   "DegTypName VARCHAR(32) NOT NULL,"
-                   "UNIQUE INDEX(DegTypCod))");
+			"DegTypCod INT NOT NULL AUTO_INCREMENT,"
+			"DegTypName VARCHAR(511) NOT NULL,"	// Deg_MAX_BYTES_DEGREE_TYPE_NAME
+		   "UNIQUE INDEX(DegTypCod))");
 
    /***** Table degrees *****/
 /*
