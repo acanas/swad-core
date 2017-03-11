@@ -681,11 +681,11 @@ mysql> DESCRIBE crs_grp_usr;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_grp_usr ("
-                   "GrpCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "UNIQUE INDEX(GrpCod,UsrCod),"
-                   "INDEX(GrpCod),"
-                   "INDEX(UsrCod))");
+			"GrpCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+		   "UNIQUE INDEX(GrpCod,UsrCod),"
+		   "INDEX(GrpCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table crs_info_read *****/
 /*
@@ -700,10 +700,10 @@ mysql> DESCRIBE crs_info_read;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_read ("
-                   "UsrCod INT NOT NULL,"
-                   "CrsCod INT NOT NULL,"
-                   "InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,CrsCod,InfoType))");
+			"UsrCod INT NOT NULL,"
+			"CrsCod INT NOT NULL,"
+			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,CrsCod,InfoType))");
 
    /***** Table crs_info_src *****/
 /*
@@ -719,11 +719,11 @@ mysql> DESCRIBE crs_info_src;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_src ("
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
-                   "InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL,"
-                   "MustBeRead ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(CrsCod,InfoType))");
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+			"InfoSrc ENUM('none','editor','plain_text','rich_text','page','URL') NOT NULL,"
+			"MustBeRead ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(CrsCod,InfoType))");
 
    /***** Table crs_info_txt *****/
 /*
@@ -739,11 +739,11 @@ mysql> DESCRIBE crs_info_txt;
 4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_info_txt ("
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
-                   "InfoTxtHTML LONGTEXT NOT NULL,"
-                   "InfoTxtMD LONGTEXT NOT NULL,"
-                   "UNIQUE INDEX(CrsCod,InfoType))");
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"InfoType ENUM('intro','description','theory','practices','bibliography','FAQ','links','assessment') NOT NULL,"
+			"InfoTxtHTML LONGTEXT NOT NULL,"
+			"InfoTxtMD LONGTEXT NOT NULL,"
+		   "UNIQUE INDEX(CrsCod,InfoType))");
 
       /***** Table crs_last *****/
 /*
@@ -757,33 +757,33 @@ mysql> DESCRIBE crs_last;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_last ("
-                   "CrsCod INT NOT NULL,"
-                   "LastTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(CrsCod),"
-                   "INDEX(LastTime))");
+			"CrsCod INT NOT NULL,"
+			"LastTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(CrsCod),"
+		   "INDEX(LastTime))");
 
    /***** Table crs_record_fields *****/
 /*
 mysql> DESCRIBE crs_record_fields;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| FieldCod   | int(11)      | NO   | PRI | NULL    | auto_increment |
-| CrsCod     | int(11)      | NO   | MUL | -1      |                |
-| FieldName  | varchar(255) | NO   |     | NULL    |                |
-| NumLines   | int(11)      | NO   |     | NULL    |                |
-| Visibility | tinyint(4)   | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| FieldCod   | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CrsCod     | int(11)       | NO   | MUL | -1      |                |
+| FieldName  | varchar(2047) | NO   |     | NULL    |                |
+| NumLines   | int(11)       | NO   |     | NULL    |                |
+| Visibility | tinyint(4)    | NO   |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS crs_record_fields ("
-                   "FieldCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "FieldName VARCHAR(255) NOT NULL,"
-                   "NumLines INT NOT NULL,"
-                   "Visibility TINYINT NOT NULL,"
-                   "UNIQUE INDEX(FieldCod),"
-                   "INDEX(CrsCod))");
+			"FieldCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"FieldName VARCHAR(2047) NOT NULL,"	// Rec_MAX_BYTES_NAME_FIELD
+			"NumLines INT NOT NULL,"
+			"Visibility TINYINT NOT NULL,"
+		   "UNIQUE INDEX(FieldCod),"
+		   "INDEX(CrsCod))");
 
    /***** Table crs_records *****/
 /*
