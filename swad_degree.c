@@ -591,7 +591,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
 void Deg_WriteSelectorOfDegree (void)
   {
    extern const char *Txt_Degree;
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumDegs;
@@ -617,8 +617,7 @@ void Deg_WriteSelectorOfDegree (void)
      {
       /***** Get degrees belonging to the current centre from database *****/
       sprintf (Query,"SELECT DegCod,ShortName FROM degrees"
-                     " WHERE CtrCod='%ld'"
-                     " ORDER BY ShortName",
+                     " WHERE CtrCod='%ld' ORDER BY ShortName",
                Gbl.CurrentCtr.Ctr.CtrCod);
       NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees of a centre");
 
@@ -1454,7 +1453,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
 
 void Deg_GetListDegsOfCurrentCtr (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1666,7 +1665,7 @@ long Deg_GetAndCheckParamOtherDegCod (void)
 
 bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
   {
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    bool DegFound = false;
@@ -1748,7 +1747,7 @@ static void Deg_GetDataOfDegreeFromRow (struct Degree *Deg,MYSQL_ROW row)
 
 void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -1756,8 +1755,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      sprintf (Query,"SELECT ShortName FROM degrees"
-		     " WHERE DegCod ='%ld'",
+      sprintf (Query,"SELECT ShortName FROM degrees WHERE DegCod ='%ld'",
 	       Deg->DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a degree") == 1)
 	{
@@ -1818,7 +1816,8 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
      {
       /***** Get the institution code of a degree from database *****/
       sprintf (Query,"SELECT centres.InsCod FROM degrees,centres"
-		     " WHERE degrees.DegCod='%ld' AND degrees.CtrCod=centres.CtrCod",
+		     " WHERE degrees.DegCod='%ld'"
+		     " AND degrees.CtrCod=centres.CtrCod",
 	       DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a degree") == 1)
 	{
@@ -1841,7 +1840,7 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
 void Deg_RemoveDegreeCompletely (long DegCod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow,NumRows;
@@ -1849,8 +1848,8 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
-   sprintf (Query,"SELECT CrsCod FROM courses"
-                  " WHERE DegCod='%ld'",DegCod);
+   sprintf (Query,"SELECT CrsCod FROM courses WHERE DegCod='%ld'",
+            DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get courses of a degree");
 
    /* Get courses in this degree */
@@ -2214,7 +2213,7 @@ void Deg_ChangeDegStatus (void)
   {
    extern const char *Txt_The_status_of_the_degree_X_has_changed;
    struct Degree *Deg;
-   char Query[256];
+   char Query[128];
    Deg_Status_t Status;
    Deg_StatusTxt_t StatusTxt;
 
@@ -2333,7 +2332,7 @@ void Deg_RemoveLogo (void)
 
 unsigned Deg_GetNumDegsTotal (void)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Get total number of degrees from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees");
@@ -2379,11 +2378,10 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 
 unsigned Deg_GetNumDegsInCtr (long CtrCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of degrees in a centre from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM degrees"
-	          " WHERE CtrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE CtrCod='%ld'",
 	    CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of degrees in a centre");
   }

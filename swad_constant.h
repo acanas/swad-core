@@ -37,9 +37,9 @@
 #define Cns_MAX_BYTES_WWW	Cns_MAX_CHARS_WWW	// 255
 
 #define Cns_MAX_CHARS_IP	(3 + 1 + 3 + 1 + 3 + 1 + 3)	// 15: max. number of chars of an IP address
-						// Example: 255.255.255.255
-						//           3+1+3+1+3+1+3
-						//          123456789012345
+				// Example: 255.255.255.255
+				//           3+1+3+1+3+1+3
+				//          123456789012345
 #define Cns_MAX_BYTES_IP	Cns_MAX_CHARS_IP	// 15
 
 #define Cns_MAX_CHARS_DATE	(4 + 1 + 2 + 1 + 2)

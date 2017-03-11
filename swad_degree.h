@@ -66,15 +66,15 @@ typedef enum
 
 struct Degree
   {
-   long DegTypCod;					// Degree type code
-   long DegCod;						// Degree code
-   long CtrCod;						// Centre code
-   Deg_Status_t Status;					// Degree status
-   long RequesterUsrCod;				// User code of the person who requested the creation of this degree
+   long DegTypCod;				// Degree type code
+   long DegCod;					// Degree code
+   long CtrCod;					// Centre code
+   Deg_Status_t Status;				// Degree status
+   long RequesterUsrCod;			// User code of the person who requested the creation of this degree
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];	// Short name of degree
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];	// Full name of degree
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   struct Course *LstCrss;				// List of courses in this degree
+   struct Course *LstCrss;			// List of courses in this degree
   };
 
 struct ListDegrees

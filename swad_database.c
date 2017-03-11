@@ -887,33 +887,33 @@ mysql> DESCRIBE deg_types;
    /***** Table degrees *****/
 /*
 mysql> DESCRIBE degrees;
-+-----------------+--------------+------+-----+---------+----------------+
-| Field           | Type         | Null | Key | Default | Extra          |
-+-----------------+--------------+------+-----+---------+----------------+
-| DegCod          | int(11)      | NO   | PRI | NULL    | auto_increment |
-| CtrCod          | int(11)      | NO   | MUL | NULL    |                |
-| DegTypCod       | int(11)      | NO   | MUL | NULL    |                |
-| Status          | tinyint(4)   | NO   | MUL | 0       |                |
-| RequesterUsrCod | int(11)      | NO   |     | -1      |                |
-| ShortName       | varchar(32)  | NO   |     | NULL    |                |
-| FullName        | varchar(127) | NO   |     | NULL    |                |
-| WWW             | varchar(255) | NO   |     | NULL    |                |
-+-----------------+--------------+------+-----+---------+----------------+
-8 rows in set (0.00 sec)
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| DegCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtrCod          | int(11)       | NO   | MUL | NULL    |                |
+| DegTypCod       | int(11)       | NO   | MUL | NULL    |                |
+| Status          | tinyint(4)    | NO   | MUL | 0       |                |
+| RequesterUsrCod | int(11)       | NO   |     | -1      |                |
+| ShortName       | varchar(511)  | NO   |     | NULL    |                |
+| FullName        | varchar(2047) | NO   |     | NULL    |                |
+| WWW             | varchar(255)  | NO   |     | NULL    |                |
++-----------------+---------------+------+-----+---------+----------------+
+8 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS degrees ("
-                   "DegCod INT NOT NULL AUTO_INCREMENT,"
-                   "CtrCod INT NOT NULL,"
-                   "DegTypCod INT NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(DegCod),"
-                   "INDEX(CtrCod),"
-                   "INDEX(DegTypCod),"
-                   "INDEX(Status))");
+			"DegCod INT NOT NULL AUTO_INCREMENT,"
+			"CtrCod INT NOT NULL,"
+			"DegTypCod INT NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(DegCod),"
+		   "INDEX(CtrCod),"
+		   "INDEX(DegTypCod),"
+		   "INDEX(Status))");
 
    /***** Table departments *****/
 /*
