@@ -340,7 +340,8 @@ bool Ses_GetSessionData (void)
 
 void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const char *ParamValue)
   {
-   char Query[512 + Cns_MAX_BYTES_TEXT];
+   char *Query;
+   size_t MaxLength;
 
    /***** Before of inserting the first hidden parameter passed to the next action,
 	  delete all the parameters coming from the previous action *****/
@@ -349,12 +350,21 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
    if (!Ses_CheckIfHiddenParIsAlreadyInDB (Action,ParamName))
      {
+      /***** Allocate space for query *****/
+      MaxLength = 256 + Ses_LENGTH_SESSION_ID + strlen (ParamName) + strlen (ParamValue);
+      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+         Lay_ShowErrorAndExit ("Not enough memory for query.");
+
       /***** Insert parameter in the database *****/
-      sprintf (Query,"INSERT INTO hidden_params (SessionId,Action,ParamName,ParamValue)"
+      sprintf (Query,"INSERT INTO hidden_params"
+	             " (SessionId,Action,ParamName,ParamValue)"
 		     " VALUES ('%s','%d','%s','%s')",
 	       Gbl.Session.Id,(int) Action,ParamName,ParamValue);
       DB_QueryINSERT (Query,"can not create hidden parameter");
       Gbl.HiddenParamsInsertedIntoDB = true;
+
+      /***** Free query *****/
+      free ((void *) Query);
      }
   }
 

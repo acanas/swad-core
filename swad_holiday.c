@@ -241,7 +241,7 @@ void Hld_EditHolidays (void)
 void Hld_GetListHolidays (void)
   {
    char OrderBySubQuery[256];
-   char Query[1024];
+   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumHld;
@@ -352,7 +352,7 @@ void Hld_GetListHolidays (void)
 
 static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
   {
-   char Query[1024];
+   char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -642,7 +642,8 @@ void Hld_RemoveHoliday (void)
    Hld_GetDataOfHolidayByCod (&Hld);
 
    /***** Remove holiday *****/
-   sprintf (Query,"DELETE FROM holidays WHERE HldCod='%ld'",Hld.HldCod);
+   sprintf (Query,"DELETE FROM holidays WHERE HldCod='%ld'",
+            Hld.HldCod);
    DB_QueryDELETE (Query,"can not remove a holiday");
 
    /***** Write message to show the change made *****/
@@ -661,7 +662,7 @@ void Hld_RemoveHoliday (void)
 void Hld_ChangeHolidayPlace (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
-   char Query[512];
+   char Query[128];
    struct Holiday *Hld;
    struct Place NewPlace;
 
@@ -761,7 +762,7 @@ void Hld_ChangeEndDate (void)
 static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
   {
    extern const char *Txt_The_date_of_the_holiday_X_has_changed_to_Y;
-   char Query[512];
+   char Query[128];
    struct Holiday *Hld;
    struct Date NewDate;
    struct Date *PtrDate = NULL;			// Initialized to avoid warning
@@ -840,7 +841,7 @@ void Hld_RenameHoliday (void)
    extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
    extern const char *Txt_The_name_of_the_holiday_X_has_not_changed;
-   char Query[512];
+   char Query[128 + Hld_MAX_BYTES_HOLIDAY_NAME];
    struct Holiday *Hld;
    char NewHldName[Hld_MAX_BYTES_HOLIDAY_NAME + 1];
 
@@ -1121,10 +1122,11 @@ void Hld_RecFormNewHoliday (void)
 static void Hld_CreateHoliday (struct Holiday *Hld)
   {
    extern const char *Txt_Created_new_holiday_X;
-   char Query[1024];
+   char Query[256 + Hld_MAX_BYTES_HOLIDAY_NAME];
 
    /***** Create a new holiday or no school period *****/
-   sprintf (Query,"INSERT INTO holidays (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
+   sprintf (Query,"INSERT INTO holidays"
+	          " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 	          " VALUES ('%ld','%ld','%u','%04u%02u%02u','%04u%02u%02u','%s')",
             Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
             Hld->StartDate.Year,

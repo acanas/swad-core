@@ -1246,39 +1246,39 @@ mysql> DESCRIBE hidden_params;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
-                   "SessionId CHAR(43) NOT NULL,"
-                   "Action INT NOT NULL,"
-                   "ParamName VARCHAR(255) NOT NULL,"
-                   "ParamValue TEXT NOT NULL,"
-                   "INDEX(SessionId,Action))");
+			"SessionId CHAR(43) NOT NULL,"
+			"Action INT NOT NULL,"
+			"ParamName VARCHAR(255) NOT NULL,"
+			"ParamValue TEXT NOT NULL,"
+		   "INDEX(SessionId,Action))");
 
    /***** Table holidays *****/
 /*
 mysql> DESCRIBE holidays;
-+-----------+--------------+------+-----+---------+----------------+
-| Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
-| HldCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
-| InsCod    | int(11)      | NO   | MUL | NULL    |                |
-| PlcCod    | int(11)      | NO   | MUL | -1      |                |
-| HldTyp    | tinyint(4)   | NO   |     | NULL    |                |
-| StartDate | date         | NO   |     | NULL    |                |
-| EndDate   | date         | NO   |     | NULL    |                |
-| Name      | varchar(127) | NO   |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| HldCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InsCod    | int(11)       | NO   | MUL | NULL    |                |
+| PlcCod    | int(11)       | NO   | MUL | -1      |                |
+| HldTyp    | tinyint(4)    | NO   |     | NULL    |                |
+| StartDate | date          | NO   |     | NULL    |                |
+| EndDate   | date          | NO   |     | NULL    |                |
+| Name      | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS holidays ("
-                   "HldCod INT NOT NULL AUTO_INCREMENT,"
-                   "InsCod INT NOT NULL,"
-                   "PlcCod INT NOT NULL DEFAULT -1,"
-                   "HldTyp TINYINT NOT NULL,"
-                   "StartDate DATE NOT NULL,"
-                   "EndDate DATE NOT NULL,"
-                   "Name VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX (HldCod),"
-                   "INDEX(InsCod),"
-                   "INDEX(PlcCod))");
+			"HldCod INT NOT NULL AUTO_INCREMENT,"
+			"InsCod INT NOT NULL,"
+			"PlcCod INT NOT NULL DEFAULT -1,"
+			"HldTyp TINYINT NOT NULL,"
+			"StartDate DATE NOT NULL,"
+			"EndDate DATE NOT NULL,"
+			"Name VARCHAR(2047) NOT NULL,"	// Hld_MAX_BYTES_HOLIDAY_NAME
+		   "UNIQUE INDEX (HldCod),"
+		   "INDEX(InsCod),"
+		   "INDEX(PlcCod))");
 
    /***** Table institutions *****/
 /*
