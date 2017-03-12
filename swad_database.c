@@ -1311,22 +1311,22 @@ mysql> DESCRIBE institutions;
    /***** Table links *****/
 /*
 mysql> DESCRIBE links;
-+-----------+--------------+------+-----+---------+----------------+
-| Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
-| LnkCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
-| ShortName | varchar(32)  | NO   |     | NULL    |                |
-| FullName  | varchar(127) | NO   |     | NULL    |                |
-| WWW       | varchar(255) | NO   |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| LnkCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
+| WWW       | varchar(255)  | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS links ("
-                   "LnkCod INT NOT NULL AUTO_INCREMENT,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(LnkCod))");
+			"LnkCod INT NOT NULL AUTO_INCREMENT,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Lnk_MAX_BYTES_LINK_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Lnk_MAX_BYTES_LINK_FULL_NAME
+			"WWW VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(LnkCod))");
 
    /***** Table log_banners *****/
 /*

@@ -198,7 +198,7 @@ void Lnk_EditLinks (void)
 
 void Lnk_GetListLinks (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -261,7 +261,7 @@ void Lnk_GetListLinks (void)
 
 void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
   {
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -273,7 +273,8 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
    if (Lnk->LnkCod > 0)
      {
       /***** Get data of an institutional link from database *****/
-      sprintf (Query,"SELECT ShortName,FullName,WWW FROM links WHERE LnkCod='%ld'",
+      sprintf (Query,"SELECT ShortName,FullName,WWW FROM links"
+	             " WHERE LnkCod='%ld'",
                Lnk->LnkCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of an institutional link");
 
@@ -423,7 +424,7 @@ long Lnk_GetParamLnkCod (void)
 void Lnk_RemoveLink (void)
   {
    extern const char *Txt_Link_X_removed;
-   char Query[512];
+   char Query[128];
    struct Link Lnk;
 
    /***** Get link code *****/
@@ -434,7 +435,8 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (&Lnk);
 
    /***** Remove link *****/
-   sprintf (Query,"DELETE FROM links WHERE LnkCod='%ld'",Lnk.LnkCod);
+   sprintf (Query,"DELETE FROM links WHERE LnkCod='%ld'",
+            Lnk.LnkCod);
    DB_QueryDELETE (Query,"can not remove an institutional link");
 
    /***** Write message to show the change made *****/
@@ -776,7 +778,10 @@ void Lnk_RecFormNewLink (void)
 static void Lnk_CreateLink (struct Link *Lnk)
   {
    extern const char *Txt_Created_new_link_X;
-   char Query[1024];
+   char Query[256 +
+              Lnk_MAX_BYTES_LINK_SHRT_NAME +
+              Lnk_MAX_BYTES_LINK_FULL_NAME +
+              Cns_MAX_BYTES_WWW];
 
    /***** Create a new link *****/
    sprintf (Query,"INSERT INTO links (ShortName,FullName,WWW)"
