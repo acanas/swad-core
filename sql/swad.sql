@@ -682,7 +682,7 @@ CREATE TABLE IF NOT EXISTS log_recent (
 --
 CREATE TABLE IF NOT EXISTS log_search (
 	LogCod INT NOT NULL,
-	SearchStr VARCHAR(255) NOT NULL,
+	SearchStr VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(LogCod));
 --
 -- Table log_ws: stores the log of calls to web service from plugins

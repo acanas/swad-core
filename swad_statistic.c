@@ -270,7 +270,8 @@ void Sta_GetRemoteAddr (void)
 void Sta_LogAccess (const char *Comments)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   char Query[Sta_MAX_BYTES_QUERY_LOG + 1];
+   char Query[Sta_MAX_BYTES_QUERY_LOG +
+              Sch_MAX_BYTES_STRING_TO_FIND + 1];
    long LogCod;
    Rol_Role_t RoleToStore = (Gbl.Action.Act == ActLogOut) ? Gbl.Usrs.Me.LoggedRoleBeforeCloseSession :
                                                             Gbl.Usrs.Me.LoggedRole;

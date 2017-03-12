@@ -274,7 +274,7 @@ bool Ses_GetSessionData (void)
    /***** Query data of session from database *****/
    sprintf (Query,"SELECT UsrCod,Password,Role,"
 	          "CtyCod,InsCod,CtrCod,DegCod,CrsCod,"
-	          "WhatToSearch,SearchString"
+	          "WhatToSearch,SearchStr"
 	          " FROM sessions WHERE SessionId='%s'",
 	    Gbl.Session.Id);
 

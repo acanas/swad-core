@@ -1349,13 +1349,13 @@ mysql> DESCRIBE log_banners;
    /***** Table log_comments *****/
 /*
 mysql> DESCRIBE log_comments;
-+----------+--------------+------+-----+---------+-------+
-| Field    | Type         | Null | Key | Default | Extra |
-+----------+--------------+------+-----+---------+-------+
-| LogCod   | int(11)      | NO   | PRI | NULL    |       |
-| Comments | varchar(255) | NO   |     | NULL    |       |
-+----------+--------------+------+-----+---------+-------+
-2 rows in set (0.00 sec)
++----------+---------+------+-----+---------+-------+
+| Field    | Type    | Null | Key | Default | Extra |
++----------+---------+------+-----+---------+-------+
+| LogCod   | int(11) | NO   | PRI | NULL    |       |
+| Comments | text    | NO   |     | NULL    |       |
++----------+---------+------+-----+---------+-------+
+2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
 			"LogCod INT NOT NULL,"
@@ -1386,28 +1386,28 @@ mysql> DESCRIBE log_full;
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log ("
-                   "LogCod INT NOT NULL AUTO_INCREMENT,"
-                   "ActCod INT NOT NULL DEFAULT -1,"
-                   "CtyCod INT NOT NULL DEFAULT -1,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL DEFAULT -1,"
-                   "Role TINYINT NOT NULL,"
-                   "ClickTime DATETIME NOT NULL,"
-                   "TimeToGenerate INT NOT NULL,"
-                   "TimeToSend INT NOT NULL,"
-                   "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),"
-                   "INDEX(ActCod),"
-                   "INDEX(CtyCod),"
-                   "INDEX(InsCod),"
-                   "INDEX(CtrCod),"
-                   "INDEX(DegCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(UsrCod),"
-                   "INDEX(ClickTime,Role))");
+			"LogCod INT NOT NULL AUTO_INCREMENT,"
+			"ActCod INT NOT NULL DEFAULT -1,"
+			"CtyCod INT NOT NULL DEFAULT -1,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"Role TINYINT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+			"TimeToGenerate INT NOT NULL,"
+			"TimeToSend INT NOT NULL,"
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_CHARS_IP
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(ActCod),"
+		   "INDEX(CtyCod),"
+		   "INDEX(InsCod),"
+		   "INDEX(CtrCod),"
+		   "INDEX(DegCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(ClickTime,Role))");
 
    /***** Table log_recent *****/
 /*
@@ -1433,44 +1433,44 @@ mysql> DESCRIBE log_recent;
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_recent ("
-                   "LogCod INT NOT NULL,"
-                   "ActCod INT NOT NULL DEFAULT -1,"
-                   "CtyCod INT NOT NULL DEFAULT -1,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL DEFAULT -1,"
-                   "Role TINYINT NOT NULL,"
-                   "ClickTime DATETIME NOT NULL,"
-                   "TimeToGenerate INT NOT NULL,"
-                   "TimeToSend INT NOT NULL,"
-                   "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(LogCod),"
-                   "INDEX(ActCod),"
-                   "INDEX(CtyCod),"
-                   "INDEX(InsCod),"
-                   "INDEX(CtrCod),"
-                   "INDEX(DegCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(UsrCod),"
-                   "INDEX(ClickTime,Role))");
+			"LogCod INT NOT NULL,"
+			"ActCod INT NOT NULL DEFAULT -1,"
+			"CtyCod INT NOT NULL DEFAULT -1,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL DEFAULT -1,"
+			"Role TINYINT NOT NULL,"
+			"ClickTime DATETIME NOT NULL,"
+			"TimeToGenerate INT NOT NULL,"
+			"TimeToSend INT NOT NULL,"
+			"IP CHAR(15) NOT NULL,"	// Cns_MAX_CHARS_IP
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(ActCod),"
+		   "INDEX(CtyCod),"
+		   "INDEX(InsCod),"
+		   "INDEX(CtrCod),"
+		   "INDEX(DegCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(ClickTime,Role))");
 
    /***** Table log_search *****/
 /*
 mysql> DESCRIBE log_search;
-+-----------+--------------+------+-----+---------+-------+
-| Field     | Type         | Null | Key | Default | Extra |
-+-----------+--------------+------+-----+---------+-------+
-| LogCod    | int(11)      | NO   | PRI | NULL    |       |
-| SearchStr | varchar(255) | NO   |     | NULL    |       |
-+-----------+--------------+------+-----+---------+-------+
++-----------+---------------+------+-----+---------+-------+
+| Field     | Type          | Null | Key | Default | Extra |
++-----------+---------------+------+-----+---------+-------+
+| LogCod    | int(11)       | NO   | PRI | NULL    |       |
+| SearchStr | varchar(2047) | NO   |     | NULL    |       |
++-----------+---------------+------+-----+---------+-------+
 2 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_search ("
-                   "LogCod INT NOT NULL,"
-                   "SearchStr VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(LogCod))");
+			"LogCod INT NOT NULL,"
+			"SearchStr VARCHAR(2047) NOT NULL,"	// Sch_MAX_BYTES_STRING_TO_FIND
+		   "UNIQUE INDEX(LogCod))");
 
    /***** Table log_ws *****/
 /*
@@ -1877,29 +1877,29 @@ mysql> DESCRIBE plugins;
    /***** Table sessions *****/
 /*
 mysql> DESCRIBE sessions;
-+----------------+--------------+------+-----+---------+-------+
-| Field          | Type         | Null | Key | Default | Extra |
-+----------------+--------------+------+-----+---------+-------+
-| SessionId      | char(43)     | NO   | PRI | NULL    |       |
-| UsrCod         | int(11)      | NO   | MUL | NULL    |       |
-| Password       | char(86)     | NO   |     | NULL    |       |
-| Role           | tinyint(4)   | NO   |     | 0       |       |
-| CtyCod         | int(11)      | NO   |     | -1      |       |
-| InsCod         | int(11)      | NO   |     | -1      |       |
-| CtrCod         | int(11)      | NO   |     | -1      |       |
-| DegCod         | int(11)      | NO   |     | -1      |       |
-| CrsCod         | int(11)      | NO   |     | -1      |       |
-| LastTime       | datetime     | NO   |     | NULL    |       |
-| LastRefresh    | datetime     | NO   |     | NULL    |       |
-| FirstPubCod    | bigint(20)   | NO   |     | 0       |       |
-| LastPubCod     | bigint(20)   | NO   |     | 0       |       |
-| LastPageMsgRcv | int(11)      | NO   |     | 1       |       |
-| LastPageMsgSnt | int(11)      | NO   |     | 1       |       |
-| WhatToSearch   | tinyint(4)   | NO   |     | 0       |       |
-| SearchString   | varchar(255) | NO   |     |         |       |
-| SideCols       | tinyint(4)   | NO   |     | 3       |       |
-+----------------+--------------+------+-----+---------+-------+
-18 rows in set (1,06 sec)
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| SessionId      | char(43)      | NO   | PRI | NULL    |       |
+| UsrCod         | int(11)       | NO   | MUL | NULL    |       |
+| Password       | char(86)      | NO   |     | NULL    |       |
+| Role           | tinyint(4)    | NO   |     | 0       |       |
+| CtyCod         | int(11)       | NO   |     | -1      |       |
+| InsCod         | int(11)       | NO   |     | -1      |       |
+| CtrCod         | int(11)       | NO   |     | -1      |       |
+| DegCod         | int(11)       | NO   |     | -1      |       |
+| CrsCod         | int(11)       | NO   |     | -1      |       |
+| LastTime       | datetime      | NO   |     | NULL    |       |
+| LastRefresh    | datetime      | NO   |     | NULL    |       |
+| FirstPubCod    | bigint(20)    | NO   |     | 0       |       |
+| LastPubCod     | bigint(20)    | NO   |     | 0       |       |
+| LastPageMsgRcv | int(11)       | NO   |     | 1       |       |
+| LastPageMsgSnt | int(11)       | NO   |     | 1       |       |
+| WhatToSearch   | tinyint(4)    | NO   |     | 0       |       |
+| SearchStr      | varchar(2047) | NO   |     |         |       |
+| SideCols       | tinyint(4)    | NO   |     | 3       |       |
++----------------+---------------+------+-----+---------+-------+
+18 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
                    "SessionId CHAR(43) NOT NULL,"
@@ -1918,7 +1918,7 @@ mysql> DESCRIBE sessions;
                    "LastPageMsgRcv INT NOT NULL DEFAULT 1,"
                    "LastPageMsgSnt INT NOT NULL DEFAULT 1,"
                    "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
-                   "SearchString VARCHAR(255) NOT NULL DEFAULT '',"
+		   "SearchStr VARCHAR(2047) NOT NULL DEFAULT '',"	// Sch_MAX_BYTES_STRING_TO_FIND
                    "SideCols TINYINT NOT NULL DEFAULT 3,"
                    "UNIQUE INDEX(SessionId),"
                    "INDEX(UsrCod))");

@@ -39,7 +39,7 @@
 #define Sch_MAX_CHARS_SEARCH_WORD	(128 - 1)	// 127
 #define Sch_MAX_BYTES_SEARCH_WORD	((Sch_MAX_CHARS_SEARCH_WORD - 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
-#define Sch_MAX_BYTES_SEARCH_QUERY	(Sch_MAX_WORDS_IN_SEARCH * Sch_MAX_BYTES_SEARCH_WORD)
+#define Sch_MAX_BYTES_SEARCH_QUERY	(Sch_MAX_WORDS_IN_SEARCH * (128 + Sch_MAX_BYTES_SEARCH_WORD))
 
 /*****************************************************************************/
 /******************************** Public types *******************************/

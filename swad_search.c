@@ -64,7 +64,7 @@ extern struct Globals Gbl;
 
 static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco_Scope_t DefaultScope);
 static bool Sch_CheckIfIHavePermissionToSearch (Sch_WhatToSearch_t WhatToSearch);
-static void Sch_GetParamSearch (char *SearchStr,size_t MaxLength);
+static void Sch_GetParamSearch (void);
 static void Sch_SearchInDB (void);
 static unsigned Sch_SearchCountriesInDB (const char *RangeQuery);
 static unsigned Sch_SearchInstitutionsInDB (const char *RangeQuery);
@@ -405,10 +405,10 @@ void Sch_GetParamWhatToSearch (void)
 /*********************** Get string from search form *************************/
 /*****************************************************************************/
 
-static void Sch_GetParamSearch (char *SearchStr,size_t MaxLength)
+static void Sch_GetParamSearch (void)
   {
    /***** Get string to search *****/
-   Par_GetParToText ("Search",SearchStr,MaxLength);
+   Par_GetParToText ("Search",Gbl.Search.Str,Sch_MAX_BYTES_STRING_TO_FIND);
   }
 
 /*****************************************************************************/
@@ -421,7 +421,7 @@ void Sch_GetParamsSearch (void)
    Sch_GetParamWhatToSearch ();
 
    /***** Get search string *****/
-   Sch_GetParamSearch (Gbl.Search.Str,sizeof (Gbl.Search.Str) - 1);
+   Sch_GetParamSearch ();
 
    /***** Save my search in order to show it in current session *****/
    if (Gbl.Usrs.Me.Logged)
@@ -1297,7 +1297,7 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 	    LengthTotal += LengthWord;
 	    if (LengthWord > MaxLengthWord)
 	       MaxLengthWord = LengthWord;
-	    if (strlen (SearchQuery) + LengthWord + 512 >
+	    if (strlen (SearchQuery) + 128 + LengthWord >
 	        Sch_MAX_BYTES_SEARCH_QUERY)	// Prevent string overflow
 	       break;
 	    if (NumWords)
@@ -1341,7 +1341,9 @@ bool Sch_BuildSearchQuery (char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1],
 
 static void Sch_SaveLastSearchIntoSession (void)
   {
-   char Query[512];
+   char Query[256 +
+              Sch_MAX_BYTES_STRING_TO_FIND +
+              Ses_LENGTH_SESSION_ID];
 
    if (Gbl.Usrs.Me.Logged)
      {
@@ -1349,7 +1351,7 @@ static void Sch_SaveLastSearchIntoSession (void)
 	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /***** Save last search in session *****/
-      sprintf (Query,"UPDATE sessions SET WhatToSearch='%u',SearchString='%s'"
+      sprintf (Query,"UPDATE sessions SET WhatToSearch='%u',SearchStr='%s'"
 		     " WHERE SessionId='%s'",
 	       (unsigned) Gbl.Search.WhatToSearch,
 	       Gbl.Search.Str,
@@ -1359,8 +1361,7 @@ static void Sch_SaveLastSearchIntoSession (void)
       /***** Update my last type of search *****/
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-      sprintf (Query,"UPDATE usr_last SET WhatToSearch='%u'"
-		     " WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_last SET WhatToSearch='%u' WHERE UsrCod='%ld'",
 	       (unsigned) Gbl.Search.WhatToSearch,
 	       Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update type of search in user's last data");
