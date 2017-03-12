@@ -718,7 +718,6 @@ void Msg_RecMsgFromUsr (void)
                      Content,Cns_MAX_BYTES_LONG_TEXT,false);
    Ptr = Gbl.Usrs.Select.All;
    NumRecipients = 0;
-
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);

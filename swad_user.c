@@ -5248,7 +5248,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  ListUsrCods.NumUsrs = 1;
 		  Usr_AllocateListUsrCods (&ListUsrCods);
-		  ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
+		  ListUsrCods.Lst[0] = UsrDat.UsrCod;
 		 }
 	       else
 		 {
@@ -5339,23 +5339,34 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                /* Find if encrypted user's code is already in list */
                if (!Usr_FindUsrCodInListOfSelectedUsrs (UsrDat.EncryptedUsrCod))        // If not in list ==> add it
                  {
+                  LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
+
                   /* Add encrypted user's code to list of users */
-                  if (LengthSelectedUsrsCods == 0)        // First user in list
+                  if (LengthSelectedUsrsCods == 0)	// First user in list
                     {
-                     if (strlen (UsrDat.EncryptedUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-                        Str_Copy (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod,
-                                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);        // Add first user
-                    }
-                  else        // Not first user in list
-                    {
-                     LengthUsrCod = strlen (UsrDat.EncryptedUsrCod);
-                     if (LengthSelectedUsrsCods + (1 + LengthUsrCod) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+                     if (LengthUsrCod < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
-                        // Add another user
+                        /* Add user */
+                        Str_Copy (Gbl.Usrs.Select.All,
+                                  UsrDat.EncryptedUsrCod,
+                                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+                        LengthSelectedUsrsCods = LengthUsrCod;
+                       }
+                    }
+                  else					// Not first user in list
+                    {
+                     if (LengthSelectedUsrsCods + (1 + LengthUsrCod) <
+                	 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+                       {
+                        /* Add separator */
                         Gbl.Usrs.Select.All[LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
-                        Str_Concat (Gbl.Usrs.Select.All,UsrDat.EncryptedUsrCod,
-                                    Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-                        LengthSelectedUsrsCods += 1 + LengthUsrCod;
+                        LengthSelectedUsrsCods++;
+
+                        /* Add user */
+                        Str_Copy (Gbl.Usrs.Select.All + LengthSelectedUsrsCods,
+                                  UsrDat.EncryptedUsrCod,
+                                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+                        LengthSelectedUsrsCods += LengthUsrCod;
                        }
                     }
                  }

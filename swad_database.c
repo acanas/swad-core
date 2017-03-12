@@ -1182,11 +1182,11 @@ mysql> DESCRIBE forum_thr_clip;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thr_clip ("
-                   "ThrCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "TimeInsert TIMESTAMP NOT NULL,"
-                   "UNIQUE INDEX(ThrCod),"
-                   "UNIQUE INDEX(UsrCod))");
+			"ThrCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeInsert TIMESTAMP NOT NULL,"
+		   "UNIQUE INDEX(ThrCod),"
+		   "UNIQUE INDEX(UsrCod))");
 
    /***** Table forum_thr_read *****/
 /*
@@ -1201,10 +1201,10 @@ mysql> DESCRIBE forum_thr_read;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thr_read ("
-                   "ThrCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "ReadTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(ThrCod,UsrCod))");
+			"ThrCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"ReadTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(ThrCod,UsrCod))");
 
    /***** Table forum_thread *****/
 /*
@@ -1221,16 +1221,16 @@ mysql> DESCRIBE forum_thread;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS forum_thread ("
-                   "ThrCod INT NOT NULL AUTO_INCREMENT,"
-                   "ForumType TINYINT NOT NULL,"
-                   "Location INT NOT NULL DEFAULT -1,"
-                   "FirstPstCod INT NOT NULL,"
-                   "LastPstCod INT NOT NULL,"
-                   "UNIQUE INDEX(ThrCod),"
-                   "INDEX(ForumType),"
-                   "INDEX(Location),"
-                   "UNIQUE INDEX(FirstPstCod),"
-                   "UNIQUE INDEX(LastPstCod))");
+			"ThrCod INT NOT NULL AUTO_INCREMENT,"
+			"ForumType TINYINT NOT NULL,"
+			"Location INT NOT NULL DEFAULT -1,"
+			"FirstPstCod INT NOT NULL,"
+			"LastPstCod INT NOT NULL,"
+		   "UNIQUE INDEX(ThrCod),"
+		   "INDEX(ForumType),"
+		   "INDEX(Location),"
+		   "UNIQUE INDEX(FirstPstCod),"
+		   "UNIQUE INDEX(LastPstCod))");
 
    /***** Table hidden_params *****/
 /*
