@@ -1283,30 +1283,30 @@ mysql> DESCRIBE holidays;
    /***** Table institutions *****/
 /*
 mysql> DESCRIBE institutions;
-+-----------------+--------------+------+-----+---------+----------------+
-| Field           | Type         | Null | Key | Default | Extra          |
-+-----------------+--------------+------+-----+---------+----------------+
-| InsCod          | int(11)      | NO   | PRI | NULL    | auto_increment |
-| CtyCod          | int(11)      | NO   | MUL | NULL    |                |
-| Status          | tinyint(4)   | NO   | MUL | 0       |                |
-| RequesterUsrCod | int(11)      | NO   |     | -1      |                |
-| ShortName       | varchar(32)  | NO   |     | NULL    |                |
-| FullName        | text         | NO   |     | NULL    |                |
-| WWW             | varchar(255) | NO   |     | NULL    |                |
-+-----------------+--------------+------+-----+---------+----------------+
-7 rows in set (0.00 sec)
++-----------------+---------------+------+-----+---------+----------------+
+| Field           | Type          | Null | Key | Default | Extra          |
++-----------------+---------------+------+-----+---------+----------------+
+| InsCod          | int(11)       | NO   | PRI | NULL    | auto_increment |
+| CtyCod          | int(11)       | NO   | MUL | NULL    |                |
+| Status          | tinyint(4)    | NO   | MUL | 0       |                |
+| RequesterUsrCod | int(11)       | NO   |     | -1      |                |
+| ShortName       | varchar(511)  | NO   |     | NULL    |                |
+| FullName        | varchar(2047) | NO   |     | NULL    |                |
+| WWW             | varchar(255)  | NO   |     | NULL    |                |
++-----------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS institutions ("
-                   "InsCod INT NOT NULL AUTO_INCREMENT,"
-                   "CtyCod INT NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "RequesterUsrCod INT NOT NULL DEFAULT -1,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName TEXT NOT NULL,"
-                   "WWW VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(InsCod),"
-                   "INDEX(CtyCod),"
-                   "INDEX(Status))");
+			"InsCod INT NOT NULL AUTO_INCREMENT,"
+			"CtyCod INT NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"RequesterUsrCod INT NOT NULL DEFAULT -1,"
+			"ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_SHRT_NAME
+			"FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL,"	// Hie_MAX_BYTES_FULL_NAME
+			"WWW VARCHAR(255) NOT NULL,"					// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(InsCod),"
+		   "INDEX(CtyCod),"
+		   "INDEX(Status))");
 
    /***** Table links *****/
 /*

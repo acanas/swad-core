@@ -1209,8 +1209,7 @@ void Ins_GetShortNameOfInstitutionByCod (struct Instit *Ins)
       if (Ins->InsCod != Cached.InsCod)	// If not cached...
 	{
 	 /***** Get the short name of an institution from database *****/
-	 sprintf (Query,"SELECT ShortName FROM institutions"
-	                " WHERE InsCod ='%ld'",
+	 sprintf (Query,"SELECT ShortName FROM institutions WHERE InsCod='%ld'",
 		  Ins->InsCod);
 	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of an institution") == 1)
 	   {
@@ -1240,7 +1239,7 @@ static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1])
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[256];
+   char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    static struct
@@ -1267,7 +1266,7 @@ static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
 	 /***** Get the short name of an institution from database *****/
 	 sprintf (Query,"SELECT institutions.FullName,countries.Name_%s"
 	                " FROM institutions,countries"
-	                " WHERE institutions.InsCod ='%ld'"
+	                " WHERE institutions.InsCod='%ld'"
 	                " AND institutions.CtyCod=countries.CtyCod",
 		  Txt_STR_LANG_ID[Gbl.Prefs.Language],Ins->InsCod);
 	 if (DB_QuerySELECT (Query,&mysql_res,"can not get the full name of an institution") == 1)
@@ -2018,7 +2017,7 @@ void Ins_ChangeInsWWWInConfig (void)
 
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1])
   {
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char Query[128 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
    sprintf (Query,"UPDATE institutions SET WWW='%s' WHERE InsCod='%ld'",
@@ -2034,7 +2033,7 @@ void Ins_ChangeInsStatus (void)
   {
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
    struct Instit *Ins;
-   char Query[256];
+   char Query[128];
    Ins_Status_t Status;
    Ins_StatusTxt_t StatusTxt;
 
@@ -2443,8 +2442,8 @@ unsigned Ins_GetNumInssInCty (long CtyCod)
    char Query[128];
 
    /***** Get number of degrees of a place from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM institutions"
-                  " WHERE CtyCod='%ld'",CtyCod);
+   sprintf (Query,"SELECT COUNT(*) FROM institutions WHERE CtyCod='%ld'",
+            CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of institutions in a country");
   }
 
@@ -2505,7 +2504,7 @@ unsigned Ins_GetNumInssWithCrss (const char *SubQuery)
 
 unsigned Ins_GetNumInssWithUsrs (Rol_Role_t Role,const char *SubQuery)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get number of institutions with users from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT institutions.InsCod)"
