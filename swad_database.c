@@ -1341,10 +1341,10 @@ mysql> DESCRIBE log_banners;
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_banners ("
-                   "LogCod INT NOT NULL,"
-                   "BanCod INT NOT NULL,"
-                   "UNIQUE INDEX(LogCod),"
-                   "INDEX(BanCod))");
+			"LogCod INT NOT NULL,"
+			"BanCod INT NOT NULL,"
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(BanCod))");
 
    /***** Table log_comments *****/
 /*
@@ -1358,9 +1358,9 @@ mysql> DESCRIBE log_comments;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_comments ("
-                   "LogCod INT NOT NULL,"
-                   "Comments VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(LogCod))");
+			"LogCod INT NOT NULL,"
+			"Comments TEXT NOT NULL,"
+		   "UNIQUE INDEX(LogCod))");
 
    /***** Table log_full *****/
 /*

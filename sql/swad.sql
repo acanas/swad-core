@@ -623,7 +623,7 @@ CREATE TABLE IF NOT EXISTS log_banners (
 --
 CREATE TABLE IF NOT EXISTS log_comments (
 	LogCod INT NOT NULL,
-	Comments VARCHAR(255) NOT NULL,
+	Comments TEXT NOT NULL,
 	UNIQUE INDEX(LogCod));
 --
 -- Table log: stores the log of all clicks
