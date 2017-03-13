@@ -592,11 +592,13 @@ static void Tst_GetQuestionsAndAnswersFromForm (void)
 
       /* Get indexes for this question */
       sprintf (StrQstIndOrAns,"Ind%06u",NumQst);
-      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrIndexesOneQst[NumQst],Tst_MAX_SIZE_INDEXES_ONE_QST);  /* If choice ==> "0", "1", "2",... */
+      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrIndexesOneQst[NumQst],
+                             Tst_MAX_BYTES_INDEXES_ONE_QST);  /* If choice ==> "0", "1", "2",... */
 
       /* Get answers selected by user for this question */
       sprintf (StrQstIndOrAns,"Ans%06u",NumQst);
-      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrAnswersOneQst[NumQst],Tst_MAX_SIZE_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
+      Par_GetParMultiToText (StrQstIndOrAns,Gbl.Test.StrAnswersOneQst[NumQst],
+                             Tst_MAX_BYTES_ANSWERS_ONE_QST);  /* If answer type == T/F ==> " ", "T", "F"; if choice ==> "0", "2",... */
      }
   }
 
@@ -691,7 +693,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
 
 static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
   {
-   char Query[512 + Ses_BYTES_SESSION_ID];
+   char Query[256 + Ses_BYTES_SESSION_ID];
 
    /***** Delete old status from expired sessions *****/
    sprintf (Query,"DELETE FROM tst_status"
@@ -703,7 +705,8 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
 	          " (SessionId,CrsCod,NumTst,Status)"
 	          " VALUES"
 	          " ('%s','%ld','%u','%u')",
-            Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst,(unsigned) TstStatus);
+            Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
+            NumTst,(unsigned) TstStatus);
    DB_QueryREPLACE (Query,"can not update status of test");
   }
 
@@ -713,7 +716,7 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
 
 static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
   {
-   char Query[512];
+   char Query[256 + Ses_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -748,7 +751,7 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
 
 static unsigned Tst_GetNumAccessesTst (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -758,7 +761,7 @@ static unsigned Tst_GetNumAccessesTst (void)
      {
       /***** Get number of hits to test from database *****/
       sprintf (Query,"SELECT NumAccTst FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	             " WHERE CrsCod='%ld' AND UsrCod='%ld'",
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of hits to test");
 
@@ -1188,7 +1191,8 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    if (AnswerIsNotBlank)
       sprintf (Query,"UPDATE tst_questions"
-	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,Score=Score+(%lf)"
+	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
+	             "Score=Score+(%lf)"
                      " WHERE QstCod='%ld'",
                ScoreThisQst,QstCod);
    else	// The answer is blank
@@ -1206,7 +1210,7 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
 
 static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update my number of accesses to test in this course *****/
    sprintf (Query,"UPDATE crs_usr SET NumAccTst='%u'"
@@ -1222,7 +1226,7 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
 
 static void Tst_UpdateLastAccTst (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update date-time and number of questions of this test *****/
    sprintf (Query,"UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst='%u'"
@@ -1499,26 +1503,30 @@ void Tst_RenameTag (void)
 	    sprintf (Query,"DROP TEMPORARY TABLE IF EXISTS tst_question_tags_tmp");
 	    if (mysql_query (&Gbl.mysql,Query))
 	       DB_ExitOnMySQLError ("can not remove temporary table");
-	    sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp ENGINE=MEMORY"
-			   " SELECT QstCod FROM tst_question_tags WHERE TagCod='%ld'",
+	    sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp"
+		           " ENGINE=MEMORY"
+			   " SELECT QstCod FROM tst_question_tags"
+			   " WHERE TagCod='%ld'",
 		     ExistingTagCod);
 	    if (mysql_query (&Gbl.mysql,Query))
 	       DB_ExitOnMySQLError ("can not create temporary table");
 
 	    /* Remove old tag in questions where it would be repeated */
+	    // New tag existed for a question ==> delete old tag
 	    sprintf (Query,"DELETE FROM tst_question_tags"
 			   " WHERE TagCod='%ld'"
 			   " AND QstCod IN"
-			   " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag existed for a question ==> delete old tag
+			   " (SELECT QstCod FROM tst_question_tags_tmp)",
 		     OldTagCod);
 	    DB_QueryDELETE (Query,"can not remove a tag from some questions");
 
 	    /* Change old tag to new tag in questions where it would not be repeated */
+	    // New tag did not exist for a question ==> change old tag to new tag
 	    sprintf (Query,"UPDATE tst_question_tags"
 			   " SET TagCod='%ld'"
 			   " WHERE TagCod='%ld'"
 			   " AND QstCod NOT IN"
-			   " (SELECT QstCod FROM tst_question_tags_tmp)",	// New tag did not exist for a question ==> change old tag to new tag
+			   " (SELECT QstCod FROM tst_question_tags_tmp)",
 		     ExistingTagCod,
 		     OldTagCod);
 	    DB_QueryUPDATE (Query,"can not update a tag in some questions");
@@ -1562,7 +1570,7 @@ void Tst_RenameTag (void)
 
 static bool Tst_CheckIfCurrentCrsHasTestTags (void)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get available tags from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM tst_tags WHERE CrsCod='%ld'",
@@ -1577,7 +1585,7 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
 
 static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get available tags from database *****/
    sprintf (Query,"SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
@@ -1593,7 +1601,7 @@ static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 
 static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get available not hidden tags from database *****/
    sprintf (Query,"SELECT TagCod,TagTxt FROM tst_tags"
@@ -1963,7 +1971,7 @@ static void Tst_PutInputFieldNumQst (const char *Field,const char *Label,
 
 static void Tst_GetConfigTstFromDB (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -2062,7 +2070,7 @@ void Tst_GetConfigFromRow (MYSQL_ROW row)
 
 bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -2302,26 +2310,31 @@ void Tst_ListQuestionsToEdit (void)
    unsigned long NumRows;
 
    /***** Get parameters, query the database and list the questions *****/
-   if (Tst_GetParamsTst ())							// Get parameters of the form
+   if (Tst_GetParamsTst ())	// Get parameters from the form
      {
-      if ((NumRows = Tst_GetQuestionsForEdit (&mysql_res)) != 0)		// Query database
+      if ((NumRows = Tst_GetQuestionsForEdit (&mysql_res)) != 0)	// Query database
         {
-	 /***** Buttons for edition *****/
+	 /* Buttons for edition */
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 	 if (Gbl.Test.XML.CreateXML)
-            TsI_CreateXML (NumRows,mysql_res);	// Create XML file for exporting questions and put a link to download it
+	    /* Create XML file for exporting questions
+	       and put a link to download it */
+            TsI_CreateXML (NumRows,mysql_res);
          else
-            TsI_PutFormToExportQuestions ();	// Button to export questions
+            /* Button to export questions */
+            TsI_PutFormToExportQuestions ();
 	 fprintf (Gbl.F.Out,"</div>");
 
-         Tst_ListOneOrMoreQuestionsToEdit (NumRows,mysql_res);			// Show the table with the questions
+	 /* Show the table with the questions */
+         Tst_ListOneOrMoreQuestionsToEdit (NumRows,mysql_res);
         }
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Tst_ShowFormAskEditTsts ();						// Show the form again
+      /* Show the form again */
+      Tst_ShowFormAskEditTsts ();
 
    /***** Free memory used by the list of tags *****/
    Tst_FreeTagsList ();
@@ -3709,7 +3722,7 @@ static void Tst_WriteTextAnsViewTest (unsigned NumQst)
    /***** Write input field for the answer *****/
    fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Ans%06u\""
 	              " size=\"40\" maxlength=\"%u\" value=\"\" />",
-            NumQst,Tst_MAX_SIZE_ANSWERS_ONE_QST);
+            NumQst,Tst_MAX_BYTES_ANSWERS_ONE_QST);
   }
 
 /*****************************************************************************/
@@ -3721,8 +3734,8 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
   {
    unsigned NumOpt;
    MYSQL_ROW row;
-   char TextAnsUsr[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
-   char TextAnsOK[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
+   char TextAnsUsr[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
+   char TextAnsOK[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    bool Correct = false;
    /*
    row[ 0] AnsInd
@@ -3781,7 +3794,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
      {
       /* Filter the user answer */
       Str_Copy (TextAnsUsr,Gbl.Test.StrAnswersOneQst[NumQst],
-                Tst_MAX_SIZE_ANSWERS_ONE_QST);
+                Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* In order to compare student answer to stored answer,
 	 the text answers are stored avoiding two or more consecurive spaces */
@@ -3795,7 +3808,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
         {
          /* Filter this correct answer */
          Str_Copy (TextAnsOK,Gbl.Test.Answer.Options[NumOpt].Text,
-                   Tst_MAX_SIZE_ANSWERS_ONE_QST);
+                   Tst_MAX_BYTES_ANSWERS_ONE_QST);
          Str_ConvertToComparable (TextAnsOK);
 
          /* Check is user answer is correct */
@@ -4201,7 +4214,9 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Get the tags of a question from database *****/
    sprintf (Query,"SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
-                  " WHERE tst_question_tags.QstCod='%ld' AND tst_question_tags.TagCod=tst_tags.TagCod AND tst_tags.CrsCod='%ld'"
+                  " WHERE tst_question_tags.QstCod='%ld'"
+                  " AND tst_question_tags.TagCod=tst_tags.TagCod"
+                  " AND tst_tags.CrsCod='%ld'"
                   " ORDER BY tst_question_tags.TagInd",
             QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get the tags of a question");
@@ -5286,7 +5301,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
    char TagStr[6 + 10 + 1];
    char AnsStr[6 + 10 + 1];
    char FbStr[5 + 10 + 1];
-   char StrMultiAns[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
+   char StrMultiAns[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
    char TF[1 + 1];	// (T)rue or (F)alse
    const char *Ptr;
    unsigned NumCorrectAns;
@@ -5417,7 +5432,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
            }
       	 else if (Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
            {
-	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Tst_MAX_SIZE_ANSWERS_ONE_QST);
+	    Par_GetParMultiToText ("AnsMulti",StrMultiAns,Tst_MAX_BYTES_ANSWERS_ONE_QST);
  	    Ptr = StrMultiAns;
             while (*Ptr)
               {
@@ -5895,7 +5910,7 @@ void Tst_RequestRemoveQst (void)
 void Tst_RemoveQst (void)
   {
    extern const char *Txt_Question_removed;
-   char Query[512];
+   char Query[256];
    bool EditingOnlyThisQst;
 
    /***** Get the question code *****/
@@ -5942,7 +5957,7 @@ void Tst_ChangeShuffleQst (void)
   {
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled;
    extern const char *Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling;
-   char Query[512];
+   char Query[256];
    bool EditingOnlyThisQst;
    bool Shuffle;
 
@@ -6022,7 +6037,8 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
                         Gbl.Test.Stem.Length +
                         Gbl.Test.Feedback.Length +
                         Img_BYTES_NAME +
-                        Img_MAX_BYTES_TITLE)) == NULL)
+                        Img_MAX_BYTES_TITLE +
+                        Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    if (Gbl.Test.QstCod < 0)	// It's a new question
@@ -6129,7 +6145,11 @@ static void Tst_InsertAnswersIntoDB (void)
    unsigned i;
 
    /***** Allocate space for query *****/
-   if ((Query = malloc (256 + Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2)) == NULL)
+   if ((Query = malloc (256 +
+                        Tst_MAX_BYTES_ANSWER_OR_FEEDBACK * 2 +
+                        Img_BYTES_NAME +
+                        Img_MAX_BYTES_TITLE +
+                        Cns_MAX_BYTES_WWW)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
    /***** Insert answers in the answers table *****/
@@ -6214,7 +6234,7 @@ static void Tst_InsertAnswersIntoDB (void)
 
 static void Tst_RemAnsFromQst (void)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove answers *****/
    sprintf (Query,"DELETE FROM tst_answers WHERE QstCod='%ld'",
@@ -6228,7 +6248,7 @@ static void Tst_RemAnsFromQst (void)
 
 static void Tst_RemTagsFromQst (void)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove tags *****/
    sprintf (Query,"DELETE FROM tst_question_tags WHERE QstCod='%ld'",
@@ -6242,7 +6262,7 @@ static void Tst_RemTagsFromQst (void)
 
 static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
   {
-   char Query[1024];
+   char Query[512];
 
    /***** Remove unused tags from tst_tags *****/
    sprintf (Query,"DELETE FROM tst_tags"
@@ -6290,15 +6310,14 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 
 static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
   {
-   char Query[256];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumImages;
    unsigned NumImg;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   sprintf (Query,"SELECT ImageName FROM tst_questions"
-		  " WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT ImageName FROM tst_questions WHERE CrsCod='%ld'",
 	    CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
@@ -7885,9 +7904,11 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
 
 static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQst,double Score)
   {
-   char Query[256 + Tst_MAX_SIZE_INDEXES_ONE_QST + Tst_MAX_SIZE_ANSWERS_ONE_QST];
-   char Indexes[Tst_MAX_SIZE_INDEXES_ONE_QST + 1];
-   char Answers[Tst_MAX_SIZE_ANSWERS_ONE_QST + 1];
+   char Query[256 +
+              Tst_MAX_BYTES_INDEXES_ONE_QST +
+              Tst_MAX_BYTES_ANSWERS_ONE_QST];
+   char Indexes[Tst_MAX_BYTES_INDEXES_ONE_QST + 1];
+   char Answers[Tst_MAX_BYTES_ANSWERS_ONE_QST + 1];
 
    /***** Replace each separator of multiple parameters by a comma *****/
    /* In database commas are used as separators instead of special chars */
@@ -7915,14 +7936,13 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
 
 static void Tst_GetTestResultQuestionsFromDB (long TstCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
 
    /***** Get questions of a test result from database *****/
-   sprintf (Query,"SELECT QstCod,Indexes,Answers"
-	          " FROM tst_exam_questions"
+   sprintf (Query,"SELECT QstCod,Indexes,Answers FROM tst_exam_questions"
                   " WHERE TstCod='%ld' ORDER BY QstInd",
             TstCod);
    Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get questions of a test result");
@@ -7940,11 +7960,11 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod)
 
       /* Get indexes for this question (row[1]) */
       Str_Copy (Gbl.Test.StrIndexesOneQst[NumQst],row[1],
-                Tst_MAX_SIZE_INDEXES_ONE_QST);
+                Tst_MAX_BYTES_INDEXES_ONE_QST);
 
       /* Get answers selected by user for this question (row[2]) */
       Str_Copy (Gbl.Test.StrAnswersOneQst[NumQst],row[2],
-                Tst_MAX_SIZE_ANSWERS_ONE_QST);
+                Tst_MAX_BYTES_ANSWERS_ONE_QST);
 
       /* Replace each comma by a separator of multiple parameters */
       /* In database commas are used as separators instead of special chars */
@@ -8017,8 +8037,7 @@ void Tst_RemoveCrsTestResults (long CrsCod)
    DB_QueryDELETE (Query,"can not remove test results made in a course");
 
    /***** Remove test results made in the course *****/
-   sprintf (Query,"DELETE FROM tst_exams"
-	          " WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_exams WHERE CrsCod='%ld'",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove test results made in a course");
   }

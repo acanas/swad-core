@@ -2303,22 +2303,22 @@ mysql> DESCRIBE tst_answers;
 | Answer     | text          | NO   |     | NULL    |       |
 | Feedback   | text          | NO   |     | NULL    |       |
 | ImageName  | varchar(43)   | NO   |     | NULL    |       |
-| ImageTitle | varchar(255)  | NO   |     | NULL    |       |
+| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
 | ImageURL   | varchar(255)  | NO   |     | NULL    |       |
 | Correct    | enum('N','Y') | NO   |     | NULL    |       |
 +------------+---------------+------+-----+---------+-------+
-8 rows in set (0.01 sec)
+8 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_answers ("
-                   "QstCod INT NOT NULL,"
-                   "AnsInd TINYINT NOT NULL,"
-                   "Answer TEXT NOT NULL,"
-                   "Feedback TEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
-                   "Correct ENUM('N','Y') NOT NULL,"
-                   "INDEX(QstCod))");
+			"QstCod INT NOT NULL,"
+			"AnsInd TINYINT NOT NULL,"
+			"Answer TEXT NOT NULL,"			// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"Feedback TEXT NOT NULL,"		// Tst_MAX_BYTES_ANSWER_OR_FEEDBACK
+			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
+			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"Correct ENUM('N','Y') NOT NULL,"
+		   "INDEX(QstCod))");
 
    /***** Table tst_config *****/
 /*
@@ -2337,14 +2337,14 @@ mysql> DESCRIBE tst_config;
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_config ("
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "Pluggable ENUM('unknown','N','Y') NOT NULL DEFAULT 'unknown',"
-                   "Min INT NOT NULL,"
-                   "Def INT NOT NULL,"
-                   "Max INT NOT NULL,"
-                   "MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,"
-                   "Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL,"
-                   "UNIQUE INDEX(CrsCod))");
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Pluggable ENUM('unknown','N','Y') NOT NULL DEFAULT 'unknown',"
+			"Min INT NOT NULL,"
+			"Def INT NOT NULL,"
+			"Max INT NOT NULL,"
+			"MinTimeNxtTstPerQst INT NOT NULL DEFAULT 0,"
+			"Feedback ENUM('nothing','total_result','each_result','each_good_bad','full_feedback') NOT NULL,"
+		   "UNIQUE INDEX(CrsCod))");
 
 /***** Table tst_exam_questions *****/
 /*
@@ -2362,13 +2362,13 @@ mysql> DESCRIBE tst_exam_questions;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exam_questions ("
-                   "TstCod INT NOT NULL,"
-                   "QstCod INT NOT NULL,"
-                   "QstInd INT NOT NULL,"
-                   "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-                   "Indexes TEXT NOT NULL,"
-                   "Answers TEXT NOT NULL,"
-                   "INDEX(TstCod,QstCod))");
+			"TstCod INT NOT NULL,"
+			"QstCod INT NOT NULL,"
+			"QstInd INT NOT NULL,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+			"Indexes TEXT NOT NULL,"	// Tst_MAX_BYTES_INDEXES_ONE_QST
+			"Answers TEXT NOT NULL,"	// Tst_MAX_BYTES_ANSWERS_ONE_QST
+		   "INDEX(TstCod,QstCod))");
 
    /***** Table tst_exams *****/
 /*
@@ -2388,16 +2388,16 @@ mysql> DESCRIBE tst_exams;
 8 rows in set (0.05 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_exams ("
-                   "TstCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "TstTime DATETIME NOT NULL,"
-                   "NumQsts INT NOT NULL DEFAULT 0,"
-                   "NumQstsNotBlank INT NOT NULL DEFAULT 0,"
-                   "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(TstCod),"
-                   "INDEX(CrsCod,UsrCod))");
+			"TstCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"AllowTeachers ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"TstTime DATETIME NOT NULL,"
+			"NumQsts INT NOT NULL DEFAULT 0,"
+			"NumQstsNotBlank INT NOT NULL DEFAULT 0,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(TstCod),"
+		   "INDEX(CrsCod,UsrCod))");
 
    /***** Table tst_question_tags *****/
 /*
@@ -2412,10 +2412,10 @@ mysql> DESCRIBE tst_question_tags;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_question_tags ("
-                   "QstCod INT NOT NULL,"
-                   "TagCod INT NOT NULL,"
-                   "TagInd TINYINT NOT NULL,"
-                   "UNIQUE INDEX(QstCod,TagCod))");
+			"QstCod INT NOT NULL,"
+			"TagCod INT NOT NULL,"
+			"TagInd TINYINT NOT NULL,"
+		   "UNIQUE INDEX(QstCod,TagCod))");
 
    /***** Table tst_questions *****/
 /*
@@ -2431,29 +2431,30 @@ mysql> DESCRIBE tst_questions;
 | Stem            | text                                                                      | NO   |     | NULL    |                |
 | Feedback        | text                                                                      | NO   |     | NULL    |                |
 | ImageName       | varchar(43)                                                               | NO   |     | NULL    |                |
-| ImageTitle      | varchar(255)                                                              | NO   |     | NULL    |                |
+| ImageTitle      | varchar(2047)                                                             | NO   |     | NULL    |                |
 | ImageURL        | varchar(255)                                                              | NO   |     | NULL    |                |
 | NumHits         | int(11)                                                                   | NO   |     | 0       |                |
 | NumHitsNotBlank | int(11)                                                                   | NO   |     | 0       |                |
 | Score           | double                                                                    | NO   |     | 0       |                |
 +-----------------+---------------------------------------------------------------------------+------+-----+---------+----------------+
-13 rows in set (0.00 sec)
+13 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_questions ("
-                   "QstCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "EditTime DATETIME NOT NULL,"
-                   "AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
-                   "Shuffle ENUM('N','Y') NOT NULL,"
-                   "Stem TEXT NOT NULL,"
-                   "Feedback TEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "NumHits INT NOT NULL DEFAULT 0,"
-                   "NumHitsNotBlank INT NOT NULL DEFAULT 0,"
-                   "Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(QstCod),"
-                   "INDEX(CrsCod,EditTime))");
+			"QstCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"EditTime DATETIME NOT NULL,"
+			"AnsType ENUM ('int','float','true_false','unique_choice','multiple_choice','text') NOT NULL,"
+			"Shuffle ENUM('N','Y') NOT NULL,"
+			"Stem TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
+			"Feedback TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
+			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+			"NumHits INT NOT NULL DEFAULT 0,"
+			"NumHitsNotBlank INT NOT NULL DEFAULT 0,"
+			"Score DOUBLE PRECISION NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(QstCod),"
+		   "INDEX(CrsCod,EditTime))");
 
    /***** Table tst_status *****/
 /*
@@ -2469,11 +2470,11 @@ mysql> DESCRIBE tst_status;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_status ("
-                   "SessionId CHAR(43) NOT NULL,"
-                   "CrsCod INT NOT NULL,"
-                   "NumTst INT NOT NULL,"
-                   "Status TINYINT NOT NULL,"
-                   "UNIQUE INDEX(SessionId,CrsCod,NumTst))");
+			"SessionId CHAR(43) NOT NULL,"
+			"CrsCod INT NOT NULL,"
+			"NumTst INT NOT NULL,"
+			"Status TINYINT NOT NULL,"
+		   "UNIQUE INDEX(SessionId,CrsCod,NumTst))");
 
    /***** Table tst_tags *****/
 /*
@@ -2484,21 +2485,20 @@ mysql> DESCRIBE tst_tags;
 | TagCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
 | CrsCod     | int(11)       | NO   | MUL | -1      |                |
 | ChangeTime | datetime      | NO   |     | NULL    |                |
-| TagTxt     | varchar(255)  | NO   | MUL | NULL    |                |
+| TagTxt     | varchar(2047) | NO   |     | NULL    |                |
 | TagHidden  | enum('N','Y') | NO   |     | NULL    |                |
 +------------+---------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
+5 rows in set (0,00 sec)
 */
 // CrsCod is redundant for speed in querys
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_tags ("
-                   "TagCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "ChangeTime DATETIME NOT NULL,"
-                   "TagTxt VARCHAR(255) NOT NULL,"
-                   "TagHidden ENUM('N','Y') NOT NULL,"
-                   "UNIQUE INDEX(TagCod),"
-                   "INDEX(CrsCod,ChangeTime),"
-                   "INDEX(TagTxt))");
+			"TagCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"ChangeTime DATETIME NOT NULL,"
+			"TagTxt VARCHAR(2047) NOT NULL,"	// Tst_MAX_BYTES_TAG
+			"TagHidden ENUM('N','Y') NOT NULL,"
+		   "UNIQUE INDEX(TagCod),"
+		   "INDEX(CrsCod,ChangeTime))");
 
    /***** Table usr_banned *****/
 /*

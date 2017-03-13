@@ -1087,7 +1087,7 @@ CREATE TABLE IF NOT EXISTS tst_answers (
 	Answer TEXT NOT NULL,
         Feedback TEXT NOT NULL,
 	ImageName VARCHAR(43) NOT NULL,
-        ImageTitle VARCHAR(255) NOT NULL,
+        ImageTitle VARCHAR(2047) NOT NULL,
         ImageURL VARCHAR(255) NOT NULL,
 	Correct ENUM('N','Y') NOT NULL,
 	INDEX(QstCod));
@@ -1147,7 +1147,7 @@ CREATE TABLE IF NOT EXISTS tst_questions (
 	Stem TEXT NOT NULL,
 	Feedback TEXT NOT NULL,
 	ImageName VARCHAR(43) NOT NULL,
-        ImageTitle VARCHAR(255) NOT NULL,
+        ImageTitle VARCHAR(2047) NOT NULL,
         ImageURL VARCHAR(255) NOT NULL,
 	NumHits INT NOT NULL DEFAULT 0,
 	NumHitsNotBlank INT NOT NULL DEFAULT 0,
@@ -1170,11 +1170,10 @@ CREATE TABLE IF NOT EXISTS tst_tags (
 	TagCod INT NOT NULL AUTO_INCREMENT,
 	CrsCod INT NOT NULL DEFAULT -1,
 	ChangeTime DATETIME NOT NULL,
-	TagTxt VARCHAR(255) NOT NULL,
+	TagTxt VARCHAR(2047) NOT NULL,
 	TagHidden ENUM('N','Y') NOT NULL,
 	UNIQUE INDEX(TagCod),
-	INDEX(CrsCod,ChangeTime),
-	INDEX(TagTxt));
+	INDEX(CrsCod,ChangeTime));
 --
 -- Table usr_banned: stores users banned for ranking
 --
