@@ -144,7 +144,7 @@ void Img_GetImageNameTitleAndURLFromRow (const char *Name,
 
    /***** Copy image name to struct *****/
    Str_Copy (Image->Name,Name,
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+             Img_BYTES_NAME);
 
    /***** Set status of image file *****/
    Image->Status = Image->Name[0] ? Img_NAME_STORED_IN_DB :

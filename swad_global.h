@@ -166,7 +166,7 @@ struct Globals
       unsigned NumSessions;
       bool IsOpen;
       bool HasBeenDisconnected;
-      char Id[Ses_LENGTH_SESSION_ID + 1];
+      char Id[Ses_BYTES_SESSION_ID + 1];
       long UsrCod;
      } Session;
 
@@ -295,8 +295,8 @@ struct Globals
          bool RoleHasChanged;	// Set when I have changed my role
 	 char UsrIdLogin[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// String to store the ID, nickname or email entered in the user's login
          char LoginPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-         char LoginEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
-         char PendingPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+         char LoginEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
+         char PendingPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 	 char PathDir[PATH_MAX + 1];
 	 bool Logged;
          bool IBelongToCurrentIns;

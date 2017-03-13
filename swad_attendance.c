@@ -2282,7 +2282,8 @@ void Att_RegisterStudentsInAttEvent (void)
       Ptr = Gbl.Usrs.Select.Std;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,
+	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 Usr_GetUsrCodFromEncryptedUsrCod (&UsrData);
 	 if (UsrData.UsrCod > 0)	// Student exists in database
 	    /***** Mark student to not be removed *****/
@@ -2836,7 +2837,8 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
 	NumStd < NumStdsInList && *Ptr;
 	NumStd++)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       (*LstSelectedUsrCods)[NumStd] = UsrDat.UsrCod;
      }

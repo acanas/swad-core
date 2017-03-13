@@ -119,7 +119,7 @@ bool Pwd_CheckPendingPassword (void)
       /* Get encrypted pending password */
       row = mysql_fetch_row (mysql_res);
       Str_Copy (Gbl.Usrs.Me.PendingPassword,row[0],
-                Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+                Pwd_BYTES_ENCRYPTED_PASSWORD);
      }
    else
       Gbl.Usrs.Me.PendingPassword[0] = '\0';
@@ -138,7 +138,7 @@ bool Pwd_CheckPendingPassword (void)
 
 void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
   {
-   char Query[128 + Pwd_MAX_BYTES_ENCRYPTED_PASSWORD];
+   char Query[128 + Pwd_BYTES_ENCRYPTED_PASSWORD];
 
    /***** Update my current password in database *****/
    sprintf (Query,"UPDATE usr_data SET Password='%s'"
@@ -149,7 +149,7 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
 
    /***** Update my current password *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,Gbl.Usrs.Me.PendingPassword,
-             Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+             Pwd_BYTES_ENCRYPTED_PASSWORD);
   }
 
 /*****************************************************************************/
@@ -163,7 +163,7 @@ void Pwd_ActChgMyPwd1 (void)
    extern const char *Txt_You_have_not_entered_your_password_correctly;
    char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char NewEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    /***** Get plain password from form *****/
    Par_GetParToText ("UsrPwd",PlainPassword,Pwd_MAX_BYTES_PLAIN_PASSWORD);
@@ -189,7 +189,7 @@ void Pwd_ActChgMyPwd1 (void)
          if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
            {
             Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-                      Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+                      Pwd_BYTES_ENCRYPTED_PASSWORD);
             Ses_UpdateSessionDataInDB ();
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
             sprintf (Gbl.Message,"%s",Txt_Your_password_has_been_changed_successfully);
@@ -457,7 +457,7 @@ static void Pwd_CreateANewPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSW
 
 void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1])
   {
-   char Query[256 + Pwd_MAX_BYTES_ENCRYPTED_PASSWORD];
+   char Query[256 + Pwd_BYTES_ENCRYPTED_PASSWORD];
 
    /***** Encrypt my pending password *****/
    Cry_EncryptSHA512Base64 (PlainPassword,Gbl.Usrs.Me.PendingPassword);
@@ -487,7 +487,7 @@ void Pwd_UpdateOtherPwd1 (void)
    extern const char *Txt_The_X_password_has_been_changed_successfully;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char NewPlainPassword[2][Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char NewEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    Gbl.Usrs.Error = true;
 
@@ -511,7 +511,7 @@ void Pwd_UpdateOtherPwd1 (void)
 	      {
 	       /* Update other user's data */
 	       Str_Copy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword,
-	                 Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+	                 Pwd_BYTES_ENCRYPTED_PASSWORD);
 	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
 	       sprintf (Gbl.Message,Txt_The_X_password_has_been_changed_successfully,
@@ -926,7 +926,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    extern const char *Txt_You_have_not_confirmed_the_action;
    extern const char *Txt_You_have_not_entered_your_password_correctly;
    char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-   char EncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+   char EncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    /***** Get if consent has been done *****/
    if (!Par_GetParToBool ("Consent"))

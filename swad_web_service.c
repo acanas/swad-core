@@ -192,7 +192,7 @@ Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
    Svc_ROLE_UNKNOWN,	// Rol_SYS_ADM
   };
 
-#define Svc_LENGTH_WS_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+#define Svc_BYTES_WS_KEY Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 
 /*****************************************************************************/
 /********************************* Data types ********************************/
@@ -204,11 +204,11 @@ Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
 
 static int Svc_GetPlgCodFromAppKey (const char *appKey);
 static int Svc_CheckIdSession (const char *IdSession);
-static int Svc_CheckWSKey (char WSKey[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+static int Svc_CheckWSKey (char WSKey[Svc_BYTES_WS_KEY + 1]);
 
 static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod);
 static int Svc_GenerateNewWSKey (long UsrCod,
-                                 char WSKey[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1]);
+                                 char WSKey[Svc_BYTES_WS_KEY + 1]);
 static int Svc_RemoveOldWSKeys (void);
 static int Svc_GetCurrentDegCodFromCurrentCrsCod (void);
 static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod);
@@ -281,7 +281,7 @@ void Svc_Exit (const char *DetailErrorMessage)
 
 static int Svc_GetPlgCodFromAppKey (const char *appKey)
   {
-   char Query[256 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
+   char Query[128 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -326,7 +326,7 @@ static int Svc_CheckIdSession (const char *IdSession)
   {
    const char *Ptr;
    unsigned i;
-   char Query[512];
+   char Query[128 + Ses_BYTES_SESSION_ID];
 
    /***** Check if pointer is NULL *****/
    if (IdSession == NULL)
@@ -335,7 +335,7 @@ static int Svc_CheckIdSession (const char *IdSession)
 	                        "Session identifier is a null pointer");
 
    /***** Check length of session identifier *****/
-   if (strlen (IdSession) != Ses_LENGTH_SESSION_ID)
+   if (strlen (IdSession) != Ses_BYTES_SESSION_ID)
       return soap_sender_fault (Gbl.soap,
 	                        "Bad session identifier",
 	                        "The length of the session identifier is wrong");
@@ -371,9 +371,9 @@ static int Svc_CheckIdSession (const char *IdSession)
 /************** Check if a web service key exists in database ****************/
 /*****************************************************************************/
 
-static int Svc_CheckWSKey (char WSKey[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
+static int Svc_CheckWSKey (char WSKey[Svc_BYTES_WS_KEY + 1])
   {
-   char Query[512];
+   char Query[128 + Svc_BYTES_WS_KEY];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -443,7 +443,7 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 /*****************************************************************************/
 
 static int Svc_GenerateNewWSKey (long UsrCod,
-                                 char WSKey[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1])
+                                 char WSKey[Svc_BYTES_WS_KEY + 1])
   {
    int ReturnCode;
    char Query[512];
@@ -454,7 +454,7 @@ static int Svc_GenerateNewWSKey (long UsrCod,
 
    /***** Create a unique name for the key *****/
    Str_Copy (WSKey,Gbl.UniqueNameEncrypted,
-             Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+             Svc_BYTES_WS_KEY);
 
    /***** Check that key does not exist in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM ws_keys WHERE WSKey='%s'",
@@ -644,7 +644,7 @@ int swad__createAccount (struct soap *soap,
                          struct swad__createAccountOutput *createAccountOut)			// output
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char NewEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
    int Result;
    int ReturnCode;
 
@@ -653,7 +653,7 @@ int swad__createAccount (struct soap *soap,
    Gbl.WebService.Function = Svc_createAccount;
 
    /***** Allocate space for strings *****/
-   createAccountOut->wsKey = (char *) soap_malloc (Gbl.soap,Svc_LENGTH_WS_KEY + 1);
+   createAccountOut->wsKey = (char *) soap_malloc (Gbl.soap,Svc_BYTES_WS_KEY + 1);
 
    /***** Default values returned on error *****/
    createAccountOut->userCode = 0;	// Undefined error
@@ -681,7 +681,7 @@ int swad__createAccount (struct soap *soap,
 
    /***** Set password to the password typed by the user *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-             Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+             Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /***** User does not exist in the platform, so create him/her! *****/
    Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
@@ -783,7 +783,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
    Gbl.WebService.Function = Svc_loginByUserPasswordKey;
 
    /***** Allocate space for strings *****/
-   loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_LENGTH_WS_KEY + 1);
+   loginByUserPasswordKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_BYTES_WS_KEY + 1);
    loginByUserPasswordKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
    loginByUserPasswordKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
    loginByUserPasswordKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -937,7 +937,7 @@ int swad__loginBySessionKey (struct soap *soap,
                              struct swad__loginBySessionKeyOutput *loginBySessionKeyOut)	// output
   {
    int ReturnCode;
-   char Query[512];
+   char Query[256 + Ses_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -949,7 +949,7 @@ int swad__loginBySessionKey (struct soap *soap,
    Gbl.WebService.Function = Svc_loginBySessionKey;
 
    /***** Allocate space for strings *****/
-   loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_LENGTH_WS_KEY + 1);
+   loginBySessionKeyOut->wsKey          = (char *) soap_malloc (Gbl.soap,Svc_BYTES_WS_KEY + 1);
    loginBySessionKeyOut->userNickname   = (char *) soap_malloc (Gbl.soap,Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1);
    loginBySessionKeyOut->userID         = (char *) soap_malloc (Gbl.soap,ID_MAX_BYTES_USR_ID + 1);
    loginBySessionKeyOut->userFirstname  = (char *) soap_malloc (Gbl.soap,Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1);
@@ -993,7 +993,8 @@ int swad__loginBySessionKey (struct soap *soap,
    // Now, we know that sessionID is a valid session identifier
    /***** Query data of the session from database *****/
    sprintf (Query,"SELECT UsrCod,DegCod,CrsCod FROM sessions"
-                  " WHERE SessionId='%s'",sessionID);
+	          " WHERE SessionId='%s'",
+            sessionID);
    if ((NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get session data")) == 1)	// Session found in table of sessions
      {
       row = mysql_fetch_row (mysql_res);

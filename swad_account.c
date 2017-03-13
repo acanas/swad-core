@@ -552,7 +552,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   char NewEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+   char NewEncryptedPassword[Pwd_BYTES_ENCRYPTED_PASSWORD + 1];
 
    if (Acc_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
      {
@@ -562,7 +562,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 
       /***** Set password to the password typed by the user *****/
       Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-                Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+                Pwd_BYTES_ENCRYPTED_PASSWORD);
 
       /***** User does not exist in the platform, so create him/her! *****/
       Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,
@@ -966,7 +966,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    extern const char *Txt_Briefcase_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Photo_of_THE_USER_X_has_been_removed;
    extern const char *Txt_Record_card_of_THE_USER_X_has_been_removed;
-   char Query[1024];
+   char Query[128];
    bool PhotoRemoved = false;
 
    /***** Remove the works zones of the user in all courses *****/
@@ -982,8 +982,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Grp_RemUsrFromAllGrps (UsrDat,QuietOrVerbose);
 
    /***** Remove user's requests for inscription *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests"
-                  " WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's requests for inscription");
 
@@ -991,8 +990,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the table of courses and users *****/
-   sprintf (Query,"DELETE FROM crs_usr"
-                  " WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from all courses");
 
@@ -1004,8 +1002,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   sprintf (Query,"DELETE FROM admin"
-                  " WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM admin WHERE UsrCod='%ld'",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user as administrator");
 

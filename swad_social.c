@@ -803,7 +803,7 @@ static void Soc_BuildQueryToGetTimeline (Soc_TimelineUsrOrGbl_t TimelineUsrOrGbl
 
 static long Soc_GetPubCodFromSession (const char *FieldName)
   {
-   char Query[128 + Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    long PubCod;
@@ -831,7 +831,7 @@ static long Soc_GetPubCodFromSession (const char *FieldName)
 
 static void Soc_UpdateLastPubCodIntoSession (void)
   {
-   char Query[256 + Ses_LENGTH_SESSION_ID];
+   char Query[256 + Ses_BYTES_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions"
@@ -847,7 +847,7 @@ static void Soc_UpdateLastPubCodIntoSession (void)
 
 static void Soc_UpdateFirstPubCodIntoSession (long FirstPubCod)
   {
-   char Query[128 + Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_BYTES_SESSION_ID];
 
    /***** Update last publishing code *****/
    sprintf (Query,"UPDATE sessions SET FirstPubCod='%ld' WHERE SessionId='%s'",
@@ -2293,8 +2293,9 @@ static long Soc_ReceiveSocialPost (void)
       /***** Allocate space for query *****/
       if ((Query = malloc (256 +
 			   strlen (Content) +
-			   Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-			   Img_MAX_BYTES_TITLE)) == NULL)
+			   Img_BYTES_NAME +
+			   Img_MAX_BYTES_TITLE +
+			   Cns_MAX_BYTES_WWW)) == NULL)
 	 Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
       /***** Check if image is received and processed *****/
@@ -2444,7 +2445,7 @@ static unsigned long Soc_GetNumCommentsInSocialNote (long NotCod)
 
 static void Soc_WriteCommentsInSocialNote (const struct SocialNote *SocNot)
   {
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumComments;
@@ -2995,8 +2996,9 @@ static long Soc_ReceiveComment (void)
 	 /***** Allocate space for query *****/
 	 if ((Query = malloc (256 +
 			      strlen (Content) +
-			      Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
-			      Img_MAX_BYTES_TITLE)) == NULL)
+			      Img_BYTES_NAME +
+			      Img_MAX_BYTES_TITLE +
+			      Cns_MAX_BYTES_WWW)) == NULL)
 	    Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 
 	 /***** Check if image is received and processed *****/
@@ -4494,7 +4496,7 @@ static void Soc_GetDataOfSocialNotByCod (struct SocialNote *SocNot)
 
 static void Soc_GetDataOfSocialComByCod (struct SocialComment *SocCom)
   {
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
 
@@ -4714,7 +4716,7 @@ void Soc_ClearOldTimelinesDB (void)
 
 static void Soc_ClearTimelineThisSession (void)
   {
-   char Query[128 + Ses_LENGTH_SESSION_ID];
+   char Query[128 + Ses_BYTES_SESSION_ID];
 
    /***** Remove social timeline for this session *****/
    sprintf (Query,"DELETE FROM social_timelines WHERE SessionId='%s'",
@@ -4728,7 +4730,7 @@ static void Soc_ClearTimelineThisSession (void)
 
 static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
-   char Query[256 + Ses_LENGTH_SESSION_ID];
+   char Query[256 + Ses_BYTES_SESSION_ID];
 
    sprintf (Query,"INSERT IGNORE INTO social_timelines"
 	          " (SessionId,NotCod)"

@@ -720,7 +720,8 @@ void Msg_RecMsgFromUsr (void)
    NumRecipients = 0;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDstData.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDstData);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDstData))		// Get recipient's data from the database
         {
@@ -1288,7 +1289,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    if ((Query = malloc (512 +
                         strlen (Subject) +
 			strlen (Content) +
-			Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 +
+			Img_BYTES_NAME +
 			Img_MAX_BYTES_TITLE)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to store database query.");
 

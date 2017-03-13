@@ -1160,7 +1160,7 @@ mysql> DESCRIBE forum_post;
 			"NumNotif INT NOT NULL DEFAULT 0,"
 			"Subject TEXT NOT NULL,"		// Cns_MAX_BYTES_SUBJECT
 			"Content LONGTEXT NOT NULL,"		// Cns_MAX_BYTES_LONG_TEXT
-			"ImageName VARCHAR(43) NOT NULL,"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
 			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
 			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(PstCod),"
@@ -1246,7 +1246,7 @@ mysql> DESCRIBE hidden_params;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
-			"SessionId CHAR(43) NOT NULL,"
+			"SessionId CHAR(43) NOT NULL,"	// Ses_BYTES_SESSION_ID
 			"Action INT NOT NULL,"
 			"ParamName VARCHAR(255) NOT NULL,"
 			"ParamValue TEXT NOT NULL,"
@@ -1565,7 +1565,7 @@ mysql> DESCRIBE msg_content;
 			"MsgCod INT NOT NULL AUTO_INCREMENT,"
 			"Subject TEXT NOT NULL,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Img_BYTES_NAME
 			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
 			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(MsgCod),"
@@ -1590,7 +1590,7 @@ mysql> DESCRIBE msg_content_deleted;
 			"MsgCod INT NOT NULL,"
 			"Subject TEXT NOT NULL,"
 			"Content LONGTEXT NOT NULL,"
-			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Img_BYTES_NAME
 			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
 			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
 		   "UNIQUE INDEX(MsgCod),"
@@ -1823,7 +1823,7 @@ mysql> DESCRIBE pending_passwd;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS pending_passwd ("
 			"UsrCod INT NOT NULL,"
-			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_MAX_BYTES_ENCRYPTED_PASSWORD
+			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
 			"DateAndTime DATETIME NOT NULL,"
 		   "PRIMARY KEY (UsrCod))");
 
@@ -1902,49 +1902,49 @@ mysql> DESCRIBE sessions;
 18 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sessions ("
-                   "SessionId CHAR(43) NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "Password CHAR(86) COLLATE latin1_bin NOT NULL,"
-                   "Role TINYINT NOT NULL DEFAULT 0,"
-                   "CtyCod INT NOT NULL DEFAULT -1,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "LastTime DATETIME NOT NULL,"
-                   "LastRefresh DATETIME NOT NULL,"
-	           "FirstPubCod BIGINT NOT NULL DEFAULT 0,"
-	           "LastPubCod BIGINT NOT NULL DEFAULT 0,"
-                   "LastPageMsgRcv INT NOT NULL DEFAULT 1,"
-                   "LastPageMsgSnt INT NOT NULL DEFAULT 1,"
-                   "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
-		   "SearchStr VARCHAR(2047) NOT NULL DEFAULT '',"	// Sch_MAX_BYTES_STRING_TO_FIND
-                   "SideCols TINYINT NOT NULL DEFAULT 3,"
-                   "UNIQUE INDEX(SessionId),"
-                   "INDEX(UsrCod))");
+			"SessionId CHAR(43) NOT NULL,"				// Ses_BYTES_SESSION_ID
+			"UsrCod INT NOT NULL,"
+			"Password CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_BYTES_ENCRYPTED_PASSWORD
+			"Role TINYINT NOT NULL DEFAULT 0,"
+			"CtyCod INT NOT NULL DEFAULT -1,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"LastTime DATETIME NOT NULL,"
+			"LastRefresh DATETIME NOT NULL,"
+			"FirstPubCod BIGINT NOT NULL DEFAULT 0,"
+			"LastPubCod BIGINT NOT NULL DEFAULT 0,"
+			"LastPageMsgRcv INT NOT NULL DEFAULT 1,"
+			"LastPageMsgSnt INT NOT NULL DEFAULT 1,"
+			"WhatToSearch TINYINT NOT NULL DEFAULT 0,"
+			"SearchStr VARCHAR(2047) NOT NULL DEFAULT '',"		// Sch_MAX_BYTES_STRING_TO_FIND
+			"SideCols TINYINT NOT NULL DEFAULT 3,"
+		   "UNIQUE INDEX(SessionId),"
+		   "INDEX(UsrCod))");
 
    /***** Table social_comments *****/
 /*
 mysql> DESCRIBE social_comments;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| PubCod     | bigint(20)   | NO   | PRI | NULL    |       |
-| Content    | longtext     | NO   | MUL | NULL    |       |
-| ImageName  | varchar(43)  | NO   |     | NULL    |       |
-| ImageTitle | varchar(255) | NO   |     | NULL    |       |
-| ImageURL   | varchar(255) | NO   |     | NULL    |       |
-+------------+--------------+------+-----+---------+-------+
-5 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| PubCod     | bigint(20)    | NO   | PRI | NULL    |       |
+| Content    | longtext      | NO   | MUL | NULL    |       |
+| ImageName  | varchar(43)   | NO   |     | NULL    |       |
+| ImageTitle | varchar(2047) | NO   |     | NULL    |       |
+| ImageURL   | varchar(255)  | NO   |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments ("
-	           "PubCod BIGINT NOT NULL,"
-                   "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(PubCod),"
-                   "FULLTEXT(Content)) ENGINE = MYISAM;");
+			"PubCod BIGINT NOT NULL,"
+			"Content LONGTEXT NOT NULL,"
+			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
+			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(PubCod),"
+		   "FULLTEXT(Content)) ENGINE = MYISAM;");
 
    /***** Table social_comments_fav *****/
 /*
@@ -1960,13 +1960,13 @@ mysql> DESCRIBE social_comments_fav;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_comments_fav ("
-	           "FavCod BIGINT AUTO_INCREMENT,"
-	           "PubCod BIGINT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-	           "TimeFav DATETIME NOT NULL,"	// Not used. For future use
-	           "UNIQUE INDEX(FavCod),"
-                   "UNIQUE INDEX(PubCod,UsrCod),"
-                   "INDEX(UsrCod))");
+			"FavCod BIGINT AUTO_INCREMENT,"
+			"PubCod BIGINT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
+		   "UNIQUE INDEX(FavCod),"
+		   "UNIQUE INDEX(PubCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table social_notes *****/
 /*
@@ -1985,17 +1985,17 @@ mysql> DESCRIBE social_notes;
 7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes ("
-	           "NotCod BIGINT NOT NULL AUTO_INCREMENT,"
-                   "NoteType TINYINT NOT NULL,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "HieCod INT NOT NULL DEFAULT -1,"
-	           "Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "TimeNote DATETIME NOT NULL,"
-                   "UNIQUE INDEX(NotCod),"
-                   "INDEX(NoteType,Cod),"
-                   "INDEX(UsrCod),"
-                   "INDEX(TimeNote))");
+			"NotCod BIGINT NOT NULL AUTO_INCREMENT,"
+			"NoteType TINYINT NOT NULL,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"HieCod INT NOT NULL DEFAULT -1,"
+			"Unavailable ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"TimeNote DATETIME NOT NULL,"
+		   "UNIQUE INDEX(NotCod),"
+		   "INDEX(NoteType,Cod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(TimeNote))");
 
    /***** Table social_notes_fav *****/
 /*
@@ -2011,36 +2011,36 @@ mysql> DESCRIBE social_notes_fav;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_notes_fav ("
-	           "FavCod BIGINT AUTO_INCREMENT,"
-	           "NotCod BIGINT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-	           "TimeFav DATETIME NOT NULL,"	// Not used. For future use
-	           "UNIQUE INDEX(FavCod),"
-                   "UNIQUE INDEX(NotCod,UsrCod),"
-                   "INDEX(UsrCod))");
+			"FavCod BIGINT AUTO_INCREMENT,"
+			"NotCod BIGINT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"TimeFav DATETIME NOT NULL,"	// Not used. For future use
+		   "UNIQUE INDEX(FavCod),"
+		   "UNIQUE INDEX(NotCod,UsrCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table social_posts *****/
 /*
 mysql> DESCRIBE social_posts;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| PstCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
-| Content    | longtext     | NO   | MUL | NULL    |                |
-| ImageName  | varchar(43)  | NO   |     | NULL    |                |
-| ImageTitle | varchar(255) | NO   |     | NULL    |                |
-| ImageURL   | varchar(255) | NO   |     | NULL    |                |
-+------------+--------------+------+-----+---------+----------------+
-5 rows in set (0.00 sec)
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| PstCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Content    | longtext      | NO   | MUL | NULL    |                |
+| ImageName  | varchar(43)   | NO   |     | NULL    |                |
+| ImageTitle | varchar(2047) | NO   |     | NULL    |                |
+| ImageURL   | varchar(255)  | NO   |     | NULL    |                |
++------------+---------------+------+-----+---------+----------------+
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_posts ("
-                   "PubCod INT NOT NULL AUTO_INCREMENT,"
-                   "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL,"
-                   "ImageTitle VARCHAR(255) NOT NULL,"
-                   "ImageURL VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(PubCod),"
-                   "FULLTEXT(Content)) ENGINE = MYISAM;");
+			"PubCod INT NOT NULL AUTO_INCREMENT,"
+			"Content LONGTEXT NOT NULL,"
+			"ImageName VARCHAR(43) NOT NULL,"	// Img_BYTES_NAME
+			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(PubCod),"
+		   "FULLTEXT(Content)) ENGINE = MYISAM;");
 
    /***** Table social_pubs *****/
 /*
@@ -2057,16 +2057,16 @@ mysql> DESCRIBE social_pubs;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_pubs ("
-	           "PubCod BIGINT NOT NULL AUTO_INCREMENT,"
-                   "NotCod BIGINT NOT NULL,"
-                   "PublisherCod INT NOT NULL,"
-	           "PubType TINYINT NOT NULL,"
-                   "TimePublish DATETIME NOT NULL,"
-                   "UNIQUE INDEX(PubCod),"
-                   "INDEX(NotCod,PublisherCod,PubType),"
-                   "INDEX(PublisherCod),"
-                   "INDEX(PubType),"
-                   "INDEX(TimePublish))");
+			"PubCod BIGINT NOT NULL AUTO_INCREMENT,"
+			"NotCod BIGINT NOT NULL,"
+			"PublisherCod INT NOT NULL,"
+			"PubType TINYINT NOT NULL,"
+			"TimePublish DATETIME NOT NULL,"
+		   "UNIQUE INDEX(PubCod),"
+		   "INDEX(NotCod,PublisherCod,PubType),"
+		   "INDEX(PublisherCod),"
+		   "INDEX(PubType),"
+		   "INDEX(TimePublish))");
 
    /***** Table social_timelines *****/
 /*
@@ -2080,9 +2080,9 @@ mysql> DESCRIBE social_timelines;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS social_timelines ("
-                   "SessionId CHAR(43) NOT NULL,"
-                   "NotCod BIGINT NOT NULL,"
-                   "UNIQUE INDEX(SessionId,NotCod))");
+			"SessionId CHAR(43) NOT NULL,"	// Ses_BYTES_SESSION_ID
+			"NotCod BIGINT NOT NULL,"
+		   "UNIQUE INDEX(SessionId,NotCod))");
 
    /***** Table sta_degrees *****/
 /*
@@ -2559,7 +2559,7 @@ mysql> DESCRIBE usr_data;
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
                    "UsrCod INT NOT NULL AUTO_INCREMENT,"
                    "EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '',"
-                   "Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '',"
+                   "Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '',"			// Pwd_BYTES_ENCRYPTED_PASSWORD
                    "Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
                    "Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
                    "FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"

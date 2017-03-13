@@ -1299,7 +1299,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Ptr = Gbl.Usrs.Select.All;
 	 while (*Ptr)
 	   {
-	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+	                                       Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
             Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
 	    if (UsrDat.UsrCod > 0)
 	      {

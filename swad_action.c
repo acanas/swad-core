@@ -4782,7 +4782,7 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
                                    const char *Id,const char *Anchor,const char *OnSubmit)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
+   char ParamsStr[256 + 256 + Ses_BYTES_SESSION_ID + 256];
 
    if (!Gbl.Form.Inside)
      {
@@ -4818,12 +4818,12 @@ static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLoca
      }
   }
 
-// Params should have space for 256 + 256 + Ses_LENGTH_SESSION_ID + 256 bytes
+// Params should have space for 256 + 256 + Ses_BYTES_SESSION_ID + 256 bytes
 void Act_SetParamsForm (char *ParamsStr,Act_Action_t NextAction,
                         bool PutParameterLocationIfNoSesion)
   {
    char ParamAction[256];
-   char ParamSession[256 + Ses_LENGTH_SESSION_ID];
+   char ParamSession[256 + Ses_BYTES_SESSION_ID];
    char ParamLocation[256];
 
    ParamAction[0] = '\0';

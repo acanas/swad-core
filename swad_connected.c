@@ -641,7 +641,7 @@ void Con_UpdateMeInConnectedList (void)
 
 void Con_RemoveOldConnected (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Remove old users from connected list *****/
    sprintf (Query,"DELETE FROM connected WHERE UsrCod NOT IN"

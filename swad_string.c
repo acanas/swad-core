@@ -112,8 +112,8 @@ action="https://localhost/swad/es" method="post">
 void Str_InsertLinks (char *Txt,unsigned long MaxLength,size_t MaxCharsURLOnScreen)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char ParamsStr[256 + 256 + Ses_LENGTH_SESSION_ID + 256];
-   char Anchor1Nick[256 + 256 + 256 + Ses_LENGTH_SESSION_ID + 256 + 256];
+   char ParamsStr[256 + 256 + Ses_BYTES_SESSION_ID + 256];
+   char Anchor1Nick[256 + 256 + 256 + Ses_BYTES_SESSION_ID + 256 + 256];
    char Anchor2Nick[256 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
    size_t TxtLength;
    size_t TxtLengthWithInsertedAnchors;

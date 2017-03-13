@@ -31,6 +31,8 @@
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
+#define Img_BYTES_NAME	Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+
 #define Img_MAX_CHARS_TITLE	(128 - 1)	// 127
 #define Img_MAX_BYTES_TITLE	((Img_MAX_CHARS_TITLE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
@@ -91,7 +93,7 @@ struct Image
   {
    Img_Action_t Action;
    Img_FileStatus_t Status;
-   char Name[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
+   char Name[Img_BYTES_NAME + 1];
    char *Title;	// Title/attribution (it must be initialized to NULL
 		// in order to not trying to free it when no memory allocated)
    char *URL;	// URL, i.e. link to original big photo or video

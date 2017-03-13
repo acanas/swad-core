@@ -487,7 +487,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get encrypted password */
    Str_Copy (UsrDat->Password,row[1],
-             Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+             Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
@@ -4886,7 +4886,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 
             /* Get encrypted password (row[2]) */
 	    Str_Copy (UsrInList->Password,row[2],
-	              Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
+	              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
             /* Get user's surname 1 (row[3]) */
 	    Str_Copy (UsrInList->Surname1,row[3],
@@ -5401,7 +5401,8 @@ bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
       Ptr = Gbl.Usrs.Select.All;
       while (*Ptr)
 	{
-	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,
+	                                    Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
 	 if (!strcmp (EncryptedUsrCodToFind,EncryptedUsrCod))
 	    return true;        // Found!
 	}
@@ -5423,7 +5424,8 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
    Ptr = Gbl.Usrs.Select.All;
    while (*Ptr)
      {
-      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
+      Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
+                                         Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (UsrDat.UsrCod > 0)
          NumUsrs++;

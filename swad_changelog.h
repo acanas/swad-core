@@ -200,6 +200,8 @@
 // TODO: Subject in msg_content and msg_content_deleted should be VARCHAR(255) in order to be copied directly to SummaryStr
 // TODO: Check how to get a summary of a social post or comments
 
+// TODO: Check default values for ImageName, ImageTitle and ImageURL in database tables
+
 // TODO: En la agenda debe poder repetirse el nombre del evento
 // TODO: Cuando hay un fallo al rellenar el formulario de nuevo evento en la agenda se borran los datos
 
@@ -207,15 +209,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.23 (2017-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.24 (2017-03-13)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.155.23:Mar 13, 2017	Adjusting size of database fields. (216957 lines)
+        Version 16.155.24:Mar 13, 2017	Adjusting size of database fields. (216988 lines)
 					2 changes necessary in database:
+ALTER TABLE social_comments CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;
+ALTER TABLE social_posts CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;
+
+        Version 16.155.23:Mar 13, 2017	Adjusting size of database fields. (216957 lines)
+					4 changes necessary in database:
 ALTER TABLE plugins CHANGE COLUMN Name Name VARCHAR(511) NOT NULL;
 ALTER TABLE plugins CHANGE COLUMN Description Description VARCHAR(2047) NOT NULL;
 ALTER TABLE plugins CHANGE COLUMN Logo Logo VARCHAR(31) NOT NULL;

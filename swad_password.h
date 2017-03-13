@@ -37,7 +37,7 @@
 #define Pwd_MAX_CHARS_PLAIN_PASSWORD	(256 - 1)
 #define Pwd_MAX_BYTES_PLAIN_PASSWORD	Pwd_MAX_CHARS_PLAIN_PASSWORD
 
-#define Pwd_MAX_BYTES_ENCRYPTED_PASSWORD	Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64
+#define Pwd_BYTES_ENCRYPTED_PASSWORD	Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64
 
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
