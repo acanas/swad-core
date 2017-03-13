@@ -33,9 +33,6 @@
 /************************** Public types and constants ***********************/
 /*****************************************************************************/
 
-#define Mai_MAX_CHARS_MAIL_DOMAIN	(128 - 1)	// 127
-#define Mai_MAX_BYTES_MAIL_DOMAIN	((Mai_MAX_CHARS_MAIL_DOMAIN + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 #define Mai_MAX_CHARS_MAIL_INFO		(128 - 1)	// 127
 #define Mai_MAX_BYTES_MAIL_INFO		((Mai_MAX_CHARS_MAIL_INFO + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
 
@@ -51,7 +48,7 @@ typedef enum
 struct Mail
   {
    long MaiCod;
-   char Domain[Mai_MAX_BYTES_MAIL_DOMAIN + 1];
+   char Domain[Cns_MAX_BYTES_EMAIL + 1];
    char Info[Mai_MAX_BYTES_MAIL_INFO + 1];
    unsigned NumUsrs;
   };
@@ -78,7 +75,7 @@ void Mai_ListEmails (void); // Creates an email message to students
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
-long Mai_GetUsrCodFromEmail (const char *Email);
+long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL + 1]);
 
 void Mai_PutLinkToChangeOtherUsrEmails (void);
 void Mai_ShowFormOthEmail (void);
@@ -87,7 +84,7 @@ void Mai_RemoveMyUsrEmail (void);
 void Mai_RemoveOtherUsrEmail (void);
 void May_NewMyUsrEmail (void);
 void Mai_NewOtherUsrEmail (void);
-bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail);
+bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL + 1]);
 
 void Mai_PutButtonToCheckEmailAddress (void);
 bool Mai_SendMailMsgToConfirmEmail (void);

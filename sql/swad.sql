@@ -699,11 +699,10 @@ CREATE TABLE IF NOT EXISTS log_ws (
 --
 CREATE TABLE IF NOT EXISTS mail_domains (
 	MaiCod INT NOT NULL AUTO_INCREMENT,
-	Domain VARCHAR(127) NOT NULL,
-	Info VARCHAR(127) NOT NULL,
+	Domain VARCHAR(2047) NOT NULL,
+	Info VARCHAR(2047) NOT NULL,
 	UNIQUE INDEX(MaiCod),
-	UNIQUE INDEX(Domain),
-	INDEX(Info));
+	UNIQUE INDEX(Domain));
 --
 -- Table marks_properties: stores information about files of marks
 --

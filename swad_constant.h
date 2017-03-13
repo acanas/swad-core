@@ -45,6 +45,9 @@
 #define Cns_MAX_CHARS_DATE	(4 + 1 + 2 + 1 + 2)
 #define Cns_MAX_BYTES_DATE	Cns_MAX_CHARS_DATE
 
+#define Cns_MAX_CHARS_EMAIL	(256 - 1)		// 255
+#define Cns_MAX_BYTES_EMAIL	Cns_MAX_CHARS_EMAIL	// 255
+
 #define Cns_MAX_CHARS_SUBJECT	(256 - 1)	// 255
 #define Cns_MAX_BYTES_SUBJECT	((Cns_MAX_CHARS_SUBJECT + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 4095
 

@@ -1486,32 +1486,31 @@ mysql> DESCRIBE log_ws;
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS log_ws ("
-                   "LogCod INT NOT NULL,"
-                   "PlgCod INT NOT NULL,"
-                   "FunCod INT NOT NULL,"
-                   "UNIQUE INDEX(LogCod),"
-                   "INDEX(PlgCod),"
-                   "INDEX(FunCod))");
+			"LogCod INT NOT NULL,"
+			"PlgCod INT NOT NULL,"
+			"FunCod INT NOT NULL,"
+		   "UNIQUE INDEX(LogCod),"
+		   "INDEX(PlgCod),"
+		   "INDEX(FunCod))");
 
    /***** Table mail_domains *****/
 /*
 mysql> DESCRIBE mail_domains;
-+--------+--------------+------+-----+---------+----------------+
-| Field  | Type         | Null | Key | Default | Extra          |
-+--------+--------------+------+-----+---------+----------------+
-| MaiCod | int(11)      | NO   | PRI | NULL    | auto_increment |
-| Domain | varchar(127) | NO   | UNI | NULL    |                |
-| Info   | varchar(127) | NO   | MUL | NULL    |                |
-+--------+--------------+------+-----+---------+----------------+
-3 rows in set (0.00 sec)
++--------+---------------+------+-----+---------+----------------+
+| Field  | Type          | Null | Key | Default | Extra          |
++--------+---------------+------+-----+---------+----------------+
+| MaiCod | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Domain | varchar(255)  | NO   | UNI | NULL    |                |
+| Info   | varchar(2047) | NO   |     | NULL    |                |
++--------+---------------+------+-----+---------+----------------+
+3 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mail_domains ("
-                   "MaiCod INT NOT NULL AUTO_INCREMENT,"
-                   "Domain VARCHAR(127) NOT NULL,"
-                   "Info VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX(MaiCod),"
-                   "UNIQUE INDEX(Domain),"
-                   "INDEX(Info))");
+			"MaiCod INT NOT NULL AUTO_INCREMENT,"
+			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL
+			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO
+		   "UNIQUE INDEX(MaiCod),"
+		   "UNIQUE INDEX(Domain))");
 
    /***** Table marks_properties *****/
 /*

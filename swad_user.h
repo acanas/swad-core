@@ -62,12 +62,6 @@
 						// Surname1                         +' '+ Surname2                           +  ','+' ' + FirstName
 						// Surname1                         +' '+ Surname2                           + '<br />' + FirstName
 
-#define Usr_MAX_CHARS_USR_EMAIL	(128 - 1)		// 127
-#define Usr_MAX_BYTES_USR_EMAIL	Usr_MAX_CHARS_USR_EMAIL	// 127
-
-#define Usr_MAX_CHARS_USR_LOGIN	Usr_MAX_CHARS_USR_EMAIL	// 127, maximum number of chars of @nick, email or ID
-#define Usr_MAX_BYTES_USR_LOGIN	((Usr_MAX_CHARS_USR_LOGIN + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 2047
-
 #define Usr_BIRTHDAY_STR_DB_LENGTH (4 + 1 + 2 + 1 + 2)	// "'%04u-%02u-%02u'"
 
 #define Usr_MAX_CHARS_ADDRESS	(128 - 1)	// 127
@@ -124,7 +118,7 @@ struct UsrData
   {
    long UsrCod;
    char EncryptedUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
-   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN + 1];	// String to store the ID, nickname or email
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
@@ -142,7 +136,7 @@ struct UsrData
    char FirstName	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char FullName	[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
-   char Email		[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char Email		[Cns_MAX_BYTES_EMAIL + 1];
    bool EmailConfirmed;
    char Photo		[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo

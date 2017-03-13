@@ -67,8 +67,8 @@ extern struct Globals Gbl;
 static void Mai_GetParamMaiOrder (void);
 static void Mai_PutIconToEditMailDomains (void);
 static void Mai_GetListMailDomainsAllowedForNotif (void);
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1]);
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1]);
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL + 1]);
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL + 1]);
 
 static void Mai_ListMailDomainsForEdition (void);
 static void Mai_PutParamMaiCod (long MaiCod);
@@ -82,9 +82,9 @@ static void Mai_PutHeadMailDomains (void);
 static void Mai_CreateMailDomain (struct Mail *Mai);
 
 static void Mai_RemoveEmail (struct UsrData *UsrDat);
-static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email);
+static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL + 1]);
 static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe);
-static void Mai_InsertMailKey (const char *Email,
+static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1]);
 
 /*****************************************************************************/
@@ -291,7 +291,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
          /* Get the mail domain (row[1]) */
          Str_Copy (Mai->Domain,row[1],
-                   Mai_MAX_BYTES_MAIL_DOMAIN);
+                   Cns_MAX_BYTES_EMAIL);
 
          /* Get the mail domain info (row[2]) */
          Str_Copy (Mai->Info,row[2],
@@ -320,7 +320,7 @@ static void Mai_GetListMailDomainsAllowedForNotif (void)
 
 bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
   {
-   char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1];
+   char MailDomain[Cns_MAX_BYTES_EMAIL + 1];
 
    /***** Check #1: is my email address confirmed? *****/
    if (!UsrDat->EmailConfirmed)
@@ -335,7 +335,7 @@ bool Mai_CheckIfUsrCanReceiveEmailNotif (const struct UsrData *UsrDat)
 /********************** Get mailbox from email address ***********************/
 /*****************************************************************************/
 
-static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1])
+static void Mai_GetMailDomain (const char *Email,char MailDomain[Cns_MAX_BYTES_EMAIL + 1])
   {
    const char *Ptr;
 
@@ -347,7 +347,7 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_M
          Ptr++;					// Skip '@'
          if (strchr (Ptr,(int) '@') == NULL)	// No more '@' found
             Str_Copy (MailDomain,Ptr,
-                      Mai_MAX_BYTES_MAIL_DOMAIN);
+                      Cns_MAX_BYTES_EMAIL);
         }
   }
 
@@ -355,9 +355,9 @@ static void Mai_GetMailDomain (const char *Email,char MailDomain[Mai_MAX_BYTES_M
 /************ Check if a mail domain is allowed for notifications ************/
 /*****************************************************************************/
 
-static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Mai_MAX_BYTES_MAIL_DOMAIN + 1])
+static bool Mai_CheckIfMailDomainIsAllowedForNotif (const char MailDomain[Cns_MAX_BYTES_EMAIL + 1])
   {
-   char Query[512];
+   char Query[128 + Cns_MAX_BYTES_EMAIL];
 
    /***** Get number of mail_domains with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM mail_domains WHERE Domain='%s'",
@@ -394,7 +394,7 @@ void Mai_WriteWarningEmailNotifications (void)
 
 void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
   {
-   char Query[1024];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -417,7 +417,7 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
 
          /* Get the short name of the mail (row[0]) */
          Str_Copy (Mai->Domain,row[0],
-                   Mai_MAX_BYTES_MAIL_DOMAIN);
+                   Cns_MAX_BYTES_EMAIL);
 
          /* Get the full name of the mail (row[1]) */
          Str_Copy (Mai->Info,row[1],
@@ -490,7 +490,7 @@ static void Mai_ListMailDomainsForEdition (void)
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"Domain\""
 	                 " size=\"15\" maxlength=\"%u\" value=\"%s\""
                          " onchange=\"document.getElementById('%s').submit();\" />",
-               Mai_MAX_CHARS_MAIL_DOMAIN,Mai->Domain,
+               Cns_MAX_CHARS_EMAIL,Mai->Domain,
                Gbl.Form.Id);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -544,7 +544,7 @@ long Mai_GetParamMaiCod (void)
 void Mai_RemoveMailDomain (void)
   {
    extern const char *Txt_Email_domain_X_removed;
-   char Query[512];
+   char Query[128];
    struct Mail Mai;
 
    /***** Get mail code *****/
@@ -555,7 +555,8 @@ void Mai_RemoveMailDomain (void)
    Mai_GetDataOfMailDomainByCod (&Mai);
 
    /***** Remove mail *****/
-   sprintf (Query,"DELETE FROM mail_domains WHERE MaiCod='%ld'",Mai.MaiCod);
+   sprintf (Query,"DELETE FROM mail_domains WHERE MaiCod='%ld'",
+            Mai.MaiCod);
    DB_QueryDELETE (Query,"can not remove a mail domain");
 
    /***** Write message to show the change made *****/
@@ -608,7 +609,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
       case Cns_SHRT_NAME:
          ParamName = "Domain";
          FieldName = "Domain";
-         MaxBytes = Mai_MAX_BYTES_MAIL_DOMAIN;
+         MaxBytes = Cns_MAX_BYTES_EMAIL;
          CurrentMaiName = Mai->Domain;
          break;
       case Cns_FULL_NAME:
@@ -743,7 +744,7 @@ static void Mai_PutFormToCreateMailDomain (void)
                       " size=\"15\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>",
-            Mai_MAX_CHARS_MAIL_DOMAIN,Mai->Domain);
+            Cns_MAX_CHARS_EMAIL,Mai->Domain);
 
    /***** Mail domain info *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
@@ -807,7 +808,7 @@ void Mai_RecFormNewMailDomain (void)
 
    /***** Get parameters from form *****/
    /* Get mail short name */
-   Par_GetParToText ("Domain",Mai->Domain,Mai_MAX_BYTES_MAIL_DOMAIN);
+   Par_GetParToText ("Domain",Mai->Domain,Cns_MAX_BYTES_EMAIL);
 
    /* Get mail full name */
    Par_GetParToText ("Info",Mai->Info,Mai_MAX_BYTES_MAIL_INFO);
@@ -844,7 +845,9 @@ void Mai_RecFormNewMailDomain (void)
 static void Mai_CreateMailDomain (struct Mail *Mai)
   {
    extern const char *Txt_Created_new_email_domain_X;
-   char Query[1024];
+   char Query[128 +
+              Cns_MAX_BYTES_EMAIL +
+              Mai_MAX_BYTES_MAIL_INFO];
 
    /***** Create a new mail *****/
    sprintf (Query,"INSERT INTO mail_domains (Domain,Info) VALUES ('%s','%s')",
@@ -1004,9 +1007,9 @@ bool Mai_CheckIfEmailIsValid (const char *Email)
    bool ArrobaFound = false;
 
    /***** An email address must have a number of characters
-          5 <= Length <= Usr_MAX_BYTES_USR_EMAIL *****/
+          5 <= Length <= Cns_MAX_BYTES_EMAIL *****/
    if (Length < 5 ||
-       Length > Usr_MAX_BYTES_USR_EMAIL)
+       Length > Cns_MAX_BYTES_EMAIL)
       return false;
 
    /***** An email address can have digits, letters, '.', '-' and '_';
@@ -1068,7 +1071,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
       /* Get email */
       row = mysql_fetch_row (mysql_res);
       Str_Copy (UsrDat->Email,row[0],
-                Usr_MAX_BYTES_USR_EMAIL);
+                Cns_MAX_BYTES_EMAIL);
       UsrDat->EmailConfirmed = (row[1][0] == 'Y');
       Found = true;
      }
@@ -1084,9 +1087,9 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 /*****************************************************************************/
 // Returns -1L if email not found
 
-long Mai_GetUsrCodFromEmail (const char *Email)
+long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL + 1])
   {
-   char Query[1024];
+   char Query[512 + Cns_MAX_BYTES_EMAIL];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsrs;
@@ -1325,7 +1328,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	              "<input type=\"email\" id=\"NewEmail\" name=\"NewEmail\""
 	              " size=\"18\" maxlength=\"%u\" value=\"%s\" />"
 	              "</div>",
-            Usr_MAX_CHARS_USR_EMAIL,
+            Cns_MAX_CHARS_EMAIL,
             Gbl.Usrs.Me.UsrDat.Email);
    Lay_PutCreateButtonInline (NumEmails ? Txt_Change_email :	// User already has an email address
         	                          Txt_Save);		// User has no email address yet
@@ -1376,12 +1379,12 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
   {
    extern const char *Txt_Email_X_removed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char Email[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char Email[Cns_MAX_BYTES_EMAIL + 1];
 
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
-      Par_GetParToText ("Email",Email,Usr_MAX_BYTES_USR_EMAIL);
+      Par_GetParToText ("Email",Email,Cns_MAX_BYTES_EMAIL);
 
       /***** Remove one of user's old email addresses *****/
       Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
@@ -1401,9 +1404,9 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 /*************** Remove an old email address from database *******************/
 /*****************************************************************************/
 
-static void Mai_RemoveEmailFromDB (long UsrCod,const char *Email)
+static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EMAIL + 1])
   {
-   char Query[1024];
+   char Query[256 + Cns_MAX_BYTES_EMAIL];
 
    /***** Remove an old email address *****/
    sprintf (Query,"DELETE FROM usr_emails"
@@ -1458,12 +1461,12 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-   char NewEmail[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char NewEmail[Cns_MAX_BYTES_EMAIL + 1];
 
    if (Usr_ICanEditOtherUsr (UsrDat))
      {
       /***** Get new email from form *****/
-      Par_GetParToText ("NewEmail",NewEmail,Usr_MAX_BYTES_USR_EMAIL);
+      Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL);
 
       if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
 	{
@@ -1517,9 +1520,9 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 // Return true if email is successfully updated
 // Return false if email can not be updated beacuse it is registered by another user
 
-bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char *NewEmail)
+bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL + 1])
   {
-   char Query[1024];
+   char Query[256 + Cns_MAX_BYTES_EMAIL];
 
    /***** Check if the new email matches any of the confirmed emails of other users *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
@@ -1664,10 +1667,12 @@ void Mai_ShowMsgConfirmEmailHasBeenSent (void)
 /************************* Insert mail hey in database ***********************/
 /*****************************************************************************/
 
-static void Mai_InsertMailKey (const char *Email,
+static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL + 1],
                                const char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1])
   {
-   char Query[512 + Mai_LENGTH_EMAIL_CONFIRM_KEY];
+   char Query[256 +
+              Cns_MAX_BYTES_EMAIL +
+              Mai_LENGTH_EMAIL_CONFIRM_KEY];
 
    /***** Remove expired pending emails from database *****/
    sprintf (Query,"DELETE FROM pending_emails"
@@ -1694,12 +1699,14 @@ void Mai_ConfirmEmail (void)
    extern const char *Txt_The_email_X_has_been_confirmed;
    extern const char *Txt_The_email_address_has_not_been_confirmed;
    extern const char *Txt_Failed_email_confirmation_key;
-   char Query[1024];
+   char Query[256 +
+              Cns_MAX_BYTES_EMAIL +
+              Mai_LENGTH_EMAIL_CONFIRM_KEY];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    char MailKey[Mai_LENGTH_EMAIL_CONFIRM_KEY + 1];
    long UsrCod;
-   char Email[Usr_MAX_BYTES_USR_EMAIL + 1];
+   char Email[Cns_MAX_BYTES_EMAIL + 1];
    bool KeyIsCorrect = false;
    bool Confirmed;
 
@@ -1718,7 +1725,7 @@ void Mai_ConfirmEmail (void)
 
       /* Get user's email */
       Str_Copy (Email,row[1],
-                Usr_MAX_BYTES_USR_EMAIL);
+                Cns_MAX_BYTES_EMAIL);
 
       KeyIsCorrect = true;
      }

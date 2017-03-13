@@ -207,33 +207,39 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.17 (2017-03-12)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.18 (2017-03-13)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.155.17:Mar 11, 2017	Adjusting size of database fields. (216755 lines)
+        Version 16.155.18:Mar 13, 2017	Adjusting size of database fields. (216761 lines)
+					3 changes necessary in database:
+DROP INDEX Info ON mail_domains;
+ALTER TABLE mail_domains CHANGE COLUMN Domain Domain VARCHAR(255) NOT NULL;
+ALTER TABLE mail_domains CHANGE COLUMN Info Info VARCHAR(2047) NOT NULL;
+
+        Version 16.155.17:Mar 12, 2017	Adjusting size of database fields. (216755 lines)
 					2 changes necessary in database:
 ALTER TABLE log_search CHANGE COLUMN SearchStr SearchStr VARCHAR(2047) NOT NULL;
 ALTER TABLE sessions CHANGE COLUMN SearchString SearchStr VARCHAR(2047) NOT NULL DEFAULT '';
 
-        Version 16.155.16:Mar 11, 2017	Adjusting size of database fields. (216749 lines)
+        Version 16.155.16:Mar 12, 2017	Adjusting size of database fields. (216749 lines)
 					1 change necessary in database:
 ALTER TABLE log_comments CHANGE COLUMN Comments Comments TEXT NOT NULL;
 
-        Version 16.155.15:Mar 11, 2017	Adjusting size of database fields. (216746 lines)
+        Version 16.155.15:Mar 12, 2017	Adjusting size of database fields. (216746 lines)
 					2 changes necessary in database:
 ALTER TABLE links CHANGE COLUMN ShortName ShortName VARCHAR(511) NOT NULL;
 ALTER TABLE links CHANGE COLUMN FullName FullName VARCHAR(2047) NOT NULL;
 
-        Version 16.155.14:Mar 11, 2017	Adjusting size of database fields. (216737 lines)
+        Version 16.155.14:Mar 12, 2017	Adjusting size of database fields. (216737 lines)
 					2 changes necessary in database:
 ALTER TABLE institutions CHANGE COLUMN ShortName ShortName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL;
 ALTER TABLE institutions CHANGE COLUMN FullName FullName VARCHAR(2047) COLLATE latin1_spanish_ci NOT NULL;
 
-        Version 16.155.13:Mar 11, 2017	Adjusting size of database fields. (216734 lines)
+        Version 16.155.13:Mar 12, 2017	Adjusting size of database fields. (216734 lines)
 					1 change necessary in database:
 ALTER TABLE holidays CHANGE COLUMN Name Name VARCHAR(2047) NOT NULL;
 

@@ -695,7 +695,7 @@ int swad__createAccount (struct soap *soap,
      {
       /* Email updated sucessfully */
       Str_Copy (Gbl.Usrs.Me.UsrDat.Email,userEmail,
-                Usr_MAX_BYTES_USR_EMAIL);
+                Cns_MAX_BYTES_EMAIL);
       Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
      }
 
@@ -767,7 +767,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                                   char *userID,char *userPassword,char *appKey,				// input
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut)	// output
   {
-   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];
    int ReturnCode;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -808,7 +808,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,
-             Usr_MAX_BYTES_USR_LOGIN);
+             Cns_MAX_BYTES_EMAIL);
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
      {
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
@@ -1078,7 +1078,7 @@ int swad__getNewPassword (struct soap *soap,
                           struct swad__getNewPasswordOutput *getNewPasswordOut)	// output
   {
    int ReturnCode;
-   char UsrIDNickOrEmail[Usr_MAX_BYTES_USR_LOGIN + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1098,7 +1098,7 @@ int swad__getNewPassword (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,
-             Usr_MAX_BYTES_USR_LOGIN);
+             Cns_MAX_BYTES_EMAIL);
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
      {
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);

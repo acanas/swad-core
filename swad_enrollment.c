@@ -330,7 +330,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
-            Usr_MAX_CHARS_USR_LOGIN);
+            Cns_MAX_CHARS_EMAIL);
 
    /***** Send button*****/
    Lay_PutConfirmButton (Txt_Continue);
@@ -1421,7 +1421,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	    /* Find next string in text */
 	    Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                     Usr_MAX_BYTES_USR_LOGIN);
+	                                     Cns_MAX_BYTES_EMAIL);
 
 	    /* Reset default list of users' codes */
 	    ListUsrCods.NumUsrs = 0;
@@ -1544,7 +1544,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	 /* Find next string in text */
 	 Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                  Usr_MAX_BYTES_USR_LOGIN);
+	                                  Cns_MAX_BYTES_EMAIL);
 
 	 /* Reset default list of users' codes */
 	 ListUsrCods.NumUsrs = 0;
