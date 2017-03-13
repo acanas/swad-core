@@ -905,7 +905,10 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
    else                                        // The user does not exist ==> add him/her
      {
       /* Add the user, with one access */
-      sprintf (Query,"INSERT INTO clicks_without_photo (UsrCod,NumClicks) VALUES ('%ld',1)",
+      sprintf (Query,"INSERT INTO clicks_without_photo"
+	             " (UsrCod,NumClicks)"
+	             " VALUES"
+	             " ('%ld',1)",
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryINSERT (Query,"can not create number of clicks without photo");
       NumClicks = 1;
@@ -2287,7 +2290,8 @@ static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsig
 
    sprintf (Query,"REPLACE INTO sta_degrees"
                   " (DegCod,Sex,NumStds,NumStdsWithPhoto,TimeAvgPhoto,TimeToComputeAvgPhoto)"
-                  " VALUES ('%ld','%s','%u','%u',NOW(),'%ld')",
+                  " VALUES"
+                  " ('%ld','%s','%u','%u',NOW(),'%ld')",
 	    DegCod,Usr_StringsSexDB[Sex],NumStds,NumStdsWithPhoto,TimeToComputeAvgPhotoInMicroseconds);
    DB_QueryREPLACE (Query,"can not save stats of a degree");
   }

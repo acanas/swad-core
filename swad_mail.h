@@ -48,7 +48,7 @@ typedef enum
 struct Mail
   {
    long MaiCod;
-   char Domain[Cns_MAX_BYTES_EMAIL + 1];
+   char Domain[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char Info[Mai_MAX_BYTES_MAIL_INFO + 1];
    unsigned NumUsrs;
   };
@@ -75,7 +75,7 @@ void Mai_ListEmails (void); // Creates an email message to students
 
 bool Mai_CheckIfEmailIsValid (const char *Email);
 bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat);
-long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL + 1]);
+long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_PutLinkToChangeOtherUsrEmails (void);
 void Mai_ShowFormOthEmail (void);
@@ -84,7 +84,7 @@ void Mai_RemoveMyUsrEmail (void);
 void Mai_RemoveOtherUsrEmail (void);
 void May_NewMyUsrEmail (void);
 void Mai_NewOtherUsrEmail (void);
-bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL + 1]);
+bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]);
 
 void Mai_PutButtonToCheckEmailAddress (void);
 bool Mai_SendMailMsgToConfirmEmail (void);

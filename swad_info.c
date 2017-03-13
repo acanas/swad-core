@@ -709,8 +709,10 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
    if (IHaveRead)
      {
       /***** Insert I have read course information *****/
-      sprintf (Query,"REPLACE INTO crs_info_read (UsrCod,CrsCod,InfoType)"
-                     " VALUES ('%ld','%ld','%s')",
+      sprintf (Query,"REPLACE INTO crs_info_read"
+	             " (UsrCod,CrsCod,InfoType)"
+                     " VALUES"
+                     " ('%ld','%ld','%s')",
                Gbl.Usrs.Me.UsrDat.UsrCod,
                Gbl.CurrentCrs.Crs.CrsCod,
                Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -1480,8 +1482,10 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
      }
    else		// Info is not stored in database, so insert it
      {
-      sprintf (Query,"INSERT INTO crs_info_src (CrsCod,InfoType,InfoSrc,MustBeRead)"
-                     " VALUES ('%ld','%s','%s','N')",
+      sprintf (Query,"INSERT INTO crs_info_src"
+	             " (CrsCod,InfoType,InfoSrc,MustBeRead)"
+                     " VALUES"
+                     " ('%ld','%s','%s','N')",
                Gbl.CurrentCrs.Crs.CrsCod,
                Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
                Inf_NamesInDBForInfoSrc[InfoSrc]);
@@ -1668,7 +1672,8 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
    /***** Insert or replace info source for a specific type of course information *****/
    sprintf (Query,"REPLACE INTO crs_info_txt"
 	          " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
-                  " VALUES ('%ld','%s','%s','%s')",
+                  " VALUES"
+                  " ('%ld','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
             InfoTxtHTML,InfoTxtMD);

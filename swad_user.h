@@ -118,7 +118,7 @@ struct UsrData
   {
    long UsrCod;
    char EncryptedUsrCod [Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];	// String to store the ID, nickname or email
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// String to store the ID, nickname or email
    struct
      {
       struct ListIDs *List;
@@ -136,7 +136,7 @@ struct UsrData
    char FirstName	[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char FullName	[Usr_MAX_BYTES_FULL_NAME + 1];
    Usr_Sex_t Sex;
-   char Email		[Cns_MAX_BYTES_EMAIL + 1];
+   char Email		[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    bool EmailConfirmed;
    char Photo		[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];	// Name of public link to photo
    Pri_Visibility_t PhotoVisibility;	// Who can see user's photo

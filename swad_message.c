@@ -1301,7 +1301,8 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    /***** Insert message subject and content in the database *****/
    sprintf (Query,"INSERT INTO msg_content"
 	          " (Subject,Content,ImageName,ImageTitle,ImageURL)"
-                  " VALUES ('%s','%s','%s','%s','%s')",
+                  " VALUES"
+                  " ('%s','%s','%s','%s','%s')",
             Subject,Content,
             Image->Name,
             Image->Title ? Image->Title : "",
@@ -1309,8 +1310,10 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    MsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
 
    /***** Insert message in sent messages *****/
-   sprintf (Query,"INSERT INTO msg_snt (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-                  " VALUES ('%ld','%ld','%ld','N',NOW())",
+   sprintf (Query,"INSERT INTO msg_snt"
+	          " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+                  " VALUES"
+                  " ('%ld','%ld','%ld','N',NOW())",
             MsgCod,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1379,7 +1382,8 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
    /***** Move messages from msg_rcv to msg_rcv_deleted *****/
    /* Insert messages into msg_rcv_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted (MsgCod,UsrCod,Notified,Open,Replied)"
+   sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted"
+	          " (MsgCod,UsrCod,Notified,Open,Replied)"
                   " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod='%ld'",
             UsrCod);
    DB_QueryINSERT (Query,"can not remove received messages");
@@ -1390,8 +1394,10 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted (MsgCod,CrsCod,UsrCod,CreatTime)"
-                  " SELECT MsgCod,CrsCod,UsrCod,CreatTime FROM msg_snt WHERE UsrCod='%ld'",
+   sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted"
+	          " (MsgCod,CrsCod,UsrCod,CreatTime)"
+                  " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
+                  " FROM msg_snt WHERE UsrCod='%ld'",
             UsrCod);
    DB_QueryINSERT (Query,"can not remove sent messages");
 
@@ -1411,7 +1417,8 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
    /***** Insert message received in the database *****/
    sprintf (Query,"INSERT INTO msg_rcv"
 	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-                  " VALUES ('%ld','%ld','%c','N','N','N')",
+                  " VALUES"
+                  " ('%ld','%ld','%c','N','N','N')",
             MsgCod,UsrCod,
             NotifyByEmail ? 'Y' :
         	            'N');
@@ -1442,7 +1449,8 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
 
    /***** Move message from msg_rcv to msg_rcv_deleted *****/
    /* Insert message into msg_rcv_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted (MsgCod,UsrCod,Notified,Open,Replied)"
+   sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted"
+	          " (MsgCod,UsrCod,Notified,Open,Replied)"
                   " SELECT MsgCod,UsrCod,Notified,Open,Replied"
                   " FROM msg_rcv WHERE MsgCod='%ld' AND UsrCod='%ld'",
             MsgCod,UsrCod);
@@ -1472,7 +1480,8 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
    /* Insert message into msg_snt_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted (MsgCod,CrsCod,UsrCod,CreatTime)"
+   sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted"
+	          " (MsgCod,CrsCod,UsrCod,CreatTime)"
                   " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
                   " FROM msg_snt WHERE MsgCod='%ld'",
             MsgCod);
@@ -1522,7 +1531,8 @@ void Msg_MoveUnusedMsgsContentToDeleted (void)
 
    /***** Move messages from msg_content to msg_content_deleted *****/
    /* Insert message content into msg_content_deleted */
-   sprintf (Query,"INSERT IGNORE INTO msg_content_deleted (MsgCod,Subject,Content)"
+   sprintf (Query,"INSERT IGNORE INTO msg_content_deleted"
+	          " (MsgCod,Subject,Content)"
                   " SELECT MsgCod,Subject,Content FROM msg_content"
                   " WHERE MsgCod NOT IN (SELECT MsgCod FROM msg_snt)"
                   " AND MsgCod NOT IN (SELECT DISTINCT MsgCod FROM msg_rcv)");
@@ -3638,8 +3648,10 @@ void Msg_BanSenderWhenShowingMsgs (void)
       Lay_ShowErrorAndExit ("Sender does not exist.");
 
    /***** Insert pair (sender's code - my code) in table of banned senders if not inserted *****/
-   sprintf (Query,"REPLACE INTO msg_banned (FromUsrCod,ToUsrCod)"
-                  " VALUES ('%ld','%ld')",
+   sprintf (Query,"REPLACE INTO msg_banned"
+	          " (FromUsrCod,ToUsrCod)"
+                  " VALUES"
+                  " ('%ld','%ld')",
             Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not ban sender");
 

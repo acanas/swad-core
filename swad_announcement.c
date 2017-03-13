@@ -512,8 +512,10 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
    char Query[128 + Cns_MAX_BYTES_SUBJECT + Cns_MAX_BYTES_TEXT];
 
    /***** Select announcements not seen *****/
-   sprintf (Query,"INSERT INTO announcements (Roles,Subject,Content)"
-                  " VALUES ('%u','%s','%s')",
+   sprintf (Query,"INSERT INTO announcements"
+	          " (Roles,Subject,Content)"
+                  " VALUES"
+                  " ('%u','%s','%s')",
             Roles,Subject,Content);
    DB_QueryINSERT (Query,"can not create announcement");
   }
@@ -599,7 +601,10 @@ void Ann_MarkAnnouncementAsSeen (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Mark announcement as seen *****/
-   sprintf (Query,"REPLACE INTO ann_seen (AnnCod,UsrCod) VALUES ('%ld','%ld')",
+   sprintf (Query,"REPLACE INTO ann_seen"
+	          " (AnnCod,UsrCod)"
+	          " VALUES"
+	          " ('%ld','%ld')",
             AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not mark announcement as seen");
 

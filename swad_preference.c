@@ -189,8 +189,10 @@ void Pre_SetPrefsFromIP (void)
    char Query[512];
 
    /***** Update preferences from current IP in database *****/
-   sprintf (Query,"REPLACE INTO IP_prefs (IP,UsrCod,LastChange,FirstDayOfWeek,Theme,IconSet,Menu,SideCols)"
-                  " VALUES ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
+   sprintf (Query,"REPLACE INTO IP_prefs"
+	          " (IP,UsrCod,LastChange,FirstDayOfWeek,Theme,IconSet,Menu,SideCols)"
+                  " VALUES"
+                  " ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Prefs.FirstDayOfWeek,
             The_ThemeId[Gbl.Prefs.Theme],

@@ -448,7 +448,8 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
    /***** Remove post from banned posts table *****/
    sprintf (Query,"REPLACE INTO forum_disabled_post"
 	          " (PstCod,UsrCod,DisableTime)"
-                  " VALUES ('%ld','%ld',NOW())",
+                  " VALUES"
+                  " ('%ld','%ld',NOW())",
             PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not ban a post of a forum");
   }
@@ -483,7 +484,8 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
    sprintf (Query,"INSERT INTO forum_post"
 	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
 	          "Subject,Content,ImageName,ImageTitle,ImageURL)"
-                  " VALUES ('%ld','%ld',NOW(),NOW(),'0',"
+                  " VALUES"
+                  " ('%ld','%ld',NOW(),NOW(),'0',"
                   "'%s','%s','%s','%s','%s')",
             ThrCod,UsrCod,
             Subject,Content,
@@ -581,35 +583,40 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
       case For_FORUM_SWAD_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
-                        " VALUES ('%u','-1','%ld','%ld')",
+                        " VALUES"
+                        " ('%u','-1','%ld','%ld')",
                   (unsigned) ForumType,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
-                        " VALUES ('%u','%ld','%ld','%ld')",
+                        " VALUES"
+                        " ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Ins.InsCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
-                        " VALUES ('%u','%ld','%ld','%ld')",
+                        " VALUES"
+                        " ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Ctr.CtrCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
-                        " VALUES ('%u','%ld','%ld','%ld')",
+                        " VALUES"
+                        " ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Deg.DegCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
-                        " VALUES ('%u','%ld','%ld','%ld')",
+                        " VALUES"
+                        " ('%u','%ld','%ld','%ld')",
                   (unsigned) ForumType,Gbl.Forum.Crs.CrsCod,FirstPstCod,FirstPstCod);
          break;
      }
@@ -789,8 +796,10 @@ static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC)
    char Query[256];
 
    /***** Insert or replace pair ThrCod-UsrCod in forum_thr_read *****/
-   sprintf (Query,"REPLACE INTO forum_thr_read (ThrCod,UsrCod,ReadTime)"
-                  " VALUES ('%ld','%ld',FROM_UNIXTIME('%ld'))",
+   sprintf (Query,"REPLACE INTO forum_thr_read"
+	          " (ThrCod,UsrCod,ReadTime)"
+                  " VALUES"
+                  " ('%ld','%ld',FROM_UNIXTIME('%ld'))",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,(long) ReadTimeUTC);
    DB_QueryREPLACE (Query,"can not update the status of reading of a thread of a forum");
   }
@@ -4433,8 +4442,10 @@ void For_InsertThrInClipboard (long ThrCod)
    For_RemoveExpiredThrsClipboards ();
 
    /***** Add thread to my clipboard *****/
-   sprintf (Query,"REPLACE INTO forum_thr_clip (ThrCod,UsrCod)"
-                  " VALUES ('%ld','%ld')",
+   sprintf (Query,"REPLACE INTO forum_thr_clip"
+	          " (ThrCod,UsrCod)"
+                  " VALUES"
+                  " ('%ld','%ld')",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not add thread to clipboard");
   }

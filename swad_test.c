@@ -699,7 +699,10 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
    DB_QueryDELETE (Query,"can not remove old status of tests");
 
    /***** Update database *****/
-   sprintf (Query,"REPLACE INTO tst_status (SessionId,CrsCod,NumTst,Status) VALUES ('%s','%ld','%u','%u')",
+   sprintf (Query,"REPLACE INTO tst_status"
+	          " (SessionId,CrsCod,NumTst,Status)"
+	          " VALUES"
+	          " ('%s','%ld','%u','%u')",
             Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst,(unsigned) TstStatus);
    DB_QueryREPLACE (Query,"can not update status of test");
   }
@@ -2147,7 +2150,8 @@ void Tst_ReceiveConfigTst (void)
    /***** Update database *****/
    sprintf (Query,"REPLACE INTO tst_config"
 	          " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
-                  " VALUES ('%ld','%s','%u','%u','%u','%lu','%s')",
+                  " VALUES"
+                  " ('%ld','%s','%u','%u','%u','%lu','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Tst_PluggableDB[Gbl.Test.Config.Pluggable],
             Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
@@ -5783,8 +5787,10 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
    char Query[256 + Tst_MAX_BYTES_TAG];
 
    /***** Insert new tag into tst_tags table *****/
-   sprintf (Query,"INSERT INTO tst_tags (CrsCod,ChangeTime,TagTxt,TagHidden)"
-                  " VALUES ('%ld',NOW(),'%s','N')",
+   sprintf (Query,"INSERT INTO tst_tags"
+	          " (CrsCod,ChangeTime,TagTxt,TagHidden)"
+                  " VALUES"
+                  " ('%ld',NOW(),'%s','N')",
             CrsCod,TagTxt);
    return DB_QueryINSERTandReturnCode (Query,"can not create new tag");
   }
@@ -6026,7 +6032,8 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 	             " (CrsCod,EditTime,AnsType,Shuffle,"
 	             "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
 	             "NumHits,Score)"
-                     " VALUES ('%ld',NOW(),'%s','%c',"
+                     " VALUES"
+                     " ('%ld',NOW(),'%s','%c',"
                      "'%s','%s','%s','%s','%s',"
                      "'0','0')",
                Gbl.CurrentCrs.Crs.CrsCod,
@@ -6100,8 +6107,10 @@ static void Tst_InsertTagsIntoDB (void)
             TagCod = Tst_CreateNewTag (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Test.Tags.Txt[NumTag]);
 
          /***** Insert tag in tst_question_tags *****/
-         sprintf (Query,"INSERT INTO tst_question_tags (QstCod,TagCod,TagInd)"
-                        " VALUES ('%ld','%ld','%u')",
+         sprintf (Query,"INSERT INTO tst_question_tags"
+                        " (QstCod,TagCod,TagInd)"
+                        " VALUES"
+                        " ('%ld','%ld','%u')",
                   Gbl.Test.QstCod,TagCod,TagIdx);
          DB_QueryINSERT (Query,"can not create tag");
 
@@ -6130,7 +6139,8 @@ static void Tst_InsertAnswersIntoDB (void)
          sprintf (Query,"INSERT INTO tst_answers"
                         " (QstCod,AnsInd,Answer,Feedback,"
                         "ImageName,ImageTitle,ImageURL,Correct)"
-                        " VALUES (%ld,0,'%ld','','','','','Y')",
+                        " VALUES"
+                        " (%ld,0,'%ld','','','','','Y')",
                   Gbl.Test.QstCod,
                   Gbl.Test.Answer.Integer);
          DB_QueryINSERT (Query,"can not create answer");
@@ -6144,7 +6154,8 @@ static void Tst_InsertAnswersIntoDB (void)
             sprintf (Query,"INSERT INTO tst_answers"
                            " (QstCod,AnsInd,Answer,Feedback,"
                            "ImageName,ImageTitle,ImageURL,Correct)"
-                           " VALUES (%ld,%u,'%lg','','','','','Y')",
+                           " VALUES"
+                           " (%ld,%u,'%lg','','','','','Y')",
                      Gbl.Test.QstCod,i,
                      Gbl.Test.Answer.FloatingPoint[i]);
             DB_QueryINSERT (Query,"can not create answer");
@@ -6155,7 +6166,8 @@ static void Tst_InsertAnswersIntoDB (void)
          sprintf (Query,"INSERT INTO tst_answers"
                         " (QstCod,AnsInd,Answer,Feedback,"
                         "ImageName,ImageTitle,ImageURL,Correct)"
-                        " VALUES (%ld,0,'%c','','','','','Y')",
+                        " VALUES"
+                        " (%ld,0,'%c','','','','','Y')",
                   Gbl.Test.QstCod,
                   Gbl.Test.Answer.TF);
          DB_QueryINSERT (Query,"can not create answer");
@@ -7018,7 +7030,8 @@ static long Tst_CreateTestResultInDB (void)
    /***** Insert new test result into table *****/
    sprintf (Query,"INSERT INTO tst_exams"
 	          " (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
-                  " VALUES ('%ld','%ld','%c',NOW(),'%u')",
+                  " VALUES"
+                  " ('%ld','%ld','%c',NOW(),'%u')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Test.AllowTeachers ? 'Y' :
@@ -7884,7 +7897,8 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    sprintf (Query,"INSERT INTO tst_exam_questions"
 		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
-		  " VALUES ('%ld','%ld','%u','%lf','%s','%s')",
+		  " VALUES"
+		  " ('%ld','%ld','%u','%lf','%s','%s')",
 	    TstCod,QstCod,
 	    NumQst,	// 0, 1, 2, 3...
 	    Score,

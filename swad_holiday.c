@@ -1127,7 +1127,8 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
    /***** Create a new holiday or no school period *****/
    sprintf (Query,"INSERT INTO holidays"
 	          " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
-	          " VALUES ('%ld','%ld','%u','%04u%02u%02u','%04u%02u%02u','%s')",
+	          " VALUES"
+	          " ('%ld','%ld','%u','%04u%02u%02u','%04u%02u%02u','%s')",
             Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
             Hld->StartDate.Year,
             Hld->StartDate.Month,

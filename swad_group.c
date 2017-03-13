@@ -1066,8 +1066,10 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
    char Query[256];
 
    /***** Register in group *****/
-   sprintf (Query,"INSERT INTO crs_grp_usr (GrpCod,UsrCod)"
-                  " VALUES ('%ld','%ld')",
+   sprintf (Query,"INSERT INTO crs_grp_usr"
+	          " (GrpCod,UsrCod)"
+                  " VALUES"
+                  " ('%ld','%ld')",
             GrpCod,UsrDat->UsrCod);
    DB_QueryINSERT (Query,"can not add a user to a group");
   }
@@ -3266,7 +3268,8 @@ static void Grp_CreateGroupType (void)
    /***** Create a new group type *****/
    sprintf (Query,"INSERT INTO crs_grp_types"
 	          " (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
-                  " VALUES ('%ld','%s','%c','%c','%c',FROM_UNIXTIME('%ld'))",
+                  " VALUES"
+                  " ('%ld','%s','%c','%c','%c',FROM_UNIXTIME('%ld'))",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
             Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment ? 'Y' :
         	                                             'N',
@@ -3293,8 +3296,10 @@ static void Grp_CreateGroup (void)
    char Query[1024];
 
    /*****  Create a new group *****/
-   sprintf (Query,"INSERT INTO crs_grp (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
-                  " VALUES ('%ld','%s','%u','N','N')",
+   sprintf (Query,"INSERT INTO crs_grp"
+	          " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
+                  " VALUES"
+                  " ('%ld','%s','%u','N','N')",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
             Gbl.CurrentCrs.Grps.GrpName,
             Gbl.CurrentCrs.Grps.MaxStudents);

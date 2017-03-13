@@ -261,7 +261,7 @@ void Pwd_ShowFormSendNewPwd (void)
                       " size=\"8\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_nick_email_or_ID,
-            Cns_MAX_CHARS_EMAIL,Gbl.Usrs.Me.UsrIdLogin);
+            Cns_MAX_CHARS_EMAIL_ADDRESS,Gbl.Usrs.Me.UsrIdLogin);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Get_a_new_password);
@@ -469,8 +469,10 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
    DB_QueryDELETE (Query,"can not remove expired pending passwords");
 
    /***** Update my current password in database *****/
-   sprintf (Query,"REPLACE INTO pending_passwd (UsrCod,PendingPassword,DateAndTime)"
-                  " VALUES ('%ld','%s',NOW())",
+   sprintf (Query,"REPLACE INTO pending_passwd"
+	          " (UsrCod,PendingPassword,DateAndTime)"
+                  " VALUES"
+                  " ('%ld','%s',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
    DB_QueryREPLACE (Query,"can not create pending password");
   }

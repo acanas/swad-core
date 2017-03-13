@@ -2219,7 +2219,8 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
    /***** Create a new survey *****/
    sprintf (Query,"INSERT INTO surveys"
 	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
-                  " VALUES ('%s','%ld','N','%u','%ld',"
+                  " VALUES"
+                  " ('%s','%ld','N','%u','%ld',"
                   "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
                   "'%s','%s')",
             Sco_ScopeDB[Svy->Scope],Svy->Cod,
@@ -2368,7 +2369,10 @@ static void Svy_CreateGrps (long SvyCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO svy_grp (SvyCod,GrpCod) VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO svy_grp"
+	             " (SvyCod,GrpCod)"
+	             " VALUES"
+	             " ('%ld','%ld')",
                SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to a survey");
      }
@@ -2996,8 +3000,10 @@ void Svy_ReceiveQst (void)
          SvyQst.QstInd = Svy_GetNextQuestionIndexInSvy (SvyCod);
 
          /* Insert question in the table of questions */
-         sprintf (Query,"INSERT INTO svy_questions (SvyCod,QstInd,AnsType,Stem)"
-                        " VALUES ('%ld','%u','%s','%s')",
+         sprintf (Query,"INSERT INTO svy_questions"
+                        " (SvyCod,QstInd,AnsType,Stem)"
+                        " VALUES"
+                        " ('%ld','%u','%s','%s')",
 	          SvyCod,SvyQst.QstInd,Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
          SvyQst.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
         }
@@ -3038,8 +3044,10 @@ void Svy_ReceiveQst (void)
             if (SvyQst.AnsChoice[NumAns].Text[0])	// Answer is not empty
               {
                /* Create answer into database */
-               sprintf (Query,"INSERT INTO svy_answers (QstCod,AnsInd,NumUsrs,Answer)"
-                              " VALUES ('%ld','%u','0','%s')",
+               sprintf (Query,"INSERT INTO svy_answers"
+        	              " (QstCod,AnsInd,NumUsrs,Answer)"
+                              " VALUES"
+                              " ('%ld','%u','0','%s')",
                         SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
                DB_QueryINSERT (Query,"can not create answer");
               }
@@ -3702,8 +3710,10 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
   {
    char Query[512];
 
-   sprintf (Query,"INSERT INTO svy_users (SvyCod,UsrCod)"
-                  " VALUES ('%ld','%ld')",
+   sprintf (Query,"INSERT INTO svy_users"
+	          " (SvyCod,UsrCod)"
+                  " VALUES"
+                  " ('%ld','%ld')",
             SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not register that you have answered the survey");
   }

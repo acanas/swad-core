@@ -627,7 +627,8 @@ void Con_UpdateMeInConnectedList (void)
           The role which is stored is the role of the last click *****/
    sprintf (Query,"REPLACE INTO connected"
 	          " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
-                  " VALUES ('%ld','%u','%ld',NOW())",
+                  " VALUES"
+                  " ('%ld','%u','%ld',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Gbl.Usrs.Me.LoggedRole,
             Gbl.CurrentCrs.Crs.CrsCod);

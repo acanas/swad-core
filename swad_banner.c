@@ -911,8 +911,10 @@ static void Ban_CreateBanner (struct Banner *Ban)
    char Query[256 + Ban_MAX_BYTES_SHRT_NAME + Ban_MAX_BYTES_FULL_NAME + Ban_MAX_BYTES_IMAGE + Cns_MAX_BYTES_WWW];
 
    /***** Create a new banner *****/
-   sprintf (Query,"INSERT INTO banners (Hidden,ShortName,FullName,Img,WWW)"
-	          " VALUES ('N','%s','%s','%s','%s')",
+   sprintf (Query,"INSERT INTO banners"
+	          " (Hidden,ShortName,FullName,Img,WWW)"
+	          " VALUES"
+	          " ('N','%s','%s','%s','%s')",
             Ban->ShrtName,Ban->FullName,Ban->Img,Ban->WWW);
    DB_QueryINSERT (Query,"can not create banner");
 

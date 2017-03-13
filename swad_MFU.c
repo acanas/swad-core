@@ -377,7 +377,8 @@ void MFU_UpdateMFUActions (void)
    /***** Update score for the current action *****/
    sprintf (Query,"REPLACE INTO actions_MFU"
                   " (UsrCod,ActCod,Score,LastClick)"
-                  " VALUES ('%ld','%ld','%f',NOW())",
+                  " VALUES"
+                  " ('%ld','%ld','%f',NOW())",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
             Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod,
             Score);

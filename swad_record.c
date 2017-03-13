@@ -552,7 +552,8 @@ void Rec_CreateRecordField (void)
    /***** Create the new field *****/
    sprintf (Query,"INSERT INTO crs_record_fields"
 	          " (CrsCod,FieldName,NumLines,Visibility)"
-	          " VALUES ('%ld','%s','%u','%u')",
+	          " VALUES"
+	          " ('%ld','%s','%u','%u')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.CurrentCrs.Records.Field.Name,
             Gbl.CurrentCrs.Records.Field.NumLines,
@@ -1834,8 +1835,10 @@ void Rec_UpdateCrsRecord (long UsrCod)
          else if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text[0])
 	   {
 	    /***** Insert text field of record course *****/
-	    sprintf (Query,"INSERT INTO crs_records (FieldCod,UsrCod,Txt)"
-		           " VALUES ('%ld','%ld','%s')",
+	    sprintf (Query,"INSERT INTO crs_records"
+		           " (FieldCod,UsrCod,Txt)"
+		           " VALUES"
+		           " ('%ld','%ld','%s')",
 		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
 		     UsrCod,
 		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);

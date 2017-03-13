@@ -1942,7 +1942,8 @@ void Soc_StoreAndPublishSocialNote (Soc_NoteType_t NoteType,long Cod,struct Soci
    /***** Store social note *****/
    sprintf (Query,"INSERT INTO social_notes"
 	          " (NoteType,Cod,UsrCod,HieCod,Unavailable,TimeNote)"
-                  " VALUES ('%u','%ld','%ld','%ld','N',NOW())",
+                  " VALUES"
+                  " ('%u','%ld','%ld','%ld','N',NOW())",
             (unsigned) NoteType,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,HieCod);
    SocPub->NotCod = DB_QueryINSERTandReturnCode (Query,"can not create new social note");
 
@@ -2304,8 +2305,10 @@ static long Soc_ReceiveSocialPost (void)
 
       /***** Publish *****/
       /* Insert post content in the database */
-      sprintf (Query,"INSERT INTO social_posts (Content,ImageName,ImageTitle,ImageURL)"
-	             " VALUES ('%s','%s','%s','%s')",
+      sprintf (Query,"INSERT INTO social_posts"
+	             " (Content,ImageName,ImageTitle,ImageURL)"
+	             " VALUES"
+	             " ('%s','%s','%s','%s')",
 	       Content,
 	       Image.Name,
 	       (Image.Name[0] &&	// Save image title only if image attached
@@ -3012,7 +3015,8 @@ static long Soc_ReceiveComment (void)
 	 /* Insert comment content in the database */
 	 sprintf (Query,"INSERT INTO social_comments"
 	                " (PubCod,Content,ImageName,ImageTitle,ImageURL)"
-			" VALUES ('%ld','%s','%s','%s','%s')",
+			" VALUES"
+			" ('%ld','%s','%s','%s','%s')",
 		  SocPub.PubCod,
 		  Content,
 		  Image.Name,
@@ -3182,7 +3186,9 @@ static long Soc_FavSocialNote (void)
 	   {
 	    /***** Mark as favourite in database *****/
 	    sprintf (Query,"INSERT IGNORE INTO social_notes_fav"
-			   " (NotCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
+			   " (NotCod,UsrCod,TimeFav)"
+			   " VALUES"
+			   " ('%ld','%ld',NOW())",
 		     SocNot.NotCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod);
 	    DB_QueryINSERT (Query,"can not favourite social note");
@@ -3268,7 +3274,9 @@ static long Soc_FavSocialComment (void)
 	   {
 	    /***** Mark as favourite in database *****/
 	    sprintf (Query,"INSERT IGNORE INTO social_comments_fav"
-			   " (PubCod,UsrCod,TimeFav) VALUES ('%ld','%ld',NOW())",
+			   " (PubCod,UsrCod,TimeFav)"
+			   " VALUES"
+			   " ('%ld','%ld',NOW())",
 		     SocCom.PubCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod);
 	    DB_QueryINSERT (Query,"can not favourite social comment");
@@ -4722,7 +4730,8 @@ static void Soc_AddNotesJustRetrievedToTimelineThisSession (void)
   {
    char Query[256 + Ses_LENGTH_SESSION_ID];
 
-   sprintf (Query,"INSERT IGNORE INTO social_timelines (SessionId,NotCod)"
+   sprintf (Query,"INSERT IGNORE INTO social_timelines"
+	          " (SessionId,NotCod)"
 	          " SELECT DISTINCTROW '%s',NotCod FROM not_codes",
             Gbl.Session.Id);
    DB_QueryINSERT (Query,"can not insert social notes in timeline");

@@ -2054,7 +2054,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
             Gbl.Prefs.IconsURL,
             Txt_User[Usr_SEX_UNKNOWN],
             Txt_User[Usr_SEX_UNKNOWN],
-            Cns_MAX_CHARS_EMAIL,
+            Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_nick_email_or_ID,
             Gbl.Usrs.Me.UsrIdLogin);
 
@@ -2195,7 +2195,10 @@ static void Usr_InsertMyBirthday (void)
    DB_QueryDELETE (Query,"can not delete old birthdays");
 
    /***** Insert new birthday *****/
-   sprintf (Query,"INSERT INTO birthdays_today (UsrCod,Today) VALUES ('%ld',CURDATE())",
+   sprintf (Query,"INSERT INTO birthdays_today"
+	          " (UsrCod,Today)"
+	          " VALUES"
+	          " ('%ld',CURDATE())",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not insert birthday");
   }
@@ -2299,7 +2302,7 @@ void Usr_PutFormLogOut (void)
 
 void Usr_GetParamUsrIdLogin (void)
   {
-   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Cns_MAX_BYTES_EMAIL);
+   Par_GetParToText ("UsrId",Gbl.Usrs.Me.UsrIdLogin,Cns_MAX_BYTES_EMAIL_ADDRESS);
    // Users' IDs are always stored internally without leading zeros
    Str_RemoveLeadingZeros (Gbl.Usrs.Me.UsrIdLogin);
   }
@@ -2313,7 +2316,7 @@ static void Usr_GetParamOtherUsrIDNickOrEMail (void)
    /***** Get parameter with the plain user's ID, @nick or email of another user *****/
    Par_GetParToText ("OtherUsrIDNickOrEMail",
                      Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,
-                     Cns_MAX_BYTES_EMAIL);
+                     Cns_MAX_BYTES_EMAIL_ADDRESS);
 
    // If it's a user's ID (if does not contain '@')
    if (strchr (Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail,(int) '@') != NULL)	// '@' not found
@@ -3589,7 +3592,7 @@ static void Usr_WriteMainUsrDataExceptUsrID (struct UsrData *UsrDat,
 static void Usr_WriteEmail (struct UsrData *UsrDat,const char *BgColor)
   {
    bool ShowEmail;
-   char MailLink[7 + Cns_MAX_BYTES_EMAIL + 1];	// mailto:mail_address
+   char MailLink[7 + Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// mailto:mail_address
 
    if (UsrDat->Email[0])
      {
@@ -5206,7 +5209,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    size_t LengthSelectedUsrsCods;
    size_t LengthUsrCod;
    const char *Ptr;
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    struct UsrData UsrDat;
    struct ListUsrCods ListUsrCods;
    bool Error = false;

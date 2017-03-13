@@ -243,11 +243,15 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
      }
 
    /***** Register user in current course in database *****/
-   sprintf (Query,"INSERT INTO crs_usr (CrsCod,UsrCod,Role,Accepted,"
-		  "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,NumAccTst,LastAccTst,NumQstsLastTst,"
+   sprintf (Query,"INSERT INTO crs_usr"
+	          " (CrsCod,UsrCod,Role,Accepted,"
+		  "LastDowGrpCod,LastComGrpCod,LastAssGrpCod,"
+		  "NumAccTst,LastAccTst,NumQstsLastTst,"
 		  "UsrListType,ColsClassPhoto,ListWithPhotos)"
-		  " VALUES ('%ld','%ld','%u','%c',"
-		  "'-1','-1','-1','0',FROM_UNIXTIME('%ld'),'0',"
+		  " VALUES"
+		  " ('%ld','%ld','%u','%c',"
+		  "'-1','-1','-1',"
+		  "'0',FROM_UNIXTIME('%ld'),'0',"
 		  "'%s','%u','%c')",
 	    Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
 	    KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
@@ -330,7 +334,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
                       "</label>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_nick_email_or_ID,
-            Cns_MAX_CHARS_EMAIL);
+            Cns_MAX_CHARS_EMAIL_ADDRESS);
 
    /***** Send button*****/
    Lay_PutConfirmButton (Txt_Continue);
@@ -1421,7 +1425,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	    /* Find next string in text */
 	    Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                     Cns_MAX_BYTES_EMAIL);
+	                                     Cns_MAX_BYTES_EMAIL_ADDRESS);
 
 	    /* Reset default list of users' codes */
 	    ListUsrCods.NumUsrs = 0;
@@ -1544,7 +1548,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
 
 	 /* Find next string in text */
 	 Str_GetNextStringUntilSeparator (&Ptr,UsrDat.UsrIDNickOrEmail,
-	                                  Cns_MAX_BYTES_EMAIL);
+	                                  Cns_MAX_BYTES_EMAIL_ADDRESS);
 
 	 /* Reset default list of users' codes */
 	 ListUsrCods.NumUsrs = 0;
@@ -1917,8 +1921,10 @@ void Enr_SignUpInCrs (void)
         }
       else                // No request in database for this user in this course
         {
-         sprintf (Query,"INSERT INTO crs_usr_requests (CrsCod,UsrCod,Role,RequestTime)"
-                        " VALUES ('%ld','%ld','%u',NOW())",
+         sprintf (Query,"INSERT INTO crs_usr_requests"
+                        " (CrsCod,UsrCod,Role,RequestTime)"
+                        " VALUES"
+                        " ('%ld','%ld','%u',NOW())",
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) RoleFromForm);
@@ -3265,8 +3271,10 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
    else        // User was not administrator of current institution/centre/degree
      {
       /***** Insert or replace administrator in current institution/centre/degree *****/
-      sprintf (Query,"REPLACE INTO admin (UsrCod,Scope,Cod)"
-                     " VALUES ('%ld','%s','%ld')",
+      sprintf (Query,"REPLACE INTO admin"
+	             " (UsrCod,Scope,Cod)"
+                     " VALUES"
+                     " ('%ld','%s','%ld')",
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryREPLACE (Query,"can not create administrator");
 

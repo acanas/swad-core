@@ -4089,9 +4089,11 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
    char Query[512];
 
    /***** Update size of the file browser in database *****/
-   sprintf (Query,"REPLACE INTO file_browser_size (FileBrowser,Cod,ZoneUsrCod,"
+   sprintf (Query,"REPLACE INTO file_browser_size"
+	          " (FileBrowser,Cod,ZoneUsrCod,"
                   "NumLevels,NumFolders,NumFiles,TotalSize)"
-                  " VALUES ('%u','%ld','%ld',"
+                  " VALUES"
+                  " ('%u','%ld','%ld',"
                   "'%u','%lu','%lu','%llu')",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
             Gbl.FileBrowser.Size.NumLevls,
@@ -4885,8 +4887,10 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Update date of my last access to file browser in this course *****/
-   sprintf (Query,"REPLACE INTO file_browser_last (UsrCod,FileBrowser,Cod,LastClick)"
-		  " VALUES ('%ld','%u','%ld',NOW())",
+   sprintf (Query,"REPLACE INTO file_browser_last"
+	          " (UsrCod,FileBrowser,Cod,LastClick)"
+		  " VALUES"
+		  " ('%ld','%u','%ld',NOW())",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
@@ -6801,12 +6805,10 @@ static void Brw_AddPathToClipboards (void)
    char Query[512 + PATH_MAX];
 
    /***** Add path to clipboards *****/
-   sprintf (Query,"INSERT INTO clipboard (UsrCod,FileBrowser,"
-	          "Cod,WorksUsrCod,"
-	          "FileType,Path)"
-                  " VALUES ('%ld','%u',"
-                  "'%ld','%ld',"
-                  "'%u','%s')",
+   sprintf (Query,"INSERT INTO clipboard"
+	          " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
+                  " VALUES"
+                  " ('%ld','%u','%ld','%ld','%u','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Gbl.FileBrowser.Type,
             Cod,WorksUsrCod,
             (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree);
@@ -6956,7 +6958,8 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
    // Path must be stored with final '/'
    sprintf (Query,"INSERT INTO expanded_folders"
 	          " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
-                  " VALUES ('%ld','%u','%ld','%ld','%s/',NOW())",
+                  " VALUES"
+                  " ('%ld','%u','%ld','%ld','%s/',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
             Cod,WorksUsrCod,
@@ -10441,7 +10444,8 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
       /* Insert number of views in database */
       sprintf (Query,"INSERT INTO file_view"
 		     " (FilCod,UsrCod,NumViews)"
-		     " VALUES ('%ld','%ld','1')",
+		     " VALUES"
+		     " ('%ld','%ld','1')",
 	       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryINSERT (Query,"can not insert number of views of a file");
      }
@@ -10697,9 +10701,11 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
    char Query[512 + PATH_MAX];
 
    /***** Add path to the database *****/
-   sprintf (Query,"INSERT INTO files (FileBrowser,Cod,ZoneUsrCod,"
+   sprintf (Query,"INSERT INTO files"
+	          " (FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License)"
-                  " VALUES ('%u','%ld','%ld',"
+                  " VALUES"
+                  " ('%u','%ld','%ld',"
                   "'%ld','%u','%s','N','%c','%u')",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,

@@ -924,7 +924,8 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
    /***** Update my nickname in database *****/
    sprintf (Query,"INSERT INTO usr_IDs"
                   " (UsrCod,UsrID,CreatTime,Confirmed)"
-                  " VALUES ('%ld','%s',NOW(),'%c')",
+                  " VALUES"
+                  " ('%ld','%s',NOW(),'%c')",
             UsrCod,NewID,
             Confirmed ? 'Y' :
         	        'N');

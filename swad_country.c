@@ -2219,8 +2219,10 @@ static void Cty_CreateCountry (struct Country *Cty)
       Str_Concat (SubQueryWWW2,"'",
                   Cty_MAX_BYTES_SUBQUERY_CTYS_WWW);
      }
-   sprintf (Query,"INSERT INTO countries (CtyCod,Alpha2%s%s)"
-	          " VALUES ('%03ld','%s'%s%s)",
+   sprintf (Query,"INSERT INTO countries"
+	          " (CtyCod,Alpha2%s%s)"
+	          " VALUES"
+	          " ('%03ld','%s'%s%s)",
             SubQueryNam1,SubQueryWWW1,
             Cty->CtyCod,Cty->Alpha2,SubQueryNam2,SubQueryWWW2);
    DB_QueryINSERT (Query,"can not create country");

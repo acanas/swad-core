@@ -465,8 +465,10 @@ static int Svc_GenerateNewWSKey (long UsrCod,
 	                          "Generated key already existed in database");
 
    /***** Insert key into database *****/
-   sprintf (Query,"INSERT INTO ws_keys (WSKey,UsrCod,PlgCod,LastTime)"
-                  " VALUES ('%s','%ld','%ld',NOW())",
+   sprintf (Query,"INSERT INTO ws_keys"
+	          " (WSKey,UsrCod,PlgCod,LastTime)"
+                  " VALUES"
+                  " ('%s','%ld','%ld',NOW())",
             WSKey,UsrCod,Gbl.WebService.PlgCod);
    DB_QueryINSERT (Query,"can not insert new key");
 
@@ -695,7 +697,7 @@ int swad__createAccount (struct soap *soap,
      {
       /* Email updated sucessfully */
       Str_Copy (Gbl.Usrs.Me.UsrDat.Email,userEmail,
-                Cns_MAX_BYTES_EMAIL);
+                Cns_MAX_BYTES_EMAIL_ADDRESS);
       Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
      }
 
@@ -767,7 +769,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
                                   char *userID,char *userPassword,char *appKey,				// input
                                   struct swad__loginByUserPasswordKeyOutput *loginByUserPasswordKeyOut)	// output
   {
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    int ReturnCode;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -808,7 +810,7 @@ int swad__loginByUserPasswordKey (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,
-             Cns_MAX_BYTES_EMAIL);
+             Cns_MAX_BYTES_EMAIL_ADDRESS);
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
      {
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
@@ -1078,7 +1080,7 @@ int swad__getNewPassword (struct soap *soap,
                           struct swad__getNewPasswordOutput *getNewPasswordOut)	// output
   {
    int ReturnCode;
-   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL + 1];
+   char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1098,7 +1100,7 @@ int swad__getNewPassword (struct soap *soap,
 
    /***** Check if user's email, @nickname or ID are valid *****/
    Str_Copy (UsrIDNickOrEmail,userID,
-             Cns_MAX_BYTES_EMAIL);
+             Cns_MAX_BYTES_EMAIL_ADDRESS);
    if (Nck_CheckIfNickWithArrobaIsValid (UsrIDNickOrEmail))		// 1: It's a nickname
      {
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
@@ -3355,15 +3357,18 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
       /* Build query */
       sprintf (Query,"INSERT INTO msg_content"
 	             " (Subject,Content,ImageName,ImageTitle,ImageURL)"
-                     " VALUES ('%s','%s','','','')",
+                     " VALUES"
+                     " ('%s','%s','','','')",
                      Subject,Content);
 
       /* Get the code of the inserted item */
       NewMsgCod = DB_QueryINSERTandReturnCode (Query,"can not create message");
 
       /***** Insert message in sent messages *****/
-      sprintf (Query,"INSERT INTO msg_snt (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
-                     " VALUES ('%ld','-1','%ld','N',NOW())",
+      sprintf (Query,"INSERT INTO msg_snt"
+	             " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
+                     " VALUES"
+                     " ('%ld','-1','%ld','N',NOW())",
                NewMsgCod,SenderUsrCod);
       DB_QueryINSERT (Query,"can not create message");
 
@@ -3371,8 +3376,10 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
      }
 
    /***** Insert message received in the database *****/
-   sprintf (Query,"INSERT INTO msg_rcv (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
-                  " VALUES ('%ld','%ld','%c','N','N','N')",
+   sprintf (Query,"INSERT INTO msg_rcv"
+	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
+                  " VALUES"
+                  " ('%ld','%ld','%c','N','N','N')",
             NewMsgCod,RecipientUsrCod,
             NotifyByEmail ? 'Y' :
         	            'N');
@@ -3380,8 +3387,10 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
 
    /***** Create notification for this recipient.
           If this recipient wants to receive notifications by email, activate the sending of a notification *****/
-   sprintf (Query,"INSERT INTO notif (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
-                  " VALUES ('%u','%ld','%ld','-1','-1','-1','%ld',NOW(),'%u')",
+   sprintf (Query,"INSERT INTO notif"
+	          " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+                  " VALUES"
+                  " ('%u','%ld','%ld','-1','-1','-1','%ld',NOW(),'%u')",
             (unsigned) Ntf_EVENT_MESSAGE,
             RecipientUsrCod,
             SenderUsrCod,
@@ -3452,8 +3461,10 @@ int swad__sendNotice (struct soap *soap,
 
    /***** Insert notice in the database *****/
    /* Build query */
-   sprintf (Query,"INSERT INTO notices (CrsCod,UsrCod,CreatTime,Content,Status)"
-                  " VALUES ('%ld','%ld',NOW(),'%s','%u')",
+   sprintf (Query,"INSERT INTO notices"
+	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
+                  " VALUES"
+                  " ('%ld','%ld',NOW(),'%s','%u')",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
             body,(unsigned) Not_ACTIVE_NOTICE);
 

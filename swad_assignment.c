@@ -1561,8 +1561,10 @@ static void Asg_CreateGrps (long AsgCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO asg_grp (AsgCod,GrpCod)"
-	             " VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO asg_grp"
+	             " (AsgCod,GrpCod)"
+	             " VALUES"
+	             " ('%ld','%ld')",
                AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an assignment");
      }

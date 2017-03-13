@@ -432,7 +432,9 @@ void Nck_UpdateMyNick (const char *NewNickname)
 
    /***** Update my nickname in database *****/
    sprintf (Query,"REPLACE INTO usr_nicknames"
-                  " (UsrCod,Nickname,CreatTime) VALUES ('%ld','%s',NOW())",
+                  " (UsrCod,Nickname,CreatTime)"
+                  " VALUES"
+                  " ('%ld','%s',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,NewNickname);
    DB_QueryREPLACE (Query,"can not update your nickname");
   }

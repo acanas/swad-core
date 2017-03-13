@@ -476,8 +476,10 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
 	    if (TimeTable[Day][Hour].Columns[Column].HourType == TT_FIRST_HOUR &&
                 TimeTable[Day][Hour].Columns[Column].Duration > 0)
               {
-               sprintf (Query,"INSERT INTO timetable_crs (CrsCod,GrpCod,Day,Hour,Duration,ClassType,Place,GroupName)"
-                              " VALUES ('%ld','%ld','%c','%u','%d','%s','%s','%s')",
+               sprintf (Query,"INSERT INTO timetable_crs"
+        	              " (CrsCod,GrpCod,Day,Hour,Duration,ClassType,Place,GroupName)"
+                              " VALUES"
+                              " ('%ld','%ld','%c','%u','%d','%s','%s','%s')",
                         CrsCod,
 			TimeTable[Day][Hour].Columns[Column].GrpCod,
 			TimeTableCharsDays[Day],
@@ -516,8 +518,10 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
 	    if (TimeTable[Day][Hour].Columns[Column].HourType == TT_FIRST_HOUR &&
                 TimeTable[Day][Hour].Columns[Column].Duration > 0)
               {
-               sprintf (Query,"INSERT INTO timetable_tut (UsrCod,Day,Hour,Duration,Place)"
-                              " VALUES ('%ld','%c','%u','%d','%s')",
+               sprintf (Query,"INSERT INTO timetable_tut"
+        	              " (UsrCod,Day,Hour,Duration,Place)"
+                              " VALUES"
+                              " ('%ld','%c','%u','%d','%s')",
                         UsrCod,TimeTableCharsDays[Day],Hour,
                         TimeTable[Day][Hour].Columns[Column].Duration,
 			TimeTable[Day][Hour].Columns[Column].Place);

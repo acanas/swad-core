@@ -88,8 +88,10 @@ void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
    char Query[256];
 
    /***** Add file of marks to the database *****/
-   sprintf (Query,"INSERT INTO marks_properties (FilCod,%s,%s)"
-                  " VALUES ('%ld','%u','%u')",
+   sprintf (Query,"INSERT INTO marks_properties"
+	          " (FilCod,%s,%s)"
+                  " VALUES"
+                  " ('%ld','%u','%u')",
             Mrk_HeadOrFootStr[Brw_HEADER],
             Mrk_HeadOrFootStr[Brw_FOOTER],
             FilCod,

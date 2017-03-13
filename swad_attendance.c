@@ -1333,9 +1333,9 @@ void Att_CreateAttEvent (struct AttendanceEvent *Att,const char *Txt)
    sprintf (Query,"INSERT INTO att_events"
 	          " (CrsCod,Hidden,UsrCod,"
 	          "StartTime,EndTime,CommentTchVisible,Title,Txt)"
-                  " VALUES ('%ld','%c','%ld',"
-                  "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
-                  "'%c','%s','%s')",
+                  " VALUES"
+                  " ('%ld','%c','%ld',"
+                  "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),'%c','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Att->Hidden ? 'Y' :
         	          'N',
@@ -1476,8 +1476,10 @@ static void Att_CreateGrps (long AttCod)
 	NumGrpSel++)
      {
       /* Create group */
-      sprintf (Query,"INSERT INTO att_grp (AttCod,GrpCod)"
-	             " VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO att_grp"
+	             " (AttCod,GrpCod)"
+	             " VALUES"
+	             " ('%ld','%ld')",
                AttCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an attendance event");
      }
@@ -2548,7 +2550,8 @@ static void Att_RegUsrInAttEventChangingComments (long AttCod,long UsrCod,bool P
    /***** Register user as assistant to an event in database *****/
    sprintf (Query,"REPLACE INTO att_usr"
 	          " (AttCod,UsrCod,Present,CommentStd,CommentTch)"
-                  " VALUES ('%ld','%ld','%c','%s','%s')",
+                  " VALUES"
+                  " ('%ld','%ld','%c','%s','%s')",
             AttCod,UsrCod,
             Present ? 'Y' :
         	      'N',

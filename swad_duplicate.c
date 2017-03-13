@@ -88,8 +88,10 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
       if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
 	{
 	 /***** Insert possible duplicate into database *****/
-         sprintf (Query,"REPLACE INTO usr_duplicated (UsrCod,InformerCod,InformTime)"
-                        " VALUES ('%ld','%ld',NOW())",
+         sprintf (Query,"REPLACE INTO usr_duplicated"
+                        " (UsrCod,InformerCod,InformTime)"
+                        " VALUES"
+                        " ('%ld','%ld',NOW())",
                   Gbl.Usrs.Other.UsrDat.UsrCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          DB_QueryINSERT (Query,"can not report duplicate");

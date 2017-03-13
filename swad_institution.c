@@ -2401,10 +2401,10 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new institution *****/
-   sprintf (Query,"INSERT INTO institutions (CtyCod,Status,RequesterUsrCod,"
-                  "ShortName,FullName,WWW)"
-                  " VALUES ('%ld','%u','%ld',"
-                  "'%s','%s','%s')",
+   sprintf (Query,"INSERT INTO institutions"
+	          " (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
+                  " VALUES"
+                  " ('%ld','%u','%ld','%s','%s','%s')",
             Ins->CtyCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,

@@ -2749,9 +2749,11 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new centre *****/
-   sprintf (Query,"INSERT INTO centres (InsCod,PlcCod,Status,RequesterUsrCod,"
+   sprintf (Query,"INSERT INTO centres"
+	          " (InsCod,PlcCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,WWW,PhotoAttribution)"
-                  " VALUES ('%ld','%ld','%u','%ld',"
+                  " VALUES"
+                  " ('%ld','%ld','%u','%ld',"
                   "'%s','%s','%s','')",
             Ctr->InsCod,Ctr->PlcCod,
             Status,

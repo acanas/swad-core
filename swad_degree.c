@@ -1171,10 +1171,10 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new degree *****/
-   sprintf (Query,"INSERT INTO degrees (CtrCod,DegTypCod,Status,"
-	          "RequesterUsrCod,ShortName,FullName,WWW)"
-                  " VALUES ('%ld','%ld','%u',"
-                  "'%ld','%s','%s','%s')",
+   sprintf (Query,"INSERT INTO degrees"
+	          " (CtrCod,DegTypCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
+                  " VALUES"
+                  " ('%ld','%ld','%u','%ld','%s','%s','%s')",
             Deg->CtrCod,Deg->DegTypCod,Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,Deg->ShrtName,Deg->FullName,Deg->WWW);
    Deg->DegCod = DB_QueryINSERTandReturnCode (Query,"can not create a new degree");

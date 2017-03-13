@@ -409,8 +409,10 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    if (URL[0])
      {
       /***** Insert or replace web / social network *****/
-      sprintf (Query,"REPLACE INTO usr_webs (UsrCod,Web,URL)"
-		     " VALUES ('%ld','%s','%s')",
+      sprintf (Query,"REPLACE INTO usr_webs"
+	             " (UsrCod,Web,URL)"
+		     " VALUES"
+		     " ('%ld','%s','%s')",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       Net_WebsAndSocialNetworksDB[Web],
 	       URL);

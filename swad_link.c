@@ -784,8 +784,10 @@ static void Lnk_CreateLink (struct Link *Lnk)
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new link *****/
-   sprintf (Query,"INSERT INTO links (ShortName,FullName,WWW)"
-                  " VALUES ('%s','%s','%s')",
+   sprintf (Query,"INSERT INTO links"
+	          " (ShortName,FullName,WWW)"
+                  " VALUES"
+                  " ('%s','%s','%s')",
             Lnk->ShrtName,Lnk->FullName,Lnk->WWW);
    DB_QueryINSERT (Query,"can not create institutional link");
 

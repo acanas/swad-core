@@ -1507,7 +1507,7 @@ mysql> DESCRIBE mail_domains;
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS mail_domains ("
 			"MaiCod INT NOT NULL AUTO_INCREMENT,"
-			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL
+			"Domain VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_EMAIL_ADDRESS
 			"Info VARCHAR(2047) NOT NULL,"	// Mai_MAX_BYTES_MAIL_INFO
 		   "UNIQUE INDEX(MaiCod),"
 		   "UNIQUE INDEX(Domain))");
@@ -1612,15 +1612,15 @@ mysql> DESCRIBE msg_rcv;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_rcv ("
-                   "MsgCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "Notified ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX (UsrCod,MsgCod),"
-                   "INDEX(MsgCod),"
-                   "INDEX(Notified))");
+			"MsgCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Notified ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX (UsrCod,MsgCod),"
+		   "INDEX(MsgCod),"
+		   "INDEX(Notified))");
 
    /***** Table msg_rcv_deleted *****/
 /*
@@ -1637,14 +1637,14 @@ mysql> DESCRIBE msg_rcv_deleted;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_rcv_deleted ("
-                   "MsgCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "Notified ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,MsgCod),"
-                   "INDEX(MsgCod),"
-                   "INDEX(Notified))");
+			"MsgCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+			"Notified ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Open ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"Replied ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(UsrCod,MsgCod),"
+		   "INDEX(MsgCod),"
+		   "INDEX(Notified))");
 
    /***** Table msg_snt *****/
 /*
@@ -1661,14 +1661,14 @@ mysql> DESCRIBE msg_snt;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_snt ("
-                   "MsgCod INT NOT NULL,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(UsrCod))");
+			"MsgCod INT NOT NULL,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"Expanded ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"CreatTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(MsgCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table msg_snt_deleted *****/
 /*
@@ -1684,13 +1684,13 @@ mysql> DESCRIBE msg_snt_deleted;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_snt_deleted ("
-                   "MsgCod INT NOT NULL,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(MsgCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(UsrCod))");
+			"MsgCod INT NOT NULL,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(MsgCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table notices *****/
 /*
@@ -1709,18 +1709,18 @@ mysql> DESCRIBE notices;
 7 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS notices ("
-                   "NotCod INT NOT NULL AUTO_INCREMENT,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "Content TEXT NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "NumNotif INT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NotCod),"
-                   "INDEX(CrsCod,Status),"
-                   "INDEX(UsrCod),"
-                   "INDEX(CreatTime),"
-                   "INDEX(Status))");
+			"NotCod INT NOT NULL AUTO_INCREMENT,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+			"Content TEXT NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(NotCod),"
+		   "INDEX(CrsCod,Status),"
+		   "INDEX(UsrCod),"
+		   "INDEX(CreatTime),"
+		   "INDEX(Status))");
 
    /***** Table notices_deleted *****/
 /*
@@ -1738,16 +1738,16 @@ mysql> DESCRIBE notices_deleted;
 6 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS notices_deleted ("
-                   "NotCod INT NOT NULL,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "UsrCod INT NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "Content TEXT NOT NULL,"
-                   "NumNotif INT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NotCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(UsrCod),"
-                   "INDEX(CreatTime))");
+			"NotCod INT NOT NULL,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"UsrCod INT NOT NULL,"
+			"CreatTime DATETIME NOT NULL,"
+			"Content TEXT NOT NULL,"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(NotCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(UsrCod),"
+		   "INDEX(CreatTime))");
 
    /***** Table notif *****/
 /*
@@ -1771,43 +1771,43 @@ mysql> DESCRIBE notif;
 */
 // TODO: Change NtfCod and LogCod from INT to BIGINT in database tables.
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS notif ("
-	           "NtfCod INT NOT NULL AUTO_INCREMENT,"
-                   "NotifyEvent TINYINT NOT NULL,"
-                   "ToUsrCod INT NOT NULL,"
-                   "FromUsrCod INT NOT NULL,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "Cod INT NOT NULL DEFAULT -1,"
-                   "TimeNotif DATETIME NOT NULL,"
-                   "Status TINYINT NOT NULL DEFAULT 0,"
-                   "UNIQUE INDEX(NtfCod),"
-                   "INDEX(NotifyEvent),"
-                   "INDEX(ToUsrCod),"
-                   "INDEX(CrsCod),"
-                   "INDEX(TimeNotif))");
+			"NtfCod INT NOT NULL AUTO_INCREMENT,"
+			"NotifyEvent TINYINT NOT NULL,"
+			"ToUsrCod INT NOT NULL,"
+			"FromUsrCod INT NOT NULL,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"TimeNotif DATETIME NOT NULL,"
+			"Status TINYINT NOT NULL DEFAULT 0,"
+		   "UNIQUE INDEX(NtfCod),"
+		   "INDEX(NotifyEvent),"
+		   "INDEX(ToUsrCod),"
+		   "INDEX(CrsCod),"
+		   "INDEX(TimeNotif))");
 
    /***** Table pending_emails *****/
 /*
-MariaDB [swad]> DESCRIBE pending_emails;
+mysql> DESCRIBE pending_emails;
 +-------------+--------------+------+-----+---------+-------+
 | Field       | Type         | Null | Key | Default | Extra |
 +-------------+--------------+------+-----+---------+-------+
 | UsrCod      | int(11)      | NO   | MUL | NULL    |       |
-| E_mail      | varchar(127) | NO   |     | NULL    |       |
+| E_mail      | varchar(255) | NO   |     | NULL    |       |
 | MailKey     | char(43)     | NO   | PRI | NULL    |       |
 | DateAndTime | datetime     | NO   |     | NULL    |       |
 +-------------+--------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS pending_emails ("
-                   "UsrCod INT NOT NULL,"
-                   "E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL,"
-                   "MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"
-                   "DateAndTime DATETIME NOT NULL,"
-                   "INDEX(UsrCod),"
-                   "UNIQUE INDEX(MailKey))");
+			"UsrCod INT NOT NULL,"
+			"E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,"	// Cns_MAX_CHARS_EMAIL_ADDRESS
+			"MailKey CHAR(43) COLLATE latin1_bin NOT NULL,"			// Mai_LENGTH_EMAIL_CONFIRM_KEY
+			"DateAndTime DATETIME NOT NULL,"
+		   "INDEX(UsrCod),"
+		   "UNIQUE INDEX(MailKey))");
 
    /***** Table pending_passwd *****/
 /*

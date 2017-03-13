@@ -333,8 +333,10 @@ void Sta_LogAccess (const char *Comments)
    if (Comments)
      {
       /* Log comments */
-      sprintf (Query,"INSERT INTO log_comments (LogCod,Comments)"
-                     " VALUES ('%ld','",
+      sprintf (Query,"INSERT INTO log_comments"
+	             " (LogCod,Comments)"
+                     " VALUES"
+                     " ('%ld','",
 	       LogCod);
       Str_AddStrToQuery (Query,Comments,sizeof (Query));
       Str_Concat (Query,"')",
@@ -352,8 +354,10 @@ void Sta_LogAccess (const char *Comments)
    if (Gbl.Search.LogSearch && Gbl.Search.Str[0])
      {
       /* Log search string */
-      sprintf (Query,"INSERT INTO log_search (LogCod,SearchStr)"
-                     " VALUES ('%ld','",
+      sprintf (Query,"INSERT INTO log_search"
+	             " (LogCod,SearchStr)"
+                     " VALUES"
+                     " ('%ld','",
 	       LogCod);
       Str_AddStrToQuery (Query,Gbl.Search.Str,sizeof (Query));
       Str_Concat (Query,"')",
@@ -371,8 +375,10 @@ void Sta_LogAccess (const char *Comments)
    if (Gbl.WebService.IsWebService)
      {
       /* Log web service plugin and function */
-      sprintf (Query,"INSERT INTO log_ws (LogCod,PlgCod,FunCod)"
-                     " VALUES ('%ld','%ld','%u')",
+      sprintf (Query,"INSERT INTO log_ws"
+	             " (LogCod,PlgCod,FunCod)"
+                     " VALUES"
+                     " ('%ld','%ld','%u')",
 	       LogCod,Gbl.WebService.PlgCod,(unsigned) Gbl.WebService.Function);
 
       if (mysql_query (&Gbl.mysql,Query))
@@ -381,8 +387,10 @@ void Sta_LogAccess (const char *Comments)
    else if (Gbl.Banners.BanCodClicked > 0)
      {
       /* Log banner clicked */
-      sprintf (Query,"INSERT INTO log_banners (LogCod,BanCod)"
-                     " VALUES ('%ld','%ld')",
+      sprintf (Query,"INSERT INTO log_banners"
+	             " (LogCod,BanCod)"
+                     " VALUES"
+                     " ('%ld','%ld')",
 	       LogCod,Gbl.Banners.BanCodClicked);
       DB_QueryINSERT (Query,"can not log banner clicked");
      }

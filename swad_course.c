@@ -1942,9 +1942,10 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
               Hie_MAX_BYTES_FULL_NAME];
 
    /***** Insert new course into pending requests *****/
-   sprintf (Query,"INSERT INTO courses (DegCod,Year,InsCrsCod,"
-                  "Status,RequesterUsrCod,ShortName,FullName)"
-                  " VALUES ('%ld','%u','%s','%u','%ld','%s','%s')",
+   sprintf (Query,"INSERT INTO courses"
+	          " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
+                  " VALUES"
+                  " ('%ld','%u','%s','%u','%ld','%s','%s')",
             Crs->DegCod,Crs->Year,
             Crs->InstitutionalCrsCod,
             Status,
@@ -3286,8 +3287,10 @@ void Crs_UpdateCrsLast (void)
        Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT)
      {
       /***** Update my last access to current course *****/
-      sprintf (Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
-	             " VALUES ('%ld',NOW())",
+      sprintf (Query,"REPLACE INTO crs_last"
+	             " (CrsCod,LastTime)"
+	             " VALUES"
+	             " ('%ld',NOW())",
 	       Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryUPDATE (Query,"can not update last access to current course");
      }

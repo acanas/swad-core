@@ -1048,8 +1048,10 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
                     Cns_MAX_BYTES_IP];
 
    /***** Create a new plugin *****/
-   sprintf (Query,"INSERT INTO plugins (Name,Description,Logo,AppKey,URL,IP)"
-                  " VALUES ('%s','%s','%s','%s','%s','%s')",
+   sprintf (Query,"INSERT INTO plugins"
+	          " (Name,Description,Logo,AppKey,URL,IP)"
+                  " VALUES"
+                  " ('%s','%s','%s','%s','%s','%s')",
             Plg->Name,Plg->Description,Plg->Logo,Plg->AppKey,Plg->URL,Plg->IP);
    DB_QueryINSERT (Query,"can not create plugin");
 

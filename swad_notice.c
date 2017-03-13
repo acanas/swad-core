@@ -163,9 +163,12 @@ static long Not_InsertNoticeInDB (const char *Content)
    char Query[256 + Cns_MAX_BYTES_TEXT];
 
    /***** Insert notice in the database *****/
-   sprintf (Query,"INSERT INTO notices (CrsCod,UsrCod,CreatTime,Content,Status)"
-                  " VALUES ('%ld','%ld',NOW(),'%s','%u')",
-            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,Content,(unsigned) Not_ACTIVE_NOTICE);
+   sprintf (Query,"INSERT INTO notices"
+	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
+                  " VALUES"
+                  " ('%ld','%ld',NOW(),'%s','%u')",
+            Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
+            Content,(unsigned) Not_ACTIVE_NOTICE);
    return DB_QueryINSERTandReturnCode (Query,"can not create notice");
   }
 
@@ -299,7 +302,8 @@ void Not_RemoveNotice (void)
 
    /***** Remove notice *****/
    /* Copy notice to table of deleted notices */
-   sprintf (Query,"INSERT IGNORE INTO notices_deleted (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
+   sprintf (Query,"INSERT IGNORE INTO notices_deleted"
+	          " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
                   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
                   " FROM notices"
                   " WHERE NotCod='%ld' AND CrsCod='%ld'",

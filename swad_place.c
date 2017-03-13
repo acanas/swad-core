@@ -849,7 +849,8 @@ static void Plc_CreatePlace (struct Place *Plc)
    char Query[1024];
 
    /***** Create a new place *****/
-   sprintf (Query,"INSERT INTO places (InsCod,ShortName,FullName)"
+   sprintf (Query,"INSERT INTO places"
+	          " (InsCod,ShortName,FullName)"
 	          " VALUES ('%ld','%s','%s')",
             Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
    DB_QueryINSERT (Query,"can not create place");

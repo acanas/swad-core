@@ -1089,8 +1089,10 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
               Cns_MAX_BYTES_WWW];
 
    /***** Create a new department *****/
-   sprintf (Query,"INSERT INTO departments (InsCod,ShortName,FullName,WWW)"
-                  " VALUES ('%ld','%s','%s','%s')",
+   sprintf (Query,"INSERT INTO departments"
+	          " (InsCod,ShortName,FullName,WWW)"
+                  " VALUES"
+                  " ('%ld','%s','%s','%s')",
             Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
    DB_QueryINSERT (Query,"can not create a new department");
 

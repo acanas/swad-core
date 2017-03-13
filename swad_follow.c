@@ -1012,7 +1012,8 @@ void Fol_FollowUsr1 (void)
 	    /***** Follow user in database *****/
 	    sprintf (Query,"REPLACE INTO usr_follow"
 			   " (FollowerCod,FollowedCod,FollowTime)"
-			   " VALUES ('%ld','%ld',NOW())",
+			   " VALUES"
+			   " ('%ld','%ld',NOW())",
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     Gbl.Usrs.Other.UsrDat.UsrCod);
 	    DB_QueryREPLACE (Query,"can not follow user");

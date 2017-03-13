@@ -375,7 +375,7 @@ static void Acc_ShowFormRequestNewAccountWithParams (const char *NewNicknameWith
                       "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Email,
-            Cns_MAX_CHARS_EMAIL,
+            Cns_MAX_CHARS_EMAIL_ADDRESS,
             Txt_HELP_email,
             NewEmail);
 
@@ -551,7 +551,7 @@ static void Acc_PrintAccountSeparator (void)
 bool Acc_CreateMyNewAccountAndLogIn (void)
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char NewEmail[Cns_MAX_BYTES_EMAIL + 1];
+   char NewEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
 
    if (Acc_GetParamsNewAccount (NewNicknameWithoutArroba,NewEmail,NewEncryptedPassword))
@@ -578,7 +578,7 @@ bool Acc_CreateMyNewAccountAndLogIn (void)
 	{
 	 /* Email updated sucessfully */
 	 Str_Copy (Gbl.Usrs.Me.UsrDat.Email,NewEmail,
-	           Cns_MAX_BYTES_EMAIL);
+	           Cns_MAX_BYTES_EMAIL_ADDRESS);
 
 	 Gbl.Usrs.Me.UsrDat.EmailConfirmed = false;
 	}
@@ -649,7 +649,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
      }
 
    /***** Step 2/3: Get new email from form *****/
-   Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL);
+   Par_GetParToText ("NewEmail",NewEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
    if (Mai_CheckIfEmailIsValid (NewEmail))	// New email is valid
      {
@@ -717,12 +717,14 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    /***** Insert new user in database *****/
    /* Insert user's data */
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
-   sprintf (Query,"INSERT INTO usr_data (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
+   sprintf (Query,"INSERT INTO usr_data"
+	          " (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
 		  "Theme,IconSet,Language,FirstDayOfWeek,PhotoVisibility,ProfileVisibility,"
 		  "CtyCod,"
 		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
 		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
-		  " VALUES ('%s','%s','%s','%s','%s','%s',"
+		  " VALUES"
+		  " ('%s','%s','%s','%s','%s','%s',"
 		  "'%s','%s','%s','%u','%s','%s',"
 		  "'%ld',"
 		  "'%s','%s','%s','%s','%s',%s,'%s',"
@@ -754,8 +756,10 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	NumID++)
      {
       Str_ConvertToUpperText (UsrDat->IDs.List[NumID].ID);
-      sprintf (Query,"INSERT INTO usr_IDs (UsrCod,UsrID,CreatTime,Confirmed)"
-		     " VALUES ('%ld','%s',NOW(),'%c')",
+      sprintf (Query,"INSERT INTO usr_IDs"
+	             " (UsrCod,UsrID,CreatTime,Confirmed)"
+		     " VALUES"
+		     " ('%ld','%s',NOW(),'%c')",
 	       UsrDat->UsrCod,
 	       UsrDat->IDs.List[NumID].ID,
 	       UsrDat->IDs.List[NumID].Confirmed ? 'Y' :

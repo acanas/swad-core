@@ -160,9 +160,11 @@ void Ses_InsertSessionInDB (void)
    if (Gbl.Search.WhatToSearch == Sch_SEARCH_UNKNOWN)
       Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
-   sprintf (Query,"INSERT INTO sessions (SessionId,UsrCod,Password,Role,"
+   sprintf (Query,"INSERT INTO sessions"
+	          " (SessionId,UsrCod,Password,Role,"
                   "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
-                  " VALUES ('%s','%ld','%s','%u',"
+                  " VALUES"
+                  " ('%s','%ld','%s','%u',"
                   "'%ld','%ld','%ld','%ld','%ld',NOW(),NOW(),'%u')",
             Gbl.Session.Id,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -358,7 +360,8 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
       /***** Insert parameter in the database *****/
       sprintf (Query,"INSERT INTO hidden_params"
 	             " (SessionId,Action,ParamName,ParamValue)"
-		     " VALUES ('%s','%d','%s','%s')",
+		     " VALUES"
+		     " ('%s','%d','%s','%s')",
 	       Gbl.Session.Id,(int) Action,ParamName,ParamValue);
       DB_QueryINSERT (Query,"can not create hidden parameter");
       Gbl.HiddenParamsInsertedIntoDB = true;

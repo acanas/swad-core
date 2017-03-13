@@ -1434,15 +1434,14 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
      }
 
    /***** Store notify event *****/
-   sprintf (Query,"INSERT INTO notif (NotifyEvent,ToUsrCod,FromUsrCod,"
-	          "InsCod,CtrCod,DegCod,CrsCod,"
-	          "Cod,TimeNotif,Status)"
-                  " VALUES ('%u','%ld','%ld',"
-                  "'%ld','%ld','%ld','%ld',"
-                  "'%ld',NOW(),'%u')",
+   sprintf (Query,"INSERT INTO notif"
+	          " (NotifyEvent,ToUsrCod,FromUsrCod,"
+	          "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
+                  " VALUES"
+                  " ('%u','%ld','%ld',"
+                  "'%ld','%ld','%ld','%ld','%ld',NOW(),'%u')",
             (unsigned) NotifyEvent,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
-            InsCod,CtrCod,DegCod,CrsCod,
-            Cod,(unsigned) Status);
+            InsCod,CtrCod,DegCod,CrsCod,Cod,(unsigned) Status);
    DB_QueryINSERT (Query,"can not create new notification event");
   }
 
@@ -1830,8 +1829,10 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
    Ntf_GetNumNotifSent (DegCod,CrsCod,NotifyEvent,&CurrentNumEvents,&CurrentNumMails);
 
    /***** Update number of users notified *****/
-   sprintf (Query,"REPLACE INTO sta_notif (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
-	          " VALUES ('%ld','%ld','%u','%u','%u')",
+   sprintf (Query,"REPLACE INTO sta_notif"
+	          " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
+	          " VALUES"
+	          " ('%ld','%ld','%u','%u','%u')",
             DegCod,CrsCod,(unsigned) NotifyEvent,
             CurrentNumEvents + NumEvents,
             CurrentNumMails + NumMails);
