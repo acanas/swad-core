@@ -290,7 +290,7 @@ bool Ses_GetSessionData (void)
 
       /***** Get password (row[1]) *****/
       Str_Copy (Gbl.Usrs.Me.LoginEncryptedPassword,row[1],
-                Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+                Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
 
       /***** Get logged user type (row[2]) *****/
       if (sscanf (row[2],"%u",&Gbl.Usrs.Me.RoleFromSession) != 1)

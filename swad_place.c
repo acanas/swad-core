@@ -536,7 +536,7 @@ void Plc_RemovePlace (void)
   {
    extern const char *Txt_To_remove_a_place_you_must_first_remove_all_centres_of_that_place;
    extern const char *Txt_Place_X_removed;
-   char Query[512];
+   char Query[128];
    struct Place Plc;
 
    /***** Get place code *****/
@@ -846,12 +846,15 @@ void Plc_RecFormNewPlace (void)
 static void Plc_CreatePlace (struct Place *Plc)
   {
    extern const char *Txt_Created_new_place_X;
-   char Query[1024];
+   char Query[256 +
+              Plc_MAX_BYTES_PLACE_SHRT_NAME +
+              Plc_MAX_BYTES_PLACE_FULL_NAME];
 
    /***** Create a new place *****/
    sprintf (Query,"INSERT INTO places"
 	          " (InsCod,ShortName,FullName)"
-	          " VALUES ('%ld','%s','%s')",
+	          " VALUES"
+	          " ('%ld','%s','%s')",
             Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
    DB_QueryINSERT (Query,"can not create place");
 

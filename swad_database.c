@@ -1822,31 +1822,31 @@ mysql> DESCRIBE pending_passwd;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS pending_passwd ("
-                   "UsrCod INT NOT NULL,"
-                   "PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"
-                   "DateAndTime DATETIME NOT NULL,"
-                   "PRIMARY KEY (UsrCod))");
+			"UsrCod INT NOT NULL,"
+			"PendingPassword CHAR(86) COLLATE latin1_bin NOT NULL,"	// Pwd_MAX_BYTES_ENCRYPTED_PASSWORD
+			"DateAndTime DATETIME NOT NULL,"
+		   "PRIMARY KEY (UsrCod))");
 
    /***** Table places *****/
 /*
 mysql> DESCRIBE places;
-+-----------+--------------+------+-----+---------+----------------+
-| Field     | Type         | Null | Key | Default | Extra          |
-+-----------+--------------+------+-----+---------+----------------+
-| PlcCod    | int(11)      | NO   | PRI | NULL    | auto_increment |
-| InsCod    | int(11)      | NO   | MUL | NULL    |                |
-| ShortName | varchar(32)  | NO   |     | NULL    |                |
-| FullName  | varchar(127) | NO   |     | NULL    |                |
-+-----------+--------------+------+-----+---------+----------------+
-4 rows in set (0.00 sec)
++-----------+---------------+------+-----+---------+----------------+
+| Field     | Type          | Null | Key | Default | Extra          |
++-----------+---------------+------+-----+---------+----------------+
+| PlcCod    | int(11)       | NO   | PRI | NULL    | auto_increment |
+| InsCod    | int(11)       | NO   | MUL | NULL    |                |
+| ShortName | varchar(511)  | NO   |     | NULL    |                |
+| FullName  | varchar(2047) | NO   |     | NULL    |                |
++-----------+---------------+------+-----+---------+----------------+
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS places ("
-                   "PlcCod INT NOT NULL AUTO_INCREMENT,"
-                   "InsCod INT NOT NULL,"
-                   "ShortName VARCHAR(32) NOT NULL,"
-                   "FullName VARCHAR(127) NOT NULL,"
-                   "UNIQUE INDEX(PlcCod),"
-                   "INDEX(InsCod))");
+			"PlcCod INT NOT NULL AUTO_INCREMENT,"
+			"InsCod INT NOT NULL,"
+			"ShortName VARCHAR(511) NOT NULL,"	// Plc_MAX_BYTES_PLACE_SHRT_NAME
+			"FullName VARCHAR(2047) NOT NULL,"	// Plc_MAX_BYTES_PLACE_FULL_NAME
+		   "UNIQUE INDEX(PlcCod),"
+		   "INDEX(InsCod))");
 
    /***** Table plugins *****/
 /*

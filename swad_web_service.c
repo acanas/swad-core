@@ -644,7 +644,7 @@ int swad__createAccount (struct soap *soap,
                          struct swad__createAccountOutput *createAccountOut)			// output
   {
    char NewNicknameWithoutArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
-   char NewEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+   char NewEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
    int Result;
    int ReturnCode;
 
@@ -681,7 +681,7 @@ int swad__createAccount (struct soap *soap,
 
    /***** Set password to the password typed by the user *****/
    Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
-             Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+             Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
 
    /***** User does not exist in the platform, so create him/her! *****/
    Acc_CreateNewUsr (&Gbl.Usrs.Me.UsrDat,

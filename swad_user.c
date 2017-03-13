@@ -487,7 +487,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
 
    /* Get encrypted password */
    Str_Copy (UsrDat->Password,row[1],
-             Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+             Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
@@ -4886,7 +4886,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 
             /* Get encrypted password (row[2]) */
 	    Str_Copy (UsrInList->Password,row[2],
-	              Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64);
+	              Pwd_MAX_BYTES_ENCRYPTED_PASSWORD);
 
             /* Get user's surname 1 (row[3]) */
 	    Str_Copy (UsrInList->Surname1,row[3],

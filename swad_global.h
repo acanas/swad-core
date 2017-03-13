@@ -295,8 +295,8 @@ struct Globals
          bool RoleHasChanged;	// Set when I have changed my role
 	 char UsrIdLogin[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];	// String to store the ID, nickname or email entered in the user's login
          char LoginPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
-         char LoginEncryptedPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
-         char PendingPassword[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+         char LoginEncryptedPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
+         char PendingPassword[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
 	 char PathDir[PATH_MAX + 1];
 	 bool Logged;
          bool IBelongToCurrentIns;

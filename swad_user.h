@@ -38,6 +38,7 @@
 #include "swad_layout.h"
 #include "swad_menu.h"
 #include "swad_nickname.h"
+#include "swad_password.h"
 #include "swad_privacy_visibility_type.h"
 #include "swad_role_type.h"
 #include "swad_scope.h"
@@ -125,7 +126,7 @@ struct UsrData
       unsigned Num;
      } IDs;
    char Nickname        [Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA + 1];
-   char Password        [Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+   char Password        [Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
    Rol_Role_t RoleInCurrentCrsDB;
    int Roles;		// Check always if filled/calculated
 			// >=0 ==> filled/calculated
@@ -184,7 +185,7 @@ struct UsrInList
   {
    long UsrCod;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
-   char Password[Cry_LENGTH_ENCRYPTED_STR_SHA512_BASE64 + 1];
+   char Password[Pwd_MAX_BYTES_ENCRYPTED_PASSWORD + 1];
    char Surname1 [Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char Surname2 [Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
    char FirstName[Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME + 1];
