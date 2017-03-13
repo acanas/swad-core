@@ -1574,27 +1574,27 @@ mysql> DESCRIBE msg_content;
    /***** Table msg_content_deleted *****/
 /*
 mysql> DESCRIBE msg_content_deleted;
-+------------+--------------+------+-----+---------+-------+
-| Field      | Type         | Null | Key | Default | Extra |
-+------------+--------------+------+-----+---------+-------+
-| MsgCod     | int(11)      | NO   | PRI | NULL    |       |
-| Subject    | text         | NO   | MUL | NULL    |       |
-| Content    | longtext     | NO   |     | NULL    |       |
-| ImageName  | varchar(43)  | NO   |     |         |       |
-| ImageTitle | varchar(255) | NO   |     |         |       |
-| ImageURL   | varchar(255) | NO   |     |         |       |
-+------------+--------------+------+-----+---------+-------+
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| MsgCod     | int(11)       | NO   | PRI | NULL    |       |
+| Subject    | text          | NO   | MUL | NULL    |       |
+| Content    | longtext      | NO   |     | NULL    |       |
+| ImageName  | varchar(43)   | NO   |     |         |       |
+| ImageTitle | varchar(2047) | NO   |     |         |       |
+| ImageURL   | varchar(255)  | NO   |     |         |       |
++------------+---------------+------+-----+---------+-------+
 6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content_deleted ("
-                   "MsgCod INT NOT NULL,"
-                   "Subject TEXT NOT NULL,"
-                   "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL DEFAULT '',"
-                   "ImageTitle VARCHAR(255) NOT NULL DEFAULT '',"
-                   "ImageURL VARCHAR(255) NOT NULL DEFAULT '',"
-                   "UNIQUE INDEX(MsgCod),"
-                   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
+			"MsgCod INT NOT NULL,"
+			"Subject TEXT NOT NULL,"
+			"Content LONGTEXT NOT NULL,"
+			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(MsgCod),"
+		   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_rcv *****/
 /*
