@@ -2661,15 +2661,15 @@ mysql> DESCRIBE usr_figures;
 6 rows in set (0.01 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_figures ("
-	           "UsrCod INT NOT NULL,"
-	           "FirstClickTime DATETIME NOT NULL,"
-	           "NumClicks INT NOT NULL DEFAULT -1,"
-	           "NumFileViews INT NOT NULL DEFAULT -1,"
-	           "NumForPst INT NOT NULL DEFAULT -1,"
-	           "NumMsgSnt INT NOT NULL DEFAULT -1,"
-	           "PRIMARY KEY(UsrCod),"
-	           "INDEX(FirstClickTime),"
-	           "INDEX(NumClicks))");
+			"UsrCod INT NOT NULL,"
+			"FirstClickTime DATETIME NOT NULL,"
+			"NumClicks INT NOT NULL DEFAULT -1,"
+			"NumFileViews INT NOT NULL DEFAULT -1,"
+			"NumForPst INT NOT NULL DEFAULT -1,"
+			"NumMsgSnt INT NOT NULL DEFAULT -1,"
+		   "PRIMARY KEY(UsrCod),"
+		   "INDEX(FirstClickTime),"
+		   "INDEX(NumClicks))");
 
    /***** Table usr_follow *****/
    /*
@@ -2684,12 +2684,12 @@ mysql> DESCRIBE usr_follow;
 3 rows in set (0.00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_follow ("
-	           "FollowerCod INT NOT NULL,"
-	           "FollowedCod INT NOT NULL,"
-	           "FollowTime DATETIME NOT NULL,"
-	           "UNIQUE INDEX (FollowerCod,FollowedCod),"
-	           "UNIQUE INDEX (FollowedCod,FollowerCod),"
-	           "INDEX (FollowTime))");
+			"FollowerCod INT NOT NULL,"
+			"FollowedCod INT NOT NULL,"
+			"FollowTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX (FollowerCod,FollowedCod),"
+		   "UNIQUE INDEX (FollowedCod,FollowerCod),"
+		   "INDEX (FollowTime))");
 
 /***** Table usr_IDs *****/
 /*
@@ -2705,12 +2705,12 @@ mysql> DESCRIBE usr_IDs;
 4 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_IDs ("
-                   "UsrCod INT NOT NULL,"
-                   "UsrID CHAR(16) NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,UsrID),"
-                   "INDEX(UsrID))");
+			"UsrCod INT NOT NULL,"
+			"UsrID CHAR(16) NOT NULL,"	// ID_MAX_BYTES_USR_ID
+			"CreatTime DATETIME NOT NULL,"
+			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(UsrCod,UsrID),"
+		   "INDEX(UsrID))");
 
    /***** Table usr_last *****/
 /*
@@ -2728,14 +2728,14 @@ mysql> DESCRIBE usr_last;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_last ("
-                   "UsrCod INT NOT NULL,"
-                   "WhatToSearch TINYINT NOT NULL DEFAULT 0,"
-                   "LastCrs INT NOT NULL DEFAULT -1,"
-                   "LastTab TINYINT NOT NULL,"
-                   "LastTime DATETIME NOT NULL,"
-                   "LastAccNotif DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod),"
-                   "INDEX(LastTime))");
+			"UsrCod INT NOT NULL,"
+			"WhatToSearch TINYINT NOT NULL DEFAULT 0,"
+			"LastCrs INT NOT NULL DEFAULT -1,"
+			"LastTab TINYINT NOT NULL,"
+			"LastTime DATETIME NOT NULL,"
+			"LastAccNotif DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod),"
+		   "INDEX(LastTime))");
 
 /***** Table usr_nicknames *****/
 /*
@@ -2750,11 +2750,11 @@ mysql> DESCRIBE usr_nicknames;
 3 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_nicknames ("
-                   "UsrCod INT NOT NULL,"
-                   "Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,Nickname),"
-                   "UNIQUE INDEX(Nickname))");
+			"UsrCod INT NOT NULL,"
+			"Nickname CHAR(16) COLLATE latin1_spanish_ci NOT NULL,"	// Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA
+			"CreatTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,Nickname),"
+		   "UNIQUE INDEX(Nickname))");
 
    /***** Table usr_report *****/
 /*
@@ -2773,14 +2773,14 @@ mysql> DESCRIBE usr_report;
 7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_report ("
-                   "RepCod INT NOT NULL AUTO_INCREMENT,"
-		   "UsrCod INT NOT NULL,"
-	           "ReportTimeUTC DATETIME NOT NULL,"
-	           "UniqueDirL CHAR(2) NOT NULL,"	//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-	           "UniqueDirR CHAR(41) NOT NULL,"	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
-	           "Filename VARCHAR(255) NOT NULL,"	// Report filename
-	           "Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink)
-	           "UNIQUE INDEX(RepCod),"
+			"RepCod INT NOT NULL AUTO_INCREMENT,"
+			"UsrCod INT NOT NULL,"
+			"ReportTimeUTC DATETIME NOT NULL,"
+			"UniqueDirL CHAR(2) NOT NULL,"	//  2  leftmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+			"UniqueDirR CHAR(41) NOT NULL,"	// 41 rightmost chars from a unique 43 chars base64url codified from a unique SHA-256 string
+			"Filename VARCHAR(255) NOT NULL,"	// Report filename, NAME_MAX
+			"Permalink VARCHAR(255) NOT NULL,"	// Full URL (permalink), Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(RepCod),"
 		   "INDEX(UsrCod))");
 
 /***** Table usr_webs *****/
@@ -2796,26 +2796,26 @@ mysql> DESCRIBE usr_webs;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_webs ("
-                   "UsrCod INT NOT NULL,"
-                   "Web ENUM("
-                   "'www',"
-                   "'500px',"
-                   "'delicious','deviantart','diaspora',"
-                   "'edmodo',"
-                   "'facebook','flickr','foursquare',"
-                   "'github','gnusocial','googleplus','googlescholar',"
-                   "'identica','instagram',"
-                   "'linkedin',"
-		   "'orcid',"
-                   "'paperli','pinterest',"
-	           "'quitter',"
-                   "'researchgate','researcherid',"
-                   "'scoopit','slideshare','stackoverflow','storify',"
-                   "'tumblr','twitter',"
-                   "'wikipedia',"
-                   "'youtube') NOT NULL,"
-                   "URL VARCHAR(255) NOT NULL,"
-                   "UNIQUE INDEX(UsrCod,Web))");
+			"UsrCod INT NOT NULL,"
+			"Web ENUM("
+			"'www',"
+			"'500px',"
+			"'delicious','deviantart','diaspora',"
+			"'edmodo',"
+			"'facebook','flickr','foursquare',"
+			"'github','gnusocial','googleplus','googlescholar',"
+			"'identica','instagram',"
+			"'linkedin',"
+			"'orcid',"
+			"'paperli','pinterest',"
+			"'quitter',"
+			"'researchgate','researcherid',"
+			"'scoopit','slideshare','stackoverflow','storify',"
+			"'tumblr','twitter',"
+			"'wikipedia',"
+			"'youtube') NOT NULL,"
+			"URL VARCHAR(255) NOT NULL,"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(UsrCod,Web))");
 
 /***** Table ws_keys *****/
 /*
@@ -2831,14 +2831,14 @@ mysql> DESCRIBE ws_keys;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS ws_keys ("
-                    "WSKey CHAR(43) NOT NULL,"
-                    "UsrCod INT NOT NULL,"
-                    "PlgCod INT NOT NULL,"
-                    "LastTime DATETIME NOT NULL,"
-                    "UNIQUE INDEX(WSKey),"
-                    "INDEX(UsrCod),"
-                    "INDEX(PlgCod),"
-                    "INDEX(LastTime))");
+			"WSKey CHAR(43) NOT NULL,"	// Svc_BYTES_WS_KEY
+			"UsrCod INT NOT NULL,"
+			"PlgCod INT NOT NULL,"
+			"LastTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(WSKey),"
+		   "INDEX(UsrCod),"
+		   "INDEX(PlgCod),"
+		   "INDEX(LastTime))");
 
    /***** Show success message *****/
    fprintf (Gbl.F.Out,"</ol>");

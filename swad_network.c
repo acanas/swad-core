@@ -200,7 +200,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void);
 
 void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
   {
-   char Query[256];
+   char Query[256 + Cns_MAX_BYTES_WWW];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;
@@ -292,7 +292,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
    extern const char *Hlp_PROFILE_Webs;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Webs_social_networks;
-   char Query[256];
+   char Query[256 + Cns_MAX_BYTES_WWW];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    Net_WebsAndSocialNetworks_t NumURL;

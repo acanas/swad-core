@@ -85,7 +85,7 @@ struct Rep_Report
    struct Rep_Hits Hits;
    unsigned long MaxHitsPerYear;
    char FilenameReport[NAME_MAX + 1];
-   char Permalink[PATH_MAX + 1];
+   char Permalink[Cns_MAX_BYTES_WWW + 1];
   };
 
 /*****************************************************************************/
@@ -404,7 +404,9 @@ static void Rep_CreateNewReportFile (struct Rep_Report *Report)
 
 static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
   {
-   char Query[1024 + PATH_MAX * 2];
+   char Query[1024 +
+              NAME_MAX +
+              Cns_MAX_BYTES_WWW];
 
    /***** Insert a new user's usage report into database *****/
    sprintf (Query,"INSERT INTO usr_report"
