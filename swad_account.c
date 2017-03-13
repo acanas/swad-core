@@ -606,7 +606,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    extern const char *Txt_The_nickname_entered_X_is_not_valid_;
    extern const char *Txt_The_email_address_X_had_been_registered_by_another_user;
    extern const char *Txt_The_email_address_entered_X_is_not_valid;
-   char Query[1024];
+   char Query[256 + Cns_MAX_CHARS_EMAIL_ADDRESS];
    char NewNicknameWithArroba[Nck_MAX_BYTES_NICKNAME_FROM_FORM + 1];
    char NewPlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD + 1];
    bool Error = false;

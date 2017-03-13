@@ -1722,7 +1722,7 @@ void Mai_ConfirmEmail (void)
 
    /***** Get user's code and email from key *****/
    sprintf (Query,"SELECT UsrCod,E_mail FROM pending_emails"
-                  " WHERE MailKey='%s'",
+	          " WHERE MailKey='%s'",
             MailKey);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email from key"))
      {

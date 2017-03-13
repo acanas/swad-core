@@ -1245,7 +1245,7 @@ CREATE TABLE IF NOT EXISTS usr_duplicated (
 --
 CREATE TABLE IF NOT EXISTS usr_emails (
 	UsrCod INT NOT NULL,
-	E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL,
+	E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,
 	CreatTime DATETIME NOT NULL,
 	Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',
 	UNIQUE INDEX(UsrCod,E_mail),

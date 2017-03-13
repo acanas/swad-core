@@ -209,13 +209,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.28 (2017-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.29 (2017-03-13)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155.29:Mar 13, 2017	Adjusting size of database fields. (217034 lines)
+					1 change necessary in database.
+ALTER TABLE usr_emails CHANGE COLUMN E_mail E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL;
+
         Version 16.155.28:Mar 13, 2017	Adjusting size of database fields. (217035 lines)
 					7 changes necessary in database.
 ALTER TABLE usr_data CHANGE COLUMN Surname1 Surname1 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';

@@ -720,7 +720,7 @@ static int Svc_CheckParamsNewAccount (char *NewNicknameWithArroba,	// Input
                                       char *NewPlainPassword,		// Input
                                       char *NewEncryptedPassword)	// Output
   {
-   char Query[1024];
+   char Query[256 + Cns_MAX_CHARS_EMAIL_ADDRESS];
 
    /***** Step 1/3: Check new nickname *****/
    /* Make a copy without possible starting arrobas */
@@ -771,7 +771,9 @@ int swad__loginByUserPasswordKey (struct soap *soap,
   {
    char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
    int ReturnCode;
-   char Query[512];
+   char Query[512 +
+              Cns_MAX_CHARS_EMAIL_ADDRESS +
+              Pwd_BYTES_ENCRYPTED_PASSWORD];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -1082,7 +1084,7 @@ int swad__getNewPassword (struct soap *soap,
   {
    int ReturnCode;
    char UsrIDNickOrEmail[Cns_MAX_BYTES_EMAIL_ADDRESS + 1];
-   char Query[512];
+   char Query[128 + Cns_MAX_BYTES_EMAIL_ADDRESS];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumRows;
@@ -1107,18 +1109,14 @@ int swad__getNewPassword (struct soap *soap,
       Str_RemoveLeadingArrobas (UsrIDNickOrEmail);
 
       /* User has typed a nickname */
-      sprintf (Query,"SELECT UsrCod"
-		     " FROM usr_nicknames"
-		     " WHERE Nickname='%s'",
+      sprintf (Query,"SELECT UsrCod FROM usr_nicknames WHERE Nickname='%s'",
 	       UsrIDNickOrEmail);
      }
    else if (Mai_CheckIfEmailIsValid (Gbl.Usrs.Me.UsrIdLogin))		// 2: It's an email
      {
       /* User has typed an email */
       // TODO: Get only if email confirmed?
-      sprintf (Query,"SELECT UsrCod"
-	             " FROM usr_emails"
-		     " WHERE E_mail='%s'",
+      sprintf (Query,"SELECT UsrCod FROM usr_emails WHERE E_mail='%s'",
 	       UsrIDNickOrEmail);
      }
    else									// 3: It's not a nickname nor email
@@ -1130,9 +1128,7 @@ int swad__getNewPassword (struct soap *soap,
 	{
 	 /* User has typed a valid user's ID (existing or not) */
 	 // TODO: Get only if ID confirmed?
-	 sprintf (Query,"SELECT UsrCod"
-	                " FROM usr_IDs"
-			" WHERE UsrID='%s'",
+	 sprintf (Query,"SELECT UsrCod FROM usr_IDs WHERE UsrID='%s'",
 		  UsrIDNickOrEmail);
 	}
       else	// String is not a valid user's nickname, email or ID

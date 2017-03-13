@@ -2618,11 +2618,11 @@ mysql> DESCRIBE usr_duplicated;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_duplicated ("
-	           "UsrCod INT NOT NULL,"
-	           "InformerCod INT NOT NULL,"
-	           "InformTime DATETIME NOT NULL,"
-	           "UNIQUE INDEX(UsrCod,InformerCod),"
-	           "INDEX(UsrCod))");
+			"UsrCod INT NOT NULL,"
+			"InformerCod INT NOT NULL,"
+			"InformTime DATETIME NOT NULL,"
+		   "UNIQUE INDEX(UsrCod,InformerCod),"
+		   "INDEX(UsrCod))");
 
    /***** Table usr_emails *****/
    /*
@@ -2631,19 +2631,19 @@ mysql> DESCRIBE usr_emails;
 | Field     | Type          | Null | Key | Default | Extra |
 +-----------+---------------+------+-----+---------+-------+
 | UsrCod    | int(11)       | NO   | PRI | NULL    |       |
-| E_mail    | varchar(127)  | NO   | PRI | NULL    |       |
+| E_mail    | varchar(255)  | NO   | PRI | NULL    |       |
 | CreatTime | datetime      | NO   |     | NULL    |       |
 | Confirmed | enum('N','Y') | NO   |     | N       |       |
 +-----------+---------------+------+-----+---------+-------+
-4 rows in set (0.01 sec)
+4 rows in set (0,00 sec)
    */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_emails ("
-                   "UsrCod INT NOT NULL,"
-                   "E_mail VARCHAR(127) COLLATE latin1_general_ci NOT NULL,"
-                   "CreatTime DATETIME NOT NULL,"
-                   "Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "UNIQUE INDEX(UsrCod,E_mail),"
-                   "UNIQUE INDEX(E_mail))");
+			"UsrCod INT NOT NULL,"
+			"E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL,"	// Cns_MAX_CHARS_EMAIL_ADDRESS
+			"CreatTime DATETIME NOT NULL,"
+			"Confirmed ENUM('N','Y') NOT NULL DEFAULT 'N',"
+		   "UNIQUE INDEX(UsrCod,E_mail),"
+		   "UNIQUE INDEX(E_mail))");
 
    /***** Table usr_figures *****/
    /*
