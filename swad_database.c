@@ -2181,11 +2181,11 @@ mysql> DESCRIBE svy_answers;
 4 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_answers ("
-                   "QstCod INT NOT NULL,"
-                   "AnsInd TINYINT NOT NULL,"
-                   "NumUsrs INT NOT NULL DEFAULT 0,"
-                   "Answer TEXT NOT NULL,"
-                   "UNIQUE INDEX(QstCod,AnsInd))");
+			"QstCod INT NOT NULL,"
+			"AnsInd TINYINT NOT NULL,"
+			"NumUsrs INT NOT NULL DEFAULT 0,"
+			"Answer TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(QstCod,AnsInd))");
 
    /***** Table svy_grp *****/
 /*
@@ -2199,9 +2199,9 @@ mysql> DESCRIBE svy_grp;
 2 rows in set (0.01 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_grp ("
-                   "SvyCod INT NOT NULL,"
-                   "GrpCod INT NOT NULL,"
-                   "UNIQUE INDEX(SvyCod,GrpCod))");
+			"SvyCod INT NOT NULL,"
+			"GrpCod INT NOT NULL,"
+		   "UNIQUE INDEX(SvyCod,GrpCod))");
 
    /***** Table svy_questions *****/
 /*
@@ -2218,13 +2218,13 @@ mysql> DESCRIBE svy_questions;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_questions ("
-                   "QstCod INT NOT NULL AUTO_INCREMENT,"
-                   "SvyCod INT NOT NULL,"
-                   "QstInd INT NOT NULL DEFAULT 0,"
-                   "AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
-                   "Stem TEXT NOT NULL,"
-                   "UNIQUE INDEX(QstCod),"
-                   "INDEX(SvyCod))");
+			"QstCod INT NOT NULL AUTO_INCREMENT,"
+			"SvyCod INT NOT NULL,"
+			"QstInd INT NOT NULL DEFAULT 0,"
+			"AnsType ENUM ('unique_choice','multiple_choice') NOT NULL,"
+			"Stem TEXT NOT NULL,"	// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(QstCod),"
+		   "INDEX(SvyCod))");
 
    /***** Table svy_users *****/
 /*
@@ -2238,9 +2238,9 @@ mysql> DESCRIBE svy_users;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS svy_users ("
-                   "SvyCod INT NOT NULL,"
-                   "UsrCod INT NOT NULL,"
-                   "UNIQUE INDEX(SvyCod,UsrCod))");
+			"SvyCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
+		   "UNIQUE INDEX(SvyCod,UsrCod))");
 
    /***** Table timetable_crs *****/
 /*
@@ -2254,21 +2254,21 @@ mysql> DESCRIBE timetable_crs;
 | Hour      | tinyint(4)                         | NO   |     | NULL    |       |
 | Duration  | tinyint(4)                         | NO   |     | NULL    |       |
 | ClassType | enum('libre','teoria','practicas') | NO   |     | NULL    |       |
-| Place     | varchar(127)                       | NO   |     | NULL    |       |
-| GroupName | varchar(255)                       | NO   |     | NULL    |       |
+| Place     | varchar(511)                       | NO   |     | NULL    |       |
+| GroupName | varchar(2047)                      | NO   |     | NULL    |       |
 +-----------+------------------------------------+------+-----+---------+-------+
-8 rows in set (0.01 sec)
+8 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_crs ("
-                   "CrsCod INT NOT NULL DEFAULT -1,"
-                   "GrpCod INT NOT NULL DEFAULT -1,"
-                   "Day ENUM('L','M','X','J','V','S','D') NOT NULL,"
-                   "Hour TINYINT NOT NULL,"
-                   "Duration TINYINT NOT NULL,"
-                   "ClassType ENUM('libre','teoria','practicas') NOT NULL,"
-                   "Place VARCHAR(127) NOT NULL,"
-                   "GroupName VARCHAR(255) NOT NULL,"
-                   "INDEX(CrsCod,GrpCod))");
+			"CrsCod INT NOT NULL DEFAULT -1,"
+			"GrpCod INT NOT NULL DEFAULT -1,"
+			"Day ENUM('L','M','X','J','V','S','D') NOT NULL,"
+			"Hour TINYINT NOT NULL,"
+			"Duration TINYINT NOT NULL,"
+			"ClassType ENUM('libre','teoria','practicas') NOT NULL,"
+			"Place VARCHAR(511) NOT NULL,"		// TT_MAX_BYTES_PLACE
+			"GroupName VARCHAR(2047) NOT NULL,"	// Grp_MAX_BYTES_GROUP_NAME
+		   "INDEX(CrsCod,GrpCod))");
 
    /***** Table timetable_tut *****/
 /*
@@ -2280,17 +2280,17 @@ mysql> DESCRIBE timetable_tut;
 | Day      | enum('L','M','X','J','V','S','D') | NO   |     | NULL    |       |
 | Hour     | tinyint(4)                        | NO   |     | NULL    |       |
 | Duration | tinyint(4)                        | NO   |     | NULL    |       |
-| Place    | varchar(127)                      | NO   |     | NULL    |       |
+| Place    | varchar(511)                      | NO   |     | NULL    |       |
 +----------+-----------------------------------+------+-----+---------+-------+
-5 rows in set (0.01 sec)
+5 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS timetable_tut ("
-                   "UsrCod INT NOT NULL,"
-                   "Day ENUM('L','M','X','J','V','S','D') NOT NULL,"
-                   "Hour TINYINT NOT NULL,"
-                   "Duration TINYINT NOT NULL,"
-                   "Place VARCHAR(127) NOT NULL,"
-                   "INDEX(UsrCod))");
+			"UsrCod INT NOT NULL,"
+			"Day ENUM('L','M','X','J','V','S','D') NOT NULL,"
+			"Hour TINYINT NOT NULL,"
+			"Duration TINYINT NOT NULL,"
+			"Place VARCHAR(511) NOT NULL,"	// TT_MAX_BYTES_PLACE
+		   "INDEX(UsrCod))");
 
    /***** Table tst_answers *****/
 /*

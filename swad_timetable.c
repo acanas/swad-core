@@ -130,7 +130,8 @@ static void TT_TimeTableDrawDaysCells (void);
 static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned Hour);
 static void TT_DrawCellAlignTimeTable (void);
 static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
-                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place);
+                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,
+                                  unsigned Duration,char *Group,long GrpCod,char *Place);
 
 /*****************************************************************************/
 /*********** Show whether only my groups or all groups are shown *************/
@@ -456,11 +457,16 @@ void TT_ShowTimeTable (long UsrCod)
 
 static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
   {
-   char Query[1024];
-   unsigned Hour,Day,Column;
+   char Query[512 +
+              TT_MAX_BYTES_PLACE +
+              Grp_MAX_BYTES_GROUP_NAME];
+   unsigned Hour;
+   unsigned Day;
+   unsigned Column;
 
    /***** Remove former timetable *****/
-   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod='%ld'",
+            CrsCod);
    DB_QueryDELETE (Query,"can not remove former timetable");
 
    /***** Go across the timetable inserting classes into database *****/
@@ -498,11 +504,13 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
 
 static void TT_WriteTutTimeTableIntoDB (long UsrCod)
   {
-   char Query[1024];
+   char Query[512 +
+              TT_MAX_BYTES_PLACE];
    unsigned Hour,Day,Column;
 
    /***** Remove former timetable *****/
-   sprintf (Query,"DELETE FROM timetable_tut WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM timetable_tut WHERE UsrCod='%ld'",
+            UsrCod);
    DB_QueryDELETE (Query,"can not remove former timetable");
 
    /***** Loop over timetable *****/
@@ -1106,7 +1114,8 @@ static void TT_DrawCellAlignTimeTable (void)
 /*****************************************************************************/
 
 static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,unsigned ColSpan,
-                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,unsigned Duration,char *Group,long GrpCod,char *Place)
+                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,
+                                  unsigned Duration,char *Group,long GrpCod,char *Place)
   {
    extern const char *Txt_unknown_removed_course;
    extern const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES];

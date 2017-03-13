@@ -209,13 +209,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.25 (2017-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.26 (2017-03-13)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155.26:Mar 13, 2017	Adjusting size of database fields. (217009 lines)
+					3 changes necessary in database:
+ALTER TABLE timetable_crs CHANGE COLUMN Place Place VARCHAR(511) NOT NULL;
+ALTER TABLE timetable_crs CHANGE COLUMN GroupName GroupName VARCHAR(2047) NOT NULL;
+ALTER TABLE timetable_tut CHANGE COLUMN Place Place VARCHAR(511) NOT NULL;
+
         Version 16.155.25:Mar 13, 2017	Adjusting size of database fields. (216995 lines)
 					1 change necessary in database.
 ALTER TABLE surveys CHANGE COLUMN Title Title VARCHAR(2047) NOT NULL;

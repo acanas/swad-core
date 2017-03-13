@@ -1065,8 +1065,8 @@ CREATE TABLE IF NOT EXISTS timetable_crs (
 	Hour TINYINT NOT NULL,
 	Duration TINYINT NOT NULL,
 	ClassType ENUM('libre','teoria','practicas') NOT NULL,
-	Place VARCHAR(127) NOT NULL,
-	GroupName VARCHAR(255) NOT NULL,
+	Place VARCHAR(511) NOT NULL,
+	GroupName VARCHAR(2047) NOT NULL,
 	INDEX(CrsCod,GrpCod));
 --
 -- Table timetable_tut: stores the timetables of office hours of the teachers
@@ -1076,7 +1076,7 @@ CREATE TABLE IF NOT EXISTS timetable_tut (
 	Day ENUM('L','M','X','J','V','S','D') NOT NULL,
 	Hour TINYINT NOT NULL,
 	Duration TINYINT NOT NULL,
-	Place VARCHAR(127) NOT NULL,
+	Place VARCHAR(511) NOT NULL,
 	INDEX(UsrCod));
 --
 -- Table tst_answers: stores the answers to the questions in tests
