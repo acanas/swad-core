@@ -1369,7 +1369,7 @@ void Svy_FreeListSurveys (void)
 
 static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -1405,7 +1405,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                          char **ContentStr,
                          long SvyCod,bool GetContent)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    size_t Length;
@@ -1544,7 +1544,8 @@ void Svy_RemoveSurvey (void)
    Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy.SvyCod);
 
    /***** Remove survey *****/
-   sprintf (Query,"DELETE FROM surveys WHERE SvyCod='%ld'",Svy.SvyCod);
+   sprintf (Query,"DELETE FROM surveys WHERE SvyCod='%ld'",
+            Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove survey");
 
    /***** Mark possible notifications as removed *****/
@@ -1658,7 +1659,7 @@ void Svy_ResetSurvey (void)
 void Svy_HideSurvey (void)
   {
    extern const char *Txt_Survey_X_is_now_hidden;
-   char Query[512];
+   char Query[128];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1692,7 +1693,7 @@ void Svy_HideSurvey (void)
 void Svy_UnhideSurvey (void)
   {
    extern const char *Txt_Survey_X_is_now_visible;
-   char Query[512];
+   char Query[128];
    struct Survey Svy;
    struct SurveyQuestion SvyQst;
 
@@ -1726,7 +1727,7 @@ void Svy_UnhideSurvey (void)
 static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[512];
+   char Query[512 + Svy_MAX_BYTES_SURVEY_TITLE];
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM surveys"
@@ -2197,7 +2198,7 @@ void Svy_RecFormSurvey (void)
 static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
                                                          unsigned NumUsrsToBeNotifiedByEMail)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update number of users notified *****/
    sprintf (Query,"UPDATE surveys SET NumNotif=NumNotif+'%u'"
@@ -2214,7 +2215,9 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Created_new_survey_X;
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Svy_MAX_BYTES_SURVEY_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Create a new survey *****/
    sprintf (Query,"INSERT INTO surveys"
@@ -2250,7 +2253,9 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_The_survey_has_been_modified;
-   char Query[1024 + Cns_MAX_BYTES_TEXT];
+   char Query[1024 +
+              Svy_MAX_BYTES_SURVEY_TITLE +
+              Cns_MAX_BYTES_TEXT];
 
    /***** Update the data of the survey *****/
    sprintf (Query,"UPDATE surveys"
@@ -2286,7 +2291,7 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
 
 static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Get if a survey is associated to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_grp WHERE SvyCod='%ld'",
@@ -2300,10 +2305,11 @@ static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
 
 bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get if a survey is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM svy_grp WHERE SvyCod='%ld' AND GrpCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM svy_grp"
+	          " WHERE SvyCod='%ld' AND GrpCod='%ld'",
             SvyCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if a survey is associated to a group") != 0);
   }
@@ -2314,10 +2320,11 @@ bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
 
 static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Remove groups of the survey *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE SvyCod='%ld'",SvyCod);
+   sprintf (Query,"DELETE FROM svy_grp WHERE SvyCod='%ld'",
+            SvyCod);
    DB_QueryDELETE (Query,"can not remove the groups associated to a survey");
   }
 
@@ -2327,11 +2334,10 @@ static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
 
 void Svy_RemoveGroup (long GrpCod)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Remove group from all the surveys *****/
-   sprintf (Query,"DELETE FROM svy_grp"
-	          " WHERE GrpCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_grp WHERE GrpCod='%ld'",
 	    GrpCod);
    DB_QueryDELETE (Query,"can not remove group"
 	                 " from the associations between surveys and groups");
@@ -2522,7 +2528,7 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 
 static unsigned Svy_GetNumQstsSvy (long SvyCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_questions WHERE SvyCod='%ld'",
@@ -2579,7 +2585,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    extern const char *Txt_SURVEY_STR_ANSWER_TYPES[Svy_NUM_ANS_TYPES];
    extern const char *Txt_Save;
    extern const char *Txt_Create_question;
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumAns;
@@ -2794,10 +2800,11 @@ static long Svy_GetParamQstCod (void)
 
 static void Svy_RemAnswersOfAQuestion (long QstCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM svy_answers WHERE QstCod='%ld'",QstCod);
+   sprintf (Query,"DELETE FROM svy_answers WHERE QstCod='%ld'",
+            QstCod);
    DB_QueryDELETE (Query,"can not remove the answers of a question");
   }
 
@@ -2824,7 +2831,7 @@ static Svy_AnswerType_t Svy_ConvertFromStrAnsTypDBToAnsTyp (const char *StrAnsTy
 
 static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get answers of a question from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_answers"
@@ -2839,7 +2846,7 @@ static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
 
 static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[256];
    unsigned long NumRows;
 
    /***** Get answers of a question from database *****/
@@ -2909,7 +2916,7 @@ void Svy_ReceiveQst (void)
    extern const char *Txt_You_must_type_at_least_the_first_two_answers;
    extern const char *Txt_The_survey_has_been_modified;
    char Txt[Cns_MAX_BYTES_TEXT + 1];
-   char Query[512 + Cns_MAX_BYTES_TEXT + 1];
+   char Query[512 + Cns_MAX_BYTES_TEXT];
    long SvyCod;
    struct SurveyQuestion SvyQst;
    unsigned NumAns;
@@ -3012,7 +3019,8 @@ void Svy_ReceiveQst (void)
          /* Update question */
          sprintf (Query,"UPDATE svy_questions SET Stem='%s',AnsType='%s'"
                         " WHERE QstCod='%ld' AND SvyCod='%ld'",
-                  Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],SvyQst.QstCod,SvyCod);
+                  Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
+                  SvyQst.QstCod,SvyCod);
          DB_QueryUPDATE (Query,"can not update question");
         }
 
@@ -3070,15 +3078,14 @@ void Svy_ReceiveQst (void)
 
 static unsigned Svy_GetQstIndFromQstCod (long QstCod)
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned QstInd = 0;
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT QstInd FROM svy_questions"
-                  " WHERE QstCod='%ld'",
+   sprintf (Query,"SELECT QstInd FROM svy_questions WHERE QstCod='%ld'",
             QstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get question index");
 
@@ -3110,8 +3117,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
    unsigned QstInd = 0;
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT MAX(QstInd) FROM svy_questions"
-                  " WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT MAX(QstInd) FROM svy_questions WHERE SvyCod='%ld'",
             SvyCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
 
@@ -3145,7 +3151,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    extern const char *Txt_This_survey_has_no_questions;
    extern const char *Txt_Done;
    extern const char *Txt_Edit_question;
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQsts;
@@ -3571,8 +3577,7 @@ void Svy_RemoveQst (void)
    Svy_RemAnswersOfAQuestion (SvyQst.QstCod);
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM svy_questions"
-                  " WHERE QstCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_questions WHERE QstCod='%ld'",
             SvyQst.QstCod);
    DB_QueryDELETE (Query,"can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
@@ -3630,7 +3635,7 @@ void Svy_ReceiveSurveyAnswers (void)
 
 static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumQst;
@@ -3693,7 +3698,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 
 static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
    sprintf (Query,"UPDATE svy_answers SET NumUsrs=NumUsrs+1"
@@ -3708,7 +3713,7 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
 static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
   {
-   char Query[512];
+   char Query[256];
 
    sprintf (Query,"INSERT INTO svy_users"
 	          " (SvyCod,UsrCod)"
@@ -3724,7 +3729,7 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
 
 static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_users"
@@ -3739,11 +3744,10 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
 
 static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
   {
-   char Query[512];
+   char Query[128];
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM svy_users"
-                  " WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM svy_users WHERE SvyCod='%ld'",
             SvyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who have answered a survey");
   }

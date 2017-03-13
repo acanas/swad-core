@@ -202,7 +202,7 @@ mysql> DESCRIBE agendas;
 			"EndTime DATETIME NOT NULL,"
 			"Event VARCHAR(2047) NOT NULL,"		// Agd_MAX_BYTES_EVENT
 			"Location VARCHAR(2047) NOT NULL,"	// Agd_MAX_BYTES_LOCATION
-			"Txt TEXT NOT NULL,"
+			"Txt TEXT NOT NULL,"			// Cns_MAX_BYTES_TEXT
 		   "UNIQUE INDEX(AgdCod),"
 		   "INDEX(UsrCod,Public,Hidden))");
 
@@ -2100,13 +2100,13 @@ mysql> DESCRIBE sta_degrees;
 6 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sta_degrees ("
-                   "DegCod INT NOT NULL DEFAULT -1,"
-                   "Sex ENUM ('unknown','female','male','all') NOT NULL DEFAULT 'all',"
-                   "NumStds INT NOT NULL,"
-                   "NumStdsWithPhoto INT NOT NULL,"
-                   "TimeAvgPhoto DATETIME NOT NULL,"
-                   "TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,"
-                   "UNIQUE INDEX(DegCod,Sex))");
+			"DegCod INT NOT NULL DEFAULT -1,"
+			"Sex ENUM ('unknown','female','male','all') NOT NULL DEFAULT 'all',"
+			"NumStds INT NOT NULL,"
+			"NumStdsWithPhoto INT NOT NULL,"
+			"TimeAvgPhoto DATETIME NOT NULL,"
+			"TimeToComputeAvgPhoto INT NOT NULL DEFAULT -1,"
+		   "UNIQUE INDEX(DegCod,Sex))");
 
    /***** Table sta_notif *****/
 /*
@@ -2123,12 +2123,12 @@ mysql> DESCRIBE sta_notif;
 5 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS sta_notif ("
-                   "DegCod INT NOT NULL,"
-                   "CrsCod INT NOT NULL,"
-                   "NotifyEvent TINYINT NOT NULL,"
-                   "NumEvents INT NOT NULL,"
-                   "NumMails INT NOT NULL,"
-                   "UNIQUE INDEX(DegCod,CrsCod,NotifyEvent))");
+			"DegCod INT NOT NULL,"
+			"CrsCod INT NOT NULL,"
+			"NotifyEvent TINYINT NOT NULL,"
+			"NumEvents INT NOT NULL,"
+			"NumMails INT NOT NULL,"
+		   "UNIQUE INDEX(DegCod,CrsCod,NotifyEvent))");
 
    /***** Table surveys *****/
 /*
@@ -2147,25 +2147,25 @@ mysql> DESCRIBE surveys;
 | UsrCod    | int(11)                                   | NO   |     | NULL    |                |
 | StartTime | datetime                                  | NO   |     | NULL    |                |
 | EndTime   | datetime                                  | NO   |     | NULL    |                |
-| Title     | varchar(255)                              | NO   |     | NULL    |                |
+| Title     | varchar(2047)                             | NO   |     | NULL    |                |
 | Txt       | text                                      | NO   |     | NULL    |                |
 +-----------+-------------------------------------------+------+-----+---------+----------------+
 13 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS surveys ("
-                   "SvyCod INT NOT NULL AUTO_INCREMENT,"
-	           "Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
-	           "Cod INT NOT NULL DEFAULT -1,"
-                   "Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
-                   "NumNotif INT NOT NULL DEFAULT 0,"
-                   "Roles INT NOT NULL DEFAULT 0,"
-                   "UsrCod INT NOT NULL,"
-                   "StartTime DATETIME NOT NULL,"
-                   "EndTime DATETIME NOT NULL,"
-                   "Title VARCHAR(255) NOT NULL,"
-                   "Txt TEXT NOT NULL,"
-                   "UNIQUE INDEX(SvyCod),"
-	           "INDEX(Scope,Cod))");
+			"SvyCod INT NOT NULL AUTO_INCREMENT,"
+			"Scope ENUM('Sys','Cty','Ins','Ctr','Deg','Crs') NOT NULL DEFAULT 'Sys',"
+			"Cod INT NOT NULL DEFAULT -1,"
+			"Hidden ENUM('N','Y') NOT NULL DEFAULT 'N',"
+			"NumNotif INT NOT NULL DEFAULT 0,"
+			"Roles INT NOT NULL DEFAULT 0,"
+			"UsrCod INT NOT NULL,"
+			"StartTime DATETIME NOT NULL,"
+			"EndTime DATETIME NOT NULL,"
+			"Title VARCHAR(2047) NOT NULL,"	// Svy_MAX_BYTES_SURVEY_TITLE
+			"Txt TEXT NOT NULL,"		// Cns_MAX_BYTES_TEXT
+		   "UNIQUE INDEX(SvyCod),"
+		   "INDEX(Scope,Cod))");
 
    /***** Table svy_answers *****/
 /*
