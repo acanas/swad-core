@@ -191,7 +191,7 @@ void Plg_EditPlugins (void)
 
 static void Plg_GetListPlugins (void)
   {
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -264,14 +264,18 @@ static void Plg_GetListPlugins (void)
 
 bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
   {
-   char Query[1024];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    bool PluginFound;
 
    /***** Clear data *****/
-   Plg->Name[0] = Plg->Description[0] = Plg->Logo[0] = Plg->URL[0] = Plg->IP[0] = '\0';
+   Plg->Name[0]        =
+   Plg->Description[0] =
+   Plg->Logo[0]        =
+   Plg->URL[0]         =
+   Plg->IP[0]          = '\0';
 
    /***** Check if plugin code is correct *****/
    if (Plg->PlgCod <= 0)
@@ -488,7 +492,7 @@ long Plg_GetParamPlgCod (void)
 void Plg_RemovePlugin (void)
   {
    extern const char *Txt_Plugin_X_removed;
-   char Query[512];
+   char Query[128];
    struct Plugin Plg;
 
    /***** Get plugin code *****/
@@ -499,7 +503,8 @@ void Plg_RemovePlugin (void)
    Plg_GetDataOfPluginByCod (&Plg);
 
    /***** Remove plugin *****/
-   sprintf (Query,"DELETE FROM plugins WHERE PlgCod='%ld'",Plg.PlgCod);
+   sprintf (Query,"DELETE FROM plugins WHERE PlgCod='%ld'",
+            Plg.PlgCod);
    DB_QueryDELETE (Query,"can not remove a plugin");
 
    /***** Write message to show the change made *****/
@@ -521,7 +526,7 @@ void Plg_RenamePlugin (void)
    extern const char *Txt_The_plugin_X_already_exists;
    extern const char *Txt_The_plugin_X_has_been_renamed_as_Y;
    extern const char *Txt_The_name_of_the_plugin_X_has_not_changed;
-   char Query[512];
+   char Query[128 + Plg_MAX_BYTES_PLUGIN_NAME];
    struct Plugin *Plg;
    char NewPlgName[Plg_MAX_BYTES_PLUGIN_NAME + 1];
 
@@ -590,10 +595,11 @@ void Plg_RenamePlugin (void)
 
 static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
   {
-   char Query[512];
+   char Query[256 + Plg_MAX_BYTES_PLUGIN_NAME];
 
    /***** Get number of plugins with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM plugins WHERE Name='%s' AND PlgCod<>'%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM plugins"
+	          " WHERE Name='%s' AND PlgCod<>'%ld'",
             Name,PlgCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a plugin already existed") != 0);
   }
@@ -607,7 +613,7 @@ void Plg_ChangePlgDescription (void)
    extern const char *Txt_The_new_description_is_X;
    extern const char *Txt_You_can_not_leave_the_description_empty;
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_BYTES_PLUGIN_DESCRIPTION];
+   char Query[128 + Plg_MAX_BYTES_PLUGIN_DESCRIPTION];
    char NewDescription[Plg_MAX_BYTES_PLUGIN_DESCRIPTION + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -654,7 +660,7 @@ void Plg_ChangePlgLogo (void)
    extern const char *Txt_The_new_logo_is_X;
    extern const char *Txt_You_can_not_leave_the_logo_empty;
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_BYTES_PLUGIN_LOGO];
+   char Query[128 + Plg_MAX_BYTES_PLUGIN_LOGO];
    char NewLogo[Plg_MAX_BYTES_PLUGIN_LOGO + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -698,7 +704,7 @@ void Plg_ChangePlgAppKey (void)
    extern const char *Txt_The_new_logo_is_X;	// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    extern const char *Txt_You_can_not_leave_the_logo_empty;// TODO: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
    struct Plugin *Plg;
-   char Query[256 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
+   char Query[128 + Plg_MAX_BYTES_PLUGIN_APP_KEY];
    char NewAppKey[Plg_MAX_BYTES_PLUGIN_APP_KEY + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -742,7 +748,7 @@ void Plg_ChangePlgURL (void)
    extern const char *Txt_The_new_URL_is_X;
    extern const char *Txt_You_can_not_leave_the_URL_empty;
    struct Plugin *Plg;
-   char Query[256 + Cns_MAX_BYTES_WWW];
+   char Query[128 + Cns_MAX_BYTES_WWW];
    char NewURL[Cns_MAX_BYTES_WWW + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;
@@ -786,7 +792,7 @@ void Plg_ChangePlgIP (void)
    extern const char *Txt_The_new_IP_address_is_X;
    extern const char *Txt_You_can_not_leave_the_IP_address_empty;
    struct Plugin *Plg;
-   char Query[256 + Cns_MAX_BYTES_IP];
+   char Query[128 + Cns_MAX_BYTES_IP];
    char NewIP[Cns_MAX_BYTES_IP + 1];
 
    Plg = &Gbl.Plugins.EditingPlg;

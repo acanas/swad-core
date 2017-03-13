@@ -1851,28 +1851,28 @@ mysql> DESCRIBE places;
    /***** Table plugins *****/
 /*
 mysql> DESCRIBE plugins;
-+-------------+--------------+------+-----+---------+----------------+
-| Field       | Type         | Null | Key | Default | Extra          |
-+-------------+--------------+------+-----+---------+----------------+
-| PlgCod      | int(11)      | NO   | PRI | NULL    | auto_increment |
-| Name        | varchar(127) | NO   |     | NULL    |                |
-| Description | text         | NO   |     | NULL    |                |
-| Logo        | varchar(16)  | NO   |     | NULL    |                |
-| AppKey      | varchar(16)  | NO   |     | NULL    |                |
-| URL         | varchar(255) | NO   |     | NULL    |                |
-| IP          | char(15)     | NO   |     | NULL    |                |
-+-------------+--------------+------+-----+---------+----------------+
-7 rows in set (0.01 sec)
++-------------+---------------+------+-----+---------+----------------+
+| Field       | Type          | Null | Key | Default | Extra          |
++-------------+---------------+------+-----+---------+----------------+
+| PlgCod      | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Name        | varchar(511)  | NO   |     | NULL    |                |
+| Description | varchar(2047) | NO   |     | NULL    |                |
+| Logo        | varchar(31)   | NO   |     | NULL    |                |
+| AppKey      | varchar(31)   | NO   |     | NULL    |                |
+| URL         | varchar(255)  | NO   |     | NULL    |                |
+| IP          | char(15)      | NO   |     | NULL    |                |
++-------------+---------------+------+-----+---------+----------------+
+7 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS plugins ("
-                   "PlgCod INT NOT NULL AUTO_INCREMENT,"
-                   "Name VARCHAR(127) NOT NULL,"
-                   "Description TEXT NOT NULL,"
-                   "Logo VARCHAR(16) NOT NULL,"
-                   "AppKey VARCHAR(16) NOT NULL,"
-                   "URL VARCHAR(255) NOT NULL,"
-                   "IP CHAR(15) NOT NULL,"
-                   "UNIQUE INDEX(PlgCod))");
+			"PlgCod INT NOT NULL AUTO_INCREMENT,"
+			"Name VARCHAR(511) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_NAME
+			"Description VARCHAR(2047) NOT NULL,"	// Plg_MAX_BYTES_PLUGIN_DESCRIPTION
+			"Logo VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_LOGO
+			"AppKey VARCHAR(31) NOT NULL,"		// Plg_MAX_BYTES_PLUGIN_APP_KEY
+			"URL VARCHAR(255) NOT NULL,"		// Cns_MAX_BYTES_WWW
+			"IP CHAR(15) NOT NULL,"			// Cns_MAX_BYTES_IP
+		   "UNIQUE INDEX(PlgCod))");
 
    /***** Table sessions *****/
 /*
