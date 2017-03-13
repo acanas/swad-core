@@ -209,13 +209,23 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.155.27 (2017-03-13)"
+#define Log_PLATFORM_VERSION	"SWAD 16.155.28 (2017-03-13)"
 #define CSS_FILE		"swad16.147.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.155.28:Mar 13, 2017	Adjusting size of database fields. (217035 lines)
+					7 changes necessary in database.
+ALTER TABLE usr_data CHANGE COLUMN Surname1 Surname1 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Surname2 Surname2 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN FirstName FirstName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN Office Office VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN LocalAddress LocalAddress VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN FamilyAddress FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '';
+ALTER TABLE usr_data CHANGE COLUMN OriginPlace OriginPlace VARCHAR(2047) NOT NULL DEFAULT '';
+
         Version 16.155.27:Mar 13, 2017	Adjusting size of database fields. (217038 lines)
 					4 changes necessary in database.
 ALTER TABLE tst_answers CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;

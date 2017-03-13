@@ -2512,7 +2512,7 @@ mysql> DESCRIBE usr_banned;
 
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_banned ("
-		   "UsrCod INT NOT NULL,"
+			"UsrCod INT NOT NULL,"
 		   "UNIQUE INDEX(UsrCod))");
 
    /***** Table usr_data *****/
@@ -2524,9 +2524,9 @@ mysql> DESCRIBE usr_data;
 | UsrCod            | int(11)                                          | NO   | PRI | NULL    | auto_increment |
 | EncryptedUsrCod   | char(43)                                         | NO   | UNI |         |                |
 | Password          | char(86)                                         | NO   |     |         |                |
-| Surname1          | varchar(32)                                      | NO   |     |         |                |
-| Surname2          | varchar(32)                                      | NO   |     |         |                |
-| FirstName         | varchar(32)                                      | NO   |     |         |                |
+| Surname1          | varchar(511)                                     | NO   |     |         |                |
+| Surname2          | varchar(511)                                     | NO   |     |         |                |
+| FirstName         | varchar(511)                                     | NO   |     |         |                |
 | Sex               | enum('unknown','female','male')                  | NO   |     | unknown |                |
 | Theme             | char(16)                                         | NO   | MUL |         |                |
 | IconSet           | char(16)                                         | NO   | MUL |         |                |
@@ -2540,13 +2540,13 @@ mysql> DESCRIBE usr_data;
 | InsCod            | int(11)                                          | NO   | MUL | -1      |                |
 | DptCod            | int(11)                                          | NO   | MUL | -1      |                |
 | CtrCod            | int(11)                                          | NO   | MUL | -1      |                |
-| Office            | varchar(127)                                     | NO   |     |         |                |
+| Office            | varchar(2047)                                    | NO   |     |         |                |
 | OfficePhone       | char(16)                                         | NO   |     |         |                |
-| LocalAddress      | varchar(127)                                     | NO   |     |         |                |
+| LocalAddress      | varchar(2047)                                    | NO   |     |         |                |
 | LocalPhone        | char(16)                                         | NO   |     |         |                |
-| FamilyAddress     | varchar(127)                                     | NO   |     |         |                |
+| FamilyAddress     | varchar(2047)                                    | NO   |     |         |                |
 | FamilyPhone       | char(16)                                         | NO   |     |         |                |
-| OriginPlace       | varchar(127)                                     | NO   |     |         |                |
+| OriginPlace       | varchar(2047)                                    | NO   |     |         |                |
 | Birthday          | date                                             | YES  |     | NULL    |                |
 | Comments          | text                                             | NO   |     | NULL    |                |
 | Menu              | tinyint(4)                                       | NO   | MUL | 0       |                |
@@ -2554,56 +2554,56 @@ mysql> DESCRIBE usr_data;
 | NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-32 rows in set (0.00 sec)
+32 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
-                   "UsrCod INT NOT NULL AUTO_INCREMENT,"
-                   "EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '',"
-                   "Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '',"			// Pwd_BYTES_ENCRYPTED_PASSWORD
-                   "Surname1 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
-                   "Surname2 VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
-                   "FirstName VARCHAR(32) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"
-                   "Sex ENUM ('unknown','female','male') NOT NULL DEFAULT 'unknown',"
-                   "Theme CHAR(16) NOT NULL DEFAULT '',"
-                   "IconSet CHAR(16) NOT NULL DEFAULT '',"
-                   "Language CHAR(2) NOT NULL DEFAULT '',"
-		   "FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
-                   "Photo CHAR(43) NOT NULL DEFAULT '',"
-		   "PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
-		   "ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
-                   "CtyCod INT NOT NULL DEFAULT -1,"
-                   "InsCtyCod INT NOT NULL DEFAULT -1,"
-                   "InsCod INT NOT NULL DEFAULT -1,"
-                   "DptCod INT NOT NULL DEFAULT -1,"
-                   "CtrCod INT NOT NULL DEFAULT -1,"
-                   "Office VARCHAR(127) NOT NULL DEFAULT '',"
-                   "OfficePhone CHAR(16) NOT NULL DEFAULT '',"
-                   "LocalAddress VARCHAR(127) NOT NULL DEFAULT '',"
-                   "LocalPhone CHAR(16) NOT NULL DEFAULT '',"
-                   "FamilyAddress VARCHAR(127) NOT NULL DEFAULT '',"
-                   "FamilyPhone CHAR(16) NOT NULL DEFAULT '',"
-                   "OriginPlace VARCHAR(127) NOT NULL DEFAULT '',"
-                   "Birthday DATE,"
-                   "Comments TEXT NOT NULL,"
-                   "Menu TINYINT NOT NULL DEFAULT 0,"
-                   "SideCols TINYINT NOT NULL DEFAULT 3,"
-                   "NotifNtfEvents INT NOT NULL DEFAULT 0,"
-                   "EmailNtfEvents INT NOT NULL DEFAULT 0,"
-                   "PRIMARY KEY(UsrCod),"
-                   "UNIQUE INDEX(EncryptedUsrCod),"
-                   "INDEX(Theme),"
-                   "INDEX(IconSet),"
-                   "INDEX(Language),"
-                   "INDEX(FirstDayOfWeek),"
+			"UsrCod INT NOT NULL AUTO_INCREMENT,"
+			"EncryptedUsrCod CHAR(43) NOT NULL DEFAULT '',"
+			"Password CHAR(86) COLLATE latin1_bin NOT NULL DEFAULT '',"		// Pwd_BYTES_ENCRYPTED_PASSWORD
+			"Surname1 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME
+			"Surname2 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME
+			"FirstName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_FIRSTNAME_OR_SURNAME
+			"Sex ENUM ('unknown','female','male') NOT NULL DEFAULT 'unknown',"
+			"Theme CHAR(16) NOT NULL DEFAULT '',"
+			"IconSet CHAR(16) NOT NULL DEFAULT '',"
+			"Language CHAR(2) NOT NULL DEFAULT '',"
+			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
+			"Photo CHAR(43) NOT NULL DEFAULT '',"					// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
+			"ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
+			"CtyCod INT NOT NULL DEFAULT -1,"
+			"InsCtyCod INT NOT NULL DEFAULT -1,"
+			"InsCod INT NOT NULL DEFAULT -1,"
+			"DptCod INT NOT NULL DEFAULT -1,"
+			"CtrCod INT NOT NULL DEFAULT -1,"
+			"Office VARCHAR(2047) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_ADDRESS
+			"OfficePhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
+			"LocalAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"LocalPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
+			"FamilyAddress VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"FamilyPhone CHAR(16) NOT NULL DEFAULT '',"		// Usr_MAX_BYTES_PHONE
+			"OriginPlace VARCHAR(2047) NOT NULL DEFAULT '',"	// Usr_MAX_BYTES_ADDRESS
+			"Birthday DATE,"
+			"Comments TEXT NOT NULL,"				// Cns_MAX_BYTES_TEXT
+			"Menu TINYINT NOT NULL DEFAULT 0,"
+			"SideCols TINYINT NOT NULL DEFAULT 3,"
+			"NotifNtfEvents INT NOT NULL DEFAULT 0,"
+			"EmailNtfEvents INT NOT NULL DEFAULT 0,"
+		   "PRIMARY KEY(UsrCod),"
+		   "UNIQUE INDEX(EncryptedUsrCod),"
+		   "INDEX(Theme),"
+		   "INDEX(IconSet),"
+		   "INDEX(Language),"
+		   "INDEX(FirstDayOfWeek),"
 		   "INDEX(PhotoVisibility),"
 		   "INDEX(ProfileVisibility),"
-                   "INDEX(CtyCod),"
-                   "INDEX(InsCtyCod),"
-                   "INDEX(InsCod),"
-                   "INDEX(DptCod),"
-                   "INDEX(CtrCod),"
-                   "INDEX(Menu),"
-                   "INDEX(SideCols))");
+		   "INDEX(CtyCod),"
+		   "INDEX(InsCtyCod),"
+		   "INDEX(InsCod),"
+		   "INDEX(DptCod),"
+		   "INDEX(CtrCod),"
+		   "INDEX(Menu),"
+		   "INDEX(SideCols))");
 
    /***** Table usr_duplicated *****/
 /*

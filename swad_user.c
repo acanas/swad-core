@@ -381,7 +381,7 @@ void Usr_FreeListUsrCods (struct ListUsrCods *ListUsrCods)
 
 void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
   {
-   char Query[512];
+   char Query[128 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -389,8 +389,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
    if (UsrDat->EncryptedUsrCod[0])
      {
       /***** Get user's code from database *****/
-      sprintf (Query,"SELECT UsrCod FROM usr_data"
-	             " WHERE EncryptedUsrCod='%s'",
+      sprintf (Query,"SELECT UsrCod FROM usr_data WHERE EncryptedUsrCod='%s'",
                UsrDat->EncryptedUsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's code");
 
@@ -415,7 +414,7 @@ void Usr_GetUsrCodFromEncryptedUsrCod (struct UsrData *UsrDat)
 
 void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove this funcion, it's not used
   {
-   char Query[512];
+   char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -423,8 +422,7 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
    if (UsrDat->UsrCod > 0)
      {
       /***** Get encrypted user's code from database *****/
-      sprintf (Query,"SELECT EncryptedUsrCod FROM usr_data"
-	             " WHERE UsrCod='%ld'",
+      sprintf (Query,"SELECT EncryptedUsrCod FROM usr_data WHERE UsrCod='%ld'",
                UsrDat->UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get encrypted user's code");
 
@@ -759,7 +757,7 @@ void Usr_WriteFirstNameBRSurnames (const struct UsrData *UsrDat)
 bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[128];
+   char Query[256];
 
    if (Sco_ScopeDB[Scope])
      {
@@ -779,7 +777,7 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
 bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[128];
+   char Query[256];
    static struct
      {
       long UsrCod;
@@ -800,7 +798,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
      {
       /***** Get if a user is superuser from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM admin"
-		     " WHERE UsrCod='%ld' AND Scope='%s'",
+	             " WHERE UsrCod='%ld' AND Scope='%s'",
 	       UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
       Cached.UsrCod = UsrCod;
       Cached.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
@@ -892,8 +890,7 @@ unsigned Usr_GetNumCrssOfUsr (long UsrCod)
    char Query[128];
 
    /***** Get the number of courses of a user from database ******/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr WHERE UsrCod='%ld'",
             UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user");
   }
@@ -919,7 +916,7 @@ unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod)
 
 unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Get the number of courses of a user with a role from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
@@ -934,7 +931,7 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
 
 unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
   {
-   char Query[128];
+   char Query[256];
 
    /***** Get the number of courses of a user with a role from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
@@ -950,7 +947,7 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole)
   {
-   char Query[256];
+   char Query[512];
    unsigned NumUsrs;
    // This query can be made in a unique, but slower, query
    // The temporary table achieves speedup from ~2s to few ms
@@ -1362,7 +1359,7 @@ void Usr_GetMyDegrees (void)
 
 void Usr_GetMyCourses (void)
   {
-   char Query[512];
+   char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrs;
@@ -1790,7 +1787,7 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
   {
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[512];
+   char Query[1024];
 
    /***** Get the institutions a user belongs to from database *****/
    sprintf (Query,"SELECT countries.CtyCod,MAX(crs_usr.Role)"
@@ -1814,7 +1811,7 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
 
 unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get the institutions a user belongs to from database *****/
    if (CtyCod > 0)
@@ -1850,7 +1847,7 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
 
 unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get from database the centres a user belongs to *****/
    if (InsCod > 0)
@@ -1882,7 +1879,7 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
 
 unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get from database the degrees a user belongs to *****/
    if (CtrCod > 0)
@@ -1913,7 +1910,7 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
 
 unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
   {
-   char Query[512];
+   char Query[1024];
 
    /***** Get from database the courses a user belongs to *****/
    if (DegCod > 0)	// Courses in a degree
@@ -1939,13 +1936,12 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
 /******** Check if a user exists with a given encrypted user's code **********/
 /*****************************************************************************/
 
-bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod)
+bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64])
   {
-   char Query[512];
+   char Query[128 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64];
 
    /***** Get if an encrypted user's code already existed in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-	          " WHERE EncryptedUsrCod='%s'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE EncryptedUsrCod='%s'",
             EncryptedUsrCod);
    return (DB_QueryCOUNT (Query,"can not check if an encrypted user's code already existed") != 0);
   }
@@ -2174,7 +2170,7 @@ void Usr_CreateBirthdayStrDB (const struct UsrData *UsrDat,
 
 static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
   {
-   char Query[256];
+   char Query[128];
 
    /***** Delete old birthdays *****/
    sprintf (Query,"SELECT COUNT(*) FROM birthdays_today WHERE UsrCod='%ld'",
@@ -3657,11 +3653,11 @@ static void Usr_WriteUsrData (const char *BgColor,
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Get the number of teachers in a course from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND Role='%u'",
+	          " WHERE CrsCod='%ld' AND Role='%u'",
             CrsCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a course");
   }
@@ -3847,7 +3843,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
 
 unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
   {
-   char Query[256];
+   char Query[512];
 
    /***** Get the number of teachers
           from the current institution in a department *****/
@@ -3868,9 +3864,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
    char Query[128];
 
    /***** Get the number of users in a country from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod)"
-	          " FROM usr_data"
-                  " WHERE CtyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtyCod='%ld'",
             CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a country");
   }
@@ -3884,9 +3878,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
    char Query[128];
 
    /***** Get the number of users in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod)"
-	          " FROM usr_data"
-                  " WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE InsCod='%ld'",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in an institution");
   }
@@ -3900,9 +3892,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
    char Query[128];
 
    /***** Get the number of users in a centre from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod)"
-	          " FROM usr_data"
-                  " WHERE CtrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtrCod='%ld'",
             CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a centre");
   }
@@ -3913,7 +3903,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
 
 unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
   {
-   char Query[256];
+   char Query[512];
 
    /***** Get the number of teachers in a centre from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
@@ -4255,7 +4245,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
-   char Query[4 * 1024];
+   char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1];
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
       "usr_data.EncryptedUsrCod,"
@@ -4501,9 +4491,9 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 /*************** Create temporary table with candidate users *****************/
 /*****************************************************************************/
 
-void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *SearchQuery)
+void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1])
   {
-   char Query[16 * 1024];
+   char Query[256 + Sch_MAX_BYTES_SEARCH_QUERY];
 
    /***** Create temporary table with candidate users *****/
    /*
@@ -4539,7 +4529,7 @@ void Usr_DropTmpTableWithCandidateUsrs (void)
 static void Usr_GetAdmsLst (Sco_Scope_t Scope)
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
-   char Query[1024];
+   char Query[2048];
    const char *QueryFields =
       "UsrCod,"
       "EncryptedUsrCod,"
@@ -5236,7 +5226,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
       while (*Ptr)
         {
          /* Find next string in text until comma or semicolon (leading and trailing spaces are removed) */
-         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,1024);
+         Str_GetNextStringUntilComma (&Ptr,UsrIDNickOrEmail,Cns_MAX_BYTES_EMAIL_ADDRESS);
 
          /* Check if string is plain user's ID or nickname and get encrypted user's ID */
          if (UsrIDNickOrEmail[0])
@@ -6514,7 +6504,7 @@ void Usr_ListAllDataTchs (void)
 /*****************************************************************************/
 // Returns number of users found
 
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery)
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY])
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
@@ -6834,7 +6824,7 @@ static void Usr_GetUsrListTypeFromForm (void)
 
 static void Usr_GetMyUsrListTypeFromDB (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -6876,7 +6866,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
 static void Usr_UpdateMyUsrListTypeInDB (void)
   {
-   char Query[512];
+   char Query[256];
 
    /***** Update type of users listing *****/
    sprintf (Query,"UPDATE crs_usr SET UsrListType='%s'"
@@ -6932,7 +6922,7 @@ static void Usr_GetParamColsClassPhotoFromForm (void)
 
 static void Usr_GetMyColsClassPhotoFromDB (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -7037,7 +7027,7 @@ static bool Usr_GetParamListWithPhotosFromForm (void)
 
 void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
   {
-   char Query[512];
+   char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -8097,14 +8087,13 @@ void Usr_ConstructPathUsr (long UsrCod,char *PathUsr)
 
 bool Usr_ChkIfUsrCodExists (long UsrCod)
   {
-   char Query[256];
+   char Query[128];
 
    if (UsrCod <= 0)	// Wrong user's code
       return false;
 
    /***** Get if a user exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-	          " WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE UsrCod='%ld'",
 	    UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user exists") != 0);
   }
@@ -8181,8 +8170,7 @@ static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
    char Query[256];
 
    /***** Get number of users who are in table of users but not in table courses-users *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-                  " WHERE UsrCod NOT IN"
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE UsrCod NOT IN"
                   " (SELECT DISTINCT(UsrCod) FROM crs_usr)");
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who do not belong to any course");
   }

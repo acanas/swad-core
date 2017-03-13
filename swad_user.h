@@ -282,7 +282,7 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
 unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res);
 
-bool Usr_ChkIfEncryptedUsrCodExists (const char *EncryptedUsrCod);
+bool Usr_ChkIfEncryptedUsrCodExists (const char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64]);
 
 void Usr_WriteLandingPage (void);
 void Usr_WriteFormLogout (void);
@@ -336,7 +336,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod);
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope);
 
 void Usr_SearchListUsrs (Rol_Role_t Role);
-void Usr_CreateTmpTableAndSearchCandidateUsrs (const char *UsrQuery);
+void Usr_CreateTmpTableAndSearchCandidateUsrs (const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY + 1]);
 void Usr_DropTmpTableWithCandidateUsrs (void);
 
 void Usr_GetUnorderedStdsCodesInDeg (long DegCod);
@@ -370,7 +370,7 @@ void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListUsrsForSelection (Rol_Role_t Role);
 void Usr_ListAllDataTchs (void);
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char *SearchQuery);
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);
 void Usr_ListDataAdms (void);
 
 void Usr_PutParamsPrefsAboutUsrList (void);
