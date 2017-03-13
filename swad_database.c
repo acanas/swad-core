@@ -1525,10 +1525,10 @@ mysql> DESCRIBE marks_properties;
 3 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS marks_properties ("
-                   "FilCod INT NOT NULL,"
-                   "Header INT NOT NULL,"
-                   "Footer INT NOT NULL,"
-                   "UNIQUE INDEX(FilCod))");
+			"FilCod INT NOT NULL,"
+			"Header INT NOT NULL,"
+			"Footer INT NOT NULL,"
+		   "UNIQUE INDEX(FilCod))");
 
    /***** Table msg_banned *****/
 /*
@@ -1542,38 +1542,39 @@ mysql> DESCRIBE msg_banned;
 2 rows in set (0.00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_banned ("
-                   "FromUsrCod INT NOT NULL,"
-                   "ToUsrCod INT NOT NULL,"
-                   "UNIQUE INDEX(FromUsrCod,ToUsrCod))");
+			"FromUsrCod INT NOT NULL,"
+			"ToUsrCod INT NOT NULL,"
+		   "UNIQUE INDEX(FromUsrCod,ToUsrCod))");
 
    /***** Table msg_content *****/
 /*
 mysql> DESCRIBE msg_content;
-+------------+--------------+------+-----+---------+----------------+
-| Field      | Type         | Null | Key | Default | Extra          |
-+------------+--------------+------+-----+---------+----------------+
-| MsgCod     | int(11)      | NO   | PRI | NULL    | auto_increment |
-| Subject    | text         | NO   | MUL | NULL    |                |
-| Content    | longtext     | NO   |     | NULL    |                |
-| ImageName  | varchar(43)  | NO   |     |         |                |
-| ImageTitle | varchar(255) | NO   |     |         |                |
-| ImageURL   | varchar(255) | NO   |     |         |                |
-+------------+--------------+------+-----+---------+----------------+
++------------+---------------+------+-----+---------+----------------+
+| Field      | Type          | Null | Key | Default | Extra          |
++------------+---------------+------+-----+---------+----------------+
+| MsgCod     | int(11)       | NO   | PRI | NULL    | auto_increment |
+| Subject    | text          | NO   | MUL | NULL    |                |
+| Content    | longtext      | NO   |     | NULL    |                |
+| ImageName  | varchar(43)   | NO   |     |         |                |
+| ImageTitle | varchar(2047) | NO   |     |         |                |
+| ImageURL   | varchar(255)  | NO   |     |         |                |
++------------+---------------+------+-----+---------+----------------+
 6 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS msg_content ("
-                   "MsgCod INT NOT NULL AUTO_INCREMENT,"
-                   "Subject TEXT NOT NULL,"
-                   "Content LONGTEXT NOT NULL,"
-                   "ImageName VARCHAR(43) NOT NULL DEFAULT '',"
-                   "ImageTitle VARCHAR(255) NOT NULL DEFAULT '',"
-                   "ImageURL VARCHAR(255) NOT NULL DEFAULT '',"
-                   "UNIQUE INDEX(MsgCod),"
-                   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
+			"MsgCod INT NOT NULL AUTO_INCREMENT,"
+			"Subject TEXT NOT NULL,"
+			"Content LONGTEXT NOT NULL,"
+			"ImageName VARCHAR(43) NOT NULL DEFAULT '',"	// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
+			"ImageTitle VARCHAR(2047) NOT NULL DEFAULT '',"	// Img_MAX_BYTES_TITLE
+			"ImageURL VARCHAR(255) NOT NULL DEFAULT '',"	// Cns_MAX_BYTES_WWW
+		   "UNIQUE INDEX(MsgCod),"
+		   "FULLTEXT(Subject,Content)) ENGINE = MYISAM;");
 
    /***** Table msg_content_deleted *****/
 /*
-mysql> DESCRIBE msg_content_deleted;                                                                    +------------+--------------+------+-----+---------+-------+
+mysql> DESCRIBE msg_content_deleted;
++------------+--------------+------+-----+---------+-------+
 | Field      | Type         | Null | Key | Default | Extra |
 +------------+--------------+------+-----+---------+-------+
 | MsgCod     | int(11)      | NO   | PRI | NULL    |       |
