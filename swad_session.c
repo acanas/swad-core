@@ -28,6 +28,7 @@
 #include <linux/stddef.h>	// For NULL
 #include <mysql/mysql.h>	// To access MySQL databases
 #include <stdio.h>		// For sprintf
+#include <stdlib.h>		// For malloc and free
 #include <string.h>		// For string functions
 
 #include "swad_connected.h"

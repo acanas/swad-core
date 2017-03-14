@@ -98,18 +98,19 @@ void Con_ShowConnectedUsrs (void)
    /* Current time */
    sprintf (Gbl.Title,"%s<br />%s %u, %u:%02u",
 	    Txt_Connected_users,
-            Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
-            Gbl.Now.Date.Day,
-            Gbl.Now.Time.Hour,
-            Gbl.Now.Time.Minute);
+	    Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
+	    Gbl.Now.Date.Day,
+	    Gbl.Now.Time.Hour,
+	    Gbl.Now.Time.Minute);
    Lay_StartRoundFrame (NULL,Gbl.Title,
-                        Con_PutIconToUpdateConnected,Hlp_USERS_Connected);
+			Con_PutIconToUpdateConnected,Hlp_USERS_Connected);
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
 
    /***** Show connected users in the current location *****/
-   Con_ShowConnectedUsrsBelongingToLocation ();
+   if (Gbl.Scope.Current != Sco_SCOPE_UNK)
+      Con_ShowConnectedUsrsBelongingToLocation ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
