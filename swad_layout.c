@@ -85,6 +85,7 @@ static void Lay_WriteRedirToMyLangOnLogIn (void);
 static void Lay_WriteRedirToMyLangOnViewUsrAgd (void);
 
 static void Lay_WriteScripts (void);
+static void Lay_WriteScriptMathJax (void);
 static void Lay_WriteScriptInit (void);
 static void Lay_WriteScriptParamsAJAX (void);
 static void Lay_WriteScriptCustomDropzone (void);
@@ -163,6 +164,8 @@ void Lay_WriteStartOfPage (void)
    // in httpd.conf to enable meta tag
    fprintf (Gbl.F.Out,"<html lang=\"%s\">\n"
                       "<head>\n"
+"<meta http-equiv=\"Page-Enter\" content=\"blendTrans(Duration=0)\">\n"
+"<meta http-equiv=\"Page-Exit\" content=\"blendTrans(Duration=0)\">\n"
                       "<meta http-equiv=\"Content-Type\" content=\"text/html;charset=windows-1252\" />\n"
                       "<meta name=\"description\" content=\"A free-software, educational, online tool for managing courses and students.\" />\n"
                       "<meta name=\"keywords\" content=\""
@@ -255,7 +258,7 @@ void Lay_WriteStartOfPage (void)
 
    /***** HTML body *****/
    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
-      fprintf (Gbl.F.Out,"<body onload=\"init()\">\n"
+      fprintf (Gbl.F.Out,"<body onload=\"init();\">\n"
                          "<div id=\"zoomLyr\" class=\"ZOOM\">"
                          "<img id=\"zoomImg\" src=\"%s/usr_bl.jpg\""
                          " alt=\"\" title=\"\""
@@ -386,6 +389,9 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>"	// main_zone
                          "</div>\n");	// whole_page_* (box that contains the whole page except the foot)
 
+      /***** Script for MathJax *****/
+      Lay_WriteScriptMathJax ();
+
       Gbl.Layout.DivsEndWritten = true;
      }
   }
@@ -469,29 +475,7 @@ static void Lay_WriteScripts (void)
 	    Cfg_URL_SWAD_PUBLIC,JS_FILE);
 
    /***** Script for MathJax *****/
-   // MathJax configuration
-   /*
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-	              " window.MathJax = {"
-	              "  tex2jax: {"
-	              "   inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
-	              "   processEscapes: true"
-	              "  }"
-	              " };"
-	              "</script>");
-   */
-#ifdef Cfg_MATHJAX_LOCAL
-   // Use the local copy of MathJax
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " src=\"%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
-	              "</script>\n",
-	    Cfg_URL_SWAD_PUBLIC);
-#else
-   // Use the MathJax Content Delivery Network (CDN)
-   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
-	              " src=\"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
-	              "</script>\n");
-#endif
+   // Lay_WriteScriptMathJax ();
 
    /***** Scripts used only in main window *****/
    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
@@ -646,6 +630,37 @@ static void Lay_WriteScripts (void)
 //}
 
 /*****************************************************************************/
+/************ Write some scripts depending on the current action *************/
+/*****************************************************************************/
+
+static void Lay_WriteScriptMathJax (void)
+  {
+   // MathJax configuration
+   /*
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+	              " window.MathJax = {"
+	              "  tex2jax: {"
+	              "   inlineMath: [ ['$','$'], [\"\\\\(\",\"\\\\)\"] ],"
+	              "   processEscapes: true"
+	              "  }"
+	              " };"
+	              "</script>");
+   */
+#ifdef Cfg_MATHJAX_LOCAL
+   // Use the local copy of MathJax
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+	              " src=\"%s/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
+	              "</script>\n",
+	    Cfg_URL_SWAD_PUBLIC);
+#else
+   // Use the MathJax Content Delivery Network (CDN)
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\""
+	              " src=\"//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML\">"
+	              "</script>\n");
+#endif
+  }
+
+/*****************************************************************************/
 /******* Write script with init function executed after loading page *********/
 /*****************************************************************************/
 
@@ -695,7 +710,7 @@ static void Lay_WriteScriptInit (void)
 	 default:
 	    break;
         }
-
+   // fprintf (Gbl.F.Out,"	document.getElementById('whole_page').style.opacity='1';\n");
    fprintf (Gbl.F.Out,"}\n"
                       "</script>\n");
   }
