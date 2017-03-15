@@ -158,6 +158,7 @@ void Msg_FormMsgUsrs (void)
    Par_GetParAndChangeFormat ("HiddenContent",Content,Cns_MAX_BYTES_LONG_TEXT,
                               Str_TO_TEXT,false);
 
+   /***** Show a form to compose a message to users *****/
    Msg_PutFormMsgUsrs (Content);
   }
 
@@ -198,7 +199,6 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    GetUsrsInCrs = !Gbl.Msg.ShowOnlyOneRecipient &&	// Show list of potential recipients
 	          (Gbl.Usrs.Me.IBelongToCurrentCrs ||	// If there is a course selected and I belong to it
 	           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
-
    if (GetUsrsInCrs)
      {
       /***** Get and update type of list,

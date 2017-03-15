@@ -347,6 +347,8 @@ bool Ses_GetSessionData (void)
 void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const char *ParamValue)
   {
    char *Query;
+   size_t LengthParamName;
+   size_t LengthParamValue;
    size_t MaxLength;
 
    /***** Before of inserting the first hidden parameter passed to the next action,
@@ -354,25 +356,37 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
    Ses_RemoveHiddenParFromThisSession ();
 
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
-   if (!Ses_CheckIfHiddenParIsAlreadyInDB (Action,ParamName))
-     {
-      /***** Allocate space for query *****/
-      MaxLength = 256 + Ses_BYTES_SESSION_ID + strlen (ParamName) + strlen (ParamValue);
-      if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory for query.");
+   if (ParamName)
+      if ((LengthParamName = strlen (ParamName)))
+	 if (!Ses_CheckIfHiddenParIsAlreadyInDB (Action,ParamName))
+	   {
+	    /***** Allocate space for query *****/
+	    if (ParamValue)
+	       LengthParamValue = strlen (ParamValue);
+	    else
+	       LengthParamValue = 0;
+	    MaxLength = 256 +
+			Ses_BYTES_SESSION_ID +
+			LengthParamName +
+			LengthParamValue;
+	    if ((Query = (char *) malloc (MaxLength + 1)) == NULL)
+	       Lay_ShowErrorAndExit ("Not enough memory for query.");
 
-      /***** Insert parameter in the database *****/
-      sprintf (Query,"INSERT INTO hidden_params"
-	             " (SessionId,Action,ParamName,ParamValue)"
-		     " VALUES"
-		     " ('%s','%d','%s','%s')",
-	       Gbl.Session.Id,(int) Action,ParamName,ParamValue);
-      DB_QueryINSERT (Query,"can not create hidden parameter");
-      Gbl.HiddenParamsInsertedIntoDB = true;
+	    /***** Insert parameter in the database *****/
+	    sprintf (Query,"INSERT INTO hidden_params"
+			   " (SessionId,Action,ParamName,ParamValue)"
+			   " VALUES"
+			   " ('%s','%d','%s','%s')",
+		     Gbl.Session.Id,(int) Action,
+		     ParamName,
+		     LengthParamValue ? ParamValue :
+					"");
+	    DB_QueryINSERT (Query,"can not create hidden parameter");
+	    Gbl.HiddenParamsInsertedIntoDB = true;
 
-      /***** Free query *****/
-      free ((void *) Query);
-     }
+	    /***** Free query *****/
+	    free ((void *) Query);
+	   }
   }
 
 /*****************************************************************************/
