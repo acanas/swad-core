@@ -37,7 +37,7 @@ const char *Hlp_Search =
 #elif L==3
 	"Search";
 #elif L==4
-	"Search";
+	"Search.es";
 #elif L==5
 	"Search";
 #elif L==6
@@ -81,7 +81,7 @@ const char *Hlp_SYSTEM_Countries =
 #elif L==3
 	"SYSTEM.Countries";
 #elif L==4
-	"SYSTEM.Countries";
+	"SYSTEM.Countries.es";
 #elif L==5
 	"SYSTEM.Countries";
 #elif L==6

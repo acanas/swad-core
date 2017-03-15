@@ -41235,7 +41235,7 @@ const char *Txt_TAGLINE =
 # if   L==1
 	"plataforma educativa";
 # elif L==2
-	"Bildungs-plattform";
+	"Bildungsplattform";
 # elif L==3
 	"educational platform";
 # elif L==4
@@ -41254,23 +41254,23 @@ const char *Txt_TAGLINE =
 
 const char *Txt_TAGLINE_BR =
 # if   L==1
-	"plataforma de suport<br />a la doc&egrave;ncia";
+	"plataforma<br />educativa";
 # elif L==2
-	"Plattform zur<br />Unterst&uuml;tzung der Lehre";
+	"Bildungs-<br />plattform";
 # elif L==3
-	"platform to<br />support teaching";
+	"educational<br />platform";
 # elif L==4
-	"plataforma de apoyo<br />a la docencia";
+	"plataforma<br />educativa";
 # elif L==5
-	"plate-forme pour<br />appuyer l'enseignement";
+	"plate-forme<br />&eacute;ducative";
 # elif L==6
-	"plataforma de apoyo<br />a la docencia";	// Okoteve traducción
+	"plataforma<br />educativa";	// Okoteve traducción
 # elif L==7
-	"piattaforma per<br />sostenere l'insegnamento";
+	"piattaforma<br />educativa";
 # elif L==8
-	"platforma do<br />wspierania nauczania";
+	"platforma<br />edukacyjna";
 # elif L==9
-	"plataforma de<br />apoio ao ensino";
+	"plataforma<br />educacional";
 # endif
 
 #elif defined SWAD_UGR_ES		// swad.ugr.es ************************
