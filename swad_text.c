@@ -41233,23 +41233,23 @@ const char *Txt_TAGLINE_BR =
 
 const char *Txt_TAGLINE =
 # if   L==1
-	"plataforma de suport a la doc&egrave;ncia";
+	"plataforma educativa";
 # elif L==2
-	"Plattform zur Unterst&uuml;tzung der Lehre";
+	"Bildungs-plattform";
 # elif L==3
-	"platform to support teaching";
+	"educational platform";
 # elif L==4
-	"plataforma de apoyo a la docencia";
+	"plataforma educativa";
 # elif L==5
-	"plate-forme pour appuyer l'enseignement";
+	"plate-forme &eacute;ducative";
 # elif L==6
-	"plataforma de apoyo a la docencia";	// Okoteve traducción
+	"plataforma educativa";	// Okoteve traducción
 # elif L==7
-	"piattaforma per sostenere l'insegnamento";
+	"piattaforma educativa";
 # elif L==8
-	"platforma do wspierania nauczania";
+	"platforma edukacyjna";
 # elif L==9
-	"plataforma de apoio ao ensino";
+	"plataforma educacional";
 # endif
 
 const char *Txt_TAGLINE_BR =

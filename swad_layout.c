@@ -169,7 +169,10 @@ void Lay_WriteStartOfPage (void)
                       "%s,"
                       "SWAD,"
                       "shared workspace at a distance,"
+                      "educational platform,"
                       "sistema web de apoyo a la docencia,"
+                      "plataforma educativa,"
+                      "campus virtual,"
                       "SWADroid,"
                       "LMS,"
                       "Learning Management System\" />\n",

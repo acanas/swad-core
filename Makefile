@@ -118,4 +118,4 @@ swad_pt: $(OBJS) $(SOAPOBJS)
 .PHONY: clean
 
 clean:
-	rm -f swad swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_text.o $(OBJS) 
+	rm -f swad swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt swad_help_URL.o swad_text.o $(OBJS) 
