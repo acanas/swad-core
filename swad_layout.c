@@ -389,9 +389,6 @@ static void Lay_WriteEndOfPage (void)
 			 "</div>"	// main_zone
                          "</div>\n");	// whole_page_* (box that contains the whole page except the foot)
 
-      /***** Script for MathJax *****/
-      Lay_WriteScriptMathJax ();
-
       Gbl.Layout.DivsEndWritten = true;
      }
   }
@@ -475,7 +472,7 @@ static void Lay_WriteScripts (void)
 	    Cfg_URL_SWAD_PUBLIC,JS_FILE);
 
    /***** Script for MathJax *****/
-   // Lay_WriteScriptMathJax ();
+   Lay_WriteScriptMathJax ();
 
    /***** Scripts used only in main window *****/
    if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)

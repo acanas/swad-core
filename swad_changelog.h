@@ -133,7 +133,6 @@
 
 // TODO: If a user creates a request for inscription, and the user is removed ==> mark possible notifications as removed
 
-// TODO: FIX BUG: Passwords with % do not work
 // TODO: When SWAD prompts the user to confirm elimination of a group, list the groups below the button
 
 // TODO: Send a message to the user when rejecting a request for enrollment. Suggested by Javier Fernández Baldomero.
@@ -204,18 +203,20 @@
 
 // TODO: En la agenda debe poder repetirse el nombre del evento
 // TODO: Cuando hay un fallo al rellenar el formulario de nuevo evento en la agenda se borran los datos
+// TODO: Comprobar cabecera de una orla cuando el ámbito actual es un centro
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.156.1 (2017-03-15)"
+#define Log_PLATFORM_VERSION	"SWAD 16.156.2 (2017-03-16)"
 #define CSS_FILE		"swad16.156.1.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.156.2: Mar 16, 2017	Fixed bug in passwords. (217076 lines)
         Version 16.156.1: Mar 15, 2017	Force vertical scrollbar. (217078 lines)
         Version 16.156:   Mar 15, 2017	Fixed bug in messages, reported by Francisco Ocaña Lara. (217063 lines)
         Version 16.155.35:Mar 15, 2017	Some help URLs translated to spanish. (217047 lines)

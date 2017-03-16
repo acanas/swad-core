@@ -183,15 +183,16 @@ void Pwd_ActChgMyPwd1 (void)
          sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
       else
         {
-         Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-                           NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD,true);
          Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
-         if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
+         if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,
+                                            Gbl.Usrs.Me.UsrDat.UsrCod))        // New password is good?
            {
+	    /* Update my data */
             Str_Copy (Gbl.Usrs.Me.UsrDat.Password,NewEncryptedPassword,
                       Pwd_BYTES_ENCRYPTED_PASSWORD);
             Ses_UpdateSessionDataInDB ();
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
+
             sprintf (Gbl.Message,"%s",Txt_Your_password_has_been_changed_successfully);
             Gbl.Usrs.Error = false;
            }
@@ -504,10 +505,9 @@ void Pwd_UpdateOtherPwd1 (void)
 	    sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
 	 else
 	   {
-	    Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-			      NewPlainPassword[0],Pwd_MAX_BYTES_PLAIN_PASSWORD,true);
 	    Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
-	    if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,Gbl.Usrs.Other.UsrDat.UsrCod))        // Good password
+	    if (Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword[0],NewEncryptedPassword,
+	                                       Gbl.Usrs.Other.UsrDat.UsrCod))        // New password is good?
 	      {
 	       /* Update other user's data */
 	       Str_Copy (Gbl.Usrs.Other.UsrDat.Password,NewEncryptedPassword,
