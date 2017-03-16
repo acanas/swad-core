@@ -839,9 +839,20 @@ static void Deg_ListDegreesForEdition (void)
 	                 "</td>",
                NumCrss);
 
+      /* Degree requester */
+      UsrDat.UsrCod = Deg->RequesterUsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
+			 "<tr>");
+      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
+      fprintf (Gbl.F.Out,"</tr>"
+			 "</table>"
+			 "</td>");
+
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM &&
 	  StatusTxt == Deg_STATUS_PENDING)
 	{
@@ -859,20 +870,9 @@ static void Deg_ListDegreesForEdition (void)
 		  Txt_DEGREE_STATUS[Deg_STATUS_ACTIVE]);
 	 Act_FormEnd ();
 	}
-      else
+      else if (StatusTxt != Deg_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Degree requester */
-      UsrDat.UsrCod = Deg->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
-      fprintf (Gbl.F.Out,"</tr>"
-			 "</table>"
-			 "</td>"
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
@@ -944,7 +944,6 @@ static void Deg_PutFormToCreateDegree (void)
   {
    extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_New_degree_of_CENTRE_X;
-   extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
    struct DegreeType *DegTyp;
@@ -1032,12 +1031,6 @@ static void Deg_PutFormToCreateDegree (void)
 	              "0"
 	              "</td>");
 
-   /***** Degree status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
-	              "%s"
-	              "</td>",
-            Txt_DEGREE_STATUS[Deg_STATUS_PENDING]);
-
    /***** Degree requester *****/
    fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
 		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
@@ -1045,7 +1038,11 @@ static void Deg_PutFormToCreateDegree (void)
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
-		      "</td>"
+		      "</td>");
+
+   /***** Degree status *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+	              "</td>"
 		      "</tr>");
 
    /***** Send button and end frame *****/
@@ -1064,7 +1061,6 @@ static void Deg_PutHeadDegreesForSeeing (void)
    extern const char *Txt_Degree;
    extern const char *Txt_Type;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Status;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1079,13 +1075,11 @@ static void Deg_PutHeadDegreesForSeeing (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Degree,
             Txt_Type,
-            Txt_Courses_ABBREVIATION,
-            Txt_Status);
+            Txt_Courses_ABBREVIATION);
   }
 
 /*****************************************************************************/
@@ -1100,7 +1094,6 @@ static void Deg_PutHeadDegreesForEdition (void)
    extern const char *Txt_Type;
    extern const char *Txt_WWW;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -1128,7 +1121,6 @@ static void Deg_PutHeadDegreesForEdition (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Code,
@@ -1137,7 +1129,6 @@ static void Deg_PutHeadDegreesForEdition (void)
             Txt_Type,
             Txt_WWW,
             Txt_Courses_ABBREVIATION,
-            Txt_Status,
             Txt_Requester);
   }
 
@@ -1288,7 +1279,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   Crs_StatusTxt_t StatusTxt;
+   Deg_StatusTxt_t StatusTxt;
    unsigned NumCrss;
 
    /***** Get number of courses in this degree *****/
@@ -1355,11 +1346,12 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
    /***** Degree status *****/
    StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-	              "%s"
-	              "</td>"
-		      "</tr>",
-	    TxtClassNormal,BgColor,Txt_DEGREE_STATUS[StatusTxt]);
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
+	    TxtClassNormal,BgColor);
+   if (StatusTxt != Deg_STATUS_ACTIVE) // If active ==> do not show anything
+      fprintf (Gbl.F.Out,"%s",Txt_DEGREE_STATUS[StatusTxt]);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }

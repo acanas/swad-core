@@ -4021,7 +4021,7 @@ const char *Txt_Centre_X_removed =	// Warning: it is very important to include %
 
 const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
    {
-#if   L==1	// Crs_STATUS_UNKNOWN
+#if   L==1	// Ctr_STATUS_UNKNOWN
 	 "Desconegudo"
 #elif L==2
 	 "Unbekannt"
@@ -4041,7 +4041,7 @@ const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
 	 "Desconhecido"
 #endif
 	 ,
-#if   L==1	// Crs_STATUS_ACTIVE
+#if   L==1	// Ctr_STATUS_ACTIVE
 	 "Activo"
 #elif L==2
 	 "Aktive"
@@ -4061,27 +4061,27 @@ const char *Txt_CENTRE_STATUS[Crs_NUM_STATUS_TXT] =
 	 "Ativo"
 #endif
 	 ,
-#if   L==1	// Crs_STATUS_PENDING
-	 "Pendent"
+#if   L==1	// Ctr_STATUS_PENDING
+	 "Novo"
 #elif L==2
-	 "Offen"
+	 "Neu"
 #elif L==3
-	 "Pending"
+	 "New"
 #elif L==4
-	 "Pendiente"
+	 "Nuevo"
 #elif L==5
-	 "En attente"
+	 "Nouveau"
 #elif L==6
-	 "Pendiente"	// Okoteve traducción
+	 "Pyahu"
 #elif L==7
-	 "In attesa"
+	 "Nuovo"
 #elif L==8
-	 "Do czasu"
+	 "Nowy"
 #elif L==9
-	 "Pendente"
+	 "Novo"
 #endif
 	 ,
-#if   L==1	// Crs_STATUS_REMOVED
+#if   L==1	// Ctr_STATUS_REMOVED
 	 "Eliminado"
 #elif L==2
 	 "Entfernt"
@@ -5682,23 +5682,23 @@ const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT] =
 #endif
 	 ,
 #if   L==1	// Crs_STATUS_PENDING
-	 "Pendent"
+	 "Nova"
 #elif L==2
-	 "Offen"
+	 "Neu"
 #elif L==3
-	 "Pending"
+	 "New"
 #elif L==4
-	 "Pendiente"
+	 "Nueva"
 #elif L==5
-	 "En attente"
+	 "Nouvelle"
 #elif L==6
-	 "Pendiente"	// Okoteve traducción
+	 "Pyahu"
 #elif L==7
-	 "In attesa"
+	 "Nuovo"
 #elif L==8
-	 "Do czasu"
+	 "Nowy"
 #elif L==9
-	 "Pendente"
+	 "Nova"
 #endif
 	 ,
 #if   L==1	// Crs_STATUS_REMOVED
@@ -7731,23 +7731,23 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 #endif
 	 ,
 #if   L==1	// Deg_STATUS_PENDING
-	 "Pendent"
+	 "Nova"
 #elif L==2
-	 "Offen"
+	 "Neu"
 #elif L==3
-	 "Pending"
+	 "New"
 #elif L==4
-	 "Pendiente"
+	 "Nueva"
 #elif L==5
-	 "En attente"
+	 "Nouveau"
 #elif L==6
-	 "Pendiente"	// Okoteve traducción
+	 "Pyahu"
 #elif L==7
-	 "In attesa"
+	 "Nuovo"
 #elif L==8
-	 "Do czasu"
+	 "Nowy"
 #elif L==9
-	 "Pendente"
+	 "Nova"
 #endif
 	 ,
 #if   L==1	// Deg_STATUS_REMOVED
@@ -16112,23 +16112,23 @@ const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT] =
 #endif
 	 ,
 #if   L==1	// Ins_STATUS_PENDING
-	 "Pendent"
+	 "Nova"
 #elif L==2
-	 "Offen"
+	 "Neu"
 #elif L==3
-	 "Pending"
+	 "New"
 #elif L==4
-	 "Pendiente"
+	 "Nueva"
 #elif L==5
-	 "En attente"
+	 "Nouvelle"
 #elif L==6
-	 "Pendiente"	// Okoteve traducción
+	 "Pyahu"
 #elif L==7
-	 "In attesa"
+	 "Nuovo"
 #elif L==8
-	 "Do czasu"
+	 "Nowy"
 #elif L==9
-	 "Pendente"
+	 "Nova"
 #endif
 	 ,
 #if   L==1	// Ins_STATUS_REMOVED

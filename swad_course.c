@@ -1327,11 +1327,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-			    "%s"
-			    "</td>"
-			    "</tr>",
-		  TxtClassNormal,BgColor,Txt_COURSE_STATUS[StatusTxt]);
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
+		  TxtClassNormal,BgColor);
+	 if (StatusTxt != Crs_STATUS_ACTIVE) // If active ==> do not show anything
+	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
+	 fprintf (Gbl.F.Out,"</td>"
+			    "</tr>");
 	}
      }
 
@@ -1520,9 +1521,20 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			    "</td>",
 		  Crs->NumStds);
 
+	 /* Course requester */
+	 UsrDat.UsrCod = Crs->RequesterUsrCod;
+	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+	 fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			    "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
+			    "<tr>");
+	 Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
+	 fprintf (Gbl.F.Out,"</tr>"
+			    "</table>"
+			    "</td>");
+
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
+	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
 	 if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM &&
 	     StatusTxt == Crs_STATUS_PENDING)
 	   {
@@ -1540,20 +1552,9 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 		     Txt_COURSE_STATUS[Crs_STATUS_ACTIVE]);
 	    Act_FormEnd ();
 	   }
-	 else
+         else if (StatusTxt != Crs_STATUS_ACTIVE)	// If active ==> do not show anything
 	    fprintf (Gbl.F.Out,"%s",Txt_COURSE_STATUS[StatusTxt]);
-	 fprintf (Gbl.F.Out,"</td>");
-
-	 /* Course requester */
-	 UsrDat.UsrCod = Crs->RequesterUsrCod;
-	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-	 fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-			    "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-			    "<tr>");
-	 Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
-	 fprintf (Gbl.F.Out,"</tr>"
-			    "</table>"
-			    "</td>"
+	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 	}
      }
@@ -1624,7 +1625,6 @@ static void Crs_PutFormToCreateCourse (void)
    extern const char *Hlp_DEGREE_Courses;
    extern const char *Txt_New_course_of_DEGREE_X;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
-   extern const char *Txt_COURSE_STATUS[Crs_NUM_STATUS_TXT];
    extern const char *Txt_Create_course;
    struct Course *Crs;
    unsigned Year;
@@ -1706,11 +1706,6 @@ static void Crs_PutFormToCreateCourse (void)
 	              "0"
 	              "</td>");
 
-   /***** Course status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
-	              "%s"
-	              "</td>",
-            Txt_COURSE_STATUS[Crs_STATUS_PENDING]);
 
    /***** Course requester *****/
    fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
@@ -1719,7 +1714,11 @@ static void Crs_PutFormToCreateCourse (void)
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
-		      "</td>"
+		      "</td>");
+
+   /***** Course status *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+	              "</td>"
 		      "</tr>");
 
    /***** Send button and end frame *****/
@@ -1740,7 +1739,6 @@ static void Crs_PutHeadCoursesForSeeing (void)
    extern const char *Txt_Course;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Status;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1760,15 +1758,13 @@ static void Crs_PutHeadCoursesForSeeing (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Institutional_BR_code,
             Txt_Year_OF_A_DEGREE,
             Txt_Course,
             Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
-            Txt_Status);
+            Txt_Students_ABBREVIATION);
   }
 
 /*****************************************************************************/
@@ -1785,7 +1781,6 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Full_name_of_the_course;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -1815,7 +1810,6 @@ static void Crs_PutHeadCoursesForEdition (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Code,
@@ -1825,7 +1819,6 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Full_name_of_the_course,
             Txt_Teachers_ABBREVIATION,
             Txt_Students_ABBREVIATION,
-            Txt_Status,
             Txt_Requester);
   }
 

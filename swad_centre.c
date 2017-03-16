@@ -836,7 +836,7 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
    const char *TxtClassNormal;
    const char *TxtClassStrong;
    const char *BgColor;
-   Crs_StatusTxt_t StatusTxt;
+   Ctr_StatusTxt_t StatusTxt;
 
    /***** Get data of place of this centre *****/
    Plc.PlcCod = Ctr->PlcCod;
@@ -906,12 +906,12 @@ static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr)
 
    /***** Centre status *****/
    StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">"
-		      "%s"
-		      "</td>"
-		      "</tr>",
-	    TxtClassNormal,BgColor,
-	    Txt_CENTRE_STATUS[StatusTxt]);
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE %s\">",
+	    TxtClassNormal,BgColor);
+   if (StatusTxt != Ctr_STATUS_ACTIVE) // If active ==> do not show anything
+      fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
+   fprintf (Gbl.F.Out,"</td>"
+		      "</tr>");
 
    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
   }
@@ -1545,9 +1545,20 @@ static void Ctr_ListCentresForEdition (void)
 	                 "</td>",
                Ctr->NumUsrs);
 
+      /* Centre requester */
+      UsrDat.UsrCod = Ctr->RequesterUsrCod;
+      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
+			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
+			 "<tr>");
+      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
+      fprintf (Gbl.F.Out,"</tr>"
+			 "</table>"
+			 "</td>");
+
       /* Centre status */
       StatusTxt = Ctr_GetStatusTxtFromStatusBits (Ctr->Status);
-      fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">");
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM &&
 	  StatusTxt == Ctr_STATUS_PENDING)
 	{
@@ -1565,20 +1576,9 @@ static void Ctr_ListCentresForEdition (void)
 		  Txt_CENTRE_STATUS[Ctr_STATUS_ACTIVE]);
 	 Act_FormEnd ();
 	}
-      else
+      else if (StatusTxt != Ctr_STATUS_ACTIVE)	// If active ==> do not show anything
 	 fprintf (Gbl.F.Out,"%s",Txt_CENTRE_STATUS[StatusTxt]);
-      fprintf (Gbl.F.Out,"</td>");
-
-      /* Centre requester */
-      UsrDat.UsrCod = Ctr->RequesterUsrCod;
-      Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-			 "<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
-      fprintf (Gbl.F.Out,"</tr>"
-			 "</table>"
-			 "</td>"
+      fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");
      }
 
@@ -2402,7 +2402,6 @@ static void Ctr_PutFormToCreateCentre (void)
    extern const char *Hlp_INSTITUTION_Centres;
    extern const char *Txt_New_centre_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
-   extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    extern const char *Txt_Create_centre;
    struct Centre *Ctr;
    unsigned NumPlc;
@@ -2499,12 +2498,6 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "0"
 	              "</td>");
 
-   /***** Centre status *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT STATUS\">"
-	              "%s"
-	              "</td>",
-            Txt_CENTRE_STATUS[Ctr_STATUS_PENDING]);
-
    /***** Centre requester *****/
    fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
 		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
@@ -2512,7 +2505,11 @@ static void Ctr_PutFormToCreateCentre (void)
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
    fprintf (Gbl.F.Out,"</tr>"
 		      "</table>"
-		      "</td>"
+		      "</td>");
+
+   /***** Centre status *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+	              "</td>"
 		      "</tr>");
 
    /***** Send button and end frame *****/
@@ -2535,7 +2532,6 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_Courses_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Status;
    Ctr_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2578,14 +2574,12 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
                       "%s+<br />%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Place,
 	    Txt_Degrees_ABBREVIATION,
 	    Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
-	    Txt_Status);
+            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
   }
 
 /*****************************************************************************/
@@ -2603,7 +2597,6 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Teachers_ABBREVIATION;
    extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Status;
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2637,7 +2630,6 @@ static void Ctr_PutHeadCentresForEdition (void)
                       "%s"
                       "</th>"
                       "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
                       "</th>"
                       "</tr>",
             Txt_Code,
@@ -2648,7 +2640,6 @@ static void Ctr_PutHeadCentresForEdition (void)
             Txt_Users,
             Txt_Degrees_ABBREVIATION,
             Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
-            Txt_Status,
             Txt_Requester);
   }
 
