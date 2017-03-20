@@ -1399,7 +1399,7 @@ const char *Hlp_USERS_Teachers =
 #elif L==3
 	"USERS.Teachers";
 #elif L==4
-	"USERS.Teachers";
+	"USERS.Teachers.es";
 #elif L==5
 	"USERS.Teachers";
 #elif L==6
@@ -1420,7 +1420,7 @@ const char *Hlp_USERS_Teachers_shared_record_card =
 #elif L==3
 	"USERS.Teachers#shared-record-card";
 #elif L==4
-	"USERS.Teachers#shared-record-card";
+	"USERS.Teachers.es#ficha-compartida";
 #elif L==5
 	"USERS.Teachers#shared-record-card";
 #elif L==6
@@ -1441,7 +1441,7 @@ const char *Hlp_USERS_Teachers_timetable =
 #elif L==3
 	"USERS.Teachers#timetable";
 #elif L==4
-	"USERS.Teachers#timetable";
+	"USERS.Teachers.es#horario";
 #elif L==5
 	"USERS.Teachers#timetable";
 #elif L==6
