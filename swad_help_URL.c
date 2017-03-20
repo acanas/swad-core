@@ -1273,7 +1273,7 @@ const char *Hlp_USERS_Students =
 #elif L==3
 	"USERS.Students";
 #elif L==4
-	"USERS.Students";
+	"USERS.Students.es";
 #elif L==5
 	"USERS.Students";
 #elif L==6
@@ -1294,7 +1294,7 @@ const char *Hlp_USERS_Students_shared_record_card =
 #elif L==3
 	"USERS.Students#shared-record-card";
 #elif L==4
-	"USERS.Students#shared-record-card";
+	"USERS.Students.es#ficha-compartida";
 #elif L==5
 	"USERS.Students#shared-record-card";
 #elif L==6
@@ -1315,7 +1315,7 @@ const char *Hlp_USERS_Students_course_record_card =
 #elif L==3
 	"USERS.Students#course-record-card";
 #elif L==4
-	"USERS.Students#course-record-card";
+	"USERS.Students.es#ficha-de-la-asignatura";
 #elif L==5
 	"USERS.Students#course-record-card";
 #elif L==6
