@@ -164,6 +164,7 @@ static void Rec_GetUsrCommentsFromForm (struct UsrData *UsrDat);
 
 void Rec_ReqEditRecordFields (void)
   {
+   extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *Txt_There_are_no_record_fields_in_the_course_X;
    extern const char *Txt_Record_fields;
 
@@ -173,7 +174,8 @@ void Rec_ReqEditRecordFields (void)
    /***** List the current fields of records for edit them *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// Fields found...
      {
-      Lay_StartRoundFrameTable (NULL,Txt_Record_fields,NULL,NULL,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Record_fields,NULL,
+                                Hlp_USERS_Students_course_record_card,2);
       Rec_ListFieldsRecordsForEdition ();
       Lay_EndRoundFrameTable ();
      }
@@ -336,6 +338,7 @@ void Rec_ListFieldsRecordsForEdition (void)
 
 void Rec_ShowFormCreateRecordField (void)
   {
+   extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *Txt_New_record_field;
    extern const char *Txt_RECORD_FIELD_VISIBILITY_MENU[Rec_NUM_TYPES_VISIBILITY];
    extern const char *Txt_Create_record_field;
@@ -345,7 +348,8 @@ void Rec_ShowFormCreateRecordField (void)
    Act_FormStart (ActNewFie);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_record_field,NULL,NULL,0);
+   Lay_StartRoundFrameTable (NULL,Txt_New_record_field,NULL,
+                             Hlp_USERS_Students_course_record_card,2);
 
    /***** Write heading *****/
    Rec_WriteHeadingRecordFields ();
