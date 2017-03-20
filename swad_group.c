@@ -4263,7 +4263,7 @@ void Grp_PutParamWhichGrpsAllGrps (void)
 
 void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
   {
-   extern const char *Txt_Show_WHICH_groups[2];
+   extern const char *Txt_GROUP_WHICH_GROUPS[2];
    Grp_WhichGroups_t WhichGrps;
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -4284,8 +4284,8 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 	       Gbl.Prefs.IconsURL,
 	       WhichGrps == Grp_ONLY_MY_GROUPS ? "myhierarchy64x64.png" :
 		                                 "hierarchy64x64.png",
-	       Txt_Show_WHICH_groups[WhichGrps],
-	       Txt_Show_WHICH_groups[WhichGrps]);
+	       Txt_GROUP_WHICH_GROUPS[WhichGrps],
+	       Txt_GROUP_WHICH_GROUPS[WhichGrps]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }

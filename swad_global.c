@@ -422,6 +422,13 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.FileType = Brw_IS_UNKNOWN;
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
+   /* Agenda */
+   Gbl.Agenda.PastFutureEvents    = (1 << Agd_FUTURE_EVENTS);
+   Gbl.Agenda.PrivatePublicEvents = (1 << Agd_PRIVATE_EVENTS) &
+	                            (1 << Agd_PUBLIC_EVENTS);
+   Gbl.Agenda.HiddenVisibleEvents = (1 << Agd_VISIBLE_EVENTS);
+   Gbl.Agenda.SelectedOrder = Agd_ORDER_DEFAULT;
+
    /* To alternate colors where listing rows */
    Gbl.RowEvenOdd = 0;
    Gbl.ColorRows[0] = "COLOR0";	// Darker

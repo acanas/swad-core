@@ -75,6 +75,13 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Agd_ShowFormToSelPastFutureEvents (void);
+static void Agd_ShowFormToSelPrivatePublicEvents (void);
+static void Agd_ShowFormToSelHiddenVisibleEvents (void);
+static void Agd_PutHiddenParamsPastFutureEvents (unsigned PastFutureEvents);
+static void Agd_PutHiddenParamsPrivatePublicEvents (unsigned PrivatePublicEvents);
+static void Agd_PutHiddenParamsHiddenVisibleEvents (unsigned HiddenVisibleEvents);
+
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType);
 static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType);
@@ -134,6 +141,11 @@ void Agd_ShowMyAgenda (void)
    Lay_StartRoundFrame ("100%",Txt_My_agenda,
 			Agd_PutIconsMyFullAgenda,Hlp_PROFILE_Agenda);
 
+   /***** Put forms to choice which events to show *****/
+   Agd_ShowFormToSelPastFutureEvents ();
+   Agd_ShowFormToSelPrivatePublicEvents ();
+   Agd_ShowFormToSelHiddenVisibleEvents ();
+
    /***** Show the current events in the user's agenda *****/
    Agd_ShowEventsToday (Agd_MY_FULL_AGENDA_TODAY);
 
@@ -142,6 +154,186 @@ void Agd_ShowMyAgenda (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/*************** Show form to select past / future events ********************/
+/*****************************************************************************/
+
+static void Agd_ShowFormToSelPastFutureEvents (void)
+  {
+   extern const char *Txt_AGENDA_PAST_FUTURE_EVENTS[2];
+   Agd_PastFutureEvents_t PstFut;
+   static const char *Image[2] =
+     {
+      "backward64x64.png",	// Agd_PAST_EVENTS
+      "forward64x64.png",	// Agd_FUTURE_EVENTS
+     };
+
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (PstFut = Agd_PAST_EVENTS;
+	PstFut <= Agd_FUTURE_EVENTS;
+	PstFut++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Agenda.PastFutureEvents & (1 << PstFut)) ? "PREF_ON" :
+							       "PREF_OFF");
+      Act_FormStart (ActSeeMyAgd);
+      Agd_PutHiddenParamsPastFutureEvents (1 << PstFut);
+      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
+      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       Image[PstFut],
+	       Txt_AGENDA_PAST_FUTURE_EVENTS[PstFut],
+	       Txt_AGENDA_PAST_FUTURE_EVENTS[PstFut]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/************** Show form to select private / public events ******************/
+/*****************************************************************************/
+
+static void Agd_ShowFormToSelPrivatePublicEvents (void)
+  {
+   extern const char *Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[2];
+   Agd_PastFutureEvents_t PrvPub;
+   static const char *Image[2] =
+     {
+      "lock-on64x64.png",	// Agd_PRIVATE_EVENTS
+      "unlock-on64x64.png",	// Agd_PUBLIC_EVENTS
+     };
+
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (PrvPub = Agd_PAST_EVENTS;
+	PrvPub <= Agd_FUTURE_EVENTS;
+	PrvPub++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Agenda.PastFutureEvents & (1 << PrvPub)) ? "PREF_ON" :
+							       "PREF_OFF");
+      Act_FormStart (ActSeeMyAgd);
+      Agd_PutHiddenParamsPastFutureEvents (1 << PrvPub);
+      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
+      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       Image[PrvPub],
+	       Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[PrvPub],
+	       Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[PrvPub]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/************* Show form to select hidden / visible events *******************/
+/*****************************************************************************/
+
+static void Agd_ShowFormToSelHiddenVisibleEvents (void)
+  {
+   extern const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[2];
+   Agd_PastFutureEvents_t HidVis;
+   static const char *Image[2] =
+     {
+      "eye-slash-on64x64.png",	// Agd_HIDDEN_EVENTS
+      "eye-on64x64.png",	// Agd_VISIBLE_EVENTS
+     };
+
+   fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
+   for (HidVis = Agd_PAST_EVENTS;
+	HidVis <= Agd_FUTURE_EVENTS;
+	HidVis++)
+     {
+      fprintf (Gbl.F.Out,"<div class=\"%s\">",
+	       (Gbl.Agenda.PastFutureEvents & (1 << HidVis)) ? "PREF_ON" :
+							       "PREF_OFF");
+      Act_FormStart (ActSeeMyAgd);
+      Agd_PutHiddenParamsPastFutureEvents (1 << HidVis);
+      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
+      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
+			 " style=\"margin:0 auto;\" />",
+	       Gbl.Prefs.IconsURL,
+	       Image[HidVis],
+	       Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis],
+	       Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis]);
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
+     }
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/**************** Put hidden params for past / future events *****************/
+/*****************************************************************************/
+
+static void Agd_PutHiddenParamsPastFutureEvents (unsigned PastFutureEvents)
+  {
+   Agd_PastFutureEvents_t PstFut;
+   static const char *ParamName[2] =
+     {
+      "Past",		// Agd_PAST_EVENTS
+      "Future",		// Agd_FUTURE_EVENTS
+     };
+
+   for (PstFut = Agd_PAST_EVENTS;
+	PstFut <= Agd_FUTURE_EVENTS;
+	PstFut++)
+      if (PastFutureEvents & (1 << PstFut))	// Booleans stored as bits in PastFutureEvents
+         Par_PutHiddenParamChar (ParamName[PstFut],'Y');
+  }
+
+/*****************************************************************************/
+/************** Put hidden params for private / public events ****************/
+/*****************************************************************************/
+
+static void Agd_PutHiddenParamsPrivatePublicEvents (unsigned PrivatePublicEvents)
+  {
+   Agd_PrivatePublicEvents_t PrvPub;
+   static const char *ParamName[2] =
+     {
+      "Private",	// Agd_PRIVATE_EVENTS
+      "Public",		// Agd_PUBLIC_EVENTS
+     };
+
+   for (PrvPub = Agd_PRIVATE_EVENTS;
+	PrvPub <= Agd_PUBLIC_EVENTS;
+	PrvPub++)
+      if (PrivatePublicEvents & (1 << PrvPub))	// Booleans stored as bits in PrivatePublicEvents
+         Par_PutHiddenParamChar (ParamName[PrvPub],'Y');
+  }
+
+/*****************************************************************************/
+/************** Put hidden params for hidden / visible events ****************/
+/*****************************************************************************/
+
+static void Agd_PutHiddenParamsHiddenVisibleEvents (unsigned HiddenVisibleEvents)
+  {
+   Agd_HiddenVisibleEvents_t HidVis;
+   static const char *ParamName[2] =
+     {
+      "Hidden",		// Agd_HIDDEN_EVENTS
+      "Visible",	// Agd_VISIBLE_EVENTS
+     };
+
+   for (HidVis = Agd_HIDDEN_EVENTS;
+	HidVis <= Agd_VISIBLE_EVENTS;
+	HidVis++)
+      if (HiddenVisibleEvents & (1 << HidVis))	// Booleans stored as bits in HiddenVisibleEvents
+         Par_PutHiddenParamChar (ParamName[HidVis],'Y');
   }
 
 /*****************************************************************************/

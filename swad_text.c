@@ -66,6 +66,7 @@
 
 #include <linux/stddef.h>	// For NULL
 
+#include "swad_agenda.h"
 #include "swad_assignment.h"
 #include "swad_attendance.h"
 #include "swad_config.h"
@@ -2104,6 +2105,208 @@ const char *Txt_Administer_user =
 	"Gerenciar utilizador";
 #endif
 
+const char *Txt_AGENDA_PAST_FUTURE_EVENTS[2] =
+	{
+	// Agd_PAST_EVENTS
+#if   L==1
+	"Esdeveniments passats"
+#elif L==2
+	"Vergangene Ereignisse"
+#elif L==3
+	"Past events"
+#elif L==4
+	"Eventos pasados"
+#elif L==5
+	"&Eacute;v&eacute;nements pass&eacute;s"
+#elif L==6
+	"Eventos pasados"	// Okoteve traducción
+#elif L==7
+	"Eventi passati"
+#elif L==8
+	"Minione wydarzenia"
+#elif L==9
+	"Eventos passados"
+#endif
+	,
+	// Agd_FUTURE_EVENTS
+#if   L==1
+	"Esdeveniments actuals i futurs"
+#elif L==2
+	"Aktuelle und zuk&uuml;nftige Ereignisse"
+#elif L==3
+	"Current and future events"
+#elif L==4
+	"Eventos actuales y futuros"
+#elif L==5
+	"&Eacute;v&eacute;nements actuels et futurs"
+#elif L==6
+	"Eventos actuales y futuros"	// Okoteve traducción
+#elif L==7
+	"Eventi attuali e futuri"
+#elif L==8
+	"Obecne i przysz&lstrok;e wydarzenia"
+#elif L==9
+	"Eventos atuais e futuros"
+#endif
+	};
+
+const char *Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[2] =
+	{
+	// Agd_PRIVATE_EVENTS
+#if   L==1
+	"Esdeveniments passats"
+#elif L==2
+	"Vergangene Ereignisse"
+#elif L==3
+	"Past events"
+#elif L==4
+	"Eventos pasados"
+#elif L==5
+	"&Eacute;v&eacute;nements pass&eacute;s"
+#elif L==6
+	"Eventos pasados"	// Okoteve traducción
+#elif L==7
+	"Eventi passati"
+#elif L==8
+	"Minione wydarzenia"
+#elif L==9
+	"Eventos passados"
+#endif
+	,
+	// Agd_PUBLIC_EVENTS
+#if   L==1
+	"Esdeveniments actuals i futurs"
+#elif L==2
+	"Aktuelle und zuk&uuml;nftige Ereignisse"
+#elif L==3
+	"Current and future events"
+#elif L==4
+	"Eventos actuales y futuros"
+#elif L==5
+	"&Eacute;v&eacute;nements actuels et futurs"
+#elif L==6
+	"Eventos actuales y futuros"	// Okoteve traducción
+#elif L==7
+	"Eventi attuali e futuri"
+#elif L==8
+	"Obecne i przysz&lstrok;e wydarzenia"
+#elif L==9
+	"Eventos atuais e futuros"
+#endif
+	};
+
+const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[2] =
+	{
+	// Agd_HIDDEN_EVENTS
+#if   L==1
+	"Esdeveniments passats"
+#elif L==2
+	"Vergangene Ereignisse"
+#elif L==3
+	"Past events"
+#elif L==4
+	"Eventos pasados"
+#elif L==5
+	"&Eacute;v&eacute;nements pass&eacute;s"
+#elif L==6
+	"Eventos pasados"	// Okoteve traducción
+#elif L==7
+	"Eventi passati"
+#elif L==8
+	"Minione wydarzenia"
+#elif L==9
+	"Eventos passados"
+#endif
+	,
+	// Agd_VISIBLE_EVENTS
+#if   L==1
+	"Esdeveniments actuals i futurs"
+#elif L==2
+	"Aktuelle und zuk&uuml;nftige Ereignisse"
+#elif L==3
+	"Current and future events"
+#elif L==4
+	"Eventos actuales y futuros"
+#elif L==5
+	"&Eacute;v&eacute;nements actuels et futurs"
+#elif L==6
+	"Eventos actuales y futuros"	// Okoteve traducción
+#elif L==7
+	"Eventi attuali e futuri"
+#elif L==8
+	"Obecne i przysz&lstrok;e wydarzenia"
+#elif L==9
+	"Eventos atuais e futuros"
+#endif
+	};
+
+/*
+const char *Txt_AGENDA_WHICH_EVENTS[Agd_NUM_WHICH_EVENTS] =
+	{
+	// Agd_ALL_EVENTS
+#if   L==1
+	"Tots els esdeveniments"
+#elif L==2
+	"Alle Ereignisse"
+#elif L==3
+	"All events"
+#elif L==4
+	"Todos los eventos"
+#elif L==5
+	"Tous les &eacute;v&eacute;nements"
+#elif L==6
+	"Todos los eventos"	// Okoteve traducción
+#elif L==7
+	"Tutti i eventi"
+#elif L==8
+	"Wszystkie imprezy"
+#elif L==9
+	"Todos os eventos"
+#endif
+	,
+	// Agd_ONLY_TODAY_AND_FUTURE_EVENTS
+#if   L==1
+	"Esdeveniments actuals i futurs"
+#elif L==2
+	"Aktuelle und zuk&uuml;nftige Ereignisse"
+#elif L==3
+	"Current and future events"
+#elif L==4
+	"Eventos actuales y futuros"
+#elif L==5
+	"&Eacute;v&eacute;nements actuels et futurs"
+#elif L==6
+	"Eventos actuales y futuros"	// Okoteve traducción
+#elif L==7
+	"Eventi attuali e futuri"
+#elif L==8
+	"Obecne i przysz&lstrok;e wydarzenia"
+#elif L==9
+	"Eventos atuais e futuros"
+#endif
+	,
+	// Agd_ONLY_PUBLIC_EVENTS
+#if   L==1
+	"Esdeveniments p&uacute;blics i visibles"
+#elif L==2
+	"&Ouml;ffentliche und sichtbare Ereignisse"
+#elif L==3
+	"Public, visible events"
+#elif L==4
+	"Eventos p&uacute;blicos y visibles"
+#elif L==5
+	"&Eacute;v&eacute;nements publics et visibles"
+#elif L==6
+	"Eventos p&uacute;blicos y visibles"	// Okoteve traducción
+#elif L==7
+	"Eventi pubblici e visibili"
+#elif L==8
+	"Wydarzenia publiczne i widoczne"
+#elif L==9
+	"Eventos p&uacute;blicos e vis&iacute;veis"
+#endif
+	};
+*/
 const char *Txt_all =
 #if   L==1
 	"tot";
@@ -13975,6 +14178,49 @@ const char *Txt_Group_X_removed =	// Warning: it is very important to include %s
 #elif L==9
 	"Group <strong>%s</strong> removed.";		// Necessita de tradução
 #endif
+
+const char *Txt_GROUP_WHICH_GROUPS[2] =
+   {
+#if   L==1
+	"Nom&eacute;s els meus grups"
+#elif L==2
+	"Nur meine Gruppen"
+#elif L==3
+	"Only my groups"
+#elif L==4
+	"Solo mis grupos"
+#elif L==5
+	"Uniquement mes groupes"
+#elif L==6
+	"Solo mis grupos"	// Okoteve traducción
+#elif L==7
+	"Solo i miei gruppi"
+#elif L==8
+	"Tylko moje grupy"
+#elif L==9
+	"Apenas os meus grupos"
+#endif
+	,
+#if   L==1
+	"Tots els grups"
+#elif L==2
+	"Alle Gruppen"
+#elif L==3
+	"All groups"
+#elif L==4
+	"Todos los grupos"
+#elif L==5
+	"Tous les groupes"
+#elif L==6
+	"Todos los grupos"	// Okoteve traducción
+#elif L==7
+	"Tutti i gruppi"
+#elif L==8
+	"Wszystkie grupy"
+#elif L==9
+	"Todos os grupos"
+#endif
+	};
 
 const char *Txt_Groups =
 #if   L==1
@@ -37328,92 +37574,6 @@ const char *Txt_Show_list =
 #elif L==9
 	"Mostrar lista";
 #endif
-
-const char *Txt_Show_WHICH_events[2] =
-   {
-#if   L==1
-	 "Tots els esdeveniments"
-#elif L==2
-	 "Alle Ereignisse"
-#elif L==3
-	 "All events"
-#elif L==4
-	 "Todos los eventos"
-#elif L==5
-	 "Tous les &eacute;v&eacute;nements"
-#elif L==6
-	 "Todos los eventos"	// Okoteve traducción
-#elif L==7
-	 "Tutti i eventi"
-#elif L==8
-	 "Wszystkie imprezy"
-#elif L==9
-	 "Todos os eventos"
-#endif
-	 ,
-#if   L==1
-	 "Nom&eacute;s els esdeveniments p&uacute;blics i visibles"
-#elif L==2
-	 "Nur &ouml;ffentliche und sichtbare Ereignisse"
-#elif L==3
-	 "Only public, visible events"
-#elif L==4
-	 "Solo eventos p&uacute;blicos y visibles"
-#elif L==5
-	 "Uniquement les &eacute;v&eacute;nements publics et visibles"
-#elif L==6
-	 "Solo eventos p&uacute;blicos y visibles"	// Okoteve traducción
-#elif L==7
-	 "Solo eventi pubblici e visibili"
-#elif L==8
-	 "Tylko wydarzenia publiczne i widoczne"
-#elif L==9
-	 "Apenas eventos p&uacute;blicos e vis&iacute;veis"
-#endif
-	};
-
-const char *Txt_Show_WHICH_groups[2] =
-   {
-#if   L==1
-	 "Nom&eacute;s els meus grups"
-#elif L==2
-	 "Nur meine Gruppen"
-#elif L==3
-	 "Only my groups"
-#elif L==4
-	 "Solo mis grupos"
-#elif L==5
-	 "Uniquement mes groupes"
-#elif L==6
-	 "Solo mis grupos"	// Okoteve traducción
-#elif L==7
-	 "Solo i miei gruppi"
-#elif L==8
-	 "Only my groups"			// Potrzebujesz tlumaczenie
-#elif L==9
-	 "Apenas os meus grupos"
-#endif
-	 ,
-#if   L==1
-	 "Tots els grups"
-#elif L==2
-	 "Alle Gruppen"
-#elif L==3
-	 "All groups"
-#elif L==4
-	 "Todos los grupos"
-#elif L==5
-	 "Tous les groupes"
-#elif L==6
-	 "Todos los grupos"	// Okoteve traducción
-#elif L==7
-	 "Tutti i gruppi"
-#elif L==8
-	 "All groups"		// Potrzebujesz tlumaczenie
-#elif L==9
-	 "Todos os grupos"
-#endif
-	};
 
 const char *Txt_Show_more_details =
 #if   L==1

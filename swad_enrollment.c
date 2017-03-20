@@ -1685,7 +1685,7 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
    /***** Check if I can register this user *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
        RegRemRole != Rol_STUDENT)
-      Lay_ShowErrorAndExit ("A teacher only can register new users if they are students.");
+      Lay_ShowErrorAndExit ("A teacher only can register several users as students.");
 
    /***** Check if the record of the user exists and get the type of user *****/
    if (UsrDat->UsrCod > 0)	// User exists in database
@@ -3574,9 +3574,6 @@ void Enr_CreateNewUsr1 (void)
 
       /***** Get new role *****/
       NewRole = Rec_GetRoleFromRecordForm ();
-      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&
-	  NewRole != Rol_STUDENT)
-	 Lay_ShowErrorAndExit ("A teacher only can create new users as students.");
 
       /***** Get user's name from form *****/
       Rec_GetUsrNameFromRecordForm (&Gbl.Usrs.Other.UsrDat);

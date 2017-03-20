@@ -61,9 +61,19 @@ struct AgendaEvent
 
 typedef enum
   {
-   Agd_ALL_EVENTS,
-   Agd_ONLY_PUBLIC_EVENTS,
-  } Agd_WhichEvents_t;
+   Agd_PAST_EVENTS,	// Events until yesterday (included)
+   Agd_FUTURE_EVENTS,	// Events from today (included) onwards
+  } Agd_PastFutureEvents_t;
+typedef enum
+  {
+   Agd_PRIVATE_EVENTS,
+   Agd_PUBLIC_EVENTS,
+  } Agd_PrivatePublicEvents_t;
+typedef enum
+  {
+   Agd_HIDDEN_EVENTS,
+   Agd_VISIBLE_EVENTS,
+  } Agd_HiddenVisibleEvents_t;
 
 #define Agd_NUM_ORDERS 2
 typedef enum
