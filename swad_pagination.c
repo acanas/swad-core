@@ -164,7 +164,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
-            case Pag_MY_FULL_AGENDA:
+            case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
@@ -173,16 +173,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               -1L,
                               1);
                break;
-            case Pag_MY_PUBLIC_AGENDA:
-               Act_FormStart (ActSeeMyPubAgd);
-               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-                              Gbl.Agenda.PrivatPublicEvents,
-                              Gbl.Agenda.HiddenVisiblEvents,
-                              Gbl.Agenda.SelectedOrder,
-                              -1L,
-                              1);
-               break;
-            case Pag_OTHER_PUBLIC_AGENDA:
+            case Pag_ANOTHER_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (1);
@@ -265,7 +256,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
-            case Pag_MY_FULL_AGENDA:
+            case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
@@ -274,16 +265,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               -1L,
                               1);
                break;
-            case Pag_MY_PUBLIC_AGENDA:
-               Act_FormStart (ActSeeMyPubAgd);
-               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-                              Gbl.Agenda.PrivatPublicEvents,
-                              Gbl.Agenda.HiddenVisiblEvents,
-                              Gbl.Agenda.SelectedOrder,
-                              -1L,
-                              1);
-               break;
-            case Pag_OTHER_PUBLIC_AGENDA:
+            case Pag_ANOTHER_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (1);
@@ -349,7 +331,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
-            case Pag_MY_FULL_AGENDA:
+            case Pag_MY_AGENDA:
                Act_FormStart (ActSeeMyAgd);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
@@ -358,16 +340,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               -1L,
                               Pagination->LeftPage);
                break;
-            case Pag_MY_PUBLIC_AGENDA:
-               Act_FormStart (ActSeeMyPubAgd);
-               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-                              Gbl.Agenda.PrivatPublicEvents,
-                              Gbl.Agenda.HiddenVisiblEvents,
-                              Gbl.Agenda.SelectedOrder,
-                              -1L,
-                              Pagination->LeftPage);
-               break;
-            case Pag_OTHER_PUBLIC_AGENDA:
+            case Pag_ANOTHER_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
@@ -440,7 +413,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
-	       case Pag_MY_FULL_AGENDA:
+	       case Pag_MY_AGENDA:
 		  Act_FormStart (ActSeeMyAgd);
 		  Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 				 Gbl.Agenda.PrivatPublicEvents,
@@ -449,16 +422,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 				 -1L,
 				 NumPage);
 		  break;
-	       case Pag_MY_PUBLIC_AGENDA:
-		  Act_FormStart (ActSeeMyPubAgd);
-		  Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-				 Gbl.Agenda.PrivatPublicEvents,
-				 Gbl.Agenda.HiddenVisiblEvents,
-				 Gbl.Agenda.SelectedOrder,
-				 -1L,
-				 NumPage);
-		  break;
-	       case Pag_OTHER_PUBLIC_AGENDA:
+	       case Pag_ANOTHER_AGENDA:
 		  Act_FormStart (ActSeeUsrAgd);
 		  Agd_PutHiddenParamEventsOrder ();
 		  Pag_PutHiddenParamPagNum (NumPage);
@@ -527,7 +491,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
-	    case Pag_MY_FULL_AGENDA:
+	    case Pag_MY_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 			      Gbl.Agenda.PrivatPublicEvents,
@@ -536,16 +500,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 			      -1L,
 			      Pagination->RightPage);
 	       break;
-	    case Pag_MY_PUBLIC_AGENDA:
-	       Act_FormStart (ActSeeMyPubAgd);
-	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-			      Gbl.Agenda.PrivatPublicEvents,
-			      Gbl.Agenda.HiddenVisiblEvents,
-			      Gbl.Agenda.SelectedOrder,
-			      -1L,
-			      Pagination->RightPage);
-	       break;
-	    case Pag_OTHER_PUBLIC_AGENDA:
+	    case Pag_ANOTHER_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
 	       Agd_PutHiddenParamEventsOrder ();
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
@@ -611,7 +566,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
-	    case Pag_MY_FULL_AGENDA:
+	    case Pag_MY_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
 	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 			      Gbl.Agenda.PrivatPublicEvents,
@@ -620,16 +575,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 			      -1L,
 			      Pagination->NumPags);
 	       break;
-	    case Pag_MY_PUBLIC_AGENDA:
-	       Act_FormStart (ActSeeMyPubAgd);
-	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
-			      Gbl.Agenda.PrivatPublicEvents,
-			      Gbl.Agenda.HiddenVisiblEvents,
-			      Gbl.Agenda.SelectedOrder,
-			      -1L,
-			      Pagination->NumPags);
-	       break;
-	    case Pag_OTHER_PUBLIC_AGENDA:
+	    case Pag_ANOTHER_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
 	       Agd_PutHiddenParamEventsOrder ();
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);

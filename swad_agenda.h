@@ -99,7 +99,6 @@ void Agd_PutFormLogInToShowUsrAgenda (void);
 void Agd_PutParamAgd (void);
 
 void Agd_ShowMyAgenda (void);
-void Agd_ShowMyPublicAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowOtherAgendaAfterLogIn (void);
 
