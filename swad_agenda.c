@@ -995,6 +995,7 @@ static void Agd_GetParamEventOrder (void)
 
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
   {
+   char Past__FutureEventsSubQuery[256];
    char OrderBySubQuery[256];
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -1021,53 +1022,55 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
                                   "Location");
          break;
      }
+
    switch (AgendaType)
      {
       case Agd_MY_AGENDA_TODAY:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld'"
-			" AND DATE(StartTime)<=CURDATE()"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today events
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+      case Agd_ANOTHER_AGENDA_TODAY:		 // Today events
+   	 sprintf (Past__FutureEventsSubQuery,
+	          " AND DATE(StartTime)<=CURDATE()"
+		  " AND DATE(EndTime)>=CURDATE()");
 	 break;
       case Agd_MY_AGENDA:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld'"
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+      case Agd_ANOTHER_AGENDA:
+	 switch (Gbl.Agenda.Past__FutureEvents)
+	   {
+	    case (1 << Agd_PAST___EVENTS):	// Past and today events
+	       sprintf (Past__FutureEventsSubQuery,
+			" AND DATE(StartTime)<=CURDATE()");
+	       break;
+	    case (1 << Agd_FUTURE_EVENTS):	// Today and future events
+	       sprintf (Past__FutureEventsSubQuery,
+			" AND DATE(EndTime)>=CURDATE()");
+	       break;
+	    default:				// All events
+	       Past__FutureEventsSubQuery[0] = '\0';
+	       break;
+	   }
 	 break;
-      /*
-      case Agd_MY_PUBLIC_AGENDA_TODAY:
+     }
+
+   switch (AgendaType)
+     {
+      case Agd_MY_AGENDA_TODAY:
+      case Agd_MY_AGENDA:
 	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND DATE(StartTime)<=CURDATE()"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today events
+			" WHERE UsrCod='%ld'%s"
 			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
-         break;
-      case Agd_MY_PUBLIC_AGENDA:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today and future events
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+		  Gbl.Usrs.Me.UsrDat.UsrCod,
+		  Past__FutureEventsSubQuery,
+		  OrderBySubQuery);
 	 break;
-      */
       case Agd_ANOTHER_AGENDA_TODAY:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
-			" AND DATE(StartTime)<=CURDATE()"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today events
-			" ORDER BY %s",
-		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
-         break;
       case Agd_ANOTHER_AGENDA:
 	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld' AND Public='Y' AND Hidden='N'"
+			" WHERE UsrCod='%ld'%s"
+			" AND Public='Y' AND Hidden='N'"
 			" AND DATE(EndTime)>=CURDATE()"  // Only today and future events
 			" ORDER BY %s",
-		  Gbl.Usrs.Other.UsrDat.UsrCod,OrderBySubQuery);
+		  Gbl.Usrs.Other.UsrDat.UsrCod,
+		  Past__FutureEventsSubQuery,
+		  OrderBySubQuery);
          break;
      }
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
