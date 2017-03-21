@@ -424,7 +424,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Agenda */
    Gbl.Agenda.PastFutureEvents    = (1 << Agd_FUTURE_EVENTS);
-   Gbl.Agenda.PrivatePublicEvents = (1 << Agd_PRIVATE_EVENTS) &
+   Gbl.Agenda.PrivatePublicEvents = (1 << Agd_PRIVATE_EVENTS) |
 	                            (1 << Agd_PUBLIC_EVENTS);
    Gbl.Agenda.HiddenVisibleEvents = (1 << Agd_VISIBLE_EVENTS);
    Gbl.Agenda.SelectedOrder = Agd_ORDER_DEFAULT;

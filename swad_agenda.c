@@ -166,8 +166,8 @@ static void Agd_ShowFormToSelPastFutureEvents (void)
    Agd_PastFutureEvents_t PstFut;
    static const char *Image[2] =
      {
-      "backward64x64.png",	// Agd_PAST_EVENTS
-      "forward64x64.png",	// Agd_FUTURE_EVENTS
+      "past64x64.png",		// Agd_PAST_EVENTS
+      "future64x64.png",	// Agd_FUTURE_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
@@ -216,11 +216,11 @@ static void Agd_ShowFormToSelPrivatePublicEvents (void)
 	PrvPub++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.PastFutureEvents & (1 << PrvPub)) ? "PREF_ON" :
-							       "PREF_OFF");
+	       (Gbl.Agenda.PrivatePublicEvents & (1 << PrvPub)) ? "PREF_ON" :
+							          "PREF_OFF");
       Act_FormStart (ActSeeMyAgd);
-      Agd_PutHiddenParamsPastFutureEvents (1 << PrvPub);
-      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
+      Agd_PutHiddenParamsPastFutureEvents (Gbl.Agenda.PastFutureEvents);
+      Agd_PutHiddenParamsPrivatePublicEvents (1 << PrvPub);
       Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
@@ -256,12 +256,12 @@ static void Agd_ShowFormToSelHiddenVisibleEvents (void)
 	HidVis++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.PastFutureEvents & (1 << HidVis)) ? "PREF_ON" :
-							       "PREF_OFF");
+	       (Gbl.Agenda.HiddenVisibleEvents & (1 << HidVis)) ? "PREF_ON" :
+							          "PREF_OFF");
       Act_FormStart (ActSeeMyAgd);
-      Agd_PutHiddenParamsPastFutureEvents (1 << HidVis);
+      Agd_PutHiddenParamsPastFutureEvents (Gbl.Agenda.PastFutureEvents);
       Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
-      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+      Agd_PutHiddenParamsHiddenVisibleEvents (1 << HidVis);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
