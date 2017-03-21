@@ -2109,38 +2109,38 @@ const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 	{
 	// Agd_PAST___EVENTS
 #if   L==1
-	"Esdeveniments passats"
+	"Esdeveniments passats i d'avui"
 #elif L==2
-	"Vergangene Ereignisse"
+	"Vergangenheit und Gegenwart Ereignisse"
 #elif L==3
-	"Past events"
+	"Past and present events"
 #elif L==4
-	"Eventos pasados"
+	"Eventos pasados y de hoy"
 #elif L==5
-	"&Eacute;v&eacute;nements pass&eacute;s"
+	"&Eacute;v&eacute;nements pass&eacute;s et pr&eacute;sents"
 #elif L==6
-	"Eventos pasados"	// Okoteve traducción
+	"Eventos pasados y de hoy"	// Okoteve traducción
 #elif L==7
-	"Eventi passati"
+	"Eventi passati e presenti"
 #elif L==8
-	"Minione wydarzenia"
+	"Wydarzenia minione i obecne"
 #elif L==9
-	"Eventos passados"
+	"Eventos passados e presentes"
 #endif
 	,
 	// Agd_FUTURE_EVENTS
 #if   L==1
-	"Esdeveniments actuals i futurs"
+	"Esdeveniments d'avui i futurs"
 #elif L==2
 	"Aktuelle und zuk&uuml;nftige Ereignisse"
 #elif L==3
 	"Current and future events"
 #elif L==4
-	"Eventos actuales y futuros"
+	"Eventos de hoy y futuros"
 #elif L==5
 	"&Eacute;v&eacute;nements actuels et futurs"
 #elif L==6
-	"Eventos actuales y futuros"	// Okoteve traducción
+	"Eventos de hoy y futuros"	// Okoteve traducción
 #elif L==7
 	"Eventi attuali e futuri"
 #elif L==8
@@ -2154,44 +2154,44 @@ const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 	{
 	// Agd_PRIVAT_EVENTS
 #if   L==1
-	"Esdeveniments passats"
+	"Esdeveniments privados"
 #elif L==2
-	"Vergangene Ereignisse"
+	"Private Ereignisse"
 #elif L==3
-	"Past events"
+	"Private events"
 #elif L==4
-	"Eventos pasados"
+	"Eventos privados"
 #elif L==5
-	"&Eacute;v&eacute;nements pass&eacute;s"
+	"&Eacute;v&eacute;nements priv&eacute;s"
 #elif L==6
-	"Eventos pasados"	// Okoteve traducción
+	"Eventos privados"	// Okoteve traducción
 #elif L==7
-	"Eventi passati"
+	"Eventi privati"
 #elif L==8
-	"Minione wydarzenia"
+	"Prywatne wydarzenia"
 #elif L==9
-	"Eventos passados"
+	"Eventos privados"
 #endif
 	,
 	// Agd_PUBLIC_EVENTS
 #if   L==1
-	"Esdeveniments actuals i futurs"
+	"Esdeveniments p&uacute;blics"
 #elif L==2
-	"Aktuelle und zuk&uuml;nftige Ereignisse"
+	"&Ouml;ffentliche Ereignisse"
 #elif L==3
-	"Current and future events"
+	"Public events"
 #elif L==4
-	"Eventos actuales y futuros"
+	"Eventos p&uacute;blicos"
 #elif L==5
-	"&Eacute;v&eacute;nements actuels et futurs"
+	"&Eacute;v&eacute;nements publics"
 #elif L==6
-	"Eventos actuales y futuros"	// Okoteve traducción
+	"Eventos p&uacute;blicos"	// Okoteve traducción
 #elif L==7
-	"Eventi attuali e futuri"
+	"Eventi pubblici"
 #elif L==8
-	"Obecne i przysz&lstrok;e wydarzenia"
+	"Publiczne wydarzenia"
 #elif L==9
-	"Eventos atuais e futuros"
+	"Eventos p&uacute;blicos"
 #endif
 	};
 
@@ -2199,114 +2199,47 @@ const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 	{
 	// Agd_HIDDEN_EVENTS
 #if   L==1
-	"Esdeveniments passats"
+	"Esdeveniments ocults"
 #elif L==2
-	"Vergangene Ereignisse"
+	"Unsichtbare Ereignisse"
 #elif L==3
-	"Past events"
+	"Hidden events"
 #elif L==4
-	"Eventos pasados"
+	"Eventos ocultos"
 #elif L==5
-	"&Eacute;v&eacute;nements pass&eacute;s"
+	"&Eacute;v&eacute;nements cach&eacute;s"
 #elif L==6
-	"Eventos pasados"	// Okoteve traducción
+	"Eventos ocultos"	// Okoteve traducción
 #elif L==7
-	"Eventi passati"
+	"Eventi nascosti"
 #elif L==8
-	"Minione wydarzenia"
+	"Ukryte wydarzenia"
 #elif L==9
-	"Eventos passados"
+	"Eventos ocultos"
 #endif
 	,
 	// Agd_VISIBL_EVENTS
 #if   L==1
-	"Esdeveniments actuals i futurs"
+	"Esdeveniments visibles"
 #elif L==2
-	"Aktuelle und zuk&uuml;nftige Ereignisse"
+	"Sichtbar Ereignisse"
 #elif L==3
-	"Current and future events"
+	"Visible events"
 #elif L==4
-	"Eventos actuales y futuros"
+	"Eventos visibles"
 #elif L==5
-	"&Eacute;v&eacute;nements actuels et futurs"
+	"&Eacute;v&eacute;nements visibles"
 #elif L==6
-	"Eventos actuales y futuros"	// Okoteve traducción
+	"Eventos visibles"	// Okoteve traducción
 #elif L==7
-	"Eventi attuali e futuri"
+	"Eventi visibili"
 #elif L==8
-	"Obecne i przysz&lstrok;e wydarzenia"
+	"Widoczne wydarzenia"
 #elif L==9
-	"Eventos atuais e futuros"
+	"Eventos vis&iacute;veis"
 #endif
 	};
 
-/*
-const char *Txt_AGENDA_WHICH_EVENTS[Agd_NUM_WHICH_EVENTS] =
-	{
-	// Agd_ALL_EVENTS
-#if   L==1
-	"Tots els esdeveniments"
-#elif L==2
-	"Alle Ereignisse"
-#elif L==3
-	"All events"
-#elif L==4
-	"Todos los eventos"
-#elif L==5
-	"Tous les &eacute;v&eacute;nements"
-#elif L==6
-	"Todos los eventos"	// Okoteve traducción
-#elif L==7
-	"Tutti i eventi"
-#elif L==8
-	"Wszystkie imprezy"
-#elif L==9
-	"Todos os eventos"
-#endif
-	,
-	// Agd_ONLY_TODAY_AND_FUTURE_EVENTS
-#if   L==1
-	"Esdeveniments actuals i futurs"
-#elif L==2
-	"Aktuelle und zuk&uuml;nftige Ereignisse"
-#elif L==3
-	"Current and future events"
-#elif L==4
-	"Eventos actuales y futuros"
-#elif L==5
-	"&Eacute;v&eacute;nements actuels et futurs"
-#elif L==6
-	"Eventos actuales y futuros"	// Okoteve traducción
-#elif L==7
-	"Eventi attuali e futuri"
-#elif L==8
-	"Obecne i przysz&lstrok;e wydarzenia"
-#elif L==9
-	"Eventos atuais e futuros"
-#endif
-	,
-	// Agd_ONLY_PUBLIC_EVENTS
-#if   L==1
-	"Esdeveniments p&uacute;blics i visibles"
-#elif L==2
-	"&Ouml;ffentliche und sichtbare Ereignisse"
-#elif L==3
-	"Public, visible events"
-#elif L==4
-	"Eventos p&uacute;blicos y visibles"
-#elif L==5
-	"&Eacute;v&eacute;nements publics et visibles"
-#elif L==6
-	"Eventos p&uacute;blicos y visibles"	// Okoteve traducción
-#elif L==7
-	"Eventi pubblici e visibili"
-#elif L==8
-	"Wydarzenia publiczne i widoczne"
-#elif L==9
-	"Eventos p&uacute;blicos e vis&iacute;veis"
-#endif
-	};
-*/
 const char *Txt_all =
 #if   L==1
 	"tot";
