@@ -423,11 +423,14 @@ void Gbl_InitializeGlobals (void)
    Gbl.FileBrowser.UploadingWithDropzone = false;
 
    /* Agenda */
-   Gbl.Agenda.PastFutureEvents    = (1 << Agd_FUTURE_EVENTS);
-   Gbl.Agenda.PrivatePublicEvents = (1 << Agd_PRIVATE_EVENTS) |
-	                            (1 << Agd_PUBLIC_EVENTS);
-   Gbl.Agenda.HiddenVisibleEvents = (1 << Agd_VISIBLE_EVENTS);
+   Gbl.Agenda.Past__FutureEvents = Agd_DEFAULT_PAST___EVENTS |
+	                           Agd_DEFAULT_FUTURE_EVENTS;
+   Gbl.Agenda.PrivatPublicEvents = Agd_DEFAULT_PRIVAT_EVENTS |
+	                           Agd_DEFAULT_PUBLIC_EVENTS;
+   Gbl.Agenda.HiddenVisiblEvents = Agd_DEFAULT_HIDDEN_EVENTS |
+	                           Agd_DEFAULT_VISIBL_EVENTS;
    Gbl.Agenda.SelectedOrder = Agd_ORDER_DEFAULT;
+   Gbl.Agenda.AgdCodToEdit = -1L;
 
    /* To alternate colors where listing rows */
    Gbl.RowEvenOdd = 0;

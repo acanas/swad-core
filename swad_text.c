@@ -2105,9 +2105,9 @@ const char *Txt_Administer_user =
 	"Gerenciar utilizador";
 #endif
 
-const char *Txt_AGENDA_PAST_FUTURE_EVENTS[2] =
+const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2] =
 	{
-	// Agd_PAST_EVENTS
+	// Agd_PAST___EVENTS
 #if   L==1
 	"Esdeveniments passats"
 #elif L==2
@@ -2150,9 +2150,9 @@ const char *Txt_AGENDA_PAST_FUTURE_EVENTS[2] =
 #endif
 	};
 
-const char *Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[2] =
+const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2] =
 	{
-	// Agd_PRIVATE_EVENTS
+	// Agd_PRIVAT_EVENTS
 #if   L==1
 	"Esdeveniments passats"
 #elif L==2
@@ -2195,7 +2195,7 @@ const char *Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[2] =
 #endif
 	};
 
-const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[2] =
+const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2] =
 	{
 	// Agd_HIDDEN_EVENTS
 #if   L==1
@@ -2218,7 +2218,7 @@ const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[2] =
 	"Eventos passados"
 #endif
 	,
-	// Agd_VISIBLE_EVENTS
+	// Agd_VISIBL_EVENTS
 #if   L==1
 	"Esdeveniments actuals i futurs"
 #elif L==2

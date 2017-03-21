@@ -210,19 +210,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.158.1 (2017-03-21)"
+#define Log_PLATFORM_VERSION	"SWAD 16.159 (2017-03-21)"
 #define CSS_FILE		"swad16.157.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.159:   Mar 21, 2017	Changes in agenda. Not finished. (217511 lines)
         Version 16.158.1: Mar 21, 2017	Changes in agenda. Not finished. (217395 lines)
         Version 16.158:   Mar 21, 2017	Changes in agenda. Not finished.
 					Fixed bug in user enrollment. (217394 lines)
 Copy the following icons to icon public directory:
-sudo cp -a backward64x64.png /var/www/html/swad/icon/
-sudo cp -a forward64x64.png /var/www/html/swad/icon/
+sudo cp -a past64x64.png /var/www/html/swad/icon/
+sudo cp -a future64x64.png /var/www/html/swad/icon/
 
         Version 16.157.3: Mar 20, 2017	Contextual help in edition of custom record card fields. (217046 lines)
         Version 16.157.2: Mar 20, 2017	Some help URLs translated to spanish. (217041 lines)

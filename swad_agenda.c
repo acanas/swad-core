@@ -52,6 +52,10 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+static const char *ParamPast__FutureName = "Past__Future";
+static const char *ParamPrivatPublicName = "PrivatPublic";
+static const char *ParamHiddenVisiblName = "HiddenVisibl";
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -75,12 +79,16 @@ typedef enum
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Agd_ShowFormToSelPastFutureEvents (void);
-static void Agd_ShowFormToSelPrivatePublicEvents (void);
-static void Agd_ShowFormToSelHiddenVisibleEvents (void);
-static void Agd_PutHiddenParamsPastFutureEvents (unsigned PastFutureEvents);
-static void Agd_PutHiddenParamsPrivatePublicEvents (unsigned PrivatePublicEvents);
-static void Agd_PutHiddenParamsHiddenVisibleEvents (unsigned HiddenVisibleEvents);
+static void Agd_ShowFormToSelPast__FutureEvents (void);
+static void Agd_ShowFormToSelPrivatPublicEvents (void);
+static void Agd_ShowFormToSelHiddenVisiblEvents (void);
+
+static void Agd_PutHiddenParamPast__FutureEvents (unsigned Past__FutureEvents);
+static void Agd_PutHiddenParamPrivatPublicEvents (unsigned PrivatPublicEvents);
+static void Agd_PutHiddenParamHiddenVisiblEvents (unsigned HiddenVisiblEvents);
+static void Agd_GetParamsPast__FutureEvents (void);
+static void Agd_GetParamsPrivatPublicEvents (void);
+static void Agd_GetParamsHiddenVisiblEvents (void);
 
 static void Agd_ShowEvents (Agd_AgendaType_t AgendaType);
 static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType);
@@ -95,17 +103,18 @@ static void Agd_PutIconToShowQR (void);
 static void Agd_PutIconsOtherPublicAgenda (void);
 
 static void Agd_PutButtonToCreateNewEvent (void);
-static void Agd_PutParamsToCreateNewEvent (void);
 static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod);
 static void Agd_GetParamEventOrder (void);
 
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent);
-static void Agd_PutParams (void);
+
+static void Agd_PutCurrentParams (void);
+static void Agd_GetParams (Agd_AgendaType_t AgendaType);
+
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
 static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
                                    char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static void Agd_PutParamAgdCod (long AgdCod);
 static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent);
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
@@ -137,14 +146,17 @@ void Agd_ShowMyAgenda (void)
    extern const char *Hlp_PROFILE_Agenda;
    extern const char *Txt_My_agenda;
 
+   /***** Get parameters *****/
+   Agd_GetParams (Agd_MY_FULL_AGENDA);
+
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_My_agenda,
 			Agd_PutIconsMyFullAgenda,Hlp_PROFILE_Agenda);
 
    /***** Put forms to choice which events to show *****/
-   Agd_ShowFormToSelPastFutureEvents ();
-   Agd_ShowFormToSelPrivatePublicEvents ();
-   Agd_ShowFormToSelHiddenVisibleEvents ();
+   Agd_ShowFormToSelPast__FutureEvents ();
+   Agd_ShowFormToSelPrivatPublicEvents ();
+   Agd_ShowFormToSelHiddenVisiblEvents ();
 
    /***** Show the current events in the user's agenda *****/
    Agd_ShowEventsToday (Agd_MY_FULL_AGENDA_TODAY);
@@ -160,36 +172,39 @@ void Agd_ShowMyAgenda (void)
 /*************** Show form to select past / future events ********************/
 /*****************************************************************************/
 
-static void Agd_ShowFormToSelPastFutureEvents (void)
+static void Agd_ShowFormToSelPast__FutureEvents (void)
   {
-   extern const char *Txt_AGENDA_PAST_FUTURE_EVENTS[2];
-   Agd_PastFutureEvents_t PstFut;
+   extern const char *Txt_AGENDA_PAST___FUTURE_EVENTS[2];
+   Agd_Past__FutureEvents_t PstFut;
    static const char *Image[2] =
      {
-      "past64x64.png",		// Agd_PAST_EVENTS
+      "past64x64.png",		// Agd_PAST___EVENTS
       "future64x64.png",	// Agd_FUTURE_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
-   for (PstFut = Agd_PAST_EVENTS;
+   for (PstFut = Agd_PAST___EVENTS;
 	PstFut <= Agd_FUTURE_EVENTS;
 	PstFut++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.PastFutureEvents & (1 << PstFut)) ? "PREF_ON" :
-							       "PREF_OFF");
+	       (Gbl.Agenda.Past__FutureEvents & (1 << PstFut)) ? "PREF_ON" :
+							         "PREF_OFF");
       Act_FormStart (ActSeeMyAgd);
-      Agd_PutHiddenParamsPastFutureEvents (1 << PstFut);
-      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
-      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+      Agd_PutParams (Gbl.Agenda.Past__FutureEvents ^ (1 << PstFut),	// Toggle
+		     Gbl.Agenda.PrivatPublicEvents,
+		     Gbl.Agenda.HiddenVisiblEvents,
+		     Gbl.Agenda.SelectedOrder,
+		     -1L,
+		     Gbl.Pag.CurrentPage);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.IconsURL,
 	       Image[PstFut],
-	       Txt_AGENDA_PAST_FUTURE_EVENTS[PstFut],
-	       Txt_AGENDA_PAST_FUTURE_EVENTS[PstFut]);
+	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut],
+	       Txt_AGENDA_PAST___FUTURE_EVENTS[PstFut]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -200,36 +215,39 @@ static void Agd_ShowFormToSelPastFutureEvents (void)
 /************** Show form to select private / public events ******************/
 /*****************************************************************************/
 
-static void Agd_ShowFormToSelPrivatePublicEvents (void)
+static void Agd_ShowFormToSelPrivatPublicEvents (void)
   {
-   extern const char *Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[2];
-   Agd_PastFutureEvents_t PrvPub;
+   extern const char *Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[2];
+   Agd_PrivatPublicEvents_t PrvPub;
    static const char *Image[2] =
      {
-      "lock-on64x64.png",	// Agd_PRIVATE_EVENTS
+      "lock-on64x64.png",	// Agd_PRIVAT_EVENTS
       "unlock-on64x64.png",	// Agd_PUBLIC_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
-   for (PrvPub = Agd_PAST_EVENTS;
-	PrvPub <= Agd_FUTURE_EVENTS;
+   for (PrvPub = Agd_PRIVAT_EVENTS;
+	PrvPub <= Agd_PUBLIC_EVENTS;
 	PrvPub++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.PrivatePublicEvents & (1 << PrvPub)) ? "PREF_ON" :
-							          "PREF_OFF");
+	       (Gbl.Agenda.PrivatPublicEvents & (1 << PrvPub)) ? "PREF_ON" :
+							         "PREF_OFF");
       Act_FormStart (ActSeeMyAgd);
-      Agd_PutHiddenParamsPastFutureEvents (Gbl.Agenda.PastFutureEvents);
-      Agd_PutHiddenParamsPrivatePublicEvents (1 << PrvPub);
-      Agd_PutHiddenParamsHiddenVisibleEvents (Gbl.Agenda.HiddenVisibleEvents);
+      Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+		     Gbl.Agenda.PrivatPublicEvents ^ (1 << PrvPub),	// Toggle
+		     Gbl.Agenda.HiddenVisiblEvents,
+		     Gbl.Agenda.SelectedOrder,
+		     -1L,
+		     Gbl.Pag.CurrentPage);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.IconsURL,
 	       Image[PrvPub],
-	       Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[PrvPub],
-	       Txt_AGENDA_PRIVATE_PUBLIC_EVENTS[PrvPub]);
+	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub],
+	       Txt_AGENDA_PRIVAT_PUBLIC_EVENTS[PrvPub]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -240,36 +258,39 @@ static void Agd_ShowFormToSelPrivatePublicEvents (void)
 /************* Show form to select hidden / visible events *******************/
 /*****************************************************************************/
 
-static void Agd_ShowFormToSelHiddenVisibleEvents (void)
+static void Agd_ShowFormToSelHiddenVisiblEvents (void)
   {
-   extern const char *Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[2];
-   Agd_PastFutureEvents_t HidVis;
+   extern const char *Txt_AGENDA_HIDDEN_VISIBL_EVENTS[2];
+   Agd_HiddenVisiblEvents_t HidVis;
    static const char *Image[2] =
      {
       "eye-slash-on64x64.png",	// Agd_HIDDEN_EVENTS
-      "eye-on64x64.png",	// Agd_VISIBLE_EVENTS
+      "eye-on64x64.png",	// Agd_VISIBL_EVENTS
      };
 
    fprintf (Gbl.F.Out,"<div class=\"PREF_CONTAINER\">");
-   for (HidVis = Agd_PAST_EVENTS;
-	HidVis <= Agd_FUTURE_EVENTS;
+   for (HidVis = Agd_HIDDEN_EVENTS;
+	HidVis <= Agd_VISIBL_EVENTS;
 	HidVis++)
      {
       fprintf (Gbl.F.Out,"<div class=\"%s\">",
-	       (Gbl.Agenda.HiddenVisibleEvents & (1 << HidVis)) ? "PREF_ON" :
-							          "PREF_OFF");
+	       (Gbl.Agenda.HiddenVisiblEvents & (1 << HidVis)) ? "PREF_ON" :
+							         "PREF_OFF");
       Act_FormStart (ActSeeMyAgd);
-      Agd_PutHiddenParamsPastFutureEvents (Gbl.Agenda.PastFutureEvents);
-      Agd_PutHiddenParamsPrivatePublicEvents (Gbl.Agenda.PrivatePublicEvents);
-      Agd_PutHiddenParamsHiddenVisibleEvents (1 << HidVis);
+      Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+		     Gbl.Agenda.PrivatPublicEvents,
+		     Gbl.Agenda.HiddenVisiblEvents ^ (1 << HidVis),	// Toggle
+		     Gbl.Agenda.SelectedOrder,
+		     -1L,
+		     Gbl.Pag.CurrentPage);
 
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s\""
 			 " alt=\"%s\" title=\"%s\" class=\"ICO25x25\""
 			 " style=\"margin:0 auto;\" />",
 	       Gbl.Prefs.IconsURL,
 	       Image[HidVis],
-	       Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis],
-	       Txt_AGENDA_HIDDEN_VISIBLE_EVENTS[HidVis]);
+	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis],
+	       Txt_AGENDA_HIDDEN_VISIBL_EVENTS[HidVis]);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -277,63 +298,56 @@ static void Agd_ShowFormToSelHiddenVisibleEvents (void)
   }
 
 /*****************************************************************************/
-/**************** Put hidden params for past / future events *****************/
+/************************ Put hidden params for events ***********************/
 /*****************************************************************************/
 
-static void Agd_PutHiddenParamsPastFutureEvents (unsigned PastFutureEvents)
+static void Agd_PutHiddenParamPast__FutureEvents (unsigned Past__FutureEvents)
   {
-   Agd_PastFutureEvents_t PstFut;
-   static const char *ParamName[2] =
-     {
-      "Past",		// Agd_PAST_EVENTS
-      "Future",		// Agd_FUTURE_EVENTS
-     };
+   Par_PutHiddenParamUnsigned (ParamPast__FutureName,Past__FutureEvents);
+  }
 
-   for (PstFut = Agd_PAST_EVENTS;
-	PstFut <= Agd_FUTURE_EVENTS;
-	PstFut++)
-      if (PastFutureEvents & (1 << PstFut))	// Booleans stored as bits in PastFutureEvents
-         Par_PutHiddenParamChar (ParamName[PstFut],'Y');
+static void Agd_PutHiddenParamPrivatPublicEvents (unsigned PrivatPublicEvents)
+  {
+   Par_PutHiddenParamUnsigned (ParamPrivatPublicName,PrivatPublicEvents);
+  }
+
+static void Agd_PutHiddenParamHiddenVisiblEvents (unsigned HiddenVisiblEvents)
+  {
+   Par_PutHiddenParamUnsigned (ParamHiddenVisiblName,HiddenVisiblEvents);
   }
 
 /*****************************************************************************/
-/************** Put hidden params for private / public events ****************/
+/************************ Get hidden params for events ***********************/
 /*****************************************************************************/
 
-static void Agd_PutHiddenParamsPrivatePublicEvents (unsigned PrivatePublicEvents)
+static void Agd_GetParamsPast__FutureEvents (void)
   {
-   Agd_PrivatePublicEvents_t PrvPub;
-   static const char *ParamName[2] =
-     {
-      "Private",	// Agd_PRIVATE_EVENTS
-      "Public",		// Agd_PUBLIC_EVENTS
-     };
-
-   for (PrvPub = Agd_PRIVATE_EVENTS;
-	PrvPub <= Agd_PUBLIC_EVENTS;
-	PrvPub++)
-      if (PrivatePublicEvents & (1 << PrvPub))	// Booleans stored as bits in PrivatePublicEvents
-         Par_PutHiddenParamChar (ParamName[PrvPub],'Y');
+   Gbl.Agenda.Past__FutureEvents = (unsigned) Par_GetParToUnsignedLong (ParamPast__FutureName,
+                                                                        0,
+                                                                        (1 << Agd_PAST___EVENTS) |
+                                                                        (1 << Agd_FUTURE_EVENTS),
+                                                                        Agd_DEFAULT_PAST___EVENTS |
+                                                                        Agd_DEFAULT_FUTURE_EVENTS);
   }
 
-/*****************************************************************************/
-/************** Put hidden params for hidden / visible events ****************/
-/*****************************************************************************/
-
-static void Agd_PutHiddenParamsHiddenVisibleEvents (unsigned HiddenVisibleEvents)
+static void Agd_GetParamsPrivatPublicEvents (void)
   {
-   Agd_HiddenVisibleEvents_t HidVis;
-   static const char *ParamName[2] =
-     {
-      "Hidden",		// Agd_HIDDEN_EVENTS
-      "Visible",	// Agd_VISIBLE_EVENTS
-     };
+   Gbl.Agenda.PrivatPublicEvents = (unsigned) Par_GetParToUnsignedLong (ParamPrivatPublicName,
+                                                                        0,
+                                                                        (1 << Agd_PRIVAT_EVENTS) |
+                                                                        (1 << Agd_PUBLIC_EVENTS),
+                                                                        Agd_DEFAULT_PRIVAT_EVENTS |
+                                                                        Agd_DEFAULT_PUBLIC_EVENTS);
+  }
 
-   for (HidVis = Agd_HIDDEN_EVENTS;
-	HidVis <= Agd_VISIBLE_EVENTS;
-	HidVis++)
-      if (HiddenVisibleEvents & (1 << HidVis))	// Booleans stored as bits in HiddenVisibleEvents
-         Par_PutHiddenParamChar (ParamName[HidVis],'Y');
+static void Agd_GetParamsHiddenVisiblEvents (void)
+  {
+   Gbl.Agenda.HiddenVisiblEvents = (unsigned) Par_GetParToUnsignedLong (ParamHiddenVisiblName,
+                                                                        0,
+                                                                        (1 << Agd_HIDDEN_EVENTS) |
+                                                                        (1 << Agd_VISIBL_EVENTS),
+                                                                        Agd_DEFAULT_HIDDEN_EVENTS |
+                                                                        Agd_DEFAULT_VISIBL_EVENTS);
   }
 
 /*****************************************************************************/
@@ -471,8 +485,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
      };
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrder ();
-   Pag_GetParamPagNum (WhatPaginate[AgendaType]);
+   Agd_GetParams (AgendaType);
 
    /***** Get list of events *****/
    Agd_GetListEvents (AgendaType);
@@ -534,7 +547,7 @@ static void Agd_ShowEventsToday (Agd_AgendaType_t AgendaType)
    unsigned NumEvent;
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrder ();
+   Agd_GetParams (AgendaType);
 
    /***** Get list of events *****/
    Agd_GetListEvents (AgendaType);
@@ -613,8 +626,8 @@ static void Agd_WriteHeaderListEvents (Agd_AgendaType_t AgendaType)
 	    Usr_PutParamOtherUsrCodEncrypted ();
 	    break;
 	}
-      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
       Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Agenda.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
@@ -678,7 +691,8 @@ static void Agd_PutIconToCreateNewEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put form to create a new event *****/
-   Lay_PutContextualLink (ActFrmNewEvtMyAgd,Agd_PutParamsToCreateNewEvent,
+   Gbl.Agenda.AgdCodToEdit = -1L;
+   Lay_PutContextualLink (ActFrmNewEvtMyAgd,Agd_PutCurrentParams,
                           "plus64x64.png",
                           Txt_New_event,NULL,
                           NULL);
@@ -748,19 +762,14 @@ static void Agd_PutButtonToCreateNewEvent (void)
    extern const char *Txt_New_event;
 
    Act_FormStart (ActFrmNewEvtMyAgd);
-   Agd_PutParamsToCreateNewEvent ();
+   Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+		  Gbl.Agenda.PrivatPublicEvents,
+		  Gbl.Agenda.HiddenVisiblEvents,
+		  Gbl.Agenda.SelectedOrder,
+		  -1L,
+		  Gbl.Pag.CurrentPage);
    Lay_PutConfirmButton (Txt_New_event);
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/******************** Put parameters to create a new event *******************/
-/*****************************************************************************/
-
-static void Agd_PutParamsToCreateNewEvent (void)
-  {
-   Agd_PutHiddenParamEventsOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -880,6 +889,141 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
   }
 
 /*****************************************************************************/
+/******************* Put a link (form) to edit one event *********************/
+/*****************************************************************************/
+
+static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
+  {
+   extern const char *Txt_Remove;
+   extern const char *Txt_Show;
+   extern const char *Txt_Hide;
+   extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
+   extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
+   extern const char *Txt_Edit;
+
+   Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
+
+   /***** Put form to remove event *****/
+   Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutCurrentParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+                          NULL);
+
+   /***** Put form to hide/show event *****/
+   if (AgdEvent->Hidden)
+      Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutCurrentParams,
+                             "eye-slash-on64x64.png",
+			     Txt_Show,NULL,
+                             NULL);
+   else
+      Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutCurrentParams,
+                             "eye-on64x64.png",
+			     Txt_Hide,NULL,
+                             NULL);
+
+   /***** Put form to edit event *****/
+   Lay_PutContextualLink (ActEdiOneEvtMyAgd,Agd_PutCurrentParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
+
+   /***** Put form to make event public/private *****/
+   if (AgdEvent->Public)
+      Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutCurrentParams,
+			     "unlock-on64x64.png",
+			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
+			     NULL);
+   else
+      Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutCurrentParams,
+			     "lock-on64x64.png",
+			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
+			     NULL);
+  }
+
+/*****************************************************************************/
+/******************* Parameters passed in agenda forms ***********************/
+/*****************************************************************************/
+
+static void Agd_PutCurrentParams (void)
+  {
+   Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                  Gbl.Agenda.PrivatPublicEvents,
+                  Gbl.Agenda.HiddenVisiblEvents,
+                  Gbl.Agenda.SelectedOrder,
+                  Gbl.Agenda.AgdCodToEdit,
+                  Gbl.Pag.CurrentPage);
+  }
+
+/* The following function is called
+   when one or more parameters must be passed explicitely.
+   Each parameter is passed only if its value is distinct to default. */
+
+void Agd_PutParams (unsigned Past__FutureEvents,
+                    unsigned PrivatPublicEvents,
+                    unsigned HiddenVisiblEvents,
+                    Agd_Order_t Order,
+                    long AgdCodToEdit,
+                    unsigned NumPage)
+  {
+   if (Past__FutureEvents != (Agd_DEFAULT_PAST___EVENTS |
+	                      Agd_DEFAULT_FUTURE_EVENTS))
+      Agd_PutHiddenParamPast__FutureEvents (Past__FutureEvents);
+
+   if (PrivatPublicEvents != (Agd_DEFAULT_PRIVAT_EVENTS |
+	                      Agd_DEFAULT_PUBLIC_EVENTS))
+      Agd_PutHiddenParamPrivatPublicEvents (PrivatPublicEvents);
+
+   if (HiddenVisiblEvents != (Agd_DEFAULT_HIDDEN_EVENTS |
+	                      Agd_DEFAULT_VISIBL_EVENTS))
+      Agd_PutHiddenParamHiddenVisiblEvents (HiddenVisiblEvents);
+
+   if (Order != Agd_ORDER_DEFAULT)
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+
+   if (AgdCodToEdit > 0)
+      Par_PutHiddenParamLong ("AgdCod",AgdCodToEdit);
+
+   if (NumPage > 1)
+      Pag_PutHiddenParamPagNum (NumPage);
+  }
+
+/*****************************************************************************/
+/********** Get parameter with the type or order in list of events ***********/
+/*****************************************************************************/
+
+static void Agd_GetParams (Agd_AgendaType_t AgendaType)
+  {
+   Pag_WhatPaginate_t WhatPaginate[Agd_NUM_AGENDA_TYPES] =
+     {
+      Pag_MY_FULL_AGENDA,	// Agd_MY_FULL_AGENDA_TODAY, not used
+      Pag_MY_FULL_AGENDA,	// Agd_MY_FULL_AGENDA
+      Pag_MY_PUBLIC_AGENDA,	// Agd_MY_PUBLIC_AGENDA_TODAY, not used
+      Pag_MY_PUBLIC_AGENDA,	// Agd_MY_PUBLIC_AGENDA
+      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA_TODAY, not used
+      Pag_OTHER_PUBLIC_AGENDA,	// Agd_OTHER_PUBLIC_AGENDA
+     };
+
+   if (AgendaType == Agd_MY_FULL_AGENDA)
+     {
+      Agd_GetParamsPast__FutureEvents ();
+      Agd_GetParamsPrivatPublicEvents ();
+      Agd_GetParamsHiddenVisiblEvents ();
+     }
+   Agd_GetParamEventOrder ();
+   Pag_GetParamPagNum (WhatPaginate[AgendaType]);
+  }
+
+/*****************************************************************************/
+/****** Put a hidden parameter with the type of order in list of events ******/
+/*****************************************************************************/
+
+void Agd_PutHiddenParamEventsOrder (void)
+  {
+   if (Gbl.Agenda.SelectedOrder != Agd_ORDER_DEFAULT)
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrder);
+  }
+
+/*****************************************************************************/
 /********** Get parameter with the type or order in list of events ***********/
 /*****************************************************************************/
 
@@ -896,78 +1040,6 @@ static void Agd_GetParamEventOrder (void)
                                                            (unsigned long) Agd_ORDER_DEFAULT);
       AlreadyGot = true;
      }
-  }
-
-/*****************************************************************************/
-/****** Put a hidden parameter with the type of order in list of events ******/
-/*****************************************************************************/
-
-void Agd_PutHiddenParamEventsOrder (void)
-  {
-   Par_PutHiddenParamUnsigned ("Order",(unsigned) Gbl.Agenda.SelectedOrder);
-  }
-
-/*****************************************************************************/
-/******************* Put a link (form) to edit one event *********************/
-/*****************************************************************************/
-
-static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
-  {
-   extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
-   extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
-   extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
-   extern const char *Txt_Edit;
-
-   Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
-
-   /***** Put form to remove event *****/
-   Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutParams,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-                          NULL);
-
-   /***** Put form to hide/show event *****/
-   if (AgdEvent->Hidden)
-      Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutParams,
-                             "eye-slash-on64x64.png",
-			     Txt_Show,NULL,
-                             NULL);
-   else
-      Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutParams,
-                             "eye-on64x64.png",
-			     Txt_Hide,NULL,
-                             NULL);
-
-   /***** Put form to edit event *****/
-   Lay_PutContextualLink (ActEdiOneEvtMyAgd,Agd_PutParams,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
-
-   /***** Put form to make event public/private *****/
-   if (AgdEvent->Public)
-      Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutParams,
-			     "unlock-on64x64.png",
-			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
-			     NULL);
-   else
-      Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutParams,
-			     "lock-on64x64.png",
-			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
-			     NULL);
-  }
-
-/*****************************************************************************/
-/********************** Params used to edit an event *************************/
-/*****************************************************************************/
-
-static void Agd_PutParams (void)
-  {
-   Agd_PutParamAgdCod (Gbl.Agenda.AgdCodToEdit);
-   Agd_PutHiddenParamEventsOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -1214,15 +1286,6 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
   }
 
 /*****************************************************************************/
-/******************* Write parameter with code of event **********************/
-/*****************************************************************************/
-
-static void Agd_PutParamAgdCod (long AgdCod)
-  {
-   Par_PutHiddenParamLong ("AgdCod",AgdCod);
-  }
-
-/*****************************************************************************/
 /******************** Get parameter with code of event ***********************/
 /*****************************************************************************/
 
@@ -1243,8 +1306,7 @@ void Agd_AskRemEvent (void)
    struct AgendaEvent AgdEvent;
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrder ();
-   Pag_GetParamPagNum (Pag_MY_FULL_AGENDA);
+   Agd_GetParams (Agd_MY_FULL_AGENDA);
 
    /***** Get event code *****/
    if ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L)
@@ -1256,9 +1318,8 @@ void Agd_AskRemEvent (void)
 
    /***** Button of confirmation of removing *****/
    Act_FormStart (ActRemEvtMyAgd);
-   Agd_PutParamAgdCod (AgdEvent.AgdCod);
-   Agd_PutHiddenParamEventsOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
+   Agd_PutCurrentParams ();
 
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
@@ -1454,8 +1515,7 @@ void Agd_RequestCreatOrEditEvent (void)
    char Txt[Cns_MAX_BYTES_TEXT + 1];
 
    /***** Get parameters *****/
-   Agd_GetParamEventOrder ();
-   Pag_GetParamPagNum (Pag_MY_FULL_AGENDA);
+   Agd_GetParams (Agd_MY_FULL_AGENDA);
 
    /***** Get the code of the event *****/
    ItsANewEvent = ((AgdEvent.AgdCod = Agd_GetParamAgdCod ()) == -1L);
@@ -1483,14 +1543,16 @@ void Agd_RequestCreatOrEditEvent (void)
 
    /***** Start form *****/
    if (ItsANewEvent)
+     {
       Act_FormStart (ActNewEvtMyAgd);
+      Gbl.Agenda.AgdCodToEdit = -1L;
+     }
    else
      {
       Act_FormStart (ActChgEvtMyAgd);
-      Agd_PutParamAgdCod (AgdEvent.AgdCod);
+      Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
      }
-   Agd_PutHiddenParamEventsOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Agd_PutCurrentParams ();
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,

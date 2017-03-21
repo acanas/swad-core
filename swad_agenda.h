@@ -61,19 +61,27 @@ struct AgendaEvent
 
 typedef enum
   {
-   Agd_PAST_EVENTS,	// Events until yesterday (included)
-   Agd_FUTURE_EVENTS,	// Events from today (included) onwards
-  } Agd_PastFutureEvents_t;
+   Agd_PAST___EVENTS = 0,	// Events until yesterday (included)
+   Agd_FUTURE_EVENTS = 1,	// Events from today (included) onwards
+  } Agd_Past__FutureEvents_t;
+#define Agd_DEFAULT_PAST___EVENTS	(0 << Agd_PAST___EVENTS)	// off
+#define Agd_DEFAULT_FUTURE_EVENTS	(1 << Agd_FUTURE_EVENTS)	// on
+
 typedef enum
   {
-   Agd_PRIVATE_EVENTS,
-   Agd_PUBLIC_EVENTS,
-  } Agd_PrivatePublicEvents_t;
+   Agd_PRIVAT_EVENTS = 0,
+   Agd_PUBLIC_EVENTS = 1,
+  } Agd_PrivatPublicEvents_t;
+#define Agd_DEFAULT_PRIVAT_EVENTS	(1 << Agd_PRIVAT_EVENTS)	// on
+#define Agd_DEFAULT_PUBLIC_EVENTS	(1 << Agd_PUBLIC_EVENTS)	// on
+
 typedef enum
   {
-   Agd_HIDDEN_EVENTS,
-   Agd_VISIBLE_EVENTS,
-  } Agd_HiddenVisibleEvents_t;
+   Agd_HIDDEN_EVENTS = 0,
+   Agd_VISIBL_EVENTS = 1,
+  } Agd_HiddenVisiblEvents_t;
+#define Agd_DEFAULT_HIDDEN_EVENTS	(0 << Agd_HIDDEN_EVENTS)	// off
+#define Agd_DEFAULT_VISIBL_EVENTS	(1 << Agd_VISIBL_EVENTS)	// on
 
 #define Agd_NUM_ORDERS 2
 typedef enum
@@ -95,8 +103,16 @@ void Agd_ShowMyPublicAgenda (void);
 void Agd_ShowUsrAgenda (void);
 void Agd_ShowOtherAgendaAfterLogIn (void);
 
-void Agd_PutHiddenParamEventsOrder (void);
 void Agd_RequestCreatOrEditEvent (void);
+
+void Agd_PutParams (unsigned Past__FutureEvents,
+                    unsigned PrivatPublicEvents,
+                    unsigned HiddenVisiblEvents,
+                    Agd_Order_t Order,
+                    long AgdCodToEdit,
+                    unsigned NumPage);
+void Agd_PutHiddenParamEventsOrder (void);
+
 void Agd_FreeListEvents (void);
 
 long Agd_GetParamAgdCod (void);

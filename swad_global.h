@@ -414,9 +414,9 @@ struct Globals
       bool LstIsRead;	// Is the list already read from database, or it needs to be read?
       unsigned Num;	// Number of events
       long *LstAgdCods;	// List of agenda codes
-      unsigned PastFutureEvents;
-      unsigned PrivatePublicEvents;
-      unsigned HiddenVisibleEvents;
+      unsigned Past__FutureEvents;
+      unsigned PrivatPublicEvents;
+      unsigned HiddenVisiblEvents;
       Agd_Order_t SelectedOrder;
       long AgdCodToEdit;	// Used as parameter in contextual links
      } Agenda;

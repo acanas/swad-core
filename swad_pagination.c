@@ -166,18 +166,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
-               Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              1);
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
-               Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              1);
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
-               Pag_PutHiddenParamPagNum (1);
                Agd_PutHiddenParamEventsOrder ();
+               Pag_PutHiddenParamPagNum (1);
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -259,18 +267,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
-               Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              1);
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
-               Pag_PutHiddenParamPagNum (1);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              1);
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
-               Pag_PutHiddenParamPagNum (1);
                Agd_PutHiddenParamEventsOrder ();
+               Pag_PutHiddenParamPagNum (1);
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -335,18 +351,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                break;
             case Pag_MY_FULL_AGENDA:
                Act_FormStart (ActSeeMyAgd);
-               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              Pagination->LeftPage);
                break;
             case Pag_MY_PUBLIC_AGENDA:
                Act_FormStart (ActSeeMyPubAgd);
-               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
-               Agd_PutHiddenParamEventsOrder ();
+               Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+                              Gbl.Agenda.PrivatPublicEvents,
+                              Gbl.Agenda.HiddenVisiblEvents,
+                              Gbl.Agenda.SelectedOrder,
+                              -1L,
+                              Pagination->LeftPage);
                break;
             case Pag_OTHER_PUBLIC_AGENDA:
                Act_FormStart (ActSeeUsrAgd);
-               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Agd_PutHiddenParamEventsOrder ();
+               Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
@@ -418,18 +442,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   break;
 	       case Pag_MY_FULL_AGENDA:
 		  Act_FormStart (ActSeeMyAgd);
-		  Pag_PutHiddenParamPagNum (NumPage);
-		  Agd_PutHiddenParamEventsOrder ();
+		  Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+				 Gbl.Agenda.PrivatPublicEvents,
+				 Gbl.Agenda.HiddenVisiblEvents,
+				 Gbl.Agenda.SelectedOrder,
+				 -1L,
+				 NumPage);
 		  break;
 	       case Pag_MY_PUBLIC_AGENDA:
 		  Act_FormStart (ActSeeMyPubAgd);
-		  Pag_PutHiddenParamPagNum (NumPage);
-		  Agd_PutHiddenParamEventsOrder ();
+		  Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+				 Gbl.Agenda.PrivatPublicEvents,
+				 Gbl.Agenda.HiddenVisiblEvents,
+				 Gbl.Agenda.SelectedOrder,
+				 -1L,
+				 NumPage);
 		  break;
 	       case Pag_OTHER_PUBLIC_AGENDA:
 		  Act_FormStart (ActSeeUsrAgd);
-		  Pag_PutHiddenParamPagNum (NumPage);
 		  Agd_PutHiddenParamEventsOrder ();
+		  Pag_PutHiddenParamPagNum (NumPage);
 		  Usr_PutParamOtherUsrCodEncrypted ();
 		  break;
               }
@@ -497,18 +529,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                break;
 	    case Pag_MY_FULL_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+			      Gbl.Agenda.PrivatPublicEvents,
+			      Gbl.Agenda.HiddenVisiblEvents,
+			      Gbl.Agenda.SelectedOrder,
+			      -1L,
+			      Pagination->RightPage);
 	       break;
 	    case Pag_MY_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeMyPubAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+			      Gbl.Agenda.PrivatPublicEvents,
+			      Gbl.Agenda.HiddenVisiblEvents,
+			      Gbl.Agenda.SelectedOrder,
+			      -1L,
+			      Pagination->RightPage);
 	       break;
 	    case Pag_OTHER_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
 	       Agd_PutHiddenParamEventsOrder ();
+	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
@@ -573,18 +613,26 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                break;
 	    case Pag_MY_FULL_AGENDA:
 	       Act_FormStart (ActSeeMyAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+			      Gbl.Agenda.PrivatPublicEvents,
+			      Gbl.Agenda.HiddenVisiblEvents,
+			      Gbl.Agenda.SelectedOrder,
+			      -1L,
+			      Pagination->NumPags);
 	       break;
 	    case Pag_MY_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeMyPubAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
-	       Agd_PutHiddenParamEventsOrder ();
+	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
+			      Gbl.Agenda.PrivatPublicEvents,
+			      Gbl.Agenda.HiddenVisiblEvents,
+			      Gbl.Agenda.SelectedOrder,
+			      -1L,
+			      Pagination->NumPags);
 	       break;
 	    case Pag_OTHER_PUBLIC_AGENDA:
 	       Act_FormStart (ActSeeUsrAgd);
-	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
 	       Agd_PutHiddenParamEventsOrder ();
+	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
