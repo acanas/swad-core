@@ -2877,7 +2877,7 @@ const char *Hlp_PROFILE_Agenda =
 #elif L==3
 	"PROFILE.Agenda";
 #elif L==4
-	"PROFILE.Agenda";
+	"PROFILE.Agenda.es";
 #elif L==5
 	"PROFILE.Agenda";
 #elif L==6
@@ -2898,7 +2898,7 @@ const char *Hlp_PROFILE_Agenda_new_event =
 #elif L==3
 	"PROFILE.Agenda#new-event";
 #elif L==4
-	"PROFILE.Agenda#new-event";
+	"PROFILE.Agenda.es#nuevo-evento";
 #elif L==5
 	"PROFILE.Agenda#new-event";
 #elif L==6
@@ -2919,7 +2919,7 @@ const char *Hlp_PROFILE_Agenda_edit_event =
 #elif L==3
 	"PROFILE.Agenda#edit-event";
 #elif L==4
-	"PROFILE.Agenda#edit-event";
+	"PROFILE.Agenda.es#editar-evento";
 #elif L==5
 	"PROFILE.Agenda#edit-event";
 #elif L==6
@@ -2940,7 +2940,7 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 #elif L==3
 	"PROFILE.Agenda#public-agenda";
 #elif L==4
-	"PROFILE.Agenda#public-agenda";
+	"PROFILE.Agenda.es#agenda-p%C3%BAblica";
 #elif L==5
 	"PROFILE.Agenda#public-agenda";
 #elif L==6
