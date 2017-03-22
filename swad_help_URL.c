@@ -1630,7 +1630,7 @@ const char *Hlp_USERS_SignUp =
 #elif L==3
 	"USERS.SignUp";
 #elif L==4
-	"USERS.SignUp";
+	"USERS.SignUp.es";
 #elif L==5
 	"USERS.SignUp";
 #elif L==6
