@@ -112,7 +112,6 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType);
 static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent);
 static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
                                    char Txt[Cns_MAX_BYTES_TEXT + 1]);
-static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent);
 static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt);
 
@@ -1635,7 +1634,6 @@ void Agd_RequestCreatOrEditEvent (void)
 
 void Agd_RecFormEvent (void)
   {
-   extern const char *Txt_Already_existed_an_event_with_the_title_X;
    extern const char *Txt_You_must_specify_the_title_of_the_event;
    extern const char *Txt_Created_new_event_X;
    extern const char *Txt_The_event_has_been_modified;
@@ -1677,18 +1675,7 @@ void Agd_RecFormEvent (void)
      }
 
    /***** Check if event is correct *****/
-   if (AgdEvent.Event[0])	// If there's event
-     {
-      /* If title of event was in database... */
-      if (Agd_CheckIfSimilarEventExists (&AgdEvent))
-        {
-         NewEventIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
-                  AgdEvent.Event);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-        }
-     }
-   else	// If there is no event
+   if (!AgdEvent.Event[0])	// If there is no event
      {
       NewEventIsCorrect = false;
       Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
@@ -1722,21 +1709,6 @@ void Agd_RecFormEvent (void)
    else
       // TODO: The form should be filled with partial data, now is always empty
       Agd_RequestCreatOrEditEvent ();
-  }
-
-/*****************************************************************************/
-/*********** Check if the title or the folder of an event exists *************/
-/*****************************************************************************/
-
-static bool Agd_CheckIfSimilarEventExists (struct AgendaEvent *AgdEvent)
-  {
-   char Query[256 + Agd_MAX_BYTES_EVENT];
-
-   /***** Get number of events with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM agendas"
-	          " WHERE UsrCod='%ld' AND Event='%s' AND AgdCod<>'%ld'",
-            AgdEvent->UsrCod,AgdEvent->Event,AgdEvent->AgdCod);
-   return (DB_QueryCOUNT (Query,"can not get similar events") != 0);
   }
 
 /*****************************************************************************/

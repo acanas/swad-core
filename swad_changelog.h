@@ -210,13 +210,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.161 (2017-03-22)"
+#define Log_PLATFORM_VERSION	"SWAD 16.161.1 (2017-03-22)"
 #define CSS_FILE		"swad16.161.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.161.1: Mar 22, 2017	Changes in agenda. (217380 lines)
         Version 16.161:   Mar 22, 2017	Changes in agenda. (217404 lines)
         Version 16.160.2: Mar 21, 2017	Changes in agenda. Not finished. (217348 lines)
         Version 16.160.1: Mar 21, 2017	Changes in agenda. Not finished. (217347 lines)
