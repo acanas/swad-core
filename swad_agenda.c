@@ -993,112 +993,165 @@ static void Agd_GetParamEventOrder (void)
 /************************* Get list of agenda events *************************/
 /*****************************************************************************/
 
+#define Agd_MAX_BYTES_SUBQUERY 128
+
 static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
   {
-   char Past__FutureEventsSubQuery[256];
-   char OrderBySubQuery[256];
-   char Query[1024];
+   char UsrSubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char Past__FutureEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char PrivatPublicEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char HiddenVisiblEventsSubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char OrderBySubQuery[Agd_MAX_BYTES_SUBQUERY];
+   char Query[128 + Agd_MAX_BYTES_SUBQUERY * 5];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
    unsigned NumEvent;
+   bool DoQuery = true;
 
-   if (Gbl.Agenda.LstIsRead)
-      Agd_FreeListEvents ();
+   /***** Initialize list of events *****/
+   Agd_FreeListEvents ();
 
    /***** Get list of events from database *****/
-   switch (Gbl.Agenda.SelectedOrder)
-     {
-      case Agd_ORDER_BY_START_DATE:
-         sprintf (OrderBySubQuery,"StartTime,"
-                                  "EndTime,"
-                                  "Event,"
-                                  "Location");
-         break;
-      case Agd_ORDER_BY_END_DATE:
-         sprintf (OrderBySubQuery,"EndTime,"
-                                  "StartTime,"
-                                  "Event,"
-                                  "Location");
-         break;
-     }
-
+   /* Build events subqueries */
    switch (AgendaType)
      {
       case Agd_MY_AGENDA_TODAY:
-      case Agd_ANOTHER_AGENDA_TODAY:		 // Today events
-   	 sprintf (Past__FutureEventsSubQuery,
-	          " AND DATE(StartTime)<=CURDATE()"
-		  " AND DATE(EndTime)>=CURDATE()");
-	 break;
       case Agd_MY_AGENDA:
-      case Agd_ANOTHER_AGENDA:
-	 switch (Gbl.Agenda.Past__FutureEvents)
+	 if (Gbl.Agenda.Past__FutureEvents == 0 ||
+             Gbl.Agenda.PrivatPublicEvents == 0 ||
+             Gbl.Agenda.HiddenVisiblEvents == 0)	// All selectors are off
+	    DoQuery = false;				// Nothing to get from database
+	 else
 	   {
-	    case (1 << Agd_PAST___EVENTS):	// Past and today events
-	       sprintf (Past__FutureEventsSubQuery,
-			" AND DATE(StartTime)<=CURDATE()");
-	       break;
-	    case (1 << Agd_FUTURE_EVENTS):	// Today and future events
-	       sprintf (Past__FutureEventsSubQuery,
-			" AND DATE(EndTime)>=CURDATE()");
-	       break;
-	    default:				// All events
-	       Past__FutureEventsSubQuery[0] = '\0';
-	       break;
+	    sprintf (UsrSubQuery,"UsrCod='%ld'",Gbl.Usrs.Me.UsrDat.UsrCod);
+	    if (AgendaType == Agd_MY_AGENDA_TODAY)
+	       Str_Copy (Past__FutureEventsSubQuery,
+			 " AND DATE(StartTime)<=CURDATE()"
+			 " AND DATE(EndTime)>=CURDATE()",
+			 Agd_MAX_BYTES_SUBQUERY);	// Today events
+	    else
+	       switch (Gbl.Agenda.Past__FutureEvents)
+		 {
+		  case (1 << Agd_PAST___EVENTS):
+		     Str_Copy (Past__FutureEventsSubQuery,
+			       " AND DATE(StartTime)<=CURDATE()",
+			       Agd_MAX_BYTES_SUBQUERY);	// Past and today events
+		     break;
+		  case (1 << Agd_FUTURE_EVENTS):
+		     Str_Copy (Past__FutureEventsSubQuery,
+			       " AND DATE(EndTime)>=CURDATE()",
+			       Agd_MAX_BYTES_SUBQUERY);	// Today and future events
+		     break;
+		  default:
+		     Past__FutureEventsSubQuery[0] = '\0';	// All events
+		     break;
+		 }
+	    switch (Gbl.Agenda.PrivatPublicEvents)
+	      {
+	       case (1 << Agd_PRIVAT_EVENTS):
+		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='N'",
+		            Agd_MAX_BYTES_SUBQUERY);	// Private events
+		  break;
+	       case (1 << Agd_PUBLIC_EVENTS):
+		  Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
+		            Agd_MAX_BYTES_SUBQUERY);	// Public events
+		  break;
+	       default:
+		  PrivatPublicEventsSubQuery[0] = '\0';	// All events
+		  break;
+	      }
+	    switch (Gbl.Agenda.HiddenVisiblEvents)
+	      {
+	       case (1 << Agd_HIDDEN_EVENTS):
+		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='Y'",
+		            Agd_MAX_BYTES_SUBQUERY);	// Hidden events
+		  break;
+	       case (1 << Agd_VISIBL_EVENTS):
+		  Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
+		            Agd_MAX_BYTES_SUBQUERY);	// Visible events
+		  break;
+	       default:
+		  HiddenVisiblEventsSubQuery[0] = '\0';	// All events
+		  break;
+	      }
 	   }
-	 break;
-     }
-
-   switch (AgendaType)
-     {
-      case Agd_MY_AGENDA_TODAY:
-      case Agd_MY_AGENDA:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld'%s"
-			" ORDER BY %s",
-		  Gbl.Usrs.Me.UsrDat.UsrCod,
-		  Past__FutureEventsSubQuery,
-		  OrderBySubQuery);
 	 break;
       case Agd_ANOTHER_AGENDA_TODAY:
       case Agd_ANOTHER_AGENDA:
-	 sprintf (Query,"SELECT AgdCod FROM agendas"
-			" WHERE UsrCod='%ld'%s"
-			" AND Public='Y' AND Hidden='N'"
-			" AND DATE(EndTime)>=CURDATE()"  // Only today and future events
-			" ORDER BY %s",
-		  Gbl.Usrs.Other.UsrDat.UsrCod,
-		  Past__FutureEventsSubQuery,
-		  OrderBySubQuery);
-         break;
+	 sprintf (UsrSubQuery,"UsrCod='%ld'",Gbl.Usrs.Other.UsrDat.UsrCod);
+	 if (AgendaType == Agd_ANOTHER_AGENDA_TODAY)
+	    Str_Copy (Past__FutureEventsSubQuery,
+		      " AND DATE(StartTime)<=CURDATE()"
+		      " AND DATE(EndTime)>=CURDATE()",
+		      Agd_MAX_BYTES_SUBQUERY);		// Today events
+	 else
+	    Str_Copy (Past__FutureEventsSubQuery,
+		      " AND DATE(EndTime)>=CURDATE()",
+		      Agd_MAX_BYTES_SUBQUERY);		// Today and future events
+	 Str_Copy (PrivatPublicEventsSubQuery," AND Public='Y'",
+	           Agd_MAX_BYTES_SUBQUERY);		// Public events
+	 Str_Copy (HiddenVisiblEventsSubQuery," AND Hidden='N'",
+	           Agd_MAX_BYTES_SUBQUERY);		// Visible events
      }
-   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
 
-   if (NumRows) // Events found...
+   if (DoQuery)
      {
-      Gbl.Agenda.Num = (unsigned) NumRows;
+      /* Build order subquery */
+      switch (Gbl.Agenda.SelectedOrder)
+	{
+	 case Agd_ORDER_BY_START_DATE:
+	    Str_Copy (OrderBySubQuery,"StartTime,"
+				      "EndTime,"
+				      "Event,"
+				      "Location",
+		      Agd_MAX_BYTES_SUBQUERY);
+	    break;
+	 case Agd_ORDER_BY_END_DATE:
+	    Str_Copy (OrderBySubQuery,"EndTime,"
+				      "StartTime,"
+				      "Event,"
+				      "Location",
+		      Agd_MAX_BYTES_SUBQUERY);
+	    break;
+	}
 
-      /***** Create list of events *****/
-      if ((Gbl.Agenda.LstAgdCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
-          Lay_ShowErrorAndExit ("Not enough memory to store list of agenda events.");
+      /* Build full query */
+      sprintf (Query,"SELECT AgdCod FROM agendas"
+		     " WHERE %s%s%s%s"
+		     " ORDER BY %s",
+	       UsrSubQuery,
+	       Past__FutureEventsSubQuery,
+	       PrivatPublicEventsSubQuery,
+	       HiddenVisiblEventsSubQuery,
+	       OrderBySubQuery);
+      NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get agenda events");
 
-      /***** Get the events codes *****/
-      for (NumEvent = 0;
-	   NumEvent < Gbl.Agenda.Num;
-	   NumEvent++)
-        {
-         /* Get next event code */
-         row = mysql_fetch_row (mysql_res);
-         if ((Gbl.Agenda.LstAgdCods[NumEvent] = Str_ConvertStrCodToLongCod (row[0])) < 0)
-            Lay_ShowErrorAndExit ("Error: wrong event code.");
-        }
+      if (NumRows) // Events found...
+	{
+	 Gbl.Agenda.Num = (unsigned) NumRows;
+
+	 /***** Create list of events *****/
+	 if ((Gbl.Agenda.LstAgdCods = (long *) calloc (NumRows,sizeof (long))) == NULL)
+	     Lay_ShowErrorAndExit ("Not enough memory to store list of agenda events.");
+
+	 /***** Get the events codes *****/
+	 for (NumEvent = 0;
+	      NumEvent < Gbl.Agenda.Num;
+	      NumEvent++)
+	   {
+	    /* Get next event code */
+	    row = mysql_fetch_row (mysql_res);
+	    if ((Gbl.Agenda.LstAgdCods[NumEvent] = Str_ConvertStrCodToLongCod (row[0])) < 0)
+	       Lay_ShowErrorAndExit ("Error: wrong event code.");
+	   }
+	}
+
+      /***** Free structure that stores the query result *****/
+      DB_FreeMySQLResult (&mysql_res);
      }
    else
       Gbl.Agenda.Num = 0;
-
-   /***** Free structure that stores the query result *****/
-   DB_FreeMySQLResult (&mysql_res);
 
    Gbl.Agenda.LstIsRead = true;
   }

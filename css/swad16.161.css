@@ -2361,6 +2361,8 @@ a:hover img.CENTRE_PHOTO_SHOW
 	padding:6px;
 	text-align:center;
 	vertical-align:middle;
+	border:solid 1px;
+	border-color:transparent;
 	}
 .PREF_ON
 	{
