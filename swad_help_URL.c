@@ -1483,7 +1483,7 @@ const char *Hlp_USERS_Guests =
 #elif L==3
 	"USERS.Guests";
 #elif L==4
-	"USERS.Guests";
+	"USERS.Guests.es";
 #elif L==5
 	"USERS.Guests";
 #elif L==6
@@ -1651,7 +1651,7 @@ const char *Hlp_USERS_Requests =
 #elif L==3
 	"USERS.Requests";
 #elif L==4
-	"USERS.Requests";
+	"USERS.Requests.es";
 #elif L==5
 	"USERS.Requests";
 #elif L==6
