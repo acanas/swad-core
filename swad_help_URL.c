@@ -1672,7 +1672,7 @@ const char *Hlp_USERS_Connected =
 #elif L==3
 	"USERS.Connected";
 #elif L==4
-	"USERS.Connected";
+	"USERS.Connected.es";
 #elif L==5
 	"USERS.Connected";
 #elif L==6
@@ -1693,7 +1693,7 @@ const char *Hlp_USERS_Connected_last_clicks =
 #elif L==3
 	"USERS.Connected#last-clicks";
 #elif L==4
-	"USERS.Connected#last-clicks";
+	"USERS.Connected.es#%C3%9Altimos-clics";
 #elif L==5
 	"USERS.Connected#last-clicks";
 #elif L==6
