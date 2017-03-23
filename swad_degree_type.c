@@ -192,8 +192,6 @@ static void DT_ListDegreeTypesForSeeing (void)
   {
    extern const char *Hlp_SYSTEM_Studies;
    extern const char *Txt_Types_of_degree;
-   extern const char *Txt_TYPES_OF_DEGREE_With_degrees;
-   extern const char *Txt_TYPES_OF_DEGREE_Without_degrees;
    unsigned NumDegTyp;
    const char *BgColor;
 
@@ -213,24 +211,9 @@ static void DT_ListDegreeTypesForSeeing (void)
 	         Gbl.CurrentDegTyp.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
                                                        Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      /* Put green tip if degree type has degrees */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s\">"
-                         "<img src=\"%s/%s16x16.gif\""
-                         " alt=\"%s\" title=\"%s\""
-                         " class=\"ICO20x20\" />"
-                         "</td>",
-               BgColor,
-               Gbl.Prefs.IconsURL,
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? "ok_green" :
-        	                                          "tr",
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? Txt_TYPES_OF_DEGREE_With_degrees :
-                                                          Txt_TYPES_OF_DEGREE_Without_degrees,
-               Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs ? Txt_TYPES_OF_DEGREE_With_degrees :
-                                                          Txt_TYPES_OF_DEGREE_Without_degrees);
-
       /* Name of degree type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE %s\">"
+      fprintf (Gbl.F.Out,"<tr>"
+                         "<td class=\"DAT LEFT_MIDDLE %s\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
@@ -380,7 +363,6 @@ static void DT_PutHeadDegreeTypesForSeeing (void)
    extern const char *Txt_Degrees;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"BM\"></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
                       "</th>"

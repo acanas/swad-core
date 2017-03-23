@@ -49314,48 +49314,6 @@ const char *Txt_Types_of_degree =
 	"Tipos de titula&ccedil;&atilde;o";
 #endif
 
-const char *Txt_TYPES_OF_DEGREE_With_degrees =
-#if   L==1
-	"Amb titulacions";
-#elif L==2
-	"Mit Studiengang";
-#elif L==3
-	"With degrees";
-#elif L==4
-	"Con titulaciones";
-#elif L==5
-	"Avec &eacute;tudes";
-#elif L==6
-	"Con titulaciones";	// Okoteve traducción
-#elif L==7
-	"Con lauree";
-#elif L==8
-	"Z Stopnie";
-#elif L==9
-	"Com titula&ccedil;oes";
-#endif
-
-const char *Txt_TYPES_OF_DEGREE_Without_degrees =
-#if   L==1
-	"Sense titulacions";
-#elif L==2
-	"Ohne Studiengang";
-#elif L==3
-	"Without degrees";
-#elif L==4
-	"Sin titulaciones";
-#elif L==5
-	"Sans &eacute;tudes";
-#elif L==6
-	"Sin titulaciones";	// Okoteve traducción
-#elif L==7
-	"Senza lauree";
-#elif L==8
-	"Bez Stopnie";
-#elif L==9
-	"Sem titula&ccedil;oes";
-#endif
-
 const char *Txt_Types_of_answers =		// Answers of a test
 #if   L==1
 	"Tipus de respostes";
