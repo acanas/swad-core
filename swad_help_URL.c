@@ -1546,7 +1546,7 @@ const char *Hlp_USERS_Attendance =
 #elif L==3
 	"USERS.Attendance";
 #elif L==4
-	"USERS.Attendance";
+	"USERS.Attendance.es";
 #elif L==5
 	"USERS.Attendance";
 #elif L==6
@@ -1567,7 +1567,7 @@ const char *Hlp_USERS_Attendance_new_event =
 #elif L==3
 	"USERS.Attendance#new-event";
 #elif L==4
-	"USERS.Attendance#new-event";
+	"USERS.Attendance.es#nuevo-evento";
 #elif L==5
 	"USERS.Attendance#new-event";
 #elif L==6
@@ -1588,7 +1588,7 @@ const char *Hlp_USERS_Attendance_edit_event =
 #elif L==3
 	"USERS.Attendance#edit-event";
 #elif L==4
-	"USERS.Attendance#edit-event";
+	"USERS.Attendance.es#editar-evento";
 #elif L==5
 	"USERS.Attendance#edit-event";
 #elif L==6
@@ -1609,7 +1609,7 @@ const char *Hlp_USERS_Attendance_attendance_list =
 #elif L==3
 	"USERS.Attendance#attendance-list";
 #elif L==4
-	"USERS.Attendance#attendance-list";
+	"USERS.Attendance.es#lista-de-asistencia";
 #elif L==5
 	"USERS.Attendance#attendance-list";
 #elif L==6
