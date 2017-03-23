@@ -70,8 +70,7 @@ CFLAGS = -Wall -Wextra -mtune=native -O2 -s
 all: swad_ca swad_de swad_en swad_es swad_fr swad_gn swad_it swad_pl swad_pt
 
 swad_ca: $(OBJS) $(SOAPOBJS) $(SHAOBJS)
-	$(CC) $(CFLAGS) -c -D L=1 swad_help_URL.c
-	$(CC) $(CFLAGS) -c -D L=1 swad_text.c
+	$(CC) $(CFLAGS) -c -D L=1 swad_help_URL.c swad_text.c
 	$(CC) $(CFLAGS) -o $@ $(OBJS) swad_help_URL.o swad_text.o $(SOAPOBJS) $(SHAOBJS) $(LIBS)
 	chmod a+x $@
 

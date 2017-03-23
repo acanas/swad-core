@@ -1252,7 +1252,7 @@ const char *Hlp_USERS_Groups =
 #elif L==3
 	"USERS.Groups";
 #elif L==4
-	"USERS.Groups";
+	"USERS.Groups.es";
 #elif L==5
 	"USERS.Groups";
 #elif L==6
@@ -1504,7 +1504,7 @@ const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 #elif L==3
 	"USERS.Duplicates#possibly-duplicate-users";
 #elif L==4
-	"USERS.Duplicates#possibly-duplicate-users";
+	"USERS.Duplicates.es#usuarios-posiblemente-duplicados";
 #elif L==5
 	"USERS.Duplicates#possibly-duplicate-users";
 #elif L==6
@@ -1517,7 +1517,7 @@ const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 	"USERS.Duplicates#possibly-duplicate-users";
 #endif
 
-const char *Hlp_USERS_Duplicates_possibly_similar_users =
+const char *Hlp_USERS_Duplicates_similar_users =
 #if   L==1
 	"USERS.Duplicates#similar-users";
 #elif L==2
@@ -1525,7 +1525,7 @@ const char *Hlp_USERS_Duplicates_possibly_similar_users =
 #elif L==3
 	"USERS.Duplicates#similar-users";
 #elif L==4
-	"USERS.Duplicates#similar-users";
+	"USERS.Duplicates.es#usuarios-similares";
 #elif L==5
 	"USERS.Duplicates#similar-users";
 #elif L==6

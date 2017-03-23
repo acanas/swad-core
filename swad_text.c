@@ -26236,11 +26236,11 @@ const char *Txt_Not_duplicated =
 #elif L==3
 	"Not duplicated";
 #elif L==4
-	"No es duplicado";
+	"No es duplicado/a";
 #elif L==5
 	"Pas dupliqu&eacute;";
 #elif L==6
-	"No es duplicado";		// Okoteve traducción
+	"No es duplicado/a";		// Okoteve traducción
 #elif L==7
 	"Non duplicato";
 #elif L==8

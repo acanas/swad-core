@@ -248,7 +248,7 @@ void Dup_GetUsrCodAndListSimilarUsrs (void)
 
 static void Dup_ListSimilarUsrs (void)
   {
-   extern const char *Hlp_USERS_Duplicates_possibly_similar_users;
+   extern const char *Hlp_USERS_Duplicates_similar_users;
    extern const char *Txt_Similar_users;
    struct UsrData UsrDat;
    char Query[512];
@@ -259,7 +259,7 @@ static void Dup_ListSimilarUsrs (void)
 
    /***** Start frame with list of possible duplicate users *****/
    Lay_StartRoundFrame (NULL,Txt_Similar_users,
-                        NULL,Hlp_USERS_Duplicates_possibly_similar_users);
+                        NULL,Hlp_USERS_Duplicates_similar_users);
 
    /***** Build query *****/
    if (Gbl.Usrs.Other.UsrDat.Surname1[0] &&
