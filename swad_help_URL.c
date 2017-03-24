@@ -178,48 +178,6 @@ const char *Hlp_SYSTEM_Studies_edit =
 	"SYSTEM.Studies#edit";
 #endif
 
-const char *Hlp_SYSTEM_Domains =
-#if   L==1
-	"SYSTEM.Domains";
-#elif L==2
-	"SYSTEM.Domains";
-#elif L==3
-	"SYSTEM.Domains";
-#elif L==4
-	"SYSTEM.Domains";
-#elif L==5
-	"SYSTEM.Domains";
-#elif L==6
-	"SYSTEM.Domains";
-#elif L==7
-	"SYSTEM.Domains";
-#elif L==8
-	"SYSTEM.Domains";
-#elif L==9
-	"SYSTEM.Domains";
-#endif
-
-const char *Hlp_SYSTEM_Domains_edit =
-#if   L==1
-	"SYSTEM.Domains#edit";
-#elif L==2
-	"SYSTEM.Domains#edit";
-#elif L==3
-	"SYSTEM.Domains#edit";
-#elif L==4
-	"SYSTEM.Domains#edit";
-#elif L==5
-	"SYSTEM.Domains#edit";
-#elif L==6
-	"SYSTEM.Domains#edit";
-#elif L==7
-	"SYSTEM.Domains#edit";
-#elif L==8
-	"SYSTEM.Domains#edit";
-#elif L==9
-	"SYSTEM.Domains#edit";
-#endif
-
 const char *Hlp_SYSTEM_Banners =
 #if   L==1
 	"SYSTEM.Banners";
@@ -1813,6 +1771,48 @@ const char *Hlp_MESSAGES_Notifications =
 	"MESSAGES.Notifications";
 #elif L==9
 	"MESSAGES.Notifications";
+#endif
+
+const char *Hlp_MESSAGES_Domains =
+#if   L==1
+	"MESSAGES.Domains";
+#elif L==2
+	"MESSAGES.Domains";
+#elif L==3
+	"MESSAGES.Domains";
+#elif L==4
+	"MESSAGES.Domains";
+#elif L==5
+	"MESSAGES.Domains";
+#elif L==6
+	"MESSAGES.Domains";
+#elif L==7
+	"MESSAGES.Domains";
+#elif L==8
+	"MESSAGES.Domains";
+#elif L==9
+	"MESSAGES.Domains";
+#endif
+
+const char *Hlp_MESSAGES_Domains_edit =
+#if   L==1
+	"MESSAGES.Domains#edit";
+#elif L==2
+	"MESSAGES.Domains#edit";
+#elif L==3
+	"MESSAGES.Domains#edit";
+#elif L==4
+	"MESSAGES.Domains#edit";
+#elif L==5
+	"MESSAGES.Domains#edit";
+#elif L==6
+	"MESSAGES.Domains#edit";
+#elif L==7
+	"MESSAGES.Domains#edit";
+#elif L==8
+	"MESSAGES.Domains#edit";
+#elif L==9
+	"MESSAGES.Domains#edit";
 #endif
 
 const char *Hlp_MESSAGES_Announcements =

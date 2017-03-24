@@ -90,12 +90,12 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeePen,		//  2
 		ActReqRemOldCrs,	//  3
 		ActSeeDegTyp,		//  4
-		ActSeeMai,		//  5
-		ActSeeBan,		//  6
-		ActSeeLnk,		//  7
-		ActLstPlg,		//  8
-		ActSetUp,		//  9
-		ActSeeCalSys,		// 10
+		ActSeeBan,		//  5
+		ActSeeLnk,		//  6
+		ActLstPlg,		//  7
+		ActSetUp,		//  8
+		ActSeeCalSys,		//  9
+		0,			// 10
 		0,			// 11
 		},
 		// TabCty *******************

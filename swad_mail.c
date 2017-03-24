@@ -93,7 +93,7 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
 
 void Mai_SeeMailDomains (void)
   {
-   extern const char *Hlp_SYSTEM_Domains;
+   extern const char *Hlp_MESSAGES_Domains;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    extern const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3];
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
@@ -110,7 +110,7 @@ void Mai_SeeMailDomains (void)
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
                              Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Mai_PutIconToEditMailDomains :
                                                                      NULL,
-                             Hlp_SYSTEM_Domains,2);
+                             Hlp_MESSAGES_Domains,2);
    fprintf (Gbl.F.Out,"<tr>");
    for (Order = Mai_ORDER_BY_DOMAIN;
 	Order <= Mai_ORDER_BY_USERS;
@@ -375,6 +375,7 @@ void Mai_WriteWarningEmailNotifications (void)
    extern const char *Txt_You_can_only_receive_email_notifications_if_;
    extern const char *Txt_TABS_TXT[Tab_NUM_TABS];
    extern const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB];
+   extern const char *Txt_Domains;
    Act_Action_t SuperActionMyAccount   = Act_Actions[ActFrmMyAcc].SuperAction;
    Act_Action_t SuperActionMailDomains = Act_Actions[ActSeeMai  ].SuperAction;
    Tab_Tab_t TabMyAccount   = Act_Actions[SuperActionMyAccount  ].Tab;
@@ -384,7 +385,8 @@ void Mai_WriteWarningEmailNotifications (void)
 	    Txt_TABS_TXT[TabMyAccount  ],
 	    Txt_MENU_TITLE[TabMyAccount  ][Act_Actions[SuperActionMyAccount  ].IndexInMenu],
             Txt_TABS_TXT[TabMailDomains],
-	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu]);
+	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu],
+	    Txt_Domains);
    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
   }
 
@@ -450,13 +452,13 @@ void Mai_FreeListMailDomains (void)
 
 static void Mai_ListMailDomainsForEdition (void)
   {
-   extern const char *Hlp_SYSTEM_Domains_edit;
+   extern const char *Hlp_MESSAGES_Domains_edit;
    extern const char *Txt_Email_domains_allowed_for_notifications;
    unsigned NumMai;
    struct Mail *Mai;
 
    Lay_StartRoundFrameTable (NULL,Txt_Email_domains_allowed_for_notifications,
-                             NULL,Hlp_SYSTEM_Domains_edit,2);
+                             NULL,Hlp_MESSAGES_Domains_edit,2);
 
    /***** Table head *****/
    Mai_PutHeadMailDomains ();
@@ -710,7 +712,7 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
 
 static void Mai_PutFormToCreateMailDomain (void)
   {
-   extern const char *Hlp_SYSTEM_Domains_edit;
+   extern const char *Hlp_MESSAGES_Domains_edit;
    extern const char *Txt_New_email_domain;
    extern const char *Txt_EMAIL_DOMAIN_ORDER[3];
    extern const char *Txt_Create_email_domain;
@@ -723,7 +725,7 @@ static void Mai_PutFormToCreateMailDomain (void)
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_email_domain,
-                             NULL,Hlp_SYSTEM_Domains_edit,2);
+                             NULL,Hlp_MESSAGES_Domains_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

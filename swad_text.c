@@ -18157,28 +18157,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudos"
 #endif
 	,
-	//  5: ActSeeMai
-#if   L==1
-	"Dominis"
-#elif L==2
-	"Dom&auml;nen"
-#elif L==3
-	"Domains"
-#elif L==4
-	"Dominios"
-#elif L==5
-	"Domaines"
-#elif L==6
-	"Dominios"	// Okoteve traducción
-#elif L==7
-	"Campi"
-#elif L==8
-	"Domen"
-#elif L==9
-	"Dom&iacute;nios"
-#endif
-	,
-	//  6: ActSeeBan
+	//  5: ActSeeBan
 #if   L==1
 	"Banners"
 #elif L==2
@@ -18199,7 +18178,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Banners"
 #endif
 	,
-	//  7: ActSeeLnk
+	//  6: ActSeeLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18220,7 +18199,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  8: ActLstPlg
+	//  7: ActLstPlg
 #if   L==1
 	"Complements"
 #elif L==2
@@ -18241,7 +18220,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  9: ActSetUp
+	//  8: ActSetUp
 #if   L==1
 	"Instal lar"
 #elif L==2
@@ -18262,7 +18241,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	// 10: ActSeeCalSys
+	//  9: ActSeeCalSys
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18283,6 +18262,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	// 10
 	NULL,	// 11
 	},
 	{
@@ -20170,32 +20150,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Tipos de titula&ccedil;&atilde;o"
 #endif
 	,
-	//  5: ActSeeMai
-#if   L==1
-	"Llista de dominis de correu permesos"
-	" per a l'enviament de notificacions"
-#elif L==2
-	"E-Mail-Dom&auml;nen f&uuml;r Benachrichtigungen"
-#elif L==3
-	"Email domains for notifications"
-#elif L==4
-	"Lista de dominios de correo permitidos"
-	" para el env&iacute;o de notificaciones"
-#elif L==5
-	"Domaines de messagerie pour notifications"
-#elif L==6
-	"Lista de dominios de correo permitidos"
-	" para el env&iacute;o de notificaciones"// Okoteve traducción
-#elif L==7
-	"Campi mail per invio di notifiche"
-#elif L==8
-	"Domen Mail powiadomien"
-#elif L==9
-	"Dom&iacute;nios de email"
-	  " para notifica&ccedil;&otilde;es"
-#endif
-	,
-	//  6: ActSeeBan
+	//  5: ActSeeBan
 #if   L==1
 	"Llista de banners publicitaris"
 #elif L==2
@@ -20216,7 +20171,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de banners publicit&aacute;rios"
 #endif
 	,
-	//  7: ActSeeLnk
+	//  6: ActSeeLnk
 #if   L==1
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2
@@ -20237,7 +20192,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	//  8: ActLstPlg
+	//  7: ActLstPlg
 #if   L==1
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2
@@ -20258,7 +20213,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  9: ActSetUp
+	//  8: ActSetUp
 #if   L==1
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2
@@ -20279,7 +20234,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	// 10: ActSeeCalSys
+	//  9: ActSeeCalSys
 #if   L==1
 	"Calendari acad&egrave;mic"
 #elif L==2
@@ -20300,6 +20255,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	// 10
 	NULL,	// 11
 	},
 	{
@@ -53425,43 +53381,43 @@ const char *Txt_You_can_only_perform_X_further_actions_ =	// Warning: it is very
 	" if you don't send your photo.";			// Necessita de tradução
 #endif
 
-const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include four %s in the following sentences
+const char *Txt_You_can_only_receive_email_notifications_if_ =	// Warning: it is very important to include five %s in the following sentences
 #if   L==1
 	"Nom&eacute;s podr&agrave; rebre notificacions per correu"
 	" si la seva adre&ccedil;a de correu est&agrave; confirmada (%s &gt; %s)"
-	" i acaba en un dels dominis permesos (%s &gt; %s).";
+	" i acaba en un dels dominis permesos (%s &gt; %s &gt; %s).";
 #elif L==2
 	"Sie k&ouml;nnen nur E-Mail-Anmeldungen zu erhalten,"
 	" wenn Sie Ihre E-Mail-Adresse best&uuml;tigt wird (%s &gt; %s),"
-	" und endet in einer der erlaubt Domains (%s &gt; %s).";
+	" und endet in einer der erlaubt Domains (%s &gt; %s &gt; %s).";
 #elif L==3
 	"You can only receive email notifications"
 	" if your email address is confirmed (%s &gt; %s)"
-	" and ends in one of the allowed domains (%s &gt; %s).";
+	" and ends in one of the allowed domains (%s &gt; %s &gt; %s).";
 #elif L==4
 	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
-	" y termina en uno de los dominios permitidos (%s &gt; %s).";
+	" y termina en uno de los dominios permitidos (%s &gt; %s &gt; %s).";
 #elif L==5
 	"Vous ne pouvez recevoir des notifications par email"
 	" si votre adresse email est confirm&eacute; (%s &gt; %s)"
-	" et se termine dans l'un des domaines autoris&eacute;s (%s &gt; %s).";
+	" et se termine dans l'un des domaines autoris&eacute;s (%s &gt; %s &gt; %s).";
 #elif L==6
 	"Solo podr&aacute; recibir notificaciones por correo"
 	" si su direcci&oacute;n de correo est&aacute; confirmada (%s &gt; %s)"
-	" y termina en uno de los dominios permitidos (%s &gt; %s).";				// Okoteve traducción
+	" y termina en uno de los dominios permitidos (%s &gt; %s &gt; %s).";				// Okoteve traducción
 #elif L==7
 	"Puoi solo ricevere email di notifica"
 	" se la tua email &egrave; confermata (%s &gt; %s)"
-	" e si termina in uno dei domini consentiti (%s &gt; %s).";
+	" e si termina in uno dei domini consentiti (%s &gt; %s &gt; %s).";
 #elif L==8
 	"Mo&zdot;na otrzyma&cacute; tylko informacj&eogon;,"
 	" czy adres email jest potwierdzone (%s &gt; %s),"
-	" a ko&nacute;czy si&eogon; w jednej z dozwolone domeny (%s &gt; %s).";
+	" a ko&nacute;czy si&eogon; w jednej z dozwolone domeny (%s &gt; %s &gt; %s).";
 #elif L==9
 	"Voc&ecirc; s&oacute; pode receber notifica&ccedil;&otilde;es de email"
 	" se o seu endere&ccedil;o de email est&aacute; confirmado (%s &gt; %s)"
-	" e termina em um dos dom&iacute;nios permitidos (%s &gt; %s).";
+	" e termina em um dos dom&iacute;nios permitidos (%s &gt; %s &gt; %s).";
 #endif
 
 const char *Txt_You_can_register_voluntarily_in_one_group_of_type_X =	// Warning: it is very important to include %s in the following sentences

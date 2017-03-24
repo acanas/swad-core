@@ -100,7 +100,6 @@ System:
 	 12. ActSeePen			List pending institutions, centres, degrees and courses
 	 13. ActReqRemOldCrs		Request the total removal of old courses
 	 14. ActSeeDegTyp		List types of degrees
-	 15. ActSeeMai			See mail domains
 	 16. ActSeeBan			See banners
 	 17. ActSeeLnk			See institutional links
 	 18. ActLstPlg			List plugins
@@ -120,11 +119,6 @@ System:
 	 30. ActRenDegTyp		Request renaming of a type of degree
 
 	 31. ActRemOldCrs		Remove completely old courses
-	 32. ActEdiMai			Edit mail domains
-	 33. ActNewMai			Request the creation of a mail domain
-	 34. ActRemMai			Request the removal of a mail domain
-	 35. ActRenMaiSho		Request the change of a mail domain
-	 36. ActRenMaiFul		Request the change of the info of a mail domain
 
 	 37. ActEdiBan			Edit banners
 	 38. ActNewBan			Request the creation of a banner
@@ -1312,8 +1306,16 @@ Messages:
        1112. ActRevNot			Reveal a notice that was hidden
        1113. ActReqRemNot		Request removal of a notice
        1114. ActRemNot			Remove a notice
+
        1115. ActSeeNewNtf		Show my recent notifications (link in top heading)
        1116. ActMrkNtfSee		Mark all my notifications as seen
+	 15. ActSeeMai			See mail domains
+	 32. ActEdiMai			Edit mail domains
+	 33. ActNewMai			Request the creation of a mail domain
+	 34. ActRemMai			Request the removal of a mail domain
+	 35. ActRenMaiSho		Request the change of a mail domain
+	 36. ActRenMaiFul		Request the change of the info of a mail domain
+
        1117. ActRcvMsgUsr		Sent/Receive a message of a user
        1118. ActReqDelAllSntMsg		Request the removal of todos the messages sent to other users
        1119. ActReqDelAllRcvMsg		Request the removal of todos the messages received from other users
@@ -1518,12 +1520,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"hierarchy64x64.png"	},
    /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
    /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInSysTab	,"grouptypes64x64.gif"	},
-   /* ActSeeMai		*/{ 855, 5,TabSys,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_SeeMailDomains		,"email64x64.gif"	},
-   /* ActSeeBan		*/{1137, 6,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
-   /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
-   /* ActLstPlg		*/{ 777, 8,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
-   /* ActSetUp		*/{ 840, 9,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
-   /* ActSeeCalSys	*/{1622,10,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"date64x64.gif"	},
+   /* ActSeeBan		*/{1137, 5,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
+   /* ActSeeLnk		*/{ 748, 6,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
+   /* ActLstPlg		*/{ 777, 7,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
+   /* ActSetUp		*/{ 840, 8,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
+   /* ActSeeCalSys	*/{1622, 9,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"date64x64.gif"	},
 
    // Actions not in menu:
    /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
@@ -1540,12 +1541,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RenameDegreeType		,NULL},
 
    /* ActRemOldCrs	*/{1110,-1,TabUnk,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveOldCrss		,NULL},
-
-   /* ActEdiMai		*/{ 856,-1,TabUnk,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_EditMailDomains		,NULL},
-   /* ActNewMai		*/{ 857,-1,TabUnk,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RecFormNewMailDomain	,NULL},
-   /* ActRemMai		*/{ 860,-1,TabUnk,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveMailDomain		,NULL},
-   /* ActRenMaiSho	*/{ 858,-1,TabUnk,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainShort	,NULL},
-   /* ActRenMaiFul	*/{ 859,-1,TabUnk,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainFull	,NULL},
 
    /* ActEdiBan		*/{1138,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_EditBanners		,NULL},
    /* ActNewBan		*/{1139,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RecFormNewBanner		,NULL},
@@ -2804,6 +2799,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeNewNtf	*/{ 991,-1,TabUnk,ActSeeNtf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_ShowMyNotifications	,NULL},
    /* ActMrkNtfSee	*/{1146,-1,TabUnk,ActSeeNtf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ntf_MarkAllNotifAsSeen		,NULL},
+
+   /* ActSeeMai		*/{ 855,-1,TabUnk,ActSeeNtf		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_SeeMailDomains		,NULL},
+   /* ActEdiMai		*/{ 856,-1,TabUnk,ActSeeNtf		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_EditMailDomains		,NULL},
+   /* ActNewMai		*/{ 857,-1,TabUnk,ActSeeNtf		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RecFormNewMailDomain	,NULL},
+   /* ActRemMai		*/{ 860,-1,TabUnk,ActSeeNtf		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RemoveMailDomain		,NULL},
+   /* ActRenMaiSho	*/{ 858,-1,TabUnk,ActSeeNtf		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainShort	,NULL},
+   /* ActRenMaiFul	*/{ 859,-1,TabUnk,ActSeeNtf		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_RenameMailDomainFull	,NULL},
 
    /* ActRcvMsgUsr	*/{  27,-1,TabUnk,ActReqMsgUsr		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Msg_RecMsgFromUsr		,NULL},
    /* ActReqDelAllSntMsg*/{ 604,-1,TabUnk,ActSeeSntMsg		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_ReqDelAllSntMsgs		,NULL},
