@@ -294,6 +294,7 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.Degs.DegTypes.Num = 0;
    Gbl.Degs.DegTypes.Lst = NULL;
+   Gbl.Degs.DegTypes.SelectedOrder = DT_ORDER_DEFAULT;
 
    Gbl.Degs.EditingDegTyp.DegTypCod     = -1L;
    Gbl.Degs.EditingDegTyp.DegTypName[0] = '\0';

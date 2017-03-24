@@ -251,7 +251,7 @@ void Ban_GetDataOfBannerByCod (struct Banner *Ban)
      {
       /***** Get data of a banner from database *****/
       sprintf (Query,"SELECT Hidden,ShortName,FullName,Img,WWW"
-	             " FROM banners WHERE BanCod='%ld'",
+	             " FROM banners WHERE BanCod=%ld",
                Ban->BanCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a banner");
 
@@ -448,7 +448,7 @@ void Ban_RemoveBanner (void)
    Ban_GetDataOfBannerByCod (&Ban);
 
    /***** Remove banner *****/
-   sprintf (Query,"DELETE FROM banners WHERE BanCod='%ld'",Ban.BanCod);
+   sprintf (Query,"DELETE FROM banners WHERE BanCod=%ld",Ban.BanCod);
    DB_QueryDELETE (Query,"can not remove a banner");
 
    /***** Write message to show the change made *****/
@@ -502,7 +502,7 @@ static void Ban_ShowOrHideBanner (bool Hide)
    if (Ban.Hidden != Hide)
      {
       sprintf (Query,"UPDATE banners SET Hidden='%c'"
-		     " WHERE BanCod='%ld'",
+		     " WHERE BanCod=%ld",
 	       Hide ? 'Y' :
 		      'N',
 	       Ban.BanCod);
@@ -636,7 +636,7 @@ static bool Ban_CheckIfBannerNameExists (const char *FieldName,const char *Name,
    char Query[128 + Ban_MAX_BYTES_FULL_NAME];
 
    /***** Get number of banners with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM banners WHERE %s='%s' AND BanCod<>'%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM banners WHERE %s='%s' AND BanCod<>%ld",
             FieldName,Name,BanCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a banner already existed") != 0);
   }
@@ -650,7 +650,7 @@ static void Ban_UpdateBanNameDB (long BanCod,const char *FieldName,const char *N
    char Query[128 + Ban_MAX_BYTES_FULL_NAME];
 
    /***** Update banner changing old name by new name *****/
-   sprintf (Query,"UPDATE banners SET %s='%s' WHERE BanCod='%ld'",
+   sprintf (Query,"UPDATE banners SET %s='%s' WHERE BanCod=%ld",
 	    FieldName,NewBanName,BanCod);
    DB_QueryUPDATE (Query,"can not update the name of a banner");
   }
@@ -681,7 +681,7 @@ void Ban_ChangeBannerImg (void)
    if (NewImg[0])
      {
       /* Update the table changing old image by new image */
-      sprintf (Query,"UPDATE banners SET Img='%s' WHERE BanCod='%ld'",
+      sprintf (Query,"UPDATE banners SET Img='%s' WHERE BanCod=%ld",
                NewImg,Ban->BanCod);
       DB_QueryUPDATE (Query,"can not update the image of a banner");
 
@@ -726,7 +726,7 @@ void Ban_ChangeBannerWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE banners SET WWW='%s' WHERE BanCod='%ld'",
+      sprintf (Query,"UPDATE banners SET WWW='%s' WHERE BanCod=%ld",
                NewWWW,Ban->BanCod);
       DB_QueryUPDATE (Query,"can not update the web of a banner");
 

@@ -107,7 +107,7 @@ void MFU_GetMFUActions (struct MFU_ListMFUActions *ListMFUActions,unsigned MaxAc
 
    /***** Get most frequently used actions *****/
    sprintf (Query,"SELECT ActCod FROM actions_MFU"
-                  " WHERE UsrCod='%ld' ORDER BY Score DESC,LastClick DESC",
+                  " WHERE UsrCod=%ld ORDER BY Score DESC,LastClick DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get most frequently used actions");
 
@@ -153,7 +153,7 @@ Act_Action_t MFU_GetMyLastActionInCurrentTab (void)
      {
       /***** Get my most frequently used actions *****/
       sprintf (Query,"SELECT ActCod FROM actions_MFU"
-                     " WHERE UsrCod='%ld'"
+                     " WHERE UsrCod=%ld"
                      " ORDER BY LastClick DESC,Score DESC",
                Gbl.Usrs.Me.UsrDat.UsrCod);
       NumActions = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get most frequently used actions");
@@ -356,7 +356,7 @@ void MFU_UpdateMFUActions (void)
 
    /***** Get current score *****/
    sprintf (Query,"SELECT Score FROM actions_MFU"
-                  " WHERE UsrCod='%ld' AND ActCod='%ld'",
+                  " WHERE UsrCod=%ld AND ActCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get score for current action"))
@@ -378,7 +378,7 @@ void MFU_UpdateMFUActions (void)
    sprintf (Query,"REPLACE INTO actions_MFU"
                   " (UsrCod,ActCod,Score,LastClick)"
                   " VALUES"
-                  " ('%ld','%ld','%f',NOW())",
+                  " (%ld,%ld,'%f',NOW())",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
             Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod,
             Score);
@@ -386,7 +386,7 @@ void MFU_UpdateMFUActions (void)
 
    /***** Update score for other actions *****/
    sprintf (Query,"UPDATE actions_MFU SET Score=GREATEST(Score*'%f','%f')"
-                  " WHERE UsrCod='%ld' AND ActCod<>'%ld'",
+                  " WHERE UsrCod=%ld AND ActCod<>%ld",
             MFU_DECREASE_FACTOR,MFU_MIN_SCORE,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Act_Actions[Act_Actions[Gbl.Action.Act].SuperAction].ActCod);

@@ -211,7 +211,7 @@ void Rec_GetListRecordFieldsInCurrentCrs (void)
    /***** Get fields of cards of a course from database *****/
    sprintf (Query,"SELECT FieldCod,FieldName,NumLines,Visibility"
 	          " FROM crs_record_fields"
-                  " WHERE CrsCod='%ld' ORDER BY FieldName",
+                  " WHERE CrsCod=%ld ORDER BY FieldName",
             Gbl.CurrentCrs.Crs.CrsCod);
    Gbl.CurrentCrs.Records.LstFields.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get fields of cards of a course");
 
@@ -538,7 +538,7 @@ unsigned long Rec_GetAllFieldsInCurrCrs (MYSQL_RES **mysql_res)
    /***** Get fields of cards of current course from database *****/
    sprintf (Query,"SELECT FieldCod,FieldName,Visibility"
 	          " FROM crs_record_fields"
-                  " WHERE CrsCod='%ld' ORDER BY FieldName",
+                  " WHERE CrsCod=%ld ORDER BY FieldName",
             Gbl.CurrentCrs.Crs.CrsCod);
    return DB_QuerySELECT (Query,mysql_res,
                           "can not get fields of cards of a course");
@@ -557,7 +557,7 @@ void Rec_CreateRecordField (void)
    sprintf (Query,"INSERT INTO crs_record_fields"
 	          " (CrsCod,FieldName,NumLines,Visibility)"
 	          " VALUES"
-	          " ('%ld','%s','%u','%u')",
+	          " (%ld,'%s',%u,%u)",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.CurrentCrs.Records.Field.Name,
             Gbl.CurrentCrs.Records.Field.NumLines,
@@ -608,7 +608,7 @@ unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
    char Query[128];
 
    /***** Get number of cards with a given field in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod=%ld",
             FieldCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of cards with a given field not empty in a course");
   }
@@ -669,12 +669,12 @@ void Rec_RemoveFieldFromDB (void)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Remove field from all records *****/
-   sprintf (Query,"DELETE FROM crs_records WHERE FieldCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_records WHERE FieldCod=%ld",
             Gbl.CurrentCrs.Records.Field.FieldCod);
    DB_QueryDELETE (Query,"can not remove field from all students' records");
 
    /***** Remove the field *****/
-   sprintf (Query,"DELETE FROM crs_record_fields WHERE FieldCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_record_fields WHERE FieldCod=%ld",
             Gbl.CurrentCrs.Records.Field.FieldCod);
    DB_QueryDELETE (Query,"can not remove field of record");
 
@@ -702,7 +702,7 @@ static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD 
 
    /***** Get a field of a record in a course from database *****/
    sprintf (Query,"SELECT FieldName,NumLines,Visibility FROM crs_record_fields"
-                  " WHERE CrsCod='%ld' AND FieldCod='%ld'",
+                  " WHERE CrsCod=%ld AND FieldCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,FieldCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get a field of a record in a course");
 
@@ -797,7 +797,7 @@ void Rec_RenameField (void)
            {
             /* Update the table of fields changing then old name by the new one */
             sprintf (Query,"UPDATE crs_record_fields SET FieldName='%s'"
-        	           " WHERE FieldCod='%ld'",
+        	           " WHERE FieldCod=%ld",
                      NewFieldName,Gbl.CurrentCrs.Records.Field.FieldCod);
             DB_QueryUPDATE (Query,"can not update name of field of record");
 
@@ -858,8 +858,8 @@ void Rec_ChangeLinesField (void)
    else
      {
       /***** Update of the table of fields changing the old maximum of students by the new one *****/
-      sprintf (Query,"UPDATE crs_record_fields SET NumLines='%u'"
-	             " WHERE FieldCod='%ld'",
+      sprintf (Query,"UPDATE crs_record_fields SET NumLines=%u"
+	             " WHERE FieldCod=%ld",
                NewNumLines,Gbl.CurrentCrs.Records.Field.FieldCod);
       DB_QueryUPDATE (Query,"can not update the number of lines of a field of record");
 
@@ -911,8 +911,8 @@ void Rec_ChangeVisibilityField (void)
    else
      {
       /***** Update of the table of fields changing the old visibility by the new *****/
-      sprintf (Query,"UPDATE crs_record_fields SET Visibility='%u'"
-	             " WHERE FieldCod='%ld'",
+      sprintf (Query,"UPDATE crs_record_fields SET Visibility=%u"
+	             " WHERE FieldCod=%ld",
                (unsigned) NewVisibility,Gbl.CurrentCrs.Records.Field.FieldCod);
       DB_QueryUPDATE (Query,"can not update the visibility of a field of record");
 
@@ -1773,7 +1773,7 @@ unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **m
 
    /***** Get the text of a field of a record from database *****/
    sprintf (Query,"SELECT Txt FROM crs_records"
-	          " WHERE FieldCod='%ld' AND UsrCod='%ld'",
+	          " WHERE FieldCod=%ld AND UsrCod=%ld",
             FieldCod,UsrCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get the text of a field of a record.");
   }
@@ -1825,7 +1825,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
               {
                /***** Update text of the field of record course *****/
                sprintf (Query,"UPDATE crs_records SET Txt='%s'"
-        	              " WHERE UsrCod='%ld' AND FieldCod='%ld'",
+        	              " WHERE UsrCod=%ld AND FieldCod=%ld",
                         Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text,
                         UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
                DB_QueryUPDATE (Query,"can not update field of record");
@@ -1834,7 +1834,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
               {
                /***** Remove text of the field of record course *****/
                sprintf (Query,"DELETE FROM crs_records"
-        	              " WHERE UsrCod='%ld' AND FieldCod='%ld'",
+        	              " WHERE UsrCod=%ld AND FieldCod=%ld",
                         UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
                DB_QueryDELETE (Query,"can not remove field of record");
               }
@@ -1845,7 +1845,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
 	    sprintf (Query,"INSERT INTO crs_records"
 		           " (FieldCod,UsrCod,Txt)"
 		           " VALUES"
-		           " ('%ld','%ld','%s')",
+		           " (%ld,%ld,'%s')",
 		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
 		     UsrCod,
 		     Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text);
@@ -1865,8 +1865,8 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs,Cns_QuietOrV
 
    /***** Remove text of the field of record course *****/
    sprintf (Query,"DELETE FROM crs_records"
-	          " WHERE UsrCod='%ld' AND FieldCod IN"
-                  " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod='%ld')",
+	          " WHERE UsrCod=%ld AND FieldCod IN"
+                  " (SELECT FieldCod FROM crs_record_fields WHERE CrsCod=%ld)",
             UsrCod,Crs->CrsCod);
    DB_QueryDELETE (Query,"can not remove user's record in a course");
 
@@ -1889,7 +1889,7 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbo
    char Query[128];
 
    /***** Remove text of the field of record course *****/
-   sprintf (Query,"DELETE FROM crs_records WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM crs_records WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove user's records in all courses");
 
    /***** Write mensaje *****/
@@ -4100,7 +4100,7 @@ void Rec_UpdateMyOffice (void)
    Par_GetParToText ("Office",Gbl.Usrs.Me.UsrDat.Tch.Office,Usr_MAX_BYTES_ADDRESS);
 
    /***** Update office *****/
-   sprintf (Query,"UPDATE usr_data SET Office='%s' WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET Office='%s' WHERE UsrCod=%ld",
 	    Gbl.Usrs.Me.UsrDat.Tch.Office,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update office");
@@ -4121,7 +4121,7 @@ void Rec_UpdateMyOfficePhone (void)
    Par_GetParToText ("OfficePhone",Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,Usr_MAX_BYTES_PHONE);
 
    /***** Update office phone *****/
-   sprintf (Query,"UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET OfficePhone='%s' WHERE UsrCod=%ld",
 	    Gbl.Usrs.Me.UsrDat.Tch.OfficePhone,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update office phone");

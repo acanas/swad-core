@@ -205,8 +205,8 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
      }
 
    /***** Update the role of a user in a course *****/
-   sprintf (Query,"UPDATE crs_usr SET Role='%u'"
-		  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"UPDATE crs_usr SET Role=%u"
+		  " WHERE CrsCod=%ld AND UsrCod=%ld",
 	    (unsigned) NewRole,Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
    DB_QueryUPDATE (Query,"can not modify user's role in course");
 
@@ -249,10 +249,10 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 		  "NumAccTst,LastAccTst,NumQstsLastTst,"
 		  "UsrListType,ColsClassPhoto,ListWithPhotos)"
 		  " VALUES"
-		  " ('%ld','%ld','%u','%c',"
-		  "'-1','-1','-1',"
-		  "'0',FROM_UNIXTIME('%ld'),'0',"
-		  "'%s','%u','%c')",
+		  " (%ld,%ld,%u,'%c',"
+		  "-1,-1,-1,"
+		  "0,FROM_UNIXTIME(%ld),0,"
+		  "'%s',%u,'%c')",
 	    Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod,(unsigned) NewRole,
 	    KeepOrSetAccepted == Enr_SET_ACCEPTED_TO_TRUE ? 'Y' :
 		                                            'N',
@@ -404,7 +404,7 @@ void Enr_GetNotifEnrollment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get user's role in course from database *****/
    sprintf (Query,"SELECT Role"
                   " FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             CrsCod,UsrCod);
 
    if (!mysql_query (&Gbl.mysql,Query))
@@ -463,14 +463,14 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek='%u',"
+		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek=%u,"
 		  "PhotoVisibility='%s',ProfileVisibility='%s',"
-		  "CtyCod='%ld',"
+		  "CtyCod=%ld,"
 		  "LocalAddress='%s',LocalPhone='%s',"
 		  "FamilyAddress='%s',FamilyPhone='%s',"
 		  "OriginPlace='%s',Birthday=%s,"
 		  "Comments='%s'"
-		  " WHERE UsrCod='%ld'",
+		  " WHERE UsrCod=%ld",
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	    Usr_StringsSexDB[UsrDat->Sex],
@@ -514,8 +514,8 @@ void Enr_UpdateInstitutionCentreDepartment (void)
    char Query[256];
 
    sprintf (Query,"UPDATE usr_data"
-	          " SET InsCtyCod='%ld',InsCod='%ld',CtrCod='%ld',DptCod='%ld'"
-	          " WHERE UsrCod='%ld'",
+	          " SET InsCtyCod=%ld,InsCod=%ld,CtrCod=%ld,DptCod=%ld"
+	          " WHERE UsrCod=%ld",
 	    Gbl.Usrs.Me.UsrDat.InsCtyCod,
 	    Gbl.Usrs.Me.UsrDat.InsCod,
             Gbl.Usrs.Me.UsrDat.Tch.CtrCod,
@@ -1896,7 +1896,7 @@ void Enr_SignUpInCrs (void)
 
       /***** Try to get and old request of the same user in the same course from database *****/
       sprintf (Query,"SELECT ReqCod FROM crs_usr_requests"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,
                Gbl.Usrs.Me.UsrDat.UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get enrollment request"))
@@ -1911,8 +1911,8 @@ void Enr_SignUpInCrs (void)
       /***** Request user in current course in database *****/
       if (ReqCod > 0)        // Old request exists in database
         {
-         sprintf (Query,"UPDATE crs_usr_requests SET Role='%u',RequestTime=NOW()"
-                        " WHERE ReqCod='%ld' AND CrsCod='%ld' AND UsrCod='%ld'",
+         sprintf (Query,"UPDATE crs_usr_requests SET Role=%u,RequestTime=NOW()"
+                        " WHERE ReqCod=%ld AND CrsCod=%ld AND UsrCod=%ld",
                   (unsigned) RoleFromForm,
                   ReqCod,
                   Gbl.CurrentCrs.Crs.CrsCod,
@@ -1924,7 +1924,7 @@ void Enr_SignUpInCrs (void)
          sprintf (Query,"INSERT INTO crs_usr_requests"
                         " (CrsCod,UsrCod,Role,RequestTime)"
                         " VALUES"
-                        " ('%ld','%ld','%u',NOW())",
+                        " (%ld,%ld,%u,NOW())",
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) RoleFromForm);
@@ -1969,7 +1969,7 @@ void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    /***** Get user and requested role from database *****/
    sprintf (Query,"SELECT UsrCod,Role"
                   " FROM crs_usr_requests"
-                  " WHERE ReqCod='%ld'",
+                  " WHERE ReqCod=%ld",
             ReqCod);
 
    if (!mysql_query (&Gbl.mysql,Query))
@@ -2250,8 +2250,8 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM crs_usr,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod='%ld'"
-                              " AND crs_usr.Role='%u'"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2267,7 +2267,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2283,7 +2283,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
@@ -2300,7 +2300,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
@@ -2338,13 +2338,13 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM crs_usr,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod='%ld'"
-                              " AND crs_usr.Role='%u'"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.CrsCod=courses.CrsCod"
                               " AND courses.DegCod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
                               " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod='%ld'"
+                              " AND institutions.CtyCod=%ld"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2361,11 +2361,11 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
                               " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod='%ld'"
+                              " AND institutions.CtyCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2382,10 +2382,10 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=centres.CtrCod"
                               " AND centres.InsCod=institutions.InsCod"
-                              " AND institutions.CtyCod='%ld'"
+                              " AND institutions.CtyCod=%ld"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
@@ -2403,9 +2403,9 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=institutions.InsCod"
-                              " AND institutions.CtyCod='%ld'"
+                              " AND institutions.CtyCod=%ld"
                               " AND institutions.InsCod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
@@ -2424,7 +2424,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM institutions,centres,degrees,courses,crs_usr_requests"
-                              " WHERE institutions.CtyCod='%ld'"
+                              " WHERE institutions.CtyCod=%ld"
                               " AND institutions.InsCod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
@@ -2450,12 +2450,12 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM crs_usr,centres,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod='%ld'"
-                              " AND crs_usr.Role='%u'"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.CrsCod=courses.CrsCod"
                               " AND courses.DegCod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod='%ld'"
+                              " AND centres.InsCod=%ld"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2472,10 +2472,10 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
                               " AND degrees.CtrCod=centres.CtrCod"
-                              " AND centres.InsCod='%ld'"
+                              " AND centres.InsCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2492,9 +2492,9 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,centres,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=centres.CtrCod"
-                              " AND centres.InsCod='%ld'"
+                              " AND centres.InsCod=%ld"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
@@ -2513,7 +2513,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM centres,degrees,courses,crs_usr_requests"
-                              " WHERE centres.InsCod='%ld'"
+                              " WHERE centres.InsCod=%ld"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
@@ -2538,11 +2538,11 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM crs_usr,degrees,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod='%ld'"
-                              " AND crs_usr.Role='%u'"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.CrsCod=courses.CrsCod"
                               " AND courses.DegCod=degrees.DegCod"
-                              " AND degrees.CtrCod='%ld'"
+                              " AND degrees.CtrCod=%ld"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2559,9 +2559,9 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM admin,degrees,courses,crs_usr_requests"
-                              " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                              " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                               " AND admin.Cod=degrees.DegCod"
-                              " AND degrees.CtrCod='%ld'"
+                              " AND degrees.CtrCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2580,7 +2580,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM degrees,courses,crs_usr_requests"
-                              " WHERE degrees.CtrCod='%ld'"
+                              " WHERE degrees.CtrCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
@@ -2604,10 +2604,10 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM crs_usr,courses,crs_usr_requests"
-                              " WHERE crs_usr.UsrCod='%ld'"
-                              " AND crs_usr.Role='%u'"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.CrsCod=courses.CrsCod"
-                              " AND courses.DegCod='%ld'"
+                              " AND courses.DegCod=%ld"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2627,7 +2627,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
         	              "crs_usr_requests.Role,"
         	              "UNIX_TIMESTAMP(crs_usr_requests.RequestTime)"
                               " FROM courses,crs_usr_requests"
-                              " WHERE courses.DegCod='%ld'"
+                              " WHERE courses.DegCod=%ld"
                               " AND courses.CrsCod=crs_usr_requests.CrsCod"
                               " AND ((1<<crs_usr_requests.Role)&%u)<>0"
                               " ORDER BY crs_usr_requests.RequestTime DESC",
@@ -2651,7 +2651,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                sprintf (Query,"SELECT ReqCod,CrsCod,UsrCod,Role,"
         	              "UNIX_TIMESTAMP(RequestTime)"
                               " FROM crs_usr_requests"
-                              " WHERE CrsCod='%ld'"
+                              " WHERE CrsCod=%ld"
                               " AND ((1<<Role)&%u)<>0"
                               " ORDER BY RequestTime DESC",
                         Gbl.CurrentCrs.Crs.CrsCod,
@@ -2845,7 +2845,7 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
           Important: do this before removing the request *****/
    /* Request request code (returns 0 or 1 rows) */
    sprintf (Query,"SELECT ReqCod FROM crs_usr_requests"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             CrsCod,UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get request code"))        // Request exists
      {
@@ -2861,7 +2861,7 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
 
    /***** Remove enrollment request *****/
    sprintf (Query,"DELETE FROM crs_usr_requests"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a request for enrollment");
   }
@@ -2878,7 +2878,7 @@ static void Enr_RemoveExpiredEnrollmentRequests (void)
           Important: do this before removing the request *****/
    sprintf (Query,"UPDATE notif,crs_usr_requests"
 	          " SET notif.Status=(notif.Status | %u)"
-                  " WHERE notif.NotifyEvent='%u'"
+                  " WHERE notif.NotifyEvent=%u"
                   " AND notif.Cod=crs_usr_requests.ReqCod"
                   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
@@ -3274,7 +3274,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
       sprintf (Query,"REPLACE INTO admin"
 	             " (UsrCod,Scope,Cod)"
                      " VALUES"
-                     " ('%ld','%s','%ld')",
+                     " (%ld,'%s',%ld)",
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryREPLACE (Query,"can not create administrator");
 
@@ -3856,7 +3856,7 @@ void Enr_AcceptUsrInCrs (long UsrCod)
 
    /***** Set enrollment of a user to "accepted" in the current course *****/
    sprintf (Query,"UPDATE crs_usr SET Accepted='Y'"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
    DB_QueryUPDATE (Query,"can not confirm user's enrollment");
   }
@@ -3942,7 +3942,7 @@ static void Enr_EffectivelyRemUsrFromCrs (struct UsrData *UsrDat,struct Course *
 
       /***** Remove user from the table of courses-users *****/
       sprintf (Query,"DELETE FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Crs->CrsCod,UsrDat->UsrCod);
       DB_QueryDELETE (Query,"can not remove a user from a course");
 
@@ -4015,7 +4015,7 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
      {
       /***** Remove user from the table of admins *****/
       sprintf (Query,"DELETE FROM admin"
-                     " WHERE UsrCod='%ld' AND Scope='%s' AND Cod='%ld'",
+                     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryDELETE (Query,"can not remove an administrator");
 

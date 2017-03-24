@@ -650,7 +650,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    sprintf (Query,"SELECT UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)-UNIX_TIMESTAMP(),"
 	          "UNIX_TIMESTAMP(LastAccTst+INTERVAL (NumQstsLastTst*%lu) SECOND)"
                   " FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.Test.Config.MinTimeNxtTstPerQst,
             Gbl.Test.Config.MinTimeNxtTstPerQst,
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -704,7 +704,7 @@ static void Tst_SetTstStatus (unsigned NumTst,Tst_Status_t TstStatus)
    sprintf (Query,"REPLACE INTO tst_status"
 	          " (SessionId,CrsCod,NumTst,Status)"
 	          " VALUES"
-	          " ('%s','%ld','%u','%u')",
+	          " ('%s',%ld,%u,%u)",
             Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,
             NumTst,(unsigned) TstStatus);
    DB_QueryREPLACE (Query,"can not update status of test");
@@ -725,7 +725,7 @@ static Tst_Status_t Tst_GetTstStatus (unsigned NumTst)
 
    /***** Get status of test from database *****/
    sprintf (Query,"SELECT Status FROM tst_status"
-                  " WHERE SessionId='%s' AND CrsCod='%ld' AND NumTst='%u'",
+                  " WHERE SessionId='%s' AND CrsCod=%ld AND NumTst=%u",
             Gbl.Session.Id,Gbl.CurrentCrs.Crs.CrsCod,NumTst);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get status of test");
 
@@ -761,7 +761,7 @@ static unsigned Tst_GetNumAccessesTst (void)
      {
       /***** Get number of hits to test from database *****/
       sprintf (Query,"SELECT NumAccTst FROM crs_usr"
-	             " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	             " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of hits to test");
 
@@ -837,7 +837,7 @@ static void Tst_ShowTstTagsPresentInATestResult (long TstCod)
    sprintf (Query,"SELECT tst_tags.TagTxt FROM"
 	          " (SELECT DISTINCT(tst_question_tags.TagCod)"
 	          " FROM tst_question_tags,tst_exam_questions"
-	          " WHERE tst_exam_questions.TstCod='%ld'"
+	          " WHERE tst_exam_questions.TstCod=%ld"
 	          " AND tst_exam_questions.QstCod=tst_question_tags.QstCod)"
 	          " AS TagsCods,tst_tags"
 	          " WHERE TagsCods.TagCod=tst_tags.TagCod"
@@ -1193,12 +1193,12 @@ static void Tst_UpdateScoreQst (long QstCod,float ScoreThisQst,bool AnswerIsNotB
       sprintf (Query,"UPDATE tst_questions"
 	             " SET NumHits=NumHits+1,NumHitsNotBlank=NumHitsNotBlank+1,"
 	             "Score=Score+(%lf)"
-                     " WHERE QstCod='%ld'",
+                     " WHERE QstCod=%ld",
                ScoreThisQst,QstCod);
    else	// The answer is blank
       sprintf (Query,"UPDATE tst_questions"
 	             " SET NumHits=NumHits+1"
-                     " WHERE QstCod='%ld'",
+                     " WHERE QstCod=%ld",
                QstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
    DB_QueryUPDATE (Query,"can not update the score of a question");
@@ -1213,8 +1213,8 @@ static void Tst_UpdateMyNumAccessTst (unsigned NumAccessesTst)
    char Query[256];
 
    /***** Update my number of accesses to test in this course *****/
-   sprintf (Query,"UPDATE crs_usr SET NumAccTst='%u'"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"UPDATE crs_usr SET NumAccTst=%u"
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
 	    NumAccessesTst,
 	    Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update the number of accesses to test");
@@ -1229,8 +1229,8 @@ static void Tst_UpdateLastAccTst (void)
    char Query[256];
 
    /***** Update date-time and number of questions of this test *****/
-   sprintf (Query,"UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst='%u'"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"UPDATE crs_usr SET LastAccTst=NOW(),NumQstsLastTst=%u"
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.Test.NumQsts,
 	    Gbl.CurrentCrs.Crs.CrsCod,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1506,7 +1506,7 @@ void Tst_RenameTag (void)
 	    sprintf (Query,"CREATE TEMPORARY TABLE tst_question_tags_tmp"
 		           " ENGINE=MEMORY"
 			   " SELECT QstCod FROM tst_question_tags"
-			   " WHERE TagCod='%ld'",
+			   " WHERE TagCod=%ld",
 		     ExistingTagCod);
 	    if (mysql_query (&Gbl.mysql,Query))
 	       DB_ExitOnMySQLError ("can not create temporary table");
@@ -1514,7 +1514,7 @@ void Tst_RenameTag (void)
 	    /* Remove old tag in questions where it would be repeated */
 	    // New tag existed for a question ==> delete old tag
 	    sprintf (Query,"DELETE FROM tst_question_tags"
-			   " WHERE TagCod='%ld'"
+			   " WHERE TagCod=%ld"
 			   " AND QstCod IN"
 			   " (SELECT QstCod FROM tst_question_tags_tmp)",
 		     OldTagCod);
@@ -1523,8 +1523,8 @@ void Tst_RenameTag (void)
 	    /* Change old tag to new tag in questions where it would not be repeated */
 	    // New tag did not exist for a question ==> change old tag to new tag
 	    sprintf (Query,"UPDATE tst_question_tags"
-			   " SET TagCod='%ld'"
-			   " WHERE TagCod='%ld'"
+			   " SET TagCod=%ld"
+			   " WHERE TagCod=%ld"
 			   " AND QstCod NOT IN"
 			   " (SELECT QstCod FROM tst_question_tags_tmp)",
 		     ExistingTagCod,
@@ -1538,7 +1538,7 @@ void Tst_RenameTag (void)
 
 	    /***** Delete old tag from tst_tags
 		   because it is not longer used *****/
-	    sprintf (Query,"DELETE FROM tst_tags WHERE TagCod='%ld'",
+	    sprintf (Query,"DELETE FROM tst_tags WHERE TagCod=%ld",
 		     OldTagCod);
 	    DB_QueryDELETE (Query,"can not remove old tag");
 	   }
@@ -1546,7 +1546,7 @@ void Tst_RenameTag (void)
 	   {
 	    /***** Simple update replacing each instance of the old tag by the new tag *****/
 	    sprintf (Query,"UPDATE tst_tags SET TagTxt='%s',ChangeTime=NOW()"
-			   " WHERE tst_tags.CrsCod='%ld'"
+			   " WHERE tst_tags.CrsCod=%ld"
 			   " AND tst_tags.TagTxt='%s'",
 		     NewTagTxt,Gbl.CurrentCrs.Crs.CrsCod,OldTagTxt);
 	    DB_QueryUPDATE (Query,"can not update tag");
@@ -1573,7 +1573,7 @@ static bool Tst_CheckIfCurrentCrsHasTestTags (void)
    char Query[128];
 
    /***** Get available tags from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM tst_tags WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM tst_tags WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    return (DB_QueryCOUNT (Query,"can not check if course has tags") != 0);
   }
@@ -1589,7 +1589,7 @@ static unsigned long Tst_GetAllTagsFromCurrentCrs (MYSQL_RES **mysql_res)
 
    /***** Get available tags from database *****/
    sprintf (Query,"SELECT TagCod,TagTxt,TagHidden FROM tst_tags"
-                  " WHERE CrsCod='%ld' ORDER BY TagTxt",
+                  " WHERE CrsCod=%ld ORDER BY TagTxt",
             Gbl.CurrentCrs.Crs.CrsCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get available tags");
   }
@@ -1605,7 +1605,7 @@ static unsigned long Tst_GetEnabledTagsFromThisCrs (MYSQL_RES **mysql_res)
 
    /***** Get available not hidden tags from database *****/
    sprintf (Query,"SELECT TagCod,TagTxt FROM tst_tags"
-                  " WHERE CrsCod='%ld' AND TagHidden='N' ORDER BY TagTxt",
+                  " WHERE CrsCod=%ld AND TagHidden='N' ORDER BY TagTxt",
             Gbl.CurrentCrs.Crs.CrsCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get available enabled tags");
   }
@@ -1978,7 +1978,7 @@ static void Tst_GetConfigTstFromDB (void)
 
    /***** Get configuration of test for current course from database *****/
    sprintf (Query,"SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
-                  " FROM tst_config WHERE CrsCod='%ld'",
+                  " FROM tst_config WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get configuration of test");
 
@@ -2077,7 +2077,7 @@ bool Tst_CheckIfCourseHaveTestsAndPluggableIsUnknown (void)
    Tst_Pluggable_t Pluggable;
 
    /***** Get pluggability of tests for current course from database *****/
-   sprintf (Query,"SELECT Pluggable FROM tst_config WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT Pluggable FROM tst_config WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get configuration of test");
 
@@ -2159,7 +2159,7 @@ void Tst_ReceiveConfigTst (void)
    sprintf (Query,"REPLACE INTO tst_config"
 	          " (CrsCod,Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback)"
                   " VALUES"
-                  " ('%ld','%s','%u','%u','%u','%lu','%s')",
+                  " (%ld,'%s',%u,%u,%u,'%lu','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Tst_PluggableDB[Gbl.Test.Config.Pluggable],
             Gbl.Test.Config.Min,Gbl.Test.Config.Def,Gbl.Test.Config.Max,
@@ -2556,15 +2556,15 @@ static unsigned long Tst_GetQuestionsForTest (MYSQL_RES **mysql_res)
 		  "tst_questions.NumHits,tst_questions.NumHitsNotBlank,"
 		  "tst_questions.Score"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-		  " WHERE tst_questions.CrsCod='%ld'"
+		  " WHERE tst_questions.CrsCod=%ld"
 		  " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod"
 		  " FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
+		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod='%ld'",
+		  " AND tst_tags.CrsCod=%ld",
 	    Gbl.CurrentCrs.Crs.CrsCod,
 	    Gbl.CurrentCrs.Crs.CrsCod,
 	    Gbl.CurrentCrs.Crs.CrsCod);
@@ -2684,7 +2684,7 @@ static bool Tst_GetOneQuestionByCod (long QstCod,MYSQL_RES **mysql_res)
 	          "ImageName,ImageTitle,ImageURL,"
 	          "NumHits,NumHitsNotBlank,Score"
                   " FROM tst_questions"
-                  " WHERE QstCod='%ld'",
+                  " WHERE QstCod=%ld",
             QstCod);
    return (DB_QuerySELECT (Query,mysql_res,"can not get data of a question") == 1);
   }
@@ -3005,7 +3005,7 @@ unsigned Tst_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res,bool Shuffle)
    /***** Get answers of a question from database *****/
    sprintf (Query,"SELECT AnsInd,Answer,Feedback,"
 	          "ImageName,ImageTitle,ImageURL,Correct"
-	          " FROM tst_answers WHERE QstCod='%ld' ORDER BY %s",
+	          " FROM tst_answers WHERE QstCod=%ld ORDER BY %s",
             QstCod,
             Shuffle ? "RAND(NOW())" :
         	      "AnsInd");
@@ -4214,9 +4214,9 @@ unsigned long Tst_GetTagsQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Get the tags of a question from database *****/
    sprintf (Query,"SELECT tst_tags.TagTxt FROM tst_question_tags,tst_tags"
-                  " WHERE tst_question_tags.QstCod='%ld'"
+                  " WHERE tst_question_tags.QstCod=%ld"
                   " AND tst_question_tags.TagCod=tst_tags.TagCod"
-                  " AND tst_tags.CrsCod='%ld'"
+                  " AND tst_tags.CrsCod=%ld"
                   " ORDER BY tst_question_tags.TagInd",
             QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get the tags of a question");
@@ -5064,7 +5064,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
    sprintf (Query,"SELECT AnsType,Shuffle,Stem,Feedback,"
 	          "ImageName,ImageTitle,ImageURL"
 		  " FROM tst_questions"
-		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+		  " WHERE QstCod=%ld AND CrsCod=%ld",
 	    Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get a question");
 
@@ -5195,11 +5195,11 @@ static void Tst_GetImageFromDB (int NumOpt,struct Image *Image)
    if (NumOpt < 0)
       // Get image associated to stem
       sprintf (Query,"SELECT ImageName,ImageTitle,ImageURL FROM tst_questions"
-		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+		     " WHERE QstCod=%ld AND CrsCod=%ld",
 	       Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);      // Get image associated to answer
    else
       sprintf (Query,"SELECT ImageName,ImageTitle,ImageURL FROM tst_answers"
-		     " WHERE QstCod='%ld' AND AnsInd='%u'",
+		     " WHERE QstCod=%ld AND AnsInd=%u",
 	       Gbl.Test.QstCod,(unsigned) NumOpt);
 
    /***** Query database *****/
@@ -5764,7 +5764,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
 
    /***** Get tag code from database *****/
    sprintf (Query,"SELECT TagCod FROM tst_tags"
-                  " WHERE CrsCod='%ld' AND TagTxt='%s'",
+                  " WHERE CrsCod=%ld AND TagTxt='%s'",
             Gbl.CurrentCrs.Crs.CrsCod,TagTxt);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get tag");
 
@@ -5805,7 +5805,7 @@ static long Tst_CreateNewTag (long CrsCod,const char *TagTxt)
    sprintf (Query,"INSERT INTO tst_tags"
 	          " (CrsCod,ChangeTime,TagTxt,TagHidden)"
                   " VALUES"
-                  " ('%ld',NOW(),'%s','N')",
+                  " (%ld,NOW(),'%s','N')",
             CrsCod,TagTxt);
    return DB_QueryINSERTandReturnCode (Query,"can not create new tag");
   }
@@ -5820,7 +5820,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
 
    /***** Insert new tag into tst_tags table *****/
    sprintf (Query,"UPDATE tst_tags SET TagHidden='%c',ChangeTime=NOW()"
-                  " WHERE TagCod='%ld' AND CrsCod='%ld'",
+                  " WHERE TagCod=%ld AND CrsCod=%ld",
             TagHidden ? 'Y' :
         	        'N',
             TagCod,Gbl.CurrentCrs.Crs.CrsCod);
@@ -5934,7 +5934,7 @@ void Tst_RemoveQst (void)
 
    /* Remove the question itself */
    sprintf (Query,"DELETE FROM tst_questions"
-                  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+                  " WHERE QstCod=%ld AND CrsCod=%ld",
             Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove a question");
 
@@ -5975,7 +5975,7 @@ void Tst_ChangeShuffleQst (void)
    /***** Remove the question from all the tables *****/
    /* Update the question changing the current shuffle */
    sprintf (Query,"UPDATE tst_questions SET Shuffle='%c'"
-                  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+                  " WHERE QstCod=%ld AND CrsCod=%ld",
             Shuffle ? 'Y' :
         	      'N',
             Gbl.Test.QstCod,Gbl.CurrentCrs.Crs.CrsCod);
@@ -6049,9 +6049,9 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 	             "Stem,Feedback,ImageName,ImageTitle,ImageURL,"
 	             "NumHits,Score)"
                      " VALUES"
-                     " ('%ld',NOW(),'%s','%c',"
+                     " (%ld,NOW(),'%s','%c',"
                      "'%s','%s','%s','%s','%s',"
-                     "'0','0')",
+                     "0,0)",
                Gbl.CurrentCrs.Crs.CrsCod,
                Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
                Gbl.Test.Shuffle ? 'Y' :
@@ -6075,7 +6075,7 @@ static void Tst_InsertOrUpdateQstIntoDB (void)
 		     " SET EditTime=NOW(),AnsType='%s',Shuffle='%c',"
 		     "Stem='%s',Feedback='%s',"
 		     "ImageName='%s',ImageTitle='%s',ImageURL='%s'"
-		     " WHERE QstCod='%ld' AND CrsCod='%ld'",
+		     " WHERE QstCod=%ld AND CrsCod=%ld",
 	       Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
 	       Gbl.Test.Shuffle ? 'Y' :
 				  'N',
@@ -6126,7 +6126,7 @@ static void Tst_InsertTagsIntoDB (void)
          sprintf (Query,"INSERT INTO tst_question_tags"
                         " (QstCod,TagCod,TagInd)"
                         " VALUES"
-                        " ('%ld','%ld','%u')",
+                        " (%ld,%ld,%u)",
                   Gbl.Test.QstCod,TagCod,TagIdx);
          DB_QueryINSERT (Query,"can not create tag");
 
@@ -6160,7 +6160,7 @@ static void Tst_InsertAnswersIntoDB (void)
                         " (QstCod,AnsInd,Answer,Feedback,"
                         "ImageName,ImageTitle,ImageURL,Correct)"
                         " VALUES"
-                        " (%ld,0,'%ld','','','','','Y')",
+                        " (%ld,0,%ld,'','','','','Y')",
                   Gbl.Test.QstCod,
                   Gbl.Test.Answer.Integer);
          DB_QueryINSERT (Query,"can not create answer");
@@ -6204,7 +6204,7 @@ static void Tst_InsertAnswersIntoDB (void)
                               " (QstCod,AnsInd,Answer,Feedback,"
                               "ImageName,ImageTitle,ImageURL,Correct)"
                               " VALUES"
-                              " ('%ld','%u','%s','%s','%s','%s','%s','%c')",
+                              " (%ld,%u,'%s','%s','%s','%s','%s','%c')",
                         Gbl.Test.QstCod,NumOpt,
                         Gbl.Test.Answer.Options[NumOpt].Text,
                         Gbl.Test.Answer.Options[NumOpt].Feedback ? Gbl.Test.Answer.Options[NumOpt].Feedback : "",
@@ -6237,7 +6237,7 @@ static void Tst_RemAnsFromQst (void)
    char Query[128];
 
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM tst_answers WHERE QstCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_answers WHERE QstCod=%ld",
             Gbl.Test.QstCod);
    DB_QueryDELETE (Query,"can not remove the answers of a question");
   }
@@ -6251,7 +6251,7 @@ static void Tst_RemTagsFromQst (void)
    char Query[128];
 
    /***** Remove tags *****/
-   sprintf (Query,"DELETE FROM tst_question_tags WHERE QstCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_question_tags WHERE QstCod=%ld",
             Gbl.Test.QstCod);
    DB_QueryDELETE (Query,"can not remove the tags of a question");
   }
@@ -6266,10 +6266,10 @@ static void Tst_RemoveUnusedTagsFromCurrentCrs (void)
 
    /***** Remove unused tags from tst_tags *****/
    sprintf (Query,"DELETE FROM tst_tags"
-	          " WHERE CrsCod='%ld' AND TagCod NOT IN"
+	          " WHERE CrsCod=%ld AND TagCod NOT IN"
                   " (SELECT DISTINCT tst_question_tags.TagCod"
                   " FROM tst_questions,tst_question_tags"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_question_tags.QstCod)",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.CurrentCrs.Crs.CrsCod);
@@ -6288,7 +6288,7 @@ static void Tst_RemoveImgFileFromStemOfQst (long CrsCod,long QstCod)
 
    /***** Get names of images associated to stems of test questions from database *****/
    sprintf (Query,"SELECT ImageName FROM tst_questions"
-		  " WHERE QstCod='%ld' AND CrsCod='%ld'",
+		  " WHERE QstCod=%ld AND CrsCod=%ld",
 	    QstCod,CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get image"))
      {
@@ -6317,7 +6317,7 @@ static void Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (long CrsCod)
    unsigned NumImg;
 
    /***** Get names of images associated to stems of test questions from database *****/
-   sprintf (Query,"SELECT ImageName FROM tst_questions WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT ImageName FROM tst_questions WHERE CrsCod=%ld",
 	    CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
@@ -6350,11 +6350,11 @@ static void Tst_RemoveImgFileFromAnsOfQst (long CrsCod,long QstCod,unsigned AnsI
    /***** Get names of images associated to answers of test questions from database *****/
    sprintf (Query,"SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod='%ld'"	// Extra check
-		  " AND tst_questions.QstCod='%ld'"	// Extra check
+		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
+		  " AND tst_questions.QstCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=tst_answers.QstCod"
-		  " AND tst_answers.QstCod='%ld'"
-		  " AND tst_answers.AnsInd='%u'",
+		  " AND tst_answers.QstCod=%ld"
+		  " AND tst_answers.AnsInd=%u",
 	    CrsCod,QstCod,QstCod,AnsInd);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get images"))
      {
@@ -6384,10 +6384,10 @@ static void Tst_RemoveAllImgFilesFromAnsOfQst (long CrsCod,long QstCod)
    /***** Get names of images associated to answers of test questions from database *****/
    sprintf (Query,"SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod='%ld'"	// Extra check
-		  " AND tst_questions.QstCod='%ld'"	// Extra check
+		  " WHERE tst_questions.CrsCod=%ld"	// Extra check
+		  " AND tst_questions.QstCod=%ld"	// Extra check
 		  " AND tst_questions.QstCod=tst_answers.QstCod"
-		  " AND tst_answers.QstCod='%ld'",
+		  " AND tst_answers.QstCod=%ld",
 	    CrsCod,QstCod,QstCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
 
@@ -6423,7 +6423,7 @@ static void Tst_RemoveAllImgFilesFromAnsOfAllQstsInCrs (long CrsCod)
    /***** Get names of images associated to answers of test questions from database *****/
    sprintf (Query,"SELECT tst_answers.ImageName"
 		  " FROM tst_questions,tst_answers"
-		  " WHERE tst_questions.CrsCod='%ld'"
+		  " WHERE tst_questions.CrsCod=%ld"
 		  " AND tst_questions.QstCod=tst_answers.QstCod",
 	    CrsCod);
    NumImages = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get images");
@@ -6502,7 +6502,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6511,7 +6511,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          else
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6524,7 +6524,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
@@ -6532,7 +6532,7 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          else
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
@@ -6544,14 +6544,14 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
                      Gbl.CurrentCtr.Ctr.CtrCod);
          else
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
@@ -6562,13 +6562,13 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod",
                      Gbl.CurrentDeg.Deg.DegCod);
          else
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
                      Gbl.CurrentDeg.Deg.DegCod,
@@ -6578,12 +6578,12 @@ static unsigned Tst_GetNumTstQuestions (Sco_Scope_t Scope,Tst_AnswerType_t AnsTy
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
-                           " WHERE CrsCod='%ld'",
+                           " WHERE CrsCod=%ld",
                      Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT COUNT(*),SUM(NumHits),SUM(Score)"
         	           " FROM tst_questions"
-                           " WHERE CrsCod='%ld' AND AnsType='%s'",
+                           " WHERE CrsCod=%ld AND AnsType='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,
                      Tst_StrAnswerTypesDB[AnsType]);
          break;
@@ -6650,7 +6650,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6659,7 +6659,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6672,7 +6672,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
@@ -6680,7 +6680,7 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
@@ -6692,14 +6692,14 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod",
                      Gbl.CurrentCtr.Ctr.CtrCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
@@ -6710,13 +6710,13 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNTDISTINCT (tst_questions.CrsCod)"
         	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod",
                      Gbl.CurrentDeg.Deg.DegCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'",
                      Gbl.CurrentDeg.Deg.DegCod,
@@ -6726,12 +6726,12 @@ static unsigned Tst_GetNumCoursesWithTstQuestions (Sco_Scope_t Scope,Tst_AnswerT
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions"
-                           " WHERE CrsCod='%ld'",
+                           " WHERE CrsCod=%ld",
                      Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
         	           " FROM tst_questions"
-                           " WHERE CrsCod='%ld'"
+                           " WHERE CrsCod=%ld"
                            " AND AnsType='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,
                      Tst_StrAnswerTypesDB[AnsType]);
@@ -6789,7 +6789,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6801,7 +6801,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM institutions,centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -6817,7 +6817,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
@@ -6828,7 +6828,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM centres,degrees,courses,tst_questions,tst_config"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
@@ -6843,7 +6843,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions,tst_config"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
@@ -6853,7 +6853,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM degrees,courses,tst_questions,tst_config"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'"
@@ -6867,7 +6867,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions,tst_config"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
@@ -6876,7 +6876,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM courses,tst_questions,tst_config"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=tst_questions.CrsCod"
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
@@ -6889,7 +6889,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          if (AnsType == Tst_ANS_ALL)
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.CrsCod='%ld'"
+                           " WHERE tst_questions.CrsCod=%ld"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,
@@ -6897,7 +6897,7 @@ static unsigned Tst_GetNumCoursesWithPluggableTstQuestions (Sco_Scope_t Scope,Ts
          else
             sprintf (Query,"SELECT COUNT(DISTINCT tst_questions.CrsCod)"
         	           " FROM tst_questions,tst_config"
-                           " WHERE tst_questions.CrsCod='%ld'"
+                           " WHERE tst_questions.CrsCod=%ld"
                            " AND tst_questions.AnsType='%s'"
                            " AND tst_questions.CrsCod=tst_config.CrsCod"
                            " AND tst_config.pluggable='%s'",
@@ -7050,7 +7050,7 @@ static long Tst_CreateTestResultInDB (void)
    sprintf (Query,"INSERT INTO tst_exams"
 	          " (CrsCod,UsrCod,AllowTeachers,TstTime,NumQsts)"
                   " VALUES"
-                  " ('%ld','%ld','%c',NOW(),'%u')",
+                  " (%ld,%ld,'%c',NOW(),%u)",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Test.AllowTeachers ? 'Y' :
@@ -7071,8 +7071,8 @@ static void Tst_StoreScoreOfTestResultInDB (long TstCod,
    /***** Update score in test result *****/
    Str_SetDecimalPointToUS ();	// To print the floating point as a dot
    sprintf (Query,"UPDATE tst_exams"
-	          " SET NumQstsNotBlank='%u',Score='%lf'"
-	          " WHERE TstCod='%ld'",
+	          " SET NumQstsNotBlank=%u,Score='%lf'"
+	          " WHERE TstCod=%ld",
             NumQstsNotBlank,Score,
             TstCod);
    Str_SetDecimalPointToLocal ();	// Return to local system
@@ -7242,9 +7242,9 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'"
-                  " AND TstTime>=FROM_UNIXTIME('%ld')"
-                  " AND TstTime<=FROM_UNIXTIME('%ld')"
+                  " WHERE CrsCod=%ld AND UsrCod=%ld"
+                  " AND TstTime>=FROM_UNIXTIME(%ld)"
+                  " AND TstTime<=FROM_UNIXTIME(%ld)"
                   " ORDER BY TstCod",
             Gbl.CurrentCrs.Crs.CrsCod,
             UsrDat->UsrCod,
@@ -7863,7 +7863,7 @@ static void Tst_GetTestResultDataByTstCod (long TstCod,time_t *TstTimeUTC,
 	          "UNIX_TIMESTAMP(TstTime),"
 	          "NumQsts,NumQstsNotBlank,Score"
 	          " FROM tst_exams"
-                  " WHERE TstCod='%ld' AND CrsCod='%ld'",
+                  " WHERE TstCod=%ld AND CrsCod=%ld",
             TstCod,
             Gbl.CurrentCrs.Crs.CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a test result of a user") == 1)
@@ -7920,7 +7920,7 @@ static void Tst_StoreOneTestResultQstInDB (long TstCod,long QstCod,unsigned NumQ
    sprintf (Query,"INSERT INTO tst_exam_questions"
 		  " (TstCod,QstCod,QstInd,Score,Indexes,Answers)"
 		  " VALUES"
-		  " ('%ld','%ld','%u','%lf','%s','%s')",
+		  " (%ld,%ld,%u,'%lf','%s','%s')",
 	    TstCod,QstCod,
 	    NumQst,	// 0, 1, 2, 3...
 	    Score,
@@ -7943,7 +7943,7 @@ static void Tst_GetTestResultQuestionsFromDB (long TstCod)
 
    /***** Get questions of a test result from database *****/
    sprintf (Query,"SELECT QstCod,Indexes,Answers FROM tst_exam_questions"
-                  " WHERE TstCod='%ld' ORDER BY QstInd",
+                  " WHERE TstCod=%ld ORDER BY QstInd",
             TstCod);
    Gbl.Test.NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get questions of a test result");
 
@@ -7987,13 +7987,13 @@ void Tst_RemoveTestResultsMadeByUsrInAllCrss (long UsrCod)
    /***** Remove test results made by the specified user *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
-                  " WHERE tst_exams.UsrCod='%ld'"
+                  " WHERE tst_exams.UsrCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove test results made by a user");
 
    sprintf (Query,"DELETE FROM tst_exams"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove test results made by a user");
   }
@@ -8009,13 +8009,13 @@ void Tst_RemoveTestResultsMadeByUsrInCrs (long UsrCod,long CrsCod)
    /***** Remove test results made by the specified user *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
-                  " WHERE tst_exams.CrsCod='%ld' AND tst_exams.UsrCod='%ld'"
+                  " WHERE tst_exams.CrsCod=%ld AND tst_exams.UsrCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
 
    sprintf (Query,"DELETE FROM tst_exams"
-	          " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	          " WHERE CrsCod=%ld AND UsrCod=%ld",
 	    CrsCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove test results made by a user in a course");
   }
@@ -8031,13 +8031,13 @@ void Tst_RemoveCrsTestResults (long CrsCod)
    /***** Remove questions of test results made in the course *****/
    sprintf (Query,"DELETE FROM tst_exam_questions"
 	          " USING tst_exams,tst_exam_questions"
-                  " WHERE tst_exams.CrsCod='%ld'"
+                  " WHERE tst_exams.CrsCod=%ld"
                   " AND tst_exams.TstCod=tst_exam_questions.TstCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove test results made in a course");
 
    /***** Remove test results made in the course *****/
-   sprintf (Query,"DELETE FROM tst_exams WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_exams WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove test results made in a course");
   }
@@ -8051,11 +8051,11 @@ void Tst_RemoveCrsTests (long CrsCod)
    char Query[512];
 
    /***** Remove tests status in the course *****/
-   sprintf (Query,"DELETE FROM tst_status WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM tst_status WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove status of tests of a course");
 
    /***** Remove test configuration of the course *****/
-   sprintf (Query,"DELETE FROM tst_config WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_config WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove configuration of tests of a course");
 
@@ -8063,19 +8063,19 @@ void Tst_RemoveCrsTests (long CrsCod)
           and test tags in the course *****/
    sprintf (Query,"DELETE FROM tst_question_tags"
 	          " USING tst_questions,tst_question_tags"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_question_tags.QstCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove tags associated to questions of tests of a course");
 
    /***** Remove test tags in the course *****/
-   sprintf (Query,"DELETE FROM tst_tags WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_tags WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove tags of test of a course");
 
    /***** Remove test answers in the course *****/
    sprintf (Query,"DELETE FROM tst_answers USING tst_questions,tst_answers"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod=tst_answers.QstCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove answers of tests of a course");
@@ -8086,7 +8086,7 @@ void Tst_RemoveCrsTests (long CrsCod)
    Tst_RemoveAllImgFilesFromStemOfAllQstsInCrs (CrsCod);
 
    /***** Remove test questions in the course *****/
-   sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM tst_questions WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove test questions of a course");
   }

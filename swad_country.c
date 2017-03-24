@@ -790,7 +790,7 @@ static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
 
    /***** Get number of users from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-	          " WHERE CtyCod='%ld'",
+	          " WHERE CtyCod=%ld",
             CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who claim to belong to other countries");
   }
@@ -1464,7 +1464,7 @@ static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution)
    Cty_FreeMapAttribution (MapAttribution);
 
    /***** Get photo attribution from database *****/
-   sprintf (Query,"SELECT MapAttribution FROM countries WHERE CtyCod='%ld'",
+   sprintf (Query,"SELECT MapAttribution FROM countries WHERE CtyCod=%ld",
 	    CtyCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get photo attribution"))
      {
@@ -2332,7 +2332,7 @@ unsigned Cty_GetNumCtysWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND centres.CtrCod=degrees.CtrCod"
                   " AND degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of countries with users");
   }

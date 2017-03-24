@@ -192,7 +192,7 @@ void Pre_SetPrefsFromIP (void)
    sprintf (Query,"REPLACE INTO IP_prefs"
 	          " (IP,UsrCod,LastChange,FirstDayOfWeek,Theme,IconSet,Menu,SideCols)"
                   " VALUES"
-                  " ('%s','%ld',NOW(),'%u','%s','%s','%u','%u')",
+                  " ('%s',%ld,NOW(),%u,'%s','%s',%u,%u)",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Prefs.FirstDayOfWeek,
             The_ThemeId[Gbl.Prefs.Theme],
@@ -204,8 +204,8 @@ void Pre_SetPrefsFromIP (void)
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek='%u',Theme='%s',IconSet='%s',Menu='%u',SideCols='%u'"
-                     " WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek=%u,Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+                     " WHERE UsrCod=%ld",
                Gbl.Prefs.FirstDayOfWeek,
                The_ThemeId[Gbl.Prefs.Theme],
                Ico_IconSetId[Gbl.Prefs.IconSet],
@@ -340,7 +340,7 @@ void Pre_UpdateMyLanguageToCurrentLanguage (void)
    Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
 
    /***** Update my language in database *****/
-   sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
 	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your language");
@@ -490,8 +490,8 @@ static void Pre_UpdateSideColsOnUsrDataTable (void)
   {
    char Query[512];
 
-   sprintf (Query,"UPDATE usr_data SET SideCols='%u'"
-	          " WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE usr_data SET SideCols=%u"
+	          " WHERE UsrCod=%ld",
             Gbl.Prefs.SideCols,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about side columns");
   }

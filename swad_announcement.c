@@ -112,7 +112,7 @@ void Ann_ShowAllAnnouncements (void)
       /* Select only active announcements for unknown users */
       sprintf (Query,"SELECT AnnCod,Status,Roles,Subject,Content"
 		     " FROM announcements"
-                     " WHERE Status='%u' AND (Roles&%u)<>0 "
+                     " WHERE Status=%u AND (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
             (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
             (unsigned) (1 << Rol_UNKNOWN));
@@ -218,9 +218,9 @@ void Ann_ShowMyAnnouncementsNotMarkedAsSeen (void)
    /***** Select announcements not seen *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
    sprintf (Query,"SELECT AnnCod,Subject,Content FROM announcements"
-                  " WHERE Status='%u' AND (Roles&%u)<>0 "
+                  " WHERE Status=%u AND (Roles&%u)<>0 "
                   " AND AnnCod NOT IN"
-                  " (SELECT AnnCod FROM ann_seen WHERE UsrCod='%ld')"
+                  " (SELECT AnnCod FROM ann_seen WHERE UsrCod=%ld)"
                   " ORDER BY AnnCod DESC",	// Newest first
             (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
             (unsigned) Gbl.Usrs.Me.UsrDat.Roles,	// All my roles in different courses
@@ -515,7 +515,7 @@ static void Ann_CreateAnnouncement (unsigned Roles,const char *Subject,const cha
    sprintf (Query,"INSERT INTO announcements"
 	          " (Roles,Subject,Content)"
                   " VALUES"
-                  " ('%u','%s','%s')",
+                  " (%u,'%s','%s')",
             Roles,Subject,Content);
    DB_QueryINSERT (Query,"can not create announcement");
   }
@@ -533,8 +533,8 @@ void Ann_HideActiveAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as hidden *****/
-   sprintf (Query,"UPDATE announcements SET Status='%u'"
-                  " WHERE AnnCod='%ld'",
+   sprintf (Query,"UPDATE announcements SET Status=%u"
+                  " WHERE AnnCod=%ld",
             (unsigned) Ann_OBSOLETE_ANNOUNCEMENT,AnnCod);
    DB_QueryUPDATE (Query,"can not hide announcement");
   }
@@ -552,8 +552,8 @@ void Ann_RevealHiddenAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Set global announcement as shown *****/
-   sprintf (Query,"UPDATE announcements SET Status='%u'"
-                  " WHERE AnnCod='%ld'",
+   sprintf (Query,"UPDATE announcements SET Status=%u"
+                  " WHERE AnnCod=%ld",
             (unsigned) Ann_ACTIVE_ANNOUNCEMENT,AnnCod);
    DB_QueryUPDATE (Query,"can not reveal announcement");
   }
@@ -572,12 +572,12 @@ void Ann_RemoveAnnouncement (void)
    AnnCod = Ann_GetParamAnnCod ();
 
    /***** Remove announcement *****/
-   sprintf (Query,"DELETE FROM announcements WHERE AnnCod='%ld'",
+   sprintf (Query,"DELETE FROM announcements WHERE AnnCod=%ld",
             AnnCod);
    DB_QueryDELETE (Query,"can not remove announcement");
 
    /***** Remove users who have seen the announcement *****/
-   sprintf (Query,"DELETE FROM ann_seen WHERE AnnCod='%ld'",
+   sprintf (Query,"DELETE FROM ann_seen WHERE AnnCod=%ld",
             AnnCod);
    DB_QueryDELETE (Query,"can not remove announcement");
 
@@ -604,7 +604,7 @@ void Ann_MarkAnnouncementAsSeen (void)
    sprintf (Query,"REPLACE INTO ann_seen"
 	          " (AnnCod,UsrCod)"
 	          " VALUES"
-	          " ('%ld','%ld')",
+	          " (%ld,%ld)",
             AnnCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not mark announcement as seen");
 
@@ -621,7 +621,7 @@ void Ann_RemoveUsrFromSeenAnnouncements (long UsrCod)
    char Query[128];
 
    /***** Remove user from seen announcements *****/
-   sprintf (Query,"DELETE FROM ann_seen WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM ann_seen WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove user from seen announcements");
   }

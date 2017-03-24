@@ -1003,9 +1003,9 @@ void Grp_RemUsrFromAllGrpsInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_Q
 
    /***** Remove user from all the groups of the course *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
-	          " WHERE UsrCod='%ld' AND GrpCod IN"
+	          " WHERE UsrCod=%ld AND GrpCod IN"
                   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod)",
             UsrDat->UsrCod,Crs->CrsCod);
    DB_QueryDELETE (Query,"can not remove a user from all groups of a course");
@@ -1029,7 +1029,7 @@ void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrV
    char Query[128];
 
    /***** Remove user from all groups *****/
-   sprintf (Query,"DELETE FROM crs_grp_usr WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_grp_usr WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from the groups he/she belongs to");
 
@@ -1052,7 +1052,7 @@ static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod)
 
    /***** Remove user from group *****/
    sprintf (Query,"DELETE FROM crs_grp_usr"
-	          " WHERE GrpCod='%ld' AND UsrCod='%ld'",
+	          " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from a group");
   }
@@ -1069,7 +1069,7 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
    sprintf (Query,"INSERT INTO crs_grp_usr"
 	          " (GrpCod,UsrCod)"
                   " VALUES"
-                  " ('%ld','%ld')",
+                  " (%ld,%ld)",
             GrpCod,UsrDat->UsrCod);
    DB_QueryINSERT (Query,"can not add a user to a group");
   }
@@ -2281,7 +2281,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
 			"COUNT(crs_grp.GrpCod)"
 			" FROM crs_grp_types,crs_grp"
-			" WHERE crs_grp_types.CrsCod='%ld'"
+			" WHERE crs_grp_types.CrsCod=%ld"
 			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			" GROUP BY crs_grp_types.GrpTypCod"
 			" ORDER BY crs_grp_types.GrpTypName",
@@ -2294,7 +2294,7 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 			"UNIX_TIMESTAMP(crs_grp_types.OpenTime),"
 			"COUNT(crs_grp.GrpCod)"
 			" FROM crs_grp_types,crs_grp"
-			" WHERE crs_grp_types.CrsCod='%ld'"
+			" WHERE crs_grp_types.CrsCod=%ld"
 			" AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			" GROUP BY crs_grp_types.GrpTypCod)"
 			" UNION "
@@ -2302,8 +2302,8 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
 			"Mandatory,Multiple,"
 			"MustBeOpened,"
 			"UNIX_TIMESTAMP(OpenTime),"
-			"'0'"
-			" FROM crs_grp_types WHERE CrsCod='%ld'"
+			"0"
+			" FROM crs_grp_types WHERE CrsCod=%ld"
 			" AND GrpTypCod NOT IN (SELECT GrpTypCod FROM crs_grp))"
 			" ORDER BY GrpTypName",
 		  Gbl.CurrentCrs.Crs.CrsCod,
@@ -2382,7 +2382,7 @@ void Grp_OpenGroupsAutomatically (void)
 
    /***** Find group types to be opened *****/
    sprintf (Query,"SELECT GrpTypCod FROM crs_grp_types"
-	          " WHERE CrsCod='%ld' AND MustBeOpened='Y'"
+	          " WHERE CrsCod=%ld AND MustBeOpened='Y'"
 	          " AND OpenTime<=NOW()",
 	    Gbl.CurrentCrs.Crs.CrsCod);
    NumGrpTypes = (unsigned) DB_QuerySELECT (Query,&mysql_res,
@@ -2399,13 +2399,13 @@ void Grp_OpenGroupsAutomatically (void)
          /***** Open all the closed groups in this course the must be opened
                 and with open time in the past ****/
          sprintf (Query,"UPDATE crs_grp SET Open='Y'"
-                        " WHERE GrpTypCod='%ld' AND Open='N'",
+                        " WHERE GrpTypCod=%ld AND Open='N'",
 	          GrpTypCod);
          DB_QueryUPDATE (Query,"can not open groups");
 
          /***** To not try to open groups again, set MustBeOpened to false *****/
          sprintf (Query,"UPDATE crs_grp_types SET MustBeOpened='N'"
-	                " WHERE GrpTypCod='%ld'",
+	                " WHERE GrpTypCod=%ld",
 	          GrpTypCod);
          DB_QueryUPDATE (Query,"can not update the opening of a type of group");
         }
@@ -2532,7 +2532,7 @@ unsigned Grp_CountNumGrpsInCurrentCrs (void)
 
    /***** Get number of group in current course from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
             Gbl.CurrentCrs.Crs.CrsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of groups in this course");
@@ -2547,7 +2547,7 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod)
    char Query[128];
 
    /***** Get number of groups of a type from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_grp WHERE GrpTypCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM crs_grp WHERE GrpTypCod=%ld",
             GrpTypCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of groups of a type");
   }
@@ -2563,7 +2563,7 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res)
    /***** Get groups of a type from database *****/
    sprintf (Query,"SELECT GrpCod,GrpName,MaxStudents,Open,FileZones"
                   " FROM crs_grp"
-                  " WHERE GrpTypCod='%ld'"
+                  " WHERE GrpTypCod=%ld"
                   " ORDER BY GrpName",
             GrpTypCod);
    return DB_QuerySELECT (Query,mysql_res,"can not get groups of a type");
@@ -2584,7 +2584,7 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    /***** Get data of a type of group from database *****/
    sprintf (Query,"SELECT GrpTypName,Mandatory,Multiple,MustBeOpened,UNIX_TIMESTAMP(OpenTime)"
 	          " FROM crs_grp_types"
-                  " WHERE CrsCod='%ld' AND GrpTypCod='%ld'",
+                  " WHERE CrsCod=%ld AND GrpTypCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get type of group");
 
@@ -2617,7 +2617,7 @@ static bool Grp_GetMultipleEnrollmentOfAGroupType (long GrpTypCod)
    bool MultipleEnrollment;
 
    /***** Get data of a type of group from database *****/
-   sprintf (Query,"SELECT Multiple FROM crs_grp_types WHERE GrpTypCod='%ld'",
+   sprintf (Query,"SELECT Multiple FROM crs_grp_types WHERE GrpTypCod=%ld",
             GrpTypCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get if type of group has multiple enrollment") != 1)
       Lay_ShowErrorAndExit ("Error when getting type of group.");
@@ -2662,7 +2662,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 		     "crs_grp.GrpName,crs_grp.MaxStudents,"
 		     "crs_grp.Open,crs_grp.FileZones"
 		     " FROM crs_grp,crs_grp_types"
-		     " WHERE crs_grp.GrpCod='%ld'"
+		     " WHERE crs_grp.GrpCod=%ld"
 		     " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod",
 	       GrpDat->GrpCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a group");
@@ -2718,7 +2718,7 @@ static long Grp_GetTypeOfGroupOfAGroup (long GrpCod)
    long GrpTypCod;
 
    /***** Get data of a group from database *****/
-   sprintf (Query,"SELECT GrpTypCod FROM crs_grp WHERE GrpCod='%ld'",
+   sprintf (Query,"SELECT GrpTypCod FROM crs_grp WHERE GrpCod=%ld",
             GrpCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get the type of a group") != 1)
       Lay_ShowErrorAndExit ("Error when getting group.");
@@ -2744,7 +2744,7 @@ bool Grp_CheckIfGroupExists (long GrpCod)
    char Query[128];
 
    /***** Get if a group exists from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_grp WHERE GrpCod='%ld'",GrpCod);
+   sprintf (Query,"SELECT COUNT(*) FROM crs_grp WHERE GrpCod=%ld",GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if a group exists") != 0);
   }
 
@@ -2758,9 +2758,9 @@ bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod)
 
    /***** Get if a group exists from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp,crs_grp_types"
-                  " WHERE crs_grp.GrpCod='%ld'"
+                  " WHERE crs_grp.GrpCod=%ld"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
-                  " AND crs_grp_types.CrsCod='%ld'",
+                  " AND crs_grp_types.CrsCod=%ld",
             GrpCod,CrsCod);
    return (DB_QueryCOUNT (Query,"can not check if a group belongs to a course") != 0);
   }
@@ -2776,12 +2776,12 @@ unsigned Grp_CountNumStdsInGrp (long GrpCod)
    /***** Get number of students in a group from database *****/
    sprintf (Query,"SELECT COUNT(*)"
 	          " FROM crs_grp_usr,crs_grp,crs_grp_types,crs_usr"
-                  " WHERE crs_grp_usr.GrpCod='%ld'"
+                  " WHERE crs_grp_usr.GrpCod=%ld"
                   " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             GrpCod,(unsigned) Rol_STUDENT);
    return (unsigned) DB_QueryCOUNT (Query,
 	                            "can not get number of students in a group");
@@ -2800,11 +2800,11 @@ static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod)
 
    /***** Get number of students not belonging to groups of a type from database ******/
    sprintf (Query,"SELECT COUNT(UsrCod) FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND Role='%u'"
+                  " WHERE CrsCod=%ld AND Role=%u"
                   " AND UsrCod NOT IN"
                   " (SELECT DISTINCT crs_grp_usr.UsrCod"
                   " FROM crs_grp,crs_grp_usr"
-                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
             Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STUDENT,GrpTypCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of students not belonging to groups of a type");
@@ -2835,9 +2835,9 @@ static long Grp_GetFirstCodGrpStdBelongsTo (long GrpTypCod,long UsrCod)
 
    /***** Get a group which a user belong to from database *****/
    sprintf (Query,"SELECT crs_grp.GrpCod FROM crs_grp,crs_grp_usr"
-	          " WHERE crs_grp.GrpTypCod='%ld'"
+	          " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                  " AND crs_grp_usr.UsrCod='%ld'",
+                  " AND crs_grp_usr.UsrCod=%ld",
             GrpTypCod,UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the group which a user belongs to");
 
@@ -2870,7 +2870,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
 
    /***** Get if I belong to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
-                  " WHERE GrpCod='%ld' AND UsrCod='%ld'",
+                  " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0);
   }
@@ -2892,24 +2892,24 @@ unsigned Grp_NumGrpTypesMandatIDontBelong (void)
                   "COUNT(*) AS NumStudents,"
                   "crs_grp.MaxStudents as MaxStudents"
                   " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.Mandatory='Y'"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.Open='Y'"
                   " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-                  " AND crs_usr.Role='%u'"
+                  " AND crs_usr.Role=%u"
                   " GROUP BY crs_grp.GrpCod"
                   " HAVING NumStudents<MaxStudents) AS grp_types_open_not_full"
                   " WHERE GrpTypCod NOT IN"
                   " (SELECT DISTINCT crs_grp_types.GrpTypCod"
                   " FROM crs_grp_types,crs_grp,crs_grp_usr"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.Mandatory='Y'"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                  " AND crs_grp_usr.UsrCod='%ld')",
+                  " AND crs_grp_usr.UsrCod=%ld)",
             Gbl.CurrentCrs.Crs.CrsCod,
             (unsigned) Rol_STUDENT,
             Gbl.CurrentCrs.Crs.CrsCod,
@@ -2935,13 +2935,13 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
                   "COUNT(*) AS NumStudents,"
                   "crs_grp.MaxStudents as MaxStudents"
                   " FROM crs_grp_types,crs_grp,crs_grp_usr,crs_usr"
-                  " WHERE crs_grp_types.GrpTypCod='%ld'"
+                  " WHERE crs_grp_types.GrpTypCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.Open='Y'"
                   " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-                  " AND crs_usr.Role='%u'"
+                  " AND crs_usr.Role=%u"
                   " GROUP BY crs_grp.GrpCod"
                   " HAVING NumStudents<MaxStudents) AS available_grp_types",
             GrpTypCod,(unsigned) Rol_STUDENT);
@@ -2968,25 +2968,25 @@ static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,
    if (CrsCod < 0)		// Query the groups from all the user's courses
       sprintf (Query,"SELECT GrpCod"
 	             " FROM crs_grp_usr"
-                     " WHERE UsrCod='%ld'",	// Groups will be unordered
+                     " WHERE UsrCod=%ld",	// Groups will be unordered
                UsrCod);
    else if (GrpTypCod < 0)	// Query the groups of any type in the course
       sprintf (Query,"SELECT crs_grp.GrpCod"
 	             " FROM crs_grp_types,crs_grp,crs_grp_usr"
-                     " WHERE crs_grp_types.CrsCod='%ld'"
+                     " WHERE crs_grp_types.CrsCod=%ld"
                      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                      " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                     " AND crs_grp_usr.UsrCod='%ld'"
+                     " AND crs_grp_usr.UsrCod=%ld"
                      " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
                Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
    else				// Query only the groups of specified type in the course
       sprintf (Query,"SELECT crs_grp.GrpCod"
 	             " FROM crs_grp_types,crs_grp,crs_grp_usr"
-                     " WHERE crs_grp_types.CrsCod='%ld'"
-                     " AND crs_grp_types.GrpTypCod='%ld'"
+                     " WHERE crs_grp_types.CrsCod=%ld"
+                     " AND crs_grp_types.GrpTypCod=%ld"
                      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                      " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                     " AND crs_grp_usr.UsrCod='%ld'"
+                     " AND crs_grp_usr.UsrCod=%ld"
                      " ORDER BY crs_grp.GrpName",
                Gbl.CurrentCrs.Crs.CrsCod,GrpTypCod,UsrCod);
    LstGrps->NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the groups which a user belongs to");
@@ -3027,11 +3027,11 @@ void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps)
    /***** Get groups which I belong to from database *****/
    sprintf (Query,"SELECT crs_grp.GrpCod"
 	          " FROM crs_grp_types,crs_grp,crs_grp_usr"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.FileZones='Y'"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                  " AND crs_grp_usr.UsrCod='%ld'"
+                  " AND crs_grp_usr.UsrCod=%ld"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    LstGrps->NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get the groups which I belong to");
@@ -3089,9 +3089,9 @@ void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GroupNames)
 
    /***** Get the names of groups which a user belongs to, from database *****/
    sprintf (Query,"SELECT crs_grp.GrpName FROM crs_grp,crs_grp_usr"
-                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
-                  " AND crs_grp_usr.UsrCod='%ld'"
+                  " AND crs_grp_usr.UsrCod=%ld"
                   " ORDER BY crs_grp.GrpName",
             GrpTypCod,UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the names of groups a user belongs to");
@@ -3235,8 +3235,8 @@ static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCo
 
    /***** Get number of group types with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_types"
-                  " WHERE CrsCod='%ld' AND GrpTypName='%s'"
-                  " AND GrpTypCod<>'%ld'",
+                  " WHERE CrsCod=%ld AND GrpTypName='%s'"
+                  " AND GrpTypCod<>%ld",
             Gbl.CurrentCrs.Crs.CrsCod,GrpTypName,GrpTypCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of type of group already existed") != 0);
   }
@@ -3251,7 +3251,7 @@ static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long 
 
    /***** Get number of groups with a type and a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp"
-                  " WHERE GrpTypCod='%ld' AND GrpName='%s' AND GrpCod<>'%ld'",
+                  " WHERE GrpTypCod=%ld AND GrpName='%s' AND GrpCod<>%ld",
             GrpTypCod,GrpName,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of group already existed") != 0);
   }
@@ -3269,7 +3269,7 @@ static void Grp_CreateGroupType (void)
    sprintf (Query,"INSERT INTO crs_grp_types"
 	          " (CrsCod,GrpTypName,Mandatory,Multiple,MustBeOpened,OpenTime)"
                   " VALUES"
-                  " ('%ld','%s','%c','%c','%c',FROM_UNIXTIME('%ld'))",
+                  " (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
             Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment ? 'Y' :
         	                                             'N',
@@ -3299,7 +3299,7 @@ static void Grp_CreateGroup (void)
    sprintf (Query,"INSERT INTO crs_grp"
 	          " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
                   " VALUES"
-                  " ('%ld','%s','%u','N','N')",
+                  " (%ld,'%s',%u,'N','N')",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,
             Gbl.CurrentCrs.Grps.GrpName,
             Gbl.CurrentCrs.Grps.MaxStudents);
@@ -3467,25 +3467,25 @@ static void Grp_RemoveGroupTypeCompletely (void)
    Svy_RemoveGroupsOfType (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
 
    /***** Change all groups of this type in course timetable *****/
-   sprintf (Query,"UPDATE timetable_crs SET GrpCod='-1'"
+   sprintf (Query,"UPDATE timetable_crs SET GrpCod=-1"
                   " WHERE GrpCod IN"
-                  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod='%ld')",
+                  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryUPDATE (Query,"can not update all groups of a type in course timetable");
 
    /***** Remove all the students in groups of this type *****/
    sprintf (Query,"DELETE FROM crs_grp_usr WHERE GrpCod IN"
-                  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod='%ld')",
+                  " (SELECT GrpCod FROM crs_grp WHERE GrpTypCod=%ld)",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryDELETE (Query,"can not remove users from all groups of a type");
 
    /***** Remove all the groups of this type *****/
-   sprintf (Query,"DELETE FROM crs_grp WHERE GrpTypCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_grp WHERE GrpTypCod=%ld",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type");
 
    /***** Remove the group type *****/
-   sprintf (Query,"DELETE FROM crs_grp_types WHERE GrpTypCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_grp_types WHERE GrpTypCod=%ld",
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
    DB_QueryDELETE (Query,"can not remove a type of group");
 
@@ -3525,17 +3525,17 @@ static void Grp_RemoveGroupCompletely (void)
    Svy_RemoveGroup (GrpDat.GrpCod);
 
    /***** Change this group in course timetable *****/
-   sprintf (Query,"UPDATE timetable_crs SET GrpCod='-1' WHERE GrpCod='%ld'",
+   sprintf (Query,"UPDATE timetable_crs SET GrpCod=-1 WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not update a group in course timetable");
 
    /***** Remove all the students in this group *****/
-   sprintf (Query,"DELETE FROM crs_grp_usr WHERE GrpCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_grp_usr WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryDELETE (Query,"can not remove users from a group");
 
    /***** Remove the group *****/
-   sprintf (Query,"DELETE FROM crs_grp WHERE GrpCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_grp WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryDELETE (Query,"can not remove a group");
 
@@ -3567,7 +3567,7 @@ void Grp_OpenGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   sprintf (Query,"UPDATE crs_grp SET Open='Y' WHERE GrpCod='%ld'",
+   sprintf (Query,"UPDATE crs_grp SET Open='Y' WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not open a group");
 
@@ -3600,7 +3600,7 @@ void Grp_CloseGroup (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing open/close status *****/
-   sprintf (Query,"UPDATE crs_grp SET Open='N' WHERE GrpCod='%ld'",
+   sprintf (Query,"UPDATE crs_grp SET Open='N' WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not close a group");
 
@@ -3633,7 +3633,7 @@ void Grp_EnableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   sprintf (Query,"UPDATE crs_grp SET FileZones='Y' WHERE GrpCod='%ld'",
+   sprintf (Query,"UPDATE crs_grp SET FileZones='Y' WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not enable file zones of a group");
 
@@ -3666,7 +3666,7 @@ void Grp_DisableFileZonesGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Update the table of groups changing file zones status *****/
-   sprintf (Query,"UPDATE crs_grp SET FileZones='N' WHERE GrpCod='%ld'",
+   sprintf (Query,"UPDATE crs_grp SET FileZones='N' WHERE GrpCod=%ld",
             Gbl.CurrentCrs.Grps.GrpCod);
    DB_QueryUPDATE (Query,"can not disable file zones of a group");
 
@@ -3714,7 +3714,7 @@ void Grp_ChangeGroupType (void)
    else
      {
       /* Update the table of groups changing old type by new type */
-      sprintf (Query,"UPDATE crs_grp SET GrpTypCod='%ld' WHERE GrpCod='%ld'",
+      sprintf (Query,"UPDATE crs_grp SET GrpTypCod=%ld WHERE GrpCod=%ld",
                NewGrpTypCod,Gbl.CurrentCrs.Grps.GrpCod);
       DB_QueryUPDATE (Query,"can not update the type of a group");
 
@@ -3763,7 +3763,7 @@ void Grp_ChangeMandatGrpTyp (void)
    else
      {
       /***** Update of the table of types of group changing the old type of enrollment by the new *****/
-      sprintf (Query,"UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod='%ld'",
+      sprintf (Query,"UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
                NewMandatoryEnrollment ? 'Y' :
         	                        'N',
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
@@ -3817,7 +3817,7 @@ void Grp_ChangeMultiGrpTyp (void)
      {
       /***** Update of the table of types of group changing the old type of enrollment by the new *****/
       sprintf (Query,"UPDATE crs_grp_types SET Multiple='%c'"
-	             " WHERE GrpTypCod='%ld'",
+	             " WHERE GrpTypCod=%ld",
                NewMultipleEnrollment ? 'Y' :
         	                       'N',
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
@@ -3859,8 +3859,8 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    /***** Update the table of types of group
           changing the old open time of enrollment by the new *****/
    sprintf (Query,"UPDATE crs_grp_types"
-	          " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME('%ld')"
-                  " WHERE GrpTypCod='%ld'",
+	          " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
+                  " WHERE GrpTypCod=%ld",
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                      'N',
             (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
@@ -3913,7 +3913,7 @@ void Grp_ChangeMaxStdsGrp (void)
    else
      {
       /***** Update the table of groups changing the old maximum of students to the new *****/
-      sprintf (Query,"UPDATE crs_grp SET MaxStudents='%u' WHERE GrpCod='%ld'",
+      sprintf (Query,"UPDATE crs_grp SET MaxStudents=%u WHERE GrpCod=%ld",
                NewMaxStds,Gbl.CurrentCrs.Grps.GrpCod);
       DB_QueryUPDATE (Query,"can not update the maximum number of students in a group");
 
@@ -4006,7 +4006,7 @@ void Grp_RenameGroupType (void)
            {
             /* Update the table changing old name by new name */
             sprintf (Query,"UPDATE crs_grp_types SET GrpTypName='%s'"
-        	           " WHERE GrpTypCod='%ld'",
+        	           " WHERE GrpTypCod=%ld",
                      NewNameGrpTyp,
                      Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
             DB_QueryUPDATE (Query,"can not update the type of a group");
@@ -4079,7 +4079,7 @@ void Grp_RenameGroup (void)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE crs_grp SET GrpName='%s' WHERE GrpCod='%ld'",
+            sprintf (Query,"UPDATE crs_grp SET GrpName='%s' WHERE GrpCod=%ld",
                      NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod);
             DB_QueryUPDATE (Query,"can not update the name of a group");
 

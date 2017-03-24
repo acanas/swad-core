@@ -564,23 +564,23 @@ static void Sch_SearchInDB (void)
          RangeQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
-         sprintf (RangeQuery," AND countries.CtyCod='%ld'",
+         sprintf (RangeQuery," AND countries.CtyCod=%ld",
                   Gbl.CurrentCty.Cty.CtyCod);
          break;
       case Sco_SCOPE_INS:
-         sprintf (RangeQuery," AND institutions.InsCod='%ld'",
+         sprintf (RangeQuery," AND institutions.InsCod=%ld",
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Sco_SCOPE_CTR:
-         sprintf (RangeQuery," AND centres.CtrCod='%ld'",
+         sprintf (RangeQuery," AND centres.CtrCod=%ld",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Sco_SCOPE_DEG:
-         sprintf (RangeQuery," AND degrees.DegCod='%ld'",
+         sprintf (RangeQuery," AND degrees.DegCod=%ld",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
-         sprintf (RangeQuery," AND courses.CrsCod='%ld'",
+         sprintf (RangeQuery," AND courses.CrsCod=%ld",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
      }
@@ -871,13 +871,13 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			"SELECT files.FilCod,"	// Institution
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"'-1' AS CtrCod,'' AS CtrShortName,"
-			"'-1' AS DegCod,'' AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS CtrCod,'' AS CtrShortName,"
+			"-1 AS DegCod,'' AS DegShortName,"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
 			"%s"
@@ -886,12 +886,12 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"'-1' AS DegCod,'' AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS DegCod,'' AS DegShortName,"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
@@ -902,11 +902,11 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
 			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"'-1','' AS CrsShortName,"
-	                "'-1'"
+			"-1,'' AS CrsShortName,"
+	                "-1"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -919,10 +919,10 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
 			"degrees.DegCod,degrees.ShortName AS DegShortName,"
 			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "'-1'"
+	                "-1"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.Public='Y' AND %s"
-	                " AND files.FileBrowser IN ('%u','%u')"
+	                " AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -988,9 +988,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
 	                " ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_usr,files"
-			" WHERE crs_usr.UsrCod='%ld'"
+			" WHERE crs_usr.UsrCod=%ld"
 			" AND crs_usr.CrsCod=files.Cod"
-			" AND files.FileBrowser IN ('%u','%u','%u','%u')",
+			" AND files.FileBrowser IN (%u,%u,%u,%u)",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) Brw_ADMI_DOCUM_CRS,
 		  (unsigned) Brw_ADMI_TEACH_CRS,
@@ -1003,9 +1003,9 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                " (FilCod INT NOT NULL,UNIQUE INDEX(FilCod))"
 	                " ENGINE=MEMORY"
 			" SELECT files.FilCod FROM crs_grp_usr,files"
-			" WHERE crs_grp_usr.UsrCod='%ld'"
+			" WHERE crs_grp_usr.UsrCod=%ld"
 			" AND crs_grp_usr.GrpCod=files.Cod"
-			" AND files.FileBrowser IN ('%u','%u','%u','%u')",
+			" AND files.FileBrowser IN (%u,%u,%u,%u)",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) Brw_ADMI_DOCUM_GRP,
 		  (unsigned) Brw_ADMI_TEACH_GRP,
@@ -1025,10 +1025,10 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
 			"degrees.DegCod,degrees.ShortName AS DegShortName,"
 			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "'-1' AS GrpCod"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
 			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_crs) AND %s"
-	                " AND files.FileBrowser IN ('%u','%u','%u','%u')"
+	                " AND files.FileBrowser IN (%u,%u,%u,%u)"
 	                " AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -1045,7 +1045,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 	                "crs_grp.GrpCod"
 			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
 			" WHERE files.FilCod IN (SELECT FilCod FROM my_files_grp) AND %s"
-	                " AND files.FileBrowser IN ('%u','%u','%u','%u')"
+	                " AND files.FileBrowser IN (%u,%u,%u,%u)"
 	                " AND files.Cod=crs_grp.GrpCod"
 	                " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 	                " AND crs_grp_types.CrsCod=courses.CrsCod"
@@ -1111,13 +1111,13 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			"SELECT files.FilCod,"	// Institution
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
-			"'-1' AS CtrCod,'' AS CtrShortName,"
-			"'-1' AS DegCod,'' AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS CtrCod,'' AS CtrShortName,"
+			"-1 AS DegCod,'' AS DegShortName,"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
 			"%s"
@@ -1126,12 +1126,12 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
-			"'-1' AS DegCod,'' AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS DegCod,'' AS DegShortName,"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
 			" AND institutions.CtyCod=countries.CtyCod"
@@ -1142,11 +1142,11 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			"institutions.InsCod,institutions.ShortName AS InsShortName,"
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
 			"degrees.DegCod,degrees.ShortName AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u')"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser IN (%u,%u)"
 			" AND files.Cod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
@@ -1159,10 +1159,10 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			"centres.CtrCod,centres.ShortName AS CtrShortName,"
 			"degrees.DegCod,degrees.ShortName AS DegShortName,"
 			"courses.CrsCod,courses.ShortName AS CrsShortName,"
-	                "'-1' AS GrpCod"
+	                "-1 AS GrpCod"
 			" FROM files,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u','%u','%u')"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser IN (%u,%u,%u,%u)"
 			" AND files.Cod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
@@ -1178,8 +1178,8 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			"courses.CrsCod,courses.ShortName AS CrsShortName,"
 	                "crs_grp.GrpCod"
 			" FROM files,crs_grp,crs_grp_types,courses,degrees,centres,institutions,countries"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser IN ('%u','%u','%u','%u')"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser IN (%u,%u,%u,%u)"
 			" AND files.Cod=crs_grp.GrpCod"
 			" AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 			" AND crs_grp_types.CrsCod=courses.CrsCod"
@@ -1191,14 +1191,14 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 			" UNION "
 			"SELECT files.FilCod,"	// Briefcase
 			"SUBSTRING(files.Path,LOCATE('/',files.Path)) AS PathFromRoot,"
-			"'-1' AS InsCod,'' AS InsShortName,"
-			"'-1' AS CtrCod,'' AS CtrShortName,"
-			"'-1' AS DegCod,'' AS DegShortName,"
-			"'-1' AS CrsCod,'' AS CrsShortName,"
-	                "'-1' AS GrpCod"
+			"-1 AS InsCod,'' AS InsShortName,"
+			"-1 AS CtrCod,'' AS CtrShortName,"
+			"-1 AS DegCod,'' AS DegShortName,"
+			"-1 AS CrsCod,'' AS CrsShortName,"
+	                "-1 AS GrpCod"
 			" FROM files"
-			" WHERE files.PublisherUsrCod='%ld' AND %s"
-			" AND files.FileBrowser='%u'"
+			" WHERE files.PublisherUsrCod=%ld AND %s"
+			" AND files.FileBrowser=%u"
 			") AS selected_files"
 			" WHERE PathFromRoot<>''"
 			" ORDER BY InsShortName,CtrShortName,DegShortName,CrsShortName,PathFromRoot",
@@ -1351,7 +1351,7 @@ static void Sch_SaveLastSearchIntoSession (void)
 	 Gbl.Search.WhatToSearch = Sch_WHAT_TO_SEARCH_DEFAULT;
 
       /***** Save last search in session *****/
-      sprintf (Query,"UPDATE sessions SET WhatToSearch='%u',SearchStr='%s'"
+      sprintf (Query,"UPDATE sessions SET WhatToSearch=%u,SearchStr='%s'"
 		     " WHERE SessionId='%s'",
 	       (unsigned) Gbl.Search.WhatToSearch,
 	       Gbl.Search.Str,
@@ -1361,7 +1361,7 @@ static void Sch_SaveLastSearchIntoSession (void)
       /***** Update my last type of search *****/
       // WhatToSearch is stored in usr_last for next time I log in
       // In other existing sessions distinct to this, WhatToSearch will remain unchanged
-      sprintf (Query,"UPDATE usr_last SET WhatToSearch='%u' WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_last SET WhatToSearch=%u WHERE UsrCod=%ld",
 	       (unsigned) Gbl.Search.WhatToSearch,
 	       Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update type of search in user's last data");

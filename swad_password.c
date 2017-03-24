@@ -112,7 +112,7 @@ bool Pwd_CheckPendingPassword (void)
 
    /***** Get pending password from database *****/
    sprintf (Query,"SELECT PendingPassword FROM pending_passwd"
-                  " WHERE UsrCod='%ld'",
+                  " WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get pending password"))
      {
@@ -142,7 +142,7 @@ void Pwd_AssignMyPendingPasswordToMyCurrentPassword (void)
 
    /***** Update my current password in database *****/
    sprintf (Query,"UPDATE usr_data SET Password='%s'"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
             Gbl.Usrs.Me.PendingPassword,
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your password");
@@ -473,7 +473,7 @@ void Pwd_SetMyPendingPassword (char PlainPassword[Pwd_MAX_BYTES_PLAIN_PASSWORD +
    sprintf (Query,"REPLACE INTO pending_passwd"
 	          " (UsrCod,PendingPassword,DateAndTime)"
                   " VALUES"
-                  " ('%ld','%s',NOW())",
+                  " (%ld,'%s',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PendingPassword);
    DB_QueryREPLACE (Query,"can not create pending password");
   }
@@ -613,7 +613,7 @@ static unsigned Pwd_GetNumOtherUsrsWhoUseThisPassword (const char *EncryptedPass
    /* Query database */
    if (UsrCod > 0)
       sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-		     " WHERE Password='%s' AND UsrCod<>'%ld'",
+		     " WHERE Password='%s' AND UsrCod<>%ld",
 	       EncryptedPassword,UsrCod);
    else
       sprintf (Query,"SELECT COUNT(*) FROM usr_data"

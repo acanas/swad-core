@@ -167,8 +167,8 @@ void Ses_InsertSessionInDB (void)
 	          " (SessionId,UsrCod,Password,Role,"
                   "CtyCod,InsCod,CtrCod,DegCod,CrsCod,LastTime,LastRefresh,WhatToSearch)"
                   " VALUES"
-                  " ('%s','%ld','%s','%u',"
-                  "'%ld','%ld','%ld','%ld','%ld',NOW(),NOW(),'%u')",
+                  " ('%s',%ld,'%s',%u,"
+                  "%ld,%ld,%ld,%ld,%ld,NOW(),NOW(),%u)",
             Gbl.Session.Id,
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Usrs.Me.UsrDat.Password,
@@ -193,8 +193,8 @@ void Ses_UpdateSessionDataInDB (void)
               Ses_BYTES_SESSION_ID];
 
    /***** Update session in database *****/
-   sprintf (Query,"UPDATE sessions SET UsrCod='%ld',Password='%s',Role='%u',"
-                  "CtyCod='%ld',InsCod='%ld',CtrCod='%ld',DegCod='%ld',CrsCod='%ld',"
+   sprintf (Query,"UPDATE sessions SET UsrCod=%ld,Password='%s',Role=%u,"
+                  "CtyCod=%ld,InsCod=%ld,CtrCod=%ld,DegCod=%ld,CrsCod=%ld,"
                   "LastTime=NOW(),LastRefresh=NOW()"
                   " WHERE SessionId='%s'",
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -376,7 +376,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
 	    sprintf (Query,"INSERT INTO hidden_params"
 			   " (SessionId,Action,ParamName,ParamValue)"
 			   " VALUES"
-			   " ('%s','%d','%s','%s')",
+			   " ('%s',%d,'%s','%s')",
 		     Gbl.Session.Id,(int) Action,
 		     ParamName,
 		     LengthParamValue ? ParamValue :
@@ -432,7 +432,7 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t Action,const char *P
 
    /***** Get a hidden parameter from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM hidden_params"
-                  " WHERE SessionId='%s' AND Action='%d' AND ParamName='%s'",
+                  " WHERE SessionId='%s' AND Action=%d AND ParamName='%s'",
             Gbl.Session.Id,(int) Action,ParamName);
    return (DB_QueryCOUNT (Query,"can not check if a hidden parameter is already in database") != 0);
   }
@@ -457,7 +457,7 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t Action,const char *ParamName,char 
      {
       /***** Get a hidden parameter from database *****/
       sprintf (Query,"SELECT ParamValue FROM hidden_params"
-                     " WHERE SessionId='%s' AND Action='%d' AND ParamName='%s'",
+                     " WHERE SessionId='%s' AND Action=%d AND ParamName='%s'",
                Gbl.Session.Id,(int) Action,ParamName);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get a hidden parameter");
 

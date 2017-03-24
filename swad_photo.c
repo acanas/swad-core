@@ -882,7 +882,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
 
    /***** Get number of clicks without photo from database *****/
    sprintf (Query,"SELECT NumClicks FROM clicks_without_photo"
-                  " WHERE UsrCod='%ld'",
+                  " WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of clicks without photo");
 
@@ -896,7 +896,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       /* Update number of clicks */
       if (NumClicks <= Pho_MAX_CLICKS_WITHOUT_PHOTO)
         {
-         sprintf (Query,"UPDATE clicks_without_photo SET NumClicks=NumClicks+1 WHERE UsrCod='%ld'",
+         sprintf (Query,"UPDATE clicks_without_photo SET NumClicks=NumClicks+1 WHERE UsrCod=%ld",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          DB_QueryUPDATE (Query,"can not update number of clicks without photo");
          NumClicks++;
@@ -908,7 +908,7 @@ unsigned Pho_UpdateMyClicksWithoutPhoto (void)
       sprintf (Query,"INSERT INTO clicks_without_photo"
 	             " (UsrCod,NumClicks)"
 	             " VALUES"
-	             " ('%ld',1)",
+	             " (%ld,1)",
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryINSERT (Query,"can not create number of clicks without photo");
       NumClicks = 1;
@@ -929,7 +929,7 @@ void Pho_RemoveUsrFromTableClicksWithoutPhoto (long UsrCod)
   {
    char Query[512];
 
-   sprintf (Query,"DELETE FROM clicks_without_photo WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM clicks_without_photo WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from the list of users without photo");
   }
 
@@ -1075,7 +1075,7 @@ static void Pho_ClearPhotoName (long UsrCod)
 
    /***** Clear photo name in user's data *****/
    sprintf (Query,"UPDATE usr_data SET Photo=''"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
 	    UsrCod);
    DB_QueryUPDATE (Query,"can not clear the name of a user's photo");
   }
@@ -1091,7 +1091,7 @@ void Pho_UpdatePhotoName (struct UsrData *UsrDat)
 
    /***** Update photo name in database *****/
    sprintf (Query,"UPDATE usr_data SET Photo='%s'"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
             Gbl.UniqueNameEncrypted,UsrDat->UsrCod);
    DB_QueryUPDATE (Query,"can not update the name of a user's photo");
 
@@ -1222,7 +1222,7 @@ void Pho_ChangePhotoVisibility (void)
 
    /***** Store public/private photo in database *****/
    sprintf (Query,"UPDATE usr_data SET PhotoVisibility='%s'"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
             Pri_VisibilityDB[Gbl.Usrs.Me.UsrDat.PhotoVisibility],
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
@@ -1334,7 +1334,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 	          " FROM degrees,courses,crs_usr"
                   " WHERE degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'"
+                  " AND crs_usr.Role=%u"
 	          " AND degrees.DegCod NOT IN"
 	          " (SELECT DISTINCT DegCod FROM sta_degrees)"
 	          " LIMIT 1",
@@ -1364,7 +1364,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
                      " WHERE sta_degrees.TimeAvgPhoto<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')"
                      " AND sta_degrees.DegCod=courses.DegCod"
                      " AND courses.CrsCod=crs_usr.CrsCod"
-                     " AND crs_usr.Role='%u'"
+                     " AND crs_usr.Role=%u"
 	             " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
                Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
                (unsigned) Rol_STUDENT);
@@ -1415,7 +1415,7 @@ static long Pho_GetTimeAvgPhotoWasComputed (long DegCod)
 
    /***** Get last time an average photo was computed from database *****/
    sprintf (Query,"SELECT MIN(UNIX_TIMESTAMP(TimeAvgPhoto))"
-                  " FROM sta_degrees WHERE DegCod='%ld'",
+                  " FROM sta_degrees WHERE DegCod=%ld",
             DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last time an average photo was computed");
 
@@ -1451,7 +1451,7 @@ static long Pho_GetTimeToComputeAvgPhoto (long DegCod)
 
    /***** Get time to compute average photo from database *****/
    sprintf (Query,"SELECT TimeToComputeAvgPhoto FROM sta_degrees"
-                  " WHERE DegCod='%ld'",DegCod);
+                  " WHERE DegCod=%ld",DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get time to compute average photo");
 
    /***** Count number of rows in result *****/
@@ -1976,7 +1976,7 @@ static void Pho_GetMaxStdsPerDegree (void)
    sprintf (Query,"SELECT MAX(NumStds),MAX(NumStdsWithPhoto),"
 	          "MAX(NumStdsWithPhoto/NumStds)"
                   " FROM sta_degrees"
-                  " WHERE Sex='all' AND NumStds>'0'");
+                  " WHERE Sex='all' AND NumStds>0");
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get maximum number of students in a degree");
 
    /***** Count number of rows in result *****/
@@ -2215,7 +2215,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
          sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
-                        " AND sta_degrees.NumStds>'0'"
+                        " AND sta_degrees.NumStds>0"
                         " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStds DESC,sta_degrees.NumStdsWithPhoto DESC,degrees.ShortName");
          break;
@@ -2223,7 +2223,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
          sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
-                        " AND sta_degrees.NumStds>'0'"
+                        " AND sta_degrees.NumStds>0"
                         " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStdsWithPhoto DESC,sta_degrees.NumStds DESC,degrees.ShortName");
          break;
@@ -2231,7 +2231,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
          sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
-                        " AND sta_degrees.NumStds>'0'"
+                        " AND sta_degrees.NumStds>0"
                         " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY sta_degrees.NumStdsWithPhoto/sta_degrees.NumStds DESC,degrees.ShortName");
          break;
@@ -2239,7 +2239,7 @@ static void Pho_BuildQueryOfDegrees (char *Query)
          sprintf (Query,"SELECT degrees.DegCod"
                         " FROM degrees,sta_degrees"
                         " WHERE sta_degrees.Sex='all'"
-                        " AND sta_degrees.NumStds>'0'"
+                        " AND sta_degrees.NumStds>0"
                         " AND degrees.DegCod=sta_degrees.DegCod"
                         " ORDER BY degrees.ShortName");
          break;
@@ -2260,7 +2260,7 @@ static void Pho_GetNumStdsInDegree (long DegCod,Usr_Sex_t Sex,int *NumStds,int *
 
    /***** Get the number of students in a degree from database *****/
    sprintf (Query,"SELECT NumStds,NumStdsWithPhoto FROM sta_degrees"
-                  " WHERE DegCod='%ld' AND Sex='%s'",
+                  " WHERE DegCod=%ld AND Sex='%s'",
             DegCod,Usr_StringsSexDB[Sex]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the number of students in a degree");
 
@@ -2291,7 +2291,7 @@ static void Pho_UpdateDegStats (long DegCod,Usr_Sex_t Sex,unsigned NumStds,unsig
    sprintf (Query,"REPLACE INTO sta_degrees"
                   " (DegCod,Sex,NumStds,NumStdsWithPhoto,TimeAvgPhoto,TimeToComputeAvgPhoto)"
                   " VALUES"
-                  " ('%ld','%s','%u','%u',NOW(),'%ld')",
+                  " (%ld,'%s',%u,%u,NOW(),%ld)",
 	    DegCod,Usr_StringsSexDB[Sex],NumStds,NumStdsWithPhoto,TimeToComputeAvgPhotoInMicroseconds);
    DB_QueryREPLACE (Query,"can not save stats of a degree");
   }

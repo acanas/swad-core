@@ -101,7 +101,7 @@ int main (void)
 
 		     sprintf (Query,"SELECT usr_IDs.UsrCod,usr_IDs.UsrID"
 				    " FROM crs_usr,usr_IDs"
-				    " WHERE crs_usr.CrsCod='%ld'"
+				    " WHERE crs_usr.CrsCod=%ld"
 				    " AND crs_usr.UsrCod=usr_IDs.UsrCod"
 				    " ORDER BY usr_IDs.UsrCod",
 			      CrsCod);

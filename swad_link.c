@@ -274,7 +274,7 @@ void Lnk_GetDataOfLinkByCod (struct Link *Lnk)
      {
       /***** Get data of an institutional link from database *****/
       sprintf (Query,"SELECT ShortName,FullName,WWW FROM links"
-	             " WHERE LnkCod='%ld'",
+	             " WHERE LnkCod=%ld",
                Lnk->LnkCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of an institutional link");
 
@@ -435,7 +435,7 @@ void Lnk_RemoveLink (void)
    Lnk_GetDataOfLinkByCod (&Lnk);
 
    /***** Remove link *****/
-   sprintf (Query,"DELETE FROM links WHERE LnkCod='%ld'",
+   sprintf (Query,"DELETE FROM links WHERE LnkCod=%ld",
             Lnk.LnkCod);
    DB_QueryDELETE (Query,"can not remove an institutional link");
 
@@ -564,7 +564,7 @@ static bool Lnk_CheckIfLinkNameExists (const char *FieldName,const char *Name,lo
    char Query[256 + Lnk_MAX_BYTES_LINK_FULL_NAME];
 
    /***** Get number of links with a name from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>'%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM links WHERE %s='%s' AND LnkCod<>%ld",
             FieldName,Name,LnkCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of an institutional link already existed") != 0);
   }
@@ -578,7 +578,7 @@ static void Lnk_UpdateLnkNameDB (long LnkCod,const char *FieldName,const char *N
    char Query[128 + Lnk_MAX_BYTES_LINK_FULL_NAME];
 
    /***** Update institutional link changing old name by new name */
-   sprintf (Query,"UPDATE links SET %s='%s' WHERE LnkCod='%ld'",
+   sprintf (Query,"UPDATE links SET %s='%s' WHERE LnkCod=%ld",
 	    FieldName,NewLnkName,LnkCod);
    DB_QueryUPDATE (Query,"can not update the name of an institutional link");
   }
@@ -609,7 +609,7 @@ void Lnk_ChangeLinkWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE links SET WWW='%s' WHERE LnkCod='%ld'",
+      sprintf (Query,"UPDATE links SET WWW='%s' WHERE LnkCod=%ld",
                NewWWW,Lnk->LnkCod);
       DB_QueryUPDATE (Query,"can not update the web of an institutional link");
 

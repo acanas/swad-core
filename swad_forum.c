@@ -398,7 +398,7 @@ static bool For_GetIfForumPstExists (long PstCod)
    char Query[128];
 
    /***** Get if a forum post exists from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE PstCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE PstCod=%ld",
 	    PstCod);
    return (DB_QueryCOUNT (Query,"can not check if a post of a forum already existed") != 0);	// Post exists if it appears in table of forum posts
   }
@@ -415,7 +415,7 @@ static bool For_GetIfPstIsEnabled (long PstCod)
      {
       /***** Get if post is disabled from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM forum_disabled_post"
-		     " WHERE PstCod='%ld'",
+		     " WHERE PstCod=%ld",
 	       PstCod);
       return (DB_QueryCOUNT (Query,"can not check if a post of a forum is disabled") == 0);	// Post is enabled if it does not appear in table of disabled posts
      }
@@ -432,7 +432,7 @@ static void For_DeletePstFromDisabledPstTable (long PstCod)
    char Query[128];
 
    /***** Remove post from disabled posts table *****/
-   sprintf (Query,"DELETE FROM forum_disabled_post WHERE PstCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_disabled_post WHERE PstCod=%ld",
             PstCod);
    DB_QueryDELETE (Query,"can not unban a post of a forum");
   }
@@ -449,7 +449,7 @@ static void For_InsertPstIntoBannedPstTable (long PstCod)
    sprintf (Query,"REPLACE INTO forum_disabled_post"
 	          " (PstCod,UsrCod,DisableTime)"
                   " VALUES"
-                  " ('%ld','%ld',NOW())",
+                  " (%ld,%ld,NOW())",
             PstCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not ban a post of a forum");
   }
@@ -485,7 +485,7 @@ static long For_InsertForumPst (long ThrCod,long UsrCod,
 	          " (ThrCod,UsrCod,CreatTime,ModifTime,NumNotif,"
 	          "Subject,Content,ImageName,ImageTitle,ImageURL)"
                   " VALUES"
-                  " ('%ld','%ld',NOW(),NOW(),'0',"
+                  " (%ld,%ld,NOW(),NOW(),0,"
                   "'%s','%s','%s','%s','%s')",
             ThrCod,UsrCod,
             Subject,Content,
@@ -522,7 +522,7 @@ static bool For_RemoveForumPst (long PstCod,struct Image *Image)
      }
 
    /***** Delete post from forum post table *****/
-   sprintf (Query,"DELETE FROM forum_post WHERE PstCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_post WHERE PstCod=%ld",
             PstCod);
    DB_QueryDELETE (Query,"can not remove a post from a forum");
 
@@ -551,7 +551,7 @@ static unsigned For_NumPstsInThrWithPstCod (long PstCod,long *ThrCod)
    sprintf (Query,"SELECT COUNT(PstCod),ThrCod FROM forum_post"
                   " WHERE ThrCod IN"
                   " (SELECT ThrCod FROM forum_post"
-                  " WHERE PstCod='%ld') GROUP BY ThrCod;",
+                  " WHERE PstCod=%ld) GROUP BY ThrCod;",
             PstCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get number of posts in a thread of a forum");
 
@@ -584,7 +584,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES"
-                        " ('%u','-1','%ld','%ld')",
+                        " (%u,-1,%ld,%ld)",
                   (unsigned) ForumType,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_INSTIT_USRS:
@@ -592,7 +592,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES"
-                        " ('%u','%ld','%ld','%ld')",
+                        " (%u,%ld,%ld,%ld)",
                   (unsigned) ForumType,Gbl.Forum.Ins.InsCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_CENTRE_USRS:
@@ -600,7 +600,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES"
-                        " ('%u','%ld','%ld','%ld')",
+                        " (%u,%ld,%ld,%ld)",
                   (unsigned) ForumType,Gbl.Forum.Ctr.CtrCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_DEGREE_USRS:
@@ -608,7 +608,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES"
-                        " ('%u','%ld','%ld','%ld')",
+                        " (%u,%ld,%ld,%ld)",
                   (unsigned) ForumType,Gbl.Forum.Deg.DegCod,FirstPstCod,FirstPstCod);
          break;
       case For_FORUM_COURSE_USRS:
@@ -616,7 +616,7 @@ static long For_InsertForumThread (For_ForumType_t ForumType,long FirstPstCod)
          sprintf (Query,"INSERT INTO forum_thread"
                         " (ForumType,Location,FirstPstCod,LastPstCod)"
                         " VALUES"
-                        " ('%u','%ld','%ld','%ld')",
+                        " (%u,%ld,%ld,%ld)",
                   (unsigned) ForumType,Gbl.Forum.Crs.CrsCod,FirstPstCod,FirstPstCod);
          break;
      }
@@ -638,7 +638,7 @@ static void For_RemoveThreadOnly (long ThrCod)
    For_RemoveThrCodFromThrClipboard (ThrCod);
 
    /***** Delete thread from forum thread table *****/
-   sprintf (Query,"DELETE FROM forum_thread WHERE ThrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_thread WHERE ThrCod=%ld",
             ThrCod);
    DB_QueryDELETE (Query,"can not remove a thread from a forum");
   }
@@ -654,13 +654,13 @@ static void For_RemoveThreadAndItsPsts (long ThrCod)
    /***** Delete banned posts in thread *****/
    sprintf (Query,"DELETE forum_disabled_post"
 	          " FROM forum_post,forum_disabled_post"
-                  " WHERE forum_post.ThrCod='%ld'"
+                  " WHERE forum_post.ThrCod=%ld"
                   " AND forum_post.PstCod=forum_disabled_post.PstCod",
             ThrCod);
    DB_QueryDELETE (Query,"can not unban the posts of a thread of a forum");
 
    /***** Delete thread posts *****/
-   sprintf (Query,"DELETE FROM forum_post WHERE ThrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_post WHERE ThrCod=%ld",
             ThrCod);
    DB_QueryDELETE (Query,"can not remove the posts of a thread of a forum");
 
@@ -680,7 +680,7 @@ static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
 
    /***** Get subject of a thread from database *****/
    sprintf (Query,"SELECT forum_post.Subject FROM forum_thread,forum_post"
-                  " WHERE forum_thread.ThrCod='%ld'"
+                  " WHERE forum_thread.ThrCod=%ld"
                   " AND forum_thread.FirstPstCod=forum_post.PstCod",
             ThrCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a thread of a forum");
@@ -709,7 +709,7 @@ For_ForumType_t For_GetForumTypeOfAPost (long PstCod)
    /***** Get forum type of a forum from database *****/
    sprintf (Query,"SELECT forum_thread.ForumType"
 	          " FROM forum_post,forum_thread"
-                  " WHERE forum_post.PstCod='%ld'"
+                  " WHERE forum_post.PstCod=%ld"
                   " AND forum_post.ThrCod=forum_thread.ThrCod",
             PstCod);
 
@@ -739,8 +739,8 @@ static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long Last
    char Query[256];
 
    /***** Update the code of the first and last posts of a thread *****/
-   sprintf (Query,"UPDATE forum_thread SET FirstPstCod='%ld',LastPstCod='%ld'"
-                  " WHERE ThrCod='%ld'",
+   sprintf (Query,"UPDATE forum_thread SET FirstPstCod=%ld,LastPstCod=%ld"
+                  " WHERE ThrCod=%ld",
             FirstPstCod,LastPstCod,ThrCod);
    DB_QueryUPDATE (Query,"can not update a thread of a forum");
   }
@@ -754,7 +754,7 @@ static void For_UpdateThrLastPst (long ThrCod,long LastPstCod)
    char Query[128];
 
    /***** Update the code of the last post of a thread *****/
-   sprintf (Query,"UPDATE forum_thread SET LastPstCod='%ld' WHERE ThrCod='%ld'",
+   sprintf (Query,"UPDATE forum_thread SET LastPstCod=%ld WHERE ThrCod=%ld",
             LastPstCod,ThrCod);
    DB_QueryUPDATE (Query,"can not update a thread of a forum");
   }
@@ -772,7 +772,7 @@ static long For_GetLastPstCod (long ThrCod)
 
    /***** Get the code of the last post of a thread from database *****/
    sprintf (Query,"SELECT PstCod FROM forum_post"
-                  " WHERE ThrCod='%ld' ORDER BY CreatTime DESC LIMIT 1",
+                  " WHERE ThrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
             ThrCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the most recent post of a thread of a forum");
 
@@ -799,7 +799,7 @@ static void For_UpdateThrReadTime (long ThrCod,time_t ReadTimeUTC)
    sprintf (Query,"REPLACE INTO forum_thr_read"
 	          " (ThrCod,UsrCod,ReadTime)"
                   " VALUES"
-                  " ('%ld','%ld',FROM_UNIXTIME('%ld'))",
+                  " (%ld,%ld,FROM_UNIXTIME(%ld))",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod,(long) ReadTimeUTC);
    DB_QueryREPLACE (Query,"can not update the status of reading of a thread of a forum");
   }
@@ -813,7 +813,7 @@ static unsigned For_GetNumOfReadersOfThr (long ThrCod)
    char Query[128];
 
    /***** Get number of distinct readers of a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_thr_read WHERE ThrCod=%ld",
             ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of readers of a thread of a forum");
   }
@@ -831,7 +831,7 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod)
 
    /***** Get number of distinct writers in a thread from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM forum_post"
-                  " WHERE ThrCod='%ld'",
+                  " WHERE ThrCod=%ld",
             ThrCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of writers in a thread of a forum");
 
@@ -857,7 +857,7 @@ static unsigned For_GetNumPstsInThr (long ThrCod)
    char Query[128];
 
    /***** Get number of posts in a thread from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE ThrCod=%ld",
             ThrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a thread of a forum");
   }
@@ -872,7 +872,7 @@ static unsigned For_GetNumMyPstInThr (long ThrCod)
 
    /***** Get if I have write posts in a thread from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post"
-                  " WHERE ThrCod='%ld' AND UsrCod='%ld'",
+                  " WHERE ThrCod=%ld AND UsrCod=%ld",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not check if you have written post in a thead of a forum");
   }
@@ -886,7 +886,7 @@ unsigned long For_GetNumPostsUsr (long UsrCod)
    char Query[128];
 
    /***** Get number of posts from a user from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_post WHERE UsrCod=%ld",
             UsrCod);
    return DB_QueryCOUNT (Query,"can not number of posts from a user");
   }
@@ -905,7 +905,7 @@ static time_t For_GetThrReadTime (long ThrCod)
    /***** Get read time of a thread from database *****/
    sprintf (Query,"SELECT UNIX_TIMESTAMP(ReadTime)"
                   " FROM forum_thr_read"
-                  " WHERE ThrCod='%ld' AND UsrCod='%ld'",
+                  " WHERE ThrCod=%ld AND UsrCod=%ld",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get date of reading of a thread of a forum"))
      {
@@ -932,7 +932,7 @@ void For_DeleteThrFromReadThrs (long ThrCod)
    char Query[128];
 
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a thread *****/
-   sprintf (Query,"DELETE FROM forum_thr_read WHERE ThrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_thr_read WHERE ThrCod=%ld",
             ThrCod);
    DB_QueryDELETE (Query,"can not remove the status of reading of a thread of a forum");
   }
@@ -946,7 +946,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
    char Query[128];
 
    /***** Delete pairs ThrCod-UsrCod in forum_thr_read for a user *****/
-   sprintf (Query,"DELETE FROM forum_thr_read WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_thr_read WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove the status of reading by a user of all the threads of a forum");
   }
@@ -1027,7 +1027,7 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime) FROM forum_post"
-                  " WHERE ThrCod='%ld' ORDER BY PstCod",
+                  " WHERE ThrCod=%ld ORDER BY PstCod",
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get posts of a thread");
 
@@ -1369,7 +1369,7 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
    /***** Get data of a post from database *****/
    sprintf (Query,"SELECT UsrCod,UNIX_TIMESTAMP(CreatTime),"
 	          "Subject,Content,ImageName,ImageTitle,ImageURL"
-                  " FROM forum_post WHERE PstCod='%ld'",
+                  " FROM forum_post WHERE PstCod=%ld",
             PstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a post");
 
@@ -1419,7 +1419,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 
    /***** Get subject of message from database *****/
    sprintf (Query,"SELECT Subject,Content FROM forum_post"
-                  " WHERE PstCod='%ld'",PstCod);
+                  " WHERE PstCod=%ld",PstCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
         {
@@ -1481,22 +1481,22 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ctr.CtrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Crs.CrsCod);
          break;
       default:
@@ -1504,9 +1504,9 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod)
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_post,forum_thread"
-                  " WHERE forum_post.UsrCod='%ld'"
+                  " WHERE forum_post.UsrCod=%ld"
                   " AND forum_post.ThrCod=forum_thread.ThrCod"
-                  " AND forum_thread.ForumType='%u'%s",
+                  " AND forum_thread.ForumType=%u%s",
             UsrCod,(unsigned) ForumType,SubQuery);
    NumPsts = (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts of a user in a forum");
 
@@ -2398,22 +2398,22 @@ unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned Nu
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ctr.CtrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Crs.CrsCod);
          break;
       default:
@@ -2422,9 +2422,9 @@ unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned Nu
      }
    sprintf (Query,"SELECT MAX(forum_thr_read.ReadTime)"
 	          " FROM forum_thr_read,forum_thread"
-                  " WHERE forum_thr_read.UsrCod='%ld'"
+                  " WHERE forum_thr_read.UsrCod=%ld"
                   " AND forum_thr_read.ThrCod=forum_thread.ThrCod"
-                  " AND forum_thread.ForumType='%u'%s",
+                  " AND forum_thread.ForumType=%u%s",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) ForumType,SubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the date of reading of a forum");
 
@@ -2456,22 +2456,22 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ctr.CtrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Crs.CrsCod);
          break;
       default:
@@ -2479,7 +2479,7 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_thread,forum_post"
-	          " WHERE forum_thread.ForumType='%u'%s"
+	          " WHERE forum_thread.ForumType=%u%s"
                   " AND forum_thread.LastPstCod=forum_post.PstCod"
                   " AND forum_post.ModifTime>'%s'",
                   (unsigned) ForumType,SubQuery,Time);
@@ -2500,7 +2500,7 @@ static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr
 
    /***** Get last time I read this thread from database *****/
    sprintf (Query,"SELECT ReadTime FROM forum_thr_read"
-                  " WHERE ThrCod='%ld' AND UsrCod='%ld'",
+                  " WHERE ThrCod=%ld AND UsrCod=%ld",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the date of reading of a thread");
 
@@ -2528,7 +2528,7 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
    /***** Get the number of posts in thread with a modify time > a specified time from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM forum_post"
-                  " WHERE ThrCod='%ld' AND ModifTime>'%s'",
+                  " WHERE ThrCod=%ld AND ModifTime>'%s'",
             ThrCod,Time);
    return (unsigned) DB_QueryCOUNT (Query,"can not check if there are new posts in a thread of a forum");
   }
@@ -2579,22 +2579,22 @@ void For_ShowForumThrs (void)
      {
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:
       case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Ctr.CtrCod);
          break;
       case For_FORUM_DEGREE_USRS:
       case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",
+         sprintf (SubQuery," AND forum_thread.Location=%ld",
                   Gbl.Forum.Crs.CrsCod);
          break;
       default:
@@ -2606,7 +2606,7 @@ void For_ShowForumThrs (void)
       case For_FIRST_MSG:
          sprintf (Query,"SELECT forum_thread.ThrCod"
                         " FROM forum_thread,forum_post"
-                        " WHERE forum_thread.ForumType='%u'%s"
+                        " WHERE forum_thread.ForumType=%u%s"
                         " AND forum_thread.FirstPstCod=forum_post.PstCod"
                         " ORDER BY forum_post.CreatTime DESC",
                   (unsigned) Gbl.Forum.ForumType,SubQuery);
@@ -2614,7 +2614,7 @@ void For_ShowForumThrs (void)
       case For_LAST_MSG:
          sprintf (Query,"SELECT forum_thread.ThrCod"
                         " FROM forum_thread,forum_post"
-                        " WHERE forum_thread.ForumType='%u'%s"
+                        " WHERE forum_thread.ForumType=%u%s"
                         " AND forum_thread.LastPstCod=forum_post.PstCod"
                         " ORDER BY forum_post.CreatTime DESC",
                   (unsigned) Gbl.Forum.ForumType,SubQuery);
@@ -2816,132 +2816,132 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
          if (InsCod > 0)	// InsCod > 0 ==> 0 <= number of institutions forums for an institution <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of institution forums for a country
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// CtyCod <= 0 ==> Number of institutions forums for the whole platform
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'",
+        	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= number of centre forums for a centre <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of centre forums for an institution
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,centres"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=centres.CtrCod"
-			   " AND centres.InsCod='%ld'",
+			   " AND centres.InsCod=%ld",
 		     (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of centre forums for a country
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of centre forums for the whole platform
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'",
+        	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> 0 <= number of degree forums for a degree <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of degree forums for a centre
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,degrees"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=degrees.DegCod"
-			   " AND degrees.CtrCod='%ld'",
+			   " AND degrees.CtrCod=%ld",
 		     (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of degree forums for an institution
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,degrees,centres"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=degrees.DegCod"
 			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod='%ld'",
+			   " AND centres.InsCod=%ld",
 		     (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of degree forums for a country
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=degrees.DegCod"
 	                   " AND degrees.CtrCod=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of degree forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(DISTINCT Location)"
 			   " FROM forum_thread"
-			   " WHERE ForumType='%u'",
+			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= number of course forums for a course <= 1
            sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	          " FROM forum_thread"
-        	          " WHERE ForumType='%u'"
-        	          " AND Location='%ld'",
+        	          " WHERE ForumType=%u"
+        	          " AND Location=%ld",
                      (unsigned) ForumType,CrsCod);
          else if (DegCod > 0)	// CrsCod <= 0 && DegCod > 0 ==> Number of course forums for a degree
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,courses"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod='%ld'",
+			   " AND courses.DegCod=%ld",
 		     (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of course forums for a centre
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,courses,degrees"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod='%ld'",
+			   " AND degrees.CtrCod=%ld",
 		     (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of course forums for an institution
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,courses,degrees,centres"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
 			   " AND degrees.CtrCod=centres.CtrCod"
-			   " AND centres.InsCod='%ld'",
+			   " AND centres.InsCod=%ld",
 		     (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of course forums for a country
 	    sprintf (Query,"SELECT COUNT(DISTINCT forum_thread.Location)"
 			   " FROM forum_thread,courses,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
 	                   " AND degrees.CtrCod=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(DISTINCT Location)"
 			   " FROM forum_thread"
-			   " WHERE ForumType='%u'",
+			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
      }
@@ -2977,139 +2977,139 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
          // Total number of threads in forums of this type
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM forum_thread"
-                        " WHERE ForumType='%u'",
+                        " WHERE ForumType=%u",
                   (unsigned) ForumType);
          break;
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> Number of threads in institution forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in institution forums for a country
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in institution forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'",
+        	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= Number of threads in centre forums for a centre <= 1
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in centre forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,centres"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'",
+        	           " AND centres.InsCod=%ld",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in centre forums for a country
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in centre forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'",
+        	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> Number of threads in degree forums for a degree
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of threads in degree forums for a centre
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,degrees"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=degrees.DegCod"
-        	           " AND degrees.CtrCod='%ld'",
+        	           " AND degrees.CtrCod=%ld",
                      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in degree forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,degrees,centres"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'",
+        	           " AND centres.InsCod=%ld",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in degree forums for a country
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=degrees.DegCod"
 	                   " AND degrees.CtrCod=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in degree forums for the whole platform
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'",
+        	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= Number of threads in course forums for a course
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
-        	           " WHERE ForumType='%u'"
-        	           " AND Location='%ld'",
+        	           " WHERE ForumType=%u"
+        	           " AND Location=%ld",
                      (unsigned) ForumType,CrsCod);
          else if (DegCod > 0)	// CrsCod <= 0 && DegCod > 0 ==> Number of threads in course forums for a degree
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,courses"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod='%ld'",
+			   " AND courses.DegCod=%ld",
 		     (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of threads in course forums for a centre
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,courses,degrees"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod='%ld'",
+			   " AND degrees.CtrCod=%ld",
 		     (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of threads in course forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread,courses,degrees,centres"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=courses.CrsCod"
         	           " AND courses.DegCod=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'",
+        	           " AND centres.InsCod=%ld",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of threads in course forums for a country
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread,courses,degrees,centres,institutions"
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
 	                   " AND degrees.CtrCod=centres.CtrCod"
 	                   " AND centres.InsCod=institutions.InsCod"
-			   " AND institutions.CtyCod='%ld'",
+			   " AND institutions.CtyCod=%ld",
 		     (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of threads in course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*)"
 			   " FROM forum_thread"
-			   " WHERE ForumType='%u'",
+			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
      }
@@ -3129,22 +3129,22 @@ unsigned For_GetNumThrsInForum (For_ForumType_t ForumType)
    switch (ForumType)
      {
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND Location='%ld'",Gbl.Forum.Ins.InsCod);
+         sprintf (SubQuery," AND Location=%ld",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND Location='%ld'",Gbl.Forum.Ctr.CtrCod);
+         sprintf (SubQuery," AND Location=%ld",Gbl.Forum.Ctr.CtrCod);
          break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND Location='%ld'",Gbl.Forum.Deg.DegCod);
+         sprintf (SubQuery," AND Location=%ld",Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND Location='%ld'",Gbl.Forum.Crs.CrsCod);
+         sprintf (SubQuery," AND Location=%ld",Gbl.Forum.Crs.CrsCod);
          break;
       default:
          SubQuery[0] = '\0';
          break;
      }
-   sprintf (Query,"SELECT COUNT(*) FROM forum_thread WHERE ForumType='%u'%s",
+   sprintf (Query,"SELECT COUNT(*) FROM forum_thread WHERE ForumType=%u%s",
             (unsigned) ForumType,SubQuery);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of threads in a forum");
   }
@@ -3170,7 +3170,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          // Total number of posts in forums of this type
          sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
                         " FROM forum_thread,forum_post "
-                        " WHERE forum_thread.ForumType='%u'"
+                        " WHERE forum_thread.ForumType=%u"
                         " AND forum_thread.ThrCod=forum_post.ThrCod",
                   (unsigned) ForumType);
          break;
@@ -3178,22 +3178,22 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          if (InsCod > 0)	// InsCod > 0 ==> Number of posts in institutions forums for an institution
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
-        	           " AND forum_thread.Location='%ld'"
+        	           " WHERE forum_thread.ForumType=%u"
+        	           " AND forum_thread.Location=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in institutions forums for a country
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,institutions,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=institutions.InsCod"
-                           " AND institutions.CtyCod='%ld'"
+                           " AND institutions.CtyCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in institution forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 			   " FROM forum_thread,forum_post "
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
@@ -3201,31 +3201,31 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          if (CtrCod > 0)	// CtrCod > 0 ==> Number of posts in centre forums for a centre
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
-        	           " AND forum_thread.Location='%ld'"
+        	           " WHERE forum_thread.ForumType=%u"
+        	           " AND forum_thread.Location=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in centre forums for an institution
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,centres,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'"
+        	           " AND centres.InsCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in centre forums for a country
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,centres,institutions,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=centres.CtrCod"
                            " AND centres.InsCod=institutions.InsCod"
-        	           " AND institutions.CtyCod='%ld'"
+        	           " AND institutions.CtyCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in centre forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 			   " FROM forum_thread,forum_post "
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
@@ -3233,41 +3233,41 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          if (DegCod > 0)	// DegCod > 0 ==> Number of posts in degree forums for a degree
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
-                           " WHERE forum_thread.ForumType='%u'"
-                           " AND forum_thread.Location='%ld'"
+                           " WHERE forum_thread.ForumType=%u"
+                           " AND forum_thread.Location=%ld"
                            " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in degree forums for a centre
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,degrees,forum_post "
-                           " WHERE forum_thread.ForumType='%u'"
+                           " WHERE forum_thread.ForumType=%u"
                            " AND forum_thread.Location=degrees.DegCod"
-                           " AND degrees.CtrCod='%ld'"
+                           " AND degrees.CtrCod=%ld"
                            " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in degree forums for an institution
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,degrees,centres,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'"
+        	           " AND centres.InsCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in degree forums for a country
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,degrees,centres,institutions,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
                            " AND centres.InsCod=institutions.InsCod"
-        	           " AND institutions.CtyCod='%ld'"
+        	           " AND institutions.CtyCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtyCod);
          else			// InsCod <= 0 ==> Number of posts in degree forums for the whole platform
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
-                           " WHERE forum_thread.ForumType='%u'"
+                           " WHERE forum_thread.ForumType=%u"
                            " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType);
          break;
@@ -3275,52 +3275,52 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= number of posts in course forums for a course
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
-                           " WHERE forum_thread.ForumType='%u'"
-                           " AND forum_thread.Location='%ld'"
+                           " WHERE forum_thread.ForumType=%u"
+                           " AND forum_thread.Location=%ld"
                            " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CrsCod);
          else if (DegCod > 0)	// CrsCod <= 0 && DegCod > 0 ==> Number of posts in course forums for a degree
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 		           " FROM forum_thread,courses,forum_post "
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
-			   " AND courses.DegCod='%ld'"
+			   " AND courses.DegCod=%ld"
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType,DegCod);
          else if (CtrCod > 0)	// DegCod <= 0 && CtrCod > 0 ==> Number of posts in course forums for a centre
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 		           " FROM forum_thread,courses,degrees,forum_post "
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.Location=courses.CrsCod"
 			   " AND courses.DegCod=degrees.DegCod"
-			   " AND degrees.CtrCod='%ld'"
+			   " AND degrees.CtrCod=%ld"
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType,CtrCod);
          else if (InsCod > 0)	// CtrCod <= 0 && InsCod > 0 ==> Number of posts in course forums for an institution
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,courses,degrees,centres,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=courses.CrsCod"
         	           " AND courses.DegCod=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
-        	           " AND centres.InsCod='%ld'"
+        	           " AND centres.InsCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,InsCod);
          else if (CtyCod > 0)	// InsCod <= 0 && CtyCod > 0 ==> Number of posts in course forums for a country
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,courses,degrees,centres,institutions,forum_post"
-        	           " WHERE forum_thread.ForumType='%u'"
+        	           " WHERE forum_thread.ForumType=%u"
         	           " AND forum_thread.Location=courses.CrsCod"
         	           " AND courses.DegCod=degrees.DegCod"
         	           " AND degrees.CtrCod=centres.CtrCod"
                            " AND centres.InsCod=institutions.InsCod"
-        	           " AND institutions.CtyCod='%ld'"
+        	           " AND institutions.CtyCod=%ld"
         	           " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType,CtyCod);
          else			// CrsCod <= 0 && DegCod <= 0 && CtrCod <= 0 ==> Number of posts in course forums for the whole platform
 	    sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
 		           " FROM forum_thread,forum_post "
-			   " WHERE forum_thread.ForumType='%u'"
+			   " WHERE forum_thread.ForumType=%u"
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
@@ -3362,23 +3362,23 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
    switch (ForumType)
      {
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Deg.DegCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Crs.CrsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Crs.CrsCod);
          break;
       default:
          SubQuery[0] = '\0';
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_thread,forum_post "
-                  " WHERE forum_thread.ForumType='%u'%s"
+                  " WHERE forum_thread.ForumType=%u%s"
                   " AND forum_thread.ThrCod=forum_post.ThrCod",
             (unsigned) ForumType,SubQuery);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of posts in a forum");
@@ -3599,7 +3599,7 @@ void For_GetThrData (struct ForumThread *Thr)
                   "UNIX_TIMESTAMP(m1.CreatTime),"
                   "m0.Subject"
                   " FROM forum_thread,forum_post AS m0,forum_post AS m1"
-                  " WHERE forum_thread.ThrCod='%ld'"
+                  " WHERE forum_thread.ThrCod=%ld"
                   " AND forum_thread.FirstPstCod=m0.PstCod"
                   " AND forum_thread.LastPstCod=m1.PstCod",
             Thr->ThrCod);
@@ -3685,7 +3685,7 @@ static void For_WriteThrSubject (long ThrCod)
    /***** Get subject of a thread from database *****/
    sprintf (Query,"SELECT forum_post.PstCod,forum_post.Subject"
 	          " FROM forum_thread,forum_post"
-                  " WHERE forum_thread.ThrCod='%ld'"
+                  " WHERE forum_thread.ThrCod=%ld"
                   " AND forum_thread.FirstPstCod=forum_post.PstCod",
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a thread");
@@ -4055,8 +4055,8 @@ static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumU
    char Query[256];
 
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE forum_post SET NumNotif=NumNotif+'%u'"
-	          " WHERE PstCod='%ld'",
+   sprintf (Query,"UPDATE forum_post SET NumNotif=NumNotif+%u"
+	          " WHERE PstCod=%ld",
             NumUsrsToBeNotifiedByEMail,PstCod);
    DB_QueryUPDATE (Query,"can not update the number of notifications of a post");
   }
@@ -4332,7 +4332,7 @@ long For_GetThrInMyClipboard (void)
    long ThrCod = -1L;;
 
    /***** Get if there is a thread ready to move in my clipboard from database *****/
-   sprintf (Query,"SELECT ThrCod FROM forum_thr_clip WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT ThrCod FROM forum_thr_clip WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not check if there is any thread ready to be moved");
 
@@ -4363,23 +4363,23 @@ bool For_CheckIfThrBelongsToForum (long ThrCod,For_ForumType_t ForumType)
    switch (ForumType)
      {
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Ins.InsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Ins.InsCod);
          break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Deg.DegCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Deg.DegCod);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
-         sprintf (SubQuery," AND forum_thread.Location='%ld'",Gbl.Forum.Crs.CrsCod);
+         sprintf (SubQuery," AND forum_thread.Location=%ld",Gbl.Forum.Crs.CrsCod);
          break;
       default:
          SubQuery[0] = '\0';
          break;
      }
    sprintf (Query,"SELECT COUNT(*) FROM forum_thread"
-	          " WHERE ThrCod='%ld' AND ForumType='%u'%s",
+	          " WHERE ThrCod=%ld AND ForumType=%u%s",
             ThrCod,(unsigned) ForumType,SubQuery);
    return (DB_QueryCOUNT (Query,"can not get if a thread belong to current forum") != 0);
   }
@@ -4398,32 +4398,32 @@ void For_MoveThrToCurrentForum (long ThrCod)
       case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
       case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
          sprintf (Query,"UPDATE forum_thread"
-                        " SET ForumType='%u',Location='-1'"
-                        " WHERE ThrCod='%ld'",
+                        " SET ForumType=%u,Location=-1"
+                        " WHERE ThrCod=%ld",
                   (unsigned) Gbl.Forum.ForumType,ThrCod);
          break;
       case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
          sprintf (Query,"UPDATE forum_thread"
-                        " SET ForumType='%u',Location='%ld'"
-                        " WHERE ThrCod='%ld'",
+                        " SET ForumType=%u,Location=%ld"
+                        " WHERE ThrCod=%ld",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Ins.InsCod,ThrCod);
          break;
       case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
          sprintf (Query,"UPDATE forum_thread"
-                        " SET ForumType='%u',Location='%ld'"
-                        " WHERE ThrCod='%ld'",
+                        " SET ForumType=%u,Location=%ld"
+                        " WHERE ThrCod=%ld",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Ctr.CtrCod,ThrCod);
          break;
       case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
          sprintf (Query,"UPDATE forum_thread"
-                        " SET ForumType='%u',Location='%ld'"
-                        " WHERE ThrCod='%ld'",
+                        " SET ForumType=%u,Location=%ld"
+                        " WHERE ThrCod=%ld",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Deg.DegCod,ThrCod);
          break;
       case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
          sprintf (Query,"UPDATE forum_thread"
-                        " SET ForumType='%u',Location='%ld'"
-                        " WHERE ThrCod='%ld'",
+                        " SET ForumType=%u,Location=%ld"
+                        " WHERE ThrCod=%ld",
                   (unsigned) Gbl.Forum.ForumType,Gbl.Forum.Crs.CrsCod,ThrCod);
          break;
      }
@@ -4445,7 +4445,7 @@ void For_InsertThrInClipboard (long ThrCod)
    sprintf (Query,"REPLACE INTO forum_thr_clip"
 	          " (ThrCod,UsrCod)"
                   " VALUES"
-                  " ('%ld','%ld')",
+                  " (%ld,%ld)",
             ThrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not add thread to clipboard");
   }
@@ -4474,7 +4474,7 @@ void For_RemoveThrCodFromThrClipboard (long ThrCod)
    char Query[128];
 
    /***** Remove thread from thread clipboard *****/
-   sprintf (Query,"DELETE FROM forum_thr_clip WHERE ThrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_thr_clip WHERE ThrCod=%ld",
             ThrCod);
    DB_QueryDELETE (Query,"can not remove a thread from clipboard");
   }
@@ -4488,7 +4488,7 @@ void For_RemoveUsrFromThrClipboard (long UsrCod)
    char Query[128];
 
    /***** Remove clipboard of specified user *****/
-   sprintf (Query,"DELETE FROM forum_thr_clip WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM forum_thr_clip WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove a thread from the clipboard of a user");
   }
@@ -4519,10 +4519,10 @@ void For_RemoveForums (Sco_Scope_t Scope,long Cod)
    sprintf (Query,"DELETE FROM forum_disabled_post"
 	          " USING forum_thread,forum_post,forum_disabled_post"
                   " WHERE"
-                  " (forum_thread.ForumType='%u'"
+                  " (forum_thread.ForumType=%u"
                   " OR"
-                  " forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld'"
+                  " forum_thread.ForumType=%u)"
+                  " AND forum_thread.Location=%ld"
                   " AND forum_thread.ThrCod=forum_post.ThrCod"
                   " AND forum_post.PstCod=forum_disabled_post.PstCod",
             ForumType[Scope].Usrs,
@@ -4534,10 +4534,10 @@ void For_RemoveForums (Sco_Scope_t Scope,long Cod)
    sprintf (Query,"DELETE FROM forum_post"
 	          " USING forum_thread,forum_post"
                   " WHERE"
-                  " (forum_thread.ForumType='%u'"
+                  " (forum_thread.ForumType=%u"
                   " OR"
-                  " forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld'"
+                  " forum_thread.ForumType=%u)"
+                  " AND forum_thread.Location=%ld"
                   " AND forum_thread.ThrCod=forum_post.ThrCod",
             ForumType[Scope].Usrs,
             ForumType[Scope].Tchs,
@@ -4548,10 +4548,10 @@ void For_RemoveForums (Sco_Scope_t Scope,long Cod)
    sprintf (Query,"DELETE FROM forum_thr_read"
 	          " USING forum_thread,forum_thr_read"
                   " WHERE"
-                  " (forum_thread.ForumType='%u'"
+                  " (forum_thread.ForumType=%u"
                   " OR"
-                  " forum_thread.ForumType='%u')"
-                  " AND forum_thread.Location='%ld'"
+                  " forum_thread.ForumType=%u)"
+                  " AND forum_thread.Location=%ld"
                   " AND forum_thread.ThrCod=forum_thr_read.ThrCod",
             ForumType[Scope].Usrs,
             ForumType[Scope].Tchs,
@@ -4561,10 +4561,10 @@ void For_RemoveForums (Sco_Scope_t Scope,long Cod)
    /***** Remove threads *****/
    sprintf (Query,"DELETE FROM forum_thread"
                   " WHERE"
-                  " (forum_thread.ForumType='%u'"
+                  " (forum_thread.ForumType=%u"
                   " OR"
-                  " forum_thread.ForumType='%u')"
-                  " AND Location='%ld'",
+                  " forum_thread.ForumType=%u)"
+                  " AND Location=%ld",
             ForumType[Scope].Usrs,
             ForumType[Scope].Tchs,
             Cod);

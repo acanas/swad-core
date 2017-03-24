@@ -516,7 +516,7 @@ static bool Inf_CheckIfIHaveReadInfo (void)
 
    /***** Get if info source is already stored in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_info_read"
-                  " WHERE UsrCod='%ld' AND CrsCod='%ld' AND InfoType='%s'",
+                  " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.CurrentCrs.Crs.CrsCod,
             Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -543,10 +543,10 @@ bool Inf_GetIfIMustReadAnyCrsInfoInThisCrs (void)
 
    /***** Get info types where students must read info *****/
    sprintf (Query,"SELECT InfoType FROM crs_info_src"
-                  " WHERE CrsCod='%ld' AND MustBeRead='Y'"
+                  " WHERE CrsCod=%ld AND MustBeRead='Y'"
                   " AND InfoType NOT IN"
                   " (SELECT InfoType FROM crs_info_read"
-                  " WHERE UsrCod='%ld' AND CrsCod='%ld')",
+                  " WHERE UsrCod=%ld AND CrsCod=%ld)",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get if you must read any course info");
@@ -691,7 +691,7 @@ static void Inf_SetForceReadIntoDB (bool MustBeRead)
 
    /***** Insert or replace info source for a specific type of course information *****/
    sprintf (Query,"UPDATE crs_info_src SET MustBeRead='%c'"
-                  " WHERE CrsCod='%ld' AND InfoType='%s'",
+                  " WHERE CrsCod=%ld AND InfoType='%s'",
             MustBeRead ? 'Y' :
         	         'N',
             Gbl.CurrentCrs.Crs.CrsCod,Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -712,7 +712,7 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
       sprintf (Query,"REPLACE INTO crs_info_read"
 	             " (UsrCod,CrsCod,InfoType)"
                      " VALUES"
-                     " ('%ld','%ld','%s')",
+                     " (%ld,%ld,'%s')",
                Gbl.Usrs.Me.UsrDat.UsrCod,
                Gbl.CurrentCrs.Crs.CrsCod,
                Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -722,7 +722,7 @@ static void Inf_SetIHaveReadIntoDB (bool IHaveRead)
      {
       /***** Remove I have read course information *****/
       sprintf (Query,"DELETE FROM crs_info_read"
-                     " WHERE UsrCod='%ld' AND CrsCod='%ld' AND InfoType='%s'",
+                     " WHERE UsrCod=%ld AND CrsCod=%ld AND InfoType='%s'",
                Gbl.Usrs.Me.UsrDat.UsrCod,
                Gbl.CurrentCrs.Crs.CrsCod,
                Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -740,7 +740,7 @@ void Inf_RemoveUsrFromCrsInfoRead (long UsrCod,long CrsCod)
 
    /***** Remove user's status about reading of course information *****/
    sprintf (Query,"DELETE FROM crs_info_read"
-                  " WHERE UsrCod='%ld' AND CrsCod='%ld'",
+                  " WHERE UsrCod=%ld AND CrsCod=%ld",
             UsrCod,CrsCod);
    DB_QueryDELETE (Query,"can not set that I have not read course info");
   }
@@ -1461,20 +1461,20 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
 
    /***** Get if info source is already stored in database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_info_src"
-                  " WHERE CrsCod='%ld' AND InfoType='%s'",
+                  " WHERE CrsCod=%ld AND InfoType='%s'",
             Gbl.CurrentCrs.Crs.CrsCod,
             Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
    if (DB_QueryCOUNT (Query,"can not get if info source is already stored in database"))	// Info is already stored in database, so update it
      {	// Update info source
       if (InfoSrc == Inf_INFO_SRC_NONE)
          sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s',MustBeRead='N'"
-                        " WHERE CrsCod='%ld' AND InfoType='%s'",
+                        " WHERE CrsCod=%ld AND InfoType='%s'",
                   Inf_NamesInDBForInfoSrc[Inf_INFO_SRC_NONE],
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
       else	// MustBeRead remains unchanged
          sprintf (Query,"UPDATE crs_info_src SET InfoSrc='%s'"
-                        " WHERE CrsCod='%ld' AND InfoType='%s'",
+                        " WHERE CrsCod=%ld AND InfoType='%s'",
                   Inf_NamesInDBForInfoSrc[InfoSrc],
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type]);
@@ -1485,7 +1485,7 @@ void Inf_SetInfoSrcIntoDB (Inf_InfoSrc_t InfoSrc)
       sprintf (Query,"INSERT INTO crs_info_src"
 	             " (CrsCod,InfoType,InfoSrc,MustBeRead)"
                      " VALUES"
-                     " ('%ld','%s','%s','N')",
+                     " (%ld,'%s','%s','N')",
                Gbl.CurrentCrs.Crs.CrsCod,
                Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
                Inf_NamesInDBForInfoSrc[InfoSrc]);
@@ -1507,7 +1507,7 @@ Inf_InfoSrc_t Inf_GetInfoSrcFromDB (long CrsCod,Inf_InfoType_t InfoType)
 
    /***** Get info source for a specific type of info from database *****/
    sprintf (Query,"SELECT InfoSrc FROM crs_info_src"
-	          " WHERE CrsCod='%ld' AND InfoType='%s'",
+	          " WHERE CrsCod=%ld AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get info source"))
      {
@@ -1545,7 +1545,7 @@ void Inf_GetAndCheckInfoSrcFromDB (long CrsCod,
 
    /***** Get info source for a specific type of info from database *****/
    sprintf (Query,"SELECT InfoSrc,MustBeRead FROM crs_info_src"
-	          " WHERE CrsCod='%ld' AND InfoType='%s'",
+	          " WHERE CrsCod=%ld AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info source");
 
@@ -1673,7 +1673,7 @@ static void Inf_SetInfoTxtIntoDB (const char *InfoTxtHTML,const char *InfoTxtMD)
    sprintf (Query,"REPLACE INTO crs_info_txt"
 	          " (CrsCod,InfoType,InfoTxtHTML,InfoTxtMD)"
                   " VALUES"
-                  " ('%ld','%s','%s','%s')",
+                  " (%ld,'%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Inf_NamesInDBForInfoType[Gbl.CurrentCrs.Info.Type],
             InfoTxtHTML,InfoTxtMD);
@@ -1696,7 +1696,7 @@ static void Inf_GetInfoTxtFromDB (long CrsCod,Inf_InfoType_t InfoType,
    /***** Get info source for a specific type of course information
           (bibliography, FAQ, links or evaluation) from database *****/
    sprintf (Query,"SELECT InfoTxtHTML,InfoTxtMD FROM crs_info_txt"
-                  " WHERE CrsCod='%ld' AND InfoType='%s'",
+                  " WHERE CrsCod=%ld AND InfoType='%s'",
             CrsCod,Inf_NamesInDBForInfoType[InfoType]);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get info text");
 

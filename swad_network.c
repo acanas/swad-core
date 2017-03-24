@@ -220,7 +220,7 @@ void Net_ShowWebsAndSocialNets (const struct UsrData *UsrDat)
      {
       /***** Get user's web / social network from database *****/
       sprintf (Query,"SELECT URL FROM usr_webs"
-		     " WHERE UsrCod='%ld' AND Web='%s'",
+		     " WHERE UsrCod=%ld AND Web='%s'",
 	       UsrDat->UsrCod,Net_WebsAndSocialNetworksDB[NumURL]);
 
       /***** Check if exists the web / social network for this user *****/
@@ -308,7 +308,7 @@ void Net_ShowFormMyWebsAndSocialNets (void)
      {
       /***** Get user's web / social network from database *****/
       sprintf (Query,"SELECT URL FROM usr_webs"
-		     " WHERE UsrCod='%ld' AND Web='%s'",
+		     " WHERE UsrCod=%ld AND Web='%s'",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       Net_WebsAndSocialNetworksDB[NumURL]);
 
@@ -412,7 +412,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
       sprintf (Query,"REPLACE INTO usr_webs"
 	             " (UsrCod,Web,URL)"
 		     " VALUES"
-		     " ('%ld','%s','%s')",
+		     " (%ld,'%s','%s')",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       Net_WebsAndSocialNetworksDB[Web],
 	       URL);
@@ -421,7 +421,7 @@ static void Net_GetMyWebsAndSocialNetsFromForm (void)
    else
      {
       /***** Remove web / social network *****/
-      sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod='%ld' AND Web='%s'",
+      sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod=%ld AND Web='%s'",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       Net_WebsAndSocialNetworksDB[Web]);
       DB_QueryREPLACE (Query,"can not remove user's web / social network");
@@ -465,7 +465,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
          sprintf (Query,"SELECT usr_webs.Web,"
                         "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_webs"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -479,7 +479,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
          sprintf (Query,"SELECT usr_webs.Web,"
                         "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_webs"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -492,7 +492,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
          sprintf (Query,"SELECT usr_webs.Web,"
                         "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM degrees,courses,crs_usr,usr_webs"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_webs.UsrCod"
@@ -504,7 +504,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
          sprintf (Query,"SELECT usr_webs.Web,"
                         "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM courses,crs_usr,usr_webs"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_webs.UsrCod"
                         " GROUP BY usr_webs.Web"
@@ -515,7 +515,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
          sprintf (Query,"SELECT usr_webs.Web,"
                         "COUNT(DISTINCT usr_webs.UsrCod) AS N"
                         " FROM crs_usr,usr_webs"
-                        " WHERE crs_usr.CrsCod='%ld'"
+                        " WHERE crs_usr.CrsCod=%ld"
                         " AND crs_usr.UsrCod=usr_webs.UsrCod"
                         " GROUP BY usr_webs.Web"
                         " ORDER BY N DESC,usr_webs.Web",

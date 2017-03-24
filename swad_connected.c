@@ -629,7 +629,7 @@ void Con_UpdateMeInConnectedList (void)
    sprintf (Query,"REPLACE INTO connected"
 	          " (UsrCod,RoleInLastCrs,LastCrsCod,LastTime)"
                   " VALUES"
-                  " ('%ld','%u','%ld',NOW())",
+                  " (%ld,%u,%ld,NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Gbl.Usrs.Me.LoggedRole,
             Gbl.CurrentCrs.Crs.CrsCod);
@@ -662,7 +662,7 @@ static unsigned Con_GetConnectedUsrsTotal (Rol_Role_t Role)
       return 0;
 
    /***** Get number of connected users with a role from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs='%u'",
+   sprintf (Query,"SELECT COUNT(*) FROM connected WHERE RoleInLastCrs=%u",
             (unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of connected users");
   }
@@ -697,7 +697,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 			      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
@@ -710,7 +710,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
@@ -722,7 +722,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
@@ -733,7 +733,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM courses,crs_usr,connected,usr_data"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
@@ -743,7 +743,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM crs_usr,connected,usr_data"
-			      " WHERE crs_usr.CrsCod='%ld'"
+			      " WHERE crs_usr.CrsCod=%ld"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentCrs.Crs.CrsCod);
@@ -769,7 +769,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM connected,crs_usr,usr_data"
 			      " WHERE connected.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			(unsigned) Role);
 	       break;
@@ -777,12 +777,12 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM institutions,centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 			      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentCty.Cty.CtyCod,
@@ -792,11 +792,11 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM centres,degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentIns.Ins.InsCod,
@@ -806,10 +806,10 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM degrees,courses,crs_usr,connected,usr_data"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentCtr.Ctr.CtrCod,
@@ -819,9 +819,9 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM courses,crs_usr,connected,usr_data"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentDeg.Deg.DegCod,
@@ -831,8 +831,8 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 		              "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			      " FROM crs_usr,connected,usr_data"
-			      " WHERE crs_usr.CrsCod='%ld'"
-			      " AND crs_usr.Role='%u'"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " AND connected.UsrCod=usr_data.UsrCod",
 			Gbl.CurrentCrs.Crs.CrsCod,
@@ -891,7 +891,7 @@ static void Con_ComputeConnectedUsrsWithARoleCurrentCrsOneByOne (Rol_Role_t Role
    sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
                   "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
                   " FROM connected,crs_usr"
-                  " WHERE crs_usr.CrsCod='%ld' AND crs_usr.Role='%u'"
+                  " WHERE crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
                   " AND crs_usr.UsrCod=connected.UsrCod"
                   " ORDER BY Dif",
             Gbl.CurrentCrs.Crs.CrsCod,
@@ -1059,7 +1059,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM connected,crs_usr"
 			      " WHERE connected.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " ORDER BY Dif",
 			(unsigned) Role);
 	       break;
@@ -1067,12 +1067,12 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM institutions,centres,degrees,courses,crs_usr,connected"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 			      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " ORDER BY Dif",
 			Gbl.CurrentCty.Cty.CtyCod,
@@ -1082,11 +1082,11 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM centres,degrees,courses,crs_usr,connected"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " ORDER BY Dif",
 			Gbl.CurrentIns.Ins.InsCod,
@@ -1096,10 +1096,10 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM degrees,courses,crs_usr,connected"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " ORDER BY Dif",
 			Gbl.CurrentCtr.Ctr.CtrCod,
@@ -1109,9 +1109,9 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       sprintf (Query,"SELECT DISTINCTROW connected.UsrCod,connected.LastCrsCod,"
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM courses,crs_usr,connected"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " ORDER BY Dif",
 			Gbl.CurrentDeg.Deg.DegCod,
@@ -1121,8 +1121,8 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 	       sprintf (Query,"SELECT connected.UsrCod,connected.LastCrsCod,"
 			      "UNIX_TIMESTAMP()-UNIX_TIMESTAMP(connected.LastTime) AS Dif"
 			      " FROM crs_usr,connected"
-			      " WHERE crs_usr.CrsCod='%ld'"
-			      " AND crs_usr.Role='%u'"
+			      " WHERE crs_usr.CrsCod=%ld"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.UsrCod=connected.UsrCod"
 			      " ORDER BY Dif",
 			Gbl.CurrentCrs.Crs.CrsCod,

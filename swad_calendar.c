@@ -152,8 +152,8 @@ void Cal_ChangeFirstDayOfWeek (void)
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET FirstDayOfWeek='%u'"
-	             " WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_data SET FirstDayOfWeek=%u"
+	             " WHERE UsrCod=%ld",
                Gbl.Prefs.FirstDayOfWeek,
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your preference about first day of week");

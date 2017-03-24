@@ -138,7 +138,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
                         " FROM degrees,ctr_admin,centres"
                         " WHERE (degrees.Status & %u)<>0"
                         " AND degrees.CtrCod=ctr_admin.CtrCod"
-                        " AND ctr_admin.UsrCod='%ld'"
+                        " AND ctr_admin.UsrCod=%ld"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " GROUP BY degrees.CtrCod ORDER BY centres.ShortName",
                   (unsigned) Deg_STATUS_BIT_PENDING,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -986,14 +986,14 @@ void Ctr_GetListCentres (long InsCod)
 		  "centres.ShortName,centres.FullName,centres.WWW,"
 		  "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
 		  " FROM centres,usr_data"
-		  " WHERE centres.InsCod='%ld'"
+		  " WHERE centres.InsCod=%ld"
 		  " AND centres.CtrCod=usr_data.CtrCod"
 		  " GROUP BY centres.CtrCod)"
 		  " UNION "
 		  "(SELECT CtrCod,InsCod,PlcCod,Status,RequesterUsrCod,"
 		  "ShortName,FullName,WWW,0 AS NumUsrs"
 		  " FROM centres"
-		  " WHERE centres.InsCod='%ld'"
+		  " WHERE centres.InsCod=%ld"
 		  " AND CtrCod NOT IN"
 		  " (SELECT DISTINCT CtrCod FROM usr_data))"
 		  " ORDER BY %s",
@@ -1104,7 +1104,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
 	             "centres.ShortName,centres.FullName,centres.WWW,"
 	             "COUNT(DISTINCT usr_data.UsrCod) AS NumUsrs"
                      " FROM centres,usr_data"
-                     " WHERE centres.CtrCod='%ld'"
+                     " WHERE centres.CtrCod=%ld"
                      " AND centres.CtrCod=usr_data.CtrCod"
                      " GROUP BY centres.CtrCod)"
                      " UNION "
@@ -1113,7 +1113,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
                      "ShortName,FullName,WWW,"
                      "0 AS NumUsrs"
                      " FROM centres"
-                     " WHERE CtrCod='%ld'"
+                     " WHERE CtrCod=%ld"
                      " AND CtrCod NOT IN"
                      " (SELECT DISTINCT CtrCod FROM usr_data))",
                Ctr->CtrCod,
@@ -1186,7 +1186,7 @@ long Ctr_GetInsCodOfCentreByCod (long CtrCod)
    if (CtrCod > 0)
      {
       /***** Get the institution code of a centre from database *****/
-      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod='%ld'",
+      sprintf (Query,"SELECT InsCod FROM centres WHERE CtrCod=%ld",
                CtrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a centre") == 1)
 	{
@@ -1217,7 +1217,7 @@ void Ctr_GetShortNameOfCentreByCod (struct Centre *Ctr)
      {
       /***** Get the short name of a centre from database *****/
       sprintf (Query,"SELECT ShortName FROM centres"
-		     " WHERE CtrCod ='%ld'",
+		     " WHERE CtrCod=%ld",
 	       Ctr->CtrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a centre") == 1)
 	{
@@ -1248,7 +1248,7 @@ static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution)
    Ctr_FreePhotoAttribution (PhotoAttribution);
 
    /***** Get photo attribution from database *****/
-   sprintf (Query,"SELECT PhotoAttribution FROM centres WHERE CtrCod='%ld'",
+   sprintf (Query,"SELECT PhotoAttribution FROM centres WHERE CtrCod=%ld",
 	    CtrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get photo attribution"))
      {
@@ -1332,7 +1332,7 @@ void Ctr_WriteSelectorOfCentre (void)
       /***** Get centres from database *****/
       sprintf (Query,"SELECT DISTINCT CtrCod,ShortName"
 	             " FROM centres"
-                     " WHERE InsCod='%ld'"
+                     " WHERE InsCod=%ld"
                      " ORDER BY ShortName",
                Gbl.CurrentIns.Ins.InsCod);
       NumCtrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get centres");
@@ -1717,7 +1717,7 @@ void Ctr_RemoveCentre (void)
       Fil_RemoveTree (PathCtr);
 
       /***** Remove centre *****/
-      sprintf (Query,"DELETE FROM centres WHERE CtrCod='%ld'",
+      sprintf (Query,"DELETE FROM centres WHERE CtrCod=%ld",
                Ctr.CtrCod);
       DB_QueryDELETE (Query,"can not remove a centre");
 
@@ -1810,7 +1810,7 @@ static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
    char Query[128];
 
    /***** Update institution in table of centres *****/
-   sprintf (Query,"UPDATE centres SET InsCod='%ld' WHERE CtrCod='%ld'",
+   sprintf (Query,"UPDATE centres SET InsCod=%ld WHERE CtrCod=%ld",
             InsCod,CtrCod);
    DB_QueryUPDATE (Query,"can not update the institution of a centre");
   }
@@ -1839,7 +1839,7 @@ void Ctr_ChangeCentrePlace (void)
    Ctr_GetDataOfCentreByCod (Ctr);
 
    /***** Update place in table of centres *****/
-   sprintf (Query,"UPDATE centres SET PlcCod='%ld' WHERE CtrCod='%ld'",
+   sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
             NewPlcCod,Ctr->CtrCod);
    DB_QueryUPDATE (Query,"can not update the place of a centre");
    Ctr->PlcCod = NewPlcCod;
@@ -1972,7 +1972,7 @@ static bool Ctr_CheckIfCtrNameExistsInIns (const char *FieldName,const char *Nam
 
    /***** Get number of centres with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod='%ld' AND %s='%s' AND CtrCod<>'%ld'",
+	          " WHERE InsCod=%ld AND %s='%s' AND CtrCod<>%ld",
             InsCod,FieldName,Name,CtrCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a centre already existed") != 0);
   }
@@ -1986,7 +1986,7 @@ static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *N
    char Query[128 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Update centre changing old name by new name */
-   sprintf (Query,"UPDATE centres SET %s='%s' WHERE CtrCod='%ld'",
+   sprintf (Query,"UPDATE centres SET %s='%s' WHERE CtrCod=%ld",
 	    FieldName,NewCtrName,CtrCod);
    DB_QueryUPDATE (Query,"can not update the name of a centre");
   }
@@ -2076,7 +2076,7 @@ static void Ctr_UpdateCtrWWWDB (long CtrCod,
    char Query[256 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
-   sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod='%ld'",
+   sprintf (Query,"UPDATE centres SET WWW='%s' WHERE CtrCod=%ld",
 	    NewWWW,CtrCod);
    DB_QueryUPDATE (Query,"can not update the web of a centre");
   }
@@ -2114,7 +2114,7 @@ void Ctr_ChangeCtrStatus (void)
    Ctr_GetDataOfCentreByCod (Ctr);
 
    /***** Update status in table of centres *****/
-   sprintf (Query,"UPDATE centres SET Status='%u' WHERE CtrCod='%ld'",
+   sprintf (Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
             (unsigned) Status,Ctr->CtrCod);
    DB_QueryUPDATE (Query,"can not update the status of a centre");
 
@@ -2385,7 +2385,7 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 
    /***** Update the table changing old attribution by new attribution *****/
    sprintf (Query,"UPDATE centres SET PhotoAttribution='%s'"
-		  " WHERE CtrCod='%ld'",
+		  " WHERE CtrCod=%ld",
 	    NewPhotoAttribution,Gbl.CurrentCtr.Ctr.CtrCod);
    DB_QueryUPDATE (Query,"can not update the photo attribution of the current centre");
 
@@ -2744,7 +2744,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
 	          " (InsCod,PlcCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,WWW,PhotoAttribution)"
                   " VALUES"
-                  " ('%ld','%ld','%u','%ld',"
+                  " (%ld,%ld,%u,%ld,"
                   "'%s','%s','%s','')",
             Ctr->InsCod,Ctr->PlcCod,
             Status,
@@ -2784,7 +2784,7 @@ unsigned Ctr_GetNumCtrsInCty (long CtyCod)
 
    /***** Get number of centres of a country from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions,centres"
-	          " WHERE institutions.CtyCod='%ld'"
+	          " WHERE institutions.CtyCod=%ld"
 	          " AND institutions.InsCod=centres.InsCod",
 	    CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres in a country");
@@ -2801,7 +2801,7 @@ unsigned Ctr_GetNumCtrsInIns (long InsCod)
 
    /***** Get number of centres of an institution from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod='%ld'",
+	          " WHERE InsCod=%ld",
 	    InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres in an institution");
   }
@@ -2816,7 +2816,7 @@ unsigned Ctr_GetNumCtrsInPlc (long PlcCod)
 
    /***** Get number of centres (of the current institution) in a place *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres"
-	          " WHERE InsCod='%ld' AND PlcCod='%ld'",
+	          " WHERE InsCod=%ld AND PlcCod=%ld",
 	    Gbl.CurrentIns.Ins.InsCod,PlcCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of centres in a place");
   }
@@ -2871,7 +2871,7 @@ unsigned Ctr_GetNumCtrsWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND centres.CtrCod=degrees.CtrCod"
                   " AND degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of centres with users");
   }

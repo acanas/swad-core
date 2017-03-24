@@ -422,7 +422,7 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
    if (UsrDat->UsrCod > 0)
      {
       /***** Get encrypted user's code from database *****/
-      sprintf (Query,"SELECT EncryptedUsrCod FROM usr_data WHERE UsrCod='%ld'",
+      sprintf (Query,"SELECT EncryptedUsrCod FROM usr_data WHERE UsrCod=%ld",
                UsrDat->UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get encrypted user's code");
 
@@ -468,7 +468,7 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,"
                   "DATE_FORMAT(Birthday,'%%Y%%m%%d'),Comments,"
                   "Menu,SideCols,NotifNtfEvents,EmailNtfEvents"
-                  " FROM usr_data WHERE UsrCod='%ld'",
+                  " FROM usr_data WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's data");
 
@@ -647,7 +647,7 @@ static void Usr_GetMyLastData (void)
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT WhatToSearch,LastCrs,LastTab,UNIX_TIMESTAMP(LastAccNotif)"
-                  " FROM usr_last WHERE UsrCod='%ld'",
+                  " FROM usr_last WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get user's last data");
 
@@ -763,7 +763,7 @@ bool Usr_CheckIfUsrIsAdm (long UsrCod,Sco_Scope_t Scope,long Cod)
      {
       /***** Get if a user is administrator of a degree from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM admin"
-		     " WHERE UsrCod='%ld' AND Scope='%s' AND Cod='%ld'",
+		     " WHERE UsrCod=%ld AND Scope='%s' AND Cod=%ld",
 	       UsrCod,Sco_ScopeDB[Scope],Cod);
       return (DB_QueryCOUNT (Query,"can not check if a user is administrator") != 0);
      }
@@ -798,7 +798,7 @@ bool Usr_CheckIfUsrIsSuperuser (long UsrCod)
      {
       /***** Get if a user is superuser from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM admin"
-	             " WHERE UsrCod='%ld' AND Scope='%s'",
+	             " WHERE UsrCod=%ld AND Scope='%s'",
 	       UsrCod,Sco_ScopeDB[Sco_SCOPE_SYS]);
       Cached.UsrCod = UsrCod;
       Cached.IsSuperuser = (DB_QueryCOUNT (Query,"can not check if a user is superuser") != 0);
@@ -890,7 +890,7 @@ unsigned Usr_GetNumCrssOfUsr (long UsrCod)
    char Query[128];
 
    /***** Get the number of courses of a user from database ******/
-   sprintf (Query,"SELECT COUNT(*) FROM crs_usr WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM crs_usr WHERE UsrCod=%ld",
             UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user");
   }
@@ -905,7 +905,7 @@ unsigned Usr_GetNumCrssOfUsrNotAccepted (long UsrCod)
 
    /***** Get the number of courses of a user not accepted from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE UsrCod='%ld' AND Accepted='N'",
+	          " WHERE UsrCod=%ld AND Accepted='N'",
             UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user");
   }
@@ -920,7 +920,7 @@ unsigned Usr_GetNumCrssOfUsrWithARole (long UsrCod,Rol_Role_t Role)
 
    /***** Get the number of courses of a user with a role from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-                  " WHERE UsrCod='%ld' AND Role='%u'",
+                  " WHERE UsrCod=%ld AND Role=%u",
             UsrCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user with a role");
   }
@@ -935,7 +935,7 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
 
    /***** Get the number of courses of a user with a role from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-                  " WHERE UsrCod='%ld' AND Role='%u' AND Accepted='N'",
+                  " WHERE UsrCod=%ld AND Role=%u AND Accepted='N'",
             UsrCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses of a user with a role");
   }
@@ -962,7 +962,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
 	          " ENGINE=MEMORY"
 	          " SELECT CrsCod FROM crs_usr"
-	          " WHERE UsrCod='%ld' AND Role='%u'",
+	          " WHERE UsrCod=%ld AND Role=%u",
 	    UsrCod,(unsigned) UsrRole);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
@@ -971,7 +971,7 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM crs_usr,usr_courses_tmp"
                   " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             (unsigned) OthersRole);
    NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
@@ -1111,7 +1111,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
 
    /* Check if user shares any course with me */
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE UsrCod='%ld'"
+	          " WHERE UsrCod=%ld"
 	          " AND CrsCod IN (SELECT CrsCod FROM my_courses_tmp)",
             UsrDat->UsrCod);
    Cached.UsrSharesAnyOfMyCrs = DB_QueryCOUNT (Query,"can not check if a user shares any course with you") != 0;
@@ -1146,7 +1146,7 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrsWithDifferentRole (long UsrCod)
    sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp "
 		  "(CrsCod INT NOT NULL,Role TINYINT NOT NULL,"
 		  "UNIQUE INDEX(CrsCod,Role)) ENGINE=MEMORY"
-		  " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod='%ld'",
+		  " SELECT CrsCod,Role FROM crs_usr WHERE UsrCod=%ld",
 	    UsrCod);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
@@ -1384,7 +1384,7 @@ void Usr_GetMyCourses (void)
 			"UNIQUE INDEX(CrsCod,Role,DegCod)) ENGINE=MEMORY"
 			" SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
 			" FROM crs_usr,courses,degrees"
-			" WHERE crs_usr.UsrCod='%ld'"
+			" WHERE crs_usr.UsrCod=%ld"
 			" AND crs_usr.CrsCod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" ORDER BY degrees.ShortName,courses.ShortName",
@@ -1546,12 +1546,12 @@ bool Usr_CheckIfUsrBelongsToIns (long UsrCod,long InsCod)
       /***** Get is a user belongs to an institution from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT centres.InsCod)"
 		     " FROM crs_usr,courses,degrees,centres"
-		     " WHERE crs_usr.UsrCod='%ld'"
+		     " WHERE crs_usr.UsrCod=%ld"
 		     " AND crs_usr.Accepted='Y'"
 		     " AND crs_usr.CrsCod=courses.CrsCod"
 		     " AND courses.DegCod=degrees.DegCod"
 		     " AND degrees.CtrCod=centres.CtrCod"
-		     " AND centres.InsCod='%ld'",
+		     " AND centres.InsCod=%ld",
 	       UsrCod,InsCod);
       Cached.UsrCod = UsrCod;
       Cached.InsCod = InsCod;
@@ -1594,11 +1594,11 @@ bool Usr_CheckIfUsrBelongsToCtr (long UsrCod,long CtrCod)
       /***** Get is a user belongs to a centre from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT degrees.CtrCod)"
 		     " FROM crs_usr,courses,degrees"
-		     " WHERE crs_usr.UsrCod='%ld'"
+		     " WHERE crs_usr.UsrCod=%ld"
 		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
 		     " AND crs_usr.CrsCod=courses.CrsCod"
 		     " AND courses.DegCod=degrees.DegCod"
-		     " AND degrees.CtrCod='%ld'",
+		     " AND degrees.CtrCod=%ld",
 	       UsrCod,CtrCod);
       Cached.UsrCod = UsrCod;
       Cached.CtrCod = CtrCod;
@@ -1641,10 +1641,10 @@ bool Usr_CheckIfUsrBelongsToDeg (long UsrCod,long DegCod)
       /***** Get is a user belongs to a degree from database *****/
       sprintf (Query,"SELECT COUNT(DISTINCT courses.DegCod)"
 		     " FROM crs_usr,courses"
-		     " WHERE crs_usr.UsrCod='%ld'"
+		     " WHERE crs_usr.UsrCod=%ld"
 		     " AND crs_usr.Accepted='Y'"	// Only if user accepted
 		     " AND crs_usr.CrsCod=courses.CrsCod"
-		     " AND courses.DegCod='%ld'",
+		     " AND courses.DegCod=%ld",
 	       UsrCod,DegCod);
       Cached.UsrCod = UsrCod;
       Cached.DegCod = DegCod;
@@ -1673,7 +1673,7 @@ bool Usr_CheckIfUsrBelongsToCrs (long UsrCod,long CrsCod,
    SubQuery = (CountOnlyAcceptedCourses ? " AND crs_usr.Accepted='Y'" :
 	                                  "");
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE CrsCod='%ld' AND UsrCod='%ld'%s",
+	          " WHERE CrsCod=%ld AND UsrCod=%ld%s",
             CrsCod,UsrCod,SubQuery);
    return (DB_QueryCOUNT (Query,"can not check if a user belongs to a course") != 0);
   }
@@ -1792,7 +1792,7 @@ unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res)
    /***** Get the institutions a user belongs to from database *****/
    sprintf (Query,"SELECT countries.CtyCod,MAX(crs_usr.Role)"
                   " FROM crs_usr,courses,degrees,centres,institutions,countries"
-                  " WHERE crs_usr.UsrCod='%ld'"
+                  " WHERE crs_usr.UsrCod=%ld"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
@@ -1817,19 +1817,19 @@ unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res)
    if (CtyCod > 0)
       sprintf (Query,"SELECT institutions.InsCod,MAX(crs_usr.Role)"
 		     " FROM crs_usr,courses,degrees,centres,institutions"
-		     " WHERE crs_usr.UsrCod='%ld'"
+		     " WHERE crs_usr.UsrCod=%ld"
 		     " AND crs_usr.CrsCod=courses.CrsCod"
 		     " AND courses.DegCod=degrees.DegCod"
 		     " AND degrees.CtrCod=centres.CtrCod"
 		     " AND centres.InsCod=institutions.InsCod"
-		     " AND institutions.CtyCod='%ld'"
+		     " AND institutions.CtyCod=%ld"
 		     " GROUP BY institutions.InsCod"
 		     " ORDER BY institutions.ShortName",
 	       UsrCod,CtyCod);
    else
       sprintf (Query,"SELECT institutions.InsCod,MAX(crs_usr.Role)"
 		     " FROM crs_usr,courses,degrees,centres,institutions"
-		     " WHERE crs_usr.UsrCod='%ld'"
+		     " WHERE crs_usr.UsrCod=%ld"
 		     " AND crs_usr.CrsCod=courses.CrsCod"
 		     " AND courses.DegCod=degrees.DegCod"
 		     " AND degrees.CtrCod=centres.CtrCod"
@@ -1853,17 +1853,17 @@ unsigned long Usr_GetCtrsFromUsr (long UsrCod,long InsCod,MYSQL_RES **mysql_res)
    if (InsCod > 0)
       sprintf (Query,"SELECT centres.CtrCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees,centres"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
                      " AND courses.DegCod=degrees.DegCod"
                      " AND degrees.CtrCod=centres.CtrCod"
-                     " AND centres.InsCod='%ld'"
+                     " AND centres.InsCod=%ld"
                      " GROUP BY centres.CtrCod ORDER BY centres.ShortName",
                UsrCod,InsCod);
    else
       sprintf (Query,"SELECT degrees.CtrCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees,centres"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
                      " AND courses.DegCod=degrees.DegCod"
                      " AND degrees.CtrCod=centres.CtrCod"
@@ -1885,16 +1885,16 @@ unsigned long Usr_GetDegsFromUsr (long UsrCod,long CtrCod,MYSQL_RES **mysql_res)
    if (CtrCod > 0)
       sprintf (Query,"SELECT degrees.DegCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
                      " AND courses.DegCod=degrees.DegCod"
-                     " AND degrees.CtrCod='%ld'"
+                     " AND degrees.CtrCod=%ld"
                      " GROUP BY degrees.DegCod ORDER BY degrees.ShortName",
                UsrCod,CtrCod);
    else
       sprintf (Query,"SELECT degrees.DegCod,MAX(crs_usr.Role)"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
                      " AND courses.DegCod=degrees.DegCod"
                      " GROUP BY degrees.DegCod ORDER BY degrees.ShortName",
@@ -1916,15 +1916,15 @@ unsigned long Usr_GetCrssFromUsr (long UsrCod,long DegCod,MYSQL_RES **mysql_res)
    if (DegCod > 0)	// Courses in a degree
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
-                     " AND courses.DegCod='%ld'"
+                     " AND courses.DegCod=%ld"
                      " ORDER BY courses.ShortName",
                UsrCod,DegCod);
    else			// All the courses
       sprintf (Query,"SELECT crs_usr.CrsCod,crs_usr.Role,courses.DegCod"
                      " FROM crs_usr,courses,degrees"
-                     " WHERE crs_usr.UsrCod='%ld'"
+                     " WHERE crs_usr.UsrCod=%ld"
                      " AND crs_usr.CrsCod=courses.CrsCod"
                      " AND courses.DegCod=degrees.DegCod"
                      " ORDER BY degrees.ShortName,courses.ShortName",
@@ -2173,7 +2173,7 @@ static bool Usr_CheckIfMyBirthdayHasNotBeenCongratulated (void)
    char Query[128];
 
    /***** Delete old birthdays *****/
-   sprintf (Query,"SELECT COUNT(*) FROM birthdays_today WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM birthdays_today WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if my birthday has been congratulated") == 0);
   }
@@ -2194,7 +2194,7 @@ static void Usr_InsertMyBirthday (void)
    sprintf (Query,"INSERT INTO birthdays_today"
 	          " (UsrCod,Today)"
 	          " VALUES"
-	          " ('%ld',CURDATE())",
+	          " (%ld,CURDATE())",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not insert birthday");
   }
@@ -3077,14 +3077,14 @@ void Usr_UpdateMyLastData (void)
    char Query[256];
 
    /***** Check if it exists an entry for me *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_last WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_last WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QueryCOUNT (Query,"can not get last user's click"))
      {
       /***** Update my last accessed course, tab and time of click in database *****/
       // WhatToSearch, LastAccNotif remain unchanged
-      sprintf (Query,"UPDATE usr_last SET LastCrs='%ld',LastTab='%u',LastTime=NOW()"
-                     " WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_last SET LastCrs=%ld,LastTab=%u,LastTime=NOW()"
+                     " WHERE UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,
                (unsigned) Gbl.Action.Tab,
                Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -3106,7 +3106,7 @@ static void Usr_InsertMyLastData (void)
    sprintf (Query,"INSERT INTO usr_last"
 	          " (UsrCod,WhatToSearch,LastCrs,LastTab,LastTime,LastAccNotif)"
                   " VALUES"
-                  " ('%ld','%u','%ld','%u',NOW(),FROM_UNIXTIME('%ld'))",
+                  " (%ld,%u,%ld,%u,NOW(),FROM_UNIXTIME(%ld))",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Sch_SEARCH_ALL,
             Gbl.CurrentCrs.Crs.CrsCod,
@@ -3657,7 +3657,7 @@ unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod)
 
    /***** Get the number of teachers in a course from database ******/
    sprintf (Query,"SELECT COUNT(*) FROM crs_usr"
-	          " WHERE CrsCod='%ld' AND Role='%u'",
+	          " WHERE CrsCod=%ld AND Role=%u",
             CrsCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a course");
   }
@@ -3673,9 +3673,9 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
    /***** Get the number of users in courses of a degree from database ******/
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM courses,crs_usr"
-                  " WHERE courses.DegCod='%ld'"
+                  " WHERE courses.DegCod=%ld"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             DegCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a degree");
   }
@@ -3693,7 +3693,7 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
    if (Role == Rol_UNKNOWN)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM degrees,courses,crs_usr"
-		     " WHERE degrees.CtrCod='%ld'"
+		     " WHERE degrees.CtrCod=%ld"
 		     " AND degrees.DegCod=courses.DegCod"
 		     " AND courses.CrsCod=crs_usr.CrsCod",
 	       CtrCod);
@@ -3702,10 +3702,10 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
       // It's a bad idea to get number of teachers or students for a big list of centres
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM degrees,courses,crs_usr"
-		     " WHERE degrees.CtrCod='%ld'"
+		     " WHERE degrees.CtrCod=%ld"
 		     " AND degrees.DegCod=courses.DegCod"
 		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role='%u'",
+		     " AND crs_usr.Role=%u",
 	       CtrCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a centre");
   }
@@ -3723,7 +3723,7 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
    if (Role == Rol_UNKNOWN)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM centres,degrees,courses,crs_usr"
-		     " WHERE centres.InsCod='%ld'"
+		     " WHERE centres.InsCod=%ld"
 		     " AND centres.CtrCod=degrees.CtrCod"
 		     " AND degrees.DegCod=courses.DegCod"
 		     " AND courses.CrsCod=crs_usr.CrsCod",
@@ -3733,11 +3733,11 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
       // It's a bad idea to get number of teachers or students for a big list of institutions
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM centres,degrees,courses,crs_usr"
-		     " WHERE centres.InsCod='%ld'"
+		     " WHERE centres.InsCod=%ld"
 		     " AND centres.CtrCod=degrees.CtrCod"
 		     " AND degrees.DegCod=courses.DegCod"
 		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role='%u'",
+		     " AND crs_usr.Role=%u",
 	       InsCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of an institution");
   }
@@ -3755,7 +3755,7 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
    if (Role == Rol_UNKNOWN)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM institutions,centres,degrees,courses,crs_usr"
-		     " WHERE institutions.CtyCod='%ld'"
+		     " WHERE institutions.CtyCod=%ld"
 		     " AND institutions.InsCod=centres.InsCod"
 		     " AND centres.CtrCod=degrees.CtrCod"
 		     " AND degrees.DegCod=courses.DegCod"
@@ -3766,12 +3766,12 @@ unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
       // It's a bad idea to get number of teachers or students for a big list of countries
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM institutions,centres,degrees,courses,crs_usr"
-		     " WHERE institutions.CtyCod='%ld'"
+		     " WHERE institutions.CtyCod=%ld"
 		     " AND institutions.InsCod=centres.InsCod"
 		     " AND centres.CtrCod=degrees.CtrCod"
 		     " AND degrees.DegCod=courses.DegCod"
 		     " AND courses.CrsCod=crs_usr.CrsCod"
-		     " AND crs_usr.Role='%u'",
+		     " AND crs_usr.Role=%u",
 	       CtyCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in courses of a country");
   }
@@ -3790,7 +3790,7 @@ long Usr_GetRamdomStdFromCrs (long CrsCod)
 
    /***** Get a random student from current course from database *****/
    sprintf (Query,"SELECT UsrCod FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND Role='%u'"
+                  " WHERE CrsCod=%ld AND Role=%u"
                   " ORDER BY RAND(NOW()) LIMIT 1",
             CrsCod,(unsigned) Rol_STUDENT);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get a random student from the current course"))
@@ -3820,9 +3820,9 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
 
    /***** Get a random student from a group from database *****/
    sprintf (Query,"SELECT crs_grp_usr.UsrCod FROM crs_grp_usr,crs_usr"
-                  " WHERE crs_grp_usr.GrpCod='%ld'"
+                  " WHERE crs_grp_usr.GrpCod=%ld"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-                  " AND crs_usr.Role='%u' ORDER BY RAND(NOW()) LIMIT 1",
+                  " AND crs_usr.Role=%u ORDER BY RAND(NOW()) LIMIT 1",
             GrpCod,(unsigned) Rol_STUDENT);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get a random student from a group"))
      {
@@ -3849,8 +3849,8 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
           from the current institution in a department *****/
    sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 	          " FROM usr_data,crs_usr"
-                  " WHERE usr_data.InsCod='%ld' AND usr_data.DptCod='%ld'"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'",
+                  " WHERE usr_data.InsCod=%ld AND usr_data.DptCod=%ld"
+                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
             Gbl.CurrentIns.Ins.InsCod,DptCod,(unsigned) Rol_TEACHER);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of teachers in a department");
   }
@@ -3864,7 +3864,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCty (long CtyCod)
    char Query[128];
 
    /***** Get the number of users in a country from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtyCod=%ld",
             CtyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a country");
   }
@@ -3878,7 +3878,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToIns (long InsCod)
    char Query[128];
 
    /***** Get the number of users in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE InsCod=%ld",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in an institution");
   }
@@ -3892,7 +3892,7 @@ unsigned Usr_GetNumUsrsWhoClaimToBelongToCtr (long CtrCod)
    char Query[128];
 
    /***** Get the number of users in a centre from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data WHERE CtrCod=%ld",
             CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of users in a centre");
   }
@@ -3908,8 +3908,8 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
    /***** Get the number of teachers in a centre from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 	          " FROM usr_data,crs_usr"
-                  " WHERE usr_data.CtrCod='%ld'"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role='%u'",
+                  " WHERE usr_data.CtrCod=%ld"
+                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
             CtrCod,(unsigned) Rol_TEACHER);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of teachers in a centre");
   }
@@ -3970,18 +3970,18 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    /***** Create query for users in the course *****/
    if (Gbl.Action.Act == ActReqMsgUsr)        // Selecting users to write a message
       sprintf (Query,"SELECT %s FROM crs_usr,usr_data"
-                     " WHERE crs_usr.CrsCod='%ld'"
-                     " AND crs_usr.Role='%u'"
+                     " WHERE crs_usr.CrsCod=%ld"
+                     " AND crs_usr.Role=%u"
                      " AND crs_usr.UsrCod NOT IN"
-                     " (SELECT ToUsrCod FROM msg_banned WHERE FromUsrCod='%ld')"
+                     " (SELECT ToUsrCod FROM msg_banned WHERE FromUsrCod=%ld)"
       		     " AND crs_usr.UsrCod=usr_data.UsrCod",        // Do not get banned users
       	       QueryFields,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,
                Gbl.Usrs.Me.UsrDat.UsrCod);
    else
       sprintf (Query,"SELECT %s FROM crs_usr,usr_data"
-                     " WHERE crs_usr.CrsCod='%ld'"
-                     " AND crs_usr.Role='%u'"
+                     " WHERE crs_usr.CrsCod=%ld"
+                     " AND crs_usr.Role=%u"
 		     " AND crs_usr.UsrCod=usr_data.UsrCod",
 	       QueryFields,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
@@ -4140,7 +4140,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 sprintf (Query,"SELECT %s"
 	                " FROM usr_data,crs_usr"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role='%u'"
+			" AND crs_usr.Role=%u"
 			" ORDER BY "
 			"usr_data.Surname1,"
 			"usr_data.Surname2,"
@@ -4154,12 +4154,12 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 sprintf (Query,"SELECT %s"
 	                " FROM usr_data,crs_usr,courses,degrees,centres,institutions"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role='%u'"
+			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
 			" AND centres.InsCod=institutions.InsCod"
-			" AND institutions.CtyCod='%ld'"
+			" AND institutions.CtyCod=%ld"
 			" ORDER BY "
 			"usr_data.Surname1,"
 			"usr_data.Surname2,"
@@ -4174,11 +4174,11 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 sprintf (Query,"SELECT %s"
 	                " FROM usr_data,crs_usr,courses,degrees,centres"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role='%u'"
+			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
 			" AND degrees.CtrCod=centres.CtrCod"
-			" AND centres.InsCod='%ld'"
+			" AND centres.InsCod=%ld"
 			" ORDER BY "
 			"usr_data.Surname1,"
 			"usr_data.Surname2,"
@@ -4193,10 +4193,10 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 sprintf (Query,"SELECT %s"
 	                " FROM usr_data,crs_usr,courses,degrees"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role='%u'"
+			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=courses.CrsCod"
 			" AND courses.DegCod=degrees.DegCod"
-			" AND degrees.CtrCod='%ld'"
+			" AND degrees.CtrCod=%ld"
 			" ORDER BY "
 			"usr_data.Surname1,"
 			"usr_data.Surname2,"
@@ -4211,9 +4211,9 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 sprintf (Query,"SELECT %s"
 	                " FROM usr_data,crs_usr,courses"
 			" WHERE usr_data.UsrCod=crs_usr.UsrCod"
-			" AND crs_usr.Role='%u'"
+			" AND crs_usr.Role=%u"
 			" AND crs_usr.CrsCod=courses.CrsCod"
-			" AND courses.DegCod='%ld'"
+			" AND courses.DegCod=%ld"
 			" ORDER BY "
 			"usr_data.Surname1,"
 			"usr_data.Surname2,"
@@ -4305,7 +4305,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod='%ld'"
+			      " AND institutions.CtyCod=%ld"
 			      " AND %s",
 			QueryFields,
 			Gbl.CurrentCty.Cty.CtyCod,
@@ -4319,7 +4319,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod='%ld'"
+			      " AND centres.InsCod=%ld"
 			      " AND %s",
 			QueryFields,
 			Gbl.CurrentIns.Ins.InsCod,
@@ -4332,7 +4332,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod='%ld'"
+			      " AND degrees.CtrCod=%ld"
 			      " AND %s",
 			QueryFields,
 			Gbl.CurrentCtr.Ctr.CtrCod,
@@ -4344,7 +4344,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 		              " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod='%ld'"
+			      " AND courses.DegCod=%ld"
 			      " AND %s",
 			QueryFields,
 			Gbl.CurrentDeg.Deg.DegCod,
@@ -4355,7 +4355,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s,crs_usr.Role,crs_usr.Accepted"
 		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.CrsCod=%ld"
 			      " AND %s",
 			QueryFields,
 			Gbl.CurrentCrs.Crs.CrsCod,
@@ -4389,7 +4389,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4400,12 +4400,12 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod=institutions.InsCod"
-			      " AND institutions.CtyCod='%ld'"
+			      " AND institutions.CtyCod=%ld"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4417,11 +4417,11 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
-			      " AND centres.InsCod='%ld'"
+			      " AND centres.InsCod=%ld"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4433,10 +4433,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
-			      " AND degrees.CtrCod='%ld'"
+			      " AND degrees.CtrCod=%ld"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4448,9 +4448,9 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
+			      " AND crs_usr.Role=%u"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
-			      " AND courses.DegCod='%ld'"
+			      " AND courses.DegCod=%ld"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4462,8 +4462,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s,crs_usr.Role,crs_usr.Accepted"
 		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role='%u'"
-			      " AND crs_usr.CrsCod='%ld'"
+			      " AND crs_usr.Role=%u"
+			      " AND crs_usr.CrsCod=%ld"
 			      " AND %s",
 			QueryFields,
 			(unsigned) Role,
@@ -4580,20 +4580,20 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         "(SELECT admin.UsrCod FROM admin,institutions"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld')"
+                        " AND institutions.CtyCod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,centres,institutions"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld')"
+                        " AND institutions.CtyCod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees,centres,institutions"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
                         " AND centres.InsCod=institutions.InsCod"
-                        " AND institutions.CtyCod='%ld')"
+                        " AND institutions.CtyCod=%ld)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
                   Sco_ScopeDB[Sco_SCOPE_SYS],
@@ -4610,18 +4610,18 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,centres"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=centres.CtrCod"
-                        " AND centres.InsCod='%ld')"
+                        " AND centres.InsCod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees,centres"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
                         " AND degrees.CtrCod=centres.CtrCod"
-                        " AND centres.InsCod='%ld')"
+                        " AND centres.InsCod=%ld)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
                   Sco_ScopeDB[Sco_SCOPE_SYS],
@@ -4639,15 +4639,15 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT admin.UsrCod FROM admin,degrees"
                         " WHERE admin.Scope='%s'"
                         " AND admin.Cod=degrees.DegCod"
-                        " AND degrees.CtrCod='%ld')"
+                        " AND degrees.CtrCod=%ld)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
                   Sco_ScopeDB[Sco_SCOPE_SYS],
@@ -4663,13 +4663,13 @@ static void Usr_GetAdmsLst (Sco_Scope_t Scope)
                         " WHERE Scope='%s')"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " OR UsrCod IN "
                         "(SELECT UsrCod FROM admin"
-                        " WHERE Scope='%s' AND Cod='%ld')"
+                        " WHERE Scope='%s' AND Cod=%ld)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
                   Sco_ScopeDB[Sco_SCOPE_SYS],
@@ -4730,7 +4730,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT %s FROM usr_data"
-                        " WHERE (CtyCod='%ld' OR InsCtyCod='%ld')"
+                        " WHERE (CtyCod=%ld OR InsCtyCod=%ld)"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
@@ -4739,7 +4739,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT %s FROM usr_data"
-                        " WHERE InsCod='%ld'"
+                        " WHERE InsCod=%ld"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
@@ -4747,7 +4747,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT %s FROM usr_data"
-                        " WHERE CtrCod='%ld'"
+                        " WHERE CtrCod=%ld"
                         " AND UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
                         " ORDER BY Surname1,Surname2,FirstName,UsrCod",
                   QueryFields,
@@ -4800,9 +4800,9 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
      {
       /***** Get the students in a degree from database *****/
       sprintf (Query,"SELECT %s FROM courses,crs_usr,usr_data"
-                     " WHERE courses.DegCod='%ld'"
+                     " WHERE courses.DegCod=%ld"
                      " AND courses.CrsCod=crs_usr.CrsCod"
-                     " AND crs_usr.Role='%u'"
+                     " AND crs_usr.Role=%u"
                      " AND crs_usr.UsrCod=usr_data.UsrCod",
                QueryFields,
                DegCod,(unsigned) Rol_STUDENT);
@@ -6832,7 +6832,7 @@ static void Usr_GetMyUsrListTypeFromDB (void)
 
    /***** Get type of listing of users from database *****/
    sprintf (Query,"SELECT UsrListType FROM crs_usr"
-	          " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+	          " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get type of listing of users");
 
@@ -6870,7 +6870,7 @@ static void Usr_UpdateMyUsrListTypeInDB (void)
 
    /***** Update type of users listing *****/
    sprintf (Query,"UPDATE crs_usr SET UsrListType='%s'"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             Usr_StringsUsrListTypeInDB[Gbl.Usrs.Me.ListType],
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update type of listing");
@@ -6934,7 +6934,7 @@ static void Usr_GetMyColsClassPhotoFromDB (void)
      {
       /***** Get number of columns in class photo from database *****/
       sprintf (Query,"SELECT ColsClassPhoto FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of columns in class photo");
 
@@ -6967,8 +6967,8 @@ static void Usr_UpdateMyColsClassPhotoInDB (void)
    if (Gbl.Usrs.Me.UsrDat.UsrCod > 0 && Gbl.CurrentCrs.Crs.CrsCod > 0)
      {
       /***** Update number of colums in class photo for current course *****/
-      sprintf (Query,"UPDATE crs_usr SET ColsClassPhoto='%u'"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+      sprintf (Query,"UPDATE crs_usr SET ColsClassPhoto=%u"
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.Usrs.ClassPhoto.Cols,
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update number of columns in class photo");
@@ -7039,7 +7039,7 @@ void Usr_GetMyPrefAboutListWithPhotosFromDB (void)
      {
       /***** Get if listing of users must show photos from database *****/
       sprintf (Query,"SELECT ListWithPhotos FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not check if listing of users must show photos");
 
@@ -7070,7 +7070,7 @@ static void Usr_UpdateMyPrefAboutListWithPhotosPhotoInDB (void)
      {
       /***** Update number of colums in class photo for current course *****/
       sprintf (Query,"UPDATE crs_usr SET ListWithPhotos='%c'"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.Usrs.Listing.WithPhotos ? 'Y' :
         	                             'N',
                Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -8093,7 +8093,7 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
       return false;
 
    /***** Get if a user exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_data WHERE UsrCod=%ld",
 	    UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user exists") != 0);
   }
@@ -8199,7 +8199,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(CrsCod) AS NumCrss"
 			   " FROM crs_usr"
-			   " WHERE Role='%u' GROUP BY UsrCod) AS NumCrssTable",
+			   " WHERE Role=%u GROUP BY UsrCod) AS NumCrssTable",
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
@@ -8207,7 +8207,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
@@ -8218,12 +8218,12 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
 		     Gbl.CurrentCty.Cty.CtyCod,
 		     (unsigned) Role);
@@ -8233,7 +8233,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM centres,degrees,courses,crs_usr"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
@@ -8243,11 +8243,11 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM centres,degrees,courses,crs_usr"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
 		     Gbl.CurrentIns.Ins.InsCod,
 		     (unsigned) Role);
@@ -8257,7 +8257,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM degrees,courses,crs_usr"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
@@ -8266,10 +8266,10 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM degrees,courses,crs_usr"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
 		     Gbl.CurrentCtr.Ctr.CtrCod,
 		     (unsigned) Role);
@@ -8279,7 +8279,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM courses,crs_usr"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
 		     Gbl.CurrentDeg.Deg.DegCod);
@@ -8287,9 +8287,9 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM courses,crs_usr"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.UsrCod) AS NumCrssTable",
 		     Gbl.CurrentDeg.Deg.DegCod,
 		     (unsigned) Role);
@@ -8336,7 +8336,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(UsrCod) AS NumUsrs"
 			   " FROM crs_usr"
-			   " WHERE Role='%u' GROUP BY CrsCod) AS NumUsrsTable",
+			   " WHERE Role=%u GROUP BY CrsCod) AS NumUsrsTable",
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
@@ -8344,7 +8344,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
@@ -8355,12 +8355,12 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
 		     Gbl.CurrentCty.Cty.CtyCod,
 		     (unsigned) Role);
@@ -8370,7 +8370,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM centres,degrees,courses,crs_usr"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
@@ -8380,11 +8380,11 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM centres,degrees,courses,crs_usr"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
 		     Gbl.CurrentIns.Ins.InsCod,
 		     (unsigned) Role);
@@ -8394,7 +8394,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM degrees,courses,crs_usr"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
@@ -8403,10 +8403,10 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM degrees,courses,crs_usr"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
 		     Gbl.CurrentCtr.Ctr.CtrCod,
 		     (unsigned) Role);
@@ -8416,7 +8416,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM courses,crs_usr"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
 		     Gbl.CurrentDeg.Deg.DegCod);
@@ -8424,9 +8424,9 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM courses,crs_usr"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
-			   " AND crs_usr.Role='%u'"
+			   " AND crs_usr.Role=%u"
 			   " GROUP BY crs_usr.CrsCod) AS NumUsrsTable",
 		     Gbl.CurrentDeg.Deg.DegCod,
 		     (unsigned) Role);
@@ -8459,7 +8459,7 @@ bool Usr_CheckIfUsrBanned (long UsrCod)
   {
    char Query[128];
 
-   sprintf (Query,"SELECT COUNT(*) FROM usr_banned WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_banned WHERE UsrCod=%ld",
 	    UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if user is banned") != 0);
   }
@@ -8472,7 +8472,7 @@ void Usr_RemoveUsrFromUsrBanned (long UsrCod)
   {
    char Query[128];
 
-   sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_banned WHERE UsrCod=%ld",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user from users banned");
   }

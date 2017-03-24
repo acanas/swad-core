@@ -91,7 +91,7 @@ void Mrk_AddMarksToDB (long FilCod,struct MarksProperties *Marks)
    sprintf (Query,"INSERT INTO marks_properties"
 	          " (FilCod,%s,%s)"
                   " VALUES"
-                  " ('%ld','%u','%u')",
+                  " (%ld,%u,%u)",
             Mrk_HeadOrFootStr[Brw_HEADER],
             Mrk_HeadOrFootStr[Brw_FOOTER],
             FilCod,
@@ -197,7 +197,7 @@ static void Mrk_GetNumRowsHeaderAndFooter (struct MarksProperties *Marks)
    /***** Get number of rows of header and footer from database *****/
    sprintf (Query,"SELECT marks_properties.%s,marks_properties.%s"
 	          " FROM files,marks_properties"
-                  " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.Path='%s'"
+                  " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
                   " AND files.FilCod=marks_properties.FilCod",
             Mrk_HeadOrFootStr[Brw_HEADER],
             Mrk_HeadOrFootStr[Brw_FOOTER],
@@ -271,8 +271,8 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       /***** Update properties of marks in the database *****/
       Cod = Brw_GetCodForFiles ();
       sprintf (Query,"UPDATE marks_properties,files"
-	             " SET marks_properties.%s='%u'"
-	             " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.Path='%s'"
+	             " SET marks_properties.%s=%u"
+	             " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.Path='%s'"
 	             " AND files.FilCod=marks_properties.FilCod",
                Mrk_HeadOrFootStr[HeaderOrFooter],NumRows,
                (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
@@ -753,7 +753,7 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    sprintf (Query,"SELECT files.FileBrowser,files.Cod,files.Path,"
 	          "marks_properties.Header,marks_properties.Footer"
 	          " FROM files,marks_properties"
-	          " WHERE files.FilCod='%ld'"
+	          " WHERE files.FilCod=%ld"
 	          " AND files.FilCod=marks_properties.FilCod",
 	    MrkCod);
    if (!mysql_query (&Gbl.mysql,Query))

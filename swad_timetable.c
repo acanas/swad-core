@@ -465,7 +465,7 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    unsigned Column;
 
    /***** Remove former timetable *****/
-   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove former timetable");
 
@@ -485,7 +485,7 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
                sprintf (Query,"INSERT INTO timetable_crs"
         	              " (CrsCod,GrpCod,Day,Hour,Duration,ClassType,Place,GroupName)"
                               " VALUES"
-                              " ('%ld','%ld','%c','%u','%d','%s','%s','%s')",
+                              " (%ld,%ld,'%c',%u,%d,'%s','%s','%s')",
                         CrsCod,
 			TimeTable[Day][Hour].Columns[Column].GrpCod,
 			TimeTableCharsDays[Day],
@@ -509,7 +509,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
    unsigned Hour,Day,Column;
 
    /***** Remove former timetable *****/
-   sprintf (Query,"DELETE FROM timetable_tut WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM timetable_tut WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove former timetable");
 
@@ -529,7 +529,7 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
                sprintf (Query,"INSERT INTO timetable_tut"
         	              " (UsrCod,Day,Hour,Duration,Place)"
                               " VALUES"
-                              " ('%ld','%c','%u','%d','%s')",
+                              " (%ld,'%c',%u,%d,'%s')",
                         UsrCod,TimeTableCharsDays[Day],Hour,
                         TimeTable[Day][Hour].Columns[Column].Duration,
 			TimeTable[Day][Hour].Columns[Column].Place);
@@ -588,17 +588,21 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                sprintf (Query,"SELECT timetable_crs.Day,timetable_crs.Hour,timetable_crs.Duration,timetable_crs.Place,"
                               "timetable_crs.ClassType,timetable_crs.GroupName,timetable_crs.GrpCod,timetable_crs.CrsCod"
                               " FROM timetable_crs,crs_usr"
-                              " WHERE crs_usr.UsrCod='%ld' AND timetable_crs.GrpCod='-1' AND timetable_crs.CrsCod=crs_usr.CrsCod"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND timetable_crs.GrpCod=-1"
+                              " AND timetable_crs.CrsCod=crs_usr.CrsCod"
                               " UNION DISTINCT "
                               "SELECT timetable_crs.Day,timetable_crs.Hour,timetable_crs.Duration,timetable_crs.Place,"
                               "timetable_crs.ClassType,timetable_crs.GroupName,timetable_crs.GrpCod,timetable_crs.CrsCod"
                               " FROM timetable_crs,crs_grp_usr"
-                              " WHERE crs_grp_usr.UsrCod='%ld' AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
+                              " WHERE crs_grp_usr.UsrCod=%ld"
+                              " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
                               " UNION "
                               "SELECT Day,Hour,Duration,Place,"
-                              "'tutorias' AS ClassType,'' AS GroupName,'-1' AS GrpCod,'-1' AS CrsCod"
+                              "'tutorias' AS ClassType,'' AS GroupName,"
+                              "-1 AS GrpCod,-1 AS CrsCod"
                               " FROM timetable_tut"
-                              " WHERE UsrCod='%ld'"
+                              " WHERE UsrCod=%ld"
                               " ORDER BY Day,Hour,ClassType,GroupName,GrpCod,Place,Duration DESC,CrsCod",
                         UsrCod,UsrCod,UsrCod);
                break;
@@ -606,12 +610,14 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                sprintf (Query,"SELECT timetable_crs.Day,timetable_crs.Hour,timetable_crs.Duration,timetable_crs.Place,"
                               "timetable_crs.ClassType,timetable_crs.GroupName,timetable_crs.GrpCod,timetable_crs.CrsCod"
                               " FROM timetable_crs,crs_usr"
-                              " WHERE crs_usr.UsrCod='%ld' AND timetable_crs.CrsCod=crs_usr.CrsCod"
+                              " WHERE crs_usr.UsrCod=%ld"
+                              " AND timetable_crs.CrsCod=crs_usr.CrsCod"
                               " UNION "
                               "SELECT Day,Hour,Duration,Place,"
-                              "'tutorias' AS ClassType,'' AS GroupName,'-1' AS GrpCod,'-1' AS CrsCod"
+                              "'tutorias' AS ClassType,'' AS GroupName,"
+                              "-1 AS GrpCod,-1 AS CrsCod"
                               " FROM timetable_tut"
-                              " WHERE UsrCod='%ld'"
+                              " WHERE UsrCod=%ld"
                               " ORDER BY Day,Hour,ClassType,"
                               "GroupName,GrpCod,Place,Duration DESC,CrsCod",
                         UsrCod,UsrCod);
@@ -624,18 +630,22 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             sprintf (Query,"SELECT Day,Hour,Duration,Place,ClassType,GroupName,GrpCod"
         	           " FROM timetable_crs"
-                           " WHERE CrsCod='%ld'"
+                           " WHERE CrsCod=%ld"
                            " ORDER BY Day,Hour,ClassType,GroupName,GrpCod,Place,Duration DESC",
                      Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT timetable_crs.Day,timetable_crs.Hour,timetable_crs.Duration,timetable_crs.Place,timetable_crs.ClassType,timetable_crs.GroupName,timetable_crs.GrpCod"
                            " FROM timetable_crs,crs_usr"
-                           " WHERE timetable_crs.CrsCod='%ld' AND timetable_crs.GrpCod='-1' AND crs_usr.UsrCod='%ld' AND timetable_crs.CrsCod=crs_usr.CrsCod"
+                           " WHERE timetable_crs.CrsCod=%ld"
+                           " AND timetable_crs.GrpCod=-1 AND crs_usr.UsrCod=%ld"
+                           " AND timetable_crs.CrsCod=crs_usr.CrsCod"
                            " UNION DISTINCT "
                            "SELECT timetable_crs.Day,timetable_crs.Hour,timetable_crs.Duration,timetable_crs.Place,"
                            "timetable_crs.ClassType,timetable_crs.GroupName,timetable_crs.GrpCod"
 			   " FROM timetable_crs,crs_grp_usr"
-                           " WHERE timetable_crs.CrsCod='%ld' AND crs_grp_usr.UsrCod='%ld' AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
+                           " WHERE timetable_crs.CrsCod=%ld"
+                           " AND crs_grp_usr.UsrCod=%ld"
+                           " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
                            " ORDER BY Day,Hour,ClassType,GroupName,GrpCod,Place,Duration DESC",
                      Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
                      Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
@@ -643,7 +653,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
       case TT_TUTOR_TIMETABLE:
          sprintf (Query,"SELECT Day,Hour,Duration,Place"
                         " FROM timetable_tut"
-                        " WHERE UsrCod='%ld'"
+                        " WHERE UsrCod=%ld"
                         " ORDER BY Day,Hour,Place,Duration DESC",
                   UsrCod);
          break;

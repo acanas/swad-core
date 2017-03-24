@@ -448,7 +448,7 @@ void Mnu_ChangeMenu (void)
    /***** Store menu in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET Menu='%u' WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_data SET Menu=%u WHERE UsrCod=%ld",
                (unsigned) Gbl.Prefs.Menu,Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your preference about menu");
      }

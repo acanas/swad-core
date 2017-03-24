@@ -406,7 +406,7 @@ void Mai_GetDataOfMailDomainByCod (struct Mail *Mai)
    if (Mai->MaiCod > 0)
      {
       /***** Get data of a mail domain from database *****/
-      sprintf (Query,"SELECT Domain,Info FROM mail_domains WHERE MaiCod='%ld'",
+      sprintf (Query,"SELECT Domain,Info FROM mail_domains WHERE MaiCod=%ld",
                Mai->MaiCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a mail domain");
 
@@ -555,7 +555,7 @@ void Mai_RemoveMailDomain (void)
    Mai_GetDataOfMailDomainByCod (&Mai);
 
    /***** Remove mail *****/
-   sprintf (Query,"DELETE FROM mail_domains WHERE MaiCod='%ld'",
+   sprintf (Query,"DELETE FROM mail_domains WHERE MaiCod=%ld",
             Mai.MaiCod);
    DB_QueryDELETE (Query,"can not remove a mail domain");
 
@@ -685,7 +685,7 @@ static bool Mai_CheckIfMailDomainNameExists (const char *FieldName,const char *N
 
    /***** Get number of mail_domains with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM mail_domains"
-	          " WHERE %s='%s' AND MaiCod<>'%ld'",
+	          " WHERE %s='%s' AND MaiCod<>%ld",
             FieldName,Name,MaiCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a mail domain already existed") != 0);
   }
@@ -699,7 +699,7 @@ static void Mai_UpdateMailDomainNameDB (long MaiCod,const char *FieldName,const 
    char Query[128 + Mai_MAX_BYTES_MAIL_INFO];
 
    /***** Update mail domain changing old name by new name */
-   sprintf (Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod='%ld'",
+   sprintf (Query,"UPDATE mail_domains SET %s='%s' WHERE MaiCod=%ld",
 	    FieldName,NewMaiName,MaiCod);
    DB_QueryUPDATE (Query,"can not update the name of a mail domain");
   }
@@ -1059,7 +1059,7 @@ bool Mai_GetEmailFromUsrCod (struct UsrData *UsrDat)
 
    /***** Get current (last updated) user's nickname from database *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
-	          " WHERE UsrCod='%ld' ORDER BY CreatTime DESC LIMIT 1",
+	          " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
 	    UsrDat->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get email address");
 
@@ -1214,7 +1214,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 
    /***** Get my emails *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
-                  " WHERE UsrCod='%ld'"
+                  " WHERE UsrCod=%ld"
                   " ORDER BY CreatTime DESC",
             UsrDat->UsrCod);
    NumEmails = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get old email addresses of a user");
@@ -1413,7 +1413,7 @@ static void Mai_RemoveEmailFromDB (long UsrCod,const char Email[Cns_MAX_BYTES_EM
 
    /***** Remove an old email address *****/
    sprintf (Query,"DELETE FROM usr_emails"
-                  " WHERE UsrCod='%ld' AND E_mail='%s'",
+                  " WHERE UsrCod=%ld AND E_mail='%s'",
             UsrCod,Email);
    DB_QueryREPLACE (Query,"can not remove an old email address");
   }
@@ -1530,20 +1530,20 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
    /***** Check if the new email matches any of the confirmed emails of other users *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='Y'"
-		  " AND UsrCod<>'%ld'",
+		  " AND UsrCod<>%ld",
 	    NewEmail,UsrDat->UsrCod);
    if (DB_QueryCOUNT (Query,"can not check if email already existed"))	// An email of another user is the same that my email
       return false;	// Don't update
 
    /***** Delete email (not confirmed) for other users *****/
    sprintf (Query,"DELETE FROM pending_emails"
-                  " WHERE E_mail='%s' AND UsrCod<>'%ld'",
+                  " WHERE E_mail='%s' AND UsrCod<>%ld",
 	    NewEmail,UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove pending email for other users");
 
    sprintf (Query,"DELETE FROM usr_emails"
                   " WHERE E_mail='%s' AND Confirmed='N'"
-		  " AND UsrCod<>'%ld'",
+		  " AND UsrCod<>%ld",
 	    NewEmail,UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove not confirmed email for other users");
 
@@ -1551,7 +1551,7 @@ bool Mai_UpdateEmailInDB (const struct UsrData *UsrDat,const char NewEmail[Cns_M
    sprintf (Query,"REPLACE INTO usr_emails"
                   " (UsrCod,E_mail,CreatTime)"
                   " VALUES"
-                  " ('%ld','%s',NOW())",
+                  " (%ld,'%s',NOW())",
             UsrDat->UsrCod,NewEmail);
    DB_QueryREPLACE (Query,"can not update email");
 
@@ -1689,7 +1689,7 @@ static void Mai_InsertMailKey (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1]
    sprintf (Query,"INSERT INTO pending_emails"
 	          " (UsrCod,E_mail,MailKey,DateAndTime)"
                   " VALUES"
-                  " ('%ld','%s','%s',NOW())",
+                  " (%ld,'%s','%s',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             Email,
             MailKey);
@@ -1751,7 +1751,7 @@ void Mai_ConfirmEmail (void)
       /***** Check user's code and email
              and get if email is already confirmed *****/
       sprintf (Query,"SELECT Confirmed FROM usr_emails"
-		     " WHERE UsrCod='%ld' AND E_mail='%s'",
+		     " WHERE UsrCod=%ld AND E_mail='%s'",
 	       UsrCod,Email);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's code and email"))
 	{
@@ -1764,7 +1764,7 @@ void Mai_ConfirmEmail (void)
          else
            {
 	    sprintf (Query,"UPDATE usr_emails SET Confirmed='Y'"
-			   " WHERE usr_emails.UsrCod='%ld'"
+			   " WHERE usr_emails.UsrCod=%ld"
 			   " AND usr_emails.E_mail='%s'",
 		     UsrCod,Email);
 	    DB_QueryUPDATE (Query,"can not confirm email");

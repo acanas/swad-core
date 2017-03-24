@@ -654,7 +654,7 @@ void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned Nu
    char Query[128 + Ses_BYTES_SESSION_ID];
 
    /***** Save last page of received/sent messages *****/
-   sprintf (Query,"UPDATE sessions SET %s='%u' WHERE SessionId='%s'",
+   sprintf (Query,"UPDATE sessions SET %s=%u WHERE SessionId='%s'",
             WhatPaginate == Pag_MESSAGES_RECEIVED ? "LastPageMsgRcv" :
         	                                    "LastPageMsgSnt",
             NumPage,Gbl.Session.Id);

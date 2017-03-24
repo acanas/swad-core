@@ -506,7 +506,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 	{
 	 /* Get subject and content of message from database */
 	 sprintf (Query,"SELECT Subject,Content FROM msg_content"
-			" WHERE MsgCod='%ld'",MsgCod);
+			" WHERE MsgCod=%ld",MsgCod);
 	 NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get message content");
 
 	 /* Result should have a unique row */
@@ -1197,13 +1197,13 @@ static void Msg_ExpandSentMsg (long MsgCod)
 
    /***** Expand message in sent message table *****/
    sprintf (Query,"UPDATE msg_snt SET Expanded='Y'"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not expand a sent message");
 
    /***** Contract all my other messages in sent message table *****/
    sprintf (Query,"UPDATE msg_snt SET Expanded='N'"
-                  " WHERE UsrCod='%ld' AND MsgCod<>'%ld'",
+                  " WHERE UsrCod=%ld AND MsgCod<>%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
    DB_QueryUPDATE (Query,"can not contract a sent message");
   }
@@ -1218,13 +1218,13 @@ static void Msg_ExpandReceivedMsg (long MsgCod)
 
    /***** Expand message in received message table and mark it as read by me *****/
    sprintf (Query,"UPDATE msg_rcv SET Open='Y',Expanded='Y'"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not expand a received message");
 
    /***** Contract all my other messages in received message table *****/
    sprintf (Query,"UPDATE msg_rcv SET Expanded='N'"
-                  " WHERE UsrCod='%ld' AND MsgCod<>'%ld'",
+                  " WHERE UsrCod=%ld AND MsgCod<>%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod,MsgCod);
    DB_QueryUPDATE (Query,"can not contract a received message");
   }
@@ -1239,7 +1239,7 @@ static void Msg_ContractSentMsg (long MsgCod)
 
    /***** Contract message in sent message table *****/
    sprintf (Query,"UPDATE msg_snt SET Expanded='N'"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not contract a sent message");
   }
@@ -1254,7 +1254,7 @@ static void Msg_ContractReceivedMsg (long MsgCod)
 
    /***** Contract message in received message table *****/
    sprintf (Query,"UPDATE msg_rcv SET Expanded='N'"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not contract a received message");
   }
@@ -1269,7 +1269,7 @@ void Msg_SetReceivedMsgAsOpen (long MsgCod,long UsrCod)
 
    /***** Mark message as read by user *****/
    sprintf (Query,"UPDATE msg_rcv SET Open='Y'"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,UsrCod);
    DB_QueryUPDATE (Query,"can not mark a received message as open");
   }
@@ -1314,7 +1314,7 @@ static long Msg_InsertNewMsg (const char *Subject,const char *Content,
    sprintf (Query,"INSERT INTO msg_snt"
 	          " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
                   " VALUES"
-                  " ('%ld','%ld','%ld','N',NOW())",
+                  " (%ld,%ld,%ld,'N',NOW())",
             MsgCod,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1385,12 +1385,12 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
    /* Insert messages into msg_rcv_deleted */
    sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted"
 	          " (MsgCod,UsrCod,Notified,Open,Replied)"
-                  " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod='%ld'",
+                  " SELECT MsgCod,UsrCod,Notified,Open,Replied FROM msg_rcv WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryINSERT (Query,"can not remove received messages");
 
    /* Delete messages from msg_rcv *****/
-   sprintf (Query,"DELETE FROM msg_rcv WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM msg_rcv WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove received messages");
 
    /***** Move message from msg_snt to msg_snt_deleted *****/
@@ -1398,12 +1398,12 @@ void Msg_DelAllRecAndSntMsgsUsr (long UsrCod)
    sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted"
 	          " (MsgCod,CrsCod,UsrCod,CreatTime)"
                   " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-                  " FROM msg_snt WHERE UsrCod='%ld'",
+                  " FROM msg_snt WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryINSERT (Query,"can not remove sent messages");
 
    /* Delete message from msg_snt *****/
-   sprintf (Query,"DELETE FROM msg_snt WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM msg_snt WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove sent messages");
   }
 
@@ -1419,7 +1419,7 @@ static void Msg_InsertReceivedMsgIntoDB (long MsgCod,long UsrCod,bool NotifyByEm
    sprintf (Query,"INSERT INTO msg_rcv"
 	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
                   " VALUES"
-                  " ('%ld','%ld','%c','N','N','N')",
+                  " (%ld,%ld,'%c','N','N','N')",
             MsgCod,UsrCod,
             NotifyByEmail ? 'Y' :
         	            'N');
@@ -1435,7 +1435,7 @@ static void Msg_SetReceivedMsgAsReplied (long MsgCod)
    char Query[512];
 
    /***** Update received message by setting Replied field to true *****/
-   sprintf (Query,"UPDATE msg_rcv SET Replied='Y' WHERE MsgCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"UPDATE msg_rcv SET Replied='Y' WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update a received message");
   }
@@ -1453,12 +1453,12 @@ static void Msg_MoveReceivedMsgToDeleted (long MsgCod,long UsrCod)
    sprintf (Query,"INSERT IGNORE INTO msg_rcv_deleted"
 	          " (MsgCod,UsrCod,Notified,Open,Replied)"
                   " SELECT MsgCod,UsrCod,Notified,Open,Replied"
-                  " FROM msg_rcv WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,UsrCod);
    DB_QueryINSERT (Query,"can not remove a received message");
 
    /* Delete message from msg_rcv *****/
-   sprintf (Query,"DELETE FROM msg_rcv WHERE MsgCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM msg_rcv WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove a received message");
 
@@ -1484,12 +1484,12 @@ static void Msg_MoveSentMsgToDeleted (long MsgCod)
    sprintf (Query,"INSERT IGNORE INTO msg_snt_deleted"
 	          " (MsgCod,CrsCod,UsrCod,CreatTime)"
                   " SELECT MsgCod,CrsCod,UsrCod,CreatTime"
-                  " FROM msg_snt WHERE MsgCod='%ld'",
+                  " FROM msg_snt WHERE MsgCod=%ld",
             MsgCod);
    DB_QueryINSERT (Query,"can not remove a sent message");
 
    /* Delete message from msg_snt *****/
-   sprintf (Query,"DELETE FROM msg_snt WHERE MsgCod='%ld'",MsgCod);
+   sprintf (Query,"DELETE FROM msg_snt WHERE MsgCod=%ld",MsgCod);
    DB_QueryDELETE (Query,"can not remove a sent message");
 
    /***** If message content is not longer necessary, move it to msg_content_deleted *****/
@@ -1510,7 +1510,7 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
    sprintf (Query,"INSERT IGNORE INTO msg_content_deleted"
 	          " (MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL)"
                   " SELECT MsgCod,Subject,Content,ImageName,ImageTitle,ImageURL"
-                  " FROM msg_content WHERE MsgCod='%ld'",
+                  " FROM msg_content WHERE MsgCod=%ld",
             MsgCod);
    DB_QueryINSERT (Query,"can not remove the content of a message");
 
@@ -1518,7 +1518,7 @@ static void Msg_MoveMsgContentToDeleted (long MsgCod)
       should be deleted to ensure the protection of personal data */
 
    /* Delete message from msg_content *****/
-   sprintf (Query,"DELETE FROM msg_content WHERE MsgCod='%ld'",MsgCod);
+   sprintf (Query,"DELETE FROM msg_content WHERE MsgCod=%ld",MsgCod);
    DB_QueryUPDATE (Query,"can not remove the content of a message");
   }
 
@@ -1559,7 +1559,7 @@ static bool Msg_CheckIfSentMsgIsDeleted (long MsgCod)
 
    /***** Get if the message code is in table of sent messages not deleted *****/
    sprintf (Query,"SELECT COUNT(*) FROM msg_snt"
-                  " WHERE MsgCod='%ld'",MsgCod);
+                  " WHERE MsgCod=%ld",MsgCod);
    return (DB_QueryCOUNT (Query,"can not check if a sent message is deleted") == 0);	// The message has been deleted by its author when it is not present in table of sent messages undeleted
   }
 
@@ -1573,7 +1573,7 @@ static bool Msg_CheckIfReceivedMsgIsDeletedForAllItsRecipients (long MsgCod)
 
    /***** Get if the message code is in table of received messages not deleted *****/
    sprintf (Query,"SELECT COUNT(*) FROM msg_rcv"
-                  " WHERE MsgCod='%ld'",MsgCod);
+                  " WHERE MsgCod=%ld",MsgCod);
    return (DB_QueryCOUNT (Query,"can not check if a received message is deleted by all recipients") == 0);	// The message has been deleted by all its recipients when it is not present in table of received messages undeleted
   }
 
@@ -1591,18 +1591,18 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
      {
       if (FilterFromToSubquery[0])
          sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
-                           " WHERE msg_rcv.UsrCod='%ld' AND msg_rcv.Open='N'"
+                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
                            " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                           " AND msg_snt.CrsCod='%ld'"
+                           " AND msg_snt.CrsCod=%ld"
                            " AND msg_snt.UsrCod=usr_data.UsrCod%s",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   FilterCrsCod,
                   FilterFromToSubquery);
       else
          sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt"
-                           " WHERE msg_rcv.UsrCod='%ld' AND msg_rcv.Open='N'"
+                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
                            " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                           " AND msg_snt.CrsCod='%ld'",
+                           " AND msg_snt.CrsCod=%ld",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   FilterCrsCod);
      }
@@ -1610,14 +1610,14 @@ static unsigned Msg_GetNumUnreadMsgs (long FilterCrsCod,const char *FilterFromTo
      {
       if (FilterFromToSubquery[0])
          sprintf (SubQuery,"SELECT msg_rcv.MsgCod FROM msg_rcv,msg_snt,usr_data"
-                           " WHERE msg_rcv.UsrCod='%ld' AND msg_rcv.Open='N'"
+                           " WHERE msg_rcv.UsrCod=%ld AND msg_rcv.Open='N'"
                            " AND msg_rcv.MsgCod=msg_snt.MsgCod"
                            " AND msg_snt.UsrCod=usr_data.UsrCod%s",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   FilterFromToSubquery);
       else
          sprintf (SubQuery,"SELECT MsgCod FROM msg_rcv"
-                           " WHERE UsrCod='%ld' AND Open='N'",
+                           " WHERE UsrCod=%ld AND Open='N'",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
      }
 
@@ -1846,7 +1846,7 @@ static unsigned long Msg_GetNumUsrsBannedByMe (void)
    char Query[128];
 
    /***** Get number of users I have banned *****/
-   sprintf (Query,"SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM msg_banned WHERE ToUsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    return DB_QueryCOUNT (Query,"can not get number of users you have banned");
   }
@@ -1888,9 +1888,9 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             if (FilterFromToSubquery[0])
                sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt,usr_data"
-                                 " WHERE msg_rcv.UsrCod='%ld'%s"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.CrsCod='%ld'"
+                                 " AND msg_snt.CrsCod=%ld"
                                  " AND msg_snt.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_rcv.MsgCod DESC",
                         UsrCod,StrUnreadMsg,FilterCrsCod,
@@ -1898,9 +1898,9 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             else
                sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt"
-                                 " WHERE msg_rcv.UsrCod='%ld'%s"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.CrsCod='%ld'"
+                                 " AND msg_snt.CrsCod=%ld"
                                  " ORDER BY msg_rcv.MsgCod DESC",
                         UsrCod,StrUnreadMsg,
                         FilterCrsCod);
@@ -1909,8 +1909,8 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             if (FilterFromToSubquery[0])
                sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
         	                 " FROM msg_snt,msg_rcv,usr_data"
-                                 " WHERE msg_snt.UsrCod='%ld'"
-                                 " AND msg_snt.CrsCod='%ld'"
+                                 " WHERE msg_snt.UsrCod=%ld"
+                                 " AND msg_snt.CrsCod=%ld"
                                  " AND msg_snt.MsgCod=msg_rcv.MsgCod"
                                  " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_snt.MsgCod DESC",
@@ -1919,7 +1919,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             else
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_snt"
-                                 " WHERE UsrCod='%ld' AND CrsCod='%ld'"
+                                 " WHERE UsrCod=%ld AND CrsCod=%ld"
                                  " ORDER BY MsgCod DESC",
                         UsrCod,FilterCrsCod);
             break;
@@ -1936,7 +1936,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
         	                                            "");
                sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt,usr_data"
-                                 " WHERE msg_rcv.UsrCod='%ld'%s"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
                                  " AND msg_snt.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_rcv.MsgCod DESC",
@@ -1949,7 +1949,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
         	                                            "");
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_rcv"
-                                 " WHERE UsrCod='%ld'%s"
+                                 " WHERE UsrCod=%ld%s"
                                  " ORDER BY MsgCod DESC",
                         UsrCod,StrUnreadMsg);
               }
@@ -1958,7 +1958,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             if (FilterFromToSubquery[0])
                sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
         	                 " FROM msg_snt,msg_rcv,usr_data"
-                                 " WHERE msg_snt.UsrCod='%ld'"
+                                 " WHERE msg_snt.UsrCod=%ld"
                                  " AND msg_snt.MsgCod=msg_rcv.MsgCod"
                                  " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
                                  " ORDER BY msg_snt.MsgCod DESC",
@@ -1967,7 +1967,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             else
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_snt"
-                                 " WHERE UsrCod='%ld'"
+                                 " WHERE UsrCod=%ld"
                                  " ORDER BY MsgCod DESC",
                         UsrCod);
             break;
@@ -1994,7 +1994,7 @@ unsigned Msg_GetNumMsgsSentByTchsCrs (long CrsCod)
 
    /***** Get the number of unique messages sent by any teacher from this course *****/
    sprintf (Query,"SELECT COUNT(*) FROM msg_snt,crs_usr"
-                  " WHERE msg_snt.CrsCod='%ld' AND crs_usr.CrsCod='%ld' AND crs_usr.Role='%u'"
+                  " WHERE msg_snt.CrsCod=%ld AND crs_usr.CrsCod=%ld AND crs_usr.Role=%u"
                   " AND msg_snt.UsrCod=crs_usr.UsrCod",
                   CrsCod,CrsCod,(unsigned) Rol_TEACHER);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of messages sent by teachers");
@@ -2010,9 +2010,9 @@ unsigned long Msg_GetNumMsgsSentByUsr (long UsrCod)
 
    /***** Get the number of unique messages sent by any teacher from this course *****/
    sprintf (Query,"SELECT"
-                  " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod='%ld')"
+                  " (SELECT COUNT(*) FROM msg_snt WHERE UsrCod=%ld)"
                   " +"
-                  " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod='%ld')",
+                  " (SELECT COUNT(*) FROM msg_snt_deleted WHERE UsrCod=%ld)",
                   UsrCod,
                   UsrCod);
    return DB_QueryCOUNT (Query,"can not get the number of messages sent by a user");
@@ -2049,7 +2049,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM institutions,centres,degrees,courses,%s"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -2061,7 +2061,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,%s"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=%s.CrsCod",
@@ -2072,7 +2072,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM degrees,courses,%s"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=%s.CrsCod",
                   Table,
@@ -2082,7 +2082,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM courses,%s"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=%s.CrsCod",
                   Table,
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -2091,7 +2091,7 @@ unsigned Msg_GetNumMsgsSent (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM %s"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE CrsCod=%ld",
                   Table,
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -2129,7 +2129,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             case Sco_SCOPE_CTY:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM institutions,centres,degrees,courses,%s,msg_snt"
-                               " WHERE institutions.CtyCod='%ld'"
+                               " WHERE institutions.CtyCod=%ld"
                                " AND institutions.InsCod=centres.InsCod"
                                " AND centres.CtrCod=degrees.CtrCod"
                                " AND degrees.DegCod=courses.DegCod"
@@ -2142,7 +2142,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             case Sco_SCOPE_INS:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM centres,degrees,courses,%s,msg_snt"
-                               " WHERE centres.InsCod='%ld'"
+                               " WHERE centres.InsCod=%ld"
                                " AND centres.CtrCod=degrees.CtrCod"
                                " AND degrees.DegCod=courses.DegCod"
                                " AND courses.CrsCod=msg_snt.CrsCod"
@@ -2154,7 +2154,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             case Sco_SCOPE_CTR:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM degrees,courses,%s,msg_snt"
-                               " WHERE degrees.CtrCod='%ld'"
+                               " WHERE degrees.CtrCod=%ld"
                                " AND degrees.DegCod=courses.DegCod"
                                " AND courses.CrsCod=msg_snt.CrsCod"
                                " AND msg_snt.MsgCod=%s.MsgCod",
@@ -2165,7 +2165,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             case Sco_SCOPE_DEG:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM courses,%s,msg_snt"
-                               " WHERE courses.DegCod='%ld'"
+                               " WHERE courses.DegCod=%ld"
                                " AND courses.CrsCod=msg_snt.CrsCod"
                                " AND msg_snt.MsgCod=%s.MsgCod",
                         Table,
@@ -2175,7 +2175,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
             case Sco_SCOPE_CRS:
                sprintf (Query,"SELECT COUNT(*)"
         	              " FROM msg_snt,%s"
-                              " WHERE msg_snt.CrsCod='%ld'"
+                              " WHERE msg_snt.CrsCod=%ld"
                               " AND msg_snt.MsgCod=%s.MsgCod",
                         Table,
                         Gbl.CurrentCrs.Crs.CrsCod,
@@ -2203,7 +2203,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv"
-                              " WHERE institutions.CtyCod='%ld'"
+                              " WHERE institutions.CtyCod=%ld"
                               " AND institutions.InsCod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
@@ -2213,7 +2213,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                               " + "
                               "(SELECT COUNT(*)"
                               " FROM institutions,centres,degrees,courses,msg_snt,msg_rcv_deleted"
-                              " WHERE institutions.CtyCod='%ld'"
+                              " WHERE institutions.CtyCod=%ld"
                               " AND institutions.InsCod=centres.InsCod"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
@@ -2227,7 +2227,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM centres,degrees,courses,msg_snt,msg_rcv"
-                              " WHERE centres.InsCod='%ld'"
+                              " WHERE centres.InsCod=%ld"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=msg_snt.CrsCod"
@@ -2236,7 +2236,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                               " + "
                               "(SELECT COUNT(*)"
                               " FROM centres,degrees,courses,msg_snt,msg_rcv_deleted"
-                              " WHERE centres.InsCod='%ld'"
+                              " WHERE centres.InsCod=%ld"
                               " AND centres.CtrCod=degrees.CtrCod"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=msg_snt.CrsCod"
@@ -2249,7 +2249,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM degrees,courses,msg_snt,msg_rcv"
-                              " WHERE degrees.CtrCod='%ld'"
+                              " WHERE degrees.CtrCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=msg_snt.CrsCod"
                               " AND msg_snt.MsgCod=msg_rcv.MsgCod"
@@ -2257,7 +2257,7 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                               " + "
                               "(SELECT COUNT(*)"
                               " FROM degrees,courses,msg_snt,msg_rcv_deleted"
-                              " WHERE degrees.CtrCod='%ld'"
+                              " WHERE degrees.CtrCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=msg_snt.CrsCod"
                               " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
@@ -2269,14 +2269,14 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM courses,msg_snt,msg_rcv"
-                              " WHERE courses.DegCod='%ld'"
+                              " WHERE courses.DegCod=%ld"
                               " AND courses.CrsCod=msg_snt.CrsCod"
                               " AND msg_snt.MsgCod=msg_rcv.MsgCod"
                               " AND msg_rcv.Notified='Y')"
                               " + "
                               "(SELECT COUNT(*)"
                               " FROM courses,msg_snt,msg_rcv_deleted"
-                              " WHERE courses.DegCod='%ld'"
+                              " WHERE courses.DegCod=%ld"
                               " AND courses.CrsCod=msg_snt.CrsCod"
                               " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
                               " AND msg_rcv_deleted.Notified='Y')",
@@ -2287,13 +2287,13 @@ unsigned Msg_GetNumMsgsReceived (Sco_Scope_t Scope,Msg_Status_t MsgStatus)
                sprintf (Query,"SELECT "
                               "(SELECT COUNT(*)"
                               " FROM msg_snt,msg_rcv"
-                              " WHERE msg_snt.CrsCod='%ld'"
+                              " WHERE msg_snt.CrsCod=%ld"
                               " AND msg_snt.MsgCod=msg_rcv.MsgCod"
                               " AND msg_rcv.Notified='Y')"
                               " + "
                               "(SELECT COUNT(*)"
                               " FROM msg_snt,msg_rcv_deleted"
-                              " WHERE msg_snt.CrsCod='%ld'"
+                              " WHERE msg_snt.CrsCod=%ld"
                               " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
                               " AND msg_rcv_deleted.Notified='Y')",
                         Gbl.CurrentCrs.Crs.CrsCod,
@@ -2480,7 +2480,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
       case Msg_MESSAGES_RECEIVED:
          sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName"
                         " FROM msg_rcv,msg_snt,courses"
-                        " WHERE msg_rcv.UsrCod='%ld'"
+                        " WHERE msg_rcv.UsrCod=%ld"
                         " AND msg_rcv.MsgCod=msg_snt.MsgCod"
                         " AND msg_snt.CrsCod=courses.CrsCod"
                         " ORDER BY courses.ShortName",
@@ -2489,7 +2489,7 @@ void Msg_GetDistinctCoursesInMyMessages (void)
       case Msg_MESSAGES_SENT:
          sprintf (Query,"SELECT DISTINCT courses.CrsCod,courses.ShortName"
                         " FROM msg_snt,courses"
-                        " WHERE msg_snt.UsrCod='%ld'"
+                        " WHERE msg_snt.UsrCod=%ld"
                         " AND msg_snt.CrsCod=courses.CrsCod"
                         " ORDER BY courses.ShortName",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2661,7 +2661,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
    /***** Get data of message from table msg_snt *****/
    *Deleted = false;
    sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-                  " FROM msg_snt WHERE MsgCod='%ld'",
+                  " FROM msg_snt WHERE MsgCod=%ld",
             MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
@@ -2669,7 +2669,7 @@ static void Msg_GetMsgSntData (long MsgCod,long *CrsCod,long *UsrCod,
      {
       /***** Get data of message from table msg_snt_deleted *****/
       sprintf (Query,"SELECT CrsCod,UsrCod,UNIX_TIMESTAMP(CreatTime)"
-                     " FROM msg_snt_deleted WHERE MsgCod='%ld'",
+                     " FROM msg_snt_deleted WHERE MsgCod=%ld",
                MsgCod);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a message");
 
@@ -2710,7 +2710,7 @@ void Msg_GetMsgSubject (long MsgCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1])
    MYSQL_ROW row;
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Subject FROM msg_content WHERE MsgCod='%ld'",MsgCod);
+   sprintf (Query,"SELECT Subject FROM msg_content WHERE MsgCod=%ld",MsgCod);
 
    /***** Result should have a unique row *****/
    if (DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a message") == 1)
@@ -2741,7 +2741,7 @@ static void Msg_GetMsgContent (long MsgCod,char Content[Cns_MAX_BYTES_LONG_TEXT 
 
    /***** Get content of message from database *****/
    sprintf (Query,"SELECT Content,ImageName,ImageTitle,ImageURL"
-	          " FROM msg_content WHERE MsgCod='%ld'",
+	          " FROM msg_content WHERE MsgCod=%ld",
             MsgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the content of a message");
 
@@ -2776,7 +2776,7 @@ static void Msg_GetStatusOfSentMsg (long MsgCod,bool *Expanded)
 
    /***** Get if sent message has been replied/expanded from database *****/
    sprintf (Query,"SELECT Expanded FROM msg_snt"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get if a sent message has been replied/expanded");
 
@@ -2807,7 +2807,7 @@ static void Msg_GetStatusOfReceivedMsg (long MsgCod,bool *Open,bool *Replied,boo
 
    /***** Get if received message has been replied/expanded from database *****/
    sprintf (Query,"SELECT Open,Replied,Expanded FROM msg_rcv"
-                  " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+                  " WHERE MsgCod=%ld AND UsrCod=%ld",
             MsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get if a received message has been replied/expanded");
 
@@ -3017,7 +3017,7 @@ void Msg_GetNotifMessage (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Subject,Content FROM msg_content WHERE MsgCod='%ld'",
+   sprintf (Query,"SELECT Subject,Content FROM msg_content WHERE MsgCod=%ld",
             MsgCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -3368,9 +3368,9 @@ static void Msg_WriteMsgTo (long MsgCod)
 
    /***** Get number of recipients of a message from database *****/
    sprintf (Query,"SELECT "
-                  "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod='%ld')"
+                  "(SELECT COUNT(*) FROM msg_rcv WHERE MsgCod=%ld)"
                   " + "
-                  "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod='%ld')",
+                  "(SELECT COUNT(*) FROM msg_rcv_deleted WHERE MsgCod=%ld)",
             MsgCod,MsgCod);
    NumRecipientsTotal = (unsigned) DB_QueryCOUNT (Query,"can not get number of recipients");
 
@@ -3378,12 +3378,12 @@ static void Msg_WriteMsgTo (long MsgCod)
    sprintf (Query,"(SELECT msg_rcv.UsrCod,'N',msg_rcv.Open,"
                   "usr_data.Surname1 AS S1,usr_data.Surname2 AS S2,usr_data.FirstName AS FN"
                   " FROM msg_rcv,usr_data"
-                  " WHERE msg_rcv.MsgCod='%ld' AND msg_rcv.UsrCod=usr_data.UsrCod)"
+                  " WHERE msg_rcv.MsgCod=%ld AND msg_rcv.UsrCod=usr_data.UsrCod)"
                   " UNION "
                   "(SELECT msg_rcv_deleted.UsrCod,'Y',msg_rcv_deleted.Open,"
                   "usr_data.Surname1 AS S1,usr_data.Surname2 AS S2,usr_data.FirstName AS FN"
                   " FROM msg_rcv_deleted,usr_data"
-                  " WHERE msg_rcv_deleted.MsgCod='%ld' AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
+                  " WHERE msg_rcv_deleted.MsgCod=%ld AND msg_rcv_deleted.UsrCod=usr_data.UsrCod)"
                   " ORDER BY S1,S2,FN",
             MsgCod,MsgCod);
    NumRecipientsKnown = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get recipients of a message");
@@ -3652,7 +3652,7 @@ void Msg_BanSenderWhenShowingMsgs (void)
    sprintf (Query,"REPLACE INTO msg_banned"
 	          " (FromUsrCod,ToUsrCod)"
                   " VALUES"
-                  " ('%ld','%ld')",
+                  " (%ld,%ld)",
             Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryREPLACE (Query,"can not ban sender");
 
@@ -3709,7 +3709,7 @@ static void Msg_UnbanSender (void)
 
    /***** Remove pair (sender's code - my code) from table of banned senders *****/
    sprintf (Query,"DELETE FROM msg_banned"
-                  " WHERE FromUsrCod='%ld' AND ToUsrCod='%ld'",
+                  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
             Gbl.Usrs.Other.UsrDat.UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryDELETE (Query,"can not ban sender");
 
@@ -3729,7 +3729,7 @@ static bool Msg_CheckIfUsrIsBanned (long FromUsrCod,long ToUsrCod)
 
    /***** Get if FromUsrCod is banned by ToUsrCod *****/
    sprintf (Query,"SELECT COUNT(*) FROM msg_banned"
-                  " WHERE FromUsrCod='%ld' AND ToUsrCod='%ld'",
+                  " WHERE FromUsrCod=%ld AND ToUsrCod=%ld",
             FromUsrCod,ToUsrCod);
    return (DB_QueryCOUNT (Query,"can not check if a user is banned") != 0);
   }
@@ -3745,7 +3745,7 @@ void Msg_RemoveUsrFromBanned (long UsrCod)
    /***** Remove pair (sender's code - my code)
           from table of banned senders *****/
    sprintf (Query,"DELETE FROM msg_banned"
-                  " WHERE FromUsrCod='%ld' OR ToUsrCod='%ld'",
+                  " WHERE FromUsrCod=%ld OR ToUsrCod=%ld",
             UsrCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove user from table of banned users");
   }
@@ -3769,7 +3769,7 @@ void Msg_ListBannedUsrs (void)
 
    /***** Get my banned users *****/
    sprintf (Query,"SELECT msg_banned.FromUsrCod FROM msg_banned,usr_data"
-                  " WHERE msg_banned.ToUsrCod='%ld'"
+                  " WHERE msg_banned.ToUsrCod=%ld"
                   " AND msg_banned.FromUsrCod=usr_data.UsrCod"
                   " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName",
             Gbl.Usrs.Me.UsrDat.UsrCod);

@@ -726,7 +726,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
 
    /* Make database query */
    sprintf (QueryQst,"SELECT QstCod FROM tst_questions"
-                     " WHERE CrsCod='%ld' AND AnsType='%s' AND Stem='%s'",
+                     " WHERE CrsCod=%ld AND AnsType='%s' AND Stem='%s'",
             Gbl.CurrentCrs.Crs.CrsCod,
             Tst_StrAnswerTypesDB[Gbl.Test.AnswerType],
             Gbl.Test.Stem.Text);
@@ -749,7 +749,7 @@ static bool TsI_CheckIfQuestionExistsInDB (void)
 
          /* Get answers from this question */
          sprintf (QueryAns,"SELECT Answer FROM tst_answers"
-                           " WHERE QstCod='%ld' ORDER BY AnsInd",
+                           " WHERE QstCod=%ld ORDER BY AnsInd",
                   QstCod);
          NumOptsExistingQstInDB = (unsigned) DB_QuerySELECT (QueryAns,&mysql_res_ans,"can not get the answer of a question");
 

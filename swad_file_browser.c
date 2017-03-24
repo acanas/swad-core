@@ -2695,7 +2695,7 @@ bool Brw_CheckIfExistsFolderAssigmentForAnyUsr (const char *FolderName)
    bool FolderExists = false;
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
 
@@ -2744,10 +2744,10 @@ static void Brw_CreateFoldersAssignmentsIfNotExist (long ZoneUsrCod)
    /***** Get assignment folders from database *****/
    // Old behaviour (only create assignment folder if assignment is open) is obsolete since 2015-11-10
    sprintf (Query,"SELECT Folder FROM assignments"
-                  " WHERE CrsCod='%ld' AND Hidden='N' AND Folder<>''"
+                  " WHERE CrsCod=%ld AND Hidden='N' AND Folder<>''"
                   " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
                   " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod='%ld'"
+                  " WHERE crs_grp_usr.UsrCod=%ld"
                   " AND asg_grp.GrpCod=crs_grp_usr.GrpCod))",
             Gbl.CurrentCrs.Crs.CrsCod,ZoneUsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get folders of assignments");
@@ -2795,7 +2795,7 @@ bool Brw_UpdateFoldersAssigmentsIfExistForAllUsrs (const char *OldFolderName,con
    unsigned NumUsrsSuccess = 0;
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
 
@@ -2910,7 +2910,7 @@ void Brw_RemoveFoldersAssignmentsIfExistForAllUsrs (const char *FolderName)
    char PathFolder[PATH_MAX + 1];
 
    /***** Get all the users belonging to current course from database *****/
-   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT UsrCod FROM crs_usr WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get users from current course");
 
@@ -3860,8 +3860,8 @@ static void Brw_UpdateGrpLastAccZone (const char *FieldNameDB,long GrpCod)
    char Query[512];
 
    /***** Update the group of my last access to a common zone *****/
-   sprintf (Query,"UPDATE crs_usr SET %s='%ld'"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+   sprintf (Query,"UPDATE crs_usr SET %s=%ld"
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             FieldNameDB,GrpCod,
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update the group of the last access to a file browser");
@@ -4093,8 +4093,8 @@ static void Brw_StoreSizeOfFileTreeInDB (void)
 	          " (FileBrowser,Cod,ZoneUsrCod,"
                   "NumLevels,NumFolders,NumFiles,TotalSize)"
                   " VALUES"
-                  " ('%u','%ld','%ld',"
-                  "'%u','%lu','%lu','%llu')",
+                  " (%u,%ld,%ld,"
+                  "%u,'%lu','%lu','%llu')",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],Cod,ZoneUsrCod,
             Gbl.FileBrowser.Size.NumLevls,
             Gbl.FileBrowser.Size.NumFolds,
@@ -4113,7 +4113,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
@@ -4122,7 +4122,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
@@ -4130,7 +4130,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
@@ -4139,7 +4139,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
    /***** Remove from database the entries that store
           the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
@@ -4148,7 +4148,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
    /***** Remove from database the entries that store
           the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
@@ -4156,7 +4156,7 @@ void Brw_RemoveInsFilesFromDB (long InsCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_INS,
 	    (unsigned) Brw_ADMI_SHARE_INS,
 	    InsCod);
@@ -4173,7 +4173,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
@@ -4182,7 +4182,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
@@ -4190,7 +4190,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
@@ -4198,7 +4198,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
@@ -4206,7 +4206,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
@@ -4214,7 +4214,7 @@ void Brw_RemoveCtrFilesFromDB (long CtrCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CTR,
 	    (unsigned) Brw_ADMI_SHARE_CTR,
 	    CtrCod);
@@ -4231,7 +4231,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u') AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u) AND files.Cod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
@@ -4240,7 +4240,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
@@ -4248,7 +4248,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
@@ -4256,7 +4256,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
@@ -4264,7 +4264,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
@@ -4272,7 +4272,7 @@ void Brw_RemoveDegFilesFromDB (long DegCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u') AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u) AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_DEG,
 	    (unsigned) Brw_ADMI_SHARE_DEG,
 	    DegCod);
@@ -4290,8 +4290,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove format of files of marks *****/
    sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-	          " WHERE files.FileBrowser='%u'"
-	          " AND files.Cod='%ld'"
+	          " WHERE files.FileBrowser=%u"
+	          " AND files.Cod=%ld"
 	          " AND files.FilCod=marks_properties.FilCod",
 	    (unsigned) Brw_ADMI_MARKS_CRS,
 	    CrsCod);
@@ -4299,8 +4299,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
-		  " AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+		  " AND files.Cod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
@@ -4313,8 +4313,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
 	    (unsigned) Brw_ADMI_SHARE_CRS,
@@ -4328,8 +4328,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
 	    (unsigned) Brw_ADMI_SHARE_CRS,
@@ -4345,8 +4345,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
    // Assignments and works are stored as one in file_browser_last...
    // ...because a user views them at the same time
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
 	    (unsigned) Brw_ADMI_SHARE_CRS,
@@ -4357,8 +4357,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
 	    (unsigned) Brw_ADMI_SHARE_CRS,
@@ -4370,8 +4370,8 @@ void Brw_RemoveCrsFilesFromDB (long CrsCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_CRS,
 	    (unsigned) Brw_ADMI_TEACH_CRS,
 	    (unsigned) Brw_ADMI_SHARE_CRS,
@@ -4392,8 +4392,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove format of files of marks *****/
    sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-	          " WHERE files.FileBrowser='%u'"
-	          " AND files.Cod='%ld'"
+	          " WHERE files.FileBrowser=%u"
+	          " AND files.Cod=%ld"
 	          " AND files.FilCod=marks_properties.FilCod",
 	    (unsigned) Brw_ADMI_MARKS_GRP,
 	    GrpCod);
@@ -4401,8 +4401,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND files.Cod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u,%u,%u)"
+		  " AND files.Cod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
@@ -4413,8 +4413,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
 	    (unsigned) Brw_ADMI_SHARE_GRP,
@@ -4424,8 +4424,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
 	    (unsigned) Brw_ADMI_SHARE_GRP,
@@ -4435,8 +4435,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
 	    (unsigned) Brw_ADMI_SHARE_GRP,
@@ -4446,8 +4446,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
 	    (unsigned) Brw_ADMI_SHARE_GRP,
@@ -4457,8 +4457,8 @@ void Brw_RemoveGrpFilesFromDB (long GrpCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u','%u','%u')"
-		  " AND Cod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u,%u,%u)"
+		  " AND Cod=%ld",
 	    (unsigned) Brw_ADMI_DOCUM_GRP,
 	    (unsigned) Brw_ADMI_TEACH_GRP,
 	    (unsigned) Brw_ADMI_SHARE_GRP,
@@ -4477,14 +4477,14 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-                  " WHERE UsrCod='%ld' AND ("
-                  "(FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u','%u')"
-                  " AND Cod='%ld')"
+                  " WHERE UsrCod=%ld AND ("
+                  "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+                  " AND Cod=%ld)"
                   " OR "
-                  "(FileBrowser IN ('%u','%u','%u','%u')"
+                  "(FileBrowser IN (%u,%u,%u,%u)"
                   " AND Cod IN"
                   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
@@ -4506,14 +4506,14 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-                  " WHERE UsrCod='%ld' AND ("
-                  "(FileBrowser IN ('%u','%u','%u','%u','%u','%u','%u','%u')"
-                  " AND Cod='%ld')"
+                  " WHERE UsrCod=%ld AND ("
+                  "(FileBrowser IN (%u,%u,%u,%u,%u,%u,%u,%u)"
+                  " AND Cod=%ld)"
                   " OR "
-                  "(FileBrowser IN ('%u','%u','%u','%u')"
+                  "(FileBrowser IN (%u,%u,%u,%u)"
                   " AND Cod IN"
                   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
@@ -4537,14 +4537,14 @@ void Brw_RemoveSomeInfoAboutCrsUsrFilesFromDB (long UsrCod,long CrsCod)
    // Assignments and works are stored as one in file_browser_last...
    // ...because a user views them at the same time
    sprintf (Query,"DELETE FROM file_browser_last"
-                  " WHERE UsrCod='%ld' AND ("
-                  "(FileBrowser IN ('%u','%u','%u','%u','%u')"
-                  " AND Cod='%ld')"
+                  " WHERE UsrCod=%ld AND ("
+                  "(FileBrowser IN (%u,%u,%u,%u,%u)"
+                  " AND Cod=%ld)"
                   " OR "
-                  "(FileBrowser IN ('%u','%u','%u','%u')"
+                  "(FileBrowser IN (%u,%u,%u,%u)"
                   " AND Cod IN"
                   " (SELECT crs_grp.GrpCod FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod))"
                   ")",
             UsrCod,
@@ -4572,8 +4572,8 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		  " WHERE files.FileBrowser IN ('%u','%u')"
-		  " AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+		  " WHERE files.FileBrowser IN (%u,%u)"
+		  " AND files.Cod=%ld AND files.ZoneUsrCod=%ld"
 		  " AND files.FilCod=file_view.FilCod",
 	    (unsigned) Brw_ADMI_ASSIG_USR,
 	    (unsigned) Brw_ADMI_WORKS_USR,
@@ -4582,8 +4582,8 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-		  " WHERE FileBrowser IN ('%u','%u')"
-		  " AND Cod='%ld' AND WorksUsrCod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u)"
+		  " AND Cod=%ld AND WorksUsrCod=%ld",
 	    (unsigned) Brw_ADMI_ASSIG_CRS,
 	    (unsigned) Brw_ADMI_WORKS_CRS,
 	    CrsCod,UsrCod);
@@ -4591,8 +4591,8 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE FileBrowser IN ('%u','%u')"
-		  " AND Cod='%ld' AND WorksUsrCod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u)"
+		  " AND Cod=%ld AND WorksUsrCod=%ld",
 	    (unsigned) Brw_ADMI_ASSIG_CRS,
 	    (unsigned) Brw_ADMI_WORKS_CRS,
 	    CrsCod,UsrCod);
@@ -4600,8 +4600,8 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE FileBrowser IN ('%u','%u')"
-		  " AND Cod='%ld' AND ZoneUsrCod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u)"
+		  " AND Cod=%ld AND ZoneUsrCod=%ld",
 	    (unsigned) Brw_ADMI_ASSIG_USR,
 	    (unsigned) Brw_ADMI_WORKS_USR,
 	    CrsCod,UsrCod);
@@ -4609,8 +4609,8 @@ void Brw_RemoveWrkFilesFromDB (long CrsCod,long UsrCod)
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE FileBrowser IN ('%u','%u')"
-		  " AND Cod='%ld' AND ZoneUsrCod='%ld'",
+		  " WHERE FileBrowser IN (%u,%u)"
+		  " AND Cod=%ld AND ZoneUsrCod=%ld",
 	    (unsigned) Brw_ADMI_ASSIG_USR,
 	    (unsigned) Brw_ADMI_WORKS_USR,
 	    CrsCod,UsrCod);
@@ -4629,38 +4629,38 @@ void Brw_RemoveUsrFilesFromDB (long UsrCod)
    // User is not removed from file_view table,
    // in order to take into account his/her views
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-		 " WHERE files.ZoneUsrCod='%ld'"
+		 " WHERE files.ZoneUsrCod=%ld"
 		 " AND files.FilCod=file_view.FilCod",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove file views to files of a user");
 
    /***** Remove from database expanded folders *****/
    sprintf (Query,"DELETE LOW_PRIORITY FROM expanded_folders"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove expanded folders for a user");
 
    /***** Remove from database the entries that store clipboards *****/
    sprintf (Query,"DELETE FROM clipboard"
-		  " WHERE UsrCod='%ld'",	// User's clipboard
+		  " WHERE UsrCod=%ld",	// User's clipboard
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user's clipboards");
 
    /***** Remove from database the entries that store the last time users visited file zones *****/
    sprintf (Query,"DELETE FROM file_browser_last"
-		  " WHERE UsrCod='%ld'",	// User's last visits to all zones
+		  " WHERE UsrCod=%ld",	// User's last visits to all zones
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove user's last visits to file zones");
 
    /***** Remove from database the entries that store the sizes of the file zones *****/
    sprintf (Query,"DELETE FROM file_browser_size"
-		  " WHERE ZoneUsrCod='%ld'",
+		  " WHERE ZoneUsrCod=%ld",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove sizes of user's file zones");
 
    /***** Remove from database the entries that store the data files *****/
    sprintf (Query,"DELETE FROM files"
-		  " WHERE ZoneUsrCod='%ld'",
+		  " WHERE ZoneUsrCod=%ld",
 	    UsrCod);
    DB_QueryDELETE (Query,"can not remove files in user's file zones");
   }
@@ -4863,7 +4863,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
 	 return;
      }
    sprintf (Query,"SELECT UNIX_TIMESTAMP(LastClick) FROM file_browser_last"
-		  " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
@@ -4890,7 +4890,7 @@ static void Brw_GetAndUpdateDateLastAccFileBrowser (void)
    sprintf (Query,"REPLACE INTO file_browser_last"
 	          " (UsrCod,FileBrowser,Cod,LastClick)"
 		  " VALUES"
-		  " ('%ld','%u','%ld',NOW())",
+		  " (%ld,%u,%ld,NOW())",
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (unsigned) Brw_FileBrowserForDB_file_browser_last[Gbl.FileBrowser.Type],
 	    Cod);
@@ -4911,7 +4911,7 @@ static long Brw_GetGrpLastAccZone (const char *FieldNameDB)
 
    /***** Get the group of my last access to a common zone from database *****/
    sprintf (Query,"SELECT %s FROM crs_usr"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             FieldNameDB,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -6689,7 +6689,7 @@ static bool Brw_GetMyClipboard (void)
 
    /***** Get my current clipboard from database *****/
    sprintf (Query,"SELECT FileBrowser,Cod,WorksUsrCod,FileType,Path"
-	          " FROM clipboard WHERE UsrCod='%ld'",
+	          " FROM clipboard WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get source of copy from clipboard");
 
@@ -6808,7 +6808,7 @@ static void Brw_AddPathToClipboards (void)
    sprintf (Query,"INSERT INTO clipboard"
 	          " (UsrCod,FileBrowser,Cod,WorksUsrCod,FileType,Path)"
                   " VALUES"
-                  " ('%ld','%u','%ld','%ld','%u','%s')",
+                  " (%ld,%u,%ld,%ld,%u,'%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Gbl.FileBrowser.Type,
             Cod,WorksUsrCod,
             (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree);
@@ -6826,10 +6826,10 @@ static void Brw_UpdatePathInClipboard (void)
    char Query[512 + PATH_MAX];
 
    /***** Update path in my clipboard *****/
-   sprintf (Query,"UPDATE clipboard SET FileBrowser='%u',"
-	          "Cod='%ld',WorksUsrCod='%ld',"
-	          "FileType='%u',Path='%s'"
-                  " WHERE UsrCod='%ld'",
+   sprintf (Query,"UPDATE clipboard SET FileBrowser=%u,"
+	          "Cod=%ld,WorksUsrCod=%ld,"
+	          "FileType=%u,Path='%s'"
+                  " WHERE UsrCod=%ld",
 	    (unsigned) Gbl.FileBrowser.Type,
 	    Cod,WorksUsrCod,
 	    (unsigned) Gbl.FileBrowser.FileType,Gbl.FileBrowser.Priv.FullPathInTree,
@@ -6959,7 +6959,7 @@ static void Brw_InsertFolderInExpandedFolders (const char Path[PATH_MAX + 1])
    sprintf (Query,"INSERT INTO expanded_folders"
 	          " (UsrCod,FileBrowser,Cod,WorksUsrCod,Path,ClickTime)"
                   " VALUES"
-                  " ('%ld','%u','%ld','%ld','%s/',NOW())",
+                  " (%ld,%u,%ld,%ld,'%s/',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) Brw_FileBrowserForDB_expanded_folders[Gbl.FileBrowser.Type],
             Cod,WorksUsrCod,
@@ -6983,23 +6983,23 @@ static void Brw_UpdateClickTimeOfThisFileBrowserInExpandedFolders (void)
      {
       if (WorksUsrCod > 0)
 	 sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-			" WHERE UsrCod='%ld' AND FileBrowser='%u'"
-			" AND Cod='%ld' AND WorksUsrCod='%ld'",
+			" WHERE UsrCod=%ld AND FileBrowser=%u"
+			" AND Cod=%ld AND WorksUsrCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) FileBrowserForExpandedFolders,
 		  Cod,
 		  WorksUsrCod);
       else
 	 sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-			" WHERE UsrCod='%ld' AND FileBrowser='%u'"
-			" AND Cod='%ld'",
+			" WHERE UsrCod=%ld AND FileBrowser=%u"
+			" AND Cod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
 		  (unsigned) FileBrowserForExpandedFolders,
 		  Cod);
      }
    else	// Briefcase
       sprintf (Query,"UPDATE expanded_folders SET ClickTime=NOW()"
-		     " WHERE UsrCod='%ld' AND FileBrowser='%u'",
+		     " WHERE UsrCod=%ld AND FileBrowser=%u",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       (unsigned) FileBrowserForExpandedFolders);
    DB_QueryUPDATE (Query,"can not update expanded folder");
@@ -7021,21 +7021,21 @@ static void Brw_RemoveFolderFromExpandedFolders (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld' AND WorksUsrCod='%ld' AND Path='%s/'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld AND WorksUsrCod=%ld AND Path='%s/'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
                   Cod,WorksUsrCod,Path);
       else
          sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld' AND Path='%s/'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld AND Path='%s/'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) FileBrowserForExpandedFolders,
                   Cod,Path);
      }
    else	// Briefcase
       sprintf (Query,"DELETE FROM expanded_folders"
-		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " WHERE UsrCod=%ld AND FileBrowser=%u"
 		     " AND Path='%s/'",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
 	       Path);
@@ -7058,21 +7058,21 @@ static void Brw_RemoveAffectedExpandedFolders (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld' AND WorksUsrCod='%ld' AND Path LIKE '%s/%%'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld AND WorksUsrCod=%ld AND Path LIKE '%s/%%'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
                   Cod,WorksUsrCod,Path);
       else
          sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld' AND Path LIKE '%s/%%'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld AND Path LIKE '%s/%%'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) FileBrowserForExpandedFolders,
                   Cod,Path);
      }
    else	// Briefcase
          sprintf (Query,"DELETE FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
                         " AND Path LIKE '%s/%%'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) FileBrowserForExpandedFolders,
                   Path);
@@ -7099,8 +7099,8 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 	{
 	 if (WorksUsrCod > 0)
 	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-			   " AND Cod='%ld' AND WorksUsrCod='%ld'"
+			   " WHERE UsrCod=%ld AND FileBrowser=%u"
+			   " AND Cod=%ld AND WorksUsrCod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		     NewPath,StartFinalSubpathNotChanged,
 		     MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
@@ -7108,8 +7108,8 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 		     OldPath);
 	 else
 	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-			   " AND Cod='%ld'"
+			   " WHERE UsrCod=%ld AND FileBrowser=%u"
+			   " AND Cod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		     NewPath,StartFinalSubpathNotChanged,
 		     MyUsrCod,(unsigned) FileBrowserForExpandedFolders,
@@ -7120,8 +7120,8 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 	{
 	 if (WorksUsrCod > 0)
 	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE FileBrowser='%u' AND Cod='%ld'"
-			   " AND WorksUsrCod='%ld'"
+			   " WHERE FileBrowser=%u AND Cod=%ld"
+			   " AND WorksUsrCod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		     NewPath,StartFinalSubpathNotChanged,
 		     (unsigned) FileBrowserForExpandedFolders,Cod,
@@ -7129,7 +7129,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
 		     OldPath);
 	 else
 	    sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-			   " WHERE FileBrowser='%u' AND Cod='%ld'"
+			   " WHERE FileBrowser=%u AND Cod=%ld"
 			   " AND Path LIKE '%s/%%'",
 		     NewPath,StartFinalSubpathNotChanged,
 		     (unsigned) FileBrowserForExpandedFolders,Cod,
@@ -7138,7 +7138,7 @@ static void Brw_RenameAffectedExpandedFolders (Brw_FileBrowser_t FileBrowser,
      }
    else	// Briefcase
       sprintf (Query,"UPDATE expanded_folders SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " WHERE UsrCod=%ld AND FileBrowser=%u"
 		     " AND Path LIKE '%s/%%'",
 	       NewPath,StartFinalSubpathNotChanged,
 	       MyUsrCod,
@@ -7163,8 +7163,8 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
      {
       if (WorksUsrCod > 0)
          sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld' AND WorksUsrCod='%ld'"
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld AND WorksUsrCod=%ld"
                         " AND Path='%s/'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) FileBrowserForExpandedFolders,
@@ -7172,8 +7172,8 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
                   Path);
       else
          sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'"
-                        " AND Cod='%ld'"
+                        " WHERE UsrCod=%ld AND FileBrowser=%u"
+                        " AND Cod=%ld"
                         " AND Path='%s/'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) FileBrowserForExpandedFolders,
@@ -7182,7 +7182,7 @@ static bool Brw_GetIfExpandedTree (const char Path[PATH_MAX + 1])
      }
    else	// Briefcase
       sprintf (Query,"SELECT COUNT(*) FROM expanded_folders"
-		     " WHERE UsrCod='%ld' AND FileBrowser='%u'"
+		     " WHERE UsrCod=%ld AND FileBrowser=%u"
 		     " AND Path='%s/'",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,
 	       (unsigned) FileBrowserForExpandedFolders,
@@ -7288,21 +7288,21 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
       case Brw_ADMI_DOCUM_INS:
       case Brw_ADMI_SHARE_INS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentIns.Ins.InsCod);
          break;
       case Brw_ADMI_DOCUM_CTR:
       case Brw_ADMI_SHARE_CTR:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentCtr.Ctr.CtrCod);
          break;
       case Brw_ADMI_DOCUM_DEG:
       case Brw_ADMI_SHARE_DEG:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
@@ -7311,7 +7311,7 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_MARKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -7320,27 +7320,27 @@ static void Brw_RemoveAffectedClipboards (Brw_FileBrowser_t FileBrowser,
       case Brw_ADMI_SHARE_GRP:
       case Brw_ADMI_MARKS_GRP:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentCrs.Grps.GrpCod);
          break;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_WORKS_USR:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u' AND Cod='%ld'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u AND Cod=%ld",
                   MyUsrCod,(unsigned) FileBrowser,
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       case Brw_ADMI_ASSIG_CRS:
       case Brw_ADMI_WORKS_CRS:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE FileBrowser='%u' AND Cod='%ld' AND WorksUsrCod='%ld'",
+                        " WHERE FileBrowser=%u AND Cod=%ld AND WorksUsrCod=%ld",
                   (unsigned) FileBrowser,
                   Gbl.CurrentCrs.Crs.CrsCod,WorksUsrCod);
          break;
       case Brw_ADMI_BRIEF_USR:
          sprintf (Query,"DELETE FROM clipboard"
-                        " WHERE UsrCod='%ld' AND FileBrowser='%u'",
+                        " WHERE UsrCod=%ld AND FileBrowser=%u",
                   MyUsrCod,(unsigned) FileBrowser);
          break;
       default:
@@ -8908,7 +8908,7 @@ bool Brw_CheckIfFileOrFolderIsSetAsHiddenInDB (Brw_FileType_t FileType,const cha
 
    /***** Get if a file or folder is hidden from database *****/
    sprintf (Query,"SELECT Hidden FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
@@ -8947,7 +8947,7 @@ bool Brw_CheckIfFileOrFolderIsHidden (struct FileMetadata *FileMetadata)
       2) the argument Path begins by 'x/', where x is a path stored in database
    */
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Hidden='Y'"
                   " AND (Path='%s' OR LOCATE(CONCAT(Path,'/'),'%s')=1)",
             FileMetadata->FileBrowser,
@@ -9899,7 +9899,7 @@ long Brw_GetFilCodByPath (const char *Path,bool OnlyIfPublic)
 
    /***** Get code of a file from database *****/
    sprintf (Query,"SELECT FilCod FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'%s",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
@@ -9942,7 +9942,7 @@ void Brw_GetFileMetadataByPath (struct FileMetadata *FileMetadata)
    sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
@@ -10075,7 +10075,7 @@ void Brw_GetFileMetadataByCod (struct FileMetadata *FileMetadata)
    sprintf (Query,"SELECT FilCod,FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License"
 	          " FROM files"
-                  " WHERE FilCod='%ld'",
+                  " WHERE FilCod=%ld",
             FileMetadata->FilCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get file metadata"))
      {
@@ -10289,7 +10289,7 @@ unsigned long Brw_GetNumFileViewsUsr (long UsrCod)
    unsigned long FileViews;
 
    /***** Get number of filw views *****/
-   sprintf (Query,"SELECT SUM(NumViews) FROM file_view WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT SUM(NumViews) FROM file_view WHERE UsrCod=%ld",
             UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get number of file views"))
      {
@@ -10329,7 +10329,7 @@ static void Brw_GetFileViewsFromLoggedUsrs (struct FileMetadata *FileMetadata)
    /***** Get number total of views from logged users *****/
    sprintf (Query,"SELECT COUNT(DISTINCT UsrCod),SUM(NumViews)"
 		  " FROM file_view"
-		  " WHERE FilCod='%ld' AND UsrCod>'0'",
+		  " WHERE FilCod=%ld AND UsrCod>0",
 	    FileMetadata->FilCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get number of views of a file from logged users"))
      {
@@ -10370,7 +10370,7 @@ static void Brw_GetFileViewsFromNonLoggedUsrs (struct FileMetadata *FileMetadata
 
    /***** Get number of public views *****/
    sprintf (Query,"SELECT SUM(NumViews) FROM file_view"
-		  " WHERE FilCod='%ld' AND UsrCod<='0'",
+		  " WHERE FilCod=%ld AND UsrCod<=0",
 	    FileMetadata->FilCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get number of public views of a file"))
      {
@@ -10404,7 +10404,7 @@ static unsigned Brw_GetFileViewsFromMe (long FilCod)
 
    /***** Get number of my views *****/
    sprintf (Query,"SELECT NumViews FROM file_view"
-		  " WHERE FilCod='%ld' AND UsrCod='%ld'",
+		  " WHERE FilCod=%ld AND UsrCod=%ld",
 	    FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
    if (DB_QuerySELECT (Query,&mysql_res,"can not get my number of views of a file"))
@@ -10435,7 +10435,7 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
      {
       /* Update number of views in database */
       sprintf (Query,"UPDATE file_view SET NumViews=NumViews+1"
-		     " WHERE FilCod='%ld' AND UsrCod='%ld'",
+		     " WHERE FilCod=%ld AND UsrCod=%ld",
 	       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update number of views of a file");
      }
@@ -10445,7 +10445,7 @@ static void Brw_UpdateFileViews (unsigned NumViews,long FilCod)
       sprintf (Query,"INSERT INTO file_view"
 		     " (FilCod,UsrCod,NumViews)"
 		     " VALUES"
-		     " ('%ld','%ld','1')",
+		     " (%ld,%ld,1)",
 	       FilCod,Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryINSERT (Query,"can not insert number of views of a file");
      }
@@ -10463,7 +10463,7 @@ static bool Brw_GetIfFolderHasPublicFiles (const char Path[PATH_MAX + 1])
 
    /***** Get if a file or folder is public from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path LIKE '%s/%%' AND Public='Y'",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
@@ -10481,7 +10481,7 @@ unsigned Brw_GetNumFilesUsr (long UsrCod)
 
    /***** Get current number of files published by a user from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-	          " WHERE PublisherUsrCod='%ld' AND FileType IN ('%u','%u')",
+	          " WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)",
             UsrCod,
             (unsigned) Brw_IS_FILE,
             (unsigned) Brw_IS_UNKNOWN);	// Unknown entries are counted as files
@@ -10498,7 +10498,7 @@ unsigned Brw_GetNumPublicFilesUsr (long UsrCod)
 
    /***** Get current number of public files published by a user from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM files"
-	          " WHERE PublisherUsrCod='%ld' AND FileType IN ('%u','%u')"
+	          " WHERE PublisherUsrCod=%ld AND FileType IN (%u,%u)"
 	          " AND Public='Y'",
             UsrCod,
             (unsigned) Brw_IS_FILE,
@@ -10518,7 +10518,7 @@ static void Brw_ChangeFileOrFolderHiddenInDB (const char Path[PATH_MAX + 1],bool
 
    /***** Mark file as hidden in database *****/
    sprintf (Query,"UPDATE files SET Hidden='%c'"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'",
             IsHidden ? 'Y' :
         	       'N',
@@ -10540,8 +10540,8 @@ static void Brw_ChangeFilePublicInDB (long PublisherUsrCod,const char *Path,
    char Query[512 + PATH_MAX];
 
    /***** Change publisher, public and license of file in database *****/
-   sprintf (Query,"UPDATE files SET PublisherUsrCod='%ld',Public='%c',License='%u'"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+   sprintf (Query,"UPDATE files SET PublisherUsrCod=%ld,Public='%c',License=%u"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'",
             PublisherUsrCod,
             IsPublic ? 'Y' :
@@ -10705,8 +10705,8 @@ long Brw_AddPathToDB (long PublisherUsrCod,Brw_FileType_t FileType,
 	          " (FileBrowser,Cod,ZoneUsrCod,"
 	          "PublisherUsrCod,FileType,Path,Hidden,Public,License)"
                   " VALUES"
-                  " ('%u','%ld','%ld',"
-                  "'%ld','%u','%s','N','%c','%u')",
+                  " (%u,%ld,%ld,"
+                  "%ld,%u,'%s','N','%c',%u)",
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
             PublisherUsrCod,
@@ -10740,7 +10740,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
        FileBrowser == Brw_ADMI_MARKS_GRP)
      {
       sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-		     " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		     " WHERE files.FileBrowser=%u AND files.Cod=%ld"
 		     " AND files.Path='%s'"
 		     " AND files.FilCod=marks_properties.FilCod",
 	       (unsigned) FileBrowser,Cod,Path);
@@ -10749,7 +10749,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-	          " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+	          " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.ZoneUsrCod=%ld"
 	          " AND files.Path='%s'"
 	          " AND files.FilCod=file_view.FilCod",
 	    (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
@@ -10757,7 +10757,7 @@ static void Brw_RemoveOneFileOrFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entry that stores the data of a file *****/
    sprintf (Query,"DELETE FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path='%s'",
 	    (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
     DB_QueryDELETE (Query,"can not remove path from database");
@@ -10785,7 +10785,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
        FileBrowser == Brw_ADMI_MARKS_GRP)
      {
       sprintf (Query,"DELETE FROM marks_properties USING files,marks_properties"
-		     " WHERE files.FileBrowser='%u' AND files.Cod='%ld'"
+		     " WHERE files.FileBrowser=%u AND files.Cod=%ld"
 		     " AND files.Path LIKE '%s/%%'"
 		     " AND files.FilCod=marks_properties.FilCod",
 	       (unsigned) FileBrowser,Cod,Path);
@@ -10794,7 +10794,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entries that store the file views *****/
    sprintf (Query,"DELETE FROM file_view USING file_view,files"
-                  " WHERE files.FileBrowser='%u' AND files.Cod='%ld' AND files.ZoneUsrCod='%ld'"
+                  " WHERE files.FileBrowser=%u AND files.Cod=%ld AND files.ZoneUsrCod=%ld"
                   " AND files.Path LIKE '%s/%%'"
 	          " AND files.FilCod=file_view.FilCod",
             (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
@@ -10802,7 +10802,7 @@ static void Brw_RemoveChildrenOfFolderFromDB (const char Path[PATH_MAX + 1])
 
    /***** Remove from database the entries that store the data of files *****/
    sprintf (Query,"DELETE FROM files"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path LIKE '%s/%%'",
             (unsigned) FileBrowser,Cod,ZoneUsrCod,Path);
    DB_QueryDELETE (Query,"can not remove paths from database");
@@ -10821,7 +10821,7 @@ static void Brw_RenameOneFolderInDB (const char OldPath[PATH_MAX + 1],
 
    /***** Update file or folder in table of common files *****/
    sprintf (Query,"UPDATE files SET Path='%s'"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld' AND Path='%s'",
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld AND Path='%s'",
             NewPath,
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
             Cod,ZoneUsrCod,
@@ -10843,7 +10843,7 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
 
    /***** Update children of a folder in table of files *****/
    sprintf (Query,"UPDATE files SET Path=CONCAT('%s','/',SUBSTRING(Path,%u))"
-                  " WHERE FileBrowser='%u' AND Cod='%ld' AND ZoneUsrCod='%ld'"
+                  " WHERE FileBrowser=%u AND Cod=%ld AND ZoneUsrCod=%ld"
                   " AND Path LIKE '%s/%%'",
             NewPath,StartFinalSubpathNotChanged,
             (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
@@ -10970,7 +10970,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
       case Rol_STUDENT:	// If I am a student, I can modify the file/folder if I am the publisher
          /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
          sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
-                        " WHERE FileBrowser='%u' AND Cod='%ld'"
+                        " WHERE FileBrowser=%u AND Cod=%ld"
                         " AND (Path='%s' OR Path LIKE '%s/%%')",
                   (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
                   Cod,

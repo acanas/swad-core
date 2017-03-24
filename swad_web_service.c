@@ -415,7 +415,7 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
 	                        "Course code must be a integer greater than 0");
 
    /***** Query if course code already exists in database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM courses WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM courses WHERE CrsCod=%ld",
             CrsCod);
    if (DB_QueryCOUNT (Query,"can not get course") != 1)
       return soap_sender_fault (Gbl.soap,
@@ -427,7 +427,7 @@ static int Svc_CheckCourseAndGroupCodes (long CrsCod,long GrpCod)
      {
       /***** Query if group code already exists in database *****/
       sprintf (Query,"SELECT COUNT(*) FROM crs_grp_types,crs_grp"
-                     " WHERE crs_grp_types.CrsCod='%ld' AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod AND crs_grp.GrpCod='%ld'",
+                     " WHERE crs_grp_types.CrsCod=%ld AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod AND crs_grp.GrpCod=%ld",
                CrsCod,GrpCod);
       if (DB_QueryCOUNT (Query,"can not get group") != 1)
          return soap_sender_fault (Gbl.soap,
@@ -468,7 +468,7 @@ static int Svc_GenerateNewWSKey (long UsrCod,
    sprintf (Query,"INSERT INTO ws_keys"
 	          " (WSKey,UsrCod,PlgCod,LastTime)"
                   " VALUES"
-                  " ('%s','%ld','%ld',NOW())",
+                  " ('%s',%ld,%ld,NOW())",
             WSKey,UsrCod,Gbl.WebService.PlgCod);
    DB_QueryINSERT (Query,"can not insert new key");
 
@@ -511,7 +511,7 @@ static int Svc_GetCurrentDegCodFromCurrentCrsCod (void)
    Gbl.CurrentDeg.Deg.DegCod = -1L;
 
    /***** Check that key does not exist in database *****/
-   sprintf (Query,"SELECT DegCod FROM courses WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT DegCod FROM courses WHERE CrsCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get the degree of a course"))	// Course found in table of courses
      {
@@ -544,7 +544,7 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
    /***** Get some user's data *****/
    /* Query database */
    sprintf (Query,"SELECT Surname1,Surname2,FirstName,Photo,DATE_FORMAT(Birthday,'%%Y%%m%%d')"
-                  " FROM usr_data WHERE UsrCod='%ld'",
+                  " FROM usr_data WHERE UsrCod=%ld",
             UsrDat->UsrCod);
 
    /* Check number of rows in result */
@@ -584,7 +584,7 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
      {
       /* Get the role in the given course */
       sprintf (Query,"SELECT Role FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                CrsCod,UsrDat->UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's role"))	// User belongs to course
 	{
@@ -604,7 +604,7 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
      {
       /* Get the maximum role in any course */
       sprintf (Query,"SELECT MAX(Role)"
-                     " FROM crs_usr WHERE UsrCod='%ld'",
+                     " FROM crs_usr WHERE UsrCod=%ld",
                UsrDat->UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get user's role") == 1)
 	{
@@ -1199,7 +1199,7 @@ int swad__getCourses (struct soap *soap,
 
    /***** Query my courses from database *****/
    sprintf (Query,"SELECT courses.CrsCod,courses.ShortName,courses.FullName,crs_usr.Role FROM crs_usr,courses"
-                  " WHERE crs_usr.UsrCod='%ld' AND crs_usr.CrsCod=courses.CrsCod"
+                  " WHERE crs_usr.UsrCod=%ld AND crs_usr.CrsCod=courses.CrsCod"
                   " ORDER BY courses.FullName",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's courses");
@@ -1660,7 +1660,7 @@ int swad__getGroupTypes (struct soap *soap,
    /***** Query group types in a course from database *****/
    sprintf (Query,"SELECT GrpTypCod,GrpTypName,Mandatory,Multiple,UNIX_TIMESTAMP(OpenTime)"
 	          " FROM crs_grp_types"
-                  " WHERE CrsCod='%d'"
+                  " WHERE CrsCod=%d"
                   " ORDER BY GrpTypName",
             courseCode);
    NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get group types");
@@ -1770,7 +1770,7 @@ int swad__getGroups (struct soap *soap,
 	          "crs_grp.GrpCod,crs_grp.GrpName,"
 	          "crs_grp.MaxStudents,crs_grp.Open,crs_grp.FileZones"
 	          " FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%d'"
+                  " WHERE crs_grp_types.CrsCod=%d"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             courseCode);
@@ -1931,7 +1931,7 @@ int swad__sendMyGroups (struct soap *soap,
 	          "crs_grp.GrpCod,crs_grp.GrpName,"
 	          "crs_grp.MaxStudents,crs_grp.Open,crs_grp.FileZones"
 	          " FROM crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%d'"
+                  " WHERE crs_grp_types.CrsCod=%d"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
             courseCode);
@@ -2111,7 +2111,7 @@ int swad__getAttendanceEvents (struct soap *soap,
                   "UNIX_TIMESTAMP(EndTime) AS ET,"
                   "CommentTchVisible,Title,Txt"
 	          " FROM att_events"
-                  " WHERE CrsCod='%d'"
+                  " WHERE CrsCod=%d"
                   " ORDER BY ST DESC,ET DESC,Title DESC",
             courseCode);
    getAttendanceEventsOut->eventsArray.__size =
@@ -2230,7 +2230,7 @@ static void Svc_GetListGrpsInAttendanceEventFromDB (long AttCod,char **ListGroup
    size_t Length;
 
    /***** Get list of groups *****/
-   sprintf (Query,"SELECT GrpCod FROM att_grp WHERE AttCod='%ld'",
+   sprintf (Query,"SELECT GrpCod FROM att_grp WHERE AttCod=%ld",
 	    AttCod);
    if ((NumGrps = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get groups of an attendance event")) == 0)
       *ListGroups = NULL;
@@ -2533,15 +2533,15 @@ int swad__getAttendanceUsers (struct soap *soap,
       // ...who have no entry in attendance list of users
       sprintf (SubQuery,"SELECT DISTINCT crs_grp_usr.UsrCod AS UsrCod,'N' AS Present"
 		        " FROM att_grp,crs_grp,crs_grp_types,crs_usr,crs_grp_usr"
-		        " WHERE att_grp.AttCod='%ld'"
+		        " WHERE att_grp.AttCod=%ld"
 		        " AND att_grp.GrpCod=crs_grp.GrpCod"
 		        " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
 		        " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.Role='%u'"
+		        " AND crs_usr.Role=%u"
 		        " AND crs_usr.UsrCod=crs_grp_usr.UsrCod"
 		        " AND crs_grp_usr.GrpCod=att_grp.GrpCod"
 		        " AND crs_grp_usr.UsrCod NOT IN"
-		        " (SELECT UsrCod FROM att_usr WHERE AttCod='%ld')",
+		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
 	       Att.AttCod,
 	       (unsigned) Rol_STUDENT,
 	       Att.AttCod);
@@ -2551,18 +2551,18 @@ int swad__getAttendanceUsers (struct soap *soap,
       // ...who have no entry in attendance list of users
       sprintf (SubQuery,"SELECT crs_usr.UsrCod AS UsrCod,'N' AS Present"
 		        " FROM att_events,crs_usr"
-		        " WHERE att_events.AttCod='%ld'"
+		        " WHERE att_events.AttCod=%ld"
 		        " AND att_events.CrsCod=crs_usr.CrsCod"
-		        " AND crs_usr.Role='%u'"
+		        " AND crs_usr.Role=%u"
 		        " AND crs_usr.UsrCod NOT IN"
-		        " (SELECT UsrCod FROM att_usr WHERE AttCod='%ld')",
+		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
 	       Att.AttCod,
 	       (unsigned) Rol_STUDENT,
 	       Att.AttCod);
    // Query: list of users in attendance list + rest of users (subquery)
    sprintf (Query,"SELECT u.UsrCod,u.Present FROM "
 		  "(SELECT UsrCod,Present"
-		  " FROM att_usr WHERE AttCod='%ld'"
+		  " FROM att_usr WHERE AttCod=%ld"
 		  " UNION %s) AS u,usr_data"
 		  " WHERE u.UsrCod=usr_data.UsrCod"
 		  " ORDER BY usr_data.Surname1,usr_data.Surname2,usr_data.FirstName",
@@ -2730,7 +2730,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	                             "Not enough memory",
 	                             "Not enough memory to store list of users");
       sprintf (Query,"UPDATE att_usr SET Present='N'"
-		     " WHERE AttCod='%ld'",
+		     " WHERE AttCod=%ld",
 	       Att.AttCod);
      }
 
@@ -2754,8 +2754,8 @@ int swad__sendAttendanceUsers (struct soap *soap,
 	       /* Add this user to query used to mark not present users as absent */
 	       if (setOthersAsAbsent)
 		 {
-		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",'%ld'" :
-								       " AND UsrCod NOT IN ('%ld'",
+		  sprintf (SubQuery,sendAttendanceUsersOut->numUsers ? ",%ld" :
+								       " AND UsrCod NOT IN (%ld",
 			   UsrCod);
 		  Str_Concat (Query,SubQuery,
 		              Length);
@@ -2847,7 +2847,7 @@ int swad__getNotifications (struct soap *soap,
    sprintf (Query,"SELECT NtfCod,NotifyEvent,UNIX_TIMESTAMP(TimeNotif),"
 	          "FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod,Status"
                   " FROM notif"
-                  " WHERE ToUsrCod='%ld' AND TimeNotif>=FROM_UNIXTIME('%ld')"
+                  " WHERE ToUsrCod=%ld AND TimeNotif>=FROM_UNIXTIME(%ld)"
                   " ORDER BY TimeNotif DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod,beginTime);
    NumNotifications = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's notifications");
@@ -3035,7 +3035,7 @@ static int Svc_GetMyLanguage (void)
 
    /***** Get user's language *****/
    sprintf (Query,"SELECT Language FROM usr_data"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get user's language") != 1)
       return soap_receiver_fault (Gbl.soap,
@@ -3113,7 +3113,7 @@ int swad__markNotificationsAsRead (struct soap *soap,
            {
 	    /***** Mark notification as read in the database *****/
 	    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-			   " WHERE NtfCod='%ld' AND ToUsrCod='%ld'",
+			   " WHERE NtfCod=%ld AND ToUsrCod=%ld",
 		     (unsigned) Ntf_STATUS_BIT_READ,
 		     (long) NtfCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 	    DB_QueryUPDATE (Query,"can not mark notification as read");
@@ -3177,10 +3177,10 @@ int swad__sendMessage (struct soap *soap,
       /***** Check if the original message was really received by me *****/
       sprintf (Query,"SELECT SUM(N) FROM"
                      " (SELECT COUNT(*) AS N FROM msg_rcv"
-                     " WHERE UsrCod='%ld' AND MsgCod='%ld'"
+                     " WHERE UsrCod=%ld AND MsgCod=%ld"
                      " UNION"
                      " SELECT COUNT(*) AS N FROM msg_rcv_deleted"
-                     " WHERE UsrCod='%ld' AND MsgCod='%ld') AS T",
+                     " WHERE UsrCod=%ld AND MsgCod=%ld) AS T",
                Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode,
                Gbl.Usrs.Me.UsrDat.UsrCod,(long) messageCode);
       if (!DB_QuerySELECT (Query,&mysql_res,"can not check original message"))
@@ -3205,10 +3205,10 @@ int swad__sendMessage (struct soap *soap,
 
       /***** Get the recipient of the message *****/
       sprintf (Query,"SELECT UsrCod FROM msg_snt"
-                     " WHERE MsgCod='%ld'"
+                     " WHERE MsgCod=%ld"
                      " UNION "
                      "SELECT UsrCod FROM msg_snt_deleted"
-                     " WHERE MsgCod='%ld'",
+                     " WHERE MsgCod=%ld",
                (long) messageCode,(long) messageCode);
       if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not check original message")))	// Message found in any of the two tables of sent messages
         {
@@ -3229,7 +3229,7 @@ int swad__sendMessage (struct soap *soap,
    /***** Build query for recipients from database *****/
    if (ReplyUsrCod > 0)
       sprintf (Query,"SELECT UsrCod FROM usr_data"
-	             " WHERE UsrCod='%ld'",
+	             " WHERE UsrCod=%ld",
 	       ReplyUsrCod);
    else
       Query[0] = '\0';
@@ -3365,7 +3365,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
       sprintf (Query,"INSERT INTO msg_snt"
 	             " (MsgCod,CrsCod,UsrCod,Expanded,CreatTime)"
                      " VALUES"
-                     " ('%ld','-1','%ld','N',NOW())",
+                     " (%ld,-1,%ld,'N',NOW())",
                NewMsgCod,SenderUsrCod);
       DB_QueryINSERT (Query,"can not create message");
 
@@ -3376,7 +3376,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
    sprintf (Query,"INSERT INTO msg_rcv"
 	          " (MsgCod,UsrCod,Notified,Open,Replied,Expanded)"
                   " VALUES"
-                  " ('%ld','%ld','%c','N','N','N')",
+                  " (%ld,%ld,'%c','N','N','N')",
             NewMsgCod,RecipientUsrCod,
             NotifyByEmail ? 'Y' :
         	            'N');
@@ -3387,7 +3387,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
    sprintf (Query,"INSERT INTO notif"
 	          " (NotifyEvent,ToUsrCod,FromUsrCod,InsCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
                   " VALUES"
-                  " ('%u','%ld','%ld','-1','-1','-1','%ld',NOW(),'%u')",
+                  " (%u,%ld,%ld,-1,-1,-1,%ld,NOW(),%u)",
             (unsigned) Ntf_EVENT_MESSAGE,
             RecipientUsrCod,
             SenderUsrCod,
@@ -3401,7 +3401,7 @@ static int Svc_SendMessageToUsr (long OriginalMsgCod,
      {
       /***** ...then update received message setting Replied field to true *****/
       sprintf (Query,"UPDATE msg_rcv SET Replied='Y'"
-	             " WHERE MsgCod='%ld' AND UsrCod='%ld'",
+	             " WHERE MsgCod=%ld AND UsrCod=%ld",
                OriginalMsgCod,SenderUsrCod);
       DB_QueryUPDATE (Query,"can not update a received message");
      }
@@ -3461,7 +3461,7 @@ int swad__sendNotice (struct soap *soap,
    sprintf (Query,"INSERT INTO notices"
 	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
                   " VALUES"
-                  " ('%ld','%ld',NOW(),'%s','%u')",
+                  " (%ld,%ld,NOW(),'%s',%u)",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
             body,(unsigned) Not_ACTIVE_NOTICE);
 
@@ -3564,7 +3564,7 @@ static int Svc_GetTstConfig (long CrsCod)
 
    /***** Query database *****/
    sprintf (Query,"SELECT Pluggable,Min,Def,Max,MinTimeNxtTstPerQst,Feedback"
-                  " FROM tst_config WHERE CrsCod='%ld'",
+                  " FROM tst_config WHERE CrsCod=%ld",
             CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get test configuration"))
      {
@@ -3598,14 +3598,14 @@ static int Svc_GetNumTestQuestionsInCrs (long CrsCod)
    // Select only questions with tags
    sprintf (Query,"SELECT COUNT(*)"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-		  " WHERE tst_questions.CrsCod='%ld'"
+		  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
+		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod='%ld'",
+		  " AND tst_tags.CrsCod=%ld",
             CrsCod,CrsCod,CrsCod);
    return (int) DB_QueryCOUNT (Query,"can not get number of test questions");
   }
@@ -3710,7 +3710,7 @@ static int Svc_GetTstTags (long CrsCod,struct swad__getTestsOutput *getTestsOut)
    /***** Get available tags from database *****/
    sprintf (Query,"SELECT TagCod,TagTxt"
 	          " FROM tst_tags"
-                  " WHERE CrsCod='%ld' AND TagHidden='N'"
+                  " WHERE CrsCod=%ld AND TagHidden='N'"
                   " ORDER BY TagTxt",
             CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get test tags");
@@ -3766,19 +3766,19 @@ static int Svc_GetTstQuestions (long CrsCod,long BeginTime,struct swad__getTests
  	          "tst_questions.AnsType,tst_questions.Shuffle,"
  	          "tst_questions.Stem,tst_questions.Feedback"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
+		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod='%ld'"
+		  " AND tst_tags.CrsCod=%ld"
 		  " AND "
 		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
                   " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
                   ")"
                   " ORDER BY QstCod",
             CrsCod,CrsCod,CrsCod,
@@ -3851,19 +3851,19 @@ static int Svc_GetTstAnswers (long CrsCod,long BeginTime,struct swad__getTestsOu
                   " FROM tst_answers WHERE QstCod IN "
                   "(SELECT tst_questions.QstCod"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
+		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod='%ld'"
+		  " AND tst_tags.CrsCod=%ld"
 		  " AND "
 		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
                   " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
                   ")"
                   ")"
                   " ORDER BY QstCod,AnsInd",
@@ -3936,19 +3936,19 @@ static int Svc_GetTstQuestionTags (long CrsCod,long BeginTime,struct swad__getTe
                   " FROM tst_question_tags WHERE QstCod IN "
                   "(SELECT tst_questions.QstCod"
 		  " FROM tst_questions,tst_question_tags,tst_tags"
-                  " WHERE tst_questions.CrsCod='%ld'"
+                  " WHERE tst_questions.CrsCod=%ld"
                   " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod FROM tst_tags,tst_question_tags"
-		  " WHERE tst_tags.CrsCod='%ld' AND tst_tags.TagHidden='Y'"
+		  " WHERE tst_tags.CrsCod=%ld AND tst_tags.TagHidden='Y'"
 		  " AND tst_tags.TagCod=tst_question_tags.TagCod)"
 		  " AND tst_questions.QstCod=tst_question_tags.QstCod"
 		  " AND tst_question_tags.TagCod=tst_tags.TagCod"
-		  " AND tst_tags.CrsCod='%ld'"
+		  " AND tst_tags.CrsCod=%ld"
 		  " AND "
 		  "("
-		  "tst_questions.EditTime>=FROM_UNIXTIME('%ld')"
+		  "tst_questions.EditTime>=FROM_UNIXTIME(%ld)"
                   " OR "
-                  "tst_tags.ChangeTime>=FROM_UNIXTIME('%ld')"
+                  "tst_tags.ChangeTime>=FROM_UNIXTIME(%ld)"
                   ")"
                   ")"
                   " ORDER BY QstCod,TagInd",
@@ -4064,12 +4064,12 @@ int swad__getTrivialQuestion (struct soap *soap,
 	    /* Add this degree to query */
 	    if (FirstDegree)
 	      {
-	       sprintf (DegreesStr,"'%ld'",DegCod);
+	       sprintf (DegreesStr,"%ld",DegCod);
 	       FirstDegree = false;
 	      }
 	    else
 	      {
-	       sprintf (DegStr,",'%ld'",DegCod);
+	       sprintf (DegStr,",%ld",DegCod);
 	       Str_Concat (DegreesStr,DegStr,
 	                   Svc_MAX_BYTES_DEGREES_STR);
 	      }
@@ -4099,7 +4099,7 @@ int swad__getTrivialQuestion (struct soap *soap,
                   " WHERE courses.DegCod IN (%s)"
 		  " AND courses.CrsCod=tst_questions.CrsCod"
                   " AND tst_questions.AnsType='unique_choice'"
-                  " AND tst_questions.NumHits>'0'"
+                  " AND tst_questions.NumHits>0"
                   " AND tst_questions.QstCod NOT IN"
 		  " (SELECT tst_question_tags.QstCod"
 		  " FROM courses,tst_tags,tst_question_tags"
@@ -4183,7 +4183,7 @@ int swad__getTrivialQuestion (struct soap *soap,
      {
       /***** Get answer from database *****/
       sprintf (Query,"SELECT QstCod,AnsInd,Correct,Answer,Feedback"
-		     " FROM tst_answers WHERE QstCod='%ld'"
+		     " FROM tst_answers WHERE QstCod=%ld"
 		     " ORDER BY AnsInd",
 	       QstCod);
       NumRows = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get test answers");

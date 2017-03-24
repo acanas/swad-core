@@ -874,7 +874,7 @@ void Svy_GetListSurveys (void)
 	Scope++)
       if (ScopesAllowed & 1 << Scope)
 	{
-	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod='%ld'%s)",
+	 sprintf (SubQuery[Scope],"%s(Scope='%s' AND Cod=%ld%s)",
 	          SubQueryFilled ? " OR " :
 	        	           "",
 		  Sco_ScopeDB[Scope],Cods[Scope],
@@ -890,7 +890,7 @@ void Svy_GetListSurveys (void)
      {
       if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
 	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s("
-	                                  "Scope='%s' AND Cod='%ld'%s"
+	                                  "Scope='%s' AND Cod=%ld%s"
 	                                  " AND "
 	                                  "(SvyCod NOT IN"
 	                                  " (SELECT SvyCod FROM svy_grp)"
@@ -898,7 +898,7 @@ void Svy_GetListSurveys (void)
                                           " SvyCod IN"
                                           " (SELECT svy_grp.SvyCod"
                                           " FROM svy_grp,crs_grp_usr"
-                                          " WHERE crs_grp_usr.UsrCod='%ld'"
+                                          " WHERE crs_grp_usr.UsrCod=%ld"
                                           " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))"
 	                                  ")",
 	          SubQueryFilled ? " OR " :
@@ -908,7 +908,7 @@ void Svy_GetListSurveys (void)
 						         " AND Hidden='N'",
                   Gbl.Usrs.Me.UsrDat.UsrCod);
       else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
-	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod='%ld'%s)",
+	 sprintf (SubQuery[Sco_SCOPE_CRS],"%s(Scope='%s' AND Cod=%ld%s)",
 	          SubQueryFilled ? " OR " :
 	        	           "",
 		  Sco_ScopeDB[Sco_SCOPE_CRS],Cods[Sco_SCOPE_CRS],
@@ -1161,7 +1161,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
                   "NOW() BETWEEN StartTime AND EndTime,"
                   "Title"
                   " FROM surveys"
-                  " WHERE SvyCod='%ld'",
+                  " WHERE SvyCod=%ld",
             Svy->SvyCod);
 
    /***** Get data of survey from database *****/
@@ -1375,7 +1375,7 @@ static void Svy_GetSurveyTxtFromDB (long SvyCod,char Txt[Cns_MAX_BYTES_TEXT + 1]
    unsigned long NumRows;
 
    /***** Get text of survey from database *****/
-   sprintf (Query,"SELECT Txt FROM surveys WHERE SvyCod='%ld'",SvyCod);
+   sprintf (Query,"SELECT Txt FROM surveys WHERE SvyCod=%ld",SvyCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get survey text");
 
    /***** The result of the query must have one row or none *****/
@@ -1413,7 +1413,7 @@ void Svy_GetNotifSurvey (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM surveys WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT Title,Txt FROM surveys WHERE SvyCod=%ld",
             SvyCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -1523,20 +1523,20 @@ void Svy_RemoveSurvey (void)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
    /***** Remove all the users in this survey *****/
-   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove users who are answered a survey");
 
    /***** Remove all the answers in this survey *****/
    sprintf (Query,"DELETE FROM svy_answers USING svy_questions,svy_answers"
-                  " WHERE svy_questions.SvyCod='%ld'"
+                  " WHERE svy_questions.SvyCod=%ld"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
             Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove answers of a survey");
 
    /***** Remove all the questions in this survey *****/
    sprintf (Query,"DELETE FROM svy_questions"
-                  " WHERE SvyCod='%ld'",
+                  " WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove questions of a survey");
 
@@ -1544,7 +1544,7 @@ void Svy_RemoveSurvey (void)
    Svy_RemoveAllTheGrpsAssociatedToAndSurvey (Svy.SvyCod);
 
    /***** Remove survey *****/
-   sprintf (Query,"DELETE FROM surveys WHERE SvyCod='%ld'",
+   sprintf (Query,"DELETE FROM surveys WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove survey");
 
@@ -1632,13 +1632,13 @@ void Svy_ResetSurvey (void)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
    /***** Remove all the users in this survey *****/
-   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_users WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryDELETE (Query,"can not remove users who are answered a survey");
 
    /***** Reset all the answers in this survey *****/
-   sprintf (Query,"UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs='0'"
-                  " WHERE svy_questions.SvyCod='%ld'"
+   sprintf (Query,"UPDATE svy_answers,svy_questions SET svy_answers.NumUsrs=0"
+                  " WHERE svy_questions.SvyCod=%ld"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
             Svy.SvyCod);
    DB_QueryUPDATE (Query,"can not reset answers of a survey");
@@ -1673,7 +1673,7 @@ void Svy_HideSurvey (void)
       Lay_ShowErrorAndExit ("You can not hide this survey.");
 
    /***** Hide survey *****/
-   sprintf (Query,"UPDATE surveys SET Hidden='Y' WHERE SvyCod='%ld'",
+   sprintf (Query,"UPDATE surveys SET Hidden='Y' WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryUPDATE (Query,"can not hide survey");
 
@@ -1707,7 +1707,7 @@ void Svy_UnhideSurvey (void)
       Lay_ShowErrorAndExit ("You can not unhide this survey.");
 
    /***** Show survey *****/
-   sprintf (Query,"UPDATE surveys SET Hidden='N' WHERE SvyCod='%ld'",
+   sprintf (Query,"UPDATE surveys SET Hidden='N' WHERE SvyCod=%ld",
             Svy.SvyCod);
    DB_QueryUPDATE (Query,"can not show survey");
 
@@ -1731,8 +1731,8 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM surveys"
-                  " WHERE Scope='%s' AND Cod='%ld'"
-                  " AND Title='%s' AND SvyCod<>'%ld'",
+                  " WHERE Scope='%s' AND Cod=%ld"
+                  " AND Title='%s' AND SvyCod<>%ld",
             Sco_ScopeDB[Svy->Scope],Svy->Cod,
             Svy->Title,Svy->SvyCod);
    return (DB_QueryCOUNT (Query,"can not get similar surveys") != 0);
@@ -2201,8 +2201,8 @@ static void Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (long SvyCod,
    char Query[256];
 
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE surveys SET NumNotif=NumNotif+'%u'"
-                  " WHERE SvyCod='%ld'",
+   sprintf (Query,"UPDATE surveys SET NumNotif=NumNotif+%u"
+                  " WHERE SvyCod=%ld",
             NumUsrsToBeNotifiedByEMail,SvyCod);
    DB_QueryUPDATE (Query,"can not update the number of notifications of a survey");
   }
@@ -2223,8 +2223,8 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
    sprintf (Query,"INSERT INTO surveys"
 	          " (Scope,Cod,Hidden,Roles,UsrCod,StartTime,EndTime,Title,Txt)"
                   " VALUES"
-                  " ('%s','%ld','N','%u','%ld',"
-                  "FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  " ('%s',%ld,'N',%u,%ld,"
+                  "FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s')",
             Sco_ScopeDB[Svy->Scope],Svy->Cod,
             Svy->Roles,
@@ -2259,11 +2259,11 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
 
    /***** Update the data of the survey *****/
    sprintf (Query,"UPDATE surveys"
-	          " SET Scope='%s',Cod='%ld',Roles='%u',"
-	          "StartTime=FROM_UNIXTIME('%ld'),"
-	          "EndTime=FROM_UNIXTIME('%ld'),"
+	          " SET Scope='%s',Cod=%ld,Roles=%u,"
+	          "StartTime=FROM_UNIXTIME(%ld),"
+	          "EndTime=FROM_UNIXTIME(%ld),"
 	          "Title='%s',Txt='%s'"
-                  " WHERE SvyCod='%ld'",
+                  " WHERE SvyCod=%ld",
             Sco_ScopeDB[Svy->Scope],Svy->Cod,
             Svy->Roles,
             Svy->TimeUTC[Svy_START_TIME],
@@ -2294,7 +2294,7 @@ static bool Svy_CheckIfSvyIsAssociatedToGrps (long SvyCod)
    char Query[128];
 
    /***** Get if a survey is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM svy_grp WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM svy_grp WHERE SvyCod=%ld",
             SvyCod);
    return (DB_QueryCOUNT (Query,"can not check if a survey is associated to groups") != 0);
   }
@@ -2309,7 +2309,7 @@ bool Svy_CheckIfSvyIsAssociatedToGrp (long SvyCod,long GrpCod)
 
    /***** Get if a survey is associated to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_grp"
-	          " WHERE SvyCod='%ld' AND GrpCod='%ld'",
+	          " WHERE SvyCod=%ld AND GrpCod=%ld",
             SvyCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if a survey is associated to a group") != 0);
   }
@@ -2323,7 +2323,7 @@ static void Svy_RemoveAllTheGrpsAssociatedToAndSurvey (long SvyCod)
    char Query[128];
 
    /***** Remove groups of the survey *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE SvyCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_grp WHERE SvyCod=%ld",
             SvyCod);
    DB_QueryDELETE (Query,"can not remove the groups associated to a survey");
   }
@@ -2337,7 +2337,7 @@ void Svy_RemoveGroup (long GrpCod)
    char Query[128];
 
    /***** Remove group from all the surveys *****/
-   sprintf (Query,"DELETE FROM svy_grp WHERE GrpCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_grp WHERE GrpCod=%ld",
 	    GrpCod);
    DB_QueryDELETE (Query,"can not remove group"
 	                 " from the associations between surveys and groups");
@@ -2353,7 +2353,7 @@ void Svy_RemoveGroupsOfType (long GrpTypCod)
 
    /***** Remove group from all the surveys *****/
    sprintf (Query,"DELETE FROM svy_grp USING crs_grp,svy_grp"
-                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=svy_grp.GrpCod",
             GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type"
@@ -2378,7 +2378,7 @@ static void Svy_CreateGrps (long SvyCod)
       sprintf (Query,"INSERT INTO svy_grp"
 	             " (SvyCod,GrpCod)"
 	             " VALUES"
-	             " ('%ld','%ld')",
+	             " (%ld,%ld)",
                SvyCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to a survey");
      }
@@ -2403,7 +2403,7 @@ static void Svy_GetAndWriteNamesOfGrpsAssociatedToSvy (struct Survey *Svy)
    /***** Get groups associated to a survey from database *****/
    sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
                   " FROM svy_grp,crs_grp,crs_grp_types"
-                  " WHERE svy_grp.SvyCod='%ld'"
+                  " WHERE svy_grp.SvyCod=%ld"
                   " AND svy_grp.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
@@ -2464,7 +2464,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
    /***** Remove all the users in course surveys *****/
    sprintf (Query,"DELETE FROM svy_users"
 	          " USING surveys,svy_users"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_users.SvyCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove users"
@@ -2473,7 +2473,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
    /***** Remove all the answers in course surveys *****/
    sprintf (Query,"DELETE FROM svy_answers"
 	          " USING surveys,svy_questions,svy_answers"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_questions.SvyCod"
                   " AND svy_questions.QstCod=svy_answers.QstCod",
             Sco_ScopeDB[Scope],Cod);
@@ -2482,7 +2482,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
    /***** Remove all the questions in course surveys *****/
    sprintf (Query,"DELETE FROM svy_questions"
 	          " USING surveys,svy_questions"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_questions.SvyCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove questions of surveys in a place on the hierarchy");
@@ -2490,7 +2490,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
    /***** Remove groups *****/
    sprintf (Query,"DELETE FROM svy_grp"
 	          " USING surveys,svy_grp"
-                  " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                  " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                   " AND surveys.SvyCod=svy_grp.SvyCod",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove all the groups"
@@ -2498,7 +2498,7 @@ void Svy_RemoveSurveys (Sco_Scope_t Scope,long Cod)
 
    /***** Remove course surveys *****/
    sprintf (Query,"DELETE FROM surveys"
-	          " WHERE Scope='%s' AND Cod='%ld'",
+	          " WHERE Scope='%s' AND Cod=%ld",
             Sco_ScopeDB[Scope],Cod);
    DB_QueryDELETE (Query,"can not remove all the surveys in a place on the hierarchy");
   }
@@ -2513,10 +2513,10 @@ static bool Svy_CheckIfICanDoThisSurveyBasedOnGrps (long SvyCod)
 
    /***** Get if I can do a survey from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM surveys"
-                  " WHERE SvyCod='%ld'"
+                  " WHERE SvyCod=%ld"
                   " AND (SvyCod NOT IN (SELECT SvyCod FROM svy_grp) OR"
                   " SvyCod IN (SELECT svy_grp.SvyCod FROM svy_grp,crs_grp_usr"
-                  " WHERE crs_grp_usr.UsrCod='%ld'"
+                  " WHERE crs_grp_usr.UsrCod=%ld"
                   " AND svy_grp.GrpCod=crs_grp_usr.GrpCod))",
             SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if I can do a survey") != 0);
@@ -2531,7 +2531,7 @@ static unsigned Svy_GetNumQstsSvy (long SvyCod)
    char Query[128];
 
    /***** Get data of questions from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM svy_questions WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM svy_questions WHERE SvyCod=%ld",
             SvyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of questions of a survey");
   }
@@ -2599,7 +2599,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
          /***** Get the type of answer and the stem from the database *****/
          /* Get the question from database */
          sprintf (Query,"SELECT QstInd,AnsType,Stem FROM svy_questions"
-                        " WHERE QstCod='%ld' AND SvyCod='%ld'",
+                        " WHERE QstCod=%ld AND SvyCod=%ld",
                   SvyQst->QstCod,SvyCod);
          DB_QuerySELECT (Query,&mysql_res,"can not get a question");
 
@@ -2803,7 +2803,7 @@ static void Svy_RemAnswersOfAQuestion (long QstCod)
    char Query[128];
 
    /***** Remove answers *****/
-   sprintf (Query,"DELETE FROM svy_answers WHERE QstCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_answers WHERE QstCod=%ld",
             QstCod);
    DB_QueryDELETE (Query,"can not remove the answers of a question");
   }
@@ -2835,7 +2835,7 @@ static bool Svy_CheckIfAnswerExists (long QstCod,unsigned AnsInd)
 
    /***** Get answers of a question from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_answers"
-                  " WHERE QstCod='%ld' AND AnsInd='%u'",
+                  " WHERE QstCod=%ld AND AnsInd=%u",
             QstCod,AnsInd);
    return (DB_QueryCOUNT (Query,"can not check if an answer exists") != 0);
   }
@@ -2851,7 +2851,7 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Get answers of a question from database *****/
    sprintf (Query,"SELECT AnsInd,NumUsrs,Answer FROM svy_answers"
-                  " WHERE QstCod='%ld' ORDER BY AnsInd",
+                  " WHERE QstCod=%ld ORDER BY AnsInd",
             QstCod);
    NumRows = DB_QuerySELECT (Query,mysql_res,"can not get answers of a question");
 
@@ -3010,7 +3010,7 @@ void Svy_ReceiveQst (void)
          sprintf (Query,"INSERT INTO svy_questions"
                         " (SvyCod,QstInd,AnsType,Stem)"
                         " VALUES"
-                        " ('%ld','%u','%s','%s')",
+                        " (%ld,%u,'%s','%s')",
 	          SvyCod,SvyQst.QstInd,Svy_StrAnswerTypesDB[SvyQst.AnswerType],Txt);
          SvyQst.QstCod = DB_QueryINSERTandReturnCode (Query,"can not create question");
         }
@@ -3018,7 +3018,7 @@ void Svy_ReceiveQst (void)
         {
          /* Update question */
          sprintf (Query,"UPDATE svy_questions SET Stem='%s',AnsType='%s'"
-                        " WHERE QstCod='%ld' AND SvyCod='%ld'",
+                        " WHERE QstCod=%ld AND SvyCod=%ld",
                   Txt,Svy_StrAnswerTypesDB[SvyQst.AnswerType],
                   SvyQst.QstCod,SvyCod);
          DB_QueryUPDATE (Query,"can not update question");
@@ -3034,7 +3034,7 @@ void Svy_ReceiveQst (void)
               {
                /* Update answer text */
                sprintf (Query,"UPDATE svy_answers SET Answer='%s'"
-                              " WHERE QstCod='%ld' AND AnsInd='%u'",
+                              " WHERE QstCod=%ld AND AnsInd=%u",
                         SvyQst.AnsChoice[NumAns].Text,SvyQst.QstCod,NumAns);
                DB_QueryUPDATE (Query,"can not update answer");
               }
@@ -3042,7 +3042,7 @@ void Svy_ReceiveQst (void)
               {
                /* Delete answer from database */
                sprintf (Query,"DELETE FROM svy_answers"
-                              " WHERE QstCod='%ld' AND AnsInd='%u'",
+                              " WHERE QstCod=%ld AND AnsInd=%u",
                         SvyQst.QstCod,NumAns);
                DB_QueryDELETE (Query,"can not delete answer");
               }
@@ -3055,7 +3055,7 @@ void Svy_ReceiveQst (void)
                sprintf (Query,"INSERT INTO svy_answers"
         	              " (QstCod,AnsInd,NumUsrs,Answer)"
                               " VALUES"
-                              " ('%ld','%u','0','%s')",
+                              " (%ld,%u,0,'%s')",
                         SvyQst.QstCod,NumAns,SvyQst.AnsChoice[NumAns].Text);
                DB_QueryINSERT (Query,"can not create answer");
               }
@@ -3085,7 +3085,7 @@ static unsigned Svy_GetQstIndFromQstCod (long QstCod)
    unsigned QstInd = 0;
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT QstInd FROM svy_questions WHERE QstCod='%ld'",
+   sprintf (Query,"SELECT QstInd FROM svy_questions WHERE QstCod=%ld",
             QstCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get question index");
 
@@ -3117,7 +3117,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
    unsigned QstInd = 0;
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT MAX(QstInd) FROM svy_questions WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT MAX(QstInd) FROM svy_questions WHERE SvyCod=%ld",
             SvyCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
 
@@ -3163,7 +3163,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 
    /***** Get data of questions from database *****/
    sprintf (Query,"SELECT QstCod,QstInd,AnsType,Stem"
-                  " FROM svy_questions WHERE SvyCod='%ld' ORDER BY QstInd",
+                  " FROM svy_questions WHERE SvyCod=%ld ORDER BY QstInd",
             Svy->SvyCod);
    NumQsts = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get data of a question");
 
@@ -3577,7 +3577,7 @@ void Svy_RemoveQst (void)
    Svy_RemAnswersOfAQuestion (SvyQst.QstCod);
 
    /* Remove the question itself */
-   sprintf (Query,"DELETE FROM svy_questions WHERE QstCod='%ld'",
+   sprintf (Query,"DELETE FROM svy_questions WHERE QstCod=%ld",
             SvyQst.QstCod);
    DB_QueryDELETE (Query,"can not remove a question");
    if (!mysql_affected_rows (&Gbl.mysql))
@@ -3585,7 +3585,7 @@ void Svy_RemoveQst (void)
 
    /* Change index of questions greater than this */
    sprintf (Query,"UPDATE svy_questions SET QstInd=QstInd-1"
-                  " WHERE SvyCod='%ld' AND QstInd>'%u'",
+                  " WHERE SvyCod=%ld AND QstInd>%u",
             SvyCod,SvyQst.QstInd);
    DB_QueryUPDATE (Query,"can not update indexes of questions");
 
@@ -3649,7 +3649,7 @@ static void Svy_ReceiveAndStoreUserAnswersToASurvey (long SvyCod)
 
    /***** Get questions of this survey from database *****/
    sprintf (Query,"SELECT QstCod FROM svy_questions"
-                  " WHERE SvyCod='%ld' ORDER BY QstCod",
+                  " WHERE SvyCod=%ld ORDER BY QstCod",
             SvyCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get questions of a survey");
 
@@ -3702,7 +3702,7 @@ static void Svy_IncreaseAnswerInDB (long QstCod,unsigned AnsInd)
 
    /***** Increase number of users who have selected the answer AnsInd in the question QstCod *****/
    sprintf (Query,"UPDATE svy_answers SET NumUsrs=NumUsrs+1"
-                  " WHERE QstCod='%ld' AND AnsInd='%u'",
+                  " WHERE QstCod=%ld AND AnsInd=%u",
             QstCod,AnsInd);
    DB_QueryINSERT (Query,"can not register your answer to the survey");
   }
@@ -3718,7 +3718,7 @@ static void Svy_RegisterIHaveAnsweredSvy (long SvyCod)
    sprintf (Query,"INSERT INTO svy_users"
 	          " (SvyCod,UsrCod)"
                   " VALUES"
-                  " ('%ld','%ld')",
+                  " (%ld,%ld)",
             SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryINSERT (Query,"can not register that you have answered the survey");
   }
@@ -3733,7 +3733,7 @@ static bool Svy_CheckIfIHaveAnsweredSvy (long SvyCod)
 
    /***** Get number of surveys with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM svy_users"
-                  " WHERE SvyCod='%ld' AND UsrCod='%ld'",
+                  " WHERE SvyCod=%ld AND UsrCod=%ld",
             SvyCod,Gbl.Usrs.Me.UsrDat.UsrCod);
    return (DB_QueryCOUNT (Query,"can not check if you have answered a survey") != 0);
   }
@@ -3747,7 +3747,7 @@ static unsigned Svy_GetNumUsrsWhoHaveAnsweredSvy (long SvyCod)
    char Query[128];
 
    /***** Get number of surveys with a field value from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM svy_users WHERE SvyCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM svy_users WHERE SvyCod=%ld",
             SvyCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users who have answered a survey");
   }
@@ -3778,7 +3778,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM institutions,centres,degrees,courses,surveys"
-			" WHERE institutions.CtyCod='%ld'"
+			" WHERE institutions.CtyCod=%ld"
 			" AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -3790,7 +3790,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM centres,degrees,courses,surveys"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
@@ -3801,7 +3801,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM degrees,courses,surveys"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'",
@@ -3811,7 +3811,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT surveys.Cod)"
                         " FROM courses,surveys"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'",
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -3820,7 +3820,7 @@ unsigned Svy_GetNumCoursesWithCrsSurveys (Sco_Scope_t Scope)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT Cod)"
                         " FROM surveys"
-                        " WHERE Scope='%s' AND Cod='%ld'",
+                        " WHERE Scope='%s' AND Cod=%ld",
                   Sco_ScopeDB[Sco_SCOPE_CRS],
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -3867,7 +3867,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM institutions,centres,degrees,courses,surveys"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -3879,7 +3879,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM centres,degrees,courses,surveys"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
@@ -3890,7 +3890,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM degrees,courses,surveys"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'",
@@ -3900,7 +3900,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(surveys.NumNotif)"
                         " FROM courses,surveys"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'",
                   Gbl.CurrentDeg.Deg.DegCod,
@@ -3910,7 +3910,7 @@ unsigned Svy_GetNumCrsSurveys (Sco_Scope_t Scope,unsigned *NumNotif)
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM surveys"
                         " WHERE surveys.Scope='%s'"
-                        " AND CrsCod='%ld'",
+                        " AND CrsCod=%ld",
                   Sco_ScopeDB[Sco_SCOPE_CRS],
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -3968,7 +3968,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM institutions,centres,degrees,courses,surveys,svy_questions"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -3983,7 +3983,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM centres,degrees,courses,surveys,svy_questions"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
@@ -3997,7 +3997,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM degrees,courses,surveys,svy_questions"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'"
@@ -4010,7 +4010,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM courses,surveys,svy_questions"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=surveys.Cod"
                         " AND surveys.Scope='%s'"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
@@ -4022,7 +4022,7 @@ float Svy_GetNumQstsPerCrsSurvey (Sco_Scope_t Scope)
          sprintf (Query,"SELECT AVG(NumQsts) FROM"
                         " (SELECT COUNT(svy_questions.QstCod) AS NumQsts"
                         " FROM surveys,svy_questions"
-                        " WHERE surveys.Scope='%s' AND surveys.Cod='%ld'"
+                        " WHERE surveys.Scope='%s' AND surveys.Cod=%ld"
                         " AND surveys.SvyCod=svy_questions.SvyCod"
                         " GROUP BY svy_questions.SvyCod) AS NumQstsTable",
                   Sco_ScopeDB[Sco_SCOPE_CRS],Gbl.CurrentCrs.Crs.CrsCod);

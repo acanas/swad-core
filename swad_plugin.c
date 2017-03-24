@@ -285,7 +285,7 @@ bool Plg_GetDataOfPluginByCod (struct Plugin *Plg)
    /***** Get data of a plugin from database *****/
    sprintf (Query,"SELECT Name,Description,Logo,AppKey,URL,IP"
                   " FROM plugins"
-                  " WHERE PlgCod='%ld'",
+                  " WHERE PlgCod=%ld",
             Plg->PlgCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a plugin");
 
@@ -503,7 +503,7 @@ void Plg_RemovePlugin (void)
    Plg_GetDataOfPluginByCod (&Plg);
 
    /***** Remove plugin *****/
-   sprintf (Query,"DELETE FROM plugins WHERE PlgCod='%ld'",
+   sprintf (Query,"DELETE FROM plugins WHERE PlgCod=%ld",
             Plg.PlgCod);
    DB_QueryDELETE (Query,"can not remove a plugin");
 
@@ -565,7 +565,7 @@ void Plg_RenamePlugin (void)
          else
            {
             /* Update the table changing old name by new name */
-            sprintf (Query,"UPDATE plugins SET Name='%s' WHERE PlgCod='%ld'",
+            sprintf (Query,"UPDATE plugins SET Name='%s' WHERE PlgCod=%ld",
                      NewPlgName,Plg->PlgCod);
             DB_QueryUPDATE (Query,"can not update the name of a plugin");
 
@@ -599,7 +599,7 @@ static bool Plg_CheckIfPluginNameExists (const char *Name,long PlgCod)
 
    /***** Get number of plugins with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM plugins"
-	          " WHERE Name='%s' AND PlgCod<>'%ld'",
+	          " WHERE Name='%s' AND PlgCod<>%ld",
             Name,PlgCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a plugin already existed") != 0);
   }
@@ -630,7 +630,7 @@ void Plg_ChangePlgDescription (void)
    if (NewDescription[0])
      {
       /* Update the table changing old description by new description */
-      sprintf (Query,"UPDATE plugins SET Description='%s' WHERE PlgCod='%ld'",
+      sprintf (Query,"UPDATE plugins SET Description='%s' WHERE PlgCod=%ld",
                NewDescription,Plg->PlgCod);
       DB_QueryUPDATE (Query,"can not update the description of a plugin");
 
@@ -677,7 +677,7 @@ void Plg_ChangePlgLogo (void)
    if (NewLogo[0])
      {
       /* Update the table changing old logo by new logo */
-      sprintf (Query,"UPDATE plugins SET Logo='%s' WHERE PlgCod='%ld'",
+      sprintf (Query,"UPDATE plugins SET Logo='%s' WHERE PlgCod=%ld",
                NewLogo,Plg->PlgCod);
       DB_QueryUPDATE (Query,"can not update the logo of a plugin");
 
@@ -721,7 +721,7 @@ void Plg_ChangePlgAppKey (void)
    if (NewAppKey[0])
      {
       /* Update the table changing old application key by new application key */
-      sprintf (Query,"UPDATE plugins SET AppKey='%s' WHERE PlgCod='%ld'",
+      sprintf (Query,"UPDATE plugins SET AppKey='%s' WHERE PlgCod=%ld",
                NewAppKey,Plg->PlgCod);
       DB_QueryUPDATE (Query,"can not update the application key of a plugin");
 
@@ -765,7 +765,7 @@ void Plg_ChangePlgURL (void)
    if (NewURL[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE plugins SET URL='%s' WHERE PlgCod='%ld'",
+      sprintf (Query,"UPDATE plugins SET URL='%s' WHERE PlgCod=%ld",
                NewURL,Plg->PlgCod);
       DB_QueryUPDATE (Query,"can not update the URL of a plugin");
 
@@ -809,7 +809,7 @@ void Plg_ChangePlgIP (void)
    if (NewIP[0])
      {
       /* Update the table changing old IP by new IP */
-      sprintf (Query,"UPDATE plugins SET IP='%s' WHERE PlgCod='%ld'",
+      sprintf (Query,"UPDATE plugins SET IP='%s' WHERE PlgCod=%ld",
                NewIP,Plg->PlgCod);
       DB_QueryUPDATE (Query,"can not update the IP address of a plugin");
 

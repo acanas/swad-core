@@ -596,10 +596,10 @@ void Asg_GetListAssignments (void)
    if (Gbl.CurrentCrs.Grps.WhichGrps == Grp_ONLY_MY_GROUPS)
       sprintf (Query,"SELECT AsgCod"
                      " FROM assignments"
-                     " WHERE CrsCod='%ld'%s"
+                     " WHERE CrsCod=%ld%s"
                      " AND (AsgCod NOT IN (SELECT AsgCod FROM asg_grp) OR"
                      " AsgCod IN (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-                     " WHERE crs_grp_usr.UsrCod='%ld' AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
+                     " WHERE crs_grp_usr.UsrCod=%ld AND asg_grp.GrpCod=crs_grp_usr.GrpCod))"
                      " ORDER BY %s",
                Gbl.CurrentCrs.Crs.CrsCod,
                HiddenSubQuery,
@@ -608,7 +608,7 @@ void Asg_GetListAssignments (void)
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
       sprintf (Query,"SELECT AsgCod"
                      " FROM assignments"
-                     " WHERE CrsCod='%ld'%s"
+                     " WHERE CrsCod=%ld%s"
                      " ORDER BY %s",
                Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignments");
@@ -658,7 +658,7 @@ void Asg_GetDataOfAssignmentByCod (struct Assignment *Asg)
 		     "NOW() BETWEEN StartTime AND EndTime,"
 		     "Title,Folder"
 		     " FROM assignments"
-		     " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+		     " WHERE AsgCod=%ld AND CrsCod=%ld",
 	       Asg->AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Get data of assignment *****/
@@ -689,7 +689,7 @@ void Asg_GetDataOfAssignmentByFolder (struct Assignment *Asg)
 		     "NOW() BETWEEN StartTime AND EndTime,"
 		     "Title,Folder"
 		     " FROM assignments"
-		     " WHERE CrsCod='%ld' AND Folder='%s'",
+		     " WHERE CrsCod=%ld AND Folder='%s'",
 	       Gbl.CurrentCrs.Crs.CrsCod,Asg->Folder);
 
       /***** Get data of assignment *****/
@@ -805,7 +805,7 @@ static void Asg_GetAssignmentTxtFromDB (long AsgCod,char Txt[Cns_MAX_BYTES_TEXT 
 
    /***** Get text of assignment from database *****/
    sprintf (Query,"SELECT Txt FROM assignments"
-	          " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+	          " WHERE AsgCod=%ld AND CrsCod=%ld",
             AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get assignment text");
 
@@ -844,7 +844,7 @@ void Asg_GetNotifAssignment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Build query *****/
-   sprintf (Query,"SELECT Title,Txt FROM assignments WHERE AsgCod='%ld'",
+   sprintf (Query,"SELECT Title,Txt FROM assignments WHERE AsgCod=%ld",
             AsgCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -958,7 +958,7 @@ void Asg_RemoveAssignment (void)
 
    /***** Remove assignment *****/
    sprintf (Query,"DELETE FROM assignments"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+                  " WHERE AsgCod=%ld AND CrsCod=%ld",
             Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove assignment");
 
@@ -993,7 +993,7 @@ void Asg_HideAssignment (void)
 
    /***** Hide assignment *****/
    sprintf (Query,"UPDATE assignments SET Hidden='Y'"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+                  " WHERE AsgCod=%ld AND CrsCod=%ld",
             Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not hide assignment");
 
@@ -1025,7 +1025,7 @@ void Asg_ShowAssignment (void)
 
    /***** Hide assignment *****/
    sprintf (Query,"UPDATE assignments SET Hidden='N'"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+                  " WHERE AsgCod=%ld AND CrsCod=%ld",
             Asg.AsgCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not show assignment");
 
@@ -1048,7 +1048,7 @@ static bool Asg_CheckIfSimilarAssignmentExists (const char *Field,const char *Va
 
    /***** Get number of assignments with a field value from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM assignments"
-	          " WHERE CrsCod='%ld' AND %s='%s' AND AsgCod<>'%ld'",
+	          " WHERE CrsCod=%ld AND %s='%s' AND AsgCod<>%ld",
             Gbl.CurrentCrs.Crs.CrsCod,Field,Value,AsgCod);
    return (DB_QueryCOUNT (Query,"can not get similar assignments") != 0);
   }
@@ -1406,8 +1406,8 @@ static void Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (long AsgCod,unsigne
    char Query[512];
 
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE assignments SET NumNotif=NumNotif+'%u'"
-                  " WHERE AsgCod='%ld'",
+   sprintf (Query,"UPDATE assignments SET NumNotif=NumNotif+%u"
+                  " WHERE AsgCod=%ld",
             NumUsrsToBeNotifiedByEMail,AsgCod);
    DB_QueryUPDATE (Query,"can not update the number of notifications of an assignment");
   }
@@ -1426,7 +1426,7 @@ static void Asg_CreateAssignment (struct Assignment *Asg,const char *Txt)
    sprintf (Query,"INSERT INTO assignments"
 	          " (CrsCod,UsrCod,StartTime,EndTime,Title,Folder,Txt)"
                   " VALUES"
-                  " ('%ld','%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  " (%ld,%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1454,10 +1454,10 @@ static void Asg_UpdateAssignment (struct Assignment *Asg,const char *Txt)
 
    /***** Update the data of the assignment *****/
    sprintf (Query,"UPDATE assignments SET "
-	          "StartTime=FROM_UNIXTIME('%ld'),"
-	          "EndTime=FROM_UNIXTIME('%ld'),"
+	          "StartTime=FROM_UNIXTIME(%ld),"
+	          "EndTime=FROM_UNIXTIME(%ld),"
                   "Title='%s',Folder='%s',Txt='%s'"
-                  " WHERE AsgCod='%ld' AND CrsCod='%ld'",
+                  " WHERE AsgCod=%ld AND CrsCod=%ld",
             Asg->TimeUTC[Dat_START_TIME],
             Asg->TimeUTC[Dat_END_TIME  ],
             Asg->Title,
@@ -1484,7 +1484,7 @@ static bool Asg_CheckIfAsgIsAssociatedToGrps (long AsgCod)
    char Query[256];
 
    /***** Get if an assignment is associated to a group from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM asg_grp WHERE AsgCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM asg_grp WHERE AsgCod=%ld",
             AsgCod);
    return (DB_QueryCOUNT (Query,"can not check if an assignment is associated to groups") != 0);
   }
@@ -1499,7 +1499,7 @@ bool Asg_CheckIfAsgIsAssociatedToGrp (long AsgCod,long GrpCod)
 
    /***** Get if an assignment is associated to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM asg_grp"
-	          " WHERE AsgCod='%ld' AND GrpCod='%ld'",
+	          " WHERE AsgCod=%ld AND GrpCod=%ld",
             AsgCod,GrpCod);
    return (DB_QueryCOUNT (Query,"can not check if an assignment is associated to a group") != 0);
   }
@@ -1513,7 +1513,7 @@ static void Asg_RemoveAllTheGrpsAssociatedToAnAssignment (long AsgCod)
    char Query[256];
 
    /***** Remove groups of the assignment *****/
-   sprintf (Query,"DELETE FROM asg_grp WHERE AsgCod='%ld'",AsgCod);
+   sprintf (Query,"DELETE FROM asg_grp WHERE AsgCod=%ld",AsgCod);
    DB_QueryDELETE (Query,"can not remove the groups associated to an assignment");
   }
 
@@ -1526,7 +1526,7 @@ void Asg_RemoveGroup (long GrpCod)
    char Query[256];
 
    /***** Remove group from all the assignments *****/
-   sprintf (Query,"DELETE FROM asg_grp WHERE GrpCod='%ld'",GrpCod);
+   sprintf (Query,"DELETE FROM asg_grp WHERE GrpCod=%ld",GrpCod);
    DB_QueryDELETE (Query,"can not remove group from the associations between assignments and groups");
   }
 
@@ -1540,7 +1540,7 @@ void Asg_RemoveGroupsOfType (long GrpTypCod)
 
    /***** Remove group from all the assignments *****/
    sprintf (Query,"DELETE FROM asg_grp USING crs_grp,asg_grp"
-                  " WHERE crs_grp.GrpTypCod='%ld'"
+                  " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=asg_grp.GrpCod",
             GrpTypCod);
    DB_QueryDELETE (Query,"can not remove groups of a type from the associations between assignments and groups");
@@ -1564,7 +1564,7 @@ static void Asg_CreateGrps (long AsgCod)
       sprintf (Query,"INSERT INTO asg_grp"
 	             " (AsgCod,GrpCod)"
 	             " VALUES"
-	             " ('%ld','%ld')",
+	             " (%ld,%ld)",
                AsgCod,Gbl.CurrentCrs.Grps.LstGrpsSel.GrpCods[NumGrpSel]);
       DB_QueryINSERT (Query,"can not associate a group to an assignment");
      }
@@ -1589,7 +1589,7 @@ static void Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (struct Assignment *Asg)
    /***** Get groups associated to an assignment from database *****/
    sprintf (Query,"SELECT crs_grp_types.GrpTypName,crs_grp.GrpName"
 	          " FROM asg_grp,crs_grp,crs_grp_types"
-                  " WHERE asg_grp.AsgCod='%ld'"
+                  " WHERE asg_grp.AsgCod=%ld"
                   " AND asg_grp.GrpCod=crs_grp.GrpCod"
                   " AND crs_grp.GrpTypCod=crs_grp_types.GrpTypCod"
                   " ORDER BY crs_grp_types.GrpTypName,crs_grp.GrpName",
@@ -1647,13 +1647,13 @@ void Asg_RemoveCrsAssignments (long CrsCod)
 
    /***** Remove groups *****/
    sprintf (Query,"DELETE FROM asg_grp USING assignments,asg_grp"
-                  " WHERE assignments.CrsCod='%ld'"
+                  " WHERE assignments.CrsCod=%ld"
                   " AND assignments.AsgCod=asg_grp.AsgCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove all the groups associated to assignments of a course");
 
    /***** Remove assignments *****/
-   sprintf (Query,"DELETE FROM assignments WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM assignments WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove all the assignments of a course");
   }
 
@@ -1671,14 +1671,14 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       // Students and teachers can edit assignments depending on groups
       /***** Get if I can edit an assignment from database *****/
       sprintf (Query,"SELECT COUNT(*) FROM assignments"
-		     " WHERE AsgCod='%ld'"
+		     " WHERE AsgCod=%ld"
 		     " AND "
 		     "("
 		     "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
 		     " OR "
 		     "AsgCod IN"					// Assignment is for specific groups
 		     " (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-		     " WHERE crs_grp_usr.UsrCod='%ld'"
+		     " WHERE crs_grp_usr.UsrCod=%ld"
 		     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
 		     ")",
 	       AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1697,7 +1697,7 @@ unsigned Asg_GetNumAssignmentsInCrs (long CrsCod)
    char Query[256];
 
    /***** Get number of assignments in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM assignments WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM assignments WHERE CrsCod=%ld",
             CrsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of assignments in course");
   }
@@ -1721,12 +1721,12 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
                         " FROM assignments"
-                        " WHERE CrsCod>'0'");
+                        " WHERE CrsCod>0");
          break;
        case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
                         " FROM institutions,centres,degrees,courses,assignments"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1737,7 +1737,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
        case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
                         " FROM centres,degrees,courses,assignments"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
@@ -1747,7 +1747,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
                         " FROM degrees,courses,assignments"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=assignments.CrsCod",
@@ -1756,7 +1756,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT assignments.CrsCod)"
                         " FROM courses,assignments"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
@@ -1764,7 +1764,7 @@ unsigned Asg_GetNumCoursesWithAssignments (Sco_Scope_t Scope)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT CrsCod)"
                         " FROM assignments"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE CrsCod=%ld",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:
@@ -1803,12 +1803,12 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM assignments"
-                        " WHERE CrsCod>'0'");
+                        " WHERE CrsCod>0");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM institutions,centres,degrees,courses,assignments"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1818,7 +1818,7 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM centres,degrees,courses,assignments"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=assignments.CrsCod",
@@ -1827,7 +1827,7 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM degrees,courses,assignments"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
@@ -1835,14 +1835,14 @@ unsigned Asg_GetNumAssignments (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(assignments.NumNotif)"
                         " FROM courses,assignments"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=assignments.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM assignments"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE CrsCod=%ld",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:

@@ -111,7 +111,7 @@ bool Nck_GetNicknameFromUsrCod (long UsrCod,
 
    /***** Get current (last updated) user's nickname from database *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
-	          " WHERE UsrCod='%ld' ORDER BY CreatTime DESC LIMIT 1",
+	          " WHERE UsrCod=%ld ORDER BY CreatTime DESC LIMIT 1",
 	    UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get nickname"))
      {
@@ -201,7 +201,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 
    /***** Get my nicknames *****/
    sprintf (Query,"SELECT Nickname FROM usr_nicknames"
-                  " WHERE UsrCod='%ld'"
+                  " WHERE UsrCod=%ld"
                   " ORDER BY CreatTime DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumNicks = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get nicknames of a user");
@@ -337,7 +337,7 @@ static void Nck_RemoveNicknameFromDB (const char *Nickname)
 
    /***** Remove an old nickname *****/
    sprintf (Query,"DELETE FROM usr_nicknames"
-                  " WHERE UsrCod='%ld' AND Nickname='%s'",
+                  " WHERE UsrCod=%ld AND Nickname='%s'",
             Gbl.Usrs.Me.UsrDat.UsrCod,Nickname);
    DB_QueryREPLACE (Query,"can not remove an old nickname");
   }
@@ -377,13 +377,13 @@ void Nck_UpdateNick (void)
         {
          /***** Check if the new nickname matches any of my old nicknames *****/
          sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-                        " WHERE UsrCod='%ld' AND Nickname='%s'",
+                        " WHERE UsrCod=%ld AND Nickname='%s'",
                   Gbl.Usrs.Me.UsrDat.UsrCod,NewNicknameWithoutArroba);
          if (!DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // No matches
            {
             /***** Check if the new nickname matches any of the nicknames of other users *****/
             sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-                           " WHERE Nickname='%s' AND UsrCod<>'%ld'",
+                           " WHERE Nickname='%s' AND UsrCod<>%ld",
                      NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
             if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that my nickname
               {
@@ -434,7 +434,7 @@ void Nck_UpdateMyNick (const char *NewNickname)
    sprintf (Query,"REPLACE INTO usr_nicknames"
                   " (UsrCod,Nickname,CreatTime)"
                   " VALUES"
-                  " ('%ld','%s',NOW())",
+                  " (%ld,'%s',NOW())",
             Gbl.Usrs.Me.UsrDat.UsrCod,NewNickname);
    DB_QueryREPLACE (Query,"can not update your nickname");
   }

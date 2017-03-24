@@ -251,7 +251,7 @@ void Cht_ShowListOfChatRoomsWithUsrs (void)
 
    /***** Get chat rooms with connected users from database *****/
    sprintf (Query,"SELECT RoomCode,NumUsrs FROM chat"
-                  " WHERE NumUsrs>'0' ORDER BY NumUsrs DESC,RoomCode");
+                  " WHERE NumUsrs>0 ORDER BY NumUsrs DESC,RoomCode");
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get chat rooms with connected users");
 
    if (NumRows > 0) // If not empty chat rooms found

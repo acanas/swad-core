@@ -1023,7 +1023,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 	    DoQuery = false;				// Nothing to get from database
 	 else
 	   {
-	    sprintf (UsrSubQuery,"UsrCod='%ld'",Gbl.Usrs.Me.UsrDat.UsrCod);
+	    sprintf (UsrSubQuery,"UsrCod=%ld",Gbl.Usrs.Me.UsrDat.UsrCod);
 	    if (AgendaType == Agd_MY_AGENDA_TODAY)
 	       Str_Copy (Past__FutureEventsSubQuery,
 			 " AND DATE(StartTime)<=CURDATE()"
@@ -1078,7 +1078,7 @@ static void Agd_GetListEvents (Agd_AgendaType_t AgendaType)
 	 break;
       case Agd_ANOTHER_AGENDA_TODAY:
       case Agd_ANOTHER_AGENDA:
-	 sprintf (UsrSubQuery,"UsrCod='%ld'",Gbl.Usrs.Other.UsrDat.UsrCod);
+	 sprintf (UsrSubQuery,"UsrCod=%ld",Gbl.Usrs.Other.UsrDat.UsrCod);
 	 if (AgendaType == Agd_ANOTHER_AGENDA_TODAY)
 	    Str_Copy (Past__FutureEventsSubQuery,
 		      " AND DATE(StartTime)<=CURDATE()"
@@ -1173,7 +1173,7 @@ static void Agd_GetDataOfEventByCod (struct AgendaEvent *AgdEvent)
                   "NOW()<StartTime,"	// Future event?
                   "Event,Location"
                   " FROM agendas"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent->AgdCod,AgdEvent->UsrCod);
 
    /***** Get data of event from database *****/
@@ -1267,7 +1267,7 @@ static void Agd_GetEventTxtFromDB (struct AgendaEvent *AgdEvent,
 
    /***** Get text of event from database *****/
    sprintf (Query,"SELECT Txt FROM agendas"
-	          " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+	          " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent->AgdCod,AgdEvent->UsrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get event text");
 
@@ -1356,7 +1356,7 @@ void Agd_RemoveEvent (void)
 
    /***** Remove event *****/
    sprintf (Query,"DELETE FROM agendas"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryDELETE (Query,"can not remove event");
 
@@ -1388,7 +1388,7 @@ void Agd_HideEvent (void)
 
    /***** Set event private *****/
    sprintf (Query,"UPDATE agendas SET Hidden='Y'"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not hide event");
 
@@ -1420,7 +1420,7 @@ void Agd_UnhideEvent (void)
 
    /***** Set event public *****/
    sprintf (Query,"UPDATE agendas SET Hidden='N'"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not show event");
 
@@ -1453,7 +1453,7 @@ void Agd_MakeEventPrivate (void)
 
    /***** Make event private *****/
    sprintf (Query,"UPDATE agendas SET Public='N'"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not make event private");
 
@@ -1485,7 +1485,7 @@ void Agd_MakeEventPublic (void)
 
    /***** Make event public *****/
    sprintf (Query,"UPDATE agendas SET Public='Y'"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent.AgdCod,AgdEvent.UsrCod);
    DB_QueryUPDATE (Query,"can not make event public");
 
@@ -1726,7 +1726,7 @@ static void Agd_CreateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
    sprintf (Query,"INSERT INTO agendas"
 	          " (UsrCod,StartTime,EndTime,Event,Location,Txt)"
                   " VALUES"
-                  " ('%ld',FROM_UNIXTIME('%ld'),FROM_UNIXTIME('%ld'),"
+                  " (%ld,FROM_UNIXTIME(%ld),FROM_UNIXTIME(%ld),"
                   "'%s','%s','%s')",
             AgdEvent->UsrCod,
             AgdEvent->TimeUTC[Agd_START_TIME],
@@ -1750,10 +1750,10 @@ static void Agd_UpdateEvent (struct AgendaEvent *AgdEvent,const char *Txt)
 
    /***** Update the data of the event *****/
    sprintf (Query,"UPDATE agendas SET "
-	          "StartTime=FROM_UNIXTIME('%ld'),"
-	          "EndTime=FROM_UNIXTIME('%ld'),"
+	          "StartTime=FROM_UNIXTIME(%ld),"
+	          "EndTime=FROM_UNIXTIME(%ld),"
                   "Event='%s',Location='%s',Txt='%s'"
-                  " WHERE AgdCod='%ld' AND UsrCod='%ld'",
+                  " WHERE AgdCod=%ld AND UsrCod=%ld",
             AgdEvent->TimeUTC[Agd_START_TIME],
             AgdEvent->TimeUTC[Agd_END_TIME  ],
             AgdEvent->Event,AgdEvent->Location,Txt,
@@ -1770,7 +1770,7 @@ void Agd_RemoveUsrEvents (long UsrCod)
    char Query[128];
 
    /***** Remove events *****/
-   sprintf (Query,"DELETE FROM agendas WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM agendas WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove all the events of a user");
   }
 
@@ -1783,7 +1783,7 @@ unsigned Agd_GetNumEventsFromUsr (long UsrCod)
    char Query[128];
 
    /***** Get number of events in a course from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM agendas WHERE UsrCod=%ld",
             UsrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of events from user");
   }
@@ -1806,12 +1806,12 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
                         " FROM agendas"
-                        " WHERE UsrCod>'0'");
+                        " WHERE UsrCod>0");
          break;
        case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
                         " FROM institutions,centres,degrees,courses,crs_usr,agendas"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1823,7 +1823,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
        case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
                         " FROM centres,degrees,courses,crs_usr,agendas"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
@@ -1834,7 +1834,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
                         " FROM degrees,courses,crs_usr,agendas"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -1844,7 +1844,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
                         " FROM courses,crs_usr,agendas"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.Status=0"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=agendas.UsrCod",
@@ -1853,7 +1853,7 @@ unsigned Agd_GetNumUsrsWithEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT agendas.UsrCod)"
                         " FROM crs_usr,agendas"
-                        " WHERE crs_usr.CrsCod='%ld'"
+                        " WHERE crs_usr.CrsCod=%ld"
                         " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
@@ -1892,12 +1892,12 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM agendas"
-                        " WHERE UsrCod>'0'");
+                        " WHERE UsrCod>0");
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM institutions,centres,degrees,courses,crs_usr,agendas"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1908,7 +1908,7 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM centres,degrees,courses,crs_usr,agendas"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -1918,7 +1918,7 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM degrees,courses,crs_usr,agendas"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=agendas.UsrCod",
@@ -1927,7 +1927,7 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM courses,crs_usr,agendas"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentDeg.Deg.DegCod);
@@ -1935,7 +1935,7 @@ unsigned Agd_GetNumEvents (Sco_Scope_t Scope)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM crs_usr,agendas"
-                        " WHERE crs_usr.CrsCod='%ld'"
+                        " WHERE crs_usr.CrsCod=%ld"
                         " AND crs_usr.UsrCod=agendas.UsrCod",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;

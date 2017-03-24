@@ -342,7 +342,7 @@ void Ntf_ShowMyNotifications (void)
    sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,"
 	          "Cod,UNIX_TIMESTAMP(TimeNotif),Status"
                   " FROM notif"
-                  " WHERE ToUsrCod='%ld'%s"
+                  " WHERE ToUsrCod=%ld%s"
                   " ORDER BY TimeNotif DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod,SubQuery);
    NumNotifications = DB_QuerySELECT (Query,&mysql_res,"can not get your notifications");
@@ -928,17 +928,17 @@ void Ntf_MarkNotifAsSeen (Ntf_NotifyEvent_t NotifyEvent,long Cod,long CrsCod,lon
      {
       if (Cod > 0)		// Set only one notification for the user as seen
          sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                        " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND Cod='%ld'",
+                        " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
                   (unsigned) Ntf_STATUS_BIT_READ,
                   ToUsrCod,(unsigned) NotifyEvent,Cod);
       else if (CrsCod > 0)	// Set all notifications of this type in the current course for the user as seen
          sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                        " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND CrsCod='%ld'",
+                        " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
                   (unsigned) Ntf_STATUS_BIT_READ,
                   ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
       else			// Set all notifications of this type for the user as seen
          sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                        " WHERE ToUsrCod='%ld' AND NotifyEvent='%u'",
+                        " WHERE ToUsrCod=%ld AND NotifyEvent=%u",
                   (unsigned) Ntf_STATUS_BIT_READ,
                   ToUsrCod,(unsigned) NotifyEvent);
       DB_QueryUPDATE (Query,"can not set notification(s) as seen");
@@ -955,7 +955,7 @@ void Ntf_MarkNotifAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 
    /***** Set notification as removed *****/
    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                  " WHERE NotifyEvent='%u' AND Cod='%ld'",
+                  " WHERE NotifyEvent=%u AND Cod=%ld",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
             (unsigned) NotifyEvent,Cod);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
@@ -972,12 +972,12 @@ void Ntf_MarkNotifToOneUsrAsRemoved (Ntf_NotifyEvent_t NotifyEvent,long Cod,long
    /***** Set notification as removed *****/
    if (Cod > 0)	// Set only one notification as removed
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND Cod='%ld'",
+		     " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND Cod=%ld",
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
 	       ToUsrCod,(unsigned) NotifyEvent,Cod);
    else		// Set all notifications of this type, in the current course for the user, as removed
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE ToUsrCod='%ld' AND NotifyEvent='%u' AND CrsCod='%ld'",
+		     " WHERE ToUsrCod=%ld AND NotifyEvent=%u AND CrsCod=%ld",
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
 	       ToUsrCod,(unsigned) NotifyEvent,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
@@ -999,16 +999,16 @@ void Ntf_MarkNotifInCrsAsRemoved (long ToUsrCod,long CrsCod)
           except notifications about new messages *****/
    if (ToUsrCod > 0)	// If the user code is specified
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE ToUsrCod='%ld'"
-		     " AND CrsCod='%ld'"
-		     " AND NotifyEvent<>'%u'",	// messages will remain available
+		     " WHERE ToUsrCod=%ld"
+		     " AND CrsCod=%ld"
+		     " AND NotifyEvent<>%u",	// messages will remain available
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
 	       ToUsrCod,
 	       CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
    else			// User code not specified ==> any user
       sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		     " WHERE CrsCod='%ld'"
-		     " AND NotifyEvent<>'%u'",	// messages will remain available
+		     " WHERE CrsCod=%ld"
+		     " AND NotifyEvent<>%u",	// messages will remain available
 	       (unsigned) Ntf_STATUS_BIT_REMOVED,
 	       CrsCod,(unsigned) Ntf_EVENT_MESSAGE);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
@@ -1114,9 +1114,9 @@ void Ntf_MarkNotifChildrenOfFolderAsRemoved (const char *Path)
 	       return;
 	   }
 	 sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-	                " WHERE NotifyEvent='%u' AND Cod IN"
+	                " WHERE NotifyEvent=%u AND Cod IN"
 	                " (SELECT FilCod FROM files"
-			" WHERE FileBrowser='%u' AND Cod='%ld'"
+			" WHERE FileBrowser=%u AND Cod=%ld"
 			" AND Path LIKE '%s/%%')",
 	          (unsigned) Ntf_STATUS_BIT_REMOVED,
 	          (unsigned) NotifyEvent,
@@ -1139,9 +1139,9 @@ void Ntf_MarkNotifFilesInGroupAsRemoved (long GrpCod)
 
    /***** Set notifications as removed *****/
    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-                  " WHERE NotifyEvent IN ('%u','%u','%u','%u') AND Cod IN"
+                  " WHERE NotifyEvent IN (%u,%u,%u,%u) AND Cod IN"
                   " (SELECT FilCod FROM files"
-                  " WHERE FileBrowser IN ('%u','%u','%u','%u') AND Cod='%ld')",
+                  " WHERE FileBrowser IN (%u,%u,%u,%u) AND Cod=%ld)",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
             (unsigned) Ntf_EVENT_DOCUMENT_FILE,
             (unsigned) Ntf_EVENT_TEACHERS_FILE,
@@ -1188,16 +1188,16 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_SHARE_CRS:
             case Brw_ADMI_MARKS_CRS:	// Notify all users in course except me
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
-                              " WHERE CrsCod='%ld'"
-                              " AND UsrCod<>'%ld'",
+                              " WHERE CrsCod=%ld"
+                              " AND UsrCod<>%ld",
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TEACH_CRS:	// Notify all teachers in course except me
                sprintf (Query,"SELECT UsrCod FROM crs_usr"
-                              " WHERE CrsCod='%ld'"
-                              " AND UsrCod<>'%ld'"
-                              " AND Role='%u'",	// Notify teachers only
+                              " WHERE CrsCod=%ld"
+                              " AND UsrCod<>%ld"
+                              " AND Role=%u",	// Notify teachers only
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER);
@@ -1206,19 +1206,19 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
             case Brw_ADMI_SHARE_GRP:
             case Brw_ADMI_MARKS_GRP:	// Notify all users in group except me
                sprintf (Query,"SELECT UsrCod FROM crs_grp_usr"
-                              " WHERE crs_grp_usr.GrpCod='%ld'"
-                              " AND crs_grp_usr.UsrCod<>'%ld'",
+                              " WHERE crs_grp_usr.GrpCod=%ld"
+                              " AND crs_grp_usr.UsrCod<>%ld",
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
                break;
             case Brw_ADMI_TEACH_GRP:	// Notify all teachers in group except me
                sprintf (Query,"SELECT crs_grp_usr.UsrCod"
         	              " FROM crs_grp_usr,crs_grp,crs_usr"
-                              " WHERE crs_grp_usr.GrpCod='%ld'"
-                              " AND crs_grp_usr.UsrCod<>'%ld'"
+                              " WHERE crs_grp_usr.GrpCod=%ld"
+                              " AND crs_grp_usr.UsrCod<>%ld"
                               " AND crs_grp_usr.GrpCod=crs_grp.GrpCod"
                               " AND crs_grp.CrsCod=crs_usr.CrsCod"
-                              " AND crs_usr.Role='%u'",	// Notify teachers only
+                              " AND crs_usr.Role=%u",	// Notify teachers only
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod,
                         (unsigned) Rol_TEACHER);
@@ -1233,24 +1233,24 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          sprintf (Query,"(SELECT crs_usr.UsrCod"
                         " FROM assignments,crs_usr"
-                        " WHERE assignments.AsgCod='%ld'"
+                        " WHERE assignments.AsgCod=%ld"
                         " AND assignments.AsgCod NOT IN"
-                        " (SELECT AsgCod FROM asg_grp WHERE AsgCod='%ld')"
+                        " (SELECT AsgCod FROM asg_grp WHERE AsgCod=%ld)"
                         " AND assignments.CrsCod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod<>'%ld')"
+                        " AND crs_usr.UsrCod<>%ld)"
                         " UNION "
                         "(SELECT DISTINCT crs_grp_usr.UsrCod"
                         " FROM asg_grp,crs_grp_usr"
-                        " WHERE asg_grp.AsgCod='%ld'"
+                        " WHERE asg_grp.AsgCod=%ld"
                         " AND asg_grp.GrpCod=crs_grp_usr.GrpCod"
-                        " AND crs_grp_usr.UsrCod<>'%ld')",
+                        " AND crs_grp_usr.UsrCod<>%ld)",
                   Cod,Cod,Gbl.Usrs.Me.UsrDat.UsrCod,
                   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
       case Ntf_EVENT_NOTICE:
          sprintf (Query,"SELECT UsrCod FROM crs_usr"
-                        " WHERE CrsCod='%ld' AND UsrCod<>'%ld'",
+                        " WHERE CrsCod=%ld AND UsrCod<>%ld",
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
@@ -1261,9 +1261,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	 if (Gbl.CurrentCrs.Crs.NumTchs)
 	    // If this course has teachers ==> send notification to teachers
 	    sprintf (Query,"SELECT UsrCod FROM crs_usr"
-			   " WHERE CrsCod='%ld'"
-			   " AND UsrCod<>'%ld'"
-			   " AND Role='%u'",	// Notify teachers only
+			   " WHERE CrsCod=%ld"
+			   " AND UsrCod<>%ld"
+			   " AND Role=%u",	// Notify teachers only
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     (unsigned) Rol_TEACHER);
@@ -1274,10 +1274,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	    // ==> send notification to administrators or superusers
 	    sprintf (Query,"SELECT UsrCod FROM admin"
 	 		   " WHERE (Scope='%s'"
-	 		   " OR (Scope='%s' AND Cod='%ld')"
-	 		   " OR (Scope='%s' AND Cod='%ld')"
-	 		   " OR (Scope='%s' AND Cod='%ld'))"
-	 		   " AND UsrCod<>'%ld'",
+	 		   " OR (Scope='%s' AND Cod=%ld)"
+	 		   " OR (Scope='%s' AND Cod=%ld)"
+	 		   " OR (Scope='%s' AND Cod=%ld))"
+	 		   " AND UsrCod<>%ld",
 	 	     Sco_ScopeDB[Sco_SCOPE_SYS],
 	 	     Sco_ScopeDB[Sco_SCOPE_INS],Gbl.CurrentIns.Ins.InsCod,
 	 	     Sco_ScopeDB[Sco_SCOPE_CTR],Gbl.CurrentCtr.Ctr.CtrCod,
@@ -1288,8 +1288,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cod is the code of the social publishing
 	 sprintf (Query,"SELECT DISTINCT(PublisherCod) FROM social_pubs"
                         " WHERE NotCod = (SELECT NotCod FROM social_pubs"
-                        " WHERE PubCod='%ld')"
-                        " AND PublisherCod<>'%ld'",
+                        " WHERE PubCod=%ld)"
+                        " AND PublisherCod<>%ld",
                   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_TIMELINE_FAV:		// New favourite to one of my social notes or comments
@@ -1304,13 +1304,13 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	   {
 	    case For_FORUM_COURSE_USRS:
 	       sprintf (Query,"SELECT UsrCod FROM crs_usr"
-			      " WHERE CrsCod='%ld' AND UsrCod<>'%ld'",
+			      " WHERE CrsCod=%ld AND UsrCod<>%ld",
 			Gbl.CurrentCrs.Crs.CrsCod,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    case For_FORUM_COURSE_TCHS:
 	       sprintf (Query,"SELECT UsrCod FROM crs_usr"
-			      " WHERE CrsCod='%ld' AND Role='%u' AND UsrCod<>'%ld'",
+			      " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
 			Gbl.CurrentCrs.Crs.CrsCod,
 			(unsigned) Rol_TEACHER,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -1322,8 +1322,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_FORUM_REPLY:
          sprintf (Query,"SELECT DISTINCT(UsrCod) FROM forum_post"
                         " WHERE ThrCod = (SELECT ThrCod FROM forum_post"
-                        " WHERE PstCod='%ld')"
-                        " AND UsrCod<>'%ld'",
+                        " WHERE PstCod=%ld)"
+                        " AND UsrCod<>%ld",
                   Cod,Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
       case Ntf_EVENT_MESSAGE:		// This function should not be called in this case
@@ -1334,19 +1334,19 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          sprintf (Query,"(SELECT crs_usr.UsrCod"
                         " FROM surveys,crs_usr"
-                        " WHERE surveys.SvyCod='%ld'"
+                        " WHERE surveys.SvyCod=%ld"
                         " AND surveys.SvyCod NOT IN"
-                        " (SELECT SvyCod FROM svy_grp WHERE SvyCod='%ld')"
+                        " (SELECT SvyCod FROM svy_grp WHERE SvyCod=%ld)"
                         " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
-                        " AND crs_usr.UsrCod<>'%ld'"
+                        " AND crs_usr.UsrCod<>%ld"
                         " AND (surveys.Roles&(1<<crs_usr.Role))<>0)"
                         " UNION "
                         "(SELECT DISTINCT crs_grp_usr.UsrCod"
                         " FROM svy_grp,crs_grp_usr,surveys,crs_usr"
-                        " WHERE svy_grp.SvyCod='%ld'"
+                        " WHERE svy_grp.SvyCod=%ld"
                         " AND svy_grp.GrpCod=crs_grp_usr.GrpCod"
                         " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
-                        " AND crs_grp_usr.UsrCod<>'%ld'"
+                        " AND crs_grp_usr.UsrCod<>%ld"
                         " AND svy_grp.SvyCod=surveys.SvyCod"
                         " AND surveys.Scope='%s' AND surveys.Cod=crs_usr.CrsCod"
                         " AND (surveys.Roles&(1<<crs_usr.Role))<>0)",
@@ -1438,8 +1438,8 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
 	          " (NotifyEvent,ToUsrCod,FromUsrCod,"
 	          "InsCod,CtrCod,DegCod,CrsCod,Cod,TimeNotif,Status)"
                   " VALUES"
-                  " ('%u','%ld','%ld',"
-                  "'%ld','%ld','%ld','%ld','%ld',NOW(),'%u')",
+                  " (%u,%ld,%ld,"
+                  "%ld,%ld,%ld,%ld,%ld,NOW(),%u)",
             (unsigned) NotifyEvent,UsrDat->UsrCod,Gbl.Usrs.Me.UsrDat.UsrCod,
             InsCod,CtrCod,DegCod,CrsCod,Cod,(unsigned) Status);
    DB_QueryINSERT (Query,"can not create new notification event");
@@ -1455,7 +1455,7 @@ static void Ntf_UpdateMyLastAccessToNotifications (void)
 
    /***** Reset to 0 my number of new received messages *****/
    sprintf (Query,"UPDATE usr_last SET LastAccNotif=NOW()"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not update last access to notifications");
   }
@@ -1566,7 +1566,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
      {
       /***** Get pending notifications of this user from database ******/
       sprintf (Query,"SELECT NotifyEvent,FromUsrCod,InsCod,CtrCod,DegCod,CrsCod,Cod"
-		     " FROM notif WHERE ToUsrCod='%ld'"
+		     " FROM notif WHERE ToUsrCod=%ld"
 		     " AND (Status & %u)<>0 AND (Status & %u)=0 AND (Status & %u)=0"
 		     " ORDER BY TimeNotif,NotifyEvent",
 	       ToUsrDat->UsrCod,
@@ -1736,7 +1736,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 
 	 /***** Mark all the pending notifications of this user as 'sent' *****/
 	 sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-			" WHERE ToUsrCod='%ld'"
+			" WHERE ToUsrCod=%ld"
 			" AND (Status & %u)<>0 AND (Status & %u)=0  AND (Status & %u)=0",
 		  (unsigned) Ntf_STATUS_BIT_SENT,ToUsrDat->UsrCod,
 		  (unsigned) Ntf_STATUS_BIT_EMAIL,
@@ -1793,7 +1793,7 @@ static void Ntf_GetNumNotifSent (long DegCod,long CrsCod,
 
    /***** Get number of notifications sent by email from database *****/
    sprintf (Query,"SELECT NumEvents,NumMails FROM sta_notif"
-                  " WHERE DegCod='%ld' AND CrsCod='%ld' AND NotifyEvent='%u'",
+                  " WHERE DegCod=%ld AND CrsCod=%ld AND NotifyEvent=%u",
             DegCod,CrsCod,(unsigned) NotifyEvent);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get number of notifications sent by email");
 
@@ -1832,7 +1832,7 @@ static void Ntf_UpdateNumNotifSent (long DegCod,long CrsCod,
    sprintf (Query,"REPLACE INTO sta_notif"
 	          " (DegCod,CrsCod,NotifyEvent,NumEvents,NumMails)"
 	          " VALUES"
-	          " ('%ld','%ld','%u','%u','%u')",
+	          " (%ld,%ld,%u,%u,%u)",
             DegCod,CrsCod,(unsigned) NotifyEvent,
             CurrentNumEvents + NumEvents,
             CurrentNumMails + NumMails);
@@ -1849,7 +1849,7 @@ void Ntf_MarkAllNotifAsSeen (void)
 
    /***** Set all my notifications as seen *****/
    sprintf (Query,"UPDATE notif SET Status=(Status | %u)"
-		  " WHERE ToUsrCod='%ld'",
+		  " WHERE ToUsrCod=%ld",
 	    (unsigned) Ntf_STATUS_BIT_READ,
 	    Gbl.Usrs.Me.UsrDat.UsrCod);
    DB_QueryUPDATE (Query,"can not set notification(s) as seen");
@@ -1981,8 +1981,8 @@ void Ntf_ChangeNotifyEvents (void)
 
    /***** Store preferences about notify events *****/
    sprintf (Query,"UPDATE usr_data"
-	          " SET NotifNtfEvents='%u',EmailNtfEvents='%u'"
-	          " WHERE UsrCod='%ld'",
+	          " SET NotifNtfEvents=%u,EmailNtfEvents=%u"
+	          " WHERE UsrCod=%ld",
             Gbl.Usrs.Me.UsrDat.Prefs.NotifNtfEvents,
             Gbl.Usrs.Me.UsrDat.Prefs.EmailNtfEvents,
             Gbl.Usrs.Me.UsrDat.UsrCod);
@@ -2051,7 +2051,7 @@ static unsigned Ntf_GetNumberOfAllMyUnseenNtfs (void)
 
    /***** Get number of places with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM notif"
-                  " WHERE ToUsrCod='%ld' AND (Status & %u)=0",
+                  " WHERE ToUsrCod=%ld AND (Status & %u)=0",
             Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED));
    return DB_QueryCOUNT (Query,"can not get number of unseen notifications");
   }
@@ -2066,8 +2066,8 @@ static unsigned Ntf_GetNumberOfMyNewUnseenNtfs (void)
 
    /***** Get number of places with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM notif"
-                  " WHERE ToUsrCod='%ld' AND (Status & %u)=0"
-                  " AND TimeNotif>FROM_UNIXTIME('%ld')",
+                  " WHERE ToUsrCod=%ld AND (Status & %u)=0"
+                  " AND TimeNotif>FROM_UNIXTIME(%ld)",
             Gbl.Usrs.Me.UsrDat.UsrCod,
             (unsigned) (Ntf_STATUS_BIT_READ | Ntf_STATUS_BIT_REMOVED),
             Gbl.Usrs.Me.UsrLast.LastAccNotif);
@@ -2084,7 +2084,7 @@ void Ntf_RemoveUsrNtfs (long ToUsrCod)
 
    /***** Delete notifications of a user ******/
    sprintf (Query,"DELETE LOW_PRIORITY FROM notif"
-	          " WHERE ToUsrCod='%ld'",
+	          " WHERE ToUsrCod=%ld",
             ToUsrCod);
    DB_QueryDELETE (Query,"can not remove notifications of a user");
   }

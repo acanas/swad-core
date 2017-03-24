@@ -157,7 +157,7 @@ static void RSS_WriteNotices (FILE *FileRSS,struct Course *Crs)
    /***** Get active notices in course *****/
    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS T,UsrCod,Content"
                   " FROM notices"
-                  " WHERE CrsCod='%ld' AND Status='%u'"
+                  " WHERE CrsCod=%ld AND Status=%u"
                   " ORDER BY T DESC",
             Crs->CrsCod,(unsigned) Not_ACTIVE_NOTICE);
    NumNotices = DB_QuerySELECT (Query,&mysql_res,"can not get notices from database");
@@ -256,7 +256,7 @@ static void RSS_WriteExamAnnouncements (FILE *FileRSS,struct Course *Crs)
       sprintf (Query,"SELECT ExaCod,UNIX_TIMESTAMP(CallDate) AS T,"
 	             "DATE_FORMAT(ExamDate,'%%d/%%m/%%Y %%H:%%i')"
 		     " FROM exam_announcements"
-		     " WHERE CrsCod='%ld' AND Status='%u' AND ExamDate>=NOW()"
+		     " WHERE CrsCod=%ld AND Status=%u AND ExamDate>=NOW()"
 		     " ORDER BY T",
 	       Gbl.CurrentCrs.Crs.CrsCod,
 	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);

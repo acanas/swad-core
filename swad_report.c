@@ -413,7 +413,7 @@ static void Rep_CreateNewReportEntryIntoDB (const struct Rep_Report *Report)
 	          " (UsrCod,ReportTimeUTC,"
 	          "UniqueDirL,UniqueDirR,Filename,Permalink)"
                   " VALUES"
-                  " ('%ld','%04d-%02d-%02d %02d:%02d:%02d',"
+                  " (%ld,'%04d-%02d-%02d %02d:%02d:%02d',"
                   "'%c%c','%s','%s','%s')",
             Gbl.Usrs.Me.UsrDat.UsrCod,
 	    1900 + Report->tm_CurrentTime.tm_year,	// year
@@ -778,7 +778,7 @@ static void Rep_WriteSectionHitsPerAction (struct Rep_Report *Report)
 
    /***** Make the query *****/
    sprintf (Query,"SELECT SQL_NO_CACHE ActCod,COUNT(*) AS N FROM log_full"
-                  " WHERE ClickTime>=FROM_UNIXTIME('%ld') AND UsrCod='%ld'"
+                  " WHERE ClickTime>=FROM_UNIXTIME(%ld) AND UsrCod=%ld"
 		  " GROUP BY ActCod ORDER BY N DESC LIMIT %u",
             (long) Report->UsrFigures.FirstClickTimeUTC,Gbl.Usrs.Me.UsrDat.UsrCod,
 	    Rep_MAX_ACTIONS);
@@ -916,14 +916,14 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
    sprintf (Query,"SELECT MAX(N) FROM ("
 		  // Clicks without course selected ---------------------------
 	          "SELECT "
-	          "'-1' AS CrsCod,"
+	          "-1 AS CrsCod,"
 	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
-	          "'%u' AS Role,"
+	          "%u AS Role,"
 	          "COUNT(*) AS N"
 	          " FROM log_full"
-	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-	          " AND UsrCod='%ld'"
-	          " AND CrsCod<='0'"
+	          " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+	          " AND UsrCod=%ld"
+	          " AND CrsCod<=0"
 	          " GROUP BY Year"
 		  // ----------------------------------------------------------
 	          " UNION "
@@ -934,11 +934,11 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
 	          "Role,"
 	          "COUNT(*) AS N"
 	          " FROM log_full"
-	          " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-	          " AND UsrCod='%ld'"
-	          " AND Role>='%u'"	// Student
-	          " AND Role<='%u'"	// Teacher
-	          " AND CrsCod>'0'"
+	          " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+	          " AND UsrCod=%ld"
+	          " AND Role>=%u"	// Student
+	          " AND Role<=%u"	// Teacher
+	          " AND CrsCod>0"
 	          " GROUP BY CrsCod,Year,Role"
 		  // ----------------------------------------------------------
 	          ") AS hits_per_crs_year",
@@ -1003,8 +1003,8 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
 	             " (crs_usr.CrsCod=log_full.CrsCod"
 	             " AND crs_usr.UsrCod=log_full.UsrCod"
 	             " AND crs_usr.Role=log_full.Role)"
-	             " WHERE crs_usr.UsrCod='%ld'"
-	             " AND crs_usr.Role='%u'"
+	             " WHERE crs_usr.UsrCod=%ld"
+	             " AND crs_usr.Role=%u"
 	             " GROUP BY crs_usr.CrsCod"
 	             " ORDER BY N DESC,log_full.CrsCod DESC",
 	       Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role);
@@ -1085,9 +1085,9 @@ static void Rep_GetAndWriteMyHistoricCrss (Rol_Role_t Role,
    /***** Get historic courses of a user from log *****/
    sprintf (Query,"SELECT CrsCod,COUNT(*) AS N"
 	          " FROM log_full"
-	          " WHERE UsrCod='%ld' AND Role='%u' AND CrsCod>'0'"
+	          " WHERE UsrCod=%ld AND Role=%u AND CrsCod>0"
                   " GROUP BY CrsCod"
-	          " HAVING N>'%u'"
+	          " HAVING N>%u"
                   " ORDER BY N DESC",
             Gbl.Usrs.Me.UsrDat.UsrCod,(unsigned) Role,
             Rep_MIN_CLICKS_CRS);
@@ -1209,18 +1209,18 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    if (AnyCourse)
       SubQueryCrs[0] = '\0';
    else
-      sprintf (SubQueryCrs," AND CrsCod='%ld'",CrsCod);
+      sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
 
    if (Role == Rol_UNKNOWN)	// Here Rol_UNKNOWN means any role
       SubQueryRol[0] = '\0';
    else
-      sprintf (SubQueryRol," AND Role='%u'",(unsigned) Role);
+      sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);
 
    sprintf (Query,"SELECT SQL_NO_CACHE "
 		  "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
 		  "COUNT(*) FROM log_full"
-                  " WHERE ClickTime>=FROM_UNIXTIME('%ld')"
-		  " AND UsrCod='%ld'%s%s"
+                  " WHERE ClickTime>=FROM_UNIXTIME(%ld)"
+		  " AND UsrCod=%ld%s%s"
 		  " GROUP BY Year DESC",
             (long) Report->UsrFigures.FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -1380,7 +1380,7 @@ static void Rep_RemoveUsrReportsFiles (long UsrCod)
 
    /***** Get directories for the reports *****/
    sprintf (Query,"SELECT UniqueDirL,UniqueDirR FROM usr_report"
-	          " WHERE UsrCod='%ld'",
+	          " WHERE UsrCod=%ld",
 	    UsrCod);
    NumReports = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's usage reports");
 
@@ -1411,6 +1411,6 @@ static void Rep_RemoveUsrReportsFromDB (long UsrCod)
    char Query[128];
 
    /***** Insert a new user's usage report into database *****/
-   sprintf (Query,"DELETE FROM usr_report WHERE UsrCod='%ld'",UsrCod);
+   sprintf (Query,"DELETE FROM usr_report WHERE UsrCod=%ld",UsrCod);
    DB_QueryDELETE (Query,"can not remove user's usage reports");
   }

@@ -4703,7 +4703,7 @@ char *Act_GetActionTextFromDB (long ActCod,
 
    /***** Get test for an action from database *****/
    sprintf (Query,"SELECT Txt FROM actions"
-	          " WHERE ActCod='%ld' AND Language='%s'",
+	          " WHERE ActCod=%ld AND Language='%s'",
             ActCod,Txt_STR_LANG_ID[Txt_LANGUAGE_ES]);	// !!! TODO: Replace Txt_LANGUAGE_ES by Gbl.Prefs.Language !!!
    if (DB_QuerySELECT (Query,&mysql_res,"can not get text for an action"))
      {

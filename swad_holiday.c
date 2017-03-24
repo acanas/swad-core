@@ -268,17 +268,17 @@ void Hld_GetListHolidays (void)
 	             "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d') AS EndDate,"
 	             "holidays.Name"
 		     " FROM holidays,places"
-		     " WHERE holidays.InsCod='%ld'"
+		     " WHERE holidays.InsCod=%ld"
 		     " AND holidays.PlcCod=places.PlcCod"
-		     " AND places.InsCod='%ld')"
+		     " AND places.InsCod=%ld)"
 		     " UNION "
 		     "(SELECT HldCod,PlcCod,'' as Place,HldTyp,"
 		     "DATE_FORMAT(StartDate,'%%Y%%m%%d') AS StartDate,"
 		     "DATE_FORMAT(EndDate,'%%Y%%m%%d') AS EndDate,Name"
 		     " FROM holidays"
-		     " WHERE InsCod='%ld'"
+		     " WHERE InsCod=%ld"
 		     " AND PlcCod NOT IN"
-		     "(SELECT DISTINCT PlcCod FROM places WHERE InsCod='%ld'))"
+		     "(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))"
 		     " ORDER BY %s",
 	       Gbl.CurrentIns.Ins.InsCod,
 	       Gbl.CurrentIns.Ins.InsCod,
@@ -373,19 +373,19 @@ static void Hld_GetDataOfHolidayByCod (struct Holiday *Hld)
                   "DATE_FORMAT(holidays.StartDate,'%%Y%%m%%d'),"
                   "DATE_FORMAT(holidays.EndDate,'%%Y%%m%%d'),holidays.Name"
                   " FROM holidays,places"
-                  " WHERE holidays.HldCod='%ld'"
-                  " AND holidays.InsCod='%ld'"
+                  " WHERE holidays.HldCod=%ld"
+                  " AND holidays.InsCod=%ld"
                   " AND holidays.PlcCod=places.PlcCod"
-                  " AND places.InsCod='%ld')"
+                  " AND places.InsCod=%ld)"
                   " UNION "
                   "(SELECT PlcCod,'' as Place,HldTyp,"
                   "DATE_FORMAT(StartDate,'%%Y%%m%%d'),"
                   "DATE_FORMAT(EndDate,'%%Y%%m%%d'),Name"
                   " FROM holidays"
-                  " WHERE HldCod='%ld'"
-                  " AND InsCod='%ld'"
+                  " WHERE HldCod=%ld"
+                  " AND InsCod=%ld"
                   " AND PlcCod NOT IN"
-                  "(SELECT DISTINCT PlcCod FROM places WHERE InsCod='%ld'))",
+                  "(SELECT DISTINCT PlcCod FROM places WHERE InsCod=%ld))",
             Hld->HldCod,
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentIns.Ins.InsCod,
@@ -642,7 +642,7 @@ void Hld_RemoveHoliday (void)
    Hld_GetDataOfHolidayByCod (&Hld);
 
    /***** Remove holiday *****/
-   sprintf (Query,"DELETE FROM holidays WHERE HldCod='%ld'",
+   sprintf (Query,"DELETE FROM holidays WHERE HldCod=%ld",
             Hld.HldCod);
    DB_QueryDELETE (Query,"can not remove a holiday");
 
@@ -683,7 +683,7 @@ void Hld_ChangeHolidayPlace (void)
    Hld_GetDataOfHolidayByCod (Hld);
 
    /***** Update the place in database *****/
-   sprintf (Query,"UPDATE holidays SET PlcCod='%ld' WHERE HldCod='%ld'",
+   sprintf (Query,"UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
             NewPlace.PlcCod,Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the place of a holiday");
 
@@ -723,8 +723,8 @@ void Hld_ChangeHolidayType (void)
 
    /***** Update holiday/no school period in database *****/
    Dat_AssignDate (&Hld->EndDate,&Hld->StartDate);
-   sprintf (Query,"UPDATE holidays SET HldTyp='%u',EndDate=StartDate"
-		  " WHERE HldCod='%ld'",
+   sprintf (Query,"UPDATE holidays SET HldTyp=%u,EndDate=StartDate"
+		  " WHERE HldCod=%ld",
 	    (unsigned) Hld->HldTyp,Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the type of a holiday");
 
@@ -812,7 +812,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
      }
 
    /***** Update the date in database *****/
-   sprintf (Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod='%ld'",
+   sprintf (Query,"UPDATE holidays SET %s='%04u%02u%02u' WHERE HldCod=%ld",
             StrStartOrEndDate,
             NewDate.Year,
             NewDate.Month,
@@ -872,7 +872,7 @@ void Hld_RenameHoliday (void)
         {
          /***** If degree was in database... *****/
 	 /* Update the table changing old name by new name */
-	 sprintf (Query,"UPDATE holidays SET Name='%s' WHERE HldCod='%ld'",
+	 sprintf (Query,"UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
 		  NewHldName,Hld->HldCod);
 	 DB_QueryUPDATE (Query,"can not update the text of a holiday");
 
@@ -1128,7 +1128,7 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
    sprintf (Query,"INSERT INTO holidays"
 	          " (InsCod,PlcCod,HldTyp,StartDate,EndDate,Name)"
 	          " VALUES"
-	          " ('%ld','%ld','%u','%04u%02u%02u','%04u%02u%02u','%s')",
+	          " (%ld,%ld,%u,'%04u%02u%02u','%04u%02u%02u','%s')",
             Gbl.CurrentIns.Ins.InsCod,Hld->PlcCod,(unsigned) Hld->HldTyp,
             Hld->StartDate.Year,
             Hld->StartDate.Month,

@@ -277,16 +277,16 @@ void Plc_GetListPlaces (void)
      }
    sprintf (Query,"(SELECT places.PlcCod,places.ShortName,places.FullName,COUNT(*) AS NumCtrs"
                   " FROM places,centres"
-                  " WHERE places.InsCod='%ld'"
+                  " WHERE places.InsCod=%ld"
                   " AND places.PlcCod=centres.PlcCod"
-                  " AND centres.InsCod='%ld'"
+                  " AND centres.InsCod=%ld"
                   " GROUP BY places.PlcCod)"
                   " UNION "
                   "(SELECT PlcCod,ShortName,FullName,0 AS NumCtrs"
                   " FROM places"
-                  " WHERE InsCod='%ld'"
+                  " WHERE InsCod=%ld"
                   " AND PlcCod NOT IN"
-                  " (SELECT DISTINCT PlcCod FROM centres WHERE InsCod='%ld'))"
+                  " (SELECT DISTINCT PlcCod FROM centres WHERE InsCod=%ld))"
                   " ORDER BY %s",
             Gbl.CurrentIns.Ins.InsCod,
             Gbl.CurrentIns.Ins.InsCod,
@@ -376,14 +376,14 @@ void Plc_GetDataOfPlaceByCod (struct Place *Plc)
       /***** Get data of a place from database *****/
       sprintf (Query,"(SELECT places.ShortName,places.FullName,COUNT(*)"
                      " FROM places,centres"
-                     " WHERE places.PlcCod='%ld'"
+                     " WHERE places.PlcCod=%ld"
                      " AND places.PlcCod=centres.PlcCod"
-                     " AND centres.PlcCod='%ld'"
+                     " AND centres.PlcCod=%ld"
                      " GROUP BY places.PlcCod)"
                      " UNION "
                      "(SELECT ShortName,FullName,0"
                      " FROM places"
-                     " WHERE PlcCod='%ld'"
+                     " WHERE PlcCod=%ld"
                      " AND PlcCod NOT IN"
                      " (SELECT DISTINCT PlcCod FROM centres))",
                Plc->PlcCod,
@@ -552,7 +552,7 @@ void Plc_RemovePlace (void)
    else			// Place has no centres ==> remove it
      {
       /***** Remove place *****/
-      sprintf (Query,"DELETE FROM places WHERE PlcCod='%ld'",
+      sprintf (Query,"DELETE FROM places WHERE PlcCod=%ld",
 	       Plc.PlcCod);
       DB_QueryDELETE (Query,"can not remove a place");
 
@@ -683,7 +683,7 @@ static bool Plc_CheckIfPlaceNameExists (const char *FieldName,const char *Name,l
 
    /***** Get number of places with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM places"
-	          " WHERE InsCod='%ld' AND %s='%s' AND PlcCod<>'%ld'",
+	          " WHERE InsCod=%ld AND %s='%s' AND PlcCod<>%ld",
             Gbl.CurrentIns.Ins.InsCod,FieldName,Name,PlcCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a place already existed") != 0);
   }
@@ -697,7 +697,7 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
    char Query[128 + Plc_MAX_BYTES_PLACE_FULL_NAME];
 
    /***** Update place changing old name by new name */
-   sprintf (Query,"UPDATE places SET %s='%s' WHERE PlcCod='%ld'",
+   sprintf (Query,"UPDATE places SET %s='%s' WHERE PlcCod=%ld",
 	    FieldName,NewPlcName,PlcCod);
    DB_QueryUPDATE (Query,"can not update the name of a place");
   }
@@ -854,7 +854,7 @@ static void Plc_CreatePlace (struct Place *Plc)
    sprintf (Query,"INSERT INTO places"
 	          " (InsCod,ShortName,FullName)"
 	          " VALUES"
-	          " ('%ld','%s','%s')",
+	          " (%ld,'%s','%s')",
             Gbl.CurrentIns.Ins.InsCod,Plc->ShrtName,Plc->FullName);
    DB_QueryINSERT (Query,"can not create place");
 

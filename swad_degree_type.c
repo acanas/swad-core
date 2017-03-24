@@ -62,6 +62,8 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
+static void DT_GetParamDegTypOrder (void);
+
 static void DT_ListDegreeTypes (void);
 static void DT_EditDegreeTypes (void);
 static void DT_ListDegreeTypesForSeeing (void);
@@ -124,6 +126,9 @@ void DT_WriteSelectorDegreeTypes (void)
 
 void DT_SeeDegreeTypes (void)
   {
+   /***** Get parameter with the type of order in the list of degree types *****/
+   DT_GetParamDegTypOrder ();
+
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes ();
 
@@ -132,6 +137,19 @@ void DT_SeeDegreeTypes (void)
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
+  }
+
+/*****************************************************************************/
+/******* Get parameter with the type or order in list of degree types ********/
+/*****************************************************************************/
+
+static void DT_GetParamDegTypOrder (void)
+  {
+   Gbl.Degs.DegTypes.SelectedOrder = (DT_Order_t)
+				     Par_GetParToUnsignedLong ("Order",
+							       0,
+							       DT_NUM_ORDERS - 1,
+							       (unsigned long) DT_ORDER_DEFAULT);
   }
 
 /*****************************************************************************/
@@ -211,15 +229,21 @@ static void DT_ListDegreeTypesForSeeing (void)
 	         Gbl.CurrentDegTyp.DegTyp.DegTypCod) ? "LIGHT_BLUE" :
                                                        Gbl.ColorRows[Gbl.RowEvenOdd];
 
-      /* Name of degree type */
+      /* Number of degree type in this list */
       fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"DAT LEFT_MIDDLE %s\">"
+			 "<td class=\"DAT_N RIGHT_MIDDLE %s\">"
+			 "%u"
+			 "</td>",
+	       BgColor,NumDegTyp + 1);
+
+      /* Name of degree type */
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N LEFT_MIDDLE %s\">"
 	                 "%s"
 	                 "</td>",
                BgColor,Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypName);
 
       /* Number of degrees of this type */
-      fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE %s\">"
+      fprintf (Gbl.F.Out,"<td class=\"DAT_N RIGHT_MIDDLE %s\">"
 	                 "%u"
 	                 "</td>"
                          "</tr>",
@@ -359,19 +383,35 @@ static void DT_PutFormToCreateDegreeType (void)
 
 static void DT_PutHeadDegreeTypesForSeeing (void)
   {
-   extern const char *Txt_Type_of_degree;
-   extern const char *Txt_Degrees;
+   extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS];
+   extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
+   DT_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"RIGHT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Type_of_degree,
-            Txt_Degrees);
+                      "<th></th>");
+   for (Order = DT_ORDER_BY_DEGREE_TYPE;
+	Order <= DT_ORDER_BY_NUM_DEGREES;
+	Order++)
+     {
+      fprintf (Gbl.F.Out,"<th class=\"%s\">",
+               Order == DT_ORDER_BY_DEGREE_TYPE ? "LEFT_MIDDLE" :
+        	                                  "RIGHT_MIDDLE");
+
+      Act_FormStart (ActSeeDegTyp);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Act_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
+      if (Order == Gbl.Degs.DegTypes.SelectedOrder)
+	 fprintf (Gbl.F.Out,"<u>");
+
+      fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
+
+      if (Order == Gbl.Degs.DegTypes.SelectedOrder)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+
+      fprintf (Gbl.F.Out,"</th>");
+     }
   }
 
 /*****************************************************************************/
@@ -427,22 +467,29 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
 
 void DT_GetListDegreeTypes (void)
   {
+   static const char *OrderBySubQuery[DT_NUM_ORDERS] =
+     {
+      "DegTypName",			// DT_ORDER_BY_DEGREE_TYPE
+      "NumDegs DESC,DegTypName",	// DT_ORDER_BY_NUM_DEGREES
+     };
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRow;
 
    /***** Get types of degree from database *****/
-   sprintf (Query,"(SELECT deg_types.DegTypCod,deg_types.DegTypName AS DegTypName,"
-                  " COUNT(degrees.DegCod)"
+   sprintf (Query,"(SELECT deg_types.DegTypCod,"
+	          "deg_types.DegTypName AS DegTypName,"
+                  " COUNT(degrees.DegCod) AS NumDegs"
                   " FROM deg_types,degrees"
                   " WHERE deg_types.DegTypCod=degrees.DegTypCod"
                   " GROUP BY degrees.DegTypCod)"
                   " UNION "
-                  "(SELECT DegTypCod,DegTypName,'0'"
+                  "(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
                   " FROM deg_types"
                   " WHERE DegTypCod NOT IN (SELECT DegTypCod FROM degrees))"
-                  " ORDER BY DegTypName");
+                  " ORDER BY %s",
+            OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
    Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get types of degree");
 
    /***** Get degree types *****/
@@ -595,7 +642,7 @@ static unsigned DT_CountNumDegsOfType (long DegTypCod)
    char Query[128];
 
    /***** Get number of degrees of a type from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE DegTypCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE DegTypCod=%ld",
             DegTypCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of degrees of a type");
   }
@@ -621,7 +668,7 @@ bool DT_GetDataOfDegreeTypeByCod (struct DegreeType *DegTyp)
      }
 
    /***** Get the name of a type of degree from database *****/
-   sprintf (Query,"SELECT DegTypName FROM deg_types WHERE DegTypCod='%ld'",
+   sprintf (Query,"SELECT DegTypName FROM deg_types WHERE DegTypCod=%ld",
             DegTyp->DegTypCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the name of a type of degree");
 
@@ -669,7 +716,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
    long DegCod;
 
    /***** Get degrees of a type from database *****/
-   sprintf (Query,"SELECT DegCod FROM degrees WHERE DegTypCod='%ld'",
+   sprintf (Query,"SELECT DegCod FROM degrees WHERE DegTypCod=%ld",
             DegTypCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees of a type");
 
@@ -693,7 +740,7 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod)
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Remove the degree type *****/
-   sprintf (Query,"DELETE FROM deg_types WHERE DegTypCod='%ld'",DegTypCod);
+   sprintf (Query,"DELETE FROM deg_types WHERE DegTypCod=%ld",DegTypCod);
    DB_QueryDELETE (Query,"can not remove a type of degree");
   }
 
@@ -748,7 +795,7 @@ void DT_RenameDegreeType (void)
            {
             /* Update the table changing old name by new name */
             sprintf (Query,"UPDATE deg_types SET DegTypName='%s'"
-                           " WHERE DegTypCod='%ld'",
+                           " WHERE DegTypCod=%ld",
                      NewNameDegTyp,DegTyp->DegTypCod);
             DB_QueryUPDATE (Query,"can not update the type of a degree");
 
@@ -782,7 +829,7 @@ static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCo
 
    /***** Get number of degree types with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM deg_types"
-                  " WHERE DegTypName='%s' AND DegTypCod<>'%ld'",
+                  " WHERE DegTypName='%s' AND DegTypCod<>%ld",
             DegTypName,DegTypCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a type of degree already existed") != 0);
   }
@@ -811,7 +858,7 @@ void DT_ChangeDegreeType (void)
    Deg_GetDataOfDegreeByCod (Deg);
 
    /***** Update the table of degrees changing old type by new type *****/
-   sprintf (Query,"UPDATE degrees SET DegTypCod='%ld' WHERE DegCod='%ld'",
+   sprintf (Query,"UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
 	    NewDegTypCod,Deg->DegCod);
    DB_QueryUPDATE (Query,"can not update the type of a degree");
 

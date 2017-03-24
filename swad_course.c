@@ -796,7 +796,7 @@ unsigned Crs_GetNumCrssInCty (long CtyCod)
 
    /***** Get number of courses in a country from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions,centres,degrees,courses"
-	          " WHERE institutions.CtyCod='%ld'"
+	          " WHERE institutions.CtyCod=%ld"
 	          " AND institutions.InsCod=centres.InsCod"
 	          " AND centres.CtrCod=degrees.CtrCod"
 	          " AND degrees.DegCod=courses.DegCod",
@@ -814,7 +814,7 @@ unsigned Crs_GetNumCrssInIns (long InsCod)
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres,degrees,courses"
-	          " WHERE centres.InsCod='%ld'"
+	          " WHERE centres.InsCod=%ld"
 	          " AND centres.CtrCod=degrees.CtrCod"
 	          " AND degrees.DegCod=courses.DegCod",
 	    InsCod);
@@ -831,7 +831,7 @@ unsigned Crs_GetNumCrssInCtr (long CtrCod)
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees,courses"
-	          " WHERE degrees.CtrCod='%ld'"
+	          " WHERE degrees.CtrCod=%ld"
 	          " AND degrees.DegCod=courses.DegCod",
 	    CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a centre");
@@ -847,7 +847,7 @@ unsigned Crs_GetNumCrssInDeg (long DegCod)
 
    /***** Get number of courses in a degree from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM courses"
-	          " WHERE DegCod='%ld'",
+	          " WHERE DegCod=%ld",
 	    DegCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of courses in a degree");
   }
@@ -867,7 +867,7 @@ unsigned Crs_GetNumCrssWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND centres.CtrCod=degrees.CtrCod"
                   " AND degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of courses with users");
   }
@@ -904,7 +904,7 @@ void Crs_WriteSelectorOfCourse (void)
      {
       /***** Get courses belonging to the current degree from database *****/
       sprintf (Query,"SELECT CrsCod,ShortName FROM courses"
-                     " WHERE DegCod='%ld'"
+                     " WHERE DegCod=%ld"
                      " ORDER BY ShortName",
                Gbl.CurrentDeg.Deg.DegCod);
       NumCrss = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get courses of a degree");
@@ -1003,13 +1003,13 @@ static void Crs_GetListCoursesInDegree (Crs_WhatCourses_t WhatCourses)
      {
       case Crs_ACTIVE_COURSES:
          sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-                        " FROM courses WHERE DegCod='%ld' AND Status=0"
+                        " FROM courses WHERE DegCod=%ld AND Status=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Crs_ALL_COURSES_EXCEPT_REMOVED:
          sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-                        " FROM courses WHERE DegCod='%ld' AND (Status & %u)=0"
+                        " FROM courses WHERE DegCod=%ld AND (Status & %u)=0"
                         " ORDER BY Year,ShortName",
                   Gbl.CurrentDeg.Deg.DegCod,
                   (unsigned) Crs_STATUS_BIT_REMOVED);
@@ -1938,7 +1938,7 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
    sprintf (Query,"INSERT INTO courses"
 	          " (DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName)"
                   " VALUES"
-                  " ('%ld','%u','%s','%u','%ld','%s','%s')",
+                  " (%ld,%u,'%s',%u,%ld,'%s','%s')",
             Crs->DegCod,Crs->Year,
             Crs->InstitutionalCrsCod,
             Status,
@@ -2017,7 +2017,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
      {
       /***** Get data of a course from database *****/
       sprintf (Query,"SELECT CrsCod,DegCod,Year,InsCrsCod,Status,RequesterUsrCod,ShortName,FullName"
-		     " FROM courses WHERE CrsCod='%ld'",
+		     " FROM courses WHERE CrsCod=%ld",
 	       Crs->CrsCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a course")) // Course found...
 	{
@@ -2100,7 +2100,7 @@ static void Crs_GetShortNamesByCod (long CrsCod,
       /***** Get the short name of a degree from database *****/
       sprintf (Query,"SELECT courses.ShortName,degrees.ShortName"
 		     " FROM courses,degrees"
-		     " WHERE courses.CrsCod='%ld'"
+		     " WHERE courses.CrsCod=%ld"
 		     " AND courses.DegCod=degrees.DegCod",
 	       CrsCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a course") == 1)
@@ -2131,11 +2131,11 @@ void Crs_RemoveCourseCompletely (long CrsCod)
    Crs_EmptyCourseCompletely (CrsCod);
 
    /***** Remove course from table of last accesses to courses in database *****/
-   sprintf (Query,"DELETE FROM crs_last WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM crs_last WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove a course");
 
    /***** Remove course from table of courses in database *****/
-   sprintf (Query,"DELETE FROM courses WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM courses WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove a course");
   }
 
@@ -2164,33 +2164,33 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
 
    /***** Remove information of the course ****/
    /* Remove timetable of the course */
-   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM timetable_crs WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove the timetable of a course");
 
    /* Remove other information of the course */
-   sprintf (Query,"DELETE FROM crs_info_src WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM crs_info_src WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove info sources of a course");
 
-   sprintf (Query,"DELETE FROM crs_info_txt WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM crs_info_txt WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove info of a course");
 
    /***** Remove exam announcements in the course *****/
    /* Mark all exam announcements in the course as deleted */
-   sprintf (Query,"UPDATE exam_announcements SET Status='%u'"
-	          " WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET Status=%u"
+	          " WHERE CrsCod=%ld",
             (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,CrsCod);
    DB_QueryUPDATE (Query,"can not remove exam announcements of a course");
 
    /***** Remove course cards of the course *****/
    /* Remove content of course cards */
    sprintf (Query,"DELETE FROM crs_records USING crs_record_fields,crs_records"
-                  " WHERE crs_record_fields.CrsCod='%ld'"
+                  " WHERE crs_record_fields.CrsCod=%ld"
                   " AND crs_record_fields.FieldCod=crs_records.FieldCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove content of cards in a course");
 
    /* Remove definition of fields in course cards */
-   sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM crs_record_fields WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove fields of cards in a course");
 
    /***** Remove assignments of the course *****/
@@ -2204,11 +2204,11 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    sprintf (Query,"INSERT INTO notices_deleted"
 	          " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
                   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif FROM notices"
-                  " WHERE CrsCod='%ld'",
+                  " WHERE CrsCod=%ld",
             CrsCod);
    DB_QueryINSERT (Query,"can not remove notices in a course");
    /* Remove all notices from the course */
-   sprintf (Query,"DELETE FROM notices WHERE CrsCod='%ld'",CrsCod);
+   sprintf (Query,"DELETE FROM notices WHERE CrsCod=%ld",CrsCod);
    DB_QueryDELETE (Query,"can not remove notices in a course");
 
    /***** Remove all the threads and posts in forums of the course *****/
@@ -2227,7 +2227,7 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    /* Remove all the users in groups in the course */
    sprintf (Query,"DELETE FROM crs_grp_usr"
 	          " USING crs_grp_types,crs_grp,crs_grp_usr"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod",
             CrsCod);
@@ -2236,24 +2236,24 @@ static void Crs_EmptyCourseCompletely (long CrsCod)
    /* Remove all the groups in the course */
    sprintf (Query,"DELETE FROM crs_grp"
 	          " USING crs_grp_types,crs_grp"
-                  " WHERE crs_grp_types.CrsCod='%ld'"
+                  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod",
             CrsCod);
    DB_QueryDELETE (Query,"can not remove groups of a course");
 
    /* Remove all the group types in the course */
    sprintf (Query,"DELETE FROM crs_grp_types"
-	          " WHERE CrsCod='%ld'",
+	          " WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove types of group of a course");
 
    /***** Remove users' requests for inscription in the course *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr_requests WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove requests for inscription to a course");
 
    /***** Remove possible users remaining in the course (teachers) *****/
-   sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr WHERE CrsCod=%ld",
 	    CrsCod);
    DB_QueryDELETE (Query,"can not remove users from a course");
 
@@ -2417,7 +2417,7 @@ static void Crs_UpdateCrsDegDB (long CrsCod,long DegCod)
    char Query[128];
 
    /***** Update degree in table of courses *****/
-   sprintf (Query,"UPDATE courses SET DegCod='%ld' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET DegCod=%ld WHERE CrsCod=%ld",
 	    DegCod,CrsCod);
    DB_QueryUPDATE (Query,"can not move course to another degree");
   }
@@ -2555,7 +2555,7 @@ static void Crs_UpdateCrsYear (struct Course *Crs,unsigned NewYear)
    char Query[128];
 
    /***** Update year/semester in table of courses *****/
-   sprintf (Query,"UPDATE courses SET Year='%u' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET Year=%u WHERE CrsCod=%ld",
 	    NewYear,Crs->CrsCod);
    DB_QueryUPDATE (Query,"can not update the year of a course");
 
@@ -2572,7 +2572,7 @@ void Crs_UpdateInstitutionalCrsCod (struct Course *Crs,const char *NewInstitutio
    char Query[512];
 
    /***** Update institutional course code in table of courses *****/
-   sprintf (Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET InsCrsCod='%s' WHERE CrsCod=%ld",
             NewInstitutionalCrsCod,Crs->CrsCod);
    DB_QueryUPDATE (Query,"can not update the institutional code of the current course");
 
@@ -2710,8 +2710,8 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
 
    /***** Get number of courses in a year of a degree and with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM courses"
-                  " WHERE DegCod='%ld' AND Year='%u'"
-                  " AND %s='%s' AND CrsCod<>'%ld'",
+                  " WHERE DegCod=%ld AND Year=%u"
+                  " AND %s='%s' AND CrsCod<>%ld",
             DegCod,Year,FieldName,Name,CrsCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a course already existed") != 0);
   }
@@ -2725,7 +2725,7 @@ static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *N
    char Query[128 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Update course changing old name by new name *****/
-   sprintf (Query,"UPDATE courses SET %s='%s' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET %s='%s' WHERE CrsCod=%ld",
 	    FieldName,NewCrsName,CrsCod);
    DB_QueryUPDATE (Query,"can not update the name of a course");
   }
@@ -2763,7 +2763,7 @@ void Crs_ChangeCrsStatus (void)
    Crs_GetDataOfCourseByCod (Crs);
 
    /***** Update status in table of courses *****/
-   sprintf (Query,"UPDATE courses SET Status='%u' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET Status=%u WHERE CrsCod=%ld",
             (unsigned) Status,Crs->CrsCod);
    DB_QueryUPDATE (Query,"can not update the status of a course");
 
@@ -2986,11 +2986,11 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    if (Role == Rol_UNKNOWN)
       SubQuery[0] = '\0';	// Role == Rol_UNKNOWN ==> any role
    else
-      sprintf (SubQuery," AND crs_usr.Role='%u'",(unsigned) Role);
+      sprintf (SubQuery," AND crs_usr.Role=%u",(unsigned) Role);
    sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
                   "courses.Year,courses.FullName,centres.ShortName,crs_usr.Accepted"
                   " FROM crs_usr,courses,degrees,centres"
-                  " WHERE crs_usr.UsrCod='%ld'%s"
+                  " WHERE crs_usr.UsrCod=%ld%s"
                   " AND crs_usr.CrsCod=courses.CrsCod"
                   " AND courses.DegCod=degrees.DegCod"
                   " AND degrees.CtrCod=centres.CtrCod"
@@ -3283,7 +3283,7 @@ void Crs_UpdateCrsLast (void)
       sprintf (Query,"REPLACE INTO crs_last"
 	             " (CrsCod,LastTime)"
 	             " VALUES"
-	             " ('%ld',NOW())",
+	             " (%ld,NOW())",
 	       Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryUPDATE (Query,"can not update last access to current course");
      }

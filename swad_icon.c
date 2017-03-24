@@ -131,7 +131,7 @@ void Ico_ChangeIconSet (void)
    /***** Store icon set in database *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE usr_data SET IconSet='%s' WHERE UsrCod='%ld'",
+      sprintf (Query,"UPDATE usr_data SET IconSet='%s' WHERE UsrCod=%ld",
                Ico_IconSetId[Gbl.Prefs.IconSet],
                Gbl.Usrs.Me.UsrDat.UsrCod);
       DB_QueryUPDATE (Query,"can not update your preference about icon set");

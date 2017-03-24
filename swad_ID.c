@@ -102,7 +102,7 @@ void ID_GetListIDsFromUsrCod (struct UsrData *UsrDat)
       // First the confirmed (Confirmed == 'Y')
       // Then the unconfirmed (Confirmed == 'N')
       sprintf (Query,"SELECT UsrID,Confirmed FROM usr_IDs"
-	             " WHERE UsrCod='%ld'"
+	             " WHERE UsrCod=%ld"
 	             " ORDER BY Confirmed DESC,UsrID",
                UsrDat->UsrCod);
       if ((NumIDs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get user's IDs")))
@@ -766,7 +766,7 @@ static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID)
 
    /***** Get if ID is confirmed from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_IDs"
-		  " WHERE UsrCod='%ld' AND UsrID='%s' AND Confirmed='Y'",
+		  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed='Y'",
 	    UsrCod,UsrID);
    return (DB_QueryCOUNT (Query,"can not check if ID is confirmed") != 0);
   }
@@ -781,7 +781,7 @@ static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID)
 
    /***** Remove one of my user's IDs *****/
    sprintf (Query,"DELETE FROM usr_IDs"
-                  " WHERE UsrCod='%ld' AND UsrID='%s'",
+                  " WHERE UsrCod=%ld AND UsrID='%s'",
             UsrCod,UsrID);
    DB_QueryREPLACE (Query,"can not remove a user's ID");
   }
@@ -925,7 +925,7 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
    sprintf (Query,"INSERT INTO usr_IDs"
                   " (UsrCod,UsrID,CreatTime,Confirmed)"
                   " VALUES"
-                  " ('%ld','%s',NOW(),'%c')",
+                  " (%ld,'%s',NOW(),'%c')",
             UsrCod,NewID,
             Confirmed ? 'Y' :
         	        'N');
@@ -1046,7 +1046,7 @@ void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID)
 
    /***** Update database *****/
    sprintf (Query,"UPDATE usr_IDs SET Confirmed='Y'"
-                  " WHERE UsrCod='%ld' AND UsrID='%s' AND Confirmed<>'Y'",
+                  " WHERE UsrCod=%ld AND UsrID='%s' AND Confirmed<>'Y'",
             UsrDat->UsrCod,UsrID);
    DB_QueryINSERT (Query,"can not confirm a user's ID");
   }

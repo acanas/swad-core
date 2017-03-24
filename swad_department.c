@@ -287,17 +287,17 @@ void Dpt_GetListDepartments (long InsCod)
 		     "departments.ShortName,departments.FullName,departments.WWW,"
 		     "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
 		     " FROM departments,usr_data,crs_usr"
-		     " WHERE departments.InsCod='%ld'"
+		     " WHERE departments.InsCod=%ld"
 		     " AND departments.DptCod=usr_data.DptCod"
 		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role='%u'"
+		     " AND crs_usr.Role=%u"
 		     " GROUP BY departments.DptCod)"
 		     " UNION "
 		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM departments"
-		     " WHERE InsCod='%ld' AND DptCod NOT IN"
+		     " WHERE InsCod=%ld AND DptCod NOT IN"
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))"
+		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
 	       InsCod,(unsigned) Rol_TEACHER,
 	       InsCod,(unsigned) Rol_TEACHER,
@@ -309,14 +309,14 @@ void Dpt_GetListDepartments (long InsCod)
 		     " FROM departments,usr_data,crs_usr"
 		     " WHERE departments.DptCod=usr_data.DptCod"
 		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role='%u'"
+		     " AND crs_usr.Role=%u"
 		     " GROUP BY departments.DptCod)"
 		     " UNION "
 		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM departments"
 		     " WHERE DptCod NOT IN"
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))"
+		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
 	       (unsigned) Rol_TEACHER,
 	       (unsigned) Rol_TEACHER,
@@ -405,17 +405,17 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
       sprintf (Query,"(SELECT departments.InsCod,departments.ShortName,departments.FullName,departments.WWW,"
                      "COUNT(DISTINCT usr_data.UsrCod) AS NumTchs"
                      " FROM departments,usr_data,crs_usr"
-                     " WHERE departments.DptCod='%ld'"
+                     " WHERE departments.DptCod=%ld"
                      " AND departments.DptCod=usr_data.DptCod"
                      " AND usr_data.UsrCod=crs_usr.UsrCod"
-                     " AND crs_usr.Role='%u'"
+                     " AND crs_usr.Role=%u"
                      " GROUP BY departments.DptCod)"
                      " UNION "
                      "(SELECT InsCod,ShortName,FullName,WWW,0"
                      " FROM departments"
-                     " WHERE DptCod='%ld' AND DptCod NOT IN"
+                     " WHERE DptCod=%ld AND DptCod NOT IN"
                      " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-                     " WHERE crs_usr.Role='%u' AND crs_usr.UsrCod=usr_data.UsrCod))",
+                     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
                Dpt->DptCod,(unsigned) Rol_TEACHER,
                Dpt->DptCod,(unsigned) Rol_TEACHER);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a department");
@@ -474,7 +474,7 @@ unsigned Dpt_GetNumDepartmentsInInstitution (long InsCod)
    char Query[128];
 
    /***** Get number of departments in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod=%ld",
 	    InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of departments in an institution");
   }
@@ -643,7 +643,7 @@ void Dpt_RemoveDepartment (void)
    else	// Department has no teachers ==> remove it
      {
       /***** Remove department *****/
-      sprintf (Query,"DELETE FROM departments WHERE DptCod='%ld'",
+      sprintf (Query,"DELETE FROM departments WHERE DptCod=%ld",
                Dpt.DptCod);
       DB_QueryDELETE (Query,"can not remove a department");
 
@@ -677,7 +677,7 @@ void Dpt_ChangeDepartIns (void)
    Dpt->InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /***** Update institution in table of departments *****/
-   sprintf (Query,"UPDATE departments SET InsCod='%ld' WHERE DptCod='%ld'",
+   sprintf (Query,"UPDATE departments SET InsCod=%ld WHERE DptCod=%ld",
             Dpt->InsCod,Dpt->DptCod);
    DB_QueryUPDATE (Query,"can not update the institution of a department");
 
@@ -805,7 +805,7 @@ static bool Dpt_CheckIfDepartmentNameExists (const char *FieldName,const char *N
 
    /***** Get number of departments with a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM departments"
-	          " WHERE %s='%s' AND DptCod<>'%ld'",
+	          " WHERE %s='%s' AND DptCod<>%ld",
             FieldName,Name,DptCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a department already existed") != 0);
   }
@@ -819,7 +819,7 @@ static void Dpt_UpdateDegNameDB (long DptCod,const char *FieldName,const char *N
    char Query[128 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Update department changing old name by new name *****/
-   sprintf (Query,"UPDATE departments SET %s='%s' WHERE DptCod='%ld'",
+   sprintf (Query,"UPDATE departments SET %s='%s' WHERE DptCod=%ld",
 	    FieldName,NewDptName,DptCod);
    DB_QueryUPDATE (Query,"can not update the name of a department");
   }
@@ -850,7 +850,7 @@ void Dpt_ChangeDptWWW (void)
    if (NewWWW[0])
      {
       /* Update the table changing old WWW by new WWW */
-      sprintf (Query,"UPDATE departments SET WWW='%s' WHERE DptCod='%ld'",
+      sprintf (Query,"UPDATE departments SET WWW='%s' WHERE DptCod=%ld",
                NewWWW,Dpt->DptCod);
       DB_QueryUPDATE (Query,"can not update the web of a department");
 
@@ -1092,7 +1092,7 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
    sprintf (Query,"INSERT INTO departments"
 	          " (InsCod,ShortName,FullName,WWW)"
                   " VALUES"
-                  " ('%ld','%s','%s','%s')",
+                  " (%ld,'%s','%s','%s')",
             Dpt->InsCod,Dpt->ShrtName,Dpt->FullName,Dpt->WWW);
    DB_QueryINSERT (Query,"can not create a new department");
 
@@ -1124,7 +1124,7 @@ unsigned Dpt_GetNumberOfDepartmentsInInstitution (long InsCod)
    char Query[128];
 
    /***** Get departments in an institution from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM departments WHERE InsCod=%ld",
             InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of departments in an institution");
   }

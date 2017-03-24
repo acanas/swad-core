@@ -320,8 +320,8 @@ static void Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (long ExaCod,u
    char Query[256];
 
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE exam_announcements SET NumNotif=NumNotif+'%u'"
-                  " WHERE ExaCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET NumNotif=NumNotif+%u"
+                  " WHERE ExaCod=%ld",
             NumUsrsToBeNotifiedByEMail,ExaCod);
    DB_QueryUPDATE (Query,"can not update the number of notifications of an exam announcement");
   }
@@ -394,8 +394,8 @@ void Exa_RemoveExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as deleted in the database *****/
-   sprintf (Query,"UPDATE exam_announcements SET Status='%u'"
-                  " WHERE ExaCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET Status=%u"
+                  " WHERE ExaCod=%ld AND CrsCod=%ld",
             (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT,
             ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not remove exam announcement");
@@ -437,8 +437,8 @@ void Exa_HideExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as hidden in the database *****/
-   sprintf (Query,"UPDATE exam_announcements SET Status='%u'"
-                  " WHERE ExaCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET Status=%u"
+                  " WHERE ExaCod=%ld AND CrsCod=%ld",
             (unsigned) Exa_HIDDEN_EXAM_ANNOUNCEMENT,
             ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not hide exam announcement");
@@ -471,8 +471,8 @@ void Exa_UnhideExamAnnouncement1 (void)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
    /***** Mark the exam announcement as visible in the database *****/
-   sprintf (Query,"UPDATE exam_announcements SET Status='%u'"
-                  " WHERE ExaCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"UPDATE exam_announcements SET Status=%u"
+                  " WHERE ExaCod=%ld AND CrsCod=%ld",
             (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT,
             ExaCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not unhide exam announcement");
@@ -556,10 +556,10 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 
    /***** Build subquery about status depending on my role *****/
    if (ICanEdit)
-      sprintf (SubQueryStatus,"Status<>'%u'",
+      sprintf (SubQueryStatus,"Status<>%u",
 	       (unsigned) Exa_DELETED_EXAM_ANNOUNCEMENT);
    else
-      sprintf (SubQueryStatus,"Status='%u'",
+      sprintf (SubQueryStatus,"Status=%u",
 	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
 
    /***** Show one highlighted exam announcement *****/
@@ -568,8 +568,8 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
       /***** Get one exam announcement from database *****/
       sprintf (Query,"SELECT ExaCod"
 		     " FROM exam_announcements"
-		     " WHERE ExaCod='%ld'"
-		     " AND CrsCod='%ld' AND %s",
+		     " WHERE ExaCod=%ld"
+		     " AND CrsCod=%ld AND %s",
 	       Gbl.ExamAnns.HighlightExaCod,
 	       Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
       NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
@@ -606,7 +606,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
 	     in current course for a date from database *****/
       sprintf (Query,"SELECT ExaCod"
 		     " FROM exam_announcements"
-		     " WHERE CrsCod='%ld' AND %s"
+		     " WHERE CrsCod=%ld AND %s"
 		     " AND DATE(ExamDate)='%s'"
 		     " ORDER BY ExamDate DESC",
 	       Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus,
@@ -642,7 +642,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
           in current course from database *****/
    sprintf (Query,"SELECT ExaCod"
 	          " FROM exam_announcements"
-                  " WHERE CrsCod='%ld' AND %s"
+                  " WHERE CrsCod=%ld AND %s"
                   " ORDER BY ExamDate DESC",
             Gbl.CurrentCrs.Crs.CrsCod,SubQueryStatus);
    NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course for listing");
@@ -747,7 +747,7 @@ static long Exa_AddExamAnnouncementToDB (void)
 	          "CallDate,ExamDate,Duration,"
 	          "Place,ExamMode,Structure,DocRequired,MatRequired,MatAllowed,OtherInfo)"
                   " VALUES "
-                  "('%ld','%u','0','%s','%u','%s',"
+                  "(%ld,%u,0,'%s',%u,'%s',"
                   "NOW(),'%04u-%02u-%02u %02u:%02u:00','%02u:%02u:00','%s',"
                   "'%s','%s','%s','%s','%s','%s')",
             Gbl.CurrentCrs.Crs.CrsCod,
@@ -790,12 +790,12 @@ static void Exa_ModifyExamAnnouncementInDB (void)
                         7 * Cns_MAX_BYTES_TEXT)) == NULL)
       Lay_ShowErrorAndExit ("Not enough memory to query database.");
    sprintf (Query,"UPDATE exam_announcements"
-                  " SET CrsFullName='%s',Year='%u',ExamSession='%s',"
+                  " SET CrsFullName='%s',Year=%u,ExamSession='%s',"
                   "ExamDate='%04u-%02u-%02u %02u:%02u:00',"
                   "Duration='%02u:%02u:00',"
                   "Place='%s',ExamMode='%s',Structure='%s',"
                   "DocRequired='%s',MatRequired='%s',MatAllowed='%s',OtherInfo='%s'"
-                  " WHERE ExaCod='%ld'",
+                  " WHERE ExaCod=%ld",
             Gbl.ExamAnns.ExaDat.CrsFullName,
             Gbl.ExamAnns.ExaDat.Year,
             Gbl.ExamAnns.ExaDat.Session,
@@ -837,7 +837,7 @@ void Exa_CreateListDatesOfExamAnnouncements (void)
              in current course from database *****/
       sprintf (Query,"SELECT DISTINCT(DATE(ExamDate))"
 	             " FROM exam_announcements"
-		     " WHERE CrsCod='%ld' AND Status='%u'",
+		     " WHERE CrsCod=%ld AND Status=%u",
 	       Gbl.CurrentCrs.Crs.CrsCod,
 	       (unsigned) Exa_VISIBLE_EXAM_ANNOUNCEMENT);
       NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get exam announcements in this course");
@@ -909,7 +909,7 @@ static void Exa_GetDataExamAnnouncementFromDB (void)
    sprintf (Query,"SELECT CrsCod,Status,CrsFullName,Year,ExamSession,"
 	          "CallDate,ExamDate,Duration,Place,ExamMode,"
 	          "Structure,DocRequired,MatRequired,MatAllowed,OtherInfo"
-                  " FROM exam_announcements WHERE ExaCod='%ld'",
+                  " FROM exam_announcements WHERE ExaCod=%ld",
            Gbl.ExamAnns.ExaDat.ExaCod);
    NumExaAnns = DB_QuerySELECT (Query,&mysql_res,"can not get data of an exam announcement");
 

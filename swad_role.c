@@ -200,7 +200,7 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
       /***** Get rol of a user in a course from database.
              The result of the query will have one row or none *****/
       sprintf (Query,"SELECT Role FROM crs_usr"
-                     " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                     " WHERE CrsCod=%ld AND UsrCod=%ld",
                CrsCod,UsrCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the role of a user in a course") == 1)        // User belongs to the course
         {
@@ -237,7 +237,7 @@ void Rol_GetRolesInAllCrssIfNotYetGot (struct UsrData *UsrDat)
    if (UsrDat->Roles < 0)	// Not yet filled
      {
       /***** Get distinct roles in all courses of the user from database *****/
-      sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod='%ld'",
+      sprintf (Query,"SELECT DISTINCT(Role) FROM crs_usr WHERE UsrCod=%ld",
 	       UsrDat->UsrCod);
       NumRoles = (unsigned) DB_QuerySELECT (Query,&mysql_res,
 					    "can not get the roles of a user"
@@ -440,7 +440,7 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
 
    /***** Get requested role from database *****/
    sprintf (Query,"SELECT Role FROM crs_usr_requests"
-                  " WHERE CrsCod='%ld' AND UsrCod='%ld'",
+                  " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get requested role"))
      {

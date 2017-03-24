@@ -166,7 +166,7 @@ static long Not_InsertNoticeInDB (const char *Content)
    sprintf (Query,"INSERT INTO notices"
 	          " (CrsCod,UsrCod,CreatTime,Content,Status)"
                   " VALUES"
-                  " ('%ld','%ld',NOW(),'%s','%u')",
+                  " (%ld,%ld,NOW(),'%s',%u)",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod,
             Content,(unsigned) Not_ACTIVE_NOTICE);
    return DB_QueryINSERTandReturnCode (Query,"can not create notice");
@@ -181,7 +181,7 @@ static void Not_UpdateNumUsrsNotifiedByEMailAboutNotice (long NotCod,unsigned Nu
    char Query[512];
 
    /***** Update number of users notified *****/
-   sprintf (Query,"UPDATE notices SET NumNotif='%u' WHERE NotCod='%ld'",
+   sprintf (Query,"UPDATE notices SET NumNotif=%u WHERE NotCod=%ld",
             NumUsrsToBeNotifiedByEMail,NotCod);
    DB_QueryUPDATE (Query,"can not update the number of notifications of a notice");
   }
@@ -228,8 +228,8 @@ void Not_HideActiveNotice (void)
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as hidden *****/
-   sprintf (Query,"UPDATE notices SET Status='%u'"
-                  " WHERE NotCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"UPDATE notices SET Status=%u"
+                  " WHERE NotCod=%ld AND CrsCod=%ld",
             (unsigned) Not_OBSOLETE_NOTICE,
             NotCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not hide notice");
@@ -251,8 +251,8 @@ void Not_RevealHiddenNotice (void)
    NotCod = Not_GetParamNotCod ();
 
    /***** Set notice as active *****/
-   sprintf (Query,"UPDATE notices SET Status='%u'"
-                  " WHERE NotCod='%ld' AND CrsCod='%ld'",
+   sprintf (Query,"UPDATE notices SET Status=%u"
+                  " WHERE NotCod=%ld AND CrsCod=%ld",
             (unsigned) Not_ACTIVE_NOTICE,
             NotCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryUPDATE (Query,"can not reveal notice");
@@ -306,13 +306,13 @@ void Not_RemoveNotice (void)
 	          " (NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif)"
                   " SELECT NotCod,CrsCod,UsrCod,CreatTime,Content,NumNotif"
                   " FROM notices"
-                  " WHERE NotCod='%ld' AND CrsCod='%ld'",
+                  " WHERE NotCod=%ld AND CrsCod=%ld",
             NotCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryINSERT (Query,"can not remove notice");
 
    /* Remove notice */
    sprintf (Query,"DELETE FROM notices"
-	          " WHERE NotCod='%ld' AND CrsCod='%ld'",
+	          " WHERE NotCod=%ld AND CrsCod=%ld",
             NotCod,Gbl.CurrentCrs.Crs.CrsCod);
    DB_QueryDELETE (Query,"can not remove notice");
 
@@ -369,7 +369,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 case Not_LIST_BRIEF_NOTICES:
 	    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			   " FROM notices"
-			   " WHERE CrsCod='%ld' AND Status='%u'"
+			   " WHERE CrsCod=%ld AND Status=%u"
 			   " ORDER BY CreatTime DESC",
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     (unsigned) Not_ACTIVE_NOTICE);
@@ -377,7 +377,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	 case Not_LIST_FULL_NOTICES:
 	    sprintf (Query,"SELECT NotCod,UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 			   " FROM notices"
-			   " WHERE CrsCod='%ld'"
+			   " WHERE CrsCod=%ld"
 			   " ORDER BY CreatTime DESC",
 		     Gbl.CurrentCrs.Crs.CrsCod);
 	    break;
@@ -546,7 +546,7 @@ static void Not_GetDataAndShowNotice (long NotCod)
    /***** Get notice data from database *****/
    sprintf (Query,"SELECT UNIX_TIMESTAMP(CreatTime) AS F,UsrCod,Content,Status"
 		  " FROM notices"
-		  " WHERE NotCod='%ld' AND CrsCod='%ld'",
+		  " WHERE NotCod=%ld AND CrsCod=%ld",
 	    NotCod,
 	    Gbl.CurrentCrs.Crs.CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get notice from database"))
@@ -761,7 +761,7 @@ void Not_GetSummaryAndContentNotice (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
    SummaryStr[0] = '\0';	// Return nothing on error
 
    /***** Get subject of message from database *****/
-   sprintf (Query,"SELECT Content FROM notices WHERE NotCod='%ld'",
+   sprintf (Query,"SELECT Content FROM notices WHERE NotCod=%ld",
             NotCod);
    if (!mysql_query (&Gbl.mysql,Query))
       if ((mysql_res = mysql_store_result (&Gbl.mysql)) != NULL)
@@ -817,56 +817,56 @@ unsigned Not_GetNumNotices (Sco_Scope_t Scope,Not_Status_t Status,unsigned *NumN
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices"
-                        " WHERE Status='%u'",
+                        " WHERE Status=%u",
                         Status);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM institutions,centres,degrees,courses,notices"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=notices.CrsCod"
-                        " AND notices.Status='%u'",
+                        " AND notices.Status=%u",
                   Gbl.CurrentCty.Cty.CtyCod,
                   Status);
          break;
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM centres,degrees,courses,notices"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=notices.CrsCod"
-                        " AND notices.Status='%u'",
+                        " AND notices.Status=%u",
                   Gbl.CurrentIns.Ins.InsCod,
                   Status);
          break;
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM degrees,courses,notices"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=notices.CrsCod"
-                        " AND notices.Status='%u'",
+                        " AND notices.Status=%u",
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   Status);
          break;
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(notices.NumNotif)"
                         " FROM courses,notices"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=notices.CrsCod"
-                        " AND notices.Status='%u'",
+                        " AND notices.Status=%u",
                   Gbl.CurrentDeg.Deg.DegCod,
                   Status);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices"
-                        " WHERE CrsCod='%ld'"
-                        " AND Status='%u'",
+                        " WHERE CrsCod=%ld"
+                        " AND Status=%u",
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Status);
          break;
@@ -919,7 +919,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM institutions,centres,degrees,courses,notices_deleted"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -929,7 +929,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM centres,degrees,courses,notices_deleted"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=notices_deleted.CrsCod",
@@ -938,7 +938,7 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM degrees,courses,notices_deleted"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=notices_deleted.CrsCod",
                   Gbl.CurrentCtr.Ctr.CtrCod);
@@ -946,14 +946,14 @@ unsigned Not_GetNumNoticesDeleted (Sco_Scope_t Scope,unsigned *NumNotif)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(*),SUM(notices_deleted.NumNotif)"
                         " FROM courses,notices_deleted"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=notices_deleted.CrsCod",
                   Gbl.CurrentDeg.Deg.DegCod);
          break;
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(*),SUM(NumNotif)"
                         " FROM notices_deleted"
-                        " WHERE CrsCod='%ld'",
+                        " WHERE CrsCod=%ld",
                   Gbl.CurrentCrs.Crs.CrsCod);
          break;
       default:

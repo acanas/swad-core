@@ -282,8 +282,8 @@ void Sta_LogAccess (const char *Comments)
 	          "(ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES "
-                  "('%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
-                  "'%u',NOW(),'%ld','%ld','%s')",
+                  "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
+                  "%u,NOW(),%ld,%ld,'%s')",
             Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
@@ -309,8 +309,8 @@ void Sta_LogAccess (const char *Comments)
 	          "(LogCod,ActCod,CtyCod,InsCod,CtrCod,DegCod,CrsCod,UsrCod,"
 	          "Role,ClickTime,TimeToGenerate,TimeToSend,IP)"
                   " VALUES "
-                  "('%ld','%ld','%ld','%ld','%ld','%ld','%ld','%ld',"
-                  "'%u',NOW(),'%ld','%ld','%s')",
+                  "(%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,"
+                  "%u,NOW(),%ld,%ld,'%s')",
             LogCod,Act_Actions[Gbl.Action.Act].ActCod,
             Gbl.CurrentCty.Cty.CtyCod,
             Gbl.CurrentIns.Ins.InsCod,
@@ -336,7 +336,7 @@ void Sta_LogAccess (const char *Comments)
       sprintf (Query,"INSERT INTO log_comments"
 	             " (LogCod,Comments)"
                      " VALUES"
-                     " ('%ld','",
+                     " (%ld,'",
 	       LogCod);
       Str_AddStrToQuery (Query,Comments,sizeof (Query));
       Str_Concat (Query,"')",
@@ -357,7 +357,7 @@ void Sta_LogAccess (const char *Comments)
       sprintf (Query,"INSERT INTO log_search"
 	             " (LogCod,SearchStr)"
                      " VALUES"
-                     " ('%ld','",
+                     " (%ld,'",
 	       LogCod);
       Str_AddStrToQuery (Query,Gbl.Search.Str,sizeof (Query));
       Str_Concat (Query,"')",
@@ -378,7 +378,7 @@ void Sta_LogAccess (const char *Comments)
       sprintf (Query,"INSERT INTO log_ws"
 	             " (LogCod,PlgCod,FunCod)"
                      " VALUES"
-                     " ('%ld','%ld','%u')",
+                     " (%ld,%ld,%u)",
 	       LogCod,Gbl.WebService.PlgCod,(unsigned) Gbl.WebService.Function);
 
       if (mysql_query (&Gbl.mysql,Query))
@@ -390,7 +390,7 @@ void Sta_LogAccess (const char *Comments)
       sprintf (Query,"INSERT INTO log_banners"
 	             " (LogCod,BanCod)"
                      " VALUES"
-                     " ('%ld','%ld')",
+                     " (%ld,%ld)",
 	       LogCod,Gbl.Banners.BanCodClicked);
       DB_QueryINSERT (Query,"can not log banner clicked");
      }
@@ -1145,7 +1145,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 break;
      }
    sprintf (QueryAux," WHERE %s.ClickTime"
-	             " BETWEEN FROM_UNIXTIME('%ld') AND FROM_UNIXTIME('%ld')",
+	             " BETWEEN FROM_UNIXTIME(%ld) AND FROM_UNIXTIME(%ld)",
             LogTable,
             (long) Gbl.DateRange.TimeUTC[0],
             (long) Gbl.DateRange.TimeUTC[1]);
@@ -1164,7 +1164,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    case Sco_SCOPE_CTY:
                if (Gbl.CurrentCty.Cty.CtyCod > 0)
 		 {
-		  sprintf (QueryAux," AND %s.CtyCod='%ld'",
+		  sprintf (QueryAux," AND %s.CtyCod=%ld",
 			   LogTable,Gbl.CurrentCty.Cty.CtyCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1173,7 +1173,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    case Sco_SCOPE_INS:
 	       if (Gbl.CurrentIns.Ins.InsCod > 0)
 		 {
-		  sprintf (QueryAux," AND %s.InsCod='%ld'",
+		  sprintf (QueryAux," AND %s.InsCod=%ld",
 			   LogTable,Gbl.CurrentIns.Ins.InsCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1182,7 +1182,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    case Sco_SCOPE_CTR:
                if (Gbl.CurrentCtr.Ctr.CtrCod > 0)
 		 {
-		  sprintf (QueryAux," AND %s.CtrCod='%ld'",
+		  sprintf (QueryAux," AND %s.CtrCod=%ld",
 			   LogTable,Gbl.CurrentCtr.Ctr.CtrCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1191,7 +1191,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    case Sco_SCOPE_DEG:
 	       if (Gbl.CurrentDeg.Deg.DegCod > 0)
 		 {
-		  sprintf (QueryAux," AND %s.DegCod='%ld'",
+		  sprintf (QueryAux," AND %s.DegCod=%ld",
 			   LogTable,Gbl.CurrentDeg.Deg.DegCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1200,7 +1200,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	    case Sco_SCOPE_CRS:
 	       if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 		 {
-		  sprintf (QueryAux," AND %s.CrsCod='%ld'",
+		  sprintf (QueryAux," AND %s.CrsCod=%ld",
 			   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
 		  Str_Concat (Query,QueryAux,
 		              Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1212,7 +1212,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 switch (Gbl.Stat.Role)
 	   {
 	    case Sta_IDENTIFIED_USRS:
-               sprintf (StrRole," AND %s.Role<>'%u'",
+               sprintf (StrRole," AND %s.Role<>%u",
                         LogTable,(unsigned) Rol_UNKNOWN);
 	       break;
 	    case Sta_ALL_USRS:
@@ -1225,45 +1225,45 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	             break;
                   case Sta_DISTINCT_USRS:
                   case Sta_CLICKS_PER_USR:
-                     sprintf (StrRole," AND %s.Role<>'%u'",
+                     sprintf (StrRole," AND %s.Role<>%u",
                               LogTable,(unsigned) Rol_UNKNOWN);
                      break;
                     }
 	       break;
 	    case Sta_INS_ADMINS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_INS_ADM);
 	       break;
 	    case Sta_CTR_ADMINS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_CTR_ADM);
 	       break;
 	    case Sta_DEG_ADMINS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_DEG_ADM);
 	       break;
 	    case Sta_TEACHERS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_TEACHER);
 	       break;
 	    case Sta_STUDENTS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_STUDENT);
 	       break;
 	    case Sta_VISITORS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_VISITOR);
                break;
 	    case Sta_GUESTS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol__GUEST_);
                break;
 	    case Sta_UNKNOWN_USRS:
-               sprintf (StrRole," AND %s.Role='%u'",
+               sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_UNKNOWN);
                break;
 	    case Sta_ME:
-               sprintf (StrRole," AND %s.UsrCod='%ld'",
+               sprintf (StrRole," AND %s.UsrCod=%ld",
                         LogTable,Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	   }
@@ -1290,7 +1290,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
            }
 	 break;
       case Sta_SHOW_COURSE_ACCESSES:
-         sprintf (QueryAux," AND %s.CrsCod='%ld'",
+         sprintf (QueryAux," AND %s.CrsCod=%ld",
                   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
 	 Str_Concat (Query,QueryAux,
 	             Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1308,8 +1308,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	       if (LengthQuery > Sta_MAX_BYTES_QUERY_ACCESS - 128)
                   Lay_ShowErrorAndExit ("Query is too large.");
                sprintf (QueryAux,
-                        NumUsr ? " OR %s.UsrCod='%ld'" :
-                                 " AND (%s.UsrCod='%ld'",
+                        NumUsr ? " OR %s.UsrCod=%ld" :
+                                 " AND (%s.UsrCod=%ld",
                         LogTable,UsrDat.UsrCod);
 	       Str_Concat (Query,QueryAux,
 	                   Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1324,7 +1324,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /* Select action */
    if (Gbl.Stat.NumAction != ActAll)
      {
-      sprintf (QueryAux," AND %s.ActCod='%ld'",
+      sprintf (QueryAux," AND %s.ActCod=%ld",
                LogTable,Act_Actions[Gbl.Stat.NumAction].ActCod);
       Str_Concat (Query,QueryAux,
                   Sta_MAX_BYTES_QUERY_ACCESS);
@@ -1814,7 +1814,7 @@ static void Sta_WriteLogComments (long LogCod)
    MYSQL_ROW row;
 
    /***** Get log comments from database *****/
-   sprintf (Query,"SELECT Comments FROM log_comments WHERE LogCod='%ld'",
+   sprintf (Query,"SELECT Comments FROM log_comments WHERE LogCod=%ld",
             LogCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get log comments"))
      {
@@ -4240,7 +4240,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
       case Sco_SCOPE_CTY:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
-         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
@@ -4251,7 +4251,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
       case Sco_SCOPE_INS:
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
-         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
@@ -4263,7 +4263,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysTotal = 1;
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
-         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
@@ -4275,7 +4275,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithInss = 1;
 	 NumCtysWithCtrs = 1;
 	 NumCtysWithDegs = 1;
-         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
@@ -4287,7 +4287,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCtrs = 1;
 	 NumCtysWithDegs = 1;
 	 NumCtysWithCrss = 1;
-         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
@@ -4369,7 +4369,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          break;
       case Sco_SCOPE_CTY:
 	 NumInssTotal = Ins_GetNumInssInCty (Gbl.CurrentCty.Cty.CtyCod);
-         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
@@ -4379,7 +4379,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          break;
       case Sco_SCOPE_INS:
 	 NumInssTotal = 1;
-         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
@@ -4390,7 +4390,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
       case Sco_SCOPE_CTR:
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
-         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
@@ -4401,7 +4401,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssTotal = 1;
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
-         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
@@ -4412,7 +4412,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCtrs = 1;
 	 NumInssWithDegs = 1;
 	 NumInssWithCrss = 1;
-         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
@@ -4489,7 +4489,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          break;
       case Sco_SCOPE_CTY:
 	 NumCtrsTotal = Ctr_GetNumCtrsInCty (Gbl.CurrentCty.Cty.CtyCod);
-         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
@@ -4498,7 +4498,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          break;
       case Sco_SCOPE_INS:
 	 NumCtrsTotal = Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
@@ -4507,7 +4507,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          break;
       case Sco_SCOPE_CTR:
 	 NumCtrsTotal = 1;
-         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
@@ -4517,7 +4517,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
       case Sco_SCOPE_DEG:
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
-         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
@@ -4527,7 +4527,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsTotal = 1;
 	 NumCtrsWithDegs = 1;
 	 NumCtrsWithCrss = 1;
-         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
@@ -4599,7 +4599,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          break;
       case Sco_SCOPE_CTY:
 	 NumDegsTotal = Deg_GetNumDegsInCty (Gbl.CurrentCty.Cty.CtyCod);
-         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
@@ -4607,7 +4607,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          break;
       case Sco_SCOPE_INS:
 	 NumDegsTotal = Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
@@ -4615,7 +4615,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          break;
       case Sco_SCOPE_CTR:
 	 NumDegsTotal = Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
-         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
@@ -4623,7 +4623,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 	 break;
       case Sco_SCOPE_DEG:
 	 NumDegsTotal = 1;
-         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
@@ -4632,7 +4632,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
      case Sco_SCOPE_CRS:
 	 NumDegsTotal = 1;
 	 NumDegsWithCrss = 1;
-         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
@@ -4699,35 +4699,35 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          break;
       case Sco_SCOPE_CTY:
 	 NumCrssTotal = Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod);
-         sprintf (SubQuery,"institutions.CtyCod='%ld' AND ",
+         sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumCrssTotal = Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod);
-         sprintf (SubQuery,"centres.InsCod='%ld' AND ",
+         sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumCrssTotal = Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
-         sprintf (SubQuery,"degrees.CtrCod='%ld' AND ",
+         sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumCrssTotal = Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod);
-         sprintf (SubQuery,"courses.DegCod='%ld' AND ",
+         sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumCrssTotal = 1;
-         sprintf (SubQuery,"crs_usr.CrsCod='%ld' AND ",
+         sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
@@ -4829,7 +4829,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
       case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
         	           " FROM institutions,centres"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
 			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
@@ -4841,7 +4841,7 @@ static void Sta_GetAndShowInssOrderedByNumCtrs (void)
       case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			   " FROM centres"
-                           " WHERE InsCod='%ld'"
+                           " WHERE InsCod=%ld"
 			   " GROUP BY InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
@@ -4882,7 +4882,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
       case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
         	           " FROM institutions,centres,degrees"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 			   " GROUP BY centres.InsCod"
@@ -4895,7 +4895,7 @@ static void Sta_GetAndShowInssOrderedByNumDegs (void)
       case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
 			   " FROM centres,degrees"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 			   " GROUP BY centres.InsCod"
 			   " ORDER BY N DESC",
@@ -4938,7 +4938,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
       case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
         	           " FROM institutions,centres,degrees,courses"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
@@ -4952,7 +4952,7 @@ static void Sta_GetAndShowInssOrderedByNumCrss (void)
       case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT centres.InsCod,COUNT(*) AS N"
 			   " FROM centres,degrees,courses"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
 			   " GROUP BY centres.InsCod"
@@ -4997,7 +4997,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
@@ -5012,7 +5012,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsInCrss (void)
       case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT centres.InsCod,COUNT(DISTINCT crs_usr.UsrCod) AS N"
 			   " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
 	                   " AND centres.CtrCod=degrees.CtrCod"
 	                   " AND degrees.DegCod=courses.DegCod"
 	                   " AND courses.CrsCod=crs_usr.CrsCod"
@@ -5050,14 +5050,14 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
       case Sco_SCOPE_SYS:
 	 sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			" FROM usr_data"
-                        " WHERE InsCod>'0'"
+                        " WHERE InsCod>0"
 			" GROUP BY InsCod"
 			" ORDER BY N DESC");
          break;
       case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT usr_data.InsCod,COUNT(*) AS N"
         	           " FROM institutions,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=usr_data.InsCod"
 			   " GROUP BY usr_data.InsCod"
 			   " ORDER BY N DESC",
@@ -5069,7 +5069,7 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void)
       case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT InsCod,COUNT(*) AS N"
 			   " FROM usr_data"
-                           " WHERE InsCod='%ld'"
+                           " WHERE InsCod=%ld"
 			   " GROUP BY InsCod"
 			   " ORDER BY N DESC",
                      Gbl.CurrentIns.Ins.InsCod);
@@ -5263,14 +5263,14 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
         	           " FROM crs_usr");
          else
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-        	           " FROM crs_usr WHERE Role='%u'",
+        	           " FROM crs_usr WHERE Role=%u",
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
          if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -5279,19 +5279,19 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
          else
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'",
+                           " AND crs_usr.Role=%u",
                      Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
          break;
       case Sco_SCOPE_INS:
          if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod",
@@ -5299,54 +5299,54 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
          else
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'",
+                           " AND crs_usr.Role=%u",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
          if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod",
                      Gbl.CurrentCtr.Ctr.CtrCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'",
+                           " AND crs_usr.Role=%u",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
          if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM courses,crs_usr"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod",
                      Gbl.CurrentDeg.Deg.DegCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	            " FROM courses,crs_usr"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'",
+                           " AND crs_usr.Role=%u",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
          if (Role == Rol_UNKNOWN)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod='%ld'",
+                           " WHERE CrsCod=%ld",
                      Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod='%ld'"
-                           " AND crs_usr.Role='%u'",
+                           " WHERE CrsCod=%ld"
+                           " AND crs_usr.Role=%u",
                      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
          break;
       default:
@@ -5652,7 +5652,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -5660,13 +5660,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"
+	                      "-1 AS GrpCod,"
 			      "NumLevels,"
 			      "NumFolders,"
 			      "NumFiles,"
 			      "TotalSize"
 			      " FROM file_browser_size"
-			      " WHERE FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " WHERE FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"
@@ -5677,7 +5677,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM crs_grp_types,crs_grp,file_browser_size"
 			      " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			(unsigned) Brw_ADMI_DOCUM_CRS,
 			(unsigned) Brw_ADMI_TEACH_CRS,
@@ -5695,14 +5695,14 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
-		              "'-1',"
-		              "'-1',"
+		              "-1,"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
-			      " WHERE FileBrowser='%u'",
+			      " WHERE FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -5711,7 +5711,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
@@ -5719,32 +5719,32 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM crs_grp_types,crs_grp,file_browser_size"
 			      " WHERE crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser='%u'",
+	                      " AND file_browser_size.FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT Cod),"
-		              "'-1',"
+		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
-			      " WHERE FileBrowser='%u'",
+			      " WHERE FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
-			      " WHERE FileBrowser='%u'",
+			      " WHERE FileBrowser=%u",
 			(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -5759,7 +5759,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -5767,18 +5767,18 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"				// Course zones
+	                      "-1 AS GrpCod,"				// Course zones
 			      "file_browser_size.NumLevels,"
 			      "file_browser_size.NumFolders,"
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 			      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
@@ -5787,14 +5787,14 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 	                      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCty.Cty.CtyCod,
 			(unsigned) Brw_ADMI_DOCUM_CRS,
@@ -5814,19 +5814,19 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
-		              "'-1',"
+		              "-1,"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 	                      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " and file_browser_size.FileBrowser='%u'",
+			      " and file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -5835,56 +5835,56 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM institutions,centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 	                      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM institutions,centres,degrees,courses,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 	                      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser='%u'",
+	                      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM institutions,centres,degrees,courses,crs_usr,file_browser_size"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 	                      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -5899,7 +5899,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -5907,17 +5907,17 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"				// Course zones
+	                      "-1 AS GrpCod,"				// Course zones
 			      "file_browser_size.NumLevels,"
 			      "file_browser_size.NumFolders,"
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
@@ -5926,13 +5926,13 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentIns.Ins.InsCod,
 			(unsigned) Brw_ADMI_DOCUM_CRS,
@@ -5952,18 +5952,18 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
-		              "'-1',"
+		              "-1,"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " and file_browser_size.FileBrowser='%u'",
+			      " and file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -5972,53 +5972,53 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM centres,degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM centres,degrees,courses,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-	                      " AND file_browser_size.FileBrowser='%u'",
+	                      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM centres,degrees,courses,crs_usr,file_browser_size"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -6033,7 +6033,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -6041,16 +6041,16 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"				// Course zones
+	                      "-1 AS GrpCod,"				// Course zones
 			      "file_browser_size.NumLevels,"
 			      "file_browser_size.NumFolders,"
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
@@ -6059,12 +6059,12 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCtr.Ctr.CtrCod,
 			(unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6084,17 +6084,17 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
-		              "'-1',"
+		              "-1,"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -6103,50 +6103,50 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM degrees,courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
                break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM degrees,courses,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM degrees,courses,crs_usr,file_browser_size"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -6161,7 +6161,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -6169,15 +6169,15 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT file_browser_size.Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"				// Course zones
+	                      "-1 AS GrpCod,"				// Course zones
 			      "file_browser_size.NumLevels,"
 			      "file_browser_size.NumFolders,"
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
@@ -6186,11 +6186,11 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentDeg.Deg.DegCod,
 			(unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6210,16 +6210,16 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
-		              "'-1',"
+		              "-1,"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -6228,47 +6228,47 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM courses,crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_grp_types.CrsCod"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM courses,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM courses,crs_usr,file_browser_size"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -6283,7 +6283,7 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_UNKNOWN:
 	       sprintf (Query,"SELECT COUNT(DISTINCT CrsCod),"
 		              "COUNT(DISTINCT GrpCod)-1,"
-		              "'-1',"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
@@ -6291,14 +6291,14 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      " FROM "
 	                      "("
 	                      "SELECT Cod AS CrsCod,"
-	                      "'-1' AS GrpCod,"				// Course zones
+	                      "-1 AS GrpCod,"				// Course zones
 			      "NumLevels,"
 			      "NumFolders,"
 			      "NumFiles,"
 			      "TotalSize"
 			      " FROM file_browser_size"
-			      " WHERE Cod='%ld'"
-			      " AND FileBrowser IN ('%u','%u','%u','%u','%u','%u')"
+			      " WHERE Cod=%ld"
+			      " AND FileBrowser IN (%u,%u,%u,%u,%u,%u)"
 	                      " UNION "
 	                      "SELECT crs_grp_types.CrsCod,"
 	                      "file_browser_size.Cod AS GrpCod,"	// Group zones
@@ -6307,10 +6307,10 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 			      "file_browser_size.NumFiles,"
 			      "file_browser_size.TotalSize"
 			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.CrsCod='%ld'"
+			      " WHERE crs_grp_types.CrsCod=%ld"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser IN ('%u','%u','%u','%u')"
+			      " AND file_browser_size.FileBrowser IN (%u,%u,%u,%u)"
 			      ") AS sizes",
 			Gbl.CurrentCrs.Crs.CrsCod,
 			(unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6329,15 +6329,15 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_TEACH_CRS:
 	    case Brw_ADMI_SHARE_CRS:
 	    case Brw_ADMI_MARKS_CRS:
-	       sprintf (Query,"SELECT '1',"
-		              "'-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT 1,"
+		              "-1,"
+		              "-1,"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
-			      " WHERE Cod='%ld' AND FileBrowser='%u'",
+			      " WHERE Cod=%ld AND FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_DOCUM_GRP:
@@ -6346,43 +6346,43 @@ static void Sta_GetSizeOfFileZoneFromDB (Sco_Scope_t Scope,
 	    case Brw_ADMI_MARKS_GRP:
 	       sprintf (Query,"SELECT COUNT(DISTINCT crs_grp_types.CrsCod),"
 		              "COUNT(DISTINCT file_browser_size.Cod),"
-		              "'-1',"
+		              "-1,"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM crs_grp_types,crs_grp,file_browser_size"
-			      " WHERE crs_grp_types.CrsCod='%ld'"
+			      " WHERE crs_grp_types.CrsCod=%ld"
 			      " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
 			      " AND crs_grp.GrpCod=file_browser_size.Cod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_ASSIG_USR:
 	    case Brw_ADMI_WORKS_USR:
-	       sprintf (Query,"SELECT '1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT 1,"
+		              "-1,"
 		              "COUNT(DISTINCT ZoneUsrCod),"
 			      "MAX(NumLevels),"
 			      "SUM(NumFolders),"
 			      "SUM(NumFiles),"
 			      "SUM(TotalSize)"
 			      " FROM file_browser_size"
-			      " WHERE Cod='%ld' AND FileBrowser='%u'",
+			      " WHERE Cod=%ld AND FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    case Brw_ADMI_BRIEF_USR:
-	       sprintf (Query,"SELECT '-1',"
-		              "'-1',"
+	       sprintf (Query,"SELECT -1,"
+		              "-1,"
 		              "COUNT(DISTINCT file_browser_size.ZoneUsrCod),"
 			      "MAX(file_browser_size.NumLevels),"
 			      "SUM(file_browser_size.NumFolders),"
 			      "SUM(file_browser_size.NumFiles),"
 			      "SUM(file_browser_size.TotalSize)"
 			      " FROM crs_usr,file_browser_size"
-			      " WHERE crs_usr.CrsCod='%ld'"
+			      " WHERE crs_usr.CrsCod=%ld"
 			      " AND crs_usr.UsrCod=file_browser_size.ZoneUsrCod"
-			      " AND file_browser_size.FileBrowser='%u'",
+			      " AND file_browser_size.FileBrowser=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FileBrowser);
 	       break;
 	    default:
@@ -6523,20 +6523,20 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_SYS:
          sprintf (Query,"SELECT Public,COUNT(*)"
                         " FROM files"
-                        " WHERE License='%u'"
+                        " WHERE License=%u"
                         " GROUP BY Public",
                   (unsigned) License);
          break;
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM institutions,centres,degrees,courses,files"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN ('%u','%u')"
-                        " AND files.License='%u'"
+	                " AND files.FileBrowser IN (%u,%u)"
+                        " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentCty.Cty.CtyCod,
                   (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6546,12 +6546,12 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM centres,degrees,courses,files"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN ('%u','%u')"
-                        " AND files.License='%u'"
+	                " AND files.FileBrowser IN (%u,%u)"
+                        " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentIns.Ins.InsCod,
                   (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6561,11 +6561,11 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM degrees,courses,files"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN ('%u','%u')"
-                        " AND files.License='%u'"
+	                " AND files.FileBrowser IN (%u,%u)"
+                        " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentCtr.Ctr.CtrCod,
                   (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6575,10 +6575,10 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT files.Public,COUNT(*)"
                         " FROM courses,files"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=files.Cod"
-	                " AND files.FileBrowser IN ('%u','%u')"
-                        " AND files.License='%u'"
+	                " AND files.FileBrowser IN (%u,%u)"
+                        " AND files.License=%u"
                         " GROUP BY files.Public",
                   Gbl.CurrentDeg.Deg.DegCod,
                   (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6588,9 +6588,9 @@ static void Sta_GetNumberOfOERsFromDB (Sco_Scope_t Scope,Brw_License_t License,u
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT Public,COUNT(*)"
                         " FROM files"
-                        " WHERE Cod='%ld'"
-	                " AND FileBrowser IN ('%u','%u')"
-                        " AND License='%u'"
+                        " WHERE Cod=%ld"
+	                " AND FileBrowser IN (%u,%u)"
+                        " AND License=%u"
                         " GROUP BY Public",
                   Gbl.CurrentCrs.Crs.CrsCod,
                   (unsigned) Brw_ADMI_DOCUM_CRS,
@@ -6930,61 +6930,61 @@ static void Sta_GetAndShowSocialActivityStats (void)
 	{
 	 case Sco_SCOPE_SYS:
 	    sprintf (Query,"SELECT COUNT(*),COUNT(DISTINCT UsrCod)"
-		           " FROM social_notes WHERE NoteType='%u'",
+		           " FROM social_notes WHERE NoteType=%u",
 	             NoteType);
 	    break;
 	 case Sco_SCOPE_CTY:
 	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM institutions,centres,degrees,courses,crs_usr,social_notes"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType='%u'",
+			   " AND social_notes.NoteType=%u",
 		     Gbl.CurrentCty.Cty.CtyCod,
 		     (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_INS:
 	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM centres,degrees,courses,crs_usr,social_notes"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType='%u'",
+			   " AND social_notes.NoteType=%u",
 		     Gbl.CurrentIns.Ins.InsCod,
 		     (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CTR:
 	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM degrees,courses,crs_usr,social_notes"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType='%u'",
+			   " AND social_notes.NoteType=%u",
 		     Gbl.CurrentCtr.Ctr.CtrCod,
 		     (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_DEG:
 	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM courses,crs_usr,social_notes"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType='%u'",
+			   " AND social_notes.NoteType=%u",
 		     Gbl.CurrentDeg.Deg.DegCod,
 		     (unsigned) NoteType);
 	    break;
 	 case Sco_SCOPE_CRS:
 	    sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			   " FROM crs_usr,social_notes"
-			   " WHERE crs_usr.CrsCod='%ld'"
+			   " WHERE crs_usr.CrsCod=%ld"
 			   " AND crs_usr.UsrCod=social_notes.UsrCod"
-			   " AND social_notes.NoteType='%u'",
+			   " AND social_notes.NoteType=%u",
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     (unsigned) NoteType);
 	    break;
@@ -7050,7 +7050,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
       case Sco_SCOPE_CTY:
 	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM institutions,centres,degrees,courses,crs_usr,social_notes"
-			" WHERE institutions.CtyCod='%ld'"
+			" WHERE institutions.CtyCod=%ld"
 			" AND institutions.InsCod=centres.InsCod"
 			" AND centres.CtrCod=degrees.CtrCod"
 			" AND degrees.DegCod=courses.DegCod"
@@ -7061,7 +7061,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
       case Sco_SCOPE_INS:
 	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM centres,degrees,courses,crs_usr,social_notes"
-			" WHERE centres.InsCod='%ld'"
+			" WHERE centres.InsCod=%ld"
 			" AND centres.CtrCod=degrees.CtrCod"
 			" AND degrees.DegCod=courses.DegCod"
 			" AND courses.CrsCod=crs_usr.CrsCod"
@@ -7071,7 +7071,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
       case Sco_SCOPE_CTR:
 	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM degrees,courses,crs_usr,social_notes"
-			" WHERE degrees.CtrCod='%ld'"
+			" WHERE degrees.CtrCod=%ld"
 			" AND degrees.DegCod=courses.DegCod"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
@@ -7080,7 +7080,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
       case Sco_SCOPE_DEG:
 	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM courses,crs_usr,social_notes"
-			" WHERE courses.DegCod='%ld'"
+			" WHERE courses.DegCod=%ld"
 			" AND courses.CrsCod=crs_usr.CrsCod"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
 		  Gbl.CurrentDeg.Deg.DegCod);
@@ -7088,7 +7088,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
       case Sco_SCOPE_CRS:
 	 sprintf (Query,"SELECT COUNT(DISTINCT social_notes.NotCod),COUNT(DISTINCT social_notes.UsrCod)"
 			" FROM crs_usr,social_notes"
-			" WHERE crs_usr.CrsCod='%ld'"
+			" WHERE crs_usr.CrsCod=%ld"
 			" AND crs_usr.UsrCod=social_notes.UsrCod",
 		  Gbl.CurrentCrs.Crs.CrsCod);
 	 break;
@@ -7212,7 +7212,7 @@ static void Sta_GetAndShowFollowStats (void)
 	 case Sco_SCOPE_CTY:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
@@ -7225,7 +7225,7 @@ static void Sta_GetAndShowFollowStats (void)
 	 case Sco_SCOPE_INS:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
@@ -7237,7 +7237,7 @@ static void Sta_GetAndShowFollowStats (void)
 	 case Sco_SCOPE_CTR:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM degrees,courses,crs_usr,usr_follow"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=usr_follow.%s",
@@ -7248,7 +7248,7 @@ static void Sta_GetAndShowFollowStats (void)
 	 case Sco_SCOPE_DEG:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM courses,crs_usr,usr_follow"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=usr_follow.%s",
 	             FieldDB[Fol],
@@ -7258,7 +7258,7 @@ static void Sta_GetAndShowFollowStats (void)
 	 case Sco_SCOPE_CRS:
 	    sprintf (Query,"SELECT COUNT(DISTINCT usr_follow.%s)"
 			   " FROM crs_usr,usr_follow"
-			   " WHERE crs_usr.CrsCod='%ld'"
+			   " WHERE crs_usr.CrsCod=%ld"
 			   " AND crs_usr.UsrCod=usr_follow.%s",
 	             FieldDB[Fol],
 		     Gbl.CurrentCrs.Crs.CrsCod,
@@ -7309,7 +7309,7 @@ static void Sta_GetAndShowFollowStats (void)
 	    sprintf (Query,"SELECT AVG(N) FROM "
 			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 			   " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE institutions.CtyCod='%ld'"
+			   " WHERE institutions.CtyCod=%ld"
 			   " AND institutions.InsCod=centres.InsCod"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
@@ -7325,7 +7325,7 @@ static void Sta_GetAndShowFollowStats (void)
 	    sprintf (Query,"SELECT AVG(N) FROM "
 			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 			   " FROM centres,degrees,courses,crs_usr,usr_follow"
-			   " WHERE centres.InsCod='%ld'"
+			   " WHERE centres.InsCod=%ld"
 			   " AND centres.CtrCod=degrees.CtrCod"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
@@ -7340,7 +7340,7 @@ static void Sta_GetAndShowFollowStats (void)
 	    sprintf (Query,"SELECT AVG(N) FROM "
 			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 			   " FROM degrees,courses,crs_usr,usr_follow"
-			   " WHERE degrees.CtrCod='%ld'"
+			   " WHERE degrees.CtrCod=%ld"
 			   " AND degrees.DegCod=courses.DegCod"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=usr_follow.%s"
@@ -7354,7 +7354,7 @@ static void Sta_GetAndShowFollowStats (void)
 	    sprintf (Query,"SELECT AVG(N) FROM "
 			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 			   " FROM courses,crs_usr,usr_follow"
-			   " WHERE courses.DegCod='%ld'"
+			   " WHERE courses.DegCod=%ld"
 			   " AND courses.CrsCod=crs_usr.CrsCod"
 			   " AND crs_usr.UsrCod=usr_follow.%s"
 			   " GROUP BY %s) AS F",
@@ -7367,7 +7367,7 @@ static void Sta_GetAndShowFollowStats (void)
 	    sprintf (Query,"SELECT AVG(N) FROM "
 			   "(SELECT COUNT(DISTINCT usr_follow.%s) AS N"
 			   " FROM crs_usr,usr_follow"
-			   " WHERE crs_usr.CrsCod='%ld'"
+			   " WHERE crs_usr.CrsCod=%ld"
 			   " AND crs_usr.UsrCod=usr_follow.%s"
 			   " GROUP BY %s) AS F",
 		     FieldDB[Fol],
@@ -7830,7 +7830,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -7842,7 +7842,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM centres,degrees,courses,crs_usr,usr_data"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -7853,7 +7853,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM degrees,courses,crs_usr,usr_data"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -7863,7 +7863,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM courses,crs_usr,usr_data"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_data.UsrCod"
                         " AND usr_data.EmailNtfEvents<>0",
@@ -7872,7 +7872,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                         " FROM crs_usr,usr_data"
-                        " WHERE crs_usr.CrsCod='%ld'"
+                        " WHERE crs_usr.CrsCod=%ld"
                         " AND crs_usr.UsrCod=usr_data.UsrCod"
                         " AND usr_data.EmailNtfEvents<>0",
                   Gbl.CurrentCrs.Crs.CrsCod);
@@ -7899,7 +7899,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -7911,7 +7911,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
@@ -7922,7 +7922,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -7932,7 +7932,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND ((usr_data.EmailNtfEvents & %u)<>0)",
@@ -7941,7 +7941,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND ((usr_data.EmailNtfEvents & %u)<>0)",
                      Gbl.CurrentCrs.Crs.CrsCod,(1 << NotifyEvent));
@@ -7958,48 +7958,48 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
          case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
-                           " WHERE NotifyEvent='%u'",
+                           " WHERE NotifyEvent=%u",
                      (unsigned) NotifyEvent);
             break;
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
                            " FROM institutions,centres,degrees,sta_notif"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
+                           " AND sta_notif.NotifyEvent=%u",
                      Gbl.CurrentCty.Cty.CtyCod,(unsigned) NotifyEvent);
             break;
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
                            " FROM centres,degrees,sta_notif"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
+                           " AND sta_notif.NotifyEvent=%u",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT SUM(sta_notif.NumEvents),SUM(sta_notif.NumMails)"
                            " FROM degrees,sta_notif"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=sta_notif.DegCod"
-                           " AND sta_notif.NotifyEvent='%u'",
+                           " AND sta_notif.NotifyEvent=%u",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
-                           " WHERE DegCod='%ld'"
-                           " AND NotifyEvent='%u'",
+                           " WHERE DegCod=%ld"
+                           " AND NotifyEvent=%u",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) NotifyEvent);
             break;
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT SUM(NumEvents),SUM(NumMails)"
                            " FROM sta_notif"
-                           " WHERE CrsCod='%ld'"
-                           " AND NotifyEvent='%u'",
+                           " WHERE CrsCod=%ld"
+                           " AND NotifyEvent=%u",
                      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) NotifyEvent);
             break;
 	 default:
@@ -8446,7 +8446,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -8460,7 +8460,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
          case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
@@ -8473,7 +8473,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -8485,7 +8485,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.%s='%s'",
@@ -8496,7 +8496,7 @@ static void Sta_GetAndShowNumUsrsPerPrivacyForAnObject (const char *TxtObject,co
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.%s='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,
@@ -8588,7 +8588,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -8601,7 +8601,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
@@ -8613,7 +8613,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -8624,7 +8624,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.Language='%s'",
@@ -8634,7 +8634,7 @@ static void Sta_GetAndShowNumUsrsPerLanguage (void)
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.Language='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,
@@ -8728,7 +8728,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -8740,7 +8740,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
@@ -8751,7 +8751,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -8761,7 +8761,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.IconSet='%s'",
@@ -8770,7 +8770,7 @@ static void Sta_GetAndShowNumUsrsPerIconSet (void)
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.IconSet='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,Ico_IconSetId[IconSet]);
@@ -8865,57 +8865,57 @@ static void Sta_GetAndShowNumUsrsPerMenu (void)
         {
          case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-        	           " WHERE Menu='%u'",
+        	           " WHERE Menu=%u",
                      (unsigned) Menu);
             break;
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu='%u'",
+                           " AND usr_data.Menu=%u",
                      Gbl.CurrentCty.Cty.CtyCod,(unsigned) Menu);
             break;
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu='%u'",
+                           " AND usr_data.Menu=%u",
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Menu);
             break;
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu='%u'",
+                           " AND usr_data.Menu=%u",
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Menu);
             break;
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu='%u'",
+                           " AND usr_data.Menu=%u",
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Menu);
             break;
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.Menu='%u'",
+                           " AND usr_data.Menu=%u",
                      Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Menu);
             break;
 	 default:
@@ -9007,57 +9007,57 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 	   {
 	    case Sco_SCOPE_SYS:
 	       sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-			      " WHERE FirstDayOfWeek='%u'",
+			      " WHERE FirstDayOfWeek=%u",
 			(unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CTY:
 	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 			      " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-			      " WHERE institutions.CtyCod='%ld'"
+			      " WHERE institutions.CtyCod=%ld"
 			      " AND institutions.InsCod=centres.InsCod"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek='%u'",
+			      " AND usr_data.FirstDayOfWeek=%u",
 			Gbl.CurrentCty.Cty.CtyCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_INS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 			      " FROM centres,degrees,courses,crs_usr,usr_data"
-			      " WHERE centres.InsCod='%ld'"
+			      " WHERE centres.InsCod=%ld"
 			      " AND centres.CtrCod=degrees.CtrCod"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek='%u'",
+			      " AND usr_data.FirstDayOfWeek=%u",
 			Gbl.CurrentIns.Ins.InsCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CTR:
 	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 			      " FROM degrees,courses,crs_usr,usr_data"
-			      " WHERE degrees.CtrCod='%ld'"
+			      " WHERE degrees.CtrCod=%ld"
 			      " AND degrees.DegCod=courses.DegCod"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek='%u'",
+			      " AND usr_data.FirstDayOfWeek=%u",
 			Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_DEG:
 	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 			      " FROM courses,crs_usr,usr_data"
-			      " WHERE courses.DegCod='%ld'"
+			      " WHERE courses.DegCod=%ld"
 			      " AND courses.CrsCod=crs_usr.CrsCod"
 			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek='%u'",
+			      " AND usr_data.FirstDayOfWeek=%u",
 			Gbl.CurrentDeg.Deg.DegCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    case Sco_SCOPE_CRS:
 	       sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 			      " FROM crs_usr,usr_data"
-			      " WHERE crs_usr.CrsCod='%ld'"
+			      " WHERE crs_usr.CrsCod=%ld"
 			      " AND crs_usr.UsrCod=usr_data.UsrCod"
-			      " AND usr_data.FirstDayOfWeek='%u'",
+			      " AND usr_data.FirstDayOfWeek=%u",
 			Gbl.CurrentCrs.Crs.CrsCod,(unsigned) FirstDayOfWeek);
 	       break;
 	    default:
@@ -9154,7 +9154,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -9166,7 +9166,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
@@ -9177,7 +9177,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
@@ -9187,7 +9187,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.Theme='%s'",
@@ -9196,7 +9196,7 @@ static void Sta_GetAndShowNumUsrsPerTheme (void)
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
                            " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
                            " AND usr_data.Theme='%s'",
                      Gbl.CurrentCrs.Crs.CrsCod,The_ThemeId[Theme]);
@@ -9287,57 +9287,57 @@ static void Sta_GetAndShowNumUsrsPerSideColumns (void)
         {
          case Sco_SCOPE_SYS:
             sprintf (Query,"SELECT COUNT(*) FROM usr_data"
-        	           " WHERE SideCols='%u'",
+        	           " WHERE SideCols=%u",
                      SideCols);
             break;
 	 case Sco_SCOPE_CTY:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
+                           " AND usr_data.SideCols=%u",
                      Gbl.CurrentCty.Cty.CtyCod,SideCols);
             break;
 	 case Sco_SCOPE_INS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
+                           " AND usr_data.SideCols=%u",
                      Gbl.CurrentIns.Ins.InsCod,SideCols);
             break;
          case Sco_SCOPE_CTR:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
+                           " AND usr_data.SideCols=%u",
                      Gbl.CurrentCtr.Ctr.CtrCod,SideCols);
             break;
          case Sco_SCOPE_DEG:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM courses,crs_usr,usr_data"
-                           " WHERE courses.DegCod='%ld'"
+                           " WHERE courses.DegCod=%ld"
                            " AND courses.CrsCod=crs_usr.CrsCod"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
+                           " AND usr_data.SideCols=%u",
                      Gbl.CurrentDeg.Deg.DegCod,SideCols);
             break;
          case Sco_SCOPE_CRS:
             sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
         	           " FROM crs_usr,usr_data"
-                           " WHERE crs_usr.CrsCod='%ld'"
+                           " WHERE crs_usr.CrsCod=%ld"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.SideCols='%u'",
+                           " AND usr_data.SideCols=%u",
                      Gbl.CurrentCrs.Crs.CrsCod,SideCols);
             break;
 	 default:

@@ -300,10 +300,10 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   "SELECT DISTINCT usr_follow.FollowedCod AS UsrCod"
                   " FROM usr_follow,"
                   "(SELECT FollowedCod FROM usr_follow"
-                  " WHERE FollowerCod='%ld') AS my_followed,"
+                  " WHERE FollowerCod=%ld) AS my_followed,"
                   " usr_data"
                   " WHERE usr_follow.FollowerCod=my_followed.FollowedCod"
-                  " AND usr_follow.FollowedCod<>'%ld'"
+                  " AND usr_follow.FollowedCod<>%ld"
                   " AND usr_follow.FollowedCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s')"
 		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
@@ -318,10 +318,10 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   "(SELECT CrsCod FROM crs_usr"
-                  " WHERE UsrCod='%ld') AS my_crs,"
+                  " WHERE UsrCod=%ld) AS my_crs,"
                   " usr_data"
                   " WHERE crs_usr.CrsCod=my_crs.CrsCod"
-                  " AND crs_usr.UsrCod<>'%ld'"
+                  " AND crs_usr.UsrCod<>%ld"
                   " AND crs_usr.UsrCod=usr_data.UsrCod"
                   " AND usr_data.ProfileVisibility IN ('%s','%s','%s')"
 		  " AND usr_data.Surname1<>''"	// Surname 1 not empty
@@ -335,7 +335,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
                   "SELECT DISTINCT crs_usr.UsrCod"
                   " FROM crs_usr,"
                   "(SELECT CrsCod,Role FROM crs_usr"
-                  " WHERE UsrCod='%ld') AS my_crs_role,"
+                  " WHERE UsrCod=%ld) AS my_crs_role,"
                   " usr_data"
                   " WHERE crs_usr.CrsCod=my_crs_role.CrsCod"
                   " AND crs_usr.Role<>my_crs_role.Role"
@@ -349,7 +349,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
 		  // Do not select my followed
                   " WHERE UsrCod NOT IN"
                   " (SELECT FollowedCod FROM usr_follow"
-                  " WHERE FollowerCod='%ld')"
+                  " WHERE FollowerCod=%ld)"
 		  // Get only MaxUsrsToShow * 2 users
 		  " ORDER BY RAND() LIMIT %u"
                   ")"
@@ -359,7 +359,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
 		  // Add some likely unknown random users with privacy
                   // Pri_VISIBILITY_SYSTEM or Pri_VISIBILITY_WORLD
 		  "SELECT UsrCod FROM usr_data"
-		  " WHERE UsrCod<>'%ld'"
+		  " WHERE UsrCod<>%ld"
 		  " AND ProfileVisibility IN ('%s','%s')"
 		  " AND Surname1<>''"		// Surname 1 not empty
 		  " AND FirstName<>''"		// First name not empty
@@ -367,7 +367,7 @@ static unsigned Fol_GetUsrsWhoToFollow (unsigned MaxUsrsToShow,
 		  // Do not select my followed
 		  " AND UsrCod NOT IN"
 		  " (SELECT FollowedCod FROM usr_follow"
-		  " WHERE FollowerCod='%ld')"
+		  " WHERE FollowerCod=%ld)"
 		  // Get only MaxUsrsToShow users
 		  " ORDER BY RAND() LIMIT %u"
 		  ")"
@@ -447,7 +447,7 @@ bool Fol_CheckUsrIsFollowerOf (long FollowerCod,long FollowedCod)
 
    /***** Check if a user is a follower of another user *****/
    sprintf (Query,"SELECT COUNT(*) FROM usr_follow"
-	          " WHERE FollowerCod='%ld' AND FollowedCod='%ld'",
+	          " WHERE FollowerCod=%ld AND FollowedCod=%ld",
             FollowerCod,FollowedCod);
    return (DB_QueryCOUNT (Query,"can not get if a user is a follower of another one") != 0);
   }
@@ -461,7 +461,7 @@ unsigned Fol_GetNumFollowing (long UsrCod)
    char Query[128];
 
    /***** Check if a user is a follower of another user *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowerCod=%ld",
             UsrCod);
    return DB_QueryCOUNT (Query,"can not get number of followed");
   }
@@ -475,7 +475,7 @@ unsigned Fol_GetNumFollowers (long UsrCod)
    char Query[128];
 
    /***** Check if a user is a follower of another user *****/
-   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_follow WHERE FollowedCod=%ld",
             UsrCod);
    return DB_QueryCOUNT (Query,"can not get number of followers");
   }
@@ -675,7 +675,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
      {
       /***** Check if a user is a follower of another user *****/
       sprintf (Query,"SELECT FollowedCod FROM usr_follow"
-		     " WHERE FollowerCod='%ld' ORDER BY FollowTime DESC",
+		     " WHERE FollowerCod=%ld ORDER BY FollowTime DESC",
 	       UsrDat->UsrCod);
       NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followed users");
       if (NumUsrs)
@@ -758,7 +758,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
      {
       /***** Check if a user is a follower of another user *****/
       sprintf (Query,"SELECT FollowerCod FROM usr_follow"
-		     " WHERE FollowedCod='%ld' ORDER BY FollowTime DESC",
+		     " WHERE FollowedCod=%ld ORDER BY FollowTime DESC",
 	       UsrDat->UsrCod);
       NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get followers");
       if (NumUsrs)
@@ -1013,7 +1013,7 @@ void Fol_FollowUsr1 (void)
 	    sprintf (Query,"REPLACE INTO usr_follow"
 			   " (FollowerCod,FollowedCod,FollowTime)"
 			   " VALUES"
-			   " ('%ld','%ld',NOW())",
+			   " (%ld,%ld,NOW())",
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
 		     Gbl.Usrs.Other.UsrDat.UsrCod);
 	    DB_QueryREPLACE (Query,"can not follow user");
@@ -1064,7 +1064,7 @@ void Fol_UnfollowUsr1 (void)
 	{
 	 /***** Follow user in database *****/
 	 sprintf (Query,"DELETE FROM usr_follow"
-	                " WHERE FollowerCod='%ld' AND FollowedCod='%ld'",
+	                " WHERE FollowerCod=%ld AND FollowedCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
@@ -1112,7 +1112,7 @@ void Fol_GetAndShowRankingFollowers (void)
       case Sco_SCOPE_CTY:
          sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM institutions,centres,degrees,courses,crs_usr,usr_follow"
-                        " WHERE institutions.CtyCod='%ld'"
+                        " WHERE institutions.CtyCod=%ld"
                         " AND institutions.InsCod=centres.InsCod"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
@@ -1125,7 +1125,7 @@ void Fol_GetAndShowRankingFollowers (void)
       case Sco_SCOPE_INS:
          sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM centres,degrees,courses,crs_usr,usr_follow"
-                        " WHERE centres.InsCod='%ld'"
+                        " WHERE centres.InsCod=%ld"
                         " AND centres.CtrCod=degrees.CtrCod"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
@@ -1137,7 +1137,7 @@ void Fol_GetAndShowRankingFollowers (void)
       case Sco_SCOPE_CTR:
          sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM degrees,courses,crs_usr,usr_follow"
-                        " WHERE degrees.CtrCod='%ld'"
+                        " WHERE degrees.CtrCod=%ld"
                         " AND degrees.DegCod=courses.DegCod"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_follow.FollowedCod"
@@ -1148,7 +1148,7 @@ void Fol_GetAndShowRankingFollowers (void)
       case Sco_SCOPE_DEG:
          sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM courses,crs_usr,usr_follow"
-                        " WHERE courses.DegCod='%ld'"
+                        " WHERE courses.DegCod=%ld"
                         " AND courses.CrsCod=crs_usr.CrsCod"
                         " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 	                " GROUP BY usr_follow.FollowedCod"
@@ -1158,7 +1158,7 @@ void Fol_GetAndShowRankingFollowers (void)
       case Sco_SCOPE_CRS:
          sprintf (Query,"SELECT usr_follow.FollowedCod,COUNT(DISTINCT usr_follow.FollowerCod) AS N"
                         " FROM crs_usr,usr_follow"
-                        " WHERE crs_usr.CrsCod='%ld'"
+                        " WHERE crs_usr.CrsCod=%ld"
                         " AND crs_usr.UsrCod=usr_follow.FollowedCod"
 	                " GROUP BY usr_follow.FollowedCod"
 			" ORDER BY N DESC,usr_follow.FollowedCod LIMIT 100",
@@ -1194,7 +1194,7 @@ void Fol_RemoveUsrFromUsrFollow (long UsrCod)
    char Query[128];
 
    sprintf (Query,"DELETE FROM usr_follow"
-	          " WHERE FollowerCod='%ld' OR FollowedCod='%ld'",
+	          " WHERE FollowerCod=%ld OR FollowedCod=%ld",
 	    UsrCod,UsrCod);
    DB_QueryDELETE (Query,"can not remove user from followers and followed");
   }

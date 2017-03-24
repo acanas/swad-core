@@ -73,10 +73,13 @@
 #include "swad_country.h"
 #include "swad_course.h"
 #include "swad_degree.h"
+#include "swad_degree_type.h"
+#include "swad_department.h"
 #include "swad_file_browser.h"
 #include "swad_forum.h"
 #include "swad_holiday.h"
 #include "swad_info.h"
+#include "swad_mail.h"
 #include "swad_menu.h"
 #include "swad_notification.h"
 #include "swad_photo.h"
@@ -4301,7 +4304,7 @@ const char *Txt_centres =
 	"centros";
 #endif
 
-const char *Txt_CENTRES_HELP_ORDER[2] =
+const char *Txt_CENTRES_HELP_ORDER[Ctr_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar per centre"
@@ -4365,7 +4368,7 @@ const char *Txt_Centres_of_INSTITUTION_X =	// Warning: it is very important to i
 	"Centros de %s";
 #endif
 
-const char *Txt_CENTRES_ORDER[2] =
+const char *Txt_CENTRES_ORDER[Ctr_NUM_ORDERS] =
    {
 #if   L==1
 	 "Centre"
@@ -5521,7 +5524,7 @@ const char *Txt_countries =
 	"pa&iacute;ses";
 #endif
 
-const char *Txt_COUNTRIES_HELP_ORDER[2] =
+const char *Txt_COUNTRIES_HELP_ORDER[Cty_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por pa&iacute;s"	// Necessita traduccio
@@ -5585,7 +5588,7 @@ const char *Txt_Countries_with_pending_institutions =
 	"Pa&iacute;ses com institu&ccedil;&otilde;es pendentes";
 #endif
 
-const char *Txt_COUNTRIES_ORDER[2] =
+const char *Txt_COUNTRIES_ORDER[Cty_NUM_ORDERS] =
    {
 #if   L==1
 	 "Pa&iacute;s"
@@ -7907,6 +7910,92 @@ const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT] =
 #endif
 	};
 
+const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS] =
+	{
+#if   L==1
+	 "Ordenar por tipus de titulaci&oacute;"
+#elif L==2
+	 "Nach Art des Grades sortieren"
+#elif L==3
+	 "Sort by type of degree"
+#elif L==4
+	 "Ordenar por tipo de titulaci&oacute;n"
+#elif L==5
+	 "Trier par type d'&eacute;tude"
+#elif L==6
+	 "Ordenar por tipo de titulaci&oacute;n"	// Okoteve traducción
+#elif L==7
+	 "Ordina per tipo di laurea"
+#elif L==8
+	 "Sortuj wed&lstrok;ug rodzaju stopnia"
+#elif L==9
+	 "Classificar por tipo de titula&ccedil;&atilde;o"
+#endif
+	 ,
+#if   L==1
+	 "Ordenar per nombre de titulacions"
+#elif L==2
+	 "Nach Anzahl der Studieng&auml;nge sortieren"
+#elif L==3
+	 "Sort by no. of degrees"
+#elif L==4
+	 "Ordenar por n&ordm; de titulaciones"
+#elif L==5
+	 "Trier par nombre d'&eacute;tudes"
+#elif L==6
+	 "Ordenar por n&ordm; de titulaciones"	// Okoteve traducción
+#elif L==7
+	 "Ordina per numero di lauree"
+#elif L==8
+	 "Sortuj wedlug stopni"
+#elif L==9
+	 "Classificar por n&ordm; de titula&ccedil;oes"
+#endif
+	};
+
+const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS] =
+	{
+#if   L==1
+	"Tipus de titulaci&oacute;"
+#elif L==2
+	"Abschlussart"
+#elif L==3
+	"Types of degree"
+#elif L==4
+	"Tipos de titulaci&oacute;n"
+#elif L==5
+	"Types d'&eacute;tude"
+#elif L==6
+	"Arandur&atilde; l&aacute;ja"
+#elif L==7
+	"Tipi di laurea"
+#elif L==8
+	"Rodzaje stopni"
+#elif L==9
+	"Tipos de titula&ccedil;&atilde;o"
+#endif
+	 ,
+#if   L==1
+	"Titulacions"
+#elif L==2
+	"Studiengang"
+#elif L==3
+	"Degrees"
+#elif L==4
+	"Titulaciones"
+#elif L==5
+	"&Eacute;tudes"
+#elif L==6
+	"Arandur&atilde;"
+#elif L==7
+	"Lauree"
+#elif L==8
+	"Stopnie"
+#elif L==9
+	"Titula&ccedil;oes"
+#endif
+	};
+
 const char *Txt_DEGREE_With_courses =
 #if   L==1
 	"Amb assignatures";
@@ -8222,7 +8311,7 @@ const char *Txt_Departments_ABBREVIATION =
 	"Depar.";
 #endif
 
-const char *Txt_DEPARTMENTS_HELP_ORDER[2] =
+const char *Txt_DEPARTMENTS_HELP_ORDER[Dpt_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por departamento"	// Necessita traduccio
@@ -8265,7 +8354,7 @@ const char *Txt_DEPARTMENTS_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_DEPARTMENTS_ORDER[2] =
+const char *Txt_DEPARTMENTS_ORDER[Dpt_NUM_ORDERS] =
    {
 #if   L==1
 	 "Departament"
@@ -10623,7 +10712,7 @@ const char *Txt_Email_domains_allowed_for_notifications =
 	"Email domains allowed for notifications";		// Necessita de tradução
 #endif
 
-const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3] =
+const char *Txt_EMAIL_DOMAIN_HELP_ORDER[Mai_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por dominio de correo"	// Necessita traduccio
@@ -10686,7 +10775,7 @@ const char *Txt_EMAIL_DOMAIN_HELP_ORDER[3] =
 #endif
 	};
 
-const char *Txt_EMAIL_DOMAIN_ORDER[3] =
+const char *Txt_EMAIL_DOMAIN_ORDER[Mai_NUM_ORDERS] =
    {
 #if   L==1
 	 "Domini de correu"
@@ -13267,7 +13356,7 @@ const char *Txt_Forum_threads =
 	"Threads de f&oacute;rum";
 #endif
 
-const char *Txt_FORUM_THREAD_HELP_ORDER[2] =
+const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por fecha del primer mensaje"	// Necessita traduccio
@@ -13310,7 +13399,7 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_FORUM_THREAD_ORDER[2] =
+const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
    {
 #if   L==1
 	 "Primer mensaje"	// Necessita traduccio
@@ -14744,7 +14833,7 @@ const char *Txt_Holidays =
 	"F&eacute;rias";
 #endif
 
-const char *Txt_HOLIDAYS_HELP_ORDER[2] =
+const char *Txt_HOLIDAYS_HELP_ORDER[Hld_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por lugar"	// Necessita traduccio
@@ -14787,7 +14876,7 @@ const char *Txt_HOLIDAYS_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_HOLIDAYS_ORDER[2] =
+const char *Txt_HOLIDAYS_ORDER[Hld_NUM_ORDERS] =
    {
 #if   L==1
 	 "Lloc"
@@ -16436,7 +16525,7 @@ const char *Txt_institutions =
 	"institu&ccedil;&otilde;es";
 #endif
 
-const char *Txt_INSTITUTIONS_HELP_ORDER[2] =
+const char *Txt_INSTITUTIONS_HELP_ORDER[Ins_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por instituci&oacute;n"	// Necessita traduccio
@@ -16605,7 +16694,7 @@ const char *Txt_Institutions_of_COUNTRY_X =	// Warning: it is very important to 
 	"Institu&ccedil;&otilde;es de %s";
 #endif
 
-const char *Txt_INSTITUTIONS_ORDER[2] =
+const char *Txt_INSTITUTIONS_ORDER[Ins_NUM_ORDERS] =
    {
 #if   L==1
 	 "Instituci&oacute;"
@@ -17460,49 +17549,6 @@ const char *Txt_Locations =
 #elif L==9
 	"Localiza&ccedil;&otilde;es";
 #endif
-
-const char *Txt_LOCATIONS_HELP_ORDER[2] =
-   {
-#if   L==1
-	 "Ordenar por fecha inicial"	// Necessita traduccio
-#elif L==2
-	 "Sortieren nach Startdatum"
-#elif L==3
-	 "Sort by start date"
-#elif L==4
-	 "Ordenar por fecha inicial"
-#elif L==5
-	 "Trier par date initiale"
-#elif L==6
-	 "Ordenar por fecha inicial"	// Okoteve traducción
-#elif L==7
-	 "Ordina per data iniziale"
-#elif L==8
-	 "Sortuj wedlug daty rozpoczecia"
-#elif L==9
-	 "Classificar por data de in&iacute;cio"
-#endif
-	 ,
-#if   L==1
-	 "Ordenar por fecha final"	// Necessita traduccio
-#elif L==2
-	 "Sortieren nach Enddatum"
-#elif L==3
-	 "Sort by end date"
-#elif L==4
-	 "Ordenar por fecha final"
-#elif L==5
-	 "Trier par date finale"
-#elif L==6
-	 "Ordenar por fecha final"	// Okoteve traducción
-#elif L==7
-	 "Ordina per data finale"
-#elif L==8
-	 "Sortuj wedlug daty koncowa"
-#elif L==9
-	 "Classificar por data final"
-#endif
-	};
 
 const char *Txt_LOG_More_info =
 #if   L==1
@@ -29115,7 +29161,7 @@ const char *Txt_Places =
 	"Localiza&ccedil;oes";
 #endif
 
-const char *Txt_PLACES_HELP_ORDER[2] =
+const char *Txt_PLACES_HELP_ORDER[Plc_NUM_ORDERS] =
    {
 #if   L==1
 	 "Ordenar por lugar"	// Necessita traduccio
@@ -29138,7 +29184,7 @@ const char *Txt_PLACES_HELP_ORDER[2] =
 #endif
 	 ,
 #if   L==1
-	 "Ordenar por n&ordm; de titulaciones"	// Necessita traduccio
+	 "Ordenar per nombre de titulacions"
 #elif L==2
 	 "Nach Anzahl der Studieng&auml;nge sortieren"
 #elif L==3
@@ -29158,7 +29204,7 @@ const char *Txt_PLACES_HELP_ORDER[2] =
 #endif
 	};
 
-const char *Txt_PLACES_ORDER[2] =
+const char *Txt_PLACES_ORDER[Plc_NUM_ORDERS] =
    {
 #if   L==1
 	 "Lloc"
@@ -49309,7 +49355,7 @@ const char *Txt_Types_of_degree =
 #elif L==7
 	"Tipi di laurea";
 #elif L==8
-	"Types of degree";		// Potrzebujesz tlumaczenie
+	"Rodzaje stopni";
 #elif L==9
 	"Tipos de titula&ccedil;&atilde;o";
 #endif

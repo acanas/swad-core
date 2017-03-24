@@ -91,7 +91,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
          sprintf (Query,"REPLACE INTO usr_duplicated"
                         " (UsrCod,InformerCod,InformTime)"
                         " VALUES"
-                        " ('%ld','%ld',NOW())",
+                        " (%ld,%ld,NOW())",
                   Gbl.Usrs.Other.UsrDat.UsrCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          DB_QueryINSERT (Query,"can not report duplicate");
@@ -266,7 +266,7 @@ static void Dup_ListSimilarUsrs (void)
        Gbl.Usrs.Other.UsrDat.FirstName[0])	// Name and surname 1 not empty
       sprintf (Query,"SELECT DISTINCT UsrCod FROM"
 	             "(SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')"
+		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)"
 		     " UNION"
 		     " SELECT UsrCod FROM usr_data"
 		     " WHERE Surname1='%s' AND Surname2='%s' AND FirstName='%s')"
@@ -277,7 +277,7 @@ static void Dup_ListSimilarUsrs (void)
 	       Gbl.Usrs.Other.UsrDat.FirstName);
    else
       sprintf (Query,"SELECT DISTINCT UsrCod FROM usr_IDs"
-		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod='%ld')",
+		     " WHERE UsrID IN (SELECT UsrID FROM usr_IDs WHERE UsrCod=%ld)",
 	       Gbl.Usrs.Other.UsrDat.UsrCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
@@ -379,7 +379,7 @@ static bool Dup_CheckIfUsrIsDup (long UsrCod)
   {
    char Query[128];
 
-   sprintf (Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM usr_duplicated WHERE UsrCod=%ld",
 	    UsrCod);
    return (DB_QueryCOUNT (Query,"can not if user is in list of possible duplicate users") != 0);
   }
@@ -460,7 +460,7 @@ void Dup_RemoveUsrFromDuplicated (long UsrCod)
    char Query[128];
 
    /***** Remove enrollment request *****/
-   sprintf (Query,"DELETE FROM usr_duplicated WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_duplicated WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from possible duplicates");
   }

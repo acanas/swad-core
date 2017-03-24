@@ -157,7 +157,7 @@ void Deg_SeeDegWithPendingCrss (void)
       case Rol_DEG_ADM:
          sprintf (Query,"SELECT courses.DegCod,COUNT(*)"
                         " FROM admin,courses,degrees"
-                        " WHERE admin.UsrCod='%ld' AND admin.Scope='%s'"
+                        " WHERE admin.UsrCod=%ld AND admin.Scope='%s'"
                         " AND admin.Cod=courses.DegCod"
                         " AND (courses.Status & %u)<>0"
                         " AND courses.DegCod=degrees.DegCod"
@@ -617,7 +617,7 @@ void Deg_WriteSelectorOfDegree (void)
      {
       /***** Get degrees belonging to the current centre from database *****/
       sprintf (Query,"SELECT DegCod,ShortName FROM degrees"
-                     " WHERE CtrCod='%ld' ORDER BY ShortName",
+                     " WHERE CtrCod=%ld ORDER BY ShortName",
                Gbl.CurrentCtr.Ctr.CtrCod);
       NumDegs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees of a centre");
 
@@ -1165,7 +1165,7 @@ static void Deg_CreateDegree (struct Degree *Deg,unsigned Status)
    sprintf (Query,"INSERT INTO degrees"
 	          " (CtrCod,DegTypCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
                   " VALUES"
-                  " ('%ld','%ld','%u','%ld','%s','%s','%s')",
+                  " (%ld,%ld,%u,%ld,'%s','%s','%s')",
             Deg->CtrCod,Deg->DegTypCod,Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,Deg->ShrtName,Deg->FullName,Deg->WWW);
    Deg->DegCod = DB_QueryINSERTandReturnCode (Query,"can not create a new degree");
@@ -1411,7 +1411,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
                   " FROM degrees,courses,crs_usr"
                   " WHERE degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'"
+                  " AND crs_usr.Role=%u"
                   " ORDER BY degrees.ShortName",
             (unsigned) Rol_STUDENT);
    Degs->Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
@@ -1454,7 +1454,7 @@ void Deg_GetListDegsOfCurrentCtr (void)
    /***** Get degrees of the current centre from database *****/
    sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
                   "ShortName,FullName,WWW"
-                  " FROM degrees WHERE CtrCod='%ld' ORDER BY FullName",
+                  " FROM degrees WHERE CtrCod=%ld ORDER BY FullName",
             Gbl.CurrentCtr.Ctr.CtrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees of a centre");
 
@@ -1678,7 +1678,7 @@ bool Deg_GetDataOfDegreeByCod (struct Degree *Deg)
       /***** Get data of a degree from database *****/
       sprintf (Query,"SELECT DegCod,CtrCod,DegTypCod,Status,RequesterUsrCod,"
 		     "ShortName,FullName,WWW"
-		     " FROM degrees WHERE DegCod ='%ld'",
+		     " FROM degrees WHERE DegCod=%ld",
 	       Deg->DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get data of a degree")) // Degree found...
 	{
@@ -1747,7 +1747,7 @@ void Deg_GetShortNameOfDegreeByCod (struct Degree *Deg)
    if (Deg->DegCod > 0)
      {
       /***** Get the short name of a degree from database *****/
-      sprintf (Query,"SELECT ShortName FROM degrees WHERE DegCod ='%ld'",
+      sprintf (Query,"SELECT ShortName FROM degrees WHERE DegCod=%ld",
 	       Deg->DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the short name of a degree") == 1)
 	{
@@ -1777,7 +1777,7 @@ long Deg_GetCtrCodOfDegreeByCod (long DegCod)
    if (DegCod > 0)
      {
       /***** Get the centre code of a degree from database *****/
-      sprintf (Query,"SELECT CtrCod FROM degrees WHERE DegCod ='%ld'",
+      sprintf (Query,"SELECT CtrCod FROM degrees WHERE DegCod=%ld",
 	       DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the centre of a degree") == 1)
 	{
@@ -1808,7 +1808,7 @@ long Deg_GetInsCodOfDegreeByCod (long DegCod)
      {
       /***** Get the institution code of a degree from database *****/
       sprintf (Query,"SELECT centres.InsCod FROM degrees,centres"
-		     " WHERE degrees.DegCod='%ld'"
+		     " WHERE degrees.DegCod=%ld"
 		     " AND degrees.CtrCod=centres.CtrCod",
 	       DegCod);
       if (DB_QuerySELECT (Query,&mysql_res,"can not get the institution of a degree") == 1)
@@ -1840,7 +1840,7 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    char PathDeg[PATH_MAX + 1];
 
    /***** Get courses of a degree from database *****/
-   sprintf (Query,"SELECT CrsCod FROM courses WHERE DegCod='%ld'",
+   sprintf (Query,"SELECT CrsCod FROM courses WHERE DegCod=%ld",
             DegCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get courses of a degree");
 
@@ -1880,12 +1880,12 @@ void Deg_RemoveDegreeCompletely (long DegCod)
    Fil_RemoveTree (PathDeg);
 
    /***** Remove administrators of this degree *****/
-   sprintf (Query,"DELETE FROM admin WHERE Scope='%s' AND Cod='%ld'",
+   sprintf (Query,"DELETE FROM admin WHERE Scope='%s' AND Cod=%ld",
             Sco_ScopeDB[Sco_SCOPE_DEG],DegCod);
    DB_QueryDELETE (Query,"can not remove administrators of a degree");
 
    /***** Remove the degree *****/
-   sprintf (Query,"DELETE FROM degrees WHERE DegCod='%ld'",
+   sprintf (Query,"DELETE FROM degrees WHERE DegCod=%ld",
             DegCod);
    DB_QueryDELETE (Query,"can not remove a degree");
 
@@ -2011,7 +2011,7 @@ static bool Deg_CheckIfDegNameExistsInCtr (const char *FieldName,const char *Nam
 
    /***** Get number of degrees with a type and a name from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM degrees"
-                  " WHERE CtrCod='%ld' AND %s='%s' AND DegCod<>'%ld'",
+                  " WHERE CtrCod=%ld AND %s='%s' AND DegCod<>%ld",
             CtrCod,FieldName,Name,DegCod);
    return (DB_QueryCOUNT (Query,"can not check if the name of a degree already existed") != 0);
   }
@@ -2025,7 +2025,7 @@ static void Deg_UpdateDegNameDB (long DegCod,const char *FieldName,const char *N
    char Query[128 + Hie_MAX_BYTES_FULL_NAME];
 
    /***** Update degree changing old name by new name *****/
-   sprintf (Query,"UPDATE degrees SET %s='%s' WHERE DegCod='%ld'",
+   sprintf (Query,"UPDATE degrees SET %s='%s' WHERE DegCod=%ld",
 	    FieldName,NewDegName,DegCod);
    DB_QueryUPDATE (Query,"can not update the name of a degree");
   }
@@ -2104,7 +2104,7 @@ static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod)
    char Query[128];
 
    /***** Update centre in table of degrees *****/
-   sprintf (Query,"UPDATE degrees SET CtrCod='%ld' WHERE DegCod='%ld'",
+   sprintf (Query,"UPDATE degrees SET CtrCod=%ld WHERE DegCod=%ld",
             CtrCod,DegCod);
    DB_QueryUPDATE (Query,"can not update the centre of a degree");
   }
@@ -2192,7 +2192,7 @@ static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW 
    char Query[256 + Cns_MAX_BYTES_WWW];
 
    /***** Update database changing old WWW by new WWW *****/
-   sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod='%ld'",
+   sprintf (Query,"UPDATE degrees SET WWW='%s' WHERE DegCod=%ld",
 	    NewWWW,DegCod);
    DB_QueryUPDATE (Query,"can not update the web of a degree");
   }
@@ -2230,7 +2230,7 @@ void Deg_ChangeDegStatus (void)
    Deg_GetDataOfDegreeByCod (Deg);
 
    /***** Update status in table of degrees *****/
-   sprintf (Query,"UPDATE degrees SET Status='%u' WHERE DegCod='%ld'",
+   sprintf (Query,"UPDATE degrees SET Status=%u WHERE DegCod=%ld",
             (unsigned) Status,Deg->DegCod);
    DB_QueryUPDATE (Query,"can not update the status of a degree");
 
@@ -2341,7 +2341,7 @@ unsigned Deg_GetNumDegsInCty (long InsCod)
 
    /***** Get number of degrees in a country from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM institutions,centres,degrees"
-	          " WHERE institutions.CtyCod='%ld'"
+	          " WHERE institutions.CtyCod=%ld"
 	          " AND institutions.InsCod=centres.InsCod"
 	          " AND centres.CtrCod=degrees.CtrCod",
 	    InsCod);
@@ -2358,7 +2358,7 @@ unsigned Deg_GetNumDegsInIns (long InsCod)
 
    /***** Get number of degrees in an institution from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM centres,degrees"
-	          " WHERE centres.InsCod='%ld'"
+	          " WHERE centres.InsCod=%ld"
 	          " AND centres.CtrCod=degrees.CtrCod",
 	    InsCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of degrees in an institution");
@@ -2373,7 +2373,7 @@ unsigned Deg_GetNumDegsInCtr (long CtrCod)
    char Query[128];
 
    /***** Get number of degrees in a centre from database *****/
-   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE CtrCod='%ld'",
+   sprintf (Query,"SELECT COUNT(*) FROM degrees WHERE CtrCod=%ld",
 	    CtrCod);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of degrees in a centre");
   }
@@ -2411,7 +2411,7 @@ unsigned Deg_GetNumDegsWithUsrs (Rol_Role_t Role,const char *SubQuery)
                   " AND centres.CtrCod=degrees.CtrCod"
                   " AND degrees.DegCod=courses.DegCod"
                   " AND courses.CrsCod=crs_usr.CrsCod"
-                  " AND crs_usr.Role='%u'",
+                  " AND crs_usr.Role=%u",
             SubQuery,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of degrees with users");
   }
@@ -2434,26 +2434,26 @@ void Hie_GetAndWriteInsCtrDegAdminBy (long UsrCod,unsigned ColSpan)
    struct Degree Deg;
 
    /***** Get institutions, centres, degrees admin by user from database *****/
-   sprintf (Query,"(SELECT '%u' AS S,'-1' AS Cod,'' AS FullName"
+   sprintf (Query,"(SELECT %u AS S,-1 AS Cod,'' AS FullName"
 	          " FROM admin"
-	          " WHERE UsrCod='%ld'"
+	          " WHERE UsrCod=%ld"
 	          " AND Scope='%s')"
                   " UNION "
-                  "(SELECT '%u' AS S,admin.Cod,institutions.FullName"
+                  "(SELECT %u AS S,admin.Cod,institutions.FullName"
                   " FROM admin,institutions"
-                  " WHERE admin.UsrCod='%ld'"
+                  " WHERE admin.UsrCod=%ld"
                   " AND admin.Scope='%s'"
                   " AND admin.Cod=institutions.InsCod)"
                   " UNION "
-                  "(SELECT '%u' AS S,admin.Cod,centres.FullName"
+                  "(SELECT %u AS S,admin.Cod,centres.FullName"
                   " FROM admin,centres"
-                  " WHERE admin.UsrCod='%ld'"
+                  " WHERE admin.UsrCod=%ld"
                   " AND admin.Scope='%s'"
                   " AND admin.Cod=centres.CtrCod)"
                   " UNION "
-                  "(SELECT '%u' AS S,admin.Cod,degrees.FullName"
+                  "(SELECT %u AS S,admin.Cod,degrees.FullName"
                   " FROM admin,degrees"
-                  " WHERE admin.UsrCod='%ld'"
+                  " WHERE admin.UsrCod=%ld"
                   " AND admin.Scope='%s'"
                   " AND admin.Cod=degrees.DegCod)"
                   " ORDER BY S,FullName",

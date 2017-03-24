@@ -325,12 +325,12 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
             if (Gbl.Stat.DegTypCod > 0)
                sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                               " FROM degrees,courses,crs_usr,usr_data"
-                              " WHERE degrees.DegTypCod='%ld'"
+                              " WHERE degrees.DegTypCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr.CrsCod"
-                              " AND crs_usr.Role='%u'"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.UsrCod=usr_data.UsrCod"
-                              " AND usr_data.DptCod='%ld'"
+                              " AND usr_data.DptCod=%ld"
                               " ORDER BY degrees.FullName,courses.FullName",
                         Gbl.Stat.DegTypCod,
                         (unsigned) Rol_TEACHER,
@@ -340,9 +340,9 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
                               " FROM degrees,courses,crs_usr,usr_data"
                               " WHERE degrees.DegCod=courses.DegCod"
                               " AND courses.CrsCod=crs_usr.CrsCod"
-                              " AND crs_usr.Role='%u'"
+                              " AND crs_usr.Role=%u"
                               " AND crs_usr.UsrCod=usr_data.UsrCod"
-                              " AND usr_data.DptCod='%ld'"
+                              " AND usr_data.DptCod=%ld"
                               " ORDER BY degrees.FullName,courses.FullName",
                         (unsigned) Rol_TEACHER,
                         Gbl.Stat.DptCod);
@@ -352,7 +352,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
             if (Gbl.Stat.DegTypCod > 0)
                sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                               " FROM degrees,courses"
-                              " WHERE degrees.DegTypCod='%ld'"
+                              " WHERE degrees.DegTypCod=%ld"
                               " AND degrees.DegCod=courses.DegCod"
                               " ORDER BY degrees.FullName,courses.FullName",
                         Gbl.Stat.DegTypCod);
@@ -367,14 +367,14 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM institutions,centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE institutions.CtyCod='%ld'"
+                           " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.Role=%u"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod='%ld'"
+                           " AND usr_data.DptCod=%ld"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCty.Cty.CtyCod,
                      (unsigned) Rol_TEACHER,
@@ -382,7 +382,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM institutions,centres,degrees,courses"
-                          " WHERE institutions.CtyCod='%ld'"
+                          " WHERE institutions.CtyCod=%ld"
                            " AND institutions.InsCod=centres.InsCod"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
@@ -393,13 +393,13 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM centres,degrees,courses,crs_usr,usr_data"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.Role=%u"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod='%ld'"
+                           " AND usr_data.DptCod=%ld"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentIns.Ins.InsCod,
                      (unsigned) Rol_TEACHER,
@@ -407,7 +407,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM centres,degrees,courses"
-                           " WHERE centres.InsCod='%ld'"
+                           " WHERE centres.InsCod=%ld"
                            " AND centres.CtrCod=degrees.CtrCod"
                            " AND degrees.DegCod=courses.DegCod"
                            " ORDER BY degrees.FullName,courses.FullName",
@@ -417,12 +417,12 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.Role=%u"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod='%ld'"
+                           " AND usr_data.DptCod=%ld"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCtr.Ctr.CtrCod,
                      (unsigned) Rol_TEACHER,
@@ -430,7 +430,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses"
-                           " WHERE degrees.CtrCod='%ld'"
+                           " WHERE degrees.CtrCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCtr.Ctr.CtrCod);
@@ -439,12 +439,12 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE degrees.DegCod='%ld'"
+                           " WHERE degrees.DegCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.Role=%u"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod='%ld'"
+                           " AND usr_data.DptCod=%ld"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentDeg.Deg.DegCod,
                      (unsigned) Rol_TEACHER,
@@ -452,7 +452,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses"
-                           " WHERE degrees.DegCod='%ld'"
+                           " WHERE degrees.DegCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentDeg.Deg.DegCod);
@@ -461,13 +461,13 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          if (Gbl.Stat.DptCod > 0)
             sprintf (Query,"SELECT DISTINCTROW degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses,crs_usr,usr_data"
-                           " WHERE courses.CrsCod='%ld'"
+                           " WHERE courses.CrsCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.CrsCod='%ld'"
-                           " AND crs_usr.Role='%u'"
+                           " AND crs_usr.CrsCod=%ld"
+                           " AND crs_usr.Role=%u"
                            " AND crs_usr.UsrCod=usr_data.UsrCod"
-                           " AND usr_data.DptCod='%ld'"
+                           " AND usr_data.DptCod=%ld"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCrs.Crs.CrsCod,
                      Gbl.CurrentCrs.Crs.CrsCod,
@@ -476,7 +476,7 @@ static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res)
          else
             sprintf (Query,"SELECT degrees.FullName,courses.FullName,courses.CrsCod,courses.InsCrsCod"
                            " FROM degrees,courses"
-                           " WHERE courses.CrsCod='%ld'"
+                           " WHERE courses.CrsCod=%ld"
                            " AND degrees.DegCod=courses.DegCod"
                            " ORDER BY degrees.FullName,courses.FullName",
                      Gbl.CurrentCrs.Crs.CrsCod);
@@ -1384,7 +1384,7 @@ int Ind_GetNumIndicatorsCrsFromDB (long CrsCod)
    int NumIndicatorsFromDB = -1;	// -1 means not yet calculated
 
    /***** Get number of indicators of a course from database *****/
-   sprintf (Query,"SELECT NumIndicators FROM courses WHERE CrsCod='%ld'",
+   sprintf (Query,"SELECT NumIndicators FROM courses WHERE CrsCod=%ld",
 	    CrsCod);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get number of indicators"))
      {
@@ -1411,7 +1411,7 @@ static void Ind_StoreIndicatorsCrsIntoDB (long CrsCod,unsigned NumIndicators)
    char Query[128];
 
    /***** Store number of indicators of a course in database *****/
-   sprintf (Query,"UPDATE courses SET NumIndicators='%u' WHERE CrsCod='%ld'",
+   sprintf (Query,"UPDATE courses SET NumIndicators=%u WHERE CrsCod=%ld",
             NumIndicators,CrsCod);
    DB_QueryUPDATE (Query,"can not store number of indicators of a course");
   }
@@ -1504,12 +1504,12 @@ static unsigned long Ind_GetNumFilesInDocumZonesOfCrsFromDB (long CrsCod)
    sprintf (Query,"SELECT"
 	          " (SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
+		  " WHERE FileBrowser=%u AND Cod=%ld) +"
 		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
 		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod='%ld'"
+		  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser='%u'"
+		  " AND file_browser_size.FileBrowser=%u"
 		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_DOCUM_CRS],
 	    CrsCod,
@@ -1546,12 +1546,12 @@ static unsigned long Ind_GetNumFilesInShareZonesOfCrsFromDB (long CrsCod)
    sprintf (Query,"SELECT"
 	          " (SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld') +"
+		  " WHERE FileBrowser=%u AND Cod=%ld) +"
 		  " (SELECT COALESCE(SUM(file_browser_size.NumFiles),0)"
 		  " FROM crs_grp_types,crs_grp,file_browser_size"
-		  " WHERE crs_grp_types.CrsCod='%ld'"
+		  " WHERE crs_grp_types.CrsCod=%ld"
                   " AND crs_grp_types.GrpTypCod=crs_grp.GrpTypCod"
-		  " AND file_browser_size.FileBrowser='%u'"
+		  " AND file_browser_size.FileBrowser=%u"
 		  " AND file_browser_size.Cod=crs_grp.GrpCod)",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_SHARE_CRS],
 	    CrsCod,
@@ -1587,7 +1587,7 @@ static unsigned long Ind_GetNumFilesInAssigZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser=%u AND Cod=%ld",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_ASSIG_USR],
 	    CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");
@@ -1620,7 +1620,7 @@ static unsigned long Ind_GetNumFilesInWorksZonesOfCrsFromDB (long CrsCod)
    /***** Get number of files in document zones of a course from database *****/
    sprintf (Query,"SELECT COALESCE(SUM(NumFiles),0)"
 		  " FROM file_browser_size"
-		  " WHERE FileBrowser='%u' AND Cod='%ld'",
+		  " WHERE FileBrowser=%u AND Cod=%ld",
 	    (unsigned) Brw_FileBrowserForDB_files[Brw_ADMI_WORKS_USR],
 	    CrsCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of files");

@@ -45,6 +45,14 @@ struct DegreeType
    unsigned NumDegs;					// Number of degrees of this type
   };
 
+#define DT_NUM_ORDERS 2
+typedef enum
+  {
+   DT_ORDER_BY_DEGREE_TYPE = 0,
+   DT_ORDER_BY_NUM_DEGREES = 1,
+  } DT_Order_t;
+#define DT_ORDER_DEFAULT DT_ORDER_BY_DEGREE_TYPE
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/

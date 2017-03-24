@@ -628,7 +628,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
       /* Check if the new nickname
          matches any of the nicknames of other users */
       sprintf (Query,"SELECT COUNT(*) FROM usr_nicknames"
-		     " WHERE Nickname='%s' AND UsrCod<>'%ld'",
+		     " WHERE Nickname='%s' AND UsrCod<>%ld",
 	       NewNicknameWithoutArroba,Gbl.Usrs.Me.UsrDat.UsrCod);
       if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that this nickname
 	{
@@ -725,10 +725,10 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 		  " VALUES"
 		  " ('%s','%s','%s','%s','%s','%s',"
-		  "'%s','%s','%s','%u','%s','%s',"
-		  "'%ld',"
+		  "'%s','%s','%s',%u,'%s','%s',"
+		  "%ld,"
 		  "'%s','%s','%s','%s','%s',%s,'%s',"
-		  "'%u','%u','-1','0')",
+		  "%u,%u,-1,0)",
 	    UsrDat->EncryptedUsrCod,
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
@@ -759,7 +759,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
       sprintf (Query,"INSERT INTO usr_IDs"
 	             " (UsrCod,UsrID,CreatTime,Confirmed)"
 		     " VALUES"
-		     " ('%ld','%s',NOW(),'%c')",
+		     " (%ld,'%s',NOW(),'%c')",
 	       UsrDat->UsrCod,
 	       UsrDat->IDs.List[NumID].ID,
 	       UsrDat->IDs.List[NumID].Confirmed ? 'Y' :
@@ -982,7 +982,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Grp_RemUsrFromAllGrps (UsrDat,QuietOrVerbose);
 
    /***** Remove user's requests for inscription *****/
-   sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr_requests WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's requests for inscription");
 
@@ -990,7 +990,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Dup_RemoveUsrFromDuplicated (UsrDat->UsrCod);
 
    /***** Remove user from the table of courses and users *****/
-   sprintf (Query,"DELETE FROM crs_usr WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM crs_usr WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from all courses");
 
@@ -1002,7 +1002,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      }
 
    /***** Remove user as administrator of any degree *****/
-   sprintf (Query,"DELETE FROM admin WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM admin WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user as administrator");
 
@@ -1055,12 +1055,12 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
    Ann_RemoveUsrFromSeenAnnouncements (UsrDat->UsrCod);
 
    /***** Remove user from table of connected users *****/
-   sprintf (Query,"DELETE FROM connected WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM connected WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from table of connected users");
 
    /***** Remove all sessions of this user *****/
-   sprintf (Query,"DELETE FROM sessions WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM sessions WHERE UsrCod=%ld",
             UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove sessions of a user");
 
@@ -1123,36 +1123,36 @@ static void Acc_RemoveUsr (struct UsrData *UsrDat)
    char Query[128];
 
    /***** Remove user's webs / social networks *****/
-   sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_webs WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's webs / social networks");
 
    /***** Remove user's nicknames *****/
-   sprintf (Query,"DELETE FROM usr_nicknames WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_nicknames WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's nicknames");
 
    /***** Remove user's emails *****/
-   sprintf (Query,"DELETE FROM pending_emails WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM pending_emails WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove pending user's emails");
 
-   sprintf (Query,"DELETE FROM usr_emails WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_emails WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's emails");
 
    /***** Remove user's IDs *****/
-   sprintf (Query,"DELETE FROM usr_IDs WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_IDs WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's IDs");
 
    /***** Remove user's last data *****/
-   sprintf (Query,"DELETE FROM usr_last WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_last WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's last data");
 
    /***** Remove user's data  *****/
-   sprintf (Query,"DELETE FROM usr_data WHERE UsrCod='%ld'",
+   sprintf (Query,"DELETE FROM usr_data WHERE UsrCod=%ld",
 	    UsrDat->UsrCod);
    DB_QueryDELETE (Query,"can not remove user's data");
   }
