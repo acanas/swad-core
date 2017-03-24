@@ -209,13 +209,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.164.2 (2017-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.164.4 (2017-03-24)"
 #define CSS_FILE		"swad16.161.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.164.4: Mar 24, 2017	Link to figures in types of degree. (217604 lines)
         Version 16.164.3: Mar 24, 2017	Fixed bug in types of degree.
 					Types of degree in system tab restricted to system admins only. (217579 lines)
         Version 16.164.2: Mar 24, 2017	Code refactoring in types of degree. (217576 lines)

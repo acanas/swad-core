@@ -69,6 +69,7 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
 static void DT_EditDegreeTypes (void);
 static void DT_ListDegreeTypesForSeeing (void);
+static void DT_PutIconsListDegTypes (void);
 static void DT_PutIconToEditDegTypes (void);
 static void DT_ListDegreeTypesForEdition (void);
 
@@ -201,12 +202,23 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (Gbl.Degs.DegTypes.Num)
      {
       /***** Write heading *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-				Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
-									NULL,
-				(NextAction == ActSeeDegTyp) ? Hlp_SYSTEM_Studies :
-				                               Hlp_STATS_Figures_types_of_degree,
-				2);
+      switch (NextAction)
+        {
+	 case ActSeeDegTyp:
+	    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
+				      DT_PutIconsListDegTypes,
+				      Hlp_SYSTEM_Studies,
+				      2);
+	    break;
+	 case ActSeeUseGbl:
+	    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
+				      DT_PutIconToEditDegTypes,
+				      Hlp_STATS_Figures_types_of_degree,
+				      2);
+	    break;
+	 default:	// Bad call
+	    return;
+        }
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
@@ -282,6 +294,20 @@ static void DT_ListDegreeTypesForSeeing (void)
   }
 
 /*****************************************************************************/
+/************** Put contextual icons in list of degree types *****************/
+/*****************************************************************************/
+
+static void DT_PutIconsListDegTypes (void)
+  {
+   /***** Put icon to edit degree types *****/
+   DT_PutIconToEditDegTypes ();
+
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_DEGREE_TYPES;
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
 /******************* Put link (form) to edit degree types ********************/
 /*****************************************************************************/
 
@@ -289,10 +315,11 @@ static void DT_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiDegTyp,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+      Lay_PutContextualLink (ActEdiDegTyp,NULL,
+			     "edit64x64.png",
+			     Txt_Edit,NULL,
+			     NULL);
   }
 
 /*****************************************************************************/
