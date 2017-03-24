@@ -505,18 +505,82 @@ void DT_GetListDegreeTypes (void)
    unsigned long NumRow;
 
    /***** Get types of degree from database *****/
-   sprintf (Query,"(SELECT deg_types.DegTypCod,"
-	          "deg_types.DegTypName AS DegTypName,"
-                  " COUNT(degrees.DegCod) AS NumDegs"
-                  " FROM deg_types,degrees"
-                  " WHERE deg_types.DegTypCod=degrees.DegTypCod"
-                  " GROUP BY degrees.DegTypCod)"
-                  " UNION "
-                  "(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
-                  " FROM deg_types"
-                  " WHERE DegTypCod NOT IN (SELECT DegTypCod FROM degrees))"
-                  " ORDER BY %s",
-            OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+   switch (Gbl.Scope.Current)
+     {
+      case Sco_SCOPE_SYS:
+	 /* Get
+	    all degree types with degrees
+	    union with
+	    all degree types without any degree */
+	 sprintf (Query,"(SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod)"
+			" UNION "
+			"(SELECT DegTypCod,DegTypName,0 AS NumDegs"	// Do not use '0' because NumDegs will be casted to string and order will be wrong
+			" FROM deg_types"
+			" WHERE DegTypCod NOT IN"
+			" (SELECT DegTypCod FROM degrees))"
+			" ORDER BY %s",
+		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+         break;
+      case Sco_SCOPE_CTY:
+	 /* Get only degree types with degrees in the current country */
+	 sprintf (Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM institutions,centres,degrees,deg_types"
+			" WHERE institutions.CtyCod=%ld"
+                        " AND institutions.InsCod=centres.InsCod"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		  Gbl.CurrentCty.Cty.CtyCod,
+		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+         break;
+      case Sco_SCOPE_INS:
+	 /* Get only degree types with degrees in the current institution */
+	 sprintf (Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM centres,degrees,deg_types"
+			" WHERE centres.InsCod=%ld"
+                        " AND centres.CtrCod=degrees.CtrCod"
+                        " AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		  Gbl.CurrentIns.Ins.InsCod,
+		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+	 break;
+      case Sco_SCOPE_CTR:
+	 /* Get only degree types with degrees in the current centre */
+	 sprintf (Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.CtrCod=%ld"
+                        " AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		  Gbl.CurrentCtr.Ctr.CtrCod,
+		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+	 break;
+      case Sco_SCOPE_DEG:
+      case Sco_SCOPE_CRS:
+	 /* Get only degree types with degrees in the current degree */
+	 sprintf (Query,"SELECT deg_types.DegTypCod,deg_types.DegTypName,"
+			"COUNT(degrees.DegCod) AS NumDegs"
+			" FROM degrees,deg_types"
+			" WHERE degrees.DegCod=%ld"
+                        " AND degrees.DegTypCod=deg_types.DegTypCod"
+			" GROUP BY degrees.DegTypCod"
+			" ORDER BY %s",
+		  Gbl.CurrentDeg.Deg.DegCod,
+		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
    Gbl.Degs.DegTypes.Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get types of degree");
 
    /***** Get degree types *****/
