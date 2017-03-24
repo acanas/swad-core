@@ -39614,7 +39614,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Hierarquia"
 #endif
 	 ,
-#if   L==1				// Sta_INSTITUTIONS
+#if   L==1				// Sta_INSTITS
 	"Institucions"
 #elif L==2
 	"Hochschulen"
@@ -39632,6 +39632,26 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Instytucje"
 #elif L==9
 	"Institu&ccedil;&otilde;es"
+#endif
+	 ,
+#if   L==1				// Sta_DEGREE_TYPES
+	"Tipus de titulaci&oacute;"
+#elif L==2
+	"Abschlussart"
+#elif L==3
+	"Types of degree"
+#elif L==4
+	"Tipos de titulaci&oacute;n"
+#elif L==5
+	"Types d'&eacute;tude"
+#elif L==6
+	"Arandur&atilde; l&aacute;ja"
+#elif L==7
+	"Tipi di laurea"
+#elif L==8
+	"Rodzaje stopni"
+#elif L==9
+	"Tipos de titula&ccedil;&atilde;o"
 #endif
 	 ,
 #if   L==1				// Sta_FOLDERS_AND_FILES

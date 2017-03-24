@@ -2174,6 +2174,27 @@ const char *Hlp_STATS_Figures_institutions =
 	"STATS.Figures#institutions";
 #endif
 
+const char *Hlp_STATS_Figures_types_of_degree =
+#if   L==1
+	"STATS.Figures#types-of-degree";
+#elif L==2
+	"STATS.Figures#types-of-degree";
+#elif L==3
+	"STATS.Figures#types-of-degree";
+#elif L==4
+	"STATS.Figures#types-of-degree";
+#elif L==5
+	"STATS.Figures#types-of-degree";
+#elif L==6
+	"STATS.Figures#types-of-degree";
+#elif L==7
+	"STATS.Figures#types-of-degree";
+#elif L==8
+	"STATS.Figures#types-of-degree";
+#elif L==9
+	"STATS.Figures#types-of-degree";
+#endif
+
 const char *Hlp_STATS_Figures_folders_and_files =
 #if   L==1
 	"STATS.Figures#folders-and-files";

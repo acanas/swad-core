@@ -62,16 +62,17 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void DT_GetParamDegTypOrder (void);
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder);
+static void DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
-static void DT_ListDegreeTypes (void);
+static void DT_ListDegreeTypes (Act_Action_t NextAction);
 static void DT_EditDegreeTypes (void);
 static void DT_ListDegreeTypesForSeeing (void);
 static void DT_PutIconToEditDegTypes (void);
 static void DT_ListDegreeTypesForEdition (void);
 
 static void DT_PutFormToCreateDegreeType (void);
-static void DT_PutHeadDegreeTypesForSeeing (void);
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction);
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
 
@@ -124,16 +125,28 @@ void DT_WriteSelectorDegreeTypes (void)
 /***************************** Show degree types *****************************/
 /*****************************************************************************/
 
-void DT_SeeDegreeTypes (void)
+void DT_SeeDegreeTypesInSysTab (void)
+  {
+   DT_SeeDegreeTypes (ActSeeDegTyp,
+                      DT_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
+  }
+
+void DT_SeeDegreeTypesInStaTab (void)
+  {
+   DT_SeeDegreeTypes (ActSeeUseGbl,
+                      DT_ORDER_BY_NUM_DEGREES);	// Default order if not specified
+  }
+
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder)
   {
    /***** Get parameter with the type of order in the list of degree types *****/
-   DT_GetParamDegTypOrder ();
+   DT_GetParamDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes ();
 
    /***** List degree types *****/
-   DT_ListDegreeTypes ();
+   DT_ListDegreeTypes (NextAction);
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
@@ -143,13 +156,13 @@ void DT_SeeDegreeTypes (void)
 /******* Get parameter with the type or order in list of degree types ********/
 /*****************************************************************************/
 
-static void DT_GetParamDegTypOrder (void)
+static void DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
   {
    Gbl.Degs.DegTypes.SelectedOrder = (DT_Order_t)
 				     Par_GetParToUnsignedLong ("Order",
 							       0,
 							       DT_NUM_ORDERS - 1,
-							       (unsigned long) DT_ORDER_DEFAULT);
+							       (unsigned long) DefaultOrder);
   }
 
 /*****************************************************************************/
@@ -159,6 +172,7 @@ static void DT_GetParamDegTypOrder (void)
 void DT_ReqEditDegreeTypes (void)
   {
    /***** Get list of degree types *****/
+   Gbl.Degs.DegTypes.SelectedOrder = DT_ORDER_BY_DEGREE_TYPE;
    DT_GetListDegreeTypes ();
 
    /***** Put form to edit degree types *****/
@@ -171,13 +185,34 @@ void DT_ReqEditDegreeTypes (void)
 /*****************************************************************************/
 /***************************** List degree types *****************************/
 /*****************************************************************************/
+// This function can be called from:
+// - system tab		==> NextAction = ActSeeDegTyp
+// - statistic tab	==> NextAction = ActSeeUseGbl
 
-static void DT_ListDegreeTypes (void)
+static void DT_ListDegreeTypes (Act_Action_t NextAction)
   {
+   extern const char *Hlp_SYSTEM_Studies;
+   extern const char *Hlp_STATS_Figures_types_of_degree;
+   extern const char *Txt_Types_of_degree;
    extern const char *Txt_There_are_no_types_of_degree;
 
    if (Gbl.Degs.DegTypes.Num)
+     {
+      /***** Write heading *****/
+      Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
+				Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
+									NULL,
+				(NextAction == ActSeeDegTyp) ? Hlp_SYSTEM_Studies :
+				                               Hlp_STATS_Figures_types_of_degree,
+				2);
+      DT_PutHeadDegreeTypesForSeeing (NextAction);
+
+      /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
+
+      /***** End table and frame *****/
+      Lay_EndRoundFrameTable ();
+     }
    else
       Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
   }
@@ -208,17 +243,8 @@ static void DT_EditDegreeTypes (void)
 
 static void DT_ListDegreeTypesForSeeing (void)
   {
-   extern const char *Hlp_SYSTEM_Studies;
-   extern const char *Txt_Types_of_degree;
    unsigned NumDegTyp;
    const char *BgColor;
-
-   /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-                             Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? DT_PutIconToEditDegTypes :
-                                                                     NULL,
-                             Hlp_SYSTEM_Studies,2);
-   DT_PutHeadDegreeTypesForSeeing ();
 
    /***** List degree types with forms for edition *****/
    for (NumDegTyp = 0;
@@ -251,10 +277,6 @@ static void DT_ListDegreeTypesForSeeing (void)
 
       Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
      }
-
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -381,7 +403,7 @@ static void DT_PutFormToCreateDegreeType (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void DT_PutHeadDegreeTypesForSeeing (void)
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
@@ -397,17 +419,22 @@ static void DT_PutHeadDegreeTypesForSeeing (void)
                Order == DT_ORDER_BY_DEGREE_TYPE ? "LEFT_MIDDLE" :
         	                                  "RIGHT_MIDDLE");
 
-      Act_FormStart (ActSeeDegTyp);
+      /* Start form to change order */
+      Act_FormStart (NextAction);
+      if (NextAction == ActSeeUseGbl)
+         Sta_PutHiddenParamFigures ();
       Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+
+      /* Link with the head of this column */
       Act_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
       if (Order == Gbl.Degs.DegTypes.SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
-
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
-
       if (Order == Gbl.Degs.DegTypes.SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
+
+      /* End form */
       Act_FormEnd ();
 
       fprintf (Gbl.F.Out,"</th>");

@@ -209,13 +209,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.163 (2017-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.164 (2017-03-24)"
 #define CSS_FILE		"swad16.161.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.164:   Mar 24, 2017	New figure in statistics: types of degree. (217510 lines)
         Version 16.163:   Mar 24, 2017	Types of degree can be ordered by name and by number of degrees.
 					Integer fields in database queries without single quotes. (217434 lines)
         Version 16.162:   Mar 23, 2017	Changes in layout of types of degree. (217330 lines)

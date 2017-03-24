@@ -103,13 +103,14 @@ typedef enum
   } Sta_ClicksGroupedBy_t;
 #define Sta_CLICKS_GROUPED_BY_DEFAULT Sta_CLICKS_CRS_PER_USR
 
-#define Sta_NUM_FIGURES 23
+#define Sta_NUM_FIGURES 24
 typedef enum
   {
    Sta_USERS,			// Number of users
    Sta_USERS_RANKING,		// Users' ranking
    Sta_HIERARCHY,		// Number of countries, institutions, centres, degrees and courses
    Sta_INSTITS,			// Number of users in each institution
+   Sta_DEGREE_TYPES,		// Number of degrees in each type of degree
    Sta_FOLDERS_AND_FILES,	// Number of folders and files
    Sta_OER,			// Number of OERs (Open Educational Resources)
    Sta_ASSIGNMENTS,		// Number of assignments

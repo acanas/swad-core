@@ -199,6 +199,8 @@ static void Sta_GetAndShowInssOrderedByNumUsrsWhoClaimToBelongToThem (void);
 static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure);
 static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
 
+static void Sta_GetAndShowDegreeTypesStats (void);
+
 static unsigned Sta_GetTotalNumberOfUsersInPlatform (void);
 
 static void Sta_GetAndShowUsersStats (void);
@@ -3986,6 +3988,7 @@ void Sta_ShowFigures (void)
       Sta_GetAndShowUsersRanking,		// Sta_USERS_RANKING
       Sta_GetAndShowHierarchyStats,		// Sta_HIERARCHY
       Sta_GetAndShowInstitutionsStats,		// Sta_INSTITS
+      Sta_GetAndShowDegreeTypesStats,		// Sta_DEGREE_TYPES
       Sta_GetAndShowFileBrowsersStats,		// Sta_FOLDERS_AND_FILES
       Sta_GetAndShowOERsStats,			// Sta_OER
       Sta_GetAndShowAssignmentsStats,		// Sta_ASSIGNMENTS
@@ -5209,7 +5212,7 @@ static void Sta_GetAndShowInss (const char *Query,const char *TxtFigure)
   }
 
 /*****************************************************************************/
-/************************* Get total number of users *************************/
+/******************** Get institution data and statistic *********************/
 /*****************************************************************************/
 
 static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res)
@@ -5230,6 +5233,16 @@ static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res)
       Lay_ShowErrorAndExit ("Error in statistic");
 
    return NumberThisRow;
+  }
+
+/*****************************************************************************/
+/****************** Get and show stats about institutions ********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowDegreeTypesStats (void)
+  {
+   /***** Show statistic about number of degrees in each type of degree *****/
+   DT_SeeDegreeTypesInStaTab ();
   }
 
 /*****************************************************************************/
