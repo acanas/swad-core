@@ -62,7 +62,8 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder);
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
+                               DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
@@ -127,17 +128,18 @@ void DT_WriteSelectorDegreeTypes (void)
 
 void DT_SeeDegreeTypesInSysTab (void)
   {
-   DT_SeeDegreeTypes (ActSeeDegTyp,
+   DT_SeeDegreeTypes (ActSeeDegTyp,Sco_SCOPE_SYS,
                       DT_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
   }
 
 void DT_SeeDegreeTypesInStaTab (void)
   {
-   DT_SeeDegreeTypes (ActSeeUseGbl,
+   DT_SeeDegreeTypes (ActSeeUseGbl,Gbl.Scope.Current,
                       DT_ORDER_BY_NUM_DEGREES);	// Default order if not specified
   }
 
-static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder)
+static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
+                               DT_Order_t DefaultOrder)
   {
    DT_Order_t SelectedOrder;
 
@@ -145,7 +147,7 @@ static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder)
    SelectedOrder = DT_GetParamDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Gbl.Scope.Current,SelectedOrder);
+   DT_GetListDegreeTypes (Scope,SelectedOrder);
 
    /***** List degree types *****/
    DT_ListDegreeTypes (NextAction,SelectedOrder);

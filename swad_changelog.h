@@ -216,7 +216,8 @@
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.164.3: Mar 24, 2017	Types of degree in system tab restricted to system admins only. (? lines)
+        Version 16.164.3: Mar 24, 2017	Fixed bug in types of degree.
+					Types of degree in system tab restricted to system admins only. (217579 lines)
         Version 16.164.2: Mar 24, 2017	Code refactoring in types of degree. (217576 lines)
         Version 16.164.1: Mar 24, 2017	Statistics about types of degree depends on the selected scope. (217575 lines)
         Version 16.164:   Mar 24, 2017	New figure in statistics: types of degree. (217510 lines)

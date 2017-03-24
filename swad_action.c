@@ -1517,7 +1517,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
    /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"hierarchy64x64.png"	},
    /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
-   /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInSysTab	,"grouptypes64x64.gif"	},
+   /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInSysTab	,"grouptypes64x64.gif"	},
    /* ActSeeMai		*/{ 855, 5,TabSys,ActSeeMai		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_SeeMailDomains		,"email64x64.gif"	},
    /* ActSeeBan		*/{1137, 6,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
    /* ActSeeLnk		*/{ 748, 7,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
