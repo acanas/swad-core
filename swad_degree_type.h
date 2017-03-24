@@ -27,6 +27,8 @@
 /********************************* Headers ***********************************/
 /*****************************************************************************/
 
+#include "swad_scope.h"
+
 /*****************************************************************************/
 /***************************** Public constants ******************************/
 /*****************************************************************************/
@@ -62,7 +64,7 @@ void DT_SeeDegreeTypesInSysTab (void);
 void DT_SeeDegreeTypesInStaTab (void);
 void DT_ReqEditDegreeTypes (void);
 
-void DT_GetListDegreeTypes (void);
+void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order);
 void DT_FreeListDegreeTypes (void);
 
 void DT_RecFormNewDegreeType (void);

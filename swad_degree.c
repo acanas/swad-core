@@ -1369,7 +1369,7 @@ void Deg_EditDegrees (void)
    Deg_GetListDegsOfCurrentCtr ();
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes ();
+   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    if (Gbl.Degs.DegTypes.Num)
      {

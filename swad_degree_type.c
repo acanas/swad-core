@@ -63,16 +63,16 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder);
-static void DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
+static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
-static void DT_ListDegreeTypes (Act_Action_t NextAction);
+static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
 static void DT_EditDegreeTypes (void);
 static void DT_ListDegreeTypesForSeeing (void);
 static void DT_PutIconToEditDegTypes (void);
 static void DT_ListDegreeTypesForEdition (void);
 
 static void DT_PutFormToCreateDegreeType (void);
-static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction);
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t SelectedOrder);
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
 
@@ -93,7 +93,7 @@ void DT_WriteSelectorDegreeTypes (void)
 
    /***** Form to select degree types *****/
    /* Get list of degree types */
-   DT_GetListDegreeTypes ();
+   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /* List degree types */
    fprintf (Gbl.F.Out,"<select id=\"OthDegTypCod\" name=\"OthDegTypCod\""
@@ -139,14 +139,16 @@ void DT_SeeDegreeTypesInStaTab (void)
 
 static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder)
   {
+   DT_Order_t SelectedOrder;
+
    /***** Get parameter with the type of order in the list of degree types *****/
-   DT_GetParamDegTypOrder (DefaultOrder);
+   SelectedOrder = DT_GetParamDegTypOrder (DefaultOrder);
 
    /***** Get list of degree types *****/
-   DT_GetListDegreeTypes ();
+   DT_GetListDegreeTypes (Gbl.Scope.Current,SelectedOrder);
 
    /***** List degree types *****/
-   DT_ListDegreeTypes (NextAction);
+   DT_ListDegreeTypes (NextAction,SelectedOrder);
 
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
@@ -156,13 +158,12 @@ static void DT_SeeDegreeTypes (Act_Action_t NextAction,DT_Order_t DefaultOrder)
 /******* Get parameter with the type or order in list of degree types ********/
 /*****************************************************************************/
 
-static void DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
+static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
   {
-   Gbl.Degs.DegTypes.SelectedOrder = (DT_Order_t)
-				     Par_GetParToUnsignedLong ("Order",
-							       0,
-							       DT_NUM_ORDERS - 1,
-							       (unsigned long) DefaultOrder);
+   return (DT_Order_t) Par_GetParToUnsignedLong ("Order",
+						 0,
+						 DT_NUM_ORDERS - 1,
+						 (unsigned long) DefaultOrder);
   }
 
 /*****************************************************************************/
@@ -172,8 +173,7 @@ static void DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
 void DT_ReqEditDegreeTypes (void)
   {
    /***** Get list of degree types *****/
-   Gbl.Degs.DegTypes.SelectedOrder = DT_ORDER_BY_DEGREE_TYPE;
-   DT_GetListDegreeTypes ();
+   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
 
    /***** Put form to edit degree types *****/
    DT_EditDegreeTypes ();
@@ -189,7 +189,7 @@ void DT_ReqEditDegreeTypes (void)
 // - system tab		==> NextAction = ActSeeDegTyp
 // - statistic tab	==> NextAction = ActSeeUseGbl
 
-static void DT_ListDegreeTypes (Act_Action_t NextAction)
+static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder)
   {
    extern const char *Hlp_SYSTEM_Studies;
    extern const char *Hlp_STATS_Figures_types_of_degree;
@@ -205,7 +205,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction)
 				(NextAction == ActSeeDegTyp) ? Hlp_SYSTEM_Studies :
 				                               Hlp_STATS_Figures_types_of_degree,
 				2);
-      DT_PutHeadDegreeTypesForSeeing (NextAction);
+      DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
@@ -403,7 +403,7 @@ static void DT_PutFormToCreateDegreeType (void)
 /***************** Write header with fields of a degree type *****************/
 /*****************************************************************************/
 
-static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction)
+static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t SelectedOrder)
   {
    extern const char *Txt_DEGREE_TYPES_HELP_ORDER[DT_NUM_ORDERS];
    extern const char *Txt_DEGREE_TYPES_ORDER[DT_NUM_ORDERS];
@@ -427,10 +427,10 @@ static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction)
 
       /* Link with the head of this column */
       Act_LinkFormSubmit (Txt_DEGREE_TYPES_HELP_ORDER[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Degs.DegTypes.SelectedOrder)
+      if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"<u>");
       fprintf (Gbl.F.Out,"%s",Txt_DEGREE_TYPES_ORDER[Order]);
-      if (Order == Gbl.Degs.DegTypes.SelectedOrder)
+      if (Order == SelectedOrder)
 	 fprintf (Gbl.F.Out,"</u>");
       fprintf (Gbl.F.Out,"</a>");
 
@@ -492,7 +492,7 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
 /**************** Create a list with all the degree types ********************/
 /*****************************************************************************/
 
-void DT_GetListDegreeTypes (void)
+void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order)
   {
    static const char *OrderBySubQuery[DT_NUM_ORDERS] =
      {
@@ -505,7 +505,7 @@ void DT_GetListDegreeTypes (void)
    unsigned long NumRow;
 
    /***** Get types of degree from database *****/
-   switch (Gbl.Scope.Current)
+   switch (Scope)
      {
       case Sco_SCOPE_SYS:
 	 /* Get
@@ -523,7 +523,7 @@ void DT_GetListDegreeTypes (void)
 			" WHERE DegTypCod NOT IN"
 			" (SELECT DegTypCod FROM degrees))"
 			" ORDER BY %s",
-		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+		  OrderBySubQuery[Order]);
          break;
       case Sco_SCOPE_CTY:
 	 /* Get only degree types with degrees in the current country */
@@ -537,7 +537,7 @@ void DT_GetListDegreeTypes (void)
 			" GROUP BY degrees.DegTypCod"
 			" ORDER BY %s",
 		  Gbl.CurrentCty.Cty.CtyCod,
-		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+		  OrderBySubQuery[Order]);
          break;
       case Sco_SCOPE_INS:
 	 /* Get only degree types with degrees in the current institution */
@@ -550,7 +550,7 @@ void DT_GetListDegreeTypes (void)
 			" GROUP BY degrees.DegTypCod"
 			" ORDER BY %s",
 		  Gbl.CurrentIns.Ins.InsCod,
-		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+		  OrderBySubQuery[Order]);
 	 break;
       case Sco_SCOPE_CTR:
 	 /* Get only degree types with degrees in the current centre */
@@ -562,7 +562,7 @@ void DT_GetListDegreeTypes (void)
 			" GROUP BY degrees.DegTypCod"
 			" ORDER BY %s",
 		  Gbl.CurrentCtr.Ctr.CtrCod,
-		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+		  OrderBySubQuery[Order]);
 	 break;
       case Sco_SCOPE_DEG:
       case Sco_SCOPE_CRS:
@@ -575,7 +575,7 @@ void DT_GetListDegreeTypes (void)
 			" GROUP BY degrees.DegTypCod"
 			" ORDER BY %s",
 		  Gbl.CurrentDeg.Deg.DegCod,
-		  OrderBySubQuery[Gbl.Degs.DegTypes.SelectedOrder]);
+		  OrderBySubQuery[Order]);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
