@@ -289,6 +289,8 @@ void Ntf_ShowMyNotifications (void)
    extern const char *Hlp_MESSAGES_Notifications;
    extern const char *Txt_Change_preferences;
    extern const char *Txt_Preferences;
+   extern const char *Txt_Email_domains_allowed_for_notifications;
+   extern const char *Txt_Domains;
    extern const char *Txt_Mark_all_notifications_as_read;
    extern const char *Txt_Mark_all_NOTIFICATIONS_as_read;
    extern const char *Txt_Notifications;
@@ -365,6 +367,12 @@ void Ntf_ShowMyNotifications (void)
    Lay_PutContextualLink (ActEdiPrf,NULL,
                           "heart64x64.gif",
 			  Txt_Change_preferences,Txt_Preferences,
+                          NULL);
+
+   /* Put form to view allowed mail domains */
+   Lay_PutContextualLink (ActSeeMai,NULL,
+                          "msg64x64.gif",
+			  Txt_Email_domains_allowed_for_notifications,Txt_Domains,
                           NULL);
 
    fprintf (Gbl.F.Out,"</div>");

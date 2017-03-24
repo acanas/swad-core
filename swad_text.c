@@ -9870,6 +9870,27 @@ const char *Txt_documents_management_area =
 	"zona de gest&atilde;o de documentos";
 #endif
 
+const char *Txt_Domains =
+#if   L==1
+	"Dominis";
+#elif L==2
+	"Dom&auml;nen";
+#elif L==3
+	"Domains";
+#elif L==4
+	"Dominios";
+#elif L==5
+	"Domaines";
+#elif L==6
+	"Dominios";	// Okoteve traducción
+#elif L==7
+	"Campi";
+#elif L==8
+	"Domen";
+#elif L==9
+	"Dom&iacute;nios";
+#endif
+
 const char *Txt_Done =
 #if   L==1
 	"Fet";
