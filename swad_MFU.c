@@ -284,7 +284,7 @@ void MFU_WriteSmallMFUActions (struct MFU_ListMFUActions *ListMFUActions)
    /***** Start div and link *****/
    fprintf (Gbl.F.Out,"<div id=\"MFU_actions\">");
    Act_FormStart (ActMFUAct);
-   Act_LinkFormSubmit (Txt_My_frequent_actions,"MFU_ACT",NULL);
+   Act_LinkFormSubmit (Txt_My_frequent_actions,NULL,NULL);
    fprintf (Gbl.F.Out," %s"
 	              "</a>",
 	    Txt_Frequent_ACTIONS);

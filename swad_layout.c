@@ -997,16 +997,19 @@ static void Lay_ShowLeftColumn (void)
 
    fprintf (Gbl.F.Out,"<div style=\"width:160px;\">");
 
-   /***** Most frequently used actions *****/
+   fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
    if (Gbl.Usrs.Me.Logged)
      {
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
+      /***** Most frequently used actions *****/
       MFU_AllocateMFUActions (&ListMFUActions,6);
       MFU_GetMFUActions (&ListMFUActions,6);
       MFU_WriteSmallMFUActions (&ListMFUActions);
       MFU_FreeMFUActions (&ListMFUActions);
-      fprintf (Gbl.F.Out,"</div>");
      }
+   else
+      /***** Institutional links *****/
+      Lnk_WriteMenuWithInstitutionalLinks ();
+   fprintf (Gbl.F.Out,"</div>");
 
    /***** Month *****/
    fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">");
@@ -1061,10 +1064,8 @@ static void Lay_ShowRightColumn (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /***** SWADroid advertisement *****/
-   if (!Gbl.Usrs.Me.Logged ||
-       Gbl.Action.Act == ActLogIn ||
-       Gbl.Action.Act == ActLogInNew)
+   if (!Gbl.Usrs.Me.Logged)
+      /***** SWADroid advertisement *****/
       fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
 			 "<a href=\"https://play.google.com/store/apps/details?id=es.ugr.swad.swadroid\""
 			 " target=\"_blank\" title=\"%s\">"
@@ -1075,9 +1076,6 @@ static void Lay_ShowRightColumn (void)
 			 "</div>",
 	       Txt_If_you_have_an_Android_device_try_SWADroid,
 	       Gbl.Prefs.IconsURL);
-
-   /***** Institutional links *****/
-   // Lnk_WriteMenuWithInstitutionalLinks ();
   }
 
 /*****************************************************************************/

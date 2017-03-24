@@ -209,13 +209,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.165 (2017-03-24)"
-#define CSS_FILE		"swad16.161.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.166 (2017-03-24)"
+#define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.166:   Mar 24, 2017	Changes in layout related with institutional links.
+					Fixed bug in swad.sql reported by user "proxa" in GitHub. (217613 lines)
         Version 16.165:   Mar 24, 2017	Allowed mail domains option is moved from system tab to messages tab. (217591 lines)
         Version 16.164.5: Mar 24, 2017	Link in notifications to allowed mail domains. (217632 lines)
         Version 16.164.4: Mar 24, 2017	Link to figures in types of degree. (217604 lines)

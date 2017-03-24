@@ -1466,7 +1466,23 @@ a:hover						/* Default ==> underlined */
 	border-radius:4px;
 	font-size:11pt;
 	color:#4D88A1;
+	}
+#institutional_links ul
+	{
+	box-sizing:border-box;
+	width:138px;
+	margin-top:2px;
+	padding-top:2px;
+	border-style:solid;
+	border-width:1px 0 0 0;
+	border-color:#DDECF1;
+	}
+#institutional_links li
+	{
+	width:138px;
+	white-space:nowrap;
 	overflow:hidden;
+	text-overflow:ellipsis;
 	}
 .INS_LNK
 	{

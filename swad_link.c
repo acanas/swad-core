@@ -119,17 +119,25 @@ static void Lnk_PutIconToEditLinks (void)
 
 void Lnk_WriteMenuWithInstitutionalLinks (void)
   {
+   extern const char *Txt_Links;
+
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
    /***** Write all the links *****/
    if (Gbl.Links.Num)
      {
-      fprintf (Gbl.F.Out,"<div class=\"LEFT_RIGHT_CELL\">"
-			 "<div id=\"institutional_links\" class=\"INS_LNK\">");
+      fprintf (Gbl.F.Out,"<div id=\"institutional_links\">");
+
+      Act_FormStart (ActSeeLnk);
+      Act_LinkFormSubmit (Txt_Links,NULL,NULL);
+      fprintf (Gbl.F.Out," %s"
+			 "</a>",
+	       Txt_Links);
+      Act_FormEnd ();
+
       Lnk_WriteListOfLinks ();
-      fprintf (Gbl.F.Out,"</div>"
-			 "</div>");
+      fprintf (Gbl.F.Out,"</div>");
      }
 
    /***** Free list of links *****/
