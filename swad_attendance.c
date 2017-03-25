@@ -531,6 +531,7 @@ static void Att_PutFormToListStdsParams (void)
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
   }
+
 /*****************************************************************************/
 /************** Put a link (form) to edit one attendance event ***************/
 /*****************************************************************************/

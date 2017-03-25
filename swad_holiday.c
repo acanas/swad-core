@@ -72,6 +72,22 @@ static void Hld_PutHeadHolidays (void);
 static void Hld_CreateHoliday (struct Holiday *Hld);
 
 /*****************************************************************************/
+/****************** Put a link to view and edit holidays *********************/
+/*****************************************************************************/
+
+void Hld_PutLinkToHolidays (void)
+  {
+   extern const char *Txt_Holidays;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActSeeHld,NULL,
+			  "date64x64.gif",
+			  Txt_Holidays,Txt_Holidays,
+			  NULL);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
 /*************************** List all the holidays ***************************/
 /*****************************************************************************/
 

@@ -259,6 +259,9 @@ void Cal_DrawCalendarCty (void)
 
 void Cal_DrawCalendarIns (void)
   {
+   /***** Link to view and edit holidays *****/
+   Hld_PutLinkToHolidays ();
+
    Cal_DrawCalendar (ActSeeCalIns,ActChgCalIns1stDay,Cal_PutIconToPrintCalendarIns,false);
   }
 

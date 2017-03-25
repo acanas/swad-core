@@ -74,6 +74,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Hld_PutLinkToHolidays (void);
+
 void Hld_SeeHolidays (void);
 void Hld_EditHolidays (void);
 void Hld_GetListHolidays (void);
