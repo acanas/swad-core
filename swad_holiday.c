@@ -72,38 +72,6 @@ static void Hld_PutHeadHolidays (void);
 static void Hld_CreateHoliday (struct Holiday *Hld);
 
 /*****************************************************************************/
-/************************ Put a link to view holidays ************************/
-/*****************************************************************************/
-
-void Hld_PutLinkToHolidays (void)
-  {
-   extern const char *Txt_Holidays;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActSeeHld,NULL,
-			  "holiday64x64.png",
-			  Txt_Holidays,Txt_Holidays,
-			  NULL);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/********************* Put a link to create a holiday ************************/
-/*****************************************************************************/
-
-void Hld_PutLinkToCreateHoliday (void)
-  {
-   extern const char *Txt_Create_holiday;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActEdiHld,NULL,
-			  "edit64x64.png",
-			  Txt_Create_holiday,Txt_Create_holiday,
-			  NULL);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
 /*************************** List all the holidays ***************************/
 /*****************************************************************************/
 

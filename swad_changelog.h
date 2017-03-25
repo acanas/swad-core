@@ -209,13 +209,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.167.1 (2017-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.167.2 (2017-03-24)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.167.2: Mar 25, 2017	Contextual link to holidays is changed to a left-top contextual icon. (217577 lines)
         Version 16.167.1: Mar 25, 2017	Changes in icons related to calendar and holidays. (217595 lines)
 Copy the following icons to icon public directory:
 sudo cp -a icon/iconset/awesome/action64x64/calendar64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/
