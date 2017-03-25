@@ -1645,7 +1645,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActSeeHld		*/{ 707,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,NULL},
    /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_EditHolidays		,NULL},
-   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RecFormNewHoliday		,NULL},
+   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Hld_RecFormNewHoliday1		,Hld_RecFormNewHoliday2		,NULL},
    /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RemoveHoliday		,NULL},
    /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayPlace		,NULL},
    /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayType		,NULL},

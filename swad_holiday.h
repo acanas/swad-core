@@ -86,6 +86,7 @@ void Hld_ChangeHolidayType (void);
 void Hld_ChangeStartDate (void);
 void Hld_ChangeEndDate (void);
 void Hld_RenameHoliday (void);
-void Hld_RecFormNewHoliday (void);
+void Hld_RecFormNewHoliday1 (void);
+void Hld_RecFormNewHoliday2 (void);
 
 #endif

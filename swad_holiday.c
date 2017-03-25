@@ -1073,8 +1073,9 @@ static void Hld_PutHeadHolidays (void)
 /******************* Receive form to create a new holiday ********************/
 /*****************************************************************************/
 
-void Hld_RecFormNewHoliday (void)
+void Hld_RecFormNewHoliday1 (void)
   {
+   extern const char *Txt_Created_new_holiday_X;
    extern const char *Txt_You_must_specify_the_name_of_the_new_holiday;
    struct Holiday *Hld;
 
@@ -1115,14 +1116,29 @@ void Hld_RecFormNewHoliday (void)
    /***** Get holiday name *****/
    Par_GetParToText ("Name",Hld->Name,Hld_MAX_BYTES_HOLIDAY_NAME);
 
-   /***** Create the new holiday or write warning message *****/
+   /***** Create the new holiday or set warning message *****/
    if (Hld->Name[0])	// If there's a holiday name
+     {
+      /* Create the new holiday */
       Hld_CreateHoliday (Hld);
+
+      /* Success message */
+      sprintf (Gbl.Message,Txt_Created_new_holiday_X,Hld->Name);
+     }
    else	// If there is not a holiday name
      {
+      /* Error message */
+      Gbl.Error = true;
       sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
+  }
+
+void Hld_RecFormNewHoliday2 (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
+			      Lay_SUCCESS,
+		  Gbl.Message);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -1134,7 +1150,6 @@ void Hld_RecFormNewHoliday (void)
 
 static void Hld_CreateHoliday (struct Holiday *Hld)
   {
-   extern const char *Txt_Created_new_holiday_X;
    char Query[256 + Hld_MAX_BYTES_HOLIDAY_NAME];
 
    /***** Create a new holiday or no school period *****/
@@ -1151,9 +1166,4 @@ static void Hld_CreateHoliday (struct Holiday *Hld)
             Hld->EndDate.Day,
             Hld->Name);
    DB_QueryINSERT (Query,"can not create holiday");
-
-   /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_holiday_X,
-            Hld->Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
