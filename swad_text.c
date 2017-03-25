@@ -6155,6 +6155,27 @@ const char *Txt_Create_another_degree =
 	"Criar uma outra titula&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_another_holiday =
+#if   L==1
+	"Crear una altra festivitat";
+#elif L==2
+	"Erstellen Sie ein anderes Feiertag";
+#elif L==3
+	"Create another holiday";
+#elif L==4
+	"Crear otra festividad";
+#elif L==5
+	"Cr&eacute;er un autre f&ecirc;te";
+#elif L==6
+	"Crear otra festividad";	// Okoteve traducción
+#elif L==7
+	"Crea una altra festivit&agrave;";
+#elif L==8
+	"Tworzenie inny wakacje";
+#elif L==9
+	"Criar uma outra f&eacute;ria";
+#endif
+
 const char *Txt_Create_another_institution =
 #if   L==1
 	"Crear una altra instituci&oacute;";
@@ -6451,7 +6472,7 @@ const char *Txt_Create_group =
 
 const char *Txt_Create_holiday =
 #if   L==1
-	"Crear festividad";	// Necessita traduccio
+	"Crear festivitat";
 #elif L==2
 	"Feiertag eingeben";
 #elif L==3
@@ -46941,21 +46962,42 @@ const char *Txt_There_are_no_email_domains =
 #if   L==1
 	"No existen dominios de correo para notificaciones.";	// Necessita traduccio
 #elif L==2
-	"There are no email domains for notifications.";		// Need Übersetzung
+	"There are no email domains for notifications.";	// Need Übersetzung
 #elif L==3
 	"There are no email domains for notifications.";
 #elif L==4
 	"No existen dominios de correo para notificaciones.";
 #elif L==5
-	"There are no email domains for notifications.";		// Besoin de traduction
+	"There are no email domains for notifications.";	// Besoin de traduction
 #elif L==6
 	"No existen dominios de correo para notificaciones.";	// Okoteve traducción
 #elif L==7
 	"Non ci sono campi mail per le notifiche.";
 #elif L==8
-	"There are no email domains for notifications.";		// Potrzebujesz tlumaczenie
+	"There are no email domains for notifications.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"There are no email domains for notifications.";		// Necessita de tradução
+	"There are no email domains for notifications.";	// Necessita de tradução
+#endif
+
+const char *Txt_There_are_no_holidays =
+#if   L==1
+	"No existen d&iacute;as festivos.";	// Necessita traduccio
+#elif L==2
+	"There are no holidays.";		// Need Übersetzung
+#elif L==3
+	"There are no holidays.";
+#elif L==4
+	"No existen d&iacute;as festivos.";
+#elif L==5
+	"There are no holidays.";		// Besoin de traduction
+#elif L==6
+	"No existen d&iacute;as festivos.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono festivit&agrave;.";
+#elif L==8
+	"There are no holidays.";		// Potrzebujesz tlumaczenie
+#elif L==9
+	"There are no holidays.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_links =

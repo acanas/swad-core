@@ -84,6 +84,9 @@ void Hld_SeeHolidays (void)
    extern const char *Txt_End_date;
    extern const char *Txt_Holiday;
    extern const char *Txt_All_places;
+   extern const char *Txt_There_are_no_holidays;
+   extern const char *Txt_Create_another_holiday;
+   extern const char *Txt_Create_holiday;
    Hld_Order_t Order;
    unsigned NumHld;
 
@@ -96,75 +99,91 @@ void Hld_SeeHolidays (void)
       Hld_GetListHolidays ();
 
       /***** Table head *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Holidays,
-                                Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
-                        	                                        NULL,
-                                Hlp_INSTITUTION_Holidays,2);
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Hld_ORDER_BY_PLACE;
-	   Order <= Hld_ORDER_BY_START_DATE;
-	   Order++)
-	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeeHld);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Hlds.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
-	 if (Order == Gbl.Hlds.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</th>");
-	}
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-	                 "&nbsp;%s&nbsp;"
-	                 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "</tr>",
-	       Txt_End_date,
-	       Txt_Holiday);
-
-      /***** Write all the holidays *****/
-      for (NumHld = 0;
-	   NumHld < Gbl.Hlds.Num;
-	   NumHld++)
-	{
-	 /* Write data of this holiday */
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%s"
-			    "</td>",
-		  Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
-						     Gbl.Hlds.Lst[NumHld].PlaceFullName);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	                    "&nbsp;%04u-%02u-%02u"
-	                    "</td>",
-		  Gbl.Hlds.Lst[NumHld].StartDate.Year,
-		  Gbl.Hlds.Lst[NumHld].StartDate.Month,
-		  Gbl.Hlds.Lst[NumHld].StartDate.Day);
-	 fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-	                    "&nbsp;");
-	 switch (Gbl.Hlds.Lst[NumHld].HldTyp)
+      Lay_StartRoundFrame (NULL,Txt_Holidays,
+                           Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM ? Hld_PutIconToEditHlds :
+                                                                   NULL,
+                           Hlp_INSTITUTION_Holidays);
+      if (Gbl.Hlds.Num)
+	 {
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
+                            "<tr>");
+	 for (Order = Hld_ORDER_BY_PLACE;
+	      Order <= Hld_ORDER_BY_START_DATE;
+	      Order++)
 	   {
-	    case Hld_HOLIDAY:
-	       break;
-	    case Hld_NON_SCHOOL_PERIOD:
-	       fprintf (Gbl.F.Out,"%04u-%02u-%02u",
-			Gbl.Hlds.Lst[NumHld].EndDate.Year,
-			Gbl.Hlds.Lst[NumHld].EndDate.Month,
-			Gbl.Hlds.Lst[NumHld].EndDate.Day);
-	       break;
+	    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+	    Act_FormStart (ActSeeHld);
+	    Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	    Act_LinkFormSubmit (Txt_HOLIDAYS_HELP_ORDER[Order],"TIT_TBL",NULL);
+	    if (Order == Gbl.Hlds.SelectedOrder)
+	       fprintf (Gbl.F.Out,"<u>");
+	    fprintf (Gbl.F.Out,"%s",Txt_HOLIDAYS_ORDER[Order]);
+	    if (Order == Gbl.Hlds.SelectedOrder)
+	       fprintf (Gbl.F.Out,"</u>");
+	    fprintf (Gbl.F.Out,"</a>");
+	    Act_FormEnd ();
+	    fprintf (Gbl.F.Out,"</th>");
 	   }
-	 fprintf (Gbl.F.Out,"</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "&nbsp;%s"
-			    "</td>"
+	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
+			    "&nbsp;%s&nbsp;"
+			    "</th>"
+			    "<th class=\"LEFT_MIDDLE\">"
+			    "%s"
+			    "</th>"
 			    "</tr>",
-		  Gbl.Hlds.Lst[NumHld].Name);
+		  Txt_End_date,
+		  Txt_Holiday);
+
+	 /***** Write all the holidays *****/
+	 for (NumHld = 0;
+	      NumHld < Gbl.Hlds.Num;
+	      NumHld++)
+	   {
+	    /* Write data of this holiday */
+	    fprintf (Gbl.F.Out,"<tr>"
+			       "<td class=\"DAT LEFT_MIDDLE\">"
+			       "%s"
+			       "</td>",
+		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
+							Gbl.Hlds.Lst[NumHld].PlaceFullName);
+	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+			       "&nbsp;%04u-%02u-%02u"
+			       "</td>",
+		     Gbl.Hlds.Lst[NumHld].StartDate.Year,
+		     Gbl.Hlds.Lst[NumHld].StartDate.Month,
+		     Gbl.Hlds.Lst[NumHld].StartDate.Day);
+	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
+			       "&nbsp;");
+	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
+	      {
+	       case Hld_HOLIDAY:
+		  break;
+	       case Hld_NON_SCHOOL_PERIOD:
+		  fprintf (Gbl.F.Out,"%04u-%02u-%02u",
+			   Gbl.Hlds.Lst[NumHld].EndDate.Year,
+			   Gbl.Hlds.Lst[NumHld].EndDate.Month,
+			   Gbl.Hlds.Lst[NumHld].EndDate.Day);
+		  break;
+	      }
+	    fprintf (Gbl.F.Out,"</td>"
+			       "<td class=\"DAT LEFT_MIDDLE\">"
+			       "&nbsp;%s"
+			       "</td>"
+			       "</tr>",
+		     Gbl.Hlds.Lst[NumHld].Name);
+	   }
+	 fprintf (Gbl.F.Out,"</table>");
+	}
+      else	// No holidays created in the current institution
+	 Lay_ShowAlert (Lay_INFO,Txt_There_are_no_holidays);
+
+      /***** Button to create centre *****/
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
+	{
+	 Act_FormStart (ActEdiHld);
+	 Lay_PutConfirmButton (Gbl.Hlds.Num ? Txt_Create_another_holiday :
+	                                      Txt_Create_holiday);
+	 Act_FormEnd ();
 	}
 
       /***** End table *****/
