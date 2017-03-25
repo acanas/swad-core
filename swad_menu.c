@@ -120,8 +120,8 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeCtr,		//  2
 		ActSeeDpt,		//  3
 		ActSeePlc,		//  4
-		ActSeeHld,		//  5
-		ActSeeCalIns,		//  6
+		ActSeeCalIns,		//  5
+		0,			//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9

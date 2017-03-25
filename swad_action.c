@@ -180,7 +180,6 @@ Institution:
 	 84. ActSeeCtr			List centres
 	 85. ActSeeDpt			List departments
 	 86. ActSeePlc			List places
-	 87. ActSeeHld			List holidays
 	 88. ActSeeCalIns		Show the academic calendar
 
 	 89. ActInsSch			Search for courses, teachers, documents...
@@ -218,6 +217,7 @@ Institution:
 	117. ActRenPlcSho		Change short name of a place
 	118. ActRenPlcFul		Change full name of a place
 
+	 87. ActSeeHld			List holidays
 	119. ActEdiHld			Edit holidays
 	120. ActNewHld			Request the creation of a holiday
 	121. ActRemHld			Remove a holiday
@@ -1605,7 +1605,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
    /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
-   /* ActSeeHld		*/{ 707, 5,TabIns,ActSeeHld		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,"date64x64.gif"	},
    /* ActSeeCalIns	*/{1628, 6,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"date64x64.gif"	},
 
    // Actions not in menu:
@@ -1644,14 +1643,15 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceShort		,NULL},
    /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceFull		,NULL},
 
-   /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_EditHolidays		,NULL},
-   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RecFormNewHoliday		,NULL},
-   /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RemoveHoliday		,NULL},
-   /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayPlace		,NULL},
-   /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayType		,NULL},
-   /* ActChgHldStrDat	*/{ 717,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeStartDate		,NULL},
-   /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeEndDate		,NULL},
-   /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeHld		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RenameHoliday		,NULL},
+   /* ActSeeHld		*/{ 707,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,NULL},
+   /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_EditHolidays		,NULL},
+   /* ActNewHld		*/{ 714,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RecFormNewHoliday		,NULL},
+   /* ActRemHld		*/{ 716,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RemoveHoliday		,NULL},
+   /* ActChgHldPlc	*/{ 896,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayPlace		,NULL},
+   /* ActChgHldTyp	*/{ 715,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeHolidayType		,NULL},
+   /* ActChgHldStrDat	*/{ 717,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeStartDate		,NULL},
+   /* ActChgHldEndDat	*/{ 718,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_ChangeEndDate		,NULL},
+   /* ActRenHld		*/{ 766,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_RenameHoliday		,NULL},
 
    /* ActPrnCalIns	*/{1629,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Cal_PrintCalendar		,NULL},
    /* ActChgCalIns1stDay*/{1630,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Cal_DrawCalendarIns		,NULL},

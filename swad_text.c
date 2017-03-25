@@ -18467,28 +18467,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes"
 #endif
 	,
-	//  5: ActSeeHld
-#if   L==1
-	"Festius"
-#elif L==2
-	"Feiertage"
-#elif L==3
-	"Holidays"
-#elif L==4
-	"Festivos"
-#elif L==5
-	"F&eacute;ri&eacute;s"
-#elif L==6
-	"Arete"
-#elif L==7
-	"Vacanze"
-#elif L==8
-	"Noclegi"
-#elif L==9
-	"F&eacute;rias"
-#endif
-	,
-	//  6: ActSeeCalIns
+	//  5: ActSeeCalIns
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18509,6 +18488,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -20460,28 +20440,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Localiza&ccedil;oes"
 #endif
 	,
-	//  5: ActSeeHld
-#if   L==1
-	"Dies festius i per&iacute;odes no lectius d'aquesta instituci&oacute;"
-#elif L==2
-	"Urlaub und vorlesungsfreie Zeit"
-#elif L==3
-	"Holidays and non school days of this institution"
-#elif L==4
-	"D&iacute;as festivos y per&iacute;odos no lectivos de esta instituci&oacute;n"
-#elif L==5
-	"Jours f&eacute;ri&eacute;s et sans &eacute;cole"
-#elif L==6
-	"D&iacute;as festivos y per&iacute;odos no lectivos de esta instituci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"Festivit&agrave; e giorni senza lezione"
-#elif L==8
-	"Noclegi i innych dni zajec szkolnych"
-#elif L==9
-	"Feriados e dias sem escola"
-#endif
-	,
-	//  6: ActSeeCalIns
+	//  5: ActSeeCalIns
 #if   L==1
 	"Calendari acad&egrave;mic"
 #elif L==2
@@ -20493,7 +20452,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==5
 	"Calendrier"
 #elif L==6
-	"Calendario acad&eacute;mico"// Okoteve traducción
+	"Calendario acad&eacute;mico"	// Okoteve traducción
 #elif L==7
 	"Calendario del corso"
 #elif L==8
@@ -20502,6 +20461,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
