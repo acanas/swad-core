@@ -81,7 +81,7 @@ void Hld_PutLinkToHolidays (void)
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Lay_PutContextualLink (ActSeeHld,NULL,
-			  "date64x64.gif",
+			  "holiday64x64.png",
 			  Txt_Holidays,Txt_Holidays,
 			  NULL);
    fprintf (Gbl.F.Out,"</div>");

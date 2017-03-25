@@ -209,13 +209,20 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.167 (2017-03-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.167.1 (2017-03-24)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.167.1: Mar 25, 2017	Changes in icons related to calendar and holidays. (217595 lines)
+Copy the following icons to icon public directory:
+sudo cp -a icon/iconset/awesome/action64x64/calendar64x64.png /var/www/html/swad/icon/iconset/awesome/action64x64/
+sudo cp -a icon/iconset/nuvola/action64x64/calendar64x64.png /var/www/html/swad/icon/iconset/nuvola/action64x64/
+sudo cp -a icon/calendar64x64.png /var/www/html/swad/icon/
+sudo cp -a icon/holiday64x64.png /var/www/html/swad/icon/
+
         Version 16.167:   Mar 25, 2017	Holidays removed from main manu. (217589 lines)
         Version 16.166.2: Mar 25, 2017	Contextual link to edit holidays in calendar. (217628 lines)
         Version 16.166.1: Mar 25, 2017	Contextual link to holidays in calendar. (217630 lines)
@@ -858,7 +865,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1611','es','N','Ver 
 
         Version 16.81.5:  Dec 01, 2016	Link in teacher's record card to show agenda. (209313 lines)
 Copy the following icon to icon public directory:
-sudo cp icon/date64x64.gif /var/www/html/swad/icon/
+sudo cp icon/calendar64x64.png /var/www/html/swad/icon/
 
         Version 16.81.4:  Dec 01, 2016	Changes in texts related to agenda. (209268 lines)
         Version 16.81.3:  Dec 01, 2016	Icon view replaced by lock in agenda.

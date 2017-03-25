@@ -1524,7 +1524,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeLnk		*/{ 748, 6,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
    /* ActLstPlg		*/{ 777, 7,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
    /* ActSetUp		*/{ 840, 8,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
-   /* ActSeeCalSys	*/{1622, 9,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"date64x64.gif"	},
+   /* ActSeeCalSys	*/{1622, 9,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
@@ -1578,7 +1578,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCtyReqSch	*/{1176, 0,TabCty,ActCtyReqSch		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtySearch		,"search64x64.gif"	},
    /* ActSeeCtyInf	*/{1155, 1,TabCty,ActSeeCtyInf		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeIns		*/{ 696, 2,TabCty,ActSeeIns		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowInssOfCurrentCty	,"institution64x64.gif"	},
-   /* ActSeeCalCty	*/{1625, 3,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCty		,"date64x64.gif"	},
+   /* ActSeeCalCty	*/{1625, 3,TabCty,ActSeeCalCty		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCty		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActCtySch		*/{1181,-1,TabUnk,ActCtyReqSch		,    0,    0,    0,    0,    0,0x1FF,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtySearch			,NULL},
@@ -1605,7 +1605,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
    /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
-   /* ActSeeCalIns	*/{1628, 6,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"date64x64.gif"	},
+   /* ActSeeCalIns	*/{1628, 6,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
@@ -1661,7 +1661,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActCtrReqSch	*/{1178, 0,TabCtr,ActCtrReqSch		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqCtrSearch		,"search64x64.gif"	},
    /* ActSeeCtrInf	*/{1151, 1,TabCtr,ActSeeCtrInf		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeDeg		*/{1011, 2,TabCtr,ActSeeDeg		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowDegsOfCurrentCtr	,"deg64x64.gif"		},
-   /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCtr		,"date64x64.gif"	},
+   /* ActSeeCalCtr	*/{1631, 3,TabCtr,ActSeeCalCtr		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCtr		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActCtrSch		*/{1183,-1,TabUnk,ActCtrReqSch		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CtrSearch			,NULL},
@@ -1696,7 +1696,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActDegReqSch	*/{1179, 0,TabDeg,ActDegReqSch		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqDegSearch		,"search64x64.gif"	},
    /* ActSeeDegInf	*/{1149, 1,TabDeg,ActSeeDegInf		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeCrs		*/{1009, 2,TabDeg,ActSeeCrs		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ShowCrssOfCurrentDeg	,"coursesdegree64x64.gif"},
-   /* ActSeeCalDeg	*/{1634, 3,TabDeg,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarDeg		,"date64x64.gif"	},
+   /* ActSeeCalDeg	*/{1634, 3,TabDeg,ActSeeCalDeg		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarDeg		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActDegSch		*/{1184,-1,TabUnk,ActDegReqSch		,    0,    0,0x1FF,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_DegSearch			,NULL},
@@ -1733,7 +1733,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeFAQ		*/{  54, 5,TabCrs,ActSeeFAQ		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"faq64x64.gif"		},
    /* ActSeeCrsLnk	*/{   9, 6,TabCrs,ActSeeCrsLnk		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_ShowInfo			,"link64x64.gif"	},
    /* ActSeeCrsTT	*/{  25, 7,TabCrs,ActSeeCrsTT		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeCalCrs	*/{  16, 8,TabCrs,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCrs		,"date64x64.gif"	},
+   /* ActSeeCalCrs	*/{  16, 8,TabCrs,ActSeeCalCrs		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarCrs		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActCrsSch		*/{1185,-1,TabUnk,ActCrsReqSch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_CrsSearch			,NULL},
@@ -2870,7 +2870,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActFrmRolSes	*/{ 843, 1,TabPrf,ActFrmRolSes		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_WriteFormLogout		,"keyuser64x64.gif"	},
    /* ActMyCrs		*/{ 987, 2,TabPrf,ActMyCrs		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqSelectOneOfMyCourses	,"hierarchy64x64.png"	},
    /* ActSeeMyTT	*/{ 408, 3,TabPrf,ActSeeMyTT		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,TT_ShowClassTimeTable		,"clock64x64.gif"	},
-   /* ActSeeMyAgd	*/{1602, 4,TabPrf,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"date64x64.gif"	},
+   /* ActSeeMyAgd	*/{1602, 4,TabPrf,ActSeeMyAgd		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowMyAgenda		,"calendar64x64.png"	},
    /* ActFrmMyAcc	*/{  36, 5,TabPrf,ActFrmMyAcc		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_ShowFormMyAccount		,"arroba64x64.gif"	},
    /* ActReqEdiRecCom	*/{ 285, 6,TabPrf,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ShowFormMySharedRecord	,"card64x64.gif"	},
    /* ActEdiPrf		*/{ 673, 7,TabPrf,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_EditPrefs			,"heart64x64.gif"	},

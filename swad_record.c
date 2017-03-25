@@ -2421,13 +2421,13 @@ static void Rec_PutIconsCommands (void)
       if (ItsMe)
 	 Lay_PutContextualLink (ActSeeMyAgd,
 				NULL,
-				"date64x64.gif",
+				"calendar64x64.png",
 				Txt_Show_agenda,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
 	 Lay_PutContextualLink (ActSeeUsrAgd,
 				Rec_PutParamUsrCodEncrypted,
-				"date64x64.gif",
+				"calendar64x64.png",
 				Txt_Show_agenda,NULL,
 				NULL);
 
