@@ -72,7 +72,7 @@ static void Hld_PutHeadHolidays (void);
 static void Hld_CreateHoliday (struct Holiday *Hld);
 
 /*****************************************************************************/
-/****************** Put a link to view and edit holidays *********************/
+/************************ Put a link to view holidays ************************/
 /*****************************************************************************/
 
 void Hld_PutLinkToHolidays (void)
@@ -83,6 +83,22 @@ void Hld_PutLinkToHolidays (void)
    Lay_PutContextualLink (ActSeeHld,NULL,
 			  "date64x64.gif",
 			  Txt_Holidays,Txt_Holidays,
+			  NULL);
+   fprintf (Gbl.F.Out,"</div>");
+  }
+
+/*****************************************************************************/
+/********************* Put a link to create a holiday ************************/
+/*****************************************************************************/
+
+void Hld_PutLinkToCreateHoliday (void)
+  {
+   extern const char *Txt_Create_holiday;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+   Lay_PutContextualLink (ActEdiHld,NULL,
+			  "edit64x64.png",
+			  Txt_Create_holiday,Txt_Create_holiday,
 			  NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -224,17 +240,11 @@ static void Hld_PutIconToEditHlds (void)
 
 void Hld_EditHolidays (void)
   {
-   extern const char *Txt_There_are_no_holidays;
-
    /***** Get list of places *****/
    Plc_GetListPlaces ();
 
    /***** Get list of holidays *****/
    Hld_GetListHolidays ();
-
-   if (!Gbl.Hlds.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_holidays);
 
    /***** Put a form to create a new holiday *****/
    Hld_PutFormToCreateHoliday ();

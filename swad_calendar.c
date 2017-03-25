@@ -259,9 +259,6 @@ void Cal_DrawCalendarCty (void)
 
 void Cal_DrawCalendarIns (void)
   {
-   /***** Link to view and edit holidays *****/
-   Hld_PutLinkToHolidays ();
-
    Cal_DrawCalendar (ActSeeCalIns,ActChgCalIns1stDay,Cal_PutIconToPrintCalendarIns,false);
   }
 
@@ -299,6 +296,16 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
      {
       Gbl.Hlds.SelectedOrder = Hld_ORDER_BY_START_DATE;
       Hld_GetListHolidays ();
+     }
+
+   /***** Link to view / edit holidays *****/
+   if (ActionSeeCalendar == ActSeeCalIns &&		// Only for institutions
+       !PrintView)					// Not print view
+     {
+      if (Gbl.Hlds.Num)					// There are holidays
+         Hld_PutLinkToHolidays ();
+      else if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
+         Hld_PutLinkToCreateHoliday ();
      }
 
    /***** Start frame *****/

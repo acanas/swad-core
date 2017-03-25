@@ -75,6 +75,7 @@ typedef enum
 /*****************************************************************************/
 
 void Hld_PutLinkToHolidays (void);
+void Hld_PutLinkToCreateHoliday (void);
 
 void Hld_SeeHolidays (void);
 void Hld_EditHolidays (void);

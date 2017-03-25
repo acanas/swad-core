@@ -46998,27 +46998,6 @@ const char *Txt_There_are_no_email_domains =
 	"There are no email domains for notifications.";		// Necessita de tradução
 #endif
 
-const char *Txt_There_are_no_holidays =
-#if   L==1
-	"No existen d&iacute;as festivos.";	// Necessita traduccio
-#elif L==2
-	"There are no holidays.";		// Need Übersetzung
-#elif L==3
-	"There are no holidays.";
-#elif L==4
-	"No existen d&iacute;as festivos.";
-#elif L==5
-	"There are no holidays.";		// Besoin de traduction
-#elif L==6
-	"No existen d&iacute;as festivos.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono festivit&agrave;.";
-#elif L==8
-	"There are no holidays.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no holidays.";		// Necessita de tradução
-#endif
-
 const char *Txt_There_are_no_links =
 #if   L==1
 	"No existen enlaces.";		// Necessita traduccio
