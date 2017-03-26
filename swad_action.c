@@ -99,28 +99,28 @@ System:
 	 11. ActSeeCty			List countries
 	 12. ActSeePen			List pending institutions, centres, degrees and courses
 	 13. ActReqRemOldCrs		Request the total removal of old courses
-	 14. ActSeeBan			See banners
-	 15. ActSeeLnk			See institutional links
-	 16. ActLstPlg			List plugins
-	 17. ActSetUp			Initial set up
-	 18. ActSeeCalSys		Show the academic calendar
+	 14. ActSeeLnk			See institutional links
+	 15. ActLstPlg			List plugins
+	 16. ActSetUp			Initial set up
+	 17. ActSeeCalSys		Show the academic calendar
 
-	 19. ActSysSch			Search for courses, teachers, documents...
+	 18. ActSysSch			Search for courses, teachers, documents...
 
-	 20. ActEdiCty			Edit countries
-	 21. ActNewCty			Request the creation of a country
-	 22. ActRemCty			Remove a country
-	 23. ActRenCty			Change the name of a country
-	 24. ActChgCtyWWW		Change web of country
+	 19. ActEdiCty			Edit countries
+	 20. ActNewCty			Request the creation of a country
+	 21. ActRemCty			Remove a country
+	 22. ActRenCty			Change the name of a country
+	 23. ActChgCtyWWW		Change web of country
 
-	 25. ActSeeDegTyp		List types of degrees
-	 26. ActEdiDegTyp		Request edition of types of degrees
-	 27. ActNewDegTyp		Request the creation of a type of degree
-	 28. ActRemDegTyp		Request the removal of a type of degree
-	 29. ActRenDegTyp		Request renaming of a type of degree
+	 24. ActSeeDegTyp		List types of degrees
+	 25. ActEdiDegTyp		Request edition of types of degrees
+	 26. ActNewDegTyp		Request the creation of a type of degree
+	 27. ActRemDegTyp		Request the removal of a type of degree
+	 28. ActRenDegTyp		Request renaming of a type of degree
 
-	 30. ActRemOldCrs		Remove completely old courses
+	 29. ActRemOldCrs		Remove completely old courses
 
+	 30. ActSeeBan			See banners
 	 31. ActEdiBan			Edit banners
 	 32. ActNewBan			Request the creation of a banner
 	 33. ActRemBan			Request the removal of a banner
@@ -1520,11 +1520,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
    /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"hierarchy64x64.png"	},
    /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
-   /* ActSeeBan		*/{1137, 4,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
-   /* ActSeeLnk		*/{ 748, 5,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
-   /* ActLstPlg		*/{ 777, 6,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
-   /* ActSetUp		*/{ 840, 7,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
-   /* ActSeeCalSys	*/{1622, 8,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"calendar64x64.png"	},
+   /* ActSeeLnk		*/{ 748, 4,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
+   /* ActLstPlg		*/{ 777, 5,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
+   /* ActSetUp		*/{ 840, 6,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
+   /* ActSeeCalSys	*/{1622, 7,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
@@ -1537,16 +1536,17 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActRemOldCrs	*/{1110,-1,TabUnk,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveOldCrss		,NULL},
 
-   /* ActEdiBan		*/{1138,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_EditBanners		,NULL},
-   /* ActNewBan		*/{1139,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RecFormNewBanner		,NULL},
-   /* ActRemBan		*/{1140,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RemoveBanner		,NULL},
-   /* ActShoBan		*/{1212,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ShowBanner			,NULL},
-   /* ActHidBan		*/{1213,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_HideBanner			,NULL},
-   /* ActRenBanSho	*/{1141,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerShort		,NULL},
-   /* ActRenBanFul	*/{1142,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerFull		,NULL},
-   /* ActChgBanImg	*/{1144,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerImg		,NULL},
-   /* ActChgBanWWW	*/{1143,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerWWW		,NULL},
-   /* ActClkBan		*/{1145,-1,TabUnk,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
+   /* ActSeeBan		*/{1137,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,NULL},
+   /* ActEdiBan		*/{1138,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_EditBanners		,NULL},
+   /* ActNewBan		*/{1139,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RecFormNewBanner		,NULL},
+   /* ActRemBan		*/{1140,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RemoveBanner		,NULL},
+   /* ActShoBan		*/{1212,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ShowBanner			,NULL},
+   /* ActHidBan		*/{1213,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_HideBanner			,NULL},
+   /* ActRenBanSho	*/{1141,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerShort		,NULL},
+   /* ActRenBanFul	*/{1142,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_RenameBannerFull		,NULL},
+   /* ActChgBanImg	*/{1144,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerImg		,NULL},
+   /* ActChgBanWWW	*/{1143,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_ChangeBannerWWW		,NULL},
+   /* ActClkBan		*/{1145,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_DOWNLD_FILE,Ban_ClickOnBanner		,NULL				,NULL},
 
    /* ActEdiLnk		*/{ 749,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_EditLinks			,NULL},
    /* ActNewLnk		*/{ 750,-1,TabUnk,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_RecFormNewLink		,NULL},

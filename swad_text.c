@@ -18199,28 +18199,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudos"
 #endif
 	,
-	//  5: ActSeeBan
-#if   L==1
-	"Banners"
-#elif L==2
-	"Werbebanners"
-#elif L==3
-	"Banners"
-#elif L==4
-	"Banners"
-#elif L==5
-	"Banni&eacute;res"
-#elif L==6
-	"Banners"
-#elif L==7
-	"Banners"
-#elif L==8
-	"Banners"
-#elif L==9
-	"Banners"
-#endif
-	,
-	//  6: ActSeeLnk
+	//  5: ActSeeLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18241,7 +18220,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  7: ActLstPlg
+	//  6: ActLstPlg
 #if   L==1
 	"Complements"
 #elif L==2
@@ -18262,7 +18241,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  8: ActSetUp
+	//  7: ActSetUp
 #if   L==1
 	"Instal lar"
 #elif L==2
@@ -18283,7 +18262,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  9: ActSeeCalSys
+	//  8: ActSeeCalSys
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18304,6 +18283,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
 	},
@@ -20152,28 +20132,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Tipos de titula&ccedil;&atilde;o"
 #endif
 	,
-	//  5: ActSeeBan
-#if   L==1
-	"Llista de banners publicitaris"
-#elif L==2
-	"Werbebanners Liste"
-#elif L==3
-	"Banners list"
-#elif L==4
-	"Lista de banners publicitarios"
-#elif L==5
-	"Liste des banni&eacute;res publicitaires"
-#elif L==6
-	"Lista de banners publicitarios"// Okoteve traducción
-#elif L==7
-	"Lista di banners"
-#elif L==8
-	"Lista banery"
-#elif L==9
-	"Lista de banners publicit&aacute;rios"
-#endif
-	,
-	//  6: ActSeeLnk
+	//  5: ActSeeLnk
 #if   L==1
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2
@@ -20194,7 +20153,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	//  7: ActLstPlg
+	//  6: ActLstPlg
 #if   L==1
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2
@@ -20215,7 +20174,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  8: ActSetUp
+	//  7: ActSetUp
 #if   L==1
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2
@@ -20236,7 +20195,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  9: ActSeeCalSys
+	//  8: ActSeeCalSys
 #if   L==1
 	"Calendari acad&egrave;mic"
 #elif L==2
@@ -20257,6 +20216,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
 	},
