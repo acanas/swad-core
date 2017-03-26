@@ -699,7 +699,8 @@ static void Deg_ListDegreesForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_CENTRE_Degrees,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
+                             Hlp_CENTRE_Degrees,2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -949,6 +950,15 @@ static void Deg_PutFormToCreateDegree (void)
    struct DegreeType *DegTyp;
    unsigned NumDegTyp;
 
+   /***** Degree data *****/
+   Deg = &Gbl.Degs.EditingDeg;
+
+   /***** Start of frame *****/
+   sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
+                        Hlp_CENTRE_Degrees);
+
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
       Act_FormStart (ActNewDeg);
@@ -957,15 +967,10 @@ static void Deg_PutFormToCreateDegree (void)
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
-   /***** Degree data *****/
-   Deg = &Gbl.Degs.EditingDeg;
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
 
-   /***** Start of frame *****/
-   sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_CENTRE_Degrees,2);
-
-   /***** Write heading *****/
+   /***** Table head *****/
    Deg_PutHeadDegreesForEdition ();
 
    /***** Put disabled icon to remove degree *****/
@@ -1045,11 +1050,17 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+
+   /***** Button to send form *****/
+   Lay_PutCreateButton (Txt_Create_degree);
 
    /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1365,7 +1376,7 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
 void Deg_EditDegrees (void)
   {
-   extern const char *Txt_There_is_no_list_of_types_of_degree;
+   extern const char *Txt_There_are_no_types_of_degree;
    extern const char *Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees;
 
    /***** Get list of degrees in the current centre *****/
@@ -1385,8 +1396,12 @@ void Deg_EditDegrees (void)
      }
    else	// No degree types
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_list_of_types_of_degree);
-      Lay_ShowAlert (Lay_INFO,Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees);
+      /***** Warning message *****/
+      Lay_ShowAlert (Lay_WARNING,Txt_There_are_no_types_of_degree);
+
+      /***** Form to create the first degree type *****/
+      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+         DT_PutFormToCreateDegreeType ();
      }
 
    /***** Free list of degree types *****/

@@ -99,7 +99,6 @@ System:
 	 11. ActSeeCty			List countries
 	 12. ActSeePen			List pending institutions, centres, degrees and courses
 	 13. ActReqRemOldCrs		Request the total removal of old courses
-	 14. ActSeeDegTyp		List types of degrees
 	 15. ActSeeBan			See banners
 	 16. ActSeeLnk			See institutional links
 	 17. ActLstPlg			List plugins
@@ -107,13 +106,15 @@ System:
 	 19. ActSeeCalSys		Show the academic calendar
 
 	 21. ActSysSch			Search for courses, teachers, documents...
-	 22. ActEdiDegTyp		Request edition of types of degrees
+
 	 23. ActEdiCty			Edit countries
 	 24. ActNewCty			Request the creation of a country
 	 25. ActRemCty			Remove a country
 	 26. ActRenCty			Change the name of a country
 	 27. ActChgCtyWWW		Change web of country
 
+	 14. ActSeeDegTyp		List types of degrees
+	 22. ActEdiDegTyp		Request edition of types of degrees
 	 28. ActNewDegTyp		Request the creation of a type of degree
 	 29. ActRemDegTyp		Request the removal of a type of degree
 	 30. ActRenDegTyp		Request renaming of a type of degree
@@ -1519,26 +1520,20 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
    /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"hierarchy64x64.png"	},
    /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
-   /* ActSeeDegTyp	*/{1013, 4,TabSys,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInSysTab	,"grouptypes64x64.gif"	},
-   /* ActSeeBan		*/{1137, 5,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
-   /* ActSeeLnk		*/{ 748, 6,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
-   /* ActLstPlg		*/{ 777, 7,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
-   /* ActSetUp		*/{ 840, 8,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
-   /* ActSeeCalSys	*/{1622, 9,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"calendar64x64.png"	},
+   /* ActSeeBan		*/{1137, 4,TabSys,ActSeeBan		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ban_SeeBanners			,"picture64x64.gif"	},
+   /* ActSeeLnk		*/{ 748, 5,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
+   /* ActLstPlg		*/{ 777, 6,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},
+   /* ActSetUp		*/{ 840, 7,TabSys,ActSetUp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Set_Setup			,"lightning64x64.gif"	},
+   /* ActSeeCalSys	*/{1622, 8,TabSys,ActSeeCalSys		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarSys		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActSysSch		*/{ 628,-1,TabUnk,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_SysSearch			,NULL},
-   /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_ReqEditDegreeTypes		,NULL},
 
    /* ActEdiCty		*/{ 863,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_EditCountries		,NULL},
    /* ActNewCty		*/{ 864,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RecFormNewCountry		,NULL},
    /* ActRemCty		*/{ 893,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RemoveCountry		,NULL},
    /* ActRenCty		*/{ 866,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_RenameCountry		,NULL},
    /* ActChgCtyWWW	*/{1157,-1,TabUnk,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cty_ChangeCtyWWW		,NULL},
-
-   /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RecFormNewDegreeType	,NULL},
-   /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RemoveDegreeType		,NULL},
-   /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDegTyp		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RenameDegreeType		,NULL},
 
    /* ActRemOldCrs	*/{1110,-1,TabUnk,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveOldCrss		,NULL},
 
@@ -1677,6 +1672,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqCtrPho	*/{1160,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x1C0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_RequestPhoto		,NULL},
    /* ActRecCtrPho	*/{1161,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x1C0,    0,    0,    0,Act_CONT_DATA,Act_THIS_WINDOW,NULL				,Ctr_ReceivePhoto		,NULL},
    /* ActChgCtrPhoAtt	*/{1159,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x1C0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrPhotoAttribution	,NULL},
+
+   /* ActSeeDegTyp	*/{1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
+   /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_ReqEditDegreeTypes		,NULL},
+   /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RecFormNewDegreeType	,NULL},
+   /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RemoveDegreeType		,NULL},
+   /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RenameDegreeType		,NULL},
 
    /* ActEdiDeg		*/{ 536,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1FE,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_EditDegrees		,NULL},
    /* ActReqDeg		*/{1206,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1FE,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_RecFormReqDeg		,NULL},

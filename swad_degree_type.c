@@ -73,7 +73,6 @@ static void DT_PutIconsListDegTypes (void);
 static void DT_PutIconToEditDegTypes (void);
 static void DT_ListDegreeTypesForEdition (void);
 
-static void DT_PutFormToCreateDegreeType (void);
 static void DT_PutHeadDegreeTypesForSeeing (Act_Action_t NextAction,DT_Order_t SelectedOrder);
 static void DT_PutHeadDegreeTypesForEdition (void);
 static void DT_CreateDegreeType (struct DegreeType *DegTyp);
@@ -83,20 +82,6 @@ static void DT_PutParamOtherDegTypCod (long DegTypCod);
 static unsigned DT_CountNumDegsOfType (long DegTypCod);
 static void DT_RemoveDegreeTypeCompletely (long DegTypCod);
 static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
-
-/*****************************************************************************/
-/******************* Put link (form) to view degree types ********************/
-/*****************************************************************************/
-
-void DT_PutIconToViewDegreeTypes (void)
-  {
-   extern const char *Txt_Types_of_degree;
-
-   Lay_PutContextualLink (ActSeeDegTyp,NULL,
-                          "hierarchy64x64.png",
-                          Txt_Types_of_degree,NULL,
-                          NULL);
-  }
 
 /*****************************************************************************/
 /************** Show selector of degree types for statistics *****************/
@@ -138,10 +123,24 @@ void DT_WriteSelectorDegreeTypes (void)
   }
 
 /*****************************************************************************/
+/******************* Put link (form) to view degree types ********************/
+/*****************************************************************************/
+
+void DT_PutIconToViewDegreeTypes (void)
+  {
+   extern const char *Txt_Types_of_degree;
+
+   Lay_PutContextualLink (ActSeeDegTyp,NULL,
+                          "hierarchy64x64.png",
+                          Txt_Types_of_degree,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /***************************** Show degree types *****************************/
 /*****************************************************************************/
 
-void DT_SeeDegreeTypesInSysTab (void)
+void DT_SeeDegreeTypesInDegTab (void)
   {
    DT_SeeDegreeTypes (ActSeeDegTyp,Sco_SCOPE_SYS,
                       DT_ORDER_BY_DEGREE_TYPE);	// Default order if not specified
@@ -203,8 +202,8 @@ void DT_ReqEditDegreeTypes (void)
 /***************************** List degree types *****************************/
 /*****************************************************************************/
 // This function can be called from:
-// - system tab		==> NextAction = ActSeeDegTyp
-// - statistic tab	==> NextAction = ActSeeUseGbl
+// - centre tab		=> NextAction = ActSeeDegTyp
+// - statistic tab	=> NextAction = ActSeeUseGbl
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder)
   {
@@ -328,8 +327,11 @@ static void DT_PutIconsListDegTypes (void)
 static void DT_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
+   bool IsCentreTab = Gbl.CurrentCtr.Ctr.CtrCod > 0 &&
+	              Gbl.CurrentDeg.Deg.DegCod <= 0;
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+   if (IsCentreTab &&				// Only editable in centre tab
+       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only editable by system admins
       Lay_PutContextualLink (ActEdiDegTyp,NULL,
 			     "edit64x64.png",
 			     Txt_Edit,NULL,
@@ -359,7 +361,7 @@ static void DT_ListDegreeTypesForEdition (void)
       /* Put icon to remove degree type */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees ==> deletion forbidden
+      if (Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs)	// Degree type has degrees => deletion forbidden
          Lay_PutIconRemovalNotAllowed ();
       else
         {
@@ -404,7 +406,7 @@ static void DT_ListDegreeTypesForEdition (void)
 /******************** Put a form to create a new degree type *****************/
 /*****************************************************************************/
 
-static void DT_PutFormToCreateDegreeType (void)
+void DT_PutFormToCreateDegreeType (void)
   {
    extern const char *Hlp_SYSTEM_Studies_edit;
    extern const char *Txt_New_type_of_degree;
@@ -731,9 +733,9 @@ void DT_RemoveDegreeType (void)
       Lay_ShowErrorAndExit ("Code of type of degree not found.");
 
    /***** Check if this degree type has degrees *****/
-   if (DegTyp.NumDegs)	// Degree type has degrees ==> don't remove
+   if (DegTyp.NumDegs)	// Degree type has degrees => don't remove
       Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type);
-   else	// Degree type has no degrees ==> remove it
+   else	// Degree type has no degrees => remove it
      {
       /***** Remove degree type *****/
       DT_RemoveDegreeTypeCompletely (DegTyp.DegTypCod);

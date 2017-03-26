@@ -58,12 +58,13 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void DT_PutIconToViewDegreeTypes (void);
 void DT_WriteSelectorDegreeTypes (void);
 
-void DT_SeeDegreeTypesInSysTab (void);
+void DT_PutIconToViewDegreeTypes (void);
+void DT_SeeDegreeTypesInDegTab (void);
 void DT_SeeDegreeTypesInStaTab (void);
 void DT_ReqEditDegreeTypes (void);
+void DT_PutFormToCreateDegreeType (void);
 
 void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order);
 void DT_FreeListDegreeTypes (void);
