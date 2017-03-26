@@ -119,8 +119,8 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeInsInf,		//  1
 		ActSeeCtr,		//  2
 		ActSeeDpt,		//  3
-		ActSeePlc,		//  4
-		ActSeeCalIns,		//  5
+		ActSeeCalIns,		//  4
+		0,			//  5
 		0,			//  6
 		0,			//  7
 		0,			//  8

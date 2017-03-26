@@ -179,7 +179,6 @@ Institution:
 	 83. ActSeeInsInf		Show information on the current institution
 	 84. ActSeeCtr			List centres
 	 85. ActSeeDpt			List departments
-	 86. ActSeePlc			List places
 	 88. ActSeeCalIns		Show the academic calendar
 
 	 89. ActInsSch			Search for courses, teachers, documents...
@@ -211,6 +210,7 @@ Institution:
 	112. ActRenDptFul		Change full name department
 	113. ActChgDptWWW		Change web of department
 
+	 86. ActSeePlc			List places
 	114. ActEdiPlc			Edit places
 	115. ActNewPlc			Request the creation of a place
 	116. ActRemPlc			Remove a place
@@ -1604,8 +1604,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeInsInf	*/{1153, 1,TabIns,ActSeeInsInf		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ins_ShowConfiguration		,"info64x64.gif"	},
    /* ActSeeCtr		*/{ 676, 2,TabIns,ActSeeCtr		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ShowCtrsOfCurrentIns	,"house64x64.gif"	},
    /* ActSeeDpt		*/{ 675, 3,TabIns,ActSeeDpt		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_SeeDepts			,"houseteachers64x64.gif"},
-   /* ActSeePlc		*/{ 703, 4,TabIns,ActSeePlc		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,"mapmarker64x64.png"	},
-   /* ActSeeCalIns	*/{1628, 6,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"calendar64x64.png"	},
+   /* ActSeeCalIns	*/{1628, 4,TabIns,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cal_DrawCalendarIns		,"calendar64x64.png"	},
 
    // Actions not in menu:
    /* ActInsSch		*/{1182,-1,TabUnk,ActInsReqSch		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sch_GetParamsSearch		,Sch_InsSearch			,NULL},
@@ -1629,6 +1628,13 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCtrWWW	*/{ 683,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x1FE,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrWWW		,NULL},
    /* ActChgCtrSta	*/{1209,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrStatus		,NULL},
 
+   /* ActSeePlc		*/{ 703,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_SeePlaces			,NULL},
+   /* ActEdiPlc		*/{ 704,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_EditPlaces			,NULL},
+   /* ActNewPlc		*/{ 705,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RecFormNewPlace		,NULL},
+   /* ActRemPlc		*/{ 776,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RemovePlace		,NULL},
+   /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceShort		,NULL},
+   /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeeCtr		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceFull		,NULL},
+
    /* ActEdiDpt		*/{ 677,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_EditDepartments		,NULL},
    /* ActNewDpt		*/{ 687,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RecFormNewDpt		,NULL},
    /* ActRemDpt		*/{ 690,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RemoveDepartment		,NULL},
@@ -1636,12 +1642,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRenDptSho	*/{ 688,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RenameDepartShort		,NULL},
    /* ActRenDptFul	*/{ 689,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_RenameDepartFull		,NULL},
    /* ActChgDptWWW	*/{ 691,-1,TabUnk,ActSeeDpt		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Dpt_ChangeDptWWW		,NULL},
-
-   /* ActEdiPlc		*/{ 704,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_EditPlaces			,NULL},
-   /* ActNewPlc		*/{ 705,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RecFormNewPlace		,NULL},
-   /* ActRemPlc		*/{ 776,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RemovePlace		,NULL},
-   /* ActRenPlcSho	*/{ 894,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceShort		,NULL},
-   /* ActRenPlcFul	*/{ 895,-1,TabUnk,ActSeePlc		,    0,    0,    0,    0,0x100,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plc_RenamePlaceFull		,NULL},
 
    /* ActSeeHld		*/{ 707,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x1FF,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_SeeHolidays		,NULL},
    /* ActEdiHld		*/{ 713,-1,TabUnk,ActSeeCalIns		,    0,    0,    0,    0,0x180,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hld_EditHolidays		,NULL},

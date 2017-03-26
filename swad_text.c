@@ -18467,28 +18467,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeePlc
-#if   L==1
-	"Llocs"
-#elif L==2
-	"Standorte"
-#elif L==3
-	"Places"
-#elif L==4
-	"Lugares"
-#elif L==5
-	"Emplacements"
-#elif L==6
-	"Tenda"
-#elif L==7
-	"Localit&agrave;"
-#elif L==8
-	"Miejsca"
-#elif L==9
-	"Localiza&ccedil;oes"
-#endif
-	,
-	//  5: ActSeeCalIns
+	//  4: ActSeeCalIns
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18509,6 +18488,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
@@ -20440,28 +20420,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Departamentos"
 #endif
 	,
-	//  4: ActSeePlc
-#if   L==1
-	"Llista d'empla&ccedil;aments d'aquesta instituci&oacute;"
-#elif L==2
-	"Standorte"
-#elif L==3
-	"List of places of this institution"
-#elif L==4
-	"Lista de emplazamientos de esta instituci&oacute;n"
-#elif L==5
-	"Emplacements"
-#elif L==6
-	"Lista de emplazamientos de esta instituci&oacute;n"// Okoteve traducción
-#elif L==7
-	"Localit&agrave;"
-#elif L==8
-	"Miejsca"
-#elif L==9
-	"Localiza&ccedil;oes"
-#endif
-	,
-	//  5: ActSeeCalIns
+	//  4: ActSeeCalIns
 #if   L==1
 	"Calendari acad&egrave;mic"
 #elif L==2
@@ -20482,6 +20441,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
