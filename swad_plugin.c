@@ -165,14 +165,8 @@ static void Plg_PutIconToEditPlugins (void)
 
 void Plg_EditPlugins (void)
   {
-   extern const char *Txt_There_are_no_plugins;
-
    /***** Get list of plugins *****/
    Plg_GetListPlugins ();
-
-   if (!Gbl.Plugins.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_plugins);
 
    /***** Put a form to create a new plugin *****/
    Plg_PutFormToCreatePlugin ();

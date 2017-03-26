@@ -245,14 +245,8 @@ static void Plc_PutIconToEditPlaces (void)
 
 void Plc_EditPlaces (void)
   {
-   extern const char *Txt_There_are_no_places;
-
    /***** Get list of places *****/
    Plc_GetListPlaces ();
-
-   if (!Gbl.Plcs.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_places);
 
    /***** Put a form to create a new place *****/
    Plc_PutFormToCreatePlace ();

@@ -6197,6 +6197,27 @@ const char *Txt_Create_another_institution =
 	"Criar uma outra institu&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_another_link =
+#if   L==1
+	"Crear un altre enlla&ccedil;";
+#elif L==2
+	"Erstellen Sie einen anderen Link";
+#elif L==3
+	"Create another link";
+#elif L==4
+	"Crear otro enlace";
+#elif L==5
+	"Cr&eacute;er un autre lien";
+#elif L==6
+	"Crear otro enlace";	// Okoteve traducción
+#elif L==7
+	"Crea un altro link";
+#elif L==8
+	"Tworzenie inny link";
+#elif L==9
+	"Criar um outro liga&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Create_another_place =
 #if   L==1
 	"Crear un altre lloc";
@@ -25097,6 +25118,27 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 	"Therefore, the specified users will be enrolled/removed in/from the course.";				// Necessita de tradução
 #endif
 
+const char *Txt_No_holidays =
+#if   L==1
+	"No hay d&iacute;as festivos.";	// Necessita traduccio
+#elif L==2
+	"No holidays.";			// Need Übersetzung
+#elif L==3
+	"No holidays.";
+#elif L==4
+	"No hay d&iacute;as festivos.";
+#elif L==5
+	"TNo holidays.";		// Besoin de traduction
+#elif L==6
+	"No hay d&iacute;as festivos.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono festivit&agrave;.";
+#elif L==8
+	"No holidays.";			// Potrzebujesz tlumaczenie
+#elif L==9
+	"No holidays.";			// Necessita de tradução
+#endif
+
 const char *Txt_No_image =	// Without any image
 #if   L==1
 	"Sense imatge";
@@ -25179,6 +25221,27 @@ const char *Txt_No_institutions =
 	"Brak instytucje.";
 #elif L==9
 	"N&atilde;o h&aacute; institu&ccedil;&otilde;es.";
+#endif
+
+const char *Txt_No_links =
+#if   L==1
+	"No hi ha enlla&ccedil;os.";
+#elif L==2
+	"Keine Links.";
+#elif L==3
+	"No links.";
+#elif L==4
+	"No hay enlaces.";
+#elif L==5
+	"Il n'y a pas de liens.";
+#elif L==6
+	"No hay enlaces.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono link.";
+#elif L==8
+	"Brak linki.";
+#elif L==9
+	"N&atilde;o h&aacute; liga&ccedil;&otilde;es.";
 #endif
 
 const char *Txt_No_BR_msgs =
@@ -46792,27 +46855,6 @@ const char *Txt_There_are_no_accesses_with_the_selected_search_criteria =
 	"There are no accesses with the selected search criteria.";		// Necessita de tradução
 #endif
 
-const char *Txt_There_are_no_banners =
-#if   L==1
-	"No existen banners.";		// Necessita traduccio
-#elif L==2
-	"There are no banners.";	// Need Übersetzung
-#elif L==3
-	"There are no banners.";
-#elif L==4
-	"No existen banners.";
-#elif L==5
-	"There are no banners.";	// Besoin de traduction
-#elif L==6
-	"No existen banners.";		// Okoteve traducción
-#elif L==7
-	"Non ci sono banners.";
-#elif L==8
-	"There are no banners.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no banners.";	// Necessita de tradução
-#endif
-
 const char *Txt_There_are_no_centres_with_requests_for_degrees_to_be_confirmed =
 #if   L==1
 	"No hi ha centres amb sol&middot;licituds de titulacions pendents de confirmar.";
@@ -46895,132 +46937,6 @@ const char *Txt_There_are_no_institutions_with_requests_for_centres_to_be_confir
 	"There are no institutions with requests for centres to be confirmed.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"There are no institutions with requests for centres to be confirmed.";		// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_departments =
-#if   L==1
-	"No existen departamentos.";	// Necessita traduccio
-#elif L==2
-	"There are no departments.";	// Need Übersetzung
-#elif L==3
-	"There are no departments.";
-#elif L==4
-	"No existen departamentos.";
-#elif L==5
-	"There are no departments.";	// Besoin de traduction
-#elif L==6
-	"No existen departamentos.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono dipartimenti.";
-#elif L==8
-	"There are no departments.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no departments.";	// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_email_domains =
-#if   L==1
-	"No existen dominios de correo para notificaciones.";	// Necessita traduccio
-#elif L==2
-	"There are no email domains for notifications.";	// Need Übersetzung
-#elif L==3
-	"There are no email domains for notifications.";
-#elif L==4
-	"No existen dominios de correo para notificaciones.";
-#elif L==5
-	"There are no email domains for notifications.";	// Besoin de traduction
-#elif L==6
-	"No existen dominios de correo para notificaciones.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono campi mail per le notifiche.";
-#elif L==8
-	"There are no email domains for notifications.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no email domains for notifications.";	// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_holidays =
-#if   L==1
-	"No existen d&iacute;as festivos.";	// Necessita traduccio
-#elif L==2
-	"There are no holidays.";		// Need Übersetzung
-#elif L==3
-	"There are no holidays.";
-#elif L==4
-	"No existen d&iacute;as festivos.";
-#elif L==5
-	"There are no holidays.";		// Besoin de traduction
-#elif L==6
-	"No existen d&iacute;as festivos.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono festivit&agrave;.";
-#elif L==8
-	"There are no holidays.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no holidays.";		// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_links =
-#if   L==1
-	"No existen enlaces.";		// Necessita traduccio
-#elif L==2
-	"There are no links.";		// Need Übersetzung
-#elif L==3
-	"There are no links.";
-#elif L==4
-	"No existen enlaces.";
-#elif L==5
-	"There are no links.";		// Besoin de traduction
-#elif L==6
-	"No existen enlaces.";		// Okoteve traducción
-#elif L==7
-	"Non ci sono links.";
-#elif L==8
-	"There are no links.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no links.";		// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_places =
-#if   L==1
-	"No existen lugares.";		// Necessita traduccio
-#elif L==2
-	"There are no places.";		// Need Übersetzung
-#elif L==3
-	"There are no places.";
-#elif L==4
-	"No existen lugares.";
-#elif L==5
-	"There are no places.";		// Besoin de traduction
-#elif L==6
-	"No existen lugares.";		// Okoteve traducción
-#elif L==7
-	"Non ci sono luoghi.";
-#elif L==8
-	"There are no places.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no places.";		// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_plugins =
-#if   L==1
-	"No existen complementos.";	// Necessita traduccio
-#elif L==2
-	"There are no plugins.";	// Need Übersetzung
-#elif L==3
-	"There are no plugins.";
-#elif L==4
-	"No existen complementos.";
-#elif L==5
-	"There are no plugins.";	// Besoin de traduction
-#elif L==6
-	"No existen complementos.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono plugin.";
-#elif L==8
-	"There are no plugins.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no plugins.";	// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is very important to include %s in the following sentences

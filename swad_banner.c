@@ -143,15 +143,9 @@ static void Ban_PutFormToEditBanners (void)
 
 void Ban_EditBanners (void)
   {
-   extern const char *Txt_There_are_no_banners;
-
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
 	               " FROM banners ORDER BY ShortName");
-
-   if (!Gbl.Banners.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_banners);
 
    /***** Put a form to create a new banner *****/
    Ban_PutFormToCreateBanner ();

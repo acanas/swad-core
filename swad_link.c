@@ -80,20 +80,34 @@ void Lnk_SeeLinks (void)
   {
    extern const char *Hlp_SYSTEM_Links;
    extern const char *Txt_Links;
+   extern const char *Txt_No_links;
+   extern const char *Txt_Create_another_link;
+   extern const char *Txt_Create_link;
 
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
    /***** Write all the links *****/
-   if (Gbl.Links.Num)
-     {
-      Lay_StartRoundFrame (NULL,Txt_Links,
-                           Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
-                        	                                   NULL,
-                           Hlp_SYSTEM_Links);
+   Lay_StartRoundFrame (NULL,Txt_Links,
+			Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
+								NULL,
+			Hlp_SYSTEM_Links);
+
+   if (Gbl.Links.Num)	// There are links
       Lnk_WriteListOfLinks ();
-      Lay_EndRoundFrame ();
+   else			// No links created
+      Lay_ShowAlert (Lay_INFO,Txt_No_links);
+
+   /***** Button to create link *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      Act_FormStart (ActEdiLnk);
+      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_link :
+	                                                  Txt_Create_link);
+      Act_FormEnd ();
      }
+
+   Lay_EndRoundFrame ();
 
    /***** Free list of links *****/
    Lnk_FreeListLinks ();
@@ -180,14 +194,8 @@ static void Lnk_WriteListOfLinks (void)
 
 void Lnk_EditLinks (void)
   {
-   extern const char *Txt_There_are_no_links;
-
    /***** Get list of links *****/
    Lnk_GetListLinks ();
-
-   if (!Gbl.Links.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_links);
 
    /***** Put a form to create a new link *****/
    Lnk_PutFormToCreateLink ();

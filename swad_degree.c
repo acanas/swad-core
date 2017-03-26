@@ -1377,7 +1377,6 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 void Deg_EditDegrees (void)
   {
    extern const char *Txt_There_are_no_types_of_degree;
-   extern const char *Txt_You_must_create_at_least_one_type_of_degree_before_creating_degrees;
 
    /***** Get list of degrees in the current centre *****/
    Deg_GetListDegsOfCurrentCtr ();

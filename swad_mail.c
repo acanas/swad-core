@@ -191,14 +191,8 @@ static void Mai_PutIconToEditMailDomains (void)
 
 void Mai_EditMailDomains (void)
   {
-   extern const char *Txt_There_are_no_email_domains;
-
    /***** Get list of mail domains *****/
    Mai_GetListMailDomainsAllowedForNotif ();
-
-   if (!Gbl.Mails.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_email_domains);
 
    /***** Put a form to create a new mail *****/
    Mai_PutFormToCreateMailDomain ();

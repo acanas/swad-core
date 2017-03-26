@@ -84,7 +84,7 @@ void Hld_SeeHolidays (void)
    extern const char *Txt_End_date;
    extern const char *Txt_Holiday;
    extern const char *Txt_All_places;
-   extern const char *Txt_There_are_no_holidays;
+   extern const char *Txt_No_holidays;
    extern const char *Txt_Create_another_holiday;
    extern const char *Txt_Create_holiday;
    Hld_Order_t Order;
@@ -175,7 +175,7 @@ void Hld_SeeHolidays (void)
 	 fprintf (Gbl.F.Out,"</table>");
 	}
       else	// No holidays created in the current institution
-	 Lay_ShowAlert (Lay_INFO,Txt_There_are_no_holidays);
+	 Lay_ShowAlert (Lay_INFO,Txt_No_holidays);
 
       /***** Button to create centre *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin

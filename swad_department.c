@@ -224,8 +224,6 @@ static void Dpt_PutIconToEditDpts (void)
 
 void Dpt_EditDepartments (void)
   {
-   extern const char *Txt_There_are_no_departments;
-
    /***** Check if institution is selected *****/
    if (Gbl.CurrentIns.Ins.InsCod <= 0)
       Lay_ShowErrorAndExit ("No institution selected.");		// This should not happen
@@ -237,10 +235,6 @@ void Dpt_EditDepartments (void)
 
    /***** Get list of departments *****/
    Dpt_GetListDepartments (Gbl.CurrentIns.Ins.InsCod);
-
-   if (!Gbl.Dpts.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_departments);
 
    /***** Put a form to create a new department *****/
    Dpt_PutFormToCreateDepartment ();
