@@ -1570,7 +1570,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 /******************** Show an alert message to the user **********************/
 /*****************************************************************************/
 
-void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
+void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
   {
    static const char *MsgIcons[Lay_NUM_ALERT_TYPES] =
      {
@@ -1592,7 +1592,7 @@ void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message)
                          "%s"
 			 "</div>"
 			 "</div>",
-	       Gbl.Prefs.IconsURL,MsgIcons[MsgType],
+	       Gbl.Prefs.IconsURL,MsgIcons[AlertType],
 	       Message);
   }
 

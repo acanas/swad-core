@@ -83,9 +83,14 @@ long Hld_GetParamHldCod (void);
 void Hld_RemoveHoliday (void);
 void Hld_ChangeHolidayPlace (void);
 void Hld_ChangeHolidayType (void);
-void Hld_ChangeStartDate (void);
-void Hld_ChangeEndDate (void);
-void Hld_RenameHoliday (void);
+
+void Hld_ChangeStartDate1 (void);
+void Hld_ChangeEndDate1 (void);
+void Hld_ChangeDate2 (void);
+
+void Hld_RenameHoliday1 (void);
+void Hld_RenameHoliday2 (void);
+
 void Hld_RecFormNewHoliday1 (void);
 void Hld_RecFormNewHoliday2 (void);
 

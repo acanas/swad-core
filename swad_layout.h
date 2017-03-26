@@ -117,7 +117,7 @@ void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
 void Lay_EndRoundFrame (void);
 
 void Lay_ShowErrorAndExit (const char *Message);
-void Lay_ShowAlert (Lay_AlertType_t MsgType,const char *Message);
+void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message);
 
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);

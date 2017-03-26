@@ -101,6 +101,7 @@ struct Globals
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
    bool Error;
+   Lay_AlertType_t AlertType;
 
    struct
      {

@@ -754,7 +754,7 @@ void Hld_ChangeHolidayType (void)
 /*** Change the date of a holiday / the start date of a non school period ****/
 /*****************************************************************************/
 
-void Hld_ChangeStartDate (void)
+void Hld_ChangeStartDate1 (void)
   {
    Hld_ChangeDate (HLD_START_DATE);
   }
@@ -763,7 +763,7 @@ void Hld_ChangeStartDate (void)
 /*************** Change the end date of a non school period ******************/
 /*****************************************************************************/
 
-void Hld_ChangeEndDate (void)
+void Hld_ChangeEndDate1 (void)
   {
    Hld_ChangeDate (HLD_END_DATE);
   }
@@ -832,16 +832,26 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
             NewDate.Day,
             Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the date of a holiday");
+   Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
+   Gbl.AlertType = Lay_SUCCESS;
    sprintf (StrDate,"%04u-%02u-%02u",
             NewDate.Year,NewDate.Month,NewDate.Day);	// Change format depending on location
    sprintf (Gbl.Message,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,StrDate);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+  }
+
+/*****************************************************************************/
+/*********** Show message and form after changing a holiday date *************/
+/*****************************************************************************/
+
+void Hld_ChangeDate2 (void)
+  {
+   /***** Show success message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
-   Dat_AssignDate (PtrDate,&NewDate);
    Hld_EditHolidays ();
   }
 
@@ -849,7 +859,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 /************************ Change the name of a degree ************************/
 /*****************************************************************************/
 
-void Hld_RenameHoliday (void)
+void Hld_RenameHoliday1 (void)
   {
    extern const char *Txt_You_can_not_leave_the_name_of_the_holiday_X_empty;
    extern const char *Txt_The_name_of_the_holiday_X_has_changed_to_Y;
@@ -874,9 +884,9 @@ void Hld_RenameHoliday (void)
    /***** Check if new name is empty *****/
    if (!NewHldName[0])
      {
+      Gbl.AlertType = Lay_WARNING;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
                Hld->Name);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
      }
    else
      {
@@ -888,23 +898,29 @@ void Hld_RenameHoliday (void)
 	 sprintf (Query,"UPDATE holidays SET Name='%s' WHERE HldCod=%ld",
 		  NewHldName,Hld->HldCod);
 	 DB_QueryUPDATE (Query,"can not update the text of a holiday");
+	 Str_Copy (Hld->Name,NewHldName,
+		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
 	 /***** Write message to show the change made *****/
+         Gbl.AlertType = Lay_SUCCESS;
 	 sprintf (Gbl.Message,Txt_The_name_of_the_holiday_X_has_changed_to_Y,
 		  Hld->Name,NewHldName);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
         }
       else	// The same name
         {
+         Gbl.AlertType = Lay_INFO;
          sprintf (Gbl.Message,Txt_The_name_of_the_holiday_X_has_not_changed,
                  Hld->Name);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
      }
+  }
+
+void Hld_RenameHoliday2 (void)
+  {
+   /***** Write error/success message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
-   Str_Copy (Hld->Name,NewHldName,
-             Hld_MAX_BYTES_HOLIDAY_NAME);
    Hld_EditHolidays ();
   }
 
@@ -1123,12 +1139,13 @@ void Hld_RecFormNewHoliday1 (void)
       Hld_CreateHoliday (Hld);
 
       /* Success message */
+      Gbl.AlertType = Lay_SUCCESS;
       sprintf (Gbl.Message,Txt_Created_new_holiday_X,Hld->Name);
      }
    else	// If there is not a holiday name
      {
       /* Error message */
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_WARNING;
       sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
      }
   }
@@ -1136,9 +1153,7 @@ void Hld_RecFormNewHoliday1 (void)
 void Hld_RecFormNewHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
-			      Lay_SUCCESS,
-		  Gbl.Message);
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();

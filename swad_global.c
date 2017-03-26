@@ -121,6 +121,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
 
    Gbl.Error = false;
+   Gbl.AlertType = Lay_SUCCESS;	// Used to show alert in a posteriori function
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;
