@@ -84,7 +84,8 @@ long Hld_GetParamHldCod (void);
 void Hld_RemoveHoliday1 (void);
 void Hld_RemoveHoliday2 (void);
 
-void Hld_ChangeHolidayPlace (void);
+void Hld_ChangeHolidayPlace1 (void);
+void Hld_ChangeHolidayPlace2 (void);
 
 void Hld_ChangeHolidayType1 (void);
 void Hld_ChangeHolidayType2 (void);

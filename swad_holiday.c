@@ -679,7 +679,7 @@ void Hld_RemoveHoliday2 (void)
 /************************* Change the place of a holiday *********************/
 /*****************************************************************************/
 
-void Hld_ChangeHolidayPlace (void)
+void Hld_ChangeHolidayPlace1 (void)
   {
    extern const char *Txt_The_place_of_the_holiday_X_has_changed_to_Y;
    char Query[128];
@@ -706,16 +706,22 @@ void Hld_ChangeHolidayPlace (void)
    sprintf (Query,"UPDATE holidays SET PlcCod=%ld WHERE HldCod=%ld",
             NewPlace.PlcCod,Hld->HldCod);
    DB_QueryUPDATE (Query,"can not update the place of a holiday");
-
-   /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_place_of_the_holiday_X_has_changed_to_Y,
-            Hld->Name,NewPlace.FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-
-   /***** Show the form again *****/
    Hld->PlcCod = NewPlace.PlcCod;
    Str_Copy (Hld->PlaceFullName,NewPlace.FullName,
              Plc_MAX_BYTES_PLACE_FULL_NAME);
+
+   /***** Write message to show the change made *****/
+   Gbl.AlertType = Lay_SUCCESS;
+   sprintf (Gbl.Message,Txt_The_place_of_the_holiday_X_has_changed_to_Y,
+            Hld->Name,NewPlace.FullName);
+  }
+
+void Hld_ChangeHolidayPlace2 (void)
+  {
+   /***** Show success message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+
+   /***** Show the form again *****/
    Hld_EditHolidays ();
   }
 
