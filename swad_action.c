@@ -97,7 +97,7 @@ extern struct Globals Gbl;
 System:
 	 10. ActSysReqSch		Request search in system tab
 	 11. ActSeeCty			List countries
-	 12. ActSeePen			List pending institutions, centres, degrees and courses
+	 12. ActSeePen			List pending institutions, centres, degrees and courses in hierarchy
 	 13. ActReqRemOldCrs		Request the total removal of old courses
 	 14. ActSeeLnk			See institutional links
 	 15. ActLstPlg			List plugins

@@ -18138,23 +18138,23 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	,
 	//  2: ActSeePen
 #if   L==1
-	"Pendents"
+	 "Jerarquia"
 #elif L==2
-	"Anh&auml;ngig"
+	 "Hierarchie"
 #elif L==3
-	"Pending"
+	 "Hierarchy"
 #elif L==4
-	"Pendientes"
+	 "Jerarqu&iacute;a"
 #elif L==5
-	"En attente"
+	 "Hi&eacute;rarchie"
 #elif L==6
-	"Pendientes"	// Okoteve traducción
+	 "S&atilde;mbyhyha reko"
 #elif L==7
-	"In sospeso"
+	 "Gerarchia"
 #elif L==8
-	"Oczekuj&aogon;cy"
+	 "Hierarchia"
 #elif L==9
-	"Pendentes"
+	 "Hierarquia"
 #endif
 	,
 	//  3: ActReqRemOldCrs
@@ -39546,7 +39546,7 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 #elif L==5
 	 "Hi&eacute;rarchie"
 #elif L==6
-	 "Jerarqu&iacute;a"		// Okoteve traducción
+	 "S&atilde;mbyhyha reko"
 #elif L==7
 	 "Gerarchia"
 #elif L==8
