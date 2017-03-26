@@ -3297,6 +3297,21 @@ void Crs_UpdateCrsLast (void)
   }
 
 /*****************************************************************************/
+/********************** Put link to remove old courses ***********************/
+/*****************************************************************************/
+
+void Crs_PutLinkToRemoveOldCrss (void)
+  {
+   extern const char *Txt_Eliminate_old_courses;
+
+   /***** Put form to remove old courses *****/
+   Lay_PutContextualLink (ActReqRemOldCrs,NULL,
+                          "remove-on64x64.png",
+                          Txt_Eliminate_old_courses,Txt_Eliminate_old_courses,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /********************** Write form to remove old courses *********************/
 /*****************************************************************************/
 

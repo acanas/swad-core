@@ -141,6 +141,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role);
 unsigned Crs_ListCrssFound (const char *Query);
 
 void Crs_UpdateCrsLast (void);
+
+void Crs_PutLinkToRemoveOldCrss (void);
 void Crs_AskRemoveOldCrss (void);
 void Crs_RemoveOldCrss (void);
 

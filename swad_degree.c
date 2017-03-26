@@ -113,25 +113,6 @@ static void Deg_UpdateDegCtrDB (long DegCod,long CtrCod);
 static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
 
 /*****************************************************************************/
-/********** List pending institutions, centres, degrees and courses **********/
-/*****************************************************************************/
-
-void Deg_SeePending (void)
-  {
-   /***** List countries with pending institutions *****/
-   Cty_SeeCtyWithPendingInss ();
-
-   /***** List institutions with pending centres *****/
-   Ins_SeeInsWithPendingCtrs ();
-
-   /***** List centres with pending degrees *****/
-   Ctr_SeeCtrWithPendingDegs ();
-
-   /***** List degrees with pending courses *****/
-   Deg_SeeDegWithPendingCrss ();
-  }
-
-/*****************************************************************************/
 /******************* List degrees with pending courses ***********************/
 /*****************************************************************************/
 

@@ -1518,7 +1518,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // Actions in menu:
    /* ActSysReqSch	*/{ 627, 0,TabSys,ActSysReqSch		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sch_ReqSysSearch		,"search64x64.gif"	},
    /* ActSeeCty		*/{ 862, 1,TabSys,ActSeeCty		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cty_ListCountries1		,Cty_ListCountries2		,"earth64x64.gif"	},
-   /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Deg_SeePending			,"hierarchy64x64.png"	},
+   /* ActSeePen		*/{1060, 2,TabSys,ActSeePen		,    0,    0,    0,    0,    0,    0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Hie_SeePending			,"hierarchy64x64.png"	},
    /* ActReqRemOldCrs	*/{1109, 3,TabSys,ActReqRemOldCrs	,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_AskRemoveOldCrss		,"removeusers64x64.gif"	},
    /* ActSeeLnk		*/{ 748, 4,TabSys,ActSeeLnk		,    0,    0,    0,    0,    0,    0,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lnk_SeeLinks			,"link64x64.gif"	},
    /* ActLstPlg		*/{ 777, 5,TabSys,ActLstPlg		,    0,    0,    0,    0,    0,    0,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Plg_ListPlugins		,"blocks64x64.gif"	},

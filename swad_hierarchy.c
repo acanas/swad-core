@@ -57,6 +57,33 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 /*****************************************************************************/
+/********** List pending institutions, centres, degrees and courses **********/
+/*****************************************************************************/
+
+void Hie_SeePending (void)
+  {
+   /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to remove old courses */
+   Crs_PutLinkToRemoveOldCrss ();
+
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** List countries with pending institutions *****/
+   Cty_SeeCtyWithPendingInss ();
+
+   /***** List institutions with pending centres *****/
+   Ins_SeeInsWithPendingCtrs ();
+
+   /***** List centres with pending degrees *****/
+   Ctr_SeeCtrWithPendingDegs ();
+
+   /***** List degrees with pending courses *****/
+   Deg_SeeDegWithPendingCrss ();
+  }
+
+/*****************************************************************************/
 /*** Write menu to select country, institution, centre, degree and course ****/
 /*****************************************************************************/
 
