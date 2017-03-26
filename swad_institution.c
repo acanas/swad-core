@@ -1792,7 +1792,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
      {
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_WARNING;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
                CurrentInsName);
      }
@@ -1804,7 +1804,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
          /***** If institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,Gbl.CurrentCty.Cty.CtyCod))
            {
-            Gbl.Error = true;
+            Gbl.AlertType = Lay_WARNING;
             sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
                      NewInsName);
            }
@@ -1814,6 +1814,7 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
             Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
             /* Create message to show the change made */
+            Gbl.AlertType = Lay_SUCCESS;
             sprintf (Gbl.Message,Txt_The_institution_X_has_been_renamed_as_Y,
                      CurrentInsName,NewInsName);
 
@@ -1823,8 +1824,11 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
            }
         }
       else	// The same name
+	{
+         Gbl.AlertType = Lay_INFO;
          sprintf (Gbl.Message,Txt_The_name_of_the_institution_X_has_not_changed,
                   CurrentInsName);
+	}
      }
   }
 
@@ -1879,13 +1883,13 @@ void Ins_ChangeInsCtyInConfig (void)
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
 	{
-	 Gbl.Error = true;
+         Gbl.AlertType = Lay_WARNING;
 	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
 		  Gbl.CurrentIns.Ins.ShrtName);
 	}
       else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
 	{
-	 Gbl.Error = true;
+         Gbl.AlertType = Lay_WARNING;
 	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
 		  Gbl.CurrentIns.Ins.FullName);
 	}
@@ -1900,6 +1904,7 @@ void Ins_ChangeInsCtyInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
+         Gbl.AlertType = Lay_SUCCESS;
 	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
 		  Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
@@ -1912,10 +1917,8 @@ void Ins_ChangeInsCtyInConfig (void)
 
 void Ins_ContEditAfterChgInsInConfig (void)
   {
-   /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
-			      Lay_SUCCESS,
-		  Gbl.Message);
+   /***** Write success / warning message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2080,17 +2083,12 @@ void Ins_ChangeInsStatus (void)
 
 void Ins_ContEditAfterChgIns (void)
   {
-   if (Gbl.Error)
-      /***** Write error message *****/
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   else
-     {
-      /***** Write success message showing the change made *****/
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   /***** Write success / warning message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
+   if (Gbl.AlertType == Lay_SUCCESS)
       /***** Put button to go to institution changed *****/
       Ins_PutButtonToGoToIns (&Gbl.Inss.EditingIns);
-     }
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
