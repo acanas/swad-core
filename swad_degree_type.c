@@ -207,7 +207,7 @@ void DT_ReqEditDegreeTypes (void)
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder)
   {
-   extern const char *Hlp_SYSTEM_Studies;
+   extern const char *Hlp_CENTRE_DegreeTypes;
    extern const char *Hlp_STATS_Figures_types_of_degree;
    extern const char *Txt_Types_of_degree;
    extern const char *Txt_There_are_no_types_of_degree;
@@ -220,7 +220,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
 	 case ActSeeDegTyp:
 	    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
 				      DT_PutIconsListDegTypes,
-				      Hlp_SYSTEM_Studies,
+				      Hlp_CENTRE_DegreeTypes,
 				      2);
 	    break;
 	 case ActSeeUseGbl:
@@ -344,13 +344,13 @@ static void DT_PutIconToEditDegTypes (void)
 
 static void DT_ListDegreeTypesForEdition (void)
   {
-   extern const char *Hlp_SYSTEM_Studies_edit;
+   extern const char *Hlp_CENTRE_DegreeTypes_edit;
    extern const char *Txt_Types_of_degree;
    unsigned NumDegTyp;
 
    /***** Write heading *****/
    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-                             NULL,Hlp_SYSTEM_Studies_edit,2);
+                             NULL,Hlp_CENTRE_DegreeTypes_edit,2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -408,7 +408,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
 void DT_PutFormToCreateDegreeType (void)
   {
-   extern const char *Hlp_SYSTEM_Studies_edit;
+   extern const char *Hlp_CENTRE_DegreeTypes_edit;
    extern const char *Txt_New_type_of_degree;
    extern const char *Txt_Type_of_degree;
    extern const char *Txt_Create_type_of_degree;
@@ -418,7 +418,7 @@ void DT_PutFormToCreateDegreeType (void)
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,
-                             NULL,Hlp_SYSTEM_Studies_edit,2);
+                             NULL,Hlp_CENTRE_DegreeTypes_edit,2);
 
    /***** Write heading *****/
    fprintf (Gbl.F.Out,"<tr>"

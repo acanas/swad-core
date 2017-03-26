@@ -136,48 +136,6 @@ const char *Hlp_SYSTEM_Old =
 	"SYSTEM.Old";
 #endif
 
-const char *Hlp_SYSTEM_Studies =
-#if   L==1
-	"SYSTEM.Studies";
-#elif L==2
-	"SYSTEM.Studies";
-#elif L==3
-	"SYSTEM.Studies";
-#elif L==4
-	"SYSTEM.Studies";
-#elif L==5
-	"SYSTEM.Studies";
-#elif L==6
-	"SYSTEM.Studies";
-#elif L==7
-	"SYSTEM.Studies";
-#elif L==8
-	"SYSTEM.Studies";
-#elif L==9
-	"SYSTEM.Studies";
-#endif
-
-const char *Hlp_SYSTEM_Studies_edit =
-#if   L==1
-	"SYSTEM.Studies#edit";
-#elif L==2
-	"SYSTEM.Studies#edit";
-#elif L==3
-	"SYSTEM.Studies#edit";
-#elif L==4
-	"SYSTEM.Studies#edit";
-#elif L==5
-	"SYSTEM.Studies#edit";
-#elif L==6
-	"SYSTEM.Studies#edit";
-#elif L==7
-	"SYSTEM.Studies#edit";
-#elif L==8
-	"SYSTEM.Studies#edit";
-#elif L==9
-	"SYSTEM.Studies#edit";
-#endif
-
 const char *Hlp_SYSTEM_Banners =
 #if   L==1
 	"SYSTEM.Banners";
@@ -497,6 +455,48 @@ const char *Hlp_CENTRE_Information =
 	"CENTRE.Information";
 #elif L==9
 	"CENTRE.Information";
+#endif
+
+const char *Hlp_CENTRE_DegreeTypes =
+#if   L==1
+	"CENTRE.DegreeTypes";
+#elif L==2
+	"CENTRE.DegreeTypes";
+#elif L==3
+	"CENTRE.DegreeTypes";
+#elif L==4
+	"CENTRE.DegreeTypes";
+#elif L==5
+	"CENTRE.DegreeTypes";
+#elif L==6
+	"CENTRE.DegreeTypes";
+#elif L==7
+	"CENTRE.DegreeTypes";
+#elif L==8
+	"CENTRE.DegreeTypes";
+#elif L==9
+	"CENTRE.DegreeTypes";
+#endif
+
+const char *Hlp_CENTRE_DegreeTypes_edit =
+#if   L==1
+	"CENTRE.DegreeTypes#edit";
+#elif L==2
+	"CENTRE.DegreeTypes#edit";
+#elif L==3
+	"CENTRE.DegreeTypes#edit";
+#elif L==4
+	"CENTRE.DegreeTypes#edit";
+#elif L==5
+	"CENTRE.DegreeTypes#edit";
+#elif L==6
+	"CENTRE.DegreeTypes#edit";
+#elif L==7
+	"CENTRE.DegreeTypes#edit";
+#elif L==8
+	"CENTRE.DegreeTypes#edit";
+#elif L==9
+	"CENTRE.DegreeTypes#edit";
 #endif
 
 const char *Hlp_CENTRE_Degrees =
