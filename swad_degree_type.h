@@ -58,6 +58,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void DT_PutIconToViewDegreeTypes (void);
 void DT_WriteSelectorDegreeTypes (void);
 
 void DT_SeeDegreeTypesInSysTab (void);

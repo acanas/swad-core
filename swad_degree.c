@@ -1247,6 +1247,9 @@ static void Deg_PutIconsListDegrees (void)
    if (Deg_CheckIfICanCreateDegrees ())
       Deg_PutIconToEditDegrees ();
 
+   /***** Put icon to view degree types *****/
+   DT_PutIconToViewDegreeTypes ();
+
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_HIERARCHY;
    Sta_PutIconToShowFigure ();

@@ -100,11 +100,11 @@ System:
 	 12. ActSeePen			List pending institutions, centres, degrees and courses
 	 13. ActReqRemOldCrs		Request the total removal of old courses
 	 14. ActSeeDegTyp		List types of degrees
-	 16. ActSeeBan			See banners
-	 17. ActSeeLnk			See institutional links
-	 18. ActLstPlg			List plugins
-	 19. ActSetUp			Initial set up
-	 20. ActSeeCalSys		Show the academic calendar
+	 15. ActSeeBan			See banners
+	 16. ActSeeLnk			See institutional links
+	 17. ActLstPlg			List plugins
+	 18. ActSetUp			Initial set up
+	 19. ActSeeCalSys		Show the academic calendar
 
 	 21. ActSysSch			Search for courses, teachers, documents...
 	 22. ActEdiDegTyp		Request edition of types of degrees

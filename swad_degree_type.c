@@ -85,6 +85,20 @@ static void DT_RemoveDegreeTypeCompletely (long DegTypCod);
 static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCod);
 
 /*****************************************************************************/
+/******************* Put link (form) to view degree types ********************/
+/*****************************************************************************/
+
+void DT_PutIconToViewDegreeTypes (void)
+  {
+   extern const char *Txt_Types_of_degree;
+
+   Lay_PutContextualLink (ActSeeDegTyp,NULL,
+                          "hierarchy64x64.png",
+                          Txt_Types_of_degree,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /************** Show selector of degree types for statistics *****************/
 /*****************************************************************************/
 
