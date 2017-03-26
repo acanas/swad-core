@@ -18157,28 +18157,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	 "Hierarquia"
 #endif
 	,
-	//  3: ActReqRemOldCrs
-#if   L==1
-	"Antics"
-#elif L==2
-	"Fr&uuml;here"
-#elif L==3
-	"Old"
-#elif L==4
-	"Antiguas"
-#elif L==5
-	"Anciens"
-#elif L==6
-	"Antiguas"	// Okoteve traducción
-#elif L==7
-	"Vecchi"
-#elif L==8
-	"Starych"
-#elif L==9
-	"Antigas"
-#endif
-	,
-	//  4: ActSeeDegTyp
+	//  3: ActSeeDegTyp
 #if   L==1
 	"Estudis"
 #elif L==2
@@ -18199,7 +18178,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estudos"
 #endif
 	,
-	//  5: ActSeeLnk
+	//  4: ActSeeLnk
 #if   L==1
 	"Enlla&ccedil;os"
 #elif L==2
@@ -18220,7 +18199,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es"
 #endif
 	,
-	//  6: ActLstPlg
+	//  5: ActLstPlg
 #if   L==1
 	"Complements"
 #elif L==2
@@ -18241,7 +18220,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Plugins"
 #endif
 	,
-	//  7: ActSetUp
+	//  6: ActSetUp
 #if   L==1
 	"Instal lar"
 #elif L==2
@@ -18262,7 +18241,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  8: ActSeeCalSys
+	//  7: ActSeeCalSys
 #if   L==1
 	"Calendari"
 #elif L==2
@@ -18283,6 +18262,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
@@ -20090,28 +20070,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Institu&ccedil;&otilde;es, centros, titula&ccedil;&otilde;es e disciplinas pendentes"
 #endif
 	,
-	//  3: ActReqRemOldCrs
-#if   L==1
-	"Eliminar assignatures antics"
-#elif L==2
-	"Fr&uuml;here Kursen entfernen"
-#elif L==3
-	"Eliminate old courses"
-#elif L==4
-	"Eliminar asignaturas antiguas"
-#elif L==5
-	"&Eacute;liminer anciens mati&egrave;res"
-#elif L==6
-	"Eliminar asignaturas antiguas"	// Okoteve traducción
-#elif L==7
-	"Rimuovere vecchi corsi"
-#elif L==8
-	"Wyeleminuj starych kurs&oacute;w"
-#elif L==9
-	"Eliminar antigas disciplinas"
-#endif
-	,
-	//  4: ActSeeDegTyp
+	//  3: ActSeeDegTyp
 #if   L==1
 	"Tipus de titulaci&oacute;"
 #elif L==2
@@ -20132,7 +20091,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Tipos de titula&ccedil;&atilde;o"
 #endif
 	,
-	//  5: ActSeeLnk
+	//  4: ActSeeLnk
 #if   L==1
 	"Llista d'enlla&ccedil;os institucionals"
 #elif L==2
@@ -20153,7 +20112,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Liga&ccedil;&otilde;es institucionais"
 #endif
 	,
-	//  6: ActLstPlg
+	//  5: ActLstPlg
 #if   L==1
 	"Llista de complements (versi&oacute; beta)"
 #elif L==2
@@ -20174,7 +20133,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Lista de plugins"
 #endif
 	,
-	//  7: ActSetUp
+	//  6: ActSetUp
 #if   L==1
 	"Instal laci&oacute; de la plataforma (en proves)"
 #elif L==2
@@ -20195,7 +20154,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Instalar"
 #endif
 	,
-	//  8: ActSeeCalSys
+	//  7: ActSeeCalSys
 #if   L==1
 	"Calendari acad&egrave;mic"
 #elif L==2
@@ -20216,6 +20175,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Calend&aacute;rio"
 #endif
 	,
+	NULL,	//  8
 	NULL,	//  9
 	NULL,	// 10
 	NULL,	// 11
