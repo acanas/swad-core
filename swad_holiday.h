@@ -80,9 +80,13 @@ void Hld_GetListHolidays (void);
 void Hld_FreeListHolidays (void);
 
 long Hld_GetParamHldCod (void);
+
 void Hld_RemoveHoliday (void);
+
 void Hld_ChangeHolidayPlace (void);
-void Hld_ChangeHolidayType (void);
+
+void Hld_ChangeHolidayType1 (void);
+void Hld_ChangeHolidayType2 (void);
 
 void Hld_ChangeStartDate1 (void);
 void Hld_ChangeEndDate1 (void);

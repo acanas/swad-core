@@ -716,7 +716,7 @@ void Hld_ChangeHolidayPlace (void)
 /************************* Change the type of a holiday **********************/
 /*****************************************************************************/
 
-void Hld_ChangeHolidayType (void)
+void Hld_ChangeHolidayType1 (void)
   {
    extern const char *Txt_The_type_of_the_holiday_X_has_changed;
    char Query[256];
@@ -742,9 +742,15 @@ void Hld_ChangeHolidayType (void)
    DB_QueryUPDATE (Query,"can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
+   Gbl.AlertType = Lay_SUCCESS;
    sprintf (Gbl.Message,Txt_The_type_of_the_holiday_X_has_changed,
             Hld->Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+  }
+
+void Hld_ChangeHolidayType2 (void)
+  {
+   /***** Show success message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
