@@ -441,7 +441,8 @@ void Pho_ReqRemoveMyPhoto (void)
 void Pho_RemoveMyPhoto1 (void)
   {
    /***** Remove photo *****/
-   Gbl.Error = !Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
+   Gbl.AlertType = Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat) ? Lay_SUCCESS :
+	                                                   Lay_WARNING;
 
    /***** The link to my photo is not valid now, so build it again before writing the web page *****/
    Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
@@ -451,8 +452,8 @@ void Pho_RemoveMyPhoto2 (void)
   {
    extern const char *Txt_Photo_removed;
 
-   if (!Gbl.Error)
-      Lay_ShowAlert (Lay_SUCCESS,Txt_Photo_removed);
+   if (Gbl.AlertType == Lay_SUCCESS)
+      Lay_ShowAlert (Gbl.AlertType,Txt_Photo_removed);
   }
 
 /*****************************************************************************/
@@ -828,10 +829,10 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.Error = false;
+      Gbl.AlertType = Lay_ERROR;
      }
    else
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_SUCCESS;
   }
 
 static void Pho_UpdatePhoto2 (void)
@@ -862,10 +863,10 @@ static void Pho_UpdatePhoto2 (void)
 	              "</table>");
 
    /***** Show message *****/
-   if (Gbl.Error)        // The file with the selected photo does not exist!
+   if (Gbl.AlertType == Lay_ERROR)        // The file with the selected photo does not exist!
       Lay_ShowErrorAndExit ("Selected photo does not exist.");
 
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Photo_has_been_updated);
+   Lay_ShowAlert (Gbl.AlertType,Txt_Photo_has_been_updated);
   }
 
 /*****************************************************************************/
