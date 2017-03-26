@@ -100,8 +100,7 @@ struct Globals
       char UniqueId[32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
-   bool Error;
-   Lay_AlertType_t AlertType;
+   Lay_AlertType_t AlertType;	// Used in a posteriori function to write success / warning message
 
    struct
      {
