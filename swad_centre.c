@@ -1756,7 +1756,7 @@ void Ctr_ChangeCtrInsInConfig (void)
                                          Gbl.CurrentCtr.Ctr.CtrCod,
                                          NewIns.InsCod))
 	{
-	 Gbl.Error = true;
+	 Gbl.AlertType = Lay_WARNING;
 	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
 		  Gbl.CurrentCtr.Ctr.ShrtName);
 	}
@@ -1765,7 +1765,7 @@ void Ctr_ChangeCtrInsInConfig (void)
                                               Gbl.CurrentCtr.Ctr.CtrCod,
                                               NewIns.InsCod))
 	{
-	 Gbl.Error = true;
+	 Gbl.AlertType = Lay_WARNING;
 	 sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
 		  Gbl.CurrentCtr.Ctr.FullName);
 	}
@@ -1780,7 +1780,8 @@ void Ctr_ChangeCtrInsInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
-	 sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
+         Gbl.AlertType = Lay_SUCCESS;
+         sprintf (Gbl.Message,Txt_The_centre_X_has_been_moved_to_the_institution_Y,
 		  Gbl.CurrentCtr.Ctr.FullName,NewIns.FullName);
 	}
      }
@@ -1793,9 +1794,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 void Ctr_ContEditAfterChgCtrInConfig (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.Error ? Lay_WARNING :
-			      Lay_SUCCESS,
-		  Gbl.Message);
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
@@ -1926,7 +1925,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
    /***** Check if new name is empty *****/
    if (!NewCtrName[0])
      {
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_WARNING;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_centre_X_empty,
                CurrentCtrName);
      }
@@ -1938,7 +1937,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
          /***** If degree was in database... *****/
          if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
            {
-            Gbl.Error = true;
+            Gbl.AlertType = Lay_WARNING;
             sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
                      NewCtrName);
            }
@@ -1948,6 +1947,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
             Ctr_UpdateInsNameDB (Ctr->CtrCod,FieldName,NewCtrName);
 
             /* Write message to show the change made */
+            Gbl.AlertType = Lay_SUCCESS;
             sprintf (Gbl.Message,Txt_The_centre_X_has_been_renamed_as_Y,
                      CurrentCtrName,NewCtrName);
 
@@ -1957,8 +1957,11 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
            }
         }
       else	// The same name
+	{
+         Gbl.AlertType = Lay_INFO;
          sprintf (Gbl.Message,Txt_The_name_of_the_centre_X_has_not_changed,
                   CurrentCtrName);
+	}
      }
   }
 
@@ -2138,17 +2141,12 @@ void Ctr_ChangeCtrStatus (void)
 
 void Ctr_ContEditAfterChgCtr (void)
   {
-   if (Gbl.Error)
-      /***** Write error message *****/
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   else
-     {
-      /***** Write success message showing the change made *****/
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   /***** Write success / warning message *****/
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
+   if (Gbl.AlertType == Lay_SUCCESS)
       /***** Put button to go to centre changed *****/
       Ctr_PutButtonToGoToCtr (&Gbl.Ctrs.EditingCtr);
-     }
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
