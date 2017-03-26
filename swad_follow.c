@@ -1030,21 +1030,23 @@ void Fol_FollowUsr1 (void)
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }
+      Gbl.AlertType = Lay_SUCCESS;
      }
    else
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_WARNING;
   }
 
 void Fol_FollowUsr2 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (!Gbl.Error)
+   if (Gbl.AlertType == Lay_SUCCESS)
       /***** Show user's profile again *****/
-      Gbl.Error = !Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
+      Gbl.AlertType = Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat) ? Lay_SUCCESS :
+	                                                             Lay_WARNING;
 
-   if (Gbl.Error)
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+   if (Gbl.AlertType == Lay_WARNING)
+      Lay_ShowAlert (Gbl.AlertType,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1069,9 +1071,10 @@ void Fol_UnfollowUsr1 (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
         }
+      Gbl.AlertType = Lay_SUCCESS;
      }
    else
-      Gbl.Error = true;
+      Gbl.AlertType = Lay_WARNING;
   }
 
 void Fol_UnfollowUsr2 (void)
@@ -1079,7 +1082,7 @@ void Fol_UnfollowUsr2 (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user to be unfollowed *****/
-   if (!Gbl.Error)
+   if (Gbl.AlertType == Lay_SUCCESS)
      {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
@@ -1089,7 +1092,7 @@ void Fol_UnfollowUsr2 (void)
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Lay_ShowAlert (Gbl.AlertType,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
