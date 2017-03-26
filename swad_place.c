@@ -72,6 +72,20 @@ static void Plc_PutHeadPlaces (void);
 static void Plc_CreatePlace (struct Place *Plc);
 
 /*****************************************************************************/
+/********************** Put link (form) to view places ***********************/
+/*****************************************************************************/
+
+void Plc_PutIconToViewPlaces (void)
+  {
+   extern const char *Txt_Places;
+
+   Lay_PutContextualLink (ActSeePlc,NULL,
+                          "mapmarker64x64.png",
+                          Txt_Places,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /*************************** List all the places *****************************/
 /*****************************************************************************/
 

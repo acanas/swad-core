@@ -806,6 +806,9 @@ static void Ctr_PutIconsListCentres (void)
    if (Ctr_CheckIfICanCreateCentres ())
       Ctr_PutIconToEditCentres ();
 
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
+
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_HIERARCHY;
    Sta_PutIconToShowFigure ();
@@ -1390,7 +1393,8 @@ static void Ctr_ListCentresForEdition (void)
    /***** Write heading *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_INSTITUTION_Centres,2);
+   Lay_StartRoundFrameTable (NULL,Gbl.Title,Plc_PutIconToViewPlaces,
+                             Hlp_INSTITUTION_Centres,2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -2406,6 +2410,12 @@ static void Ctr_PutFormToCreateCentre (void)
 
    Ctr = &Gbl.Ctrs.EditingCtr;
 
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Plc_PutIconToViewPlaces,
+                        Hlp_INSTITUTION_Centres);
+
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       Act_FormStart (ActNewCtr);
@@ -2414,12 +2424,10 @@ static void Ctr_PutFormToCreateCentre (void)
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
-   /***** Start of frame *****/
-   sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_INSTITUTION_Centres,2);
+   /***** Start table *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
 
-   /***** Write heading *****/
+   /***** Table head *****/
    Ctr_PutHeadCentresForEdition ();
 
    /***** Put disabled icon to remove centre *****/
@@ -2510,11 +2518,17 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** Send button and end frame *****/
-   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
 
-   /***** End of form *****/
+   /***** Button to send form *****/
+   Lay_PutCreateButton (Txt_Create_centre);
+
+   /***** End form *****/
    Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

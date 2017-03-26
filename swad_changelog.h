@@ -205,17 +205,20 @@
 // TODO: Comprobar cabecera de una orla cuando el ámbito actual es un centro
 // TODO: Include type of degree in form of degree configuration
 
+// TODO: Cuando un admin. pulsa en "Inscribir profesor/a" y el usuario es invitado, debería salir en el rol por defecto "profesor" y no "estudiante"
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.167.15 (2017-03-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.167.16 (2017-03-26)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.167.16:Mar 26, 2017	Link to view places in centres. (217718 lines)
         Version 16.167.15:Mar 26, 2017	Code refactoring in enrollment. (217694 lines)
         Version 16.167.14:Mar 26, 2017	Code refactoring in follow/unfollow. (217691 lines)
         Version 16.167.13:Mar 26, 2017	Code refactoring in uploading of photos. (217686 lines)

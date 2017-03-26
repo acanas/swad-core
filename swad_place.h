@@ -58,6 +58,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Plc_PutIconToViewPlaces (void);
 void Plc_SeePlaces (void);
 void Plc_EditPlaces (void);
 void Plc_GetListPlaces (void);
