@@ -74,6 +74,20 @@ static void Ban_PutHeadBanners (void);
 static void Ban_CreateBanner (struct Banner *Ban);
 
 /*****************************************************************************/
+/************************* Put link to view banners **************************/
+/*****************************************************************************/
+
+void Ban_PutLinkToViewBanners (void)
+  {
+   extern const char *Txt_Banners;
+
+   Lay_PutContextualLink (ActSeeBan,NULL,
+                          "picture64x64.gif",
+                          Txt_Banners,Txt_Banners,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /*************************** List all the banners ****************************/
 /*****************************************************************************/
 

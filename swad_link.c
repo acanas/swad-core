@@ -84,6 +84,17 @@ void Lnk_SeeLinks (void)
    extern const char *Txt_Create_another_link;
    extern const char *Txt_Create_link;
 
+   /***** Put contextual links *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only for system admins
+     {
+      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+      /* Put link to view banners */
+      Ban_PutLinkToViewBanners ();
+
+      fprintf (Gbl.F.Out,"</div>");
+     }
+
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 

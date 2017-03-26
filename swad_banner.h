@@ -56,6 +56,7 @@ struct Banner
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
+void Ban_PutLinkToViewBanners (void);
 void Ban_SeeBanners (void);
 void Ban_EditBanners (void);
 void Ban_FreeListBanners (void);
