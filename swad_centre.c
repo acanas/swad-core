@@ -117,7 +117,7 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status);
 
 void Ctr_SeeCtrWithPendingDegs (void)
   {
-   extern const char *Hlp_SYSTEM_Pending;
+   extern const char *Hlp_SYSTEM_Hierarchy_pending;
    extern const char *Txt_Centres_with_pending_degrees;
    extern const char *Txt_Centre;
    extern const char *Txt_Degrees_ABBREVIATION;
@@ -160,7 +160,7 @@ void Ctr_SeeCtrWithPendingDegs (void)
      {
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,Txt_Centres_with_pending_degrees,
-                                NULL,Hlp_SYSTEM_Pending,2);
+                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"

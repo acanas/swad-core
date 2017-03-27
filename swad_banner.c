@@ -97,8 +97,7 @@ void Ban_SeeBanners (void)
    extern const char *Hlp_SYSTEM_Banners;
    extern const char *Txt_Banners;
    extern const char *Txt_No_banners;
-   extern const char *Txt_Create_another_banner;
-   extern const char *Txt_Create_banner;
+   extern const char *Txt_New_banner;
 
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
@@ -120,8 +119,7 @@ void Ban_SeeBanners (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiBan);
-      Lay_PutConfirmButton (Gbl.Banners.Num ? Txt_Create_another_banner :
-	                                      Txt_Create_banner);
+      Lay_PutConfirmButton (Txt_New_banner);
       Act_FormEnd ();
      }
 

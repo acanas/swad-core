@@ -6092,27 +6092,6 @@ const char *Txt_Create_announcement =
 	"Criar an&uacute;ncio";
 #endif
 
-const char *Txt_Create_another_banner =
-#if   L==1
-	"Crear un altre banner";
-#elif L==2
-	"Erstellen Sie ein anderes Werbebanner";
-#elif L==3
-	"Create another banner";
-#elif L==4
-	"Crear otro banner";
-#elif L==5
-	"Cr&eacute;er un autre banni&eacute;re";
-#elif L==6
-	"Crear otro banner";	// Okoteve traducción
-#elif L==7
-	"Crea un altro banner";
-#elif L==8
-	"Tworzenie inny banner";
-#elif L==9
-	"Criar um outro banner";
-#endif
-
 const char *Txt_Create_another_centre =
 #if   L==1
 	"Crear un altre centre";
@@ -6176,27 +6155,6 @@ const char *Txt_Create_another_degree =
 	"Criar uma outra titula&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Create_another_holiday =
-#if   L==1
-	"Crear una altra festivitat";
-#elif L==2
-	"Erstellen Sie ein anderes Feiertag";
-#elif L==3
-	"Create another holiday";
-#elif L==4
-	"Crear otra festividad";
-#elif L==5
-	"Cr&eacute;er un autre f&ecirc;te";
-#elif L==6
-	"Crear otra festividad";	// Okoteve traducción
-#elif L==7
-	"Crea una altra festivit&agrave;";
-#elif L==8
-	"Tworzenie inny wakacje";
-#elif L==9
-	"Criar uma outra f&eacute;ria";
-#endif
-
 const char *Txt_Create_another_institution =
 #if   L==1
 	"Crear una altra instituci&oacute;";
@@ -6216,48 +6174,6 @@ const char *Txt_Create_another_institution =
 	"Tworzenie inny instytucji";
 #elif L==9
 	"Criar uma outra institu&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Create_another_link =
-#if   L==1
-	"Crear un altre enlla&ccedil;";
-#elif L==2
-	"Erstellen Sie einen anderen Link";
-#elif L==3
-	"Create another link";
-#elif L==4
-	"Crear otro enlace";
-#elif L==5
-	"Cr&eacute;er un autre lien";
-#elif L==6
-	"Crear otro enlace";	// Okoteve traducción
-#elif L==7
-	"Crea un altro link";
-#elif L==8
-	"Tworzenie inny link";
-#elif L==9
-	"Criar um outro liga&ccedil;&atilde;o";
-#endif
-
-const char *Txt_Create_another_place =
-#if   L==1
-	"Crear un altre lloc";
-#elif L==2
-	"Erstellen Sie einen anderen Standort";
-#elif L==3
-	"Create another place";
-#elif L==4
-	"Crear otro lugar";
-#elif L==5
-	"Cr&eacute;er un autre emplacement";
-#elif L==6
-	"Crear otro lugar";	// Okoteve traducción
-#elif L==7
-	"Crea una altra localit&grave;";
-#elif L==8
-	"Tworzenie innego miejsca";
-#elif L==9
-	"Criar uma outra localiza&ccedil;&atilde;o";
 #endif
 
 const char *Txt_Create_assignment =
@@ -23972,7 +23888,7 @@ const char *Txt_New_announcement_OF_EXAM =
 
 const char *Txt_New_banner =
 #if   L==1
-	"Nuevo banner";		// Necessita traduccio
+	"Nou banner";
 #elif L==2
 	"Neue Werbebanner";
 #elif L==3

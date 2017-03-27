@@ -81,8 +81,7 @@ void Lnk_SeeLinks (void)
    extern const char *Hlp_SYSTEM_Links;
    extern const char *Txt_Links;
    extern const char *Txt_No_links;
-   extern const char *Txt_Create_another_link;
-   extern const char *Txt_Create_link;
+   extern const char *Txt_New_link;
 
    /***** Put contextual links *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only for system admins
@@ -114,8 +113,7 @@ void Lnk_SeeLinks (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiLnk);
-      Lay_PutConfirmButton (Gbl.Links.Num ? Txt_Create_another_link :
-	                                    Txt_Create_link);
+      Lay_PutConfirmButton (Txt_New_link);
       Act_FormEnd ();
      }
 

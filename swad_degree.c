@@ -118,7 +118,7 @@ static void Deg_UpdateDegWWWDB (long DegCod,const char NewWWW[Cns_MAX_BYTES_WWW 
 
 void Deg_SeeDegWithPendingCrss (void)
   {
-   extern const char *Hlp_SYSTEM_Pending;
+   extern const char *Hlp_SYSTEM_Hierarchy_pending;
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_Degrees_with_pending_courses;
    extern const char *Txt_Degree;
@@ -163,7 +163,7 @@ void Deg_SeeDegWithPendingCrss (void)
      {
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,Txt_Degrees_with_pending_courses,
-                                NULL,Hlp_SYSTEM_Pending,2);
+                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"

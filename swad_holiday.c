@@ -85,8 +85,7 @@ void Hld_SeeHolidays (void)
    extern const char *Txt_Holiday;
    extern const char *Txt_All_places;
    extern const char *Txt_No_holidays;
-   extern const char *Txt_Create_another_holiday;
-   extern const char *Txt_Create_holiday;
+   extern const char *Txt_New_holiday;
    Hld_Order_t Order;
    unsigned NumHld;
 
@@ -181,8 +180,7 @@ void Hld_SeeHolidays (void)
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
 	{
 	 Act_FormStart (ActEdiHld);
-	 Lay_PutConfirmButton (Gbl.Hlds.Num ? Txt_Create_another_holiday :
-	                                      Txt_Create_holiday);
+	 Lay_PutConfirmButton (Txt_New_holiday);
 	 Act_FormEnd ();
 	}
 

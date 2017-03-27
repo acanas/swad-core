@@ -97,8 +97,7 @@ void Plc_SeePlaces (void)
    extern const char *Txt_PLACES_ORDER[2];
    extern const char *Txt_Other_places;
    extern const char *Txt_Place_unspecified;
-   extern const char *Txt_Create_another_place;
-   extern const char *Txt_Create_place;
+   extern const char *Txt_New_place;
    Plc_Order_t Order;
    unsigned NumPlc;
    unsigned NumCtrsWithPlc = 0;
@@ -199,8 +198,7 @@ void Plc_SeePlaces (void)
       if (ICanEdit)
 	{
 	 Act_FormStart (ActEdiPlc);
-	 Lay_PutConfirmButton (Gbl.Plcs.Num ? Txt_Create_another_place :
-	                                      Txt_Create_place);
+	 Lay_PutConfirmButton (Txt_New_place);
 	 Act_FormEnd ();
 	}
 

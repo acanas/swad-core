@@ -94,46 +94,46 @@ const char *Hlp_SYSTEM_Countries =
 	"SYSTEM.Countries";
 #endif
 
-const char *Hlp_SYSTEM_Pending =
+const char *Hlp_SYSTEM_Hierarchy_pending =
 #if   L==1
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==2
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==3
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==4
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy.es#pendientes";
 #elif L==5
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==6
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==7
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==8
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #elif L==9
-	"SYSTEM.Pending";
+	"SYSTEM.Hierarchy#pending";
 #endif
 
-const char *Hlp_SYSTEM_Old =
+const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses =
 #if   L==1
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==2
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==3
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==4
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
 #elif L==5
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==6
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==7
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==8
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==9
-	"SYSTEM.Old";
+	"SYSTEM.Hierarchy#eliminate-old-courses";
 #endif
 
 const char *Hlp_SYSTEM_Banners =

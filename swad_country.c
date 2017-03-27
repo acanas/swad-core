@@ -97,7 +97,7 @@ static void Cty_CreateCountry (struct Country *Cty);
 
 void Cty_SeeCtyWithPendingInss (void)
   {
-   extern const char *Hlp_SYSTEM_Pending;
+   extern const char *Hlp_SYSTEM_Hierarchy_pending;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_Countries_with_pending_institutions;
    extern const char *Txt_Country;
@@ -133,7 +133,7 @@ void Cty_SeeCtyWithPendingInss (void)
      {
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,Txt_Countries_with_pending_institutions,
-                                NULL,Hlp_SYSTEM_Pending,2);
+                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"

@@ -105,7 +105,7 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status);
 
 void Ins_SeeInsWithPendingCtrs (void)
   {
-   extern const char *Hlp_SYSTEM_Pending;
+   extern const char *Hlp_SYSTEM_Hierarchy_pending;
    extern const char *Txt_Institutions_with_pending_centres;
    extern const char *Txt_Institution;
    extern const char *Txt_Centres_ABBREVIATION;
@@ -147,7 +147,7 @@ void Ins_SeeInsWithPendingCtrs (void)
      {
       /***** Write heading *****/
       Lay_StartRoundFrameTable (NULL,Txt_Institutions_with_pending_centres,
-                                NULL,Hlp_SYSTEM_Pending,2);
+                                NULL,Hlp_SYSTEM_Hierarchy_pending,2);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th class=\"LEFT_MIDDLE\">"
                          "%s"
