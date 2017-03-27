@@ -1294,7 +1294,7 @@ const char *Hlp_USERS_Administration_administer_one_user =
 #elif L==3
 	"USERS.Administration#administer-one-user";
 #elif L==4
-	"USERS.Administration#administer-one-user";
+	"USERS.Administration.es#administrar-un-usuario";
 #elif L==5
 	"USERS.Administration#administer-one-user";
 #elif L==6
@@ -1315,7 +1315,7 @@ const char *Hlp_USERS_Administration_administer_multiple_users =
 #elif L==3
 	"USERS.Administration#administer-multiple-users";
 #elif L==4
-	"USERS.Administration#administer-multiple-users";
+	"USERS.Administration.es#administrar-varios-usuarios";
 #elif L==5
 	"USERS.Administration#administer-multiple-users";
 #elif L==6
@@ -1336,7 +1336,7 @@ const char *Hlp_USERS_Administration_remove_all_students =
 #elif L==3
 	"USERS.Administration#remove-all-students";
 #elif L==4
-	"USERS.Administration#remove-all-students";
+	"USERS.Administration.es#eliminar-todos-los-estudiantes";
 #elif L==5
 	"USERS.Administration#remove-all-students";
 #elif L==6
@@ -1420,7 +1420,7 @@ const char *Hlp_USERS_Administrators =
 #elif L==3
 	"USERS.Administrators";
 #elif L==4
-	"USERS.Administrators";
+	"USERS.Administrators.es";
 #elif L==5
 	"USERS.Administrators";
 #elif L==6
