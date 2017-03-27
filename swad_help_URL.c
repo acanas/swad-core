@@ -2644,7 +2644,7 @@ const char *Hlp_STATS_Visits_global_visits =
 #elif L==3
 	"STATS.Visits#global-visits";
 #elif L==4
-	"STATS.Visits#global-visits";
+	"STATS.Visits.es#accesos-globales";
 #elif L==5
 	"STATS.Visits#global-visits";
 #elif L==6
@@ -2665,7 +2665,7 @@ const char *Hlp_STATS_Visits_visits_to_course =
 #elif L==3
 	"STATS.Visits#visits-to-course";
 #elif L==4
-	"STATS.Visits#visits-to-course";
+	"STATS.Visits.es#accesos-a-la-asignatura";
 #elif L==5
 	"STATS.Visits#visits-to-course";
 #elif L==6
