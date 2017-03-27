@@ -211,13 +211,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.171.5 (2017-03-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.171.6 (2017-03-27)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.171.6: Mar 27, 2017	Some help URLs translated to spanish. (217519 lines)
         Version 16.171.5: Mar 27, 2017	Changed buttons to create a new link, banner, place or holiday. (217518 lines)
         Version 16.171.4: Mar 27, 2017	Some help URLs translated to spanish. (217605 lines)
         Version 16.171.3: Mar 27, 2017	Fixed bug in assignments, reported by Eva Martínez Ortigosa. (217604 lines)

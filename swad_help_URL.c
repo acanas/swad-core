@@ -144,7 +144,7 @@ const char *Hlp_SYSTEM_Banners =
 #elif L==3
 	"SYSTEM.Banners";
 #elif L==4
-	"SYSTEM.Banners";
+	"SYSTEM.Banners.es";
 #elif L==5
 	"SYSTEM.Banners";
 #elif L==6
@@ -165,7 +165,7 @@ const char *Hlp_SYSTEM_Banners_edit =
 #elif L==3
 	"SYSTEM.Banners#edit";
 #elif L==4
-	"SYSTEM.Banners#edit";
+	"SYSTEM.Banners.es#editar";
 #elif L==5
 	"SYSTEM.Banners#edit";
 #elif L==6
@@ -186,7 +186,7 @@ const char *Hlp_SYSTEM_Links =
 #elif L==3
 	"SYSTEM.Links";
 #elif L==4
-	"SYSTEM.Links";
+	"SYSTEM.Links.es";
 #elif L==5
 	"SYSTEM.Links";
 #elif L==6
@@ -207,7 +207,7 @@ const char *Hlp_SYSTEM_Links_edit =
 #elif L==3
 	"SYSTEM.Links#edit";
 #elif L==4
-	"SYSTEM.Links#edit";
+	"SYSTEM.Links.es#editar";
 #elif L==5
 	"SYSTEM.Links#edit";
 #elif L==6
