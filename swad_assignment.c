@@ -581,7 +581,7 @@ void Asg_GetListAssignments (void)
          HiddenSubQuery[0] = '\0';
          break;
       default:
-         sprintf (HiddenSubQuery,"AND Hidden='N'");
+         sprintf (HiddenSubQuery," AND Hidden='N'");
          break;
      }
    switch (Gbl.Asgs.SelectedOrder)
