@@ -211,13 +211,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.171 (2017-03-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.171.1 (2017-03-27)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.171.1: Mar 27, 2017	Code refactoring in banners. (217602 lines)
         Version 16.171:   Mar 27, 2017	Action to remove old courses removed from main menu. (217534 lines)
         Version 16.170.2: Mar 27, 2017	Link to remove old courses from Hierarchy. (217573 lines)
         Version 16.170.1: Mar 27, 2017	Pending is renamed as Hierarchy. (217554 lines)

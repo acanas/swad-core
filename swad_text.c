@@ -6092,6 +6092,27 @@ const char *Txt_Create_announcement =
 	"Criar an&uacute;ncio";
 #endif
 
+const char *Txt_Create_another_banner =
+#if   L==1
+	"Crear un altre banner";
+#elif L==2
+	"Erstellen Sie ein anderes Werbebanner";
+#elif L==3
+	"Create another banner";
+#elif L==4
+	"Crear otro banner";
+#elif L==5
+	"Cr&eacute;er un autre banni&eacute;re";
+#elif L==6
+	"Crear otro banner";	// Okoteve traducción
+#elif L==7
+	"Crea un altro banner";
+#elif L==8
+	"Tworzenie inny banner";
+#elif L==9
+	"Criar um outro banner";
+#endif
+
 const char *Txt_Create_another_centre =
 #if   L==1
 	"Crear un altre centre";
@@ -6262,7 +6283,7 @@ const char *Txt_Create_assignment =
 
 const char *Txt_Create_banner =
 #if   L==1
-	"Crear banner";	// Necessita traduccio
+	"Crear banner";
 #elif L==2
 	"Werbebanner erstellen";
 #elif L==3
@@ -24787,6 +24808,27 @@ const char *Txt_No_assignments =
 	"Brak zadania.";
 #elif L==9
 	"N&atilde;o h&aacute; atividades.";
+#endif
+
+const char *Txt_No_banners =
+#if   L==1
+	"No hi ha banners.";
+#elif L==2
+	"Keine Werbebanners.";
+#elif L==3
+	"No banners.";
+#elif L==4
+	"No hay banners.";
+#elif L==5
+	"Il n'y a pas de banni&eacute;res.";
+#elif L==6
+	"No hay banners.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono banners.";
+#elif L==8
+	"Brak banners.";
+#elif L==9
+	"N&atilde;o h&aacute; banners.";
 #endif
 
 const char *Txt_no_course_of_origin =	// Means: "message sent from any course"

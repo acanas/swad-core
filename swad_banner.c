@@ -59,6 +59,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
+static void Ban_WriteListOfBanners (void);
 static void Ban_PutFormToEditBanners (void);
 static void Ban_GetListBanners (const char *Query);
 static void Ban_ListBannersForEdition (void);
@@ -88,14 +89,16 @@ void Ban_PutLinkToViewBanners (void)
   }
 
 /*****************************************************************************/
-/*************************** List all the banners ****************************/
+/***************************** List all banners ******************************/
 /*****************************************************************************/
 
 void Ban_SeeBanners (void)
   {
    extern const char *Hlp_SYSTEM_Banners;
    extern const char *Txt_Banners;
-   unsigned NumBan;
+   extern const char *Txt_No_banners;
+   extern const char *Txt_Create_another_banner;
+   extern const char *Txt_Create_banner;
 
    /***** Get list of banners *****/
    Ban_GetListBanners ("SELECT BanCod,Hidden,ShortName,FullName,Img,WWW"
@@ -103,24 +106,55 @@ void Ban_SeeBanners (void)
                        " WHERE Hidden='N'"
 	               " ORDER BY ShortName");
 
-   /***** Frame head *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Banners,
-                             Ban_PutFormToEditBanners,Hlp_SYSTEM_Banners,2);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Banners,
+                        Ban_PutFormToEditBanners,Hlp_SYSTEM_Banners);
+
+   /***** Write all frames *****/
+   if (Gbl.Banners.Num)	// There are banners
+      Ban_WriteListOfBanners ();
+   else			// No banners created
+      Lay_ShowAlert (Lay_INFO,Txt_No_banners);
+
+   /***** Button to create banner *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+     {
+      Act_FormStart (ActEdiBan);
+      Lay_PutConfirmButton (Gbl.Banners.Num ? Txt_Create_another_banner :
+	                                      Txt_Create_banner);
+      Act_FormEnd ();
+     }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Free list of banners *****/
+   Ban_FreeListBanners ();
+  }
+
+/*****************************************************************************/
+/*************************** Write list of banners ***************************/
+/*****************************************************************************/
+
+static void Ban_WriteListOfBanners (void)
+  {
+   unsigned NumBan;
+
+   /***** List start *****/
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
 
    /***** Write all the banners *****/
    for (NumBan = 0;
 	NumBan < Gbl.Banners.Num;
 	NumBan++)
       /* Write data of this banner */
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
+      fprintf (Gbl.F.Out,"<li>"
+			 "<a href=\"%s\" title=\"%s\" class=\"DAT\" target=\"_blank\">"
                          "<img src=\"%s/%s/%s\""
                          " alt=\"%s\" title=\"%s\""
                          " class=\"BANNER\" />"
                          "</a>"
-                         "</td>"
-                         "</tr>",
+			 "</li>",
                Gbl.Banners.Lst[NumBan].WWW,
                Gbl.Banners.Lst[NumBan].FullName,
                Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_BANNER,
@@ -128,11 +162,8 @@ void Ban_SeeBanners (void)
                Gbl.Banners.Lst[NumBan].ShrtName,
                Gbl.Banners.Lst[NumBan].FullName);
 
-   /***** Frame end *****/
-   Lay_EndRoundFrameTable ();
-
-   /***** Free list of banners *****/
-   Ban_FreeListBanners ();
+   /***** List end *****/
+   fprintf (Gbl.F.Out,"</ul>");
   }
 
 /*****************************************************************************/

@@ -98,12 +98,13 @@ void Lnk_SeeLinks (void)
    /***** Get list of links *****/
    Lnk_GetListLinks ();
 
-   /***** Write all the links *****/
+   /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Links,
 			Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ? Lnk_PutIconToEditLinks :
 								NULL,
 			Hlp_SYSTEM_Links);
 
+   /***** Write all links *****/
    if (Gbl.Links.Num)	// There are links
       Lnk_WriteListOfLinks ();
    else			// No links created
@@ -113,11 +114,12 @@ void Lnk_SeeLinks (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       Act_FormStart (ActEdiLnk);
-      Lay_PutConfirmButton (Gbl.CurrentCtr.Ctr.Degs.Num ? Txt_Create_another_link :
-	                                                  Txt_Create_link);
+      Lay_PutConfirmButton (Gbl.Links.Num ? Txt_Create_another_link :
+	                                    Txt_Create_link);
       Act_FormEnd ();
      }
 
+   /***** End frame *****/
    Lay_EndRoundFrame ();
 
    /***** Free list of links *****/
