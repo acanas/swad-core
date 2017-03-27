@@ -1993,7 +1993,7 @@ const char *Hlp_STATS_Surveys =
 #elif L==3
 	"STATS.Surveys";
 #elif L==4
-	"STATS.Surveys";
+	"STATS.Surveys.es";
 #elif L==5
 	"STATS.Surveys";
 #elif L==6
@@ -2014,7 +2014,7 @@ const char *Hlp_STATS_Surveys_new_survey =
 #elif L==3
 	"STATS.Surveys#new-survey";
 #elif L==4
-	"STATS.Surveys#new-survey";
+	"STATS.Surveys.es#nueva-encuesta";
 #elif L==5
 	"STATS.Surveys#new-survey";
 #elif L==6
@@ -2035,7 +2035,7 @@ const char *Hlp_STATS_Surveys_edit_survey =
 #elif L==3
 	"STATS.Surveys#edit-survey";
 #elif L==4
-	"STATS.Surveys#edit-survey";
+	"STATS.Surveys.es#editar-encuesta";
 #elif L==5
 	"STATS.Surveys#edit-survey";
 #elif L==6
@@ -2056,7 +2056,7 @@ const char *Hlp_STATS_Surveys_questions =
 #elif L==3
 	"STATS.Surveys#questions";
 #elif L==4
-	"STATS.Surveys#questions";
+	"STATS.Surveys.es#preguntas";
 #elif L==5
 	"STATS.Surveys#questions";
 #elif L==6
