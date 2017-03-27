@@ -2686,7 +2686,7 @@ const char *Hlp_STATS_Report =
 #elif L==3
 	"STATS.Report";
 #elif L==4
-	"STATS.Report";
+	"STATS.Report.es";
 #elif L==5
 	"STATS.Report";
 #elif L==6
