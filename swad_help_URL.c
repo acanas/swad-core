@@ -2602,7 +2602,7 @@ const char *Hlp_STATS_Degrees =
 #elif L==3
 	"STATS.Degrees";
 #elif L==4
-	"STATS.Degrees";
+	"STATS.Degrees.es";
 #elif L==5
 	"STATS.Degrees";
 #elif L==6
@@ -2623,7 +2623,7 @@ const char *Hlp_STATS_Indicators =
 #elif L==3
 	"STATS.Indicators";
 #elif L==4
-	"STATS.Indicators";
+	"STATS.Indicators.es";
 #elif L==5
 	"STATS.Indicators";
 #elif L==6
@@ -2707,7 +2707,7 @@ const char *Hlp_STATS_Frequent =
 #elif L==3
 	"STATS.Frequent";
 #elif L==4
-	"STATS.Frequent";
+	"STATS.Frequent.es";
 #elif L==5
 	"STATS.Frequent";
 #elif L==6
