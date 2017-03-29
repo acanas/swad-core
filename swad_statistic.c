@@ -6885,7 +6885,7 @@ static void Sta_GetAndShowTestsStats (void)
 
 static void Sta_GetAndShowSocialActivityStats (void)
   {
-   extern const char *Hlp_STATS_Figures_public_activity;
+   extern const char *Hlp_STATS_Figures_timeline;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Type;
    extern const char *Txt_No_of_social_posts;
@@ -6904,7 +6904,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_SOCIAL_ACTIVITY],
-                             NULL,Hlp_STATS_Figures_public_activity,2);
+                             NULL,Hlp_STATS_Figures_timeline,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

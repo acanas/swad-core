@@ -2077,7 +2077,7 @@ const char *Hlp_STATS_Figures =
 #elif L==3
 	"STATS.Figures";
 #elif L==4
-	"STATS.Figures";
+	"STATS.Figures.es";
 #elif L==5
 	"STATS.Figures";
 #elif L==6
@@ -2098,7 +2098,7 @@ const char *Hlp_STATS_Figures_users =
 #elif L==3
 	"STATS.Figures#users";
 #elif L==4
-	"STATS.Figures#users";
+	"STATS.Figures.es#usuarios";
 #elif L==5
 	"STATS.Figures#users";
 #elif L==6
@@ -2119,7 +2119,7 @@ const char *Hlp_STATS_Figures_ranking =
 #elif L==3
 	"STATS.Figures#ranking";
 #elif L==4
-	"STATS.Figures#ranking";
+	"STATS.Figures.es#ranking";
 #elif L==5
 	"STATS.Figures#ranking";
 #elif L==6
@@ -2140,7 +2140,7 @@ const char *Hlp_STATS_Figures_hierarchy =
 #elif L==3
 	"STATS.Figures#hierarchy";
 #elif L==4
-	"STATS.Figures#hierarchy";
+	"STATS.Figures.es#jerarqu%C3%ADa";
 #elif L==5
 	"STATS.Figures#hierarchy";
 #elif L==6
@@ -2161,7 +2161,7 @@ const char *Hlp_STATS_Figures_institutions =
 #elif L==3
 	"STATS.Figures#institutions";
 #elif L==4
-	"STATS.Figures#institutions";
+	"STATS.Figures.es#instituciones";
 #elif L==5
 	"STATS.Figures#institutions";
 #elif L==6
@@ -2182,7 +2182,7 @@ const char *Hlp_STATS_Figures_types_of_degree =
 #elif L==3
 	"STATS.Figures#types-of-degree";
 #elif L==4
-	"STATS.Figures#types-of-degree";
+	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==5
 	"STATS.Figures#types-of-degree";
 #elif L==6
@@ -2203,7 +2203,7 @@ const char *Hlp_STATS_Figures_folders_and_files =
 #elif L==3
 	"STATS.Figures#folders-and-files";
 #elif L==4
-	"STATS.Figures#folders-and-files";
+	"STATS.Figures.es#carpetas-y-archivos";
 #elif L==5
 	"STATS.Figures#folders-and-files";
 #elif L==6
@@ -2224,7 +2224,7 @@ const char *Hlp_STATS_Figures_open_educational_resources_oer =
 #elif L==3
 	"STATS.Figures#open-educational-resources-oer";
 #elif L==4
-	"STATS.Figures#open-educational-resources-oer";
+	"STATS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==5
 	"STATS.Figures#open-educational-resources-oer";
 #elif L==6
@@ -2245,7 +2245,7 @@ const char *Hlp_STATS_Figures_assignments =
 #elif L==3
 	"STATS.Figures#assignments";
 #elif L==4
-	"STATS.Figures#assignments";
+	"STATS.Figures.es#actividades";
 #elif L==5
 	"STATS.Figures#assignments";
 #elif L==6
@@ -2266,7 +2266,7 @@ const char *Hlp_STATS_Figures_tests =
 #elif L==3
 	"STATS.Figures#tests";
 #elif L==4
-	"STATS.Figures#tests";
+	"STATS.Figures.es#tests";
 #elif L==5
 	"STATS.Figures#tests";
 #elif L==6
@@ -2279,25 +2279,25 @@ const char *Hlp_STATS_Figures_tests =
 	"STATS.Figures#tests";
 #endif
 
-const char *Hlp_STATS_Figures_public_activity =
+const char *Hlp_STATS_Figures_timeline =
 #if   L==1
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==2
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==3
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==4
-	"STATS.Figures#public-activity";
+	"STATS.Figures.es#timeline";
 #elif L==5
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==6
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==7
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==8
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #elif L==9
-	"STATS.Figures#public-activity";
+	"STATS.Figures#timeline";
 #endif
 
 const char *Hlp_STATS_Figures_followed_followers =
@@ -2308,7 +2308,7 @@ const char *Hlp_STATS_Figures_followed_followers =
 #elif L==3
 	"STATS.Figures#followed--followers";
 #elif L==4
-	"STATS.Figures#followed--followers";
+	"STATS.Figures.es#seguidos--seguidores";
 #elif L==5
 	"STATS.Figures#followed--followers";
 #elif L==6
@@ -2329,7 +2329,7 @@ const char *Hlp_STATS_Figures_forums =
 #elif L==3
 	"STATS.Figures#forums";
 #elif L==4
-	"STATS.Figures#forums";
+	"STATS.Figures.es#foros";
 #elif L==5
 	"STATS.Figures#forums";
 #elif L==6
@@ -2350,7 +2350,7 @@ const char *Hlp_STATS_Figures_notifications =
 #elif L==3
 	"STATS.Figures#notifications";
 #elif L==4
-	"STATS.Figures#notifications";
+	"STATS.Figures.es#notificaciones";
 #elif L==5
 	"STATS.Figures#notifications";
 #elif L==6
@@ -2371,7 +2371,7 @@ const char *Hlp_STATS_Figures_notices =
 #elif L==3
 	"STATS.Figures#notices";
 #elif L==4
-	"STATS.Figures#notices";
+	"STATS.Figures.es#avisos";
 #elif L==5
 	"STATS.Figures#notices";
 #elif L==6
@@ -2392,7 +2392,7 @@ const char *Hlp_STATS_Figures_messages =
 #elif L==3
 	"STATS.Figures#messages";
 #elif L==4
-	"STATS.Figures#messages";
+	"STATS.Figures.es#mensajes";
 #elif L==5
 	"STATS.Figures#messages";
 #elif L==6
@@ -2413,7 +2413,7 @@ const char *Hlp_STATS_Figures_surveys =
 #elif L==3
 	"STATS.Figures#surveys";
 #elif L==4
-	"STATS.Figures#surveys";
+	"STATS.Figures.es#encuestas";
 #elif L==5
 	"STATS.Figures#surveys";
 #elif L==6
@@ -2434,7 +2434,7 @@ const char *Hlp_STATS_Figures_webs_social_networks =
 #elif L==3
 	"STATS.Figures#webs--social-networks";
 #elif L==4
-	"STATS.Figures#webs--social-networks";
+	"STATS.Figures.es#webs--redes-sociales";
 #elif L==5
 	"STATS.Figures#webs--social-networks";
 #elif L==6
@@ -2455,7 +2455,7 @@ const char *Hlp_STATS_Figures_language =
 #elif L==3
 	"STATS.Figures#language";
 #elif L==4
-	"STATS.Figures#language";
+	"STATS.Figures.es#idioma";
 #elif L==5
 	"STATS.Figures#language";
 #elif L==6
@@ -2476,7 +2476,7 @@ const char *Hlp_STATS_Figures_icons =
 #elif L==3
 	"STATS.Figures#icons";
 #elif L==4
-	"STATS.Figures#icons";
+	"STATS.Figures.es#iconos";
 #elif L==5
 	"STATS.Figures#icons";
 #elif L==6
@@ -2497,7 +2497,7 @@ const char *Hlp_STATS_Figures_menu =
 #elif L==3
 	"STATS.Figures#menu";
 #elif L==4
-	"STATS.Figures#menu";
+	"STATS.Figures.es#men%C3%BA";
 #elif L==5
 	"STATS.Figures#menu";
 #elif L==6
@@ -2518,7 +2518,7 @@ const char *Hlp_STATS_Figures_calendar =
 #elif L==3
 	"STATS.Figures#calendar";
 #elif L==4
-	"STATS.Figures#calendar";
+	"STATS.Figures.es#calendario";
 #elif L==5
 	"STATS.Figures#calendar";
 #elif L==6
@@ -2539,7 +2539,7 @@ const char *Hlp_STATS_Figures_theme =
 #elif L==3
 	"STATS.Figures#theme";
 #elif L==4
-	"STATS.Figures#theme";
+	"STATS.Figures.es#tema";
 #elif L==5
 	"STATS.Figures#theme";
 #elif L==6
@@ -2560,7 +2560,7 @@ const char *Hlp_STATS_Figures_columns =
 #elif L==3
 	"STATS.Figures#columns";
 #elif L==4
-	"STATS.Figures#columns";
+	"STATS.Figures.es#columnas";
 #elif L==5
 	"STATS.Figures#columns";
 #elif L==6
@@ -2581,7 +2581,7 @@ const char *Hlp_STATS_Figures_privacy =
 #elif L==3
 	"STATS.Figures#privacy";
 #elif L==4
-	"STATS.Figures#privacy";
+	"STATS.Figures.es#privacidad";
 #elif L==5
 	"STATS.Figures#privacy";
 #elif L==6

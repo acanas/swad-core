@@ -37730,163 +37730,163 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_INS_DOC_PUB_FILE
-	 "Document p&uacute;blic"
+	 "Document p&uacute;blic (instituci&oacute;)"
 #elif L==2
-	 "&Ouml;ffentliche Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei (Hochschule)"
 #elif L==3
-	 "Public document file"
+	 "Public document file (institution)"
 #elif L==4
-	 "Documento p&uacute;blico"
+	 "Documento p&uacute;blico (instituci&oacute;n)"
 #elif L==5
-	 "Fichier de document public"
+	 "Fichier de document public (&eacute;tablissement)"
 #elif L==6
-	 "Documento p&uacute;blico"	// Okoteve traducción
+	 "Documento p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
 #elif L==7
-	 "Documento pubblico"
+	 "Documento pubblico (istituzione)"
 #elif L==8
-	 "Plik dokumentu publiczne"
+	 "Plik dokumentu publiczne (instytucji)"
 #elif L==9
-	 "Arquivo de documento p&uacute;blico"
+	 "Arquivo de documento p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_INS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic"
+	 "Arxiu compartit p&uacute;blic (instituci&oacute;)"
 #elif L==2
-	 "&Ouml;ffentliche Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei (Hochschule)"
 #elif L==3
-	 "Public shared file"
+	 "Public shared file (institution)"
 #elif L==4
-	 "Archivo compartido p&uacute;blico"
+	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"
 #elif L==5
-	 "Fichier partag&eacute; public"
+	 "Fichier partag&eacute; public (&eacute;tablissement)"
 #elif L==6
-	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico (instituci&oacute;n)"	// Okoteve traducción
 #elif L==7
-	 "File condiviso pubblico"
+	 "File condiviso pubblico (istituzione)"
 #elif L==8
-	 "Udost&eogon;pniony plik publiczne"
+	 "Udost&eogon;pniony plik publiczne (instytucji)"
 #elif L==9
-	 "Arquivo compartilhado p&uacute;blico"
+	 "Arquivo compartilhado p&uacute;blico (institu&ccedil;&atilde;o)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_CTR_DOC_PUB_FILE
-	 "Document p&uacute;blic"
+	 "Document p&uacute;blic (centre)"
 #elif L==2
-	 "&Ouml;ffentliche Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei (Lehrinstitut)"
 #elif L==3
-	 "Public document file"
+	 "Public document file (centre)"
 #elif L==4
-	 "Documento p&uacute;blico"
+	 "Documento p&uacute;blico (centro)"
 #elif L==5
-	 "Fichier de document public"
+	 "Fichier de document public (centre)"
 #elif L==6
-	 "Documento p&uacute;blico"	// Okoteve traducción
+	 "Documento p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7
-	 "Documento pubblico"
+	 "Documento pubblico (centro)"
 #elif L==8
-	 "Plik dokumentu publiczne"
+	 "Plik dokumentu publiczne (centrum)"
 #elif L==9
-	 "Arquivo de documento p&uacute;blico"
+	 "Arquivo de documento p&uacute;blico (centro)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_CTR_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic"
+	 "Arxiu compartit p&uacute;blic (centre)"
 #elif L==2
-	 "&Ouml;ffentliche Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei (Lehrinstitut)"
 #elif L==3
-	 "Public shared file"
+	 "Public shared file (centre)"
 #elif L==4
-	 "Archivo compartido p&uacute;blico"
+	 "Archivo compartido p&uacute;blico (centro)"
 #elif L==5
-	 "Fichier partag&eacute; public"
+	 "Fichier partag&eacute; public (centre)"
 #elif L==6
-	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico (centro)"	// Okoteve traducción
 #elif L==7
-	 "File condiviso pubblico"
+	 "File condiviso pubblico (centro)"
 #elif L==8
-	 "Udost&eogon;pniony plik publiczne"
+	 "Udost&eogon;pniony plik publiczne (centrum)"
 #elif L==9
-	 "Arquivo compartilhado p&uacute;blico"
+	 "Arquivo compartilhado p&uacute;blico (centro)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_DEG_DOC_PUB_FILE
-	 "Document p&uacute;blic"
+	 "Document p&uacute;blic (titulaci&oacute;)"
 #elif L==2
-	 "&Ouml;ffentliche Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei (Studiengang)"
 #elif L==3
-	 "Public document file"
+	 "Public document file (degree)"
 #elif L==4
-	 "Documento p&uacute;blico"
+	 "Documento p&uacute;blico (titulaci&oacute;n)"
 #elif L==5
-	 "Fichier de document public"
+	 "Fichier de document public (&eacute;tude)"
 #elif L==6
-	 "Documento p&uacute;blico"	// Okoteve traducción
+	 "Documento p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
 #elif L==7
-	 "Documento pubblico"
+	 "Documento pubblico (laurea)"
 #elif L==8
-	 "Plik dokumentu publiczne"
+	 "Plik dokumentu publiczne (stopie&nacute;)"
 #elif L==9
-	 "Arquivo de documento p&uacute;blico"
+	 "Arquivo de documento p&uacute;blico (titula&ccedil;&atilde;o)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_DEG_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic"
+	 "Arxiu compartit p&uacute;blic (titulaci&oacute;)"
 #elif L==2
-	 "&Ouml;ffentliche Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei (Studiengang)"
 #elif L==3
-	 "Public shared file"
+	 "Public shared file (degree)"
 #elif L==4
-	 "Archivo compartido p&uacute;blico"
+	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"
 #elif L==5
-	 "Fichier partag&eacute; public"
+	 "Fichier partag&eacute; public (&eacute;tude)"
 #elif L==6
-	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico (titulaci&oacute;n)"	// Okoteve traducción
 #elif L==7
-	 "File condiviso pubblico"
+	 "File condiviso pubblico (laurea)"
 #elif L==8
-	 "Udost&eogon;pniony plik publiczne"
+	 "Udost&eogon;pniony plik publiczne (stopie&nacute;)"
 #elif L==9
-	 "Arquivo compartilhado p&uacute;blico"
+	 "Arquivo compartilhado p&uacute;blico (titula&ccedil;&atilde;o)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_CRS_DOC_PUB_FILE
-	 "Document p&uacute;blic"
+	 "Document p&uacute;blic (assignatura)"
 #elif L==2
-	 "&Ouml;ffentliche Dokumentdatei"
+	 "&Ouml;ffentliche Dokumentdatei (Kurs)"
 #elif L==3
-	 "Public document file"
+	 "Public document file (course)"
 #elif L==4
-	 "Documento p&uacute;blico"
+	 "Documento p&uacute;blico (asignatura)"
 #elif L==5
-	 "Fichier de document public"
+	 "Fichier de document public (mati&egrave;re)"
 #elif L==6
-	 "Documento p&uacute;blico"	// Okoteve traducción
+	 "Documento p&uacute;blico (asignatura)"	// Okoteve traducción
 #elif L==7
-	 "Documento pubblico"
+	 "Documento pubblico (corso)"
 #elif L==8
-	 "Plik dokumentu publiczne"
+	 "Plik dokumentu publiczne (kurs)"
 #elif L==9
-	 "Arquivo de documento p&uacute;blico"
+	 "Arquivo de documento p&uacute;blico (disciplina)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_CRS_SHA_PUB_FILE
-	 "Arxiu compartit p&uacute;blic"
+	 "Arxiu compartit p&uacute;blic (assignatura)"
 #elif L==2
-	 "&Ouml;ffentliche Freigegebene Datei"
+	 "&Ouml;ffentliche Freigegebene Datei (Kurs)"
 #elif L==3
-	 "Public shared file"
+	 "Public shared file (course)"
 #elif L==4
-	 "Archivo compartido p&uacute;blico"
+	 "Archivo compartido p&uacute;blico (asignatura)"
 #elif L==5
-	 "Fichier partag&eacute; public"
+	 "Fichier partag&eacute; public (mati&egrave;re)"
 #elif L==6
-	 "Archivo compartido p&uacute;blico"	// Okoteve traducción
+	 "Archivo compartido p&uacute;blico (asignatura)"	// Okoteve traducción
 #elif L==7
-	 "File condiviso pubblico"
+	 "File condiviso pubblico (corso)"
 #elif L==8
-	 "Udost&eogon;pniony plik publiczne"
+	 "Udost&eogon;pniony plik publiczne (kurs)"
 #elif L==9
-	 "Arquivo compartilhado p&uacute;blico"
+	 "Arquivo compartilhado p&uacute;blico (disciplina)"
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_EXAM_ANNOUNCEMENT
