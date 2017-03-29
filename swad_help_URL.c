@@ -1674,7 +1674,7 @@ const char *Hlp_SOCIAL_Timeline =
 #elif L==3
 	"SOCIAL.Timeline";
 #elif L==4
-	"SOCIAL.Timeline";
+	"SOCIAL.Timeline.es";
 #elif L==5
 	"SOCIAL.Timeline";
 #elif L==6
@@ -1695,7 +1695,7 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 #elif L==3
 	"SOCIAL.Profiles#view-public-profile";
 #elif L==4
-	"SOCIAL.Profiles#view-public-profile";
+	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
 #elif L==5
 	"SOCIAL.Profiles#view-public-profile";
 #elif L==6
@@ -1716,7 +1716,7 @@ const char *Hlp_SOCIAL_Profiles_who_to_follow =
 #elif L==3
 	"SOCIAL.Profiles#who-to-follow";
 #elif L==4
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
 #elif L==5
 	"SOCIAL.Profiles#who-to-follow";
 #elif L==6
@@ -1737,7 +1737,7 @@ const char *Hlp_SOCIAL_Forums =
 #elif L==3
 	"SOCIAL.Forums";
 #elif L==4
-	"SOCIAL.Forums";
+	"SOCIAL.Forums.es";
 #elif L==5
 	"SOCIAL.Forums";
 #elif L==6
