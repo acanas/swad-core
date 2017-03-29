@@ -2814,7 +2814,7 @@ const char *Hlp_PROFILE_Session_role =
 #elif L==3
 	"PROFILE.Session#role";
 #elif L==4
-	"PROFILE.Session#role";
+	"PROFILE.Session.es#rol";
 #elif L==5
 	"PROFILE.Session#role";
 #elif L==6
@@ -2856,7 +2856,7 @@ const char *Hlp_PROFILE_Courses =
 #elif L==3
 	"PROFILE.Courses";
 #elif L==4
-	"PROFILE.Courses";
+	"PROFILE.Courses.es";
 #elif L==5
 	"PROFILE.Courses";
 #elif L==6
@@ -2877,7 +2877,7 @@ const char *Hlp_PROFILE_Timetable =
 #elif L==3
 	"PROFILE.Timetable";
 #elif L==4
-	"PROFILE.Timetable";
+	"PROFILE.Timetable.es";
 #elif L==5
 	"PROFILE.Timetable";
 #elif L==6
@@ -2982,7 +2982,7 @@ const char *Hlp_PROFILE_Record =
 #elif L==3
 	"PROFILE.Record";
 #elif L==4
-	"PROFILE.Record";
+	"PROFILE.Record.es";
 #elif L==5
 	"PROFILE.Record";
 #elif L==6
@@ -3003,7 +3003,7 @@ const char *Hlp_PROFILE_Institution =
 #elif L==3
 	"PROFILE.Institution";
 #elif L==4
-	"PROFILE.Institution";
+	"PROFILE.Institution.es";
 #elif L==5
 	"PROFILE.Institution";
 #elif L==6
@@ -3024,7 +3024,7 @@ const char *Hlp_PROFILE_Webs =
 #elif L==3
 	"PROFILE.Webs";
 #elif L==4
-	"PROFILE.Webs";
+	"PROFILE.Webs.es";
 #elif L==5
 	"PROFILE.Webs";
 #elif L==6
