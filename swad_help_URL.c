@@ -1886,7 +1886,7 @@ const char *Hlp_MESSAGES_Write =
 #elif L==3
 	"MESSAGES.Write";
 #elif L==4
-	"MESSAGES.Write";
+	"MESSAGES.Write.es";
 #elif L==5
 	"MESSAGES.Write";
 #elif L==6
