@@ -1907,7 +1907,7 @@ const char *Hlp_MESSAGES_Received =
 #elif L==3
 	"MESSAGES.Received";
 #elif L==4
-	"MESSAGES.Received";
+	"MESSAGES.Received.es";
 #elif L==5
 	"MESSAGES.Received";
 #elif L==6
@@ -1928,7 +1928,7 @@ const char *Hlp_MESSAGES_Received_filter =
 #elif L==3
 	"MESSAGES.Received#filter";
 #elif L==4
-	"MESSAGES.Received#filter";
+	"MESSAGES.Received.es#filtro";
 #elif L==5
 	"MESSAGES.Received#filter";
 #elif L==6
@@ -1949,7 +1949,7 @@ const char *Hlp_MESSAGES_Sent =
 #elif L==3
 	"MESSAGES.Sent";
 #elif L==4
-	"MESSAGES.Sent";
+	"MESSAGES.Sent.es";
 #elif L==5
 	"MESSAGES.Sent";
 #elif L==6
@@ -1970,7 +1970,7 @@ const char *Hlp_MESSAGES_Sent_filter =
 #elif L==3
 	"MESSAGES.Sent#filter";
 #elif L==4
-	"MESSAGES.Sent#filter";
+	"MESSAGES.Sent.es#filtro";
 #elif L==5
 	"MESSAGES.Sent#filter";
 #elif L==6
