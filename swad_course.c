@@ -35,7 +35,7 @@
 #include "swad_constant.h"
 #include "swad_database.h"
 #include "swad_degree.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_exam.h"
 #include "swad_global.h"
 #include "swad_help.h"
@@ -138,7 +138,7 @@ void Crs_ShowIntroduction (void)
    /***** Course introduction *****/
    Inf_ShowInfo ();
 
-   /***** Show help to enroll me *****/
+   /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
@@ -183,7 +183,7 @@ static void Crs_Configuration (bool PrintView)
    /***** Messages and links above the frame *****/
    if (!PrintView)
      {
-      /* Link to request enrollment in the current course */
+      /* Link to request enrolment in the current course */
       if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
 	{
@@ -2888,8 +2888,8 @@ void Crs_ReqSelectOneOfMyCourses (void)
    if (Gbl.Usrs.Me.MyCrss.Num)
       /* Show my courses */
       Crs_WriteListMyCoursesToSelectOne ();
-   else	// I am not enrolled in any course
-      /* Show help to enroll me */
+   else	// I am not enroled in any course
+      /* Show help to enrol me */
       Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
@@ -3148,8 +3148,8 @@ unsigned Crs_ListCrssFound (const char *Query)
 
 static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnAccepted)
   {
-   extern const char *Txt_Enrollment_confirmed;
-   extern const char *Txt_Enrollment_not_confirmed;
+   extern const char *Txt_Enrolment_confirmed;
+   extern const char *Txt_Enrolment_not_confirmed;
    extern const char *Txt_Go_to_X;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    struct Degree Deg;
@@ -3215,10 +3215,10 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
                Gbl.Prefs.IconsURL,
                Accepted ? "ok_on" :
         	          "tr",
-               Accepted ? Txt_Enrollment_confirmed :
-        	          Txt_Enrollment_not_confirmed,
-               Accepted ? Txt_Enrollment_confirmed :
-        	          Txt_Enrollment_not_confirmed);
+               Accepted ? Txt_Enrolment_confirmed :
+        	          Txt_Enrolment_not_confirmed,
+               Accepted ? Txt_Enrolment_confirmed :
+        	          Txt_Enrolment_not_confirmed);
      }
 
    /***** Write number of course in this search *****/

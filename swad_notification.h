@@ -55,34 +55,34 @@ typedef enum
 
    /* Course tab */
    Ntf_EVENT_DOCUMENT_FILE	=  1,
-   Ntf_EVENT_TEACHERS_FILE	=  2,	// TODO: Change all the numbers >= 2
-   Ntf_EVENT_SHARED_FILE	=  3,	// Old 2
+   Ntf_EVENT_TEACHERS_FILE	=  2,
+   Ntf_EVENT_SHARED_FILE	=  3,
 
    /* Assessment tab */
-   Ntf_EVENT_ASSIGNMENT		=  4,	// Old 3
-   Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,	// Old 4
-   Ntf_EVENT_MARKS_FILE		=  6,	// Old 5
+   Ntf_EVENT_ASSIGNMENT		=  4,
+   Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,
+   Ntf_EVENT_MARKS_FILE		=  6,
 
    /* Users tab */
-   Ntf_EVENT_ENROLLMENT_STUDENT	=  7,	// Old 6
-   Ntf_EVENT_ENROLLMENT_TEACHER	=  8,	// Old 7
-   Ntf_EVENT_ENROLLMENT_REQUEST	=  9,	// Old 8
+   Ntf_EVENT_ENROLMENT_STUDENT	=  7,
+   Ntf_EVENT_ENROLMENT_TEACHER	=  8,
+   Ntf_EVENT_ENROLMENT_REQUEST	=  9,
 
    /* Social tab */
-   Ntf_EVENT_TIMELINE_COMMENT	= 10,	// Old 9	// New comment to one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_FAV	= 11,	// Old 10	// New fav of one of my social publishings (notes or comments)
-   Ntf_EVENT_TIMELINE_SHARE	= 12,	// Old 11	// New sharing of one of my social notes
-   Ntf_EVENT_TIMELINE_MENTION	= 13,	// Old 12	// New mention
-   Ntf_EVENT_FOLLOWER		= 14,	// Old 13
-   Ntf_EVENT_FORUM_POST_COURSE	= 15,	// Old 14	// New post in forums of my courses
-   Ntf_EVENT_FORUM_REPLY	= 16,	// Old 15	// New reply to one of my posts in any forum
+   Ntf_EVENT_TIMELINE_COMMENT	= 10,	// New comment to one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_FAV	= 11,	// New fav of one of my social publishings (notes or comments)
+   Ntf_EVENT_TIMELINE_SHARE	= 12,	// New sharing of one of my social notes
+   Ntf_EVENT_TIMELINE_MENTION	= 13,	// New mention
+   Ntf_EVENT_FOLLOWER		= 14,
+   Ntf_EVENT_FORUM_POST_COURSE	= 15,	// New post in forums of my courses
+   Ntf_EVENT_FORUM_REPLY	= 16,	// New reply to one of my posts in any forum
 
    /* Messages tab */
-   Ntf_EVENT_NOTICE		= 17,	// Old 16
-   Ntf_EVENT_MESSAGE		= 18,	// Old 17
+   Ntf_EVENT_NOTICE		= 17,
+   Ntf_EVENT_MESSAGE		= 18,
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY		= 19,	// Old 18
+   Ntf_EVENT_SURVEY		= 19,
 
    /* Profile tab */
 

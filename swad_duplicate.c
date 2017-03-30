@@ -28,7 +28,7 @@
 #include "swad_account.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_profile.h"
@@ -459,7 +459,7 @@ void Dup_RemoveUsrFromDuplicated (long UsrCod)
   {
    char Query[128];
 
-   /***** Remove enrollment request *****/
+   /***** Remove user from list of duplicated users *****/
    sprintf (Query,"DELETE FROM usr_duplicated WHERE UsrCod=%ld",
             UsrCod);
    DB_QueryDELETE (Query,"can not remove a user from possible duplicates");

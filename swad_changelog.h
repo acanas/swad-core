@@ -135,7 +135,7 @@
 
 // TODO: When SWAD prompts the user to confirm elimination of a group, list the groups below the button
 
-// TODO: Send a message to the user when rejecting a request for enrollment. Suggested by Javier Fernández Baldomero.
+// TODO: Send a message to the user when rejecting a request for enrolment. Suggested by Javier Fernández Baldomero.
 // TODO: Create a table with IPs to block temporarily multiple access to the action used to check ID for empty accounts
 // TODO: Every action should have a minimum time between two clicks on it (for example "Generate a report" should have 60 s)
 
@@ -207,17 +207,21 @@
 
 // TODO: Cuando un admin. pulsa en "Inscribir profesor/a" y el usuario es invitado, debería salir en el rol por defecto "profesor" y no "estudiante"
 
+// TODO: Poner interrogación de ayuda en "USUARIOS > Inscripción" (cuando se pide confirmación para aceptar o rechazar)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.171.15 (2017-03-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.172 (2017-03-30)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.172:   Mar 30, 2017	Some help URLs translated to spanish.
+					Changed "enroll" and "enrollment" to "enrol" and "enrolment", except in web service API. (217531 lines)
         Version 16.171.15:Mar 30, 2017	Some help URLs translated to spanish. (217528 lines)
         Version 16.171.14:Mar 29, 2017	Some help URLs translated to spanish. (217526 lines)
         Version 16.171.13:Mar 29, 2017	Some help URLs translated to spanish. (217526 lines)
@@ -248,7 +252,7 @@ sudo cp -a icon/picture64x64.gif /var/www/html/swad/icon/
         Version 16.168.1: Mar 26, 2017	Link to view degree types in degrees. (217694 lines)
         Version 16.168:   Mar 26, 2017	Action to view places removed from main menu. (217679 lines)
         Version 16.167.16:Mar 26, 2017	Link to view places in centres. (217718 lines)
-        Version 16.167.15:Mar 26, 2017	Code refactoring in enrollment. (217694 lines)
+        Version 16.167.15:Mar 26, 2017	Code refactoring in enrolment. (217694 lines)
         Version 16.167.14:Mar 26, 2017	Code refactoring in follow/unfollow. (217691 lines)
         Version 16.167.13:Mar 26, 2017	Code refactoring in uploading of photos. (217686 lines)
         Version 16.167.12:Mar 26, 2017	Code refactoring in edition of institutions. (217685 lines)
@@ -303,7 +307,7 @@ UPDATE actions SET Obsolete='Y' WHERE ActCod='1617';
         Version 16.159:   Mar 21, 2017	Changes in agenda. Not finished. (217511 lines)
         Version 16.158.1: Mar 21, 2017	Changes in agenda. Not finished. (217395 lines)
         Version 16.158:   Mar 21, 2017	Changes in agenda. Not finished.
-					Fixed bug in user enrollment. (217394 lines)
+					Fixed bug in user enrolment. (217394 lines)
 Copy the following icons to icon public directory:
 sudo cp -a past64x64.png /var/www/html/swad/icon/
 sudo cp -a future64x64.png /var/www/html/swad/icon/
@@ -515,7 +519,7 @@ ALTER TABLE agendas CHANGE COLUMN Location Location VARCHAR(2047) NOT NULL;
         Version 16.147.7: Mar 05, 2017	Changes in layout of social timeline. (216372 lines)
         Version 16.147.6: Mar 05, 2017	Changes in layout of record card. (216370 lines)
         Version 16.147.5: Mar 05, 2017	Changes in layout of record card. (216346 lines)
-        Version 16.147.4: Mar 05, 2017	Changes in layout of enrollment requesters.
+        Version 16.147.4: Mar 05, 2017	Changes in layout of enrolment requesters.
 					Code refactoring writing user's name. (216345 lines)
         Version 16.147.3: Mar 05, 2017	Changes in layout of followed users, users to follow and connected users. (216365 lines)
         Version 16.147.2: Mar 05, 2017	Changes in layout of notice author. (216316 lines)
@@ -588,7 +592,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1637','es','N','Ver 
         Version 16.135.5: Feb 11, 2017	Change in button to register teacher when no teachers found.
 					Changed color in statistics of countries. (212503 lines)
         Version 16.135.4: Feb 11, 2017	Force filling of ID in form to check if account exists. (212502 lines)
-        Version 16.135.3: Feb 09, 2017	Code refactoring related to enrolling teachers and students. (212499 lines)
+        Version 16.135.3: Feb 09, 2017	Code refactoring related to enroling teachers and students. (212499 lines)
         Version 16.135.2: Feb 09, 2017	Changes in layout of stats on degrees. (212456 lines)
         Version 16.135.1: Feb 09, 2017	Link from current date to calendar depending on scope. (212461 lines)
         Version 16.135:   Feb 09, 2017	Changes in layout of tabs. (212452 lines)
@@ -666,8 +670,8 @@ UPDATE actions SET Txt='Cambiar 1er. d&iacute;a calendario asignatura' WHERE Act
         Version 16.122:   Jan 20, 2017	Link to calendar in current month (left-top date-time). (211937 lines)
         Version 16.121:   Jan 19, 2017	Fixed bug in groups selection, reported by Eva Martínez Ortigosa.
 					Code refactoring in groups selected. (211915 lines)
-        Version 16.120.2: Jan 19, 2017	Changed the question to confirm user's enrollment. (211954 lines)
-        Version 16.120.1: Jan 19, 2017	From now on, a teacher A can enroll another user B as a teacher in their courses, although user B is not yet a teacher in any course. (? lines)
+        Version 16.120.2: Jan 19, 2017	Changed the question to confirm user's enrolment. (211954 lines)
+        Version 16.120.1: Jan 19, 2017	From now on, a teacher A can enrol another user B as a teacher in their courses, although user B is not yet a teacher in any course. (? lines)
         Version 16.120:   Jan 19, 2017	Fixed bug when limiting length of links. (211934 lines)
         Version 16.119.4: Jan 18, 2017	Changes in layout of current data and time. (211882 lines)
         Version 16.119.3: Jan 17, 2017	Changes in layout of current data and time. (211881 lines)
@@ -767,10 +771,10 @@ UPDATE actions SET Txt='Cambiar 1er. d&iacute;a calendario asignatura' WHERE Act
 					Changes in layout of lists. (211183 lines)
         Version 16.103.7: Dec 18, 2016	Change in checkbox to force students to read couse info. (211206 lines)
         Version 16.103.6: Dec 18, 2016	Some div elements changed to header, footer, aside and nav elements. (211212 lines)
-        Version 16.103.5: Dec 17, 2016	Code refactoring in user enrollment. (211207 lines)
-        Version 16.103.4: Dec 17, 2016	Code refactoring in user enrollment. (211170 lines)
-        Version 16.103.3: Dec 17, 2016	Code refactoring in user enrollment. (211149 lines)
-        Version 16.103.2: Dec 17, 2016	Code refactoring in user enrollment. (211133 lines)
+        Version 16.103.5: Dec 17, 2016	Code refactoring in user enrolment. (211207 lines)
+        Version 16.103.4: Dec 17, 2016	Code refactoring in user enrolment. (211170 lines)
+        Version 16.103.3: Dec 17, 2016	Code refactoring in user enrolment. (211149 lines)
+        Version 16.103.2: Dec 17, 2016	Code refactoring in user enrolment. (211133 lines)
         Version 16.103.1: Dec 16, 2016	Changes in layout of tabs. (211123 lines)
         Version 16.103:   Dec 16, 2016	Contextual help on course info. (211130 lines)
         Version 16.102:   Dec 15, 2016	Fixed bug in mail to students, reported by GitHub user raistmaj.
@@ -1019,7 +1023,7 @@ Copy icon/iconset/nuvola/action64x64/mapmarker64x64.png to public icons director
         Version 16.68:    Nov 22, 2016	Change in text related to notifications.
 					Changes in contextual links in notifications. (207406 lines)
         Version 16.67.3:  Nov 22, 2016	Contextual help on notifications. (207355 lines)
-        Version 16.67.2:  Nov 21, 2016	Contextual help on sign up in a course and enrollment requests. (207351 lines)
+        Version 16.67.2:  Nov 21, 2016	Contextual help on sign up in a course and enrolment requests. (207351 lines)
         Version 16.67.1:  Nov 21, 2016	Contextual help on connected users and last clicks in real time. (207346 lines)
         Version 16.67:    Nov 21, 2016	Refactoring in tests.
 					"Test exam" is now called "Test result". (207336 lines)
@@ -1580,7 +1584,7 @@ Copy icons icon/download64x64.png
         Version 15.233.2: Jun 27, 2016	Code refactoring in search of users. (203072 lines)
         Version 15.233.1: Jun 27, 2016	New restrictions in length of search string. (203117 lines)
         Version 15.233:   Jun 27, 2016	Simplified search for users with a role. Now all users can be found. (203103 lines)
-        Version 15.232.1: Jun 27, 2016	Fixed bug in search of any user (acceptation of enrollment was wrong). (203702 lines)
+        Version 15.232.1: Jun 27, 2016	Fixed bug in search of any user (acceptation of enrolment was wrong). (203702 lines)
         Version 15.232:   Jun 27, 2016	Search any user, independently on role. (203657 lines)
         Version 15.231.4: Jun 24, 2016	Fix bug (buffer overflow) when getting users. (203474 lines)
         Version 15.231.3: Jun 24, 2016	Parameter name used for "Scope" now depends on context. (203472 lines)
@@ -2131,8 +2135,8 @@ ALTER TABLE tst_questions ADD COLUMN Image CHAR(43) NOT NULL AFTER Stem;
         Version 15.163.3: Mar 28, 2016	Scope selector inside frame in listing of admins. (196652 lines)
         Version 15.163.2: Mar 27, 2016	Scope selector inside frame in listing of guests. (196655 lines)
         Version 15.163.1: Mar 27, 2016	Added HTML directives "label" for scope and other form fields. (196654 lines)
-        Version 15.163:   Mar 27, 2016	Requests for enrollment older than one month are automatically removed. (196656 lines)
-        Version 15.162.7: Mar 25, 2016	Changed message after enrollment request. (196625 lines)
+        Version 15.163:   Mar 27, 2016	Requests for enrolment older than one month are automatically removed. (196656 lines)
+        Version 15.162.7: Mar 25, 2016	Changed message after enrolment request. (196625 lines)
         Version 15.162.6: Mar 24, 2016	Smaller buttons to see results of surveys.
 					Fix bug in surveys. (196615 lines)
         Version 15.162.5: Mar 24, 2016	Default role in registration form will be teacher for the creator of a course. (196615 lines)
@@ -2146,10 +2150,10 @@ ALTER TABLE tst_questions ADD COLUMN Image CHAR(43) NOT NULL AFTER Stem;
         Version 15.161.3: Mar 24, 2016	Changed icon to reset survey. (196577 lines)
 Copy file recycle64x64.png to icon directory
 
-        Version 15.161.2: Mar 24, 2016	Removed contextual icon "update" integrated in frame in "enrollment requests". (196577 lines)
+        Version 15.161.2: Mar 24, 2016	Removed contextual icon "update" integrated in frame in "enrolment requests". (196577 lines)
         Version 15.161.1: Mar 24, 2016	Code refactoring in forms to select roles.
-					Put contextual icon "update" integrated in frame in "enrollment requests". (196598 lines)
-        Version 15.161:   Mar 24, 2016	Changes related to enrollments requests. (196581 lines)
+					Put contextual icon "update" integrated in frame in "enrolment requests". (196598 lines)
+        Version 15.161:   Mar 24, 2016	Changes related to enrolments requests. (196581 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1522','es','N','Actualizar inscripciones pendientes');
 
@@ -2868,7 +2872,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1489','es','N','Elim
         Version 15.68:    Dec 19, 2015	Show guests in connected users.
 					Optimization in queries about connected users. (187158 lines)
         Version 15.67.1:  Dec 15, 2015	Changed some messages. (187141 lines)
-        Version 15.67:    Dec 15, 2015	Fixed bugs in queries of enrollment requests. (187140 lines)
+        Version 15.67:    Dec 15, 2015	Fixed bugs in queries of enrolment requests. (187140 lines)
         Version 15.66.3:  Dec 15, 2015	Changes in some small icons.
 					Fixed bug in record card. (187004 lines)
 					2 changes necessary in database:
@@ -3216,10 +3220,10 @@ ALTER TABLE log ADD COLUMN CtyCod INT NOT NULL DEFAULT -1 AFTER ActCod,ADD INDEX
 Add swad_help.o to list of object files
 
         Version 15.9.1:   Oct 06, 2015	Minor change in contextual help. (185514 lines)
-        Version 15.9:     Oct 05, 2015	Contextual help to encourage enrollment. (185512 lines)
+        Version 15.9:     Oct 05, 2015	Contextual help to encourage enrolment. (185512 lines)
         Version 15.8:     Oct 04, 2015	Changes in file browser layout.
 					Folder owners are not displayed. (185022 lines)
-        Version 15.7.2:   Oct 04, 2015	New layout in enrollment requests. (185018 lines)
+        Version 15.7.2:   Oct 04, 2015	New layout in enrolment requests. (185018 lines)
         Version 15.7.1:   Oct 03, 2015	Message translated. (184984 lines)
         Version 15.7:     Oct 03, 2015	Height of tabs reduced.
 					Changes in layout of students record cards in course. (184962 lines)
@@ -3253,32 +3257,32 @@ Add swad_help.o to list of object files
         Version 14.134.8: Sep 20, 2015	Fixed bug in list of guests.
                                         Changes in listing of connected users. (184885 lines)
         Version 14.134.7: Sep 18, 2015	Fixed bug in list of guests. (184879 lines)
-        Version 14.134.6: Sep 18, 2015	Fixed bug in user enrollment. (184878 lines)
+        Version 14.134.6: Sep 18, 2015	Fixed bug in user enrolment. (184878 lines)
         Version 14.134.5: Sep 18, 2015	Change in order of options in user menu.
                                         Change in styles and layout related to users. (184877 lines)
-        Version 14.134.4: Sep 18, 2015	Changes in user enrollment. (184876 lines)
-        Version 14.134.3: Sep 18, 2015	Changes in user enrollment. (184875 lines)
+        Version 14.134.4: Sep 18, 2015	Changes in user enrolment. (184876 lines)
+        Version 14.134.3: Sep 18, 2015	Changes in user enrolment. (184875 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='82';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1467','es','N','Cambiar contrase&ntilde;a otro usuario');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1468','es','N','Cambiar contrase&ntilde;a estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1469','es','N','Cambiar contrase&ntilde;a profesor');
 
-        Version 14.134.2: Sep 17, 2015	Changes in user enrollment. (184852 lines)
+        Version 14.134.2: Sep 17, 2015	Changes in user enrolment. (184852 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='598';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1464','es','N','Solicitar cambio contrase&ntilde;a otro usuario');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1465','es','N','Solicitar cambio contrase&ntilde;a estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1466','es','N','Solicitar cambio contrase&ntilde;a profesor');
 
-        Version 14.134.1: Sep 17, 2015	Changes in user enrollment. (184834 lines)
+        Version 14.134.1: Sep 17, 2015	Changes in user enrolment. (184834 lines)
 					3 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='58';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1462','es','N','Eliminar estudiante asignatura');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1463','es','N','Eliminar profesor asignatura');
 
-        Version 14.134:   Sep 17, 2015	Changes in user enrollment.
-					Changes in notifications about enrollment. (184823 lines)
+        Version 14.134:   Sep 17, 2015	Changes in user enrolment.
+					Changes in notifications about enrolment. (184823 lines)
 					25 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='592';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1456','es','N','Solicitar acept. inscrip. estudiante');
@@ -3306,12 +3310,12 @@ UPDATE sta_notif SET NotifyEvent=8  WHERE NotifyEvent=7;
 UPDATE usr_data SET NotifNtfEvents=(((NotifNtfEvents & ~0x7F) << 1) | (NotifNtfEvents & 0x7F) | 0x80);
 UPDATE usr_data SET EmailNtfEvents=(((EmailNtfEvents & ~0x7F) << 1) | (EmailNtfEvents & 0x7F));
 
-        Version 14.133.1: Sep 17, 2015	Changes in user enrollment. (184669 lines)
-        Version 14.133:   Sep 17, 2015	Changes in user enrollment. (184665 lines)
+        Version 14.133.1: Sep 17, 2015	Changes in user enrolment. (184669 lines)
+        Version 14.133:   Sep 17, 2015	Changes in user enrolment. (184665 lines)
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1417','1421','1425');
 
-        Version 14.132.7: Sep 17, 2015	Changes in user enrollment. (184706 lines)
+        Version 14.132.7: Sep 17, 2015	Changes in user enrolment. (184706 lines)
         Version 14.132.6: Sep 17, 2015	Changes in users' IDs. (184640 lines)
 					12 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='1239';
@@ -3327,7 +3331,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1453','es','N','Crea
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1454','es','N','Crear ID estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1455','es','N','Crear ID profesor');
 
-        Version 14.132.5: Sep 16, 2015	Changes in user enrollment. (184592 lines)
+        Version 14.132.5: Sep 16, 2015	Changes in user enrolment. (184592 lines)
 					4 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='440';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1444','es','N','Crear invitado');
@@ -3363,29 +3367,29 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1432','es','N','Soli
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1433','es','N','Solicitar cambio foto estudiante');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1434','es','N','Solicitar cambio foto profesor');
 
-        Version 14.131.1: Sep 16, 2015	Changes in user enrollment. (184403 lines)
-        Version 14.131:   Sep 15, 2015	Changes in user enrollment. (184408 lines)
+        Version 14.131.1: Sep 16, 2015	Changes in user enrolment. (184403 lines)
+        Version 14.131:   Sep 15, 2015	Changes in user enrolment. (184408 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1430','es','N','Preguntar si eliminar mi cuenta');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1431','es','N','Eliminar mi cuenta');
 
-        Version 14.130.3: Sep 14, 2015	Changes in user enrollment. (184358 lines)
-        Version 14.130.2: Sep 14, 2015	Changes in user enrollment. (184359 lines)
-        Version 14.130.1: Sep 14, 2015	Changes and bug fixing in user enrollment. (184416 lines)
+        Version 14.130.3: Sep 14, 2015	Changes in user enrolment. (184358 lines)
+        Version 14.130.2: Sep 14, 2015	Changes in user enrolment. (184359 lines)
+        Version 14.130.1: Sep 14, 2015	Changes and bug fixing in user enrolment. (184416 lines)
 					3 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='799';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1428','es','N','Inscribir/eliminar varios estudiantes');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1429','es','N','Inscribir/eliminar varios profesores');
 
-        Version 14.130:   Sep 13, 2015	Changes in user enrollment. (184379 lines)
+        Version 14.130:   Sep 13, 2015	Changes in user enrolment. (184379 lines)
 					3 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='797';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1426','es','N','Administrar varios estudiantes');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1427','es','N','Administrar varios profesores');
 
         Version 14.129:   Sep 12, 2015	New links to admin a user in list of students.
-					Changes in user enrollment.
-					Fixed bug in user enrollment. (184411 lines)
+					Changes in user enrolment.
+					Fixed bug in user enrolment. (184411 lines)
 					15 changes necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='177';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1414','es','N','Solicitar ID modif. invitado');
@@ -4015,10 +4019,10 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1245','es','N','Soli
 ALTER TABLE institutions DROP COLUMN Logo;
 
 	Version 14.55.5:  Jan 16, 2015	Code refactoring related to maps of countries. (173573 lines)
-	Version 14.55.4:  Jan 16, 2015	Fixed bugs in enrollment.
+	Version 14.55.4:  Jan 16, 2015	Fixed bugs in enrolment.
 					New MIME type, suggested by Francisco Ocaña Lara. (173576 lines)
 	Version 14.55.3:  Jan 16, 2015	Link in course information to request registration in course.
-					Fixed bug in enrollment. (173570 lines)
+					Fixed bug in enrolment. (173570 lines)
 	Version 14.55.2:  Jan 15, 2015	Logo of centre, degree, institution or country in title. (173546 lines)
 	Version 14.55.1:  Jan 14, 2015	Fixed bug in user's photo. (173510 lines)
 	Version 14.55:    Jan 14, 2015	New option to upload logo of a centre. (173509 lines)
@@ -4162,9 +4166,9 @@ Add swad_account.o to list of object files
 Add swad_role.o to list of object files
 
 	Version 14.35:    Dec 12, 2014	New MIME type, suggested by Benito Palacios.
-					New module swad_enrollment for enrollment (registration) or removing of users. (170725 lines)
+					New module swad_enrolment for enrolment (registration) or removing of users. (170725 lines)
 					1 change necessary in Makefile:
-Add swad_enrollment.o to list of object files
+Add swad_enrolment.o to list of object files
 
 	Version 14.34.4:  Dec 08, 2014	Some messages translated. (170623 lines)
 	Version 14.34.3:  Dec 08, 2014	Tables are printed with rounded corners. (170602 lines)
@@ -4836,7 +4840,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1164','es','N','Conf
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1162','es','N','Solicitar la creaci&oacute;n de una cuenta');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1163','es','N','Crear una nueva cuenta');
 
-	Version 13.40.1:  Jan 22, 2014	Changes in enrollment of users. (161007 lines)
+	Version 13.40.1:  Jan 22, 2014	Changes in enrolment of users. (161007 lines)
 	Version 13.40:    Jan 20, 2014	Changes in listing of countries.
 					Removed options to go to country, institution, centre, etc. (160965 lines)
 					1 change necessary in database:
@@ -4856,8 +4860,8 @@ Add swad_photo.o to list of object files
 	Version 13.37.2:  Jan 13, 2014	Get list of users' codes for a given ID. Not finished.
 					Fixed bug when redirecting to another language, reported by Monserrat Bosch Olives. (160694 lines)
 	Version 13.37.1:  Jan 13, 2014	Get list of users' codes for a given ID. Not finished. (160611 lines)
-	Version 13.37:    Jan 12, 2014	Code refactoring related to enrollment of users. (160575 lines)
-	Version 13.36:    Jan 11, 2014	When a teacher tries to enroll a user in a course and there are more than one user with the same ID, the teacher can choose what user to enroll. (160605 lines)
+	Version 13.37:    Jan 12, 2014	Code refactoring related to enrolment of users. (160575 lines)
+	Version 13.36:    Jan 11, 2014	When a teacher tries to enrol a user in a course and there are more than one user with the same ID, the teacher can choose what user to enrol. (160605 lines)
 	Version 13.35.2:  Jan 11, 2014	Implemented function to remove one of my user's IDs. (160531 lines)
 	Version 13.35.1:  Jan 11, 2014	Changes in layout and CSS. (160453 lines)
 	Version 13.35:    Jan 11, 2014	Changes in CSS for icons. (160491 lines)
@@ -4886,7 +4890,7 @@ Add swad_photo.o to list of object files
 					1 change necessary in database:
 UPDATE actions SET Obsolete='Y' WHERE ActCod='306';
 
-	Version 13.31:    Dec 31, 2013	Enrollment tab is merged with users tab.
+	Version 13.31:    Dec 31, 2013	Enrolment tab is merged with users tab.
 					Connected option is moved to the end of users tab. (161065 lines)
 	Version 13.30.3:  Dec 31, 2013	Link to edit groups in option to select my groups. (161188 lines)
 	Version 13.30.2:  Dec 31, 2013	Options to edit group types is integrated in option to edit groups. (161244 lines)
@@ -5256,7 +5260,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1108','es','N','Envi
 	Version 12.68.5:  Sep 20, 2013	Default icon set is changed from Nuvola to Awesome. (153535 lines)
 	Version 12.68.4:  Sep 19, 2013	Internal changes in creation of new users. (153534 lines)
 	Version 12.68.3:  Sep 19, 2013	Fixed bug in creation of new users. (153508 lines)
-	Version 12.68.2:  Sep 19, 2013	Fixed bug in notifications about enrollment requests, reported by Antonio Martínez López. (153491 lines)
+	Version 12.68.2:  Sep 19, 2013	Fixed bug in notifications about enrolment requests, reported by Antonio Martínez López. (153491 lines)
 	Version 12.68.1:  Sep 18, 2013	Fixed bug in icon set. (153479 lines)
 	Version 12.68:    Sep 18, 2013	Users can choose two icon sets: Awesome and Nuvola. (153475 lines)
 Create directory for icon set in directory of icons:
@@ -5660,7 +5664,7 @@ ALTER TABLE tst_answers ADD COLUMN Feedback TEXT NOT NULL AFTER Answer;
 	Version 12.33:   Feb 10, 2013	New users' range for current centre.
 					Refactorization of code related to users' lists location. (144061 lines)
 	Version 12.32.5: Jan 30, 2013	Changes in the text of several options in menu.
-					Changes in order of options of enrollment tab. (143920 lines)
+					Changes in order of options of enrolment tab. (143920 lines)
 	Version 12.32.4: Jan 29, 2013	Fixed bug in calendar. (143918 lines)
 	Version 12.32.3: Jan 15, 2013	New file extension allowed, requested by Javier Mateos: .dmg (Disk Image in Masc OS). (143896 lines)
 	Version 12.32.2: Dec 30, 2012	Changed DNI to UsrID in tables log and log_recent. (143896 lines)
@@ -5929,8 +5933,8 @@ ALTER TABLE crs_grp_types ADD COLUMN MustBeOpened ENUM('N','Y') NOT NULL DEFAULT
 ALTER TABLE crs_grp_types ADD COLUMN OpenTime DATETIME NOT NULL DEFAULT 0 AFTER Multiple;
 CREATE INDEX OpenTime ON crs_grp_types (OpenTime);
 
-	Version 12.0.5:  Sep 30, 2012	Changes in listing of pending requests for enrollment. (136342 lines)
-	Version 12.0.4:  Sep 30, 2012	Selection of students or teachers when listing pending requests for enrollment. (136337 lines)
+	Version 12.0.5:  Sep 30, 2012	Changes in listing of pending requests for enrolment. (136342 lines)
+	Version 12.0.4:  Sep 30, 2012	Selection of students or teachers when listing pending requests for enrolment. (136337 lines)
 	Version 12.0.3:  Sep 30, 2012	Change in menu of system tab. (136273 lines)
 	Version 12.0.2:  Sep 29, 2012	Minor change in configuration of tests. (136272 lines)
 	Version 12.0.1:  Sep 24, 2012	Minor change in order of option in system tab. (136268 lines)
@@ -5973,7 +5977,7 @@ UPDATE actions SET Txt='Formulario solicitud inscripción' WHERE ActCod='1054';
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1056','es','Y','Solicitar inscripción');
 
 	Version 11.76:   Sep 15, 2012	Programming new option to request the creation of a new course.
-					New option to apply for enrollment.
+					New option to apply for enrolment.
 					New option to change the status of a course. (135559 lines)
 					2 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1054','es','Y','Solicitar inscripción');
@@ -6006,7 +6010,7 @@ CREATE INDEX Status ON courses (Status);
 					Teachers can not change other users' passwords. (134539 lines)
 	Version 11.74:   Jul 24, 2012	Changed "dar de alta/baja" to "inscribir/eliminar" in Spanish and Catala.
 					Changed the order of several options in menus.
-					Users' tab is moved after enrollment tab. (134512 lines)
+					Users' tab is moved after enrolment tab. (134512 lines)
 	Version 11.73:   Jul 21, 2012	Fixed important bug in trimming leading spaces of strings. (134526 lines)
 	Version 11.72.9: Jul 20, 2012	Fixed bug in edition of plugins. (134511 lines)
 	Version 11.72.8: Jul 20, 2012	Changed database collation to latin1_spanish_ci. (134486 lines)
@@ -6200,7 +6204,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 11.30.6: Jan 14, 2012	Several messages translated (still 53 messages to be translated).
 					Other minor changes. (124913 lines)
 	Version 11.30.5: Jan 14, 2012	Pending notifications are sent by email on refresh actions. (124802 lines)
-	Version 11.30.4: Jan 14, 2012	When a user is removed from a course or from a group, it is better not to set notifications as inaccessible because the user can be enrolled again. (124802 lines)
+	Version 11.30.4: Jan 14, 2012	When a user is removed from a course or from a group, it is better not to set notifications as inaccessible because the user can be enroled again. (124802 lines)
 	Version 11.30.3: Jan 14, 2012	When a course is removed, the notifications in that course are set as removed.
 					When a user is removed from a course or from a group, the notifications inaccessible are set as inaccessible. (124842 lines)
 	Version 11.30.2: Jan 13, 2012	When a group is removed, the notifications about files of marks in that group are set as removed. (124757 lines)
@@ -6341,7 +6345,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 					Programming new WS function sendMessage. (121829 lines)
 	Version 10.53.5: Jul 02, 2011	New fields added to WS function getNotifications. (121749 lines)
 	Version 10.53.4: Jun 30, 2011	Changes in database tables. (121743 lines)
-	Version 10.53.3: Jun 30, 2011	Change in enrollment of users with a new role. (121742 lines)
+	Version 10.53.3: Jun 30, 2011	Change in enrolment of users with a new role. (121742 lines)
 	Version 10.53.2: Jun 14, 2011	New statistics about number of test questions. (121716 lines)
 	Version 10.53.1: Jun 13, 2011	New statistics about number of test questions. (121638 lines)
 	Version 10.53:   Jun 10, 2011	A lot of messages translated to Polish by Wojtek Kieca, Tomasz Olechowski and Mateusz Stanko, students from Zespol Szkol Techniczny nr. 9. (121585 lines)
@@ -6425,8 +6429,8 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 10.35.2: Mar 10, 2011	Fixed bug in statistics of users in a course, reported by Nicola Comunale Rizzo. (100706 lines)
 	Version 10.35.1: Mar 10, 2011	Counting number of students in a group instead of getting directly. This change should be reversed if slow. (100725 lines)
 	Version 10.35:   Mar 10, 2011	Changes and bug fixes counting number of students in groups. (? lines)
-	Version 10.34:   Mar 09, 2011	Lot of changes in enrollment of users. (100696 lines)
-	Version 10.33.3: Mar 08, 2011	Changes in enrollment of users. (100666 lines)
+	Version 10.34:   Mar 09, 2011	Lot of changes in enrolment of users. (100696 lines)
+	Version 10.33.3: Mar 08, 2011	Changes in enrolment of users. (100666 lines)
 	Version 10.33.2: Mar 08, 2011	Fixed bugs and other changes related to importation of students from an external site. (100659 lines)
 	Version 10.33.1: Mar 08, 2011	Few changes related to roles in courses. (100638 lines)
 	Version 10.33:   Mar 08, 2011	Added indexes to table crs_usr.
@@ -6438,7 +6442,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 10.32:   Mar 07, 2011	Changes in global statistics about number of users.
 					Fixed bug in query related to search of teachers. (100696 lines)
 	Version 10.31.1: Mar 07, 2011	UsrDat->Roles is not computed, but read from usr_data table. (100666 lines)
-	Version 10.31:   Mar 06, 2011	A user can be enrolled as "teacher" in course A and as "student" in course B. (100660 lines)
+	Version 10.31:   Mar 06, 2011	A user can be enroled as "teacher" in course A and as "student" in course B. (100660 lines)
 	Version 10.30.4: Mar 06, 2011	Changed "UsrType" to "Role" in log and log_recent database tables. (100587 lines)
 	Version 10.30.3: Mar 06, 2011	Internal changes related to roles. (100587 lines)
 	Version 10.30.2: Mar 06, 2011	Changed "Gender" for "Sex" in database tables. (100580 lines)
@@ -6454,7 +6458,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 	Version 10.27:   Mar 02, 2011	User type related variables and database fields are changed form UsrType to Role, except fields in log tables. (100252 lines)
 	Version 10.26:   Mar 01, 2011	After sending a file to a folder, a new form to send another file to the same folder is shown. (100231 lines)
 	Version 10.25.10:Mar 01, 2011	Text "Class photo" or "List" is shown near icons in selection of type of users' listing. (100183 lines)
-	Version 10.25.9: Mar 01, 2011	Acceptance of enrollment is set to true when importing students from official groups. (100164 lines)
+	Version 10.25.9: Mar 01, 2011	Acceptance of enrolment is set to true when importing students from official groups. (100164 lines)
 	Version 10.25.8: Feb 22, 2011	beginTime and eventTime are changed to long. Reported by Juan Miguel Boyero Corral. (100127 lines)
 	Version 10.25.7: Feb 22, 2011	eventTime is changed from time_t to unsigned long. Reported by Juan Miguel Boyero Corral. (100126 lines)
 	Version 10.25.6: Feb 22, 2011	Deleting a user removes her/him from connected and sessions tables. (100125 lines)
@@ -6489,7 +6493,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1051','es','N','Camb
 					gsoap updated to version 2.8.1 (2011/01/14) (99111 lines)
 	Version 10.20:   Jan 24, 2011	Administrators options are moved to users tab.
 					Degree tab is renamed as system tab.
-					Users tab is splitted into two tabs: users and enrollment. (99030 lines)
+					Users tab is splitted into two tabs: users and enrolment. (99030 lines)
 	Version 10.19.1: Jan 23, 2011	Changes in option to view the connected users. (98898 lines)
 	Version 10.19:   Jan 23, 2011	New option to view the connected users. (98882 lines)
 	Version 10.18:   Jan 22, 2011	New option to change the rol of the logged user. (98788 lines)

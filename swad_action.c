@@ -44,7 +44,7 @@
 #include "swad_degree_type.h"
 #include "swad_duplicate.h"
 #include "swad_exam.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -934,7 +934,7 @@ Users:
 	770. ActLstTch			Show class photo or list of teachers
 	771. ActLstOth			Show class photo or list of guests
 	772. ActSeeAtt			Show attendance events
-	773. ActReqSignUp		Apply for my enrollment
+	773. ActReqSignUp		Apply for my enrolment
 	774. ActSeeSignUpReq		Show pending requests for inscription in the current course
 	775. ActLstCon			List connected users
 
@@ -990,8 +990,8 @@ Users:
         821. ActLogInUsrAgdLan		Show another user's public agenda after change language
         822. ActSeeUsrAgd		Show another user's public agenda
 
-	823. ActReqEnrSevStd		Request the enrollment/removing of several users to / from current course
-	824. ActReqEnrSevTch		Request the enrollment/removing of several users to / from current course
+	823. ActReqEnrSevStd		Request the enrolment/removing of several users to / from current course
+	824. ActReqEnrSevTch		Request the enrolment/removing of several users to / from current course
 
 	825. ActReqLstStdAtt		Request listing of attendance of several students to several events
 	826. ActSeeLstMyAtt		List my attendance as student to several events
@@ -1010,17 +1010,17 @@ Users:
 	839. ActRecAttStd		Save students who attended to an event and comments
 	840. ActRecAttMe		Save my comments as student in an attendance event
 
-	841. ActSignUp			Apply for my enrollment
+	841. ActSignUp			Apply for my enrolment
 	842. ActUpdSignUpReq		Update pending requests for inscription in the current course
-	843. ActReqRejSignUp		Ask if reject the enrollment of a user in a course
-	844. ActRejSignUp		Reject the enrollment of a user in a course
+	843. ActReqRejSignUp		Ask if reject the enrolment of a user in a course
+	844. ActRejSignUp		Reject the enrolment of a user in a course
 
-	845. ActReqMdfOneOth		Request a user's ID for enrollment/removing
-	846. ActReqMdfOneStd		Request a user's ID for enrollment/removing
-	847. ActReqMdfOneTch		Request a user's ID for enrollment/removing
-	848. ActReqMdfOth		Request enrollment/removing of a user
-	849. ActReqMdfStd		Request enrollment/removing of a user
-	850. ActReqMdfTch		Request enrollment/removing of a user
+	845. ActReqMdfOneOth		Request a user's ID for enrolment/removing
+	846. ActReqMdfOneStd		Request a user's ID for enrolment/removing
+	847. ActReqMdfOneTch		Request a user's ID for enrolment/removing
+	848. ActReqMdfOth		Request enrolment/removing of a user
+	849. ActReqMdfStd		Request enrolment/removing of a user
+	850. ActReqMdfTch		Request enrolment/removing of a user
 	851. ActReqOthPho		Show form to send the photo of another user
 	852. ActReqStdPho		Show form to send the photo of another user
 	853. ActReqTchPho		Show form to send the photo of another user
@@ -1042,12 +1042,12 @@ Users:
 	869. ActUpdOth			Update another user's data and groups
 	870. ActUpdStd			Update another user's data and groups
 	871. ActUpdTch			Update another user's data and groups
-	872. ActReqAccEnrStd		Confirm acceptation / refusion of enrollment as student in current course
-	873. ActReqAccEnrTch		Confirm acceptation / refusion of enrollment as teacher in current course
-	874. ActAccEnrStd		Accept enrollment as student in current course
-	875. ActAccEnrTch		Accept enrollment as teacher in current course
-	876. ActRemMe_Std		Reject enrollment as student in current course
-	877. ActRemMe_Tch		Reject enrollment as teacher in current course
+	872. ActReqAccEnrStd		Confirm acceptation / refusion of enrolment as student in current course
+	873. ActReqAccEnrTch		Confirm acceptation / refusion of enrolment as teacher in current course
+	874. ActAccEnrStd		Accept enrolment as student in current course
+	875. ActAccEnrTch		Accept enrolment as teacher in current course
+	876. ActRemMe_Std		Reject enrolment as student in current course
+	877. ActRemMe_Tch		Reject enrolment as teacher in current course
 
 	878. ActNewAdmIns		Register an administrador in this institution
 	879. ActRemAdmIns		Remove an administrador of this institution
@@ -2391,7 +2391,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLstOth		*/{1186, 3,TabUsr,ActLstOth		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListDataAdms		,"adm64x64.gif"		},
    /* ActSeeAtt		*/{ 861, 4,TabUsr,ActSeeAtt		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_SeeAttEvents		,"rollcall64x64.png"	},
    /* ActReqSignUp	*/{1054, 5,TabUsr,ActReqSignUp		,    0,0x006,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqSignUpInCrs		,"enrollmentrequest64x64.gif"},
-   /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ShowEnrollmentRequests	,"enrollmentrequest64x64.gif"},
+   /* ActSeeSignUpReq	*/{1057, 6,TabUsr,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ShowEnrolmentRequests	,"enrollmentrequest64x64.gif"},
    /* ActLstCon		*/{ 995, 7,TabUsr,ActLstCon		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Con_ShowConnectedUsrs		,"userplugged64x64.gif"	},
 
    // Actions not in menu:
@@ -2473,7 +2473,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRecAttMe	*/{1076,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RegisterMeAsStdInAttEvent	,NULL},
 
    /* ActSignUp		*/{1056,-1,TabUnk,ActReqSignUp		,    0,0x006,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_SignUpInCrs		,NULL},
-   /* ActUpdSignUpReq	*/{1522,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_UpdateEnrollmentRequests	,NULL},
+   /* ActUpdSignUpReq	*/{1522,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_UpdateEnrolmentRequests	,NULL},
    /* ActReqRejSignUp	*/{1058,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRejectSignUp		,NULL},
    /* ActRejSignUp	*/{1059,-1,TabUnk,ActSeeSignUpReq	,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,0x1F0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RejectSignUp		,NULL},
 
@@ -5100,8 +5100,8 @@ void Act_AdjustCurrentAction (void)
    /***** If I belong to current course *****/
    if (Gbl.Usrs.Me.IBelongToCurrentCrs)
      {
-      /***** If I have not accepted the enrollment,
-             the only action possible is show a form to ask for enrollment *****/
+      /***** If I have not accepted the enrolment,
+             the only action possible is show a form to ask for enrolment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.Action.Act != ActLogOut)
 	{
 	 Gbl.Action.Act = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT) ? ActReqAccEnrStd :
@@ -5134,7 +5134,7 @@ void Act_AdjustCurrentAction (void)
                   // These last actions are allowed in order to students could see/print timetable before register in groups
                   break;
                default:
-                  /* If there are some group types with mandatory enrollment and groups in this course,
+                  /* If there are some group types with mandatory enrolment and groups in this course,
 	             and I don't belong to any of those groups,
 	             the the only action possible is show a form to register in groups */
                   if (Grp_NumGrpTypesMandatIDontBelong ())	// To do: if this query is too slow ==> put it only when login.

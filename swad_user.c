@@ -42,7 +42,7 @@
 #include "swad_course.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_global.h"
 #include "swad_group.h"
 #include "swad_help.h"
@@ -1968,7 +1968,7 @@ void Usr_WriteFormLogout (void)
    /***** Form to change my role *****/
    Usr_ShowFormsLogoutAndRole ();
 
-   /***** Show help to enroll me *****/
+   /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 
@@ -2130,7 +2130,7 @@ void Usr_WelcomeUsr (void)
              !Gbl.Usrs.Me.UsrDat.EmailConfirmed)
             Mai_PutButtonToCheckEmailAddress ();
 
-	 /***** Show help to enroll me *****/
+	 /***** Show help to enrol me *****/
 	 Hlp_ShowHelpWhatWouldYouLikeToDo ();
 
 	 fprintf (Gbl.F.Out,"</div>");
@@ -3124,8 +3124,8 @@ static void Usr_InsertMyLastData (void)
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
                               bool PutCheckBoxToSelectUsr)
   {
-   extern const char *Txt_Enrollment_confirmed;
-   extern const char *Txt_Enrollment_not_confirmed;
+   extern const char *Txt_Enrolment_confirmed;
+   extern const char *Txt_Enrolment_not_confirmed;
    char BgColor[Usr_MAX_BYTES_BG_COLOR + 1];
    char PhotoURL[PATH_MAX + 1];
    bool ShowPhoto;
@@ -3151,7 +3151,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
      }
 
-   /***** User has accepted enrollment? *****/
+   /***** User has accepted enrolment? *****/
    fprintf (Gbl.F.Out,"<td class=\"");
    if (UsrIsTheMsgSender)
       fprintf (Gbl.F.Out,"BM_SEL");
@@ -3165,10 +3165,10 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
             Gbl.Prefs.IconsURL,
             UsrDat->Accepted ? "ok_on" :
         	               "tr",
-            UsrDat->Accepted ? Txt_Enrollment_confirmed :
-                               Txt_Enrollment_not_confirmed,
-            UsrDat->Accepted ? Txt_Enrollment_confirmed :
-                               Txt_Enrollment_not_confirmed);
+            UsrDat->Accepted ? Txt_Enrolment_confirmed :
+                               Txt_Enrolment_not_confirmed,
+            UsrDat->Accepted ? Txt_Enrolment_confirmed :
+                               Txt_Enrolment_not_confirmed);
 
    /***** Write number of user in the list *****/
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -4906,7 +4906,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
             /* Get user's institution code (row[10]) */
 	    UsrInList->InsCod = Str_ConvertStrCodToLongCod (row[10]);
 
-            /* Get user's role and acceptance of enrollment in course(s)
+            /* Get user's role and acceptance of enrolment in course(s)
                (row[11], row[12] if Scope == Sco_SCOPE_CRS) */
             switch (Role)
               {
@@ -5949,8 +5949,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
-      /***** Button to enroll students *****/
-      Enr_PutButtonToEnrollStudents ();
+      /***** Button to enrol students *****/
+      Enr_PutButtonToEnrolStudents ();
      }
 
    /***** Free memory for students list *****/
@@ -6025,8 +6025,8 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
-      /***** Button to enroll a teacher *****/
-      Enr_PutButtonToEnrollOneTeacher ();
+      /***** Button to enrol a teacher *****/
+      Enr_PutButtonToEnrolOneTeacher ();
      }
 
    /***** Free memory for teachers list *****/
@@ -7409,8 +7409,8 @@ void Usr_SeeStudents (void)
 	 /***** Show warning indicating no students found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_STUDENT);
 
-	 /***** Button to enroll students *****/
-	 Enr_PutButtonToEnrollStudents ();
+	 /***** Button to enrol students *****/
+	 Enr_PutButtonToEnrolStudents ();
 	}
      }
 
@@ -7561,8 +7561,8 @@ void Usr_SeeTeachers (void)
 	 /***** Show warning indicating no teachers found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_TEACHER);
 
-	 /***** Button to enroll a teacher *****/
-	 Enr_PutButtonToEnrollOneTeacher ();
+	 /***** Button to enrol a teacher *****/
+	 Enr_PutButtonToEnrolOneTeacher ();
 	}
 
       /***** End frame *****/

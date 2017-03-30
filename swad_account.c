@@ -32,7 +32,7 @@
 #include "swad_calendar.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"

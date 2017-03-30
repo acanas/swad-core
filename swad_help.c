@@ -70,8 +70,8 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
 
 void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
   {
-   extern const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS];
-   extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them;
+   extern const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS];
+   extern const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them;
    extern const char *Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them;
    extern const char *Txt_What_would_you_like_to_do;
    extern const char *Txt_Register_students_in_the_course_X;
@@ -108,8 +108,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
        !Gbl.Usrs.Me.MyCrss.Num)
      {
       sprintf (Gbl.Message,"%s<br />%s<br />%s",
-	       Txt_You_are_not_enrolled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
-	       Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them,
+	       Txt_You_are_not_enroled_in_any_course[Gbl.Usrs.Me.UsrDat.Sex],
+	       Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them,
 	       Txt_If_you_can_not_find_your_institution_your_centre_your_degree_or_your_courses_you_can_create_them);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
@@ -147,13 +147,13 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	   }
 	}
 
-      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enrolled in some courses
+      if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
 	     !Gbl.CurrentCrs.Crs.NumStds &&				// Current course has no students
 	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)	// I am a teacher in current course
 	   {
-	    /* Request students enrollment */
+	    /* Request students enrolment */
 	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,
 		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,

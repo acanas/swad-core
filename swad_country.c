@@ -198,7 +198,7 @@ void Cty_ShowConfiguration (void)
   {
    Cty_Configuration (false);
 
-   /***** Show help to enroll me *****/
+   /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 

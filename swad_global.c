@@ -316,8 +316,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.CurrentCrs.Grps.GrpTypes.Num = 0;
    Gbl.CurrentCrs.Grps.GrpTypes.NestedCalls = 0;
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName[0] = '\0';
-   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = true;
-   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = false;
+   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment = true;
+   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment = false;
    Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = false;
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = (time_t) 0;
    Gbl.CurrentCrs.Grps.GrpCod = -1L; // -1L stands for the whole course

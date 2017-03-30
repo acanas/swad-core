@@ -1,4 +1,4 @@
-// swad_enrollment.c: enrollment (registration) or removing of users
+// swad_enrolment.c: enrolment (registration) or removing of users
 
 /*
     SWAD (Shared Workspace At a Distance),
@@ -32,7 +32,7 @@
 #include "swad_announcement.h"
 #include "swad_database.h"
 #include "swad_duplicate.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_notification.h"
@@ -89,7 +89,7 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole);
+static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole);
 
 static void Enr_ReqAdminUsrs (Rol_Role_t Role);
 static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role);
@@ -104,10 +104,10 @@ static void Enr_RegisterUsr (struct UsrData *UsrDat,Rol_Role_t RegRemRole,
 
 static void Enr_PutLinkToRemAllStdsThisCrs (void);
 
-static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected);
+static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected);
 
-static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod);
-static void Enr_RemoveExpiredEnrollmentRequests (void);
+static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod);
+static void Enr_RemoveExpiredEnrolmentRequests (void);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
 static bool Enr_ICanAdminOtherUsrs (void);
@@ -136,14 +136,14 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName);
 
 /*****************************************************************************/
-/**************** Show form with button to enroll students *******************/
+/***************** Show form with button to enrol students *******************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrollStudents (void)
+void Enr_PutButtonToEnrolStudents (void)
   {
    extern const char *Txt_Register_students;
 
-   /***** Form to enroll several students *****/
+   /***** Form to enrol several students *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
        Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)	// I am logged as teacher
      {
@@ -154,14 +154,14 @@ void Enr_PutButtonToEnrollStudents (void)
   }
 
 /*****************************************************************************/
-/**************** Show form with button to enroll teachers *******************/
+/**************** Show form with button to enrol teachers ********************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrollOneTeacher (void)
+void Enr_PutButtonToEnrolOneTeacher (void)
   {
    extern const char *Txt_Register_teacher;
 
-   /***** Form to enroll several students *****/
+   /***** Form to enrol several students *****/
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
        Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
      {
@@ -213,7 +213,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    /***** Create notification for this user.
 	  If this user wants to receive notifications by email,
 	  activate the sending of a notification *****/
-   Enr_NotifyAfterEnrollment (UsrDat,NewRole);
+   Enr_NotifyAfterEnrolment (UsrDat,NewRole);
 
    UsrDat->RoleInCurrentCrsDB = NewRole;
    UsrDat->Roles = -1;	// Force roles to be got from database
@@ -269,14 +269,14 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    /***** Create notification for this user.
 	  If this user wants to receive notifications by email,
 	  activate the sending of a notification *****/
-   Enr_NotifyAfterEnrollment (UsrDat,NewRole);
+   Enr_NotifyAfterEnrolment (UsrDat,NewRole);
   }
 
 /*****************************************************************************/
 /********* Create notification after register user in current course *********/
 /*****************************************************************************/
 
-static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole)
+static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
   {
    bool CreateNotif;
    bool NotifyByEmail;
@@ -286,22 +286,22 @@ static void Enr_NotifyAfterEnrollment (struct UsrData *UsrDat,Rol_Role_t NewRole
    switch (NewRole)
      {
       case Rol_STUDENT:
-	 NotifyEvent = Ntf_EVENT_ENROLLMENT_STUDENT;
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_STUDENT;
 	 break;
       case Rol_TEACHER:
-	 NotifyEvent = Ntf_EVENT_ENROLLMENT_TEACHER;
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_TEACHER;
 	 break;
       default:
 	 NotifyEvent = Ntf_EVENT_UNKNOWN;
          Lay_ShowErrorAndExit ("Wrong role.");
      }
 
-   /***** Remove possible enrollment request ******/
-   Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   /***** Remove possible enrolment request ******/
+   Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
-   /***** Remove old enrollment notifications before inserting the new one ******/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1,UsrDat->UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1,UsrDat->UsrCod);
+   /***** Remove old enrolment notifications before inserting the new one ******/
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STUDENT,-1,UsrDat->UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TEACHER,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
@@ -347,17 +347,17 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
 void Enr_ReqAcceptRegisterInCrs (void)
   {
-   extern const char *Txt_Enrollment;
-   extern const char *Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y;
+   extern const char *Txt_Enrolment;
+   extern const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Confirm_my_enrollment;
+   extern const char *Txt_Confirm_my_enrolment;
    extern const char *Txt_Remove_me_from_this_course;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrollment,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,NULL);
 
    /***** Show message *****/
-   sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y,
+   sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,
             Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_INFO,Gbl.Message);
@@ -365,7 +365,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    /***** Send button to accept register in the current course *****/
    Act_FormStart (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActAccEnrStd :
 	                                                                 ActAccEnrTch);
-   Lay_PutCreateButtonInline (Txt_Confirm_my_enrollment);
+   Lay_PutCreateButtonInline (Txt_Confirm_my_enrolment);
    Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
@@ -378,19 +378,19 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_EndRoundFrame ();
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLLMENT_STUDENT :
-	                                                                       Ntf_EVENT_ENROLLMENT_TEACHER,
+   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? Ntf_EVENT_ENROLMENT_STUDENT :
+	                                                                       Ntf_EVENT_ENROLMENT_TEACHER,
                         -1L,Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 
 /*****************************************************************************/
-/****************** Put an enrollment into a notification ********************/
+/****************** Put an enrolment into a notification ********************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                             long CrsCod,long UsrCod)
+void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                            long CrsCod,long UsrCod)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
@@ -588,7 +588,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Step_3_Optionally_select_groups;
    extern const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_users_;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
-   extern const char *Txt_Step_4_Confirm_the_enrollment_removing;
+   extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
    extern const char *Txt_Confirm;
 
    /***** Put contextual links *****/
@@ -604,7 +604,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /***** Form to send students to be enrolled / removed *****/
+   /***** Form to send students to be enroled / removed *****/
    Act_FormStart (Role == Rol_STUDENT ? ActRcvFrmEnrSevStd :
 	                                ActRcvFrmEnrSevTch);
 
@@ -615,7 +615,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
 	                NULL,
 	                Hlp_USERS_Administration_administer_multiple_users);
 
-   /***** Step 1: List of students to be enrolled / removed *****/
+   /***** Step 1: List of students to be enroled / removed *****/
    fprintf (Gbl.F.Out,"<div class=\"%s LEFT_MIDDLE\">"
                       "%s"
                       "</div>",
@@ -660,7 +660,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
                       "%s"
                       "</div>",
             The_ClassTitle[Gbl.Prefs.Theme],
-            Txt_Step_4_Confirm_the_enrollment_removing);
+            Txt_Step_4_Confirm_the_enrolment_removing);
    Pwd_AskForConfirmationOnDangerousAction ();
 
    /***** Send button and end frame *****/
@@ -693,8 +693,8 @@ void Enr_AskRemoveOldUsrs (void)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Eliminate_old_users;
-   extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2;
-   extern const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2;
+   extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2;
+   extern const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2;
    extern const char *Txt_Eliminate;
    unsigned Months;
 
@@ -707,7 +707,7 @@ void Enr_AskRemoveOldUsrs (void)
    /***** Form to request number of months without clicks *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s&nbsp;",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2);
+            Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2);
    fprintf (Gbl.F.Out,"<select name=\"Months\">");
    for (Months  = Usr_MIN_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
         Months <= Usr_MAX_MONTHS_WITHOUT_ACCESS_TO_REMOVE_OLD_USRS;
@@ -719,7 +719,7 @@ void Enr_AskRemoveOldUsrs (void)
       fprintf (Gbl.F.Out,">%u</option>",Months);
      }
    fprintf (Gbl.F.Out,"</select>&nbsp;");
-   fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2,
+   fprintf (Gbl.F.Out,Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2,
             Cfg_PLATFORM_SHORT_NAME);
    fprintf (Gbl.F.Out,"</label>");
 
@@ -736,7 +736,7 @@ void Enr_AskRemoveOldUsrs (void)
 
 void Enr_RemoveOldUsrs (void)
   {
-   extern const char *Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z;
+   extern const char *Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z;
    extern const char *Txt_X_users_have_been_eliminated;
    unsigned MonthsWithoutAccess;
    time_t SecondsWithoutAccess;
@@ -771,7 +771,7 @@ void Enr_RemoveOldUsrs (void)
             (unsigned long) SecondsWithoutAccess);
    if ((NumUsrs = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
      {
-      sprintf (Gbl.Message,Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
+      sprintf (Gbl.Message,Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z,
                NumUsrs,
                MonthsWithoutAccess,
                Cfg_PLATFORM_SHORT_NAME);
@@ -811,7 +811,7 @@ void Enr_RemoveOldUsrs (void)
   }
 
 /*****************************************************************************/
-/***** Put text area to enter/paste IDs of users to be enrolled/removed ******/
+/***** Put text area to enter/paste IDs of users to be enroled/removed ******/
 /*****************************************************************************/
 
 static void Enr_PutAreaToEnterUsrsIDs (void)
@@ -1262,16 +1262,16 @@ void Enr_ReceiveFormAdminTchs (void)
 
 static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
   {
-   extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
+   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    extern const char *Txt_No_user_has_been_eliminated;
    extern const char *Txt_One_user_has_been_eliminated;
    extern const char *Txt_No_user_has_been_removed;
    extern const char *Txt_One_user_has_been_removed;
    extern const char *Txt_X_users_have_been_eliminated;
    extern const char *Txt_X_users_have_been_removed;
-   extern const char *Txt_No_user_has_been_enrolled;
-   extern const char *Txt_One_user_has_been_enrolled;
-   extern const char *Txt_X_users_have_been_enrolled_including_possible_repetitions;
+   extern const char *Txt_No_user_has_been_enroled;
+   extern const char *Txt_One_user_has_been_enroled;
+   extern const char *Txt_X_users_have_been_enroled_including_possible_repetitions;
    struct
      {
       bool RemoveUsrs;
@@ -1380,11 +1380,11 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       if (WhatToDo.RegisterUsrs &&
 	  Role == Rol_STUDENT &&
 	  LstGrps.NumGrps >= 2)
-	 /* Check if I have selected more than one group of single enrollment */
+	 /* Check if I have selected more than one group of single enrolment */
 	 if (!Grp_CheckIfSelectionGrpsIsValid (&LstGrps))
 	   {
 	    /* Show warning message and exit */
-	    Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group);
+	    Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
 	    /* Free memory used by lists of groups and abort */
 	    Grp_FreeListCodGrp (&LstGrps);
@@ -1614,7 +1614,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       /***** Move unused contents of messages to table of deleted contents of messages *****/
       Msg_MoveUnusedMsgsContentToDeleted ();
 
-   /***** Write messages with the number of users enrolled/removed *****/
+   /***** Write messages with the number of users enroled/removed *****/
    if (WhatToDo.RemoveUsrs)
      {
       if (WhatToDo.EliminateUsrs)        // Eliminate completely from the platform
@@ -1652,13 +1652,13 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       switch (NumUsrsRegistered)
 	{
 	 case 0:
-	    Lay_ShowAlert (Lay_INFO,Txt_No_user_has_been_enrolled);
+	    Lay_ShowAlert (Lay_INFO,Txt_No_user_has_been_enroled);
 	    break;
 	 case 1:
-	    Lay_ShowAlert (Lay_SUCCESS,Txt_One_user_has_been_enrolled);
+	    Lay_ShowAlert (Lay_SUCCESS,Txt_One_user_has_been_enroled);
 	    break;
 	 default:
-	    sprintf (Gbl.Message,Txt_X_users_have_been_enrolled_including_possible_repetitions,
+	    sprintf (Gbl.Message,Txt_X_users_have_been_enroled_including_possible_repetitions,
 		     NumUsrsRegistered);
 	    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 	    break;
@@ -1837,13 +1837,13 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 
 void Enr_ReqSignUpInCrs (void)
   {
-   extern const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y;
+   extern const char *Txt_You_were_already_enroled_as_X_in_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_STUDENT)
      {
-      sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
+      sprintf (Gbl.Message,Txt_You_were_already_enroled_as_X_in_the_course_Y,
                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -1862,9 +1862,9 @@ void Enr_ReqSignUpInCrs (void)
 
 void Enr_SignUpInCrs (void)
   {
-   extern const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y;
+   extern const char *Txt_You_were_already_enroled_as_X_in_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing;
+   extern const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing;
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1875,7 +1875,7 @@ void Enr_SignUpInCrs (void)
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_STUDENT)
      {
-      sprintf (Gbl.Message,Txt_You_were_already_enrolled_as_X_in_the_course_Y,
+      sprintf (Gbl.Message,Txt_You_were_already_enroled_as_X_in_the_course_Y,
                Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
@@ -1899,7 +1899,7 @@ void Enr_SignUpInCrs (void)
                      " WHERE CrsCod=%ld AND UsrCod=%ld",
                Gbl.CurrentCrs.Crs.CrsCod,
                Gbl.Usrs.Me.UsrDat.UsrCod);
-      if (DB_QuerySELECT (Query,&mysql_res,"can not get enrollment request"))
+      if (DB_QuerySELECT (Query,&mysql_res,"can not get enrolment request"))
         {
          row = mysql_fetch_row (mysql_res);
          /* Get request code (row[0]) */
@@ -1917,7 +1917,7 @@ void Enr_SignUpInCrs (void)
                   ReqCod,
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
-         DB_QueryUPDATE (Query,"can not update enrollment request");
+         DB_QueryUPDATE (Query,"can not update enrolment request");
         }
       else                // No request in database for this user in this course
         {
@@ -1928,34 +1928,34 @@ void Enr_SignUpInCrs (void)
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod,
                   (unsigned) RoleFromForm);
-         ReqCod = DB_QueryINSERTandReturnCode (Query,"can not save enrollment request");
+         ReqCod = DB_QueryINSERTandReturnCode (Query,"can not save enrolment request");
         }
 
       /***** Show confirmation message *****/
-      sprintf (Gbl.Message,Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing,
+      sprintf (Gbl.Message,Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing,
                Txt_ROLES_SINGUL_abc[RoleFromForm][Gbl.Usrs.Me.UsrDat.Sex],
                Gbl.CurrentCrs.Crs.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
-      /***** Notify teachers or admins by email about the new enrollment request *****/
+      /***** Notify teachers or admins by email about the new enrolment request *****/
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
       if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_TEACHER)
 	{
-         NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLLMENT_REQUEST,ReqCod);
+         NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
          Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 	}
      }
   }
 
 /*****************************************************************************/
-/************** Put an enrollment request into a notification *****************/
+/************** Put an enrolment request into a notification *****************/
 /*****************************************************************************/
 // This function may be called inside a web service, so don't report error
 
-void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                    char **ContentStr,
-                                    long ReqCod,bool GetContent)
+void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                   char **ContentStr,
+                                   long ReqCod,bool GetContent)
   {
    extern const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char Query[256];
@@ -2008,13 +2008,13 @@ void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   }
 
 /*****************************************************************************/
-/****** Ask if reject the request for enrollment of a user in a course *******/
+/****** Ask if reject the request for enrolment of a user in a course *******/
 /*****************************************************************************/
 
 void Enr_AskIfRejectSignUp (void)
   {
-   extern const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y;
-   extern const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_;
+   extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
+   extern const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Reject;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
@@ -2031,13 +2031,13 @@ void Enr_AskIfRejectSignUp (void)
                                       false))
         {
          /* User already belongs to this course */
-         sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
+         sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
          /* Remove inscription request because it has not sense */
-         Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+         Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
         }
       else        // User does not belong to this course
         {
@@ -2046,7 +2046,7 @@ void Enr_AskIfRejectSignUp (void)
              Role == Rol_TEACHER)
            {
             /* Ask if reject */
-            sprintf (Gbl.Message,Txt_Do_you_really_want_to_reject_the_enrollment_request_,
+            sprintf (Gbl.Message,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
                      Gbl.Usrs.Other.UsrDat.FullName,
                      Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
                      Gbl.CurrentCrs.Crs.FullName);
@@ -2069,13 +2069,13 @@ void Enr_AskIfRejectSignUp (void)
   }
 
 /*****************************************************************************/
-/********* Reject the request for enrollment of a user in a course ***********/
+/********* Reject the request for enrolment of a user in a course ***********/
 /*****************************************************************************/
 
 void Enr_RejectSignUp (void)
   {
-   extern const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y;
-   extern const char *Txt_Enrollment_of_X_rejected;
+   extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
+   extern const char *Txt_Enrolment_of_X_rejected;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code *****/
@@ -2088,17 +2088,17 @@ void Enr_RejectSignUp (void)
                                       false))
         {
          /* User already belongs to this course */
-         sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
+         sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
                   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
          Lay_ShowAlert (Lay_WARNING,Gbl.Message);
          Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
         }
 
       /* Remove inscription request */
-      Enr_RemoveEnrollmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
+      Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Other.UsrDat.UsrCod);
 
       /* Confirmation message */
-      sprintf (Gbl.Message,Txt_Enrollment_of_X_rejected,
+      sprintf (Gbl.Message,Txt_Enrolment_of_X_rejected,
                Gbl.Usrs.Other.UsrDat.FullName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
@@ -2106,27 +2106,27 @@ void Enr_RejectSignUp (void)
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
    /* Show again the rest of registrarion requests */
-   Enr_ShowEnrollmentRequests ();
+   Enr_ShowEnrolmentRequests ();
   }
 
 /*****************************************************************************/
-/******** Show pending requests for enrollment in the current course *********/
+/******** Show pending requests for enrolment in the current course *********/
 /*****************************************************************************/
 
-void Enr_ShowEnrollmentRequests (void)
+void Enr_ShowEnrolmentRequests (void)
   {
-   /***** Show enrollment request (default roles depend on my logged role) *****/
+   /***** Show enrolment request (default roles depend on my logged role) *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TEACHER:
-	 Enr_ShowEnrollmentRequestsGivenRoles ((1 << Rol_STUDENT) |
+	 Enr_ShowEnrolmentRequestsGivenRoles ((1 << Rol_STUDENT) |
 			                       (1 << Rol_TEACHER));
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 Enr_ShowEnrollmentRequestsGivenRoles (1 << Rol_TEACHER);
+	 Enr_ShowEnrolmentRequestsGivenRoles (1 << Rol_TEACHER);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2135,30 +2135,30 @@ void Enr_ShowEnrollmentRequests (void)
   }
 
 /*****************************************************************************/
-/******* Update pending requests for enrollment in the current course ********/
+/******* Update pending requests for enrolment in the current course ********/
 /*****************************************************************************/
 
-void Enr_UpdateEnrollmentRequests (void)
+void Enr_UpdateEnrolmentRequests (void)
   {
    unsigned RolesSelected;
 
    /***** Get selected roles *****/
    RolesSelected = Rol_GetSelectedRoles ();
 
-   /***** Update enrollment requests *****/
-   Enr_ShowEnrollmentRequestsGivenRoles (RolesSelected);
+   /***** Update enrolment requests *****/
+   Enr_ShowEnrolmentRequestsGivenRoles (RolesSelected);
   }
 
 /*****************************************************************************/
-/************* Show pending requests for enrollment given roles **************/
+/************* Show pending requests for enrolment given roles **************/
 /*****************************************************************************/
 
-static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
+static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
   {
    extern const char *Hlp_USERS_Requests;
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Enrollment_requests;
+   extern const char *Txt_Enrolment_requests;
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Course;
@@ -2170,7 +2170,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Register;
    extern const char *Txt_Reject;
-   extern const char *Txt_No_enrollment_requests;
+   extern const char *Txt_No_enrolment_requests;
    char Query[1024];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -2186,8 +2186,8 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    char PhotoURL[PATH_MAX + 1];
    Rol_Role_t DesiredRole;
 
-   /***** Remove expired enrollment requests *****/
-   Enr_RemoveExpiredEnrollmentRequests ();
+   /***** Remove expired enrolment requests *****/
+   Enr_RemoveExpiredEnrolmentRequests ();
 
    /***** Get scope *****/
    Gbl.Scope.Allowed = 1 << Sco_SCOPE_SYS |
@@ -2200,7 +2200,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
    Sco_GetScope ("ScopeEnr");
 
    /***** Start frame *****/
-   Lay_StartRoundFrame ("100%",Txt_Enrollment_requests,NULL,Hlp_USERS_Requests);
+   Lay_StartRoundFrame ("100%",Txt_Enrolment_requests,NULL,Hlp_USERS_Requests);
 
    /***** Selection of scope and roles *****/
    /* Start form */
@@ -2667,7 +2667,7 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
          break;
      }
 
-   NumRequests = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrollment");
+   NumRequests = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get requests for enrolment");
 
    /***** List requests *****/
    if (NumRequests)
@@ -2809,12 +2809,12 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
                                "</tr>");
 
             /***** Mark possible notification as seen *****/
-            Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLLMENT_REQUEST,
+            Ntf_MarkNotifAsSeen (Ntf_EVENT_ENROLMENT_REQUEST,
                                 ReqCod,Gbl.CurrentCrs.Crs.CrsCod,
                                 Gbl.Usrs.Me.UsrDat.UsrCod);
            }
          else        // User does not exists or user already belongs to course ==> remove pair from crs_usr_requests table
-            Enr_RemoveEnrollmentRequest (Crs.CrsCod,UsrDat.UsrCod);
+            Enr_RemoveEnrolmentRequest (Crs.CrsCod,UsrDat.UsrCod);
         }
 
       /* End table */
@@ -2824,17 +2824,17 @@ static void Enr_ShowEnrollmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else	// There are no requests
-      Lay_ShowAlert (Lay_INFO,Txt_No_enrollment_requests);
+      Lay_ShowAlert (Lay_INFO,Txt_No_enrolment_requests);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
-/********************* Remove a request for enrollment ***********************/
+/********************* Remove a request for enrolment ***********************/
 /*****************************************************************************/
 
-static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
+static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod)
   {
    char Query[256];
    MYSQL_RES *mysql_res;
@@ -2854,23 +2854,23 @@ static void Enr_RemoveEnrollmentRequest (long CrsCod,long UsrCod)
       ReqCod = Str_ConvertStrCodToLongCod (row[0]);
 
       /* Mark possible notifications as removed */
-      Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLLMENT_REQUEST,ReqCod);
+      Ntf_MarkNotifAsRemoved (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
      }
    /* Free structure that stores the query result */
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Remove enrollment request *****/
+   /***** Remove enrolment request *****/
    sprintf (Query,"DELETE FROM crs_usr_requests"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
             CrsCod,UsrCod);
-   DB_QueryDELETE (Query,"can not remove a request for enrollment");
+   DB_QueryDELETE (Query,"can not remove a request for enrolment");
   }
 
 /*****************************************************************************/
-/******************* Remove expired requests for enrollment ******************/
+/******************* Remove expired requests for enrolment ******************/
 /*****************************************************************************/
 
-static void Enr_RemoveExpiredEnrollmentRequests (void)
+static void Enr_RemoveExpiredEnrolmentRequests (void)
   {
    char Query[512];
 
@@ -2882,15 +2882,15 @@ static void Enr_RemoveExpiredEnrollmentRequests (void)
                   " AND notif.Cod=crs_usr_requests.ReqCod"
                   " AND crs_usr_requests.RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             (unsigned) Ntf_STATUS_BIT_REMOVED,
-            (unsigned) Ntf_EVENT_ENROLLMENT_REQUEST,
-            Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS);
+            (unsigned) Ntf_EVENT_ENROLMENT_REQUEST,
+            Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
    DB_QueryUPDATE (Query,"can not set notification(s) as removed");
 
-   /***** Remove expired requests for enrollment *****/
+   /***** Remove expired requests for enrolment *****/
    sprintf (Query,"DELETE FROM crs_usr_requests"
                   " WHERE RequestTime<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
-            Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS);
-   DB_QueryDELETE (Query,"can not remove expired requests for enrollment");
+            Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS);
+   DB_QueryDELETE (Query,"can not remove expired requests for enrolment");
   }
 
 /*****************************************************************************/
@@ -3048,14 +3048,14 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
    if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
      {
       /***** If UsrCod is present in parameters,
-	     use this parameter to identify the user to be enrolled / removed *****/
+	     use this parameter to identify the user to be enroled / removed *****/
       ListUsrCods.NumUsrs = 1;
       Usr_AllocateListUsrCods (&ListUsrCods);
       ListUsrCods.Lst[0] = Gbl.Usrs.Other.UsrDat.UsrCod;
      }
    else        // Parameter with user code not present
       /***** If UsrCod is not present in parameters from form,
-	     use user's ID to identify the user to be enrolled /removed *****/
+	     use user's ID to identify the user to be enroled /removed *****/
       Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (&ListUsrCods);
 
    Enr_AskIfRegRemUsr (&ListUsrCods,Role);
@@ -3068,9 +3068,9 @@ static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role)
 static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
   {
    extern const char *Txt_There_are_X_users_with_the_ID_Y;
-   extern const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y;
-   extern const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrollment;
-   extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_course_Z;
+   extern const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y;
+   extern const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment;
+   extern const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z;
    extern const char *Txt_THE_USER_X_already_exists_in_Y;
    extern const char *Txt_The_user_is_new_not_yet_in_X;
    extern const char *Txt_If_this_is_a_new_user_in_X_you_should_indicate_her_his_ID;
@@ -3107,10 +3107,10 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	                                                                    Gbl.CurrentCrs.Crs.CrsCod,
 	                                                                    true);
 	       if (Gbl.Usrs.Other.UsrDat.Accepted)
-		  sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enrolled_in_the_course_Y,
+		  sprintf (Gbl.Message,Txt_THE_USER_X_is_already_enroled_in_the_course_Y,
 			   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
-	       else        // Enrollment not yet accepted
-		  sprintf (Gbl.Message,Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrollment,
+	       else        // Enrolment not yet accepted
+		  sprintf (Gbl.Message,Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment,
 			   Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 	       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
@@ -3118,7 +3118,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
 	      }
 	    else        // User does not belong to the current course
 	      {
-	       sprintf (Gbl.Message,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_course_Z,
+	       sprintf (Gbl.Message,Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z,
 			Gbl.Usrs.Other.UsrDat.FullName,Cfg_PLATFORM_SHORT_NAME,Gbl.CurrentCrs.Crs.FullName);
 	       Lay_ShowAlert (Lay_INFO,Gbl.Message);
 
@@ -3141,7 +3141,7 @@ static void Enr_AskIfRegRemUsr (struct ListUsrCods *ListUsrCods,Rol_Role_t Role)
    else	// No users found, he/she is a new user
      {
       /***** If UsrCod is not present in parameters from form,
-	     use user's ID to identify the user to be enrolled *****/
+	     use user's ID to identify the user to be enroled *****/
       if (Gbl.Usrs.Other.UsrDat.IDs.List)
          NewUsrIDValid = ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID);	// Check the first element of the list
       else
@@ -3261,7 +3261,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
   {
    extern const char *Sco_ScopeDB[Sco_NUM_SCOPES];
    extern const char *Txt_THE_USER_X_is_already_an_administrator_of_Y;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y;
+   extern const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y;
    char Query[512];
 
    /***** Check if user was and administrator of current institution/centre/degree *****/
@@ -3278,7 +3278,7 @@ static void Enr_RegisterAdmin (struct UsrData *UsrDat,Sco_Scope_t Scope,long Cod
                UsrDat->UsrCod,Sco_ScopeDB[Scope],Cod);
       DB_QueryREPLACE (Query,"can not create administrator");
 
-      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y,
+      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y,
                UsrDat->FullName,InsCtrDegName);
      }
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -3525,25 +3525,25 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
   }
 
 /*****************************************************************************/
-/*************** Accept my enrollment in the current course ******************/
+/*************** Accept my enrolment in the current course ******************/
 /*****************************************************************************/
 
 void Enr_AcceptRegisterMeInCrs (void)
   {
-   extern const char *Txt_You_have_confirmed_your_enrollment_in_the_course_X;
+   extern const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X;
 
-   /***** Confirm my enrollment *****/
+   /***** Confirm my enrolment *****/
    Enr_AcceptUsrInCrs (Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Mark all notifications about enrollment (as student or as teacher)
+   /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_STUDENT,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STUDENT,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLLMENT_TEACHER,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TEACHER,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/
-   sprintf (Gbl.Message,Txt_You_have_confirmed_your_enrollment_in_the_course_X,
+   sprintf (Gbl.Message,Txt_You_have_confirmed_your_enrolment_in_the_course_X,
             Gbl.CurrentCrs.Crs.FullName);
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
@@ -3556,7 +3556,7 @@ void Enr_CreateNewUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
+   extern const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y;
    extern const char *Txt_The_ID_X_is_not_valid;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
@@ -3612,7 +3612,7 @@ void Enr_CreateNewUsr1 (void)
 
 	    /* Success message */
             Gbl.AlertType = Lay_SUCCESS;
-	    sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
+	    sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 		     Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 	   }
 	}
@@ -3662,7 +3662,7 @@ void Enr_ModifyUsr1 (void)
   {
    extern const char *Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y;
+   extern const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y;
    bool ItsMe;
    Rol_Role_t OldRole;
    Rol_Role_t NewRole;
@@ -3726,7 +3726,7 @@ void Enr_ModifyUsr1 (void)
 
 		     /* Show success message */
 	             Gbl.AlertType = Lay_SUCCESS;
-		     sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_course_Y,
+		     sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
 		    }
 
@@ -3857,11 +3857,11 @@ void Enr_AcceptUsrInCrs (long UsrCod)
   {
    char Query[512];
 
-   /***** Set enrollment of a user to "accepted" in the current course *****/
+   /***** Set enrolment of a user to "accepted" in the current course *****/
    sprintf (Query,"UPDATE crs_usr SET Accepted='Y'"
                   " WHERE CrsCod=%ld AND UsrCod=%ld",
             Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
-   DB_QueryUPDATE (Query,"can not confirm user's enrollment");
+   DB_QueryUPDATE (Query,"can not confirm user's enrolment");
   }
 
 /*****************************************************************************/

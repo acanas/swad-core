@@ -645,11 +645,11 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Novo arquivo de notas",
 	},
 	{
-	// Ntf_EVENT_ENROLLMENT_STUDENT
+	// Ntf_EVENT_ENROLMENT_STUDENT
 	"",
 	"Nova inscripció com a estudiant",
 	"New Einschreibung als Student",
-	"New enrollment as a student",
+	"New enrolment as a student",
 	"Nueva inscripción como estudiante",
 	"Nouvelle inscriptionen tant qu'étudiant",
 	"Nueva inscripción como estudiante",			// Okoteve traducción
@@ -658,11 +658,11 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Nova inscrição como estudante",
 	},
 	{
-	// Ntf_EVENT_ENROLLMENT_TEACHER
+	// Ntf_EVENT_ENROLMENT_TEACHER
 	"",
 	"Nova inscripció com a professor",
 	"New Einschreibung als Lehrkraft",
-	"New enrollment as a teacher",
+	"New enrolment as a teacher",
 	"Nueva inscripción como profesor",
 	"Nouvelle inscription en tant qu'enseignant",
 	"Nueva inscripción como profesor",			// Okoteve traducción
@@ -671,11 +671,11 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Nova inscrição como professor",
 	},
 	{
-	// Ntf_EVENT_ENROLLMENT_REQUEST
+	// Ntf_EVENT_ENROLMENT_REQUEST
 	"",
 	"Nova petició d'inscripció",
 	"New Registrierungsanforderung",
-	"New enrollment request",
+	"New enrolment request",
 	"Nueva petición de inscripción",
 	"Nouvelle demande d'inscription",
 	"Nueva petición de inscripción",	// Okoteve traducción
@@ -1504,7 +1504,7 @@ const char *Txt_A_student_can_only_belong_to_one_group =
 	"Um aluno pode pertencer a um grupo";
 #endif
 
-const char *Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"Un professor/a o un administrador/a l'ha inscrit"
 	" com a <strong>%s</strong>"
@@ -1519,10 +1519,10 @@ const char *Txt_A_teacher_or_administrator_has_enrolled_you_as_X_into_the_course
 	" oder ziehen Sie es vor,"
 	" aus dem Kurs entfernt zu werden?";
 #elif L==3
-	"A teacher or an administrator has enrolled you"
+	"A teacher or an administrator has enroled you"
 	" as a <strong>%s</strong>"
 	"into the course <strong>%s</strong>."
-	" Do you want to confirm the enrollment"
+	" Do you want to confirm the enrolment"
 	" or do you prefer to be removed from the course?";
 #elif L==4
 	"Un profesor/a o un administrador/a le ha inscrito"
@@ -5146,13 +5146,13 @@ const char *Txt_Confirm_ID =
 	"Confirmar ID";
 #endif
 
-const char *Txt_Confirm_my_enrollment =
+const char *Txt_Confirm_my_enrolment =
 #if   L==1
 	"Confirmar la meva inscripci&oacute;";
 #elif L==2
 	"Best&auml;tigen Sie meine Registrierung";
 #elif L==3
-	"Confirm my enrollment";
+	"Confirm my enrolment";
 #elif L==4
 	"Confirmar mi inscripci&oacute;n";
 #elif L==5
@@ -5186,9 +5186,9 @@ const char *Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_reque
 #elif L==3
 	"Congratulations! You have created your account <strong>@%s</strong>."
 	" Now %s will request you some data to complete your profile."
-	" Then you will be able to apply for enrollment in courses."
+	" Then you will be able to apply for enrolment in courses."
 	" If a course does not exist,"
-	" you can create it before applying for enrollment in it"
+	" you can create it before applying for enrolment in it"
 	" (the same applies to institutions, centres and degrees).";
 #elif L==4
 	"&iexcl;Enhorabuena! Ha creado su cuenta <strong>@%s</strong>."
@@ -8625,16 +8625,16 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Necessita traduccio
 #elif L==2
 	"Do you really want to be removed from the course <strong>%s</strong>"
-	" (removing your works, enrollment in groups, etc.)?";			// Need Übersetzung
+	" (removing your works, enrolment in groups, etc.)?";			// Need Übersetzung
 #elif L==3
 	"Do you really want to be removed from the course <strong>%s</strong>"
-	" (removing your works, enrollment in groups, etc.)?";
+	" (removing your works, enrolment in groups, etc.)?";
 #elif L==4
 	"&iquest;Realmente desea ser eliminado de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";
 #elif L==5
 	"Do you really want to be removed from the course <strong>%s</strong>"
-	" (removing your works, enrollment in groups, etc.)?";			// Besoin de traduction
+	" (removing your works, enrolment in groups, etc.)?";			// Besoin de traduction
 #elif L==6
 	"&iquest;Realmente desea ser eliminado de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Okoteve traducción
@@ -8646,7 +8646,7 @@ const char *Txt_Do_you_really_want_to_be_removed_from_the_course_X =	// Warning:
 	" (usuwanie swoja prace, rejestracja w grupach, itp.)?";
 #elif L==9
 	"Do you really want to be removed from the course <strong>%s</strong>"
-	" (removing your works, enrollment in groups, etc.)?";			// Necessita de tradução
+	" (removing your works, enrolment in groups, etc.)?";			// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
@@ -8886,17 +8886,17 @@ const char *Txt_Do_you_really_want_to_register_the_following_user_as_an_administ
 	" as an administrator of <strong>%s</strong>?";		// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warning: it is very important to include three %s in the following sentences
+const char *Txt_Do_you_really_want_to_reject_the_enrolment_request_ =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1
 	"&iexcl;Realmente desea rechazar la solicitud de inscripci&oacute;n"
 	" de <strong>%s</strong> como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>?";		// Necessita traduccio
 #elif L==2
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";			// Need Übersetzung
 #elif L==3
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";
 #elif L==4
@@ -8904,7 +8904,7 @@ const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warnin
 	" de <strong>%s</strong> como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>?";
 #elif L==5
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";			// Besoin de traduction
 #elif L==6
@@ -8912,15 +8912,15 @@ const char *Txt_Do_you_really_want_to_reject_the_enrollment_request_ =	// Warnin
 	" de <strong>%s</strong> como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>?";		// Okoteve traducción
 #elif L==7
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";			// Bisogno di traduzione
 #elif L==8
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"Do you really want to reject the enrollment request"
+	"Do you really want to reject the enrolment request"
 	" from <strong>%s</strong> as <strong>%s</strong>"
 	" in the course <strong>%s</strong>?";			// Necessita de tradução
 #endif
@@ -8936,17 +8936,17 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 #elif L==2
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
-	" they will no longer enrolled in this course,"
+	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
-	" and their enrollment in groups of this course will be removed.</strong>.";	// Need Übersetzung
+	" and their enrolment in groups of this course will be removed.</strong>.";	// Need Übersetzung
 #elif L==3
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
-	" they will no longer enrolled in this course,"
+	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
-	" and their enrollment in groups of this course will be removed.</strong>.";
+	" and their enrolment in groups of this course will be removed.</strong>.";
 #elif L==4
 	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
 	"Aunque no se eliminar&aacute;n los datos de los estudiantes en otras asignaturas,"
@@ -8957,10 +8957,10 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 #elif L==5
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
-	" they will no longer enrolled in this course,"
+	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
-	" and their enrollment in groups of this course will be removed.</strong>.";	// Besoin de traduction
+	" and their enrolment in groups of this course will be removed.</strong>.";	// Besoin de traduction
 #elif L==6
 	"&iquest;Realmente desea eliminar los %u estudiantes de la asignatura <strong>%s</strong>?<br />"
 	"Aunque no se eliminar&aacute;n los datos de los estudiantes en otras asignaturas,"
@@ -8985,10 +8985,10 @@ const char *Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_ =
 #elif L==9
 	"Do you really want to remove the %u students from the course <strong>%s</strong>?<br />"
 	"Although students' data will not be removed in other courses,"
-	" they will no longer enrolled in this course,"
+	" they will no longer enroled in this course,"
 	" and also <strong>all the works submitted by them in this course,"
 	" their record cards for this course,"
-	" and their enrollment in groups of this course will be removed.</strong>.";	// Necessita de tradução
+	" and their enrolment in groups of this course will be removed.</strong>.";	// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_assignment_X =	// Warning: it is very important to include %s in the following sentences
@@ -9327,16 +9327,16 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Necessita traduccio
 #elif L==2
 	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrollment in groups, etc.)?";		// Need Übersetzung
+	" (removing her/his works, enrolment in groups, etc.)?";		// Need Übersetzung
 #elif L==3
 	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrollment in groups, etc.)?";
+	" (removing her/his works, enrolment in groups, etc.)?";
 #elif L==4
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";
 #elif L==5
 	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrollment in groups, etc.)?";		// Besoin de traduction
+	" (removing her/his works, enrolment in groups, etc.)?";		// Besoin de traduction
 #elif L==6
 	"&iquest;Realmente desea eliminar el siguiente usuario de la asignatura <strong>%s</strong>"
 	" (eliminando sus trabajos, adscripci&oacute;n a grupos, etc.)?";	// Okoteve traducción
@@ -9345,10 +9345,10 @@ const char *Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_
 	" (rimuovendo i suoi lavori, registrazione in gruppi, etc.)?";
 #elif L==8
 	"Do you really want to remove the following user z kursu <strong>%s</strong>"
-	" (removing her/his works, enrollment in groups, etc.)?";
+	" (removing her/his works, enrolment in groups, etc.)?";
 #elif L==9
 	"Do you really want to remove the following user from the course <strong>%s</strong>"
-	" (removing her/his works, enrollment in groups, etc.)?";		// Necessita de tradução
+	" (removing her/his works, enrolment in groups, etc.)?";		// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_remove_the_group_X =	// Warning: it is very important to include %s in the following sentences
@@ -10416,18 +10416,18 @@ const char *Txt_Eliminate_all_courses_whithout_users_PART_2_OF_2 =
 	"months.";		// Necessita de tradução
 #endif
 
-const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_OF_2 =
+const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_1_OF_2 =
 #if   L==1
 	"Eliminar todos los usuarios"
 	" que no est&eacute;n inscritos en ninguna asignatura"
 	" y que lleven m&aacute;s de";				// Necessita traduccio
 #elif L==2
 	"Eliminate all users"
-	" who are not enrolled on any courses"
+	" who are not enroled on any courses"
 	" and with more than";					// Need Übersetzung
 #elif L==3
 	"Eliminate all users"
-	" who are not enrolled on any courses"
+	" who are not enroled on any courses"
 	" and with more than";
 #elif L==4
 	"Eliminar todos los usuarios"
@@ -10435,7 +10435,7 @@ const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_O
 	" y que lleven m&aacute;s de";
 #elif L==5
 	"Eliminate all users"
-	" who are not enrolled on any courses"
+	" who are not enroled on any courses"
 	" and with more than";					// Besoin de traduction
 #elif L==6
 	"Eliminar todos los usuarios"
@@ -10451,11 +10451,11 @@ const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_1_O
 	" na kazdym z kurs&oacute;w";
 #elif L==9
 	"Eliminate all users"
-	" who are not enrolled on any courses"
+	" who are not enroled on any courses"
 	" and with more than";					// Necessita de tradução
 #endif
 
-const char *Txt_Eliminate_all_users_who_are_not_enrolled_on_any_courses_PART_2_OF_2 =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Eliminate_all_users_who_are_not_enroled_on_any_courses_PART_2_OF_2 =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"meses sin acceder a %s.";		// Necessita traduccio
 #elif L==2
@@ -10619,21 +10619,21 @@ const char *Txt_Eliminate_user_account =
 	"Remover conta de usu&aacute;rio";
 #endif
 
-const char *Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with_more_than_Y_months_without_access_to_Z =	// Warning: it is very important to include %lu, %u and %s in the following sentences
+const char *Txt_Eliminating_X_users_who_were_not_enroled_in_any_course_and_with_more_than_Y_months_without_access_to_Z =	// Warning: it is very important to include %lu, %u and %s in the following sentences
 #if   L==1
 	"Eliminando %lu usuario(s) que no estaba(n) inscrito(s) en ninguna asignatura"
 	" y que llevaba(n) m&aacute;s de %u meses sin acceder a %s.";	// Necessita traduccio
 #elif L==2
-	"Eliminating %lu user(s) who were not enrolled in any course"
+	"Eliminating %lu user(s) who were not enroled in any course"
 	" and with more than %u months without access to %s.";		// Need Übersetzung
 #elif L==3
-	"Eliminating %lu user(s) who were not enrolled in any course"
+	"Eliminating %lu user(s) who were not enroled in any course"
 	" and with more than %u months without access to %s.";
 #elif L==4
 	"Eliminando %lu usuario(s) que no estaba(n) inscrito(s) en ninguna asignatura"
 	" y que llevaba(n) m&aacute;s de %u meses sin acceder a %s.";
 #elif L==5
-	"Eliminating %lu user(s) who were not enrolled in any course"
+	"Eliminating %lu user(s) who were not enroled in any course"
 	" and with more than %u months without access to %s.";		// Besoin de traduction
 #elif L==6
 	"Eliminando %lu usuario(s) que no estaba(n) inscrito(s) en ninguna asignatura"
@@ -10645,7 +10645,7 @@ const char *Txt_Eliminating_X_users_who_were_not_enrolled_in_any_course_and_with
 	"Eliminowanie uzytkownik&oacute;w, kt&oacute;rzy nie lu% odnotowano w kurs"
 	" i ponad miesiac u% bez dostepu do %s.";
 #elif L==9
-	"Eliminating %lu user(s) who were not enrolled in any course"
+	"Eliminating %lu user(s) who were not enroled in any course"
 	" and with more than %u months without access to %s.";		// Necessita de tradução
 #endif
 
@@ -10952,13 +10952,13 @@ const char *Txt_End_date =
 	"Data final";
 #endif
 
-const char *Txt_Enroll_in_groups =
+const char *Txt_Enrol_in_groups =
 #if   L==1
 	"Inscriure en grups";
 #elif L==2
 	"Anmeldung mich in Gruppen";
 #elif L==3
-	"Enroll in groups";
+	"Enrol in groups";
 #elif L==4
 	"Inscribirme en grupos";
 #elif L==5
@@ -10973,13 +10973,13 @@ const char *Txt_Enroll_in_groups =
 	"Inscreva-me em grupos ";
 #endif
 
-const char *Txt_Enrollment =
+const char *Txt_Enrolment =
 #if   L==1
 	"Inscripci&oacute;";
 #elif L==2
 	"Einschreibung";
 #elif L==3
-	"Enrollment";
+	"Enrolment";
 #elif L==4
 	"Inscripci&oacute;n";
 #elif L==5
@@ -10994,17 +10994,17 @@ const char *Txt_Enrollment =
 	"Inscri&ccedil;&atilde;o";
 #endif
 
-const char *Txt_Enrollment_confirmed =
+const char *Txt_Enrolment_confirmed =
 #if   L==1
 	"Inscripci&oacute;n confirmada";	// Necessita traduccio
 #elif L==2
-	"Enrollment confirmed";			// Need Übersetzung
+	"Enrolment confirmed";			// Need Übersetzung
 #elif L==3
-	"Enrollment confirmed";
+	"Enrolment confirmed";
 #elif L==4
 	"Inscripci&oacute;n confirmada";
 #elif L==5
-	"Enrollment confirmed";			// Besoin de traduction
+	"Enrolment confirmed";			// Besoin de traduction
 #elif L==6
 	"Inscripci&oacute;n confirmada";	// Okoteve traducción
 #elif L==7
@@ -11012,41 +11012,41 @@ const char *Txt_Enrollment_confirmed =
 #elif L==8
 	"Rejestracja potwierdzona";
 #elif L==9
-	"Enrollment confirmed";			// Necessita de tradução
+	"Enrolment confirmed";			// Necessita de tradução
 #endif
 
-const char *Txt_Enrollment_of_X_rejected =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_Enrolment_of_X_rejected =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Inscripci&oacute;n de <strong>%s</strong> rechazada.";	// Necessita traduccio
 #elif L==2
-	"Enrollment of <strong>%s</strong> rejected.";		// Need Übersetzung
+	"Enrolment of <strong>%s</strong> rejected.";		// Need Übersetzung
 #elif L==3
-	"Enrollment of <strong>%s</strong> rejected.";
+	"Enrolment of <strong>%s</strong> rejected.";
 #elif L==4
 	"Inscripci&oacute;n de <strong>%s</strong> rechazada.";
 #elif L==5
-	"Enrollment of <strong>%s</strong> rejected.";		// Besoin de traduction
+	"Enrolment of <strong>%s</strong> rejected.";		// Besoin de traduction
 #elif L==6
 	"Inscripci&oacute;n de <strong>%s</strong> rechazada.";	// Okoteve traducción
 #elif L==7
-	"Enrollment of <strong>%s</strong> rejected.";		// Bisogno di traduzione
+	"Enrolment of <strong>%s</strong> rejected.";		// Bisogno di traduzione
 #elif L==8
-	"Enrollment of <strong>%s</strong> rejected.";		// Potrzebujesz tlumaczenie
+	"Enrolment of <strong>%s</strong> rejected.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"Enrollment of <strong>%s</strong> rejected.";		// Necessita de tradução
+	"Enrolment of <strong>%s</strong> rejected.";		// Necessita de tradução
 #endif
 
-const char *Txt_Enrollment_not_confirmed =
+const char *Txt_Enrolment_not_confirmed =
 #if   L==1
 	"Inscripci&oacute;n pendiente de confirmaci&oacute;n";	// Necessita traduccio
 #elif L==2
-	"Enrollment not confirmed";				// Need Übersetzung
+	"Enrolment not confirmed";				// Need Übersetzung
 #elif L==3
-	"Enrollment not confirmed";
+	"Enrolment not confirmed";
 #elif L==4
 	"Inscripci&oacute;n pendiente de confirmaci&oacute;n";
 #elif L==5
-	"Enrollment not confirmed";				// Besoin de traduction
+	"Enrolment not confirmed";				// Besoin de traduction
 #elif L==6
 	"Inscripci&oacute;n pendiente de confirmaci&oacute;n";	// Okoteve traducción
 #elif L==7
@@ -11054,16 +11054,16 @@ const char *Txt_Enrollment_not_confirmed =
 #elif L==8
 	"Rejestracja nie potwierdzona";
 #elif L==9
-	"Enrollment not confirmed";				// Necessita de tradução
+	"Enrolment not confirmed";				// Necessita de tradução
 #endif
 
-const char *Txt_Enrollment_requests =
+const char *Txt_Enrolment_requests =
 #if   L==1
 	"Peticions d'inscripci&oacute;";
 #elif L==2
 	"Registrierungsanforderungen";
 #elif L==3
-	"Enrollment requests";
+	"Enrolment requests";
 #elif L==4
 	"Solicitudes de inscripci&oacute;n";
 #elif L==5
@@ -15545,21 +15545,21 @@ const char *Txt_SEARCH_X_in_Y =	// Search string "in" documentos, users, etc.
 	"em";
 #endif
 
-const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group =
+const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group =
 #if   L==1
 	"En un tipo de grupo de adscripci&oacute;n &uacute;nica"
 	" no es posible apuntar estudiantes a m&aacute;s de un grupo.";	// Necessita traduccio
 #elif L==2
-	"In a type of group with single enrollment,"
+	"In a type of group with single enrolment,"
 	" students can not be registered in more than one group.";	// Need Übersetzung
 #elif L==3
-	"In a type of group with single enrollment,"
+	"In a type of group with single enrolment,"
 	" tudents can not be registered in more than one group.";
 #elif L==4
 	"En un tipo de grupo de adscripci&oacute;n &uacute;nica"
 	" no es posible apuntar estudiantes a m&aacute;s de un grupo.";
 #elif L==5
-	"In a type of group with single enrollment,"
+	"In a type of group with single enrolment,"
 	" students can not be registered in more than one group.";	// Besoin de traduction
 #elif L==6
 	"En un tipo de grupo de adscripci&oacute;n &uacute;nica"
@@ -15571,7 +15571,7 @@ const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_re
 	"W rodzaju grupy z jednej rejestracji,"
 	" nie mozesz rejestrowac uczni&oacute;w w wiecej niz jednej grupy.";
 #elif L==9
-	"In a type of group with single enrollment,"
+	"In a type of group with single enrolment,"
 	" students can not be registered in more than one group.";	// Necessita de tradução
 #endif
 
@@ -17717,13 +17717,13 @@ const char *Txt_Logo =
 	"Logotipo";
 #endif
 
-const char *Txt_Mandatory_enrollment =		// (to a type of group)
+const char *Txt_Mandatory_enrolment =		// (to a type of group)
 #if   L==1
 	"&iquest;Adscripci&oacute;n obligatoria?";	// Necessita traduccio
 #elif L==2
 	"Obligatorische beitreten?";
 #elif L==3
-	"Mandatory enrollment?";
+	"Mandatory enrolment?";
 #elif L==4
 	"&iquest;Adscripci&oacute;n obligatoria?";
 #elif L==5
@@ -21236,7 +21236,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 #elif L==2
 	"Registrierungsanforderungen"
 #elif L==3
-	"Enrollment requests in this course pending verification"
+	"Enrolment requests in this course pending verification"
 #elif L==4
 	"Peticiones de inscripci&oacute;n pendientes de verificar"
 #elif L==5
@@ -23634,13 +23634,13 @@ const char *Txt_MSGS_Sent =
 	"Enviadas";
 #endif
 
-const char *Txt_Multiple_enrollment =		// (to a type of group)
+const char *Txt_Multiple_enrolment =		// (to a type of group)
 #if   L==1
 	"&iquest;Adscripci&oacute;n m&uacute;ltiple?";	// Necessita traduccio
 #elif L==2
 	"Mehrere beitreten?";
 #elif L==3
-	"Multiple enrollment?";
+	"Multiple enrolment?";
 #elif L==4
 	"&iquest;Adscripci&oacute;n m&uacute;ltiple?";
 #elif L==5
@@ -24873,25 +24873,25 @@ const char *Txt_No_degrees =
 	"N&atilde;o h&aacute; titula&ccedil;oes.";
 #endif
 
-const char *Txt_No_enrollment_requests =
+const char *Txt_No_enrolment_requests =
 #if   L==1
 	"No hay solicitudes de inscripci&oacute;n.";	// Necessita traduccio
 #elif L==2
-	"No enrollment requests.";			// Need Übersetzung
+	"No enrolment requests.";			// Need Übersetzung
 #elif L==3
-	"No enrollment requests.";
+	"No enrolment requests.";
 #elif L==4
 	"No hay solicitudes de inscripci&oacute;n.";
 #elif L==5
-	"No enrollment requests.";			// Besoin de traduction
+	"No enrolment requests.";			// Besoin de traduction
 #elif L==6
 	"No hay solicitudes de inscripci&oacute;n.";	// Okoteve traducción
 #elif L==7
-	"No enrollment requests.";			// Bisogno di traduzione
+	"No enrolment requests.";			// Bisogno di traduzione
 #elif L==8
-	"No enrollment requests.";			// Potrzebujesz tlumaczenie
+	"No enrolment requests.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"No enrollment requests.";			// Necessita de tradução
+	"No enrolment requests.";			// Necessita de tradução
 #endif
 
 const char *Txt_No_events =
@@ -24972,16 +24972,16 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";	// Necessita traduccio
 #elif L==2
 	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enrolled/removed in/from the course.";				// Need Übersetzung
+	"Therefore, the specified users will be enroled/removed in/from the course.";				// Need Übersetzung
 #elif L==3
 	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enrolled/removed in/from the course.";
+	"Therefore, the specified users will be enroled/removed in/from the course.";
 #elif L==4
 	"No se han creado grupos en la asignatura <strong>%s</strong>."
 	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";
 #elif L==5
 	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enrolled/removed in/from the course.";				// Besoin de traduction
+	"Therefore, the specified users will be enroled/removed in/from the course.";				// Besoin de traduction
 #elif L==6
 	"No se han creado grupos en la asignatura <strong>%s</strong>."
 	" Por tanto, los usuarios especificados ser&aacute;n inscritos/eliminados en/de la asignatura.";	// Okoteve traducción
@@ -24993,7 +24993,7 @@ const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_ =	// Warn
 	"Dlatego okreslonych uzytkownik&oacute;w zostanie zarejestrowany / usuniete w / z kursu.";
 #elif L==9
 	"No groups have been created in the course <strong>%s</strong>."
-	"Therefore, the specified users will be enrolled/removed in/from the course.";				// Necessita de tradução
+	"Therefore, the specified users will be enroled/removed in/from the course.";				// Necessita de tradução
 #endif
 
 const char *Txt_No_holidays =
@@ -25773,17 +25773,17 @@ const char *Txt_No_user_has_been_eliminated =
 	"No user has been eliminated.";			// Necessita de tradução
 #endif
 
-const char *Txt_No_user_has_been_enrolled =
+const char *Txt_No_user_has_been_enroled =
 #if   L==1
 	"No se ha inscrito ning&uacute;n usuario.";	// Necessita traduccio
 #elif L==2
-	"No user has been enrolled.";			// Need Übersetzung
+	"No user has been enroled.";			// Need Übersetzung
 #elif L==3
-	"No user has been enrolled.";
+	"No user has been enroled.";
 #elif L==4
 	"No se ha inscrito ning&uacute;n usuario.";
 #elif L==5
-	"No user has been enrolled.";			// Besoin de traduction
+	"No user has been enroled.";			// Besoin de traduction
 #elif L==6
 	"No se ha inscrito ning&uacute;n usuario.";	// Okoteve traducción
 #elif L==7
@@ -25791,7 +25791,7 @@ const char *Txt_No_user_has_been_enrolled =
 #elif L==8
 	"Zaden uzytkownik nie zostal zarejestrowany.";
 #elif L==9
-	"No user has been enrolled.";			// Necessita de tradução
+	"No user has been enroled.";			// Necessita de tradução
 #endif
 
 const char *Txt_No_user_has_been_removed =
@@ -26745,12 +26745,12 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novos arquivos de notas"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_STUDENT
+#if   L==1	// Ntf_EVENT_ENROLMENT_STUDENT
 	 "Novas inscripci&oacute;s com a estudiant"
 #elif L==2
 	 "New Einschreibungen als Student"
 #elif L==3
-	 "New enrollments as a student"
+	 "New enrolments as a student"
 #elif L==4
 	 "Nuevas inscripciones como estudiante"
 #elif L==5
@@ -26765,12 +26765,12 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas inscri&ccedil;&otilde;es como estudante"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_TEACHER
+#if   L==1	// Ntf_EVENT_ENROLMENT_TEACHER
 	 "Novas inscripci&oacute;s com a professor"
 #elif L==2
 	 "New Einschreibungen als Lehrkraft"
 #elif L==3
-	 "New enrollments as a teacher"
+	 "New enrolments as a teacher"
 #elif L==4
 	 "Nuevas inscripciones como profesor/a"
 #elif L==5
@@ -26785,12 +26785,12 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas inscri&ccedil;&otilde;es como professor"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_REQUEST
+#if   L==1	// Ntf_EVENT_ENROLMENT_REQUEST
 	 "Novas petici&oacute;s d'inscripci&oacute;"
 #elif L==2
 	 "New Registrierungsanforderungen"
 #elif L==3
-	 "New enrollment requests"
+	 "New enrolment requests"
 #elif L==4
 	 "Nuevas peticiones de inscripci&oacute;n"
 #elif L==5
@@ -27148,12 +27148,12 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Arquivo de notas"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_STUDENT
+#if   L==1	// Ntf_EVENT_ENROLMENT_STUDENT
 	 "Inscripci&oacute; com a estudiant"
 #elif L==2
 	 "Einschreibung als Student"
 #elif L==3
-	 "Enrollment as a student"
+	 "Enrolment as a student"
 #elif L==4
 	 "Inscripci&oacute;n como estudiante"
 #elif L==5
@@ -27168,12 +27168,12 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Inscri&ccedil;&atilde;o como estudante"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_TEACHER
+#if   L==1	// Ntf_EVENT_ENROLMENT_TEACHER
 	 "Inscripci&oacute; com a professor"
 #elif L==2
 	 "Einschreibung als Lehrkraft"
 #elif L==3
-	 "Enrollment as a teacher"
+	 "Enrolment as a teacher"
 #elif L==4
 	 "Inscripci&oacute;n como profesor/a"
 #elif L==5
@@ -27188,12 +27188,12 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Inscri&ccedil;&atilde;o como professor"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLLMENT_REQUEST
+#if   L==1	// Ntf_EVENT_ENROLMENT_REQUEST
 	 "Petici&oacute; d'inscripci&oacute;"
 #elif L==2
 	 "Registrierungsanforderung"
 #elif L==3
-	 "Enrollment request"
+	 "Enrolment request"
 #elif L==4
 	 "Petici&oacute;n de inscripci&oacute;n"
 #elif L==5
@@ -27808,17 +27808,17 @@ const char *Txt_One_user_has_been_eliminated =
 	"One user has been eliminated.";		// Necessita de tradução
 #endif
 
-const char *Txt_One_user_has_been_enrolled =
+const char *Txt_One_user_has_been_enroled =
 #if   L==1
 	"Se ha inscrito un usuario.";		// Necessita traduccio
 #elif L==2
-	"One user has been enrolled.";		// Need Übersetzung
+	"One user has been enroled.";		// Need Übersetzung
 #elif L==3
-	"One user has been enrolled.";
+	"One user has been enroled.";
 #elif L==4
 	"Se ha inscrito un usuario.";
 #elif L==5
-	"One user has been enrolled.";		// Besoin de traduction
+	"One user has been enroled.";		// Besoin de traduction
 #elif L==6
 	"Se ha inscrito un usuario.";		// Okoteve traducción
 #elif L==7
@@ -27826,7 +27826,7 @@ const char *Txt_One_user_has_been_enrolled =
 #elif L==8
 	"Jeden uzytkownik zostal zarejestrowany.";
 #elif L==9
-	"One user has been enrolled.";		// Necessita de tradução
+	"One user has been enroled.";		// Necessita de tradução
 #endif
 
 const char *Txt_One_user_has_been_removed =
@@ -36479,16 +36479,16 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 #elif L==2
 	"Select the groups in/from which you want to register/remove users."
 	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enrolled in the course and the selected groups,"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Need Übersetzung
 #elif L==3
 	"Select the groups in/from which you want to register/remove users."
 	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enrolled in the course and the selected groups,"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";
 #elif L==4
 	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
@@ -36500,9 +36500,9 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 #elif L==5
 	"Select the groups in/from which you want to register/remove users."
 	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enrolled in the course and the selected groups,"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Besoin de traduction
 #elif L==6
 	"Seleccione los grupos en/de los que quiere inscribir/eliminar usuarios."
@@ -36521,16 +36521,16 @@ const char *Txt_Select_the_groups_in_from_which_you_want_to_register_remove_user
 #elif L==8
 	"Select the groups in/from which you want to register/remove users."
 	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enrolled in the course and the selected groups,"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"Select the groups in/from which you want to register/remove users."
 	"You can only select those groups to which you belong.<br />"
-	"If you select any groups, users will be enrolled in the course and the selected groups,"
+	"If you select any groups, users will be enroled in the course and the selected groups,"
 	" or removed from the selected groups but not from the course.<br />"
-	"If you do not select any groups, users will be enrolled in the course but not in specific groups,"
+	"If you do not select any groups, users will be enroled in the course but not in specific groups,"
 	" or removed from the course and from all groups.";	// Necessita de tradução
 #endif
 
@@ -40083,25 +40083,25 @@ const char *Txt_Step_3_Optionally_select_groups =
 	"Step 3: Optionally, select groups";		// Necessita de tradução
 #endif
 
-const char *Txt_Step_4_Confirm_the_enrollment_removing =
+const char *Txt_Step_4_Confirm_the_enrolment_removing =
 #if   L==1
 	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Necessita traduccio
 #elif L==2
-	"Step 4: Confirm the enrollment / removing";			// Need Übersetzung
+	"Step 4: Confirm the enrolment / removing";			// Need Übersetzung
 #elif L==3
-	"Step 4: Confirm the enrollment / removing";
+	"Step 4: Confirm the enrolment / removing";
 #elif L==4
 	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";
 #elif L==5
-	"Step 4: Confirm the enrollment / removing";			// Besoin de traduction
+	"Step 4: Confirm the enrolment / removing";			// Besoin de traduction
 #elif L==6
 	"Paso 4: Confirme la inscripci&oacute;n / eliminaci&oacute;n";	// Okoteve traducción
 #elif L==7
 	"Passo 4: Conferma la registrazione / rimozione";
 #elif L==8
-	"Step 4: Confirm the enrollment / removing";			// Potrzebujesz tlumaczenie
+	"Step 4: Confirm the enrolment / removing";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"Step 4: Confirm the enrollment / removing";			// Necessita de tradução
+	"Step 4: Confirm the enrolment / removing";			// Necessita de tradução
 #endif
 
 const char *Txt_Student_comment =
@@ -42821,7 +42821,7 @@ const char *Txt_The_email_address_X_had_been_registered_by_another_user =	// War
 	" ya ha sido registrada por otro usuario.";
 #elif L==5
 	"The email address <strong>%s</strong>"
-	" had been enrolled by another user.";		// Besoin de traduction
+	" had been enroled by another user.";		// Besoin de traduction
 #elif L==6
 	"La direcci&oacute;n de correo <strong>%s</strong>"
 	" ya ha sido registrada por otro usuario.";	// Okoteve traducción
@@ -42983,46 +42983,46 @@ const char *Txt_The_email_domain_X_has_not_changed =	// Warning: it is very impo
 	"The email domain <strong>%s</strong> has not changed.";		// Necessita de tradução
 #endif
 
-const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";	// Necessita traduccio
 #elif L==2
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Need Übersetzung
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Need Übersetzung
 #elif L==3
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";
 #elif L==4
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";
 #elif L==5
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Besoin de traduction
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Besoin de traduction
 #elif L==6
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es obligatoria.";	// Okoteve traducción
 #elif L==7
 	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora obbligatoria.";
 #elif L==8
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Potrzebujesz tlumaczenie
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The enrollment of students into groups of type <strong>%s</strong> is now mandatory.";			// Necessita de tradução
+	"The enrolment of students into groups of type <strong>%s</strong> is now mandatory.";			// Necessita de tradução
 #endif
 
-const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";	// Necessita traduccio
 #elif L==2
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Need Übersetzung
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Need Übersetzung
 #elif L==3
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";
 #elif L==4
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";
 #elif L==5
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Besoin de traduction
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Besoin de traduction
 #elif L==6
 	"La adscripci&oacute;n de estudiantes a grupos del tipo <strong>%s</strong> ahora es voluntaria.";	// Okoteve traducción
 #elif L==7
 	"La registrazione di studenti nei gruppi di tipo <strong>%s</strong> &egrave; ora volontaria.";
 #elif L==8
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Potrzebujesz tlumaczenie
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Potrzebujesz tlumaczenie
 #elif L==9
-	"The enrollment of students into groups of type <strong>%s</strong> is now voluntary.";			// Necessita de tradução
+	"The enrolment of students into groups of type <strong>%s</strong> is now voluntary.";			// Necessita de tradução
 #endif
 
 const char *Txt_The_event_has_been_modified =
@@ -43543,7 +43543,7 @@ const char *Txt_The_ID_is_used_in_order_to_facilitate_ =
 	" und Beratungskompetenz eingesetzt.";
 #elif L==3
 	"The ID is used in order to facilitate"
-	" enrollment in courses"
+	" enrolment in courses"
 	" and consulting marks.";
 #elif L==4
 	"El ID se utiliza con el fin de facilitar"
@@ -44744,7 +44744,7 @@ const char *Txt_The_nickname_X_had_been_registered_by_another_user =	// Warning:
 	" ya hab&iacute;a sido registrado por otro usuario.";
 #elif L==5
 	"The nickname <strong>@%s</strong>"
-	" had been enrolled by another user.";			// Besoin de traduction
+	" had been enroled by another user.";			// Besoin de traduction
 #elif L==6
 	"El apodo <strong>@%s</strong>"
 	" ya hab&iacute;a sido registrado por otro usuario.";	// Okoteve traducción
@@ -45728,25 +45728,25 @@ const char *Txt_The_type_of_group_of_the_group_X_has_changed =	// Warning: it is
 	"The type of group of the group <strong>%s</strong> has changed.";	// Necessita de tradução
 #endif
 
-const char *Txt_The_type_of_enrollment_of_the_type_of_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El tipo de adscripci&oacute;n del tipo de grupo <strong>%s</strong> no ha cambiado.";	// Necessita traduccio
 #elif L==2
-	"The type of enrollment of the type of group <strong>%s</strong> has not changed.";	// Need Übersetzung
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Need Übersetzung
 #elif L==3
-	"The type of enrollment of the type of group <strong>%s</strong> has not changed.";
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";
 #elif L==4
 	"El tipo de adscripci&oacute;n del tipo de grupo <strong>%s</strong> no ha cambiado.";
 #elif L==5
-	"The type of enrollment of the type of group <strong>%s</strong> has not changed.";	// Besoin de traduction
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Besoin de traduction
 #elif L==6
 	"El tipo de adscripci&oacute;n del tipo de grupo <strong>%s</strong> no ha cambiado.";	// Okoteve traducción
 #elif L==7
 	"Il tipo di registrazione del tipo di gruppo <strong>%s</strong> non &egrave; cambiato.";
 #elif L==8
-	"The type of enrollment of the type of group <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"The type of enrollment of the type of group <strong>%s</strong> has not changed.";	// Necessita de tradução
+	"The type of enrolment of the type of group <strong>%s</strong> has not changed.";	// Necessita de tradução
 #endif
 
 const char *Txt_The_type_of_the_holiday_X_has_changed =	// Warning: it is very important to include %s in the following sentences
@@ -45872,18 +45872,18 @@ const char *Txt_THE_USER_X_already_exists_in_Y =	// Warning: it is very importan
 	"<strong>%s</strong> already exists in %s.";	// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_course_Z =	// Warning: it is very important to include three %s in the following sentences
+const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enroled_in_the_course_Z =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ya existe en %s,"
 	" pero a&uacute;n no est&aacute; inscrito"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
 	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enrolled"
+	" but is not yet enroled"
 	" in the course <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3
 	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enrolled"
+	" but is not yet enroled"
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"<strong>%s</strong> ya existe en %s,"
@@ -45891,7 +45891,7 @@ const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_co
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5
 	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enrolled"
+	" but is not yet enroled"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"<strong>%s</strong> ya existe en %s,"
@@ -45903,29 +45903,29 @@ const char *Txt_THE_USER_X_already_exists_in_Y_but_is_not_yet_enrolled_in_the_co
 	" al corso <strong>%s</strong>.";
 #elif L==8
 	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enrolled"
+	" but is not yet enroled"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"<strong>%s</strong> already exists in %s,"
-	" but is not yet enrolled"
+	" but is not yet enroled"
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_THE_USER_X_has_been_enroled_as_administrator_of_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
 	" como administrador/a de <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" as administrator of <strong>%s</strong>.";		// Übersetzung notwendig
 #elif L==3
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" as administrator of <strong>%s</strong>.";
 #elif L==4
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
 	" como administrador/a de <strong>%s</strong>.";
 #elif L==5
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" as administrator of <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
@@ -45934,14 +45934,14 @@ const char *Txt_THE_USER_X_has_been_enrolled_as_administrator_of_Y =	// Warning:
 	"<strong>%s</strong> &egrave; stato registrato"
 	" come amministratore de <strong>%s</strong>.";
 #elif L==8
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" as administrator of <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" as administrator of <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_THE_USER_X_has_been_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha estat afegit/da"
 	" a l'assignatura <strong>%s</strong>.";
@@ -45949,7 +45949,7 @@ const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y =	// Warning: it is
 	"<strong>%s</strong> hat sich im"
 	" im Kurs <strong>%s</strong> eingeschrieben.";
 #elif L==3
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
@@ -45971,21 +45971,21 @@ const char *Txt_THE_USER_X_has_been_enrolled_in_the_course_Y =	// Warning: it is
 	" na disciplina <strong>%s</strong>.";
 #endif
 
-const char *Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z =	// Warning: it is very important to include three %s in the following sentences
+const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z =	// Warning: it is very important to include three %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
 	" al grupo de tipo %s <strong>%s</strong>.";		// Necessita traduccio
 #elif L==2
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the group of type %s <strong>%s</strong>.";	// Übersetzung notwendig
 #elif L==3
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the group of type %s <strong>%s</strong>.";
 #elif L==4
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
 	" al grupo de tipo %s <strong>%s</strong>.";
 #elif L==5
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the group of type %s <strong>%s</strong>.";	// Besoin de traduction
 #elif L==6
 	"<strong>%s</strong> ha sido a&ntilde;adido/a"
@@ -45994,10 +45994,10 @@ const char *Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z =	// Warni
 	"<strong>%s</strong> &egrave; stato registrato"
 	" nel gruppo di tipo %s <strong>%s</strong>.";
 #elif L==8
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the group of type %s <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"<strong>%s</strong> has been enrolled"
+	"<strong>%s</strong> has been enroled"
 	" in the group of type %s <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
@@ -46286,7 +46286,7 @@ const char *Txt_THE_USER_X_is_already_an_administrator_of_Y =	// Warning: it is 
 	"<strong>%s</strong> is already an administrator of <strong>%s</strong>.";	// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrollment =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_the_enrolment =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ya est&aacute;"
 	" en la asignatura <strong>%s</strong>,"
@@ -46294,11 +46294,11 @@ const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_t
 #elif L==2
 	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrollment.";			// Übersetzung notwendig
+	" but has not yet accepted the enrolment.";			// Übersetzung notwendig
 #elif L==3
 	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrollment.";
+	" but has not yet accepted the enrolment.";
 #elif L==4
 	"<strong>%s</strong> ya est&aacute;"
 	" en la asignatura <strong>%s</strong>,"
@@ -46306,7 +46306,7 @@ const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_t
 #elif L==5
 	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrollment.";			// Besoin de traduction
+	" but has not yet accepted the enrolment.";			// Besoin de traduction
 #elif L==6
 	"<strong>%s</strong> ya est&aacute;"
 	" en la asignatura <strong>%s</strong>,"
@@ -46318,28 +46318,28 @@ const char *Txt_THE_USER_X_is_already_in_the_course_Y_but_has_not_yet_accepted_t
 #elif L==8
 	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrollment.";			// Potrzebujesz tlumaczenie
+	" but has not yet accepted the enrolment.";			// Potrzebujesz tlumaczenie
 #elif L==9
 	"<strong>%s</strong> is already"
 	" in the course <strong>%s</strong>,"
-	" but has not yet accepted the enrollment.";			// Necessita de tradução
+	" but has not yet accepted the enrolment.";			// Necessita de tradução
 #endif
 
-const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_THE_USER_X_is_already_enroled_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"<strong>%s</strong> ya est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"<strong>%s</strong> is already enrolled"
+	"<strong>%s</strong> is already enroled"
 	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
 #elif L==3
-	"<strong>%s</strong> is already enrolled"
+	"<strong>%s</strong> is already enroled"
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"<strong>%s</strong> ya est&aacute; inscrito/a"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5
-	"<strong>%s</strong> is already enrolled"
+	"<strong>%s</strong> is already enroled"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"<strong>%s</strong> ya est&aacute; inscrito/a"
@@ -46348,10 +46348,10 @@ const char *Txt_THE_USER_X_is_already_enrolled_in_the_course_Y =	// Warning: it 
 	"<strong>%s</strong> &egrave; gi&agrave; registrato"
 	" nel corso <strong>%s</strong>.";
 #elif L==8
-	"<strong>%s</strong> is already enrolled"
+	"<strong>%s</strong> is already enroled"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"<strong>%s</strong> is already enrolled"
+	"<strong>%s</strong> is already enroled"
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
@@ -50199,25 +50199,25 @@ const char *Txt_X_users_have_been_eliminated =	// Warning: it is very important 
 	"%u user(s) have been eliminated.";		// Necessita de tradução
 #endif
 
-const char *Txt_X_users_have_been_enrolled_including_possible_repetitions =	// Warning: it is very important to include %u in the following sentences
+const char *Txt_X_users_have_been_enroled_including_possible_repetitions =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
 	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";	// Necessita traduccio
 #elif L==2
-	"%u users have been enrolled (including possible repetitions).";	// Need Übersetzung
+	"%u users have been enroled (including possible repetitions).";	// Need Übersetzung
 #elif L==3
-	"%u users have been enrolled (including possible repetitions).";
+	"%u users have been enroled (including possible repetitions).";
 #elif L==4
 	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";
 #elif L==5
-	"%u users have been enrolled (including possible repetitions).";	// Besoin de traduction
+	"%u users have been enroled (including possible repetitions).";	// Besoin de traduction
 #elif L==6
 	"Se han inscrito %u usuarios (incluyendo posibles repeticiones).";	// Okoteve traducción
 #elif L==7
 	"%u utenti sono stati registrati (comprese le eventuali ripetizioni).";
 #elif L==8
-	"%u users have been enrolled (including possible repetitions).";	// Potrzebujesz tlumaczenie
+	"%u users have been enroled (including possible repetitions).";	// Potrzebujesz tlumaczenie
 #elif L==9
-	"%u users have been enrolled (including possible repetitions).";	// Necessita de tradução
+	"%u users have been enroled (including possible repetitions).";	// Necessita de tradução
 #endif
 
 const char *Txt_X_users_have_been_removed =	// Warning: it is very important to include %u in the following sentences
@@ -52004,14 +52004,14 @@ const char *Txt_You_are_now_LOGGED_IN_as_X =	// Warning: it is very important to
 	"Agora voc&ecirc; est&aacute; %s como <strong>%s</strong>.";
 #endif
 
-const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
+const char *Txt_You_are_not_enroled_in_any_course[Usr_NUM_SEXS] =
 	{
 #if   L==1	// Usr_SEX_UNKNOWN
 	"Usted no est&aacute; inscrito/a en ninguna asignatura."	// Necessita traduccio
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	"You are not enrolled in any course."
+	"You are not enroled in any course."
 #elif L==4
 	"Usted no est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
@@ -52021,7 +52021,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==7
 	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
@@ -52031,7 +52031,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	"You are not enrolled in any course."
+	"You are not enroled in any course."
 #elif L==4
 	"Usted no est&aacute; inscrita en ninguna asignatura."
 #elif L==5
@@ -52041,7 +52041,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==7
 	"Non ti sei iscritta ad alcun corso."
 #elif L==8
-	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculada em nenhuma disciplina."
 #endif
@@ -52051,7 +52051,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	"You are not enrolled in any course."
+	"You are not enroled in any course."
 #elif L==4
 	"Usted no est&aacute; inscrito en ninguna asignatura."
 #elif L==5
@@ -52061,7 +52061,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==7
 	"Non ti sei iscritto ad alcun corso."
 #elif L==8
-	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado em nenhuma disciplina."
 #endif
@@ -52071,7 +52071,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==2
 	"Sie sind zu keiner Kurs eingeschrieben."
 #elif L==3
-	"You are not enrolled in any course."
+	"You are not enroled in any course."
 #elif L==4
 	"Usted no est&aacute; inscrito/a en ninguna asignatura."
 #elif L==5
@@ -52081,7 +52081,7 @@ const char *Txt_You_are_not_enrolled_in_any_course[Usr_NUM_SEXS] =
 #elif L==7
 	"Non ti sei iscritto/a ad alcun corso."
 #elif L==8
-	"You are not enrolled in any course."			// Potrzebujesz tlumaczenie
+	"You are not enroled in any course."			// Potrzebujesz tlumaczenie
 #elif L==9
 	"Voc&ecirc; n&atilde;o est&aacute; matriculado/a em nenhuma disciplina."
 #endif
@@ -53185,7 +53185,7 @@ const char *Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X =	/
 	" in one or more groups of type %s.";		// Necessita de tradução
 #endif
 
-const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollment_in_them =
+const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrolment_in_them =
 #if   L==1
 	"Podeu cercar assignatures, seleccionar-les"
 	" i sol&middot;licitar la seva inscripci&oacute; en elles.";
@@ -53194,7 +53194,7 @@ const char *Txt_You_can_search_for_courses_select_them_and_request_your_enrollme
 	" und fordern Sie Ihre Anmeldung in ihnen.";
 #elif L==3
 	"You can search for courses, select them"
-	" and request your enrollment in them.";
+	" and request your enrolment in them.";
 #elif L==4
 	"Puede buscar asignaturas, seleccionarlas"
 	" y solicitar su inscripci&oacute;n en ellas.";
@@ -53419,21 +53419,21 @@ const char *Txt_You_have_confirmed_that_you_have_read_this_information =
 	"You have confirmed that you have read this information.";	// Necessita de tradução
 #endif
 
-const char *Txt_You_have_confirmed_your_enrollment_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_You_have_confirmed_your_enrolment_in_the_course_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"You have confirmed your enrollment"
+	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";		// Need Übersetzung
 #elif L==3
-	"You have confirmed your enrollment"
+	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"Usted ha confirmado su inscripci&oacute;n"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5
-	"You have confirmed your enrollment"
+	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"Usted ha confirmado su inscripci&oacute;n"
@@ -53442,10 +53442,10 @@ const char *Txt_You_have_confirmed_your_enrollment_in_the_course_X =	// Warning:
 	"Hai confermato la tua registrazione"
 	" in questo corso <strong>%s</strong>.";
 #elif L==8
-	"You have confirmed your enrollment"
+	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"You have confirmed your enrollment"
+	"You have confirmed your enrolment"
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
@@ -54818,33 +54818,33 @@ const char *Txt_You_should_read_the_following_information =
 	"Voc&ecirc; deve ler as seguintes informa&ccedil;&otilde;es:";
 #endif
 
-const char *Txt_You_were_already_enrolled_as_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_You_were_already_enroled_as_X_in_the_course_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"Usted ya estaba inscrito/a como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";	// Necessita traduccio
 #elif L==2
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Übersetzung notwendig
 #elif L==3
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";
 #elif L==4
 	"Usted ya estaba inscrito/a como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";
 #elif L==5
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Besoin de traduction
 #elif L==6
 	"Usted ya estaba inscrito/a como <strong>%s</strong>"
 	" en la asignatura <strong>%s</strong>.";	// Okoteve traducción
 #elif L==7
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Bisogno di traduzione
 #elif L==8
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Potrzebujesz tlumaczenie
 #elif L==9
-	"You were already enrolled as <strong>%s</strong>"
+	"You were already enroled as <strong>%s</strong>"
 	" in the course <strong>%s</strong>.";		// Necessita de tradução
 #endif
 
@@ -55052,7 +55052,7 @@ const char *Txt_Your_record_card_in_this_course_has_been_updated =
 	"Your record card in this course has been updated:";	// Necessita de tradução
 #endif
 
-const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
+const char *Txt_Your_request_for_enrolment_as_X_in_the_course_Y_has_been_accepted_for_processing =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"La seva petici&oacute; d'inscripci&oacute; com <strong>%s</strong>"
 	" en l'assignatura <strong>%s</strong> ha estat realitzada."
@@ -55064,7 +55064,7 @@ const char *Txt_Your_request_for_enrollment_as_X_in_the_course_Y_has_been_accept
 	" Ihre Anfrage wird durch einen Lehrer oder Administrator &uuml;berpr&uuml;ft werden."
 	" Sie werden benachrichtigt, sobald die Anmeldung akzeptiert wird.";
 #elif L==3
-	"Your request for enrollment as <strong>%s</strong>"
+	"Your request for enrolment as <strong>%s</strong>"
 	" in the course <strong>%s</strong> has been accepted for processing."
 	" Your request will be reviewed by a teacher or administrator."
 	" You will be notified when registration is accepted.";

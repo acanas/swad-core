@@ -66,7 +66,7 @@ struct GroupData
    int  Vacant;
    bool Open;					// Group is open?
    bool FileZones;				// Group has file zones?
-   bool MultipleEnrollment;
+   bool MultipleEnrolment;
   };
 
 struct Group
@@ -84,8 +84,8 @@ struct GroupType
   {
    long GrpTypCod;					// Code of type of group
    char GrpTypName[Grp_MAX_BYTES_GROUP_TYPE_NAME + 1];	// Name of type of group
-   bool MandatoryEnrollment;				// Enrollment is mandatory?
-   bool MultipleEnrollment;				// Enrollment is multiple?
+   bool MandatoryEnrolment;				// Enrolment is mandatory?
+   bool MultipleEnrolment;				// Enrolment is multiple?
    bool MustBeOpened;					// Groups must be opened?
    time_t OpenTimeUTC;					// Open groups automatically in this date-time. If == 0, don't open.
    unsigned NumGrps;					// Number of groups of this type

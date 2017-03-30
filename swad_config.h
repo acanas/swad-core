@@ -477,7 +477,7 @@
 
 #define Cfg_TIME_TO_DELETE_TEST_TMP_FILES		((time_t)(        2UL * 60UL * 60UL))  	// Temporary files related to imported test questions after these seconds
 
-#define Cfg_TIME_TO_DELETE_ENROLLMENT_REQUESTS		((time_t)(30UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired enrollment requests
+#define Cfg_TIME_TO_DELETE_ENROLMENT_REQUESTS		((time_t)(30UL * 24UL * 60UL * 60UL))	// Past these seconds, remove expired enrolment requests
 
 #define Cfg_TIME_TO_DELETE_THREAD_CLIPBOARD		((time_t)(              15UL * 60UL))	// Threads older than these seconds are removed from clipboard
 

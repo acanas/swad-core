@@ -1689,11 +1689,11 @@ int swad__getGroupTypes (struct soap *soap,
 	 Str_Copy (getGroupTypesOut->groupTypesArray.__ptr[NumRow].groupTypeName,row[1],
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
-         /* Get whether enrollment is mandatory ('Y') or voluntary ('N') (row[2]) */
+         /* Get whether enrolment is mandatory ('Y') or voluntary ('N') (row[2]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumRow].mandatory = (row[2][0] == 'Y') ? 1 :
                                                                                           0;
 
-         /* Get whether user can enroll in multiple groups ('Y') or only in one group ('N') (row[3]) */
+         /* Get whether user can enrol in multiple groups ('Y') or only in one group ('N') (row[3]) */
          getGroupTypesOut->groupTypesArray.__ptr[NumRow].multiple = (row[3][0] == 'Y') ? 1 :
                                                                                          0;
 

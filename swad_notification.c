@@ -35,7 +35,7 @@
 #include "swad_config.h"
 #include "swad_config.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_exam.h"
 #include "swad_follow.h"
 #include "swad_global.h"
@@ -72,9 +72,9 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "marksFile",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "enrollmentStudent",		// Ntf_EVENT_ENROLLMENT_STUDENT
-   "enrollmentTeacher",		// Ntf_EVENT_ENROLLMENT_TEACHER
-   "enrollmentRequest",		// Ntf_EVENT_ENROLLMENT_REQUEST
+   "enrollmentStudent",		// Ntf_EVENT_ENROLMENT_STUDENT	// TODO: Change to "enrolmentStudent" carefully in future versions
+   "enrollmentTeacher",		// Ntf_EVENT_ENROLMENT_TEACHER	// TODO: Change to "enrolmentTeacher" carefully in future versions
+   "enrollmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST	// TODO: Change to "enrolmentRequest" carefully in future versions
 
    /* Social tab */
    "timelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
@@ -110,9 +110,9 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeAdmMrk,	// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   ActReqAccEnrStd,	// Ntf_EVENT_ENROLLMENT_STUDENT
-   ActReqAccEnrTch,	// Ntf_EVENT_ENROLLMENT_TEACHER
-   ActSeeSignUpReq,	// Ntf_EVENT_ENROLLMENT_REQUEST
+   ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STUDENT
+   ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TEACHER
+   ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
    ActSeeSocTmlGbl,	// Ntf_EVENT_TIMELINE_COMMENT
@@ -153,9 +153,9 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "NotifyNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "NotifyNtfEventEnrollmentStudent",	// Ntf_EVENT_ENROLLMENT_STUDENT
-   "NotifyNtfEventEnrollmentTeacher",	// Ntf_EVENT_ENROLLMENT_TEACHER
-   "NotifyNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
+   "NotifyNtfEventEnrolmentStudent",	// Ntf_EVENT_ENROLMENT_STUDENT
+   "NotifyNtfEventEnrolmentTeacher",	// Ntf_EVENT_ENROLMENT_TEACHER
+   "NotifyNtfEventEnrolmentRequest",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
    "NotifyNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
@@ -192,9 +192,9 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "EmailNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "EmailNtfEventEnrollmentStudent",	// Ntf_EVENT_ENROLLMENT_STUDENT
-   "EmailNtfEventEnrollmentTeacher",	// Ntf_EVENT_ENROLLMENT_TEACHER
-   "EmailNtfEventEnrollmentRequest",	// Ntf_EVENT_ENROLLMENT_REQUEST
+   "EmailNtfEventEnrolmentStudent",	// Ntf_EVENT_ENROLMENT_STUDENT
+   "EmailNtfEventEnrolmentTeacher",	// Ntf_EVENT_ENROLMENT_TEACHER
+   "EmailNtfEventEnrolmentRequest",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
    "EmailNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
@@ -231,9 +231,9 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_STUDENT
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLLMENT_TEACHER
-   "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLLMENT_REQUEST
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_STUDENT
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_TEACHER
+   "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
    "soc64x64.png",			// Ntf_EVENT_TIMELINE_COMMENT
@@ -887,12 +887,12 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);
          break;
-      case Ntf_EVENT_ENROLLMENT_STUDENT:
-      case Ntf_EVENT_ENROLLMENT_TEACHER:
-	 Enr_GetNotifEnrollment (SummaryStr,CrsCod,UsrCod);
+      case Ntf_EVENT_ENROLMENT_STUDENT:
+      case Ntf_EVENT_ENROLMENT_TEACHER:
+	 Enr_GetNotifEnrolment (SummaryStr,CrsCod,UsrCod);
          break;
-      case Ntf_EVENT_ENROLLMENT_REQUEST:
-	 Enr_GetNotifEnrollmentRequest (SummaryStr,ContentStr,Cod,GetContent);
+      case Ntf_EVENT_ENROLMENT_REQUEST:
+	 Enr_GetNotifEnrolmentRequest (SummaryStr,ContentStr,Cod,GetContent);
          break;
       case Ntf_EVENT_TIMELINE_COMMENT:
       case Ntf_EVENT_TIMELINE_FAV:
@@ -1236,7 +1236,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
            }
          break;
       case Ntf_EVENT_ASSIGNMENT:
-         // 1. If the assignment is available for the whole course ==> get all users enrolled in the course except me
+         // 1. If the assignment is available for the whole course ==> get all users enroled in the course except me
          // 2. If the assignment is available only for some groups ==> get all users who belong to any of the groups except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          sprintf (Query,"(SELECT crs_usr.UsrCod"
@@ -1262,10 +1262,10 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_ENROLLMENT_STUDENT:	// This function should not be called in this case
-      case Ntf_EVENT_ENROLLMENT_TEACHER:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_STUDENT:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_TEACHER:	// This function should not be called in this case
          return 0;
-      case Ntf_EVENT_ENROLLMENT_REQUEST:
+      case Ntf_EVENT_ENROLMENT_REQUEST:
 	 if (Gbl.CurrentCrs.Crs.NumTchs)
 	    // If this course has teachers ==> send notification to teachers
 	    sprintf (Query,"SELECT UsrCod FROM crs_usr"
@@ -1337,7 +1337,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_MESSAGE:		// This function should not be called in this case
 	 return 0;
       case Ntf_EVENT_SURVEY:	// Only surveys for a course are notified, not surveys for a degree or global
-         // 1. If the survey is available for the whole course ==> get users enrolled in the course whose role is available in survey, except me
+         // 1. If the survey is available for the whole course ==> get users enroled in the course whose role is available in survey, except me
          // 2. If the survey is available only for some groups ==> get users who belong to any of the groups and whose role is available in survey, except me
          // Cases 1 and 2 are mutually exclusive, so the union returns the case 1 or 2
          sprintf (Query,"(SELECT crs_usr.UsrCod"
@@ -1664,9 +1664,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_ASSIGNMENT:
 	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
 	       case Ntf_EVENT_MARKS_FILE:
-	       case Ntf_EVENT_ENROLLMENT_STUDENT:
-	       case Ntf_EVENT_ENROLLMENT_TEACHER:
-	       case Ntf_EVENT_ENROLLMENT_REQUEST:
+	       case Ntf_EVENT_ENROLMENT_STUDENT:
+	       case Ntf_EVENT_ENROLMENT_TEACHER:
+	       case Ntf_EVENT_ENROLMENT_REQUEST:
 	       case Ntf_EVENT_NOTICE:
 	       case Ntf_EVENT_MESSAGE:
 	       case Ntf_EVENT_SURVEY:

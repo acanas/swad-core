@@ -31,7 +31,7 @@
 #include <unistd.h>		// For unlink
 
 #include "swad_database.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_password.h"

@@ -1708,25 +1708,25 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 	"SOCIAL.Profiles#view-public-profile";
 #endif
 
-const char *Hlp_SOCIAL_Profiles_who_to_follow =
+const char *Hlp_SOCIAL_Follow =
 #if   L==1
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==2
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==3
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==4
-	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
+	"SOCIAL.Follow.es";
 #elif L==5
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==6
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==7
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==8
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #elif L==9
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Follow";
 #endif
 
 const char *Hlp_SOCIAL_Forums =
@@ -3045,7 +3045,7 @@ const char *Hlp_PROFILE_Photo =
 #elif L==3
 	"PROFILE.Photo";
 #elif L==4
-	"PROFILE.Photo";
+	"PROFILE.Photo.es";
 #elif L==5
 	"PROFILE.Photo";
 #elif L==6
@@ -3066,7 +3066,7 @@ const char *Hlp_PROFILE_Preferences_language =
 #elif L==3
 	"PROFILE.Preferences#language";
 #elif L==4
-	"PROFILE.Preferences#language";
+	"PROFILE.Preferences.es#idioma";
 #elif L==5
 	"PROFILE.Preferences#language";
 #elif L==6
@@ -3087,7 +3087,7 @@ const char *Hlp_PROFILE_Preferences_calendar =
 #elif L==3
 	"PROFILE.Preferences#calendar";
 #elif L==4
-	"PROFILE.Preferences#calendar";
+	"PROFILE.Preferences.es#calendario";
 #elif L==5
 	"PROFILE.Preferences#calendar";
 #elif L==6
@@ -3108,7 +3108,7 @@ const char *Hlp_PROFILE_Preferences_icons =
 #elif L==3
 	"PROFILE.Preferences#icons";
 #elif L==4
-	"PROFILE.Preferences#icons";
+	"PROFILE.Preferences.es#iconos";
 #elif L==5
 	"PROFILE.Preferences#icons";
 #elif L==6
@@ -3129,7 +3129,7 @@ const char *Hlp_PROFILE_Preferences_theme =
 #elif L==3
 	"PROFILE.Preferences#theme";
 #elif L==4
-	"PROFILE.Preferences#theme";
+	"PROFILE.Preferences.es#tema";
 #elif L==5
 	"PROFILE.Preferences#theme";
 #elif L==6
@@ -3150,7 +3150,7 @@ const char *Hlp_PROFILE_Preferences_menu =
 #elif L==3
 	"PROFILE.Preferences#menu";
 #elif L==4
-	"PROFILE.Preferences#menu";
+	"PROFILE.Preferences.es#men%C3%BA";
 #elif L==5
 	"PROFILE.Preferences#menu";
 #elif L==6
@@ -3171,7 +3171,7 @@ const char *Hlp_PROFILE_Preferences_columns =
 #elif L==3
 	"PROFILE.Preferences#columns";
 #elif L==4
-	"PROFILE.Preferences#columns";
+	"PROFILE.Preferences.es#columnas";
 #elif L==5
 	"PROFILE.Preferences#columns";
 #elif L==6
@@ -3192,7 +3192,7 @@ const char *Hlp_PROFILE_Preferences_privacy =
 #elif L==3
 	"PROFILE.Preferences#privacy";
 #elif L==4
-	"PROFILE.Preferences#privacy";
+	"PROFILE.Preferences.es#privacidad";
 #elif L==5
 	"PROFILE.Preferences#privacy";
 #elif L==6
@@ -3213,7 +3213,7 @@ const char *Hlp_PROFILE_Preferences_notifications =
 #elif L==3
 	"PROFILE.Preferences#notifications";
 #elif L==4
-	"PROFILE.Preferences#notifications";
+	"PROFILE.Preferences.es#notificaciones";
 #elif L==5
 	"PROFILE.Preferences#notifications";
 #elif L==6
@@ -3234,7 +3234,7 @@ const char *Hlp_PROFILE_Briefcase =
 #elif L==3
 	"PROFILE.Briefcase";
 #elif L==4
-	"PROFILE.Briefcase";
+	"PROFILE.Briefcase.es";
 #elif L==5
 	"PROFILE.Briefcase";
 #elif L==6

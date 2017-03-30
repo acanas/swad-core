@@ -33,7 +33,7 @@
 #include "swad_action.h"
 #include "swad_config.h"
 #include "swad_database.h"
-#include "swad_enrollment.h"
+#include "swad_enrolment.h"
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
@@ -1063,7 +1063,7 @@ void Rec_GetUsrAndShowRecordOneStdCrs (void)
 
 static void Rec_ShowRecordOneStdCrs (void)
   {
-   /***** Get if student has accepted enrollment in current course *****/
+   /***** Get if student has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
                                                                 Gbl.CurrentCrs.Crs.CrsCod,
                                                                 true);
@@ -1257,7 +1257,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    /***** Width for office hours *****/
    sprintf (Width,"%upx",Rec_RECORD_WIDTH);
 
-   /***** Get if teacher has accepted enrollment in current course *****/
+   /***** Get if teacher has accepted enrolment in current course *****/
    Gbl.Usrs.Other.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Other.UsrDat.UsrCod,
                                                                 Gbl.CurrentCrs.Crs.CrsCod,
                                                                 true);
@@ -2785,7 +2785,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	       ClassForm,Txt_Role);
       switch (TypeOfView)
 	{
-	 case Rec_SHA_SIGN_UP_FORM:			// I want to apply for enrollment
+	 case Rec_SHA_SIGN_UP_FORM:			// I want to apply for enrolment
 	    DefaultRoleInCurrentCrs = ((UsrDat->Roles & (1 << Rol_TEACHER)) ||			// I am teacher in other courses
 				       UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod) ?	// I am the creator of the course
 				      Rol_TEACHER :

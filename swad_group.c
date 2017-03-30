@@ -81,7 +81,7 @@ static void Grp_PutFormToCreateGroupType (void);
 static void Grp_PutFormToCreateGroup (void);
 static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
-static bool Grp_GetMultipleEnrollmentOfAGroupType (long GrpTypCod);
+static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_GetTypeOfGroupOfAGroup (long GrpCod);
 static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod);
 static long Grp_GetFirstCodGrpStdBelongsTo (long GrpTypCod,long UsrCod);
@@ -472,7 +472,7 @@ void Grp_ChangeMyGrps (void)
   {
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
-   extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
+   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    struct ListCodGrps LstGrpsIWant;
    bool MySelectionIsValid = true;
 
@@ -484,9 +484,9 @@ void Grp_ChangeMyGrps (void)
    LstGrpsIWant.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsIWant);
 
-   /***** A student can not be enrolled in more than one group
-          if the type of group is of single enrollment *****/
-   // As the form to register in groups of single enrollment...
+   /***** A student can not be enroled in more than one group
+          if the type of group is of single enrolment *****/
+   // As the form to register in groups of single enrolment...
    // ...is a radio-based form and not a checkbox-based form...
    // ...this check is made only to avoid problems...
    // ...if the student manipulates the form
@@ -508,7 +508,7 @@ void Grp_ChangeMyGrps (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_There_has_been_no_change_in_groups);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group);
+      Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
    /***** Free memory with the list of groups which I want to belong to *****/
    Grp_FreeListCodGrp (&LstGrpsIWant);
@@ -522,7 +522,7 @@ void Grp_ChangeOtherUsrGrps (void)
   {
    extern const char *Txt_The_requested_group_changes_were_successful;
    extern const char *Txt_There_has_been_no_change_in_groups;
-   extern const char *Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group;
+   extern const char *Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group;
    struct ListCodGrps LstGrpsUsrWants;
    bool SelectionIsValid = true;
 
@@ -534,8 +534,8 @@ void Grp_ChangeOtherUsrGrps (void)
    LstGrpsUsrWants.NumGrps = 0;		// Initialized to avoid bug reported by Coverity
    Grp_GetLstCodsGrpWanted (&LstGrpsUsrWants);
 
-   /***** A student can not be enrolled in more than one group
-          if the type of group is of single enrollment *****/
+   /***** A student can not be enroled in more than one group
+          if the type of group is of single enrolment *****/
    if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&
        LstGrpsUsrWants.NumGrps >= 2)
       SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
@@ -554,7 +554,7 @@ void Grp_ChangeOtherUsrGrps (void)
 	 Lay_ShowAlert (Lay_WARNING,Txt_There_has_been_no_change_in_groups);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrollment_students_can_not_be_registered_in_more_than_one_group);
+      Lay_ShowAlert (Lay_WARNING,Txt_In_a_type_of_group_with_single_enrolment_students_can_not_be_registered_in_more_than_one_group);
 
    /***** Free memory with the list of groups to/from which register/remove users *****/
    Grp_FreeListCodGrp (&LstGrpsUsrWants);
@@ -792,7 +792,7 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
   }
 
 /*****************************************************************************/
-/***** Check if no se ha selected más of a group of single enrollment ********/
+/***** Check if no se ha selected más of a group of single enrolment ********/
 /*****************************************************************************/
 
 bool Grp_CheckIfSelectionGrpsIsValid (struct ListCodGrps *LstGrps)
@@ -813,7 +813,7 @@ bool Grp_CheckIfSelectionGrpsIsValid (struct ListCodGrps *LstGrps)
 	NumCodGrp++)
      {
       GrpTypCod = Grp_GetTypeOfGroupOfAGroup (LstGrps->GrpCods[NumCodGrp]);
-      if (!Grp_GetMultipleEnrollmentOfAGroupType (GrpTypCod))
+      if (!Grp_GetMultipleEnrolmentOfAGroupType (GrpTypCod))
          for (NumGrpTyp = 0;
 	      NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	      NumGrpTyp++)
@@ -873,13 +873,13 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
 void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGrps)
   {
    extern const char *Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged;
-   extern const char *Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z;
+   extern const char *Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z;
    struct ListCodGrps LstGrpsHeBelongs;
    unsigned NumGrpTyp;
    unsigned NumGrpSel;
    unsigned NumGrpThisType;
    unsigned NumGrpHeBelongs;
-   bool MultipleEnrollment;
+   bool MultipleEnrolment;
    bool AlreadyRegisteredInGrp;
 
    /***** For each existing type of group in the course... *****/
@@ -887,7 +887,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
 	NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	NumGrpTyp++)
      {
-      MultipleEnrollment = Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment;
+      MultipleEnrolment = Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment;
 
       /***** Query in the database the group codes of any group of this type the student belongs to *****/
       LstGrpsHeBelongs.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
@@ -914,9 +914,9 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
         	    NumGrpHeBelongs++)
                   if (LstGrps->GrpCods[NumGrpSel] == LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs])
                      AlreadyRegisteredInGrp = true;
-                  else if (!MultipleEnrollment)	// If the type of group is of single enrollment
+                  else if (!MultipleEnrolment)	// If the type of group is of single enrolment
                     {
-                     /* If the enrollment is single and the group to which the user belongs is different from the selected ==>
+                     /* If the enrolment is single and the group to which the user belongs is different from the selected ==>
                         remove user from the group to which he belongs */
                      Grp_RemoveUsrFromGroup (UsrDat->UsrCod,LstGrpsHeBelongs.GrpCods[NumGrpHeBelongs]);
                      sprintf (Gbl.Message,Txt_THE_USER_X_has_been_removed_from_the_group_of_type_Y_to_which_it_belonged,
@@ -927,7 +927,7 @@ void Grp_RegisterUsrIntoGroups (struct UsrData *UsrDat,struct ListCodGrps *LstGr
                if (!AlreadyRegisteredInGrp)	// If the user does not belong to the selected group
                  {
                   Grp_AddUsrToGroup (UsrDat,LstGrps->GrpCods[NumGrpSel]);
-                  sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enrolled_in_the_group_of_type_Y_Z,
+                  sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enroled_in_the_group_of_type_Y_Z,
 		           UsrDat->FullName,Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypName,
                            Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].LstGrps[NumGrpThisType].GrpName);
                   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
@@ -1127,17 +1127,17 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMdtGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrollment\""
+      fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
-      if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrollment)
+      if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "<option value=\"Y\"",
                Txt_It_is_optional_to_choose_a_group);
-      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrollment)
+      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MandatoryEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
@@ -1149,17 +1149,17 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
       Act_FormStart (ActChgMulGrpTyp);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<select name=\"MultipleEnrollment\""
+      fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
 	                 " onchange=\"document.getElementById('%s').submit();\">"
                          "<option value=\"N\"",
                Gbl.Form.Id);
-      if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment)
+      if (!Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "<option value=\"Y\"",
                Txt_A_student_can_only_belong_to_one_group);
-      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrollment)
+      if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].MultipleEnrolment)
 	 fprintf (Gbl.F.Out," selected=\"selected\"");
       fprintf (Gbl.F.Out,">%s</option>"
 	                 "</select>",
@@ -1220,8 +1220,8 @@ static void Grp_WriteHeadingGroupTypes (void)
   {
    extern const char *Txt_Type_of_group;
    extern const char *Txt_eg_Lectures_Practicals;
-   extern const char *Txt_Mandatory_enrollment;
-   extern const char *Txt_Multiple_enrollment;
+   extern const char *Txt_Mandatory_enrolment;
+   extern const char *Txt_Multiple_enrolment;
    extern const char *Txt_Opening_of_groups;
    extern const char *Txt_No_of_BR_groups;
 
@@ -1244,8 +1244,8 @@ static void Grp_WriteHeadingGroupTypes (void)
                       "</th>"
                       "</tr>",
             Txt_Type_of_group,Txt_eg_Lectures_Practicals,
-            Txt_Mandatory_enrollment,
-            Txt_Multiple_enrollment,
+            Txt_Mandatory_enrolment,
+            Txt_Multiple_enrolment,
             Txt_Opening_of_groups,
             Txt_No_of_BR_groups);
   }
@@ -1514,7 +1514,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_My_groups;
    extern const char *Txt_Change_my_groups;
-   extern const char *Txt_Enroll_in_groups;
+   extern const char *Txt_Enrol_in_groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
@@ -1530,7 +1530,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** Show warnings to students *****/
-      // Students are required to join groups with mandatory enrollment; teachers don't
+      // Students are required to join groups with mandatory enrolment; teachers don't
       if (ShowWarningsToStudents)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
@@ -1560,7 +1560,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
       if (PutFormToChangeGrps)
 	{
 	 Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-						Txt_Enroll_in_groups);
+						Txt_Enrol_in_groups);
 	 Act_FormEnd ();
 	}
      }
@@ -1623,19 +1623,19 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 	 if (Grp_GetFirstCodGrpStdBelongsTo (GrpTyp->GrpTypCod,Gbl.Usrs.Me.UsrDat.UsrCod) < 0)  // If the student does not belong to any group
 	    if (Grp_GetIfGrpIsAvailable (GrpTyp->GrpTypCod))	// If there is any group of this type available
 	      {
-	       if (GrpTyp->MandatoryEnrollment)
+	       if (GrpTyp->MandatoryEnrolment)
 		 {
 		  sprintf (Gbl.Message,
-			   GrpTyp->MultipleEnrollment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
-							Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
+			   GrpTyp->MultipleEnrolment ? Txt_You_have_to_register_compulsorily_at_least_in_one_group_of_type_X :
+						       Txt_You_have_to_register_compulsorily_in_one_group_of_type_X,
 			   GrpTyp->GrpTypName);
 		  Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 		 }
 	       else
 		 {
 		  sprintf (Gbl.Message,
-			   GrpTyp->MultipleEnrollment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
-							Txt_You_can_register_voluntarily_in_one_group_of_type_X,
+			   GrpTyp->MultipleEnrolment ? Txt_You_can_register_voluntarily_in_one_or_more_groups_of_type_X :
+						       Txt_You_can_register_voluntarily_in_one_group_of_type_X,
 			   GrpTyp->GrpTypName);
 		  Lay_ShowAlert (Lay_INFO,Gbl.Message);
 		 }
@@ -1680,17 +1680,17 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
       fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"");
 
-      // If user is a student and the enrollment is single
+      // If user is a student and the enrolment is single
       // and there are more than a group, put a radio item
       if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
-          !GrpTyp->MultipleEnrollment &&
+          !GrpTyp->MultipleEnrolment &&
           GrpTyp->NumGrps > 1)
 	{
          fprintf (Gbl.F.Out,"radio\" id=\"Grp%ld\" name=\"GrpCod%ld\""
                             " value=\"%ld\"",
                   Grp->GrpCod,GrpTyp->GrpTypCod,
                   Grp->GrpCod);
-         if (!GrpTyp->MandatoryEnrollment)	// If the enrollment is not mandatory, I can select no groups
+         if (!GrpTyp->MandatoryEnrolment)	// If the enrolment is not mandatory, I can select no groups
             fprintf (Gbl.F.Out," onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
                      GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	}
@@ -2091,15 +2091,15 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it mandatory to register in any groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"MandatoryEnrollment\""
+                      "<select name=\"MandatoryEnrolment\""
                       " style=\"width:150px;\">"
                       "<option value=\"N\"");
-   if (!Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment)
+   if (!Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "<option value=\"Y\"",
             Txt_It_is_optional_to_choose_a_group);
-   if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment)
+   if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "</select>"
@@ -2108,15 +2108,15 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Is it possible to register in multiple groups of this type? *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
-                      "<select name=\"MultipleEnrollment\""
+                      "<select name=\"MultipleEnrolment\""
                       " style=\"width:150px;\">"
                       "<option value=\"N\"");
-   if (!Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment)
+   if (!Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "<option value=\"Y\"",
             Txt_A_student_can_only_belong_to_one_group);
-   if (Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment)
+   if (Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>"
 	              "</select>"
@@ -2338,10 +2338,10 @@ void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                    Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
          /* Is it mandatory to register in any groups of this type? (row[2]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrollment = (row[2][0] == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MandatoryEnrolment = (row[2][0] == 'Y');
 
          /* Is it possible to register in multiple groups of this type? (row[3]) */
-         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MultipleEnrollment = (row[3][0] == 'Y');
+         Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MultipleEnrolment = (row[3][0] == 'Y');
 
          /* Groups of this type must be opened? (row[4]) */
          Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumRow].MustBeOpened = (row[4][0] == 'Y');
@@ -2596,9 +2596,9 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
    row = mysql_fetch_row (mysql_res);
    Str_Copy (GrpTyp->GrpTypName,row[0],
              Grp_MAX_BYTES_GROUP_TYPE_NAME);
-   GrpTyp->MandatoryEnrollment = (row[1][0] == 'Y');
-   GrpTyp->MultipleEnrollment  = (row[2][0] == 'Y');
-   GrpTyp->MustBeOpened        = (row[3][0] == 'Y');
+   GrpTyp->MandatoryEnrolment = (row[1][0] == 'Y');
+   GrpTyp->MultipleEnrolment  = (row[2][0] == 'Y');
+   GrpTyp->MustBeOpened       = (row[3][0] == 'Y');
    GrpTyp->OpenTimeUTC = Dat_GetUNIXTimeFromStr (row[4]);
 
    /***** Free structure that stores the query result *****/
@@ -2606,30 +2606,30 @@ static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp)
   }
 
 /*****************************************************************************/
-/************* Check if a group type has multiple enrollment *****************/
+/************* Check if a group type has multiple enrolment *****************/
 /*****************************************************************************/
 
-static bool Grp_GetMultipleEnrollmentOfAGroupType (long GrpTypCod)
+static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod)
   {
    char Query[128];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   bool MultipleEnrollment;
+   bool MultipleEnrolment;
 
    /***** Get data of a type of group from database *****/
    sprintf (Query,"SELECT Multiple FROM crs_grp_types WHERE GrpTypCod=%ld",
             GrpTypCod);
-   if (DB_QuerySELECT (Query,&mysql_res,"can not get if type of group has multiple enrollment") != 1)
+   if (DB_QuerySELECT (Query,&mysql_res,"can not get if type of group has multiple enrolment") != 1)
       Lay_ShowErrorAndExit ("Error when getting type of group.");
 
-   /***** Get multiple enrollment *****/
+   /***** Get multiple enrolment *****/
    row = mysql_fetch_row (mysql_res);
-   MultipleEnrollment = (row[0][0] == 'Y');
+   MultipleEnrolment = (row[0][0] == 'Y');
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return MultipleEnrollment;
+   return MultipleEnrolment;
   }
 
 /*****************************************************************************/
@@ -2650,9 +2650,9 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
    GrpDat->GrpName[0]    = '\0';
    GrpDat->MaxStudents = 0;
    GrpDat->Vacant      = 0;
-   GrpDat->Open               = false;
-   GrpDat->FileZones          = false;
-   GrpDat->MultipleEnrollment = false;
+   GrpDat->Open              = false;
+   GrpDat->FileZones         = false;
+   GrpDat->MultipleEnrolment = false;
 
    if (GrpDat->GrpCod > 0)
      {
@@ -2685,7 +2685,7 @@ void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat)
 	           Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
 	 /* Get whether a student may be in one or multiple groups (row[3]) */
-	 GrpDat->MultipleEnrollment = (row[3][0] == 'Y');
+	 GrpDat->MultipleEnrolment = (row[3][0] == 'Y');
 
 	 /* Get the name of the group (row[4]) */
 	 Str_Copy (GrpDat->GrpName,row[4],
@@ -2876,7 +2876,7 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
   }
 
 /*****************************************************************************/
-/**** Get the number of types of group with mandatory enrollment         *****/
+/**** Get the number of types of group with mandatory enrolment          *****/
 /**** that have any group open and with any vacant                       *****/
 /**** and I don't belong to any of these groups as student               *****/
 /*****************************************************************************/
@@ -2886,7 +2886,7 @@ unsigned Grp_NumGrpTypesMandatIDontBelong (void)
    char Query[4096];
    unsigned NumGrpTypes;
 
-   /***** Get the number of types of groups with mandatory enrollment which I don't belong to, from database *****/
+   /***** Get the number of types of groups with mandatory enrolment which I don't belong to, from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT GrpTypCod) FROM"
                   " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
                   "COUNT(*) AS NumStudents,"
@@ -3132,10 +3132,10 @@ void Grp_RecFormNewGrpTyp (void)
                      Grp_MAX_BYTES_GROUP_TYPE_NAME);
 
    /* Get whether it is mandatory to regisrer in any group of this type */
-   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = Par_GetParToBool ("MandatoryEnrollment");
+   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
 
    /* Get whether it is possible to register in multiple groups of this type */
-   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = Par_GetParToBool ("MultipleEnrollment");
+   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
 
    /* Get open time */
    Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC = Dat_GetTimeUTCFromForm ("OpenTimeUTC");
@@ -3271,10 +3271,10 @@ static void Grp_CreateGroupType (void)
                   " VALUES"
                   " (%ld,'%s','%c','%c','%c',FROM_UNIXTIME(%ld))",
             Gbl.CurrentCrs.Crs.CrsCod,Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
-            Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment ? 'Y' :
-        	                                             'N',
-            Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment ? 'Y' :
+            Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment ? 'Y' :
         	                                            'N',
+            Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment ? 'Y' :
+        	                                           'N',
             Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened ? 'Y' :
         	                                      'N',
             (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
@@ -3735,104 +3735,104 @@ void Grp_ChangeGroupType (void)
 
 void Grp_ChangeMandatGrpTyp (void)
   {
-   extern const char *Txt_The_type_of_enrollment_of_the_type_of_group_X_has_not_changed;
-   extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory;
-   extern const char *Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary;
+   extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
+   extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory;
+   extern const char *Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary;
    char Query[1024];
-   bool NewMandatoryEnrollment;
+   bool NewMandatoryEnrolment;
 
    /***** Get parameters of the form *****/
    /* Get the código of type of group */
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
-   /* Get the new type of enrollment (mandatory or voluntaria) of this type of group */
-   NewMandatoryEnrollment = Par_GetParToBool ("MandatoryEnrollment");
+   /* Get the new type of enrolment (mandatory or voluntaria) of this type of group */
+   NewMandatoryEnrolment = Par_GetParToBool ("MandatoryEnrolment");
 
-   /* Get from the database the name of the type and the old type of enrollment */
+   /* Get from the database the name of the type and the old type of enrolment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
 
-   /***** Check if the old type of enrollment match the new
+   /***** Check if the old type of enrolment match the new
           (this happens when return is pressed without changes in the form) *****/
-   if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment == NewMandatoryEnrollment)
+   if (Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment == NewMandatoryEnrolment)
      {
-      sprintf (Gbl.Message,Txt_The_type_of_enrollment_of_the_type_of_group_X_has_not_changed,
+      sprintf (Gbl.Message,Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
    else
      {
-      /***** Update of the table of types of group changing the old type of enrollment by the new *****/
+      /***** Update of the table of types of group changing the old type of enrolment by the new *****/
       sprintf (Query,"UPDATE crs_grp_types SET Mandatory='%c' WHERE GrpTypCod=%ld",
-               NewMandatoryEnrollment ? 'Y' :
+               NewMandatoryEnrolment ? 'Y' :
         	                        'N',
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-      DB_QueryUPDATE (Query,"can not update enrollment type of a type of group");
+      DB_QueryUPDATE (Query,"can not update enrolment type of a type of group");
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,
-               NewMandatoryEnrollment ? Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_mandatory :
-                                        Txt_The_enrollment_of_students_into_groups_of_type_X_is_now_voluntary,
+               NewMandatoryEnrolment ? Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_mandatory :
+                                       Txt_The_enrolment_of_students_into_groups_of_type_X_is_now_voluntary,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
    /***** Show the form again *****/
-   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrollment = NewMandatoryEnrollment;
+   Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment = NewMandatoryEnrolment;
    Grp_ReqEditGroups ();
   }
 
 /*****************************************************************************/
-/******** Change multiple enrollment to one or more groups of a type *********/
+/******** Change multiple enrolment to one or more groups of a type *********/
 /*****************************************************************************/
 
 void Grp_ChangeMultiGrpTyp (void)
   {
-   extern const char *Txt_The_type_of_enrollment_of_the_type_of_group_X_has_not_changed;
+   extern const char *Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed;
    extern const char *Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X;
    extern const char *Txt_Now_each_student_can_only_belong_to_a_group_of_type_X;
    char Query[1024];
-   bool NewMultipleEnrollment;
+   bool NewMultipleEnrolment;
 
    /***** Get parameters from the form *****/
    /* Get the code of type of group */
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) < 0)
       Lay_ShowErrorAndExit ("Code of type of group is missing.");
 
-   /* Get the new type of enrollment (single or multiple) of this type of group */
-   NewMultipleEnrollment = Par_GetParToBool ("MultipleEnrollment");
+   /* Get the new type of enrolment (single or multiple) of this type of group */
+   NewMultipleEnrolment = Par_GetParToBool ("MultipleEnrolment");
 
-   /* Get from the database the name of the type and the old type of enrollment */
+   /* Get from the database the name of the type and the old type of enrolment */
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
 
-   /***** Check if the old type of enrollment match the new one
+   /***** Check if the old type of enrolment match the new one
    	  (this happends when return is pressed without changes) *****/
-   if (Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment == NewMultipleEnrollment)
+   if (Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment == NewMultipleEnrolment)
      {
-      sprintf (Gbl.Message,Txt_The_type_of_enrollment_of_the_type_of_group_X_has_not_changed,
+      sprintf (Gbl.Message,Txt_The_type_of_enrolment_of_the_type_of_group_X_has_not_changed,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
       Lay_ShowAlert (Lay_INFO,Gbl.Message);
      }
    else
      {
-      /***** Update of the table of types of group changing the old type of enrollment by the new *****/
+      /***** Update of the table of types of group changing the old type of enrolment by the new *****/
       sprintf (Query,"UPDATE crs_grp_types SET Multiple='%c'"
 	             " WHERE GrpTypCod=%ld",
-               NewMultipleEnrollment ? 'Y' :
-        	                       'N',
+               NewMultipleEnrolment ? 'Y' :
+        	                      'N',
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-      DB_QueryUPDATE (Query,"can not update enrollment type of a type of group");
+      DB_QueryUPDATE (Query,"can not update enrolment type of a type of group");
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Message,
-               NewMultipleEnrollment ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
-                                       Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
+               NewMultipleEnrolment ? Txt_Now_each_student_can_belong_to_multiple_groups_of_type_X :
+                                      Txt_Now_each_student_can_only_belong_to_a_group_of_type_X,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
    /***** Show the form again *****/
-   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrollment = NewMultipleEnrollment;
+   Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment = NewMultipleEnrolment;
    Grp_ReqEditGroups ();
   }
 
@@ -3857,7 +3857,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    Gbl.CurrentCrs.Grps.GrpTyp.MustBeOpened = Grp_CheckIfOpenTimeInTheFuture (Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC);
 
    /***** Update the table of types of group
-          changing the old open time of enrollment by the new *****/
+          changing the old open time of enrolment by the new *****/
    sprintf (Query,"UPDATE crs_grp_types"
 	          " SET MustBeOpened='%c',OpenTime=FROM_UNIXTIME(%ld)"
                   " WHERE GrpTypCod=%ld",
@@ -3865,7 +3865,7 @@ void Grp_ChangeOpenTimeGrpTyp (void)
         	                                      'N',
             (long) Gbl.CurrentCrs.Grps.GrpTyp.OpenTimeUTC,
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   DB_QueryUPDATE (Query,"can not update enrollment type of a type of group");
+   DB_QueryUPDATE (Query,"can not update enrolment type of a type of group");
 
    /***** Write message to show the change made *****/
    Lay_ShowAlert (Lay_SUCCESS,Txt_The_date_time_of_opening_of_groups_has_changed);
@@ -4156,7 +4156,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
 
    /***** Allocate memory for the strings with group codes in each type *****/
    if ((LstStrCodGrps = (char **) calloc (Gbl.CurrentCrs.Grps.GrpTypes.Num,sizeof (char *))) == NULL)
-      Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enrolled.");
+      Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enroled.");
 
    /***** Get lists with the groups that I want in each type
           in order to count the total number of groups selected *****/
@@ -4167,7 +4167,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
       /***** Allocate memory for the list of group codes of this type *****/
       if ((LstStrCodGrps[NumGrpTyp] = (char *) malloc ((size_t) ((1 + 10 + 1) *
                                                                  Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps))) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enrolled.");
+         Lay_ShowErrorAndExit ("Not enough memory to store codes of groups in which a user wants to be enroled.");
 
       /***** Get the multiple parameter code of group of this type *****/
       sprintf (Param,"GrpCod%ld",Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
@@ -4191,7 +4191,7 @@ void Grp_GetLstCodsGrpWanted (struct ListCodGrps *LstGrpsWanted)
    if (LstGrpsWanted->NumGrps)
      {
       if ((LstGrpsWanted->GrpCods = (long *) calloc (LstGrpsWanted->NumGrps,sizeof (long))) == NULL)
-         Lay_ShowErrorAndExit ("Not enoguh memory to store codes of groups in which a user wants to be enrolled.");
+         Lay_ShowErrorAndExit ("Not enoguh memory to store codes of groups in which a user wants to be enroled.");
 
       /***** Get the groups *****/
       for (NumGrpTyp = 0, NumGrpWanted = 0;

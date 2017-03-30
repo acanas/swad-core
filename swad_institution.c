@@ -261,7 +261,7 @@ void Ins_ShowConfiguration (void)
   {
    Ins_Configuration (false);
 
-   /***** Show help to enroll me *****/
+   /***** Show help to enrol me *****/
    Hlp_ShowHelpWhatWouldYouLikeToDo ();
   }
 

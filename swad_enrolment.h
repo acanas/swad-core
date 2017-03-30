@@ -1,4 +1,4 @@
-// swad_enrollment.h: enrollment (registration) or removing of users
+// swad_enrolment.h: enrolment (registration) or removing of users
 
 #ifndef _SWAD_ENR
 #define _SWAD_ENR
@@ -70,8 +70,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrollStudents (void);
-void Enr_PutButtonToEnrollOneTeacher (void);
+void Enr_PutButtonToEnrolStudents (void);
+void Enr_PutButtonToEnrolOneTeacher (void);
 
 void Enr_PutLinkToRequestSignUp (void);
 
@@ -82,8 +82,8 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
 void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction);
 
 void Enr_ReqAcceptRegisterInCrs (void);
-void Enr_GetNotifEnrollment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                             long CrsCod,long UsrCod);
+void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                            long CrsCod,long UsrCod);
 void Enr_UpdateUsrData (struct UsrData *UsrDat);
 void Enr_FilterUsrDat (struct UsrData *UsrDat);
 void Enr_UpdateInstitutionCentreDepartment (void);
@@ -106,13 +106,13 @@ void Enr_RemAllStdsThisCrs (void);
 unsigned Enr_RemAllStdsInCrs (struct Course *Crs);
 void Enr_ReqSignUpInCrs (void);
 void Enr_SignUpInCrs (void);
-void Enr_GetNotifEnrollmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
-                                    char **ContentStr,
-                                    long ReqCod,bool GetContent);
+void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
+                                   char **ContentStr,
+                                   long ReqCod,bool GetContent);
 void Enr_AskIfRejectSignUp (void);
 void Enr_RejectSignUp (void);
-void Enr_ShowEnrollmentRequests (void);
-void Enr_UpdateEnrollmentRequests (void);
+void Enr_ShowEnrolmentRequests (void);
+void Enr_UpdateEnrolmentRequests (void);
 
 void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction);
 

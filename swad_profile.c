@@ -308,7 +308,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	 /* Get user's role in current course */
 	 UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
-	 /* Get if user has accepted enrollment in current course */
+	 /* Get if user has accepted enrolment in current course */
 	 UsrDat->Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
 	                                                Gbl.CurrentCrs.Crs.CrsCod,
 	                                                true);
