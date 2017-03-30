@@ -1601,6 +1601,27 @@ const char *Hlp_USERS_SignUp =
 	"USERS.SignUp";
 #endif
 
+const char *Hlp_USERS_SignUp_confirm_enrolment =
+#if   L==1
+	"USERS.SignUp#confirm_enrolment";
+#elif L==2
+	"USERS.SignUp#confirm_enrolment";
+#elif L==3
+	"USERS.SignUp#confirm_enrolment";
+#elif L==4
+	"USERS.SignUp.es#confirmar-inscripci%C3%B3n";
+#elif L==5
+	"USERS.SignUp#confirm_enrolment";
+#elif L==6
+	"USERS.SignUp#confirm_enrolment";
+#elif L==7
+	"USERS.SignUp#confirm_enrolment";
+#elif L==8
+	"USERS.SignUp#confirm_enrolment";
+#elif L==9
+	"USERS.SignUp#confirm_enrolment";
+#endif
+
 const char *Hlp_USERS_Requests =
 #if   L==1
 	"USERS.Requests";
@@ -1708,25 +1729,25 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 	"SOCIAL.Profiles#view-public-profile";
 #endif
 
-const char *Hlp_SOCIAL_Follow =
+const char *Hlp_SOCIAL_Profiles_who_to_follow =
 #if   L==1
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==2
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==3
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==4
-	"SOCIAL.Follow.es";
+	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
 #elif L==5
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==6
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==7
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==8
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #elif L==9
-	"SOCIAL.Follow";
+	"SOCIAL.Profiles#who-to-follow";
 #endif
 
 const char *Hlp_SOCIAL_Forums =

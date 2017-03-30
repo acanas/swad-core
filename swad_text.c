@@ -1521,7 +1521,7 @@ const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_
 #elif L==3
 	"A teacher or an administrator has enroled you"
 	" as a <strong>%s</strong>"
-	"into the course <strong>%s</strong>."
+	" into the course <strong>%s</strong>."
 	" Do you want to confirm the enrolment"
 	" or do you prefer to be removed from the course?";
 #elif L==4

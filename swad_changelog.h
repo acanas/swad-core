@@ -206,20 +206,20 @@
 // TODO: Include type of degree in form of degree configuration
 
 // TODO: Cuando un admin. pulsa en "Inscribir profesor/a" y el usuario es invitado, debería salir en el rol por defecto "profesor" y no "estudiante"
-
-// TODO: Poner interrogación de ayuda en "USUARIOS > Inscripción" (cuando se pide confirmación para aceptar o rechazar)
+// TODO: Tras inscribir a un profesor en una asignatura, nos vamos a otra pestaña, luego regresamos a USUARIOS y la opción por defecto es Otros, cuando debería ser Profesores.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.172 (2017-03-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.172.1 (2017-03-30)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.172.1: Mar 30, 2017	Some help URLs translated to spanish. (217554 lines)
         Version 16.172:   Mar 30, 2017	Some help URLs translated to spanish.
 					Changed "enroll" and "enrollment" to "enrol" and "enrolment", except in web service API. (217531 lines)
         Version 16.171.15:Mar 30, 2017	Some help URLs translated to spanish. (217528 lines)

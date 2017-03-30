@@ -347,6 +347,7 @@ void Enr_WriteFormToReqAnotherUsrID (Act_Action_t NextAction)
 
 void Enr_ReqAcceptRegisterInCrs (void)
   {
+   extern const char *Hlp_USERS_SignUp_confirm_enrolment;
    extern const char *Txt_Enrolment;
    extern const char *Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y;
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
@@ -354,7 +355,8 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_Remove_me_from_this_course;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,
+                        Hlp_USERS_SignUp_confirm_enrolment);
 
    /***** Show message *****/
    sprintf (Gbl.Message,Txt_A_teacher_or_administrator_has_enroled_you_as_X_into_the_course_Y,

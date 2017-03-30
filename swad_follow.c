@@ -108,7 +108,7 @@ void Fol_PutLinkWhoToFollow (void)
 
 void Fol_SuggestUsrsToFollowMainZone (void)
   {
-   extern const char *Hlp_SOCIAL_Follow;
+   extern const char *Hlp_SOCIAL_Profiles_who_to_follow;
    extern const char *Txt_Who_to_follow;
    extern const char *Txt_No_user_to_whom_you_can_follow_Try_again_later;
    MYSQL_RES *mysql_res;
@@ -131,7 +131,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       /***** Start frame *****/
       Lay_StartRoundFrameTable ("560px",Txt_Who_to_follow,
                                 Fol_PutIconsWhoToFollow,
-                                Hlp_SOCIAL_Follow,2);
+                                Hlp_SOCIAL_Profiles_who_to_follow,2);
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrDat);
