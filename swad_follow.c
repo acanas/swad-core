@@ -1064,7 +1064,7 @@ void Fol_UnfollowUsr1 (void)
       if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
                                     Gbl.Usrs.Other.UsrDat.UsrCod))
 	{
-	 /***** Follow user in database *****/
+	 /***** Unfollow user in database *****/
 	 sprintf (Query,"DELETE FROM usr_follow"
 	                " WHERE FollowerCod=%ld AND FollowedCod=%ld",
 		  Gbl.Usrs.Me.UsrDat.UsrCod,

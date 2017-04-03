@@ -71,10 +71,6 @@ extern struct Globals Gbl;
 /***************************** Private prototypes ****************************/
 /*****************************************************************************/
 
-static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname);
-
-static void Prf_ShowUserProfileAndTimeline (void);
-
 static void Prf_PutLinkToUpdateAction (Act_Action_t Action,const char *EncryptedUsrCod);
 
 static unsigned long Prf_GetRankingFigure (long UsrCod,const char *FieldName);
@@ -160,6 +156,12 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
 
 void Prf_RequestUserProfile (void)
   {
+   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
+   extern const char *Txt_Another_user_s_profile;
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Nickname;
+   extern const char *Txt_Continue;
+
    if (Gbl.Usrs.Me.Logged)
      {
       /***** Put link to show my public profile and users to follow *****/
@@ -169,23 +171,6 @@ void Prf_RequestUserProfile (void)
       fprintf (Gbl.F.Out,"</div>");
      }
 
-   /* By default, the nickname is filled with my nickname
-      If no user logged ==> the nickname is empty */
-   Prf_RequestUserProfileWithDefaultNickname (Gbl.Usrs.Me.UsrDat.Nickname);
-  }
-
-/*****************************************************************************/
-/*************** Request a user's profile with nickname filled ***************/
-/*****************************************************************************/
-
-static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickname)
-  {
-   extern const char *Hlp_SOCIAL_Profiles_view_public_profile;
-   extern const char *Txt_Another_user_s_profile;
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Nickname;
-   extern const char *Txt_Continue;
-
    /***** Start form *****/
    Act_FormStart (ActSeeOthPubPrf);
 
@@ -193,6 +178,8 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
    Lay_StartRoundFrame (NULL,Txt_Another_user_s_profile,NULL,Hlp_SOCIAL_Profiles_view_public_profile);
 
    /***** Form to request user's @nickname *****/
+   /* By default, the nickname is filled with my nickname
+      If no user logged ==> the nickname is empty */
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"text\" name=\"usr\""
@@ -201,7 +188,7 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Nickname,
             Nck_MAX_BYTES_NICKNAME_FROM_FORM,
-            DefaultNickname);
+            Gbl.Usrs.Me.UsrDat.Nickname);
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Continue);
@@ -217,6 +204,9 @@ static void Prf_RequestUserProfileWithDefaultNickname (const char *DefaultNickna
 
 void Prf_GetUsrDatAndShowUserProfile (void)
   {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   bool ProfileShown = false;
+
    /***** Get user's data *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod <= 0)
       Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -224,7 +214,28 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    /***** Show profile and timeline *****/
    if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
       /* Show profile */
-      Prf_ShowUserProfileAndTimeline ();
+      if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
+	{
+	 ProfileShown = true;
+
+	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
+	   {
+	    /* Show timeline */
+	    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   	    Soc_ShowTimelineUsr ();
+	    fprintf (Gbl.F.Out,"</section>");
+	   }
+	}
+
+   /***** If profile could not be shown... *****/
+   if (!ProfileShown)
+     {
+      /* Show error message */
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+
+      /* Request a user's profile */
+      Prf_RequestUserProfile ();
+     }
 
    /***** If it's not me, mark possible notification as seen *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)	// Not me
@@ -232,40 +243,6 @@ void Prf_GetUsrDatAndShowUserProfile (void)
                            Gbl.Usrs.Other.UsrDat.UsrCod,-1L,
 			   Gbl.Usrs.Me.UsrDat.UsrCod);
   }
-
-/*****************************************************************************/
-/************* Show a user's profile followed by his/her timeline ************/
-/*****************************************************************************/
-
-static void Prf_ShowUserProfileAndTimeline (void)
-  {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
-   /***** Show profile *****/
-   if (Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
-     {
-      if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
-	{
-	 /***** Show timeline *****/
-	 /* Start section */
-	 fprintf (Gbl.F.Out,"<section id=\"timeline\">");
-
-	 /* Show public social activity (timeline) of this user */
-	 Soc_ShowTimelineUsr ();
-
-	 /* End section */
-	 fprintf (Gbl.F.Out,"</section>");
-	}
-     }
-   else
-     {
-      /* Show error message */
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-
-      /* Request nickname */
-      Prf_RequestUserProfileWithDefaultNickname ("");
-     }
-   }
 
 /*****************************************************************************/
 /*************************** Show a user's profile ***************************/
@@ -281,27 +258,28 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
    bool ItsMe = (Gbl.Usrs.Me.Logged &&
 	         UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Contextual links *****/
-   if (Gbl.Usrs.Me.Logged)
-     {
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
-      if (ItsMe)	// It's me
-	 /* Put link to show another user's profile */
-         Prf_PutLinkRequestAnotherUserProfile ();
-      else		// Not me
-	 /* Put link to show my public profile */
-	 Prf_PutLinkMyPublicProfile ();
-
-      /* Put link to show users to follow */
-      Fol_PutLinkWhoToFollow ();
-
-      fprintf (Gbl.F.Out,"</div>");
-     }
-
    /***** Check if I can see the public profile *****/
    if (Pri_ShowingIsAllowed (UsrDat->ProfileVisibility,UsrDat))
      {
+      /***** Contextual links *****/
+      if (Gbl.Usrs.Me.Logged)
+	{
+	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+	 if (ItsMe)	// It's me
+	    /* Put link to show another user's profile */
+	    Prf_PutLinkRequestAnotherUserProfile ();
+	 else		// Not me
+	    /* Put link to show my public profile */
+	    Prf_PutLinkMyPublicProfile ();
+
+	 /* Put link to show users to follow */
+	 Fol_PutLinkWhoToFollow ();
+
+	 fprintf (Gbl.F.Out,"</div>");
+	}
+
+      /***** Shared record card *****/
       if (!ItsMe &&				// If not it's me...
 	  Gbl.CurrentCrs.Crs.CrsCod > 0)	// ...and a course is selected
 	{
@@ -313,8 +291,6 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	                                                Gbl.CurrentCrs.Crs.CrsCod,
 	                                                true);
 	}
-
-      /***** Common record *****/
       Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat);
 
       /***** Show details of user's profile *****/

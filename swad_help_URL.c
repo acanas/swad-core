@@ -1781,7 +1781,7 @@ const char *Hlp_MESSAGES_Notifications =
 #elif L==3
 	"MESSAGES.Notifications";
 #elif L==4
-	"MESSAGES.Notifications";
+	"MESSAGES.Notifications.es";
 #elif L==5
 	"MESSAGES.Notifications";
 #elif L==6
@@ -1802,7 +1802,7 @@ const char *Hlp_MESSAGES_Domains =
 #elif L==3
 	"MESSAGES.Domains";
 #elif L==4
-	"MESSAGES.Domains";
+	"MESSAGES.Domains.es";
 #elif L==5
 	"MESSAGES.Domains";
 #elif L==6
@@ -1823,7 +1823,7 @@ const char *Hlp_MESSAGES_Domains_edit =
 #elif L==3
 	"MESSAGES.Domains#edit";
 #elif L==4
-	"MESSAGES.Domains#edit";
+	"MESSAGES.Domains.es#editar";
 #elif L==5
 	"MESSAGES.Domains#edit";
 #elif L==6
@@ -1844,7 +1844,7 @@ const char *Hlp_MESSAGES_Announcements =
 #elif L==3
 	"MESSAGES.Announcements";
 #elif L==4
-	"MESSAGES.Announcements";
+	"MESSAGES.Announcements.es";
 #elif L==5
 	"MESSAGES.Announcements";
 #elif L==6
@@ -1865,7 +1865,7 @@ const char *Hlp_MESSAGES_Notices =
 #elif L==3
 	"MESSAGES.Notices";
 #elif L==4
-	"MESSAGES.Notices";
+	"MESSAGES.Notices.es";
 #elif L==5
 	"MESSAGES.Notices";
 #elif L==6
@@ -1991,7 +1991,7 @@ const char *Hlp_MESSAGES_Email =
 #elif L==3
 	"MESSAGES.Email";
 #elif L==4
-	"MESSAGES.Email";
+	"MESSAGES.Email.es";
 #elif L==5
 	"MESSAGES.Email";
 #elif L==6

@@ -212,13 +212,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.172.3 (2017-03-31)"
+#define Log_PLATFORM_VERSION	"SWAD 16.173 (2017-04-02)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.173:   Apr 03, 2017	Some help URLs translated to spanish.
+					Fixed bugs and code refactoring in public profiles. (217541 lines)
         Version 16.172.3: Mar 31, 2017	Some help URLs translated to spanish. (217556 lines)
         Version 16.172.2: Mar 30, 2017	Some help URLs translated to spanish. (217555 lines)
         Version 16.172.1: Mar 30, 2017	Some help URLs translated to spanish. (217554 lines)
