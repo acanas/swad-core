@@ -1082,7 +1082,7 @@ const char *Hlp_FILES_Documents =
 #elif L==3
 	"FILES.Documents";
 #elif L==4
-	"FILES.Documents";
+	"FILES.Documents.es";
 #elif L==5
 	"FILES.Documents";
 #elif L==6
@@ -1103,7 +1103,7 @@ const char *Hlp_FILES_Private =
 #elif L==3
 	"FILES.Private";
 #elif L==4
-	"FILES.Private";
+	"FILES.Private.es";
 #elif L==5
 	"FILES.Private";
 #elif L==6
@@ -1124,7 +1124,7 @@ const char *Hlp_FILES_Shared =
 #elif L==3
 	"FILES.Shared";
 #elif L==4
-	"FILES.Shared";
+	"FILES.Shared.es";
 #elif L==5
 	"FILES.Shared";
 #elif L==6
@@ -1145,7 +1145,7 @@ const char *Hlp_FILES_Homework_for_students =
 #elif L==3
 	"FILES.Homework#for-students";
 #elif L==4
-	"FILES.Homework#for-students";
+	"FILES.Homework.es#para-estudiantes";
 #elif L==5
 	"FILES.Homework#for-students";
 #elif L==6
@@ -1166,7 +1166,7 @@ const char *Hlp_FILES_Homework_for_teachers =
 #elif L==3
 	"FILES.Homework#for-teachers";
 #elif L==4
-	"FILES.Homework#for-teachers";
+	"FILES.Homework.es#para-profesores";
 #elif L==5
 	"FILES.Homework#for-teachers";
 #elif L==6
@@ -1187,7 +1187,7 @@ const char *Hlp_FILES_Marks =
 #elif L==3
 	"FILES.Marks";
 #elif L==4
-	"FILES.Marks";
+	"FILES.Marks.es";
 #elif L==5
 	"FILES.Marks";
 #elif L==6

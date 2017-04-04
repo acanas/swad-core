@@ -208,17 +208,20 @@
 // TODO: Cuando un admin. pulsa en "Inscribir profesor/a" y el usuario es invitado, debería salir en el rol por defecto "profesor" y no "estudiante"
 // TODO: Tras inscribir a un profesor en una asignatura, nos vamos a otra pestaña, luego regresamos a USUARIOS y la opción por defecto es Otros, cuando debería ser Profesores.
 
+// TODO: Comprobar que, para detectar el número de filas de cabecera y pie automáticamente en los archivos de calificaciones, SWAD mira no sólo que parezcan un ID, sino que coincida con alguno de los DNI de la asignatura (por ejemplo en el caso de los DNI alemanes formados por varias letras)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.173.1 (2017-04-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.173.2 (2017-04-04)"
 #define CSS_FILE		"swad16.166.css"
 #define JS_FILE			"swad16.144.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.173.2: Apr 04, 2017	Some help URLs translated to spanish. (217544 lines)
         Version 16.173.1: Apr 04, 2017	Some help URLs translated to spanish. (217542 lines)
         Version 16.173:   Apr 03, 2017	Some help URLs translated to spanish.
 					Fixed bugs and code refactoring in public profiles. (217541 lines)
