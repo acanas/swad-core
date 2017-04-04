@@ -274,7 +274,7 @@ const char *Hlp_INSTITUTION_Information =
 #elif L==3
 	"INSTITUTION.Information";
 #elif L==4
-	"INSTITUTION.Information";
+	"INSTITUTION.Information.es";
 #elif L==5
 	"INSTITUTION.Information";
 #elif L==6
@@ -295,7 +295,7 @@ const char *Hlp_INSTITUTION_Centres =
 #elif L==3
 	"INSTITUTION.Centres";
 #elif L==4
-	"INSTITUTION.Centres";
+	"INSTITUTION.Centres.es";
 #elif L==5
 	"INSTITUTION.Centres";
 #elif L==6
@@ -316,7 +316,7 @@ const char *Hlp_INSTITUTION_Departments =
 #elif L==3
 	"INSTITUTION.Departments";
 #elif L==4
-	"INSTITUTION.Departments";
+	"INSTITUTION.Departments.es";
 #elif L==5
 	"INSTITUTION.Departments";
 #elif L==6
@@ -337,7 +337,7 @@ const char *Hlp_INSTITUTION_Departments_edit =
 #elif L==3
 	"INSTITUTION.Departments#edit";
 #elif L==4
-	"INSTITUTION.Departments#edit";
+	"INSTITUTION.Departments.es#editar";
 #elif L==5
 	"INSTITUTION.Departments#edit";
 #elif L==6
@@ -358,7 +358,7 @@ const char *Hlp_INSTITUTION_Places =
 #elif L==3
 	"INSTITUTION.Places";
 #elif L==4
-	"INSTITUTION.Places";
+	"INSTITUTION.Places.es";
 #elif L==5
 	"INSTITUTION.Places";
 #elif L==6
@@ -379,7 +379,7 @@ const char *Hlp_INSTITUTION_Places_edit =
 #elif L==3
 	"INSTITUTION.Places#edit";
 #elif L==4
-	"INSTITUTION.Places#edit";
+	"INSTITUTION.Places.es#editar";
 #elif L==5
 	"INSTITUTION.Places#edit";
 #elif L==6
@@ -400,7 +400,7 @@ const char *Hlp_INSTITUTION_Holidays =
 #elif L==3
 	"INSTITUTION.Holidays";
 #elif L==4
-	"INSTITUTION.Holidays";
+	"INSTITUTION.Holidays.es";
 #elif L==5
 	"INSTITUTION.Holidays";
 #elif L==6
@@ -421,7 +421,7 @@ const char *Hlp_INSTITUTION_Holidays_edit =
 #elif L==3
 	"INSTITUTION.Holidays#edit";
 #elif L==4
-	"INSTITUTION.Holidays#edit";
+	"INSTITUTION.Holidays.es#editar";
 #elif L==5
 	"INSTITUTION.Holidays#edit";
 #elif L==6
