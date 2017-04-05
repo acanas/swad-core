@@ -58,7 +58,7 @@ const char *Hlp_Calendar =
 #elif L==3
 	"Calendar";
 #elif L==4
-	"Calendar";
+	"Calendar.es";
 #elif L==5
 	"Calendar";
 #elif L==6
@@ -230,7 +230,7 @@ const char *Hlp_COUNTRY_Information =
 #elif L==3
 	"COUNTRY.Information";
 #elif L==4
-	"COUNTRY.Information";
+	"COUNTRY.Information.es";
 #elif L==5
 	"COUNTRY.Information";
 #elif L==6
@@ -251,7 +251,7 @@ const char *Hlp_COUNTRY_Institutions =
 #elif L==3
 	"COUNTRY.Institutions";
 #elif L==4
-	"COUNTRY.Institutions";
+	"COUNTRY.Institutions.es";
 #elif L==5
 	"COUNTRY.Institutions";
 #elif L==6
@@ -444,7 +444,7 @@ const char *Hlp_CENTRE_Information =
 #elif L==3
 	"CENTRE.Information";
 #elif L==4
-	"CENTRE.Information";
+	"CENTRE.Information.es";
 #elif L==5
 	"CENTRE.Information";
 #elif L==6
@@ -465,7 +465,7 @@ const char *Hlp_CENTRE_DegreeTypes =
 #elif L==3
 	"CENTRE.DegreeTypes";
 #elif L==4
-	"CENTRE.DegreeTypes";
+	"CENTRE.DegreeTypes.es";
 #elif L==5
 	"CENTRE.DegreeTypes";
 #elif L==6
@@ -486,7 +486,7 @@ const char *Hlp_CENTRE_DegreeTypes_edit =
 #elif L==3
 	"CENTRE.DegreeTypes#edit";
 #elif L==4
-	"CENTRE.DegreeTypes#edit";
+	"CENTRE.DegreeTypes.es#editar";
 #elif L==5
 	"CENTRE.DegreeTypes#edit";
 #elif L==6
@@ -530,7 +530,7 @@ const char *Hlp_DEGREE_Information =
 #elif L==3
 	"DEGREE.Information";
 #elif L==4
-	"DEGREE.Information";
+	"DEGREE.Information.es";
 #elif L==5
 	"DEGREE.Information";
 #elif L==6
@@ -551,7 +551,7 @@ const char *Hlp_DEGREE_Courses =
 #elif L==3
 	"DEGREE.Courses";
 #elif L==4
-	"DEGREE.Courses";
+	"DEGREE.Courses.es";
 #elif L==5
 	"DEGREE.Courses";
 #elif L==6
@@ -574,7 +574,7 @@ const char *Hlp_COURSE_Information =
 #elif L==3
 	"COURSE.Information";
 #elif L==4
-	"COURSE.Information";
+	"COURSE.Information.es";
 #elif L==5
 	"COURSE.Information";
 #elif L==6
@@ -595,7 +595,7 @@ const char *Hlp_COURSE_Information_textual_information =
 #elif L==3
 	"COURSE.Information#textual-information";
 #elif L==4
-	"COURSE.Information#textual-information";
+	"COURSE.Information.es##informaci%C3%B3n-textual";
 #elif L==5
 	"COURSE.Information#textual-information";
 #elif L==6
@@ -616,7 +616,7 @@ const char *Hlp_COURSE_Information_edit =
 #elif L==3
 	"COURSE.Information#edit";
 #elif L==4
-	"COURSE.Information#edit";
+	"COURSE.Information.es#editar";
 #elif L==5
 	"COURSE.Information#edit";
 #elif L==6
@@ -637,7 +637,7 @@ const char *Hlp_COURSE_Guide =
 #elif L==3
 	"COURSE.Guide";
 #elif L==4
-	"COURSE.Guide";
+	"COURSE.Guide.es";
 #elif L==5
 	"COURSE.Guide";
 #elif L==6
@@ -658,7 +658,7 @@ const char *Hlp_COURSE_Guide_edit =
 #elif L==3
 	"COURSE.Guide#edit";
 #elif L==4
-	"COURSE.Guide#edit";
+	"COURSE.Guide.es#editar";
 #elif L==5
 	"COURSE.Guide#edit";
 #elif L==6
@@ -679,7 +679,7 @@ const char *Hlp_COURSE_Syllabus =
 #elif L==3
 	"COURSE.Syllabus";
 #elif L==4
-	"COURSE.Syllabus";
+	"COURSE.Syllabus.es";
 #elif L==5
 	"COURSE.Syllabus";
 #elif L==6
@@ -700,7 +700,7 @@ const char *Hlp_COURSE_Syllabus_edit =
 #elif L==3
 	"COURSE.Syllabus#edit";
 #elif L==4
-	"COURSE.Syllabus#edit";
+	"COURSE.Syllabus.es#editar";
 #elif L==5
 	"COURSE.Syllabus#edit";
 #elif L==6
@@ -721,7 +721,7 @@ const char *Hlp_COURSE_Timetable =
 #elif L==3
 	"COURSE.Timetable";
 #elif L==4
-	"COURSE.Timetable";
+	"COURSE.Timetable.es";
 #elif L==5
 	"COURSE.Timetable";
 #elif L==6
@@ -742,7 +742,7 @@ const char *Hlp_COURSE_Bibliography =
 #elif L==3
 	"COURSE.Bibliography";
 #elif L==4
-	"COURSE.Bibliography";
+	"COURSE.Bibliography.es";
 #elif L==5
 	"COURSE.Bibliography";
 #elif L==6
@@ -763,7 +763,7 @@ const char *Hlp_COURSE_Bibliography_edit =
 #elif L==3
 	"COURSE.Bibliography#edit";
 #elif L==4
-	"COURSE.Bibliography#edit";
+	"COURSE.Bibliography.es#editar";
 #elif L==5
 	"COURSE.Bibliography#edit";
 #elif L==6
@@ -784,7 +784,7 @@ const char *Hlp_COURSE_FAQ =
 #elif L==3
 	"COURSE.FAQ";
 #elif L==4
-	"COURSE.FAQ";
+	"COURSE.FAQ.es";
 #elif L==5
 	"COURSE.FAQ";
 #elif L==6
@@ -805,7 +805,7 @@ const char *Hlp_COURSE_FAQ_edit =
 #elif L==3
 	"COURSE.FAQ#edit";
 #elif L==4
-	"COURSE.FAQ#edit";
+	"COURSE.FAQ.es#editar";
 #elif L==5
 	"COURSE.FAQ#edit";
 #elif L==6
@@ -826,7 +826,7 @@ const char *Hlp_COURSE_Links =
 #elif L==3
 	"COURSE.Links";
 #elif L==4
-	"COURSE.Links";
+	"COURSE.Links.es";
 #elif L==5
 	"COURSE.Links";
 #elif L==6
@@ -847,7 +847,7 @@ const char *Hlp_COURSE_Links_edit =
 #elif L==3
 	"COURSE.Links#edit";
 #elif L==4
-	"COURSE.Links#edit";
+	"COURSE.Links.es#editar";
 #elif L==5
 	"COURSE.Links#edit";
 #elif L==6
@@ -870,7 +870,7 @@ const char *Hlp_ASSESSMENT_System =
 #elif L==3
 	"ASSESSMENT.System";
 #elif L==4
-	"ASSESSMENT.System";
+	"ASSESSMENT.System.es";
 #elif L==5
 	"ASSESSMENT.System";
 #elif L==6
@@ -891,7 +891,7 @@ const char *Hlp_ASSESSMENT_System_edit =
 #elif L==3
 	"ASSESSMENT.System#edit";
 #elif L==4
-	"ASSESSMENT.System#edit";
+	"ASSESSMENT.System.es#editar";
 #elif L==5
 	"ASSESSMENT.System#edit";
 #elif L==6
