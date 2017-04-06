@@ -507,7 +507,7 @@ const char *Hlp_CENTRE_Degrees =
 #elif L==3
 	"CENTRE.Degrees";
 #elif L==4
-	"CENTRE.Degrees";
+	"CENTRE.Degrees.es";
 #elif L==5
 	"CENTRE.Degrees";
 #elif L==6
@@ -518,6 +518,27 @@ const char *Hlp_CENTRE_Degrees =
 	"CENTRE.Degrees";
 #elif L==9
 	"CENTRE.Degrees";
+#endif
+
+const char *Hlp_CENTRE_Degrees_edit =
+#if   L==1
+	"CENTRE.Degrees#edit";
+#elif L==2
+	"CENTRE.Degrees#edit";
+#elif L==3
+	"CENTRE.Degrees#edit";
+#elif L==4
+	"CENTRE.Degrees.es#editar";
+#elif L==5
+	"CENTRE.Degrees#edit";
+#elif L==6
+	"CENTRE.Degrees#edit";
+#elif L==7
+	"CENTRE.Degrees#edit";
+#elif L==8
+	"CENTRE.Degrees#edit";
+#elif L==9
+	"CENTRE.Degrees#edit";
 #endif
 
 /***** DEGREE tab *****/
@@ -912,7 +933,7 @@ const char *Hlp_ASSESSMENT_Assignments =
 #elif L==3
 	"ASSESSMENT.Assignments";
 #elif L==4
-	"ASSESSMENT.Assignments";
+	"ASSESSMENT.Assignments.es";
 #elif L==5
 	"ASSESSMENT.Assignments";
 #elif L==6
@@ -933,7 +954,7 @@ const char *Hlp_ASSESSMENT_Assignments_new_assignment =
 #elif L==3
 	"ASSESSMENT.Assignments#new-assignment";
 #elif L==4
-	"ASSESSMENT.Assignments#new-assignment";
+	"ASSESSMENT.Assignments.es#nueva-actividad";
 #elif L==5
 	"ASSESSMENT.Assignments#new-assignment";
 #elif L==6
@@ -954,7 +975,7 @@ const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 #elif L==3
 	"ASSESSMENT.Assignments#edit-assignment";
 #elif L==4
-	"ASSESSMENT.Assignments#edit-assignment";
+	"ASSESSMENT.Assignments.es#editar-actividad";
 #elif L==5
 	"ASSESSMENT.Assignments#edit-assignment";
 #elif L==6
@@ -975,7 +996,7 @@ const char *Hlp_ASSESSMENT_Tests =
 #elif L==3
 	"ASSESSMENT.Tests";
 #elif L==4
-	"ASSESSMENT.Tests";
+	"ASSESSMENT.Tests.es";
 #elif L==5
 	"ASSESSMENT.Tests";
 #elif L==6
@@ -996,7 +1017,7 @@ const char *Hlp_ASSESSMENT_Tests_test_results =
 #elif L==3
 	"ASSESSMENT.Tests#test-results";
 #elif L==4
-	"ASSESSMENT.Tests#test-results";
+	"ASSESSMENT.Tests.es#resultados-de-tests";
 #elif L==5
 	"ASSESSMENT.Tests#test-results";
 #elif L==6
@@ -1017,7 +1038,7 @@ const char *Hlp_ASSESSMENT_Announcements =
 #elif L==3
 	"ASSESSMENT.Announcements";
 #elif L==4
-	"ASSESSMENT.Announcements";
+	"ASSESSMENT.Announcements.es";
 #elif L==5
 	"ASSESSMENT.Announcements";
 #elif L==6
@@ -1038,7 +1059,7 @@ const char *Hlp_ASSESSMENT_Announcements_new_announcement =
 #elif L==3
 	"ASSESSMENT.Announcements#new-announcement";
 #elif L==4
-	"ASSESSMENT.Announcements#new-announcement";
+	"ASSESSMENT.Announcements.es#nueva-convocatoria";
 #elif L==5
 	"ASSESSMENT.Announcements#new-announcement";
 #elif L==6
@@ -1059,7 +1080,7 @@ const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 #elif L==3
 	"ASSESSMENT.Announcements#edit-announcement";
 #elif L==4
-	"ASSESSMENT.Announcements#edit-announcement";
+	"ASSESSMENT.Announcements.es#editar-convocatoria";
 #elif L==5
 	"ASSESSMENT.Announcements#edit-announcement";
 #elif L==6

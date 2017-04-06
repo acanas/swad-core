@@ -661,7 +661,7 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
-   extern const char *Hlp_CENTRE_Degrees;
+   extern const char *Hlp_CENTRE_Degrees_edit;
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    unsigned NumDeg;
@@ -681,7 +681,7 @@ static void Deg_ListDegreesForEdition (void)
    sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
    Lay_StartRoundFrameTable (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
-                             Hlp_CENTRE_Degrees,2);
+                             Hlp_CENTRE_Degrees_edit,2);
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -924,7 +924,7 @@ static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt)
 
 static void Deg_PutFormToCreateDegree (void)
   {
-   extern const char *Hlp_CENTRE_Degrees;
+   extern const char *Hlp_CENTRE_Degrees_edit;
    extern const char *Txt_New_degree_of_CENTRE_X;
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
@@ -938,7 +938,7 @@ static void Deg_PutFormToCreateDegree (void)
    sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
             Gbl.CurrentCtr.Ctr.ShrtName);
    Lay_StartRoundFrame (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
-                        Hlp_CENTRE_Degrees);
+                        Hlp_CENTRE_Degrees_edit);
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
