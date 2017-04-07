@@ -31,7 +31,7 @@
 
 const char *Hlp_Search =
 #if   L==1
-	"Search";
+	"Search.es";
 #elif L==2
 	"Search";
 #elif L==3
@@ -41,7 +41,7 @@ const char *Hlp_Search =
 #elif L==5
 	"Search";
 #elif L==6
-	"Search";
+	"Search.es";
 #elif L==7
 	"Search";
 #elif L==8
@@ -52,7 +52,7 @@ const char *Hlp_Search =
 
 const char *Hlp_Calendar =
 #if   L==1
-	"Calendar";
+	"Calendar.es";
 #elif L==2
 	"Calendar";
 #elif L==3
@@ -62,7 +62,7 @@ const char *Hlp_Calendar =
 #elif L==5
 	"Calendar";
 #elif L==6
-	"Calendar";
+	"Calendar.es";
 #elif L==7
 	"Calendar";
 #elif L==8
@@ -75,7 +75,7 @@ const char *Hlp_Calendar =
 
 const char *Hlp_SYSTEM_Countries =
 #if   L==1
-	"SYSTEM.Countries";
+	"SYSTEM.Countries.es";
 #elif L==2
 	"SYSTEM.Countries";
 #elif L==3
@@ -85,7 +85,7 @@ const char *Hlp_SYSTEM_Countries =
 #elif L==5
 	"SYSTEM.Countries";
 #elif L==6
-	"SYSTEM.Countries";
+	"SYSTEM.Countries.es";
 #elif L==7
 	"SYSTEM.Countries";
 #elif L==8
@@ -96,7 +96,7 @@ const char *Hlp_SYSTEM_Countries =
 
 const char *Hlp_SYSTEM_Hierarchy_pending =
 #if   L==1
-	"SYSTEM.Hierarchy#pending";
+	"SYSTEM.Hierarchy.es#pendientes";
 #elif L==2
 	"SYSTEM.Hierarchy#pending";
 #elif L==3
@@ -106,7 +106,7 @@ const char *Hlp_SYSTEM_Hierarchy_pending =
 #elif L==5
 	"SYSTEM.Hierarchy#pending";
 #elif L==6
-	"SYSTEM.Hierarchy#pending";
+	"SYSTEM.Hierarchy.es#pendientes";
 #elif L==7
 	"SYSTEM.Hierarchy#pending";
 #elif L==8
@@ -117,7 +117,7 @@ const char *Hlp_SYSTEM_Hierarchy_pending =
 
 const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses =
 #if   L==1
-	"SYSTEM.Hierarchy#eliminate-old-courses";
+	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
 #elif L==2
 	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==3
@@ -127,7 +127,7 @@ const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses =
 #elif L==5
 	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==6
-	"SYSTEM.Hierarchy#eliminate-old-courses";
+	"SYSTEM.Hierarchy.es#eliminar-asignaturas-antiguas";
 #elif L==7
 	"SYSTEM.Hierarchy#eliminate-old-courses";
 #elif L==8
@@ -138,7 +138,7 @@ const char *Hlp_SYSTEM_Hierarchy_eliminate_old_courses =
 
 const char *Hlp_SYSTEM_Banners =
 #if   L==1
-	"SYSTEM.Banners";
+	"SYSTEM.Banners.es";
 #elif L==2
 	"SYSTEM.Banners";
 #elif L==3
@@ -148,7 +148,7 @@ const char *Hlp_SYSTEM_Banners =
 #elif L==5
 	"SYSTEM.Banners";
 #elif L==6
-	"SYSTEM.Banners";
+	"SYSTEM.Banners.es";
 #elif L==7
 	"SYSTEM.Banners";
 #elif L==8
@@ -159,7 +159,7 @@ const char *Hlp_SYSTEM_Banners =
 
 const char *Hlp_SYSTEM_Banners_edit =
 #if   L==1
-	"SYSTEM.Banners#edit";
+	"SYSTEM.Banners.es#editar";
 #elif L==2
 	"SYSTEM.Banners#edit";
 #elif L==3
@@ -169,7 +169,7 @@ const char *Hlp_SYSTEM_Banners_edit =
 #elif L==5
 	"SYSTEM.Banners#edit";
 #elif L==6
-	"SYSTEM.Banners#edit";
+	"SYSTEM.Banners.es#editar";
 #elif L==7
 	"SYSTEM.Banners#edit";
 #elif L==8
@@ -180,7 +180,7 @@ const char *Hlp_SYSTEM_Banners_edit =
 
 const char *Hlp_SYSTEM_Links =
 #if   L==1
-	"SYSTEM.Links";
+	"SYSTEM.Links.es";
 #elif L==2
 	"SYSTEM.Links";
 #elif L==3
@@ -190,7 +190,7 @@ const char *Hlp_SYSTEM_Links =
 #elif L==5
 	"SYSTEM.Links";
 #elif L==6
-	"SYSTEM.Links";
+	"SYSTEM.Links.es";
 #elif L==7
 	"SYSTEM.Links";
 #elif L==8
@@ -201,7 +201,7 @@ const char *Hlp_SYSTEM_Links =
 
 const char *Hlp_SYSTEM_Links_edit =
 #if   L==1
-	"SYSTEM.Links#edit";
+	"SYSTEM.Links.es#editar";
 #elif L==2
 	"SYSTEM.Links#edit";
 #elif L==3
@@ -211,7 +211,7 @@ const char *Hlp_SYSTEM_Links_edit =
 #elif L==5
 	"SYSTEM.Links#edit";
 #elif L==6
-	"SYSTEM.Links#edit";
+	"SYSTEM.Links.es#editar";
 #elif L==7
 	"SYSTEM.Links#edit";
 #elif L==8
@@ -224,7 +224,7 @@ const char *Hlp_SYSTEM_Links_edit =
 
 const char *Hlp_COUNTRY_Information =
 #if   L==1
-	"COUNTRY.Information";
+	"COUNTRY.Information.es";
 #elif L==2
 	"COUNTRY.Information";
 #elif L==3
@@ -234,7 +234,7 @@ const char *Hlp_COUNTRY_Information =
 #elif L==5
 	"COUNTRY.Information";
 #elif L==6
-	"COUNTRY.Information";
+	"COUNTRY.Information.es";
 #elif L==7
 	"COUNTRY.Information";
 #elif L==8
@@ -245,7 +245,7 @@ const char *Hlp_COUNTRY_Information =
 
 const char *Hlp_COUNTRY_Institutions =
 #if   L==1
-	"COUNTRY.Institutions";
+	"COUNTRY.Institutions.es";
 #elif L==2
 	"COUNTRY.Institutions";
 #elif L==3
@@ -255,7 +255,7 @@ const char *Hlp_COUNTRY_Institutions =
 #elif L==5
 	"COUNTRY.Institutions";
 #elif L==6
-	"COUNTRY.Institutions";
+	"COUNTRY.Institutions.es";
 #elif L==7
 	"COUNTRY.Institutions";
 #elif L==8
@@ -268,7 +268,7 @@ const char *Hlp_COUNTRY_Institutions =
 
 const char *Hlp_INSTITUTION_Information =
 #if   L==1
-	"INSTITUTION.Information";
+	"INSTITUTION.Information.es";
 #elif L==2
 	"INSTITUTION.Information";
 #elif L==3
@@ -278,7 +278,7 @@ const char *Hlp_INSTITUTION_Information =
 #elif L==5
 	"INSTITUTION.Information";
 #elif L==6
-	"INSTITUTION.Information";
+	"INSTITUTION.Information.es";
 #elif L==7
 	"INSTITUTION.Information";
 #elif L==8
@@ -289,7 +289,7 @@ const char *Hlp_INSTITUTION_Information =
 
 const char *Hlp_INSTITUTION_Centres =
 #if   L==1
-	"INSTITUTION.Centres";
+	"INSTITUTION.Centres.es";
 #elif L==2
 	"INSTITUTION.Centres";
 #elif L==3
@@ -299,7 +299,7 @@ const char *Hlp_INSTITUTION_Centres =
 #elif L==5
 	"INSTITUTION.Centres";
 #elif L==6
-	"INSTITUTION.Centres";
+	"INSTITUTION.Centres.es";
 #elif L==7
 	"INSTITUTION.Centres";
 #elif L==8
@@ -310,7 +310,7 @@ const char *Hlp_INSTITUTION_Centres =
 
 const char *Hlp_INSTITUTION_Departments =
 #if   L==1
-	"INSTITUTION.Departments";
+	"INSTITUTION.Departments.es";
 #elif L==2
 	"INSTITUTION.Departments";
 #elif L==3
@@ -320,7 +320,7 @@ const char *Hlp_INSTITUTION_Departments =
 #elif L==5
 	"INSTITUTION.Departments";
 #elif L==6
-	"INSTITUTION.Departments";
+	"INSTITUTION.Departments.es";
 #elif L==7
 	"INSTITUTION.Departments";
 #elif L==8
@@ -331,7 +331,7 @@ const char *Hlp_INSTITUTION_Departments =
 
 const char *Hlp_INSTITUTION_Departments_edit =
 #if   L==1
-	"INSTITUTION.Departments#edit";
+	"INSTITUTION.Departments.es#editar";
 #elif L==2
 	"INSTITUTION.Departments#edit";
 #elif L==3
@@ -341,7 +341,7 @@ const char *Hlp_INSTITUTION_Departments_edit =
 #elif L==5
 	"INSTITUTION.Departments#edit";
 #elif L==6
-	"INSTITUTION.Departments#edit";
+	"INSTITUTION.Departments.es#editar";
 #elif L==7
 	"INSTITUTION.Departments#edit";
 #elif L==8
@@ -352,7 +352,7 @@ const char *Hlp_INSTITUTION_Departments_edit =
 
 const char *Hlp_INSTITUTION_Places =
 #if   L==1
-	"INSTITUTION.Places";
+	"INSTITUTION.Places.es";
 #elif L==2
 	"INSTITUTION.Places";
 #elif L==3
@@ -362,7 +362,7 @@ const char *Hlp_INSTITUTION_Places =
 #elif L==5
 	"INSTITUTION.Places";
 #elif L==6
-	"INSTITUTION.Places";
+	"INSTITUTION.Places.es";
 #elif L==7
 	"INSTITUTION.Places";
 #elif L==8
@@ -373,7 +373,7 @@ const char *Hlp_INSTITUTION_Places =
 
 const char *Hlp_INSTITUTION_Places_edit =
 #if   L==1
-	"INSTITUTION.Places#edit";
+	"INSTITUTION.Places.es#editar";
 #elif L==2
 	"INSTITUTION.Places#edit";
 #elif L==3
@@ -383,7 +383,7 @@ const char *Hlp_INSTITUTION_Places_edit =
 #elif L==5
 	"INSTITUTION.Places#edit";
 #elif L==6
-	"INSTITUTION.Places#edit";
+	"INSTITUTION.Places.es#editar";
 #elif L==7
 	"INSTITUTION.Places#edit";
 #elif L==8
@@ -394,7 +394,7 @@ const char *Hlp_INSTITUTION_Places_edit =
 
 const char *Hlp_INSTITUTION_Holidays =
 #if   L==1
-	"INSTITUTION.Holidays";
+	"INSTITUTION.Holidays.es";
 #elif L==2
 	"INSTITUTION.Holidays";
 #elif L==3
@@ -404,7 +404,7 @@ const char *Hlp_INSTITUTION_Holidays =
 #elif L==5
 	"INSTITUTION.Holidays";
 #elif L==6
-	"INSTITUTION.Holidays";
+	"INSTITUTION.Holidays.es";
 #elif L==7
 	"INSTITUTION.Holidays";
 #elif L==8
@@ -415,7 +415,7 @@ const char *Hlp_INSTITUTION_Holidays =
 
 const char *Hlp_INSTITUTION_Holidays_edit =
 #if   L==1
-	"INSTITUTION.Holidays#edit";
+	"INSTITUTION.Holidays.es#editar";
 #elif L==2
 	"INSTITUTION.Holidays#edit";
 #elif L==3
@@ -425,7 +425,7 @@ const char *Hlp_INSTITUTION_Holidays_edit =
 #elif L==5
 	"INSTITUTION.Holidays#edit";
 #elif L==6
-	"INSTITUTION.Holidays#edit";
+	"INSTITUTION.Holidays.es#editar";
 #elif L==7
 	"INSTITUTION.Holidays#edit";
 #elif L==8
@@ -438,7 +438,7 @@ const char *Hlp_INSTITUTION_Holidays_edit =
 
 const char *Hlp_CENTRE_Information =
 #if   L==1
-	"CENTRE.Information";
+	"CENTRE.Information.es";
 #elif L==2
 	"CENTRE.Information";
 #elif L==3
@@ -448,7 +448,7 @@ const char *Hlp_CENTRE_Information =
 #elif L==5
 	"CENTRE.Information";
 #elif L==6
-	"CENTRE.Information";
+	"CENTRE.Information.es";
 #elif L==7
 	"CENTRE.Information";
 #elif L==8
@@ -459,7 +459,7 @@ const char *Hlp_CENTRE_Information =
 
 const char *Hlp_CENTRE_DegreeTypes =
 #if   L==1
-	"CENTRE.DegreeTypes";
+	"CENTRE.DegreeTypes.es";
 #elif L==2
 	"CENTRE.DegreeTypes";
 #elif L==3
@@ -469,7 +469,7 @@ const char *Hlp_CENTRE_DegreeTypes =
 #elif L==5
 	"CENTRE.DegreeTypes";
 #elif L==6
-	"CENTRE.DegreeTypes";
+	"CENTRE.DegreeTypes.es";
 #elif L==7
 	"CENTRE.DegreeTypes";
 #elif L==8
@@ -480,7 +480,7 @@ const char *Hlp_CENTRE_DegreeTypes =
 
 const char *Hlp_CENTRE_DegreeTypes_edit =
 #if   L==1
-	"CENTRE.DegreeTypes#edit";
+	"CENTRE.DegreeTypes.es#editar";
 #elif L==2
 	"CENTRE.DegreeTypes#edit";
 #elif L==3
@@ -490,7 +490,7 @@ const char *Hlp_CENTRE_DegreeTypes_edit =
 #elif L==5
 	"CENTRE.DegreeTypes#edit";
 #elif L==6
-	"CENTRE.DegreeTypes#edit";
+	"CENTRE.DegreeTypes.es#editar";
 #elif L==7
 	"CENTRE.DegreeTypes#edit";
 #elif L==8
@@ -501,7 +501,7 @@ const char *Hlp_CENTRE_DegreeTypes_edit =
 
 const char *Hlp_CENTRE_Degrees =
 #if   L==1
-	"CENTRE.Degrees";
+	"CENTRE.Degrees.es";
 #elif L==2
 	"CENTRE.Degrees";
 #elif L==3
@@ -511,7 +511,7 @@ const char *Hlp_CENTRE_Degrees =
 #elif L==5
 	"CENTRE.Degrees";
 #elif L==6
-	"CENTRE.Degrees";
+	"CENTRE.Degrees.es";
 #elif L==7
 	"CENTRE.Degrees";
 #elif L==8
@@ -522,7 +522,7 @@ const char *Hlp_CENTRE_Degrees =
 
 const char *Hlp_CENTRE_Degrees_edit =
 #if   L==1
-	"CENTRE.Degrees#edit";
+	"CENTRE.Degrees.es#editar";
 #elif L==2
 	"CENTRE.Degrees#edit";
 #elif L==3
@@ -532,7 +532,7 @@ const char *Hlp_CENTRE_Degrees_edit =
 #elif L==5
 	"CENTRE.Degrees#edit";
 #elif L==6
-	"CENTRE.Degrees#edit";
+	"CENTRE.Degrees.es#editar";
 #elif L==7
 	"CENTRE.Degrees#edit";
 #elif L==8
@@ -545,7 +545,7 @@ const char *Hlp_CENTRE_Degrees_edit =
 
 const char *Hlp_DEGREE_Information =
 #if   L==1
-	"DEGREE.Information";
+	"DEGREE.Information.es";
 #elif L==2
 	"DEGREE.Information";
 #elif L==3
@@ -555,7 +555,7 @@ const char *Hlp_DEGREE_Information =
 #elif L==5
 	"DEGREE.Information";
 #elif L==6
-	"DEGREE.Information";
+	"DEGREE.Information.es";
 #elif L==7
 	"DEGREE.Information";
 #elif L==8
@@ -566,7 +566,7 @@ const char *Hlp_DEGREE_Information =
 
 const char *Hlp_DEGREE_Courses =
 #if   L==1
-	"DEGREE.Courses";
+	"DEGREE.Courses.es";
 #elif L==2
 	"DEGREE.Courses";
 #elif L==3
@@ -576,7 +576,7 @@ const char *Hlp_DEGREE_Courses =
 #elif L==5
 	"DEGREE.Courses";
 #elif L==6
-	"DEGREE.Courses";
+	"DEGREE.Courses.es";
 #elif L==7
 	"DEGREE.Courses";
 #elif L==8
@@ -589,7 +589,7 @@ const char *Hlp_DEGREE_Courses =
 
 const char *Hlp_COURSE_Information =
 #if   L==1
-	"COURSE.Information";
+	"COURSE.Information.es";
 #elif L==2
 	"COURSE.Information";
 #elif L==3
@@ -599,7 +599,7 @@ const char *Hlp_COURSE_Information =
 #elif L==5
 	"COURSE.Information";
 #elif L==6
-	"COURSE.Information";
+	"COURSE.Information.es";
 #elif L==7
 	"COURSE.Information";
 #elif L==8
@@ -610,7 +610,7 @@ const char *Hlp_COURSE_Information =
 
 const char *Hlp_COURSE_Information_textual_information =
 #if   L==1
-	"COURSE.Information#textual-information";
+	"COURSE.Information.es##informaci%C3%B3n-textual";
 #elif L==2
 	"COURSE.Information#textual-information";
 #elif L==3
@@ -620,7 +620,7 @@ const char *Hlp_COURSE_Information_textual_information =
 #elif L==5
 	"COURSE.Information#textual-information";
 #elif L==6
-	"COURSE.Information#textual-information";
+	"COURSE.Information.es##informaci%C3%B3n-textual";
 #elif L==7
 	"COURSE.Information#textual-information";
 #elif L==8
@@ -631,7 +631,7 @@ const char *Hlp_COURSE_Information_textual_information =
 
 const char *Hlp_COURSE_Information_edit =
 #if   L==1
-	"COURSE.Information#edit";
+	"COURSE.Information.es#editar";
 #elif L==2
 	"COURSE.Information#edit";
 #elif L==3
@@ -641,7 +641,7 @@ const char *Hlp_COURSE_Information_edit =
 #elif L==5
 	"COURSE.Information#edit";
 #elif L==6
-	"COURSE.Information#edit";
+	"COURSE.Information.es#editar";
 #elif L==7
 	"COURSE.Information#edit";
 #elif L==8
@@ -652,7 +652,7 @@ const char *Hlp_COURSE_Information_edit =
 
 const char *Hlp_COURSE_Guide =
 #if   L==1
-	"COURSE.Guide";
+	"COURSE.Guide.es";
 #elif L==2
 	"COURSE.Guide";
 #elif L==3
@@ -662,7 +662,7 @@ const char *Hlp_COURSE_Guide =
 #elif L==5
 	"COURSE.Guide";
 #elif L==6
-	"COURSE.Guide";
+	"COURSE.Guide.es";
 #elif L==7
 	"COURSE.Guide";
 #elif L==8
@@ -673,7 +673,7 @@ const char *Hlp_COURSE_Guide =
 
 const char *Hlp_COURSE_Guide_edit =
 #if   L==1
-	"COURSE.Guide#edit";
+	"COURSE.Guide.es#editar";
 #elif L==2
 	"COURSE.Guide#edit";
 #elif L==3
@@ -683,7 +683,7 @@ const char *Hlp_COURSE_Guide_edit =
 #elif L==5
 	"COURSE.Guide#edit";
 #elif L==6
-	"COURSE.Guide#edit";
+	"COURSE.Guide.es#editar";
 #elif L==7
 	"COURSE.Guide#edit";
 #elif L==8
@@ -694,7 +694,7 @@ const char *Hlp_COURSE_Guide_edit =
 
 const char *Hlp_COURSE_Syllabus =
 #if   L==1
-	"COURSE.Syllabus";
+	"COURSE.Syllabus.es";
 #elif L==2
 	"COURSE.Syllabus";
 #elif L==3
@@ -704,7 +704,7 @@ const char *Hlp_COURSE_Syllabus =
 #elif L==5
 	"COURSE.Syllabus";
 #elif L==6
-	"COURSE.Syllabus";
+	"COURSE.Syllabus.es";
 #elif L==7
 	"COURSE.Syllabus";
 #elif L==8
@@ -715,7 +715,7 @@ const char *Hlp_COURSE_Syllabus =
 
 const char *Hlp_COURSE_Syllabus_edit =
 #if   L==1
-	"COURSE.Syllabus#edit";
+	"COURSE.Syllabus.es#editar";
 #elif L==2
 	"COURSE.Syllabus#edit";
 #elif L==3
@@ -725,7 +725,7 @@ const char *Hlp_COURSE_Syllabus_edit =
 #elif L==5
 	"COURSE.Syllabus#edit";
 #elif L==6
-	"COURSE.Syllabus#edit";
+	"COURSE.Syllabus.es#editar";
 #elif L==7
 	"COURSE.Syllabus#edit";
 #elif L==8
@@ -738,7 +738,7 @@ const char *Hlp_COURSE_Timetable =
 #if   L==1
 	"COURSE.Timetable";
 #elif L==2
-	"COURSE.Timetable";
+	"COURSE.Timetable.es";
 #elif L==3
 	"COURSE.Timetable";
 #elif L==4
@@ -746,7 +746,7 @@ const char *Hlp_COURSE_Timetable =
 #elif L==5
 	"COURSE.Timetable";
 #elif L==6
-	"COURSE.Timetable";
+	"COURSE.Timetable.es";
 #elif L==7
 	"COURSE.Timetable";
 #elif L==8
@@ -757,7 +757,7 @@ const char *Hlp_COURSE_Timetable =
 
 const char *Hlp_COURSE_Bibliography =
 #if   L==1
-	"COURSE.Bibliography";
+	"COURSE.Bibliography.es";
 #elif L==2
 	"COURSE.Bibliography";
 #elif L==3
@@ -767,7 +767,7 @@ const char *Hlp_COURSE_Bibliography =
 #elif L==5
 	"COURSE.Bibliography";
 #elif L==6
-	"COURSE.Bibliography";
+	"COURSE.Bibliography.es";
 #elif L==7
 	"COURSE.Bibliography";
 #elif L==8
@@ -778,7 +778,7 @@ const char *Hlp_COURSE_Bibliography =
 
 const char *Hlp_COURSE_Bibliography_edit =
 #if   L==1
-	"COURSE.Bibliography#edit";
+	"COURSE.Bibliography.es#editar";
 #elif L==2
 	"COURSE.Bibliography#edit";
 #elif L==3
@@ -788,7 +788,7 @@ const char *Hlp_COURSE_Bibliography_edit =
 #elif L==5
 	"COURSE.Bibliography#edit";
 #elif L==6
-	"COURSE.Bibliography#edit";
+	"COURSE.Bibliography.es#editar";
 #elif L==7
 	"COURSE.Bibliography#edit";
 #elif L==8
@@ -799,7 +799,7 @@ const char *Hlp_COURSE_Bibliography_edit =
 
 const char *Hlp_COURSE_FAQ =
 #if   L==1
-	"COURSE.FAQ";
+	"COURSE.FAQ.es";
 #elif L==2
 	"COURSE.FAQ";
 #elif L==3
@@ -809,7 +809,7 @@ const char *Hlp_COURSE_FAQ =
 #elif L==5
 	"COURSE.FAQ";
 #elif L==6
-	"COURSE.FAQ";
+	"COURSE.FAQ.es";
 #elif L==7
 	"COURSE.FAQ";
 #elif L==8
@@ -820,7 +820,7 @@ const char *Hlp_COURSE_FAQ =
 
 const char *Hlp_COURSE_FAQ_edit =
 #if   L==1
-	"COURSE.FAQ#edit";
+	"COURSE.FAQ.es#editar";
 #elif L==2
 	"COURSE.FAQ#edit";
 #elif L==3
@@ -830,7 +830,7 @@ const char *Hlp_COURSE_FAQ_edit =
 #elif L==5
 	"COURSE.FAQ#edit";
 #elif L==6
-	"COURSE.FAQ#edit";
+	"COURSE.FAQ.es#editar";
 #elif L==7
 	"COURSE.FAQ#edit";
 #elif L==8
@@ -841,7 +841,7 @@ const char *Hlp_COURSE_FAQ_edit =
 
 const char *Hlp_COURSE_Links =
 #if   L==1
-	"COURSE.Links";
+	"COURSE.Links.es";
 #elif L==2
 	"COURSE.Links";
 #elif L==3
@@ -851,7 +851,7 @@ const char *Hlp_COURSE_Links =
 #elif L==5
 	"COURSE.Links";
 #elif L==6
-	"COURSE.Links";
+	"COURSE.Links.es";
 #elif L==7
 	"COURSE.Links";
 #elif L==8
@@ -862,7 +862,7 @@ const char *Hlp_COURSE_Links =
 
 const char *Hlp_COURSE_Links_edit =
 #if   L==1
-	"COURSE.Links#edit";
+	"COURSE.Links.es#editar";
 #elif L==2
 	"COURSE.Links#edit";
 #elif L==3
@@ -872,7 +872,7 @@ const char *Hlp_COURSE_Links_edit =
 #elif L==5
 	"COURSE.Links#edit";
 #elif L==6
-	"COURSE.Links#edit";
+	"COURSE.Links.es#editar";
 #elif L==7
 	"COURSE.Links#edit";
 #elif L==8
@@ -885,7 +885,7 @@ const char *Hlp_COURSE_Links_edit =
 
 const char *Hlp_ASSESSMENT_System =
 #if   L==1
-	"ASSESSMENT.System";
+	"ASSESSMENT.System.es";
 #elif L==2
 	"ASSESSMENT.System";
 #elif L==3
@@ -895,7 +895,7 @@ const char *Hlp_ASSESSMENT_System =
 #elif L==5
 	"ASSESSMENT.System";
 #elif L==6
-	"ASSESSMENT.System";
+	"ASSESSMENT.System.es";
 #elif L==7
 	"ASSESSMENT.System";
 #elif L==8
@@ -906,7 +906,7 @@ const char *Hlp_ASSESSMENT_System =
 
 const char *Hlp_ASSESSMENT_System_edit =
 #if   L==1
-	"ASSESSMENT.System#edit";
+	"ASSESSMENT.System.es#editar";
 #elif L==2
 	"ASSESSMENT.System#edit";
 #elif L==3
@@ -916,7 +916,7 @@ const char *Hlp_ASSESSMENT_System_edit =
 #elif L==5
 	"ASSESSMENT.System#edit";
 #elif L==6
-	"ASSESSMENT.System#edit";
+	"ASSESSMENT.System.es#editar";
 #elif L==7
 	"ASSESSMENT.System#edit";
 #elif L==8
@@ -927,7 +927,7 @@ const char *Hlp_ASSESSMENT_System_edit =
 
 const char *Hlp_ASSESSMENT_Assignments =
 #if   L==1
-	"ASSESSMENT.Assignments";
+	"ASSESSMENT.Assignments.es";
 #elif L==2
 	"ASSESSMENT.Assignments";
 #elif L==3
@@ -937,7 +937,7 @@ const char *Hlp_ASSESSMENT_Assignments =
 #elif L==5
 	"ASSESSMENT.Assignments";
 #elif L==6
-	"ASSESSMENT.Assignments";
+	"ASSESSMENT.Assignments.es";
 #elif L==7
 	"ASSESSMENT.Assignments";
 #elif L==8
@@ -948,7 +948,7 @@ const char *Hlp_ASSESSMENT_Assignments =
 
 const char *Hlp_ASSESSMENT_Assignments_new_assignment =
 #if   L==1
-	"ASSESSMENT.Assignments#new-assignment";
+	"ASSESSMENT.Assignments.es#nueva-actividad";
 #elif L==2
 	"ASSESSMENT.Assignments#new-assignment";
 #elif L==3
@@ -958,7 +958,7 @@ const char *Hlp_ASSESSMENT_Assignments_new_assignment =
 #elif L==5
 	"ASSESSMENT.Assignments#new-assignment";
 #elif L==6
-	"ASSESSMENT.Assignments#new-assignment";
+	"ASSESSMENT.Assignments.es#nueva-actividad";
 #elif L==7
 	"ASSESSMENT.Assignments#new-assignment";
 #elif L==8
@@ -969,7 +969,7 @@ const char *Hlp_ASSESSMENT_Assignments_new_assignment =
 
 const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 #if   L==1
-	"ASSESSMENT.Assignments#edit-assignment";
+	"ASSESSMENT.Assignments.es#editar-actividad";
 #elif L==2
 	"ASSESSMENT.Assignments#edit-assignment";
 #elif L==3
@@ -979,7 +979,7 @@ const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 #elif L==5
 	"ASSESSMENT.Assignments#edit-assignment";
 #elif L==6
-	"ASSESSMENT.Assignments#edit-assignment";
+	"ASSESSMENT.Assignments.es#editar-actividad";
 #elif L==7
 	"ASSESSMENT.Assignments#edit-assignment";
 #elif L==8
@@ -990,7 +990,7 @@ const char *Hlp_ASSESSMENT_Assignments_edit_assignment =
 
 const char *Hlp_ASSESSMENT_Tests =
 #if   L==1
-	"ASSESSMENT.Tests";
+	"ASSESSMENT.Tests.es";
 #elif L==2
 	"ASSESSMENT.Tests";
 #elif L==3
@@ -1000,7 +1000,7 @@ const char *Hlp_ASSESSMENT_Tests =
 #elif L==5
 	"ASSESSMENT.Tests";
 #elif L==6
-	"ASSESSMENT.Tests";
+	"ASSESSMENT.Tests.es";
 #elif L==7
 	"ASSESSMENT.Tests";
 #elif L==8
@@ -1011,7 +1011,7 @@ const char *Hlp_ASSESSMENT_Tests =
 
 const char *Hlp_ASSESSMENT_Tests_test_results =
 #if   L==1
-	"ASSESSMENT.Tests#test-results";
+	"ASSESSMENT.Tests.es#resultados-de-tests";
 #elif L==2
 	"ASSESSMENT.Tests#test-results";
 #elif L==3
@@ -1021,7 +1021,7 @@ const char *Hlp_ASSESSMENT_Tests_test_results =
 #elif L==5
 	"ASSESSMENT.Tests#test-results";
 #elif L==6
-	"ASSESSMENT.Tests#test-results";
+	"ASSESSMENT.Tests.es#resultados-de-tests";
 #elif L==7
 	"ASSESSMENT.Tests#test-results";
 #elif L==8
@@ -1032,7 +1032,7 @@ const char *Hlp_ASSESSMENT_Tests_test_results =
 
 const char *Hlp_ASSESSMENT_Announcements =
 #if   L==1
-	"ASSESSMENT.Announcements";
+	"ASSESSMENT.Announcements.es";
 #elif L==2
 	"ASSESSMENT.Announcements";
 #elif L==3
@@ -1042,7 +1042,7 @@ const char *Hlp_ASSESSMENT_Announcements =
 #elif L==5
 	"ASSESSMENT.Announcements";
 #elif L==6
-	"ASSESSMENT.Announcements";
+	"ASSESSMENT.Announcements.es";
 #elif L==7
 	"ASSESSMENT.Announcements";
 #elif L==8
@@ -1053,7 +1053,7 @@ const char *Hlp_ASSESSMENT_Announcements =
 
 const char *Hlp_ASSESSMENT_Announcements_new_announcement =
 #if   L==1
-	"ASSESSMENT.Announcements#new-announcement";
+	"ASSESSMENT.Announcements.es#nueva-convocatoria";
 #elif L==2
 	"ASSESSMENT.Announcements#new-announcement";
 #elif L==3
@@ -1063,7 +1063,7 @@ const char *Hlp_ASSESSMENT_Announcements_new_announcement =
 #elif L==5
 	"ASSESSMENT.Announcements#new-announcement";
 #elif L==6
-	"ASSESSMENT.Announcements#new-announcement";
+	"ASSESSMENT.Announcements.es#nueva-convocatoria";
 #elif L==7
 	"ASSESSMENT.Announcements#new-announcement";
 #elif L==8
@@ -1074,7 +1074,7 @@ const char *Hlp_ASSESSMENT_Announcements_new_announcement =
 
 const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 #if   L==1
-	"ASSESSMENT.Announcements#edit-announcement";
+	"ASSESSMENT.Announcements.es#editar-convocatoria";
 #elif L==2
 	"ASSESSMENT.Announcements#edit-announcement";
 #elif L==3
@@ -1084,7 +1084,7 @@ const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 #elif L==5
 	"ASSESSMENT.Announcements#edit-announcement";
 #elif L==6
-	"ASSESSMENT.Announcements#edit-announcement";
+	"ASSESSMENT.Announcements.es#editar-convocatoria";
 #elif L==7
 	"ASSESSMENT.Announcements#edit-announcement";
 #elif L==8
@@ -1097,7 +1097,7 @@ const char *Hlp_ASSESSMENT_Announcements_edit_announcement =
 
 const char *Hlp_FILES_Documents =
 #if   L==1
-	"FILES.Documents";
+	"FILES.Documents.es";
 #elif L==2
 	"FILES.Documents";
 #elif L==3
@@ -1107,7 +1107,7 @@ const char *Hlp_FILES_Documents =
 #elif L==5
 	"FILES.Documents";
 #elif L==6
-	"FILES.Documents";
+	"FILES.Documents.es";
 #elif L==7
 	"FILES.Documents";
 #elif L==8
@@ -1118,7 +1118,7 @@ const char *Hlp_FILES_Documents =
 
 const char *Hlp_FILES_Private =
 #if   L==1
-	"FILES.Private";
+	"FILES.Private.es";
 #elif L==2
 	"FILES.Private";
 #elif L==3
@@ -1128,7 +1128,7 @@ const char *Hlp_FILES_Private =
 #elif L==5
 	"FILES.Private";
 #elif L==6
-	"FILES.Private";
+	"FILES.Private.es";
 #elif L==7
 	"FILES.Private";
 #elif L==8
@@ -1139,7 +1139,7 @@ const char *Hlp_FILES_Private =
 
 const char *Hlp_FILES_Shared =
 #if   L==1
-	"FILES.Shared";
+	"FILES.Shared.es";
 #elif L==2
 	"FILES.Shared";
 #elif L==3
@@ -1149,7 +1149,7 @@ const char *Hlp_FILES_Shared =
 #elif L==5
 	"FILES.Shared";
 #elif L==6
-	"FILES.Shared";
+	"FILES.Shared.es";
 #elif L==7
 	"FILES.Shared";
 #elif L==8
@@ -1160,7 +1160,7 @@ const char *Hlp_FILES_Shared =
 
 const char *Hlp_FILES_Homework_for_students =
 #if   L==1
-	"FILES.Homework#for-students";
+	"FILES.Homework.es#para-estudiantes";
 #elif L==2
 	"FILES.Homework#for-students";
 #elif L==3
@@ -1170,7 +1170,7 @@ const char *Hlp_FILES_Homework_for_students =
 #elif L==5
 	"FILES.Homework#for-students";
 #elif L==6
-	"FILES.Homework#for-students";
+	"FILES.Homework.es#para-estudiantes";
 #elif L==7
 	"FILES.Homework#for-students";
 #elif L==8
@@ -1181,7 +1181,7 @@ const char *Hlp_FILES_Homework_for_students =
 
 const char *Hlp_FILES_Homework_for_teachers =
 #if   L==1
-	"FILES.Homework#for-teachers";
+	"FILES.Homework.es#para-profesores";
 #elif L==2
 	"FILES.Homework#for-teachers";
 #elif L==3
@@ -1191,7 +1191,7 @@ const char *Hlp_FILES_Homework_for_teachers =
 #elif L==5
 	"FILES.Homework#for-teachers";
 #elif L==6
-	"FILES.Homework#for-teachers";
+	"FILES.Homework.es#para-profesores";
 #elif L==7
 	"FILES.Homework#for-teachers";
 #elif L==8
@@ -1202,7 +1202,7 @@ const char *Hlp_FILES_Homework_for_teachers =
 
 const char *Hlp_FILES_Marks =
 #if   L==1
-	"FILES.Marks";
+	"FILES.Marks.es";
 #elif L==2
 	"FILES.Marks";
 #elif L==3
@@ -1212,7 +1212,7 @@ const char *Hlp_FILES_Marks =
 #elif L==5
 	"FILES.Marks";
 #elif L==6
-	"FILES.Marks";
+	"FILES.Marks.es";
 #elif L==7
 	"FILES.Marks";
 #elif L==8
@@ -1225,7 +1225,7 @@ const char *Hlp_FILES_Marks =
 
 const char *Hlp_USERS_Groups =
 #if   L==1
-	"USERS.Groups";
+	"USERS.Groups.es";
 #elif L==2
 	"USERS.Groups";
 #elif L==3
@@ -1235,7 +1235,7 @@ const char *Hlp_USERS_Groups =
 #elif L==5
 	"USERS.Groups";
 #elif L==6
-	"USERS.Groups";
+	"USERS.Groups.es";
 #elif L==7
 	"USERS.Groups";
 #elif L==8
@@ -1246,7 +1246,7 @@ const char *Hlp_USERS_Groups =
 
 const char *Hlp_USERS_Students =
 #if   L==1
-	"USERS.Students";
+	"USERS.Students.es";
 #elif L==2
 	"USERS.Students";
 #elif L==3
@@ -1256,7 +1256,7 @@ const char *Hlp_USERS_Students =
 #elif L==5
 	"USERS.Students";
 #elif L==6
-	"USERS.Students";
+	"USERS.Students.es";
 #elif L==7
 	"USERS.Students";
 #elif L==8
@@ -1267,7 +1267,7 @@ const char *Hlp_USERS_Students =
 
 const char *Hlp_USERS_Students_shared_record_card =
 #if   L==1
-	"USERS.Students#shared-record-card";
+	"USERS.Students.es#ficha-compartida";
 #elif L==2
 	"USERS.Students#shared-record-card";
 #elif L==3
@@ -1277,7 +1277,7 @@ const char *Hlp_USERS_Students_shared_record_card =
 #elif L==5
 	"USERS.Students#shared-record-card";
 #elif L==6
-	"USERS.Students#shared-record-card";
+	"USERS.Students.es#ficha-compartida";
 #elif L==7
 	"USERS.Students#shared-record-card";
 #elif L==8
@@ -1288,7 +1288,7 @@ const char *Hlp_USERS_Students_shared_record_card =
 
 const char *Hlp_USERS_Students_course_record_card =
 #if   L==1
-	"USERS.Students#course-record-card";
+	"USERS.Students.es#ficha-de-la-asignatura";
 #elif L==2
 	"USERS.Students#course-record-card";
 #elif L==3
@@ -1298,7 +1298,7 @@ const char *Hlp_USERS_Students_course_record_card =
 #elif L==5
 	"USERS.Students#course-record-card";
 #elif L==6
-	"USERS.Students#course-record-card";
+	"USERS.Students.es#ficha-de-la-asignatura";
 #elif L==7
 	"USERS.Students#course-record-card";
 #elif L==8
@@ -1309,7 +1309,7 @@ const char *Hlp_USERS_Students_course_record_card =
 
 const char *Hlp_USERS_Administration_administer_one_user =
 #if   L==1
-	"USERS.Administration#administer-one-user";
+	"USERS.Administration.es#administrar-un-usuario";
 #elif L==2
 	"USERS.Administration#administer-one-user";
 #elif L==3
@@ -1319,7 +1319,7 @@ const char *Hlp_USERS_Administration_administer_one_user =
 #elif L==5
 	"USERS.Administration#administer-one-user";
 #elif L==6
-	"USERS.Administration#administer-one-user";
+	"USERS.Administration.es#administrar-un-usuario";
 #elif L==7
 	"USERS.Administration#administer-one-user";
 #elif L==8
@@ -1330,7 +1330,7 @@ const char *Hlp_USERS_Administration_administer_one_user =
 
 const char *Hlp_USERS_Administration_administer_multiple_users =
 #if   L==1
-	"USERS.Administration#administer-multiple-users";
+	"USERS.Administration.es#administrar-varios-usuarios";
 #elif L==2
 	"USERS.Administration#administer-multiple-users";
 #elif L==3
@@ -1340,7 +1340,7 @@ const char *Hlp_USERS_Administration_administer_multiple_users =
 #elif L==5
 	"USERS.Administration#administer-multiple-users";
 #elif L==6
-	"USERS.Administration#administer-multiple-users";
+	"USERS.Administration.es#administrar-varios-usuarios";
 #elif L==7
 	"USERS.Administration#administer-multiple-users";
 #elif L==8
@@ -1351,7 +1351,7 @@ const char *Hlp_USERS_Administration_administer_multiple_users =
 
 const char *Hlp_USERS_Administration_remove_all_students =
 #if   L==1
-	"USERS.Administration#remove-all-students";
+	"USERS.Administration.es#eliminar-todos-los-estudiantes";
 #elif L==2
 	"USERS.Administration#remove-all-students";
 #elif L==3
@@ -1361,7 +1361,7 @@ const char *Hlp_USERS_Administration_remove_all_students =
 #elif L==5
 	"USERS.Administration#remove-all-students";
 #elif L==6
-	"USERS.Administration#remove-all-students";
+	"USERS.Administration.es#eliminar-todos-los-estudiantes";
 #elif L==7
 	"USERS.Administration#remove-all-students";
 #elif L==8
@@ -1372,7 +1372,7 @@ const char *Hlp_USERS_Administration_remove_all_students =
 
 const char *Hlp_USERS_Teachers =
 #if   L==1
-	"USERS.Teachers";
+	"USERS.Teachers.es";
 #elif L==2
 	"USERS.Teachers";
 #elif L==3
@@ -1382,7 +1382,7 @@ const char *Hlp_USERS_Teachers =
 #elif L==5
 	"USERS.Teachers";
 #elif L==6
-	"USERS.Teachers";
+	"USERS.Teachers.es";
 #elif L==7
 	"USERS.Teachers";
 #elif L==8
@@ -1393,7 +1393,7 @@ const char *Hlp_USERS_Teachers =
 
 const char *Hlp_USERS_Teachers_shared_record_card =
 #if   L==1
-	"USERS.Teachers#shared-record-card";
+	"USERS.Teachers.es#ficha-compartida";
 #elif L==2
 	"USERS.Teachers#shared-record-card";
 #elif L==3
@@ -1403,7 +1403,7 @@ const char *Hlp_USERS_Teachers_shared_record_card =
 #elif L==5
 	"USERS.Teachers#shared-record-card";
 #elif L==6
-	"USERS.Teachers#shared-record-card";
+	"USERS.Teachers.es#ficha-compartida";
 #elif L==7
 	"USERS.Teachers#shared-record-card";
 #elif L==8
@@ -1414,7 +1414,7 @@ const char *Hlp_USERS_Teachers_shared_record_card =
 
 const char *Hlp_USERS_Teachers_timetable =
 #if   L==1
-	"USERS.Teachers#timetable";
+	"USERS.Teachers.es#horario";
 #elif L==2
 	"USERS.Teachers#timetable";
 #elif L==3
@@ -1424,7 +1424,7 @@ const char *Hlp_USERS_Teachers_timetable =
 #elif L==5
 	"USERS.Teachers#timetable";
 #elif L==6
-	"USERS.Teachers#timetable";
+	"USERS.Teachers.es#horario";
 #elif L==7
 	"USERS.Teachers#timetable";
 #elif L==8
@@ -1435,7 +1435,7 @@ const char *Hlp_USERS_Teachers_timetable =
 
 const char *Hlp_USERS_Administrators =
 #if   L==1
-	"USERS.Administrators";
+	"USERS.Administrators.es";
 #elif L==2
 	"USERS.Administrators";
 #elif L==3
@@ -1445,7 +1445,7 @@ const char *Hlp_USERS_Administrators =
 #elif L==5
 	"USERS.Administrators";
 #elif L==6
-	"USERS.Administrators";
+	"USERS.Administrators.es";
 #elif L==7
 	"USERS.Administrators";
 #elif L==8
@@ -1456,7 +1456,7 @@ const char *Hlp_USERS_Administrators =
 
 const char *Hlp_USERS_Guests =
 #if   L==1
-	"USERS.Guests";
+	"USERS.Guests.es";
 #elif L==2
 	"USERS.Guests";
 #elif L==3
@@ -1466,7 +1466,7 @@ const char *Hlp_USERS_Guests =
 #elif L==5
 	"USERS.Guests";
 #elif L==6
-	"USERS.Guests";
+	"USERS.Guests.es";
 #elif L==7
 	"USERS.Guests";
 #elif L==8
@@ -1477,7 +1477,7 @@ const char *Hlp_USERS_Guests =
 
 const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 #if   L==1
-	"USERS.Duplicates#possibly-duplicate-users";
+	"USERS.Duplicates.es#usuarios-posiblemente-duplicados";
 #elif L==2
 	"USERS.Duplicates#possibly-duplicate-users";
 #elif L==3
@@ -1487,7 +1487,7 @@ const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 #elif L==5
 	"USERS.Duplicates#possibly-duplicate-users";
 #elif L==6
-	"USERS.Duplicates#possibly-duplicate-users";
+	"USERS.Duplicates.es#usuarios-posiblemente-duplicados";
 #elif L==7
 	"USERS.Duplicates#possibly-duplicate-users";
 #elif L==8
@@ -1498,7 +1498,7 @@ const char *Hlp_USERS_Duplicates_possibly_duplicate_users =
 
 const char *Hlp_USERS_Duplicates_similar_users =
 #if   L==1
-	"USERS.Duplicates#similar-users";
+	"USERS.Duplicates.es#usuarios-similares";
 #elif L==2
 	"USERS.Duplicates#similar-users";
 #elif L==3
@@ -1508,7 +1508,7 @@ const char *Hlp_USERS_Duplicates_similar_users =
 #elif L==5
 	"USERS.Duplicates#similar-users";
 #elif L==6
-	"USERS.Duplicates#similar-users";
+	"USERS.Duplicates.es#usuarios-similares";
 #elif L==7
 	"USERS.Duplicates#similar-users";
 #elif L==8
@@ -1519,7 +1519,7 @@ const char *Hlp_USERS_Duplicates_similar_users =
 
 const char *Hlp_USERS_Attendance =
 #if   L==1
-	"USERS.Attendance";
+	"USERS.Attendance.es";
 #elif L==2
 	"USERS.Attendance";
 #elif L==3
@@ -1529,7 +1529,7 @@ const char *Hlp_USERS_Attendance =
 #elif L==5
 	"USERS.Attendance";
 #elif L==6
-	"USERS.Attendance";
+	"USERS.Attendance.es";
 #elif L==7
 	"USERS.Attendance";
 #elif L==8
@@ -1540,7 +1540,7 @@ const char *Hlp_USERS_Attendance =
 
 const char *Hlp_USERS_Attendance_new_event =
 #if   L==1
-	"USERS.Attendance#new-event";
+	"USERS.Attendance.es#nuevo-evento";
 #elif L==2
 	"USERS.Attendance#new-event";
 #elif L==3
@@ -1550,7 +1550,7 @@ const char *Hlp_USERS_Attendance_new_event =
 #elif L==5
 	"USERS.Attendance#new-event";
 #elif L==6
-	"USERS.Attendance#new-event";
+	"USERS.Attendance.es#nuevo-evento";
 #elif L==7
 	"USERS.Attendance#new-event";
 #elif L==8
@@ -1561,7 +1561,7 @@ const char *Hlp_USERS_Attendance_new_event =
 
 const char *Hlp_USERS_Attendance_edit_event =
 #if   L==1
-	"USERS.Attendance#edit-event";
+	"USERS.Attendance.es#editar-evento";
 #elif L==2
 	"USERS.Attendance#edit-event";
 #elif L==3
@@ -1571,7 +1571,7 @@ const char *Hlp_USERS_Attendance_edit_event =
 #elif L==5
 	"USERS.Attendance#edit-event";
 #elif L==6
-	"USERS.Attendance#edit-event";
+	"USERS.Attendance.es#editar-evento";
 #elif L==7
 	"USERS.Attendance#edit-event";
 #elif L==8
@@ -1582,7 +1582,7 @@ const char *Hlp_USERS_Attendance_edit_event =
 
 const char *Hlp_USERS_Attendance_attendance_list =
 #if   L==1
-	"USERS.Attendance#attendance-list";
+	"USERS.Attendance.es#lista-de-asistencia";
 #elif L==2
 	"USERS.Attendance#attendance-list";
 #elif L==3
@@ -1592,7 +1592,7 @@ const char *Hlp_USERS_Attendance_attendance_list =
 #elif L==5
 	"USERS.Attendance#attendance-list";
 #elif L==6
-	"USERS.Attendance#attendance-list";
+	"USERS.Attendance.es#lista-de-asistencia";
 #elif L==7
 	"USERS.Attendance#attendance-list";
 #elif L==8
@@ -1603,7 +1603,7 @@ const char *Hlp_USERS_Attendance_attendance_list =
 
 const char *Hlp_USERS_SignUp =
 #if   L==1
-	"USERS.SignUp";
+	"USERS.SignUp.es";
 #elif L==2
 	"USERS.SignUp";
 #elif L==3
@@ -1613,7 +1613,7 @@ const char *Hlp_USERS_SignUp =
 #elif L==5
 	"USERS.SignUp";
 #elif L==6
-	"USERS.SignUp";
+	"USERS.SignUp.es";
 #elif L==7
 	"USERS.SignUp";
 #elif L==8
@@ -1624,7 +1624,7 @@ const char *Hlp_USERS_SignUp =
 
 const char *Hlp_USERS_SignUp_confirm_enrolment =
 #if   L==1
-	"USERS.SignUp#confirm_enrolment";
+	"USERS.SignUp.es#confirmar-inscripci%C3%B3n";
 #elif L==2
 	"USERS.SignUp#confirm_enrolment";
 #elif L==3
@@ -1634,7 +1634,7 @@ const char *Hlp_USERS_SignUp_confirm_enrolment =
 #elif L==5
 	"USERS.SignUp#confirm_enrolment";
 #elif L==6
-	"USERS.SignUp#confirm_enrolment";
+	"USERS.SignUp.es#confirmar-inscripci%C3%B3n";
 #elif L==7
 	"USERS.SignUp#confirm_enrolment";
 #elif L==8
@@ -1645,7 +1645,7 @@ const char *Hlp_USERS_SignUp_confirm_enrolment =
 
 const char *Hlp_USERS_Requests =
 #if   L==1
-	"USERS.Requests";
+	"USERS.Requests.es";
 #elif L==2
 	"USERS.Requests";
 #elif L==3
@@ -1655,7 +1655,7 @@ const char *Hlp_USERS_Requests =
 #elif L==5
 	"USERS.Requests";
 #elif L==6
-	"USERS.Requests";
+	"USERS.Requests.es";
 #elif L==7
 	"USERS.Requests";
 #elif L==8
@@ -1666,7 +1666,7 @@ const char *Hlp_USERS_Requests =
 
 const char *Hlp_USERS_Connected =
 #if   L==1
-	"USERS.Connected";
+	"USERS.Connected.es";
 #elif L==2
 	"USERS.Connected";
 #elif L==3
@@ -1676,7 +1676,7 @@ const char *Hlp_USERS_Connected =
 #elif L==5
 	"USERS.Connected";
 #elif L==6
-	"USERS.Connected";
+	"USERS.Connected.es";
 #elif L==7
 	"USERS.Connected";
 #elif L==8
@@ -1687,7 +1687,7 @@ const char *Hlp_USERS_Connected =
 
 const char *Hlp_USERS_Connected_last_clicks =
 #if   L==1
-	"USERS.Connected#last-clicks";
+	"USERS.Connected.es#%C3%9Altimos-clics";
 #elif L==2
 	"USERS.Connected#last-clicks";
 #elif L==3
@@ -1697,7 +1697,7 @@ const char *Hlp_USERS_Connected_last_clicks =
 #elif L==5
 	"USERS.Connected#last-clicks";
 #elif L==6
-	"USERS.Connected#last-clicks";
+	"USERS.Connected.es#%C3%9Altimos-clics";
 #elif L==7
 	"USERS.Connected#last-clicks";
 #elif L==8
@@ -1710,7 +1710,7 @@ const char *Hlp_USERS_Connected_last_clicks =
 
 const char *Hlp_SOCIAL_Timeline =
 #if   L==1
-	"SOCIAL.Timeline";
+	"SOCIAL.Timeline.es";
 #elif L==2
 	"SOCIAL.Timeline";
 #elif L==3
@@ -1720,7 +1720,7 @@ const char *Hlp_SOCIAL_Timeline =
 #elif L==5
 	"SOCIAL.Timeline";
 #elif L==6
-	"SOCIAL.Timeline";
+	"SOCIAL.Timeline.es";
 #elif L==7
 	"SOCIAL.Timeline";
 #elif L==8
@@ -1731,7 +1731,7 @@ const char *Hlp_SOCIAL_Timeline =
 
 const char *Hlp_SOCIAL_Profiles_view_public_profile =
 #if   L==1
-	"SOCIAL.Profiles#view-public-profile";
+	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
 #elif L==2
 	"SOCIAL.Profiles#view-public-profile";
 #elif L==3
@@ -1741,7 +1741,7 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 #elif L==5
 	"SOCIAL.Profiles#view-public-profile";
 #elif L==6
-	"SOCIAL.Profiles#view-public-profile";
+	"SOCIAL.Profiles.es#ver-perfil-p%C3%BAblico";
 #elif L==7
 	"SOCIAL.Profiles#view-public-profile";
 #elif L==8
@@ -1752,7 +1752,7 @@ const char *Hlp_SOCIAL_Profiles_view_public_profile =
 
 const char *Hlp_SOCIAL_Profiles_who_to_follow =
 #if   L==1
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
 #elif L==2
 	"SOCIAL.Profiles#who-to-follow";
 #elif L==3
@@ -1762,7 +1762,7 @@ const char *Hlp_SOCIAL_Profiles_who_to_follow =
 #elif L==5
 	"SOCIAL.Profiles#who-to-follow";
 #elif L==6
-	"SOCIAL.Profiles#who-to-follow";
+	"SOCIAL.Profiles.es#a-qui%C3%A9n-seguir";
 #elif L==7
 	"SOCIAL.Profiles#who-to-follow";
 #elif L==8
@@ -1773,7 +1773,7 @@ const char *Hlp_SOCIAL_Profiles_who_to_follow =
 
 const char *Hlp_SOCIAL_Forums =
 #if   L==1
-	"SOCIAL.Forums";
+	"SOCIAL.Forums.es";
 #elif L==2
 	"SOCIAL.Forums";
 #elif L==3
@@ -1783,7 +1783,7 @@ const char *Hlp_SOCIAL_Forums =
 #elif L==5
 	"SOCIAL.Forums";
 #elif L==6
-	"SOCIAL.Forums";
+	"SOCIAL.Forums.es";
 #elif L==7
 	"SOCIAL.Forums";
 #elif L==8
@@ -1796,7 +1796,7 @@ const char *Hlp_SOCIAL_Forums =
 
 const char *Hlp_MESSAGES_Notifications =
 #if   L==1
-	"MESSAGES.Notifications";
+	"MESSAGES.Notifications.es";
 #elif L==2
 	"MESSAGES.Notifications";
 #elif L==3
@@ -1806,7 +1806,7 @@ const char *Hlp_MESSAGES_Notifications =
 #elif L==5
 	"MESSAGES.Notifications";
 #elif L==6
-	"MESSAGES.Notifications";
+	"MESSAGES.Notifications.es";
 #elif L==7
 	"MESSAGES.Notifications";
 #elif L==8
@@ -1817,7 +1817,7 @@ const char *Hlp_MESSAGES_Notifications =
 
 const char *Hlp_MESSAGES_Domains =
 #if   L==1
-	"MESSAGES.Domains";
+	"MESSAGES.Domains.es";
 #elif L==2
 	"MESSAGES.Domains";
 #elif L==3
@@ -1827,7 +1827,7 @@ const char *Hlp_MESSAGES_Domains =
 #elif L==5
 	"MESSAGES.Domains";
 #elif L==6
-	"MESSAGES.Domains";
+	"MESSAGES.Domains.es";
 #elif L==7
 	"MESSAGES.Domains";
 #elif L==8
@@ -1838,7 +1838,7 @@ const char *Hlp_MESSAGES_Domains =
 
 const char *Hlp_MESSAGES_Domains_edit =
 #if   L==1
-	"MESSAGES.Domains#edit";
+	"MESSAGES.Domains.es#editar";
 #elif L==2
 	"MESSAGES.Domains#edit";
 #elif L==3
@@ -1848,7 +1848,7 @@ const char *Hlp_MESSAGES_Domains_edit =
 #elif L==5
 	"MESSAGES.Domains#edit";
 #elif L==6
-	"MESSAGES.Domains#edit";
+	"MESSAGES.Domains.es#editar";
 #elif L==7
 	"MESSAGES.Domains#edit";
 #elif L==8
@@ -1859,7 +1859,7 @@ const char *Hlp_MESSAGES_Domains_edit =
 
 const char *Hlp_MESSAGES_Announcements =
 #if   L==1
-	"MESSAGES.Announcements";
+	"MESSAGES.Announcements.es";
 #elif L==2
 	"MESSAGES.Announcements";
 #elif L==3
@@ -1869,7 +1869,7 @@ const char *Hlp_MESSAGES_Announcements =
 #elif L==5
 	"MESSAGES.Announcements";
 #elif L==6
-	"MESSAGES.Announcements";
+	"MESSAGES.Announcements.es";
 #elif L==7
 	"MESSAGES.Announcements";
 #elif L==8
@@ -1880,7 +1880,7 @@ const char *Hlp_MESSAGES_Announcements =
 
 const char *Hlp_MESSAGES_Notices =
 #if   L==1
-	"MESSAGES.Notices";
+	"MESSAGES.Notices.es";
 #elif L==2
 	"MESSAGES.Notices";
 #elif L==3
@@ -1890,7 +1890,7 @@ const char *Hlp_MESSAGES_Notices =
 #elif L==5
 	"MESSAGES.Notices";
 #elif L==6
-	"MESSAGES.Notices";
+	"MESSAGES.Notices.es";
 #elif L==7
 	"MESSAGES.Notices";
 #elif L==8
@@ -1901,7 +1901,7 @@ const char *Hlp_MESSAGES_Notices =
 
 const char *Hlp_MESSAGES_Write =
 #if   L==1
-	"MESSAGES.Write";
+	"MESSAGES.Write.es";
 #elif L==2
 	"MESSAGES.Write";
 #elif L==3
@@ -1911,7 +1911,7 @@ const char *Hlp_MESSAGES_Write =
 #elif L==5
 	"MESSAGES.Write";
 #elif L==6
-	"MESSAGES.Write";
+	"MESSAGES.Write.es";
 #elif L==7
 	"MESSAGES.Write";
 #elif L==8
@@ -1922,7 +1922,7 @@ const char *Hlp_MESSAGES_Write =
 
 const char *Hlp_MESSAGES_Received =
 #if   L==1
-	"MESSAGES.Received";
+	"MESSAGES.Received.es";
 #elif L==2
 	"MESSAGES.Received";
 #elif L==3
@@ -1932,7 +1932,7 @@ const char *Hlp_MESSAGES_Received =
 #elif L==5
 	"MESSAGES.Received";
 #elif L==6
-	"MESSAGES.Received";
+	"MESSAGES.Received.es";
 #elif L==7
 	"MESSAGES.Received";
 #elif L==8
@@ -1943,7 +1943,7 @@ const char *Hlp_MESSAGES_Received =
 
 const char *Hlp_MESSAGES_Received_filter =
 #if   L==1
-	"MESSAGES.Received#filter";
+	"MESSAGES.Received.es#filtro";
 #elif L==2
 	"MESSAGES.Received#filter";
 #elif L==3
@@ -1953,7 +1953,7 @@ const char *Hlp_MESSAGES_Received_filter =
 #elif L==5
 	"MESSAGES.Received#filter";
 #elif L==6
-	"MESSAGES.Received#filter";
+	"MESSAGES.Received.es#filtro";
 #elif L==7
 	"MESSAGES.Received#filter";
 #elif L==8
@@ -1964,7 +1964,7 @@ const char *Hlp_MESSAGES_Received_filter =
 
 const char *Hlp_MESSAGES_Sent =
 #if   L==1
-	"MESSAGES.Sent";
+	"MESSAGES.Sent.es";
 #elif L==2
 	"MESSAGES.Sent";
 #elif L==3
@@ -1974,7 +1974,7 @@ const char *Hlp_MESSAGES_Sent =
 #elif L==5
 	"MESSAGES.Sent";
 #elif L==6
-	"MESSAGES.Sent";
+	"MESSAGES.Sent.es";
 #elif L==7
 	"MESSAGES.Sent";
 #elif L==8
@@ -1985,7 +1985,7 @@ const char *Hlp_MESSAGES_Sent =
 
 const char *Hlp_MESSAGES_Sent_filter =
 #if   L==1
-	"MESSAGES.Sent#filter";
+	"MESSAGES.Sent.es#filtro";
 #elif L==2
 	"MESSAGES.Sent#filter";
 #elif L==3
@@ -1995,7 +1995,7 @@ const char *Hlp_MESSAGES_Sent_filter =
 #elif L==5
 	"MESSAGES.Sent#filter";
 #elif L==6
-	"MESSAGES.Sent#filter";
+	"MESSAGES.Sent.es#filtro";
 #elif L==7
 	"MESSAGES.Sent#filter";
 #elif L==8
@@ -2006,7 +2006,7 @@ const char *Hlp_MESSAGES_Sent_filter =
 
 const char *Hlp_MESSAGES_Email =
 #if   L==1
-	"MESSAGES.Email";
+	"MESSAGES.Email.es";
 #elif L==2
 	"MESSAGES.Email";
 #elif L==3
@@ -2016,7 +2016,7 @@ const char *Hlp_MESSAGES_Email =
 #elif L==5
 	"MESSAGES.Email";
 #elif L==6
-	"MESSAGES.Email";
+	"MESSAGES.Email.es";
 #elif L==7
 	"MESSAGES.Email";
 #elif L==8
@@ -2029,7 +2029,7 @@ const char *Hlp_MESSAGES_Email =
 
 const char *Hlp_STATS_Surveys =
 #if   L==1
-	"STATS.Surveys";
+	"STATS.Surveys.es";
 #elif L==2
 	"STATS.Surveys";
 #elif L==3
@@ -2039,7 +2039,7 @@ const char *Hlp_STATS_Surveys =
 #elif L==5
 	"STATS.Surveys";
 #elif L==6
-	"STATS.Surveys";
+	"STATS.Surveys.es";
 #elif L==7
 	"STATS.Surveys";
 #elif L==8
@@ -2050,7 +2050,7 @@ const char *Hlp_STATS_Surveys =
 
 const char *Hlp_STATS_Surveys_new_survey =
 #if   L==1
-	"STATS.Surveys#new-survey";
+	"STATS.Surveys.es#nueva-encuesta";
 #elif L==2
 	"STATS.Surveys#new-survey";
 #elif L==3
@@ -2060,7 +2060,7 @@ const char *Hlp_STATS_Surveys_new_survey =
 #elif L==5
 	"STATS.Surveys#new-survey";
 #elif L==6
-	"STATS.Surveys#new-survey";
+	"STATS.Surveys.es#nueva-encuesta";
 #elif L==7
 	"STATS.Surveys#new-survey";
 #elif L==8
@@ -2071,7 +2071,7 @@ const char *Hlp_STATS_Surveys_new_survey =
 
 const char *Hlp_STATS_Surveys_edit_survey =
 #if   L==1
-	"STATS.Surveys#edit-survey";
+	"STATS.Surveys.es#editar-encuesta";
 #elif L==2
 	"STATS.Surveys#edit-survey";
 #elif L==3
@@ -2081,7 +2081,7 @@ const char *Hlp_STATS_Surveys_edit_survey =
 #elif L==5
 	"STATS.Surveys#edit-survey";
 #elif L==6
-	"STATS.Surveys#edit-survey";
+	"STATS.Surveys.es#editar-encuesta";
 #elif L==7
 	"STATS.Surveys#edit-survey";
 #elif L==8
@@ -2092,7 +2092,7 @@ const char *Hlp_STATS_Surveys_edit_survey =
 
 const char *Hlp_STATS_Surveys_questions =
 #if   L==1
-	"STATS.Surveys#questions";
+	"STATS.Surveys.es#preguntas";
 #elif L==2
 	"STATS.Surveys#questions";
 #elif L==3
@@ -2102,7 +2102,7 @@ const char *Hlp_STATS_Surveys_questions =
 #elif L==5
 	"STATS.Surveys#questions";
 #elif L==6
-	"STATS.Surveys#questions";
+	"STATS.Surveys.es#preguntas";
 #elif L==7
 	"STATS.Surveys#questions";
 #elif L==8
@@ -2113,7 +2113,7 @@ const char *Hlp_STATS_Surveys_questions =
 
 const char *Hlp_STATS_Figures =
 #if   L==1
-	"STATS.Figures";
+	"STATS.Figures.es";
 #elif L==2
 	"STATS.Figures";
 #elif L==3
@@ -2123,7 +2123,7 @@ const char *Hlp_STATS_Figures =
 #elif L==5
 	"STATS.Figures";
 #elif L==6
-	"STATS.Figures";
+	"STATS.Figures.es";
 #elif L==7
 	"STATS.Figures";
 #elif L==8
@@ -2134,7 +2134,7 @@ const char *Hlp_STATS_Figures =
 
 const char *Hlp_STATS_Figures_users =
 #if   L==1
-	"STATS.Figures#users";
+	"STATS.Figures.es#usuarios";
 #elif L==2
 	"STATS.Figures#users";
 #elif L==3
@@ -2144,7 +2144,7 @@ const char *Hlp_STATS_Figures_users =
 #elif L==5
 	"STATS.Figures#users";
 #elif L==6
-	"STATS.Figures#users";
+	"STATS.Figures.es#usuarios";
 #elif L==7
 	"STATS.Figures#users";
 #elif L==8
@@ -2155,7 +2155,7 @@ const char *Hlp_STATS_Figures_users =
 
 const char *Hlp_STATS_Figures_ranking =
 #if   L==1
-	"STATS.Figures#ranking";
+	"STATS.Figures.es#ranking";
 #elif L==2
 	"STATS.Figures#ranking";
 #elif L==3
@@ -2165,7 +2165,7 @@ const char *Hlp_STATS_Figures_ranking =
 #elif L==5
 	"STATS.Figures#ranking";
 #elif L==6
-	"STATS.Figures#ranking";
+	"STATS.Figures.es#ranking";
 #elif L==7
 	"STATS.Figures#ranking";
 #elif L==8
@@ -2176,7 +2176,7 @@ const char *Hlp_STATS_Figures_ranking =
 
 const char *Hlp_STATS_Figures_hierarchy =
 #if   L==1
-	"STATS.Figures#hierarchy";
+	"STATS.Figures.es#jerarqu%C3%ADa";
 #elif L==2
 	"STATS.Figures#hierarchy";
 #elif L==3
@@ -2186,7 +2186,7 @@ const char *Hlp_STATS_Figures_hierarchy =
 #elif L==5
 	"STATS.Figures#hierarchy";
 #elif L==6
-	"STATS.Figures#hierarchy";
+	"STATS.Figures.es#jerarqu%C3%ADa";
 #elif L==7
 	"STATS.Figures#hierarchy";
 #elif L==8
@@ -2197,7 +2197,7 @@ const char *Hlp_STATS_Figures_hierarchy =
 
 const char *Hlp_STATS_Figures_institutions =
 #if   L==1
-	"STATS.Figures#institutions";
+	"STATS.Figures.es#instituciones";
 #elif L==2
 	"STATS.Figures#institutions";
 #elif L==3
@@ -2207,7 +2207,7 @@ const char *Hlp_STATS_Figures_institutions =
 #elif L==5
 	"STATS.Figures#institutions";
 #elif L==6
-	"STATS.Figures#institutions";
+	"STATS.Figures.es#instituciones";
 #elif L==7
 	"STATS.Figures#institutions";
 #elif L==8
@@ -2218,7 +2218,7 @@ const char *Hlp_STATS_Figures_institutions =
 
 const char *Hlp_STATS_Figures_types_of_degree =
 #if   L==1
-	"STATS.Figures#types-of-degree";
+	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==2
 	"STATS.Figures#types-of-degree";
 #elif L==3
@@ -2228,7 +2228,7 @@ const char *Hlp_STATS_Figures_types_of_degree =
 #elif L==5
 	"STATS.Figures#types-of-degree";
 #elif L==6
-	"STATS.Figures#types-of-degree";
+	"STATS.Figures.es#tipos-de-titulaci%C3%B3n";
 #elif L==7
 	"STATS.Figures#types-of-degree";
 #elif L==8
@@ -2239,7 +2239,7 @@ const char *Hlp_STATS_Figures_types_of_degree =
 
 const char *Hlp_STATS_Figures_folders_and_files =
 #if   L==1
-	"STATS.Figures#folders-and-files";
+	"STATS.Figures.es#carpetas-y-archivos";
 #elif L==2
 	"STATS.Figures#folders-and-files";
 #elif L==3
@@ -2249,7 +2249,7 @@ const char *Hlp_STATS_Figures_folders_and_files =
 #elif L==5
 	"STATS.Figures#folders-and-files";
 #elif L==6
-	"STATS.Figures#folders-and-files";
+	"STATS.Figures.es#carpetas-y-archivos";
 #elif L==7
 	"STATS.Figures#folders-and-files";
 #elif L==8
@@ -2260,7 +2260,7 @@ const char *Hlp_STATS_Figures_folders_and_files =
 
 const char *Hlp_STATS_Figures_open_educational_resources_oer =
 #if   L==1
-	"STATS.Figures#open-educational-resources-oer";
+	"STATS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==2
 	"STATS.Figures#open-educational-resources-oer";
 #elif L==3
@@ -2270,7 +2270,7 @@ const char *Hlp_STATS_Figures_open_educational_resources_oer =
 #elif L==5
 	"STATS.Figures#open-educational-resources-oer";
 #elif L==6
-	"STATS.Figures#open-educational-resources-oer";
+	"STATS.Figures.es#recursos-educativos-abiertos-oer";
 #elif L==7
 	"STATS.Figures#open-educational-resources-oer";
 #elif L==8
@@ -2281,7 +2281,7 @@ const char *Hlp_STATS_Figures_open_educational_resources_oer =
 
 const char *Hlp_STATS_Figures_assignments =
 #if   L==1
-	"STATS.Figures#assignments";
+	"STATS.Figures.es#actividades";
 #elif L==2
 	"STATS.Figures#assignments";
 #elif L==3
@@ -2291,7 +2291,7 @@ const char *Hlp_STATS_Figures_assignments =
 #elif L==5
 	"STATS.Figures#assignments";
 #elif L==6
-	"STATS.Figures#assignments";
+	"STATS.Figures.es#actividades";
 #elif L==7
 	"STATS.Figures#assignments";
 #elif L==8
@@ -2302,7 +2302,7 @@ const char *Hlp_STATS_Figures_assignments =
 
 const char *Hlp_STATS_Figures_tests =
 #if   L==1
-	"STATS.Figures#tests";
+	"STATS.Figures.es#tests";
 #elif L==2
 	"STATS.Figures#tests";
 #elif L==3
@@ -2312,7 +2312,7 @@ const char *Hlp_STATS_Figures_tests =
 #elif L==5
 	"STATS.Figures#tests";
 #elif L==6
-	"STATS.Figures#tests";
+	"STATS.Figures.es#tests";
 #elif L==7
 	"STATS.Figures#tests";
 #elif L==8
@@ -2323,7 +2323,7 @@ const char *Hlp_STATS_Figures_tests =
 
 const char *Hlp_STATS_Figures_timeline =
 #if   L==1
-	"STATS.Figures#timeline";
+	"STATS.Figures.es#timeline";
 #elif L==2
 	"STATS.Figures#timeline";
 #elif L==3
@@ -2333,7 +2333,7 @@ const char *Hlp_STATS_Figures_timeline =
 #elif L==5
 	"STATS.Figures#timeline";
 #elif L==6
-	"STATS.Figures#timeline";
+	"STATS.Figures.es#timeline";
 #elif L==7
 	"STATS.Figures#timeline";
 #elif L==8
@@ -2344,7 +2344,7 @@ const char *Hlp_STATS_Figures_timeline =
 
 const char *Hlp_STATS_Figures_followed_followers =
 #if   L==1
-	"STATS.Figures#followed--followers";
+	"STATS.Figures.es#seguidos--seguidores";
 #elif L==2
 	"STATS.Figures#followed--followers";
 #elif L==3
@@ -2354,7 +2354,7 @@ const char *Hlp_STATS_Figures_followed_followers =
 #elif L==5
 	"STATS.Figures#followed--followers";
 #elif L==6
-	"STATS.Figures#followed--followers";
+	"STATS.Figures.es#seguidos--seguidores";
 #elif L==7
 	"STATS.Figures#followed--followers";
 #elif L==8
@@ -2365,7 +2365,7 @@ const char *Hlp_STATS_Figures_followed_followers =
 
 const char *Hlp_STATS_Figures_forums =
 #if   L==1
-	"STATS.Figures#forums";
+	"STATS.Figures.es#foros";
 #elif L==2
 	"STATS.Figures#forums";
 #elif L==3
@@ -2375,7 +2375,7 @@ const char *Hlp_STATS_Figures_forums =
 #elif L==5
 	"STATS.Figures#forums";
 #elif L==6
-	"STATS.Figures#forums";
+	"STATS.Figures.es#foros";
 #elif L==7
 	"STATS.Figures#forums";
 #elif L==8
@@ -2386,7 +2386,7 @@ const char *Hlp_STATS_Figures_forums =
 
 const char *Hlp_STATS_Figures_notifications =
 #if   L==1
-	"STATS.Figures#notifications";
+	"STATS.Figures.es#notificaciones";
 #elif L==2
 	"STATS.Figures#notifications";
 #elif L==3
@@ -2396,7 +2396,7 @@ const char *Hlp_STATS_Figures_notifications =
 #elif L==5
 	"STATS.Figures#notifications";
 #elif L==6
-	"STATS.Figures#notifications";
+	"STATS.Figures.es#notificaciones";
 #elif L==7
 	"STATS.Figures#notifications";
 #elif L==8
@@ -2407,7 +2407,7 @@ const char *Hlp_STATS_Figures_notifications =
 
 const char *Hlp_STATS_Figures_notices =
 #if   L==1
-	"STATS.Figures#notices";
+	"STATS.Figures.es#avisos";
 #elif L==2
 	"STATS.Figures#notices";
 #elif L==3
@@ -2417,7 +2417,7 @@ const char *Hlp_STATS_Figures_notices =
 #elif L==5
 	"STATS.Figures#notices";
 #elif L==6
-	"STATS.Figures#notices";
+	"STATS.Figures.es#avisos";
 #elif L==7
 	"STATS.Figures#notices";
 #elif L==8
@@ -2428,7 +2428,7 @@ const char *Hlp_STATS_Figures_notices =
 
 const char *Hlp_STATS_Figures_messages =
 #if   L==1
-	"STATS.Figures#messages";
+	"STATS.Figures.es#mensajes";
 #elif L==2
 	"STATS.Figures#messages";
 #elif L==3
@@ -2438,7 +2438,7 @@ const char *Hlp_STATS_Figures_messages =
 #elif L==5
 	"STATS.Figures#messages";
 #elif L==6
-	"STATS.Figures#messages";
+	"STATS.Figures.es#mensajes";
 #elif L==7
 	"STATS.Figures#messages";
 #elif L==8
@@ -2449,7 +2449,7 @@ const char *Hlp_STATS_Figures_messages =
 
 const char *Hlp_STATS_Figures_surveys =
 #if   L==1
-	"STATS.Figures#surveys";
+	"STATS.Figures.es#encuestas";
 #elif L==2
 	"STATS.Figures#surveys";
 #elif L==3
@@ -2459,7 +2459,7 @@ const char *Hlp_STATS_Figures_surveys =
 #elif L==5
 	"STATS.Figures#surveys";
 #elif L==6
-	"STATS.Figures#surveys";
+	"STATS.Figures.es#encuestas";
 #elif L==7
 	"STATS.Figures#surveys";
 #elif L==8
@@ -2470,7 +2470,7 @@ const char *Hlp_STATS_Figures_surveys =
 
 const char *Hlp_STATS_Figures_webs_social_networks =
 #if   L==1
-	"STATS.Figures#webs--social-networks";
+	"STATS.Figures.es#webs--redes-sociales";
 #elif L==2
 	"STATS.Figures#webs--social-networks";
 #elif L==3
@@ -2480,7 +2480,7 @@ const char *Hlp_STATS_Figures_webs_social_networks =
 #elif L==5
 	"STATS.Figures#webs--social-networks";
 #elif L==6
-	"STATS.Figures#webs--social-networks";
+	"STATS.Figures.es#webs--redes-sociales";
 #elif L==7
 	"STATS.Figures#webs--social-networks";
 #elif L==8
@@ -2491,7 +2491,7 @@ const char *Hlp_STATS_Figures_webs_social_networks =
 
 const char *Hlp_STATS_Figures_language =
 #if   L==1
-	"STATS.Figures#language";
+	"STATS.Figures.es#idioma";
 #elif L==2
 	"STATS.Figures#language";
 #elif L==3
@@ -2501,7 +2501,7 @@ const char *Hlp_STATS_Figures_language =
 #elif L==5
 	"STATS.Figures#language";
 #elif L==6
-	"STATS.Figures#language";
+	"STATS.Figures.es#idioma";
 #elif L==7
 	"STATS.Figures#language";
 #elif L==8
@@ -2512,7 +2512,7 @@ const char *Hlp_STATS_Figures_language =
 
 const char *Hlp_STATS_Figures_icons =
 #if   L==1
-	"STATS.Figures#icons";
+	"STATS.Figures.es#iconos";
 #elif L==2
 	"STATS.Figures#icons";
 #elif L==3
@@ -2522,7 +2522,7 @@ const char *Hlp_STATS_Figures_icons =
 #elif L==5
 	"STATS.Figures#icons";
 #elif L==6
-	"STATS.Figures#icons";
+	"STATS.Figures.es#iconos";
 #elif L==7
 	"STATS.Figures#icons";
 #elif L==8
@@ -2533,7 +2533,7 @@ const char *Hlp_STATS_Figures_icons =
 
 const char *Hlp_STATS_Figures_menu =
 #if   L==1
-	"STATS.Figures#menu";
+	"STATS.Figures.es#men%C3%BA";
 #elif L==2
 	"STATS.Figures#menu";
 #elif L==3
@@ -2543,7 +2543,7 @@ const char *Hlp_STATS_Figures_menu =
 #elif L==5
 	"STATS.Figures#menu";
 #elif L==6
-	"STATS.Figures#menu";
+	"STATS.Figures.es#men%C3%BA";
 #elif L==7
 	"STATS.Figures#menu";
 #elif L==8
@@ -2554,7 +2554,7 @@ const char *Hlp_STATS_Figures_menu =
 
 const char *Hlp_STATS_Figures_calendar =
 #if   L==1
-	"STATS.Figures#calendar";
+	"STATS.Figures.es#calendario";
 #elif L==2
 	"STATS.Figures#calendar";
 #elif L==3
@@ -2564,7 +2564,7 @@ const char *Hlp_STATS_Figures_calendar =
 #elif L==5
 	"STATS.Figures#calendar";
 #elif L==6
-	"STATS.Figures#calendar";
+	"STATS.Figures.es#calendario";
 #elif L==7
 	"STATS.Figures#calendar";
 #elif L==8
@@ -2575,7 +2575,7 @@ const char *Hlp_STATS_Figures_calendar =
 
 const char *Hlp_STATS_Figures_theme =
 #if   L==1
-	"STATS.Figures#theme";
+	"STATS.Figures.es#tema";
 #elif L==2
 	"STATS.Figures#theme";
 #elif L==3
@@ -2585,7 +2585,7 @@ const char *Hlp_STATS_Figures_theme =
 #elif L==5
 	"STATS.Figures#theme";
 #elif L==6
-	"STATS.Figures#theme";
+	"STATS.Figures.es#tema";
 #elif L==7
 	"STATS.Figures#theme";
 #elif L==8
@@ -2596,7 +2596,7 @@ const char *Hlp_STATS_Figures_theme =
 
 const char *Hlp_STATS_Figures_columns =
 #if   L==1
-	"STATS.Figures#columns";
+	"STATS.Figures.es#columnas";
 #elif L==2
 	"STATS.Figures#columns";
 #elif L==3
@@ -2606,7 +2606,7 @@ const char *Hlp_STATS_Figures_columns =
 #elif L==5
 	"STATS.Figures#columns";
 #elif L==6
-	"STATS.Figures#columns";
+	"STATS.Figures.es#columnas";
 #elif L==7
 	"STATS.Figures#columns";
 #elif L==8
@@ -2617,7 +2617,7 @@ const char *Hlp_STATS_Figures_columns =
 
 const char *Hlp_STATS_Figures_privacy =
 #if   L==1
-	"STATS.Figures#privacy";
+	"STATS.Figures.es#privacidad";
 #elif L==2
 	"STATS.Figures#privacy";
 #elif L==3
@@ -2627,7 +2627,7 @@ const char *Hlp_STATS_Figures_privacy =
 #elif L==5
 	"STATS.Figures#privacy";
 #elif L==6
-	"STATS.Figures#privacy";
+	"STATS.Figures.es#privacidad";
 #elif L==7
 	"STATS.Figures#privacy";
 #elif L==8
@@ -2638,7 +2638,7 @@ const char *Hlp_STATS_Figures_privacy =
 
 const char *Hlp_STATS_Degrees =
 #if   L==1
-	"STATS.Degrees";
+	"STATS.Degrees.es";
 #elif L==2
 	"STATS.Degrees";
 #elif L==3
@@ -2648,7 +2648,7 @@ const char *Hlp_STATS_Degrees =
 #elif L==5
 	"STATS.Degrees";
 #elif L==6
-	"STATS.Degrees";
+	"STATS.Degrees.es";
 #elif L==7
 	"STATS.Degrees";
 #elif L==8
@@ -2659,7 +2659,7 @@ const char *Hlp_STATS_Degrees =
 
 const char *Hlp_STATS_Indicators =
 #if   L==1
-	"STATS.Indicators";
+	"STATS.Indicators.es";
 #elif L==2
 	"STATS.Indicators";
 #elif L==3
@@ -2669,7 +2669,7 @@ const char *Hlp_STATS_Indicators =
 #elif L==5
 	"STATS.Indicators";
 #elif L==6
-	"STATS.Indicators";
+	"STATS.Indicators.es";
 #elif L==7
 	"STATS.Indicators";
 #elif L==8
@@ -2680,7 +2680,7 @@ const char *Hlp_STATS_Indicators =
 
 const char *Hlp_STATS_Visits_global_visits =
 #if   L==1
-	"STATS.Visits#global-visits";
+	"STATS.Visits.es#accesos-globales";
 #elif L==2
 	"STATS.Visits#global-visits";
 #elif L==3
@@ -2690,7 +2690,7 @@ const char *Hlp_STATS_Visits_global_visits =
 #elif L==5
 	"STATS.Visits#global-visits";
 #elif L==6
-	"STATS.Visits#global-visits";
+	"STATS.Visits.es#accesos-globales";
 #elif L==7
 	"STATS.Visits#global-visits";
 #elif L==8
@@ -2701,7 +2701,7 @@ const char *Hlp_STATS_Visits_global_visits =
 
 const char *Hlp_STATS_Visits_visits_to_course =
 #if   L==1
-	"STATS.Visits#visits-to-course";
+	"STATS.Visits.es#accesos-a-la-asignatura";
 #elif L==2
 	"STATS.Visits#visits-to-course";
 #elif L==3
@@ -2711,7 +2711,7 @@ const char *Hlp_STATS_Visits_visits_to_course =
 #elif L==5
 	"STATS.Visits#visits-to-course";
 #elif L==6
-	"STATS.Visits#visits-to-course";
+	"STATS.Visits.es#accesos-a-la-asignatura";
 #elif L==7
 	"STATS.Visits#visits-to-course";
 #elif L==8
@@ -2722,7 +2722,7 @@ const char *Hlp_STATS_Visits_visits_to_course =
 
 const char *Hlp_STATS_Report =
 #if   L==1
-	"STATS.Report";
+	"STATS.Report.es";
 #elif L==2
 	"STATS.Report";
 #elif L==3
@@ -2732,7 +2732,7 @@ const char *Hlp_STATS_Report =
 #elif L==5
 	"STATS.Report";
 #elif L==6
-	"STATS.Report";
+	"STATS.Report.es";
 #elif L==7
 	"STATS.Report";
 #elif L==8
@@ -2743,7 +2743,7 @@ const char *Hlp_STATS_Report =
 
 const char *Hlp_STATS_Frequent =
 #if   L==1
-	"STATS.Frequent";
+	"STATS.Frequent.es";
 #elif L==2
 	"STATS.Frequent";
 #elif L==3
@@ -2753,7 +2753,7 @@ const char *Hlp_STATS_Frequent =
 #elif L==5
 	"STATS.Frequent";
 #elif L==6
-	"STATS.Frequent";
+	"STATS.Frequent.es";
 #elif L==7
 	"STATS.Frequent";
 #elif L==8
@@ -2766,7 +2766,7 @@ const char *Hlp_STATS_Frequent =
 
 const char *Hlp_PROFILE_LogIn =
 #if   L==1
-	"PROFILE.LogIn";
+	"PROFILE.LogIn.es";
 #elif L==2
 	"PROFILE.LogIn";
 #elif L==3
@@ -2776,7 +2776,7 @@ const char *Hlp_PROFILE_LogIn =
 #elif L==5
 	"PROFILE.LogIn";
 #elif L==6
-	"PROFILE.LogIn";
+	"PROFILE.LogIn.es";
 #elif L==7
 	"PROFILE.LogIn";
 #elif L==8
@@ -2787,7 +2787,7 @@ const char *Hlp_PROFILE_LogIn =
 
 const char *Hlp_PROFILE_SignUp =
 #if   L==1
-	"PROFILE.SignUp";
+	"PROFILE.SignUp.es";
 #elif L==2
 	"PROFILE.SignUp";
 #elif L==3
@@ -2797,7 +2797,7 @@ const char *Hlp_PROFILE_SignUp =
 #elif L==5
 	"PROFILE.SignUp";
 #elif L==6
-	"PROFILE.SignUp";
+	"PROFILE.SignUp.es";
 #elif L==7
 	"PROFILE.SignUp";
 #elif L==8
@@ -2808,7 +2808,7 @@ const char *Hlp_PROFILE_SignUp =
 
 const char *Hlp_PROFILE_Account =
 #if   L==1
-	"PROFILE.Account";
+	"PROFILE.Account.es";
 #elif L==2
 	"PROFILE.Account";
 #elif L==3
@@ -2818,7 +2818,7 @@ const char *Hlp_PROFILE_Account =
 #elif L==5
 	"PROFILE.Account";
 #elif L==6
-	"PROFILE.Account";
+	"PROFILE.Account.es";
 #elif L==7
 	"PROFILE.Account";
 #elif L==8
@@ -2829,7 +2829,7 @@ const char *Hlp_PROFILE_Account =
 
 const char *Hlp_PROFILE_Account_email =
 #if   L==1
-	"PROFILE.Account#email";
+	"PROFILE.Account.es#correo";
 #elif L==2
 	"PROFILE.Account#email";
 #elif L==3
@@ -2839,7 +2839,7 @@ const char *Hlp_PROFILE_Account_email =
 #elif L==5
 	"PROFILE.Account#email";
 #elif L==6
-	"PROFILE.Account#email";
+	"PROFILE.Account.es#correo";
 #elif L==7
 	"PROFILE.Account#email";
 #elif L==8
@@ -2850,7 +2850,7 @@ const char *Hlp_PROFILE_Account_email =
 
 const char *Hlp_PROFILE_Session_role =
 #if   L==1
-	"PROFILE.Session#role";
+	"PROFILE.Session.es#rol";
 #elif L==2
 	"PROFILE.Session#role";
 #elif L==3
@@ -2860,7 +2860,7 @@ const char *Hlp_PROFILE_Session_role =
 #elif L==5
 	"PROFILE.Session#role";
 #elif L==6
-	"PROFILE.Session#role";
+	"PROFILE.Session.es#rol";
 #elif L==7
 	"PROFILE.Session#role";
 #elif L==8
@@ -2871,7 +2871,7 @@ const char *Hlp_PROFILE_Session_role =
 
 const char *Hlp_PROFILE_Password =
 #if   L==1
-	"PROFILE.Password";
+	"PROFILE.Password.es";
 #elif L==2
 	"PROFILE.Password";
 #elif L==3
@@ -2881,7 +2881,7 @@ const char *Hlp_PROFILE_Password =
 #elif L==5
 	"PROFILE.Password";
 #elif L==6
-	"PROFILE.Password";
+	"PROFILE.Password.es";
 #elif L==7
 	"PROFILE.Password";
 #elif L==8
@@ -2892,7 +2892,7 @@ const char *Hlp_PROFILE_Password =
 
 const char *Hlp_PROFILE_Courses =
 #if   L==1
-	"PROFILE.Courses";
+	"PROFILE.Courses.es";
 #elif L==2
 	"PROFILE.Courses";
 #elif L==3
@@ -2902,7 +2902,7 @@ const char *Hlp_PROFILE_Courses =
 #elif L==5
 	"PROFILE.Courses";
 #elif L==6
-	"PROFILE.Courses";
+	"PROFILE.Courses.es";
 #elif L==7
 	"PROFILE.Courses";
 #elif L==8
@@ -2913,7 +2913,7 @@ const char *Hlp_PROFILE_Courses =
 
 const char *Hlp_PROFILE_Timetable =
 #if   L==1
-	"PROFILE.Timetable";
+	"PROFILE.Timetable.es";
 #elif L==2
 	"PROFILE.Timetable";
 #elif L==3
@@ -2923,7 +2923,7 @@ const char *Hlp_PROFILE_Timetable =
 #elif L==5
 	"PROFILE.Timetable";
 #elif L==6
-	"PROFILE.Timetable";
+	"PROFILE.Timetable.es";
 #elif L==7
 	"PROFILE.Timetable";
 #elif L==8
@@ -2934,7 +2934,7 @@ const char *Hlp_PROFILE_Timetable =
 
 const char *Hlp_PROFILE_Agenda =
 #if   L==1
-	"PROFILE.Agenda";
+	"PROFILE.Agenda.es";
 #elif L==2
 	"PROFILE.Agenda";
 #elif L==3
@@ -2944,7 +2944,7 @@ const char *Hlp_PROFILE_Agenda =
 #elif L==5
 	"PROFILE.Agenda";
 #elif L==6
-	"PROFILE.Agenda";
+	"PROFILE.Agenda.es";
 #elif L==7
 	"PROFILE.Agenda";
 #elif L==8
@@ -2955,7 +2955,7 @@ const char *Hlp_PROFILE_Agenda =
 
 const char *Hlp_PROFILE_Agenda_new_event =
 #if   L==1
-	"PROFILE.Agenda#new-event";
+	"PROFILE.Agenda.es#nuevo-evento";
 #elif L==2
 	"PROFILE.Agenda#new-event";
 #elif L==3
@@ -2965,7 +2965,7 @@ const char *Hlp_PROFILE_Agenda_new_event =
 #elif L==5
 	"PROFILE.Agenda#new-event";
 #elif L==6
-	"PROFILE.Agenda#new-event";
+	"PROFILE.Agenda.es#nuevo-evento";
 #elif L==7
 	"PROFILE.Agenda#new-event";
 #elif L==8
@@ -2976,7 +2976,7 @@ const char *Hlp_PROFILE_Agenda_new_event =
 
 const char *Hlp_PROFILE_Agenda_edit_event =
 #if   L==1
-	"PROFILE.Agenda#edit-event";
+	"PROFILE.Agenda.es#editar-evento";
 #elif L==2
 	"PROFILE.Agenda#edit-event";
 #elif L==3
@@ -2986,7 +2986,7 @@ const char *Hlp_PROFILE_Agenda_edit_event =
 #elif L==5
 	"PROFILE.Agenda#edit-event";
 #elif L==6
-	"PROFILE.Agenda#edit-event";
+	"PROFILE.Agenda.es#editar-evento";
 #elif L==7
 	"PROFILE.Agenda#edit-event";
 #elif L==8
@@ -2997,7 +2997,7 @@ const char *Hlp_PROFILE_Agenda_edit_event =
 
 const char *Hlp_PROFILE_Agenda_public_agenda =
 #if   L==1
-	"PROFILE.Agenda#public-agenda";
+	"PROFILE.Agenda.es#agenda-p%C3%BAblica";
 #elif L==2
 	"PROFILE.Agenda#public-agenda";
 #elif L==3
@@ -3007,7 +3007,7 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 #elif L==5
 	"PROFILE.Agenda#public-agenda";
 #elif L==6
-	"PROFILE.Agenda#public-agenda";
+	"PROFILE.Agenda.es#agenda-p%C3%BAblica";
 #elif L==7
 	"PROFILE.Agenda#public-agenda";
 #elif L==8
@@ -3018,7 +3018,7 @@ const char *Hlp_PROFILE_Agenda_public_agenda =
 
 const char *Hlp_PROFILE_Record =
 #if   L==1
-	"PROFILE.Record";
+	"PROFILE.Record.es";
 #elif L==2
 	"PROFILE.Record";
 #elif L==3
@@ -3028,7 +3028,7 @@ const char *Hlp_PROFILE_Record =
 #elif L==5
 	"PROFILE.Record";
 #elif L==6
-	"PROFILE.Record";
+	"PROFILE.Record.es";
 #elif L==7
 	"PROFILE.Record";
 #elif L==8
@@ -3039,7 +3039,7 @@ const char *Hlp_PROFILE_Record =
 
 const char *Hlp_PROFILE_Institution =
 #if   L==1
-	"PROFILE.Institution";
+	"PROFILE.Institution.es";
 #elif L==2
 	"PROFILE.Institution";
 #elif L==3
@@ -3049,7 +3049,7 @@ const char *Hlp_PROFILE_Institution =
 #elif L==5
 	"PROFILE.Institution";
 #elif L==6
-	"PROFILE.Institution";
+	"PROFILE.Institution.es";
 #elif L==7
 	"PROFILE.Institution";
 #elif L==8
@@ -3060,7 +3060,7 @@ const char *Hlp_PROFILE_Institution =
 
 const char *Hlp_PROFILE_Webs =
 #if   L==1
-	"PROFILE.Webs";
+	"PROFILE.Webs.es";
 #elif L==2
 	"PROFILE.Webs";
 #elif L==3
@@ -3070,7 +3070,7 @@ const char *Hlp_PROFILE_Webs =
 #elif L==5
 	"PROFILE.Webs";
 #elif L==6
-	"PROFILE.Webs";
+	"PROFILE.Webs.es";
 #elif L==7
 	"PROFILE.Webs";
 #elif L==8
@@ -3081,7 +3081,7 @@ const char *Hlp_PROFILE_Webs =
 
 const char *Hlp_PROFILE_Photo =
 #if   L==1
-	"PROFILE.Photo";
+	"PROFILE.Photo.es";
 #elif L==2
 	"PROFILE.Photo";
 #elif L==3
@@ -3091,7 +3091,7 @@ const char *Hlp_PROFILE_Photo =
 #elif L==5
 	"PROFILE.Photo";
 #elif L==6
-	"PROFILE.Photo";
+	"PROFILE.Photo.es";
 #elif L==7
 	"PROFILE.Photo";
 #elif L==8
@@ -3102,7 +3102,7 @@ const char *Hlp_PROFILE_Photo =
 
 const char *Hlp_PROFILE_Preferences_language =
 #if   L==1
-	"PROFILE.Preferences#language";
+	"PROFILE.Preferences.es#idioma";
 #elif L==2
 	"PROFILE.Preferences#language";
 #elif L==3
@@ -3112,7 +3112,7 @@ const char *Hlp_PROFILE_Preferences_language =
 #elif L==5
 	"PROFILE.Preferences#language";
 #elif L==6
-	"PROFILE.Preferences#language";
+	"PROFILE.Preferences.es#idioma";
 #elif L==7
 	"PROFILE.Preferences#language";
 #elif L==8
@@ -3123,7 +3123,7 @@ const char *Hlp_PROFILE_Preferences_language =
 
 const char *Hlp_PROFILE_Preferences_calendar =
 #if   L==1
-	"PROFILE.Preferences#calendar";
+	"PROFILE.Preferences.es#calendario";
 #elif L==2
 	"PROFILE.Preferences#calendar";
 #elif L==3
@@ -3133,7 +3133,7 @@ const char *Hlp_PROFILE_Preferences_calendar =
 #elif L==5
 	"PROFILE.Preferences#calendar";
 #elif L==6
-	"PROFILE.Preferences#calendar";
+	"PROFILE.Preferences.es#calendario";
 #elif L==7
 	"PROFILE.Preferences#calendar";
 #elif L==8
@@ -3144,7 +3144,7 @@ const char *Hlp_PROFILE_Preferences_calendar =
 
 const char *Hlp_PROFILE_Preferences_icons =
 #if   L==1
-	"PROFILE.Preferences#icons";
+	"PROFILE.Preferences.es#iconos";
 #elif L==2
 	"PROFILE.Preferences#icons";
 #elif L==3
@@ -3154,7 +3154,7 @@ const char *Hlp_PROFILE_Preferences_icons =
 #elif L==5
 	"PROFILE.Preferences#icons";
 #elif L==6
-	"PROFILE.Preferences#icons";
+	"PROFILE.Preferences.es#iconos";
 #elif L==7
 	"PROFILE.Preferences#icons";
 #elif L==8
@@ -3165,7 +3165,7 @@ const char *Hlp_PROFILE_Preferences_icons =
 
 const char *Hlp_PROFILE_Preferences_theme =
 #if   L==1
-	"PROFILE.Preferences#theme";
+	"PROFILE.Preferences.es#tema";
 #elif L==2
 	"PROFILE.Preferences#theme";
 #elif L==3
@@ -3175,7 +3175,7 @@ const char *Hlp_PROFILE_Preferences_theme =
 #elif L==5
 	"PROFILE.Preferences#theme";
 #elif L==6
-	"PROFILE.Preferences#theme";
+	"PROFILE.Preferences.es#tema";
 #elif L==7
 	"PROFILE.Preferences#theme";
 #elif L==8
@@ -3186,7 +3186,7 @@ const char *Hlp_PROFILE_Preferences_theme =
 
 const char *Hlp_PROFILE_Preferences_menu =
 #if   L==1
-	"PROFILE.Preferences#menu";
+	"PROFILE.Preferences.es#men%C3%BA";
 #elif L==2
 	"PROFILE.Preferences#menu";
 #elif L==3
@@ -3196,7 +3196,7 @@ const char *Hlp_PROFILE_Preferences_menu =
 #elif L==5
 	"PROFILE.Preferences#menu";
 #elif L==6
-	"PROFILE.Preferences#menu";
+	"PROFILE.Preferences.es#men%C3%BA";
 #elif L==7
 	"PROFILE.Preferences#menu";
 #elif L==8
@@ -3207,7 +3207,7 @@ const char *Hlp_PROFILE_Preferences_menu =
 
 const char *Hlp_PROFILE_Preferences_columns =
 #if   L==1
-	"PROFILE.Preferences#columns";
+	"PROFILE.Preferences.es#columnas";
 #elif L==2
 	"PROFILE.Preferences#columns";
 #elif L==3
@@ -3217,7 +3217,7 @@ const char *Hlp_PROFILE_Preferences_columns =
 #elif L==5
 	"PROFILE.Preferences#columns";
 #elif L==6
-	"PROFILE.Preferences#columns";
+	"PROFILE.Preferences.es#columnas";
 #elif L==7
 	"PROFILE.Preferences#columns";
 #elif L==8
@@ -3228,7 +3228,7 @@ const char *Hlp_PROFILE_Preferences_columns =
 
 const char *Hlp_PROFILE_Preferences_privacy =
 #if   L==1
-	"PROFILE.Preferences#privacy";
+	"PROFILE.Preferences.es#privacidad";
 #elif L==2
 	"PROFILE.Preferences#privacy";
 #elif L==3
@@ -3238,7 +3238,7 @@ const char *Hlp_PROFILE_Preferences_privacy =
 #elif L==5
 	"PROFILE.Preferences#privacy";
 #elif L==6
-	"PROFILE.Preferences#privacy";
+	"PROFILE.Preferences.es#privacidad";
 #elif L==7
 	"PROFILE.Preferences#privacy";
 #elif L==8
@@ -3249,7 +3249,7 @@ const char *Hlp_PROFILE_Preferences_privacy =
 
 const char *Hlp_PROFILE_Preferences_notifications =
 #if   L==1
-	"PROFILE.Preferences#notifications";
+	"PROFILE.Preferences.es#notificaciones";
 #elif L==2
 	"PROFILE.Preferences#notifications";
 #elif L==3
@@ -3259,7 +3259,7 @@ const char *Hlp_PROFILE_Preferences_notifications =
 #elif L==5
 	"PROFILE.Preferences#notifications";
 #elif L==6
-	"PROFILE.Preferences#notifications";
+	"PROFILE.Preferences.es#notificaciones";
 #elif L==7
 	"PROFILE.Preferences#notifications";
 #elif L==8
@@ -3270,7 +3270,7 @@ const char *Hlp_PROFILE_Preferences_notifications =
 
 const char *Hlp_PROFILE_Briefcase =
 #if   L==1
-	"PROFILE.Briefcase";
+	"PROFILE.Briefcase.es";
 #elif L==2
 	"PROFILE.Briefcase";
 #elif L==3
@@ -3280,7 +3280,7 @@ const char *Hlp_PROFILE_Briefcase =
 #elif L==5
 	"PROFILE.Briefcase";
 #elif L==6
-	"PROFILE.Briefcase";
+	"PROFILE.Briefcase.es";
 #elif L==7
 	"PROFILE.Briefcase";
 #elif L==8
