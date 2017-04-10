@@ -1403,8 +1403,7 @@ static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
   {
    extern const char *Txt_Help;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"box-sizing:border-box; width:100%%;\">"
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_CONTAINER\">"
 	              "<div class=\"%s\"",ClassFrame);
    if (Width)
        fprintf (Gbl.F.Out," style=\"width:%s;\"",Width);
