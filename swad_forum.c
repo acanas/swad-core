@@ -238,6 +238,8 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
    ActDisPstForSWATch,
   };
 
+#define For_ID_NEW_THREAD_SECTION "new_thread"	// Link to go to <section>
+
 // Forum images will be saved with:
 // - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
 // - maximum height of For_IMAGE_SAVED_MAX_HEIGHT
@@ -279,6 +281,7 @@ static time_t For_GetThrReadTime (long ThrCod);
 static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1]);
 
 static void For_PutIconsForums (void);
+static void For_PutIconNewThread (void);
 
 static void For_WriteNumPsts (unsigned NumPsts);
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
@@ -1144,6 +1147,20 @@ static void For_PutIconsForums (void)
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_FORUMS;
    Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/********************** Put icon to write a new thread ***********************/
+/*****************************************************************************/
+
+static void For_PutIconNewThread (void)
+  {
+   extern const char *Txt_New_thread;
+
+   fprintf (Gbl.F.Out,"<a href=\"#%s\" title=\"%s\">",
+            For_ID_NEW_THREAD_SECTION,Txt_New_thread);
+   Lay_PutIconWithText ("plus64x64.png",Txt_New_thread,NULL);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/
@@ -2671,7 +2688,8 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Threads,NULL,Hlp_SOCIAL_Forums,2);
+      Lay_StartRoundFrameTable (NULL,Txt_Threads,For_PutIconNewThread,
+                                Hlp_SOCIAL_Forums,2);
 
       /***** Heading row *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2735,7 +2753,9 @@ void For_ShowForumThrs (void)
      }
 
    /***** Put a form to write the first message of a new thread *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_THREAD_SECTION);
    For_WriteFormForumPst (false,-1,NULL);
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
