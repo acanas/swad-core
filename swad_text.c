@@ -47528,27 +47528,6 @@ const char *Txt_Thread_with_posts_from_you =
 	"Thread with posts from you.";			// Necessita de tradução
 #endif
 
-const char *Txt_Threads =
-#if   L==1
-	"Discussions";
-#elif L==2
-	"Threads";
-#elif L==3
-	"Threads";
-#elif L==4
-	"Discusiones";
-#elif L==5
-	"Fils";
-#elif L==6
-	"Discusiones";	// Okoteve traducción
-#elif L==7
-	"Discussione";
-#elif L==8
-	"W&aogon;tki";
-#elif L==9
-	"Threads";
-#endif
-
 const char *Txt_threads =
 #if   L==1
 	"discussions";

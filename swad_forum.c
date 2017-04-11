@@ -238,7 +238,9 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
    ActDisPstForSWATch,
   };
 
-#define For_ID_NEW_THREAD_SECTION "new_thread"	// Link to go to <section>
+// Links to go to <section>
+#define For_ID_FORUM_THREADS_SECTION	"forum_threads"
+#define For_ID_NEW_THREAD_SECTION	"new_thread"
 
 // Forum images will be saved with:
 // - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
@@ -2416,7 +2418,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,long Cod,
      }
 
    /***** Write link to forum *****/
-   Act_FormStart (NextAct);
+   Act_FormStartAnchor (NextAct,For_ID_FORUM_THREADS_SECTION);
    For_PutParamWhichForum ();
    For_PutParamForumOrder ();
    switch (ForumType)
@@ -2636,7 +2638,7 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 void For_ShowForumThrs (void)
   {
    extern const char *Hlp_SOCIAL_Forums;
-   extern const char *Txt_Threads;
+   extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
    extern const char *Txt_FORUM_THREAD_ORDER[2];
@@ -2648,6 +2650,8 @@ void For_ShowForumThrs (void)
    char Query[2048];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
+   char FrameTitle[128 + For_MAX_BYTES_FORUM_NAME];
+   char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    unsigned NumThr;
    unsigned NumThrs;
    unsigned NumThrInScreen;	// From 0 to Pag_ITEMS_PER_PAGE-1
@@ -2668,6 +2672,14 @@ void For_ShowForumThrs (void)
 
    /***** Show list of available forums *****/
    For_ShowForumList ();
+
+   /***** Set forum name *****/
+   For_SetForumName (Gbl.Forum.Type,
+	             &Gbl.Forum.Ins,
+	             &Gbl.Forum.Ctr,
+	             &Gbl.Forum.Deg,
+	             &Gbl.Forum.Crs,
+	             ForumName,Gbl.Prefs.Language,true);
 
    /***** Get page number *****/
    Pag_GetParamPagNum (Pag_THREADS_FORUM);
@@ -2742,6 +2754,12 @@ void For_ShowForumThrs (void)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
+   /***** Start frame for threads of this forum *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_THREADS_SECTION);
+   sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
+   Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewThread,
+			Hlp_SOCIAL_Forums);
+
    /***** List the threads *****/
    if (NumThrs)
      {
@@ -2749,12 +2767,9 @@ void For_ShowForumThrs (void)
       if (PaginationThrs.MoreThanOnePage)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
-      /***** Start table *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Threads,For_PutIconNewThread,
-                                Hlp_SOCIAL_Forums,2);
-
       /***** Heading row *****/
-      fprintf (Gbl.F.Out,"<tr>"
+      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+	                 "<tr>"
 	                 "<th class=\"LEFT_MIDDLE\""
 	                 " style=\"width:18px;\">"
 	                 "</th>"
@@ -2807,7 +2822,7 @@ void For_ShowForumThrs (void)
       For_ListForumThrs (ThrCods,&PaginationThrs);
 
       /***** End table *****/
-      Lay_EndRoundFrameTable ();
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Write links to all the pages in the listing of threads *****/
       if (PaginationThrs.MoreThanOnePage)
@@ -2817,6 +2832,10 @@ void For_ShowForumThrs (void)
    /***** Put a form to write the first message of a new thread *****/
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_THREAD_SECTION);
    For_WriteFormForumPst (false,-1,NULL);
+   fprintf (Gbl.F.Out,"</section>");
+
+   /***** End frame with threads of this forum ****/
+   Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</section>");
   }
 
