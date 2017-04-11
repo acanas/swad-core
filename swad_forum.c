@@ -280,12 +280,12 @@ static unsigned For_GetNumOfWritersInThr (long ThrCod);
 static unsigned For_GetNumPstsInThr (long ThrCod);
 static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
-static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1]);
+static void For_ShowThreadPosts (long ThrCod);
 
 static void For_PutIconsForums (void);
 static void For_PutIconNewThread (void);
 
-static void For_WriteNumPsts (unsigned NumPsts);
+// static void For_WriteNumPsts (unsigned NumPsts);
 static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long PstCod,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum);
@@ -329,7 +329,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
-static void For_WriteThrSubject (long ThrCod);
+// static void For_WriteThrSubject (long ThrCod);
 static void For_GetParamsForum (void);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
@@ -965,15 +965,17 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 /****************************** Show forum posts *****************************/
 /*****************************************************************************/
 
-static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1])
+static void For_ShowThreadPosts (long ThrCod)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Thread;
-   extern const char *Txt_There_are_new_posts;
-   extern const char *Txt_No_new_posts;
-   extern const char *Txt_Posts;
-   bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
+   // extern const char *Txt_There_are_new_posts;
+   // extern const char *Txt_No_new_posts;
+   // extern const char *Txt_Posts;
+   // bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    struct ForumThread Thr;
+   char LastSubject[Cns_MAX_BYTES_SUBJECT + 1];
+   char FrameTitle[128 + Cns_MAX_BYTES_SUBJECT];
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
@@ -1004,22 +1006,27 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
    /* Get thread read time for the current user */
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
-   /* Table start */
+   /***** Start frame *****/
+   sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
+   Lay_StartRoundFrame (NULL,FrameTitle,NULL,Hlp_SOCIAL_Forums);
+
+/*
+   * Table start *
    Lay_StartRoundFrame (NULL,Txt_Thread,For_PutIconsForums,Hlp_SOCIAL_Forums);
 
-   /* Put a form to select which forums */
+   * Put a form to select which forums *
    For_PutFormWhichForums ();
 
-   /* Write a link to top level of forums */
+   * Write a link to top level of forums *
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
    For_WriteLinkToTopLevelOfForums ();
 
-   /* Write a link to current forum */
+   * Write a link to current forum *
    IsLastItemInLevel[1] = true;
    For_WriteLinkToAForum (Gbl.Forum.Type,Gbl.Forum.Cod,
                           true,true,1,IsLastItemInLevel);
 
-   /* Write thread title */
+   * Write thread title *
    fprintf (Gbl.F.Out,"<li class=\"DAT\" style=\"height:25px;\">");
    IsLastItemInLevel[2] = true;
    Lay_IndentDependingOnLevel (2,IsLastItemInLevel);
@@ -1035,7 +1042,7 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
 	    Thr.NumUnreadPosts ? Txt_There_are_new_posts :
 			         Txt_No_new_posts);
    For_WriteThrSubject (ThrCod);
-
+*/
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime) FROM forum_post"
                   " WHERE ThrCod=%ld ORDER BY PstCod",
@@ -1043,15 +1050,15 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get posts of a thread");
 
    NumPsts = (unsigned) NumRows;
-
-   /* Write number of posts and number of new posts */
+/*
+   / Write number of posts and number of new posts /
    fprintf (Gbl.F.Out," ");
    For_WriteNumPsts (NumPsts);
 
    fprintf (Gbl.F.Out,"</li>"
 	              "</ul>");
    Lay_EndRoundFrame ();
-
+*/
    LastSubject[0] = '\0';
    if (NumPsts)		// If there are posts...
      {
@@ -1088,9 +1095,10 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
       if (Pagination.MoreThanOnePage)
          Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
 
-      /***** Show posts from this page, the author and the date of last reply *****/
-      Lay_StartRoundFrameTable (NULL,Txt_Posts,NULL,Hlp_SOCIAL_Forums,2);
+      /***** Start table *****/
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
+      /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
            NumRow <= Pagination.LastItemVisible;
@@ -1135,7 +1143,8 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
         	                 Gbl.Usrs.Me.UsrDat.UsrCod);
         }
 
-      Lay_EndRoundFrameTable ();
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -1144,6 +1153,12 @@ static void For_ShowThreadPosts (long ThrCod,char LastSubject[Cns_MAX_BYTES_SUBJ
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
+
+   /***** Form to write a new message in the thread *****/
+   For_WriteFormForumPst (true,ThrCod,LastSubject);
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1174,7 +1189,7 @@ static void For_PutIconNewThread (void)
 /*****************************************************************************/
 /*************************** Write number of posts ***************************/
 /*****************************************************************************/
-
+/*
 static void For_WriteNumPsts (unsigned NumPsts)
   {
    extern const char *Txt_post;
@@ -1182,7 +1197,7 @@ static void For_WriteNumPsts (unsigned NumPsts)
 
    fprintf (Gbl.F.Out,"[");
 
-   /***** Write total number of posts *****/
+   ***** Write total number of posts *****
    if (NumPsts == 1)
       fprintf (Gbl.F.Out,"1 %s",Txt_post);
    else
@@ -1190,7 +1205,7 @@ static void For_WriteNumPsts (unsigned NumPsts)
 
    fprintf (Gbl.F.Out,"]");
   }
-
+*/
 /*****************************************************************************/
 /**************************** Show a post from forum *************************/
 /*****************************************************************************/
@@ -1798,7 +1813,7 @@ void For_ShowForumList (void)
    Usr_GetMyInstits ();
 
    /***** Table start *****/
-   Lay_StartRoundFrame ("100%",Txt_Forums,For_PutIconsForums,
+   Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,
                         Hlp_SOCIAL_Forums);
 
    /***** Put a form to select which forums *****/
@@ -3773,7 +3788,7 @@ void For_GetThrData (struct ForumThread *Thr)
 /*****************************************************************************/
 /************* Write the subject of the first message of a thread ************/
 /*****************************************************************************/
-
+/*
 static void For_WriteThrSubject (long ThrCod)
   {
    extern const char *Txt_no_subject;
@@ -3784,7 +3799,7 @@ static void For_WriteThrSubject (long ThrCod)
    unsigned long NumRows;
    long FirstPstCod;
 
-   /***** Get subject of a thread from database *****/
+   ***** Get subject of a thread from database *****
    sprintf (Query,"SELECT forum_post.PstCod,forum_post.Subject"
 	          " FROM forum_thread,forum_post"
                   " WHERE forum_thread.ThrCod=%ld"
@@ -3792,16 +3807,16 @@ static void For_WriteThrSubject (long ThrCod)
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get the subject of a thread");
 
-   /***** The result of the query should have only one row *****/
+   ***** The result of the query should have only one row *****
    if (NumRows != 1)
       Lay_ShowErrorAndExit ("Error when getting the subject of a thread.");
    row = mysql_fetch_row (mysql_res);
 
-   /***** Get message code *****/
+   ***** Get message code *****
    if (sscanf (row[0],"%ld",&FirstPstCod) != 1)
       Lay_ShowErrorAndExit ("Error when getting the subject of a thread.");
 
-   /***** Write the subject of the thread *****/
+   ***** Write the subject of the thread *****
    if (For_GetIfPstIsEnabled (FirstPstCod))
      {
       if (row[1][0])
@@ -3812,10 +3827,10 @@ static void For_WriteThrSubject (long ThrCod)
    else
       fprintf (Gbl.F.Out,"[%s]",Txt_first_message_not_allowed);
 
-   /***** Free the structure that stores the query result *****/
+   ***** Free the structure that stores the query result *****
    DB_FreeMySQLResult (&mysql_res);
   }
-
+*/
 /*****************************************************************************/
 /**************** Show posts of a thread in a discussion forum ***************/
 /*****************************************************************************/
@@ -3933,19 +3948,17 @@ static long For_GetParamPstCod (void)
 
 void For_ShowForumLevel2 (long ThrCod)
   {
-   char Subject[Cns_MAX_BYTES_SUBJECT + 1];
-
    /***** Get order type, degree and course of the forum *****/
-   For_GetParamsForum ();
+   // For_GetParamsForum ();
 
    /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
+   // For_SetForumTypeAndRestrictAccess ();
+
+   /***** Show forums and threads *****/
+   For_ShowForumThrs ();
 
    /***** Show the posts of this thread *****/
-   For_ShowThreadPosts (ThrCod,Subject);
-
-   /***** Form to write a new message in the thread *****/
-   For_WriteFormForumPst (true,ThrCod,Subject);
+   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
