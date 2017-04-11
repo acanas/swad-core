@@ -450,8 +450,8 @@ void Ntf_ShowMyNotifications (void)
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
-            Gbl.Forum.ForumType = For_GetForumTypeOfAPost (Cod);
-            For_SetForumName (Gbl.Forum.ForumType,
+            Gbl.Forum.Type = For_GetForumTypeOfAPost (Cod);
+            For_SetForumName (Gbl.Forum.Type,
         	              &Ins,
         	              &Ctr,
         	              &Deg,
@@ -771,7 +771,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
 	 For_PutAllHiddenParamsForum ();
 	 break;
       case Ntf_EVENT_NOTICE:

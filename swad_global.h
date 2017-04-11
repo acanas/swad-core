@@ -579,7 +579,8 @@ struct Globals
    struct
      {
       For_WhichForums_t WhichForums;
-      For_ForumType_t ForumType;
+      For_ForumType_t Type;
+      long Cod;	// Institution, centre, degree or course code of the selected forum
       struct Instit Ins;
       struct Centre Ctr;
       struct Degree Deg;

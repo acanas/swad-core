@@ -408,8 +408,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
 
    /* Forums */
-   Gbl.Forum.ForumType = (For_ForumType_t) 0;
    Gbl.Forum.WhichForums = For_DEFAULT_WHICH_FORUMS;
+   Gbl.Forum.Type = (For_ForumType_t) 0;
+   Gbl.Forum.Cod = -1L;
    Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
 

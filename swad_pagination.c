@@ -148,12 +148,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (1);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
@@ -240,12 +240,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (1);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
@@ -315,12 +315,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
@@ -397,12 +397,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   Msg_PutHiddenParamsMsgsFilters ();
                   break;
                case Pag_THREADS_FORUM:
-                  Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+                  Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                   Pag_PutHiddenParamPagNum (NumPage);
                   For_PutAllHiddenParamsForum ();
                   break;
                case Pag_POSTS_FORUM:
-                  Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+                  Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                   Pag_PutHiddenParamPagNum (NumPage);
                   For_PutHiddenParamThrCod (ThrCod);
                   For_PutAllHiddenParamsForum ();
@@ -475,12 +475,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
@@ -550,12 +550,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.ForumType]);
+               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
