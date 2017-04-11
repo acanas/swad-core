@@ -2736,6 +2736,7 @@ void For_ShowForumThrs (void)
    PaginationThrs.NumItems = NumThrs;
    PaginationThrs.CurrentPage = (int) Gbl.Pag.CurrentPage;
    Pag_CalculatePagination (&PaginationThrs);
+   PaginationThrs.Anchor = For_ID_FORUM_THREADS_SECTION;
    Gbl.Pag.CurrentPage = (unsigned) PaginationThrs.CurrentPage;
 
    /***** Fill the list of threads for current page *****/
@@ -2768,7 +2769,7 @@ void For_ShowForumThrs (void)
          Pag_WriteLinksToPagesCentered (Pag_THREADS_FORUM,0,&PaginationThrs);
 
       /***** Heading row *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
 	                 "<tr>"
 	                 "<th class=\"LEFT_MIDDLE\""
 	                 " style=\"width:18px;\">"

@@ -62,6 +62,7 @@ struct Pagination	// Used for threads and messages pagination
    unsigned FirstItemVisible;	// 1, 2, 3...
    unsigned LastItemVisible;	// 1, 2, 3...
    bool MoreThanOnePage;
+   char *Anchor;	// Anchor in forms. Use NULL when not needed
   };
 
 /*****************************************************************************/

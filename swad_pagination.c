@@ -92,6 +92,9 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
    Pagination->FirstItemVisible = Pagination->LastItemVisible - (Pag_ITEMS_PER_PAGE - 1);
    if (Pagination->LastItemVisible > Pagination->NumItems)
       Pagination->LastItemVisible = Pagination->NumItems;
+
+   /* Default anchor */
+   Pagination->Anchor = NULL;
   }
 
 /*****************************************************************************/
@@ -126,46 +129,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Act_FormStart (ActSeeAsg);
+               Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
-               Act_FormStart (ActSeeAtt);
+               Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
-               Act_FormStart (ActSeeRcvMsg);
+               Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_MESSAGES_SENT:
-               Act_FormStart (ActSeeSntMsg);
+               Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
 	       break;
             case Pag_SURVEYS:
-               Act_FormStart (ActSeeAllSvy);
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_AGENDA:
-               Act_FormStart (ActSeeMyAgd);
+               Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
                               Gbl.Agenda.HiddenVisiblEvents,
@@ -174,7 +179,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               1);
                break;
             case Pag_ANOTHER_AGENDA:
-               Act_FormStart (ActSeeUsrAgd);
+               Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (1);
                Usr_PutParamOtherUsrCodEncrypted ();
@@ -218,46 +223,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Act_FormStart (ActSeeAsg);
+               Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
-               Act_FormStart (ActSeeAtt);
+               Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
-               Act_FormStart (ActSeeRcvMsg);
+               Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_MESSAGES_SENT:
-               Act_FormStart (ActSeeSntMsg);
+               Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
 	       break;
             case Pag_SURVEYS:
-               Act_FormStart (ActSeeAllSvy);
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (1);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_AGENDA:
-               Act_FormStart (ActSeeMyAgd);
+               Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
                               Gbl.Agenda.HiddenVisiblEvents,
@@ -266,7 +273,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               1);
                break;
             case Pag_ANOTHER_AGENDA:
-               Act_FormStart (ActSeeUsrAgd);
+               Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (1);
                Usr_PutParamOtherUsrCodEncrypted ();
@@ -293,46 +300,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Act_FormStart (ActSeeAsg);
+               Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
-               Act_FormStart (ActSeeAtt);
+               Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
-               Act_FormStart (ActSeeRcvMsg);
+               Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_MESSAGES_SENT:
-               Act_FormStart (ActSeeSntMsg);
+               Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
 	       break;
             case Pag_SURVEYS:
-               Act_FormStart (ActSeeAllSvy);
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_AGENDA:
-               Act_FormStart (ActSeeMyAgd);
+               Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
                Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
                               Gbl.Agenda.PrivatPublicEvents,
                               Gbl.Agenda.HiddenVisiblEvents,
@@ -341,7 +350,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                               Pagination->LeftPage);
                break;
             case Pag_ANOTHER_AGENDA:
-               Act_FormStart (ActSeeUsrAgd);
+               Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
                Agd_PutHiddenParamEventsOrder ();
                Pag_PutHiddenParamPagNum (Pagination->LeftPage);
                Usr_PutParamOtherUsrCodEncrypted ();
@@ -375,46 +384,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
             switch (WhatPaginate)
               {
                case Pag_ASSIGNMENTS:
-                  Act_FormStart (ActSeeAsg);
+                  Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_ATT_EVENTS:
-                  Act_FormStart (ActSeeAtt);
+                  Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   Att_PutHiddenParamAttOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_MESSAGES_RECEIVED:
-                  Act_FormStart (ActSeeRcvMsg);
+                  Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   Msg_PutHiddenParamsMsgsFilters ();
                   break;
                case Pag_MESSAGES_SENT:
-                  Act_FormStart (ActSeeSntMsg);
+                  Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   Msg_PutHiddenParamsMsgsFilters ();
                   break;
                case Pag_THREADS_FORUM:
-                  Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+                  Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                       Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   For_PutAllHiddenParamsForum ();
                   break;
                case Pag_POSTS_FORUM:
-                  Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+                  Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                       Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   For_PutHiddenParamThrCod (ThrCod);
                   For_PutAllHiddenParamsForum ();
                   break;
                case Pag_SURVEYS:
-                  Act_FormStart (ActSeeAllSvy);
+                  Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (NumPage);
                   Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
 	       case Pag_MY_AGENDA:
-		  Act_FormStart (ActSeeMyAgd);
+		  Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
 		  Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 				 Gbl.Agenda.PrivatPublicEvents,
 				 Gbl.Agenda.HiddenVisiblEvents,
@@ -423,7 +434,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 				 NumPage);
 		  break;
 	       case Pag_ANOTHER_AGENDA:
-		  Act_FormStart (ActSeeUsrAgd);
+		  Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
 		  Agd_PutHiddenParamEventsOrder ();
 		  Pag_PutHiddenParamPagNum (NumPage);
 		  Usr_PutParamOtherUsrCodEncrypted ();
@@ -453,46 +464,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Act_FormStart (ActSeeAsg);
+               Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
-               Act_FormStart (ActSeeAtt);
+               Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
-               Act_FormStart (ActSeeRcvMsg);
+               Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_MESSAGES_SENT:
-               Act_FormStart (ActSeeSntMsg);
+               Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_SURVEYS:
-               Act_FormStart (ActSeeAllSvy);
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->RightPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
 	    case Pag_MY_AGENDA:
-	       Act_FormStart (ActSeeMyAgd);
+	       Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
 	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 			      Gbl.Agenda.PrivatPublicEvents,
 			      Gbl.Agenda.HiddenVisiblEvents,
@@ -501,7 +514,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 			      Pagination->RightPage);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
-	       Act_FormStart (ActSeeUsrAgd);
+	       Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
 	       Agd_PutHiddenParamEventsOrder ();
 	       Pag_PutHiddenParamPagNum (Pagination->RightPage);
 	       Usr_PutParamOtherUsrCodEncrypted ();
@@ -528,46 +541,48 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
-               Act_FormStart (ActSeeAsg);
+               Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_ATT_EVENTS:
-               Act_FormStart (ActSeeAtt);
+               Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                Att_PutHiddenParamAttOrder ();
                Grp_PutParamWhichGrps ();
                break;
             case Pag_MESSAGES_RECEIVED:
-               Act_FormStart (ActSeeRcvMsg);
+               Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_MESSAGES_SENT:
-               Act_FormStart (ActSeeSntMsg);
+               Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStart (For_ActionsSeePstFor[Gbl.Forum.Type]);
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                                    Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                For_PutHiddenParamThrCod (ThrCod);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_SURVEYS:
-               Act_FormStart (ActSeeAllSvy);
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (Pagination->NumPags);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
 	    case Pag_MY_AGENDA:
-	       Act_FormStart (ActSeeMyAgd);
+	       Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
 	       Agd_PutParams (Gbl.Agenda.Past__FutureEvents,
 			      Gbl.Agenda.PrivatPublicEvents,
 			      Gbl.Agenda.HiddenVisiblEvents,
@@ -576,7 +591,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
 			      Pagination->NumPags);
 	       break;
 	    case Pag_ANOTHER_AGENDA:
-	       Act_FormStart (ActSeeUsrAgd);
+	       Act_FormStartAnchor (ActSeeUsrAgd,Pagination->Anchor);
 	       Agd_PutHiddenParamEventsOrder ();
 	       Pag_PutHiddenParamPagNum (Pagination->NumPags);
 	       Usr_PutParamOtherUsrCodEncrypted ();
