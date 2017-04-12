@@ -29972,27 +29972,6 @@ const char *Txt_post =
 	"post";
 #endif
 
-const char *Txt_Posts =
-#if   L==1
-	"Missatges";
-#elif L==2
-	"Nachrichten";
-#elif L==3
-	"Posts";
-#elif L==4
-	"Mensajes";
-#elif L==5
-	"Messages";
-#elif L==6
-	"Marandu";
-#elif L==7
-	"Post";
-#elif L==8
-	"Posty";
-#elif L==9
-	"Posts";
-#endif
-
 const char *Txt_posts =
 #if   L==1
 	"missatges";
