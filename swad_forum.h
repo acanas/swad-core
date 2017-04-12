@@ -131,7 +131,6 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
 void For_GetThrData (struct ForumThread *Thr);
 void For_ShowThrPsts (void);
 void For_PutHiddenParamThrCod (long ThrCod);
-void For_ShowForumLevel2 (long ThrCod);
 void For_RecForumPst (void);
 void For_DelPst (void);
 void For_ReqDelThr (void);

@@ -241,6 +241,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 // Links to go to <section>
 #define For_ID_FORUM_THREADS_SECTION	"forum_threads"
 #define For_ID_NEW_THREAD_SECTION	"new_thread"
+#define For_ID_FORUM_POSTS_SECTION	"thread_posts"
 
 // Forum images will be saved with:
 // - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
@@ -324,6 +325,7 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
+static void For_ShowForumLevel2 (long ThrCod);
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
@@ -1007,6 +1009,7 @@ static void For_ShowThreadPosts (long ThrCod)
    ReadTimeUTC = For_GetThrReadTime (ThrCod);
 
    /***** Start frame *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_POSTS_SECTION);
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Lay_StartRoundFrame (NULL,FrameTitle,NULL,Hlp_SOCIAL_Forums);
 
@@ -1159,6 +1162,7 @@ static void For_ShowThreadPosts (long ThrCod)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
@@ -2801,7 +2805,8 @@ void For_ShowForumThrs (void)
 	   Order++)
 	{
 	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
-         Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+         Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                              For_ID_FORUM_POSTS_SECTION);
          Pag_PutHiddenParamPagNum (PaginationThrs.CurrentPage);
          For_PutParamWhichForum ();
          For_PutParamsForumInsDegCrs ();
@@ -3622,6 +3627,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
       PaginationPsts.NumItems = Thr.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
+      PaginationPsts.Anchor = For_ID_FORUM_POSTS_SECTION;
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,Thr.ThrCod,&PaginationPsts,
                              Thr.Enabled[For_FIRST_MSG],
                              Thr.Subject,
@@ -3946,7 +3952,7 @@ static long For_GetParamPstCod (void)
 /******************** Show posts of a thread of the forum ********************/
 /*****************************************************************************/
 
-void For_ShowForumLevel2 (long ThrCod)
+static void For_ShowForumLevel2 (long ThrCod)
   {
    /***** Get order type, degree and course of the forum *****/
    // For_GetParamsForum ();
