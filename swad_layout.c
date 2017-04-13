@@ -1888,12 +1888,13 @@ void Lay_IndentDependingOnLevel (unsigned Level,bool IsLastItemInLevel[])
 		                         "subleft");
 
    /***** Level *****/
-   fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
-	              " alt=\"\" title=\"\""
-                      " class=\"ICO25x25\" />",
-	    Gbl.Prefs.IconsURL,
-	    IsLastItemInLevel[Level] ? "subend" :
-				       "submid");
+   if (Level)
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s20x20.gif\""
+			 " alt=\"\" title=\"\""
+			 " class=\"ICO25x25\" />",
+	       Gbl.Prefs.IconsURL,
+	       IsLastItemInLevel[Level] ? "subend" :
+					  "submid");
   }
 
 /*****************************************************************************/

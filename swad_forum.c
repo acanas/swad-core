@@ -298,7 +298,6 @@ static void For_WriteNumberOfPosts (For_ForumType_t ForumType,long UsrCod);
 static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
 static void For_PutFormWhichForums (void);
-static void For_WriteLinkToTopLevelOfForums (void);
 static void For_PutParamsForumInsDegCrs (void);
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinksToPlatformForums (bool IsLastForum,
@@ -330,6 +329,11 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
+static unsigned For_GetNumPstsInForum (For_ForumType_t ForumType);
+
+static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
+                               struct Pagination *PaginationThrs);
+static void For_GetThrData (struct ForumThread *Thr);
 
 static void For_GetParamsForum (void);
 static long For_GetParamThrCod (void);
@@ -1749,16 +1753,15 @@ void For_ShowForumList (void)
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
 
-   /***** Table start *****/
+   /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Forums,For_PutIconsForums,
                         Hlp_SOCIAL_Forums);
 
    /***** Put a form to select which forums *****/
    For_PutFormWhichForums ();
 
-   /***** Write a link to top level of forums *****/
+   /***** Start list *****/
    fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
-   For_WriteLinkToTopLevelOfForums ();
 
    /***** Links to global forums *****/
    For_WriteLinksToGblForums (IsLastItemInLevel);
@@ -1873,8 +1876,10 @@ void For_ShowForumList (void)
          break;
      }
 
-   /***** End table *****/
+   /***** End list *****/
    fprintf (Gbl.F.Out,"</ul>");
+
+   /***** End frame *****/
    Lay_EndRoundFrame ();
   }
 
@@ -1919,31 +1924,6 @@ static void For_PutFormWhichForums (void)
   }
 
 /*****************************************************************************/
-/**************** Write title and link to top level of forums ****************/
-/*****************************************************************************/
-
-static void For_WriteLinkToTopLevelOfForums (void)
-  {
-   extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Forums;
-
-   fprintf (Gbl.F.Out,"<li style=\"height:25px;\">");
-   Act_FormStart (ActSeeFor);
-   For_PutAllHiddenParamsForum ();
-   Act_LinkFormSubmit (Txt_Forums,The_ClassForm[Gbl.Prefs.Theme],NULL);
-   fprintf (Gbl.F.Out,"<img src=\"%s/forum64x64.gif\""
-	              " alt=\"%s\" title=\"%s\""
-	              " class=\"ICO20x20\" />"
-                      "&nbsp;%s"
-                      "</a>",
-            Gbl.Prefs.IconsURL,
-            Txt_Forums,Txt_Forums,
-            Txt_Forums);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</li>");
-  }
-
-/*****************************************************************************/
 /************************* Write links to global forums **********************/
 /*****************************************************************************/
 
@@ -1955,7 +1935,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
    Highlight = (Gbl.Forum.Type == For_FORUM_GLOBAL_USRS);
    IsLastItemInLevel[1] = false;
    For_WriteLinkToAForum (For_FORUM_GLOBAL_USRS,-1L,
-                          Highlight,false,1,IsLastItemInLevel);
+                          Highlight,false,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers global *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
@@ -1964,7 +1944,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
       Highlight = (Gbl.Forum.Type == For_FORUM_GLOBAL_TCHS);
       IsLastItemInLevel[1] = false;
       For_WriteLinkToAForum (For_FORUM_GLOBAL_TCHS,-1L,
-                             Highlight,false,1,IsLastItemInLevel);
+                             Highlight,false,0,IsLastItemInLevel);
      }
   }
 
@@ -1987,7 +1967,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
    Highlight = (Gbl.Forum.Type == For_FORUM_SWAD_USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
    For_WriteLinkToAForum (For_FORUM_SWAD_USRS,-1L,
-                          Highlight,false,1,IsLastItemInLevel);
+                          Highlight,false,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers about the platform *****/
    if (ICanSeeTeacherForum)
@@ -1995,7 +1975,7 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
       Highlight = (Gbl.Forum.Type == For_FORUM_SWAD_TCHS);
       IsLastItemInLevel[1] = IsLastForum;
       For_WriteLinkToAForum (For_FORUM_SWAD_TCHS,-1L,
-                             Highlight,false,1,IsLastItemInLevel);
+                             Highlight,false,0,IsLastItemInLevel);
      }
   }
 
@@ -2739,7 +2719,7 @@ void For_ShowForumThrs (void)
 	{
 	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
-                              For_ID_FORUM_POSTS_SECTION);
+                              For_ID_FORUM_THREADS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,PaginationThrs.CurrentPage);
          For_PutParamWhichForum ();
          For_PutParamsForumInsDegCrs ();
@@ -3408,7 +3388,7 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 /********************* Get number of posts in a forum ************************/
 /*****************************************************************************/
 
-unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
+static unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
   {
    char SubQuery[256];
    char Query[1024];
@@ -3443,8 +3423,8 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
 /************************ List the threads of a forum ************************/
 /*****************************************************************************/
 
-void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
-                        struct Pagination *PaginationThrs)
+static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
+                               struct Pagination *PaginationThrs)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -3641,7 +3621,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 /***************************** Get data of a thread **************************/
 /*****************************************************************************/
 
-void For_GetThrData (struct ForumThread *Thr)
+static void For_GetThrData (struct ForumThread *Thr)
   {
    extern const char *Txt_no_subject;
    char Query[2048];
@@ -3872,12 +3852,14 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a message of an existing thread
      {
-      Act_FormStart (For_ActionsRecRepFor[Gbl.Forum.Type]);
+      Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.Type],
+                           For_ID_FORUM_POSTS_SECTION);
       For_PutHiddenParamThrCod (ThrCod);
       Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,0);
      }
    else		// Form to write the first message of a new thread
-      Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.Type]);
+      Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.Type],
+                           For_ID_FORUM_POSTS_SECTION);
    For_PutAllHiddenParamsForum ();
 
    /***** Subject and content *****/
