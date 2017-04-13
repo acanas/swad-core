@@ -148,7 +148,7 @@ void Att_SeeAttEvents (void)
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get list of attendance events *****/
    Att_GetListAttEvents (Att_NEWEST_FIRST);
@@ -208,9 +208,9 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.AttEvents.Num;
-   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pagination.CurrentPage = (int) Gbl.AttEvents.CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+   Gbl.AttEvents.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -238,7 +238,7 @@ static void Att_ShowAllAttEvents (void)
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeeAtt);
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.AttEvents.SelectedOrder)
@@ -301,7 +301,7 @@ static void Att_PutFormToSelectWhichGroupsToShow (void)
 static void Att_ParamsWhichGroupsToShow (void)
   {
    Att_PutHiddenParamAttOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -341,7 +341,7 @@ static void Att_PutParamsToCreateNewAttEvent (void)
   {
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -529,7 +529,7 @@ static void Att_PutFormToListStdsParams (void)
   {
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -583,7 +583,7 @@ static void Att_PutParams (void)
    Att_PutParamAttCod (Gbl.AttEvents.AttCodToEdit);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -868,7 +868,7 @@ void Att_AskRemAttEvent (void)
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get attendance event code *****/
    if ((Att.AttCod = Att_GetParamAttCod ()) == -1L)
@@ -882,7 +882,7 @@ void Att_AskRemAttEvent (void)
    Att_PutParamAttCod (Att.AttCod);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
@@ -1043,7 +1043,7 @@ void Att_RequestCreatOrEditAttEvent (void)
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Get the code of the attendance event *****/
    Att.AttCod = Att_GetParamAttCod ();
@@ -1082,7 +1082,7 @@ void Att_RequestCreatOrEditAttEvent (void)
      }
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,
@@ -1817,7 +1817,7 @@ void Att_SeeOneAttEvent (void)
    /***** Get parameters *****/
    Att_GetParamAttOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ATT_EVENTS);
+   Gbl.AttEvents.CurrentPage = Pag_GetParamPagNum (Pag_ATT_EVENTS);
 
    /***** Show attendance *****/
    Lay_StartRoundFrameTable (NULL,Txt_Event,NULL,Hlp_USERS_Attendance,2);

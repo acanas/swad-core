@@ -37,17 +37,18 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
+#define Pag_NUM_WHAT_PAGINATE 9
 typedef enum
   {
-   Pag_ASSIGNMENTS,
-   Pag_ATT_EVENTS,
-   Pag_MESSAGES_RECEIVED,
-   Pag_MESSAGES_SENT,
-   Pag_THREADS_FORUM,
-   Pag_POSTS_FORUM,
-   Pag_SURVEYS,
-   Pag_MY_AGENDA,
-   Pag_ANOTHER_AGENDA,
+   Pag_ASSIGNMENTS		= 0,
+   Pag_ATT_EVENTS		= 1,
+   Pag_THREADS_FORUM		= 2,
+   Pag_POSTS_FORUM		= 3,
+   Pag_MESSAGES_RECEIVED	= 4,
+   Pag_MESSAGES_SENT		= 5,
+   Pag_SURVEYS			= 6,
+   Pag_MY_AGENDA		= 7,
+   Pag_ANOTHER_AGENDA		= 8,
   } Pag_WhatPaginate_t;
 
 struct Pagination	// Used for threads and messages pagination
@@ -73,8 +74,8 @@ void Pag_CalculatePagination (struct Pagination *Pagination);
 void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination);
 void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination,
                             bool FirstMsgEnabled,const char *Subject,const char *Font,bool LinkToPagCurrent);
-void Pag_PutHiddenParamPagNum (unsigned NumPage);
-void Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate);
+void Pag_PutHiddenParamPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
+unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate);
 
 void Pag_SaveLastPageMsgIntoSession (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 unsigned Pag_GetLastPageMsgFromSession (Pag_WhatPaginate_t WhatPaginate);

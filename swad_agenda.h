@@ -104,12 +104,11 @@ void Agd_ShowOtherAgendaAfterLogIn (void);
 
 void Agd_RequestCreatOrEditEvent (void);
 
-void Agd_PutParams (unsigned Past__FutureEvents,
-                    unsigned PrivatPublicEvents,
-                    unsigned HiddenVisiblEvents,
-                    Agd_Order_t Order,
-                    long AgdCodToEdit,
-                    unsigned NumPage);
+void Agd_PutParamsMyAgenda (unsigned Past__FutureEvents,
+                            unsigned PrivatPublicEvents,
+                            unsigned HiddenVisiblEvents,
+                            unsigned NumPage,
+                            long AgdCodToEdit);
 void Agd_PutHiddenParamEventsOrder (void);
 
 void Agd_FreeListEvents (void);

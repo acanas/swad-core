@@ -963,7 +963,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
   }
 
 /*****************************************************************************/
-/****************************** Show forum posts *****************************/
+/************************ Show posts in a thread *****************************/
 /*****************************************************************************/
 
 static void For_ShowThreadPosts (long ThrCod)
@@ -982,7 +982,7 @@ static void For_ShowThreadPosts (long ThrCod)
    unsigned NumPsts;
    time_t ReadTimeUTC;		// Read time of thread for the current user
    time_t CreatTimeUTC;		// Creation time of post
-   struct Pagination Pagination;
+   struct Pagination PaginationPsts;
    long PstCod;
    bool NewPst = false;
    bool ICanModerateForum = false;
@@ -993,7 +993,7 @@ static void For_ShowThreadPosts (long ThrCod)
    For_GetThrData (&Thr);
 
    /***** Get the page number *****/
-   Pag_GetParamPagNum (Pag_POSTS_FORUM);
+   Gbl.Forum.CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
 
    /***** Write title *****/
    /* Get if there is a thread ready to be moved */
@@ -1009,7 +1009,8 @@ static void For_ShowThreadPosts (long ThrCod)
    Lay_StartRoundFrame (NULL,FrameTitle,NULL,Hlp_SOCIAL_Forums);
 
    /***** Get posts of a thread from database *****/
-   sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime) FROM forum_post"
+   sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
+	          " FROM forum_post"
                   " WHERE ThrCod=%ld ORDER BY PstCod",
             ThrCod);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get posts of a thread");
@@ -1020,16 +1021,16 @@ static void For_ShowThreadPosts (long ThrCod)
       /***** Check if I can moderate posts in forum *****/
       switch (Gbl.Forum.Type)
         {
-         case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
-         case For_FORUM_GLOBAL_USRS:		case For_FORUM_GLOBAL_TCHS:
-         case For_FORUM_CENTRE_USRS:		case For_FORUM_CENTRE_TCHS:
+         case For_FORUM_SWAD_USRS:	case For_FORUM_SWAD_TCHS:
+         case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
+         case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
             ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
             break;
          case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
             ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
             break;
-         case For_FORUM_DEGREE_USRS:		case For_FORUM_DEGREE_TCHS:
-         					case For_FORUM_COURSE_TCHS:
+         case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
+         				case For_FORUM_COURSE_TCHS:
             ICanModerateForum = (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
                                  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
             break;
@@ -1041,22 +1042,22 @@ static void For_ShowThreadPosts (long ThrCod)
         }
 
       /***** Compute variables related to pagination *****/
-      Pagination.NumItems = NumPsts;
-      Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
-      Pag_CalculatePagination (&Pagination);
-      Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+      PaginationPsts.NumItems = NumPsts;
+      PaginationPsts.CurrentPage = (int) Gbl.Forum.CurrentPagePsts;
+      Pag_CalculatePagination (&PaginationPsts);
+      Gbl.Forum.CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
       /***** Write links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
+      if (PaginationPsts.MoreThanOnePage)
+         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&PaginationPsts);
 
       /***** Start table *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
 
       /***** Show posts from this page, the author and the date of last reply *****/
-      mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
-      for (NumRow = Pagination.FirstItemVisible;
-           NumRow <= Pagination.LastItemVisible;
+      mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
+      for (NumRow = PaginationPsts.FirstItemVisible;
+           NumRow <= PaginationPsts.LastItemVisible;
            NumRow++)
         {
          row = mysql_fetch_row (mysql_res);
@@ -1069,7 +1070,7 @@ static void For_ShowThreadPosts (long ThrCod)
          NumPst = (unsigned) NumRow;
          NewPst = (CreatTimeUTC > ReadTimeUTC);
 
-         if (NewPst && NumRow == Pagination.LastItemVisible)
+         if (NewPst && NumRow == PaginationPsts.LastItemVisible)
             /* Update forum_thr_read table indicating that this thread page and previous ones
                have been read and have no new posts for the current user
                (even if any previous pages have been no read actually) */
@@ -1102,8 +1103,8 @@ static void For_ShowThreadPosts (long ThrCod)
       fprintf (Gbl.F.Out,"</table>");
 
       /***** Write again links to pages *****/
-      if (Pagination.MoreThanOnePage)
-         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&Pagination);
+      if (PaginationPsts.MoreThanOnePage)
+         Pag_WriteLinksToPagesCentered (Pag_POSTS_FORUM,ThrCod,&PaginationPsts);
      }
 
    /***** Free structure that stores the query result *****/
@@ -1150,7 +1151,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
                                 bool NewPst,bool ICanModerateForum)
   {
-   extern const char *Txt_unread_MESSAGE;
+   extern const char *Txt_MSG_New;
    extern const char *Txt_MSG_Open;
    extern const char *Txt_no_subject;
    extern const char *Txt_Post_X_allowed;
@@ -1197,9 +1198,9 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
             Gbl.Prefs.IconsURL,
             NewPst ? "msg-unread" :
         	     "msg-open",
-            NewPst ? Txt_unread_MESSAGE :
+            NewPst ? Txt_MSG_New :
         	     Txt_MSG_Open,
-            NewPst ? Txt_unread_MESSAGE :
+            NewPst ? Txt_MSG_New :
         	     Txt_MSG_Open);
 
    /***** Write post number *****/
@@ -1232,7 +1233,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
       // Post can be removed if post is the last (without answers) and it's mine
      {
       Act_FormStart (For_ActionsDelPstFor[Gbl.Forum.Type]);
-      Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
       For_PutHiddenParamPstCod (PstCod);
       For_PutAllHiddenParamsForum ();
       For_PutHiddenParamThrCod (Thr->ThrCod);
@@ -1247,7 +1248,7 @@ static void For_ShowAForumPost (struct ForumThread *Thr,unsigned PstNum,long Pst
         {
          Act_FormStart (Enabled ? For_ActionsDisPstFor[Gbl.Forum.Type] :
                                   For_ActionsEnbPstFor[Gbl.Forum.Type]);
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
          For_PutHiddenParamPstCod (PstCod);
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr->ThrCod);
@@ -2355,7 +2356,7 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,long Cod,
       else
         {
          Act_FormStart (For_ActionsPasThrFor[ForumType]);
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Gbl.Forum.ThreadToMove);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/paste_on16x16.gif\""
@@ -2633,7 +2634,7 @@ void For_ShowForumThrs (void)
 	             ForumName,Gbl.Prefs.Language,true);
 
    /***** Get page number *****/
-   Pag_GetParamPagNum (Pag_THREADS_FORUM);
+   Gbl.Forum.CurrentPageThrs = Pag_GetParamPagNum (Pag_THREADS_FORUM);
 
    /***** Get threads of a forum from database *****/
    switch (Gbl.Forum.Type)
@@ -2685,10 +2686,10 @@ void For_ShowForumThrs (void)
 
    /***** Compute variables related to pagination of threads *****/
    PaginationThrs.NumItems = NumThrs;
-   PaginationThrs.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   PaginationThrs.CurrentPage = (int) Gbl.Forum.CurrentPageThrs;
    Pag_CalculatePagination (&PaginationThrs);
    PaginationThrs.Anchor = For_ID_FORUM_THREADS_SECTION;
-   Gbl.Pag.CurrentPage = (unsigned) PaginationThrs.CurrentPage;
+   Gbl.Forum.CurrentPageThrs = (unsigned) PaginationThrs.CurrentPage;
 
    /***** Fill the list of threads for current page *****/
    mysql_data_seek (mysql_res,(my_ulonglong) (PaginationThrs.FirstItemVisible - 1));
@@ -2739,7 +2740,7 @@ void For_ShowForumThrs (void)
 	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
                               For_ID_FORUM_POSTS_SECTION);
-         Pag_PutHiddenParamPagNum (PaginationThrs.CurrentPage);
+         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,PaginationThrs.CurrentPage);
          For_PutParamWhichForum ();
          For_PutParamsForumInsDegCrs ();
          Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
@@ -3442,7 +3443,8 @@ unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
 /************************ List the threads of a forum ************************/
 /*****************************************************************************/
 
-void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *PaginationThrs)
+void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
+                        struct Pagination *PaginationThrs)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -3540,7 +3542,7 @@ void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],struct Pagination *Pagi
          /* Put button to cut the thread for moving it to another forum */
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStart (For_ActionsCutThrFor[Gbl.Forum.Type]);
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
          For_PutAllHiddenParamsForum ();
          For_PutHiddenParamThrCod (Thr.ThrCod);
          fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/cut16x16.gif\""
@@ -3872,7 +3874,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
      {
       Act_FormStart (For_ActionsRecRepFor[Gbl.Forum.Type]);
       For_PutHiddenParamThrCod (ThrCod);
-      Pag_PutHiddenParamPagNum (0);
+      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,0);
      }
    else		// Form to write the first message of a new thread
       Act_FormStart (For_ActionsRecThrFor[Gbl.Forum.Type]);
@@ -3889,7 +3891,8 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" id=\"Subject\" name=\"Subject\""
-                      " size=\"45\" maxlength=\"%u\" value=\"%s\""
+                      " class=\"MSG_SUBJECT\""
+                      " maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                       "</td>"
                       "</tr>",
@@ -3901,11 +3904,12 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    /* Content */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_TOP\">"
-	              "<label for=\"Content\" class=\"%s\">%s:&nbsp;</label>"
+	              "<label for=\"Content\" class=\"%s\">%s:</label>"
 	              "</td>"
                       "<td class=\"LEFT_TOP\">"
                       "<textarea id=\"Content\" name=\"Content\""
-                      " cols=\"72\" rows=\"15\">"
+                      " class=\"MSG_CONTENT\""
+                      " rows=\"10\">"
                       "</textarea>"
 	              "</td>"
 	              "</tr>",
@@ -3966,7 +3970,7 @@ void For_RecForumPst (void)
      }
 
    /***** Get page number *****/
-   Pag_GetParamPagNum (Pag_POSTS_FORUM);
+   Gbl.Forum.CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
 
    /***** Get message subject *****/
    Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);

@@ -169,7 +169,7 @@ void Svy_SeeAllSurveys (void)
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show all the surveys *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -201,9 +201,9 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Svys.Num;
-   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pagination.CurrentPage = (int) Gbl.Svys.CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+   Gbl.Svys.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -231,7 +231,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 /* Form to change order */
 	 Act_FormStart (ActSeeAllSvy);
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Svys.SelectedOrder)
@@ -356,7 +356,7 @@ static void Svy_PutParamsToCreateNewSvy (void)
   {
    Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -373,7 +373,7 @@ static void Svy_PutFormToSelectWhichGroupsToShow (void)
 static void Svy_ParamsWhichGroupsToShow (void)
   {
    Svy_PutHiddenParamSvyOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -388,7 +388,7 @@ void Svy_SeeOneSurvey (void)
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -483,7 +483,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    Svy_PutParamSvyCod (SvyCod);
    Svy_PutHiddenParamSvyOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
    Act_LinkFormSubmit (Txt_View_survey,
                        Svy.Status.Visible ? "ASG_TITLE" :
 	                                    "ASG_TITLE_LIGHT",NULL);
@@ -519,7 +519,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Lay_PutCreateButtonInline (Txt_Answer_survey);
 	 Act_FormEnd ();
 
@@ -534,7 +534,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	 Svy_PutParamSvyCod (Svy.SvyCod);
 	 Svy_PutHiddenParamSvyOrder ();
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
 	 Lay_PutConfirmButtonInline (Txt_View_survey_results);
 	 Act_FormEnd ();
 
@@ -830,7 +830,7 @@ static void Svy_PutParams (void)
       Svy_PutParamSvyCod (Gbl.Svys.SvyCodToEdit);
    Att_PutHiddenParamAttOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_SURVEYS,Gbl.Svys.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -1475,7 +1475,7 @@ void Svy_AskRemSurvey (void)
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -1573,7 +1573,7 @@ void Svy_AskResetSurvey (void)
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get survey code *****/
    if ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L)
@@ -1763,7 +1763,7 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Get parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Get the code of the survey *****/
    ItsANewSurvey = ((Svy.SvyCod = Svy_GetParamSvyCod ()) == -1L);
@@ -2560,7 +2560,7 @@ void Svy_RequestEditQuestion (void)
    /***** Get other parameters *****/
    Svy_GetParamSvyOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_SURVEYS);
+   Gbl.Svys.CurrentPage = Pag_GetParamPagNum (Pag_SURVEYS);
 
    /***** Show form to create a new question in this survey *****/
    Svy_ShowFormEditOneQst (SvyCod,&SvyQst,Txt);

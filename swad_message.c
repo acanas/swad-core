@@ -66,6 +66,12 @@ extern struct Globals Gbl;
 #define Msg_IMAGE_SAVED_MAX_HEIGHT	512
 #define Msg_IMAGE_SAVED_QUALITY		 75	// 1 to 100
 
+static const Pag_WhatPaginate_t Msg_WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
+  {
+   Pag_MESSAGES_RECEIVED,	// Msg_MESSAGES_RECEIVED
+   Pag_MESSAGES_SENT		// Msg_MESSAGES_SENT
+  };
+
 /*****************************************************************************/
 /******************************** Private types ******************************/
 /*****************************************************************************/
@@ -1708,7 +1714,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
      };
 
    /***** Get the page number *****/
-   Pag_GetParamPagNum (WhatPaginate[Gbl.Msg.TypeOfMessages]);
+   Gbl.Msg.CurrentPage = Pag_GetParamPagNum (WhatPaginate[Gbl.Msg.TypeOfMessages]);
 
    /***** Get other parameters *****/
    Msg_GetParamMsgsCrsCod ();
@@ -1784,7 +1790,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
             if (MsgCod == Gbl.Msg.ExpandedMsgCod)	// Expanded message found
               {
-               Gbl.Pag.CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
+               Gbl.Msg.CurrentPage = (unsigned) (NumRow / Pag_ITEMS_PER_PAGE) + 1;
                break;
               }
            }
@@ -1792,13 +1798,13 @@ static void Msg_ShowSentOrReceivedMessages (void)
 
       /***** Compute variables related to pagination *****/
       Pagination.NumItems = Gbl.Msg.NumMsgs;
-      Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+      Pagination.CurrentPage = (int) Gbl.Msg.CurrentPage;
       Pag_CalculatePagination (&Pagination);
-      Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+      Gbl.Msg.CurrentPage = (unsigned) Pagination.CurrentPage;
 
       /***** Save my current page in order to show it next time I'll view my received/sent messages *****/
       Pag_SaveLastPageMsgIntoSession (WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                              Gbl.Pag.CurrentPage);
+	                              Gbl.Msg.CurrentPage);
 
       /***** Write links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -3089,7 +3095,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
                                                                     (Expanded ? ActConSntMsg :
                                                         	                ActExpSntMsg));
    Msg_PutHiddenParamsMsgsFilters ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+	                     Gbl.Msg.CurrentPage);
    Msg_PutHiddenParamMsgCod (MsgCod);
    Act_LinkFormSubmit (Expanded ? Txt_Hide_message :
 	                          Txt_See_message,
@@ -3483,7 +3490,8 @@ static void Msg_WriteMsgTo (long MsgCod)
                             "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
          Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
          Msg_PutHiddenParamsMsgsFilters ();
-         Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+         Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+	                           Gbl.Msg.CurrentPage);
          Msg_PutHiddenParamMsgCod (MsgCod);
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
          Act_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
@@ -3547,7 +3555,8 @@ static void Msg_PutFormToDeleteMessage (long MsgCod)
      };
 
    Act_FormStart (ActionDel[Gbl.Msg.TypeOfMessages]);
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+	                     Gbl.Msg.CurrentPage);
    Msg_PutHiddenParamMsgCod (MsgCod);
    Msg_PutHiddenParamsMsgsFilters ();
    Lay_PutIconRemove ();
@@ -3599,7 +3608,8 @@ static void Msg_PutFormToBanSender (struct UsrData *UsrDat)
    extern const char *Txt_Sender_permitted_click_to_ban_him;
 
    Act_FormStart (ActBanUsrMsg);
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/unlock-on64x64.png\""
@@ -3620,7 +3630,8 @@ static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat)
    extern const char *Txt_Sender_banned_click_to_unban_him;
 
    Act_FormStart (ActUnbUsrMsg);
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+	                     Gbl.Msg.CurrentPage);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Msg_PutHiddenParamsMsgsFilters ();
    fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/lock-on64x64.png\""

@@ -205,8 +205,6 @@ void Gbl_InitializeGlobals (void)
    Gbl.Msg.ShowOnlyUnreadMsgs = false;
    Gbl.Msg.ExpandedMsgCod = -1L;
 
-   Gbl.Pag.CurrentPage = 1;	// By default, go to the first page
-
    Gbl.CurrentCty.Cty.CtyCod = -1L;
 
    Gbl.CurrentIns.Ins.InsCod = -1L;	// Unknown institution
@@ -413,6 +411,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.Forum.Cod = -1L;
    Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
+   // Gbl.Forum.CurrentPageThrs = 1;	// TODO: Remove this line
+   // Gbl.Forum.CurrentPagePsts = 1;	// TODO: Remove this line
 
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';

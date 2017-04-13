@@ -419,6 +419,7 @@ struct Globals
       unsigned HiddenVisiblEvents;
       Agd_Order_t SelectedOrder;
       long AgdCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
      } Agenda;
    struct
      {
@@ -555,11 +556,12 @@ struct Globals
      } FileBrowser;	// Struct used for a file browser
    struct
      {
-      bool LstIsRead;	// Is the list already read from database, or it needs to be read?
-      unsigned Num;	// Number of assignments
-      long *LstAsgCods;	// List of assigment codes
+      bool LstIsRead;		// Is the list already read from database, or it needs to be read?
+      unsigned Num;		// Number of assignments
+      long *LstAsgCods;		// List of assigment codes
       Dat_StartEndTime_t SelectedOrder;
       long AsgCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
      } Asgs;
    struct
      {
@@ -571,6 +573,7 @@ struct Globals
       bool ShowDetails;
       char *StrAttCodsSelected;
       long AttCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
      } AttEvents;
    struct
      {
@@ -589,6 +592,8 @@ struct Globals
       For_Order_t SelectedOrder;
       char PathRelOld[PATH_MAX + 1];
       long ThreadToMove;
+      unsigned CurrentPageThrs;
+      unsigned CurrentPagePsts;
      } Forum;
    struct
      {
@@ -620,11 +625,8 @@ struct Globals
       bool ShowOnlyOneRecipient;	// Shown only a selected recipient or also other potential recipients?
       char FileNameMail[PATH_MAX + 1];
       FILE *FileMail;
-     } Msg;
-   struct
-     {
       unsigned CurrentPage;
-     } Pag;
+     } Msg;
    struct
      {
       TT_TimeTableType_t Type;
@@ -704,6 +706,7 @@ struct Globals
       Svy_Order_t SelectedOrder;
       long SvyCodToEdit;	// Used as parameter in contextual links
       long SvyQstCodToEdit;	// Used as parameter in contextual links
+      unsigned CurrentPage;
      } Svys;
    struct
      {

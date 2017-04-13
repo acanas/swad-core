@@ -101,7 +101,7 @@ void Asg_SeeAssignments (void)
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Show all the assignments *****/
    Asg_ShowAllAssignments ();
@@ -130,9 +130,9 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Compute variables related to pagination *****/
    Pagination.NumItems = Gbl.Asgs.Num;
-   Pagination.CurrentPage = (int) Gbl.Pag.CurrentPage;
+   Pagination.CurrentPage = (int) Gbl.Asgs.CurrentPage;
    Pag_CalculatePagination (&Pagination);
-   Gbl.Pag.CurrentPage = (unsigned) Pagination.CurrentPage;
+   Gbl.Asgs.CurrentPage = (unsigned) Pagination.CurrentPage;
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -158,7 +158,7 @@ static void Asg_ShowAllAssignments (void)
 	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
 	 Act_FormStart (ActSeeAsg);
 	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
 	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
 	 if (Order == Gbl.Asgs.SelectedOrder)
@@ -273,7 +273,7 @@ static void Asg_PutParamsToCreateNewAsg (void)
   {
    Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -290,7 +290,7 @@ static void Asg_PutFormToSelectWhichGroupsToShow (void)
 static void Asg_ParamsWhichGroupsToShow (void)
   {
    Asg_PutHiddenParamAsgOrder ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -553,7 +553,7 @@ static void Asg_PutParams (void)
    Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
    Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -905,7 +905,7 @@ void Asg_ReqRemAssignment (void)
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get assignment code *****/
    if ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L)
@@ -919,7 +919,7 @@ void Asg_ReqRemAssignment (void)
    Asg_PutParamAsgCod (Asg.AsgCod);
    Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_assignment_X,
@@ -1077,7 +1077,7 @@ void Asg_RequestCreatOrEditAsg (void)
    /***** Get parameters *****/
    Asg_GetParamAsgOrder ();
    Grp_GetParamWhichGrps ();
-   Pag_GetParamPagNum (Pag_ASSIGNMENTS);
+   Gbl.Asgs.CurrentPage = Pag_GetParamPagNum (Pag_ASSIGNMENTS);
 
    /***** Get the code of the assignment *****/
    ItsANewAssignment = ((Asg.AsgCod = Asg_GetParamAsgCod ()) == -1L);
@@ -1114,7 +1114,7 @@ void Asg_RequestCreatOrEditAsg (void)
      }
    Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Gbl.Pag.CurrentPage);
+   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,
