@@ -1052,6 +1052,7 @@ static void For_ShowThreadPosts (long ThrCod)
       PaginationPsts.NumItems = NumPsts;
       PaginationPsts.CurrentPage = (int) Gbl.Forum.CurrentPagePsts;
       Pag_CalculatePagination (&PaginationPsts);
+      PaginationPsts.Anchor = For_ID_FORUM_POSTS_SECTION;
       Gbl.Forum.CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
       /***** Write links to pages *****/
