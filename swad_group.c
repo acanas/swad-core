@@ -4298,13 +4298,11 @@ void Grp_ShowFormToSelWhichGrps (Act_Action_t Action,void (*FuncParams) ())
 
 void Grp_GetParamWhichGrps (void)
   {
-   static bool FirstTime = true;
+   static bool AlreadyGot = false;
    Grp_WhichGroups_t WhichGroupsDefault;
 
-   if (FirstTime)
+   if (!AlreadyGot)
      {
-      FirstTime = false;
-
       /***** Get which grous (my groups or all groups) *****/
       /* Set default */
       switch (Gbl.Action.Act)
@@ -4334,5 +4332,7 @@ void Grp_GetParamWhichGrps (void)
 	                                                        0,
 	                                                        Grp_NUM_WHICH_GROUPS - 1,
 	                                                        (unsigned long) WhichGroupsDefault);
+
+      AlreadyGot = true;
      }
   }

@@ -1897,7 +1897,6 @@ static void For_PutFormWhichForums (void)
           - only the forums of current institution/degree/course *****/
    Act_FormStart (ActSeeFor);
    For_PutParamForumOrder ();
-   For_PutParamsForumInsDegCrs ();
    fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
 	              "<ul>");
 
@@ -3729,43 +3728,56 @@ void For_ShowThrPsts (void)
 
 static void For_GetParamsForum (void)
   {
-   /***** Get which forums I want to see *****/
-   Gbl.Forum.WhichForums = (For_WhichForums_t)
-	                   Par_GetParToUnsignedLong ("WhichForum",
-                                                     0,
-                                                     For_NUM_WHICH_FORUMS - 1,
-                                                     (unsigned long) For_DEFAULT_WHICH_FORUMS);
+   static bool AlreadyGot = false;
 
-   /***** Get order type *****/
-   Gbl.Forum.SelectedOrder = (For_Order_t)
-	                     Par_GetParToUnsignedLong ("Order",
-                                                       0,
-                                                       For_NUM_ORDERS - 1,
-                                                       (unsigned long) For_DEFAULT_ORDER);
+   if (!AlreadyGot)
+     {
+      /***** Get which forums I want to see *****/
+      Gbl.Forum.WhichForums = (For_WhichForums_t)
+			      Par_GetParToUnsignedLong ("WhichForum",
+							0,
+							For_NUM_WHICH_FORUMS - 1,
+							(unsigned long) For_DEFAULT_WHICH_FORUMS);
 
-   /***** Get parameter with code of institution *****/
-   Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
-   Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
-   if (Gbl.Forum.Ins.InsCod > 0)
-      Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
+      /***** Get order type *****/
+      Gbl.Forum.SelectedOrder = (For_Order_t)
+				Par_GetParToUnsignedLong ("Order",
+							  0,
+							  For_NUM_ORDERS - 1,
+							  (unsigned long) For_DEFAULT_ORDER);
 
-   /***** Get parameter with code of institution *****/
-   Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
-   Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
-   if (Gbl.Forum.Ctr.CtrCod > 0)
-      Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
+      /***** Get parameter with code of course *****/
+      Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
+      Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
+      if (Gbl.Forum.Crs.CrsCod > 0)
+	 Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
+      else
+	{
+	 /***** Get parameter with code of degree *****/
+	 Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
+	 Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
+	 if (Gbl.Forum.Deg.DegCod > 0)
+	    Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
+	 else
+	   {
+	    /***** Get parameter with code of institution *****/
+	    Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
+	    Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
+	    if (Gbl.Forum.Ctr.CtrCod > 0)
+	       Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
+	    else
+	      {
+	       /***** Get parameter with code of institution *****/
+	       Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
+	       Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
+	       if (Gbl.Forum.Ins.InsCod > 0)
+		  Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
+	      }
+	   }
+	}
 
-   /***** Get parameter with code of degree *****/
-   Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
-   Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
-   if (Gbl.Forum.Deg.DegCod > 0)
-      Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
-
-   /***** Get parameter with code of course *****/
-   Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
-   Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
-   if (Gbl.Forum.Crs.CrsCod > 0)
-      Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
+      AlreadyGot = true;
+     }
   }
 
 /*****************************************************************************/
