@@ -323,6 +323,8 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (For_ForumType_t ForumType,c
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
+static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted);
+
 static void For_ShowForumLevel2 (long ThrCod);
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
 
@@ -332,6 +334,7 @@ static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPos
 static unsigned For_GetNumPstsInForum (For_ForumType_t ForumType);
 
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
+                               long ThrCodHighlighted,
                                struct Pagination *PaginationThrs);
 static void For_GetThrData (struct ForumThread *Thr);
 
@@ -2293,7 +2296,6 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,long Cod,
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *The_ClassFormDark[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Copy_not_allowed;
    extern const char *Txt_Paste_thread;
@@ -2302,11 +2304,6 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,long Cod,
    unsigned NumPosts;
    const char *Style;
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
-   const char *ClassNormal;
-   char ClassHighlight[64];
-
-   ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
-   sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
 
    /***** Get number of threads and number of posts *****/
    NumThrs = For_GetNumThrsInForum (ForumType);
@@ -2315,9 +2312,10 @@ static void For_WriteLinkToForum (For_ForumType_t ForumType,long Cod,
 	                          The_ClassForm[Gbl.Prefs.Theme]);
 
    /***** Start row *****/
-   fprintf (Gbl.F.Out,"<li class=\"%s\" style=\"height:25px;\">",
-	    Highlight ? ClassHighlight :
-			ClassNormal);
+   fprintf (Gbl.F.Out,"<li");
+   if (Highlight)
+      fprintf (Gbl.F.Out," class=\"LIGHT_BLUE\"");
+   fprintf (Gbl.F.Out," style=\"height:25px;\">");
 
    /***** Indent forum title *****/
    Lay_IndentDependingOnLevel (Level,IsLastItemInLevel);
@@ -2568,6 +2566,11 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
 void For_ShowForumThrs (void)
   {
+   For_ShowForumThreadsHighlightingOneThread (-1L);
+  }
+
+static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
+  {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
@@ -2752,7 +2755,7 @@ void For_ShowForumThrs (void)
                Txt_ReaBRders);
 
       /***** List the threads *****/
-      For_ListForumThrs (ThrCods,&PaginationThrs);
+      For_ListForumThrs (ThrCods,ThrCodHighlighted,&PaginationThrs);
 
       /***** End table *****/
       fprintf (Gbl.F.Out,"</table>");
@@ -3423,6 +3426,7 @@ static unsigned For_GetNumPstsInForum (For_ForumType_t ForumType)
 /*****************************************************************************/
 
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
+                               long ThrCodHighlighted,
                                struct Pagination *PaginationThrs)
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -3464,8 +3468,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       For_GetThrData (&Thr);
       Style = (Thr.NumUnreadPosts ? "AUTHOR_TXT_NEW" :
 	                            "AUTHOR_TXT");
-      BgColor = (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
-                                                      Gbl.ColorRows[Gbl.RowEvenOdd];
+      BgColor =  (Thr.ThrCod == ThreadInMyClipboard) ? "LIGHT_GREEN" :
+	        ((Thr.ThrCod == ThrCodHighlighted)   ? "LIGHT_BLUE" :
+                                                       Gbl.ColorRows[Gbl.RowEvenOdd]);
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -3834,8 +3839,8 @@ static long For_GetParamPstCod (void)
 
 static void For_ShowForumLevel2 (long ThrCod)
   {
-   /***** Show forums and threads *****/
-   For_ShowForumThrs ();
+   /***** Show threads *****/
+   For_ShowForumThreadsHighlightingOneThread (ThrCod);
 
    /***** Show the posts of this thread *****/
    For_ShowThreadPosts (ThrCod);
@@ -4143,7 +4148,7 @@ void For_DelPst (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_Post_and_thread_removed);
 
       /* Show the remaining threads */
-      For_ShowForumThrs ();
+      For_ShowForumThreadsHighlightingOneThread (ThrCod);
      }
    else
      {
@@ -4201,7 +4206,7 @@ void For_DelThr (void)
   {
    extern const char *Txt_Thread_X_removed;
    extern const char *Txt_Thread_removed;
-   long ThrCod;
+   long ThrCod = -1L;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
    /***** Get order type, degree and course of the forum *****/
@@ -4235,7 +4240,7 @@ void For_DelThr (void)
       Lay_ShowErrorAndExit ("You can not remove threads in this forum.");
 
    /***** Show the threads again *****/
-   For_ShowForumThrs ();
+   For_ShowForumThreadsHighlightingOneThread (ThrCod);
   }
 
 /*****************************************************************************/
@@ -4273,7 +4278,7 @@ void For_CutThr (void)
    Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the threads again *****/
-   For_ShowForumThrs ();
+   For_ShowForumThreadsHighlightingOneThread (ThrCod);
   }
 
 /*****************************************************************************/
@@ -4323,7 +4328,7 @@ void For_PasteThr (void)
      }
 
    /***** Show the threads again *****/
-   For_ShowForumThrs ();
+   For_ShowForumThreadsHighlightingOneThread (ThrCod);
   }
 
 /*****************************************************************************/
