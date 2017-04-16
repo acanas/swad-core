@@ -3568,6 +3568,41 @@ static void For_GetParamsForum (void)
    /***** Set forum type *****/
    For_SetForumType ();
 
+   /***** Get parameter with code of course, degree, centre or institution *****/
+   switch (Gbl.Forum.Type)
+     {
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
+         /* Get parameter with code of course */
+	 Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
+         Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
+         Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
+         break;
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+	 /* Get parameter with code of degree */
+	 Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
+	 Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
+         Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
+         break;
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+	 /* Get parameter with code of centre */
+	 Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
+	 Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
+	 Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
+         break;
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
+	 /* Get parameter with code of institution */
+	 Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
+	 Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
+	 Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
+         break;
+      default:
+         break;
+     }
+
    /***** Get which forums I want to see *****/
    Gbl.Forum.WhichForums = (For_WhichForums_t)
 			   Par_GetParToUnsignedLong ("WhichForum",
@@ -3581,36 +3616,6 @@ static void For_GetParamsForum (void)
 						       0,
 						       For_NUM_ORDERS - 1,
 						       (unsigned long) For_DEFAULT_ORDER);
-
-   /***** Get parameter with code of course *****/
-   Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
-   Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
-   if (Gbl.Forum.Crs.CrsCod > 0)
-      Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
-   else
-     {
-      /***** Get parameter with code of degree *****/
-      Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
-      Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
-      if (Gbl.Forum.Deg.DegCod > 0)
-	 Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
-      else
-	{
-	 /***** Get parameter with code of institution *****/
-	 Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
-	 Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
-	 if (Gbl.Forum.Ctr.CtrCod > 0)
-	    Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
-	 else
-	   {
-	    /***** Get parameter with code of institution *****/
-	    Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
-	    Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
-	    if (Gbl.Forum.Ins.InsCod > 0)
-	       Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
-	   }
-	}
-     }
 
    /***** Restrict access to forum *****/
    For_RestrictAccess ();
