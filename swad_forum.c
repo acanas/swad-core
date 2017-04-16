@@ -299,6 +299,9 @@ static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
 static void For_PutFormWhichForums (void);
 static void For_PutParamsForumInsDegCrs (void);
+
+static void For_ShowForumList (void);
+
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
 static void For_WriteLinksToPlatformForums (bool IsLastForum,
                                             bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS]);
@@ -325,7 +328,6 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted);
 
-static void For_ShowForumLevel2 (long ThrCod);
 static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
@@ -339,6 +341,8 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 static void For_GetThrData (struct ForumThread *Thr);
 
 static void For_GetParamsForum (void);
+static void For_SetForumType (void);
+static void For_RestrictAccess (void);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
@@ -350,13 +354,11 @@ static long For_GetParamPstCod (void);
 void For_EnbPst (void)
   {
    extern const char *Txt_Post_unbanned;
-   long PstCod,ThrCod;
+   long PstCod;
+   long ThrCod;
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get the post code to unban *****/
    PstCod = For_GetParamPstCod ();
@@ -369,7 +371,7 @@ void For_EnbPst (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Post_unbanned);
 
    /***** Show the posts again *****/
-   For_ShowForumLevel2 (ThrCod);
+   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
@@ -381,11 +383,8 @@ void For_DisPst (void)
    extern const char *Txt_Post_banned;
    long PstCod,ThrCod;
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get the post code to ban *****/
    PstCod = For_GetParamPstCod ();
@@ -404,7 +403,7 @@ void For_DisPst (void)
       Lay_ShowErrorAndExit ("The post to be banned no longer exists.");
 
    /***** Show the posts again *****/
-   For_ShowForumLevel2 (ThrCod);
+   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
@@ -995,6 +994,9 @@ static void For_ShowThreadPosts (long ThrCod)
    bool ICanModerateForum = false;
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
 
+   /***** Show threads *****/
+   For_ShowForumThreadsHighlightingOneThread (ThrCod);
+
    /***** Get data of the thread *****/
    Thr.ThrCod = ThrCod;
    For_GetThrData (&Thr);
@@ -1556,180 +1558,10 @@ static void For_PutParamsForumInsDegCrs (void)
   }
 
 /*****************************************************************************/
-/***************************** Set the type of forum *************************/
-/*****************************************************************************/
-
-void For_SetForumTypeAndRestrictAccess (void)
-  {
-   extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
-   bool ICanSeeForum = false;
-
-   switch (Gbl.Action.Act)
-     {
-      case ActSeeForSWAUsr:	case ActSeePstForSWAUsr:
-      case ActRcvThrForSWAUsr:	case ActRcvRepForSWAUsr:
-      case ActReqDelThrSWAUsr:	case ActDelThrForSWAUsr:
-      case ActCutThrForSWAUsr:	case ActPasThrForSWAUsr:
-      case ActDelPstForSWAUsr:
-      case ActEnbPstForSWAUsr:	case ActDisPstForSWAUsr:
-         Gbl.Forum.Type = For_FORUM_SWAD_USRS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForSWATch:	case ActSeePstForSWATch:
-      case ActRcvThrForSWATch:	case ActRcvRepForSWATch:
-      case ActReqDelThrSWATch:	case ActDelThrForSWATch:
-      case ActCutThrForSWATch:	case ActPasThrForSWATch:
-      case ActDelPstForSWATch:
-      case ActEnbPstForSWATch:	case ActDisPstForSWATch:
-         Gbl.Forum.Type = For_FORUM_SWAD_TCHS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForGenUsr:	case ActSeePstForGenUsr:
-      case ActRcvThrForGenUsr:	case ActRcvRepForGenUsr:
-      case ActReqDelThrGenUsr:	case ActDelThrForGenUsr:
-      case ActCutThrForGenUsr:	case ActPasThrForGenUsr:
-      case ActDelPstForGenUsr:
-      case ActEnbPstForGenUsr:	case ActDisPstForGenUsr:
-         Gbl.Forum.Type = For_FORUM_GLOBAL_USRS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForGenTch:	case ActSeePstForGenTch:
-      case ActRcvThrForGenTch:	case ActRcvRepForGenTch:
-      case ActReqDelThrGenTch:	case ActDelThrForGenTch:
-      case ActCutThrForGenTch:	case ActPasThrForGenTch:
-      case ActDelPstForGenTch:
-      case ActEnbPstForGenTch:	case ActDisPstForGenTch:
-         Gbl.Forum.Type = For_FORUM_GLOBAL_TCHS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForInsUsr:	case ActSeePstForInsUsr:
-      case ActRcvThrForInsUsr:	case ActRcvRepForInsUsr:
-      case ActReqDelThrInsUsr:	case ActDelThrForInsUsr:
-      case ActCutThrForInsUsr:	case ActPasThrForInsUsr:
-      case ActDelPstForInsUsr:
-      case ActEnbPstForInsUsr:	case ActDisPstForInsUsr:
-         Gbl.Forum.Type = For_FORUM_INSTIT_USRS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForInsTch:	case ActSeePstForInsTch:
-      case ActRcvThrForInsTch:	case ActRcvRepForInsTch:
-      case ActReqDelThrInsTch:	case ActDelThrForInsTch:
-      case ActCutThrForInsTch:	case ActPasThrForInsTch:
-      case ActDelPstForInsTch:
-      case ActEnbPstForInsTch:	case ActDisPstForInsTch:
-	 Gbl.Forum.Type = For_FORUM_INSTIT_TCHS;
-         Gbl.Forum.Level = 1;
-	 break;
-      case ActSeeForCtrUsr:	case ActSeePstForCtrUsr:
-      case ActRcvThrForCtrUsr:	case ActRcvRepForCtrUsr:
-      case ActReqDelThrCtrUsr:	case ActDelThrForCtrUsr:
-      case ActCutThrForCtrUsr:	case ActPasThrForCtrUsr:
-      case ActDelPstForCtrUsr:
-      case ActEnbPstForCtrUsr:	case ActDisPstForCtrUsr:
-         Gbl.Forum.Type = For_FORUM_CENTRE_USRS;
-         Gbl.Forum.Level = 1;
-         break;
-      case ActSeeForCtrTch:	case ActSeePstForCtrTch:
-      case ActRcvThrForCtrTch:	case ActRcvRepForCtrTch:
-      case ActReqDelThrCtrTch:	case ActDelThrForCtrTch:
-      case ActCutThrForCtrTch:	case ActPasThrForCtrTch:
-      case ActDelPstForCtrTch:
-      case ActEnbPstForCtrTch:	case ActDisPstForCtrTch:
-	 Gbl.Forum.Type = For_FORUM_CENTRE_TCHS;
-         Gbl.Forum.Level = 1;
-	 break;
-      case ActSeeForDegUsr:	case ActSeePstForDegUsr:
-      case ActRcvThrForDegUsr:	case ActRcvRepForDegUsr:
-      case ActReqDelThrDegUsr:	case ActDelThrForDegUsr:
-      case ActCutThrForDegUsr:	case ActPasThrForDegUsr:
-      case ActDelPstForDegUsr:
-      case ActEnbPstForDegUsr:	case ActDisPstForDegUsr:
-         Gbl.Forum.Type = For_FORUM_DEGREE_USRS;
-         Gbl.Forum.Level = 2;
-         break;
-      case ActSeeForDegTch:	case ActSeePstForDegTch:
-      case ActRcvThrForDegTch:	case ActRcvRepForDegTch:
-      case ActReqDelThrDegTch:	case ActDelThrForDegTch:
-      case ActCutThrForDegTch:	case ActPasThrForDegTch:
-      case ActDelPstForDegTch:
-      case ActEnbPstForDegTch:	case ActDisPstForDegTch:
-	 Gbl.Forum.Type = For_FORUM_DEGREE_TCHS;
-         Gbl.Forum.Level = 2;
-	 break;
-      case ActSeeForCrsUsr:	case ActSeePstForCrsUsr:
-      case ActRcvThrForCrsUsr:	case ActRcvRepForCrsUsr:
-      case ActReqDelThrCrsUsr:	case ActDelThrForCrsUsr:
-      case ActCutThrForCrsUsr:	case ActPasThrForCrsUsr:
-      case ActDelPstForCrsUsr:
-      case ActEnbPstForCrsUsr:	case ActDisPstForCrsUsr:
-         Gbl.Forum.Type = For_FORUM_COURSE_USRS;
-         Gbl.Forum.Level = 3;
-         break;
-      case ActSeeForCrsTch:	case ActSeePstForCrsTch:
-      case ActRcvThrForCrsTch:	case ActRcvRepForCrsTch:
-      case ActReqDelThrCrsTch:	case ActDelThrForCrsTch:
-      case ActCutThrForCrsTch:	case ActPasThrForCrsTch:
-      case ActDelPstForCrsTch:
-      case ActEnbPstForCrsTch:	case ActDisPstForCrsTch:
-         Gbl.Forum.Type = For_FORUM_COURSE_TCHS;
-         Gbl.Forum.Level = 3;
-         break;
-     }
-
-   /***** Restrict access *****/
-   switch (Gbl.Forum.Type)
-     {
-      case For_FORUM_COURSE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_STUDENT);
-         break;
-      case For_FORUM_COURSE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_TEACHER);
-         break;
-      case For_FORUM_DEGREE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_STUDENT);
-         break;
-      case For_FORUM_DEGREE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_TEACHER);
-         break;
-      case For_FORUM_CENTRE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_STUDENT);
-         break;
-      case For_FORUM_CENTRE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_TEACHER);
-         break;
-      case For_FORUM_INSTIT_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_STUDENT);
-         break;
-      case For_FORUM_INSTIT_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_TEACHER);
-         break;
-      case For_FORUM_GLOBAL_USRS:
-      case For_FORUM_SWAD_USRS:
-         ICanSeeForum = true;
-         break;
-      case For_FORUM_GLOBAL_TCHS:
-      case For_FORUM_SWAD_TCHS:
-         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
-         break;
-     }
-   if (!ICanSeeForum)
-      Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_access_to_this_forum);
-  }
-
-/*****************************************************************************/
 /************************** Show list of available forums ********************/
 /*****************************************************************************/
 
-void For_ShowForumList (void)
+static void For_ShowForumList (void)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forums;
@@ -1750,9 +1582,6 @@ void For_ShowForumList (void)
    /***** Get if there is a thread ready to be moved *****/
    if (ICanMoveThreads)
       Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
-
-   /***** Get order type, degree and course of the forum *****/
-   For_GetParamsForum ();
 
    /***** Fill the list with the institutions I belong to *****/
    Usr_GetMyInstits ();
@@ -2567,8 +2396,16 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
 
 void For_ShowForumThrs (void)
   {
+   /***** Get parameters related to forum *****/
+   For_GetParamsForum ();
+
+   /***** Show forum threads with no one highlighted *****/
    For_ShowForumThreadsHighlightingOneThread (-1L);
   }
+
+/*****************************************************************************/
+/********** Show available threads of a forum highlighting a thread **********/
+/*****************************************************************************/
 
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
   {
@@ -2598,12 +2435,6 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
    /***** Get if there is a thread ready to be moved *****/
    if (ICanMoveThreads)
       Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
-
-   /***** Get order type, degree and course of the forum *****/
-   For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Show list of available forums *****/
    For_ShowForumList ();
@@ -3718,14 +3549,14 @@ void For_ShowThrPsts (void)
   {
    long ThrCod;
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
 
    /***** Get the identifier of the thread that user want to show *****/
    ThrCod = For_GetParamThrCod ();
 
    /***** Show the posts of that thread *****/
-   For_ShowForumLevel2 (ThrCod);
+   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
@@ -3734,56 +3565,233 @@ void For_ShowThrPsts (void)
 
 static void For_GetParamsForum (void)
   {
-   static bool AlreadyGot = false;
+   /***** Set forum type *****/
+   For_SetForumType ();
 
-   if (!AlreadyGot)
+   /***** Get which forums I want to see *****/
+   Gbl.Forum.WhichForums = (For_WhichForums_t)
+			   Par_GetParToUnsignedLong ("WhichForum",
+						     0,
+						     For_NUM_WHICH_FORUMS - 1,
+						     (unsigned long) For_DEFAULT_WHICH_FORUMS);
+
+   /***** Get order type *****/
+   Gbl.Forum.SelectedOrder = (For_Order_t)
+			     Par_GetParToUnsignedLong ("Order",
+						       0,
+						       For_NUM_ORDERS - 1,
+						       (unsigned long) For_DEFAULT_ORDER);
+
+   /***** Get parameter with code of course *****/
+   Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
+   Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
+   if (Gbl.Forum.Crs.CrsCod > 0)
+      Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
+   else
      {
-      /***** Get which forums I want to see *****/
-      Gbl.Forum.WhichForums = (For_WhichForums_t)
-			      Par_GetParToUnsignedLong ("WhichForum",
-							0,
-							For_NUM_WHICH_FORUMS - 1,
-							(unsigned long) For_DEFAULT_WHICH_FORUMS);
-
-      /***** Get order type *****/
-      Gbl.Forum.SelectedOrder = (For_Order_t)
-				Par_GetParToUnsignedLong ("Order",
-							  0,
-							  For_NUM_ORDERS - 1,
-							  (unsigned long) For_DEFAULT_ORDER);
-
-      /***** Get parameter with code of course *****/
-      Gbl.Forum.Crs.CrsCod = Par_GetParToLong ("ForCrsCod");
-      Crs_GetDataOfCourseByCod (&Gbl.Forum.Crs);
-      if (Gbl.Forum.Crs.CrsCod > 0)
-	 Gbl.Forum.Cod = Gbl.Forum.Crs.CrsCod;
+      /***** Get parameter with code of degree *****/
+      Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
+      Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
+      if (Gbl.Forum.Deg.DegCod > 0)
+	 Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
       else
 	{
-	 /***** Get parameter with code of degree *****/
-	 Gbl.Forum.Deg.DegCod = Par_GetParToLong ("ForDegCod");
-	 Deg_GetDataOfDegreeByCod (&Gbl.Forum.Deg);
-	 if (Gbl.Forum.Deg.DegCod > 0)
-	    Gbl.Forum.Cod = Gbl.Forum.Deg.DegCod;
+	 /***** Get parameter with code of institution *****/
+	 Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
+	 Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
+	 if (Gbl.Forum.Ctr.CtrCod > 0)
+	    Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
 	 else
 	   {
 	    /***** Get parameter with code of institution *****/
-	    Gbl.Forum.Ctr.CtrCod = Par_GetParToLong ("ForCtrCod");
-	    Ctr_GetDataOfCentreByCod (&Gbl.Forum.Ctr);
-	    if (Gbl.Forum.Ctr.CtrCod > 0)
-	       Gbl.Forum.Cod = Gbl.Forum.Ctr.CtrCod;
-	    else
-	      {
-	       /***** Get parameter with code of institution *****/
-	       Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
-	       Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
-	       if (Gbl.Forum.Ins.InsCod > 0)
-		  Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
-	      }
+	    Gbl.Forum.Ins.InsCod = Par_GetParToLong ("ForInsCod");
+	    Ins_GetDataOfInstitutionByCod (&Gbl.Forum.Ins,Ins_GET_BASIC_DATA);
+	    if (Gbl.Forum.Ins.InsCod > 0)
+	       Gbl.Forum.Cod = Gbl.Forum.Ins.InsCod;
 	   }
 	}
-
-      AlreadyGot = true;
      }
+
+   /***** Restrict access to forum *****/
+   For_RestrictAccess ();
+  }
+
+/*****************************************************************************/
+/***************************** Set the type of forum *************************/
+/*****************************************************************************/
+
+static void For_SetForumType (void)
+  {
+   switch (Gbl.Action.Act)
+     {
+      case ActSeeFor:
+      case ActSeeForGenUsr:	case ActSeePstForGenUsr:
+      case ActRcvThrForGenUsr:	case ActRcvRepForGenUsr:
+      case ActReqDelThrGenUsr:	case ActDelThrForGenUsr:
+      case ActCutThrForGenUsr:	case ActPasThrForGenUsr:
+      case ActDelPstForGenUsr:
+      case ActEnbPstForGenUsr:	case ActDisPstForGenUsr:
+         Gbl.Forum.Type = For_FORUM_GLOBAL_USRS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForGenTch:	case ActSeePstForGenTch:
+      case ActRcvThrForGenTch:	case ActRcvRepForGenTch:
+      case ActReqDelThrGenTch:	case ActDelThrForGenTch:
+      case ActCutThrForGenTch:	case ActPasThrForGenTch:
+      case ActDelPstForGenTch:
+      case ActEnbPstForGenTch:	case ActDisPstForGenTch:
+         Gbl.Forum.Type = For_FORUM_GLOBAL_TCHS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForSWAUsr:	case ActSeePstForSWAUsr:
+      case ActRcvThrForSWAUsr:	case ActRcvRepForSWAUsr:
+      case ActReqDelThrSWAUsr:	case ActDelThrForSWAUsr:
+      case ActCutThrForSWAUsr:	case ActPasThrForSWAUsr:
+      case ActDelPstForSWAUsr:
+      case ActEnbPstForSWAUsr:	case ActDisPstForSWAUsr:
+         Gbl.Forum.Type = For_FORUM_SWAD_USRS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForSWATch:	case ActSeePstForSWATch:
+      case ActRcvThrForSWATch:	case ActRcvRepForSWATch:
+      case ActReqDelThrSWATch:	case ActDelThrForSWATch:
+      case ActCutThrForSWATch:	case ActPasThrForSWATch:
+      case ActDelPstForSWATch:
+      case ActEnbPstForSWATch:	case ActDisPstForSWATch:
+         Gbl.Forum.Type = For_FORUM_SWAD_TCHS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForInsUsr:	case ActSeePstForInsUsr:
+      case ActRcvThrForInsUsr:	case ActRcvRepForInsUsr:
+      case ActReqDelThrInsUsr:	case ActDelThrForInsUsr:
+      case ActCutThrForInsUsr:	case ActPasThrForInsUsr:
+      case ActDelPstForInsUsr:
+      case ActEnbPstForInsUsr:	case ActDisPstForInsUsr:
+         Gbl.Forum.Type = For_FORUM_INSTIT_USRS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForInsTch:	case ActSeePstForInsTch:
+      case ActRcvThrForInsTch:	case ActRcvRepForInsTch:
+      case ActReqDelThrInsTch:	case ActDelThrForInsTch:
+      case ActCutThrForInsTch:	case ActPasThrForInsTch:
+      case ActDelPstForInsTch:
+      case ActEnbPstForInsTch:	case ActDisPstForInsTch:
+	 Gbl.Forum.Type = For_FORUM_INSTIT_TCHS;
+         Gbl.Forum.Level = 1;
+	 break;
+      case ActSeeForCtrUsr:	case ActSeePstForCtrUsr:
+      case ActRcvThrForCtrUsr:	case ActRcvRepForCtrUsr:
+      case ActReqDelThrCtrUsr:	case ActDelThrForCtrUsr:
+      case ActCutThrForCtrUsr:	case ActPasThrForCtrUsr:
+      case ActDelPstForCtrUsr:
+      case ActEnbPstForCtrUsr:	case ActDisPstForCtrUsr:
+         Gbl.Forum.Type = For_FORUM_CENTRE_USRS;
+         Gbl.Forum.Level = 1;
+         break;
+      case ActSeeForCtrTch:	case ActSeePstForCtrTch:
+      case ActRcvThrForCtrTch:	case ActRcvRepForCtrTch:
+      case ActReqDelThrCtrTch:	case ActDelThrForCtrTch:
+      case ActCutThrForCtrTch:	case ActPasThrForCtrTch:
+      case ActDelPstForCtrTch:
+      case ActEnbPstForCtrTch:	case ActDisPstForCtrTch:
+	 Gbl.Forum.Type = For_FORUM_CENTRE_TCHS;
+         Gbl.Forum.Level = 1;
+	 break;
+      case ActSeeForDegUsr:	case ActSeePstForDegUsr:
+      case ActRcvThrForDegUsr:	case ActRcvRepForDegUsr:
+      case ActReqDelThrDegUsr:	case ActDelThrForDegUsr:
+      case ActCutThrForDegUsr:	case ActPasThrForDegUsr:
+      case ActDelPstForDegUsr:
+      case ActEnbPstForDegUsr:	case ActDisPstForDegUsr:
+         Gbl.Forum.Type = For_FORUM_DEGREE_USRS;
+         Gbl.Forum.Level = 2;
+         break;
+      case ActSeeForDegTch:	case ActSeePstForDegTch:
+      case ActRcvThrForDegTch:	case ActRcvRepForDegTch:
+      case ActReqDelThrDegTch:	case ActDelThrForDegTch:
+      case ActCutThrForDegTch:	case ActPasThrForDegTch:
+      case ActDelPstForDegTch:
+      case ActEnbPstForDegTch:	case ActDisPstForDegTch:
+	 Gbl.Forum.Type = For_FORUM_DEGREE_TCHS;
+         Gbl.Forum.Level = 2;
+	 break;
+      case ActSeeForCrsUsr:	case ActSeePstForCrsUsr:
+      case ActRcvThrForCrsUsr:	case ActRcvRepForCrsUsr:
+      case ActReqDelThrCrsUsr:	case ActDelThrForCrsUsr:
+      case ActCutThrForCrsUsr:	case ActPasThrForCrsUsr:
+      case ActDelPstForCrsUsr:
+      case ActEnbPstForCrsUsr:	case ActDisPstForCrsUsr:
+         Gbl.Forum.Type = For_FORUM_COURSE_USRS;
+         Gbl.Forum.Level = 3;
+         break;
+      case ActSeeForCrsTch:	case ActSeePstForCrsTch:
+      case ActRcvThrForCrsTch:	case ActRcvRepForCrsTch:
+      case ActReqDelThrCrsTch:	case ActDelThrForCrsTch:
+      case ActCutThrForCrsTch:	case ActPasThrForCrsTch:
+      case ActDelPstForCrsTch:
+      case ActEnbPstForCrsTch:	case ActDisPstForCrsTch:
+         Gbl.Forum.Type = For_FORUM_COURSE_TCHS;
+         Gbl.Forum.Level = 3;
+         break;
+     }
+  }
+
+/*****************************************************************************/
+/************************** Restrict access to forum *************************/
+/*****************************************************************************/
+
+static void For_RestrictAccess (void)
+  {
+   extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
+   bool ICanSeeForum = false;
+
+   /***** Restrict access *****/
+   switch (Gbl.Forum.Type)
+     {
+      case For_FORUM_COURSE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_STUDENT);
+         break;
+      case For_FORUM_COURSE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyRoleInCrs (Gbl.Forum.Crs.CrsCod) >= Rol_TEACHER);
+         break;
+      case For_FORUM_DEGREE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_STUDENT);
+         break;
+      case For_FORUM_DEGREE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.Deg.DegCod) >= Rol_TEACHER);
+         break;
+      case For_FORUM_CENTRE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_STUDENT);
+         break;
+      case For_FORUM_CENTRE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.Ctr.CtrCod) >= Rol_TEACHER);
+         break;
+      case For_FORUM_INSTIT_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_STUDENT);
+         break;
+      case For_FORUM_INSTIT_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInIns (Gbl.Forum.Ins.InsCod) >= Rol_TEACHER);
+         break;
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_SWAD_USRS:
+         ICanSeeForum = true;
+         break;
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM_SWAD_TCHS:
+         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
+         break;
+     }
+   if (!ICanSeeForum)
+      Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_access_to_this_forum);
   }
 
 /*****************************************************************************/
@@ -3832,19 +3840,6 @@ static long For_GetParamPstCod (void)
       Lay_ShowErrorAndExit ("Wrong post code.");
 
    return PstCod;
-  }
-
-/*****************************************************************************/
-/******************** Show posts of a thread of the forum ********************/
-/*****************************************************************************/
-
-static void For_ShowForumLevel2 (long ThrCod)
-  {
-   /***** Show threads *****/
-   For_ShowForumThreadsHighlightingOneThread (ThrCod);
-
-   /***** Show the posts of this thread *****/
-   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
@@ -3949,11 +3944,8 @@ void For_RecForumPst (void)
    char Content[Cns_MAX_BYTES_LONG_TEXT + 1];
    struct Image Image;
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get the code of the thread y the número of page *****/
    if (Gbl.Action.Act == ActRcvRepForCrsUsr || Gbl.Action.Act == ActRcvRepForCrsTch ||
@@ -4056,7 +4048,7 @@ void For_RecForumPst (void)
      }
 
    /***** Show again the posts of this thread of the forum *****/
-   For_ShowForumLevel2 (ThrCod);
+   For_ShowThreadPosts (ThrCod);
   }
 
 /*****************************************************************************/
@@ -4090,17 +4082,13 @@ void For_DelPst (void)
    struct Image Image;
    bool ThreadDeleted = false;
 
-   /***** Get parameters *****/
-   /* Get the code of the message to remove */
-   PstCod = For_GetParamPstCod ();
-
-   /* Get order type, degree and course of the forum */
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
 
-   /* Set forum type */
-   For_SetForumTypeAndRestrictAccess ();
+   /***** Get the code of the message to remove *****/
+   PstCod = For_GetParamPstCod ();
 
-   /* Get the thread number */
+   /***** Get the thread number *****/
    ThrCod = For_GetParamThrCod ();
 
    /***** Initialize image *****/
@@ -4156,7 +4144,7 @@ void For_DelPst (void)
       Lay_ShowAlert (Lay_SUCCESS,Txt_Post_removed);
 
       /* Show the remaining posts */
-      For_ShowForumLevel2 (ThrCod);
+      For_ShowThreadPosts (ThrCod);
      }
   }
 
@@ -4172,11 +4160,8 @@ void For_ReqDelThr (void)
    long ThrCod;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Initialize the type of forum *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get the identifier of the thread to remove *****/
    ThrCod = For_GetParamThrCod ();
@@ -4210,11 +4195,8 @@ void For_DelThr (void)
    long ThrCod = -1L;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    if (PermissionThreadDeletion[Gbl.Forum.Type] & (1 << Gbl.Usrs.Me.LoggedRole)) // If I have permission to remove thread in this forum...
      {
@@ -4255,11 +4237,8 @@ void For_CutThr (void)
    long ThrCod;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get code of thread to cut *****/
    ThrCod = For_GetParamThrCod ();
@@ -4295,11 +4274,8 @@ void For_PasteThr (void)
    long ThrCod;
    char Subject[Cns_MAX_BYTES_SUBJECT + 1];
 
-   /***** Get order type, degree and course of the forum *****/
+   /***** Get parameters related to forum *****/
    For_GetParamsForum ();
-
-   /***** Set forum type *****/
-   For_SetForumTypeAndRestrictAccess ();
 
    /***** Get code of thread to paste *****/
    ThrCod = For_GetParamThrCod ();

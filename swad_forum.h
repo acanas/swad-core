@@ -107,8 +107,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
                                        long PstCod,bool GetContent);
 
 void For_PutAllHiddenParamsForum (void);
-void For_SetForumTypeAndRestrictAccess (void);
-void For_ShowForumList (void);
+
 void For_SetForumName (For_ForumType_t ForumType,
                        struct Instit *Ins,
                        struct Centre *Ctr,

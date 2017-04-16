@@ -2585,7 +2585,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    // TabSoc ******************************************************************
    /* ActSeeSocTmlGbl	*/{1490, 0,TabSoc,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Soc_ShowTimelineGbl1		,Soc_ShowTimelineGbl2		,"soc64x64.png"		},
    /* ActSeeSocPrf	*/{1520, 1,TabSoc,ActSeeSocPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Prf_SeeSocialProfiles		,"prf64x64.gif"		},
-   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumList		,"forum64x64.gif"	},
+   /* ActSeeFor		*/{  95, 2,TabSoc,ActSeeFor		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,For_ShowForumThrs		,"forum64x64.gif"	},
    /* ActSeeChtRms	*/{  51, 3,TabSoc,ActSeeChtRms		,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Cht_ShowChatRooms		,"chat64x64.gif"	},
 
    /* ActRcvSocPstGbl	*/{1492,-1,TabUnk,ActSeeSocTmlGbl	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_DATA,Act_THIS_WINDOW,Soc_ShowTimelineGbl1		,Soc_ReceiveSocialPostGbl	,NULL},
