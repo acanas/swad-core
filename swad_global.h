@@ -583,11 +583,7 @@ struct Globals
      {
       For_WhichForums_t WhichForums;
       For_ForumType_t Type;
-      long Cod;	// Institution, centre, degree or course code of the selected forum
-      struct Instit Ins;
-      struct Centre Ctr;
-      struct Degree Deg;
-      struct Course Crs;
+      long Location;	// Institution, centre, degree or course code of the selected forum
       int Level;
       For_Order_t SelectedOrder;
       char PathRelOld[PATH_MAX + 1];

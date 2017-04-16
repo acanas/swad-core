@@ -1375,17 +1375,10 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 		  break;
 	       case Soc_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
-		  Gbl.Forum.Type = For_GetForumTypeOfAPost (SocNot->Cod);
-		  For_SetForumName (Gbl.Forum.Type,
-				    &Ins,
-				    &Ctr,
-				    &Deg,
-				    &Crs,
+		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,
+		                                      &Gbl.Forum.Type,&Gbl.Forum.Location);
+		  For_SetForumName (Gbl.Forum.Type,Gbl.Forum.Location,
 				    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
-		  Gbl.Forum.Ins.InsCod = Ins.InsCod;
-		  Gbl.Forum.Ctr.CtrCod = Ctr.CtrCod;
-		  Gbl.Forum.Deg.DegCod = Deg.DegCod;
-		  Gbl.Forum.Crs.CrsCod = Crs.CrsCod;
 		  break;
 	       default:
 		  break;

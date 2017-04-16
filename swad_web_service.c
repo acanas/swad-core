@@ -2813,6 +2813,8 @@ int swad__getNotifications (struct soap *soap,
    struct Degree Deg;
    struct Course Crs;
    long Cod;
+   For_ForumType_t ForumType;
+   long ForumLocation;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1];
    char *ContentStr;
@@ -2947,11 +2949,8 @@ int swad__getNotifications (struct soap *soap,
 	 if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 	     NotifyEvent == Ntf_EVENT_FORUM_REPLY)
 	   {
-            For_SetForumName (For_GetForumTypeOfAPost (Cod),
-        	              &Ins,
-        	              &Ctr,
-        	              &Deg,
-        	              &Crs,
+	    For_GetForumTypeAndLocationOfAPost (Cod,&ForumType,&ForumLocation);
+            For_SetForumName (ForumType,ForumLocation,
         	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
             sprintf (getNotificationsOut->notificationsArray.__ptr[NumNotif].location,"%s: %s",
                      Txt_Forum,ForumName);

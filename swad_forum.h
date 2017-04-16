@@ -96,10 +96,10 @@ typedef enum
 void For_EnbPst (void);
 void For_DisPst (void);
 
-For_ForumType_t For_GetForumTypeOfAPost (long PstCod);
+void For_GetForumTypeAndLocationOfAPost (long PstCod,
+                                         For_ForumType_t *ForumType,long *ForumLocation);
 
 unsigned long For_GetNumPostsUsr (long UsrCod);
-void For_DeleteThrFromReadThrs (long ThrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
 
 void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
@@ -108,20 +108,15 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 
 void For_PutAllHiddenParamsForum (void);
 
-void For_SetForumName (For_ForumType_t ForumType,
-                       struct Instit *Ins,
-                       struct Centre *Ctr,
-                       struct Degree *Deg,
-                       struct Course *Crs,
+void For_SetForumName (For_ForumType_t ForumType,long ForumLocation,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Txt_Language_t Language,bool UseHTMLEntities);
-unsigned For_GetNumThrsWithNewPstsInForum (For_ForumType_t ForumType,unsigned NumThreads);
+
 void For_ShowForumThrs (void);
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
                                       long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod);
 unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
                                             long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod);
-unsigned For_GetNumThrsInForum (For_ForumType_t ForumType);
 unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                                             long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                             unsigned *NumUsrsToBeNotifiedByEMail);
@@ -134,14 +129,8 @@ void For_ReqDelThr (void);
 void For_DelThr (void);
 void For_CutThr (void);
 void For_PasteThr (void);
-long For_GetThrInMyClipboard (void);
-bool For_CheckIfThrBelongsToForum (long ThrCod,For_ForumType_t ForumType);
-void For_MoveThrToCurrentForum (long ThrCod);
-void For_InsertThrInClipboard (long ThrCod);
-void For_RemoveExpiredThrsClipboards (void);
-void For_RemoveThrCodFromThrClipboard (long ThrCod);
 void For_RemoveUsrFromThrClipboard (long UsrCod);
 
-void For_RemoveForums (Sco_Scope_t Scope,long DegCod);
+void For_RemoveForums (Sco_Scope_t Scope,long ForumLocation);
 
 #endif
