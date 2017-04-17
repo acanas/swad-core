@@ -450,9 +450,9 @@ void Ntf_ShowMyNotifications (void)
          if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
              NotifyEvent == Ntf_EVENT_FORUM_REPLY)
            {
-            For_GetForumTypeAndLocationOfAPost (Cod,&Gbl.Forum.Type,&Gbl.Forum.Location);
-            For_SetForumName (Gbl.Forum.Type,Gbl.Forum.Location,
-        	              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
+            For_GetForumTypeAndLocationOfAPost (Cod,&Gbl.Forum.WhichForum);
+            For_SetForumName (&Gbl.Forum.WhichForum,
+                              ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
            }
 
          /* Get time of the event (row[7]) */
@@ -763,7 +763,7 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
 	 break;
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
-	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.Type]);
+	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type]);
 	 For_PutAllHiddenParamsForum ();
 	 break;
       case Ntf_EVENT_NOTICE:
@@ -1170,8 +1170,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
    unsigned long NumRow;
    unsigned long NumRows;
    struct UsrData UsrDat;
-   For_ForumType_t ForumType;
-   long ForumLocation;
+   struct Forum WhichForum;
    unsigned NumUsrsToBeNotifiedByEMail = 0;
    unsigned NotifyEventMask = (1 << NotifyEvent);
 
@@ -1302,8 +1301,8 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
          return 0;
       case Ntf_EVENT_FORUM_POST_COURSE:
 	 // Check if forum is for users or for all users in the course
-	 For_GetForumTypeAndLocationOfAPost (Cod,&ForumType,&ForumLocation);
-	 switch (ForumType)
+	 For_GetForumTypeAndLocationOfAPost (Cod,&WhichForum);
+	 switch (WhichForum.Type)
 	   {
 	    case For_FORUM_COURSE_USRS:
 	       sprintf (Query,"SELECT UsrCod FROM crs_usr"
@@ -1421,23 +1420,23 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
        NotifyEvent == Ntf_EVENT_FORUM_REPLY)
      {
       InsCod = CtrCod = DegCod = CrsCod = -1L;
-      switch (Gbl.Forum.Type)
+      switch (Gbl.Forum.WhichForum.Type)
         {
 	 case For_FORUM_INSTIT_USRS:
 	 case For_FORUM_INSTIT_TCHS:
-            InsCod = Gbl.Forum.Location;
+            InsCod = Gbl.Forum.WhichForum.Location;
             break;
 	 case For_FORUM_CENTRE_USRS:
 	 case For_FORUM_CENTRE_TCHS:
-            CtrCod = Gbl.Forum.Location;
+            CtrCod = Gbl.Forum.WhichForum.Location;
             break;
 	 case For_FORUM_DEGREE_USRS:
 	 case For_FORUM_DEGREE_TCHS:
-            DegCod = Gbl.Forum.Location;
+            DegCod = Gbl.Forum.WhichForum.Location;
             break;
 	 case For_FORUM_COURSE_USRS:
 	 case For_FORUM_COURSE_TCHS:
-            CrsCod = Gbl.Forum.Location;
+            CrsCod = Gbl.Forum.WhichForum.Location;
             break;
 	 default:
 	    break;
@@ -1572,8 +1571,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
    struct Degree Deg;
    struct Course Crs;
    long Cod;
-   For_ForumType_t ForumType = (For_ForumType_t) 0;	// Initialized to avoid warning
-   long ForumLocation = -1L;					// Initialized to avoid warning
+   struct Forum WhichForum;
    char ForumName[For_MAX_BYTES_FORUM_NAME + 1];
    char Command[2048]; // Command to execute for sending an email
    int ReturnCode;
@@ -1652,7 +1650,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	    /* Get forum type */
 	    if (NotifyEvent == Ntf_EVENT_FORUM_POST_COURSE ||
 		NotifyEvent == Ntf_EVENT_FORUM_REPLY)
-	       For_GetForumTypeAndLocationOfAPost (Cod,&ForumType,&ForumLocation);
+	       For_GetForumTypeAndLocationOfAPost (Cod,&WhichForum);
 
 	    /* Information about the type of this event */
 	    fprintf (Gbl.Msg.FileMail,Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[NotifyEvent][ToUsrLanguage],
@@ -1688,7 +1686,7 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 		  break;
 	       case Ntf_EVENT_FORUM_POST_COURSE:
 	       case Ntf_EVENT_FORUM_REPLY:
-		  For_SetForumName (ForumType,ForumLocation,
+		  For_SetForumName (&WhichForum,
 				    ForumName,ToUsrLanguage,false);	// Set forum name in recipient's language
 		  fprintf (Gbl.Msg.FileMail,"%s: %s\n",
 			   Txt_Forum_NO_HTML[ToUsrLanguage],

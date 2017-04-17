@@ -44,7 +44,7 @@ typedef enum
   {
    For_ONLY_CURRENT_FORUMS	= 0,
    For_ALL_MY_FORUMS		= 1,
-  } For_WhichForums_t;	// Which forums I want to see: all my forums or only the forums of current institution/degree/course.
+  } For_ForumSet_t;	// Which set of forums I want to see: all my forums or only the forums of current institution/degree/course.
 #define For_DEFAULT_WHICH_FORUMS For_ONLY_CURRENT_FORUMS
 
 #define For_NUM_TYPES_FORUM 12
@@ -63,6 +63,12 @@ typedef enum
    For_FORUM_SWAD_USRS		= 10,
    For_FORUM_SWAD_TCHS		= 11,
   } For_ForumType_t;	// Don't change numbers (used in database)
+
+struct Forum
+  {
+   For_ForumType_t Type;
+   long Location;	// Code of institution, centre, degree or course
+  };
 
 struct ForumThread
   {
@@ -96,8 +102,7 @@ typedef enum
 void For_EnbPst (void);
 void For_DisPst (void);
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,
-                                         For_ForumType_t *ForumType,long *ForumLocation);
+void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *WhichForum);
 
 unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
@@ -108,7 +113,7 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
 
 void For_PutAllHiddenParamsForum (void);
 
-void For_SetForumName (For_ForumType_t ForumType,long ForumLocation,
+void For_SetForumName (struct Forum *WhichForum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Txt_Language_t Language,bool UseHTMLEntities);
 

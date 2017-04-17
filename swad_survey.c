@@ -207,7 +207,9 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+                                     0,
+                                     &Pagination);
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Surveys,
@@ -275,7 +277,9 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_SURVEYS,
+                                     0,
+                                     &Pagination);
 
    /***** Free list of surveys *****/
    Svy_FreeListSurveys ();

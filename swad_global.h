@@ -581,9 +581,8 @@ struct Globals
      } Social;
    struct
      {
-      For_WhichForums_t WhichForums;
-      For_ForumType_t Type;
-      long Location;	// Institution, centre, degree or course code of the selected forum
+      For_ForumSet_t ForumSet;
+      struct Forum WhichForum;	// Forum type and location
       int Level;
       For_Order_t SelectedOrder;
       char PathRelOld[PATH_MAX + 1];

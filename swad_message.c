@@ -1809,7 +1809,8 @@ static void Msg_ShowSentOrReceivedMessages (void)
       /***** Write links to pages *****/
       if (Pagination.MoreThanOnePage)
          Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
-                                        0,&Pagination);
+                                        0,
+                                        &Pagination);
 
       /***** Show received / sent messages in this page *****/
       fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
@@ -1833,7 +1834,8 @@ static void Msg_ShowSentOrReceivedMessages (void)
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
          Pag_WriteLinksToPagesCentered (WhatPaginate[Gbl.Msg.TypeOfMessages],
-                                        0,&Pagination);
+                                        0,
+                                        &Pagination);
      }
 
    /***** End frame *****/

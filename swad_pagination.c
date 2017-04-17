@@ -114,10 +114,14 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
 /************** Show enlaces a distintas páginas of messages *****************/
 /*****************************************************************************/
 
-void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination)
+void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
+                                    long ThrCod,
+                                    struct Pagination *Pagination)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Pag_WriteLinksToPages (WhatPaginate,ThrCod,Pagination,true,NULL,"TIT",false);
+   Pag_WriteLinksToPages (WhatPaginate,
+                          ThrCod,
+                          Pagination,true,NULL,"TIT",false);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -125,7 +129,9 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,
 /********************** Show links to pages of messages **********************/
 /*****************************************************************************/
 
-void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination,
+void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
+                            long ThrCod,
+                            struct Pagination *Pagination,
                             bool FirstMsgEnabled,const char *Subject,const char *Font,
                             bool LinkToPagCurrent)
   {
@@ -154,13 +160,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                For_PutHiddenParamThrCod (ThrCod);
@@ -247,13 +253,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                For_PutHiddenParamThrCod (ThrCod);
@@ -323,13 +329,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                For_PutHiddenParamThrCod (ThrCod);
@@ -406,13 +412,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_THREADS_FORUM:
-                  Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+                  Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   For_PutAllHiddenParamsForum ();
                   break;
                case Pag_POSTS_FORUM:
-                  Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+                  Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   For_PutHiddenParamThrCod (ThrCod);
@@ -485,13 +491,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
                For_PutHiddenParamThrCod (ThrCod);
@@ -561,13 +567,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct P
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
                For_PutAllHiddenParamsForum ();
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
                For_PutHiddenParamThrCod (ThrCod);

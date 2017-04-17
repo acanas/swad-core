@@ -214,7 +214,9 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Write links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+                                     0,
+                                     &Pagination);
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Events,
@@ -281,7 +283,9 @@ static void Att_ShowAllAttEvents (void)
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
-      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,0,&Pagination);
+      Pag_WriteLinksToPagesCentered (Pag_ATT_EVENTS,
+                                     0,
+                                     &Pagination);
 
    /***** Free list of attendance events *****/
    Att_FreeListAttEvents ();

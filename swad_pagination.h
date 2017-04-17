@@ -71,9 +71,14 @@ struct Pagination	// Used for threads and messages pagination
 /*****************************************************************************/
 
 void Pag_CalculatePagination (struct Pagination *Pagination);
-void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination);
-void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,long ThrCod,struct Pagination *Pagination,
-                            bool FirstMsgEnabled,const char *Subject,const char *Font,bool LinkToPagCurrent);
+void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
+                                    long ThrCod,
+                                    struct Pagination *Pagination);
+void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
+                            long ThrCod,
+                            struct Pagination *Pagination,
+                            bool FirstMsgEnabled,const char *Subject,const char *Font,
+                            bool LinkToPagCurrent);
 void Pag_PutHiddenParamPagNum (Pag_WhatPaginate_t WhatPaginate,unsigned NumPage);
 unsigned Pag_GetParamPagNum (Pag_WhatPaginate_t WhatPaginate);
 
