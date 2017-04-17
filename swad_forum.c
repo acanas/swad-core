@@ -1220,8 +1220,20 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
    if (LastPst && Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)
       // Post can be removed if post is the last (without answers) and it's mine
      {
-      Act_FormStart (For_ActionsDelPstFor[ForumSelected->Type]);
-      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
+      if (PstNum == 1)	// First and unique post in thread
+	{
+	 Act_FormStartAnchor (For_ActionsDelPstFor[ForumSelected->Type],
+			      For_ID_FORUM_THREADS_SECTION);
+	 Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,
+	                           Gbl.Forum.CurrentPageThrs);
+	}
+      else		// Last of several posts in thread
+	{
+	 Act_FormStartAnchor (For_ActionsDelPstFor[ForumSelected->Type],
+			      For_ID_FORUM_POSTS_SECTION);
+	 Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,
+	                           Gbl.Forum.CurrentPagePsts);
+	}
       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
 				   Gbl.Forum.SelectedOrder,
 				   Gbl.Forum.ForumSelected.Location,
@@ -1236,8 +1248,9 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
      {
       if (ICanModerateForum)
         {
-         Act_FormStart (Enabled ? For_ActionsDisPstFor[ForumSelected->Type] :
-                                  For_ActionsEnbPstFor[ForumSelected->Type]);
+         Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[ForumSelected->Type] :
+                                        For_ActionsEnbPstFor[ForumSelected->Type],
+                              For_ID_FORUM_POSTS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
 				      Gbl.Forum.SelectedOrder,
@@ -3776,7 +3789,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      {
       Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
-      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,0);
+      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
 				   Gbl.Forum.SelectedOrder,
 				   Gbl.Forum.ForumSelected.Location,

@@ -214,13 +214,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.181.2 (2017-04-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.181.3 (2017-04-18)"
 #define CSS_FILE		"swad16.181.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.181.3: Apr 18, 2017	Code refactoring in forums. (217604 lines)
         Version 16.181.2: Apr 18, 2017	Code refactoring in forums. (217590 lines)
         Version 16.181.1: Apr 17, 2017	Code refactoring in forums. (217538 lines)
         Version 16.181:   Apr 17, 2017	Changes in layout of messages.
