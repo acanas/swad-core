@@ -242,6 +242,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
 #define For_ID_FORUM_THREADS_SECTION	"forum_threads"
 #define For_ID_NEW_THREAD_SECTION	"new_thread"
 #define For_ID_FORUM_POSTS_SECTION	"thread_posts"
+#define For_ID_NEW_POST_SECTION		"new_post"
 
 // Forum images will be saved with:
 // - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
@@ -284,9 +285,7 @@ static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_DeleteThrFromReadThrs (long ThrCod);
 static void For_ShowThreadPosts (long ThrCod);
-
-static void For_PutIconsForums (void);
-static void For_PutIconNewThread (void);
+static void For_PutIconNewPost (void);
 
 static void For_ShowAForumPost (struct Forum *WhichForum,struct ForumThread *Thr,unsigned PstNum,long PstCod,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
@@ -299,6 +298,9 @@ static void For_WriteNumberOfPosts (struct Forum *WhichForum,long UsrCod);
 
 static void For_PutParamWhichForum (void);
 static void For_PutParamForumOrder (void);
+
+static void For_PutIconsForums (void);
+
 static void For_PutFormWhichForums (void);
 static void For_PutParamForumInsCtrDegCrs (void);
 
@@ -331,24 +333,12 @@ static unsigned For_GetNumOfThreadsInForumNewerThan (struct Forum *WhichForum,
 static unsigned For_GetNumOfUnreadPostsInThr (long ThrCod,unsigned NumPostsInThr);
 static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
-static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted);
-
-static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
-
-static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
-
-static long For_GetThrInMyClipboard (void);
-static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *WhichForum);
-static void For_MoveThrToCurrentForum (long ThrCod);
-static void For_InsertThrInClipboard (long ThrCod);
-static void For_RemoveExpiredThrsClipboards (void);
-static void For_RemoveThrCodFromThrClipboard (long ThrCod);
-
-static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
+static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
+static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted);
+static void For_PutIconNewThread (void);
 static unsigned For_GetNumThrsInForum (struct Forum *WhichForum);
 static unsigned For_GetNumPstsInForum (struct Forum *WhichForum);
-
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                long ThrCodHighlighted,
                                struct Pagination *PaginationThrs);
@@ -360,6 +350,17 @@ static void For_RestrictAccess (void);
 static long For_GetParamThrCod (void);
 static void For_PutHiddenParamPstCod (long PstCod);
 static long For_GetParamPstCod (void);
+
+static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject);
+
+static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
+
+static long For_GetThrInMyClipboard (void);
+static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *WhichForum);
+static void For_MoveThrToCurrentForum (long ThrCod);
+static void For_InsertThrInClipboard (long ThrCod);
+static void For_RemoveExpiredThrsClipboards (void);
+static void For_RemoveThrCodFromThrClipboard (long ThrCod);
 
 /*****************************************************************************/
 /****************************** Enable a forum post **************************/
@@ -1005,7 +1006,8 @@ static void For_ShowThreadPosts (long ThrCod)
    /***** Start frame *****/
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_POSTS_SECTION);
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
-   Lay_StartRoundFrame (NULL,FrameTitle,NULL,Hlp_SOCIAL_Forums);
+   Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewPost,
+                        Hlp_SOCIAL_Forums);
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
@@ -1119,8 +1121,10 @@ static void For_ShowThreadPosts (long ThrCod)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Form to write a new message in the thread *****/
+   /***** Form to write a new post in the thread *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_POST_SECTION);
    For_WriteFormForumPst (true,ThrCod,LastSubject);
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -1128,27 +1132,16 @@ static void For_ShowThreadPosts (long ThrCod)
   }
 
 /*****************************************************************************/
-/********************** Put contextual icons in forums ***********************/
+/*********************** Put icon to write a new post ************************/
 /*****************************************************************************/
 
-static void For_PutIconsForums (void)
+static void For_PutIconNewPost (void)
   {
-   /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_FORUMS;
-   Sta_PutIconToShowFigure ();
-  }
-
-/*****************************************************************************/
-/********************** Put icon to write a new thread ***********************/
-/*****************************************************************************/
-
-static void For_PutIconNewThread (void)
-  {
-   extern const char *Txt_New_thread;
+   extern const char *Txt_New_post;
 
    fprintf (Gbl.F.Out,"<a href=\"#%s\" title=\"%s\">",
-            For_ID_NEW_THREAD_SECTION,Txt_New_thread);
-   Lay_PutIconWithText ("plus64x64.png",Txt_New_thread,NULL);
+            For_ID_NEW_POST_SECTION,Txt_New_post);
+   Lay_PutIconWithText ("plus64x64.png",Txt_New_post,NULL);
    fprintf (Gbl.F.Out,"</a>");
   }
 
@@ -1716,6 +1709,17 @@ static void For_ShowForumList (void)
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/********************** Put contextual icons in forums ***********************/
+/*****************************************************************************/
+
+static void For_PutIconsForums (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_FORUMS;
+   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -2349,6 +2353,62 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time)
   }
 
 /*****************************************************************************/
+/*************** Get and write total number of threads and posts *************/
+/*****************************************************************************/
+
+static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts)
+  {
+   extern const char *Txt_thread;
+   extern const char *Txt_threads;
+   extern const char *Txt_post;
+   extern const char *Txt_posts;
+   extern const char *Txt_with_new_posts;
+
+   /***** Write number of threads and number of posts *****/
+   fprintf (Gbl.F.Out," [");
+   if (NumThrs == 1)
+     {
+      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
+      if (NumThrsWithNewPosts)
+         fprintf (Gbl.F.Out,", 1 %s",Txt_with_new_posts);
+      fprintf (Gbl.F.Out,"; ");
+      if (NumPosts == 1)
+         fprintf (Gbl.F.Out,"1 %s",Txt_post);
+      else
+         fprintf (Gbl.F.Out,"%u %s",NumPosts,Txt_posts);
+     }
+   else
+     {
+      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
+      if (NumThrsWithNewPosts)
+         fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
+      fprintf (Gbl.F.Out,"; %u %s",NumPosts,Txt_posts);
+     }
+   fprintf (Gbl.F.Out,"]");
+  }
+
+/*****************************************************************************/
+/************** Get and write total number of threads and posts **************/
+/*****************************************************************************/
+
+static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts)
+  {
+   extern const char *Txt_thread;
+   extern const char *Txt_threads;
+   extern const char *Txt_with_new_posts;
+
+   /***** Write number of threads and number of posts *****/
+   fprintf (Gbl.F.Out," [");
+   if (NumThrs == 1)
+      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
+   else
+      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
+   if (NumThrsWithNewPosts)
+      fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
+   fprintf (Gbl.F.Out,"]");
+  }
+
+/*****************************************************************************/
 /********************** Show available threads of a forum ********************/
 /*****************************************************************************/
 
@@ -2546,7 +2606,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
                                         &PaginationThrs);
      }
 
-   /***** Put a form to write the first message of a new thread *****/
+   /***** Put a form to write the first post of a new thread *****/
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_THREAD_SECTION);
    For_WriteFormForumPst (false,-1,NULL);
    fprintf (Gbl.F.Out,"</section>");
@@ -2557,59 +2617,17 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
   }
 
 /*****************************************************************************/
-/************** Get and write total number of threads and posts **************/
+/********************** Put icon to write a new thread ***********************/
 /*****************************************************************************/
 
-static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts)
+static void For_PutIconNewThread (void)
   {
-   extern const char *Txt_thread;
-   extern const char *Txt_threads;
-   extern const char *Txt_with_new_posts;
+   extern const char *Txt_New_thread;
 
-   /***** Write number of threads and number of posts *****/
-   fprintf (Gbl.F.Out," [");
-   if (NumThrs == 1)
-      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
-   else
-      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
-   if (NumThrsWithNewPosts)
-      fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-   fprintf (Gbl.F.Out,"]");
-  }
-
-/*****************************************************************************/
-/*************** Get and write total number of threads and posts *************/
-/*****************************************************************************/
-
-static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts)
-  {
-   extern const char *Txt_thread;
-   extern const char *Txt_threads;
-   extern const char *Txt_post;
-   extern const char *Txt_posts;
-   extern const char *Txt_with_new_posts;
-
-   /***** Write number of threads and number of posts *****/
-   fprintf (Gbl.F.Out," [");
-   if (NumThrs == 1)
-     {
-      fprintf (Gbl.F.Out,"1 %s",Txt_thread);
-      if (NumThrsWithNewPosts)
-         fprintf (Gbl.F.Out,", 1 %s",Txt_with_new_posts);
-      fprintf (Gbl.F.Out,"; ");
-      if (NumPosts == 1)
-         fprintf (Gbl.F.Out,"1 %s",Txt_post);
-      else
-         fprintf (Gbl.F.Out,"%u %s",NumPosts,Txt_posts);
-     }
-   else
-     {
-      fprintf (Gbl.F.Out,"%u %s",NumThrs,Txt_threads);
-      if (NumThrsWithNewPosts)
-         fprintf (Gbl.F.Out,", %u %s",NumThrsWithNewPosts,Txt_with_new_posts);
-      fprintf (Gbl.F.Out,"; %u %s",NumPosts,Txt_posts);
-     }
-   fprintf (Gbl.F.Out,"]");
+   fprintf (Gbl.F.Out,"<a href=\"#%s\" title=\"%s\">",
+            For_ID_NEW_THREAD_SECTION,Txt_New_thread);
+   Lay_PutIconWithText ("plus64x64.png",Txt_New_thread,NULL);
+   fprintf (Gbl.F.Out,"</a>");
   }
 
 /*****************************************************************************/

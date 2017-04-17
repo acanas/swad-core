@@ -24327,6 +24327,27 @@ const char *Txt_New_plugin =
 	"Novo plugin";
 #endif
 
+const char *Txt_New_post =
+#if   L==1
+	"Novo missatge";
+#elif L==2
+	"Neue Nachricht";
+#elif L==3
+	"New post";
+#elif L==4
+	"Nuevo mensaje";
+#elif L==5
+	"Nouveau message";
+#elif L==6
+	"Nuevo mensaje";	// Okoteve traducción
+#elif L==7
+	"Nuovo post";
+#elif L==8
+	"Nowy post";
+#elif L==9
+	"Novo post";
+#endif
+
 const char *Txt_New_question =
 #if   L==1
 	"Nova pregunta";
@@ -29621,13 +29642,13 @@ const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very importa
 #if   L==1
 	"Mensaje %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
 #elif L==2
-	"Post %u banned. Click to unban it.";		// Need Übersetzung
+	"Post %u banned. Click to unban it.";			// Need Übersetzung
 #elif L==3
 	"Post %u banned. Click to unban it.";
 #elif L==4
 	"Mensaje %u no permitido. Pulse para permitirlo.";
 #elif L==5
-	"Post %u banned. Click to unban it.";		// Besoin de traduction
+	"Post %u banned. Click to unban it.";			// Besoin de traduction
 #elif L==6
 	"Mensaje %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
 #elif L==7
@@ -29635,7 +29656,7 @@ const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very importa
 #elif L==8
 	"Post %u zakazany.Kliknij, aby to odbanowac.";
 #elif L==9
-	"Post %u banned. Click to unban it.";		// Necessita de tradução
+	"Post %u banned. Click to unban it.";			// Necessita de tradução
 #endif
 
 const char *Txt_Post_sent =
