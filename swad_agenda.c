@@ -472,7 +472,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    if (Gbl.Agenda.Num)
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
 
       /***** Table head *****/
       Agd_WriteHeaderListEvents (AgendaType);

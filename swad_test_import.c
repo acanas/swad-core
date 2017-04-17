@@ -959,7 +959,7 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Question;
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
 	              "<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"

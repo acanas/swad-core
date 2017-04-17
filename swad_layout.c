@@ -1357,7 +1357,7 @@ void Lay_StartRoundFrameTable (const char *Width,const char *Title,
   {
    Lay_StartRoundFrame (Width,Title,FunctionToDrawContextualIcons,HelpLink);
 
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
    if (CellPadding)
       fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
    fprintf (Gbl.F.Out,"\">");
@@ -1370,7 +1370,7 @@ void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
   {
    Lay_StartRoundFrameShadow (Width,Title,FunctionToDrawContextualIcons,HelpLink);
 
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
    if (CellPadding)
       fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
    fprintf (Gbl.F.Out,"\">");

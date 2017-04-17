@@ -388,7 +388,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
                          "<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
@@ -1899,7 +1899,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       Mai_WriteWarningEmailNotifications ();
 
    /***** List of notifications *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
 	              "<tr>"
 		      "<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"

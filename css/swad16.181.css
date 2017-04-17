@@ -1548,7 +1548,7 @@ a:hover						/* Default ==> underlined */
 .FRAME_CONTAINER
 	{
 	box-sizing:border-box;
-	width:100%%;
+	width:100%;
 	text-align:center;
 	vertical-align:middle;
 	}
@@ -1594,15 +1594,24 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	float:right;
 	}
-.FRAME_TBL
+.FRAME_TBL_WIDE
 	{
 	box-sizing:border-box;
 	width:100%;
 	}
-.FRAME_TBL_MARGIN
+.FRAME_TBL_WIDE_MARGIN
 	{
 	box-sizing:border-box;
 	width:100%;
+	margin-bottom:20px;
+	}
+.FRAME_TBL_CENTER
+	{
+	margin:0 auto;
+	}
+.FRAME_TBL_CENTER_MARGIN
+	{
+	margin:0 auto;
 	margin-bottom:20px;
 	}
 .FRAME_TITLE
@@ -1853,10 +1862,10 @@ a:hover img.CENTRE_PHOTO_SHOW
 .NO_BR	{white-space:nowrap;}
 
 /********************************* Messages **********************************/
-.MSG_SUBJECT, .MSG_CONTENT
+.MSG_RECIPIENTS, .MSG_SUBJECT, .MSG_CONTENT
 	{
 	box-sizing:border-box;
-	width:480px;
+	width:640px;
 	}
 .BG_MSG_BLUE
 	{

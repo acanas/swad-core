@@ -104,7 +104,7 @@ void Pri_EditMyPrivacy (void)
    /***** Start table *****/
    Lay_StartRoundFrame (NULL,Txt_Privacy,
                         Pri_PutIconsPrivacy,Hlp_PROFILE_Preferences_privacy);
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,

@@ -1637,8 +1637,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 			      Pho_PutIconToPrintDegreeStats,
 			      Hlp_STATS_Degrees);
 
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-			    " style=\"margin:0 auto;\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
 
 	 /***** Put a selector for the type of average *****/
 	 Pho_PutSelectorForTypeOfAvg ();
@@ -2036,7 +2035,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
 
       /***** Get and print degrees *****/
       for (NumRow = 0, NumDegsNotEmpty = 0;
@@ -2121,8 +2120,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
 			 "<tr>"
 			 "<th class=\"RIGHT_TOP\">"
 			 "%s"

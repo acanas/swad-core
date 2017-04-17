@@ -312,7 +312,7 @@ static void Deg_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       /***** Centre *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -949,7 +949,7 @@ static void Deg_PutFormToCreateDegree (void)
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
 
    /***** Table head *****/
    Deg_PutHeadDegreesForEdition ();
@@ -1192,7 +1192,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/

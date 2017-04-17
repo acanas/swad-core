@@ -272,7 +272,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
 
    /***** "To:" section (recipients) *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -457,7 +457,7 @@ static void Msg_WriteFormUsrsIDsOrNicksOtherRecipients (void)
       fprintf (Gbl.F.Out," colspan=\"%u\"",Colspan);
    fprintf (Gbl.F.Out," class=\"LEFT_MIDDLE\">"
 	              "<textarea id=\"OtherRecipients\" name=\"OtherRecipients\""
-	              " cols=\"72\" rows=\"2\""
+	              " class=\"MSG_RECIPIENTS\" rows=\"2\""
 	              " placeholder=\"%s\">",
             Txt_nicks_emails_or_IDs_separated_by_commas);
    if (Gbl.Usrs.ListOtherRecipients[0])
@@ -501,7 +501,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 	              "</td>"
                       "<td class=\"LEFT_MIDDLE\">"
                       "<textarea id=\"MsgSubject\" name=\"Subject\""
-                      " cols=\"72\" rows=\"2\">",
+                      " class=\"MSG_SUBJECT\" rows=\"2\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Subject);
 
@@ -551,7 +551,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
 	                 "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
-                         " cols=\"72\" rows=\"20\">",
+                         " class=\"MSG_CONTENT\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
@@ -583,7 +583,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                          "</td>"
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
-                         " cols=\"72\" rows=\"20\">",
+                         " class=\"MSG_CONTENT\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_MSG_Message);
 
@@ -2588,7 +2588,7 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
 	              "<tr>");
 
    /***** Filter authors/recipients *****/
@@ -3529,13 +3529,13 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
    UniqueId++;
 
    /***** Start cell *****/
-   fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"%s RIGHT_TOP\""
+   fprintf (Gbl.F.Out,"<td id=\"msg_date_%u\" class=\"%s RIGHT_TOP\""
 	              " style=\"width:106px;\">",
             UniqueId,ClassBackground);
 
    /***** Write date and time *****/
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('date_%u',"
+                      "writeLocalDateHMSFromUTC('msg_date_%u',"
                       "%ld,',&nbsp;','%s',true,false,false);"
                       "</script>",
             UniqueId,(long) TimeUTC,Txt_Today);

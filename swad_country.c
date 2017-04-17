@@ -297,7 +297,7 @@ static void Cty_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       /***** Country name (an link to WWW if exists) *****/
       fprintf (Gbl.F.Out,"<tr>"

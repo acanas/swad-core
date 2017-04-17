@@ -119,7 +119,7 @@ void Plc_SeePlaces (void)
                            ICanEdit ? Plc_PutIconToEditPlaces :
                         	      NULL,
                            Hlp_INSTITUTION_Places);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
                          "<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;

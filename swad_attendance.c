@@ -231,7 +231,7 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
@@ -1946,7 +1946,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Grp_PutParamsCodGrps ();
 
       /***** List students' data *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
                          "<tr>"
                          "<th></th>"
                          "<th></th>"
@@ -2644,7 +2644,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Grp_PutParamsCodGrps ();
 
 	 /* Write list of students to select some of them */
-	 fprintf (Gbl.F.Out,"<table style=\"margin:0 auto;\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
 	 Usr_ListUsersToSelect (Rol_STUDENT);
 	 fprintf (Gbl.F.Out,"</table>");
 
@@ -3175,8 +3175,8 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                         TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                       Hlp_USERS_Attendance_attendance_list);
    fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
-            PutButtonShowDetails ? "FRAME_TBL_MARGIN" :
-        	                   "FRAME_TBL");
+            PutButtonShowDetails ? "FRAME_TBL_WIDE_MARGIN" :
+        	                   "FRAME_TBL_WIDE");
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();

@@ -832,7 +832,7 @@ void Pwd_ShowFormOthPwd (void)
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
-	 fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
          Pwd_PutFormToGetNewPasswordTwice ();
 	 fprintf (Gbl.F.Out,"</table>");
 

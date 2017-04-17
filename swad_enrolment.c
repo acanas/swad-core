@@ -822,7 +822,7 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\" style=\"margin:0 auto;\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
                       "<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
@@ -2207,7 +2207,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    /***** Selection of scope and roles *****/
    /* Start form */
    Act_FormStart (ActUpdSignUpReq);
-   fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:5px;\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_5\">");
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2678,8 +2678,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"margin:0 auto;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
                          "<th></th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"

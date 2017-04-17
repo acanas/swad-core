@@ -110,7 +110,7 @@ void Ind_ReqIndicatorsCourses (void)
    /***** Form to update indicators *****/
    /* Start form */
    Act_FormStart (ActReqStaCrs);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
    /* Scope */
    fprintf (Gbl.F.Out,"<tr>"

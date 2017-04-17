@@ -1061,7 +1061,7 @@ static void For_ShowThreadPosts (long ThrCod)
                                         &PaginationPsts);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
@@ -2542,7 +2542,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
                                         &PaginationThrs);
 
       /***** Heading row *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
 	                 "<tr>"
 	                 "<th class=\"LEFT_MIDDLE\""
 	                 " style=\"width:18px;\">"
@@ -3342,9 +3342,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];
 	    UniqueId++;
-            fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"%s LEFT_TOP %s\">"
+            fprintf (Gbl.F.Out,"<td id=\"thr_date_%u\" class=\"%s LEFT_TOP %s\">"
                                "<script type=\"text/javascript\">"
-			       "writeLocalDateHMSFromUTC('date_%u',"
+			       "writeLocalDateHMSFromUTC('thr_date_%u',"
 			       "%ld,'<br />','%s',true,false,false);"
 			       "</script>"
 			       "</td>",
@@ -3779,15 +3779,15 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_New_message;
+   extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_MSG_Message;
-   extern const char *Txt_Send_message;
+   extern const char *Txt_Send;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
-                        IsReply ? Txt_New_message :
+                        IsReply ? Txt_New_post :
         	                  Txt_New_thread,
         	        NULL,Hlp_SOCIAL_Forums);
 
@@ -3848,7 +3848,7 @@ static void For_WriteFormForumPst (bool IsReply,long ThrCod,const char *Subject)
    Img_PutImageUploader (-1,"FOR_IMG_TIT_URL");
 
    /***** Send button *****/
-   Lay_PutCreateButton (Txt_Send_message);
+   Lay_PutCreateButton (Txt_Send);
 
    /***** End form *****/
    Act_FormEnd ();

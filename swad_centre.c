@@ -377,7 +377,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       /***** Institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -759,7 +759,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/
@@ -2425,7 +2425,7 @@ static void Ctr_PutFormToCreateCentre (void)
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
 
    /***** Table head *****/
    Ctr_PutHeadCentresForEdition ();

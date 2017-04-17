@@ -323,7 +323,7 @@ static void Ins_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       /***** Country *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -684,7 +684,7 @@ static void Ins_ListInstitutions (void)
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
       /***** Write all the institutions and their nuber of users *****/

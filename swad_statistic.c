@@ -493,8 +493,7 @@ void Sta_AskShowCrsHits (void)
          Par_PutHiddenParamLong ("LastRow",0);
 
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-                            " style=\"margin:0 auto;\">"
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
                             "<tr>"
 			    "<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
@@ -1770,9 +1769,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 		                             "?");
 
       /* Write the date-time (row[3]) */
-      fprintf (Gbl.F.Out,"<td id=\"date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
+      fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('date_%u',"
+			 "writeLocalDateHMSFromUTC('log_date_%u',"
 			 "%ld,',&nbsp;','%s',true,false,true);"
 			 "</script>"
 			 "</td>",

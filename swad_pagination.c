@@ -226,7 +226,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    if (Pagination->MoreThanOnePage)
      {
       /***** Links to several pages start here *****/
-      fprintf (Gbl.F.Out,"<table style=\"margin:0 auto; border-spacing:6px;\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_5\">"
                          "<tr>"
                          "<td class=\"%s LEFT_MIDDLE\">"
                          "%s"

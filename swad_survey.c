@@ -222,7 +222,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
 			 "<tr>");
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
@@ -438,7 +438,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
    /***** Start date/time *****/
    UniqueId++;
@@ -2666,7 +2666,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -3188,7 +3188,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	}
 
       /***** Write the heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">"
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
                          "<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");

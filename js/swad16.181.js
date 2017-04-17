@@ -125,10 +125,9 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
 		if (WriteWeekDay) {
 			DayOfWeek = d.getDay();
 			DayOfWeek = (DayOfWeek == 0) ? 6 : DayOfWeek - 1;
-			StrDate = StrDate + Separator + DAYS[DayOfWeek] + Separator;
+			StrDate = StrDate + Separator + DAYS[DayOfWeek];
 		}
-		else
-			StrDate = StrDate + Separator;
+		StrDate = StrDate + Separator;
 	}
 	else
 		StrDate = '';
@@ -138,15 +137,12 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
 	Min = d.getMinutes();
 	StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
 	StrMin = ((Min < 10) ? ':0' : ':') + Min;
+	StrSec = '';
 	if (WriteSeconds) {
 		Sec = d.getSeconds();
 		if (Sec)
 			StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
-		else
-			StrSec = '';
 	}
-	else
-		StrSec = '';
 
 	/* Write date and time */
 	document.getElementById(id).innerHTML = StrDate + StrHou + StrMin + StrSec;

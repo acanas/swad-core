@@ -440,7 +440,7 @@ void Tst_ShowNewTest (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
+	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
 	    fprintf (Gbl.F.Out,"</table>");
 
@@ -540,7 +540,7 @@ void Tst_AssessTest (void)
 	   }
 
 	 /***** Write answers and solutions *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
+	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
 	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
 	 fprintf (Gbl.F.Out,"</table>");
 
@@ -2722,7 +2722,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                         Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">"
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
 	              "<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"
@@ -6968,8 +6968,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-                            " style=\"margin:0 auto;\">"
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
                             "<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
@@ -7652,7 +7651,7 @@ void Tst_ShowOneTestResult (void)
 				 Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_10\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
 
       /***** Header row *****/
       /* Get data of the user who made the test */

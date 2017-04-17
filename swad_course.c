@@ -216,7 +216,7 @@ static void Crs_Configuration (bool PrintView)
             Gbl.CurrentCrs.Crs.FullName);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1161,7 +1161,7 @@ static void Crs_ListCourses (void)
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_MARGIN CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/

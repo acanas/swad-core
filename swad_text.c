@@ -24329,17 +24329,17 @@ const char *Txt_New_plugin =
 
 const char *Txt_New_post =
 #if   L==1
-	"Novo missatge";
+	"Nou comentari";
 #elif L==2
-	"Neue Nachricht";
+	"Neue Kommentar";
 #elif L==3
 	"New post";
 #elif L==4
-	"Nuevo mensaje";
+	"Nuevo comentario";
 #elif L==5
-	"Nouveau message";
+	"Nouveau commentaire";
 #elif L==6
-	"Nuevo mensaje";	// Okoteve traducción
+	"Nuevo comentario";	// Okoteve traducción
 #elif L==7
 	"Nuovo post";
 #elif L==8

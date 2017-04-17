@@ -274,7 +274,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** List the groups for each group type *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
@@ -1548,7 +1548,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	 Act_FormStart (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)

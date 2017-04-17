@@ -2216,7 +2216,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       /***** Show email and user's ID *****/
       if (ShowIDRows)
 	{
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 	 Rec_ShowEmail (UsrDat,ClassForm);
 	 Rec_ShowUsrIDs (UsrDat,ClassForm);
          fprintf (Gbl.F.Out,"</table>");
@@ -2244,7 +2244,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
             break;
         }
 
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL CELLS_PAD_2\">");
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
 
       if (ShowIDRows)
 	{

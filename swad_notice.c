@@ -699,7 +699,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Not_PutHiddenParamNotCod (NotCod);
       Act_LinkFormSubmit (Txt_See_full_notice,DateClass[Status],NULL);
      }
-   fprintf (Gbl.F.Out,"<span id=\"notice_date_%u\"></span>",
+   fprintf (Gbl.F.Out,"<span id=\"not_date_%u\"></span>",
             UniqueId);
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)
      {
@@ -707,7 +707,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('notice_date_%u',"
+                      "writeLocalDateHMSFromUTC('not_date_%u',"
                       "%ld,'<br />','%s',true,false,false);"
                       "</script>"
 	              "</div>",

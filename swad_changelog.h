@@ -214,13 +214,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.180.1 (2017-04-17)"
-#define CSS_FILE		"swad16.177.css"
-#define JS_FILE			"swad16.144.js"
+#define Log_PLATFORM_VERSION	"SWAD 16.181 (2017-04-17)"
+#define CSS_FILE		"swad16.181.css"
+#define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.181:   Apr 17, 2017	Changes in layout of messages.
+					Changes in layout of some tables.
+					Fixed bug in forums. (217560 lines)
         Version 16.180.1: Apr 17, 2017	New '+' icon in list of thread posts to add a new post. (217558 lines)
         Version 16.180:   Apr 17, 2017	Code refactoring in forums. (217521 lines)
         Version 16.179:   Apr 16, 2017	Code refactoring in forums. (217444 lines)
