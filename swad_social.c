@@ -1375,8 +1375,8 @@ static void Soc_WriteSocialNote (const struct SocialNote *SocNot,
 		  break;
 	       case Soc_NOTE_FORUM_POST:
 		  /* Get forum type of the post */
-		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Gbl.Forum.WhichForum);
-		  For_SetForumName (&Gbl.Forum.WhichForum,
+		  For_GetForumTypeAndLocationOfAPost (SocNot->Cod,&Gbl.Forum.ForumSelected);
+		  For_SetForumName (&Gbl.Forum.ForumSelected,
 		                    ForumName,Gbl.Prefs.Language,false);	// Set forum name in recipient's language
 		  break;
 	       default:
@@ -1825,8 +1825,12 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	 case Soc_NOTE_SOCIAL_POST:	// Not applicable
 	    return;
 	 case Soc_NOTE_FORUM_POST:
-	    Act_FormStartUnique (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type]);
-	    For_PutAllHiddenParamsForum ();
+	    Act_FormStartUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
+	    For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					 Gbl.Forum.SelectedOrder,
+					 Gbl.Forum.ForumSelected.Location,
+					 Gbl.Forum.ForumSelected.ThrCod,
+					 -1L);
 	    if (SocNot->HieCod != Gbl.CurrentCrs.Crs.CrsCod)	// Not the current course
 	       Crs_PutParamCrsCod (SocNot->HieCod);		// Go to another course
 	    break;

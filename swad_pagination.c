@@ -160,17 +160,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    -1L,
+					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               For_PutHiddenParamThrCod (ThrCod);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    ThrCod,
+					    -1L);
 	       break;
             case Pag_MESSAGES_RECEIVED:
                Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
@@ -253,17 +260,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               For_PutAllHiddenParamsForum ();
-               break;
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    -1L,
+					    -1L);
+	       break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               For_PutHiddenParamThrCod (ThrCod);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    ThrCod,
+					    -1L);
 	       break;
             case Pag_MESSAGES_RECEIVED:
                Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
@@ -329,17 +343,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    -1L,
+					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               For_PutHiddenParamThrCod (ThrCod);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    ThrCod,
+					    -1L);
 	       break;
             case Pag_MESSAGES_RECEIVED:
                Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
@@ -412,17 +433,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Grp_PutParamWhichGrps ();
                   break;
                case Pag_THREADS_FORUM:
-                  Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+                  Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  For_PutAllHiddenParamsForum ();
+		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					       Gbl.Forum.SelectedOrder,
+					       Gbl.Forum.ForumSelected.Location,
+					       -1L,
+					       -1L);
                   break;
                case Pag_POSTS_FORUM:
-                  Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+                  Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  For_PutHiddenParamThrCod (ThrCod);
-                  For_PutAllHiddenParamsForum ();
+		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					       Gbl.Forum.SelectedOrder,
+					       Gbl.Forum.ForumSelected.Location,
+					       ThrCod,
+					       -1L);
                   break;
                case Pag_MESSAGES_RECEIVED:
                   Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
@@ -491,17 +519,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               For_PutAllHiddenParamsForum ();
-               break;
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    -1L,
+					    -1L);
+	       break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               For_PutHiddenParamThrCod (ThrCod);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    ThrCod,
+					    -1L);
                break;
             case Pag_MESSAGES_RECEIVED:
                Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);
@@ -567,17 +602,24 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Grp_PutParamWhichGrps ();
                break;
             case Pag_THREADS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    -1L,
+					    -1L);
                break;
             case Pag_POSTS_FORUM:
-               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.WhichForum.Type],
+               Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               For_PutHiddenParamThrCod (ThrCod);
-               For_PutAllHiddenParamsForum ();
+	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ForumSelected.Location,
+					    ThrCod,
+					    -1L);
                break;
             case Pag_MESSAGES_RECEIVED:
                Act_FormStartAnchor (ActSeeRcvMsg,Pagination->Anchor);

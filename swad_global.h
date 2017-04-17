@@ -582,7 +582,7 @@ struct Globals
    struct
      {
       For_ForumSet_t ForumSet;
-      struct Forum WhichForum;	// Forum type and location
+      struct Forum ForumSelected;	// Forum type, location, thread and post
       int Level;
       For_Order_t SelectedOrder;
       char PathRelOld[PATH_MAX + 1];

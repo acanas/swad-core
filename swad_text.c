@@ -751,12 +751,12 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	{
 	// Ntf_EVENT_FORUM_POST_COURSE
 	"",
-	"Novo missatge en un fòrum",
+	"Novo comentari en un fòrum",
 	"Neue Nachricht in einem Forum",
 	"New post in a forum",
-	"Nuevo mensaje en un foro",
-	"Nouveau message dans un forum",
-	"Nuevo mensaje en un foro",		// Okoteve traducción
+	"Nuevo comentario en un foro",
+	"Nouveau post dans un forum",
+	"Nuevo comentario en un foro",		// Okoteve traducción
 	"Nuovo post in un forum",
 	"Nowy post na forum",
 	"Novo post em um fórum",
@@ -8547,27 +8547,6 @@ const char *Txt_Do_not_reload_this_page_because_the_message_will_be_sent_again_ 
 	"Do not reload this page because the message would be sent again and would arrive repeated.";			// Necessita de tradução
 #endif
 
-const char *Txt_Do_not_reload_this_page_because_the_post_will_be_sent_again_ =
-#if   L==1
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";	// Necessita traduccio
-#elif L==2
-	"Do not reload this page because the post would be sent again and would arrive repeated.";			// Need Übersetzung
-#elif L==3
-	"Do not reload this page because the post would be sent again and would arrive repeated.";
-#elif L==4
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";
-#elif L==5
-	"Do not reload this page because the post would be sent again and would arrive repeated.";			// Besoin de traduction
-#elif L==6
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";	// Okoteve traducción
-#elif L==7
-	"Non ricaricare questa pagina perch&egrave; il post sar&agrave; nuovamente inviato.";
-#elif L==8
-	"Nie przeladuj strone, poniewaz post zostanie wyslany ponownie przyjedzie powtarzane.";
-#elif L==9
-	"Do not reload this page because the post would be sent again and would arrive repeated.";			// Necessita de tradução
-#endif
-
 const char *Txt_Do_not_show_again =
 #if   L==1
 	"No mostrar de nou";
@@ -9212,17 +9191,17 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 
 const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #if   L==1
-	"De veres voleu eliminar el seg&uuml;ent missatge?";
+	"De veres voleu eliminar el seg&uuml;ent comentari?";
 #elif L==2
 	"Wollen Sie wirklich, um die folgende Beitrag zu entfernen?";
 #elif L==3
 	"Do you really want to remove the following post?";
 #elif L==4
-	"&iquest;Realmente desea eliminar el siguiente mensaje?";
+	"&iquest;Realmente desea eliminar el siguiente comentario?";
 #elif L==5
-	"Voulez-vous vraiment supprimer le message suivant?";
+	"Voulez-vous vraiment supprimer le post suivant?";
 #elif L==6
-	"&iquest;Realmente desea eliminar el siguiente mensaje?";		// Okoteve traducción
+	"&iquest;Realmente desea eliminar el siguiente comentario?";		// Okoteve traducción
 #elif L==7
 	"Vuoi realmente rimuovere il seguente post?";
 #elif L==8
@@ -13316,17 +13295,17 @@ const char *Txt_Forum =
 
 const char *Txt_Forum_posts =
 #if   L==1
-	"Mensajes en foros";	// Necessita traduccio
+	"Comentarios en foros";	// Necessita traduccio
 #elif L==2
 	"Forum-Beitr&auml;ge";
 #elif L==3
 	"Forum posts";
 #elif L==4
-	"Mensajes en foros";
+	"Comentarios en foros";
 #elif L==5
-	"Messages de forum";
+	"Posts de forum";
 #elif L==6
-	"Mensajes en foros";	// Okoteve traducción
+	"Comentarios en foros";	// Okoteve traducción
 #elif L==7
 	"Post del forum";
 #elif L==8
@@ -24331,13 +24310,13 @@ const char *Txt_New_post =
 #if   L==1
 	"Nou comentari";
 #elif L==2
-	"Neue Kommentar";
+	"Neue Post";
 #elif L==3
 	"New post";
 #elif L==4
 	"Nuevo comentario";
 #elif L==5
-	"Nouveau commentaire";
+	"Nouveau post";
 #elif L==6
 	"Nuevo comentario";	// Okoteve traducción
 #elif L==7
@@ -25166,17 +25145,17 @@ const char *Txt_No_BR_msgs =
 
 const char *Txt_No_new_posts =
 #if   L==1
-	"No hay mensajes nuevos";	// Necessita traduccio
+	"No hay comentarios nuevos";	// Necessita traduccio
 #elif L==2
 	"Keine neuen Nachrichten";
 #elif L==3
 	"No new posts";
 #elif L==4
-	"No hay mensajes nuevos";
+	"No hay comentarios nuevos";
 #elif L==5
-	"Pas de nouveaux messages";
+	"Pas de nouveaux posts";
 #elif L==6
-	"No hay mensajes nuevos";	// Okoteve traducción
+	"No hay comentarios nuevos";	// Okoteve traducción
 #elif L==7
 	"Nessun nuovo post";
 #elif L==8
@@ -25355,86 +25334,86 @@ const char *Txt_No_of_BR_lines =
 
 const char *Txt_No_of_posts =
 #if   L==1
-	"N&ordm; de mensajes";	// Necessita traduccio
+	"N&ordm; de comentarios";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten";
 #elif L==3
 	"No. of posts";
 #elif L==4
-	"N&ordm; de mensajes";
+	"N&ordm; de comentarios";
 #elif L==5
-	"Nombre de messages";
+	"Nombre de posts";
 #elif L==6
-	"N&ordm; de mensajes";	// Okoteve traducción
+	"N&ordm; de comentarios";	// Okoteve traducción
 #elif L==7
 	"Numero di post";
 #elif L==8
 	"Liczba wiadomosci";
 #elif L==9
-	"N&ordm; de mensagens";
+	"N&ordm; de posts";
 #endif
 
 const char *Txt_No_of_posts_BR_per_forum =
 #if   L==1
-	"N&ordm; de mensajes<br />por foro";	// Necessita traduccio
+	"N&ordm; de comentarios<br />por foro";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten<br />pro Forum";
 #elif L==3
 	"No. of posts<br />per forum";
 #elif L==4
-	"N&ordm; de mensajes<br />por foro";
+	"N&ordm; de comentarios<br />por foro";
 #elif L==5
-	"Nombre de messages<br />par forum";
+	"Nombre de posts<br />par forum";
 #elif L==6
-	"N&ordm; de mensajes<br />por foro";	// Okoteve traducción
+	"N&ordm; de comentarios<br />por foro";	// Okoteve traducción
 #elif L==7
 	"Numero di post<br />per forum";
 #elif L==8
 	"Liczba wiadomosci<br />per forum";
 #elif L==9
-	"N&ordm; de mensagens<br />por f&oacute;rum";
+	"N&ordm; de posts<br />por f&oacute;rum";
 #endif
 
 const char *Txt_No_of_posts_BR_per_user =
 #if   L==1
-	"N&ordm; de mensajes<br />por usuari";	// Necessita traduccio
+	"N&ordm; de comentarios<br />por usuari";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten<br />pro Benutzer";
 #elif L==3
 	"No. of posts<br />per user";
 #elif L==4
-	"N&ordm; de mensajes<br />por usuario";
+	"N&ordm; de comentarios<br />por usuario";
 #elif L==5
-	"Nombre de messages<br />par utilisateur";
+	"Nombre de posts<br />par utilisateur";
 #elif L==6
-	"N&ordm; de mensajes<br />por puruh&aacute;ra";	// Okoteve traducción
+	"N&ordm; de comentarios<br />por puruh&aacute;ra";	// Okoteve traducción
 #elif L==7
 	"Numero di post<br />per utente";
 #elif L==8
 	"Liczba wiadomosci<br />per u&zdot;ytkownik";
 #elif L==9
-	"N&ordm; de mensagens<br />por utilizador";
+	"N&ordm; de posts<br />por utilizador";
 #endif
 
 const char *Txt_No_of_posts_BR_per_thread =
 #if   L==1
-	"N&ordm; de mensajes<br />por discusi&oacute;n";	// Necessita traduccio
+	"N&ordm; de comentarios<br />por discusi&oacute;n";	// Necessita traduccio
 #elif L==2
 	"Anzahl der Nachrichten<br />pro Thread";
 #elif L==3
 	"No. of posts<br />per thread";
 #elif L==4
-	"N&ordm; de mensajes<br />por usuario";
+	"N&ordm; de comentarios<br />por usuario";
 #elif L==5
-	"Nombre de messages<br />par fil";
+	"Nombre de posts<br />par fil";
 #elif L==6
-	"N&ordm; de mensajes<br />por discusi&oacute;n";	// Okoteve traducción
+	"N&ordm; de comentarios<br />por discusi&oacute;n";	// Okoteve traducción
 #elif L==7
 	"Numero di post<br />per discussione";
 #elif L==8
 	"Liczba wiadomosci<br />per watku";
 #elif L==9
-	"N&ordm; de mensagens<br />por thread";
+	"N&ordm; de posts<br />por thread";
 #endif
 
 const char *Txt_No_of_private_files =
@@ -26843,7 +26822,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==8
 	 "Nowe komentarze do moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novos coment&aacute;rio &agrave;s minhos post sociais"
+	 "Novos coment&aacute;rio &agrave;s minhos posts sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_FAV
@@ -26863,7 +26842,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==8
 	 "Nowe ulubiony do moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novos favoritos &agrave;s minhos post sociais"
+	 "Novos favoritos &agrave;s minhos posts sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_SHARE
@@ -26883,7 +26862,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==8
 	 "Nowe podzial moich post spo&lstrok;ecznej"
 #elif L==9
-	 "Novas partilhas de minhos post sociais"
+	 "Novas partilhas de minhos posts sociais"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_TIMELINE_MENTION
@@ -26927,17 +26906,17 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FORUM_POST_COURSE
-	 "Novos missatges en f&ograve;rums"
+	 "Novos comentaris en f&ograve;rums"
 #elif L==2
 	 "Neue Beitr&auml;ge in den Foren"
 #elif L==3
 	 "New posts in course forums"
 #elif L==4
-	 "Nuevos mensajes en foros de asignaturas"
+	 "Nuevos comentarios en foros de asignaturas"
 #elif L==5
-	 "Nouveaux messages dans les forums"
+	 "Nouveaux posts dans les forums"
 #elif L==6
-	 "Nuevos mensajes en foros de asignaturas"	// Okoteve traducción
+	 "Nuevos comentarios en foros de asignaturas"	// Okoteve traducción
 #elif L==7
 	 "Nuovi post nei forum"
 #elif L==8
@@ -26947,17 +26926,17 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FORUM_REPLY
-	 "Noves respostes als meus missatges en f&ograve;rums"
+	 "Noves respostes als meus comentaris en f&ograve;rums"
 #elif L==2
 	 "Neue Antworten auf meine Beitr&auml;ge in den Foren"
 #elif L==3
 	 "New replies to my posts in forums"
 #elif L==4
-	 "Nuevas respuestas a mis mensajes en foros"
+	 "Nuevas respuestas a mis comentarios en foros"
 #elif L==5
-	 "Nouvelles r&eacute;ponses &agrave; mes messages dans les forums"
+	 "Nouvelles r&eacute;ponses &agrave; mes posts dans les forums"
 #elif L==6
-	 "Nuevas respuestas a mis mensajes en foros"	// Okoteve traducción
+	 "Nuevas respuestas a mis comentarios en foros"	// Okoteve traducción
 #elif L==7
 	 "Nuove risposte ai miei post nei forum"
 #elif L==8
@@ -27330,17 +27309,17 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_FORUM_POST_COURSE
-	 "Missatge en un f&ograve;rum"
+	 "Comentari en un f&ograve;rum"
 #elif L==2
 	 "Beitr&auml;ge in einem Forum"
 #elif L==3
 	 "Post in a forum"
 #elif L==4
-	 "Mensaje en un foro"
+	 "Comentario en un foro"
 #elif L==5
-	 "Message dans un forum"
+	 "Post dans un forum"
 #elif L==6
-	 "Mensaje en un foro"	// Okoteve traducción
+	 "Comentario en un foro"	// Okoteve traducción
 #elif L==7
 	 "Post in un forum"
 #elif L==8
@@ -29535,17 +29514,17 @@ const char *Txt_Possibly_duplicate_users =
 
 const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Mensaje %u permitido.";	// Necessita traduccio
+	"Comentario %u permitido.";	// Necessita traduccio
 #elif L==2
 	"Post %u allowed.";		// Need Übersetzung
 #elif L==3
 	"Post %u allowed.";
 #elif L==4
-	"Mensaje %u permitido.";
+	"Comentario %u permitido.";
 #elif L==5
 	"Post %u allowed.";		// Besoin de traduction
 #elif L==6
-	"Mensaje %u permitido.";	// Okoteve traducción
+	"Comentario %u permitido.";	// Okoteve traducción
 #elif L==7
 	"Post %u autorizzato.";
 #elif L==8
@@ -29556,38 +29535,38 @@ const char *Txt_Post_X_allowed =	// Warning: it is very important to include %u 
 
 const char *Txt_Post_X_allowed_Click_to_ban_it =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Mensaje %u permitido. Pulse para censurarlo.";	// Necessita traduccio
+	"Comentario %u permitido. Pulse para censurarlo.";	// Necessita traduccio
 #elif L==2
-	"Post %u allowed. Click to ban it.";		// Need Übersetzung
+	"Post %u allowed. Click to ban it.";			// Need Übersetzung
 #elif L==3
 	"Post %u allowed. Click to ban it.";
 #elif L==4
-	"Mensaje %u permitido. Pulse para censurarlo.";
+	"Comentario %u permitido. Pulse para censurarlo.";
 #elif L==5
-	"Post %u allowed. Click to ban it.";		// Besoin de traduction
+	"Post %u allowed. Click to ban it.";			// Besoin de traduction
 #elif L==6
-	"Mensaje %u permitido. Pulse para censurarlo.";	// Okoteve traducción
+	"Comentario %u permitido. Pulse para censurarlo.";	// Okoteve traducción
 #elif L==7
 	"Post %u autorizzato. Clicca per censurarlo.";
 #elif L==8
 	"Post% u dozwolone. Kliknij, aby to zakazac.";
 #elif L==9
-	"Post %u allowed. Click to ban it.";		// Necessita de tradução
+	"Post %u allowed. Click to ban it.";			// Necessita de tradução
 #endif
 
 const char *Txt_Post_and_thread_removed =
 #if   L==1
-	"Mensaje y discusi&oacute;n eliminados.";	// Necessita traduccio
+	"Comentario y discusi&oacute;n eliminados.";	// Necessita traduccio
 #elif L==2
 	"Nachricht und Faden entfernt.";
 #elif L==3
 	"Post and thread removed.";
 #elif L==4
-	"Mensaje y discusi&oacute;n eliminados.";
+	"Comentario y discusi&oacute;n eliminados.";
 #elif L==5
 	"Post and thread removed.";			// Besoin de traduction
 #elif L==6
-	"Mensaje y discusi&oacute;n eliminados.";	// Okoteve traducción
+	"Comentario y discusi&oacute;n eliminados.";	// Okoteve traducción
 #elif L==7
 	"Post e discussione rimossi.";
 #elif L==8
@@ -29598,17 +29577,17 @@ const char *Txt_Post_and_thread_removed =
 
 const char *Txt_Post_banned =
 #if   L==1
-	"Mensaje no permitido";		// Necessita traduccio
+	"Comentario no permitido";	// Necessita traduccio
 #elif L==2
 	"Post banned.";			// Need Übersetzung
 #elif L==3
 	"Post banned.";
 #elif L==4
-	"Mensaje no permitido";
+	"Comentario no permitido";
 #elif L==5
 	"Post banned.";			// Besoin de traduction
 #elif L==6
-	"Mensaje no permitido";		// Okoteve traducción
+	"Comentario no permitido";	// Okoteve traducción
 #elif L==7
 	"Post censurato.";
 #elif L==8
@@ -29619,17 +29598,17 @@ const char *Txt_Post_banned =
 
 const char *Txt_Post_X_banned =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Mensaje %u no permitido";	// Necessita traduccio
+	"Comentario %u no permitido";	// Necessita traduccio
 #elif L==2
 	"Post %u banned.";		// Need Übersetzung
 #elif L==3
 	"Post %u banned.";
 #elif L==4
-	"Mensaje %u no permitido";
+	"Comentario %u no permitido";
 #elif L==5
 	"Post %u banned.";		// Besoin de traduction
 #elif L==6
-	"Mensaje %u no permitido";	// Okoteve traducción
+	"Comentario %u no permitido";	// Okoteve traducción
 #elif L==7
 	"Post %u censurato.";
 #elif L==8
@@ -29640,17 +29619,17 @@ const char *Txt_Post_X_banned =	// Warning: it is very important to include %u i
 
 const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Mensaje %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
+	"Comentario %u no permitido. Pulse para permitirlo.";	// Necessita traduccio
 #elif L==2
 	"Post %u banned. Click to unban it.";			// Need Übersetzung
 #elif L==3
 	"Post %u banned. Click to unban it.";
 #elif L==4
-	"Mensaje %u no permitido. Pulse para permitirlo.";
+	"Comentario %u no permitido. Pulse para permitirlo.";
 #elif L==5
 	"Post %u banned. Click to unban it.";			// Besoin de traduction
 #elif L==6
-	"Mensaje %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
+	"Comentario %u no permitido. Pulse para permitirlo.";	// Okoteve traducción
 #elif L==7
 	"Post %u censurato. Clicca per autorizzarlo.";
 #elif L==8
@@ -29661,17 +29640,17 @@ const char *Txt_Post_X_banned_Click_to_unban_it =	// Warning: it is very importa
 
 const char *Txt_Post_sent =
 #if   L==1
-	"Mensaje enviado.";	// Necessita traduccio
+	"Comentario enviado.";	// Necessita traduccio
 #elif L==2
 	"Post sent.";		// Need Übersetzung
 #elif L==3
 	"Post sent.";
 #elif L==4
-	"Mensaje enviado.";
+	"Comentario enviado.";
 #elif L==5
 	"Post sent.";		// Besoin de traduction
 #elif L==6
-	"Mensaje enviado.";	// Okoteve traducción
+	"Comentario enviado.";	// Okoteve traducción
 #elif L==7
 	"Post inviato.";
 #elif L==8
@@ -29682,17 +29661,17 @@ const char *Txt_Post_sent =
 
 const char *Txt_Post_removed =
 #if   L==1
-	"Missatge eliminat.";
+	"Comentari eliminat.";
 #elif L==2
 	"Nachricht entfernt.";
 #elif L==3
 	"Post removed.";
 #elif L==4
-	"Mensaje eliminado.";
+	"Comentario eliminado.";
 #elif L==5
 	"Message supprim&eacute;.";
 #elif L==6
-	"Mensaje eliminado.";		// Okoteve traducción
+	"Comentario eliminado.";		// Okoteve traducción
 #elif L==7
 	"Post rimosso.";
 #elif L==8
@@ -29703,17 +29682,17 @@ const char *Txt_Post_removed =
 
 const char *Txt_Post_unbanned =
 #if   L==1
-	"Mensaje permitido";		// Necessita traduccio
+	"Comentario permitido";		// Necessita traduccio
 #elif L==2
 	"Post unbanned.";		// Need Übersetzung
 #elif L==3
 	"Post unbanned";
 #elif L==4
-	"Mensaje permitido";
+	"Comentario permitido";
 #elif L==5
 	"Post unbanned.";		// Besoin de traduction
 #elif L==6
-	"Mensaje permitido";		// Okoteve traducción
+	"Comentario permitido";		// Okoteve traducción
 #elif L==7
 	"Post autorizzato.";
 #elif L==8
@@ -29974,15 +29953,15 @@ const char *Txt_Post =	// Publish (verb)
 
 const char *Txt_post =
 #if   L==1
-	"missatge";
+	"comentari";
 #elif L==2
 	"Nachricht";
 #elif L==3
 	"post";
 #elif L==4
-	"mensaje";
+	"comentario";
 #elif L==5
-	"message";
+	"post";
 #elif L==6
 	"marandu";
 #elif L==7
@@ -29995,15 +29974,15 @@ const char *Txt_post =
 
 const char *Txt_posts =
 #if   L==1
-	"missatges";
+	"comentaris";
 #elif L==2
 	"Nachrichten";
 #elif L==3
 	"posts";
 #elif L==4
-	"mensajes";
+	"comentarios";
 #elif L==5
-	"messages";
+	"posts";
 #elif L==6
 	"marandu";
 #elif L==7
@@ -37930,17 +37909,17 @@ const char *Txt_SOCIAL_NOTE[Soc_NUM_NOTE_TYPES] =
 #endif
 	 ,
 #if   L==1	// Soc_NOTE_FORUM_POST
-	 "Missatge en un f&ograve;rum"
+	 "Comentari en un f&ograve;rum"
 #elif L==2
 	 "Beitr&auml;ge in einem Forum"
 #elif L==3
 	 "Post in a forum"
 #elif L==4
-	 "Mensaje en un foro"
+	 "Comentario en un foro"
 #elif L==5
-	 "Message dans un forum"
+	 "Post dans un forum"
 #elif L==6
-	 "Mensaje en un foro"	// Okoteve traducción
+	 "Comentario en un foro"	// Okoteve traducción
 #elif L==7
 	 "Post in un forum"
 #elif L==8
@@ -47290,7 +47269,7 @@ const char *Txt_This_link_will_remain_active_as_long_as_your_user_s_account_exis
 
 const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_the_forums =
 #if   L==1
-	"Este mensaje ha sido censurado,"
+	"Este comentario ha sido censurado,"
 	" probablemente por no cumplir las normas de los foros.";		// Necessita traduccio
 #elif L==2
 	"This post has been banned,"
@@ -47299,13 +47278,13 @@ const char *Txt_This_post_has_been_banned_probably_for_not_satisfy_the_rules_of_
 	"This post has been banned,"
 	" probably for not satisfy the rules of the forums.";
 #elif L==4
-	"Este mensaje ha sido censurado,"
+	"Este comentario ha sido censurado,"
 	" probablemente por no cumplir las normas de los foros.";
 #elif L==5
 	"This post has been banned,"
 	" probably for not satisfy the rules of the forums.";			// Besoin de traduction
 #elif L==6
-	"Este mensaje ha sido censurado,"
+	"Este comentario ha sido censurado,"
 	" probablemente por no cumplir las normas de los foros.";		// Okoteve traducción
 #elif L==7
 	"Questo post &egrave; stato censurato,"
@@ -47509,17 +47488,17 @@ const char *Txt_Thread_X_removed =	// Warning: it is very important to include %
 
 const char *Txt_Thread_with_posts_from_you =
 #if   L==1
-	"Discusi&oacute;n con mensajes de usted.";	// Necessita traduccio
+	"Discusi&oacute;n con comentarios de usted.";	// Necessita traduccio
 #elif L==2
 	"Thread with posts from you.";			// Need Übersetzung
 #elif L==3
 	"Thread with posts from you.";
 #elif L==4
-	"Discusi&oacute;n con mensajes de usted.";
+	"Discusi&oacute;n con comentarios de usted.";
 #elif L==5
 	"Thread with posts from you.";			// Besoin de traduction
 #elif L==6
-	"Discusi&oacute;n con mensajes de usted.";	// Okoteve traducción
+	"Discusi&oacute;n con comentarios de usted.";	// Okoteve traducción
 #elif L==7
 	"Discussione con post per te.";
 #elif L==8
@@ -51293,17 +51272,17 @@ const char *Txt_With_institutions =
 
 const char *Txt_with_new_posts =
 #if   L==1
-	"con mensajes nuevos";	// Necessita traduccio
+	"con comentarios nuevos";	// Necessita traduccio
 #elif L==2
 	"mit neuen Beitr&auml;ge";
 #elif L==3
 	"with new posts";
 #elif L==4
-	"con mensajes nuevos";
+	"con comentarios nuevos";
 #elif L==5
-	"avec de nouveaux messages";
+	"avec de nouveaux posts";
 #elif L==6
-	"con mensajes nuevos";	// Okoteve traducción
+	"con comentarios nuevos";	// Okoteve traducción
 #elif L==7
 	"con nuovi post";
 #elif L==8
@@ -53628,17 +53607,17 @@ const char *Txt_You_have_to_register_compulsorily_in_one_group_of_type_X =	// Wa
 
 const char *Txt_You_have_written_1_post_in_this_thread =
 #if   L==1
-	"Usted ha escrito 1 mensaje en esta discusi&oacute;n";		// Necessita traduccio
+	"Usted ha escrito 1 comentario en esta discusi&oacute;n";		// Necessita traduccio
 #elif L==2
 	"Sie haben 1 Nachricht in diesem Thread";
 #elif L==3
 	"You have written 1 post in this thread";
 #elif L==4
-	"Usted ha escrito 1 mensaje en esta discusi&oacute;n";
+	"Usted ha escrito 1 comentario en esta discusi&oacute;n";
 #elif L==5
-	"Vous avez &eacute;crit 1 message dans ce fil";
+	"Vous avez &eacute;crit 1 post dans ce fil";
 #elif L==6
-	"Usted ha escrito 1 mensaje en esta discusi&oacute;n";		// Okoteve traducción
+	"Usted ha escrito 1 comentario en esta discusi&oacute;n";		// Okoteve traducción
 #elif L==7
 	"Hai scritto 1 post in questa discussione";
 #elif L==8
@@ -53649,17 +53628,17 @@ const char *Txt_You_have_written_1_post_in_this_thread =
 
 const char *Txt_You_have_written_X_posts_in_this_thread =		// Warning: it is very important to include %u in the following sentences
 #if   L==1
-	"Usted ha escrito %u mensajes en esta discusi&oacute;n";	// Necessita traduccio
+	"Usted ha escrito %u comentarios en esta discusi&oacute;n";	// Necessita traduccio
 #elif L==2
 	"Sie haben %u Nachrichten in diesem Thread";
 #elif L==3
 	"You have written %u posts in this thread";
 #elif L==4
-	"Usted ha escrito %u mensajes en esta discusi&oacute;n";
+	"Usted ha escrito %u comentarios en esta discusi&oacute;n";
 #elif L==5
-	"Vous avez &eacute;crit %u messages dans ce fil";
+	"Vous avez &eacute;crit %u posts dans ce fil";
 #elif L==6
-	"Usted ha escrito %u mensajes en esta discusi&oacute;n";	// Okoteve traducción
+	"Usted ha escrito %u comentarios en esta discusi&oacute;n";	// Okoteve traducción
 #elif L==7
 	"Hai scritto %u post in questa discussione";
 #elif L==8

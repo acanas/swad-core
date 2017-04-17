@@ -69,6 +69,7 @@ struct Forum
    For_ForumType_t Type;	// Type of forum
    long Location;		// Code of institution, centre, degree or course
    long ThrCod;			// Optional thread code
+   long PstCod;			// Optional post code
   };
 
 struct ForumThread
@@ -103,7 +104,7 @@ typedef enum
 void For_EnbPst (void);
 void For_DisPst (void);
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *WhichForum);
+void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *ForumSelected);
 
 unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
@@ -112,9 +113,13 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
                                        char **ContentStr,
                                        long PstCod,bool GetContent);
 
-void For_PutAllHiddenParamsForum (void);
+void For_PutAllHiddenParamsForum (For_ForumSet_t ForumSet,
+                                  For_Order_t Order,
+                                  long Location,
+                                  long ThrCod,
+                                  long PstCod);
 
-void For_SetForumName (struct Forum *WhichForum,
+void For_SetForumName (struct Forum *ForumSelected,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Txt_Language_t Language,bool UseHTMLEntities);
 
@@ -128,7 +133,6 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                                             unsigned *NumUsrsToBeNotifiedByEMail);
 
 void For_ShowThrPsts (void);
-void For_PutHiddenParamThrCod (long ThrCod);
 void For_RecForumPst (void);
 void For_DelPst (void);
 void For_ReqDelThr (void);
