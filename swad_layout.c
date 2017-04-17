@@ -1082,7 +1082,7 @@ static void Lay_ShowRightColumn (void)
 /**************** Show an icon with a link in contextual menu ****************/
 /*****************************************************************************/
 
-void Lay_PutContextualLink (Act_Action_t NextAction,
+void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             void (*FuncParams) (),
                             const char *Icon,
                             const char *Title,const char *Text,
@@ -1096,7 +1096,7 @@ void Lay_PutContextualLink (Act_Action_t NextAction,
 				// jumping to the next line on narrow screens
 
    /***** Start form *****/
-   Act_FormStart (NextAction);
+   Act_FormStartAnchor (NextAction,Anchor);
    if (FuncParams)
       FuncParams ();
 

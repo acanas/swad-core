@@ -129,8 +129,7 @@ void Prf_PutLinkMyPublicProfile (void)
   {
    extern const char *Txt_My_public_profile;
 
-   Lay_PutContextualLink (ActSeeOthPubPrf,
-                          Usr_PutParamMyUsrCodEncrypted,
+   Lay_PutContextualLink (ActSeeOthPubPrf,NULL,Usr_PutParamMyUsrCodEncrypted,
                           "usr64x64.gif",
                           Txt_My_public_profile,Txt_My_public_profile,
 		          NULL);
@@ -144,7 +143,7 @@ void Prf_PutLinkRequestAnotherUserProfile (void)
   {
    extern const char *Txt_Another_user_s_profile;
 
-   Lay_PutContextualLink (ActReqOthPubPrf,NULL,
+   Lay_PutContextualLink (ActReqOthPubPrf,NULL,NULL,
                           "usr64x64.gif",
                           Txt_Another_user_s_profile,Txt_Another_user_s_profile,
 		          NULL);

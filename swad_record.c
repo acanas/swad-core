@@ -952,7 +952,7 @@ void Rec_PutLinkToEditRecordFields (void)
    extern const char *Txt_Edit_record_fields;
 
    /***** Link to edit record fields *****/
-   Lay_PutContextualLink (ActEdiRecFie,NULL,
+   Lay_PutContextualLink (ActEdiRecFie,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit_record_fields,Txt_Edit_record_fields,
 		          NULL);
@@ -2389,13 +2389,13 @@ static void Rec_PutIconsCommands (void)
 
       if (ItsMe)
          /***** Button to edit my record card *****/
-	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,
+	 Lay_PutContextualLink (ActReqEdiRecCom,NULL,NULL,
 	                        "edit64x64.png",
 			        Txt_Edit_my_personal_data,NULL,
 		                NULL);
       if (ICanViewUsrProfile)
          /***** Button to view user's profile *****/
-         Lay_PutContextualLink (ActSeeOthPubPrf,
+         Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
 			        Rec_PutParamUsrCodEncrypted,
 				"usr64x64.gif",
 				ItsMe ? Txt_My_public_profile :
@@ -2405,13 +2405,13 @@ static void Rec_PutIconsCommands (void)
       /***** Button to view user's record card *****/
       if (Usr_CheckIfICanViewRecordStd (Gbl.Record.UsrDat))
 	 /* View student's records: common record card and course record card */
-         Lay_PutContextualLink (ActSeeRecOneStd,
+         Lay_PutContextualLink (ActSeeRecOneStd,NULL,
 			        Rec_PutParamUsrCodEncrypted,
 				"card64x64.gif",
 				Txt_View_record_for_this_course,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewRecordTch (Gbl.Record.UsrDat))
-	 Lay_PutContextualLink (ActSeeRecOneTch,
+	 Lay_PutContextualLink (ActSeeRecOneTch,NULL,
 				Rec_PutParamUsrCodEncrypted,
 				"card64x64.gif",
 				Txt_View_record_and_office_hours,NULL,
@@ -2419,14 +2419,12 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to view user's agenda *****/
       if (ItsMe)
-	 Lay_PutContextualLink (ActSeeMyAgd,
-				NULL,
+	 Lay_PutContextualLink (ActSeeMyAgd,NULL,NULL,
 				"calendar64x64.png",
 				Txt_Show_agenda,NULL,
 				NULL);
       else if (Usr_CheckIfICanViewUsrAgenda (Gbl.Record.UsrDat))
-	 Lay_PutContextualLink (ActSeeUsrAgd,
-				Rec_PutParamUsrCodEncrypted,
+	 Lay_PutContextualLink (ActSeeUsrAgd,NULL,Rec_PutParamUsrCodEncrypted,
 				"calendar64x64.png",
 				Txt_Show_agenda,NULL,
 				NULL);
@@ -2441,7 +2439,7 @@ static void Rec_PutIconsCommands (void)
 	 Lay_PutContextualLink ( Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
 	                        (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
 	                        	                                                ActReqMdfOth),
-				Rec_PutParamUsrCodEncrypted,
+				NULL,Rec_PutParamUsrCodEncrypted,
 				"config64x64.gif",
 			        Txt_Administer_user,NULL,
 		                NULL);
@@ -2452,24 +2450,24 @@ static void Rec_PutIconsCommands (void)
 	{
 	 /***** Button to view user's assignments and works *****/
 	 if (ItsMe)	// I am a student
-	    Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,
+	    Lay_PutContextualLink (ActAdmAsgWrkUsr,NULL,NULL,
 			           "folder64x64.gif",
 			           Txt_View_homework,NULL,
 		                   NULL);
 	 else		// I am a teacher or superuser
-	    Lay_PutContextualLink (ActAdmAsgWrkCrs,Rec_PutParamsWorks,
+	    Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,Rec_PutParamsWorks,
 			           "folder64x64.gif",
 			           Txt_View_homework,NULL,
 		                   NULL);
 
 	 /***** Button to view user's test exams *****/
 	 if (ItsMe)
-	    Lay_PutContextualLink (ActSeeMyTstRes,NULL,
+	    Lay_PutContextualLink (ActSeeMyTstRes,NULL,NULL,
 			           "exam64x64.png",
 			           Txt_View_test_results,NULL,
 		                   NULL);
 	 else
-	    Lay_PutContextualLink (ActSeeUsrTstRes,Rec_PutParamsStudent,
+	    Lay_PutContextualLink (ActSeeUsrTstRes,NULL,Rec_PutParamsStudent,
 			           "exam64x64.png",
 			           Txt_View_test_results,NULL,
 		                   NULL);
@@ -2477,13 +2475,13 @@ static void Rec_PutIconsCommands (void)
 	 /***** Button to view user's attendance *****/
 	 if (ItsMe && IAmLoggedAsStudent)
 	    // As student, I can see my attendance
-	    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
+	    Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
 				   "rollcall64x64.png",
 				   Txt_View_attendance,NULL,
 				   NULL);
 	 else if (IAmLoggedAsTeacher || IAmLoggedAsSysAdm)
 	    // As teacher, I can see attendance of the student
-	    Lay_PutContextualLink (ActSeeLstStdAtt,Rec_PutParamsStudent,
+	    Lay_PutContextualLink (ActSeeLstStdAtt,NULL,Rec_PutParamsStudent,
 				   "rollcall64x64.png",
 				   Txt_View_attendance,NULL,
 				   NULL);
@@ -2494,13 +2492,13 @@ static void Rec_PutIconsCommands (void)
 	  (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// A course is selected
 	   Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
 	   IAmLoggedAsTeacher))						// I am a teacher in the current course
-	 Lay_PutContextualLink (ActPrnUsrQR,Rec_PutParamUsrCodEncrypted,
+	 Lay_PutContextualLink (ActPrnUsrQR,NULL,Rec_PutParamUsrCodEncrypted,
 				"qr64x64.gif",
 				Txt_QR_code,NULL,
 				NULL);
 
       /***** Button to send a message *****/
-      Lay_PutContextualLink (ActReqMsgUsr,Rec_PutParamsMsgUsr,
+      Lay_PutContextualLink (ActReqMsgUsr,NULL,Rec_PutParamsMsgUsr,
 			     "msg64x64.gif",
 			     Txt_Write_a_message,NULL,
 		             NULL);
@@ -2511,12 +2509,12 @@ static void Rec_PutIconsCommands (void)
 	 if (Fol_CheckUsrIsFollowerOf (Gbl.Usrs.Me.UsrDat.UsrCod,
 				       Gbl.Record.UsrDat->UsrCod))
 	    // I follow user
-	    Lay_PutContextualLink (ActUnfUsr,Rec_PutParamUsrCodEncrypted,
+	    Lay_PutContextualLink (ActUnfUsr,NULL,Rec_PutParamUsrCodEncrypted,
 				   "following64x64.png",
 				   Txt_Following_unfollow,NULL,
 				   NULL);	// Put button to unfollow, even if I can not view user's profile
 	 else if (ICanViewUsrProfile)
-	    Lay_PutContextualLink (ActFolUsr,Rec_PutParamUsrCodEncrypted,
+	    Lay_PutContextualLink (ActFolUsr,NULL,Rec_PutParamUsrCodEncrypted,
 				   "follow64x64.png",
 				   Txt_Follow,NULL,
 				   NULL);	// Put button to follow
@@ -3689,7 +3687,8 @@ void Rec_PutLinkToChangeMyInsCtrDpt (void)
    extern const char *Txt_Edit_my_institution;
 
    /***** Link to edit my institution, centre, department... *****/
-   Lay_PutContextualLink (ActReqEdiMyIns,NULL,"ins64x64.gif",
+   Lay_PutContextualLink (ActReqEdiMyIns,NULL,NULL,
+                          "ins64x64.gif",
                           Txt_Edit_my_institution,Txt_Edit_my_institution,
 		          NULL);
   }

@@ -332,7 +332,7 @@ static void Svy_PutIconToCreateNewSvy (void)
   {
    extern const char *Txt_New_survey;
 
-   Lay_PutContextualLink (ActFrmNewSvy,Svy_PutParamsToCreateNewSvy,
+   Lay_PutContextualLink (ActFrmNewSvy,NULL,Svy_PutParamsToCreateNewSvy,
                           "plus64x64.png",
                           Txt_New_survey,NULL,
 		          NULL);
@@ -792,31 +792,31 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
-   Lay_PutContextualLink (ActReqRemSvy,Svy_PutParams,
+   Lay_PutContextualLink (ActReqRemSvy,NULL,Svy_PutParams,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
 		          NULL);
 
    /***** Put form to reset survey *****/
-   Lay_PutContextualLink (ActReqRstSvy,Svy_PutParams,
+   Lay_PutContextualLink (ActReqRstSvy,NULL,Svy_PutParams,
                           "recycle64x64.png",
                           Txt_Reset,NULL,
 		          NULL);
 
    /***** Put form to hide/show survey *****/
    if (Visible)
-      Lay_PutContextualLink (ActHidSvy,Svy_PutParams,
+      Lay_PutContextualLink (ActHidSvy,NULL,Svy_PutParams,
                              "eye-on64x64.png",
 			     Txt_Hide,NULL,
 		             NULL);
    else
-      Lay_PutContextualLink (ActShoSvy,Svy_PutParams,
+      Lay_PutContextualLink (ActShoSvy,NULL,Svy_PutParams,
                              "eye-slash-on64x64.png",
 			     Txt_Show,NULL,
 		             NULL);
 
    /***** Put form to edit survey *****/
-   Lay_PutContextualLink (ActEdiOneSvy,Svy_PutParams,
+   Lay_PutContextualLink (ActEdiOneSvy,NULL,Svy_PutParams,
                           "edit64x64.png",
                           Txt_Edit,NULL,
 		          NULL);
@@ -3308,7 +3308,7 @@ static void Svy_PutIconToAddNewQuestion (void)
    extern const char *Txt_New_question;
 
    /***** Put form to create a new question *****/
-   Lay_PutContextualLink (ActEdiOneSvyQst,Svy_PutParams,
+   Lay_PutContextualLink (ActEdiOneSvyQst,NULL,Svy_PutParams,
                           "plus64x64.png",
                           Txt_New_question,NULL,
 		          NULL);
@@ -3496,7 +3496,7 @@ static void Svy_PutIconToRemoveOneQst (void)
   {
    extern const char *Txt_Remove;
 
-   Lay_PutContextualLink (ActReqRemSvyQst,Svy_PutParamsRemoveOneQst,
+   Lay_PutContextualLink (ActReqRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
 		          NULL);

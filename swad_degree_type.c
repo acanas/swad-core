@@ -130,7 +130,7 @@ void DT_PutIconToViewDegreeTypes (void)
   {
    extern const char *Txt_Types_of_degree;
 
-   Lay_PutContextualLink (ActSeeDegTyp,NULL,
+   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
                           "hierarchy64x64.png",
                           Txt_Types_of_degree,NULL,
                           NULL);
@@ -332,7 +332,7 @@ static void DT_PutIconToEditDegTypes (void)
 
    if (IsCentreTab &&				// Only editable in centre tab
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only editable by system admins
-      Lay_PutContextualLink (ActEdiDegTyp,NULL,
+      Lay_PutContextualLink (ActEdiDegTyp,NULL,NULL,
 			     "edit64x64.png",
 			     Txt_Edit,NULL,
 			     NULL);

@@ -120,7 +120,8 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
   {
    extern const char *Txt_Create_ZIP_file;
 
-   Lay_PutContextualLink (ActAdmAsgWrkCrs,ZIP_PutLinkToCreateZIPAsgWrkParams,
+   Lay_PutContextualLink (ActAdmAsgWrkCrs,NULL,
+                          ZIP_PutLinkToCreateZIPAsgWrkParams,
                           "download64x64.png",
                           Txt_Create_ZIP_file,Txt_Create_ZIP_file,
 		          NULL);

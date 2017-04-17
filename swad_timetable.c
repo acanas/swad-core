@@ -311,13 +311,13 @@ static void TT_PutContextualIcons (void)
    extern const char *Txt_Print;
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
-      Lay_PutContextualLink (ActEdiCrsTT,Grp_PutParamWhichGrps,
+      Lay_PutContextualLink (ActEdiCrsTT,NULL,Grp_PutParamWhichGrps,
 			     "edit64x64.png",
 			     Txt_Edit,NULL,
 		             NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Lay_PutContextualLink (ActEdiTut,NULL,
+      Lay_PutContextualLink (ActEdiTut,NULL,NULL,
                              "edit64x64.png",
 			     Txt_Edit_office_hours,NULL,
 		             NULL);
@@ -325,7 +325,7 @@ static void TT_PutContextualIcons (void)
    if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
       Lay_PutContextualLink (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
 								         ActPrnMyTT,
-			     Grp_PutParamWhichGrps,
+			     NULL,Grp_PutParamWhichGrps,
 			     "print64x64.png",
 			     Txt_Print,NULL,
 		             NULL);
@@ -390,7 +390,7 @@ static void TT_PutIconToViewCrsTT (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see course timetable *****/
-   Lay_PutContextualLink (ActSeeCrsTT,NULL,
+   Lay_PutContextualLink (ActSeeCrsTT,NULL,NULL,
                           "eye-on64x64.png",
                           Txt_Show_timetable,NULL,
 		          NULL);
@@ -405,7 +405,7 @@ static void TT_PutIconToViewMyTT (void)
    extern const char *Txt_Show_timetable;
 
    /***** Link (form) to see my timetable *****/
-   Lay_PutContextualLink (ActSeeMyTT,NULL,
+   Lay_PutContextualLink (ActSeeMyTT,NULL,NULL,
                           "eye-on64x64.png",
                           Txt_Show_timetable,NULL,
 		          NULL);

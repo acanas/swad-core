@@ -644,7 +644,7 @@ static void Agd_PutIconToCreateNewEvent (void)
 
    /***** Put form to create a new event *****/
    Gbl.Agenda.AgdCodToEdit = -1L;
-   Lay_PutContextualLink (ActFrmNewEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+   Lay_PutContextualLink (ActFrmNewEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
                           "plus64x64.png",
                           Txt_New_event,NULL,
                           NULL);
@@ -655,7 +655,7 @@ static void Agd_PutIconToViewEditMyFullAgenda (void)
    extern const char *Txt_Edit;
 
    /***** Put form to create a new event *****/
-   Lay_PutContextualLink (ActSeeMyAgd,NULL,
+   Lay_PutContextualLink (ActSeeMyAgd,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
@@ -683,8 +683,8 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    /***** Button to view user's public profile *****/
    if (Pri_ShowingIsAllowed (Gbl.Usrs.Other.UsrDat.ProfileVisibility,
 		             &Gbl.Usrs.Other.UsrDat))
-      Lay_PutContextualLink (ActSeeOthPubPrf,
-			     Usr_PutParamOtherUsrCodEncrypted,
+      Lay_PutContextualLink (ActSeeOthPubPrf,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
 			     "usr64x64.gif",
 			     Txt_Another_user_s_profile,NULL,
 			     NULL);
@@ -692,13 +692,13 @@ static void Agd_PutIconsOtherPublicAgenda (void)
    /***** Button to view user's record card *****/
    if (Usr_CheckIfICanViewRecordStd (&Gbl.Usrs.Other.UsrDat))
       /* View student's records: common record card and course record card */
-      Lay_PutContextualLink (ActSeeRecOneStd,
-			     Usr_PutParamOtherUsrCodEncrypted,
+      Lay_PutContextualLink (ActSeeRecOneStd,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
 			     "card64x64.gif",
 			     Txt_View_record_for_this_course,NULL,
 			     NULL);
    else if (Usr_CheckIfICanViewRecordTch (&Gbl.Usrs.Other.UsrDat))
-      Lay_PutContextualLink (ActSeeRecOneTch,
+      Lay_PutContextualLink (ActSeeRecOneTch,NULL,
 			     Usr_PutParamOtherUsrCodEncrypted,
 			     "card64x64.gif",
 			     Txt_View_record_and_office_hours,NULL,
@@ -853,37 +853,37 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
    Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
-   Lay_PutContextualLink (ActReqRemEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+   Lay_PutContextualLink (ActReqRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
                           NULL);
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Lay_PutContextualLink (ActShoEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+      Lay_PutContextualLink (ActShoEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
                              "eye-slash-on64x64.png",
 			     Txt_Show,NULL,
                              NULL);
    else
-      Lay_PutContextualLink (ActHidEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+      Lay_PutContextualLink (ActHidEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
                              "eye-on64x64.png",
 			     Txt_Hide,NULL,
                              NULL);
 
    /***** Put form to edit event *****/
-   Lay_PutContextualLink (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+   Lay_PutContextualLink (ActEdiOneEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)
-      Lay_PutContextualLink (ActPrvEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+      Lay_PutContextualLink (ActPrvEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
 			     "unlock-on64x64.png",
 			     Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private,NULL,
 			     NULL);
    else
-      Lay_PutContextualLink (ActPubEvtMyAgd,Agd_PutCurrentParamsMyAgenda,
+      Lay_PutContextualLink (ActPubEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
 			     "lock-on64x64.png",
 			     Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses,NULL,
 			     NULL);

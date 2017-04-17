@@ -175,7 +175,7 @@ void Att_SeeAttEvents (void)
 	   }
 
       /* Put link to my QR code */
-      Lay_PutContextualLink (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted,
+      Lay_PutContextualLink (ActPrnUsrQR,NULL,Usr_PutParamMyUsrCodEncrypted,
 			     "qr64x64.gif",
 			     Txt_QR_code,Txt_QR_code,
 			     NULL);
@@ -317,7 +317,7 @@ static void Att_PutIconToCreateNewAttEvent (void)
    extern const char *Txt_New_event;
 
    /***** Put form to create a new attendance event *****/
-   Lay_PutContextualLink (ActFrmNewAtt,Att_PutParamsToCreateNewAttEvent,
+   Lay_PutContextualLink (ActFrmNewAtt,NULL,Att_PutParamsToCreateNewAttEvent,
                           "plus64x64.png",
                           Txt_New_event,NULL,
                           NULL);
@@ -509,7 +509,7 @@ static void Att_PutFormToListMyAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Lay_PutContextualLink (ActSeeLstMyAtt,NULL,
+   Lay_PutContextualLink (ActSeeLstMyAtt,NULL,NULL,
                           "list64x64.gif",
                           Txt_Attendance_list,Txt_Attendance_list,
                           NULL);
@@ -523,7 +523,7 @@ static void Att_PutFormToListStdsAttendance (void)
   {
    extern const char *Txt_Attendance_list;
 
-   Lay_PutContextualLink (ActReqLstStdAtt,Att_PutFormToListStdsParams,
+   Lay_PutContextualLink (ActReqLstStdAtt,NULL,Att_PutFormToListStdsParams,
                           "list64x64.gif",
                           Txt_Attendance_list,Txt_Attendance_list,
                           NULL);
@@ -552,25 +552,25 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
-   Lay_PutContextualLink (ActReqRemAtt,Att_PutParams,
+   Lay_PutContextualLink (ActReqRemAtt,NULL,Att_PutParams,
                           "remove-on64x64.png",
                           Txt_Remove,NULL,
                           NULL);
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAtt,Att_PutParams,
+      Lay_PutContextualLink (ActShoAtt,NULL,Att_PutParams,
                              "eye-slash-on64x64.png",
 			     Txt_Show,NULL,
                              NULL);
    else
-      Lay_PutContextualLink (ActHidAtt,Att_PutParams,
+      Lay_PutContextualLink (ActHidAtt,NULL,Att_PutParams,
                              "eye-on64x64.png",
 			     Txt_Hide,NULL,
                              NULL);
 
    /***** Put form to edit attendance event *****/
-   Lay_PutContextualLink (ActEdiOneAtt,Att_PutParams,
+   Lay_PutContextualLink (ActEdiOneAtt,NULL,Att_PutParams,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
@@ -2971,7 +2971,7 @@ static void Att_PutIconToPrintMyList (void)
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams,
+   Lay_PutContextualLink (ActPrnLstMyAtt,NULL,Att_PutFormToPrintMyListParams,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -2994,7 +2994,7 @@ static void Att_PutIconToPrintStdsList (void)
    extern const char *Txt_Print;
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList,
+   Lay_PutContextualLink (ActPrnLstStdAtt,NULL,Att_PutParamsToPrintStdsList,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);

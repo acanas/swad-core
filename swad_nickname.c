@@ -253,7 +253,7 @@ void Nck_ShowFormChangeUsrNickname (void)
 
       /* Link to QR code */
       if (NumNick == 1 && Gbl.Usrs.Me.UsrDat.Nickname[0])
-         Lay_PutContextualLink (ActPrnUsrQR,Usr_PutParamMyUsrCodEncrypted,
+         Lay_PutContextualLink (ActPrnUsrQR,NULL,Usr_PutParamMyUsrCodEncrypted,
 				"qr64x64.gif",
 				Txt_QR_code,NULL,
 				NULL);

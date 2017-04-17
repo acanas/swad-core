@@ -142,7 +142,7 @@ void Syl_PutFormWhichSyllabus (void)
                       "<ul class=\"LIST_LEFT\" style=\"margin:12px;\">");
 
    for (WhichSyllabus = (Syl_WhichSyllabus_t) 0;
-	WhichSyllabus < For_NUM_WHICH_FORUMS;
+	WhichSyllabus < For_NUM_FORUM_SETS;
 	WhichSyllabus++)
      {
       fprintf (Gbl.F.Out,"<li class=\"DAT LEFT_MIDDLE\""

@@ -406,9 +406,10 @@ void Gbl_InitializeGlobals (void)
    Gbl.Social.WhichUsrs = Soc_DEFAULT_WHICH_USRS;
 
    /* Forums */
-   Gbl.Forum.ForumSet = For_DEFAULT_WHICH_FORUMS;
+   Gbl.Forum.ForumSet = For_DEFAULT_FORUM_SET;
    Gbl.Forum.WhichForum.Type = (For_ForumType_t) 0;
    Gbl.Forum.WhichForum.Location = -1L;
+   Gbl.Forum.WhichForum.ThrCod = -1L;
    Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
    // Gbl.Forum.CurrentPageThrs = 1;	// TODO: Remove this line

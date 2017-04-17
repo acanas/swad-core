@@ -39,13 +39,13 @@
 /************************ Public constants and types *************************/
 /*****************************************************************************/
 
-#define For_NUM_WHICH_FORUMS 2
+#define For_NUM_FORUM_SETS 2
 typedef enum
   {
    For_ONLY_CURRENT_FORUMS	= 0,
    For_ALL_MY_FORUMS		= 1,
   } For_ForumSet_t;	// Which set of forums I want to see: all my forums or only the forums of current institution/degree/course.
-#define For_DEFAULT_WHICH_FORUMS For_ONLY_CURRENT_FORUMS
+#define For_DEFAULT_FORUM_SET For_ONLY_CURRENT_FORUMS
 
 #define For_NUM_TYPES_FORUM 12
 typedef enum
@@ -66,8 +66,9 @@ typedef enum
 
 struct Forum
   {
-   For_ForumType_t Type;
-   long Location;	// Code of institution, centre, degree or course
+   For_ForumType_t Type;	// Type of forum
+   long Location;		// Code of institution, centre, degree or course
+   long ThrCod;			// Optional thread code
   };
 
 struct ForumThread

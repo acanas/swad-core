@@ -168,7 +168,8 @@ void Pho_PutLinkToChangeMyPhoto (void)
 		                                       Txt_Upload_photo;
 
    /***** Link for changing / uploading the photo *****/
-   Lay_PutContextualLink (ActReqMyPho,NULL,"photo64x64.gif",
+   Lay_PutContextualLink (ActReqMyPho,NULL,NULL,
+                          "photo64x64.gif",
                           TitleText,TitleText,
                           NULL);
   }
@@ -197,7 +198,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
 	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
 	                                                                                   ActReqOthPho),	// Guest, visitor or admin
-	                        Usr_PutParamOtherUsrCodEncrypted,
+	                        NULL,Usr_PutParamOtherUsrCodEncrypted,
 	                        "photo64x64.gif",
 				TitleText,TitleText,
 				NULL);
@@ -214,7 +215,7 @@ static void Pho_PutIconToRequestRemoveMyPhoto (void)
 
    /***** Link to request the removal of my photo *****/
    if (Gbl.Usrs.Me.MyPhotoExists)
-      Lay_PutContextualLink (ActReqRemMyPho,NULL,
+      Lay_PutContextualLink (ActReqRemMyPho,NULL,NULL,
                              "remove-on64x64.png",
 			     Txt_Remove_photo,NULL,
 		             NULL);
@@ -236,7 +237,7 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqRemStdPho :
 			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqRemTchPho :
 											ActReqRemOthPho),	// Guest, visitor or admin
-			     Usr_PutParamOtherUsrCodEncrypted,
+			     NULL,Usr_PutParamOtherUsrCodEncrypted,
 			     "remove-on64x64.png",
 			     Txt_Remove_photo,NULL,
 		             NULL);
@@ -1869,7 +1870,8 @@ static void Pho_PutIconToPrintDegreeStats (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams,
+   Lay_PutContextualLink (ActPrnPhoDeg,NULL,
+                          Pho_PutLinkToPrintViewOfDegreeStatsParams,
                           "print64x64.png",
                           Txt_Print,NULL,
 		          NULL);

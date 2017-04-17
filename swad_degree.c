@@ -553,7 +553,7 @@ static void Deg_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
 
    /***** Link to print info about degree *****/
-   Lay_PutContextualLink (ActPrnDegInf,NULL,
+   Lay_PutContextualLink (ActPrnDegInf,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -1255,7 +1255,7 @@ static void Deg_PutIconToEditDegrees (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiDeg,NULL,
+   Lay_PutContextualLink (ActEdiDeg,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);

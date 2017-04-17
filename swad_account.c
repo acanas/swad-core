@@ -97,7 +97,7 @@ void Acc_PutLinkToCreateAccount (void)
   {
    extern const char *Txt_Create_account;
 
-   Lay_PutContextualLink (ActFrmMyAcc,NULL,
+   Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
                           "arroba64x64.gif",
                           Txt_Create_account,Txt_Create_account,
                           NULL);
@@ -512,7 +512,7 @@ static void Acc_PutLinkToRemoveMyAccount (void)
   {
    extern const char *Txt_Remove_account;
 
-   Lay_PutContextualLink (ActReqRemMyAcc,Acc_PutParamsToRemoveMyAccount,
+   Lay_PutContextualLink (ActReqRemMyAcc,NULL,Acc_PutParamsToRemoveMyAccount,
                           "remove-on64x64.png",
                           Txt_Remove_account,Txt_Remove_account,
                           NULL);

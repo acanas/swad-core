@@ -153,7 +153,7 @@ static void Plg_PutIconToEditPlugins (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiPlg,NULL,
+   Lay_PutContextualLink (ActEdiPlg,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
 		          NULL);

@@ -707,7 +707,7 @@ static void Exa_PutIconToCreateNewExamAnnouncement (void)
   {
    extern const char *Txt_New_announcement_OF_EXAM;
 
-   Lay_PutContextualLink (ActEdiExaAnn,NULL,
+   Lay_PutContextualLink (ActEdiExaAnn,NULL,NULL,
                           "plus64x64.png",
                           Txt_New_announcement_OF_EXAM,NULL,
                           NULL);
@@ -1546,7 +1546,7 @@ static void Exa_PutIconsExamAnnouncement (void)
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/
-      Lay_PutContextualLink (ActReqRemExaAnn,Exa_PutParamExaCodToEdit,
+      Lay_PutContextualLink (ActReqRemExaAnn,NULL,Exa_PutParamExaCodToEdit,
                              "remove-on64x64.png",
 			     Txt_Remove,NULL,
                              NULL);
@@ -1555,13 +1555,13 @@ static void Exa_PutIconsExamAnnouncement (void)
       switch (Gbl.ExamAnns.ExaDat.Status)
         {
 	 case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActHidExaAnn,Exa_PutParamExaCodToEdit,
+	    Lay_PutContextualLink (ActHidExaAnn,NULL,Exa_PutParamExaCodToEdit,
 				   "eye-on64x64.png",
 				   Txt_Hide,NULL,
 				   NULL);
 	    break;
 	 case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActShoExaAnn,Exa_PutParamExaCodToEdit,
+	    Lay_PutContextualLink (ActShoExaAnn,NULL,Exa_PutParamExaCodToEdit,
 				   "eye-slash-on64x64.png",
 				   Txt_Show,NULL,
 				   NULL);
@@ -1571,14 +1571,14 @@ static void Exa_PutIconsExamAnnouncement (void)
         }
 
       /***** Link to edit this exam announcement *****/
-      Lay_PutContextualLink (ActEdiExaAnn,Exa_PutParamExaCodToEdit,
+      Lay_PutContextualLink (ActEdiExaAnn,NULL,Exa_PutParamExaCodToEdit,
                              "edit64x64.png",
 			     Txt_Edit,NULL,
                              NULL);
      }
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnExaAnn,Exa_PutParamExaCodToEdit,
+   Lay_PutContextualLink (ActPrnExaAnn,NULL,Exa_PutParamExaCodToEdit,
                           "print64x64.png",
 			  Txt_Print,NULL,
                           NULL);

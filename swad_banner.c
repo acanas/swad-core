@@ -82,7 +82,7 @@ void Ban_PutLinkToViewBanners (void)
   {
    extern const char *Txt_Banners;
 
-   Lay_PutContextualLink (ActSeeBan,NULL,
+   Lay_PutContextualLink (ActSeeBan,NULL,NULL,
                           "picture64x64.gif",
                           Txt_Banners,Txt_Banners,
                           NULL);
@@ -174,7 +174,7 @@ static void Ban_PutFormToEditBanners (void)
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       /***** Link to edit banners *****/
-      Lay_PutContextualLink (ActEdiBan,NULL,
+      Lay_PutContextualLink (ActEdiBan,NULL,NULL,
                              "edit64x64.png",
                              Txt_Edit,NULL,
                              NULL);

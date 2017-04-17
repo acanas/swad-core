@@ -115,7 +115,7 @@ void Dup_PutLinkToListDupUsrs (void)
    extern const char *Txt_Duplicate_USERS;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLink (ActLstDupUsr,NULL,
+   Lay_PutContextualLink (ActLstDupUsr,NULL,NULL,
                           "usrs64x64.gif",
                           Txt_Duplicate_USERS,Txt_Duplicate_USERS,
                           NULL);

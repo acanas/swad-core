@@ -141,7 +141,7 @@ void Con_PutLinkToLastClicks (void)
   {
    extern const char *Txt_Last_clicks;
 
-   Lay_PutContextualLink (ActLstClk,NULL,
+   Lay_PutContextualLink (ActLstClk,NULL,NULL,
                           "mouse-pointer64x64.png",
                           Txt_Last_clicks,Txt_Last_clicks,
                           NULL);

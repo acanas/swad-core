@@ -482,7 +482,7 @@ static void Cty_PutIconToPrint (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnCtyInf,NULL,
+   Lay_PutContextualLink (ActPrnCtyInf,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -774,7 +774,7 @@ static void Cty_PutIconToEditCountries (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiCty,NULL,
+   Lay_PutContextualLink (ActEdiCty,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);

@@ -628,7 +628,7 @@ static void Ins_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
 
    /***** Link to print info about institution *****/
-   Lay_PutContextualLink (ActPrnInsInf,NULL,
+   Lay_PutContextualLink (ActPrnInsInf,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -743,7 +743,7 @@ static void Ins_PutIconToEditInstitutions (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiIns,NULL,
+   Lay_PutContextualLink (ActEdiIns,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);

@@ -94,7 +94,7 @@ void Fol_PutLinkWhoToFollow (void)
   {
    extern const char *Txt_Who_to_follow;
 
-   Lay_PutContextualLink (ActSeeSocPrf,NULL,
+   Lay_PutContextualLink (ActSeeSocPrf,NULL,NULL,
                           "follow64x64.png",
                           Txt_Who_to_follow,Txt_Who_to_follow,
                           NULL);

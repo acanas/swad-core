@@ -181,7 +181,7 @@ static void Ann_PutIconToAddNewAnnouncement (void)
   {
    extern const char *Txt_New_announcement;
 
-   Lay_PutContextualLink (ActWriAnn,NULL,
+   Lay_PutContextualLink (ActWriAnn,NULL,NULL,
                           "plus64x64.png",
                           Txt_New_announcement,NULL,
                           NULL);
@@ -308,7 +308,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ICanEdit)
      {
       /***** Put form to remove announcement *****/
-      Lay_PutContextualLink (ActRemAnn,Ann_PutParams,
+      Lay_PutContextualLink (ActRemAnn,NULL,Ann_PutParams,
 			     "remove-on64x64.png",
 			     Txt_Remove,NULL,
 			     NULL);
@@ -317,13 +317,13 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       switch (Status)
 	{
 	 case Ann_ACTIVE_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActHidAnn,Ann_PutParams,
+	    Lay_PutContextualLink (ActHidAnn,NULL,Ann_PutParams,
 				   "eye-on64x64.png",
 				   Txt_NOTICE_Active_Mark_as_obsolete,NULL,
 				   NULL);
 	    break;
 	 case Ann_OBSOLETE_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActRevAnn,Ann_PutParams,
+	    Lay_PutContextualLink (ActRevAnn,NULL,Ann_PutParams,
 				   "eye-slash-on64x64.png",
 				   Txt_NOTICE_Obsolete_Mark_as_active,NULL,
 				   NULL);
@@ -361,7 +361,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
      }
    else
       /***** Put form to mark announcement as seen *****/
-      Lay_PutContextualLink (ActAnnSee,Ann_PutParams,
+      Lay_PutContextualLink (ActAnnSee,NULL,Ann_PutParams,
 			     "remove-on64x64.png",
 			     Txt_Do_not_show_again,Txt_Do_not_show_again,
 			     NULL);

@@ -1998,7 +1998,7 @@ void Usr_PutLinkToLogin (void)
   {
    extern const char *Txt_Log_in;
 
-   Lay_PutContextualLink (ActFrmLogIn,NULL,
+   Lay_PutContextualLink (ActFrmLogIn,NULL,NULL,
                           "login-green64x64.png",
                           Txt_Log_in,Txt_Log_in,
 		          NULL);
@@ -3009,7 +3009,7 @@ void Usr_ShowFormsLogoutAndRole (void)
 
    /***** Link to log out *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLogOut,NULL,
+   Lay_PutContextualLink (ActLogOut,NULL,NULL,
                           "logout-red64x64.png",
                           Txt_Log_out,Txt_Log_out,
 		          NULL);
@@ -7087,7 +7087,7 @@ static void Usr_PutLinkToSeeAdmins (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list admins *****/
-   Lay_PutContextualLink (ActLstOth,NULL,
+   Lay_PutContextualLink (ActLstOth,NULL,NULL,
                           "adm16x16.gif",
                           Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
                           Txt_ROLES_PLURAL_Abc[Rol_DEG_ADM][Usr_SEX_UNKNOWN],
@@ -7103,7 +7103,7 @@ static void Usr_PutLinkToSeeGuests (void)
    extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
 
    /***** Put form to list guests *****/
-   Lay_PutContextualLink (ActLstGst,NULL,
+   Lay_PutContextualLink (ActLstGst,NULL,NULL,
                           "usrs64x64.gif",
                           Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
                           Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
@@ -7659,7 +7659,7 @@ static void Usr_PutIconToPrintGsts (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnGstPho,Usr_ShowGstsAllDataParams,
+   Lay_PutContextualLink (ActPrnGstPho,NULL,Usr_ShowGstsAllDataParams,
 			  "print64x64.png",
 			  Txt_Print,NULL,
 		          NULL);
@@ -7669,7 +7669,7 @@ static void Usr_PutIconToPrintStds (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnStdPho,Usr_ShowStdsAllDataParams,
+   Lay_PutContextualLink (ActPrnStdPho,NULL,Usr_ShowStdsAllDataParams,
 			  "print64x64.png",
 			  Txt_Print,NULL,
 		          NULL);
@@ -7679,7 +7679,7 @@ static void Usr_PutIconToPrintTchs (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnTchPho,Usr_ShowTchsAllDataParams,
+   Lay_PutContextualLink (ActPrnTchPho,NULL,Usr_ShowTchsAllDataParams,
 			  "print64x64.png",
 			  Txt_Print,NULL,
 		          NULL);
@@ -7693,7 +7693,7 @@ static void Usr_PutIconToShowGstsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
-   Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
+   Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
 		          NULL);
@@ -7704,7 +7704,7 @@ static void Usr_PutLinkToShowGstsAllData (void)
    extern const char *Txt_Show_all_data;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLstGstAll,Usr_ShowGstsAllDataParams,
+   Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
@@ -7715,7 +7715,7 @@ static void Usr_PutIconToShowStdsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
-   Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
+   Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
 		          NULL);
@@ -7726,7 +7726,7 @@ static void Usr_PutLinkToShowStdsAllData (void)
    extern const char *Txt_Show_all_data;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLstStdAll,Usr_ShowStdsAllDataParams,
+   Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);
@@ -7737,7 +7737,7 @@ static void Usr_PutIconToShowTchsAllData (void)
   {
    extern const char *Txt_Show_all_data;
 
-   Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
+   Lay_PutContextualLink (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
 		          NULL);
@@ -7748,7 +7748,7 @@ static void Usr_PutLinkToShowTchsAllData (void)
    extern const char *Txt_Show_all_data;
 
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLstTchAll,Usr_ShowTchsAllDataParams,
+   Lay_PutContextualLink (ActLstTchAll,NULL,Usr_ShowTchsAllDataParams,
 			  "table64x64.gif",
 			  Txt_Show_all_data,Txt_Show_all_data,
 		          NULL);

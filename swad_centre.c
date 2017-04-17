@@ -671,7 +671,7 @@ static void Ctr_PutIconsToPrintAndUpload (void)
    extern const char *Txt_Print;
 
    /***** Link to print info about centre *****/
-   Lay_PutContextualLink (ActPrnCtrInf,NULL,
+   Lay_PutContextualLink (ActPrnCtrInf,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -706,7 +706,7 @@ static void Ctr_PutIconToChangePhoto (void)
 	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod,
 	    (unsigned)  Gbl.CurrentCtr.Ctr.CtrCod);
    PhotoExists = Fil_CheckIfPathExists (PathPhoto);
-   Lay_PutContextualLink (ActReqCtrPho,NULL,
+   Lay_PutContextualLink (ActReqCtrPho,NULL,NULL,
 			  "photo64x64.gif",
 			  PhotoExists ? Txt_Change_photo :
 				        Txt_Upload_photo,NULL,
@@ -822,7 +822,7 @@ static void Ctr_PutIconToEditCentres (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiCtr,NULL,
+   Lay_PutContextualLink (ActEdiCtr,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);

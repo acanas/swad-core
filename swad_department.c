@@ -211,7 +211,7 @@ static void Dpt_PutIconToEditDpts (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiDpt,NULL,
+   Lay_PutContextualLink (ActEdiDpt,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);

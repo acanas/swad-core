@@ -640,7 +640,7 @@ void Sta_AskShowGblHits (void)
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
        (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-      Lay_PutContextualLink (ActReqAccCrs,NULL,
+      Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
 			     "stats64x64.gif",
 			     Txt_Visits_to_course,Txt_Visits_to_course,
 		             NULL);
@@ -3927,7 +3927,7 @@ void Sta_PutIconToShowFigure (void)
   {
    extern const char *Txt_Show_statistic;
 
-   Lay_PutContextualLink (ActSeeUseGbl,Sta_PutParamsToShowFigure,
+   Lay_PutContextualLink (ActSeeUseGbl,NULL,Sta_PutParamsToShowFigure,
                           "pie64x64.gif",
                           Txt_Show_statistic,NULL,
                           NULL);

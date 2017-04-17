@@ -237,7 +237,7 @@ void Pre_RemoveOldPrefsFromIP (void)
 
 void Pre_PutLinkToChangeLanguage (void)
   {
-   Lay_PutContextualLink (ActEdiPrf,NULL,
+   Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
                           "cty64x64.gif",
                           "Change language","Change language",
 		          NULL);

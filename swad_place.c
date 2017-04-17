@@ -79,7 +79,7 @@ void Plc_PutIconToViewPlaces (void)
   {
    extern const char *Txt_Places;
 
-   Lay_PutContextualLink (ActSeePlc,NULL,
+   Lay_PutContextualLink (ActSeePlc,NULL,NULL,
                           "mapmarker64x64.png",
                           Txt_Places,NULL,
                           NULL);
@@ -231,7 +231,7 @@ static void Plc_PutIconToEditPlaces (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiPlc,NULL,
+   Lay_PutContextualLink (ActEdiPlc,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
 		          NULL);

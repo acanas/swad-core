@@ -13442,7 +13442,7 @@ const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
 #endif
 	};
 
-const char *Txt_FORUM_WHICH_FORUM[For_NUM_WHICH_FORUMS] =
+const char *Txt_FORUM_WHICH_FORUM[For_NUM_FORUM_SETS] =
    {
 	 // For_ONLY_CURRENT_FORUMS
 #if   L==1

@@ -494,7 +494,7 @@ static void Crs_PutIconToPrint (void)
   {
    extern const char *Txt_Print;
 
-   Lay_PutContextualLink (ActPrnCrsInf,NULL,
+   Lay_PutContextualLink (ActPrnCrsInf,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -1223,7 +1223,7 @@ static void Crs_PutIconToEditCourses (void)
   {
    extern const char *Txt_Edit;
 
-   Lay_PutContextualLink (ActEdiCrs,NULL,
+   Lay_PutContextualLink (ActEdiCrs,NULL,NULL,
                           "edit64x64.png",
                           Txt_Edit,NULL,
                           NULL);
@@ -2908,7 +2908,7 @@ static void Crs_PutLinkToSearchCourses (void)
                           (Gbl.CurrentIns.Ins.InsCod > 0 ? ActInsReqSch :
                           (Gbl.CurrentCty.Cty.CtyCod > 0 ? ActCtyReqSch :
                                                            ActSysReqSch)))),
-                          Sch_PutLinkToSearchCoursesParams,
+                          NULL,Sch_PutLinkToSearchCoursesParams,
 			  "search64x64.gif",
 			  Txt_Search_courses,Txt_Search_courses,
                           NULL);
@@ -2929,7 +2929,7 @@ void Crs_PutFormToSelectMyCourses (void)
    extern const char *Txt_My_courses;
 
    /***** Put form to search / select courses *****/
-   Lay_PutContextualLink (ActMyCrs,NULL,
+   Lay_PutContextualLink (ActMyCrs,NULL,NULL,
                           "hierarchy64x64.gif",
                           Txt_My_courses,Txt_My_courses,
                           NULL);
@@ -3305,7 +3305,7 @@ void Crs_PutLinkToRemoveOldCrss (void)
    extern const char *Txt_Eliminate_old_courses;
 
    /***** Put form to remove old courses *****/
-   Lay_PutContextualLink (ActReqRemOldCrs,NULL,
+   Lay_PutContextualLink (ActReqRemOldCrs,NULL,NULL,
                           "remove-on64x64.png",
                           Txt_Eliminate_old_courses,Txt_Eliminate_old_courses,
                           NULL);

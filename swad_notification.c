@@ -357,20 +357,20 @@ void Ntf_ShowMyNotifications (void)
 
    if (NumNotifications)	// TODO: Show message only when I don't have notificacions at all
       /* Put form to change notification preferences */
-      Lay_PutContextualLink (ActMrkNtfSee,NULL,
+      Lay_PutContextualLink (ActMrkNtfSee,NULL,NULL,
                              "eye-on64x64.png",
 			     Txt_Mark_all_notifications_as_read,
 			     Txt_Mark_all_NOTIFICATIONS_as_read,
                              NULL);
 
    /* Put form to change notification preferences */
-   Lay_PutContextualLink (ActEdiPrf,NULL,
+   Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
                           "heart64x64.gif",
 			  Txt_Change_preferences,Txt_Preferences,
                           NULL);
 
    /* Put form to view allowed mail domains */
-   Lay_PutContextualLink (ActSeeMai,NULL,
+   Lay_PutContextualLink (ActSeeMai,NULL,NULL,
                           "msg64x64.gif",
 			  Txt_Email_domains_allowed_for_notifications,Txt_Domains,
                           NULL);

@@ -3681,14 +3681,14 @@ static void Brw_PutIconsFileBrowser (void)
 	 break;
       case Brw_ICON_VIEW:
 	 Lay_PutContextualLink (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
-				Brw_PutHiddenParamFullTreeIfSelected,
+				NULL,Brw_PutHiddenParamFullTreeIfSelected,
 				"eye-on64x64.png",
 				Txt_View,NULL,
 				NULL);
 	 break;
       case Brw_ICON_EDIT:
 	 Lay_PutContextualLink (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
-				Brw_PutHiddenParamFullTreeIfSelected,
+				NULL,Brw_PutHiddenParamFullTreeIfSelected,
 				"edit64x64.png",
 				Txt_Edit,NULL,
 				NULL);
@@ -11568,7 +11568,8 @@ static void Brw_PutLinkToAskRemOldFiles (void)
   {
    extern const char *Txt_Remove_old_files;
 
-   Lay_PutContextualLink (ActReqRemOldBrf,Brw_PutHiddenParamFullTreeIfSelected,
+   Lay_PutContextualLink (ActReqRemOldBrf,NULL,
+                          Brw_PutHiddenParamFullTreeIfSelected,
 			  "remove-on64x64.png",
 			  Txt_Remove_old_files,Txt_Remove_old_files,
                           NULL);

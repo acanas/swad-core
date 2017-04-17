@@ -494,7 +494,7 @@ void ID_PutLinkToChangeUsrIDs (void)
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
-      Lay_PutContextualLink (ActFrmMyAcc,NULL,
+      Lay_PutContextualLink (ActFrmMyAcc,NULL,NULL,
 			     "arroba64x64.gif",
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);
@@ -502,7 +502,7 @@ void ID_PutLinkToChangeUsrIDs (void)
       Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmIDsStd :
 	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmIDsTch :
 	                	                                                        ActFrmIDsOth),	// Guest, visitor or admin
-                             Usr_PutParamOtherUsrCodEncrypted,
+                             NULL,Usr_PutParamOtherUsrCodEncrypted,
 			     "arroba64x64.gif",
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);

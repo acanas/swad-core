@@ -349,7 +349,7 @@ static void Cal_PutIconToPrintCalendarSys (void)
    extern const char *Txt_Print;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalSys,NULL,
+   Lay_PutContextualLink (ActPrnCalSys,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -360,7 +360,7 @@ static void Cal_PutIconToPrintCalendarCty (void)
    extern const char *Txt_Print;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCty,NULL,
+   Lay_PutContextualLink (ActPrnCalCty,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -372,7 +372,7 @@ static void Cal_PutIconToPrintCalendarIns (void)
    extern const char *Txt_Holidays;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalIns,NULL,
+   Lay_PutContextualLink (ActPrnCalIns,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -380,7 +380,7 @@ static void Cal_PutIconToPrintCalendarIns (void)
    /***** View holidays *****/
    if (Gbl.Hlds.Num ||					// There are holidays
        Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
-      Lay_PutContextualLink (ActSeeHld,NULL,
+      Lay_PutContextualLink (ActSeeHld,NULL,NULL,
 			     "holiday64x64.png",
 			     Txt_Holidays,NULL,
 			     NULL);
@@ -391,7 +391,7 @@ static void Cal_PutIconToPrintCalendarCtr (void)
    extern const char *Txt_Print;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCtr,NULL,
+   Lay_PutContextualLink (ActPrnCalCtr,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -402,7 +402,7 @@ static void Cal_PutIconToPrintCalendarDeg (void)
    extern const char *Txt_Print;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalDeg,NULL,
+   Lay_PutContextualLink (ActPrnCalDeg,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);
@@ -413,7 +413,7 @@ static void Cal_PutIconToPrintCalendarCrs (void)
    extern const char *Txt_Print;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCrs,NULL,
+   Lay_PutContextualLink (ActPrnCalCrs,NULL,NULL,
                           "print64x64.png",
                           Txt_Print,NULL,
                           NULL);

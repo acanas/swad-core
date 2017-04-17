@@ -77,7 +77,7 @@ void Pri_PutLinkToChangeMyPrivacy (void)
    extern const char *Txt_Privacy;
 
    /***** Link to edit my privacy *****/
-   Lay_PutContextualLink (ActEdiPri,NULL,
+   Lay_PutContextualLink (ActEdiPri,NULL,NULL,
                           "lock64x64.png",
                           Txt_Privacy,Txt_Privacy,
 		          NULL);

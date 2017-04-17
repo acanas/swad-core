@@ -180,7 +180,7 @@ void Enr_PutLinkToRequestSignUp (void)
    extern const char *Txt_Sign_up;
 
    /***** Show the form *****/
-   Lay_PutContextualLink (ActReqSignUp,NULL,
+   Lay_PutContextualLink (ActReqSignUp,NULL,NULL,
                           "enrollmentrequest64x64.gif",
                           Txt_Sign_up,Txt_Sign_up,
                           NULL);
@@ -681,7 +681,7 @@ void Enr_PutLinkToRemOldUsrs (void)
    extern const char *Txt_Eliminate_old_users;
 
    /***** Put form to remove old users *****/
-   Lay_PutContextualLink (ActReqRemOldUsr,NULL,
+   Lay_PutContextualLink (ActReqRemOldUsr,NULL,NULL,
                           "remove-on64x64.png",
                           Txt_Eliminate_old_users,Txt_Eliminate_old_users,
                           NULL);
@@ -1736,7 +1736,7 @@ static void Enr_PutLinkToRemAllStdsThisCrs (void)
    extern const char *Txt_Remove_all_students;
 
    /***** Put form to remove all the students in the current course *****/
-   Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,
+   Lay_PutContextualLink (ActReqRemAllStdCrs,NULL,NULL,
                           "remove-on64x64.png",
                           Txt_Remove_all_students,Txt_Remove_all_students,
                           NULL);
@@ -2905,7 +2905,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
    const char *TitleText = Enr_ICanAdminOtherUsrs () ? Txt_Administer_one_user :
                         	                              Txt_Administer_me;
 
-   Lay_PutContextualLink (NextAction,NULL,
+   Lay_PutContextualLink (NextAction,NULL,NULL,
                           "config64x64.gif",
                           TitleText,TitleText,
                           NULL);
@@ -2924,7 +2924,8 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 
    Lay_PutContextualLink (Role == Rol_STUDENT ? ActReqEnrSevStd :
 	                                        ActReqEnrSevTch,
-	                  NULL,"config64x64.gif",
+	                  NULL,NULL,
+	                  "config64x64.gif",
 	                  TitleText,TitleText,
                           NULL);
   }
