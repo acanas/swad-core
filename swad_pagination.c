@@ -142,7 +142,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
   {
    extern const char *Txt_Page;
    extern const char *Txt_See_page_X_of_Y;
-   extern const char *Txt_first_message_not_allowed;
+   extern const char *Txt_Post_banned;
    unsigned NumPage;
 
    /***** Link to page 1, including a text *****/
@@ -227,7 +227,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          fprintf (Gbl.F.Out,"%s",Subject);
       else
          fprintf (Gbl.F.Out,"[%s]",
-                  Txt_first_message_not_allowed);
+                  Txt_Post_banned);
       if (LinkToPagCurrent)
 	{
 	 fprintf (Gbl.F.Out,"</a>");

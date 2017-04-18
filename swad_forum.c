@@ -3508,10 +3508,10 @@ static void For_GetThrData (struct ForumThread *Thr)
    row = mysql_fetch_row (mysql_res);
 
    /***** Get the code of the first post in this thread (row[0]) *****/
-   //Thr->PstCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[0]);
+   Thr->PstCod[For_FIRST_MSG] = Str_ConvertStrCodToLongCod (row[0]);
 
    /***** Get the code of the last  post in this thread (row[1]) *****/
-   //Thr->PstCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[1]);
+   Thr->PstCod[For_LAST_MSG ] = Str_ConvertStrCodToLongCod (row[1]);
 
    /***** Get the code of the first message in this thread (row[0]) *****/
    if (sscanf (row[0],"%ld",&(Thr->PstCod[For_FIRST_MSG])) != 1)
@@ -3546,8 +3546,8 @@ static void For_GetThrData (struct ForumThread *Thr)
    for (Order = For_FIRST_MSG;
 	Order <= For_LAST_MSG;
 	Order++)
-      // Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
-      Thr->Enabled[Order] = true;
+      Thr->Enabled[Order] = For_GetIfPstIsEnabled (Thr->PstCod[Order]);
+      // Thr->Enabled[Order] = true;
 
    /***** Get number of posts in this thread *****/
    Thr->NumPosts = For_GetNumPstsInThr (Thr->ThrCod);

@@ -12788,27 +12788,6 @@ const char *Txt_First_day_of_the_week =
 	"Primeiro dia da semana";
 #endif
 
-const char *Txt_first_message_not_allowed =
-#if   L==1
-	"primer mensaje no permitido";	// Necessita traduccio
-#elif L==2
-	"erste Nachricht nicht erlaubt";
-#elif L==3
-	"first message not allowed";
-#elif L==4
-	"primer mensaje no permitido";
-#elif L==5
-	"premier message non admis";
-#elif L==6
-	"primer mensaje no permitido";	// Okoteve traducción
-#elif L==7
-	"primo messaggio non ammesso";
-#elif L==8
-	"Pierwszy komunikat nie jest dozwolony";
-#elif L==9
-	"primeira mensagem n&atilde;o permitida";
-#endif
-
 const char *Txt_First_name =
 #if   L==1
 	"Nom";
