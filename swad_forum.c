@@ -239,6 +239,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
   };
 
 // Links to go to <section>
+#define For_ID_REMOVE_THREAD_SECTION	"remove_thread"
 #define For_ID_FORUM_THREADS_SECTION	"forum_threads"
 #define For_ID_NEW_THREAD_SECTION	"new_thread"
 #define For_ID_FORUM_POSTS_SECTION	"thread_posts"
@@ -355,6 +356,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 
+static bool For_CheckIfICanMoveThreads (void);
 static long For_GetThrInMyClipboard (void);
 static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *ForumSelected);
 static void For_MoveThrToCurrentForum (long ThrCod);
@@ -376,6 +378,13 @@ void For_EnbPst (void)
    /***** Delete post from table of disabled posts *****/
    For_DeletePstFromDisabledPstTable (Gbl.Forum.ForumSelected.PstCod);
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
+   /***** Show threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+                                              Lay_SUCCESS,NULL);
+
    /***** Show the posts again *****/
    For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_unbanned);
   }
@@ -396,6 +405,13 @@ void For_DisPst (void)
      {
       /***** Insert post into table of banned posts *****/
       For_InsertPstIntoBannedPstTable (Gbl.Forum.ForumSelected.PstCod);
+
+      /***** Show forum list again *****/
+      For_ShowForumList ();
+
+      /***** Show threads again *****/
+      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						 Lay_SUCCESS,NULL);
 
       /***** Show the posts again *****/
       For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_banned);
@@ -965,25 +981,16 @@ static void For_ShowThreadPosts (Lay_AlertType_t AlertType,const char *Message)
    long PstCod;
    bool NewPst = false;
    bool ICanModerateForum = false;
-   bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
-
-   /***** Show threads *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-                                              Lay_SUCCESS,NULL);
 
    /***** Get data of the thread *****/
    Thr.ThrCod = Gbl.Forum.ForumSelected.ThrCod;
    For_GetThrData (&Thr);
 
-   /***** Get the page number *****/
-   Gbl.Forum.CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
-
-   /***** Write title *****/
-   /* Get if there is a thread ready to be moved */
-   if (ICanMoveThreads)
+   /***** Get if there is a thread ready to be moved *****/
+   if (For_CheckIfICanMoveThreads ())
       Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
 
-   /* Get thread read time for the current user */
+   /***** Get thread read time for the current user *****/
    ReadTimeUTC = For_GetThrReadTime (Gbl.Forum.ForumSelected.ThrCod);
 
    /***** Show alert after action *****/
@@ -1240,7 +1247,7 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
 	                           Gbl.Forum.CurrentPagePsts);
 	}
       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				   Gbl.Forum.SelectedOrder,
+				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   PstCod);
@@ -1258,7 +1265,7 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
                               For_ID_FORUM_POSTS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				      Gbl.Forum.SelectedOrder,
+				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Gbl.Forum.ForumSelected.ThrCod,
 				      PstCod);
@@ -1492,7 +1499,7 @@ static void For_WriteNumberOfPosts (struct Forum *ForumSelected,long UsrCod)
 static void For_PutAllHiddenParamsSelectedForum (void)
   {
    For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-                                Gbl.Forum.SelectedOrder,
+                                Gbl.Forum.ThreadsOrder,
                                 Gbl.Forum.ForumSelected.Location,
                                 Gbl.Forum.ForumSelected.ThrCod,
                                 -1L);
@@ -1570,7 +1577,6 @@ static void For_ShowForumList (void)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forums;
-   bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS];
    MYSQL_RES *mysql_resCtr;
    MYSQL_RES *mysql_resDeg;
@@ -1592,7 +1598,7 @@ static void For_ShowForumList (void)
    bool ICanSeeDegForum;
 
    /***** Get if there is a thread ready to be moved *****/
-   if (ICanMoveThreads)	// If I have permission to move threads...
+   if (For_CheckIfICanMoveThreads ())
       Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
 
    /***** Fill the list with the institutions I belong to *****/
@@ -1779,7 +1785,7 @@ static void For_PutFormWhichForums (void)
           - all my forums
           - only the forums of current institution/degree/course *****/
    Act_FormStart (ActSeeFor);
-   For_PutParamForumOrder (Gbl.Forum.SelectedOrder);
+   For_PutParamForumOrder (Gbl.Forum.ThreadsOrder);
    fprintf (Gbl.F.Out,"<div class=\"SEL_BELOW_TITLE\">"
 	              "<ul>");
 
@@ -2232,7 +2238,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
          Act_FormStart (For_ActionsPasThrFor[Forum->Type]);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				      Gbl.Forum.SelectedOrder,
+				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Gbl.Forum.ThreadToMove,
 				      -1L);
@@ -2249,7 +2255,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    /***** Write link to forum *****/
    Act_FormStartAnchor (NextAct,For_ID_FORUM_THREADS_SECTION);
    For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-                                Gbl.Forum.SelectedOrder,
+                                Gbl.Forum.ThreadsOrder,
                                 Forum->Location,
                                 -1L,
                                 -1L);
@@ -2465,6 +2471,9 @@ void For_ShowForumThrs (void)
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
    /***** Show forum threads with no one highlighted *****/
    For_ShowForumThreadsHighlightingOneThread (-1L,Lay_SUCCESS,NULL);
   }
@@ -2497,21 +2506,10 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    For_Order_t Order;
    long ThrCods[Pag_ITEMS_PER_PAGE];
    struct Pagination PaginationThrs;
-   bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
-
-   /***** Get if there is a thread ready to be moved *****/
-   if (ICanMoveThreads)
-      Gbl.Forum.ThreadToMove = For_GetThrInMyClipboard ();
-
-   /***** Show list of available forums *****/
-   For_ShowForumList ();
 
    /***** Set forum name *****/
    For_SetForumName (&Gbl.Forum.ForumSelected,
 	             ForumName,Gbl.Prefs.Language,true);
-
-   /***** Get page number *****/
-   Gbl.Forum.CurrentPageThrs = Pag_GetParamPagNum (Pag_THREADS_FORUM);
 
    /***** Get threads of a forum from database *****/
    if (Gbl.Forum.ForumSelected.Location > 0)
@@ -2519,7 +2517,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	       Gbl.Forum.ForumSelected.Location);
    else
       SubQuery[0] = '\0';
-   switch (Gbl.Forum.SelectedOrder)
+   switch (Gbl.Forum.ThreadsOrder)
      {
       case For_FIRST_MSG:
          sprintf (Query,"SELECT forum_thread.ThrCod"
@@ -2610,10 +2608,10 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 				      -1L,
 				      -1L);
 	 Act_LinkFormSubmit (Txt_FORUM_THREAD_HELP_ORDER[Order],"TIT_TBL",NULL);
-         if (Order == Gbl.Forum.SelectedOrder)
+         if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"<u>");
 	 fprintf (Gbl.F.Out,"%s",Txt_FORUM_THREAD_ORDER[Order]);
-         if (Order == Gbl.Forum.SelectedOrder)
+         if (Order == Gbl.Forum.ThreadsOrder)
             fprintf (Gbl.F.Out,"</u>");
          fprintf (Gbl.F.Out,"</a>");
          Act_FormEnd ();
@@ -3262,13 +3260,13 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
    time_t TimeUTC;
    struct Pagination PaginationPsts;
    const char *Style;
-   bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
    long ThreadInMyClipboard = -1L;
    unsigned Column;
    const char *BgColor;
+   bool ICanMoveThreads;
 
    /***** Get if there is a thread ready to be moved *****/
-   if (ICanMoveThreads)
+   if ((ICanMoveThreads = For_CheckIfICanMoveThreads ()))
       ThreadInMyClipboard = For_GetThrInMyClipboard ();
 
    /***** Initialize structure with user's data *****/
@@ -3331,10 +3329,10 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
         {
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
-                              For_ID_FORUM_THREADS_SECTION);
+                              For_ID_REMOVE_THREAD_SECTION);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				      Gbl.Forum.SelectedOrder,
+				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
 				      -1L);
@@ -3350,7 +3348,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                               For_ID_FORUM_THREADS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				      Gbl.Forum.SelectedOrder,
+				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
 				      -1L);
@@ -3545,6 +3543,13 @@ void For_ShowThrPsts (void)
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
+   /***** Show threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+                                              Lay_SUCCESS,NULL);
+
    /***** Show the posts of that thread *****/
    For_ShowThreadPosts (Lay_SUCCESS,NULL);
   }
@@ -3590,11 +3595,15 @@ static void For_GetParamsForum (void)
 						  (unsigned long) For_DEFAULT_FORUM_SET);
 
    /***** Get order type *****/
-   Gbl.Forum.SelectedOrder = (For_Order_t)
+   Gbl.Forum.ThreadsOrder = (For_Order_t)
 			     Par_GetParToUnsignedLong ("Order",
 						       0,
 						       For_NUM_ORDERS - 1,
 						       (unsigned long) For_DEFAULT_ORDER);
+
+   /***** Get optional page numbers for threads and posts *****/
+   Gbl.Forum.CurrentPageThrs = Pag_GetParamPagNum (Pag_THREADS_FORUM);
+   Gbl.Forum.CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
 
    /***** Restrict access to forum *****/
    For_RestrictAccess ();
@@ -3616,7 +3625,6 @@ static void For_SetForumType (void)
       case ActDelPstForGenUsr:
       case ActEnbPstForGenUsr:	case ActDisPstForGenUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_GLOBAL_USRS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForGenTch:	case ActSeePstForGenTch:
       case ActRcvThrForGenTch:	case ActRcvRepForGenTch:
@@ -3625,7 +3633,6 @@ static void For_SetForumType (void)
       case ActDelPstForGenTch:
       case ActEnbPstForGenTch:	case ActDisPstForGenTch:
          Gbl.Forum.ForumSelected.Type = For_FORUM_GLOBAL_TCHS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForSWAUsr:	case ActSeePstForSWAUsr:
       case ActRcvThrForSWAUsr:	case ActRcvRepForSWAUsr:
@@ -3634,7 +3641,6 @@ static void For_SetForumType (void)
       case ActDelPstForSWAUsr:
       case ActEnbPstForSWAUsr:	case ActDisPstForSWAUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_SWAD_USRS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForSWATch:	case ActSeePstForSWATch:
       case ActRcvThrForSWATch:	case ActRcvRepForSWATch:
@@ -3643,7 +3649,6 @@ static void For_SetForumType (void)
       case ActDelPstForSWATch:
       case ActEnbPstForSWATch:	case ActDisPstForSWATch:
          Gbl.Forum.ForumSelected.Type = For_FORUM_SWAD_TCHS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForInsUsr:	case ActSeePstForInsUsr:
       case ActRcvThrForInsUsr:	case ActRcvRepForInsUsr:
@@ -3652,7 +3657,6 @@ static void For_SetForumType (void)
       case ActDelPstForInsUsr:
       case ActEnbPstForInsUsr:	case ActDisPstForInsUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_INSTIT_USRS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForInsTch:	case ActSeePstForInsTch:
       case ActRcvThrForInsTch:	case ActRcvRepForInsTch:
@@ -3661,7 +3665,6 @@ static void For_SetForumType (void)
       case ActDelPstForInsTch:
       case ActEnbPstForInsTch:	case ActDisPstForInsTch:
 	 Gbl.Forum.ForumSelected.Type = For_FORUM_INSTIT_TCHS;
-         Gbl.Forum.Level = 1;
 	 break;
       case ActSeeForCtrUsr:	case ActSeePstForCtrUsr:
       case ActRcvThrForCtrUsr:	case ActRcvRepForCtrUsr:
@@ -3670,7 +3673,6 @@ static void For_SetForumType (void)
       case ActDelPstForCtrUsr:
       case ActEnbPstForCtrUsr:	case ActDisPstForCtrUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_CENTRE_USRS;
-         Gbl.Forum.Level = 1;
          break;
       case ActSeeForCtrTch:	case ActSeePstForCtrTch:
       case ActRcvThrForCtrTch:	case ActRcvRepForCtrTch:
@@ -3679,7 +3681,6 @@ static void For_SetForumType (void)
       case ActDelPstForCtrTch:
       case ActEnbPstForCtrTch:	case ActDisPstForCtrTch:
 	 Gbl.Forum.ForumSelected.Type = For_FORUM_CENTRE_TCHS;
-         Gbl.Forum.Level = 1;
 	 break;
       case ActSeeForDegUsr:	case ActSeePstForDegUsr:
       case ActRcvThrForDegUsr:	case ActRcvRepForDegUsr:
@@ -3688,7 +3689,6 @@ static void For_SetForumType (void)
       case ActDelPstForDegUsr:
       case ActEnbPstForDegUsr:	case ActDisPstForDegUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_DEGREE_USRS;
-         Gbl.Forum.Level = 2;
          break;
       case ActSeeForDegTch:	case ActSeePstForDegTch:
       case ActRcvThrForDegTch:	case ActRcvRepForDegTch:
@@ -3697,7 +3697,6 @@ static void For_SetForumType (void)
       case ActDelPstForDegTch:
       case ActEnbPstForDegTch:	case ActDisPstForDegTch:
 	 Gbl.Forum.ForumSelected.Type = For_FORUM_DEGREE_TCHS;
-         Gbl.Forum.Level = 2;
 	 break;
       case ActSeeForCrsUsr:	case ActSeePstForCrsUsr:
       case ActRcvThrForCrsUsr:	case ActRcvRepForCrsUsr:
@@ -3706,7 +3705,6 @@ static void For_SetForumType (void)
       case ActDelPstForCrsUsr:
       case ActEnbPstForCrsUsr:	case ActDisPstForCrsUsr:
          Gbl.Forum.ForumSelected.Type = For_FORUM_COURSE_USRS;
-         Gbl.Forum.Level = 3;
          break;
       case ActSeeForCrsTch:	case ActSeePstForCrsTch:
       case ActRcvThrForCrsTch:	case ActRcvRepForCrsTch:
@@ -3715,7 +3713,6 @@ static void For_SetForumType (void)
       case ActDelPstForCrsTch:
       case ActEnbPstForCrsTch:	case ActDisPstForCrsTch:
          Gbl.Forum.ForumSelected.Type = For_FORUM_COURSE_TCHS;
-         Gbl.Forum.Level = 3;
          break;
      }
   }
@@ -3805,7 +3802,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
                            For_ID_FORUM_POSTS_SECTION);
       Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				   Gbl.Forum.SelectedOrder,
+				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
 				   -1L);
@@ -3815,7 +3812,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
       Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				   Gbl.Forum.SelectedOrder,
+				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   -1L,
 				   -1L);
@@ -3900,9 +3897,6 @@ void For_RecForumPst (void)
        Gbl.Action.Act == ActRcvRepForSWAUsr || Gbl.Action.Act == ActRcvRepForSWATch)
       PstIsAReply = true;
 
-   /***** Get page number *****/
-   Gbl.Forum.CurrentPagePsts = Pag_GetParamPagNum (Pag_POSTS_FORUM);
-
    /***** Get message subject *****/
    Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
 
@@ -3982,6 +3976,13 @@ void For_RecForumPst (void)
 	 break;
      }
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
+   /***** Show threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+                                              Lay_SUCCESS,NULL);
+
    /***** Show again the posts of this thread of the forum *****/
    For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_sent);
   }
@@ -4060,13 +4061,21 @@ void For_DelPst (void)
 	 break;
      }
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
    if (ThreadDeleted)
-      /* Show the remaining threads */
+      /***** Show the remaining threads *****/
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
                                                  Lay_SUCCESS,Txt_Post_and_thread_removed);
    else
-      /* Show the remaining posts */
+     {
+      /***** Show threads again *****/
+      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						 Lay_SUCCESS,NULL);
+      /***** Show the remaining posts *****/
       For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_removed);
+     }
   }
 
 /*****************************************************************************/
@@ -4083,25 +4092,37 @@ void For_ReqDelThr (void)
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
 
-   /***** Get subject of thread to delete *****/
+   /***** Get subject of the thread to delete *****/
    For_GetThrSubject (Gbl.Forum.ForumSelected.ThrCod,Subject);
 
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
    /***** Request confirmation to remove the thread *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_REMOVE_THREAD_SECTION);
    if (Subject[0])
+     {
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+     }
    else
-      sprintf (Gbl.Message,"%s",Txt_Do_you_really_want_to_remove_the_entire_thread);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-
-   Act_FormStart (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type]);
+      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_entire_thread);
+   Act_FormStartAnchor (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
+                        For_ID_FORUM_THREADS_SECTION);
+   Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
    For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				Gbl.Forum.SelectedOrder,
+				Gbl.Forum.ThreadsOrder,
 				Gbl.Forum.ForumSelected.Location,
 				Gbl.Forum.ForumSelected.ThrCod,
 				-1L);
    Lay_PutRemoveButton (Txt_Remove_thread);
    Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</section>");
+
+   /***** Show the threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+					      Lay_SUCCESS,NULL);
   }
 
 /*****************************************************************************/
@@ -4126,16 +4147,17 @@ void For_DelThr (void)
       /***** Remove the thread and all its posts *****/
       For_RemoveThreadAndItsPsts (Gbl.Forum.ForumSelected.ThrCod);
 
-      /***** Write message confirming the deletion *****/
+      /***** Show forum list again *****/
+      For_ShowForumList ();
+
+      /***** Show the threads again *****/
       if (Subject[0])
       	{
-	 /***** Show the threads again *****/
          sprintf (Gbl.Message,Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 	                                            Lay_SUCCESS,Gbl.Message);
       	}
       else
-	 /***** Show the threads again *****/
 	 For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 	                                            Lay_SUCCESS,Txt_Thread_removed);
      }
@@ -4162,16 +4184,17 @@ void For_CutThr (void)
    /***** Mark the thread as cut *****/
    For_InsertThrInClipboard (Gbl.Forum.ForumSelected.ThrCod);
 
-   /***** Write message confirming that thread has been marked to move it *****/
+   /***** Show forum list again *****/
+   For_ShowForumList ();
+
+   /***** Show the threads again *****/
    if (Subject[0])
      {
-      /***** Show the threads again *****/
       sprintf (Gbl.Message,Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Lay_SUCCESS,Gbl.Message);
      }
    else
-      /***** Show the threads again *****/
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Lay_SUCCESS,Txt_Thread_marked_to_be_moved);
 
@@ -4198,6 +4221,9 @@ void For_PasteThr (void)
    /***** Check if paste (move) the thread to current forum has sense *****/
    if (For_CheckIfThrBelongsToForum (Gbl.Forum.ForumSelected.ThrCod,&Gbl.Forum.ForumSelected))
      {
+      /***** Show forum list again *****/
+      For_ShowForumList ();
+
       /***** Show the threads again *****/
       if (Subject[0])
 	{
@@ -4215,6 +4241,9 @@ void For_PasteThr (void)
       /***** Paste (move) the thread to current forum *****/
       For_MoveThrToCurrentForum (Gbl.Forum.ForumSelected.ThrCod);
 
+      /***** Show forum list again *****/
+      For_ShowForumList ();
+
       /***** Show the threads again *****/
       if (Subject[0])
 	{
@@ -4230,7 +4259,16 @@ void For_PasteThr (void)
   }
 
 /*****************************************************************************/
-/**************** Get if there is a thread ready to be moved ****************/
+/*********************** Check if I can move threads *************************/
+/*****************************************************************************/
+
+static bool For_CheckIfICanMoveThreads (void)
+  {
+   return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
+  }
+
+/*****************************************************************************/
+/**************** Get if there is a thread ready to be moved *****************/
 /*****************************************************************************/
 
 static long For_GetThrInMyClipboard (void)

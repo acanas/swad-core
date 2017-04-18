@@ -164,7 +164,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -174,7 +174,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -264,7 +264,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -274,7 +274,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -347,7 +347,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -357,7 +357,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -437,7 +437,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
 		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					       Gbl.Forum.SelectedOrder,
+					       Gbl.Forum.ThreadsOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       -1L,
 					       -1L);
@@ -447,7 +447,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                        Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
 		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					       Gbl.Forum.SelectedOrder,
+					       Gbl.Forum.ThreadsOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       ThrCod,
 					       -1L);
@@ -523,7 +523,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -533,7 +533,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);
@@ -606,7 +606,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
 					    -1L);
@@ -616,7 +616,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                                     Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
 	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-					    Gbl.Forum.SelectedOrder,
+					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
 					    -1L);

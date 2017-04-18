@@ -582,13 +582,11 @@ struct Globals
    struct
      {
       For_ForumSet_t ForumSet;
-      struct Forum ForumSelected;	// Forum type, location, thread and post
-      int Level;
-      For_Order_t SelectedOrder;
-      char PathRelOld[PATH_MAX + 1];
-      long ThreadToMove;
+      For_Order_t ThreadsOrder;
       unsigned CurrentPageThrs;
       unsigned CurrentPagePsts;
+      struct Forum ForumSelected;	// Forum type, location, thread and post
+      long ThreadToMove;
      } Forum;
    struct
      {

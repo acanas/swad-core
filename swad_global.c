@@ -411,7 +411,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Forum.ForumSelected.Location = -1L;
    Gbl.Forum.ForumSelected.ThrCod = -1L;
    Gbl.Forum.ForumSelected.PstCod = -1L;
-   Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
+   Gbl.Forum.ThreadsOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
 
    /* User nickname */
