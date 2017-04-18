@@ -2666,10 +2666,11 @@ static void For_PutIconNewThread (void)
   {
    extern const char *Txt_New_thread;
 
-   fprintf (Gbl.F.Out,"<a href=\"#%s\" title=\"%s\">",
-            For_ID_NEW_THREAD_SECTION,Txt_New_thread);
-   Lay_PutIconWithText ("plus64x64.png",Txt_New_thread,NULL);
-   fprintf (Gbl.F.Out,"</a>");
+   Lay_PutContextualLink (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
+                          For_ID_NEW_THREAD_SECTION,For_PutAllHiddenParamsSelectedForum,
+                          "plus64x64.png",
+                          Txt_New_thread,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
