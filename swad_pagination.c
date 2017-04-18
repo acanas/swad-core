@@ -126,7 +126,7 @@ void Pag_WriteLinksToPagesCentered (Pag_WhatPaginate_t WhatPaginate,
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
    Pag_WriteLinksToPages (WhatPaginate,
                           ThrCod,
-                          Pagination,true,NULL,"TIT",false);
+                          Pagination,true,NULL,"PAG_TXT",false);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -140,14 +140,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                             bool FirstMsgEnabled,const char *Subject,const char *Font,
                             bool LinkToPagCurrent)
   {
-   extern const char *Txt_Page;
-   extern const char *Txt_See_page_X_of_Y;
+   extern const char *Txt_Page_X_of_Y;
    extern const char *Txt_Post_banned;
    unsigned NumPage;
+   char LinkStyle[64];
 
    /***** Link to page 1, including a text *****/
    if (Subject)
      {
+      fprintf (Gbl.F.Out,"<div>");
       if (LinkToPagCurrent)
         {
          switch (WhatPaginate)
@@ -217,7 +218,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_See_page_X_of_Y,
+         sprintf (Gbl.Title,Txt_Page_X_of_Y,
                   1,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
         }
@@ -226,8 +227,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
       if (FirstMsgEnabled)
          fprintf (Gbl.F.Out,"%s",Subject);
       else
-         fprintf (Gbl.F.Out,"[%s]",
-                  Txt_Post_banned);
+         fprintf (Gbl.F.Out,"[%s]",Txt_Post_banned);
       if (LinkToPagCurrent)
 	{
 	 fprintf (Gbl.F.Out,"</a>");
@@ -235,23 +235,17 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	}
       else
 	 fprintf (Gbl.F.Out,"</span>");
+      fprintf (Gbl.F.Out,"</div>");
      }
 
+   /***** Links to several pages start here *****/
    if (Pagination->MoreThanOnePage)
      {
-      /***** Links to several pages start here *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_5\">"
-                         "<tr>"
-                         "<td class=\"%s LEFT_MIDDLE\">"
-                         "%s"
-                         "</td>",
-               Font,Txt_Page);
+      sprintf (LinkStyle,"PAG %s",Font);
 
       /***** Possible link to page 1 *****/
       if (Pagination->StartPage > 1)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  Font);
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
@@ -319,25 +313,20 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_See_page_X_of_Y,
+         sprintf (Gbl.Title,Txt_Page_X_of_Y,
                   1,Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
-         fprintf (Gbl.F.Out,"1</a>");
+         Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
+         fprintf (Gbl.F.Out,"1"
+                            "</a>");
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage > 2)
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "&hellip;"
-        	               "</td>",
-        	     Font);
+            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
         }
 
       /***** Posible link to page left *****/
       if (Pagination->LeftPage > 1 &&
 	  Pagination->LeftPage < Pagination->StartPage)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  Font);
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
@@ -405,19 +394,15 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Usr_PutParamOtherUsrCodEncrypted ();
                break;
            }
-         sprintf (Gbl.Title,Txt_See_page_X_of_Y,
+         sprintf (Gbl.Title,Txt_Page_X_of_Y,
                   Pagination->LeftPage,
                   Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
+         Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",
                   Pagination->LeftPage);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
          if (Pagination->LeftPage < Pagination->StartPage - 1)
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "&hellip;"
-        	               "</td>",
-                     Font);
+            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
         }
 
       /***** Loop to put links to the pages around the current one *****/
@@ -425,10 +410,13 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	   NumPage <= Pagination->EndPage;
 	   NumPage++)
         {
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  Font);
+	 sprintf (Gbl.Title,Txt_Page_X_of_Y,
+		  NumPage,Pagination->NumPags);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
-            fprintf (Gbl.F.Out,"<u>%u</u>",NumPage);
+            fprintf (Gbl.F.Out,"<span title=\"%s\" class=\"PAG_CUR %s\">"
+                               "%u"
+                               "</span>",
+                     Gbl.Title,Font,NumPage);
          else
            {
             switch (WhatPaginate)
@@ -498,14 +486,11 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Usr_PutParamOtherUsrCodEncrypted ();
                   break;
               }
-            sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                     NumPage,Pagination->NumPags);
-            Act_LinkFormSubmit (Gbl.Title,Font,NULL);
+            Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
             fprintf (Gbl.F.Out,"%u</a>",
                      NumPage);
             Act_FormEnd ();
            }
-         fprintf (Gbl.F.Out,"</td>");
         }
 
       /***** Posible link to page right *****/
@@ -513,12 +498,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	  Pagination->RightPage < Pagination->NumPags)
         {
          if (Pagination->RightPage > Pagination->EndPage + 1)
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "&hellip;"
-        	               "</td>",
-                     Font);
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  Font);
+            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
@@ -586,24 +566,18 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         sprintf (Gbl.Title,Txt_See_page_X_of_Y,
+         sprintf (Gbl.Title,Txt_Page_X_of_Y,
                   Pagination->RightPage,Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
+         Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",Pagination->RightPage);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
         }
 
       /***** Possible link to last page *****/
       if (Pagination->EndPage < Pagination->NumPags)
         {
          if (Pagination->NumPags > Pagination->RightPage + 1)
-            fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
-        	               "&hellip;"
-        	               "</td>",
-                     Font);
-         fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
-                  Font);
+            fprintf (Gbl.F.Out,"<span class=\"%s\">&hellip;</span>",Font);
          switch (WhatPaginate)
            {
             case Pag_ASSIGNMENTS:
@@ -671,15 +645,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       Usr_PutParamOtherUsrCodEncrypted ();
 	       break;
            }
-         sprintf (Gbl.Title,Txt_See_page_X_of_Y,
+         sprintf (Gbl.Title,Txt_Page_X_of_Y,
                   Pagination->NumPags,Pagination->NumPags);
-         Act_LinkFormSubmit (Gbl.Title,Font,NULL);
+         Act_LinkFormSubmit (Gbl.Title,LinkStyle,NULL);
          fprintf (Gbl.F.Out,"%u</a>",Pagination->NumPags);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
         }
-      fprintf (Gbl.F.Out,"</tr>"
-	                 "</table>");
      }
   }
 

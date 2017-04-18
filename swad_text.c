@@ -28389,7 +28389,7 @@ const char *Txt_out_of_PART_OF_A_SCORE =	// Example: score is 2 out of 10
 #elif L==9
 	"out of";
 #endif
-
+/*	TODO: Remove if not used
 const char *Txt_Page =
 #if   L==1
 	"P&agrave;g.";
@@ -28410,7 +28410,7 @@ const char *Txt_Page =
 #elif L==9
 	"P&aacute;g.";
 #endif
-
+*/
 const char *Txt_page =
 #if   L==1
 	"p&agrave;g.";
@@ -28430,6 +28430,27 @@ const char *Txt_page =
 	"strona";
 #elif L==9
 	"p&aacute;g.";
+#endif
+
+const char *Txt_Page_X_of_Y =	// Warning: it is very important to include two %u in the following sentences
+#if   L==1
+	"P&agrave;gina %u de %u";
+#elif L==2
+	"Seite %u von %u";
+#elif L==3
+	"Page %u of %u";
+#elif L==4
+	"P&aacute;gina %u de %u";
+#elif L==5
+	"Page %u de %u";
+#elif L==6
+	"P&aacute;gina %u de %u";	// Okoteve traducción
+#elif L==7
+	"Pagina %u di %u";
+#elif L==8
+	"Strona %u z %u";
+#elif L==9
+	"P&aacute;gina %u de %u";
 #endif
 
 const char *Txt_PAGE1_Page_generated_in =
@@ -36163,27 +36184,6 @@ const char *Txt_See_notifications =
 	"See notifications";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"Veja notifica&ccedil;&otilde;es";
-#endif
-
-const char *Txt_See_page_X_of_Y =	// Warning: it is very important to include two %u in the following sentences
-#if   L==1
-	"Ver p&aacute;gina %u de %u";	// Necessita traduccio
-#elif L==2
-	"Siehe Seite %u von %u";
-#elif L==3
-	"See page %u of %u";
-#elif L==4
-	"Ver p&aacute;gina %u de %u";
-#elif L==5
-	"Voir page %u de %u";
-#elif L==6
-	"Ver p&aacute;gina %u de %u";	// Okoteve traducción
-#elif L==7
-	"Vedi pagina %u di %u";
-#elif L==8
-	"See page %u of %u";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"Veja p&aacute;gina %u de %u";
 #endif
 
 const char *Txt_Select_another_country =

@@ -2909,6 +2909,38 @@ a:hover img.CENTRE_PHOTO_SHOW
 .BM0		{width:20px; text-align:center; vertical-align:middle; background-color:#F4F2EA;}
 .BM1		{width:20px; text-align:center; vertical-align:middle; background-color:#FBFAF7;}
 
+/******************************** Pagination *********************************/
+.PAG
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	margin:4px 2px;
+	padding:2px 8px;
+	border-style:solid;
+	border-width:1px;
+	border-radius:4px;
+	border-color:#C0DAE4;
+	}
+a.PAG:hover, .PAG_CUR
+	{
+	display:inline-block;
+	box-sizing:border-box;
+	margin:4px 2px;
+	padding:2px 8px;
+	border-style:solid;
+	border-width:1px;
+	border-radius:4px;
+	border-color:#C0DAE4;
+	background-color:#DDECF1;
+	text-decoration:none;
+	}
+.PAG_TXT
+	{
+	font-size:13pt;
+	font-weight:bold;
+	color:#4D88A1;
+	}
+
 /***************************** Calls for exams *******************************/
 .CONV_TIT
 	{
