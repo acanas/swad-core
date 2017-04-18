@@ -72,7 +72,10 @@ static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
 
 void Pag_CalculatePagination (struct Pagination *Pagination)
   {
-   Pagination->StartPage = Pagination->LeftPage = Pagination->RightPage = Pagination->EndPage = 1;
+   Pagination->StartPage =
+   Pagination->LeftPage  =
+   Pagination->RightPage =
+   Pagination->EndPage   = 1;
    Pagination->MoreThanOnePage = false;
    if ((Pagination->NumPags = NumSubsetsOfNElements (Pagination->NumItems,Pag_ITEMS_PER_PAGE)) > 1)
      {
@@ -85,8 +88,10 @@ void Pag_CalculatePagination (struct Pagination *Pagination)
          Pagination->CurrentPage = Pagination->NumPags;
 
       /* Compute first page with link around the current */
-      if ((Pagination->StartPage = Pagination->CurrentPage - NUM_PAGES_BEFORE_CURRENT) < 1)
+      if (Pagination->CurrentPage <= NUM_PAGES_BEFORE_CURRENT)
          Pagination->StartPage = 1;
+      else
+         Pagination->StartPage = Pagination->CurrentPage - NUM_PAGES_BEFORE_CURRENT;
 
       /* Compute last page with link around the current */
       if ((Pagination->EndPage = Pagination->CurrentPage + NUM_PAGES_AFTER_CURRENT) > Pagination->NumPags)
@@ -138,7 +143,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
    extern const char *Txt_Page;
    extern const char *Txt_See_page_X_of_Y;
    extern const char *Txt_first_message_not_allowed;
-   int NumPage;
+   unsigned NumPage;
 
    /***** Link to page 1, including a text *****/
    if (Subject)
@@ -162,8 +167,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_THREADS_FORUM:
                Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                            1,	// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
@@ -172,8 +178,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                            1,				// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
@@ -211,7 +218,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                  1,(unsigned) Pagination->NumPags);
+                  1,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
         }
       else
@@ -262,8 +269,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_THREADS_FORUM:
                Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                            1,	// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
@@ -272,8 +280,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                            1,				// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
@@ -311,7 +320,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                  1,(unsigned) Pagination->NumPags);
+                  1,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"1</a>");
          Act_FormEnd ();
@@ -324,7 +333,8 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
         }
 
       /***** Posible link to page left *****/
-      if (Pagination->LeftPage > 1 && Pagination->LeftPage < Pagination->StartPage)
+      if (Pagination->LeftPage > 1 &&
+	  Pagination->LeftPage < Pagination->StartPage)
         {
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
@@ -345,8 +355,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_THREADS_FORUM:
                Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Pagination->LeftPage,	// Page of threads = left
+                                            1,				// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
@@ -355,8 +366,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                            Pagination->LeftPage,	// Page of posts   = left
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
@@ -394,13 +406,14 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                  (unsigned) Pagination->LeftPage,(unsigned) Pagination->NumPags);
+                  Pagination->LeftPage,
+                  Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
          fprintf (Gbl.F.Out,"%u</a>",
-                  (unsigned) Pagination->LeftPage);
+                  Pagination->LeftPage);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
-         if (Pagination->LeftPage < Pagination->StartPage-1)
+         if (Pagination->LeftPage < Pagination->StartPage - 1)
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">"
         	               "&hellip;"
         	               "</td>",
@@ -415,7 +428,7 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_MIDDLE\">",
                   Font);
          if (!LinkToPagCurrent && NumPage == Pagination->CurrentPage)
-            fprintf (Gbl.F.Out,"<u>%u</u>",(unsigned) NumPage);
+            fprintf (Gbl.F.Out,"<u>%u</u>",NumPage);
          else
            {
             switch (WhatPaginate)
@@ -435,8 +448,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_THREADS_FORUM:
                   Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                        Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+		  For_PutAllHiddenParamsForum (NumPage,	// Page of threads = number of page
+                                               1,	// Page of posts   = first
+                                               Gbl.Forum.ForumSet,
 					       Gbl.Forum.ThreadsOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       -1L,
@@ -445,8 +459,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                case Pag_POSTS_FORUM:
                   Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                        Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-		  For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+		  For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                               NumPage,				// Page of posts   = number of page
+                                               Gbl.Forum.ForumSet,
 					       Gbl.Forum.ThreadsOrder,
 					       Gbl.Forum.ForumSelected.Location,
 					       ThrCod,
@@ -484,10 +499,10 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   break;
               }
             sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                     (unsigned) NumPage,(unsigned) Pagination->NumPags);
+                     NumPage,Pagination->NumPags);
             Act_LinkFormSubmit (Gbl.Title,Font,NULL);
             fprintf (Gbl.F.Out,"%u</a>",
-                     (unsigned) NumPage);
+                     NumPage);
             Act_FormEnd ();
            }
          fprintf (Gbl.F.Out,"</td>");
@@ -521,8 +536,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_THREADS_FORUM:
                Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Pagination->RightPage,	// Page of threads = right
+                                            1,				// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
@@ -531,8 +547,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                            Pagination->RightPage,	// Page of posts   = right
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
@@ -570,9 +587,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                  (unsigned) Pagination->RightPage,(unsigned) Pagination->NumPags);
+                  Pagination->RightPage,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
-         fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->RightPage);
+         fprintf (Gbl.F.Out,"%u</a>",Pagination->RightPage);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
         }
@@ -604,8 +621,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_THREADS_FORUM:
                Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Pagination->NumPags,	// Page of threads = last
+                                            1,				// Page of posts   = first
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    -1L,
@@ -614,8 +632,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
             case Pag_POSTS_FORUM:
                Act_FormStartAnchor (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
                                     Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-	       For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                            Pagination->NumPags,	// Page of posts   = last
+                                            Gbl.Forum.ForumSet,
 					    Gbl.Forum.ThreadsOrder,
 					    Gbl.Forum.ForumSelected.Location,
 					    ThrCod,
@@ -653,9 +672,9 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
 	       break;
            }
          sprintf (Gbl.Title,Txt_See_page_X_of_Y,
-                  (unsigned) Pagination->NumPags,(unsigned) Pagination->NumPags);
+                  Pagination->NumPags,Pagination->NumPags);
          Act_LinkFormSubmit (Gbl.Title,Font,NULL);
-         fprintf (Gbl.F.Out,"%u</a>",(unsigned) Pagination->NumPags);
+         fprintf (Gbl.F.Out,"%u</a>",Pagination->NumPags);
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
         }

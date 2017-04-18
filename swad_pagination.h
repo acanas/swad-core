@@ -54,12 +54,12 @@ typedef enum
 struct Pagination	// Used for threads and messages pagination
   {
    unsigned NumItems;
-   int StartPage;
-   int LeftPage;
-   int CurrentPage;	// 1, 2, 3...
-   int RightPage;
-   int EndPage;
-   int NumPags;
+   unsigned StartPage;
+   unsigned LeftPage;
+   unsigned CurrentPage;	// 1, 2, 3...
+   unsigned RightPage;
+   unsigned EndPage;
+   unsigned NumPags;
    unsigned FirstItemVisible;	// 1, 2, 3...
    unsigned LastItemVisible;	// 1, 2, 3...
    bool MoreThanOnePage;

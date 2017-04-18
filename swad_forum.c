@@ -285,7 +285,7 @@ static unsigned For_GetNumPstsInThr (long ThrCod);
 static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_DeleteThrFromReadThrs (long ThrCod);
-static void For_ShowThreadPosts (Lay_AlertType_t AlertType,const char *Message);
+static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewPost (void);
 
 static void For_ShowAForumPost (struct Forum *ForumSelected,
@@ -368,7 +368,7 @@ static void For_RemoveThrCodFromThrClipboard (long ThrCod);
 /****************************** Enable a forum post **************************/
 /*****************************************************************************/
 
-void For_EnbPst (void)
+void For_EnablePost (void)
   {
    extern const char *Txt_Post_unbanned;
 
@@ -386,14 +386,14 @@ void For_EnbPst (void)
                                               Lay_SUCCESS,NULL);
 
    /***** Show the posts again *****/
-   For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_unbanned);
+   For_ShowPostsOfAThread (Lay_SUCCESS,Txt_Post_unbanned);
   }
 
 /*****************************************************************************/
 /***************************** Disable a forum post **************************/
 /*****************************************************************************/
 
-void For_DisPst (void)
+void For_DisablePost (void)
   {
    extern const char *Txt_Post_banned;
 
@@ -414,7 +414,7 @@ void For_DisPst (void)
 						 Lay_SUCCESS,NULL);
 
       /***** Show the posts again *****/
-      For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_banned);
+      For_ShowPostsOfAThread (Lay_SUCCESS,Txt_Post_banned);
      }
    else
       Lay_ShowErrorAndExit ("The post to be banned no longer exists.");
@@ -961,7 +961,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 /************************ Show posts in a thread *****************************/
 /*****************************************************************************/
 
-static void For_ShowThreadPosts (Lay_AlertType_t AlertType,const char *Message)
+static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Message)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Thread;
@@ -1226,27 +1226,66 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /***** Form to remove post *****/
+   /***** Form to ban/unban post *****/
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"CENTER_TOP\" style=\"width:22px;\">");
+   if (ICanModerateForum)
+     {
+      Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[ForumSelected->Type] :
+				     For_ActionsEnbPstFor[ForumSelected->Type],
+			   For_ID_FORUM_POSTS_SECTION);
+      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                   Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
+                                   Gbl.Forum.ForumSet,
+				   Gbl.Forum.ThreadsOrder,
+				   Gbl.Forum.ForumSelected.Location,
+				   Gbl.Forum.ForumSelected.ThrCod,
+				   PstCod);
+
+      sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
+				   Txt_Post_X_banned_Click_to_unban_it,
+	       PstNum);
+      fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICO20x20\" />",
+	       Gbl.Prefs.IconsURL,
+	       Enabled ? "eye" :
+			 "eye-slash",
+	       Gbl.Title,
+	       Gbl.Title);
+      Act_FormEnd ();
+     }
+   else
+     {
+      sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed :
+				   Txt_Post_X_banned,
+	       PstNum);
+      fprintf (Gbl.F.Out,"<span title=\"%s\">"
+			 "<img src=\"%s/%s-off64x64.png\""
+			 " alt=\"%s\" title=\"%s\""
+			 " class=\"ICO20x20\" />"
+			 "</span>",
+	       Gbl.Title,
+	       Gbl.Prefs.IconsURL,
+	       Enabled ? "eye" :
+			 "eye-slash",
+	       Gbl.Title,
+	       Gbl.Title);
+     }
+
+   /***** Form to remove post *****/
    if (LastPst && Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod)
       // Post can be removed if post is the last (without answers) and it's mine
      {
       if (PstNum == 1)	// First and unique post in thread
-	{
 	 Act_FormStartAnchor (For_ActionsDelPstFor[ForumSelected->Type],
 			      For_ID_FORUM_THREADS_SECTION);
-	 Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,
-	                           Gbl.Forum.CurrentPageThrs);
-	}
       else		// Last of several posts in thread
-	{
 	 Act_FormStartAnchor (For_ActionsDelPstFor[ForumSelected->Type],
 			      For_ID_FORUM_POSTS_SECTION);
-	 Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,
-	                           Gbl.Forum.CurrentPagePsts);
-	}
-      For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                   Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
+                                   Gbl.Forum.ForumSet,
 				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
@@ -1254,62 +1293,13 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
       Lay_PutIconRemove ();
       Act_FormEnd ();
      }
+   fprintf (Gbl.F.Out,"</td>");
 
-   /***** Form to ban/unban post *****/
-   else
-     {
-      if (ICanModerateForum)
-        {
-         Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[ForumSelected->Type] :
-                                        For_ActionsEnbPstFor[ForumSelected->Type],
-                              For_ID_FORUM_POSTS_SECTION);
-         Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
-				      Gbl.Forum.ThreadsOrder,
-				      Gbl.Forum.ForumSelected.Location,
-				      Gbl.Forum.ForumSelected.ThrCod,
-				      PstCod);
-
-         sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed_Click_to_ban_it :
-                                      Txt_Post_X_banned_Click_to_unban_it,
-                  PstNum);
-         fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/%s-on64x64.png\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
-                  Enabled ? "eye" :
-                	    "eye-slash",
-                  Gbl.Title,
-                  Gbl.Title);
-         Act_FormEnd ();
-        }
-      else
-        {
-         sprintf (Gbl.Title,Enabled ? Txt_Post_X_allowed :
-                                      Txt_Post_X_banned,
-                  PstNum);
-         fprintf (Gbl.F.Out,"<span title=\"%s\">"
-                            "<img src=\"%s/%s-off64x64.png\""
-                            " alt=\"%s\" title=\"%s\""
-                            " class=\"ICO20x20\" />"
-                            "</span>",
-                  Gbl.Title,
-                  Gbl.Prefs.IconsURL,
-                  Enabled ? "eye" :
-                	    "eye-slash",
-                  Gbl.Title,
-                  Gbl.Title);
-        }
-     }
-
-   /***** Write author or destinatary, and form to reply (in case of received post) *****/
-   fprintf (Gbl.F.Out,"</td>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP\""
+   /***** Write author *****/
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\""
 	              " style=\"width:150px;\">"
-                      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">");
-
-   /* Write author */
-   fprintf (Gbl.F.Out,"<tr>");
+                      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"
+                      "<tr>");
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
    Msg_WriteMsgAuthor (&UsrDat,"AUTHOR_TXT",Enabled,NULL);
    fprintf (Gbl.F.Out,"</tr>");
@@ -1320,11 +1310,11 @@ static void For_ShowAForumPost (struct Forum *ForumSelected,
       For_WriteNumberOfPosts (ForumSelected,UsrDat.UsrCod);
       fprintf (Gbl.F.Out,"</tr>");
      }
+   fprintf (Gbl.F.Out,"</table>"
+	              "</td>");
 
    /***** Write post content *****/
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
-	              "<td class=\"MSG_TXT LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<td class=\"MSG_TXT LEFT_TOP\">");
    if (Enabled)
      {
       Str_Copy (Content,OriginalContent,
@@ -1498,19 +1488,25 @@ static void For_WriteNumberOfPosts (struct Forum *ForumSelected,long UsrCod)
 
 static void For_PutAllHiddenParamsSelectedForum (void)
   {
-   For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
+                                Gbl.Forum.ForumSet,
                                 Gbl.Forum.ThreadsOrder,
                                 Gbl.Forum.ForumSelected.Location,
                                 Gbl.Forum.ForumSelected.ThrCod,
                                 -1L);
   }
 
-void For_PutAllHiddenParamsForum (For_ForumSet_t ForumSet,
+void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
+                                  unsigned NumPagePosts,
+                                  For_ForumSet_t ForumSet,
                                   For_Order_t Order,
                                   long Location,
                                   long ThrCod,
                                   long PstCod)
   {
+   Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,NumPageThreads);
+   Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,NumPagePosts);
    For_PutParamForumSet (ForumSet);
    For_PutParamForumOrder (Order);
    For_PutParamForumLocation (Location);
@@ -2236,8 +2232,9 @@ static void For_WriteLinkToForum (struct Forum *Forum,
       else
         {
          Act_FormStart (For_ActionsPasThrFor[Forum->Type]);
-         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                      1,	// Page of posts   = first
+                                      Gbl.Forum.ForumSet,
 				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Gbl.Forum.ThreadToMove,
@@ -2254,7 +2251,9 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 
    /***** Write link to forum *****/
    Act_FormStartAnchor (NextAct,For_ID_FORUM_THREADS_SECTION);
-   For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+   For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                1,	// Page of posts   = first
+                                Gbl.Forum.ForumSet,
                                 Gbl.Forum.ThreadsOrder,
                                 Forum->Location,
                                 -1L,
@@ -2466,7 +2465,7 @@ static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts
 /********************** Show available threads of a forum ********************/
 /*****************************************************************************/
 
-void For_ShowForumThrs (void)
+void For_ShowForumTheads (void)
   {
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -2601,8 +2600,9 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_ID_FORUM_THREADS_SECTION);
-         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,PaginationThrs.CurrentPage);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                      1,				// Page of posts   = first
+                                      Gbl.Forum.ForumSet,
 				      Order,
 				      Gbl.Forum.ForumSelected.Location,
 				      -1L,
@@ -3331,8 +3331,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
                               For_ID_REMOVE_THREAD_SECTION);
-         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                      1,				// Page of posts   = first
+                                      Gbl.Forum.ForumSet,
 				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
@@ -3347,8 +3348,9 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
                               For_ID_FORUM_THREADS_SECTION);
-         Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                      1,				// Page of posts   = first
+                                      Gbl.Forum.ForumSet,
 				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Thr.ThrCod,
@@ -3539,7 +3541,7 @@ static void For_GetThrData (struct ForumThread *Thr)
 /**************** Show posts of a thread in a discussion forum ***************/
 /*****************************************************************************/
 
-void For_ShowThrPsts (void)
+void For_ShowThreadPosts (void)
   {
    /***** Get parameters related to forum *****/
    For_GetParamsForum ();
@@ -3552,7 +3554,7 @@ void For_ShowThrPsts (void)
                                               Lay_SUCCESS,NULL);
 
    /***** Show the posts of that thread *****/
-   For_ShowThreadPosts (Lay_SUCCESS,NULL);
+   For_ShowPostsOfAThread (Lay_SUCCESS,NULL);
   }
 
 /*****************************************************************************/
@@ -3801,8 +3803,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      {
       Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
-      Pag_PutHiddenParamPagNum (Pag_POSTS_FORUM,Gbl.Forum.CurrentPagePsts);
-      For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                   UINT_MAX,			// Page of posts   = last
+                                   Gbl.Forum.ForumSet,
 				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   Gbl.Forum.ForumSelected.ThrCod,
@@ -3812,7 +3815,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      {
       Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
-      For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+      For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                   1,	// Page of posts   = first
+                                   Gbl.Forum.ForumSet,
 				   Gbl.Forum.ThreadsOrder,
 				   Gbl.Forum.ForumSelected.Location,
 				   -1L,
@@ -3825,20 +3830,20 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 
    /* Subject */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"RIGHT_MIDDLE\">"
-	              "<label for=\"Subject\" class=\"%s\">%s:</label>"
-	              "</td>"
-                      "<td class=\"LEFT_MIDDLE\">"
-                      "<input type=\"text\" id=\"Subject\" name=\"Subject\""
-                      " class=\"MSG_SUBJECT\""
-                      " maxlength=\"%u\" value=\"%s\""
-                      " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Subject,
-            Cns_MAX_CHARS_SUBJECT,
-            IsReply ? Subject :
-        	      "");
+		      "<td class=\"RIGHT_MIDDLE\">"
+		      "<label for=\"Subject\" class=\"%s\">%s:</label>"
+		      "</td>"
+		      "<td class=\"LEFT_MIDDLE\">"
+		      "<input type=\"text\" id=\"Subject\" name=\"Subject\""
+		      " class=\"MSG_SUBJECT\""
+		      " maxlength=\"%u\" value=\"%s\""
+		      " required=\"required\" />"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Subject,
+	    Cns_MAX_CHARS_SUBJECT,
+	    IsReply ? Subject :
+		      "");
 
    /* Content */
    fprintf (Gbl.F.Out,"<tr>"
@@ -3876,10 +3881,10 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 /************************** Receive message of a forum ***********************/
 /*****************************************************************************/
 
-void For_RecForumPst (void)
+void For_ReceiveForumPost (void)
   {
    extern const char *Txt_Post_sent;
-   bool PstIsAReply = false;
+   bool IsReply = false;
    long PstCod = 0;
    unsigned NumUsrsToBeNotifiedByEMail;
    struct SocialPublishing SocPub;
@@ -3896,7 +3901,7 @@ void For_RecForumPst (void)
        Gbl.Action.Act == ActRcvRepForInsUsr || Gbl.Action.Act == ActRcvRepForInsTch ||
        Gbl.Action.Act == ActRcvRepForGenUsr || Gbl.Action.Act == ActRcvRepForGenTch ||
        Gbl.Action.Act == ActRcvRepForSWAUsr || Gbl.Action.Act == ActRcvRepForSWATch)
-      PstIsAReply = true;
+      IsReply = true;
 
    /***** Get message subject *****/
    Par_GetParToHTML ("Subject",Gbl.Msg.Subject,Cns_MAX_BYTES_SUBJECT);
@@ -3915,7 +3920,7 @@ void For_RecForumPst (void)
    Img_GetImageFromForm (-1,&Image,NULL);
 
    /***** Create a new message *****/
-   if (PstIsAReply)	// This post is a reply to another posts in the thread
+   if (IsReply)	// This post is a reply to another posts in the thread
      {
       // Gbl.Forum.ForumSelected.ThrCod has been received from form
 
@@ -3952,19 +3957,15 @@ void For_RecForumPst (void)
       case For_FORUM_COURSE_TCHS:
 	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_POST_COURSE,PstCod)))
 	    For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
-	 // Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 	 break;
       default:
 	 break;
      }
 
    /***** Notify the new post to previous writers in this thread *****/
-   if (PstIsAReply)
-     {
+   if (IsReply)
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
          For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
-      // Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
-     }
 
    /***** Insert forum post into public social activity *****/
    switch (Gbl.Forum.ForumSelected.Type)	// Only if forum is public for any logged user
@@ -3985,7 +3986,7 @@ void For_RecForumPst (void)
                                               Lay_SUCCESS,NULL);
 
    /***** Show again the posts of this thread of the forum *****/
-   For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_sent);
+   For_ShowPostsOfAThread (Lay_SUCCESS,Txt_Post_sent);
   }
 
 /*****************************************************************************/
@@ -4007,7 +4008,7 @@ static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumU
 /***************************** Delete a forum post ***************************/
 /*****************************************************************************/
 
-void For_DelPst (void)
+void For_RemovePost (void)
   {
    extern const char *Txt_Post_and_thread_removed;
    extern const char *Txt_Post_removed;
@@ -4075,7 +4076,7 @@ void For_DelPst (void)
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
 						 Lay_SUCCESS,NULL);
       /***** Show the remaining posts *****/
-      For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_removed);
+      For_ShowPostsOfAThread (Lay_SUCCESS,Txt_Post_removed);
      }
   }
 
@@ -4083,7 +4084,7 @@ void For_DelPst (void)
 /***************** Request the removing of an existing thread ****************/
 /*****************************************************************************/
 
-void For_ReqDelThr (void)
+void For_RequestRemoveThread (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread_X;
    extern const char *Txt_Do_you_really_want_to_remove_the_entire_thread;
@@ -4111,8 +4112,9 @@ void For_ReqDelThr (void)
       Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_entire_thread);
    Act_FormStartAnchor (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
                         For_ID_FORUM_THREADS_SECTION);
-   Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
-   For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                1,				// Page of posts   = first
+                                Gbl.Forum.ForumSet,
 				Gbl.Forum.ThreadsOrder,
 				Gbl.Forum.ForumSelected.Location,
 				Gbl.Forum.ForumSelected.ThrCod,
@@ -4130,7 +4132,7 @@ void For_ReqDelThr (void)
 /*************************** Remove an existing thread ***********************/
 /*****************************************************************************/
 
-void For_DelThr (void)
+void For_RemoveThread (void)
   {
    extern const char *Txt_Thread_X_removed;
    extern const char *Txt_Thread_removed;
@@ -4170,7 +4172,7 @@ void For_DelThr (void)
 /*************** Cut a thread to move it to another forum ********************/
 /*****************************************************************************/
 
-void For_CutThr (void)
+void For_CutThread (void)
   {
    extern const char *Txt_Thread_X_marked_to_be_moved;
    extern const char *Txt_Thread_marked_to_be_moved;
@@ -4205,7 +4207,7 @@ void For_CutThr (void)
 /************* Paste the thread in clipboard into current forum **************/
 /*****************************************************************************/
 
-void For_PasteThr (void)
+void For_PasteThread (void)
   {
    extern const char *Txt_The_thread_X_is_already_in_this_forum;
    extern const char *Txt_The_thread_is_already_in_this_forum;

@@ -101,8 +101,8 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void For_EnbPst (void);
-void For_DisPst (void);
+void For_EnablePost (void);
+void For_DisablePost (void);
 
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *ForumSelected);
 
@@ -113,7 +113,9 @@ void For_GetSummaryAndContentForumPst (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1
                                        char **ContentStr,
                                        long PstCod,bool GetContent);
 
-void For_PutAllHiddenParamsForum (For_ForumSet_t ForumSet,
+void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
+                                  unsigned NumPagePosts,
+                                  For_ForumSet_t ForumSet,
                                   For_Order_t Order,
                                   long Location,
                                   long ThrCod,
@@ -123,7 +125,7 @@ void For_SetForumName (struct Forum *ForumSelected,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Txt_Language_t Language,bool UseHTMLEntities);
 
-void For_ShowForumThrs (void);
+void For_ShowForumTheads (void);
 unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
                                       long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod);
 unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
@@ -132,13 +134,13 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                                             long CtyCod,long InsCod,long CtrCod,long DegCod,long CrsCod,
                                             unsigned *NumUsrsToBeNotifiedByEMail);
 
-void For_ShowThrPsts (void);
-void For_RecForumPst (void);
-void For_DelPst (void);
-void For_ReqDelThr (void);
-void For_DelThr (void);
-void For_CutThr (void);
-void For_PasteThr (void);
+void For_ShowThreadPosts (void);
+void For_ReceiveForumPost (void);
+void For_RemovePost (void);
+void For_RequestRemoveThread (void);
+void For_RemoveThread (void);
+void For_CutThread (void);
+void For_PasteThread (void);
 void For_RemoveUsrFromThrClipboard (long UsrCod);
 
 void For_RemoveForums (Sco_Scope_t Scope,long ForumLocation);

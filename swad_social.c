@@ -1826,7 +1826,9 @@ static void Soc_PutFormGoToAction (const struct SocialNote *SocNot)
 	    return;
 	 case Soc_NOTE_FORUM_POST:
 	    Act_FormStartUnique (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
-	    For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	    For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                         1,	// Page of posts   = first
+                                         Gbl.Forum.ForumSet,
 					 Gbl.Forum.ThreadsOrder,
 					 Gbl.Forum.ForumSelected.Location,
 					 Gbl.Forum.ForumSelected.ThrCod,

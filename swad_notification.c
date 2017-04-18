@@ -764,7 +764,9 @@ static bool Ntf_StartFormGoToAction (Ntf_NotifyEvent_t NotifyEvent,
       case Ntf_EVENT_FORUM_POST_COURSE:
       case Ntf_EVENT_FORUM_REPLY:
 	 Act_FormStart (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type]);
-	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
+	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                      1,	// Page of posts   = first
+                                      Gbl.Forum.ForumSet,
 				      Gbl.Forum.ThreadsOrder,
 				      Gbl.Forum.ForumSelected.Location,
 				      Gbl.Forum.ForumSelected.ThrCod,
