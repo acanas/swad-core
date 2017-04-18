@@ -410,10 +410,9 @@ void Gbl_InitializeGlobals (void)
    Gbl.Forum.ForumSelected.Type = (For_ForumType_t) 0;
    Gbl.Forum.ForumSelected.Location = -1L;
    Gbl.Forum.ForumSelected.ThrCod = -1L;
+   Gbl.Forum.ForumSelected.PstCod = -1L;
    Gbl.Forum.SelectedOrder = For_DEFAULT_ORDER;
    Gbl.Forum.ThreadToMove = -1L;
-   // Gbl.Forum.CurrentPageThrs = 1;	// TODO: Remove this line
-   // Gbl.Forum.CurrentPagePsts = 1;	// TODO: Remove this line
 
    /* User nickname */
    Gbl.Usrs.Me.UsrDat.Nickname[0] = '\0';

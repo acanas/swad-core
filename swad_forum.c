@@ -284,7 +284,7 @@ static unsigned For_GetNumPstsInThr (long ThrCod);
 static unsigned For_GetNumMyPstInThr (long ThrCod);
 static time_t For_GetThrReadTime (long ThrCod);
 static void For_DeleteThrFromReadThrs (long ThrCod);
-static void For_ShowThreadPosts (void);
+static void For_ShowThreadPosts (Lay_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewPost (void);
 
 static void For_ShowAForumPost (struct Forum *ForumSelected,
@@ -337,7 +337,8 @@ static unsigned For_GetNumOfPostsInThrNewerThan (long ThrCod,const char *Time);
 
 static void For_WriteNumThrsAndPsts (unsigned NumThrs,unsigned NumThrsWithNewPosts,unsigned NumPosts);
 static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts);
-static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted);
+static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
+                                                       Lay_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewThread (void);
 static unsigned For_GetNumThrsInForum (struct Forum *ForumSelected);
 static unsigned For_GetNumPstsInForum (struct Forum *ForumSelected);
@@ -374,10 +375,9 @@ void For_EnbPst (void)
 
    /***** Delete post from table of disabled posts *****/
    For_DeletePstFromDisabledPstTable (Gbl.Forum.ForumSelected.PstCod);
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Post_unbanned);
 
    /***** Show the posts again *****/
-   For_ShowThreadPosts ();
+   For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_unbanned);
   }
 
 /*****************************************************************************/
@@ -396,13 +396,12 @@ void For_DisPst (void)
      {
       /***** Insert post into table of banned posts *****/
       For_InsertPstIntoBannedPstTable (Gbl.Forum.ForumSelected.PstCod);
-      Lay_ShowAlert (Lay_SUCCESS,Txt_Post_banned);
+
+      /***** Show the posts again *****/
+      For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_banned);
      }
    else
       Lay_ShowErrorAndExit ("The post to be banned no longer exists.");
-
-   /***** Show the posts again *****/
-   For_ShowThreadPosts ();
   }
 
 /*****************************************************************************/
@@ -946,7 +945,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 /************************ Show posts in a thread *****************************/
 /*****************************************************************************/
 
-static void For_ShowThreadPosts (void)
+static void For_ShowThreadPosts (Lay_AlertType_t AlertType,const char *Message)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Thread;
@@ -969,7 +968,8 @@ static void For_ShowThreadPosts (void)
    bool ICanMoveThreads = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// If I have permission to move threads...
 
    /***** Show threads *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod);
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+                                              Lay_SUCCESS,NULL);
 
    /***** Get data of the thread *****/
    Thr.ThrCod = Gbl.Forum.ForumSelected.ThrCod;
@@ -986,8 +986,13 @@ static void For_ShowThreadPosts (void)
    /* Get thread read time for the current user */
    ReadTimeUTC = For_GetThrReadTime (Gbl.Forum.ForumSelected.ThrCod);
 
-   /***** Start frame *****/
+   /***** Show alert after action *****/
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_POSTS_SECTION);
+   if (Message)
+      if (Message[0])
+         Lay_ShowAlert (AlertType,Message);
+
+   /***** Start frame *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewPost,
                         Hlp_SOCIAL_Forums);
@@ -2461,14 +2466,15 @@ void For_ShowForumThrs (void)
    For_GetParamsForum ();
 
    /***** Show forum threads with no one highlighted *****/
-   For_ShowForumThreadsHighlightingOneThread (-1L);
+   For_ShowForumThreadsHighlightingOneThread (-1L,Lay_SUCCESS,NULL);
   }
 
 /*****************************************************************************/
 /********** Show available threads of a forum highlighting a thread **********/
 /*****************************************************************************/
 
-static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
+static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
+                                                       Lay_AlertType_t AlertType,const char *Message)
   {
    extern const char *Hlp_SOCIAL_Forums;
    extern const char *Txt_Forum;
@@ -2557,8 +2563,13 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted)
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Start frame for threads of this forum *****/
+   /***** Show alert after action *****/
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_THREADS_SECTION);
+   if (Message)
+      if (Message[0])
+         Lay_ShowAlert (AlertType,Message);
+
+   /***** Start frame for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewThread,
 			Hlp_SOCIAL_Forums);
@@ -3313,12 +3324,14 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
                                     Txt_No_new_posts,
                Thr.NumUnreadPosts ? Txt_There_are_new_posts :
                                     Txt_No_new_posts);
+
+      /***** Put button to remove the thread *****/
       if (PermissionThreadDeletion[Gbl.Forum.ForumSelected.Type] &
 	  (1 << Gbl.Usrs.Me.LoggedRole)) // If I have permission to remove thread in this forum...
         {
-         /* Put button to remove the thread */
          fprintf (Gbl.F.Out,"<br />");
-         Act_FormStart (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type]);
+         Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
+                              For_ID_FORUM_THREADS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
 				      Gbl.Forum.SelectedOrder,
@@ -3329,11 +3342,12 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
          Act_FormEnd ();
         }
 
+      /***** Put button to cut the thread for moving it to another forum *****/
       if (ICanMoveThreads)
         {
-         /* Put button to cut the thread for moving it to another forum */
          fprintf (Gbl.F.Out,"<br />");
-         Act_FormStart (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type]);
+         Act_FormStartAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
+                              For_ID_FORUM_THREADS_SECTION);
          Pag_PutHiddenParamPagNum (Pag_THREADS_FORUM,Gbl.Forum.CurrentPageThrs);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.ForumSet,
 				      Gbl.Forum.SelectedOrder,
@@ -3532,7 +3546,7 @@ void For_ShowThrPsts (void)
    For_GetParamsForum ();
 
    /***** Show the posts of that thread *****/
-   For_ShowThreadPosts ();
+   For_ShowThreadPosts (Lay_SUCCESS,NULL);
   }
 
 /*****************************************************************************/
@@ -3936,9 +3950,6 @@ void For_RecForumPst (void)
    /***** Increment number of forum posts in my user's figures *****/
    Prf_IncrementNumForPstUsr (Gbl.Usrs.Me.UsrDat.UsrCod);
 
-   /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Post_sent);
-
    /***** Notify the new post to users in course *****/
    switch (Gbl.Forum.ForumSelected.Type)
      {
@@ -3946,7 +3957,7 @@ void For_RecForumPst (void)
       case For_FORUM_COURSE_TCHS:
 	 if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_POST_COURSE,PstCod)))
 	    For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
-	 Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+	 // Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 	 break;
       default:
 	 break;
@@ -3957,7 +3968,7 @@ void For_RecForumPst (void)
      {
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_FORUM_REPLY,PstCod)))
          For_UpdateNumUsrsNotifiedByEMailAboutPost (PstCod,NumUsrsToBeNotifiedByEMail);
-      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+      // Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
      }
 
    /***** Insert forum post into public social activity *****/
@@ -3972,7 +3983,7 @@ void For_RecForumPst (void)
      }
 
    /***** Show again the posts of this thread of the forum *****/
-   For_ShowThreadPosts ();
+   For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_sent);
   }
 
 /*****************************************************************************/
@@ -4050,19 +4061,12 @@ void For_DelPst (void)
      }
 
    if (ThreadDeleted)
-     {
-      Lay_ShowAlert (Lay_SUCCESS,Txt_Post_and_thread_removed);
-
       /* Show the remaining threads */
-      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod);
-     }
+      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+                                                 Lay_SUCCESS,Txt_Post_and_thread_removed);
    else
-     {
-      Lay_ShowAlert (Lay_SUCCESS,Txt_Post_removed);
-
       /* Show the remaining posts */
-      For_ShowThreadPosts ();
-     }
+      For_ShowThreadPosts (Lay_SUCCESS,Txt_Post_removed);
   }
 
 /*****************************************************************************/
@@ -4125,18 +4129,18 @@ void For_DelThr (void)
       /***** Write message confirming the deletion *****/
       if (Subject[0])
       	{
-         sprintf (Gbl.Message,Txt_Thread_X_removed,
-                  Subject);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-        }
+	 /***** Show the threads again *****/
+         sprintf (Gbl.Message,Txt_Thread_X_removed,Subject);
+         For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+	                                            Lay_SUCCESS,Gbl.Message);
+      	}
       else
-         Lay_ShowAlert (Lay_SUCCESS,Txt_Thread_removed);
+	 /***** Show the threads again *****/
+	 For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+	                                            Lay_SUCCESS,Txt_Thread_removed);
      }
    else
       Lay_ShowErrorAndExit ("You can not remove threads in this forum.");
-
-   /***** Show the threads again *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod);
   }
 
 /*****************************************************************************/
@@ -4160,14 +4164,17 @@ void For_CutThr (void)
 
    /***** Write message confirming that thread has been marked to move it *****/
    if (Subject[0])
-      sprintf (Gbl.Message,Txt_Thread_X_marked_to_be_moved,
-               Subject);
+     {
+      /***** Show the threads again *****/
+      sprintf (Gbl.Message,Txt_Thread_X_marked_to_be_moved,Subject);
+      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						 Lay_SUCCESS,Gbl.Message);
+     }
    else
-      sprintf (Gbl.Message,"%s",Txt_Thread_marked_to_be_moved);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      /***** Show the threads again *****/
+      For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						 Lay_SUCCESS,Txt_Thread_marked_to_be_moved);
 
-   /***** Show the threads again *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod);
   }
 
 /*****************************************************************************/
@@ -4188,29 +4195,38 @@ void For_PasteThr (void)
    /***** Get subject of thread to paste *****/
    For_GetThrSubject (Gbl.Forum.ForumSelected.ThrCod,Subject);
 
-   /***** Paste (move) the thread to current forum *****/
+   /***** Check if paste (move) the thread to current forum has sense *****/
    if (For_CheckIfThrBelongsToForum (Gbl.Forum.ForumSelected.ThrCod,&Gbl.Forum.ForumSelected))
      {
+      /***** Show the threads again *****/
       if (Subject[0])
+	{
          sprintf (Gbl.Message,Txt_The_thread_X_is_already_in_this_forum,
                   Subject);
+         For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						    Lay_WARNING,Gbl.Message);
+        }
       else
-         sprintf (Gbl.Message,"%s",Txt_The_thread_is_already_in_this_forum);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						    Lay_WARNING,Txt_The_thread_is_already_in_this_forum);
      }
    else
      {
+      /***** Paste (move) the thread to current forum *****/
       For_MoveThrToCurrentForum (Gbl.Forum.ForumSelected.ThrCod);
+
+      /***** Show the threads again *****/
       if (Subject[0])
+	{
          sprintf (Gbl.Message,Txt_Thread_X_moved_to_this_forum,
                   Subject);
+         For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						    Lay_SUCCESS,Gbl.Message);
+	}
       else
-         sprintf (Gbl.Message,"%s",Txt_Thread_moved_to_this_forum);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+						    Lay_SUCCESS,Txt_Thread_moved_to_this_forum);
      }
-
-   /***** Show the threads again *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod);
   }
 
 /*****************************************************************************/
