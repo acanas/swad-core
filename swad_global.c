@@ -407,7 +407,7 @@ void Gbl_InitializeGlobals (void)
 
    /* Forums */
    Gbl.Forum.ForumSet = For_DEFAULT_FORUM_SET;
-   Gbl.Forum.ForumSelected.Type = (For_ForumType_t) 0;
+   Gbl.Forum.ForumSelected.Type = For_FORUM_UNKNOWN;
    Gbl.Forum.ForumSelected.Location = -1L;
    Gbl.Forum.ForumSelected.ThrCod = -1L;
    Gbl.Forum.ForumSelected.PstCod = -1L;

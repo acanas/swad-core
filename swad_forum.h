@@ -47,21 +47,22 @@ typedef enum
   } For_ForumSet_t;	// Which set of forums I want to see: all my forums or only the forums of current institution/degree/course.
 #define For_DEFAULT_FORUM_SET For_ONLY_CURRENT_FORUMS
 
-#define For_NUM_TYPES_FORUM 12
+#define For_NUM_TYPES_FORUM 13
 typedef enum
   {
-   For_FORUM_COURSE_USRS	=  0,
-   For_FORUM_COURSE_TCHS	=  1,
-   For_FORUM_DEGREE_USRS	=  2,
-   For_FORUM_DEGREE_TCHS	=  3,
-   For_FORUM_CENTRE_USRS	=  4,
-   For_FORUM_CENTRE_TCHS	=  5,
-   For_FORUM_INSTIT_USRS	=  6,
-   For_FORUM_INSTIT_TCHS	=  7,
-   For_FORUM_GLOBAL_USRS	=  8,
-   For_FORUM_GLOBAL_TCHS	=  9,
-   For_FORUM_SWAD_USRS		= 10,
-   For_FORUM_SWAD_TCHS		= 11,
+   For_FORUM_COURSE_USRS	=  0,	// TODO: Change to 11 (also in database)
+   For_FORUM_COURSE_TCHS	=  1,	// TODO: Change to 12 (also in database)
+   For_FORUM_DEGREE_USRS	=  2,	// TODO: Change to  9 (also in database)
+   For_FORUM_DEGREE_TCHS	=  3,	// TODO: Change to 10 (also in database)
+   For_FORUM_CENTRE_USRS	=  4,	// TODO: Change to  7 (also in database)
+   For_FORUM_CENTRE_TCHS	=  5,	// TODO: Change to  8 (also in database)
+   For_FORUM_INSTIT_USRS	=  6,	// TODO: Change to  5 (also in database)
+   For_FORUM_INSTIT_TCHS	=  7,	// TODO: Change to  6 (also in database)
+   For_FORUM_GLOBAL_USRS	=  8,	// TODO: Change to  1 (also in database)
+   For_FORUM_GLOBAL_TCHS	=  9,	// TODO: Change to  2 (also in database)
+   For_FORUM__SWAD__USRS	= 10,	// TODO: Change to  3 (also in database)
+   For_FORUM__SWAD__TCHS	= 11,	// TODO: Change to  4 (also in database)
+   For_FORUM_UNKNOWN		= 12,	// TODO: Change to  0 (also in database)
   } For_ForumType_t;	// Don't change numbers (used in database)
 
 struct Forum

@@ -68,8 +68,9 @@ const unsigned PermissionThreadDeletion[For_NUM_TYPES_FORUM] =
    0x180,	// For_FORUM_INSTIT_TCHS
    0x100,	// For_FORUM_GLOBAL_USRS
    0x100,	// For_FORUM_GLOBAL_TCHS
-   0x100,	// For_FORUM_SWAD_USRS
-   0x100,	// For_FORUM_SWAD_TCHS
+   0x100,	// For_FORUM__SWAD__USRS
+   0x100,	// For_FORUM__SWAD__TCHS
+   0x000,	// For_FORUM_UNKNOWN
   };
 
 const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
@@ -86,6 +87,7 @@ const Act_Action_t For_ActionsSeeFor[For_NUM_TYPES_FORUM] =
    ActSeeForGenTch,
    ActSeeForSWAUsr,
    ActSeeForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
   {
@@ -101,6 +103,7 @@ const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM] =
    ActSeePstForGenTch,
    ActSeePstForSWAUsr,
    ActSeePstForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
   {
@@ -116,6 +119,7 @@ const Act_Action_t For_ActionsRecThrFor[For_NUM_TYPES_FORUM] =
    ActRcvThrForGenTch,
    ActRcvThrForSWAUsr,
    ActRcvThrForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
   {
@@ -131,6 +135,7 @@ const Act_Action_t For_ActionsRecRepFor[For_NUM_TYPES_FORUM] =
    ActRcvRepForGenTch,
    ActRcvRepForSWAUsr,
    ActRcvRepForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
   {
@@ -146,6 +151,7 @@ const Act_Action_t For_ActionsReqDelThr[For_NUM_TYPES_FORUM] =
    ActReqDelThrGenTch,
    ActReqDelThrSWAUsr,
    ActReqDelThrSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
   {
@@ -161,6 +167,7 @@ const Act_Action_t For_ActionsDelThrFor[For_NUM_TYPES_FORUM] =
    ActDelThrForGenTch,
    ActDelThrForSWAUsr,
    ActDelThrForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
   {
@@ -176,6 +183,7 @@ const Act_Action_t For_ActionsCutThrFor[For_NUM_TYPES_FORUM] =
    ActCutThrForGenTch,
    ActCutThrForSWAUsr,
    ActCutThrForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
   {
@@ -191,6 +199,7 @@ const Act_Action_t For_ActionsPasThrFor[For_NUM_TYPES_FORUM] =
    ActPasThrForGenTch,
    ActPasThrForSWAUsr,
    ActPasThrForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
   {
@@ -206,6 +215,7 @@ const Act_Action_t For_ActionsDelPstFor[For_NUM_TYPES_FORUM] =
    ActDelPstForGenTch,
    ActDelPstForSWAUsr,
    ActDelPstForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
   {
@@ -221,6 +231,7 @@ const Act_Action_t For_ActionsEnbPstFor[For_NUM_TYPES_FORUM] =
    ActEnbPstForGenTch,
    ActEnbPstForSWAUsr,
    ActEnbPstForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
   {
@@ -236,6 +247,7 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
    ActDisPstForGenTch,
    ActDisPstForSWAUsr,
    ActDisPstForSWATch,
+   ActSeeFor,		// For_FORUM_UNKNOWN
   };
 
 // Links to go to <section>
@@ -273,7 +285,7 @@ static long For_InsertForumThread (struct Forum *WichForum,long FirstPstCod);
 static void For_RemoveThreadOnly (long ThrCod);
 static void For_RemoveThreadAndItsPsts (long ThrCod);
 static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 1]);
-static void For_GetForumTypeAndLocationFromQuery (const char *Query,struct Forum *ForumSelected);
+
 static void For_UpdateThrFirstAndLastPst (long ThrCod,long FirstPstCod,long LastPstCod);
 static void For_UpdateThrLastPst (long ThrCod,long LastPstCod);
 static long For_GetLastPstCod (long ThrCod);
@@ -693,6 +705,14 @@ static void For_GetThrSubject (long ThrCod,char Subject[Cns_MAX_BYTES_SUBJECT + 
 void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *ForumSelected)
   {
    char Query[512];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned UnsignedNum;
+   long LongNum;
+
+   /***** Set default forum type and location *****/
+   ForumSelected->Type = For_FORUM_UNKNOWN;
+   ForumSelected->Location = -1L;
 
    /***** Get forum type of a forum from database *****/
    sprintf (Query,"SELECT forum_thread.ForumType,forum_thread.Location"
@@ -700,18 +720,6 @@ void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *ForumSelected
                   " WHERE forum_post.PstCod=%ld"
                   " AND forum_post.ThrCod=forum_thread.ThrCod",
             PstCod);
-   For_GetForumTypeAndLocationFromQuery (Query,ForumSelected);
-  }
-
-/*****************************************************************************/
-/*********** Get the forum type and location of a thread or post *************/
-/*****************************************************************************/
-
-static void For_GetForumTypeAndLocationFromQuery (const char *Query,struct Forum *ForumSelected)
-  {
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    /***** Check if there is a row with forum type *****/
    if (DB_QuerySELECT (Query,&mysql_res,"can not get forum type and location"))
@@ -719,18 +727,14 @@ static void For_GetForumTypeAndLocationFromQuery (const char *Query,struct Forum
       row = mysql_fetch_row (mysql_res);
 
       /* Get forum type (row[0]) */
-      if (sscanf (row[0],"%u",&UnsignedNum) != 1)
-         Lay_ShowErrorAndExit ("Wrong forum type.");
-      if (UnsignedNum >= For_NUM_TYPES_FORUM)
-         Lay_ShowErrorAndExit ("Wrong forum type.");
-      ForumSelected->Type = (For_ForumType_t) UnsignedNum;
+      if (sscanf (row[0],"%u",&UnsignedNum) == 1)
+	 if (UnsignedNum < For_NUM_TYPES_FORUM)
+	    ForumSelected->Type = (For_ForumType_t) UnsignedNum;
 
       /* Get forum location (row[1]) */
-      if (sscanf (row[1],"%ld",&(ForumSelected->Location)) != 1)
-         Lay_ShowErrorAndExit ("Wrong forum location.");
+      if (sscanf (row[1],"%ld",&LongNum) == 1)
+         ForumSelected->Location = LongNum;
      }
-   else
-      Lay_ShowErrorAndExit ("Wrong forum.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1017,28 +1021,30 @@ static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Messag
       /***** Check if I can moderate posts in forum *****/
       switch (Gbl.Forum.ForumSelected.Type)
         {
-         case For_FORUM_SWAD_USRS:
-         case For_FORUM_SWAD_TCHS:
          case For_FORUM_GLOBAL_USRS:
          case For_FORUM_GLOBAL_TCHS:
-         case For_FORUM_CENTRE_USRS:
-         case For_FORUM_CENTRE_TCHS:
-            ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+         case For_FORUM__SWAD__USRS:
+         case For_FORUM__SWAD__TCHS:
+            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
             break;
          case For_FORUM_INSTIT_USRS:
          case For_FORUM_INSTIT_TCHS:
-            ICanModerateForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
+            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM);
+            break;
+         case For_FORUM_CENTRE_USRS:
+         case For_FORUM_CENTRE_TCHS:
+            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM);
             break;
          case For_FORUM_DEGREE_USRS:
          case For_FORUM_DEGREE_TCHS:
          case For_FORUM_COURSE_TCHS:
-            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM);
             break;
          case For_FORUM_COURSE_USRS:
-            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
-                                 Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM ||
-                                 Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+            ICanModerateForum = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+            break;
+         default:
+            ICanModerateForum = false;
             break;
         }
 
@@ -1852,18 +1858,18 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
 	                  Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
 
    /***** Link to forum of users about the platform *****/
-   ForumSelected.Type = For_FORUM_SWAD_USRS;
+   ForumSelected.Type = For_FORUM__SWAD__USRS;
    ForumSelected.Location = -1L;
-   Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_SWAD_USRS);
+   Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM__SWAD__USRS);
    IsLastItemInLevel[1] = (IsLastForum && !ICanSeeTeacherForum);
    For_WriteLinkToAForum (&ForumSelected,Highlight,false,0,IsLastItemInLevel);
 
    /***** Link to forum of teachers about the platform *****/
    if (ICanSeeTeacherForum)
      {
-      ForumSelected.Type = For_FORUM_SWAD_TCHS;
+      ForumSelected.Type = For_FORUM__SWAD__TCHS;
       ForumSelected.Location = -1L;
-      Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM_SWAD_TCHS);
+      Highlight = (Gbl.Forum.ForumSelected.Type == For_FORUM__SWAD__TCHS);
       IsLastItemInLevel[1] = IsLastForum;
       For_WriteLinkToAForum (&ForumSelected,Highlight,false,0,IsLastItemInLevel);
      }
@@ -2049,20 +2055,13 @@ static void For_WriteLinkToAForum (struct Forum *Forum,
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
          break;
-      case For_FORUM_SWAD_USRS:
-      case For_FORUM_SWAD_TCHS:
+      case For_FORUM__SWAD__USRS:
+      case For_FORUM__SWAD__TCHS:
          sprintf (Icon,"<img src=\"%s/swad64x64.gif\""
                        " alt=\"%s\" title=\"%s\""
                        " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
-         break;
-      case For_FORUM_INSTIT_USRS:
-      case For_FORUM_INSTIT_TCHS:
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
-      case For_FORUM_DEGREE_USRS:
-      case For_FORUM_DEGREE_TCHS:
          break;
       case For_FORUM_COURSE_USRS:
       case For_FORUM_COURSE_TCHS:
@@ -2071,6 +2070,8 @@ static void For_WriteLinkToAForum (struct Forum *Forum,
                        " class=\"ICO20x20\" />",
                   Gbl.Prefs.IconsURL,
                   ForumName,ForumName);
+         break;
+      default:
          break;
      }
 
@@ -2092,6 +2093,7 @@ void For_SetForumName (struct Forum *Forum,
    extern const char *Txt_General_NO_HTML[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_only_teachers;
    extern const char *Txt_only_teachers_NO_HTML[1 + Txt_NUM_LANGUAGES];
+   extern const char *Txt_Unknown_FORUM;
    struct Instit Ins;
    struct Centre Ctr;
    struct Degree Deg;
@@ -2099,48 +2101,24 @@ void For_SetForumName (struct Forum *Forum,
 
    switch (Forum->Type)
      {
-      case For_FORUM_COURSE_USRS:
-	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
-	    Lay_ShowErrorAndExit ("Course not found.");
-         Str_Copy (ForumName,Crs.ShrtName,
+      case For_FORUM_GLOBAL_USRS:
+         Str_Copy (ForumName,UseHTMLEntities ? Txt_General :
+                                               Txt_General_NO_HTML[Language],
                    For_MAX_BYTES_FORUM_NAME);
          break;
-      case For_FORUM_COURSE_TCHS:
-	 Crs.CrsCod = Forum->Location;
-	 if (!Crs_GetDataOfCourseByCod (&Crs))
-	    Lay_ShowErrorAndExit ("Course not found.");
-         sprintf (ForumName,"%s%s",Crs.ShrtName,
+      case For_FORUM_GLOBAL_TCHS:
+         sprintf (ForumName,"%s%s",
+                  UseHTMLEntities ? Txt_General :
+                                    Txt_General_NO_HTML[Language],
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
-      case For_FORUM_DEGREE_USRS:
-	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
-	    Lay_ShowErrorAndExit ("Degree not found.");
-         Str_Copy (ForumName,Deg.ShrtName,
+      case For_FORUM__SWAD__USRS:
+         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,
                    For_MAX_BYTES_FORUM_NAME);
          break;
-      case For_FORUM_DEGREE_TCHS:
-	 Deg.DegCod = Forum->Location;
-	 if (!Deg_GetDataOfDegreeByCod (&Deg))
-	    Lay_ShowErrorAndExit ("Degree not found.");
-         sprintf (ForumName,"%s%s",Deg.ShrtName,
-                  UseHTMLEntities ? Txt_only_teachers :
-                                    Txt_only_teachers_NO_HTML[Language]);
-         break;
-      case For_FORUM_CENTRE_USRS:
-	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
-	    Lay_ShowErrorAndExit ("Centre not found.");
-         Str_Copy (ForumName,Ctr.ShrtName,
-                   For_MAX_BYTES_FORUM_NAME);
-         break;
-      case For_FORUM_CENTRE_TCHS:
-	 Ctr.CtrCod = Forum->Location;
-	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
-	    Lay_ShowErrorAndExit ("Centre not found.");
-         sprintf (ForumName,"%s%s",Ctr.ShrtName,
+      case For_FORUM__SWAD__TCHS:
+         sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
@@ -2159,27 +2137,54 @@ void For_SetForumName (struct Forum *Forum,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
-      case For_FORUM_GLOBAL_USRS:
-         Str_Copy (ForumName,UseHTMLEntities ? Txt_General :
-                                               Txt_General_NO_HTML[Language],
+      case For_FORUM_CENTRE_USRS:
+	 Ctr.CtrCod = Forum->Location;
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	    Lay_ShowErrorAndExit ("Centre not found.");
+         Str_Copy (ForumName,Ctr.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
-      case For_FORUM_GLOBAL_TCHS:
-         sprintf (ForumName,"%s%s",
-                  UseHTMLEntities ? Txt_General :
-                                    Txt_General_NO_HTML[Language],
+      case For_FORUM_CENTRE_TCHS:
+	 Ctr.CtrCod = Forum->Location;
+	 if (!Ctr_GetDataOfCentreByCod (&Ctr))
+	    Lay_ShowErrorAndExit ("Centre not found.");
+         sprintf (ForumName,"%s%s",Ctr.ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
-      case For_FORUM_SWAD_USRS:
-         Str_Copy (ForumName,Cfg_PLATFORM_SHORT_NAME,
+      case For_FORUM_DEGREE_USRS:
+	 Deg.DegCod = Forum->Location;
+	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	    Lay_ShowErrorAndExit ("Degree not found.");
+         Str_Copy (ForumName,Deg.ShrtName,
                    For_MAX_BYTES_FORUM_NAME);
          break;
-      case For_FORUM_SWAD_TCHS:
-         sprintf (ForumName,"%s%s",Cfg_PLATFORM_SHORT_NAME,
+      case For_FORUM_DEGREE_TCHS:
+	 Deg.DegCod = Forum->Location;
+	 if (!Deg_GetDataOfDegreeByCod (&Deg))
+	    Lay_ShowErrorAndExit ("Degree not found.");
+         sprintf (ForumName,"%s%s",Deg.ShrtName,
                   UseHTMLEntities ? Txt_only_teachers :
                                     Txt_only_teachers_NO_HTML[Language]);
          break;
+      case For_FORUM_COURSE_USRS:
+	 Crs.CrsCod = Forum->Location;
+	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	    Lay_ShowErrorAndExit ("Course not found.");
+         Str_Copy (ForumName,Crs.ShrtName,
+                   For_MAX_BYTES_FORUM_NAME);
+         break;
+      case For_FORUM_COURSE_TCHS:
+	 Crs.CrsCod = Forum->Location;
+	 if (!Crs_GetDataOfCourseByCod (&Crs))
+	    Lay_ShowErrorAndExit ("Course not found.");
+         sprintf (ForumName,"%s%s",Crs.ShrtName,
+                  UseHTMLEntities ? Txt_only_teachers :
+                                    Txt_only_teachers_NO_HTML[Language]);
+         break;
+      default:
+         Str_Copy (ForumName,Txt_Unknown_FORUM,
+                   For_MAX_BYTES_FORUM_NAME);
      }
   }
 
@@ -2688,10 +2693,13 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
    /***** Get number of forums of a type from database *****/
    switch (ForumType)
      {
-      case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
-      case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM__SWAD__USRS:
+      case For_FORUM__SWAD__TCHS:
          return 1;	// Only one forum
-      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> 0 <= number of institutions forums for an institution <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
@@ -2711,7 +2719,8 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= number of centre forums for a centre <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
@@ -2739,7 +2748,8 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> 0 <= number of degree forums for a degree <= 1
             sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	           " FROM forum_thread"
@@ -2776,7 +2786,8 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= number of course forums for a course <= 1
            sprintf (Query,"SELECT COUNT(DISTINCT Location)"
         	          " FROM forum_thread"
@@ -2823,6 +2834,8 @@ unsigned For_GetNumTotalForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
+      default:
+	 return 0;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get number of forums of a type");
 
@@ -2851,15 +2864,18 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
    /***** Get total number of threads in forums of this type from database *****/
    switch (ForumType)
      {
-      case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
-      case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM__SWAD__USRS:
+      case For_FORUM__SWAD__TCHS:
          // Total number of threads in forums of this type
          sprintf (Query,"SELECT COUNT(*)"
                         " FROM forum_thread"
                         " WHERE ForumType=%u",
                   (unsigned) ForumType);
          break;
-      case For_FORUM_INSTIT_USRS:	case For_FORUM_INSTIT_TCHS:
+      case For_FORUM_INSTIT_USRS:
+      case For_FORUM_INSTIT_TCHS:
          if (InsCod > 0)	// InsCod > 0 ==> Number of threads in institution forums for an institution
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2879,7 +2895,8 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> 0 <= Number of threads in centre forums for a centre <= 1
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2907,7 +2924,8 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
 	 break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> Number of threads in degree forums for a degree
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2944,7 +2962,8 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
         	           " WHERE ForumType=%u",
                      (unsigned) ForumType);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= Number of threads in course forums for a course
             sprintf (Query,"SELECT COUNT(*)"
         	           " FROM forum_thread"
@@ -2991,6 +3010,8 @@ unsigned For_GetNumTotalThrsInForumsOfType (For_ForumType_t ForumType,
 			   " WHERE ForumType=%u",
 		     (unsigned) ForumType);
          break;
+      default:
+	 return 0;
      }
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of threads in forums of a type");
   }
@@ -3030,8 +3051,10 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
    /***** Get total number of posts in forums of this type from database *****/
    switch (ForumType)
      {
-      case For_FORUM_SWAD_USRS:		case For_FORUM_SWAD_TCHS:
-      case For_FORUM_GLOBAL_USRS:	case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM__SWAD__USRS:
+      case For_FORUM__SWAD__TCHS:
          // Total number of posts in forums of this type
          sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
                         " FROM forum_thread,forum_post "
@@ -3062,7 +3085,8 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
-      case For_FORUM_CENTRE_USRS:	case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
          if (CtrCod > 0)	// CtrCod > 0 ==> Number of posts in centre forums for a centre
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post"
@@ -3094,7 +3118,8 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
-      case For_FORUM_DEGREE_USRS:	case For_FORUM_DEGREE_TCHS:
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
          if (DegCod > 0)	// DegCod > 0 ==> Number of posts in degree forums for a degree
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
@@ -3136,7 +3161,8 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
                            " AND forum_thread.ThrCod=forum_post.ThrCod",
                      (unsigned) ForumType);
          break;
-      case For_FORUM_COURSE_USRS:	case For_FORUM_COURSE_TCHS:
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
          if (CrsCod > 0)	// CrsCod > 0 ==> 0 <= number of posts in course forums for a course
             sprintf (Query,"SELECT COUNT(*),SUM(forum_post.NumNotif)"
         	           " FROM forum_thread,forum_post "
@@ -3189,6 +3215,8 @@ unsigned For_GetNumTotalPstsInForumsOfType (For_ForumType_t ForumType,
 			   " AND forum_thread.ThrCod=forum_post.ThrCod",
 		     (unsigned) ForumType);
          break;
+      default:
+	 return 0;
      }
    DB_QuerySELECT (Query,&mysql_res,"can not get the total number of forums of a type");
 
@@ -3569,14 +3597,14 @@ static void For_GetParamsForum (void)
    /***** Get parameter with code of course, degree, centre or institution *****/
    switch (Gbl.Forum.ForumSelected.Type)
      {
-      case For_FORUM_COURSE_USRS:
-      case For_FORUM_COURSE_TCHS:
-      case For_FORUM_DEGREE_USRS:
-      case For_FORUM_DEGREE_TCHS:
-      case For_FORUM_CENTRE_USRS:
-      case For_FORUM_CENTRE_TCHS:
       case For_FORUM_INSTIT_USRS:
       case For_FORUM_INSTIT_TCHS:
+      case For_FORUM_CENTRE_USRS:
+      case For_FORUM_CENTRE_TCHS:
+      case For_FORUM_DEGREE_USRS:
+      case For_FORUM_DEGREE_TCHS:
+      case For_FORUM_COURSE_USRS:
+      case For_FORUM_COURSE_TCHS:
 	 Gbl.Forum.ForumSelected.Location = Par_GetParToLong ("Location");
          break;
       default:
@@ -3643,7 +3671,7 @@ static void For_SetForumType (void)
       case ActCutThrForSWAUsr:	case ActPasThrForSWAUsr:
       case ActDelPstForSWAUsr:
       case ActEnbPstForSWAUsr:	case ActDisPstForSWAUsr:
-         Gbl.Forum.ForumSelected.Type = For_FORUM_SWAD_USRS;
+         Gbl.Forum.ForumSelected.Type = For_FORUM__SWAD__USRS;
          break;
       case ActSeeForSWATch:	case ActSeePstForSWATch:
       case ActRcvThrForSWATch:	case ActRcvRepForSWATch:
@@ -3651,7 +3679,7 @@ static void For_SetForumType (void)
       case ActCutThrForSWATch:	case ActPasThrForSWATch:
       case ActDelPstForSWATch:
       case ActEnbPstForSWATch:	case ActDisPstForSWATch:
-         Gbl.Forum.ForumSelected.Type = For_FORUM_SWAD_TCHS;
+         Gbl.Forum.ForumSelected.Type = For_FORUM__SWAD__TCHS;
          break;
       case ActSeeForInsUsr:	case ActSeePstForInsUsr:
       case ActRcvThrForInsUsr:	case ActRcvRepForInsUsr:
@@ -3717,6 +3745,8 @@ static void For_SetForumType (void)
       case ActEnbPstForCrsTch:	case ActDisPstForCrsTch:
          Gbl.Forum.ForumSelected.Type = For_FORUM_COURSE_TCHS;
          break;
+      default:
+	 Gbl.Forum.ForumSelected.Type = For_FORUM_UNKNOWN;
      }
   }
 
@@ -3727,34 +3757,19 @@ static void For_SetForumType (void)
 static void For_RestrictAccess (void)
   {
    extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
-   bool ICanSeeForum = false;
+   bool ICanSeeForum;
 
    /***** Restrict access *****/
    switch (Gbl.Forum.ForumSelected.Type)
      {
-      case For_FORUM_COURSE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
+      case For_FORUM_GLOBAL_USRS:
+      case For_FORUM__SWAD__USRS:
+         ICanSeeForum = true;
          break;
-      case For_FORUM_COURSE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
-         break;
-      case For_FORUM_DEGREE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
-         break;
-      case For_FORUM_DEGREE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
-         break;
-      case For_FORUM_CENTRE_USRS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
-         break;
-      case For_FORUM_CENTRE_TCHS:
-         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
+      case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM__SWAD__TCHS:
+         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
          break;
       case For_FORUM_INSTIT_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
@@ -3764,15 +3779,33 @@ static void For_RestrictAccess (void)
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
                          Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
          break;
-      case For_FORUM_GLOBAL_USRS:
-      case For_FORUM_SWAD_USRS:
-         ICanSeeForum = true;
+      case For_FORUM_CENTRE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
          break;
-      case For_FORUM_GLOBAL_TCHS:
-      case For_FORUM_SWAD_TCHS:
-         Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TEACHER));
+      case For_FORUM_CENTRE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
          break;
+      case For_FORUM_DEGREE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
+         break;
+      case For_FORUM_DEGREE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
+         break;
+      case For_FORUM_COURSE_USRS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_STUDENT);
+         break;
+      case For_FORUM_COURSE_TCHS:
+         ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_TEACHER);
+         break;
+      default:
+	 ICanSeeForum = false;
+	 break;
      }
    if (!ICanSeeForum)
       Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_access_to_this_forum);
@@ -3971,7 +4004,7 @@ void For_ReceiveForumPost (void)
    switch (Gbl.Forum.ForumSelected.Type)	// Only if forum is public for any logged user
      {
       case For_FORUM_GLOBAL_USRS:
-      case For_FORUM_SWAD_USRS:
+      case For_FORUM__SWAD__USRS:
          Soc_StoreAndPublishSocialNote (Soc_NOTE_FORUM_POST,PstCod,&SocPub);
          break;
       default:
@@ -4056,7 +4089,7 @@ void For_RemovePost (void)
    switch (Gbl.Forum.ForumSelected.Type)	// Only if forum is public for any logged user
      {
       case For_FORUM_GLOBAL_USRS:
-      case For_FORUM_SWAD_USRS:
+      case For_FORUM__SWAD__USRS:
          Soc_MarkSocialNoteAsUnavailableUsingNoteTypeAndCod (Soc_NOTE_FORUM_POST,Gbl.Forum.ForumSelected.PstCod);
          break;
       default:
@@ -4332,10 +4365,10 @@ static void For_MoveThrToCurrentForum (long ThrCod)
    /***** Move a thread to current forum *****/
    switch (Gbl.Forum.ForumSelected.Type)
      {
-      case For_FORUM_SWAD_USRS:
-      case For_FORUM_SWAD_TCHS:
       case For_FORUM_GLOBAL_USRS:
       case For_FORUM_GLOBAL_TCHS:
+      case For_FORUM__SWAD__USRS:
+      case For_FORUM__SWAD__TCHS:
          sprintf (Query,"UPDATE forum_thread"
                         " SET ForumType=%u,Location=-1"
                         " WHERE ThrCod=%ld",
@@ -4378,6 +4411,9 @@ static void For_MoveThrToCurrentForum (long ThrCod)
                   Gbl.Forum.ForumSelected.Location,
                   ThrCod);
          break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong forum.");
+	 break;
      }
    DB_QueryUPDATE (Query,"can not move a thread to current forum");
   }

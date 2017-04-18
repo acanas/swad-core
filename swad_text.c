@@ -49113,27 +49113,6 @@ const char *Txt_Unfollow =
 	"Deixar de seguir";
 #endif
 
-const char *Txt_unknown_removed_course =
-#if   L==1
-	"assignatura desconeguda / eliminada";
-#elif L==2
-	"Kurs unbekannt / entfernt";
-#elif L==3
-	"unknown / removed course";
-#elif L==4
-	"asignatura desconocida / eliminada";
-#elif L==5
-	"mati&egrave;re inconnue / supprim&eacute;e";
-#elif L==6
-	"asignatura desconocida / eliminada";	// Okoteve traducción
-#elif L==7
-	"corso sconosciuto / rimosso";
-#elif L==8
-	"kurs nieznany / usuni&eogon;te";
-#elif L==9
-	"disciplina desconhecida / removida";
-#endif
-
 const char *Txt_unknown_assignment =
 #if   L==1
 	"activitat desconeguda";
@@ -49153,6 +49132,27 @@ const char *Txt_unknown_assignment =
 	"unknown assignment";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"atividade desconhecida";
+#endif
+
+const char *Txt_Unknown_FORUM =
+#if   L==1
+	"Desconocido";	// Necessita traduccio
+#elif L==2
+	"Unbekannt";
+#elif L==3
+	"Unknown";
+#elif L==4
+	"Desconocido";
+#elif L==5
+	"Inconnu";
+#elif L==6
+	"Desconocido";	// Okoteve traducción
+#elif L==7
+	"Sconosciuto";
+#elif L==8
+	"Unknown";	// Potrzebujesz tlumaczenie
+#elif L==9
+	"Desconhecido";
 #endif
 
 const char *Txt_unknown_recipient =
@@ -49195,6 +49195,27 @@ const char *Txt_unknown_recipients =
 	"unknown recipients";		// Potrzebujesz tlumaczenie
 #elif L==9
 	"destinat&aacute;rios desconhecidos";
+#endif
+
+const char *Txt_unknown_removed_course =
+#if   L==1
+	"assignatura desconeguda / eliminada";
+#elif L==2
+	"Kurs unbekannt / entfernt";
+#elif L==3
+	"unknown / removed course";
+#elif L==4
+	"asignatura desconocida / eliminada";
+#elif L==5
+	"mati&egrave;re inconnue / supprim&eacute;e";
+#elif L==6
+	"asignatura desconocida / eliminada";	// Okoteve traducción
+#elif L==7
+	"corso sconosciuto / rimosso";
+#elif L==8
+	"kurs nieznany / usuni&eogon;te";
+#elif L==9
+	"disciplina desconhecida / removida";
 #endif
 
 const char *Txt_unknown_TIME =
