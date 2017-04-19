@@ -105,7 +105,7 @@ typedef enum
 void For_EnablePost (void);
 void For_DisablePost (void);
 
-void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *ForumSelected);
+void For_GetForumTypeAndLocationOfAPost (long PstCod,struct Forum *Forum);
 
 unsigned long For_GetNumPostsUsr (long UsrCod);
 void For_RemoveUsrFromReadThrs (long UsrCod);
@@ -122,7 +122,7 @@ void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   long ThrCod,
                                   long PstCod);
 
-void For_SetForumName (struct Forum *ForumSelected,
+void For_SetForumName (struct Forum *Forum,
                        char ForumName[For_MAX_BYTES_FORUM_NAME + 1],
                        Txt_Language_t Language,bool UseHTMLEntities);
 
