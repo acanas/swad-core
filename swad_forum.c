@@ -300,6 +300,7 @@ static time_t For_GetThrReadTime (long ThrCod);
 static void For_DeleteThrFromReadThrs (long ThrCod);
 static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewPost (void);
+static void For_PutAllHiddenParamsNewPost (void);
 
 static void For_ShowAForumPost (unsigned PstNum,long PstCod,
                                 bool LastPst,char LastSubject[Cns_MAX_BYTES_SUBJECT + 1],
@@ -310,7 +311,6 @@ static void For_GetPstData (long PstCod,long *UsrCod,time_t *CreatTimeUTC,
                             struct Image *Image);
 static void For_WriteNumberOfPosts (long UsrCod);
 
-static void For_PutAllHiddenParamsSelectedForum (void);
 static void For_PutParamForumSet (For_ForumSet_t ForumSet);
 static void For_PutParamForumOrder (For_Order_t Order);
 static void For_PutParamForumLocation (long Location);
@@ -348,6 +348,7 @@ static void For_WriteNumberOfThrs (unsigned NumThrs,unsigned NumThrsWithNewPosts
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                                        Lay_AlertType_t AlertType,const char *Message);
 static void For_PutIconNewThread (void);
+static void For_PutAllHiddenParamsNewThread (void);
 static unsigned For_GetNumThrsInForum (struct Forum *Forum);
 static unsigned For_GetNumPstsInForum (struct Forum *Forum);
 static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
@@ -1145,10 +1146,21 @@ static void For_PutIconNewPost (void)
    extern const char *Txt_New_post;
 
    Lay_PutContextualLink (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
-                          For_ID_NEW_POST_SECTION,For_PutAllHiddenParamsSelectedForum,
+                          For_ID_NEW_POST_SECTION,For_PutAllHiddenParamsNewPost,
                           "plus64x64.png",
                           Txt_New_post,NULL,
                           NULL);
+  }
+
+static void For_PutAllHiddenParamsNewPost (void)
+  {
+   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
+                                UINT_MAX,			// Page of posts   = last
+                                Gbl.Forum.ForumSet,
+                                Gbl.Forum.ThreadsOrder,
+                                Gbl.Forum.ForumSelected.Location,
+                                Gbl.Forum.ForumSelected.ThrCod,
+                                -1L);
   }
 
 /*****************************************************************************/
@@ -1494,17 +1506,6 @@ static void For_WriteNumberOfPosts (long UsrCod)
 /*****************************************************************************/
 /************ Put all the hidden parameters related to forums ****************/
 /*****************************************************************************/
-
-static void For_PutAllHiddenParamsSelectedForum (void)
-  {
-   For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
-                                Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
-                                Gbl.Forum.ForumSet,
-                                Gbl.Forum.ThreadsOrder,
-                                Gbl.Forum.ForumSelected.Location,
-                                Gbl.Forum.ForumSelected.ThrCod,
-                                -1L);
-  }
 
 void For_PutAllHiddenParamsForum (unsigned NumPageThreads,
                                   unsigned NumPagePosts,
@@ -2650,10 +2651,21 @@ static void For_PutIconNewThread (void)
    extern const char *Txt_New_thread;
 
    Lay_PutContextualLink (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
-                          For_ID_NEW_THREAD_SECTION,For_PutAllHiddenParamsSelectedForum,
+                          For_ID_NEW_THREAD_SECTION,For_PutAllHiddenParamsNewThread,
                           "plus64x64.png",
                           Txt_New_thread,NULL,
                           NULL);
+  }
+
+static void For_PutAllHiddenParamsNewThread (void)
+  {
+   For_PutAllHiddenParamsForum (1,	// Page of threads = first
+                                1,	// Page of posts = first
+                                Gbl.Forum.ForumSet,
+                                Gbl.Forum.ThreadsOrder,
+                                Gbl.Forum.ForumSelected.Location,
+                                -1L,
+                                -1L);
   }
 
 /*****************************************************************************/
@@ -3813,29 +3825,17 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
         	                  Hlp_SOCIAL_Forums_new_thread);
 
    /***** Start form *****/
-   if (IsReply)	// Form to write a reply to a message of an existing thread
+   if (IsReply)	// Form to write a reply to a post of an existing thread
      {
       Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
-      For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
-                                   UINT_MAX,			// Page of posts   = last
-                                   Gbl.Forum.ForumSet,
-				   Gbl.Forum.ThreadsOrder,
-				   Gbl.Forum.ForumSelected.Location,
-				   Gbl.Forum.ForumSelected.ThrCod,
-				   -1L);
+      For_PutAllHiddenParamsNewPost ();
      }
-   else		// Form to write the first message of a new thread
+   else		// Form to write the first post of a new thread
      {
       Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
                            For_ID_FORUM_POSTS_SECTION);
-      For_PutAllHiddenParamsForum (1,	// Page of threads = first
-                                   1,	// Page of posts   = first
-                                   Gbl.Forum.ForumSet,
-				   Gbl.Forum.ThreadsOrder,
-				   Gbl.Forum.ForumSelected.Location,
-				   -1L,
-				   -1L);
+      For_PutAllHiddenParamsNewThread ();
      }
 
    /***** Subject and content *****/
