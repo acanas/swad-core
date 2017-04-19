@@ -481,7 +481,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
   {
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_Subject;
-   extern const char *Txt_MSG_Message;
+   extern const char *Txt_MSG_Content;
    extern const char *Txt_Original_message;
    char Query[512];
    MYSQL_RES *mysql_res;
@@ -553,7 +553,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                          "<td class=\"LEFT_MIDDLE\">"
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">",
-               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
+               The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -586,7 +586,7 @@ static void Msg_WriteFormSubjectAndContentMsgToUsrs (char Content[Cns_MAX_BYTES_
                          "<textarea id=\"MsgContent\" name=\"Content\""
                          " class=\"MSG_CONTENT\" rows=\"20\">",
                The_ClassForm[Gbl.Prefs.Theme],
-               Txt_MSG_Message);
+               Txt_MSG_Content);
 
       /* Start textarea with a '\n', that will be not visible in textarea.
          When Content is "\nLorem ipsum" (a white line before "Lorem ipsum"),
@@ -2585,7 +2585,7 @@ void Msg_ShowFormToFilterMsgs (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
-   extern const char *Txt_MSG_Message;
+   extern const char *Txt_MSG_Content;
    const char *TxtFromTo[Msg_NUM_TYPES_OF_MSGS] =
      {
       Txt_MSG_From,
@@ -2617,7 +2617,7 @@ void Msg_ShowFormToFilterMsgs (void)
                       "</label>"
                       "</td>",
             The_ClassForm[Gbl.Prefs.Theme],
-            Txt_MSG_Message,
+            Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** End table *****/
@@ -2856,7 +2856,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    extern const char *Txt_MSG_Sent;
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
-   extern const char *Txt_MSG_Message;
+   extern const char *Txt_MSG_Content;
    struct UsrData UsrDat;
    const char *Title = NULL;	// Initialized to avoid warning
    bool FromThisCrs = false;	// Initialized to avoid warning
@@ -2984,12 +2984,12 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
 
-      /***** Write "Message:" *****/
+      /***** Write "Content:" *****/
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"RIGHT_TOP MSG_TIT\">"
 	                 "%s:&nbsp;"
 	                 "</td>",
-               Txt_MSG_Message);
+               Txt_MSG_Content);
 
       /***** Initialize image *****/
       Img_ImageConstructor (&Image);

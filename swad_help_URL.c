@@ -1792,6 +1792,90 @@ const char *Hlp_SOCIAL_Forums =
 	"SOCIAL.Forums.en";
 #endif
 
+const char *Hlp_SOCIAL_Forums_threads =
+#if   L==1
+	"SOCIAL.Forums.es#discusiones";
+#elif L==2
+	"SOCIAL.Forums.en#threads";
+#elif L==3
+	"SOCIAL.Forums.en#threads";
+#elif L==4
+	"SOCIAL.Forums.es#discusiones";
+#elif L==5
+	"SOCIAL.Forums.en#threads";
+#elif L==6
+	"SOCIAL.Forums.es#discusiones";
+#elif L==7
+	"SOCIAL.Forums.en#threads";
+#elif L==8
+	"SOCIAL.Forums.en#threads";
+#elif L==9
+	"SOCIAL.Forums.en#threads";
+#endif
+
+const char *Hlp_SOCIAL_Forums_new_thread =
+#if   L==1
+	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
+#elif L==2
+	"SOCIAL.Forums.en#new-thread";
+#elif L==3
+	"SOCIAL.Forums.en#new-thread";
+#elif L==4
+	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
+#elif L==5
+	"SOCIAL.Forums.en#new-thread";
+#elif L==6
+	"SOCIAL.Forums.es#nueva-discusi%C3%B3n";
+#elif L==7
+	"SOCIAL.Forums.en#new-thread";
+#elif L==8
+	"SOCIAL.Forums.en#new-thread";
+#elif L==9
+	"SOCIAL.Forums.en#new-thread";
+#endif
+
+const char *Hlp_SOCIAL_Forums_posts =
+#if   L==1
+	"SOCIAL.Forums.es#comentarios";
+#elif L==2
+	"SOCIAL.Forums.en#posts";
+#elif L==3
+	"SOCIAL.Forums.en#posts";
+#elif L==4
+	"SOCIAL.Forums.es#comentarios";
+#elif L==5
+	"SOCIAL.Forums.en#posts";
+#elif L==6
+	"SOCIAL.Forums.es#comentarios";
+#elif L==7
+	"SOCIAL.Forums.en#posts";
+#elif L==8
+	"SOCIAL.Forums.en#posts";
+#elif L==9
+	"SOCIAL.Forums.en#posts";
+#endif
+
+const char *Hlp_SOCIAL_Forums_new_post =
+#if   L==1
+	"SOCIAL.Forums.es#nuevo-comentario";
+#elif L==2
+	"SOCIAL.Forums.en#new-post";
+#elif L==3
+	"SOCIAL.Forums.en#new-post";
+#elif L==4
+	"SOCIAL.Forums.es#nuevo-comentario";
+#elif L==5
+	"SOCIAL.Forums.en#new-post";
+#elif L==6
+	"SOCIAL.Forums.es#nuevo-comentario";
+#elif L==7
+	"SOCIAL.Forums.en#new-post";
+#elif L==8
+	"SOCIAL.Forums.en#new-post";
+#elif L==9
+	"SOCIAL.Forums.en#new-post";
+#endif
+
 /***** MESSAGES tab *****/
 
 const char *Hlp_MESSAGES_Notifications =

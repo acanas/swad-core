@@ -406,7 +406,7 @@ void Ann_ShowFormAnnouncement (void)
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_announcement;
    extern const char *Txt_MSG_Subject;
-   extern const char *Txt_MSG_Message;
+   extern const char *Txt_MSG_Content;
    extern const char *Txt_Users;
    extern const char *Txt_Create_announcement;
 
@@ -419,7 +419,7 @@ void Ann_ShowFormAnnouncement (void)
 
    /***** Announcement subject and body *****/
    Ann_PutSubjectMessage ("Subject",Txt_MSG_Subject, 2);
-   Ann_PutSubjectMessage ("Content",Txt_MSG_Message,20);
+   Ann_PutSubjectMessage ("Content",Txt_MSG_Content,20);
 
    /***** Users' roles who can view the announcement *****/
    fprintf (Gbl.F.Out,"<tr>"

@@ -967,7 +967,7 @@ void For_RemoveUsrFromReadThrs (long UsrCod)
 
 static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_SOCIAL_Forums;
+   extern const char *Hlp_SOCIAL_Forums_posts;
    extern const char *Txt_Thread;
    struct ForumThread Thr;
    char LastSubject[Cns_MAX_BYTES_SUBJECT + 1];
@@ -1006,7 +1006,7 @@ static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Messag
    /***** Start frame *****/
    sprintf (FrameTitle,"%s: %s",Txt_Thread,Thr.Subject);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewPost,
-                        Hlp_SOCIAL_Forums);
+                        Hlp_SOCIAL_Forums_posts);
 
    /***** Get posts of a thread from database *****/
    sprintf (Query,"SELECT PstCod,UNIX_TIMESTAMP(CreatTime)"
@@ -2467,7 +2467,7 @@ void For_ShowForumTheads (void)
 static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                                        Lay_AlertType_t AlertType,const char *Message)
   {
-   extern const char *Hlp_SOCIAL_Forums;
+   extern const char *Hlp_SOCIAL_Forums_threads;
    extern const char *Txt_Forum;
    extern const char *Txt_MSG_Subject;
    extern const char *Txt_FORUM_THREAD_HELP_ORDER[2];
@@ -2552,7 +2552,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    /***** Start frame for threads of this forum *****/
    sprintf (FrameTitle,"%s: %s",Txt_Forum,ForumName);
    Lay_StartRoundFrame (NULL,FrameTitle,For_PutIconNewThread,
-			Hlp_SOCIAL_Forums);
+			Hlp_SOCIAL_Forums_threads);
 
    /***** List the threads *****/
    if (NumThrs)
@@ -3795,19 +3795,22 @@ static void For_RestrictAccess (void)
 
 static void For_WriteFormForumPst (bool IsReply,const char *Subject)
   {
-   extern const char *Hlp_SOCIAL_Forums;
+   extern const char *Hlp_SOCIAL_Forums_new_post;
+   extern const char *Hlp_SOCIAL_Forums_new_thread;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_post;
    extern const char *Txt_New_thread;
    extern const char *Txt_MSG_Subject;
-   extern const char *Txt_MSG_Message;
+   extern const char *Txt_MSG_Content;
    extern const char *Txt_Send;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,
                         IsReply ? Txt_New_post :
         	                  Txt_New_thread,
-        	        NULL,Hlp_SOCIAL_Forums);
+        	        NULL,
+        	        IsReply ? Hlp_SOCIAL_Forums_new_post :
+        	                  Hlp_SOCIAL_Forums_new_thread);
 
    /***** Start form *****/
    if (IsReply)	// Form to write a reply to a message of an existing thread
@@ -3868,7 +3871,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
                       "</textarea>"
 	              "</td>"
 	              "</tr>",
-            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Message);
+            The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
 
    fprintf (Gbl.F.Out,"</table>");
 

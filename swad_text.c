@@ -13360,43 +13360,43 @@ const char *Txt_FORUM_THREAD_HELP_ORDER[For_NUM_ORDERS] =
 const char *Txt_FORUM_THREAD_ORDER[For_NUM_ORDERS] =
    {
 #if   L==1
-	 "Primer mensaje"	// Necessita traduccio
+	 "Primer comentari"
 #elif L==2
-	 "Erste Nachricht"
+	 "Erste Post"
 #elif L==3
-	 "First message"
+	 "First post"
 #elif L==4
-	 "Primer mensaje"
+	 "Primer comentario"
 #elif L==5
-	 "Premier message"
+	 "Premier post"
 #elif L==6
-	 "Primer mensaje"	// Okoteve traducción
+	 "Primer comentario"	// Okoteve traducción
 #elif L==7
-	 "Primo messaggio"
+	 "Primo post"
 #elif L==8
-	 "Pierwsza wiadomosc"
+	 "Pierwsza post"
 #elif L==9
-	 "Primeira mensagem"
+	 "Primeira post"
 #endif
 	 ,
 #if   L==1
-	 "&Uacute;ltimo mensaje"	// Necessita traduccio
+	 "&Uacute;ltim comentari"
 #elif L==2
-	 "Letzte Nachricht"
+	 "Letzte Post"
 #elif L==3
-	 "Last message"
+	 "Last post"
 #elif L==4
-	 "&Uacute;ltimo mensaje"
+	 "&Uacute;ltimo comentario"
 #elif L==5
-	 "Dernier message"
+	 "Dernier post"
 #elif L==6
-	 "&Uacute;ltimo mensaje"	// Okoteve traducción
+	 "&Uacute;ltimo comentario"	// Okoteve traducción
 #elif L==7
-	 "Ultimo messaggio"
+	 "Ultimo post"
 #elif L==8
-	 "Ostatnia wiadomosc"
+	 "Ostatnia post"
 #elif L==9
-	 "&Uacute;ltima mensagem"
+	 "&Uacute;ltima post"
 #endif
 	};
 
@@ -23214,6 +23214,27 @@ const char *Txt_Movement_not_allowed =
 	"Movimento n&atilde;o permitido";
 #endif
 
+const char *Txt_MSG_Content =	// of a post or message
+#if   L==1
+	"Contingut";
+#elif L==2
+	"Inhalt";
+#elif L==3
+	"Content";
+#elif L==4
+	"Contenido";
+#elif L==5
+	"Contenu";
+#elif L==6
+	"Contenido";	// Okoteve traducción
+#elif L==7
+	"Contenuto";
+#elif L==8
+	"Tre&sacute;&cacute;";
+#elif L==9
+	"Conte&uacute;do";
+#endif
+
 const char *Txt_MSG_Deleted_without_opening =
 #if   L==1
 	"Eliminado sin abrir";		// Necessita traduccio
@@ -23275,27 +23296,6 @@ const char *Txt_MSG_from =
 	"z";
 #elif L==9
 	"de";
-#endif
-
-const char *Txt_MSG_Message =
-#if   L==1
-	"Missatge";
-#elif L==2
-	"Nachricht";
-#elif L==3
-	"Message";
-#elif L==4
-	"Mensaje";
-#elif L==5
-	"Message";
-#elif L==6
-	"Marandu";
-#elif L==7
-	"Messaggio";
-#elif L==8
-	"Wiadomo&sacute;&cacute;";
-#elif L==9
-	"Mensagem";
 #endif
 
 const char *Txt_MSG_New =
@@ -29955,7 +29955,7 @@ const char *Txt_post =
 #if   L==1
 	"comentari";
 #elif L==2
-	"Nachricht";
+	"Post";
 #elif L==3
 	"post";
 #elif L==4
