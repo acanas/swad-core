@@ -51,7 +51,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 #define TT_START_HOUR				  6	// Day starts at 6:00
-#define TT_HOURS_PER_DAY			 16	// From 6:00 to 22:00
+#define TT_HOURS_PER_DAY			 18	// From 6:00 to 24:00
 #define TT_DAYS					  7	// Seven days per week
 #define TT_MAX_COLUMNS_PER_CELL			  3	// Maximum number of items (i.e. classes) in a timetable cell (1, 2, 3 or 4)
 #define TT_NUM_MINICOLUMNS_PER_DAY		  6	// Least common multiple of 1,2,3,...,TT_MAX_COLUMNS_PER_CELL
@@ -891,8 +891,8 @@ static void TT_DrawTimeTable (void)
 
       /* Hour */
       if (Hour % 2)
-         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_TXT RIGHT_MIDDLE\""
-                            " style=\"width:%u%%; height:40px;\">"
+         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR TT_TXT RIGHT_MIDDLE\""
+                            " style=\"width:%u%%;\">"
                             "%2u:00"
                             "</td>",
                   TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
@@ -957,8 +957,8 @@ static void TT_DrawTimeTable (void)
 
       /* Hour */
       if (Hour % 2)
-         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_TXT LEFT_MIDDLE\""
-                            " style=\"width:%u%%; height:40px;\">"
+         fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"TT_HOUR TT_TXT LEFT_MIDDLE\""
+                            " style=\"width:%u%%;\">"
                             "%2u:00"
                             "</td>",
                   TT_PERCENT_WIDTH_OF_AN_HOUR_COLUMN,
@@ -1135,10 +1135,10 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned Hour,unsigned Column,uns
    extern const char *Txt_Place;
    static const char *TimeTableClasses[TT_NUM_CLASS_TYPES] =
      {
-      "FREE",	// Free hour
-      "THEO",	// Theoretical class
-      "PRAC",	// Practical class
-      "TUTO"	// Tutorials
+      "TT_FREE",	// Free hour
+      "TT_THEO",	// Theoretical class
+      "TT_PRAC",	// Practical class
+      "TT_TUTO"		// Tutorials
      };
    enum
      {
