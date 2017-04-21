@@ -49092,6 +49092,54 @@ const char *Txt_Unfollow =
 	"Deixar de seguir";
 #endif
 
+const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_ =
+#if   L==1
+	"Desafortunadament Firefox i Chrome ja no permeten executar Java,"
+	" de manera que el xat no estar&agrave; disponible per a aquests navegadors"
+	" fins que desenvolupem un nou xat amb una altra tecnologia."
+	" Sentim les mol&egrave;sties.";
+#elif L==2
+	"Leider keinen Firefox und Chrome l&auml;nger erlauben Ihnen Java zu laufen,"
+	" so dass der Chat f&uuml;r diesen Browser nicht zur Verf&uuml;gung steht,"
+	" bis wir einen neuen Chat mit anderer Technologie zu entwickeln."
+	" Es tut uns leid.";
+#elif L==3
+	"Unfortunately Firefox and Chrome no longer allow Java to run,"
+	" so chat will not be available for these browsers"
+	" until we develop a new chat with another technology."
+	" We apologize for the inconveniences.";
+#elif L==4
+	"Desafortunadamente Firefox y Chrome ya no permiten ejecutar Java,"
+	" de modo que el chat no estar&aacute; disponible para estos navegadores"
+	" hasta que desarrollemos un nuevo chat con otra tecnolog&iacute;a."
+	" Sentimos las molestias.";
+#elif L==5
+	"Malheureusement, pas Firefox et Chrome plus vous permettent d'ex&eacute;cuter Java,"
+	" donc le chat n'est pas disponible pour ces navigateurs"
+	" jusqu'&agrave; ce que nous d&eacute;veloppons un nouveau chat avec d'autres technologies."
+	" D&eacute;sol&eacute; pour la g&ecirc;ne occasionn&eacute;e.";
+#elif L==6
+	"Desafortunadamente Firefox y Chrome ya no permiten ejecutar Java,"
+	" de modo que el chat no estar&aacute; disponible para estos navegadores"
+	" hasta que desarrollemos un nuevo chat con otra tecnolog&iacute;a."
+	" Sentimos las molestias.";	// Okoteve traducción
+#elif L==7
+	"Purtroppo Firefox e Chrome non consentono pi&ugrave; di eseguire Java,"
+	" quindi la chat non &egrave; disponibile per questi browser"
+	" finch&eacute; non sviluppiamo una nuova chat con altre tecnologie."
+	" Ci scusiamo per l'inconveniente.";
+#elif L==8
+	"Niestety Firefox i Chrome nie pozwalaj&aogon; ju&zdot; na uruchamianie Java,"
+	" wi&eogon;c rozmowa nie jest dost&eogon;pny dla tych przegl&aogon;darek"
+	" a&zdot; opracowa&cacute; nowy czat z innymi technologiami."
+	" Przepraszamy za niedogodno&sacute;ci.";
+#elif L==9
+	"Infelizmente Firefox e Chrome j&aacute; n&atilde;o permitem que voc&ecirc; execute o Java,"
+	" de modo que o chat n&atilde;o est&aacute; dispon&iacute;vel para estes navegadores"
+	" at&eacute; que desenvolver um novo chat com outra tecnologia."
+	" Desculpe o transtorno.";
+#endif
+
 const char *Txt_unknown_assignment =
 #if   L==1
 	"activitat desconeguda";

@@ -76,6 +76,7 @@ static unsigned Cht_GetNumUsrsInChatRoom (const char *RoomCode);
 void Cht_ShowChatRooms (void)
   {
    extern const char *Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_;
+   extern const char *Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_;
 
    /***** Help message about software needed to use the whiteboard/chat *****/
    sprintf (Gbl.Message,Txt_To_use_chat_you_must_have_installed_the_software_X_and_add_Y_,
@@ -85,6 +86,8 @@ void Cht_ShowChatRooms (void)
 
    /***** List available chat rooms *****/
    Cht_ShowListOfAvailableChatRooms ();
+
+   Lay_ShowAlert (Lay_WARNING,Txt_Unfortunately_Firefox_and_Chrome_no_longer_allow_Java_to_run_);
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Cht_ShowListOfChatRoomsWithUsrs ();

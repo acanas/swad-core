@@ -208,19 +208,23 @@
 
 // TODO: Comprobar que, para detectar el número de filas de cabecera y pie automáticamente en los archivos de calificaciones, SWAD mira no sólo que parezcan un ID, sino que coincida con alguno de los DNI de la asignatura (por ejemplo en el caso de los DNI alemanes formados por varias letras)
 
+// TODO: En información de un centro, poner icono que enlace a edición de lugares, y posibilidad de editar lugar del centro en un menú desplegable. Lugar debería ir encima de Acceso directo.
+// TODO: Cuando se está editando instituciones, centros, titulaciones y asignaturas, poner un icono Ver (ojo) en la esquina superior izquierda.
+
 // TODO: Changes in timetable (hours end in 24h).
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.185.3 (2017-04-20)"
+#define Log_PLATFORM_VERSION	"SWAD 16.185.4 (2017-04-21)"
 #define CSS_FILE		"swad16.185.3.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.185.4: Apr 21, 2017	Warning about Java no longer working. (217849 lines)
         Version 16.185.3: Apr 20, 2017	Timetables end at 24h, suggested by Sandra Daniela Tazzioli Barroso. (217797 lines)
         Version 16.185.2: Apr 19, 2017	Changes in forums. (217793 lines)
         Version 16.185.1: Apr 19, 2017	Changes in forums.
