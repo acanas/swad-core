@@ -51,8 +51,8 @@
 #define Cfg_PLATFORM_SHORT_NAME			"SWAD local"
 #define Cfg_PLATFORM_FULL_NAME			"SWAD (Shared Workspace At a Distance)"
 #define Cfg_PLATFORM_SERVER			"localhost"			// Server name (main part of the URL)
-#define Cfg_URL_SWAD_SERVER			"https://localhost/swad/"	// With ending slash
-#define Cfg_URL_SWAD_CGI			"https://localhost/swad"	// Without ending slash
+#define Cfg_URL_SWAD_SERVER			"https://localhost/"		// With ending slash
+#define Cfg_URL_SWAD_CGI			"https://localhost"		// Without ending slash
 #define Cfg_URL_SWAD_PUBLIC			"https://localhost/swad"	// Without ending slash
 #define Cfg_PATH_CGI_BIN			"/usr/lib/cgi-bin/swad"		// Directory for this CGI and other commands called by it
 #define Cfg_PATH_SWAD_PUBLIC			"/var/www/html/swad"		// Main public directory for public SWAD pages, icons, etc.

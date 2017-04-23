@@ -2381,14 +2381,15 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-size:10pt;
 	letter-spacing:0;
 	}
-.TT_HOUR	{height:40px;}
-.TT_FREE0	{height:20px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
-.TT_FREE1	{height:20px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
-.TT_FREE2	{height:20px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
-.TT_FREE3	{height:20px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
-.TT_THEO	{height:20px; background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
-.TT_PRAC	{height:20px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
-.TT_TUTO	{height:20px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
+.TT_HOUR	{height:20px;}
+.TT_ALIGN	{height:10px;}
+.TT_FREE0	{height:10px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #F4F2EA;}
+.TT_FREE1	{height:10px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #F4F2EA;}
+.TT_FREE2	{height:10px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #FBFAF7;}
+.TT_FREE3	{height:10px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #FBFAF7;}
+.TT_THEO	{height:10px; background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
+.TT_PRAC	{height:10px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
+.TT_TUTO	{height:10px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
 /********************************* Preference ********************************/
 .PREF_CONTAINER

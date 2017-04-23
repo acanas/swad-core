@@ -41165,55 +41165,11 @@ const char *Txt_Tag_X_not_allowed_Click_to_allow_it =	// Warning: it is very imp
 
 const char *Txt_TAGLINE =
 # if   L==1
-	"plataforma de suport a la doc&egrave;ncia";
-# elif L==2
-	"Plattform zur Unterst&uuml;tzung der Lehre";
-# elif L==3
-	"platform to support teaching";
-# elif L==4
-	"plataforma de apoyo a la docencia";
-# elif L==5
-	"plate-forme pour appuyer l'enseignement";
-# elif L==6
-	"plataforma de apoyo a la docencia";	// Okoteve traducción
-# elif L==7
-	"piattaforma per sostenere l'insegnamento";
-# elif L==8
-	"platforma do wspierania nauczania";
-# elif L==9
-	"plataforma de apoio ao ensino";
-# endif
-
-const char *Txt_TAGLINE_BR =
-# if   L==1
-	"plataforma de suport<br />a la doc&egrave;ncia";
-# elif L==2
-	"Plattform zur<br />Unterst&uuml;tzung der Lehre";
-# elif L==3
-	"platform to<br />support teaching";
-# elif L==4
-	"plataforma de apoyo<br />a la docencia";
-# elif L==5
-	"plate-forme pour<br />appuyer l'enseignement";
-# elif L==6
-	"plataforma de apoyo<br />a la docencia";	// Okoteve traducción
-# elif L==7
-	"piattaforma per<br />sostenere l'insegnamento";
-# elif L==8
-	"platforma do<br />wspierania nauczania";
-# elif L==9
-	"plataforma de<br />apoio ao ensino";
-# endif
-
-#elif defined OPENSWAD_ORG		// openswad.org ***********************
-
-const char *Txt_TAGLINE =
-# if   L==1
 	"plataforma educativa";
 # elif L==2
 	"Bildungsplattform";
 # elif L==3
-	"educational platform";
+	"social learning platform";
 # elif L==4
 	"plataforma educativa";
 # elif L==5
@@ -41234,7 +41190,51 @@ const char *Txt_TAGLINE_BR =
 # elif L==2
 	"Bildungs-<br />plattform";
 # elif L==3
-	"educational<br />platform";
+	"social learning<br />platform";
+# elif L==4
+	"plataforma<br />educativa";
+# elif L==5
+	"plate-forme<br />&eacute;ducative";
+# elif L==6
+	"plataforma<br />educativa";	// Okoteve traducción
+# elif L==7
+	"piattaforma<br />educativa";
+# elif L==8
+	"platforma<br />edukacyjna";
+# elif L==9
+	"plataforma<br />educacional";
+# endif
+
+#elif defined OPENSWAD_ORG		// openswad.org ***********************
+
+const char *Txt_TAGLINE =
+# if   L==1
+	"plataforma educativa";
+# elif L==2
+	"Bildungsplattform";
+# elif L==3
+	"social learning platform";
+# elif L==4
+	"plataforma educativa";
+# elif L==5
+	"plate-forme &eacute;ducative";
+# elif L==6
+	"plataforma educativa";	// Okoteve traducción
+# elif L==7
+	"piattaforma educativa";
+# elif L==8
+	"platforma edukacyjna";
+# elif L==9
+	"plataforma educacional";
+# endif
+
+const char *Txt_TAGLINE_BR =
+# if   L==1
+	"plataforma<br />educativa";
+# elif L==2
+	"Bildungs-<br />plattform";
+# elif L==3
+	"social learning<br />platform";
 # elif L==4
 	"plataforma<br />educativa";
 # elif L==5
