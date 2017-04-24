@@ -39,9 +39,9 @@
 #define TT_NUM_TIMETABLE_TYPES 3
 typedef enum
   {
-   TT_COURSE_TIMETABLE = 0,
-   TT_MY_TIMETABLE     = 1,
-   TT_TUTOR_TIMETABLE  = 2,
+   TT_COURSE_TIMETABLE   = 0,
+   TT_MY_TIMETABLE       = 1,
+   TT_TUTORING_TIMETABLE = 2,
   } TT_TimeTableType_t;
 
 typedef enum
@@ -54,11 +54,11 @@ typedef enum
 #define TT_NUM_CLASS_TYPES 4
 typedef enum
   {
-   TT_NO_CLASS     = 0,
-   TT_THEORY_CLASS = 1,
-   TT_PRACT_CLASS  = 2,
-   TT_TUTOR_CLASS  = 3,
-  } TT_ClassType_t;
+   TT_FREE      = 0,
+   TT_LECTURE   = 1,
+   TT_PRACTICAL = 2,
+   TT_TUTORING  = 3,
+  } TT_ClassTypeOld_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/

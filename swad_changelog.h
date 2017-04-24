@@ -219,13 +219,61 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.186.1 (2017-04-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.187 (2017-04-24)"
 #define CSS_FILE		"swad16.185.3.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.187:   Apr 24, 2017	Changes in timetable. Not finished. (217947 lines)
+					35 changes necessary in database.
+ALTER TABLE timetable_crs CHANGE COLUMN Day DayOld ENUM('L','M','X','J','V','S','D') NOT NULL;
+ALTER TABLE timetable_crs CHANGE COLUMN Hour HourOld TINYINT NOT NULL;
+ALTER TABLE timetable_crs CHANGE COLUMN Duration DurationOld TINYINT NOT NULL;
+ALTER TABLE timetable_crs CHANGE COLUMN ClassType ClassTypeOld ENUM('libre','teoria','practicas') NOT NULL;
+
+ALTER TABLE timetable_crs ADD COLUMN Weekday TINYINT NOT NULL AFTER GrpCod;
+ALTER TABLE timetable_crs ADD COLUMN StartTime TIME NOT NULL AFTER Weekday;
+ALTER TABLE timetable_crs ADD COLUMN Duration TIME NOT NULL AFTER StartTime;
+ALTER TABLE timetable_crs ADD COLUMN ClassType ENUM('free','lecture','practical') NOT NULL AFTER Duration;
+
+UPDATE timetable_crs SET Weekday=0 WHERE DayOld='L';
+UPDATE timetable_crs SET Weekday=1 WHERE DayOld='M';
+UPDATE timetable_crs SET Weekday=2 WHERE DayOld='X';
+UPDATE timetable_crs SET Weekday=3 WHERE DayOld='J';
+UPDATE timetable_crs SET Weekday=4 WHERE DayOld='V';
+UPDATE timetable_crs SET Weekday=5 WHERE DayOld='S';
+UPDATE timetable_crs SET Weekday=6 WHERE DayOld='D';
+
+UPDATE timetable_crs SET StartTime=ADDTIME('06:00:00',SEC_TO_TIME(TIME_TO_SEC('00:30:00')*HourOld));
+
+UPDATE timetable_crs SET Duration=SEC_TO_TIME(TIME_TO_SEC('00:30:00')*DurationOld);
+
+UPDATE timetable_crs SET ClassType='free' WHERE ClassTypeOld='libre';
+UPDATE timetable_crs SET ClassType='lecture' WHERE ClassTypeOld='teoria';
+UPDATE timetable_crs SET ClassType='practical' WHERE ClassTypeOld='practicas';
+
+ALTER TABLE timetable_tut CHANGE COLUMN Day DayOld ENUM('L','M','X','J','V','S','D') NOT NULL;
+ALTER TABLE timetable_tut CHANGE COLUMN Hour HourOld TINYINT NOT NULL;
+ALTER TABLE timetable_tut CHANGE COLUMN Duration DurationOld TINYINT NOT NULL;
+
+ALTER TABLE timetable_tut ADD COLUMN Weekday TINYINT NOT NULL AFTER UsrCod;
+ALTER TABLE timetable_tut ADD COLUMN StartTime TIME NOT NULL AFTER Weekday;
+ALTER TABLE timetable_tut ADD COLUMN Duration TIME NOT NULL AFTER StartTime;
+
+UPDATE timetable_tut SET Weekday=0 WHERE DayOld='L';
+UPDATE timetable_tut SET Weekday=1 WHERE DayOld='M';
+UPDATE timetable_tut SET Weekday=2 WHERE DayOld='X';
+UPDATE timetable_tut SET Weekday=3 WHERE DayOld='J';
+UPDATE timetable_tut SET Weekday=4 WHERE DayOld='V';
+UPDATE timetable_tut SET Weekday=5 WHERE DayOld='S';
+UPDATE timetable_tut SET Weekday=6 WHERE DayOld='D';
+
+UPDATE timetable_tut SET StartTime=ADDTIME('06:00:00',SEC_TO_TIME(TIME_TO_SEC('00:30:00')*HourOld));
+
+UPDATE timetable_tut SET Duration=SEC_TO_TIME(TIME_TO_SEC('00:30:00')*DurationOld);
+
         Version 16.186.1: Apr 24, 2017	Changes in timetable. Not finished. (217881 lines)
         Version 16.186:   Apr 24, 2017	Changes in timetable. Not finished. (217867 lines)
         Version 16.185.4: Apr 21, 2017	Warning about Java no longer working. (217849 lines)

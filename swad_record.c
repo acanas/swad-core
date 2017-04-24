@@ -1293,7 +1293,7 @@ static void Rec_ShowRecordOneTchCrs (void)
    /* Office hours */
    if (ShowOfficeHours)
      {
-      Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
+      Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
 			   NULL,Hlp_USERS_Teachers_timetable);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
@@ -1398,7 +1398,7 @@ void Rec_ListRecordsTchs (void)
             /* Office hours */
             if (ShowOfficeHours)
               {
-               Gbl.TimeTable.Type = TT_TUTOR_TIMETABLE;
+               Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
 	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
 	                            NULL,Hlp_USERS_Teachers_timetable);
 	       TT_ShowTimeTable (UsrDat.UsrCod);

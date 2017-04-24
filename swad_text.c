@@ -47722,7 +47722,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 	"Hor&aacute;rio minha disciplinas"
 #endif
 	 ,
-	// TT_TUTOR_TIMETABLE
+	// TT_TUTORING_TIMETABLE
 #if   L==1
 	"Horari de tutories"
 #elif L==2
@@ -47746,7 +47746,7 @@ const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES] =
 
 const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	{
-   // TT_NO_CLASS
+   // TT_FREE
 #if   L==1
 	 "Lliure"
 #elif L==2
@@ -47767,7 +47767,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	 "Livre"
 #endif
 	 ,
-	 // TT_THEORY_CLASS
+	 // TT_LECTURE
 #if   L==1
 	 "Teoria"
 #elif L==2
@@ -47788,7 +47788,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	 "Teoria"
 #endif
 	 ,
-	 // TT_PRACT_CLASS
+	 // TT_PRACTICAL
 #if   L==1
 	 "Pr&agrave;ct."
 #elif L==2
@@ -47809,7 +47809,7 @@ const char *Txt_TIMETABLE_CLASS_TYPES[TT_NUM_CLASS_TYPES] =
 	 "Pr&aacute;ct."
 #endif
 	 ,
-	 // TT_TUTOR_CLASS
+	 // TT_TUTORING
 #if   L==1
 	 "Tutories"
 #elif L==2
