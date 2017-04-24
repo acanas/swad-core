@@ -626,7 +626,7 @@ struct Globals
       unsigned Day;
       unsigned HourOld;
       unsigned Column;
-      TT_ClassTypeOld_t ClassTypeOld;
+      TT_ClassType_t ClassType;
       unsigned DurationOld;
       char Place[TT_MAX_BYTES_PLACE + 1];
       char Group[Grp_MAX_BYTES_GROUP_NAME + 1];

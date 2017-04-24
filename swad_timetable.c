@@ -50,9 +50,9 @@ extern struct Globals Gbl;
 /*************************** Internal constants ******************************/
 /*****************************************************************************/
 
-#define TT_START_HOUR				  6	// Day starts at 6:00
-#define TT_HOURS_PER_DAY			 18	// From 6:00 to 24:00
-// #define TT_HOURS_PER_DAY			  2	// From 6:00 to 24:00
+#define TT_START_HOUR				  6	// Day starts at  6:00
+#define TT_END_HOUR				 24	// Day  ends  at 24:00
+#define TT_HOURS_PER_DAY (TT_END_HOUR - TT_START_HOUR)	// From  6:00 to 24:00
 
 #define TT_DAYS					  7	// Seven days per week
 #define TT_MAX_COLUMNS_PER_CELL			  3	// Maximum number of items (i.e. classes) in a timetable cell (1, 2, 3 or 4)
@@ -74,7 +74,22 @@ extern struct Globals Gbl;
 /************************* Internal global variables *************************/
 /*****************************************************************************/
 
-char TimeTableCharsDays[TT_DAYS] =	// TODO: Change from Spanish to numbers, also in database
+char *TimeTableStrsClassTypeDB[TT_NUM_CLASS_TYPES] =
+  {
+   "free",
+   "lecture",
+   "practical",
+   "tutoring",
+  };
+
+char *TimeTableStrsClassTypeOldDB[TT_NUM_CLASS_TYPES] =	// TODO: Remove
+  {
+   "libre",
+   "teoria",
+   "practicas",
+   "tutorias",
+  };
+char TimeTableCharsDaysOld[TT_DAYS] =	// TODO: Remove
  {
   'L',	// Monday
   'M',	// Tuesday
@@ -85,36 +100,30 @@ char TimeTableCharsDays[TT_DAYS] =	// TODO: Change from Spanish to numbers, also
   'D',	// Sunday
  };
 
-char *TimeTableStrsClassTypeOldDB[TT_NUM_CLASS_TYPES] =
-  {
-   "free",
-   "lecture",
-   "practical",
-   "tutoring",
-  };
-char *TimeTableStrsClassTypeOldDBOld[TT_NUM_CLASS_TYPES] =	// TODO: Remove
-  {
-   "libre",
-   "teoria",
-   "practicas",
-   "tutorias",
-  };
-
 struct TimeTableColumn
   {
    long CrsCod;		// Course code (-1 if no course selected)
    long GrpCod;		// Group code (-1 if no group selected)
    TT_HourType_t HourType;
-   TT_ClassTypeOld_t ClassTypeOld;
-   unsigned DurationOld;
+   TT_ClassType_t ClassType;
+   unsigned DurationMinutes;
+   unsigned DurationOld;		// TODO: Remove
    char Place[TT_MAX_BYTES_PLACE + 1];
    char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
   };
+
 struct
   {
    unsigned NumColumns;
    struct TimeTableColumn Columns[TT_MAX_COLUMNS_PER_CELL];
-  } TimeTable[TT_DAYS][TT_HOURS_PER_DAY * 12];
+  } TimeTableOld[TT_DAYS][TT_HOURS_PER_DAY * 12];
+
+struct
+  {
+   unsigned NumColumns;
+   struct TimeTableColumn Columns[TT_MAX_COLUMNS_PER_CELL];
+  } TT_TimeTable[TT_DAYS][TT_HOURS_PER_DAY * 12];
+
 bool TimeTableHoursChecked[TT_HOURS_PER_DAY * 12];
 
 /*****************************************************************************/
@@ -140,7 +149,7 @@ static void TT_TimeTableDrawHourCell (unsigned HourOld,unsigned Min,const char *
 static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned HourOld);
 static void TT_DrawCellAlignTimeTable (void);
 static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,unsigned ColSpan,
-                                  long CrsCod,TT_HourType_t HourType,TT_ClassTypeOld_t ClassTypeOld,
+                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,
                                   unsigned DurationOld,char *Group,long GrpCod,char *Place);
 
 /*****************************************************************************/
@@ -200,12 +209,12 @@ static void TT_GetParamsTimeTable (void)
 
    /***** Get class type *****/
    Par_GetParToText ("ModTTClassTypeOld",StrClassTypeOld,TT_MAX_BYTES_STR_CLASS_TYPE);
-   for (Gbl.TimeTable.ClassTypeOld = (TT_ClassTypeOld_t) 0;
-	Gbl.TimeTable.ClassTypeOld < (TT_ClassTypeOld_t) TT_NUM_CLASS_TYPES;
-	Gbl.TimeTable.ClassTypeOld++)
-      if (!strcmp (StrClassTypeOld,TimeTableStrsClassTypeOldDB[Gbl.TimeTable.ClassTypeOld]))
+   for (Gbl.TimeTable.ClassType = (TT_ClassType_t) 0;
+	Gbl.TimeTable.ClassType < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
+	Gbl.TimeTable.ClassType++)
+      if (!strcmp (StrClassTypeOld,TimeTableStrsClassTypeOldDB[Gbl.TimeTable.ClassType]))
          break;
-   if (Gbl.TimeTable.ClassTypeOld == (TT_ClassTypeOld_t) TT_NUM_CLASS_TYPES)
+   if (Gbl.TimeTable.ClassType == (TT_ClassType_t) TT_NUM_CLASS_TYPES)
       Lay_ShowErrorAndExit ("Type of timetable cell is missing.");
 
    /***** Get class duration *****/
@@ -470,8 +479,10 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    char Query[512 +
               TT_MAX_BYTES_PLACE +
               Grp_MAX_BYTES_GROUP_NAME];
-   unsigned HourOld;
+   unsigned Interval5Minutes;
    unsigned Day;
+   unsigned Hour;
+   unsigned Min;
    unsigned Column;
 
    /***** Remove former timetable *****/
@@ -483,27 +494,29 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    for (Day = 0;
 	Day < TT_DAYS;
 	Day++)
-      for (HourOld = 0;
-	   HourOld < TT_HOURS_PER_DAY * 2;
-	   HourOld++)
+      for (Interval5Minutes = 0, Hour = TT_START_HOUR, Min = 0;
+	   Hour < TT_END_HOUR;
+	   Interval5Minutes++, Hour += (Min + 5) / 60, Min = (Min + 5) % 60)
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
-	    if (TimeTable[Day][HourOld].Columns[Column].HourType == TT_FIRST_HOUR &&
-                TimeTable[Day][HourOld].Columns[Column].DurationOld > 0)
+	    if (TT_TimeTable[Day][Interval5Minutes].Columns[Column].HourType == TT_FIRST_HOUR &&
+                TT_TimeTable[Day][Interval5Minutes].Columns[Column].DurationOld > 0)
               {
                sprintf (Query,"INSERT INTO timetable_crs"
-        	              " (CrsCod,GrpCod,DayOld,HourOld,DurationOld,ClassTypeOld,Place,GroupName)"
+        	              " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
+        	              "ClassType,Place,GroupName)"
                               " VALUES"
-                              " (%ld,%ld,'%c',%u,%d,'%s','%s','%s')",
+                              " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
+                              "'%s','%s','%s')",
                         CrsCod,
-			TimeTable[Day][HourOld].Columns[Column].GrpCod,
-			TimeTableCharsDays[Day],
-			HourOld,
-                        TimeTable[Day][HourOld].Columns[Column].DurationOld,
-                        TimeTableStrsClassTypeOldDB[TimeTable[Day][HourOld].Columns[Column].ClassTypeOld],
-                        TimeTable[Day][HourOld].Columns[Column].Place,
-		        TimeTable[Day][HourOld].Columns[Column].Group);
+			TT_TimeTable[Day][Interval5Minutes].Columns[Column].GrpCod,
+			Day,
+			Hour,Min,
+			TT_TimeTable[Day][Interval5Minutes].Columns[Column].DurationMinutes * 60,
+                        TimeTableStrsClassTypeOldDB[TT_TimeTable[Day][Interval5Minutes].Columns[Column].ClassType],
+                        TT_TimeTable[Day][Interval5Minutes].Columns[Column].Place,
+		        TT_TimeTable[Day][Interval5Minutes].Columns[Column].Group);
                DB_QueryINSERT (Query,"can not create course timetable");
               }
   }
@@ -535,16 +548,16 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
-	    if (TimeTable[Day][HourOld].Columns[Column].HourType == TT_FIRST_HOUR &&
-                TimeTable[Day][HourOld].Columns[Column].DurationOld > 0)
+	    if (TimeTableOld[Day][HourOld].Columns[Column].HourType == TT_FIRST_HOUR &&
+                TimeTableOld[Day][HourOld].Columns[Column].DurationOld > 0)
               {
                sprintf (Query,"INSERT INTO timetable_tut"
         	              " (UsrCod,DayOld,HourOld,DurationOld,Place)"
                               " VALUES"
                               " (%ld,'%c',%u,%d,'%s')",
-                        UsrCod,TimeTableCharsDays[Day],HourOld,
-                        TimeTable[Day][HourOld].Columns[Column].DurationOld,
-			TimeTable[Day][HourOld].Columns[Column].Place);
+                        UsrCod,TimeTableCharsDaysOld[Day],HourOld,
+                        TimeTableOld[Day][HourOld].Columns[Column].DurationOld,
+			TimeTableOld[Day][HourOld].Columns[Column].Place);
                DB_QueryINSERT (Query,"can not create office timetable");
               }
   }
@@ -568,7 +581,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
    unsigned DurationOld;
    unsigned H;
    long GrpCod;
-   TT_ClassTypeOld_t ClassTypeOld = TT_FREE;	// Initialized to avoid warning
+   TT_ClassType_t ClassType = TT_FREE;	// Initialized to avoid warning
    bool TimeTableIsIncomplete = false;
    bool TimeTableHasSpaceForThisClass;
    bool Found;
@@ -581,18 +594,18 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
 	   HourOld < TT_HOURS_PER_DAY * 2;
 	   HourOld++)
         {
-         TimeTable[Day][HourOld].NumColumns = 0;
+         TimeTableOld[Day][HourOld].NumColumns = 0;
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
 	   {
-	    TimeTable[Day][HourOld].Columns[Column].CrsCod    = -1L;
-	    TimeTable[Day][HourOld].Columns[Column].GrpCod    = -1L;
-	    TimeTable[Day][HourOld].Columns[Column].HourType  = TT_FREE_HOUR;
-	    TimeTable[Day][HourOld].Columns[Column].ClassTypeOld = TT_FREE;
-	    TimeTable[Day][HourOld].Columns[Column].DurationOld  = 0;
-	    TimeTable[Day][HourOld].Columns[Column].Group[0]  = '\0';
-	    TimeTable[Day][HourOld].Columns[Column].Place[0]  = '\0';
+	    TimeTableOld[Day][HourOld].Columns[Column].CrsCod    = -1L;
+	    TimeTableOld[Day][HourOld].Columns[Column].GrpCod    = -1L;
+	    TimeTableOld[Day][HourOld].Columns[Column].HourType  = TT_FREE_HOUR;
+	    TimeTableOld[Day][HourOld].Columns[Column].ClassType = TT_FREE;
+	    TimeTableOld[Day][HourOld].Columns[Column].DurationOld  = 0;
+	    TimeTableOld[Day][HourOld].Columns[Column].Group[0]  = '\0';
+	    TimeTableOld[Day][HourOld].Columns[Column].Place[0]  = '\0';
 	   }
         }
 
@@ -695,7 +708,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
       for (Day = 0;
 	   Day < TT_DAYS;
 	   Day++)
-	 if (Str_ConvertToUpperLetter (row[0][0]) == TimeTableCharsDays[Day])
+	 if (Str_ConvertToUpperLetter (row[0][0]) == TimeTableCharsDaysOld[Day])
 	    break;
       if (Day == TT_DAYS)
 	 Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
@@ -713,10 +726,10 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
         {
          case TT_COURSE_TIMETABLE:
          case TT_MY_TIMETABLE:
-            for (ClassTypeOld = TT_LECTURE, Found = false;
-        	 ClassTypeOld <= TT_TUTORING;
-        	 ClassTypeOld++)
-  	       if (!strcmp (row[4],TimeTableStrsClassTypeOldDB[ClassTypeOld]))
+            for (ClassType = TT_LECTURE, Found = false;
+        	 ClassType <= TT_TUTORING;
+        	 ClassType++)
+  	       if (!strcmp (row[4],TimeTableStrsClassTypeOldDB[ClassType]))
   		 {
   		  Found = true;
                   break;
@@ -725,19 +738,19 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
 	       Lay_ShowErrorAndExit ("Wrong type of class in timetable.");
             break;
          case TT_TUTORING_TIMETABLE:
-            ClassTypeOld = TT_TUTORING;
+            ClassType = TT_TUTORING;
             break;
         }
 
       /* Cell has been read without errors. */
-      if (TimeTable[Day][HourOld].NumColumns < TT_MAX_COLUMNS_PER_CELL)	// If there's place for another column in this cell...
+      if (TimeTableOld[Day][HourOld].NumColumns < TT_MAX_COLUMNS_PER_CELL)	// If there's place for another column in this cell...
         {
          /* Find the first free column for this day-hour */
          FirstFreeColumn = TT_MAX_COLUMNS_PER_CELL;
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
-            if (TimeTable[Day][HourOld].Columns[Column].HourType == TT_FREE_HOUR)
+            if (TimeTableOld[Day][HourOld].Columns[Column].HourType == TT_FREE_HOUR)
               {
                FirstFreeColumn = Column;
                break;
@@ -749,7 +762,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
             for (H = HourOld + 1;
         	 H < HourOld + DurationOld && H < TT_HOURS_PER_DAY * 2;
         	 H++)
-               if (TimeTable[Day][H].Columns[FirstFreeColumn].HourType != TT_FREE_HOUR)
+               if (TimeTableOld[Day][H].Columns[FirstFreeColumn].HourType != TT_FREE_HOUR)
                 {
                   TimeTableIsIncomplete = true;
                   TimeTableHasSpaceForThisClass = false;
@@ -757,15 +770,15 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                  }
             if (TimeTableHasSpaceForThisClass)
               {
-               TimeTable[Day][HourOld].Columns[FirstFreeColumn].ClassTypeOld = ClassTypeOld;
-               TimeTable[Day][HourOld].Columns[FirstFreeColumn].DurationOld  = DurationOld;
-               TimeTable[Day][HourOld].Columns[FirstFreeColumn].HourType  = TT_FIRST_HOUR;
+               TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].ClassType = ClassType;
+               TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].DurationOld  = DurationOld;
+               TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].HourType  = TT_FIRST_HOUR;
                for (H = HourOld + 1;
         	    H < HourOld + DurationOld && H < TT_HOURS_PER_DAY * 2;
         	    H++)
                  {
-	          TimeTable[Day][H].Columns[FirstFreeColumn].HourType = TT_NEXT_HOUR;
-	          TimeTable[Day][H].NumColumns++;
+	          TimeTableOld[Day][H].Columns[FirstFreeColumn].HourType = TT_NEXT_HOUR;
+	          TimeTableOld[Day][H].NumColumns++;
                  }
 
                /* Group and place */
@@ -773,23 +786,23 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                  {
                   case TT_MY_TIMETABLE:
                   case TT_COURSE_TIMETABLE:
-                     TimeTable[Day][HourOld].Columns[FirstFreeColumn].CrsCod =
+                     TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].CrsCod =
                         (Gbl.TimeTable.Type == TT_MY_TIMETABLE ? Str_ConvertStrCodToLongCod (row[7]) :
                                                                  Gbl.CurrentCrs.Crs.CrsCod);
-                     Str_Copy (TimeTable[Day][HourOld].Columns[FirstFreeColumn].Group,
+                     Str_Copy (TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].Group,
                                row[5],
                                Grp_MAX_BYTES_GROUP_NAME);
-                     TimeTable[Day][HourOld].Columns[FirstFreeColumn].GrpCod = GrpCod;
+                     TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].GrpCod = GrpCod;
                      // no break;
                   case TT_TUTORING_TIMETABLE:
-                     Str_Copy (TimeTable[Day][HourOld].Columns[FirstFreeColumn].Place,
+                     Str_Copy (TimeTableOld[Day][HourOld].Columns[FirstFreeColumn].Place,
                                row[3],
                                TT_MAX_BYTES_PLACE);
                      break;
                  }
 
                /* Increment number of items in this cell */
-               TimeTable[Day][HourOld].NumColumns++;
+               TimeTableOld[Day][HourOld].NumColumns++;
               }
            }
          else
@@ -812,31 +825,31 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
 
 static void TT_ModifTimeTable (void)
   {
-   if (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType == TT_FIRST_HOUR)
+   if (TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType == TT_FIRST_HOUR)
      {
       /***** Free this cell *****/
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].GrpCod    = -1;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType  = TT_FREE_HOUR;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].ClassTypeOld = TT_FREE;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].DurationOld  = 0;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Group[0]  = '\0';
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Place[0]  = '\0';
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns--;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].GrpCod    = -1;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType  = TT_FREE_HOUR;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].ClassType = TT_FREE;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].DurationOld  = 0;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Group[0]  = '\0';
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Place[0]  = '\0';
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns--;
      }
 
-   if (Gbl.TimeTable.ClassTypeOld != TT_FREE && Gbl.TimeTable.DurationOld > 0 &&
-       TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns < TT_MAX_COLUMNS_PER_CELL)
+   if (Gbl.TimeTable.ClassType != TT_FREE && Gbl.TimeTable.DurationOld > 0 &&
+       TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns < TT_MAX_COLUMNS_PER_CELL)
      {
       /***** Change this cell *****/
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns++;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].GrpCod    = Gbl.TimeTable.GrpCod;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType  = TT_FIRST_HOUR;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].ClassTypeOld = Gbl.TimeTable.ClassTypeOld;
-      TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].DurationOld  = Gbl.TimeTable.DurationOld;
-      Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Group,
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].NumColumns++;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].GrpCod    = Gbl.TimeTable.GrpCod;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].HourType  = TT_FIRST_HOUR;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].ClassType = Gbl.TimeTable.ClassType;
+      TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].DurationOld  = Gbl.TimeTable.DurationOld;
+      Str_Copy (TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Group,
                 Gbl.TimeTable.Group,
                 Grp_MAX_BYTES_GROUP_NAME);
-      Str_Copy (TimeTable[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Place,
+      Str_Copy (TimeTableOld[Gbl.TimeTable.Day][Gbl.TimeTable.HourOld].Columns[Gbl.TimeTable.Column].Place,
                 Gbl.TimeTable.Place,
                 TT_MAX_BYTES_PLACE);
      }
@@ -943,7 +956,7 @@ static void TT_DrawTimeTable (void)
          for (Column = 0, ContinuousFreeMinicolumns = 0;
               Column < ColumnsToDrawIncludingExtraColumn;
               Column++)
-            if (TimeTable[Day][HourOld].Columns[Column].HourType == TT_FREE_HOUR)
+            if (TimeTableOld[Day][HourOld].Columns[Column].HourType == TT_FREE_HOUR)
                ContinuousFreeMinicolumns += TT_NUM_MINICOLUMNS_PER_DAY / ColumnsToDrawIncludingExtraColumn;
             else
               {
@@ -954,13 +967,13 @@ static void TT_DrawTimeTable (void)
                   ContinuousFreeMinicolumns = 0;
                  }
                TT_TimeTableDrawCell (Day,HourOld,Column,TT_NUM_MINICOLUMNS_PER_DAY/ColumnsToDrawIncludingExtraColumn,
-	                             TimeTable[Day][HourOld].Columns[Column].CrsCod,
-				     TimeTable[Day][HourOld].Columns[Column].HourType,
-	                             TimeTable[Day][HourOld].Columns[Column].ClassTypeOld,
-                                     TimeTable[Day][HourOld].Columns[Column].DurationOld,
-	                             TimeTable[Day][HourOld].Columns[Column].Group,
-	                             TimeTable[Day][HourOld].Columns[Column].GrpCod,
-                                     TimeTable[Day][HourOld].Columns[Column].Place);
+	                             TimeTableOld[Day][HourOld].Columns[Column].CrsCod,
+				     TimeTableOld[Day][HourOld].Columns[Column].HourType,
+	                             TimeTableOld[Day][HourOld].Columns[Column].ClassType,
+                                     TimeTableOld[Day][HourOld].Columns[Column].DurationOld,
+	                             TimeTableOld[Day][HourOld].Columns[Column].Group,
+	                             TimeTableOld[Day][HourOld].Columns[Column].GrpCod,
+                                     TimeTableOld[Day][HourOld].Columns[Column].Place);
               }
          if (ContinuousFreeMinicolumns)
             TT_TimeTableDrawCell (Day,HourOld,Column-1,ContinuousFreeMinicolumns,
@@ -1089,7 +1102,7 @@ static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned HourOld)
    unsigned FirstHour;
    unsigned Cols;
 
-   ColumnsToDraw = TimeTable[Day][HourOld].NumColumns;
+   ColumnsToDraw = TimeTableOld[Day][HourOld].NumColumns;
 
    if (!TimeTableHoursChecked[HourOld])
      {
@@ -1098,14 +1111,14 @@ static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned HourOld)
 	   Column < TT_MAX_COLUMNS_PER_CELL;
 	   Column++)
         {
-         switch (TimeTable[Day][HourOld].Columns[Column].HourType)
+         switch (TimeTableOld[Day][HourOld].Columns[Column].HourType)
            {
             case TT_FREE_HOUR:
                break;
             case TT_FIRST_HOUR:
                /* Check from first hour (this one) to last hour searching maximum number of columns */
                for (H = HourOld + 1;
-        	    H < HourOld + TimeTable[Day][HourOld].Columns[Column].DurationOld;
+        	    H < HourOld + TimeTableOld[Day][HourOld].Columns[Column].DurationOld;
         	    H++)
                   if (!TimeTableHoursChecked[H])
                     {
@@ -1117,11 +1130,11 @@ static unsigned TT_TimeTableCalculateColsToDraw (unsigned Day,unsigned HourOld)
             case TT_NEXT_HOUR:
                /* Find first hour for this item (class) */
                for (FirstHour = HourOld;
-        	    TimeTable[Day][FirstHour].Columns[Column].HourType == TT_NEXT_HOUR;
+        	    TimeTableOld[Day][FirstHour].Columns[Column].HourType == TT_NEXT_HOUR;
         	    FirstHour--);
                  /* Check from first hour to last hour searching maximum number of columns */
                for (H = FirstHour;
-        	    H < FirstHour + TimeTable[Day][FirstHour].Columns[Column].DurationOld;
+        	    H < FirstHour + TimeTableOld[Day][FirstHour].Columns[Column].DurationOld;
         	    H++)
                   if (!TimeTableHoursChecked[H])
                     {
@@ -1153,7 +1166,7 @@ static void TT_DrawCellAlignTimeTable (void)
 /*****************************************************************************/
 
 static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,unsigned ColSpan,
-                                  long CrsCod,TT_HourType_t HourType,TT_ClassTypeOld_t ClassTypeOld,
+                                  long CrsCod,TT_HourType_t HourType,TT_ClassType_t ClassType,
                                   unsigned DurationOld,char *Group,long GrpCod,char *Place)
   {
    extern const char *Txt_unknown_removed_course;
@@ -1183,7 +1196,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
    unsigned Dur;
    unsigned MaxDuration;
    unsigned RowSpan = 0;
-   TT_ClassTypeOld_t CT;
+   TT_ClassType_t CT;
    struct Course Crs;
 
    /***** Compute row span and background color depending on hour type *****/
@@ -1234,8 +1247,8 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
 
    /***** Cell start *****/
    fprintf (Gbl.F.Out,"<td rowspan=\"%u\" colspan=\"%u\" class=\"%s",
-            RowSpan,ColSpan,TimeTableClasses[ClassTypeOld]);
-   if (ClassTypeOld == TT_FREE)
+            RowSpan,ColSpan,TimeTableClasses[ClassType]);
+   if (ClassType == TT_FREE)
       fprintf (Gbl.F.Out,"%u",HourOld % 4);
    fprintf (Gbl.F.Out," CENTER_MIDDLE DAT_SMALL\">");
 
@@ -1257,14 +1270,14 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
               {
                Crs.CrsCod = CrsCod;
                Crs_GetDataOfCourseByCod (&Crs);
-               if (ClassTypeOld == TT_LECTURE ||
-                   ClassTypeOld == TT_PRACTICAL)
+               if (ClassType == TT_LECTURE ||
+                   ClassType == TT_PRACTICAL)
 		  fprintf (Gbl.F.Out,"%s<br />",
 		           Crs.ShrtName[0] ? Crs.ShrtName :
 			                     Txt_unknown_removed_course);
               }
 	    fprintf (Gbl.F.Out,"%s (%dh%s)",
-		     Txt_TIMETABLE_CLASS_TYPES[ClassTypeOld],
+		     Txt_TIMETABLE_CLASS_TYPES[ClassType],
 	             DurationOld / 2,
 	             DurationOld % 2 ? "30'" :
 	        	            "");
@@ -1297,15 +1310,15 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
 	 fprintf (Gbl.F.Out,"<select name=\"ModTTClassTypeOld\" style=\"width:68px;\""
 	                    " onchange=\"document.getElementById('%s').submit();\">",
 	          Gbl.Form.Id);
-	 for (CT = (TT_ClassTypeOld_t) 0;
-	      CT < (TT_ClassTypeOld_t) TT_NUM_CLASS_TYPES;
+	 for (CT = (TT_ClassType_t) 0;
+	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
 	      CT++)
 	    if ((CT == TT_FREE) ||
 		((TimeTableView == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
 		((TimeTableView == TT_TUT_EDIT) && (CT == TT_TUTORING)))
 	      {
 	       fprintf (Gbl.F.Out,"<option");
-	       if (CT == ClassTypeOld)
+	       if (CT == ClassType)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
 	       fprintf (Gbl.F.Out," value=\"%s\">%s</option>",
 		        TimeTableStrsClassTypeOldDB[CT],
@@ -1318,7 +1331,7 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
             for (H = HourOld + 1;
         	 H < TT_HOURS_PER_DAY * 2;
         	 H++)
-              if (TimeTable[Day][H].NumColumns == TT_MAX_COLUMNS_PER_CELL)
+              if (TimeTableOld[Day][H].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
             MaxDuration = H - HourOld;
 	    if (MaxDuration > 1)
@@ -1333,14 +1346,14 @@ static void TT_TimeTableDrawCell (unsigned Day,unsigned HourOld,unsigned Column,
 	    fprintf (Gbl.F.Out,"<select name=\"ModTTDur\" style=\"width:57px;\""
 		               " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
-            for (H = HourOld + TimeTable[Day][HourOld].Columns[Column].DurationOld;
+            for (H = HourOld + TimeTableOld[Day][HourOld].Columns[Column].DurationOld;
         	 H < TT_HOURS_PER_DAY * 2;
         	 H++)
-               if (TimeTable[Day][H].NumColumns == TT_MAX_COLUMNS_PER_CELL)
+               if (TimeTableOld[Day][H].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
             MaxDuration = H - HourOld;
-            if (TimeTable[Day][HourOld].Columns[Column].DurationOld > MaxDuration)
-               MaxDuration = TimeTable[Day][HourOld].Columns[Column].DurationOld;
+            if (TimeTableOld[Day][HourOld].Columns[Column].DurationOld > MaxDuration)
+               MaxDuration = TimeTableOld[Day][HourOld].Columns[Column].DurationOld;
 	    for (Dur = 0;
 		 Dur <= MaxDuration;
 		 Dur++)

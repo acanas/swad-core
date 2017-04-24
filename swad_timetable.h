@@ -58,7 +58,7 @@ typedef enum
    TT_LECTURE   = 1,
    TT_PRACTICAL = 2,
    TT_TUTORING  = 3,
-  } TT_ClassTypeOld_t;
+  } TT_ClassType_t;
 
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
