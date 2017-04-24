@@ -46,10 +46,10 @@ typedef enum
 
 typedef enum
   {
-   TT_FREE_HOUR,
-   TT_FIRST_HOUR,
-   TT_NEXT_HOUR,
-  } TT_HourType_t;
+   TT_FREE_INTERVAL,
+   TT_FIRST_INTERVAL,
+   TT_NEXT_INTERVAL,
+  } TT_IntervalType_t;
 
 #define TT_NUM_CLASS_TYPES 4
 typedef enum

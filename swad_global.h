@@ -623,11 +623,11 @@ struct Globals
    struct
      {
       TT_TimeTableType_t Type;
-      unsigned Day;
-      unsigned HourOld;
+      unsigned Weekday;
+      unsigned Interval;
       unsigned Column;
       TT_ClassType_t ClassType;
-      unsigned DurationOld;
+      unsigned DurationNumIntervals;
       char Place[TT_MAX_BYTES_PLACE + 1];
       char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
       long GrpCod;		// Group code (-1 if no group selected)
