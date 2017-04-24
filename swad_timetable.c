@@ -480,7 +480,7 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
               TT_MAX_BYTES_PLACE +
               Grp_MAX_BYTES_GROUP_NAME];
    unsigned Interval5Minutes;
-   unsigned Day;
+   unsigned Weekday;
    unsigned Hour;
    unsigned Min;
    unsigned Column;
@@ -491,17 +491,17 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
    DB_QueryDELETE (Query,"can not remove former timetable");
 
    /***** Go across the timetable inserting classes into database *****/
-   for (Day = 0;
-	Day < TT_DAYS;
-	Day++)
+   for (Weekday = 0;
+	Weekday < TT_DAYS;
+	Weekday++)
       for (Interval5Minutes = 0, Hour = TT_START_HOUR, Min = 0;
 	   Hour < TT_END_HOUR;
 	   Interval5Minutes++, Hour += (Min + 5) / 60, Min = (Min + 5) % 60)
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
-	    if (TT_TimeTable[Day][Interval5Minutes].Columns[Column].HourType == TT_FIRST_HOUR &&
-                TT_TimeTable[Day][Interval5Minutes].Columns[Column].DurationOld > 0)
+	    if (TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].HourType == TT_FIRST_HOUR &&
+                TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].DurationMinutes)
               {
                sprintf (Query,"INSERT INTO timetable_crs"
         	              " (CrsCod,GrpCod,Weekday,StartTime,Duration,"
@@ -510,13 +510,13 @@ static void TT_WriteCrsTimeTableIntoDB (long CrsCod)
                               " (%ld,%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),"
                               "'%s','%s','%s')",
                         CrsCod,
-			TT_TimeTable[Day][Interval5Minutes].Columns[Column].GrpCod,
-			Day,
+			TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].GrpCod,
+			Weekday,
 			Hour,Min,
-			TT_TimeTable[Day][Interval5Minutes].Columns[Column].DurationMinutes * 60,
-                        TimeTableStrsClassTypeOldDB[TT_TimeTable[Day][Interval5Minutes].Columns[Column].ClassType],
-                        TT_TimeTable[Day][Interval5Minutes].Columns[Column].Place,
-		        TT_TimeTable[Day][Interval5Minutes].Columns[Column].Group);
+			TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].DurationMinutes * 60,
+                        TimeTableStrsClassTypeOldDB[TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].ClassType],
+                        TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].Place,
+		        TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].Group);
                DB_QueryINSERT (Query,"can not create course timetable");
               }
   }
@@ -529,8 +529,10 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
   {
    char Query[512 +
               TT_MAX_BYTES_PLACE];
-   unsigned HourOld;
-   unsigned Day;
+   unsigned Interval5Minutes;
+   unsigned Weekday;
+   unsigned Hour;
+   unsigned Min;
    unsigned Column;
 
    /***** Remove former timetable *****/
@@ -539,25 +541,27 @@ static void TT_WriteTutTimeTableIntoDB (long UsrCod)
    DB_QueryDELETE (Query,"can not remove former timetable");
 
    /***** Loop over timetable *****/
-   for (Day = 0;
-	Day < TT_DAYS;
-	Day++)
-      for (HourOld = 0;
-	   HourOld < TT_HOURS_PER_DAY * 2;
-	   HourOld++)
+   for (Weekday = 0;
+	Weekday < TT_DAYS;
+	Weekday++)
+      for (Interval5Minutes = 0, Hour = TT_START_HOUR, Min = 0;
+	   Hour < TT_END_HOUR;
+	   Interval5Minutes++, Hour += (Min + 5) / 60, Min = (Min + 5) % 60)
          for (Column = 0;
               Column < TT_MAX_COLUMNS_PER_CELL;
               Column++)
-	    if (TimeTableOld[Day][HourOld].Columns[Column].HourType == TT_FIRST_HOUR &&
-                TimeTableOld[Day][HourOld].Columns[Column].DurationOld > 0)
+	    if (TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].HourType == TT_FIRST_HOUR &&
+                TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].DurationMinutes)
               {
                sprintf (Query,"INSERT INTO timetable_tut"
-        	              " (UsrCod,DayOld,HourOld,DurationOld,Place)"
+        	              " (UsrCod,Weekday,StartTime,Duration,Place)"
                               " VALUES"
-                              " (%ld,'%c',%u,%d,'%s')",
-                        UsrCod,TimeTableCharsDaysOld[Day],HourOld,
-                        TimeTableOld[Day][HourOld].Columns[Column].DurationOld,
-			TimeTableOld[Day][HourOld].Columns[Column].Place);
+                              " (%ld,%u,'%02u:%02u:00',SEC_TO_TIME(%u),'%s')",
+                        UsrCod,
+			Weekday,
+			Hour,Min,
+			TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].DurationMinutes * 60,
+			TT_TimeTable[Weekday][Interval5Minutes].Columns[Column].Place);
                DB_QueryINSERT (Query,"can not create office timetable");
               }
   }
