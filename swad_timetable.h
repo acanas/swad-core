@@ -60,6 +60,16 @@ typedef enum
    TT_TUTORING  = 3,
   } TT_ClassType_t;
 
+struct TT_Range
+  {
+   struct
+     {
+      unsigned Start;		// Class or table starts at this hour
+      unsigned End;		// Class or table ends at this hour
+     } Hours;
+   unsigned MinutesPerInterval;	// 5, 15 or 30 minutes
+  };
+
 /*****************************************************************************/
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/

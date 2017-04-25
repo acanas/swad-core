@@ -45560,6 +45560,27 @@ const char *Txt_The_thread_X_is_already_in_this_forum =	// Warning: it is very i
 	"The thread <strong>%s</strong> is already in this forum.";		// Necessita de tradução
 #endif
 
+const char *Txt_The_timetable_is_empty =
+#if   L==1
+	"L'horari est&agrave; buit.";
+#elif L==2
+	"Der Fahrplan ist leer.";
+#elif L==3
+	"The timetable is empty.";
+#elif L==4
+	"El horario est&aacute; vac&iacute;o.";
+#elif L==5
+	"L'horaire est vide.";
+#elif L==6
+	"El horario est&aacute; vac&iacute;o.";	// Okoteve traducción
+#elif L==7
+	"Il orario &egrave; vuoto.";
+#elif L==8
+	"Harmonogram jest pusty.";
+#elif L==9
+	"O hor&aacute;rio est&aacute; vazio.";
+#endif
+
 const char *Txt_The_type_of_degree_X_already_exists =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"El tipo de titulaci&oacute;n <strong>%s</strong> ya existe.";	// Necessita traduccio

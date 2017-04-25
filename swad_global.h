@@ -624,9 +624,7 @@ struct Globals
      {
       struct
         {
-	 unsigned StartHour;		// Day starts at this hour
-	 unsigned EndHour;		// Day  ends  at this hour
-	 unsigned MinutesPerInterval;	// Number of minutes per interval
+	 struct TT_Range Range;
 	 unsigned HoursPerDay;		// From start hour to end hour
 	 unsigned SecondsPerInterval;
 	 unsigned IntervalsPerHour;
@@ -639,7 +637,7 @@ struct Globals
       unsigned Interval;
       unsigned Column;
       TT_ClassType_t ClassType;
-      unsigned DurationNumIntervals;
+      unsigned DurationIntervals;
       char Place[TT_MAX_BYTES_PLACE + 1];
       char Group[Grp_MAX_BYTES_GROUP_NAME + 1];
       long GrpCod;		// Group code (-1 if no group selected)
