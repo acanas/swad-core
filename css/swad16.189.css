@@ -2364,7 +2364,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#345C6C;
 	font-size:10pt;
-	line-height:110%;
+	line-height:100%;
 	letter-spacing:0;
 	}
 .TT_DAY
@@ -2385,17 +2385,17 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#404040;
-	font-size:14pt;
+	font-size:13pt;
 	font-weight:bold;
-	line-height:110%;
+	line-height:100%;
 	letter-spacing:0;
 	}
 .TT_HOUR_SMALL
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#A0A0A0;
-	font-size:10pt;
-	line-height:110%;
+	font-size:8pt;
+	line-height:100%;
 	letter-spacing:0;
 	}
 .TT_HOUR	{height:16px;}

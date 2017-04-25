@@ -184,7 +184,7 @@ static void TT_GetParamsTimeTable (void)
    Gbl.TimeTable.Interval = (unsigned)
 	                            Par_GetParToUnsignedLong ("ModTTHour",
                                                               0,
-                                                              TT_HOURS_PER_DAY * 2 - 1,
+                                                              TT_INTERVALS_PER_DAY - 1,
                                                               0);
 
    /***** Get number of column *****/
@@ -615,7 +615,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
             case Grp_ONLY_MY_GROUPS:
                sprintf (Query,"SELECT "
                               "timetable_crs.Weekday,"
-        	              "TIME_TO_SEC(timetable_crs.StartTime),"
+        	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
         	              "timetable_crs.Place,"
                               "timetable_crs.ClassType,"
@@ -629,7 +629,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                               " UNION DISTINCT "
                               "SELECT "
                               "timetable_crs.Weekday,"
-                              "TIME_TO_SEC(timetable_crs.StartTime),"
+                              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
                               "TIME_TO_SEC(timetable_crs.Duration) AS D,"
                               "timetable_crs.Place,"
                               "timetable_crs.ClassType,"
@@ -642,7 +642,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                               " UNION "
                               "SELECT "
                               "Weekday,"
-                              "TIME_TO_SEC(StartTime),"
+                              "TIME_TO_SEC(StartTime) AS S,"
                               "TIME_TO_SEC(Duration) AS D,"
                               "Place,"
                               "'tutoring' AS ClassType,"
@@ -651,14 +651,14 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                               "-1 AS CrsCod"
                               " FROM timetable_tut"
                               " WHERE UsrCod=%ld"
-                              " ORDER BY Weekday,StartTime,ClassType,"
+                              " ORDER BY Weekday,S,ClassType,"
                               "GroupName,GrpCod,Place,D DESC,CrsCod",
                         UsrCod,UsrCod,UsrCod);
                break;
             case Grp_ALL_GROUPS:
                sprintf (Query,"SELECT "
         	              "timetable_crs.Weekday,"
-        	              "TIME_TO_SEC(timetable_crs.StartTime),"
+        	              "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	              "TIME_TO_SEC(timetable_crs.Duration) AS D,"
         	              "timetable_crs.Place,"
                               "timetable_crs.ClassType,"
@@ -671,7 +671,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                               " UNION "
                               "SELECT "
                               "Weekday,"
-                              "TIME_TO_SEC(StartTime),"
+                              "TIME_TO_SEC(StartTime) AS S,"
                               "TIME_TO_SEC(Duration) AS D,"
                               "Place,"
                               "'tutoring' AS ClassType,"
@@ -680,7 +680,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                               "-1 AS CrsCod"
                               " FROM timetable_tut"
                               " WHERE UsrCod=%ld"
-                              " ORDER BY Weekday,StartTime,ClassType,"
+                              " ORDER BY Weekday,S,ClassType,"
                               "GroupName,GrpCod,Place,D DESC,CrsCod",
                         UsrCod,UsrCod);
                break;
@@ -692,7 +692,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
              Gbl.Action.Act == ActChgCrsTT)	// If we are editing, all groups are shown
             sprintf (Query,"SELECT "
         	           "Weekday,"
-        	           "TIME_TO_SEC(StartTime),"
+        	           "TIME_TO_SEC(StartTime) AS S,"
         	           "TIME_TO_SEC(Duration) AS D,"
         	           "Place,"
         	           "ClassType,"
@@ -700,13 +700,13 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
         	           "GrpCod"
         	           " FROM timetable_crs"
                            " WHERE CrsCod=%ld"
-                           " ORDER BY Weekday,StartTime,ClassType,"
+                           " ORDER BY Weekday,S,ClassType,"
                            "GroupName,GrpCod,Place,D DESC",
                      Gbl.CurrentCrs.Crs.CrsCod);
          else
             sprintf (Query,"SELECT "
         	           "timetable_crs.Weekday,"
-        	           "TIME_TO_SEC(timetable_crs.StartTime),"
+        	           "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
         	           "TIME_TO_SEC(timetable_crs.Duration) AS D,"
         	           "timetable_crs.Place,"
         	           "timetable_crs.ClassType,"
@@ -718,7 +718,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                            " AND timetable_crs.CrsCod=crs_usr.CrsCod"
                            " UNION DISTINCT "
                            "SELECT timetable_crs.Weekday,"
-                           "TIME_TO_SEC(timetable_crs.StartTime),"
+                           "TIME_TO_SEC(timetable_crs.StartTime) AS S,"
                            "TIME_TO_SEC(timetable_crs.Duration) AS D,"
                            "timetable_crs.Place,"
                            "timetable_crs.ClassType,"
@@ -728,7 +728,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                            " WHERE timetable_crs.CrsCod=%ld"
                            " AND crs_grp_usr.UsrCod=%ld"
                            " AND timetable_crs.GrpCod=crs_grp_usr.GrpCod"
-                           " ORDER BY Weekday,StartTime,ClassType,"
+                           " ORDER BY Weekday,S,ClassType,"
                            "GroupName,GrpCod,Place,D DESC",
                      Gbl.CurrentCrs.Crs.CrsCod,UsrCod,
                      Gbl.CurrentCrs.Crs.CrsCod,UsrCod);
@@ -736,12 +736,12 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
       case TT_TUTORING_TIMETABLE:
          sprintf (Query,"SELECT "
                         "Weekday,"
-                        "TIME_TO_SEC(StartTime),"
+                        "TIME_TO_SEC(StartTime) AS S,"
                         "TIME_TO_SEC(Duration) AS D,"
                         "Place"
                         " FROM timetable_tut"
                         " WHERE UsrCod=%ld"
-                        " ORDER BY Weekday,StartTime,Place,D DESC",
+                        " ORDER BY Weekday,S,Place,D DESC",
                   UsrCod);
          break;
      }
@@ -761,17 +761,18 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
             GrpCod = -1;
 
       /* Day of week (row[0]) */
-      if (sscanf (row[0],"%u",&Weekday) == 1)
-	 if (Weekday >= TT_DAYS_PER_WEEK)
-	    Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
+      if (sscanf (row[0],"%u",&Weekday) != 1)
+	 Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
+      if (Weekday >= TT_DAYS_PER_WEEK)
+	 Lay_ShowErrorAndExit ("Wrong day of week in timetable.");
 
       /* StartTime formatted as seconds (row[1])
          --> StartTime in number of intervals */
       if (sscanf (row[1],"%u",&Seconds) != 1)
-	 Lay_ShowErrorAndExit ("Wrong hour in timetable.");
-      Interval = Seconds / TT_SECONDS_PER_MINUTE;
+	 Lay_ShowErrorAndExit ("Wrong start time in timetable.");
+      Interval = Seconds / TT_SECONDS_PER_INTERVAL;
       if (Interval < TT_INTERVALS_BEFORE_START_HOUR)
-	 Lay_ShowErrorAndExit ("Wrong hour in timetable.");
+	 Lay_ShowErrorAndExit ("Wrong start time in timetable.");
       Interval -= TT_INTERVALS_BEFORE_START_HOUR;
 
       /* Duration formatted as seconds (row[2])
@@ -815,6 +816,7 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
                FirstFreeColumn = Column;
                break;
               }
+
          if (FirstFreeColumn < TT_MAX_COLUMNS_PER_CELL)
             // If there's place for another column in this cell
            {
@@ -834,10 +836,10 @@ static void TT_CreatTimeTableFromDB (long UsrCod)
               {
                TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].ClassType = ClassType;
                TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].DurationNumIntervals = DurationNumIntervals;
-               TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].IntervalType  = TT_FIRST_INTERVAL;
+               TT_TimeTable[Weekday][Interval].Columns[FirstFreeColumn].IntervalType = TT_FIRST_INTERVAL;
                for (I = Interval + 1;
         	    I < Interval + DurationNumIntervals &&
-        	    I < TT_HOURS_PER_DAY * 2;
+        	    I < TT_INTERVALS_PER_DAY;
         	    I++)
                  {
 	          TT_TimeTable[Weekday][I].Columns[FirstFreeColumn].IntervalType = TT_NEXT_INTERVAL;
@@ -1006,7 +1008,8 @@ static void TT_DrawTimeTable (void)
 	 Weekday = (DayColumn + Gbl.Prefs.FirstDayOfWeek) % 7;
 
          /* Check how many colums are needed.
-            For each item (class) in this hour from left to right, we must check the maximum of columns */
+            For each item (class) in this hour from left to right,
+            we must check the maximum of columns */
          for (I = 0;
               I < TT_INTERVALS_PER_DAY;
               I++)
@@ -1332,11 +1335,14 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    /***** Draw cell depending on type of view *****/
    switch (TimeTableView)
      {
-      case TT_CRS_SHOW:
-      case TT_TUT_SHOW:
+      case TT_CRS_SHOW:	// View course timetable
+      case TT_TUT_SHOW:	// View tutoring timetable
 	 if (IntervalType != TT_FREE_INTERVAL) // If cell is not empty...
 	   {
+	    /***** Start cell *****/
 	    fprintf (Gbl.F.Out,"<div class=\"TT_CELL TT_TXT\">");
+
+	    /***** Course name *****/
 	    if (Gbl.TimeTable.Type == TT_MY_TIMETABLE)
               {
                Crs.CrsCod = CrsCod;
@@ -1347,14 +1353,17 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		           Crs.ShrtName[0] ? Crs.ShrtName :
 			                     Txt_unknown_removed_course);
               }
-	    fprintf (Gbl.F.Out,"%s (%dh%s)",
+
+	    /***** Type of class and duration *****/
+	    fprintf (Gbl.F.Out,"%s (%u:%02u h)",
 		     Txt_TIMETABLE_CLASS_TYPES[ClassType],
-	             DurationNumIntervals / 2,
-	             DurationNumIntervals % 2 ? "30'" :
-	        	            "");
+	             (DurationNumIntervals / TT_INTERVALS_PER_HOUR),				// Hours
+	             (DurationNumIntervals % TT_INTERVALS_PER_HOUR) * TT_MINUTES_PER_INTERVAL);	// Minutes
+
+	    /***** Group *****/
 	    if (TimeTableView == TT_CRS_SHOW)
 	      {
-               if (GrpCod == -1)
+               if (GrpCod <= 0)
                  {
 	          if (Group[0])
 		     fprintf (Gbl.F.Out,"<br />%s",Group);
@@ -1362,12 +1371,13 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
                else
 		  fprintf (Gbl.F.Out,"<br />%s %s",
                            GrpDat.GrpTypName,GrpDat.GrpName);
-	       if (Place[0])
-		  fprintf (Gbl.F.Out,"<br />%s",Place);
 	      }
-	    else	// TimeTableView == TT_TUT_SHOW
-	       if (Place[0])
-		  fprintf (Gbl.F.Out,"<br />%s",Place);
+
+	    /***** Place *****/
+	    if (Place[0])
+	       fprintf (Gbl.F.Out,"<br />%s",Place);
+
+	    /***** End cell *****/
             fprintf (Gbl.F.Out,"</div>");
 	   }
 	 break;
@@ -1396,20 +1406,21 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		        Txt_TIMETABLE_CLASS_TYPES[CT]);
 	      }
 	 fprintf (Gbl.F.Out,"</select>");
+
 	 if (IntervalType == TT_FREE_INTERVAL)
 	   {
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"ModTTDur\" value=\"");
             for (I = Interval + 1;
-        	 I < TT_HOURS_PER_DAY * 2;
+        	 I < TT_INTERVALS_PER_DAY;
         	 I++)
               if (TT_TimeTable[Weekday][I].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
             MaxDuration = I - Interval;
-	    if (MaxDuration > 1)
-	       fprintf (Gbl.F.Out,"1:00");
-	    else
-	       fprintf (Gbl.F.Out,"0:30");
-	    fprintf (Gbl.F.Out," h\" />");
+	    Dur = (MaxDuration >= TT_INTERVALS_PER_HOUR) ? TT_INTERVALS_PER_HOUR :	// MaxDuration >= 1h ==> Dur = 1h
+	                                                   MaxDuration;			// MaxDuration  < 1h ==> Dur = MaxDuration
+	    fprintf (Gbl.F.Out,"%u:%02u h\" />",
+		     (Dur / TT_INTERVALS_PER_HOUR),					// Hours
+		     (Dur % TT_INTERVALS_PER_HOUR) * TT_MINUTES_PER_INTERVAL);	// Minutes
 	   }
 	 else
 	   {
@@ -1418,7 +1429,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 		               " onchange=\"document.getElementById('%s').submit();\">",
 		     Gbl.Form.Id);
             for (I = Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationNumIntervals;
-        	 I < TT_HOURS_PER_DAY * 2;
+        	 I < TT_INTERVALS_PER_DAY;
         	 I++)
                if (TT_TimeTable[Weekday][I].NumColumns == TT_MAX_COLUMNS_PER_CELL)
                   break;
@@ -1433,9 +1444,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	       if (Dur == DurationNumIntervals)
 		  fprintf (Gbl.F.Out," selected=\"selected\"");
 	       fprintf (Gbl.F.Out,">%u:%02u h</option>",
-		        Dur / 2,
-		        Dur % 2 ? 30 :
-		                  0);
+		        (Dur / TT_INTERVALS_PER_HOUR),					// Hours
+		        (Dur % TT_INTERVALS_PER_HOUR) * TT_MINUTES_PER_INTERVAL);	// Minutes
 	      }
 	    fprintf (Gbl.F.Out,"</select>");
 

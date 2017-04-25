@@ -1061,10 +1061,10 @@ CREATE TABLE IF NOT EXISTS svy_users (
 CREATE TABLE IF NOT EXISTS timetable_crs (
 	CrsCod INT NOT NULL DEFAULT -1,
 	GrpCod INT NOT NULL DEFAULT -1,
-	Day ENUM('L','M','X','J','V','S','D') NOT NULL,
-	Hour TINYINT NOT NULL,
-	Duration TINYINT NOT NULL,
-	ClassType ENUM('libre','teoria','practicas') NOT NULL,
+	Weekday TINYINT NOT NULL,
+	StartTime TIME NOT NULL,
+	Duration TIME NOT NULL,
+	ClassType ENUM('free','lecture','practical') NOT NULL,
 	Place VARCHAR(511) NOT NULL,
 	GroupName VARCHAR(2047) NOT NULL,
 	INDEX(CrsCod,GrpCod));
@@ -1073,9 +1073,9 @@ CREATE TABLE IF NOT EXISTS timetable_crs (
 --
 CREATE TABLE IF NOT EXISTS timetable_tut (
 	UsrCod INT NOT NULL,
-	Day ENUM('L','M','X','J','V','S','D') NOT NULL,
-	Hour TINYINT NOT NULL,
-	Duration TINYINT NOT NULL,
+	Weekday TINYINT NOT NULL,
+	StartTime TIME NOT NULL,
+	Duration TIME NOT NULL,
 	Place VARCHAR(511) NOT NULL,
 	INDEX(UsrCod));
 --

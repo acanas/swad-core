@@ -219,13 +219,24 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.188 (2017-04-24)"
-#define CSS_FILE		"swad16.185.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.189 (2017-04-25)"
+#define CSS_FILE		"swad16.189.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.189:   Apr 25, 2017	Changes in timetable. (218027 lines)
+					7 changes necessary in database.
+ALTER TABLE timetable_crs DROP COLUMN DayOld;
+ALTER TABLE timetable_crs DROP COLUMN HourOld;
+ALTER TABLE timetable_crs DROP COLUMN DurationOld;
+ALTER TABLE timetable_crs DROP COLUMN ClassTypeOld;
+
+ALTER TABLE timetable_tut DROP COLUMN DayOld;
+ALTER TABLE timetable_tut DROP COLUMN HourOld;
+ALTER TABLE timetable_tut DROP COLUMN DurationOld;
+
         Version 16.188:   Apr 24, 2017	Changes in timetable. Not finished. (218029 lines)
         Version 16.187.3: Apr 24, 2017	Changes in timetable. Not finished. (218040 lines)
         Version 16.187.2: Apr 24, 2017	Changes in timetable. Not finished. (217963 lines)
