@@ -622,6 +622,17 @@ struct Globals
      } Msg;
    struct
      {
+      struct
+        {
+	 unsigned StartHour;		// Day starts at this hour
+	 unsigned EndHour;		// Day  ends  at this hour
+	 unsigned MinutesPerInterval;	// Number of minutes per interval
+	 unsigned HoursPerDay;		// From start hour to end hour
+	 unsigned SecondsPerInterval;
+	 unsigned IntervalsPerHour;
+	 unsigned IntervalsPerDay;
+	 unsigned IntervalsBeforeStartHour;
+        } Config;
       TT_TimeTableType_t Type;
       unsigned Weekday;
       unsigned Interval;

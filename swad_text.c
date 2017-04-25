@@ -15565,23 +15565,23 @@ const char *Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_
 
 const char *Txt_Incomplete_timetable_for_lack_of_space =
 #if   L==1
-	"Horari incomplet per falta d'espai";
+	"Horari incomplet per falta d'espai.";
 #elif L==2
-	"Unvollst&auml;ndige Studenplan f&uuml;r Platzmangel";
+	"Unvollst&auml;ndige Studenplan f&uuml;r Platzmangel.";
 #elif L==3
-	"Incomplete timetable for lack of space";
+	"Incomplete timetable for lack of space.";
 #elif L==4
-	"Horario incompleto por falta de espacio";
+	"Horario incompleto por falta de espacio.";
 #elif L==5
-	"Horaire incompl&egrave;te par manque de place";
+	"Horaire incompl&egrave;te par manque de place.";
 #elif L==6
-	"Horario incompleto por falta de espacio";	// Okoteve traducción
+	"Horario incompleto por falta de espacio.";	// Okoteve traducción
 #elif L==7
-	"Orario incompleto per mancanza di spazio";
+	"Orario incompleto per mancanza di spazio.";
 #elif L==8
-	"Niekompletne harmonogram brak miejsca";
+	"Niekompletne harmonogram brak miejsca.";
 #elif L==9
-	"Hor&aacute;rio incompleto por falta de espa&ccedil;o";
+	"Hor&aacute;rio incompleto por falta de espa&ccedil;o.";
 #endif
 
 const char *Txt_Increase_level_of_X =	// Warning: it is very important to include %s in the following sentences
