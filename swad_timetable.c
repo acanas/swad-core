@@ -504,22 +504,28 @@ void TT_ShowTimeTable (long UsrCod)
   {
    extern const char *Txt_The_timetable_is_empty;
 
-   /***** Editing or viewing? *****/
+   /***** Set type of view depending on current action *****/
+   Gbl.TimeTable.View = TT_CRS_VIEW;
    switch (Gbl.Action.Act)
      {
       case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
       case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
+	 Gbl.TimeTable.View = TT_CRS_VIEW;
+	 break;
       case ActSeeRecOneTch:	case ActSeeRecSevTch:
-         Gbl.TimeTable.Editing = false;
-         break;
+	 Gbl.TimeTable.View = TT_TUT_VIEW;
+	 break;
       case ActEdiCrsTT:		case ActChgCrsTT:
+	 Gbl.TimeTable.View = TT_CRS_EDIT;
+	 break;
       case ActEdiTut:		case ActChgTut:
-         Gbl.TimeTable.Editing = true;
-         break;
+	 Gbl.TimeTable.View = TT_TUT_EDIT;
+	 break;
      }
 
    /***** If editing ==> configure and allocate timetable *****/
-   if (Gbl.TimeTable.Editing)
+   if (Gbl.TimeTable.View == TT_CRS_EDIT ||
+       Gbl.TimeTable.View == TT_TUT_EDIT)
      {
       Gbl.TimeTable.Config.Range.Hours.Start          = TT_START_HOUR;		// Day starts at this hour
       Gbl.TimeTable.Config.Range.Hours.End	      = TT_END_HOUR;		// Day  ends  at this hour
@@ -842,7 +848,8 @@ static void TT_FillTimeTableFromDB (long UsrCod)
 
    /***** If viewing (not editing) ==>
           calculate range of hours and resolution *****/
-   if (!Gbl.TimeTable.Editing)
+   if (Gbl.TimeTable.View == TT_CRS_VIEW ||
+       Gbl.TimeTable.View == TT_TUT_VIEW)
      {
       /* Initialize hours and resolution for timetable */
       Gbl.TimeTable.Config.Range.Hours.Start = TT_END_HOUR;		// Initialized to maximum hour
@@ -1225,12 +1232,16 @@ static void TT_DrawTimeTable (void)
             we must check the maximum of columns */
          ColumnsToDraw = TT_CalculateColsToDrawInCell (true,	// Top call, non recursive
                                                        Weekday,Interval);
-         if (!Gbl.TimeTable.Editing && ColumnsToDraw == 0)
+         if (ColumnsToDraw == 0 &&
+             (Gbl.TimeTable.View == TT_CRS_VIEW ||
+              Gbl.TimeTable.View == TT_TUT_VIEW))
             ColumnsToDraw = 1;
 	 // If editing and there's place for more columns,
          // a potential new column is added at the end of each day
          ColumnsToDrawIncludingExtraColumn = ColumnsToDraw;
-         if (Gbl.TimeTable.Editing && ColumnsToDraw < TT_MAX_COLUMNS_PER_CELL)
+         if (ColumnsToDraw < TT_MAX_COLUMNS_PER_CELL &&
+             (Gbl.TimeTable.View == TT_CRS_EDIT ||
+              Gbl.TimeTable.View == TT_TUT_EDIT))
             ColumnsToDrawIncludingExtraColumn++;
 
          /* Draw cells */
@@ -1466,18 +1477,11 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    extern const char *Txt_Place;
    static const char *TimeTableClasses[TT_NUM_CLASS_TYPES] =
      {
-      "TT_FREE",	// Free hour
-      "TT_LECT",	// Theoretical class
-      "TT_PRAC",	// Practical class
-      "TT_TUTO"		// Tutorials
+      "TT_FREE",	// TT_FREE	(free hour)
+      "TT_LECT",	// TT_LECTURE	(lecture class)
+      "TT_PRAC",	// TT_PRACTICAL	(practical class)
+      "TT_TUTO",	// TT_TUTORING	(tutoring/office hour)
      };
-   enum
-     {
-      TT_CRS_SHOW,
-      TT_CRS_EDIT,
-      TT_TUT_SHOW,
-      TT_TUT_EDIT,
-     } TimeTableView = TT_CRS_SHOW;
    struct GroupData GrpDat;
    unsigned NumGrpTyp;
    unsigned NumGrp;
@@ -1505,28 +1509,10 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    if (RowSpan == 0)
       return;
 
-   /***** Set type of view depending on current action *****/
-   switch (Gbl.Action.Act)
-     {
-      case ActSeeCrsTT:		case ActPrnCrsTT:	case ActChgCrsTT1stDay:
-      case ActSeeMyTT:		case ActPrnMyTT:	case ActChgMyTT1stDay:
-	 TimeTableView = TT_CRS_SHOW;
-	 break;
-      case ActEdiCrsTT:		case ActChgCrsTT:
-	 TimeTableView = TT_CRS_EDIT;
-	 break;
-      case ActSeeRecOneTch:	case ActSeeRecSevTch:
-	 TimeTableView = TT_TUT_SHOW;
-	 break;
-      case ActEdiTut:		case ActChgTut:
-	 TimeTableView = TT_TUT_EDIT;
-	 break;
-     }
-
    /***** If group code > 0, a group is selected ==> get group type and name *****/
    if (IntervalType == TT_FIRST_INTERVAL &&
-       (TimeTableView == TT_CRS_SHOW ||
-        TimeTableView == TT_CRS_EDIT) &&
+       (Gbl.TimeTable.View == TT_CRS_VIEW ||
+        Gbl.TimeTable.View == TT_CRS_EDIT) &&
        GrpCod > 0)
      {
       /* Get group type and name */
@@ -1548,16 +1534,16 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
    fprintf (Gbl.F.Out,"\">");
 
    /***** Form to modify this cell *****/
-   if (TimeTableView == TT_CRS_EDIT)
+   if (Gbl.TimeTable.View == TT_CRS_EDIT)
       Act_FormStart (ActChgCrsTT);
-   else if (TimeTableView == TT_TUT_EDIT)
+   else if (Gbl.TimeTable.View == TT_TUT_EDIT)
       Act_FormStart (ActChgTut);
 
    /***** Draw cell depending on type of view *****/
-   switch (TimeTableView)
+   switch (Gbl.TimeTable.View)
      {
-      case TT_CRS_SHOW:	// View course timetable
-      case TT_TUT_SHOW:	// View tutoring timetable
+      case TT_CRS_VIEW:	// View course timetable
+      case TT_TUT_VIEW:	// View tutoring timetable
 	 if (IntervalType != TT_FREE_INTERVAL) // If cell is not empty...
 	   {
 	    /***** Start cell *****/
@@ -1583,7 +1569,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	             Gbl.TimeTable.Config.Range.MinutesPerInterval);			// Minutes
 
 	    /***** Group *****/
-	    if (TimeTableView == TT_CRS_SHOW)
+	    if (Gbl.TimeTable.View == TT_CRS_VIEW)
 	      {
                if (GrpCod <= 0)
                  {
@@ -1617,8 +1603,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      CT < (TT_ClassType_t) TT_NUM_CLASS_TYPES;
 	      CT++)
 	    if ((CT == TT_FREE) ||
-		((TimeTableView == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
-		((TimeTableView == TT_TUT_EDIT) && (CT == TT_TUTORING)))
+		((Gbl.TimeTable.View == TT_CRS_EDIT) && (CT == TT_LECTURE || CT == TT_PRACTICAL)) ||
+		((Gbl.TimeTable.View == TT_TUT_EDIT) && (CT == TT_TUTORING)))
 	      {
 	       fprintf (Gbl.F.Out,"<option");
 	       if (CT == ClassType)
@@ -1673,7 +1659,7 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
 	      }
 	    fprintf (Gbl.F.Out,"</select>");
 
-	    if (TimeTableView == TT_CRS_EDIT)
+	    if (Gbl.TimeTable.View == TT_CRS_EDIT)
 	      {
 	       /***** Group *****/
 	       fprintf (Gbl.F.Out,"<br />"
@@ -1732,8 +1718,8 @@ static void TT_TimeTableDrawCell (unsigned Weekday,unsigned Interval,unsigned Co
      }
 
    /***** End of form *****/
-   if (TimeTableView == TT_CRS_EDIT ||
-       TimeTableView == TT_TUT_EDIT)
+   if (Gbl.TimeTable.View == TT_CRS_EDIT ||
+       Gbl.TimeTable.View == TT_TUT_EDIT)
       Act_FormEnd ();
 
    /***** End of cell *****/

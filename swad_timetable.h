@@ -36,6 +36,14 @@
 #define TT_MAX_CHARS_PLACE	(32 - 1)	// 31
 #define TT_MAX_BYTES_PLACE	((TT_MAX_CHARS_PLACE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 511
 
+typedef enum
+  {
+   TT_CRS_VIEW,
+   TT_TUT_VIEW,
+   TT_CRS_EDIT,
+   TT_TUT_EDIT,
+  } TT_TimeTableView_t;
+
 #define TT_NUM_TIMETABLE_TYPES 3
 typedef enum
   {
