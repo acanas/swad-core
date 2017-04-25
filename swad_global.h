@@ -634,6 +634,7 @@ struct Globals
 	 unsigned IntervalsBeforeStartHour;
         } Config;
       TT_TimeTableType_t Type;
+      bool Editing;
       unsigned Weekday;
       unsigned Interval;
       unsigned Column;

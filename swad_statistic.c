@@ -1727,7 +1727,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 	NumRow >= FirstRow;
 	NumRow--, UniqueId++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
      {
-      mysql_data_seek (mysql_res, (my_ulonglong) (NumRow-1));
+      mysql_data_seek (mysql_res,(my_ulonglong) (NumRow - 1));
       row = mysql_fetch_row (mysql_res);
 
       /* Get log code */
@@ -2765,7 +2765,7 @@ static void Sta_ShowNumHitsPerHour (unsigned long NumRows,
       ColumnWidth = NumDigits * DIGIT_WIDTH + 2;
 
       /***** Draw the graphic *****/
-      mysql_data_seek (mysql_res, 0);
+      mysql_data_seek (mysql_res,0);
       NumRow = 1;
       fprintf (Gbl.F.Out,"<tr>");
       while (Hour < 24)
@@ -3083,7 +3083,7 @@ static void Sta_ShowNumHitsPerAction (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3141,7 +3141,7 @@ static void Sta_ShowNumHitsPerPlugin (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3195,7 +3195,7 @@ static void Sta_ShowNumHitsPerWSFunction (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3260,7 +3260,7 @@ static void Sta_ShowNumHitsPerBanner (unsigned long NumRows,
      }
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3328,7 +3328,7 @@ static void Sta_ShowNumHitsPerCountry (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1, Ranking = 0;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3421,7 +3421,7 @@ static void Sta_ShowNumHitsPerInstitution (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1, Ranking = 0;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3516,7 +3516,7 @@ static void Sta_ShowNumHitsPerCentre (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1, Ranking = 0;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3611,7 +3611,7 @@ static void Sta_ShowNumHitsPerDegree (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1, Ranking = 0;
 	NumRow <= NumRows;
 	NumRow++)
@@ -3719,7 +3719,7 @@ static void Sta_ShowNumHitsPerCourse (unsigned long NumRows,
    Sta_ComputeMaxAndTotalHits (&Hits,NumRows,mysql_res,1,1);
 
    /***** Write rows *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (NumRow = 1, Ranking = 0;
 	NumRow <= NumRows;
 	NumRow++)

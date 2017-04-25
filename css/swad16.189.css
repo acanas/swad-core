@@ -2383,9 +2383,9 @@ a:hover img.CENTRE_PHOTO_SHOW
 	}
 .TT_HOUR_BIG
 	{
-	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
-	color:#404040;
-	font-size:13pt;
+	/* font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif; */
+	color:#808080;
+	font-size:10pt;
 	font-weight:bold;
 	line-height:100%;
 	letter-spacing:0;
@@ -2394,19 +2394,19 @@ a:hover img.CENTRE_PHOTO_SHOW
 	{
 	font-family:"Arial Narrow","Nimbus Sans L","DejaVu LGC Sans Condensed",sans-serif;
 	color:#A0A0A0;
-	font-size:8pt;
+	font-size:10pt;
 	line-height:100%;
 	letter-spacing:0;
 	}
-.TT_HOUR	{height:16px;}
-.TT_ALIGN	{height:8px;}
-.TT_FREE0	{height:8px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #E0D9C2;}
-.TT_FREE1	{height:8px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #E0D9C2;}
-.TT_FREE2	{height:8px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #E0D9C2;}
-.TT_FREE3	{height:8px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #E0D9C2;}
-.TT_THEO	{height:8px; background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
-.TT_PRAC	{height:8px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
-.TT_TUTO	{height:8px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
+.TT_HOUR	{height:24px;}
+.TT_ALIGN	{height:12px;}
+.TT_FREE0	{height:12px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #EEEADC #E0D9C2;}
+.TT_FREE1	{height:12px; background-color:#F4F2EA; border:solid 1px; border-color:#F4F2EA #E0D9C2 #E0D9C2 #E0D9C2;}
+.TT_FREE2	{height:12px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #F5F2E9 #E0D9C2;}
+.TT_FREE3	{height:12px; background-color:#FBFAF7; border:solid 1px; border-color:#FBFAF7 #E0D9C2 #E0D9C2 #E0D9C2;}
+.TT_THEO	{height:12px; background-color:#C0DAE4; border:solid 2px; border-color:#C9E3ED #B5CFD9 #B5CFD9 #C9E3ED;}
+.TT_PRAC	{height:12px; background-color:#DBE5E9; border:solid 2px; border-color:#E4EEF2 #D0DADE #D0DADE #E4EEF2;}
+.TT_TUTO	{height:12px; background-color:#D6E9C3; border:solid 2px; border-color:#DFEEE0 #CAE3B1 #CAE3B1 #DFEEE0;}
 
 /********************************* Preference ********************************/
 .PREF_CONTAINER

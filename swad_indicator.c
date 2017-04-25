@@ -973,7 +973,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
      }
 
    /***** List courses *****/
-   mysql_data_seek (mysql_res, 0);
+   mysql_data_seek (mysql_res,0);
    for (Gbl.RowEvenOdd = 1, NumCrs = 0;
 	NumCrs < NumCrss;
 	NumCrs++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)

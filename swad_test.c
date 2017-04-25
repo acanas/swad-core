@@ -4549,7 +4549,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	                 " class=\"TAG_SEL\" onchange=\"changeTxtTag('%u')\">",
                NumTag,NumTag,NumTag);
       fprintf (Gbl.F.Out,"<option value=\"\">&nbsp;</option>");
-      mysql_data_seek (mysql_res, 0);
+      mysql_data_seek (mysql_res,0);
       TagNotFound = true;
       for (NumRow = 1;
 	   NumRow <= NumRows;
