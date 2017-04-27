@@ -443,7 +443,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Start date/time *****/
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_BOTTOM",
+                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
@@ -460,7 +460,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
             UniqueId,Svy.TimeUTC[Svy_START_TIME],Txt_Today);
 
    /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_BOTTOM",
+   fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
             UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :

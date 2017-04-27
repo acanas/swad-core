@@ -18822,28 +18822,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllExaAnn
-#if   L==1
-	"Convocat&ograve;ries"
-#elif L==2
-	"Pr&uuml;fungsaufrufe"
-#elif L==3
-	"Announcements"
-#elif L==4
-	"Convocatorias"
-#elif L==5
-	"Convocations"
-#elif L==6
-	"Convocatorias"	// Okoteve traducción
-#elif L==7
-	"Appelli"
-#elif L==8
-	"Ogloszenia"
-#elif L==9
-	"Chamadas"
-#endif
-	,
-	//  4: ActSeeAllSvy
+	//  3: ActSeeAllSvy
 #if   L==1
 	"Enquestes"
 #elif L==2
@@ -18862,6 +18841,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ankiety"
 #elif L==9
 	"Inqu&eacute;ritos"
+#endif
+	,
+	//  4: ActSeeAllExaAnn
+#if   L==1
+	"Convocat&ograve;ries"
+#elif L==2
+	"Pr&uuml;fungsaufrufe"
+#elif L==3
+	"Announcements"
+#elif L==4
+	"Convocatorias"
+#elif L==5
+	"Convocations"
+#elif L==6
+	"Convocatorias"	// Okoteve traducción
+#elif L==7
+	"Appelli"
+#elif L==8
+	"Ogloszenia"
+#elif L==9
+	"Chamadas"
 #endif
 	,
 	NULL,	//  5
@@ -20747,28 +20747,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Testes"
 #endif
 	,
-	//  3: ActSeeAllExaAnn
-#if   L==1
-	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
-#elif L==2
-	"Pr&uuml;fungsaufruf"
-#elif L==3
-	"Announcements of exams"
-#elif L==4
-	"Listado de convocatorias de ex&aacute;menes de esta asignatura"
-#elif L==5
-	"Convocations &agrave; examens"
-#elif L==6
-	"Listado de convocatorias de ex&aacute;menes de esta asignatura"// Okoteve traducción
-#elif L==7
-	"Appelli d'esame"
-#elif L==8
-	"Ogloszenia egzamin&oacute;w"
-#elif L==9
-	"Chamadas para exames"
-#endif
-	,
-	//  4: ActSeeAllSvy
+	//  3: ActSeeAllSvy
 #if   L==1
 	"Enquestes an&ograve;nimes"
 #elif L==2
@@ -20787,6 +20766,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Ankiety"
 #elif L==9
 	"Inqu&eacute;ritos"
+#endif
+	,
+	//  4: ActSeeAllExaAnn
+#if   L==1
+	"Llistat de convocat&ograve;ries d'ex&agrave;mens d'aquesta assignatura"
+#elif L==2
+	"Pr&uuml;fungsaufruf"
+#elif L==3
+	"Announcements of exams"
+#elif L==4
+	"Listado de convocatorias de ex&aacute;menes de esta asignatura"
+#elif L==5
+	"Convocations &agrave; examens"
+#elif L==6
+	"Listado de convocatorias de ex&aacute;menes de esta asignatura"// Okoteve traducción
+#elif L==7
+	"Appelli d'esame"
+#elif L==8
+	"Ogloszenia egzamin&oacute;w"
+#elif L==9
+	"Chamadas para exames"
 #endif
 	,
 	NULL,	//  5

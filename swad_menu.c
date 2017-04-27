@@ -178,8 +178,8 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeAss,		//  0
 		ActSeeAsg,		//  1
 		ActReqTst,		//  2
-		ActSeeAllExaAnn,	//  3
-		ActSeeAllSvy,		//  4
+		ActSeeAllSvy,		//  3
+		ActSeeAllExaAnn,	//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
