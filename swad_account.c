@@ -902,18 +902,21 @@ void Acc_AskIfRemoveMyAccount (void)
    extern const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account;
    extern const char *Txt_Eliminate_my_user_account;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
+   /***** Show question and button to remove my user account *****/
+   /* Start alert */
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
+   /* Show my record */
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
 
+   /* Show form to request confirmation */
    Act_FormStart (ActRemMyAcc);
-
-   /* Ask for consent on dangerous actions */
    Pwd_AskForConfirmationOnDangerousAction ();
-
    Lay_PutRemoveButton (Txt_Eliminate_my_user_account);
-
    Act_FormEnd ();
+
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -924,7 +927,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      /***** Show question and button to remove user as administrator *****/
+      /***** Show question and button to remove user account *****/
       /* Start alert */
       Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
