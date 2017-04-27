@@ -48,12 +48,12 @@ extern const Act_Action_t For_ActionsSeePstFor[For_NUM_TYPES_FORUM];
 static const char *Pag_ParamNumPag[Pag_NUM_WHAT_PAGINATE] =
   {
    "NumPagAsg",		// Pag_ASSIGNMENTS
+   "NumPagSvy",		// Pag_SURVEYS
    "NumPagAtt",		// Pag_ATT_EVENTS
    "NumPagThr",		// Pag_THREADS_FORUM
    "NumPagPst",		// Pag_POSTS_FORUM
    "NumPagRcv",		// Pag_MESSAGES_RECEIVED
    "NumPagSnt",		// Pag_MESSAGES_SENT
-   "NumPagSvy",		// Pag_SURVEYS
    "NumPagMyAgd",	// Pag_MY_AGENDA
    "NumPagOthAgd",	// Pag_ANOTHER_AGENDA
   };
@@ -159,6 +159,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_SURVEYS:
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_ATT_EVENTS:
                Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -196,12 +202,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Msg_PutHiddenParamsMsgsFilters ();
-               break;
-            case Pag_SURVEYS:
-               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
-               Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_AGENDA:
                Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -254,6 +254,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
                break;
+            case Pag_SURVEYS:
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,1);
+               Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
             case Pag_ATT_EVENTS:
                Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
@@ -292,12 +298,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Pag_PutHiddenParamPagNum (WhatPaginate,1);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
-            case Pag_SURVEYS:
-               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,1);
-               Asg_PutHiddenParamAsgOrder ();
-               Grp_PutParamWhichGrps ();
-               break;
             case Pag_MY_AGENDA:
                Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
                Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
@@ -331,6 +331,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
+               Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
+            case Pag_SURVEYS:
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
@@ -372,12 +378,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
                Msg_PutHiddenParamsMsgsFilters ();
-               break;
-            case Pag_SURVEYS:
-               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->LeftPage);
-               Asg_PutHiddenParamAsgOrder ();
-               Grp_PutParamWhichGrps ();
                break;
             case Pag_MY_AGENDA:
                Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
@@ -427,6 +427,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Asg_PutHiddenParamAsgOrder ();
                   Grp_PutParamWhichGrps ();
                   break;
+               case Pag_SURVEYS:
+                  Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
+                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
+                  Asg_PutHiddenParamAsgOrder ();
+                  Grp_PutParamWhichGrps ();
+                  break;
                case Pag_ATT_EVENTS:
                   Act_FormStartAnchor (ActSeeAtt,Pagination->Anchor);
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
@@ -465,12 +471,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                   Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
                   Msg_PutHiddenParamsMsgsFilters ();
                   break;
-               case Pag_SURVEYS:
-                  Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-                  Pag_PutHiddenParamPagNum (WhatPaginate,NumPage);
-                  Asg_PutHiddenParamAsgOrder ();
-                  Grp_PutParamWhichGrps ();
-                  break;
                case Pag_MY_AGENDA:
                   Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
                   Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
@@ -503,6 +503,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
+               Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
+            case Pag_SURVEYS:
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
@@ -545,12 +551,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
                Msg_PutHiddenParamsMsgsFilters ();
                break;
-            case Pag_SURVEYS:
-               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->RightPage);
-               Asg_PutHiddenParamAsgOrder ();
-               Grp_PutParamWhichGrps ();
-               break;
 	    case Pag_MY_AGENDA:
 	       Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);
 	       Agd_PutParamsMyAgenda (Gbl.Agenda.Past__FutureEvents,
@@ -582,6 +582,12 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
            {
             case Pag_ASSIGNMENTS:
                Act_FormStartAnchor (ActSeeAsg,Pagination->Anchor);
+               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
+               Asg_PutHiddenParamAsgOrder ();
+               Grp_PutParamWhichGrps ();
+               break;
+            case Pag_SURVEYS:
+               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
                Asg_PutHiddenParamAsgOrder ();
                Grp_PutParamWhichGrps ();
@@ -623,12 +629,6 @@ void Pag_WriteLinksToPages (Pag_WhatPaginate_t WhatPaginate,
                Act_FormStartAnchor (ActSeeSntMsg,Pagination->Anchor);
                Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
                Msg_PutHiddenParamsMsgsFilters ();
-               break;
-            case Pag_SURVEYS:
-               Act_FormStartAnchor (ActSeeAllSvy,Pagination->Anchor);
-               Pag_PutHiddenParamPagNum (WhatPaginate,Pagination->NumPags);
-               Asg_PutHiddenParamAsgOrder ();
-               Grp_PutParamWhichGrps ();
                break;
 	    case Pag_MY_AGENDA:
 	       Act_FormStartAnchor (ActSeeMyAgd,Pagination->Anchor);

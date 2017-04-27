@@ -124,11 +124,11 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeFor,		// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   ActSeeOneNot,		// Ntf_EVENT_NOTICE
+   ActSeeOneNot,	// Ntf_EVENT_NOTICE
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   ActSeeAllSvy,	// Ntf_EVENT_SURVEY
+   ActSeeAllSvy,	// Ntf_EVENT_SURVEY	TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 
    /* Profile tab */
   };

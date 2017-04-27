@@ -179,7 +179,7 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		ActSeeAsg,		//  1
 		ActReqTst,		//  2
 		ActSeeAllExaAnn,	//  3
-		0,			//  4
+		ActSeeAllSvy,		//  4
 		0,			//  5
 		0,			//  6
 		0,			//  7
@@ -250,13 +250,13 @@ const Act_Action_t Mnu_MenuActions[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB
 		},
 		// TabSta *******************
 		{
-		ActSeeAllSvy,		//  0
-		ActReqUseGbl,		//  1
-		ActSeePhoDeg,		//  2
-		ActReqStaCrs,		//  3
-		ActReqAccGbl,		//  4
-		ActReqMyUsgRep,		//  5
-		ActMFUAct,		//  6
+		ActReqUseGbl,		//  0
+		ActSeePhoDeg,		//  1
+		ActReqStaCrs,		//  2
+		ActReqAccGbl,		//  3
+		ActReqMyUsgRep,		//  4
+		ActMFUAct,		//  5
+		0,			//  6
 		0,			//  7
 		0,			//  8
 		0,			//  9

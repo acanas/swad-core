@@ -27,6 +27,7 @@
 
 #include <linux/stddef.h>	// For NULL
 #include <stdio.h>		// For fprintf, etc.
+#include <stdlib.h>		// For malloc, calloc, free
 #include <string.h>		// For string functions
 
 #include "swad_calendar.h"
@@ -1054,7 +1055,7 @@ static void TT_FillTimeTableFromDB (long UsrCod)
   }
 
 /*****************************************************************************/
-/****************** Get resolution given a time in seconds *******************/
+/** Calculate range of a cell (start hour, end hour, minutes per interval) ***/
 /*****************************************************************************/
 
 static void TT_CalculateRangeCell (unsigned StartTimeSeconds,
@@ -1091,6 +1092,9 @@ static void TT_CalculateRangeCell (unsigned StartTimeSeconds,
      }
   }
 
+/*****************************************************************************/
+/*********************** Calculate minutes per interval **********************/
+/*****************************************************************************/
 // Example: if Seconds == 42300 (time == 11:45:00) => Minutes = 45 => Resolution = 15
 
 static unsigned TT_CalculateMinutesPerInterval (unsigned Seconds)
@@ -1389,13 +1393,11 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
    static bool *TT_IntervalsChecked;
 
    if (TopCall)	// Top call, non recursive call
-     {
       /****** Allocate space to store list of intervals already checked
               and initialize to false by using calloc *****/
       if ((TT_IntervalsChecked = (bool *) calloc (Gbl.TimeTable.Config.IntervalsPerDay,
                                                   sizeof (bool))) == NULL)
 	 Lay_ShowErrorAndExit ("Error allocating memory for timetable.");
-     }
 
    ColumnsToDraw = TT_TimeTable[Weekday][Interval].NumColumns;
 
@@ -1405,13 +1407,13 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
       for (Column = 0;
 	   Column < TT_MAX_COLUMNS_PER_CELL;
 	   Column++)
-        {
          switch (TT_TimeTable[Weekday][Interval].Columns[Column].IntervalType)
            {
             case TT_FREE_INTERVAL:
                break;
             case TT_FIRST_INTERVAL:
-               /* Check from first hour (this one) to last hour searching maximum number of columns */
+               /* Check from first hour (this one) to last hour
+                  searching maximum number of columns */
                for (i = Interval + 1;
         	    i < Interval + TT_TimeTable[Weekday][Interval].Columns[Column].DurationIntervals;
         	    i++)
@@ -1429,7 +1431,8 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
         	    TT_TimeTable[Weekday][FirstHour].Columns[Column].IntervalType == TT_NEXT_INTERVAL;
         	    FirstHour--);
 
-               /* Check from first hour to last hour searching maximum number of columns */
+               /* Check from first hour to last hour
+                  searching maximum number of columns */
                for (i = FirstHour;
         	    i < FirstHour + TT_TimeTable[Weekday][FirstHour].Columns[Column].DurationIntervals;
         	    i++)
@@ -1442,7 +1445,6 @@ static unsigned TT_CalculateColsToDrawInCell (bool TopCall,
                     }
                break;
            }
-        }
      }
 
    if (TopCall)	// Top call, non recursive call

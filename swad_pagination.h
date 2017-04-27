@@ -41,12 +41,12 @@
 typedef enum
   {
    Pag_ASSIGNMENTS		= 0,
-   Pag_ATT_EVENTS		= 1,
-   Pag_THREADS_FORUM		= 2,
-   Pag_POSTS_FORUM		= 3,
-   Pag_MESSAGES_RECEIVED	= 4,
-   Pag_MESSAGES_SENT		= 5,
-   Pag_SURVEYS			= 6,
+   Pag_SURVEYS			= 1,
+   Pag_ATT_EVENTS		= 2,
+   Pag_THREADS_FORUM		= 3,
+   Pag_POSTS_FORUM		= 4,
+   Pag_MESSAGES_RECEIVED	= 5,
+   Pag_MESSAGES_SENT		= 6,
    Pag_MY_AGENDA		= 7,
    Pag_ANOTHER_AGENDA		= 8,
   } Pag_WhatPaginate_t;

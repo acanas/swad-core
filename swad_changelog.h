@@ -211,21 +211,24 @@
 // TODO: En información de un centro, poner icono que enlace a edición de lugares, y posibilidad de editar lugar del centro en un menú desplegable. Lugar debería ir encima de Acceso directo.
 // TODO: Cuando se está editando instituciones, centros, titulaciones y asignaturas, poner un icono Ver (ojo) en la esquina superior izquierda.
 
-// TODO: Changes in timetable (hours end in 24h).
-
 // TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
+
+// TODO: Fix bug: En Compartidos, si se borra la posibilidad de carpetas en un grupo ==> sale mensaje "The group has no file zones."
+
+// TODO: Change numbers of notifications in program and database to match order in tabs
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.192.1 (2017-04-25)"
+#define Log_PLATFORM_VERSION	"SWAD 16.193 (2017-04-27)"
 #define CSS_FILE		"swad16.192.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.193:   Apr 27, 2017	Surveys action moved from statistics to assessment tab. (218262 lines)
         Version 16.192.1: Apr 25, 2017	Code refactoring in timetable. (218258 lines)
         Version 16.192:   Apr 25, 2017	Changes in layout and code refactoring in timetable. (218262 lines)
         Version 16.191:   Apr 25, 2017	Changes in layout of timetable. (218183 lines)

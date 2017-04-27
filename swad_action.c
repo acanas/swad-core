@@ -422,6 +422,7 @@ Assessment:
 	299. ActSeeAsg			Show assignments
 	300. ActReqTst			Request a test of self-assesment
 	301. ActSeeAllExaAnn		Show the exam announcements
+       1140. ActSeeAllSvy		List all surveys in pages
 
 	302. ActEdiAss			Edit the assessment system
 	303. ActChgFrcReaAss		Change force students to read assessment system
@@ -476,6 +477,22 @@ Assessment:
 	350. ActHidExaAnn		Hide exam announcement
 	351. ActShoExaAnn		Show exam announcement
 
+       1147. ActSeeOneSvy		Show one survey
+       1148. ActAnsSvy			Answer a survey
+       1149. ActFrmNewSvy		Form to create a new survey
+       1150. ActEdiOneSvy		Edit one survey
+       1151. ActNewSvy			Create new survey
+       1152. ActChgSvy			Modify data of an existing survey
+       1153. ActReqRemSvy		Request the removal of a survey
+       1154. ActRemSvy			Remove survey
+       1155. ActReqRstSvy		Request the reset of answers of a survey
+       1156. ActRstSvy			Reset answers of survey
+       1157. ActHidSvy			Hide survey
+       1158. ActShoSvy			Show survey
+       1159. ActEdiOneSvyQst		Edit a new question for a survey
+       1160. ActRcvSvyQst		Receive a question of a survey
+       1161. ActReqRemSvyQst		Request the removal of a question of a survey
+       1162. ActRemSvyQst		Confirm the removal of a question of a survey
 Files:
 	352. ActSeeAdmDocIns		Documents zone of the institution (see or admin)
 	353. ActAdmShaIns		Admin the shared files zone of the institution
@@ -1334,7 +1351,6 @@ Messages:
        1139. ActUnbUsrLst		Unban a user when listing banned users
 
 Statistics:
-       1140. ActSeeAllSvy		List all surveys in pages
        1141. ActReqUseGbl		Request showing use of the platform
        1142. ActSeePhoDeg		Show a class photo with the average photos of the students of each degree
        1143. ActReqStaCrs		Request statistics of courses
@@ -1342,22 +1358,6 @@ Statistics:
        1145. ActReqMyUsgRep		Request my usage report
        1146. ActMFUAct			Show most frequently used actions
 
-       1147. ActSeeOneSvy		Show one survey
-       1148. ActAnsSvy			Answer a survey
-       1149. ActFrmNewSvy		Form to create a new survey
-       1150. ActEdiOneSvy		Edit one survey
-       1151. ActNewSvy			Create new survey
-       1152. ActChgSvy			Modify data of an existing survey
-       1153. ActReqRemSvy		Request the removal of a survey
-       1154. ActRemSvy			Remove survey
-       1155. ActReqRstSvy		Request the reset of answers of a survey
-       1156. ActRstSvy			Reset answers of survey
-       1157. ActHidSvy			Hide survey
-       1158. ActShoSvy			Show survey
-       1159. ActEdiOneSvyQst		Edit a new question for a survey
-       1160. ActRcvSvyQst		Receive a question of a survey
-       1161. ActReqRemSvyQst		Request the removal of a question of a survey
-       1162. ActRemSvyQst		Confirm the removal of a question of a survey
        1163. ActSeeUseGbl		Show use of the platform
        1164. ActPrnPhoDeg		Show vista of impresión of the class photo with the average photos of the students of each degree.
        1165. ActCalPhoDeg		Compute the average photos of the students of each degree
@@ -1866,6 +1866,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeAsg		*/{ 801, 1,TabAss,ActSeeAsg		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_SeeAssignments		,"desk64x64.gif"	},
    /* ActReqTst		*/{ 103, 2,TabAss,ActReqTst		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowFormAskTst		,"test64x64.gif"	},
    /* ActSeeAllExaAnn	*/{  85, 3,TabAss,ActSeeAllExaAnn	,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Exa_ListExamAnnouncementsSee	,"announce64x64.gif"	},
+   /* ActSeeAllSvy	*/{ 966, 4,TabAss,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
 
    // Actions not in menu:
    /* ActEdiAss		*/{  69,-1,TabUnk,ActSeeAss		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Inf_FormsToSelSendInfo		,NULL},
@@ -1924,6 +1925,25 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRemExaAnn	*/{ 187,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_RemoveExamAnnouncement1	,Exa_RemoveExamAnnouncement2	,NULL},
    /* ActHidExaAnn	*/{1620,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_HideExamAnnouncement1	,Exa_HideExamAnnouncement2	,NULL},
    /* ActShoExaAnn	*/{1621,-1,TabUnk,ActSeeAllExaAnn	,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Exa_UnhideExamAnnouncement1	,Exa_UnhideExamAnnouncement2	,NULL},
+
+   /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
+   /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
+   /* ActFrmNewSvy	*/{ 973,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActEdiOneSvy	*/{ 974,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
+   /* ActNewSvy		*/{ 968,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActChgSvy		*/{ 975,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
+   /* ActReqRemSvy	*/{ 976,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskRemSurvey		,NULL},
+   /* ActRemSvy		*/{ 969,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveSurvey		,NULL},
+
+   /* ActReqRstSvy	*/{ 984,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskResetSurvey		,NULL},
+   /* ActRstSvy		*/{ 985,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ResetSurvey		,NULL},
+
+   /* ActHidSvy		*/{ 977,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_HideSurvey			,NULL},
+   /* ActShoSvy		*/{ 978,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_UnhideSurvey		,NULL},
+   /* ActEdiOneSvyQst	*/{ 979,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestEditQuestion	,NULL},
+   /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
+   /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
+   /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
 
    // TabFil ******************************************************************
    // Actions in menu:
@@ -2827,34 +2847,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    // TabSta ******************************************************************
    // Actions in menu:
-   /* ActSeeAllSvy	*/{ 966, 0,TabSta,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeAllSurveys		,"survey64x64.gif"	},
-   /* ActReqUseGbl	*/{ 761, 1,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
-   /* ActSeePhoDeg	*/{ 447, 2,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
-   /* ActReqStaCrs	*/{ 767, 3,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
-   /* ActReqAccGbl	*/{ 591, 4,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
-   /* ActReqMyUsgRep	*/{1586, 5,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
-   /* ActMFUAct		*/{ 993, 6,TabSta,ActMFUAct		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
+   /* ActReqUseGbl	*/{ 761, 0,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
+   /* ActSeePhoDeg	*/{ 447, 1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
+   /* ActReqStaCrs	*/{ 767, 2,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
+   /* ActReqAccGbl	*/{ 591, 3,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
+   /* ActReqMyUsgRep	*/{1586, 4,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
+   /* ActMFUAct		*/{ 993, 5,TabSta,ActMFUAct		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
-   /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
-   /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,0x1F8,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},
-   /* ActFrmNewSvy	*/{ 973,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActEdiOneSvy	*/{ 974,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestCreatOrEditSvy	,NULL},
-   /* ActNewSvy		*/{ 968,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
-   /* ActChgSvy		*/{ 975,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RecFormSurvey		,NULL},
-   /* ActReqRemSvy	*/{ 976,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskRemSurvey		,NULL},
-   /* ActRemSvy		*/{ 969,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveSurvey		,NULL},
-
-   /* ActReqRstSvy	*/{ 984,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_AskResetSurvey		,NULL},
-   /* ActRstSvy		*/{ 985,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ResetSurvey		,NULL},
-
-   /* ActHidSvy		*/{ 977,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_HideSurvey			,NULL},
-   /* ActShoSvy		*/{ 978,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_UnhideSurvey		,NULL},
-   /* ActEdiOneSvyQst	*/{ 979,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestEditQuestion	,NULL},
-   /* ActRcvSvyQst	*/{ 980,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveQst			,NULL},
-   /* ActReqRemSvyQst	*/{1524,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RequestRemoveQst		,NULL},
-   /* ActRemSvyQst	*/{ 981,-1,TabUnk,ActSeeAllSvy		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_RemoveQst			,NULL},
-
    /* ActSeeUseGbl	*/{  84,-1,TabUnk,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ShowFigures		,NULL},
    /* ActPrnPhoDeg	*/{ 448,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Pho_PrintPhotoDegree  		,NULL},
    /* ActCalPhoDeg	*/{ 444,-1,TabUnk,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_CalcPhotoDegree		,NULL},

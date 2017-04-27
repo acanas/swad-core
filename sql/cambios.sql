@@ -11698,3 +11698,12 @@ ALTER TABLE surveys DROP COLUMN CrsCod;
 
 SELECT LENGTH(Subject) AS Len,COUNT(*) AS N FROM forum_post GROUP BY Len ORDER BY Len DESC;
 
+
+
+
+CREATE TABLE timetable_crs_backup LIKE timetable_crs;
+INSERT INTO timetable_crs_backup SELECT * FROM timetable_crs;
+
+CREATE TABLE timetable_tut_backup LIKE timetable_tut;
+INSERT INTO timetable_tut_backup SELECT * FROM timetable_tut;
+

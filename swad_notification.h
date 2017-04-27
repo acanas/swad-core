@@ -54,14 +54,17 @@ typedef enum
    Ntf_EVENT_UNKNOWN		=  0,
 
    /* Course tab */
-   Ntf_EVENT_DOCUMENT_FILE	=  1,
-   Ntf_EVENT_TEACHERS_FILE	=  2,
-   Ntf_EVENT_SHARED_FILE	=  3,
 
    /* Assessment tab */
    Ntf_EVENT_ASSIGNMENT		=  4,
    Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,
    Ntf_EVENT_MARKS_FILE		=  6,
+   Ntf_EVENT_SURVEY		= 19,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+
+   /* Files tab */
+   Ntf_EVENT_DOCUMENT_FILE	=  1,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+   Ntf_EVENT_TEACHERS_FILE	=  2,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+   Ntf_EVENT_SHARED_FILE	=  3,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
 
    /* Users tab */
    Ntf_EVENT_ENROLMENT_STUDENT	=  7,
@@ -82,7 +85,6 @@ typedef enum
    Ntf_EVENT_MESSAGE		= 18,
 
    /* Statistics tab */
-   Ntf_EVENT_SURVEY		= 19,
 
    /* Profile tab */
 

@@ -18843,7 +18843,27 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas"
 #endif
 	,
-	NULL,	//  4
+	//  4: ActSeeAllSvy
+#if   L==1
+	"Enquestes"
+#elif L==2
+	"Umfragen"
+#elif L==3
+	"Surveys"
+#elif L==4
+	"Encuestas"
+#elif L==5
+	"Sondages"
+#elif L==6
+	"Encuestas"	// Okoteve traducción
+#elif L==7
+	"Sondaggi"
+#elif L==8
+	"Ankiety"
+#elif L==9
+	"Inqu&eacute;ritos"
+#endif
+	,
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -19533,28 +19553,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSta **********************************************************************
-	//  0: ActSeeAllSvy
-#if   L==1
-	"Enquestes"
-#elif L==2
-	"Umfragen"
-#elif L==3
-	"Surveys"
-#elif L==4
-	"Encuestas"
-#elif L==5
-	"Sondages"
-#elif L==6
-	"Encuestas"	// Okoteve traducción
-#elif L==7
-	"Sondaggi"
-#elif L==8
-	"Ankiety"
-#elif L==9
-	"Inqu&eacute;ritos"
-#endif
-	,
-	//  1: ActReqUseGbl
+	//  0: ActReqUseGbl
 #if   L==1
 	"Xifres"
 #elif L==2
@@ -19575,7 +19574,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"N&uacute;meros"
 #endif
 	,
-	//  2: ActSeePhoDeg
+	//  1: ActSeePhoDeg
 #if   L==1
 	"Titulacions"
 #elif L==2
@@ -19596,7 +19595,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Titula&ccedil;&atilde;os"
 #endif
 	,
-	//  3: ActReqStaCrs
+	//  2: ActReqStaCrs
 #if   L==1
 	"Indicadors"
 #elif L==2
@@ -19617,7 +19616,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores"
 #endif
 	,
-	//  4: ActReqAccGbl
+	//  3: ActReqAccGbl
 #if   L==1
 	"Accessos"
 #elif L==2
@@ -19638,7 +19637,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Visitas"
 #endif
 	,
-	//  5: ActReqMyUsgRep
+	//  4: ActReqMyUsgRep
 #if   L==1
 	"Informe"
 #elif L==2
@@ -19659,7 +19658,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Relat&oacute;rio"
 #endif
 	,
-	//  6: ActMFUAct
+	//  5: ActMFUAct
 #if   L==1
 	"Freq&uuml;ents"
 #elif L==2
@@ -19680,6 +19679,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Freq&uuml;entes"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9
@@ -20768,7 +20768,27 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Chamadas para exames"
 #endif
 	,
-	NULL,	//  4
+	//  4: ActSeeAllSvy
+#if   L==1
+	"Enquestes an&ograve;nimes"
+#elif L==2
+	"Umfragen"
+#elif L==3
+	"Surveys"
+#elif L==4
+	"Encuestas an&oacute;nimas"
+#elif L==5
+	"Sondages"
+#elif L==6
+	"Encuestas an&oacute;nimas"	// Okoteve traducción
+#elif L==7
+	"Sondaggi"
+#elif L==8
+	"Ankiety"
+#elif L==9
+	"Inqu&eacute;ritos"
+#endif
+	,
 	NULL,	//  5
 	NULL,	//  6
 	NULL,	//  7
@@ -21499,28 +21519,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	},
 	{
 	// TabSta *****************************************************
-	//  0: ActSeeAllSvy
-#if   L==1
-	"Enquestes an&ograve;nimes"
-#elif L==2
-	"Umfragen"
-#elif L==3
-	"Surveys"
-#elif L==4
-	"Encuestas an&oacute;nimas"
-#elif L==5
-	"Sondages"
-#elif L==6
-	"Encuestas an&oacute;nimas"	// Okoteve traducción
-#elif L==7
-	"Sondaggi"
-#elif L==8
-	"Ankiety"
-#elif L==9
-	"Inqu&eacute;ritos"
-#endif
-	,
-	//  1: ActReqUseGbl
+	//  0: ActReqUseGbl
 #if   L==1
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
 	" o d'aquesta titulaci&oacute; o assignatura"
@@ -21544,7 +21543,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Utiliza&ccedil;&atilde;o de SWAD"
 #endif
 	,
-	//  2: ActSeePhoDeg
+	//  1: ActSeePhoDeg
 #if   L==1
 	"Estad&iacute;stiques del nombre d'estudiants en cada titulaci&oacute;"
 	" representades per les fotos mitjana dels estudiants"
@@ -21568,7 +21567,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Fotografia titula&ccedil;oes"
 #endif
 	,
-	//  3: ActReqStaCrs
+	//  2: ActReqStaCrs
 #if   L==1
 	"Indicadors d'assignatures per al contracte-programa"
 #elif L==2
@@ -21589,7 +21588,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Indicadores de disciplinas para o contrato programa"
 #endif
 	,
-	//  4: ActReqAccGbl
+	//  3: ActReqAccGbl
 #if   L==1
 	"Estad&iacute;stiques d'accesso a la plataforma"
 #elif L==2
@@ -21610,7 +21609,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Estat&iacute;sticas de acesso &agrave; plataforma"
 #endif
 	,
-	//  5: ActReqMyUsgRep
+	//  4: ActReqMyUsgRep
 #if   L==1
 	"Informe sobre el meu &uacute;s de la plataforma"
 #elif L==2
@@ -21631,7 +21630,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Relat&oacute;rio sobre o meu uso da plataforma"
 #endif
 	,
-	//  6: ActMFUAct
+	//  5: ActMFUAct
 #if   L==1
 	"Acc&eacute;s directe a les meves accions m&eacute;s freq&uuml;ents"
 #elif L==2
@@ -21652,6 +21651,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	"Acesso direto das minhas a&ccedil;&otilde;es mais freq&uuml;entes"
 #endif
 	,
+	NULL,	//  6
 	NULL,	//  7
 	NULL,	//  8
 	NULL,	//  9

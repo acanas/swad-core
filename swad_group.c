@@ -4311,8 +4311,8 @@ void Grp_GetParamWhichGrps (void)
 	 case ActPrnCrsTT:
 	 case ActChgCrsTT1stDay:
 	 case ActSeeAsg:
-	 case ActSeeAtt:
 	 case ActSeeAllSvy:
+	 case ActSeeAtt:
 	    WhichGroupsDefault = Gbl.Usrs.Me.IBelongToCurrentCrs ? Grp_ONLY_MY_GROUPS :	// If I belong to this course ==> see only my groups
 							           Grp_ALL_GROUPS;	// If I don't belong to this course ==> see all groups
 	    break;
