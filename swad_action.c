@@ -2843,14 +2843,14 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUnbUsrMsg	*/{1016,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_UnbanSenderWhenShowingMsgs	,NULL},
    /* ActUnbUsrLst	*/{1018,-1,TabUnk,ActSeeRcvMsg		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Msg_UnbanSenderWhenListingUsrs	,NULL},
 
-   // TabSta ******************************************************************
+   // TabAna ******************************************************************
    // Actions in menu:
-   /* ActReqUseGbl	*/{ 761, 0,TabSta,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
-   /* ActSeePhoDeg	*/{ 447, 1,TabSta,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
-   /* ActReqStaCrs	*/{ 767, 2,TabSta,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
-   /* ActReqAccGbl	*/{ 591, 3,TabSta,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
-   /* ActReqMyUsgRep	*/{1586, 4,TabSta,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
-   /* ActMFUAct		*/{ 993, 5,TabSta,ActMFUAct		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
+   /* ActReqUseGbl	*/{ 761, 0,TabAna,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ReqShowFigures		,"pie64x64.gif"		},
+   /* ActSeePhoDeg	*/{ 447, 1,TabAna,ActSeePhoDeg		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_ShowPhotoDegree		,"classphoto64x64.gif"	},
+   /* ActReqStaCrs	*/{ 767, 2,TabAna,ActReqStaCrs		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ind_ReqIndicatorsCourses	,"tablestats64x64.gif"	},
+   /* ActReqAccGbl	*/{ 591, 3,TabAna,ActReqAccGbl		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowGblHits		,"stats64x64.gif"	},
+   /* ActReqMyUsgRep	*/{1586, 4,TabAna,ActReqMyUsgRep	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ReqMyUsageReport		,"report64x64.png"	},
+   /* ActMFUAct		*/{ 993, 5,TabAna,ActMFUAct		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,MFU_ShowMyMFUActions		,"star64x64.gif"	},
 
    // Actions not in menu:
    /* ActSeeUseGbl	*/{  84,-1,TabUnk,ActReqUseGbl		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_ShowFigures		,NULL},

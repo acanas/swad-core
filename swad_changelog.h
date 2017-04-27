@@ -221,14 +221,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.193.1 (2017-04-27)"
+#define Log_PLATFORM_VERSION	"SWAD 16.193.2 (2017-04-27)"
 #define CSS_FILE		"swad16.192.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.193.1: Apr 27, 2017	Examn announcements action moved to end of assessment tab. (218263 lines)
+        Version 16.193.2: Apr 27, 2017	Statistics tab is renamed as Analytics tab. (218265 lines)
+        Version 16.193.1: Apr 27, 2017	Exam announcements action moved to end of assessment tab. (218263 lines)
         Version 16.193:   Apr 27, 2017	Surveys action moved from statistics to assessment tab. (218262 lines)
         Version 16.192.1: Apr 25, 2017	Code refactoring in timetable. (218258 lines)
         Version 16.192:   Apr 25, 2017	Changes in layout and code refactoring in timetable. (218262 lines)

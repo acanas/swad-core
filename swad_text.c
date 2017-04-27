@@ -19552,7 +19552,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	},
 	{
-	// TabSta **********************************************************************
+	// TabAna **********************************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Xifres"
@@ -21518,7 +21518,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	},
 	{
-	// TabSta *****************************************************
+	// TabAna *****************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
@@ -41034,25 +41034,25 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	 "Mensagens"
 #endif
 	 ,
-	 // TabSta
+	 // TabAna
 #if   L==1
-	 "Estad&iacute;stiques"
+	 "An&agrave;lisis"
 #elif L==2
-	 "Statistik"
+	 "Analytik"
 #elif L==3
-	 "Statistics"
+	 "Analytics"
 #elif L==4
-	 "Estad&iacute;sticas"
+	 "An&aacute;lisis"
 #elif L==5
-	 "Statistiques"
+	 "Analyse"
 #elif L==6
-	 "Papy'aporeko"
+	 "&Ntilde;ehesa'&yuml;ijo"
 #elif L==7
-	 "Statistiche"
+	 "Analisi"
 #elif L==8
-	 "Statystyki"
+	 "Analizy"
 #elif L==9
-	 "Estat&iacute;sticas"
+	 "An&aacute;lise"
 #endif
 	 ,
 	 // TabPrf

@@ -51,7 +51,7 @@ typedef enum
    TabUsr =  9,
    TabSoc = 10,
    TabMsg = 11,
-   TabSta = 12,
+   TabAna = 12,
    TabPrf = 13,
   } Tab_Tab_t;
 

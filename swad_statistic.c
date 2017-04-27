@@ -3865,8 +3865,9 @@ void Sta_ReqShowFigures (void)
   {
    extern const char *Hlp_STATS_Figures;
    extern const char *The_ClassForm[The_NUM_THEMES];
-   extern const char *Txt_Statistic;
+   extern const char *Txt_Figures;
    extern const char *Txt_Scope;
+   extern const char *Txt_Statistic;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Show_statistic;
    Sta_FigureType_t FigureType;
@@ -3875,7 +3876,7 @@ void Sta_ReqShowFigures (void)
    Act_FormStart (ActSeeUseGbl);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Statistic,NULL,Hlp_STATS_Figures);
+   Lay_StartRoundFrame (NULL,Txt_Figures,NULL,Hlp_STATS_Figures);
 
    /***** Compute stats for anywhere, degree or course? *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
