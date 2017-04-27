@@ -3882,15 +3882,18 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
                                    Gbl.CurrentCrs.Crs.CrsCod,
                                    false))
      {
+      /***** Show question and button to remove user as administrator *****/
+      /* Start alert */
       sprintf (Gbl.Message,
                ItsMe ? Txt_Do_you_really_want_to_be_removed_from_the_course_X :
 		       Txt_Do_you_really_want_to_remove_the_following_user_from_the_course_X,
 	       Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
+      /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      /* Show form to request confirmation */
       Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdCrs :
 	                                                         ActRemTchCrs);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -3898,7 +3901,9 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
                                    Txt_Remove_user_from_this_course);
       Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
+
+      /* End alert */
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
