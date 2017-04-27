@@ -47,14 +47,15 @@
 /********************************* Public types ******************************/
 /*****************************************************************************/
 
-#define Lay_NUM_ALERT_TYPES 5
+#define Lay_NUM_ALERT_TYPES 6
 typedef enum
   {
    Lay_INFO      = 0,
    Lay_SUCCESS   = 1,
-   Lay_WARNING   = 2,
-   Lay_ERROR     = 3,
-   Lay_CLIPBOARD = 4,
+   Lay_QUESTION  = 2,
+   Lay_WARNING   = 3,
+   Lay_ERROR     = 4,
+   Lay_CLIPBOARD = 5,
   } Lay_AlertType_t;
 
 typedef enum
@@ -90,12 +91,12 @@ void Lay_PutIconRemovalNotAllowed (void);
 void Lay_PutIconBRemovalNotAllowed (void);
 void Lay_PutIconRemove (void);
 
-void Lay_PutCreateButton (const char *Text);
-void Lay_PutCreateButtonInline (const char *Text);
-void Lay_PutConfirmButton (const char *Text);
-void Lay_PutConfirmButtonInline (const char *Text);
-void Lay_PutRemoveButton (const char *Text);
-void Lay_PutRemoveButtonInline (const char *Text);
+void Lay_PutCreateButton (const char *TxtButton);
+void Lay_PutCreateButtonInline (const char *TxtButton);
+void Lay_PutConfirmButton (const char *TxtButton);
+void Lay_PutConfirmButtonInline (const char *TxtButton);
+void Lay_PutRemoveButton (const char *TxtButton);
+void Lay_PutRemoveButtonInline (const char *TxtButton);
 
 void Lay_StartRoundFrameTable (const char *Width,const char *Title,
                                void (*FunctionToDrawContextualIcons) (void),
@@ -118,6 +119,8 @@ void Lay_EndRoundFrame (void);
 
 void Lay_ShowErrorAndExit (const char *Message);
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message);
+void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message);
+void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,Lay_Button_t Button,const char *TxtButton);
 
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);

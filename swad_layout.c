@@ -65,12 +65,18 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-/*****************************************************************************/
-/******************************* Private types *******************************/
-/*****************************************************************************/
+static const char *Lay_AlertIcons[Lay_NUM_ALERT_TYPES] =
+  {
+   "info16x16.gif",
+   "success16x16.gif",
+   "question16x16.gif",
+   "warning16x16.gif",
+   "error16x16.gif",
+   "copy_on16x16.gif",
+  };
 
 /*****************************************************************************/
-/***************************** Private variables *****************************/
+/******************************* Private types *******************************/
 /*****************************************************************************/
 
 /*****************************************************************************/
@@ -97,6 +103,8 @@ static void Lay_WriteTitleAction (void);
 
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
+
+static void Lay_PutButton (Lay_Button_t Button,const char *TxtButton);
 
 static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
                                          void (*FunctionToDrawContextualIcons) (void),
@@ -1291,58 +1299,78 @@ void Lay_PutIconRemove (void)
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 
-void Lay_PutCreateButton (const char *Text)
+static void Lay_PutButton (Lay_Button_t Button,const char *TxtButton)
+  {
+   if (TxtButton)
+      if (TxtButton[0])
+	 switch (Button)
+           {
+	    case Lay_NO_BUTTON:
+	       break;
+	    case Lay_CREATE_BUTTON:
+	       Lay_PutCreateButton (TxtButton);
+	       break;
+	    case Lay_CONFIRM_BUTTON:
+	       Lay_PutConfirmButton (TxtButton);
+	       break;
+	    case Lay_REMOVE_BUTTON:
+ 	       Lay_PutRemoveButton (TxtButton);
+	       break;
+          }
+  }
+
+void Lay_PutCreateButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CREATE\">"
                       "%s"
                       "</button>"
                       "</div>",
-            Text);
+            TxtButton);
   }
 
-void Lay_PutCreateButtonInline (const char *Text)
+void Lay_PutCreateButtonInline (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
                       "%s"
                       "</button>",
-            Text);
+            TxtButton);
   }
 
-void Lay_PutConfirmButton (const char *Text)
+void Lay_PutConfirmButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_CONFIRM\">"
                       "%s"
                       "</button>"
                       "</div>",
-            Text);
+            TxtButton);
   }
 
-void Lay_PutConfirmButtonInline (const char *Text)
+void Lay_PutConfirmButtonInline (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
                       "%s"
                       "</button>",
-            Text);
+            TxtButton);
   }
 
-void Lay_PutRemoveButton (const char *Text)
+void Lay_PutRemoveButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<button type=\"submit\" class=\"BT_SUBMIT BT_REMOVE\">"
                       "%s"
                       "</button>"
                       "</div>",
-            Text);
+            TxtButton);
   }
 
-void Lay_PutRemoveButtonInline (const char *Text)
+void Lay_PutRemoveButtonInline (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_REMOVE\">"
                       "%s"
                       "</button>",
-            Text);
+            TxtButton);
   }
 
 /*****************************************************************************/
@@ -1458,24 +1486,7 @@ void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton
 
 void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton)
   {
-   /***** Button *****/
-   if (TxtButton)
-      if (TxtButton[0])
-	 switch (Button)
-           {
-	    case Lay_NO_BUTTON:
-	       break;
-	    case Lay_CREATE_BUTTON:
-	       Lay_PutCreateButton (TxtButton);
-	       break;
-	    case Lay_CONFIRM_BUTTON:
-	       Lay_PutConfirmButton (TxtButton);
-	       break;
-	    case Lay_REMOVE_BUTTON:
- 	       Lay_PutRemoveButton (TxtButton);
-	       break;
-          }
-
+   Lay_PutButton (Button,TxtButton);
    Lay_EndRoundFrame ();
   }
 
@@ -1504,8 +1515,13 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    if (!Gbl.WebService.IsWebService)
      {
+      /****** If start of page is not written yet, do it now ******/
+      if (!Gbl.Layout.HTMLStartWritten)
+	 Lay_WriteStartOfPage ();
+
       /***** Write possible error message *****/
-      Lay_ShowAlert (Lay_ERROR,Message);
+      if (Message)
+         Lay_ShowAlert (Lay_ERROR,Message);
 
       /***** Finish the page, except </body> and </html> *****/
       Lay_WriteEndOfPage ();
@@ -1571,28 +1587,43 @@ void Lay_ShowErrorAndExit (const char *Message)
 
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
   {
-   static const char *MsgIcons[Lay_NUM_ALERT_TYPES] =
-     {
-      "info16x16.gif",
-      "success16x16.gif",
-      "warning16x16.gif",
-      "error16x16.gif",
-      "copy_on16x16.gif",
-     };
+   Lay_ShowAlertAndButton1 (AlertType,Message);
+   Lay_ShowAlertAndButton2 (ActUnk,Lay_NO_BUTTON,NULL);
+  }
 
+void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
+  {
    /****** If start of page is not written yet, do it now ******/
    if (!Gbl.Layout.HTMLStartWritten)
       Lay_WriteStartOfPage ();
 
+   /***** Start box *****/
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+		      "<div class=\"ALERT\""
+		      " style=\"background-image:url('%s/%s');\">",
+	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
+
+   /***** Write message *****/
    if (Message)
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	                 "<div class=\"ALERT\""
-	                 " style=\"background-image:url('%s/%s');\">"
-                         "%s"
-			 "</div>"
-			 "</div>",
-	       Gbl.Prefs.IconsURL,MsgIcons[AlertType],
-	       Message);
+      fprintf (Gbl.F.Out,"%s",Message);
+  }
+
+void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,Lay_Button_t Button,const char *TxtButton)
+  {
+   /***** Optional button *****/
+   if (NextAction != ActUnk &&
+       Button != Lay_NO_BUTTON &&
+       TxtButton)
+      if (TxtButton[0])
+	{
+	 Act_FormStart (NextAction);
+	 Lay_PutButton (Button,TxtButton);
+	 Act_FormEnd ();
+	}
+
+   /***** End box *****/
+   fprintf (Gbl.F.Out,"</div>"
+		      "</div>");
   }
 
 /*****************************************************************************/

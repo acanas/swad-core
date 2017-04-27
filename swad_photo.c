@@ -405,8 +405,6 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 
 void Pho_ReqRemoveMyPhoto (void)
   {
-   extern const char *Hlp_PROFILE_Photo;
-   extern const char *Txt_Photo;
    extern const char *Txt_Do_you_really_want_to_remove_your_photo;
    extern const char *Txt_Remove_photo;
    extern const char *Txt_The_photo_no_longer_exists;
@@ -414,22 +412,18 @@ void Pho_ReqRemoveMyPhoto (void)
    /***** Show current photo and help message *****/
    if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL))
      {
-      /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_Photo,
-                           Pho_PutIconToRequestRemoveMyPhoto,Hlp_PROFILE_Photo);
+      /***** Show question and button to remove my photo *****/
+      /* Start alert */
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
 
-      /***** Show current photo and help message *****/
+      /* Show current photo */
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
 			"PHOTO186x248",Pho_NO_ZOOM,false);
-      Lay_ShowAlert (Lay_INFO,Txt_Do_you_really_want_to_remove_your_photo);
+      fprintf (Gbl.F.Out,"</div>");
 
-      /***** Button to remove my photo *****/
-      Act_FormStart (ActRemMyPho);
-      Lay_PutRemoveButton (Txt_Remove_photo);
-      Act_FormEnd ();
-
-      /***** End frame *****/
-      Lay_EndRoundFrame ();
+      /* End alert */
+      Lay_ShowAlertAndButton2 (ActRemMyPho,Lay_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
