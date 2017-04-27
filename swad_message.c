@@ -854,7 +854,8 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_GetParamFilterContent ();
    Msg_GetParamOnlyUnreadMsgs ();
 
-   /***** Request confirmation to remove messages *****/
+   /***** Show question and button to remove messages received *****/
+   /* Start alert */
    if (Gbl.Msg.FilterContent[0])
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
@@ -881,16 +882,15 @@ void Msg_ReqDelAllRecMsgs (void)
                 	                    Txt_any_user,
                   Gbl.Msg.FilterCrsShrtName);
      }
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Form to remove received messages *****/
-   Act_FormStart (ActDelAllRcvMsg);
-   Msg_PutHiddenParamsMsgsFilters ();
-   Lay_PutRemoveButton (Txt_Delete_messages_received);
-   Act_FormEnd ();
+   /* Show received messages again */
+   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_RECEIVED;
+   Msg_ShowSentOrReceivedMessages ();
 
-   /***** Show messages again *****/
-   Msg_ShowRecMsgs ();
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
+                            Lay_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
 /*****************************************************************************/
@@ -909,7 +909,8 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_GetParamFilterFromTo ();
    Msg_GetParamFilterContent ();
 
-   /***** Request confirmation to remove messages *****/
+   /***** Show question and button to remove messages received *****/
+   /* Start alert */
    if (Gbl.Msg.FilterContent[0])
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
@@ -920,16 +921,15 @@ void Msg_ReqDelAllSntMsgs (void)
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
 					 Txt_any_user,
                Gbl.Msg.FilterCrsShrtName);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Form to remove sent messages *****/
-   Act_FormStart (ActDelAllSntMsg);
-   Msg_PutHiddenParamsMsgsFilters ();
-   Lay_PutRemoveButton (Txt_Delete_messages_sent);
-   Act_FormEnd ();
+   /* Show sent messages again */
+   Gbl.Msg.TypeOfMessages = Msg_MESSAGES_SENT;
+   Msg_ShowSentOrReceivedMessages ();
 
-   /***** Show messages again *****/
-   Msg_ShowSntMsgs ();
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
+                            Lay_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
 
 /*****************************************************************************/

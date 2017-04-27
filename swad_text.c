@@ -8670,36 +8670,6 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
 	"Do you really want to completely eliminate your user account?";	// Necessita de tradução
 #endif
 
-const char *Txt_Do_you_really_want_to_create_a_new_user_account_with_the_following_data =
-#if   L==1
-	"Realment voleu crear un nou compte d'usuari"
-	" amb les seg&uuml;ents dades?";
-#elif L==2
-	"Wollen Sie wirklich, um ein neues Benutzerkonto"
-	" mit den folgenden Daten zu erstellen?";
-#elif L==3
-	"Do you really want to create a new user account"
-	" with the following data?";
-#elif L==4
-	"&iquest;Realmente desea crear una nueva cuenta de usuario/a"
-	" con los siguientes datos?";
-#elif L==5
-	"Voulez-vous vraiment cr&eacute;er un nouveau compte d'utilisateur"
-	" avec les donn&eacute;es suivantes?";
-#elif L==6
-	"&iquest;Realmente desea crear una nueva cuenta de usuario/a"
-	" con los siguientes datos?";	// Okoteve traducción
-#elif L==7
-	"Vuoi realmente creare un nuovo account utente"
-	" con i seguenti dati?";
-#elif L==8
-	"Czy na pewno chcesz, aby utworzy&cacute; nowe konto u&zdot;ytkownika"
-	" z nast&eogon;puj&aogon;cymi danymi?";
-#elif L==9
-	"Voc&ecirc; realmente deseja criar uma nova conta de usu&aacute;rio"
-	" com os seguintes dados?";
-#endif
-
 const char *Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y =	// Warning: it is very important to include two %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar todos los mensajes recibidos de %s desde %s?";	// Necessita traduccio
