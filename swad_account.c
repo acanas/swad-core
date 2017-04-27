@@ -924,19 +924,22 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      /***** Show question and button to remove user as administrator *****/
+      /* Start alert */
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
+      /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
+      /* Show form to request confirmation */
       Act_FormStart (ActRemUsrGbl);
       Usr_PutParamOtherUsrCodEncrypted ();
-
-      /* Ask for consent on dangerous actions */
       Pwd_AskForConfirmationOnDangerousAction ();
-
       Lay_PutRemoveButton (Txt_Eliminate_user_account);
-
       Act_FormEnd ();
+
+      /* End alert */
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

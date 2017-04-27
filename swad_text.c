@@ -8632,21 +8632,21 @@ const char *Txt_Do_you_really_want_to_completely_eliminate_the_following_user =
 #if   L==1
 	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";	// Necessita traduccio
 #elif L==2
-	"Do you really want to completely eliminate the following user?";	// Need Übersetzung
+	"Do you really want to completely eliminate the following user?";			// Need Übersetzung
 #elif L==3
 	"Do you really want to completely eliminate the following user?";
 #elif L==4
-	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";
+	"&iquest;Realmente desea eliminar por completo la cuenta del siguiente usuario?";
 #elif L==5
-	"Do you really want to completely eliminate the following user?";	// Besoin de traduction
+	"Do you really want to completely eliminate the following user?";			// Besoin de traduction
 #elif L==6
-	"&iquest;Realmente desea eliminar completamente la cuenta del siguiente usuario?";	// Okoteve traducción
+	"&iquest;Realmente desea eliminar por completo la cuenta del siguiente usuario?";	// Okoteve traducción
 #elif L==7
 	"Vuoi realmente rimuovere totalmente il seguente utente?";
 #elif L==8
 	"Czy na pewno chcesz, aby calkowicie wyeliminowac nastepujacych uzytkownik&oacute;w?";
 #elif L==9
-	"Do you really want to completely eliminate the following user?";	// Necessita de tradução
+	"Do you really want to completely eliminate the following user?";			// Necessita de tradução
 #endif
 
 const char *Txt_Do_you_really_want_to_completely_eliminate_your_user_account =
