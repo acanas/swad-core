@@ -1497,15 +1497,21 @@ a:hover						/* Default ==> underlined */
 	display:inline-block;
 	box-sizing:border-box;
 	max-width:90%;
-	margin:8px auto 0 auto;
+	margin:8px auto;
+	padding:12px;
 	background-color:#FFF9EA;
+	border-radius:2px;
+	box-shadow: 0 2px 2px 0 rgba(124,121,109,0.14), 0 2px 1px -2px rgba(124,121,109,0.2), 0 1px 5px 0 rgba(124,121,109,0.12);
+	/* opacity:0.9; */
+	}
+.ALERT_TXT
+	{
+	box-sizing:border-box;
+	margin:0 auto;
+	padding:12px 12px 12px 45px;
 	background-position:12px 12px;
 	background-size:20px 20px;
 	background-repeat:no-repeat;
-	padding:12px 12px 12px 45px;
-	border-radius:2px;
-	box-shadow: 0 2px 2px 0 rgba(124,121,109,0.14), 0 2px 1px -2px rgba(124,121,109,0.2), 0 1px 5px 0 rgba(124,121,109,0.12);
-	opacity:0.9;
 	font-size:12pt;
 	color:#632921;
 	text-align:left;

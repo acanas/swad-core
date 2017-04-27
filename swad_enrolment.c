@@ -3986,19 +3986,22 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
 
    if (Usr_ChkIfUsrCodExists (Gbl.Usrs.Other.UsrDat.UsrCod))
      {
+      /***** Show question and button to remove user as administrator *****/
+      /* Start alert */
       sprintf (Gbl.Message,
                ItsMe ? Txt_Do_you_really_want_to_be_removed_as_an_administrator_of_X :
                        Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X,
                InsCtrDegName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
+      /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-      Act_FormStart (Enr_ActRemAdm[Scope]);
-      Usr_PutParamOtherUsrCodEncrypted ();
-      Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_as_an_administrator :
-                                   Txt_Remove_USER_as_an_administrator);
-      Act_FormEnd ();
+      /* End alert */
+      Lay_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],Usr_PutParamOtherUsrCodEncrypted,
+                               Lay_REMOVE_BUTTON,
+                               ItsMe ? Txt_Remove_me_as_an_administrator :
+                                       Txt_Remove_USER_as_an_administrator);
      }
    else
       Lay_ShowErrorAndExit ("User doesn't exist.");

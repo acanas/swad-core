@@ -1588,7 +1588,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
   {
    Lay_ShowAlertAndButton1 (AlertType,Message);
-   Lay_ShowAlertAndButton2 (ActUnk,Lay_NO_BUTTON,NULL);
+   Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
   }
 
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
@@ -1599,16 +1599,19 @@ void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
 
    /***** Start box *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-		      "<div class=\"ALERT\""
-		      " style=\"background-image:url('%s/%s');\">",
-	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
+	              "<div class=\"ALERT\">");
 
    /***** Write message *****/
+   fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\""
+		      " style=\"background-image:url('%s/%s');\">",
+	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
    if (Message)
       fprintf (Gbl.F.Out,"%s",Message);
+   fprintf (Gbl.F.Out,"</div>");
   }
 
-void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,Lay_Button_t Button,const char *TxtButton)
+void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,void (*FuncParams) (),
+                              Lay_Button_t Button,const char *TxtButton)
   {
    /***** Optional button *****/
    if (NextAction != ActUnk &&
@@ -1616,14 +1619,21 @@ void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,Lay_Button_t Button,const 
        TxtButton)
       if (TxtButton[0])
 	{
+         /* Start form */
 	 Act_FormStart (NextAction);
+	 if (FuncParams)
+	    FuncParams ();
+
+         /* Put button *****/
 	 Lay_PutButton (Button,TxtButton);
+
+         /* End form */
 	 Act_FormEnd ();
 	}
 
    /***** End box *****/
    fprintf (Gbl.F.Out,"</div>"
-		      "</div>");
+	              "</div>");
   }
 
 /*****************************************************************************/
