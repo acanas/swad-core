@@ -2010,7 +2010,7 @@ void Enr_GetNotifEnrolmentRequest (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
   }
 
 /*****************************************************************************/
-/****** Ask if reject the request for enrolment of a user in a course *******/
+/******* Ask if reject the request for enrolment of a user in a course *******/
 /*****************************************************************************/
 
 void Enr_AskIfRejectSignUp (void)
@@ -2047,20 +2047,20 @@ void Enr_AskIfRejectSignUp (void)
          if (Role == Rol_STUDENT ||
              Role == Rol_TEACHER)
            {
-            /* Ask if reject */
+	    /***** Show question and button to reject user's enrolment request *****/
+	    /* Start alert */
             sprintf (Gbl.Message,Txt_Do_you_really_want_to_reject_the_enrolment_request_,
                      Gbl.Usrs.Other.UsrDat.FullName,
                      Txt_ROLES_SINGUL_abc[Role][Gbl.Usrs.Other.UsrDat.Sex],
                      Gbl.CurrentCrs.Crs.FullName);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+
+	    /* Show user's record */
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-            /* Button to confirm rejection */
-            Act_FormStart (ActRejSignUp);
-            Usr_PutParamOtherUsrCodEncrypted ();
-
-            Lay_PutConfirmButton (Txt_Reject);
-            Act_FormEnd ();
+	    /* End alert */
+	    Lay_ShowAlertAndButton2 (ActRejSignUp,Usr_PutParamOtherUsrCodEncrypted,
+				     Lay_REMOVE_BUTTON,Txt_Reject);
            }
          else
             Lay_ShowErrorAndExit ("Wrong role.");
@@ -3518,7 +3518,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
 
 	       /* End alert */
 	       Lay_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],Usr_PutParamOtherUsrCodEncrypted,
-	                                Lay_CONFIRM_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
+	                                Lay_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
          else
