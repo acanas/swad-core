@@ -225,6 +225,7 @@ static long Soc_UnfavSocialNote (void);
 static long Soc_UnfavSocialComment (void);
 
 static void Soc_RequestRemovalSocialNote (void);
+static void Soc_PutParamsRemoveSocialNote (void);
 static void Soc_RemoveSocialNote (void);
 static void Soc_RemoveImgFileFromSocialPost (long PstCod);
 static void Soc_RemoveASocialNoteFromDB (struct SocialNote *SocNot);
@@ -3648,25 +3649,42 @@ static void Soc_RequestRemovalSocialNote (void)
       if (Gbl.Usrs.Me.Logged &&
 	  SocNot.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this note
 	{
-	 /***** Show warning and social note *****/
-	 /* Warning message */
-	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_post);
+	 /***** Show question and button to remove social note *****/
+	 /* Start alert */
+	 Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_post);
 
 	 /* Show social note */
 	 Soc_WriteSocialNote (&SocNot,
 			      Soc_TOP_MESSAGE_NONE,-1L,
 			      false,true);
 
-
-	 /***** Form to ask for confirmation to remove this social post *****/
-         Soc_FormStart (ActRemSocPubGbl,ActRemSocPubUsr);
-	 Soc_PutHiddenParamNotCod (SocNot.NotCod);
-	 Lay_PutRemoveButton (Txt_Remove);
-	 Act_FormEnd ();
+	 /* End alert */
+	 Gbl.Social.NotCod = SocNot.NotCod;	// Social note to be removed
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	    Lay_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",
+	                             Soc_PutParamsRemoveSocialNote,
+				     Lay_REMOVE_BUTTON,Txt_Remove);
+	 else
+	    Lay_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,
+	                             Soc_PutParamsRemoveSocialNote,
+				     Lay_REMOVE_BUTTON,Txt_Remove);
 	}
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_The_original_post_no_longer_exists);
+  }
+
+/*****************************************************************************/
+/****************** Put parameters to remove a social note *******************/
+/*****************************************************************************/
+
+static void Soc_PutParamsRemoveSocialNote (void)
+  {
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Usr_PutParamOtherUsrCodEncrypted ();
+   else
+      Soc_PutParamWhichUsrs ();
+   Soc_PutHiddenParamNotCod (Gbl.Social.NotCod);
   }
 
 /*****************************************************************************/
@@ -3979,7 +3997,7 @@ static void Soc_RequestRemovalSocialComment (void)
 				 true);
 
 	 /* End alert */
-	 Gbl.Social.PubCod = SocCom.PubCod;	// Publication to be removed
+	 Gbl.Social.PubCod = SocCom.PubCod;	// Social publishing to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
 	    Lay_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",
 	                             Soc_PutParamsRemoveSocialCommment,

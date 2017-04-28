@@ -9161,17 +9161,17 @@ const char *Txt_Do_you_really_want_to_remove_the_following_comment =
 
 const char *Txt_Do_you_really_want_to_remove_the_following_post =
 #if   L==1
-	"De veres voleu eliminar el seg&uuml;ent comentari?";
+	"De veres voleu eliminar la seg&uuml;ent publicaci&oacute;?";
 #elif L==2
 	"Wollen Sie wirklich, um die folgende Beitrag zu entfernen?";
 #elif L==3
 	"Do you really want to remove the following post?";
 #elif L==4
-	"&iquest;Realmente desea eliminar el siguiente comentario?";
+	"&iquest;Realmente desea eliminar la siguiente publicaci&oacute;n?";
 #elif L==5
 	"Voulez-vous vraiment supprimer le post suivant?";
 #elif L==6
-	"&iquest;Realmente desea eliminar el siguiente comentario?";		// Okoteve traducción
+	"&iquest;Realmente desea eliminar la siguiente publicaci&oacute;n?";		// Okoteve traducción
 #elif L==7
 	"Vuoi realmente rimuovere il seguente post?";
 #elif L==8
@@ -24341,17 +24341,17 @@ const char *Txt_New_SOCIAL_comment =
 
 const char *Txt_New_SOCIAL_post =
 #if   L==1
-	"Novo missatge";
+	"Nova publicaci&oacute;";
 #elif L==2
 	"Neue Beitrag";
 #elif L==3
 	"New post";
 #elif L==4
-	"Nuevo mensaje";
+	"Nueva publicaci&oacute;n";
 #elif L==5
-	"Nouveau message";
+	"Nouveau post";
 #elif L==6
-	"Nuevo mensaje";	// Okoteve traducción
+	"Nueva publicaci&oacute;n";	// Okoteve traducción
 #elif L==7
 	"Nuovo post";
 #elif L==8
@@ -44832,7 +44832,7 @@ const char *Txt_The_original_post_no_longer_exists =
 #elif L==4
 	"La publicaci&oacute;n original ya no existe.";
 #elif L==5
-	"La publication originale a disparu.";
+	"Le post original a disparu.";
 #elif L==6
 	"La publicaci&oacute;n original ya no existe.";	// Okoteve traducción
 #elif L==7
