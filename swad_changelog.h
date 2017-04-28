@@ -221,14 +221,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.194.10 (2017-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.194.11 (2017-04-28)"
 #define CSS_FILE		"swad16.193.4.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.194.10:Apr 28, 2017	Changed dialog to remove and exam announcement. (218379 lines)
+        Version 16.194.11:Apr 28, 2017	Changed dialog to remove a notice. (218379 lines)
+        Version 16.194.10:Apr 28, 2017	Changed dialog to remove an exam announcement. (218379 lines)
         Version 16.194.9: Apr 28, 2017	Changed dialog to remove a non empty folder. (218379 lines)
         Version 16.194.8: Apr 28, 2017	Changed dialog to remove a file/link. (218369 lines)
         Version 16.194.7: Apr 28, 2017	Changed dialog to remove a record field. (218359 lines)

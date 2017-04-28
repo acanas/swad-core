@@ -269,20 +269,20 @@ void Not_RequestRemNotice (void)
   {
    extern const char *Txt_Do_you_really_want_to_remove_the_following_notice;
    extern const char *Txt_Remove;
-   long NotCod;
 
    /***** Get the code of the notice to remove *****/
-   NotCod = Not_GetParamNotCod ();
+   Gbl.CurrentCrs.Notices.NotCod = Not_GetParamNotCod ();
 
-   /***** Ask for confirmation to remove this notice *****/
-   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_notice);
-   Not_GetDataAndShowNotice (NotCod);
+   /***** Show question and button to remove this notice *****/
+   /* Start alert */
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
-   /***** Form to remove this notice *****/
-   Act_FormStart (ActRemNot);
-   Not_PutHiddenParamNotCod (NotCod);
-   Lay_PutRemoveButton (Txt_Remove);
-   Act_FormEnd ();
+   /* Show notice */
+   Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.NotCod);
+
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemNot,NULL,Not_PutParams,
+			    Lay_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
    Not_ShowNotices (Not_LIST_FULL_NOTICES);
