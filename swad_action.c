@@ -1317,7 +1317,7 @@ Messages:
        1107. ActHidAnn			Hide a global announcement that was active
        1108. ActRevAnn			Reveal a global announcement that was hidden
        1109. ActRemAnn			Remove global announcement
-       1110. ActSeeOneNot			Show (expand) a notice
+       1110. ActSeeOneNot		Show (expand) a notice
        1111. ActWriNot			Write a new notice
        1112. ActRcvNot			Receive and create a new notice
        1113. ActHidNot			Hide a notice that was active

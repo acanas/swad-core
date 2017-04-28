@@ -59,6 +59,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertType,const char *Message);
+static void Grp_ReqEditGroupsInternal1 (void);
+static void Grp_ReqEditGroupsInternal2 (void);
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
@@ -170,6 +172,20 @@ void Grp_ReqEditGroups (void)
 
 static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertType,const char *Message)
   {
+   /***** Put form to edit group types *****/
+   Grp_ReqEditGroupsInternal1 ();
+
+   /***** Show optional alert *****/
+   if (Message)
+      if (Message[0])
+         Lay_ShowAlert (AlertType,Message);
+
+   /***** Put form to edit groups *****/
+   Grp_ReqEditGroupsInternal2 ();
+  }
+
+static void Grp_ReqEditGroupsInternal1 (void)
+  {
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ALL_GROUP_TYPES);
 
@@ -186,12 +202,10 @@ static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertType,const char *Mes
    /***** Groups *****/
    /* Start section */
    fprintf (Gbl.F.Out,"<section id=\"groups\">");
+  }
 
-   /* Show optional alert */
-   if (Message)
-      if (Message[0])
-         Lay_ShowAlert (AlertType,Message);
-
+static void Grp_ReqEditGroupsInternal2 (void)
+  {
    /* Put form to edit groups */
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num) // If there are group types...
       Grp_EditGroups ();
@@ -1315,7 +1329,7 @@ static void Grp_ListGroupsForEdition (void)
          /* Write icon to remove group */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"BM\">");
-         Act_FormStart (ActReqRemGrp);
+         Act_FormStartAnchor (ActReqRemGrp,"groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          Lay_PutIconRemove ();
          Act_FormEnd ();
@@ -3430,6 +3444,9 @@ static void Grp_AskConfirmRemGrp (void)
    struct GroupData GrpDat;
    unsigned NumStds;
 
+   /***** Put form to edit types of group *****/
+   Grp_ReqEditGroupsInternal1 ();
+
    /***** Get name of the group from database *****/
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
@@ -3451,11 +3468,11 @@ static void Grp_AskConfirmRemGrp (void)
    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemGrp,NULL,Grp_PutParamRemGrp,
+   Lay_ShowAlertAndButton2 (ActRemGrp,"groups",Grp_PutParamRemGrp,
 			    Lay_REMOVE_BUTTON,Txt_Remove_group);
 
-   /***** Show the form again *****/
-   Grp_ReqEditGroups ();
+   /***** Put form to edit groups *****/
+   Grp_ReqEditGroupsInternal2 ();
   }
 
 /*****************************************************************************/
