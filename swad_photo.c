@@ -476,25 +476,24 @@ void Pho_ReqRemoveUsrPhoto (void)
 	 /***** Show current photo and help message *****/
 	 if (Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL))
 	   {
-	    /***** Start frame *****/
-	    Lay_StartRoundFrame (NULL,Txt_Photo,
-	                         Pho_PutIconToRequestRemoveOtherUsrPhoto,NULL);
+	    /***** Show question and button to remove user's photo *****/
+	    /* Start alert */
+	    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_photo_of_X,
+	             Gbl.Usrs.Other.UsrDat.FullName);
+	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
+	    /* Show current photo */
+	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
-	    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_photo_of_X,Gbl.Usrs.Other.UsrDat.FullName);
-	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	    fprintf (Gbl.F.Out,"</div>");
 
-	    /***** Button to remove user's photo *****/
-	    Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
-			   (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
-										      ActRemOthPho));	// Guest, visitor or admin
-	    Usr_PutParamOtherUsrCodEncrypted ();
-	    Lay_PutRemoveButton (Txt_Remove_photo);
-	    Act_FormEnd ();
-
-	    /***** End frame *****/
-	    Lay_EndRoundFrame ();
+	    /* End alert */
+	    Lay_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+			             (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
+										                ActRemOthPho),	// Guest, visitor or admin
+	                             NULL,Usr_PutParamOtherUsrCodEncrypted,
+				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
 	    Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
@@ -825,10 +824,10 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.AlertType = Lay_ERROR;
+      Gbl.AlertType = Lay_SUCCESS;
      }
    else
-      Gbl.AlertType = Lay_SUCCESS;
+      Gbl.AlertType = Lay_ERROR;
   }
 
 static void Pho_UpdatePhoto2 (void)
