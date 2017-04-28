@@ -1759,17 +1759,21 @@ void Enr_AskRemAllStdsThisCrs (void)
 
    if ((NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Gbl.CurrentCrs.Crs.CrsCod)))
      {
-      /***** Write message to confirm the removing *****/
+      /***** Show question and button to remove students *****/
+      /* Start alert */
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_X_students_from_the_course_Y_,
                NumStds,Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-      /***** Form to remove all the students in current course *****/
+      /* Show form to request confirmation */
       Act_FormStart (ActRemAllStdCrs);
       Grp_PutParamAllGroups ();
       Pwd_AskForConfirmationOnDangerousAction ();
       Lay_PutRemoveButton (Txt_Remove_all_students);
       Act_FormEnd ();
+
+      /* End alert */
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       /***** Show warning indicating no students found *****/
