@@ -1533,6 +1533,7 @@ static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
 static void Brw_PutParamsRemFile (void);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
+static void Brw_PutParamsRemFolder (void);
 
 static void Brw_WriteCurrentClipboard (void);
 
@@ -6214,7 +6215,7 @@ void Brw_AskRemFileFromTree (void)
   }
 
 /*****************************************************************************/
-/************************ Remove a file of a file browser ********************/
+/*********************** Put params to remove a file/link ********************/
 /*****************************************************************************/
 
 static void Brw_PutParamsRemFile (void)
@@ -6341,17 +6342,28 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    extern const char *Txt_Do_you_really_want_to_remove_the_folder_X;
    extern const char *Txt_Remove_folder;
 
-   /***** Form to remove a not empty folder *****/
-   Act_FormStart (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type]);
+   /***** Show question and button to remove not empty folder *****/
+   /* Start alert */
+   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
+            Gbl.FileBrowser.FilFolLnkName);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+
+   /* End alert */
+   Lay_ShowAlertAndButton2 (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,
+			    Brw_PutParamsRemFolder,
+			    Lay_REMOVE_BUTTON,Txt_Remove_folder);
+  }
+
+/*****************************************************************************/
+/************************ Put params to remove a folder **********************/
+/*****************************************************************************/
+
+static void Brw_PutParamsRemFolder (void)
+  {
    Brw_PutParamsFileBrowser (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],
                              Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
                              Gbl.FileBrowser.FilFolLnkName,
                              Brw_IS_FOLDER,-1L);
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_folder_X,
-            Gbl.FileBrowser.FilFolLnkName);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_folder);
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
