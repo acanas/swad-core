@@ -364,6 +364,8 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject);
 
 static void For_UpdateNumUsrsNotifiedByEMailAboutPost (long PstCod,unsigned NumUsrsToBeNotifiedByEMail);
 
+static void For_PutAllHiddenParamsRemThread (void);
+
 static bool For_CheckIfICanMoveThreads (void);
 static long For_GetThrInMyClipboard (void);
 static bool For_CheckIfThrBelongsToForum (long ThrCod,struct Forum *Forum);
@@ -4114,18 +4116,32 @@ void For_RequestRemoveThread (void)
    /***** Show forum list again *****/
    For_ShowForumList ();
 
-   /***** Request confirmation to remove the thread *****/
+   /***** Show question and button to remove the thread *****/
+   /* Start alert */
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_REMOVE_THREAD_SECTION);
    if (Subject[0])
      {
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_entire_thread);
-   Act_FormStartAnchor (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
-                        For_ID_FORUM_THREADS_SECTION);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
+
+   /* End alert */
+   Lay_ShowAlertAndButton2 (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
+                            For_ID_FORUM_THREADS_SECTION,
+                            For_PutAllHiddenParamsRemThread,
+                            Lay_REMOVE_BUTTON,Txt_Remove_thread);
+   fprintf (Gbl.F.Out,"</section>");
+
+   /***** Show the threads again *****/
+   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
+					      Lay_SUCCESS,NULL);
+  }
+
+static void For_PutAllHiddenParamsRemThread (void)
+  {
    For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                 1,				// Page of posts   = first
                                 Gbl.Forum.ForumSet,
@@ -4133,13 +4149,6 @@ void For_RequestRemoveThread (void)
 				Gbl.Forum.ForumSelected.Location,
 				Gbl.Forum.ForumSelected.ThrCod,
 				-1L);
-   Lay_PutRemoveButton (Txt_Remove_thread);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</section>");
-
-   /***** Show the threads again *****/
-   For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-					      Lay_SUCCESS,NULL);
   }
 
 /*****************************************************************************/

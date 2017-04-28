@@ -916,7 +916,7 @@ void Acc_AskIfRemoveMyAccount (void)
    Act_FormEnd ();
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
+   Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -942,7 +942,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Act_FormEnd ();
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

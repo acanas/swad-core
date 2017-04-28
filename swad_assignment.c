@@ -917,7 +917,7 @@ void Asg_ReqRemAssignment (void)
    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemAsg,Asg_PutParams,
+   Lay_ShowAlertAndButton2 (ActRemAsg,NULL,Asg_PutParams,
                             Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 
    /***** Show assignments again *****/

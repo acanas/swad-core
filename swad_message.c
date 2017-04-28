@@ -891,7 +891,8 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_ShowSentOrReceivedMessages ();
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActDelAllRcvMsg,Msg_PutHiddenParamsMsgsFilters,
+   Lay_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,
+                            Msg_PutHiddenParamsMsgsFilters,
                             Lay_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
 
@@ -930,7 +931,8 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_ShowSentOrReceivedMessages ();
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActDelAllSntMsg,Msg_PutHiddenParamsMsgsFilters,
+   Lay_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,
+                            Msg_PutHiddenParamsMsgsFilters,
                             Lay_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }
 

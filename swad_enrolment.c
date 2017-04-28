@@ -1773,7 +1773,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormEnd ();
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       /***** Show warning indicating no students found *****/
@@ -2063,7 +2063,8 @@ void Enr_AskIfRejectSignUp (void)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	    /* End alert */
-	    Lay_ShowAlertAndButton2 (ActRejSignUp,Usr_PutParamOtherUsrCodEncrypted,
+	    Lay_ShowAlertAndButton2 (ActRejSignUp,NULL,
+	                             Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Reject);
            }
          else
@@ -3521,7 +3522,8 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	       /* End alert */
-	       Lay_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],Usr_PutParamOtherUsrCodEncrypted,
+	       Lay_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,
+	                                Usr_PutParamOtherUsrCodEncrypted,
 	                                Lay_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
@@ -3910,7 +3912,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Act_FormEnd ();
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -4010,7 +4012,8 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],Usr_PutParamOtherUsrCodEncrypted,
+      Lay_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,
+                               Usr_PutParamOtherUsrCodEncrypted,
                                Lay_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :
                                        Txt_Remove_USER_as_an_administrator);

@@ -1588,7 +1588,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
   {
    Lay_ShowAlertAndButton1 (AlertType,Message);
-   Lay_ShowAlertAndButton2 (ActUnk,NULL,Lay_NO_BUTTON,NULL);
+   Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
   }
 
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
@@ -1610,7 +1610,8 @@ void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
    fprintf (Gbl.F.Out,"</div>");
   }
 
-void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,void (*FuncParams) (),
+void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,
+                              void (*FuncParams) (),
                               Lay_Button_t Button,const char *TxtButton)
   {
    /***** Optional button *****/
@@ -1620,7 +1621,7 @@ void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,void (*FuncParams) (),
       if (TxtButton[0])
 	{
          /* Start form */
-	 Act_FormStart (NextAction);
+	 Act_FormStartAnchor (NextAction,Anchor);
 	 if (FuncParams)
 	    FuncParams ();
 

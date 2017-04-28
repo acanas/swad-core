@@ -423,7 +423,8 @@ void Pho_ReqRemoveMyPhoto (void)
       fprintf (Gbl.F.Out,"</div>");
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActRemMyPho,NULL,Lay_REMOVE_BUTTON,Txt_Remove_photo);
+      Lay_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
+                               Lay_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
