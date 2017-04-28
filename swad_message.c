@@ -85,8 +85,10 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1]);
 static void Msg_ShowSentOrReceivedMessages (void);
 static unsigned long Msg_GetNumUsrsBannedByMe (void);
 static void Msg_PutLinkToViewBannedUsers(void);
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCod,
-                                                          long FilterCrsCod,const char *FilterFromToSubquery);
+static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1],
+                                                          long UsrCod,
+                                                          long FilterCrsCod,
+                                                          const char *FilterFromToSubquery);
 
 static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs);
 
@@ -1053,7 +1055,7 @@ static void Msg_MakeFilterFromToSubquery (char FilterFromToSubquery[Msg_MAX_BYTE
      {
       Ptr = Gbl.Msg.FilterFromTo;
       Str_Copy (FilterFromToSubquery,
-                " AND CONCAT(usr_data.FirstName,usr_data.Surname1,usr_data.Surname2) LIKE '",
+                " AND CONCAT(usr_data.FirstName,' ',usr_data.Surname1,' ',usr_data.Surname2) LIKE '",
                 Msg_MAX_BYTES_MESSAGES_QUERY);
       while (*Ptr)
         {
@@ -1350,7 +1352,8 @@ static unsigned long Msg_DelSomeRecOrSntMsgsUsr (Msg_TypeOfMessages_t TypeOfMess
    long MsgCod;
 
    /***** Get some of the messages received or sent by this user from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,UsrCod,FilterCrsCod,FilterFromToSubquery);
+   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,UsrCod,
+                                                 FilterCrsCod,FilterFromToSubquery);
    NumMsgs = DB_QuerySELECT (Query,&mysql_res,"can not get list of messages");
 
    /***** Delete each message *****/
@@ -1737,9 +1740,9 @@ static void Msg_ShowSentOrReceivedMessages (void)
      }
 
    /***** Get messages from database *****/
-   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
+   Msg_ConstructQueryToSelectSentOrReceivedMsgs (Query,Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                 Gbl.Msg.FilterCrsCod,FilterFromToSubquery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get messages");
-
    Gbl.Msg.NumMsgs = (unsigned) NumRows;
 
    /***** Start frame with messages *****/
@@ -1878,8 +1881,10 @@ static void Msg_PutLinkToViewBannedUsers(void)
 /********* Generate a query to select messages received or sent **************/
 /*****************************************************************************/
 
-static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCod,
-                                                          long FilterCrsCod,const char *FilterFromToSubquery)
+static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYTES_MESSAGES_QUERY + 1],
+                                                          long UsrCod,
+                                                          long FilterCrsCod,
+                                                          const char *FilterFromToSubquery)
   {
    char SubQuery[Msg_MAX_BYTES_MESSAGES_QUERY + 1];
    char *PtrQuery;
@@ -1895,41 +1900,57 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
             StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                         "");
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt,usr_data"
                                  " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
                                  " AND msg_snt.CrsCod=%ld"
-                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s"
-                                 " ORDER BY msg_rcv.MsgCod DESC",
-                        UsrCod,StrUnreadMsg,FilterCrsCod,
-                        FilterFromToSubquery);
+                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
+                                 " UNION "
+                                 "(SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt_deleted,usr_data"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
+                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+                                 " AND msg_snt_deleted.CrsCod=%ld"
+                                 " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
+                        UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery,
+                        UsrCod,StrUnreadMsg,FilterCrsCod,FilterFromToSubquery);
             else
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt"
                                  " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.CrsCod=%ld"
-                                 " ORDER BY msg_rcv.MsgCod DESC",
-                        UsrCod,StrUnreadMsg,
-                        FilterCrsCod);
+                                 " AND msg_snt.CrsCod=%ld)"
+                                 " UNION "
+                                 "(SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt_deleted"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
+                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+                                 " AND msg_snt_deleted.CrsCod=%ld)",
+                        UsrCod,StrUnreadMsg,FilterCrsCod,
+                        UsrCod,StrUnreadMsg,FilterCrsCod);
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
+               sprintf (PtrQuery,"(SELECT DISTINCT msg_snt.MsgCod"
         	                 " FROM msg_snt,msg_rcv,usr_data"
                                  " WHERE msg_snt.UsrCod=%ld"
                                  " AND msg_snt.CrsCod=%ld"
                                  " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
-                                 " ORDER BY msg_snt.MsgCod DESC",
-                        UsrCod,FilterCrsCod,
-                        FilterFromToSubquery);
+                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
+                                 " UNION "
+                                 "(SELECT DISTINCT msg_snt.MsgCod"
+        	                 " FROM msg_snt,msg_rcv_deleted,usr_data"
+                                 " WHERE msg_snt.UsrCod=%ld"
+                                 " AND msg_snt.CrsCod=%ld"
+                                 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+                                 " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
+                        UsrCod,FilterCrsCod,FilterFromToSubquery,
+                        UsrCod,FilterCrsCod,FilterFromToSubquery);
             else
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_snt"
-                                 " WHERE UsrCod=%ld AND CrsCod=%ld"
-                                 " ORDER BY MsgCod DESC",
+                                 " WHERE UsrCod=%ld AND CrsCod=%ld",
                         UsrCod,FilterCrsCod);
             break;
          default: // Not aplicable here
@@ -1943,14 +1964,19 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
               {
                StrUnreadMsg = (Gbl.Msg.ShowOnlyUnreadMsgs ? " AND msg_rcv.Open='N'" :
         	                                            "");
-               sprintf (PtrQuery,"SELECT msg_rcv.MsgCod"
+               sprintf (PtrQuery,"(SELECT msg_rcv.MsgCod"
         	                 " FROM msg_rcv,msg_snt,usr_data"
                                  " WHERE msg_rcv.UsrCod=%ld%s"
                                  " AND msg_rcv.MsgCod=msg_snt.MsgCod"
-                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s"
-                                 " ORDER BY msg_rcv.MsgCod DESC",
-                        UsrCod,StrUnreadMsg,
-                        FilterFromToSubquery);
+                                 " AND msg_snt.UsrCod=usr_data.UsrCod%s)"
+                                 " UNION "
+                                 "(SELECT msg_rcv.MsgCod"
+        	                 " FROM msg_rcv,msg_snt_deleted,usr_data"
+                                 " WHERE msg_rcv.UsrCod=%ld%s"
+                                 " AND msg_rcv.MsgCod=msg_snt_deleted.MsgCod"
+                                 " AND msg_snt_deleted.UsrCod=usr_data.UsrCod%s)",
+                        UsrCod,StrUnreadMsg,FilterFromToSubquery,
+                        UsrCod,StrUnreadMsg,FilterFromToSubquery);
               }
             else
               {
@@ -1958,26 +1984,29 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
         	                                            "");
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_rcv"
-                                 " WHERE UsrCod=%ld%s"
-                                 " ORDER BY MsgCod DESC",
+                                 " WHERE UsrCod=%ld%s",
                         UsrCod,StrUnreadMsg);
               }
             break;
          case Msg_MESSAGES_SENT:
             if (FilterFromToSubquery[0])
-               sprintf (PtrQuery,"SELECT DISTINCT msg_snt.MsgCod"
+               sprintf (PtrQuery,"(SELECT msg_snt.MsgCod"
         	                 " FROM msg_snt,msg_rcv,usr_data"
                                  " WHERE msg_snt.UsrCod=%ld"
                                  " AND msg_snt.MsgCod=msg_rcv.MsgCod"
-                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s"
-                                 " ORDER BY msg_snt.MsgCod DESC",
-                        UsrCod,
-                        FilterFromToSubquery);
+                                 " AND msg_rcv.UsrCod=usr_data.UsrCod%s)"
+                                 " UNION "
+                                 "(SELECT msg_snt.MsgCod"
+        	                 " FROM msg_snt,msg_rcv_deleted,usr_data"
+                                 " WHERE msg_snt.UsrCod=%ld"
+                                 " AND msg_snt.MsgCod=msg_rcv_deleted.MsgCod"
+                                 " AND msg_rcv_deleted.UsrCod=usr_data.UsrCod%s)",
+                        UsrCod,FilterFromToSubquery,
+                        UsrCod,FilterFromToSubquery);
             else
                sprintf (PtrQuery,"SELECT MsgCod"
         	                 " FROM msg_snt"
-                                 " WHERE UsrCod=%ld"
-                                 " ORDER BY MsgCod DESC",
+                                 " WHERE UsrCod=%ld",
                         UsrCod);
             break;
          default: // Not aplicable here
@@ -1985,12 +2014,15 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char *Query,long UsrCo
         }
 
    if (Gbl.Msg.FilterContent[0])
+      /* Match against the content written in filter form */
       sprintf (Query,"SELECT MsgCod"
 	             " FROM msg_content"
-                     " WHERE MsgCod IN (%s)"
+                     " WHERE MsgCod IN (SELECT MsgCod FROM (%s) AS M)"
                      " AND MATCH (Subject,Content) AGAINST ('%s')",
-               SubQuery,
-               Gbl.Msg.FilterContent);
+               SubQuery,Gbl.Msg.FilterContent);
+
+   /* End the query ordering the result from most recent message to oldest */
+   Str_Concat (Query," ORDER BY MsgCod DESC",Msg_MAX_BYTES_MESSAGES_QUERY);
   }
 
 /*****************************************************************************/
