@@ -2648,7 +2648,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code
      {
       /* Parameters for contextual icon */
-      Gbl.Svys.SvyCodToEdit = SvyCod;
+      Gbl.Svys.SvyCodToEdit    = SvyCod;
       Gbl.Svys.SvyQstCodToEdit = SvyQst->QstCod;
 
       sprintf (Gbl.Title,"%s %u",
@@ -3535,19 +3535,17 @@ void Svy_RequestRemoveQst (void)
    /* Get question index */
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
 
-   /***** Start form *****/
-   Act_FormStart (ActRemSvyQst);
-   Svy_PutParamSvyCod (SvyCod);
-   Svy_PutParamQstCod (SvyQst.QstCod);
-
-   /***** Ask for confirmation of removing *****/
+   /***** Show question and button to remove question *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (SvyQst.QstInd + 1));
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_question);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** End form *****/
-   Act_FormEnd ();
+   /* End alert */
+   Gbl.Svys.SvyCodToEdit    = SvyCod;
+   Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
+   Lay_ShowAlertAndButton2 (ActRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
+			    Lay_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
