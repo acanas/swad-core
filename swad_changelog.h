@@ -221,13 +221,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.194.6 (2017-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.194.7 (2017-04-28)"
 #define CSS_FILE		"swad16.193.4.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.194.7: Apr 28, 2017	Changed dialog to remove record field. (218359 lines)
         Version 16.194.6: Apr 28, 2017	Changed dialog to remove an agenda event. (218347 lines)
         Version 16.194.5: Apr 28, 2017	Changed dialog to remove a forum thread. (218347 lines)
         Version 16.194.4: Apr 28, 2017	Changed dialog to remove an assignment. (218332 lines)

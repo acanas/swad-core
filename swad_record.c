@@ -71,6 +71,8 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Rec_WriteHeadingRecordFields (void);
+
+static void Rec_PutParamFielCod (void);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
@@ -276,7 +278,7 @@ void Rec_ListFieldsRecordsForEdition (void)
       fprintf (Gbl.F.Out,"<tr>");
 
       /* Write icon to remove the field */
-      fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
+      fprintf (Gbl.F.Out,"<td class=\"BM\">");
       Act_FormStart (ActReqRemFie);
       Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod);
       Lay_PutIconRemove ();
@@ -610,7 +612,9 @@ unsigned Rec_CountNumRecordsInCurrCrsWithField (long FieldCod)
    /***** Get number of cards with a given field in a course from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_records WHERE FieldCod=%ld",
             FieldCod);
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of cards with a given field not empty in a course");
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of cards"
+	                                  " with a given field not empty"
+	                                  " in a course");
   }
 
 /*****************************************************************************/
@@ -631,7 +635,8 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.CurrentCrs.Records.Field.NumLines,
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
-   /***** Write mensaje to ask confirmation of deletion *****/
+   /***** Show question and button to remove my photo *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
    if (NumRecords == 1)
@@ -644,13 +649,14 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
       Str_Concat (Gbl.Message,Message_part2,
                   Lay_MAX_BYTES_ALERT);
      }
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Button to confirm removing *****/
-   Act_FormStart (ActRemFie);
-   Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.Field.FieldCod);
-   Lay_PutRemoveButton (Txt_Remove_record_field);
-   Act_FormEnd ();
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemFie,NULL,Rec_PutParamFielCod,
+			    Lay_REMOVE_BUTTON,Txt_Remove_record_field);
+
+   /***** List record fields again *****/
+   Rec_ReqEditRecordFields ();
   }
 
 /*****************************************************************************/
@@ -685,6 +691,15 @@ void Rec_RemoveFieldFromDB (void)
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
+  }
+
+/*****************************************************************************/
+/********************** Put parameter with field code ************************/
+/*****************************************************************************/
+
+static void Rec_PutParamFielCod (void)
+  {
+   Par_PutHiddenParamLong ("FieldCod",Gbl.CurrentCrs.Records.Field.FieldCod);
   }
 
 /*****************************************************************************/
