@@ -1531,6 +1531,7 @@ static void Brw_GetFileNameToShow (Brw_FileType_t FileType,
 static void Brw_WriteDatesAssignment (void);
 static void Brw_WriteFileSizeAndDate (struct FileMetadata *FileMetadata);
 static void Brw_WriteFileOrFolderPublisher (unsigned Level,unsigned long UsrCod);
+static void Brw_PutParamsRemFile (void);
 static void Brw_AskConfirmRemoveFolderNotEmpty (void);
 
 static void Brw_WriteCurrentClipboard (void);
@@ -6189,31 +6190,39 @@ void Brw_AskRemFileFromTree (void)
    /***** Button of confirmation of removing *****/
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
-      /***** Form to ask for confirmation to remove a file *****/
-      Act_FormStart (Brw_ActRemoveFile[Gbl.FileBrowser.Type]);
-      Brw_PutParamsFileBrowser (Brw_ActRemoveFile[Gbl.FileBrowser.Type],
-                                Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
-                                Gbl.FileBrowser.FilFolLnkName,
-                                Gbl.FileBrowser.FileType,-1L);
-
-      /* Show question */
+      /***** Show question and button to remove file/link *****/
+      /* Start alert */
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
                              Gbl.FileBrowser.FileType,
                              Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-      Lay_PutRemoveButton (Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
-        	                                                     Txt_Remove_link);
-
-      Act_FormEnd ();
+      /* End alert */
+      Lay_ShowAlertAndButton2 (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
+                               Brw_PutParamsRemFile,
+                               Lay_REMOVE_BUTTON,
+                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
+        	                                                         Txt_Remove_link);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
 
    /***** Show again file browser *****/
    Brw_ShowAgainFileBrowserOrWorks ();
+  }
+
+/*****************************************************************************/
+/************************ Remove a file of a file browser ********************/
+/*****************************************************************************/
+
+static void Brw_PutParamsRemFile (void)
+  {
+   Brw_PutParamsFileBrowser (Brw_ActRemoveFile[Gbl.FileBrowser.Type],
+			     Gbl.FileBrowser.Priv.PathInTreeUntilFilFolLnk,
+			     Gbl.FileBrowser.FilFolLnkName,
+			     Gbl.FileBrowser.FileType,-1L);
   }
 
 /*****************************************************************************/
