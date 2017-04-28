@@ -96,6 +96,7 @@ static void Grp_CreateGroupType (void);
 static void Grp_CreateGroup (void);
 
 static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
+static void Grp_PutParamRemGrpTyp (void);
 static void Grp_AskConfirmRemGrp (void);
 static void Grp_PutParamRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
@@ -3360,22 +3361,31 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    /***** Get data of the group type from database *****/
    Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
 
-   /***** Write message to ask confirmation of removing *****/
+   /***** Show question and button to remove type of group *****/
+   /* Start alert */
    if (NumGrps == 1)
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
    else
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActRemGrpTyp);
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemGrpTyp,NULL,Grp_PutParamRemGrpTyp,
+			    Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
+
+   /***** Show the form again *****/
+   Grp_ReqEditGroups ();
+  }
+
+/*****************************************************************************/
+/**************** Put parameter to remove a type of group ********************/
+/*****************************************************************************/
+
+static void Grp_PutParamRemGrpTyp (void)
+  {
    Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod);
-   Lay_PutRemoveButton (Txt_Remove_type_of_group);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
