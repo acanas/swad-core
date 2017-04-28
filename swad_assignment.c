@@ -908,7 +908,6 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
-   Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
 
    /***** Show question and button to remove the assignment *****/
    /* Start alert */
@@ -917,6 +916,7 @@ void Asg_ReqRemAssignment (void)
    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
    /* End alert */
+   Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
    Lay_ShowAlertAndButton2 (ActRemAsg,NULL,Asg_PutParams,
                             Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 

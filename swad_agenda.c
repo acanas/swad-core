@@ -1319,17 +1319,16 @@ void Agd_AskRemEvent (void)
    AgdEvent.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
    Agd_GetDataOfEventByCod (&AgdEvent);
 
-   /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemEvtMyAgd);
-   Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
-   Agd_PutCurrentParamsMyAgenda ();
-
-   /***** Ask for confirmation of removing *****/
+   /***** Show question and button to remove event *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
-            AgdEvent.Event);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_event);
-   Act_FormEnd ();
+	    AgdEvent.Event);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+
+   /* End alert */
+   Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
+   Lay_ShowAlertAndButton2 (ActRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
+			    Lay_REMOVE_BUTTON,Txt_Remove_event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
