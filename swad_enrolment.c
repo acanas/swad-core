@@ -3498,7 +3498,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                          (Scope == Sco_SCOPE_INS && Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
          if (ICanRegister)
            {
-            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is yet an administrator of current institution/centre/degree
+            if (Usr_CheckIfUsrIsAdm (Gbl.Usrs.Other.UsrDat.UsrCod,Scope,Cod))        // User is already an administrator of current institution/centre/degree
               {
                sprintf (Gbl.Message,Txt_THE_USER_X_is_already_an_administrator_of_Y,
                         Gbl.Usrs.Other.UsrDat.FullName,InsCtrDegName);
@@ -3507,15 +3507,18 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
               }
             else
               {
+	       /***** Show question and button to register user as administrator *****/
+	       /* Start alert */
                sprintf (Gbl.Message,Txt_Do_you_really_want_to_register_the_following_user_as_an_administrator_of_X,
                         InsCtrDegName);
-               Lay_ShowAlert (Lay_INFO,Gbl.Message);
+	       Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+
+	       /* Show user's record */
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
-               Act_FormStart (Enr_ActNewAdm[Scope]);
-               Usr_PutParamOtherUsrCodEncrypted ();
-               Lay_PutConfirmButton (Txt_Register_user_IN_A_COURSE_OR_DEGREE);
-               Act_FormEnd ();
+	       /* End alert */
+	       Lay_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],Usr_PutParamOtherUsrCodEncrypted,
+	                                Lay_CONFIRM_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
            }
          else
