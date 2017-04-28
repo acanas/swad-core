@@ -223,13 +223,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.194.19 (2017-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.194.20 (2017-04-28)"
 #define CSS_FILE		"swad16.193.4.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.194.20:Apr 28, 2017	Changes in edition of groups. (218420 lines)
         Version 16.194.19:Apr 28, 2017	Changed dialog to remove a non empty type of group. (218397 lines)
         Version 16.194.18:Apr 28, 2017	Changed dialog to remove a survey. (218388 lines)
         Version 16.194.17:Apr 28, 2017	Changed dialog to remove a test question. (218388 lines)

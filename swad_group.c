@@ -58,6 +58,8 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertType,const char *Message);
+
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
 
@@ -163,21 +165,42 @@ void Grp_WriteNamesOfSelectedGrps (void)
 
 void Grp_ReqEditGroups (void)
   {
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL);
+  }
+
+static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertType,const char *Message)
+  {
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ALL_GROUP_TYPES);
 
-   /***** Put form to edit group types *****/
+   /***** Group types *****/
+   /* Start section */
+   fprintf (Gbl.F.Out,"<section id=\"group_types\">");
+
+   /* Put form to edit group types */
    Grp_EditGroupTypes ();
 
-   /***** Put form to edit groups *****/
-   if (Gbl.CurrentCrs.Grps.GrpTypes.Num) // If there are group types...
-     {
-      fprintf (Gbl.F.Out,"<br />");
-      Grp_EditGroups ();
-     }
+   /* End section */
+   fprintf (Gbl.F.Out,"</section>");
 
-   /***** Free list of groups types and groups in this course *****/
+   /***** Groups *****/
+   /* Start section */
+   fprintf (Gbl.F.Out,"<section id=\"groups\">");
+
+   /* Show optional alert */
+   if (Message)
+      if (Message[0])
+         Lay_ShowAlert (AlertType,Message);
+
+   /* Put form to edit groups */
+   if (Gbl.CurrentCrs.Grps.GrpTypes.Num) // If there are group types...
+      Grp_EditGroups ();
+
+   /* Free list of groups types and groups in this course */
    Grp_FreeListGrpTypesAndGrps ();
+
+   /* End section */
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
@@ -2070,7 +2093,7 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_Create_type_of_group;
 
    /***** Start form *****/
-   Act_FormStart (ActNewGrpTyp);
+   Act_FormStartAnchor (ActNewGrpTyp,"group_types");
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,
@@ -2182,7 +2205,7 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumGrpTyp;
 
    /***** Start form *****/
-   Act_FormStart (ActNewGrp);
+   Act_FormStartAnchor (ActNewGrp,"groups");
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,Hlp_USERS_Groups,2);
@@ -3188,7 +3211,9 @@ static bool Grp_CheckIfOpenTimeInTheFuture (time_t OpenTimeUTC)
 void Grp_RecFormNewGrp (void)
   {
    extern const char *Txt_The_group_X_already_exists;
+   extern const char *Txt_Created_new_group_X;
    extern const char *Txt_You_must_specify_the_name_of_the_new_group;
+   Lay_AlertType_t AlertType;
 
    /***** Get parameters from form *****/
    if ((Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = Grp_GetParamGrpTypCod ()) > 0) // Group type valid
@@ -3209,24 +3234,34 @@ void Grp_RecFormNewGrp (void)
          /***** If name of group was in database... *****/
          if (Grp_CheckIfGroupNameExists (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod,Gbl.CurrentCrs.Grps.GrpName,-1L))
            {
+            AlertType = Lay_WARNING;
             sprintf (Gbl.Message,Txt_The_group_X_already_exists,
                      Gbl.CurrentCrs.Grps.GrpName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
            }
          else	// Add new group to database
+           {
             Grp_CreateGroup ();
+
+	    /* Write success message */
+            AlertType = Lay_SUCCESS;
+	    sprintf (Gbl.Message,Txt_Created_new_group_X,
+		     Gbl.CurrentCrs.Grps.GrpName);
+           }
         }
       else	// If there is not a group name
         {
+         AlertType = Lay_ERROR;
          sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_name_of_the_new_group);
-         Lay_ShowAlert (Lay_ERROR,Gbl.Message);
         }
      }
    else	// Invalid group type
-      Lay_ShowAlert (Lay_ERROR,"Wrong type of group.");
+     {
+      AlertType = Lay_ERROR;
+      sprintf (Gbl.Message,"%s","Wrong type of group.");
+     }
 
    /***** Show the form again *****/
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3296,10 +3331,9 @@ static void Grp_CreateGroupType (void)
 
 static void Grp_CreateGroup (void)
   {
-   extern const char *Txt_Created_new_group_X;
-   char Query[1024];
+   char Query[256 + Grp_MAX_BYTES_GROUP_NAME];
 
-   /*****  Create a new group *****/
+   /***** Create a new group *****/
    sprintf (Query,"INSERT INTO crs_grp"
 	          " (GrpTypCod,GrpName,MaxStudents,Open,FileZones)"
                   " VALUES"
@@ -3308,11 +3342,6 @@ static void Grp_CreateGroup (void)
             Gbl.CurrentCrs.Grps.GrpName,
             Gbl.CurrentCrs.Grps.MaxStudents);
    DB_QueryINSERT (Query,"can not create group");
-
-   /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_group_X,
-            Gbl.CurrentCrs.Grps.GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
