@@ -1337,8 +1337,9 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Write icon to open/close group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
-         Act_FormStart (Grp->Open ? ActCloGrp :
-                                    ActOpeGrp);
+         Act_FormStartAnchor (Grp->Open ? ActCloGrp :
+                                          ActOpeGrp,
+                              "groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          sprintf (Gbl.Title,
                   Grp->Open ? Txt_Group_X_open_click_to_close_it :
@@ -1357,8 +1358,9 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Write icon to activate file zones for this group */
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
-         Act_FormStart (Grp->FileZones ? ActDisFilZonGrp :
-                                         ActEnaFilZonGrp);
+         Act_FormStartAnchor (Grp->FileZones ? ActDisFilZonGrp :
+                                               ActEnaFilZonGrp,
+                              "groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          sprintf (Gbl.Title,
                   Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
@@ -1377,7 +1379,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Group type */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStart (ActChgGrpTyp);
+         Act_FormStartAnchor (ActChgGrpTyp,"groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:150px;\""
                             " onchange=\"document.getElementById('%s').submit();\">",
@@ -1398,7 +1400,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Group name */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStart (ActRenGrp);
+         Act_FormStartAnchor (ActRenGrp,"groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -1409,7 +1411,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Maximum number of students of the group (row[3]) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStart (ActChgMaxStdGrp);
+         Act_FormStartAnchor (ActChgMaxStdGrp,"groups");
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
                             " size=\"3\" maxlength=\"10\" value=\"");
@@ -3642,13 +3644,11 @@ void Grp_OpenGroup (void)
    DB_QueryUPDATE (Query,"can not open a group");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_group_X_is_now_open,
-            GrpDat.GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Message,Txt_The_group_X_is_now_open,GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = true;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3675,13 +3675,11 @@ void Grp_CloseGroup (void)
    DB_QueryUPDATE (Query,"can not close a group");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_group_X_is_now_closed,
-            GrpDat.GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Message,Txt_The_group_X_is_now_closed,GrpDat.GrpName);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = false;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3710,11 +3708,10 @@ void Grp_EnableFileZonesGrp (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_File_zones_of_the_group_X_are_now_enabled,
             GrpDat.GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = true;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3743,11 +3740,10 @@ void Grp_DisableFileZonesGrp (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Message,Txt_File_zones_of_the_group_X_are_now_disabled,
             GrpDat.GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = false;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3761,6 +3757,7 @@ void Grp_ChangeGroupType (void)
    long NewGrpTypCod;
    struct GroupData GrpDat;
    char Query[512];
+   Lay_AlertType_t AlertType;
 
    /***** Get parameters from form *****/
    /* Get group code */
@@ -3777,9 +3774,8 @@ void Grp_ChangeGroupType (void)
    /***** If group was in database... *****/
    if (Grp_CheckIfGroupNameExists (NewGrpTypCod,GrpDat.GrpName,-1L))
      {
-      sprintf (Gbl.Message,Txt_The_group_X_already_exists,
-               GrpDat.GrpName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      AlertType = Lay_WARNING;
+      sprintf (Gbl.Message,Txt_The_group_X_already_exists,GrpDat.GrpName);
      }
    else
      {
@@ -3789,14 +3785,14 @@ void Grp_ChangeGroupType (void)
       DB_QueryUPDATE (Query,"can not update the type of a group");
 
       /***** Write message to show the change made *****/
+      AlertType = Lay_SUCCESS;
       sprintf (Gbl.Message,Txt_The_type_of_group_of_the_group_X_has_changed,
                GrpDat.GrpName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3956,6 +3952,7 @@ void Grp_ChangeMaxStdsGrp (void)
    struct GroupData GrpDat;
    char Query[1024];
    unsigned NewMaxStds;
+   Lay_AlertType_t AlertType;
 
    /***** Get parameters of the form *****/
    /* Get group code */
@@ -3976,9 +3973,9 @@ void Grp_ChangeMaxStdsGrp (void)
    /***** Check if the old maximum of students equals the new one (this happens when user press return without change the form) *****/
    if (GrpDat.MaxStudents == NewMaxStds)
      {
+      AlertType = Lay_INFO;
       sprintf (Gbl.Message,Txt_The_maximum_number_of_students_in_the_group_X_has_not_changed,
                GrpDat.GrpName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
    else
      {
@@ -3988,18 +3985,18 @@ void Grp_ChangeMaxStdsGrp (void)
       DB_QueryUPDATE (Query,"can not update the maximum number of students in a group");
 
       /***** Write message to show the change made *****/
+      AlertType = Lay_SUCCESS;
       if (NewMaxStds > Grp_MAX_STUDENTS_IN_A_GROUP)
          sprintf (Gbl.Message,Txt_The_group_X_now_has_no_limit_of_students,
                   GrpDat.GrpName);
       else
          sprintf (Gbl.Message,Txt_The_maximum_number_of_students_in_the_group_X_is_now_Y,
                   GrpDat.GrpName,NewMaxStds);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
      }
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.MaxStudents = NewMaxStds;
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -4114,6 +4111,7 @@ void Grp_RenameGroup (void)
    struct GroupData GrpDat;
    char Query[128 + Grp_MAX_BYTES_GROUP_NAME];
    char NewNameGrp[Grp_MAX_BYTES_GROUP_NAME + 1];
+   Lay_AlertType_t AlertType;
 
    /***** Get parameters from form *****/
    /* Get the code of the group */
@@ -4130,9 +4128,9 @@ void Grp_RenameGroup (void)
    /***** Check if new name is empty *****/
    if (!NewNameGrp[0])
      {
+      AlertType = Lay_WARNING;
       sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_group_X_empty,
                GrpDat.GrpName);
-      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
      }
    else
      {
@@ -4142,9 +4140,8 @@ void Grp_RenameGroup (void)
          /***** If group was in database... *****/
          if (Grp_CheckIfGroupNameExists (GrpDat.GrpTypCod,NewNameGrp,Gbl.CurrentCrs.Grps.GrpCod))
            {
-            sprintf (Gbl.Message,Txt_The_group_X_already_exists,
-                     NewNameGrp);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	    AlertType = Lay_WARNING;
+            sprintf (Gbl.Message,Txt_The_group_X_already_exists,NewNameGrp);
            }
          else
            {
@@ -4154,23 +4151,23 @@ void Grp_RenameGroup (void)
             DB_QueryUPDATE (Query,"can not update the name of a group");
 
             /***** Write message to show the change made *****/
+	    AlertType = Lay_SUCCESS;
             sprintf (Gbl.Message,Txt_The_group_X_has_been_renamed_as_Y,
                      GrpDat.GrpName,NewNameGrp);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
            }
         }
       else	// The same name
         {
+	 AlertType = Lay_INFO;
          sprintf (Gbl.Message,Txt_The_name_of_the_group_X_has_not_changed,
                   NewNameGrp);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
         }
      }
 
    /***** Show the form again *****/
    Str_Copy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,
              Grp_MAX_BYTES_GROUP_NAME);
-   Grp_ReqEditGroups ();
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
