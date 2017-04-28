@@ -67,7 +67,6 @@ static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void);
 static void Asg_PutIconToCreateNewAsg (void);
 static void Asg_PutButtonToCreateNewAsg (void);
-static void Asg_PutParamsToCreateNewAsg (void);
 static void Asg_PutFormToSelectWhichGroupsToShow (void);
 static void Asg_ParamsWhichGroupsToShow (void);
 static void Asg_ShowOneAssignment (long AsgCod);
@@ -249,7 +248,8 @@ static void Asg_PutIconToCreateNewAsg (void)
    extern const char *Txt_New_assignment;
 
    /***** Put form to create a new assignment *****/
-   Lay_PutContextualLink (ActFrmNewAsg,NULL,Asg_PutParamsToCreateNewAsg,
+   Gbl.Asgs.AsgCodToEdit = -1L;
+   Lay_PutContextualLink (ActFrmNewAsg,NULL,Asg_PutParams,
                           "plus64x64.png",
                           Txt_New_assignment,NULL,
                           NULL);
@@ -263,21 +263,11 @@ static void Asg_PutButtonToCreateNewAsg (void)
   {
    extern const char *Txt_New_assignment;
 
+   Gbl.Asgs.AsgCodToEdit = -1L;
    Act_FormStart (ActFrmNewAsg);
-   Asg_PutParamsToCreateNewAsg ();
+   Asg_PutParams ();
    Lay_PutConfirmButton (Txt_New_assignment);
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/***************** Put parameters to create a new assignment *****************/
-/*****************************************************************************/
-
-static void Asg_PutParamsToCreateNewAsg (void)
-  {
-   Asg_PutHiddenParamAsgOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
   }
 
 /*****************************************************************************/
@@ -319,7 +309,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Start date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
+	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_start_%u',"
                       "%ld,'<br />','%s',true,true,true);"
@@ -335,7 +325,7 @@ static void Asg_ShowOneAssignment (long AsgCod)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_end_%u',"
                       "%ld,'<br />','%s',false,true,true);"
@@ -554,7 +544,8 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
 static void Asg_PutParams (void)
   {
-   Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
+   if (Gbl.Asgs.AsgCodToEdit > 0)
+      Asg_PutParamAsgCod (Gbl.Asgs.AsgCodToEdit);
    Asg_PutHiddenParamAsgOrder ();
    Grp_PutParamWhichGrps ();
    Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
@@ -917,20 +908,17 @@ void Asg_ReqRemAssignment (void)
 
    /***** Get data of the assignment from database *****/
    Asg_GetDataOfAssignmentByCod (&Asg);
+   Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
 
-   /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemAsg);
-   Asg_PutParamAsgCod (Asg.AsgCod);
-   Asg_PutHiddenParamAsgOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
-
-   /***** Ask for confirmation of removing *****/
+   /***** Show question and button to remove the assignment *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_assignment);
-   Act_FormEnd ();
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemAsg,Asg_PutParams,
+                            Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1110,15 +1098,16 @@ void Asg_RequestCreatOrEditAsg (void)
 
    /***** Start form *****/
    if (ItsANewAssignment)
+     {
       Act_FormStart (ActNewAsg);
+      Gbl.Asgs.AsgCodToEdit = -1L;
+     }
    else
      {
       Act_FormStart (ActChgAsg);
-      Asg_PutParamAsgCod (Asg.AsgCod);
+      Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
      }
-   Asg_PutHiddenParamAsgOrder ();
-   Grp_PutParamWhichGrps ();
-   Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+   Asg_PutParams ();
 
    /***** Table start *****/
    Lay_StartRoundFrameTable (NULL,
