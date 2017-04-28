@@ -244,8 +244,10 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden);
 
 static void Tst_PutIconToRemoveOneQst (void);
 static void Tst_PutParamsRemoveOneQst (void);
+static void Tst_PutParamsRemoveQst (void);
 
 static long Tst_GetQstCod (void);
+static void Tst_PutParamQstCod (void);
 
 static void Tst_InsertOrUpdateQstIntoDB (void);
 static void Tst_InsertTagsIntoDB (void);
@@ -2815,11 +2817,11 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActReqRemTstQst);
-      Sta_WriteParamsDatesSeeAccesses ();
-      Tst_WriteParamEditQst ();
-      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+      Tst_PutParamQstCod ();
       if (NumRows == 1)
          Par_PutHiddenParamChar ("OnlyThisQst",'Y'); // If there are only one row, don't list again after removing
+      Sta_WriteParamsDatesSeeAccesses ();
+      Tst_WriteParamEditQst ();
       Lay_PutIconRemove ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
@@ -2827,7 +2829,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       /* Write icon to edit the question */
       fprintf (Gbl.F.Out,"<td class=\"BT%u\">",Gbl.RowEvenOdd);
       Act_FormStart (ActEdiOneTstQst);
-      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+      Tst_PutParamQstCod ();
       fprintf (Gbl.F.Out,"<input type=\"image\" src=\"%s/edit64x64.png\""
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
@@ -2882,7 +2884,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
           Gbl.Test.AnswerType == Tst_ANS_MULTIPLE_CHOICE)
         {
          Act_FormStart (ActShfTstQst);
-         Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+         Tst_PutParamQstCod ();
          Sta_WriteParamsDatesSeeAccesses ();
          Tst_WriteParamEditQst ();
          if (NumRows == 1)
@@ -4514,7 +4516,7 @@ static void Tst_PutFormEditOneQst (char Stem[Cns_MAX_BYTES_TEXT + 1],
    /***** Start form *****/
    Act_FormStart (ActRcvTstQst);
    if (Gbl.Test.QstCod > 0)	// The question already has assigned a code
-      Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
+      Tst_PutParamQstCod ();
 
    /***** Start table *****/
    fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
@@ -5843,16 +5845,6 @@ static void Tst_PutIconToRemoveOneQst (void)
   }
 
 /*****************************************************************************/
-/****************** Put parameter to remove one question *********************/
-/*****************************************************************************/
-
-static void Tst_PutParamsRemoveOneQst (void)
-  {
-   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
-   Par_PutHiddenParamChar ("OnlyThisQst",'Y');
-  }
-
-/*****************************************************************************/
 /******************** Request the removal of a question **********************/
 /*****************************************************************************/
 
@@ -5872,36 +5864,56 @@ void Tst_RequestRemoveQst (void)
       to continue listing the rest of questions */
    EditingOnlyThisQst = Par_GetParToBool ("OnlyThisQst");
 
-   /***** Start form *****/
-   Act_FormStart (ActRemTstQst);
-   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
-   if (EditingOnlyThisQst)
-      Par_PutHiddenParamChar ("OnlyThisQst",'Y');
-   else	// Editing a list of questions
-     {
-      /* Get and write other parameters related to the listing of questions */
-      if (Tst_GetParamsTst ())
-	{
-	 Sta_WriteParamsDatesSeeAccesses ();
-	 Tst_WriteParamEditQst ();
-	}
-      Tst_FreeTagsList ();
-     }
+   /* Get other parameters */
+   if (!EditingOnlyThisQst)
+      if (!Tst_GetParamsTst ())
+	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
-   /***** Ask for confirmation of removing *****/
+   /***** Show question and button to remove question *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) Gbl.Test.QstCod);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
-   Lay_PutRemoveButton (Txt_Remove_question);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** End form *****/
-   Act_FormEnd ();
+   /* End alert */
+   if (EditingOnlyThisQst)
+      Lay_ShowAlertAndButton2 (ActRemTstQst,NULL,
+			       Tst_PutParamsRemoveOneQst,
+			       Lay_REMOVE_BUTTON,Txt_Remove_question);
+   else
+     {
+      Lay_ShowAlertAndButton2 (ActRemTstQst,NULL,
+			       Tst_PutParamsRemoveQst,
+			       Lay_REMOVE_BUTTON,Txt_Remove_question);
+      Tst_FreeTagsList ();
+     }
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)
       Tst_ListOneQstToEdit ();
    else
       Tst_ListQuestionsToEdit ();
+  }
+
+/*****************************************************************************/
+/***** Put parameter to remove question when editing only one question *******/
+/*****************************************************************************/
+
+static void Tst_PutParamsRemoveOneQst (void)
+  {
+   Tst_PutParamQstCod ();
+   Par_PutHiddenParamChar ("OnlyThisQst",'Y');
+  }
+
+/*****************************************************************************/
+/***** Put parameter to remove question when editing several questions *******/
+/*****************************************************************************/
+
+static void Tst_PutParamsRemoveQst (void)
+  {
+   Tst_PutParamQstCod ();
+   Sta_WriteParamsDatesSeeAccesses ();
+   Tst_WriteParamEditQst ();
   }
 
 /*****************************************************************************/
@@ -6004,6 +6016,15 @@ static long Tst_GetQstCod (void)
   {
    /***** Get code of test question *****/
    return Par_GetParToLong ("QstCod");
+  }
+
+/*****************************************************************************/
+/************ Put parameter with question code to edit, remove... ************/
+/*****************************************************************************/
+
+static void Tst_PutParamQstCod (void)
+  {
+   Par_PutHiddenParamLong ("QstCod",Gbl.Test.QstCod);
   }
 
 /*****************************************************************************/
