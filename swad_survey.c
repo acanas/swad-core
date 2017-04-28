@@ -1490,17 +1490,16 @@ void Svy_AskRemSurvey (void)
    if (!Svy.Status.ICanEdit)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
-   /***** Ask for confirmation of removing *****/
+   /***** Show question and button to remove survey *****/
+   /* Start alert */
    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Button of confirmation of removing *****/
+   /* End alert */
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   Act_FormStart (ActRemSvy);
-   Svy_PutParams ();
-   Lay_PutRemoveButton (Txt_Remove_survey);
-   Act_FormEnd ();
+   Lay_ShowAlertAndButton2 (ActRemSvy,NULL,Svy_PutParams,
+			    Lay_REMOVE_BUTTON,Txt_Remove_survey);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
