@@ -362,20 +362,19 @@ void Exa_ReqRemoveExamAnnouncement (void)
    if ((Gbl.ExamAnns.ExaDat.ExaCod = Exa_GetParamExaCod ()) <= 0)
       Lay_ShowErrorAndExit ("Code of exam announcement is missing.");
 
-   /***** Message *****/
-   Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
+   /***** Show question and button to remove exam announcement *****/
+   /* Start alert */
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
 
-   /***** View announcement *****/
+   /* Show announcement */
    Exa_AllocMemExamAnnouncement ();
    Exa_GetDataExamAnnouncementFromDB ();
    Exa_ShowExamAnnouncement (Exa_NORMAL_VIEW);
    Exa_FreeMemExamAnnouncement ();
 
-   /***** Button of confirmation of removing *****/
-   Act_FormStart (ActRemExaAnn);
-   Exa_PutParamExaCodToEdit ();
-   Lay_PutRemoveButton (Txt_Remove);
-   Act_FormEnd ();
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemExaAnn,NULL,Exa_PutParamExaCodToEdit,
+			    Lay_REMOVE_BUTTON,Txt_Remove);
   }
 
 /*****************************************************************************/
