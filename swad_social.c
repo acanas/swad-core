@@ -233,6 +233,7 @@ static long Soc_GetNotCodOfSocialPublishing (long PubCod);
 static long Soc_GetPubCodOfOriginalSocialNote (long NotCod);
 
 static void Soc_RequestRemovalSocialComment (void);
+static void Soc_PutParamsRemoveSocialCommment (void);
 static void Soc_RemoveSocialComment (void);
 static void Soc_RemoveImgFileFromSocialComment (long PubCod);
 static void Soc_RemoveASocialCommentFromDB (struct SocialComment *SocCom);
@@ -3968,20 +3969,25 @@ static void Soc_RequestRemovalSocialComment (void)
       if (Gbl.Usrs.Me.Logged &&
 	  SocCom.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// I am the author of this comment
 	{
-	 /***** Show warning and social comment *****/
-	 /* Warning message */
-	 Lay_ShowAlert (Lay_WARNING,Txt_Do_you_really_want_to_remove_the_following_comment);
+	 /***** Show question and button to remove social comment *****/
+	 /* Start alert */
+	 Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_comment);
 
 	 /* Show social comment */
 	 Soc_WriteSocialComment (&SocCom,
 				 Soc_TOP_MESSAGE_NONE,-1L,
 				 true);
 
-	 /***** Form to ask for confirmation to remove this social comment *****/
-         Soc_FormStart (ActRemSocComGbl,ActRemSocComUsr);
-	 Soc_PutHiddenParamPubCod (SocCom.PubCod);
-	 Lay_PutRemoveButton (Txt_Remove);
-	 Act_FormEnd ();
+	 /* End alert */
+	 Gbl.Social.PubCod = SocCom.PubCod;	// Publication to be removed
+	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+	    Lay_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",
+	                             Soc_PutParamsRemoveSocialCommment,
+				     Lay_REMOVE_BUTTON,Txt_Remove);
+	 else
+	    Lay_ShowAlertAndButton2 (ActRemSocComGbl,NULL,
+	                             Soc_PutParamsRemoveSocialCommment,
+				     Lay_REMOVE_BUTTON,Txt_Remove);
 	}
      }
    else
@@ -3989,6 +3995,19 @@ static void Soc_RequestRemovalSocialComment (void)
 
    /***** Free image *****/
    Img_ImageDestructor (&SocCom.Image);
+  }
+
+/*****************************************************************************/
+/***************** Put parameters to remove a social comment *****************/
+/*****************************************************************************/
+
+static void Soc_PutParamsRemoveSocialCommment (void)
+  {
+   if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
+      Usr_PutParamOtherUsrCodEncrypted ();
+   else
+      Soc_PutParamWhichUsrs ();
+   Soc_PutHiddenParamPubCod (Gbl.Social.PubCod);
   }
 
 /*****************************************************************************/

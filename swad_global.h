@@ -578,6 +578,7 @@ struct Globals
    struct
      {
       Soc_WhichUsrs_t WhichUsrs;
+      long PubCod;		// Used as parameter about publication to be edited, removed...
      } Social;
    struct
      {
