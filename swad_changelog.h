@@ -221,13 +221,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.194.13 (2017-04-28)"
+#define Log_PLATFORM_VERSION	"SWAD 16.194.14 (2017-04-28)"
 #define CSS_FILE		"swad16.193.4.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.194.14:Apr 28, 2017	Changed dialog to remove a group. (218368 lines)
         Version 16.194.13:Apr 28, 2017	Changed dialog to remove a social note. (218417 lines)
         Version 16.194.12:Apr 28, 2017	Changed dialog to remove a social comment. (218398 lines)
         Version 16.194.11:Apr 28, 2017	Changed dialog to remove a notice. (218379 lines)

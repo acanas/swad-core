@@ -459,7 +459,7 @@ struct Globals
          unsigned NumGrps;
          struct GroupTypes GrpTypes;
          struct GroupType GrpTyp;
-         long GrpCod;
+         long GrpCod;		// Group to be edited, removed...
          char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];
          unsigned MaxStudents;
          bool Open;

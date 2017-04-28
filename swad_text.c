@@ -9180,66 +9180,6 @@ const char *Txt_Do_you_really_want_to_remove_the_following_post =
 	"Voc&ecirc; realmente deseja remover o seguinte post?";
 #endif
 
-const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_centre_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a del centro <strong>%s</strong>?";		// Necessita traduccio
-#elif L==2
-	"Do you really want to remove the following user"
-	" as an administrator of the centre <strong>%s</strong>?";	// Need Übersetzung
-#elif L==3
-	"Do you really want to remove the following user"
-	" as an administrator of the centre <strong>%s</strong>?";
-#elif L==4
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a del centro <strong>%s</strong>?";
-#elif L==5
-	"Do you really want to remove the following user"
-	" as an administrator of the centre <strong>%s</strong>?";	// Besoin de traduction
-#elif L==6
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a del centro <strong>%s</strong>?";		// Okoteve traducción
-#elif L==7
-	"Vuoi realmente rimuovere il seguente utente"
-	" come amministratore del centro <strong>%s</strong>?";
-#elif L==8
-	"Czy na pewno chcesz usunac nastepujace u&zdot;ytkownika"
-	" jako administratora centrum <strong>%s</strong>?";
-#elif L==9
-	"Do you really want to remove the following user"
-	" as an administrator of the centre <strong>%s</strong>?";	// Necessita de tradução
-#endif
-
-const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_the_degree_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a de la titulaci&oacute;n <strong>%s</strong>?";	// Necessita traduccio
-#elif L==2
-	"Do you really want to remove the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Need Übersetzung
-#elif L==3
-	"Do you really want to remove the following user"
-	" as an administrator of the degree <strong>%s</strong>?";
-#elif L==4
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a de la titulaci&oacute;n <strong>%s</strong>?";
-#elif L==5
-	"Do you really want to remove the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Besoin de traduction
-#elif L==6
-	"&iquest;Realmente desea eliminar el siguiente usuario"
-	" como administrador/a de la titulaci&oacute;n <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7
-	"Vuoi realmente rimuovere il seguente utente"
-	" come amministratore della laurea <strong>%s</strong>?";
-#elif L==8
-	"Czy na pewno chcesz usunac nastepujace u&zdot;ytkownika"
-	" jako administratora stopnia <strong>%s</strong>?";
-#elif L==9
-	"Do you really want to remove the following user"
-	" as an administrator of the degree <strong>%s</strong>?";		// Necessita de tradução
-#endif
-
 const char *Txt_Do_you_really_want_to_remove_the_following_user_as_an_administrator_of_X =	// Warning: it is very important to include %s in the following sentences
 #if   L==1
 	"&iquest;Realmente desea eliminar el siguiente usuario"

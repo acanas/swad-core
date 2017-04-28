@@ -94,10 +94,13 @@ static bool Grp_CheckIfGroupTypeNameExists (const char *GrpTypName,long GrpTypCo
 static bool Grp_CheckIfGroupNameExists (long GrpTypCod,const char *GrpName,long GrpCod);
 static void Grp_CreateGroupType (void);
 static void Grp_CreateGroup (void);
+
 static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps);
 static void Grp_AskConfirmRemGrp (void);
+static void Grp_PutParamRemGrp (void);
 static void Grp_RemoveGroupTypeCompletely (void);
 static void Grp_RemoveGroupCompletely (void);
+
 static void Grp_WriteMaxStdsGrp (unsigned MaxStudents);
 static long Grp_GetParamGrpTypCod (void);
 static long Grp_GetParamGrpCod (void);
@@ -3388,12 +3391,15 @@ static void Grp_AskConfirmRemGrp (void)
    struct GroupData GrpDat;
    unsigned NumStds;
 
-   /***** Get name and type of the group from database *****/
+   /***** Get name of the group from database *****/
    GrpDat.GrpCod = Gbl.CurrentCrs.Grps.GrpCod;
    Grp_GetDataOfGroupByCod (&GrpDat);
+
+   /***** Count number of students in group *****/
    NumStds = Grp_CountNumStdsInGrp (Gbl.CurrentCrs.Grps.GrpCod);
 
-   /***** Write message to ask confirmation of removing *****/
+   /***** Show question and button to remove group *****/
+   /* Start alert */
    if (NumStds == 0)
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_group_X,
                GrpDat.GrpName);
@@ -3403,19 +3409,27 @@ static void Grp_AskConfirmRemGrp (void)
    else
       sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                GrpDat.GrpName,NumStds);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
 
-   /***** Put button to confirm the removing *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Act_FormStart (ActRemGrp);
-   Grp_PutParamGrpCod (GrpDat.GrpCod);
-   Lay_PutRemoveButton (Txt_Remove_group);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
+   /* End alert */
+   Lay_ShowAlertAndButton2 (ActRemGrp,NULL,Grp_PutParamRemGrp,
+			    Lay_REMOVE_BUTTON,Txt_Remove_group);
+
+   /***** Show the form again *****/
+   Grp_ReqEditGroups ();
   }
 
 /*****************************************************************************/
-/****************************** Remove a group type **************************/
+/*********************** Put parameter to remove a group *********************/
+/*****************************************************************************/
+
+static void Grp_PutParamRemGrp (void)
+  {
+   Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
+  }
+
+/*****************************************************************************/
+/**************************** Remove a group type ****************************/
 /*****************************************************************************/
 
 void Grp_RemoveGroupType (void)
