@@ -137,12 +137,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"%s COLOR%u\""
+                         " class=\"LST_EDIT_ROWS COLOR%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />"
                          "</label>",
                Txt_TABLE_Header,
                Mrk_HeadOrFootStr[Brw_HEADER],Marks.Header,
-               Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Brw_PutParamsFileBrowser (ActUnk,
@@ -165,12 +164,11 @@ void Mrk_GetAndWriteNumRowsHeaderAndFooter (Brw_FileType_t FileType,
       fprintf (Gbl.F.Out,"<label>&nbsp;%s: "
                          "<input type=\"text\" name=\"%s\""
                          " size=\"1\" maxlength=\"5\" value=\"%u\""
-                         " class=\"%s COLOR%u\""
+                         " class=\"LST_EDIT_ROWS COLOR%u\""
                          " onchange=\"document.getElementById('%s').submit();\" />"
                          "</label>",
                Txt_TABLE_Footer,
                Mrk_HeadOrFootStr[Brw_FOOTER],Marks.Footer,
-               Gbl.FileBrowser.InputStyle,
                Gbl.RowEvenOdd,
                Gbl.Form.Id);
       Brw_PutParamsFileBrowser (ActUnk,
