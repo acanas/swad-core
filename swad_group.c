@@ -69,6 +69,8 @@ static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertType,const char *Me
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
+static void Grp_PutIconsEditingGroups (void);
+static void Grp_PutIconToCreateNewGroup (void);
 
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
@@ -82,8 +84,6 @@ static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 
 static void Grp_ListGroupsForEdition (void);
-static void Grp_PutIconsEditingGroups (void);
-static void Grp_PutIconToCreateNewGroup (void);
 static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (void);
 
@@ -234,7 +234,14 @@ static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertType,const char *Me
 
 static void Grp_EditGroupTypes (void)
   {
+   extern const char *Hlp_USERS_Groups;
+   extern const char *Txt_Types_of_group;
    extern const char *Txt_There_are_no_types_of_group_in_the_course_X;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Types_of_group,
+                        Grp_PutIconsEditingGroupTypes,
+                        Hlp_USERS_Groups);
 
    /***** Forms to edit current group types *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)	// Group types found...
@@ -248,6 +255,9 @@ static void Grp_EditGroupTypes (void)
 
    /***** Put a form to create a new group type *****/
    Grp_PutFormToCreateGroupType ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -256,7 +266,13 @@ static void Grp_EditGroupTypes (void)
 
 static void Grp_EditGroups (void)
   {
+   extern const char *Hlp_USERS_Groups;
+   extern const char *Txt_Groups;
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
+                        Hlp_USERS_Groups);
 
    /***** Forms to edit current groups *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
@@ -270,6 +286,33 @@ static void Grp_EditGroups (void)
 
    /***** Put a form to create a new group *****/
    Grp_PutFormToCreateGroup ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of groups ******************/
+/*****************************************************************************/
+
+static void Grp_PutIconsEditingGroups (void)
+  {
+   /***** Put icon to view groups *****/
+   Grp_PutIconToViewGroups ();
+
+   /***** Put icon to create a new group *****/
+   Grp_PutIconToCreateNewGroup ();
+  }
+
+static void Grp_PutIconToCreateNewGroup (void)
+  {
+   extern const char *Txt_New_group;
+
+   /***** Put form to create a new group *****/
+   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP,NULL,
+                          "plus64x64.png",
+                          Txt_New_group,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1132,8 +1175,7 @@ static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod)
 
 static void Grp_ListGroupTypesForEdition (void)
   {
-   extern const char *Hlp_USERS_Groups;
-   extern const char *Txt_Types_of_group;
+
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
    extern const char *Txt_A_student_can_belong_to_several_groups;
@@ -1145,9 +1187,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Types_of_group,
-                             Grp_PutIconsEditingGroupTypes,
-                             Hlp_USERS_Groups,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1263,7 +1303,8 @@ static void Grp_ListGroupTypesForEdition (void)
                Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps);
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -1345,8 +1386,6 @@ static void Grp_WriteHeadingGroupTypes (void)
 
 static void Grp_ListGroupsForEdition (void)
   {
-   extern const char *Hlp_USERS_Groups;
-   extern const char *Txt_Groups;
    extern const char *Txt_Group_X_open_click_to_close_it;
    extern const char *Txt_Group_X_closed_click_to_open_it;
    extern const char *Txt_File_zones_of_the_group_X_enabled_click_to_disable_them;
@@ -1359,8 +1398,7 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
-                             Hlp_USERS_Groups,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1480,31 +1518,7 @@ static void Grp_ListGroupsForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
-  }
-
-/*****************************************************************************/
-/**************** Put contextual icons in edition of groups ******************/
-/*****************************************************************************/
-
-static void Grp_PutIconsEditingGroups (void)
-  {
-   /***** Put icon to view groups *****/
-   Grp_PutIconToViewGroups ();
-
-   /***** Put icon to create a new group *****/
-   Grp_PutIconToCreateNewGroup ();
-  }
-
-static void Grp_PutIconToCreateNewGroup (void)
-  {
-   extern const char *Txt_New_group;
-
-   /***** Put form to create a new group *****/
-   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP,NULL,
-                          "plus64x64.png",
-                          Txt_New_group,NULL,
-                          NULL);
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -2171,7 +2185,6 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 
 static void Grp_PutFormToCreateGroupType (void)
   {
-   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_New_type_of_group;
    extern const char *Txt_It_is_optional_to_choose_a_group;
    extern const char *Txt_It_is_mandatory_to_choose_a_group;
@@ -2187,16 +2200,14 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,
-                             NULL,Hlp_USERS_Groups,2);
+                             NULL,NULL,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroupTypes ();
 
-   /***** Put disabled icon to remove group type *****/
+   /***** Column to remove group type, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
+                      "<td class=\"BM\"></td>");
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2271,8 +2282,10 @@ static void Grp_PutFormToCreateGroupType (void)
                       "</td>");
 
    /***** Number of groups of this type *****/
-   fprintf (Gbl.F.Out,"<td></td>"
-	              "</tr>");
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+		      "0"	// It's a new group type ==> 0 groups
+		      "</td>"
+		      "</tr>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_group);
@@ -2305,11 +2318,9 @@ static void Grp_PutFormToCreateGroup (void)
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();
 
-   /***** Put disabled icons to remove group, open group and archive zone *****/
+   /***** Put disabled icons to open group and archive zone *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>"
+                      "<td class=\"BM\"></td>"
                       "<td class=\"BM\">"
                       "<img src=\"%s/lock-off64x64.png\""
                       " alt=\"%s\" title=\"%s\""
@@ -2361,7 +2372,9 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</td>");
 
    /***** Current number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td></td>"
+   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+		      "0"	// It's a new group ==> 0 students
+		      "</td>"
 		      "</tr>");
 
    /***** Send button and end frame *****/
@@ -3675,7 +3688,7 @@ static void Grp_RemoveGroupCompletely (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Remove file zones of this group *****/
-   Brw_RemoveGrpZonesVerbose (&GrpDat);
+   Brw_RemoveGrpZones (Gbl.CurrentCrs.Crs.CrsCod,GrpDat.GrpCod);
 
    /***** Remove this group from all the assignments *****/
    Asg_RemoveGroup (GrpDat.GrpCod);

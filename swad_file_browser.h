@@ -246,7 +246,6 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
                                Brw_FileType_t FileType,long FilCod);
 
 void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod);
-void Brw_RemoveGrpZonesVerbose (struct GroupData *GrpDat);
 void Brw_RemoveGrpZones (long CrsCod,long GrpCod);
 
 void Brw_RemoveUsrWorksInCrs (struct UsrData *UsrDat,struct Course *Crs,Cns_QuietOrVerbose_t QuietOrVerbose);

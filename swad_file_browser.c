@@ -11030,7 +11030,8 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
   {
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned long NumRow,NumRows;
+   unsigned long NumRow;
+   unsigned long NumRows;
    struct GroupData GrpDat;
 
    /***** Query database *****/
@@ -11050,28 +11051,11 @@ void Brw_RemoveZonesOfGroupsOfType (long GrpTypCod)
          Grp_GetDataOfGroupByCod (&GrpDat);
 
          /* Remove file zones of this group */
-         Brw_RemoveGrpZonesVerbose (&GrpDat);
+         Brw_RemoveGrpZones (Gbl.CurrentCrs.Crs.CrsCod,GrpDat.GrpCod);
 	}
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
-  }
-
-/*****************************************************************************/
-/************** Remove file zones of a group and show message ****************/
-/*****************************************************************************/
-
-void Brw_RemoveGrpZonesVerbose (struct GroupData *GrpDat)
-  {
-   extern const char *Txt_File_zones_of_the_group_X_Y_removed;
-
-   /***** Remove group zones and clipboards *****/
-   Brw_RemoveGrpZones (Gbl.CurrentCrs.Crs.CrsCod,GrpDat->GrpCod);
-
-   /***** Print message *****/
-   sprintf (Gbl.Message,Txt_File_zones_of_the_group_X_Y_removed,
-            GrpDat->GrpTypName,GrpDat->GrpName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/

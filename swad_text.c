@@ -12401,27 +12401,6 @@ const char *Txt_File_zones_of_the_group_X_disabled_click_to_enable_them =	// War
 	"File zones of the group %s disabled, click to enable them";			// Necessita de tradução
 #endif
 
-const char *Txt_File_zones_of_the_group_X_Y_removed =	// Warning: it is very important to include two %s in the following sentences
-#if   L==1
-	"Zonas de archivos del grupo <strong>%s %s</strong> eliminadas.";	// Necessita traduccio
-#elif L==2
-	"Dateienbereiche der Gruppe <strong>%s %s</strong> entfernt.";
-#elif L==3
-	"File areas of the group <strong>%s %s</strong> removed.";
-#elif L==4
-	"Zonas de archivos del grupo <strong>%s %s</strong> eliminadas.";
-#elif L==5
-	"File zones of the group <strong>%s %s</strong> removed.";		// Besoin de traduction
-#elif L==6
-	"Zonas de archivos del grupo <strong>%s %s</strong> eliminadas.";	// Okoteve traducción
-#elif L==7
-	"Aree file del gruppo <strong>%s %s</strong> rimosse.";
-#elif L==8
-	"Plik obszarach grupy <strong>%s %s</strong> usuniety.";
-#elif L==9
-	"File zones of the group <strong>%s %s</strong> removed.";	// Necessita de tradução
-#endif
-
 const char *Txt_Files =
 #if   L==1
 	"Fitxers";
