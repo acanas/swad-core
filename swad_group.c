@@ -40,8 +40,10 @@
 /*************************** Internal constants ******************************/
 /*****************************************************************************/
 
-#define Grp_SECTION_GROUP_TYPES	"grp_types"
-#define Grp_SECTION_GROUPS	"grps"
+#define Grp_SECTION_GROUP_TYPES		"grp_types"
+#define Grp_SECTION_NEW_GROUP_TYPE	"new_grp_type"
+#define Grp_SECTION_GROUPS		"grps"
+#define Grp_SECTION_NEW_GROUP		"new_grp"
 
 /*****************************************************************************/
 /***************************** Internal types ********************************/
@@ -73,6 +75,9 @@ static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Alr
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod);
 static void Grp_ListGroupTypesForEdition (void);
+static void Grp_PutIconsEditingGroupTypes (void);
+static void Grp_PutIconToViewGroups (void);
+static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
 static void Grp_ListGroupsForEdition (void);
 static void Grp_WriteHeadingGroups (void);
@@ -178,7 +183,7 @@ void Grp_ReqEditGroups (void)
 static void Grp_ReqEditGroupsInternal0 (void)
   {
    /***** Start groups types section *****/
-   fprintf (Gbl.F.Out,"<section id=\"group_types\">");
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUP_TYPES);
   }
 
 static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertType,const char *Message)
@@ -198,7 +203,7 @@ static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertType,const char *Me
    fprintf (Gbl.F.Out,"</section>");
 
    /***** Start groups section *****/
-   fprintf (Gbl.F.Out,"<section id=\"groups\">");
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUPS);
   }
 
 static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertType,const char *Message)
@@ -1136,7 +1141,9 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Types_of_group,NULL,Hlp_USERS_Groups,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Types_of_group,
+                             Grp_PutIconsEditingGroupTypes,
+                             Hlp_USERS_Groups,2);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1253,6 +1260,41 @@ static void Grp_ListGroupTypesForEdition (void)
      }
 
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/************ Put contextual icons in edition of types of group **************/
+/*****************************************************************************/
+
+static void Grp_PutIconsEditingGroupTypes (void)
+  {
+   /***** Put icon to view groups *****/
+   Grp_PutIconToViewGroups ();
+
+   /***** Put icon to create a new type of group *****/
+   Grp_PutIconToCreateNewGroupType ();
+  }
+
+static void Grp_PutIconToViewGroups (void)
+  {
+   extern const char *Txt_View;
+
+   /***** Put form to create a new type of group *****/
+   Lay_PutContextualLink (ActReqSelGrp,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
+  }
+
+static void Grp_PutIconToCreateNewGroupType (void)
+  {
+   extern const char *Txt_New_type_of_group;
+
+   /***** Put form to create a new type of group *****/
+   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP_TYPE,NULL,
+                          "plus64x64.png",
+                          Txt_New_type_of_group,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2111,6 +2153,7 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_Create_type_of_group;
 
    /***** Start form *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_NEW_GROUP_TYPE);
    Act_FormStartAnchor (ActNewGrpTyp,Grp_SECTION_GROUP_TYPES);
 
    /***** Start of frame *****/
@@ -2207,6 +2250,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** End form *****/
    Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
