@@ -2301,7 +2301,6 @@ static void Grp_PutFormToCreateGroupType (void)
 
 static void Grp_PutFormToCreateGroup (void)
   {
-   extern const char *Hlp_USERS_Groups;
    extern const char *Txt_New_group;
    extern const char *Txt_Group_closed;
    extern const char *Txt_File_zones_disabled;
@@ -2313,7 +2312,7 @@ static void Grp_PutFormToCreateGroup (void)
    Act_FormStartAnchor (ActNewGrp,Grp_SECTION_GROUPS);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,Hlp_USERS_Groups,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,NULL,2);
 
    /***** Write heading *****/
    Grp_WriteHeadingGroups ();
@@ -3904,8 +3903,8 @@ void Grp_ChangeGroupType (void)
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
    Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (AlertType,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal2 (AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
