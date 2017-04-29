@@ -75,6 +75,8 @@ static void Ins_ListOneInstitutionForSeeing (struct Instit *Ins,unsigned NumIns)
 static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable);
 static void Ins_GetParamInsOrder (void);
 
+static void Ins_PutIconToViewInstitutions (void);
+
 static void Ins_GetFullNameAndCtyOfInstitutionByCod (struct Instit *Ins,
                                                char CtyName[Hie_MAX_BYTES_FULL_NAME + 1]);
 
@@ -924,8 +926,17 @@ static void Ins_GetParamInsOrder (void)
 
 void Ins_EditInstitutions (void)
   {
+   extern const char *Hlp_COUNTRY_Institutions;
+   extern const char *Txt_Institutions_of_COUNTRY_X;
+
    /***** Get list of institutions *****/
    Ins_GetListInstitutions (Gbl.CurrentCty.Cty.CtyCod,Ins_GET_EXTRA_DATA);
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
+            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ins_PutIconToViewInstitutions,
+                        Hlp_COUNTRY_Institutions);
 
    /***** Put a form to create a new institution *****/
    Ins_PutFormToCreateInstitution ();
@@ -934,8 +945,26 @@ void Ins_EditInstitutions (void)
    if (Gbl.Inss.Num)
       Ins_ListInstitutionsForEdition ();
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free list of institutions *****/
    Ins_FreeListInstitutions ();
+  }
+
+/*****************************************************************************/
+/***************** Put contextual icon to view institutions ******************/
+/*****************************************************************************/
+
+static void Ins_PutIconToViewInstitutions (void)
+  {
+   extern const char *Txt_View;
+
+   /***** Put form to create a new type of group *****/
+   Lay_PutContextualLink (ActSeeIns,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1383,8 +1412,6 @@ void Ins_WriteSelectorOfInstitution (void)
 
 static void Ins_ListInstitutionsForEdition (void)
   {
-   extern const char *Hlp_COUNTRY_Institutions;
-   extern const char *Txt_Institutions_of_COUNTRY_X;
    extern const char *Txt_INSTITUTION_STATUS[Ins_NUM_STATUS_TXT];
    unsigned NumIns;
    struct Instit *Ins;
@@ -1397,9 +1424,7 @@ static void Ins_ListInstitutionsForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Institutions_of_COUNTRY_X,
-            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_COUNTRY_Institutions,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -1563,9 +1588,8 @@ static void Ins_ListInstitutionsForEdition (void)
 			 "</tr>");
      }
 
-
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -2148,8 +2172,7 @@ void Ins_RemoveLogo (void)
 
 static void Ins_PutFormToCreateInstitution (void)
   {
-   extern const char *Hlp_COUNTRY_Institutions;
-   extern const char *Txt_New_institution_of_COUNTRY_X;
+   extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
    struct Instit *Ins;
 
@@ -2164,18 +2187,14 @@ static void Ins_PutFormToCreateInstitution (void)
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
    /***** Start of frame *****/
-   sprintf (Gbl.Title,Txt_New_institution_of_COUNTRY_X,
-            Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,Hlp_COUNTRY_Institutions,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_institution,NULL,NULL,2);
 
    /***** Write heading *****/
    Ins_PutHeadInstitutionsForEdition ();
 
-   /***** Put icon to remove institution *****/
+   /***** Column to remove institution, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
+		      "<td class=\"BM\"></td>");
 
    /***** Institution code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");

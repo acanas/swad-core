@@ -23985,25 +23985,25 @@ const char *Txt_New_holiday =
 	"Nova f&eacute;ria";
 #endif
 
-const char *Txt_New_institution_of_COUNTRY_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_New_institution =
 #if   L==1
-	"Nova instituci&oacute;n (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...) de %s";
+	"Nova instituci&oacute;n (universitat, institut, escola, acad&egrave;mia, organitzaci&oacute;, empresa...)";
 #elif L==2
-	"Neue Hochschule (Universit&auml;t, Hochschule, Schule, Hochschule, Organisation, Unternehmen...) von %s";
+	"Neue Hochschule (Universit&auml;t, Hochschule, Schule, Hochschule, Organisation, Unternehmen...)";
 #elif L==3
-	"New institution (university, college, school, academy, organization, company...) of %s";
+	"New institution (university, college, school, academy, organization, company...)";
 #elif L==4
-	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...) de %s";
+	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...)";
 #elif L==5
-	"Nouvel &eacute;tablissement (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...) de %s";
+	"Nouvel &eacute;tablissement (universit&eacute;, coll&egrave;ge, &eacute;cole, acad&eacute;mie, organisation, entreprise...)";
 #elif L==6
-	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...) de %s";	// Okoteve traducción
+	"Nueva instituci&oacute;n (universidad, instituto, colegio, academia, organizaci&oacute;n, empresa...)";	// Okoteve traducción
 #elif L==7
-	"Nuova istituzione (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...) di %s";
+	"Nuova istituzione (universit&agrave;, istituto, scuola, accademia, organizzazione, societ&agrave;...)";
 #elif L==8
-	"Nowa instytucja (uniwersytet, uczelnia, szko&lstrok;a, akademia, organizacja, firma...) %s";
+	"Nowa instytucja (uniwersytet, uczelnia, szko&lstrok;a, akademia, organizacja, firma...)";
 #elif L==9
-	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...) de %s";
+	"Nova institu&ccedil;&atilde;o (universidade, faculdade, escola, academia, organiza&ccedil;&atilde;o, empresa...)";
 #endif
 
 const char *Txt_New_link =
