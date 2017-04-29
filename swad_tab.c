@@ -171,23 +171,26 @@ static bool Tab_CheckIfICanViewTab (Tab_Tab_t Tab)
       case TabUnk:
 	 return false;
       case TabSys:
-	 return (Gbl.CurrentCty.Cty.CtyCod <= 0);
+	 return (Gbl.CurrentCty.Cty.CtyCod <= 0);	// No country selected
       case TabCty:
-	 return (Gbl.CurrentCty.Cty.CtyCod > 0 &&
-	         Gbl.CurrentIns.Ins.InsCod <= 0);
+	 return (Gbl.CurrentCty.Cty.CtyCod > 0 &&	// Country selected
+	         Gbl.CurrentIns.Ins.InsCod <= 0);	// No institution selected
       case TabIns:
-	 return (Gbl.CurrentIns.Ins.InsCod > 0 &&
-	         Gbl.CurrentCtr.Ctr.CtrCod <= 0);
+	 return (Gbl.CurrentIns.Ins.InsCod > 0 &&	// Institution selected
+	         Gbl.CurrentCtr.Ctr.CtrCod <= 0);	// No centre selected
       case TabCtr:
-	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0 &&
-	         Gbl.CurrentDeg.Deg.DegCod <= 0);
+	 return (Gbl.CurrentCtr.Ctr.CtrCod > 0 &&	// Centre selected
+	         Gbl.CurrentDeg.Deg.DegCod <= 0);	// No degree selected
       case TabDeg:
-	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&
-	         Gbl.CurrentCrs.Crs.CrsCod <= 0);
+	 return (Gbl.CurrentDeg.Deg.DegCod > 0 &&	// Degree selected
+	         Gbl.CurrentCrs.Crs.CrsCod <= 0);	// No course selected
       case TabCrs:
-	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
+	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);	// Course selected
+      case TabAss:
+	 return (Gbl.CurrentCrs.Crs.CrsCod > 0 ||	// Course selected
+	         Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT);// Surveys not available for unknown users and guests
       case TabFil:
-	 return (Gbl.CurrentIns.Ins.InsCod > 0);
+	 return (Gbl.CurrentIns.Ins.InsCod > 0);	// Institution selected
       default:
 	 return true;
      }
