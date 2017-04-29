@@ -63,9 +63,11 @@ extern struct Globals Gbl;
 /***************************** Internal prototypes ***************************/
 /*****************************************************************************/
 
+static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertTypeGroupTypes,const char *MessageGroupTypes,
+                                       Lay_AlertType_t AlertTypeGroups,const char *MessageGroups);
 static void Grp_ReqEditGroupsInternal0 (void);
-static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertType,const char *Message);
-static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertType,const char *Message);
+static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertTypeGroupTypes,const char *MessageGroupTypes);
+static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertTypeGroups,const char *MessageGroups);
 
 static void Grp_EditGroupTypes (void);
 static void Grp_EditGroups (void);
@@ -179,9 +181,16 @@ void Grp_WriteNamesOfSelectedGrps (void)
 
 void Grp_ReqEditGroups (void)
   {
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_INFO,NULL);
+  }
+
+static void Grp_ReqEditGroupsInternal (Lay_AlertType_t AlertTypeGroupTypes,const char *MessageGroupTypes,
+                                       Lay_AlertType_t AlertTypeGroups,const char *MessageGroups)
+  {
    Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal1 (AlertTypeGroupTypes,MessageGroupTypes);
+   Grp_ReqEditGroupsInternal2 (AlertTypeGroups,MessageGroups);
   }
 
 static void Grp_ReqEditGroupsInternal0 (void)
@@ -190,15 +199,15 @@ static void Grp_ReqEditGroupsInternal0 (void)
    fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUP_TYPES);
   }
 
-static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertType,const char *Message)
+static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertTypeGroupTypes,const char *MessageGroupTypes)
   {
    /***** Get list of groups types and groups in this course *****/
    Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ALL_GROUP_TYPES);
 
    /***** Show optional alert *****/
-   if (Message)
-      if (Message[0])
-         Lay_ShowAlert (AlertType,Message);
+   if (MessageGroupTypes)
+      if (MessageGroupTypes[0])
+         Lay_ShowAlert (AlertTypeGroupTypes,MessageGroupTypes);
 
    /***** Put form to edit group types *****/
    Grp_EditGroupTypes ();
@@ -210,12 +219,12 @@ static void Grp_ReqEditGroupsInternal1 (Lay_AlertType_t AlertType,const char *Me
    fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUPS);
   }
 
-static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertType,const char *Message)
+static void Grp_ReqEditGroupsInternal2 (Lay_AlertType_t AlertTypeGroups,const char *MessageGroups)
   {
    /***** Show optional alert *****/
-   if (Message)
-      if (Message[0])
-         Lay_ShowAlert (AlertType,Message);
+   if (MessageGroups)
+      if (MessageGroups[0])
+         Lay_ShowAlert (AlertTypeGroups,MessageGroups);
 
    /***** Put form to edit groups *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num) // If there are group types...
@@ -3300,9 +3309,8 @@ void Grp_RecFormNewGrpTyp (void)
      }
 
    /***** Show the form again *****/
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (AlertType,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -3376,9 +3384,8 @@ void Grp_RecFormNewGrp (void)
      }
 
    /***** Show the form again *****/
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (AlertType,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3667,9 +3674,8 @@ static void Grp_RemoveGroupTypeCompletely (void)
             Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
 
    /***** Show the form again *****/
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_SUCCESS,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -3717,9 +3723,8 @@ static void Grp_RemoveGroupCompletely (void)
    sprintf (Gbl.Message,Txt_Group_X_removed,GrpDat.GrpName);
 
    /***** Show the form again *****/
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_SUCCESS,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3750,9 +3755,8 @@ void Grp_OpenGroup (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = true;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_SUCCESS,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3783,9 +3787,8 @@ void Grp_CloseGroup (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.Open = false;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_SUCCESS,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3817,9 +3820,8 @@ void Grp_EnableFileZonesGrp (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = true;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_SUCCESS,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3851,9 +3853,8 @@ void Grp_DisableFileZonesGrp (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.FileZones = false;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (Lay_SUCCESS,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              Lay_SUCCESS,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3902,9 +3903,8 @@ void Grp_ChangeGroupType (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.GrpTypCod = NewGrpTypCod;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (AlertType,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -3958,9 +3958,8 @@ void Grp_ChangeMandatGrpTyp (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.MandatoryEnrolment = NewMandatoryEnrolment;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (AlertType,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -4015,9 +4014,8 @@ void Grp_ChangeMultiGrpTyp (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.GrpTyp.MultipleEnrolment = NewMultipleEnrolment;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (AlertType,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -4055,9 +4053,8 @@ void Grp_ChangeOpenTimeGrpTyp (void)
    sprintf (Gbl.Message,"%s",Txt_The_date_time_of_opening_of_groups_has_changed);
 
    /***** Show the form again *****/
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_SUCCESS,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (Lay_SUCCESS,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -4116,9 +4113,8 @@ void Grp_ChangeMaxStdsGrp (void)
 
    /***** Show the form again *****/
    Gbl.CurrentCrs.Grps.MaxStudents = NewMaxStds;
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (AlertType,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
@@ -4218,9 +4214,8 @@ void Grp_RenameGroupType (void)
    /***** Show the form again *****/
    Str_Copy (Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NewNameGrpTyp,
              Grp_MAX_BYTES_GROUP_TYPE_NAME);
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (AlertType,Gbl.Message);
-   Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);
+   Grp_ReqEditGroupsInternal (AlertType,Gbl.Message,
+                              Lay_INFO,NULL);
   }
 
 /*****************************************************************************/
@@ -4292,9 +4287,8 @@ void Grp_RenameGroup (void)
    /***** Show the form again *****/
    Str_Copy (Gbl.CurrentCrs.Grps.GrpName,NewNameGrp,
              Grp_MAX_BYTES_GROUP_NAME);
-   Grp_ReqEditGroupsInternal0 ();
-   Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
-   Grp_ReqEditGroupsInternal2 (AlertType,Gbl.Message);
+   Grp_ReqEditGroupsInternal (Lay_INFO,NULL,
+                              AlertType,Gbl.Message);
   }
 
 /*****************************************************************************/
