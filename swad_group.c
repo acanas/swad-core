@@ -74,12 +74,16 @@ static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **Al
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
 static void Grp_AddUsrToGroup (struct UsrData *UsrDat,long GrpCod);
+
 static void Grp_ListGroupTypesForEdition (void);
 static void Grp_PutIconsEditingGroupTypes (void);
 static void Grp_PutIconToViewGroups (void);
 static void Grp_PutIconToCreateNewGroupType (void);
 static void Grp_WriteHeadingGroupTypes (void);
+
 static void Grp_ListGroupsForEdition (void);
+static void Grp_PutIconsEditingGroups (void);
+static void Grp_PutIconToCreateNewGroup (void);
 static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (void);
 
@@ -1355,7 +1359,8 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Groups,NULL,Hlp_USERS_Groups,2);
+   Lay_StartRoundFrameTable (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
+                             Hlp_USERS_Groups,2);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1476,6 +1481,30 @@ static void Grp_ListGroupsForEdition (void)
 
    /***** End table *****/
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of groups ******************/
+/*****************************************************************************/
+
+static void Grp_PutIconsEditingGroups (void)
+  {
+   /***** Put icon to view groups *****/
+   Grp_PutIconToViewGroups ();
+
+   /***** Put icon to create a new group *****/
+   Grp_PutIconToCreateNewGroup ();
+  }
+
+static void Grp_PutIconToCreateNewGroup (void)
+  {
+   extern const char *Txt_New_group;
+
+   /***** Put form to create a new group *****/
+   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP,NULL,
+                          "plus64x64.png",
+                          Txt_New_group,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -2267,6 +2296,7 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumGrpTyp;
 
    /***** Start form *****/
+   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_NEW_GROUP);
    Act_FormStartAnchor (ActNewGrp,Grp_SECTION_GROUPS);
 
    /***** Start of frame *****/
@@ -2339,6 +2369,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** End of form *****/
    Act_FormEnd ();
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
