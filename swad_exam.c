@@ -1536,8 +1536,6 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 static void Exa_PutIconsExamAnnouncement (void)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -1552,16 +1550,10 @@ static void Exa_PutIconsExamAnnouncement (void)
       switch (Gbl.ExamAnns.ExaDat.Status)
         {
 	 case Exa_VISIBLE_EXAM_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActHidExaAnn,NULL,Exa_PutParamExaCodToEdit,
-				   "eye-on64x64.png",
-				   Txt_Hide,NULL,
-				   NULL);
+            Lay_PutIconToHide (ActHidExaAnn,Exa_PutParamExaCodToEdit);
 	    break;
 	 case Exa_HIDDEN_EXAM_ANNOUNCEMENT:
-	    Lay_PutContextualLink (ActShoExaAnn,NULL,Exa_PutParamExaCodToEdit,
-				   "eye-slash-on64x64.png",
-				   Txt_Show,NULL,
-				   NULL);
+            Lay_PutIconToUnhide (ActShoExaAnn,Exa_PutParamExaCodToEdit);
 	    break;
 	 case Exa_DELETED_EXAM_ANNOUNCEMENT:	// Not applicable here
 	    break;

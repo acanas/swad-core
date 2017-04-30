@@ -1087,7 +1087,7 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
-/**************** Show contextual icons to edit, view, print *****************/
+/******** Show contextual icons to edit, view, hide, unhide, print ***********/
 /*****************************************************************************/
 
 void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
@@ -1107,6 +1107,26 @@ void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ())
    Lay_PutContextualLink (NextAction,NULL,FuncParams,
 			  "eye-on64x64.png",
 			  Txt_View,NULL,
+                          NULL);
+  }
+
+void Lay_PutIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Hide;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "eye-on64x64.png",
+                          Txt_Hide,NULL,
+                          NULL);
+  }
+
+void Lay_PutIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Show;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "eye-slash-on64x64.png",
+                          Txt_Show,NULL,
                           NULL);
   }
 

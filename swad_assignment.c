@@ -503,8 +503,6 @@ void Asg_PutHiddenParamAsgOrder (void)
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -518,15 +516,9 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
    /***** Put form to hide/show assignment *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAsg,NULL,Asg_PutParams,
-                             "eye-slash-on64x64.png",
-			     Txt_Show,NULL,
-                             NULL);
+      Lay_PutIconToUnhide (ActShoAsg,Asg_PutParams);
    else
-      Lay_PutContextualLink (ActHidAsg,NULL,Asg_PutParams,
-                             "eye-on64x64.png",
-			     Txt_Hide,NULL,
-                             NULL);
+      Lay_PutIconToHide (ActHidAsg,Asg_PutParams);
 
    /***** Put form to edit assignment *****/
    Lay_PutIconToEdit (ActEdiOneAsg,Asg_PutParams);

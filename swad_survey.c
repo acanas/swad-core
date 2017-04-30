@@ -783,8 +783,6 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
   {
    extern const char *Txt_Remove;
    extern const char *Txt_Reset;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -804,15 +802,9 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to hide/show survey *****/
    if (Visible)
-      Lay_PutContextualLink (ActHidSvy,NULL,Svy_PutParams,
-                             "eye-on64x64.png",
-			     Txt_Hide,NULL,
-		             NULL);
+      Lay_PutIconToHide (ActHidSvy,Svy_PutParams);
    else
-      Lay_PutContextualLink (ActShoSvy,NULL,Svy_PutParams,
-                             "eye-slash-on64x64.png",
-			     Txt_Show,NULL,
-		             NULL);
+      Lay_PutIconToUnhide (ActShoSvy,Svy_PutParams);
 
    /***** Put form to edit survey *****/
    Lay_PutIconToEdit (ActEdiOneSvy,Svy_PutParams);

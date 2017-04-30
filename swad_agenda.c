@@ -838,8 +838,6 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
 
@@ -853,15 +851,9 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Lay_PutContextualLink (ActShoEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-                             "eye-slash-on64x64.png",
-			     Txt_Show,NULL,
-                             NULL);
+      Lay_PutIconToUnhide (ActShoEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
    else
-      Lay_PutContextualLink (ActHidEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-                             "eye-on64x64.png",
-			     Txt_Hide,NULL,
-                             NULL);
+      Lay_PutIconToHide (ActHidEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to edit event *****/
    Lay_PutIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);

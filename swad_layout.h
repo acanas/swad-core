@@ -74,6 +74,8 @@ void Lay_WriteStartOfPage (void);
 
 void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ());
 void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
 void Lay_PutIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
 void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             void (*FuncParams) (),

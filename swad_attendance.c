@@ -543,8 +543,6 @@ static void Att_PutFormToListStdsParams (void)
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
   {
    extern const char *Txt_Remove;
-   extern const char *Txt_Show;
-   extern const char *Txt_Hide;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -558,15 +556,9 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Lay_PutContextualLink (ActShoAtt,NULL,Att_PutParams,
-                             "eye-slash-on64x64.png",
-			     Txt_Show,NULL,
-                             NULL);
+      Lay_PutIconToUnhide (ActShoAtt,Att_PutParams);
    else
-      Lay_PutContextualLink (ActHidAtt,NULL,Att_PutParams,
-                             "eye-on64x64.png",
-			     Txt_Hide,NULL,
-                             NULL);
+      Lay_PutIconToHide (ActHidAtt,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
    Lay_PutIconToEdit (ActEdiOneAtt,Att_PutParams);
