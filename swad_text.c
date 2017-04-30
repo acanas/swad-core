@@ -23754,25 +23754,25 @@ const char *Txt_New_banner =
 	"Novo banner";
 #endif
 
-const char *Txt_New_centre_of_INSTITUTION_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_New_centre =
 #if   L==1
-	"Nou centre (facultat, escola, institut, divisi&oacute;, edifici...) de %s";
+	"Nou centre (facultat, escola, institut, divisi&oacute;, edifici...)";
 #elif L==2
-	"Neues Lehrinstitut (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...) von %s";
+	"Neues Lehrinstitut (Fakult&auml;t, Schule, Hochschule, Abteilung, Geb&auml;ude...)";
 #elif L==3
-	"New centre (faculty, school, college, division, building...) of %s";
+	"New centre (faculty, school, college, division, building...)";
 #elif L==4
-	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...) de %s";
+	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";
 #elif L==5
-	"Nouveau centre (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...) de %s";
+	"Nouveau centre (facult&eacute;, &eacute;cole, universit&eacute;, division, b&acirc;timent...)";
 #elif L==6
-	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...) de %s";	// Okoteve traducción
+	"Nuevo centro (facultad, escuela, instituto, divisi&oacute;n, edificio...)";	// Okoteve traducción
 #elif L==7
-	"Nuovo centro (facolt&agrave;, scuola, istituto, divisione, costruzione...) di %s";
+	"Nuovo centro (facolt&agrave;, scuola, istituto, divisione, costruzione...)";
 #elif L==8
-	"Nowe centrum (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...) %s";
+	"Nowe centrum (wydzia&lstrok;, szko&lstrok;a, uczelnia, podzia&lstrok;, budowa...)";
 #elif L==9
-	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...) de %s";
+	"Novo centro (faculdade, escola, faculdade, divis&atilde;o, constru&ccedil;&atilde;o...)";
 #endif
 
 const char *Txt_New_country =

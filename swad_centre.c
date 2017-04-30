@@ -86,6 +86,10 @@ static void Ctr_PutIconsListCentres (void);
 static void Ctr_PutIconToEditCentres (void);
 static void Ctr_ListOneCentreForSeeing (struct Centre *Ctr,unsigned NumCtr);
 static void Ctr_GetParamCtrOrder (void);
+
+static void Ctr_PutIconsEditingCentres (void);
+static void Ctr_PutIconToViewCentres (void);
+
 static void Ctr_GetPhotoAttribution (long CtrCod,char **PhotoAttribution);
 static void Ctr_FreePhotoAttribution (char **PhotoAttribution);
 static void Ctr_ListCentresForEdition (void);
@@ -938,11 +942,19 @@ static void Ctr_GetParamCtrOrder (void)
 
 void Ctr_EditCentres (void)
   {
+   extern const char *Hlp_INSTITUTION_Centres;
+   extern const char *Txt_Centres_of_INSTITUTION_X;
+
    /***** Get list of places *****/
    Plc_GetListPlaces ();
 
    /***** Get list of centres *****/
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
+
+   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
+            Gbl.CurrentIns.Ins.FullName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
+                        Hlp_INSTITUTION_Centres);
 
    /***** Put a form to create a new centre *****/
    Ctr_PutFormToCreateCentre ();
@@ -951,11 +963,38 @@ void Ctr_EditCentres (void)
    if (Gbl.Ctrs.Num)
       Ctr_ListCentresForEdition ();
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free list of centres *****/
    Ctr_FreeListCentres ();
 
    /***** Free list of places *****/
    Plc_FreeListPlaces ();
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of centres *****************/
+/*****************************************************************************/
+
+static void Ctr_PutIconsEditingCentres (void)
+  {
+   /***** Put icon to view centres *****/
+   Ctr_PutIconToViewCentres ();
+
+   /***** Put icon to view places *****/
+   Plc_PutIconToViewPlaces ();
+  }
+
+static void Ctr_PutIconToViewCentres (void)
+  {
+   extern const char *Txt_View;
+
+   /***** Put form to create a new type of group *****/
+   Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1375,8 +1414,6 @@ void Ctr_WriteSelectorOfCentre (void)
 
 static void Ctr_ListCentresForEdition (void)
   {
-   extern const char *Hlp_INSTITUTION_Centres;
-   extern const char *Txt_Centres_of_INSTITUTION_X;
    extern const char *Txt_Another_place;
    extern const char *Txt_CENTRE_STATUS[Ctr_NUM_STATUS_TXT];
    unsigned NumCtr;
@@ -1391,10 +1428,7 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.FullName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,Plc_PutIconToViewPlaces,
-                             Hlp_INSTITUTION_Centres,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -2401,20 +2435,13 @@ void Ctr_ChangeCtrPhotoAttribution (void)
 
 static void Ctr_PutFormToCreateCentre (void)
   {
-   extern const char *Hlp_INSTITUTION_Centres;
-   extern const char *Txt_New_centre_of_INSTITUTION_X;
+   extern const char *Txt_New_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_centre;
    struct Centre *Ctr;
    unsigned NumPlc;
 
    Ctr = &Gbl.Ctrs.EditingCtr;
-
-   /***** Start frame *****/
-   sprintf (Gbl.Title,Txt_New_centre_of_INSTITUTION_X,
-            Gbl.CurrentIns.Ins.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,Plc_PutIconToViewPlaces,
-                        Hlp_INSTITUTION_Centres);
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
@@ -2424,17 +2451,15 @@ static void Ctr_PutFormToCreateCentre (void)
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");
 
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable (NULL,Txt_New_centre,NULL,NULL,2);
 
-   /***** Table head *****/
+   /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
 
-   /***** Put disabled icon to remove centre *****/
+   /***** Column to remove institution, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
+		      "<td class=\"BM\"></td>");
 
    /***** Centre code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -2518,17 +2543,11 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>"
 		      "</tr>");
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-
-   /***** Button to send form *****/
-   Lay_PutCreateButton (Txt_Create_centre);
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_centre);
 
    /***** End form *****/
    Act_FormEnd ();
-
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/

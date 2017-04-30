@@ -2186,7 +2186,7 @@ static void Ins_PutFormToCreateInstitution (void)
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");
 
-   /***** Start of frame *****/
+   /***** Start frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_institution,NULL,NULL,2);
 
    /***** Write heading *****/
@@ -2263,7 +2263,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Send button and end of frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_institution);
 
-   /***** End of form *****/
+   /***** End form *****/
    Act_FormEnd ();
   }
 
