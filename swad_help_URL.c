@@ -520,27 +520,6 @@ const char *Hlp_CENTRE_Degrees =
 	"CENTRE.Degrees.en";
 #endif
 
-const char *Hlp_CENTRE_Degrees_edit =
-#if   L==1
-	"CENTRE.Degrees.es#editar";
-#elif L==2
-	"CENTRE.Degrees.en#edit";
-#elif L==3
-	"CENTRE.Degrees.en#edit";
-#elif L==4
-	"CENTRE.Degrees.es#editar";
-#elif L==5
-	"CENTRE.Degrees.en#edit";
-#elif L==6
-	"CENTRE.Degrees.es#editar";
-#elif L==7
-	"CENTRE.Degrees.en#edit";
-#elif L==8
-	"CENTRE.Degrees.en#edit";
-#elif L==9
-	"CENTRE.Degrees.en#edit";
-#endif
-
 /***** DEGREE tab *****/
 
 const char *Hlp_DEGREE_Information =

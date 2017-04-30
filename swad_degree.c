@@ -100,6 +100,9 @@ static void Deg_PutIconsListDegrees (void);
 static void Deg_PutIconToEditDegrees (void);
 static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg);
 
+static void Deg_PutIconsEditingDegrees (void);
+static void Deg_PutIconToViewDegrees (void);
+
 static void Deg_RecFormRequestOrCreateDeg (unsigned Status);
 static void Deg_PutParamOtherDegCod (long DegCod);
 
@@ -661,8 +664,6 @@ void Deg_ShowDegsOfCurrentCtr (void)
 
 static void Deg_ListDegreesForEdition (void)
   {
-   extern const char *Hlp_CENTRE_Degrees_edit;
-   extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_DEGREE_STATUS[Deg_NUM_STATUS_TXT];
    unsigned NumDeg;
    struct DegreeType *DegTyp;
@@ -678,10 +679,7 @@ static void Deg_ListDegreesForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
-                             Hlp_CENTRE_Degrees_edit,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Deg_PutHeadDegreesForEdition ();
 
    /***** List the degrees *****/
@@ -859,7 +857,7 @@ static void Deg_ListDegreesForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -924,8 +922,7 @@ static Deg_Status_t Deg_GetStatusBitsFromStatusTxt (Deg_StatusTxt_t StatusTxt)
 
 static void Deg_PutFormToCreateDegree (void)
   {
-   extern const char *Hlp_CENTRE_Degrees_edit;
-   extern const char *Txt_New_degree_of_CENTRE_X;
+   extern const char *Txt_New_degree;
    extern const char *Txt_Create_degree;
    struct Degree *Deg;
    struct DegreeType *DegTyp;
@@ -933,12 +930,6 @@ static void Deg_PutFormToCreateDegree (void)
 
    /***** Degree data *****/
    Deg = &Gbl.Degs.EditingDeg;
-
-   /***** Start of frame *****/
-   sprintf (Gbl.Title,Txt_New_degree_of_CENTRE_X,
-            Gbl.CurrentCtr.Ctr.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Title,DT_PutIconToViewDegreeTypes,
-                        Hlp_CENTRE_Degrees_edit);
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
@@ -948,17 +939,15 @@ static void Deg_PutFormToCreateDegree (void)
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
 
-   /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable (NULL,Txt_New_degree,NULL,NULL,2);
 
    /***** Table head *****/
    Deg_PutHeadDegreesForEdition ();
 
-   /***** Put disabled icon to remove degree *****/
+   /***** Column to remove degree, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
+		      "<td class=\"BM\"></td>");
 
    /***** Degree code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -1034,14 +1023,11 @@ static void Deg_PutFormToCreateDegree (void)
    /***** End table *****/
    fprintf (Gbl.F.Out,"</table>");
 
-   /***** Button to send form *****/
-   Lay_PutCreateButton (Txt_Create_degree);
+   /***** Send button and end of frame *****/
+   Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_degree);
 
    /***** End form *****/
    Act_FormEnd ();
-
-   /***** End frame *****/
-   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
@@ -1357,6 +1343,8 @@ static void Deg_ListOneDegreeForSeeing (struct Degree *Deg,unsigned NumDeg)
 
 void Deg_EditDegrees (void)
   {
+   extern const char *Hlp_CENTRE_Degrees;
+   extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_There_are_no_types_of_degree;
 
    /***** Get list of degrees in the current centre *****/
@@ -1364,6 +1352,12 @@ void Deg_EditDegrees (void)
 
    /***** Get list of degree types *****/
    DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
+
+   /***** Start frame *****/
+   sprintf (Gbl.Title,Txt_Degrees_of_CENTRE_X,
+            Gbl.CurrentCtr.Ctr.FullName);
+   Lay_StartRoundFrame (NULL,Gbl.Title,Deg_PutIconsEditingDegrees,
+                        Hlp_CENTRE_Degrees);
 
    if (Gbl.Degs.DegTypes.Num)
      {
@@ -1384,11 +1378,38 @@ void Deg_EditDegrees (void)
          DT_PutFormToCreateDegreeType ();
      }
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free list of degree types *****/
    DT_FreeListDegreeTypes ();
 
    /***** Free list of degrees in the current centre *****/
    Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of degrees *****************/
+/*****************************************************************************/
+
+static void Deg_PutIconsEditingDegrees (void)
+  {
+   /***** Put icon to view degrees *****/
+   Deg_PutIconToViewDegrees ();
+
+   /***** Put icon to view types of degree *****/
+   DT_PutIconToViewDegreeTypes ();
+  }
+
+static void Deg_PutIconToViewDegrees (void)
+  {
+   extern const char *Txt_View;
+
+   /***** Put form to view degrees *****/
+   Lay_PutContextualLink (ActSeeDeg,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/

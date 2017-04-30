@@ -960,7 +960,7 @@ static void Ins_PutIconToViewInstitutions (void)
   {
    extern const char *Txt_View;
 
-   /***** Put form to create a new type of group *****/
+   /***** Put form to view institutions *****/
    Lay_PutContextualLink (ActSeeIns,NULL,NULL,
 			  "eye-on64x64.png",
 			  Txt_View,NULL,
@@ -2176,6 +2176,7 @@ static void Ins_PutFormToCreateInstitution (void)
    extern const char *Txt_Create_institution;
    struct Instit *Ins;
 
+   /***** Institution data *****/
    Ins = &Gbl.Inss.EditingIns;
 
    /***** Start form *****/

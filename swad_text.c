@@ -23817,25 +23817,25 @@ const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to inc
 	"Nova disciplina (disciplina, curso...) de %s";
 #endif
 
-const char *Txt_New_degree_of_CENTRE_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_New_degree =
 #if   L==1
-	"Nova titulaci&oacute; (carrera, llicenciatura, diplomatura, grau, postgrau, m&agrave;ster, cicle, nivell...) de %s";
+	"Nova titulaci&oacute; (carrera, llicenciatura, diplomatura, grau, postgrau, m&agrave;ster, cicle, nivell...)";
 #elif L==2
-	"Neuer Studiengang (Karriere, Diplom, Grad, Graduierten, Master, Zyklus, Niveau...) von %s";
+	"Neuer Studiengang (Karriere, Diplom, Grad, Graduierten, Master, Zyklus, Niveau...)";
 #elif L==3
-	"New degree (career, diploma, degree, postgraduate, master, cycle, level...) of %s";
+	"New degree (career, diploma, degree, postgraduate, master, cycle, level...)";
 #elif L==4
-	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...) de %s";
+	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";
 #elif L==5
-	"Nouvel &eacute;tude (carri&egrave;re, grade, dipl&ocirc;me, degr&eacute;, troisi&agrave;me cycle, master, cycle, niveau...) de %s";
+	"Nouvel &eacute;tude (carri&egrave;re, grade, dipl&ocirc;me, degr&eacute;, troisi&agrave;me cycle, master, cycle, niveau...)";
 #elif L==6
-	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...) de %s";	// Okoteve traducción
+	"Nueva titulaci&oacute;n (carrera, licenciatura, diplomatura, grado, posgrado, m&aacute;ster, ciclo, nivel...)";	// Okoteve traducción
 #elif L==7
-	"Nuova laurea (carriera, diploma, laurea, post-laurea, master, ciclo, livello...) di %s";
+	"Nuova laurea (carriera, diploma, laurea, post-laurea, master, ciclo, livello...)";
 #elif L==8
-	"Nowy stopie&nacute; (zawodowe, stopie&nacute;, dyplom, magisterskie, podyplomowe, magisterskie, cykl, poziom...) %s";
+	"Nowy stopie&nacute; (zawodowe, stopie&nacute;, dyplom, magisterskie, podyplomowe, magisterskie, cykl, poziom...)";
 #elif L==9
-	"Nova titula&ccedil;&atilde;o (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...) de %s";
+	"Nova titula&ccedil;&atilde;o (carreira, diploma, grau, p&oacute;s-grau, mestrado, ciclo, n&iacute;vel...)";
 #endif
 
 const char *Txt_New_department =

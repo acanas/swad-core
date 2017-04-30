@@ -951,6 +951,7 @@ void Ctr_EditCentres (void)
    /***** Get list of centres *****/
    Ctr_GetListCentres (Gbl.CurrentIns.Ins.InsCod);
 
+   /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Centres_of_INSTITUTION_X,
             Gbl.CurrentIns.Ins.FullName);
    Lay_StartRoundFrame (NULL,Gbl.Title,Ctr_PutIconsEditingCentres,
@@ -990,7 +991,7 @@ static void Ctr_PutIconToViewCentres (void)
   {
    extern const char *Txt_View;
 
-   /***** Put form to create a new type of group *****/
+   /***** Put form to view centres *****/
    Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
 			  "eye-on64x64.png",
 			  Txt_View,NULL,
@@ -1621,7 +1622,7 @@ static void Ctr_ListCentresForEdition (void)
      }
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
@@ -2441,6 +2442,7 @@ static void Ctr_PutFormToCreateCentre (void)
    struct Centre *Ctr;
    unsigned NumPlc;
 
+   /***** Centre data *****/
    Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Start form *****/
@@ -2457,7 +2459,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Write heading *****/
    Ctr_PutHeadCentresForEdition ();
 
-   /***** Column to remove institution, disabled here *****/
+   /***** Column to remove centre, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"BM\"></td>");
 
