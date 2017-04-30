@@ -467,7 +467,7 @@ static void Inf_PutButtonToEditInfo (void)
 
 void Inf_PutIconToEditInfo (void)
   {
-   Lay_PutIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
+   Lay_PutContextualIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
   }
 
 /*****************************************************************************/

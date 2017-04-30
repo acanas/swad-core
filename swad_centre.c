@@ -673,7 +673,7 @@ static void Ctr_Configuration (bool PrintView)
 static void Ctr_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about centre *****/
-   Lay_PutIconToPrint (ActPrnCtrInf,NULL);
+   Lay_PutContextualIconToPrint (ActPrnCtrInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -819,7 +819,7 @@ static void Ctr_PutIconsListCentres (void)
 
 static void Ctr_PutIconToEditCentres (void)
   {
-   Lay_PutIconToEdit (ActEdiCtr,NULL);
+   Lay_PutContextualIconToEdit (ActEdiCtr,NULL);
   }
 
 /*****************************************************************************/
@@ -979,7 +979,7 @@ static void Ctr_PutIconsEditingCentres (void)
 
 static void Ctr_PutIconToViewCentres (void)
   {
-   Lay_PutIconToView (ActSeeCtr,NULL);
+   Lay_PutContextualIconToView (ActSeeCtr,NULL);
   }
 
 /*****************************************************************************/

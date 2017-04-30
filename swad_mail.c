@@ -177,7 +177,7 @@ static void Mai_GetParamMaiOrder (void)
 
 static void Mai_PutIconToEditMailDomains (void)
   {
-   Lay_PutIconToEdit (ActEdiMai,NULL);
+   Lay_PutContextualIconToEdit (ActEdiMai,NULL);
   }
 
 /*****************************************************************************/

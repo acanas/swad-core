@@ -3679,11 +3679,11 @@ static void Brw_PutIconsFileBrowser (void)
       case Brw_ICON_NONE:
 	 break;
       case Brw_ICON_VIEW:
-	 Lay_PutIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+	 Lay_PutContextualIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
 	                    Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
       case Brw_ICON_EDIT:
-         Lay_PutIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
+         Lay_PutContextualIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
                             Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
      }

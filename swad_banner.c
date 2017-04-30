@@ -171,7 +171,7 @@ static void Ban_WriteListOfBanners (void)
 static void Ban_PutFormToEditBanners (void)
   {
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Lay_PutIconToEdit (ActEdiBan,NULL);
+      Lay_PutContextualIconToEdit (ActEdiBan,NULL);
   }
 
 /*****************************************************************************/

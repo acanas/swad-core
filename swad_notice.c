@@ -598,7 +598,6 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_See_full_notice;
    extern const char *Txt_Today;
-   extern const char *Txt_Remove;
    static const char *ContainerClass[Not_NUM_STATUS] =
      {
       "NOTICE_CONTAINER_ACTIVE",	// Not_ACTIVE_NOTICE
@@ -636,10 +635,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       if (Not_CheckIfICanEditNotices ())
 	{
 	 /***** Put form to remove announcement *****/
-	 Lay_PutContextualLink (ActReqRemNot,NULL,Not_PutParams,
-				"remove-on64x64.png",
-				Txt_Remove,NULL,
-				NULL);
+         Lay_PutContextualIconToRemove (ActReqRemNot,Not_PutParams);
 
 	 /***** Put form to change the status of the notice *****/
          switch (Status)

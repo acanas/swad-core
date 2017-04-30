@@ -628,7 +628,7 @@ static void Ins_Configuration (bool PrintView)
 static void Ins_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about institution *****/
-   Lay_PutIconToPrint (ActPrnInsInf,NULL);
+   Lay_PutContextualIconToPrint (ActPrnInsInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
@@ -738,7 +738,7 @@ static void Ins_PutIconsListInstitutions (void)
 
 static void Ins_PutIconToEditInstitutions (void)
   {
-   Lay_PutIconToEdit (ActEdiIns,NULL);
+   Lay_PutContextualIconToEdit (ActEdiIns,NULL);
   }
 
 /*****************************************************************************/
@@ -948,7 +948,7 @@ void Ins_EditInstitutions (void)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   Lay_PutIconToView (ActSeeIns,NULL);
+   Lay_PutContextualIconToView (ActSeeIns,NULL);
   }
 
 /*****************************************************************************/

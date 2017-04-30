@@ -211,7 +211,7 @@ static void Hld_GetParamHldOrder (void)
 
 static void Hld_PutIconToEditHlds (void)
   {
-   Lay_PutIconToEdit (ActEdiHld,NULL);
+   Lay_PutContextualIconToEdit (ActEdiHld,NULL);
   }
 
 /*****************************************************************************/

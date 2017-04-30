@@ -272,7 +272,6 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
   {
    extern const char *Txt_Users;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Remove;
    extern const char *Txt_NOTICE_Active_Mark_as_obsolete;
    extern const char *Txt_NOTICE_Obsolete_Mark_as_active;
    extern const char *Txt_Do_not_show_again;
@@ -308,10 +307,7 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
    if (ICanEdit)
      {
       /***** Put form to remove announcement *****/
-      Lay_PutContextualLink (ActRemAnn,NULL,Ann_PutParams,
-			     "remove-on64x64.png",
-			     Txt_Remove,NULL,
-			     NULL);
+      Lay_PutContextualIconToRemove (ActRemAnn,Ann_PutParams);
 
       /***** Put form to change the status of the announcement *****/
       switch (Status)

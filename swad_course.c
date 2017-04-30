@@ -492,7 +492,7 @@ static void Crs_Configuration (bool PrintView)
 
 static void Crs_PutIconToPrint (void)
   {
-   Lay_PutIconToPrint (ActPrnCrsInf,NULL);
+   Lay_PutContextualIconToPrint (ActPrnCrsInf,NULL);
   }
 
 /*****************************************************************************/
@@ -1191,7 +1191,7 @@ static void Crs_PutIconsListCourses (void)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   Lay_PutIconToEdit (ActEdiCrs,NULL);
+   Lay_PutContextualIconToEdit (ActEdiCrs,NULL);
   }
 
 /*****************************************************************************/
@@ -1347,7 +1347,7 @@ void Crs_EditCourses (void)
 
 static void Crs_PutIconToViewCourses (void)
   {
-   Lay_PutIconToView (ActSeeCrs,NULL);
+   Lay_PutContextualIconToView (ActSeeCrs,NULL);
   }
 
 /*****************************************************************************/

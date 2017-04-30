@@ -483,7 +483,7 @@ static void Cty_Configuration (bool PrintView)
 
 static void Cty_PutIconToPrint (void)
   {
-   Lay_PutIconToPrint (ActPrnCtyInf,NULL);
+   Lay_PutContextualIconToPrint (ActPrnCtyInf,NULL);
   }
 
 /*****************************************************************************/
@@ -770,7 +770,7 @@ static void Cty_PutIconsListCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   Lay_PutIconToEdit (ActEdiCty,NULL);
+   Lay_PutContextualIconToEdit (ActEdiCty,NULL);
   }
 
 /*****************************************************************************/
@@ -974,7 +974,7 @@ void Cty_EditCountries (void)
 
 static void Cty_PutIconToViewCountries (void)
   {
-   Lay_PutIconToView (ActSeeCty,NULL);
+   Lay_PutContextualIconToView (ActSeeCty,NULL);
   }
 
 /*****************************************************************************/

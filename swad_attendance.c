@@ -542,26 +542,21 @@ static void Att_PutFormToListStdsParams (void)
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
   {
-   extern const char *Txt_Remove;
-
    fprintf (Gbl.F.Out,"<div>");
 
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
-   Lay_PutContextualLink (ActReqRemAtt,NULL,Att_PutParams,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-                          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemAtt,Att_PutParams);
 
    /***** Put form to hide/show attendance event *****/
    if (Hidden)
-      Lay_PutIconToUnhide (ActShoAtt,Att_PutParams);
+      Lay_PutContextualIconToUnhide (ActShoAtt,Att_PutParams);
    else
-      Lay_PutIconToHide (ActHidAtt,Att_PutParams);
+      Lay_PutContextualIconToHide (ActHidAtt,Att_PutParams);
 
    /***** Put form to edit attendance event *****/
-   Lay_PutIconToEdit (ActEdiOneAtt,Att_PutParams);
+   Lay_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2956,7 +2951,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 static void Att_PutIconToPrintMyList (void)
   {
-   Lay_PutIconToPrint (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams);
+   Lay_PutContextualIconToPrint (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams);
   }
 
 static void Att_PutFormToPrintMyListParams (void)
@@ -2973,7 +2968,7 @@ static void Att_PutFormToPrintMyListParams (void)
 
 static void Att_PutIconToPrintStdsList (void)
   {
-   Lay_PutIconToPrint (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList);
+   Lay_PutContextualIconToPrint (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList);
   }
 
 static void Att_PutParamsToPrintStdsList (void)

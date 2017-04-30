@@ -1334,7 +1334,7 @@ static void Tst_PutIconsTests (void)
      {
       /***** Put form to edit existing test questions *****/
       if (Gbl.Action.Act != ActEdiTstQst)
-         Lay_PutIconToEdit (ActEdiTstQst,NULL);
+         Lay_PutContextualIconToEdit (ActEdiTstQst,NULL);
 
       /***** Put form to create a new test question *****/
       if (Gbl.Action.Act != ActEdiOneTstQst)
@@ -5832,12 +5832,7 @@ static void Tst_EnableOrDisableTag (long TagCod,bool TagHidden)
 
 static void Tst_PutIconToRemoveOneQst (void)
   {
-   extern const char *Txt_Remove;
-
-   Lay_PutContextualLink (ActReqRemTstQst,NULL,Tst_PutParamsRemoveOneQst,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-		          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemTstQst,Tst_PutParamsRemoveOneQst);
   }
 
 /*****************************************************************************/

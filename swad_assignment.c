@@ -502,26 +502,21 @@ void Asg_PutHiddenParamAsgOrder (void)
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
   {
-   extern const char *Txt_Remove;
-
    fprintf (Gbl.F.Out,"<div>");
 
    Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
    /***** Put form to remove assignment *****/
-   Lay_PutContextualLink (ActReqRemAsg,NULL,Asg_PutParams,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-                          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
 
    /***** Put form to hide/show assignment *****/
    if (Hidden)
-      Lay_PutIconToUnhide (ActShoAsg,Asg_PutParams);
+      Lay_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
    else
-      Lay_PutIconToHide (ActHidAsg,Asg_PutParams);
+      Lay_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
 
    /***** Put form to edit assignment *****/
-   Lay_PutIconToEdit (ActEdiOneAsg,Asg_PutParams);
+   Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }

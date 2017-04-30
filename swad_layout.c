@@ -1087,10 +1087,20 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
-/******** Show contextual icons to edit, view, hide, unhide, print ***********/
+/***** Show contextual icons to remove, edit, view, hide, unhide, print ******/
 /*****************************************************************************/
 
-void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
+void Lay_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Remove;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "remove-on64x64.png",
+                          Txt_Remove,NULL,
+                          NULL);
+  }
+
+void Lay_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Edit;
 
@@ -1100,7 +1110,7 @@ void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
                           NULL);
   }
 
-void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ())
+void Lay_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_View;
 
@@ -1110,7 +1120,7 @@ void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ())
                           NULL);
   }
 
-void Lay_PutIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
+void Lay_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Hide;
 
@@ -1120,7 +1130,7 @@ void Lay_PutIconToHide (Act_Action_t NextAction,void (*FuncParams) ())
                           NULL);
   }
 
-void Lay_PutIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
+void Lay_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Show;
 
@@ -1130,7 +1140,7 @@ void Lay_PutIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ())
                           NULL);
   }
 
-void Lay_PutIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
+void Lay_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
   {
    extern const char *Txt_Print;
 
@@ -1334,7 +1344,7 @@ void Lay_PutIconBRemovalNotAllowed (void)
   }
 
 /*****************************************************************************/
-/******** Put a disabled icon indicating that removal is not allowed *********/
+/******** Put an icon indicating that removal is not allowed *********/
 /*****************************************************************************/
 
 void Lay_PutIconRemove (void)

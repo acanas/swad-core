@@ -393,13 +393,13 @@ void TT_ShowClassTimeTable (void)
 static void TT_PutContextualIcons (void)
   {
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
-      Lay_PutIconToEdit (ActEdiCrsTT,Grp_PutParamWhichGrps);
+      Lay_PutContextualIconToEdit (ActEdiCrsTT,Grp_PutParamWhichGrps);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Lay_PutIconToEdit (ActEdiTut,NULL);
+      Lay_PutContextualIconToEdit (ActEdiTut,NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
-      Lay_PutIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+      Lay_PutContextualIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
 								      ActPrnMyTT,
 			  Grp_PutParamWhichGrps);
   }
@@ -460,7 +460,7 @@ void TT_EditMyTutTimeTable (void)
 
 static void TT_PutIconToViewCrsTT (void)
   {
-   Lay_PutIconToView (ActSeeCrsTT,NULL);
+   Lay_PutContextualIconToView (ActSeeCrsTT,NULL);
   }
 
 /*****************************************************************************/
@@ -469,7 +469,7 @@ static void TT_PutIconToViewCrsTT (void)
 
 static void TT_PutIconToViewMyTT (void)
   {
-   Lay_PutIconToView (ActSeeMyTT,NULL);
+   Lay_PutContextualIconToView (ActSeeMyTT,NULL);
   }
 
 /*****************************************************************************/

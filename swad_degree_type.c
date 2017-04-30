@@ -139,7 +139,7 @@ void DT_PutIconToViewDegreeTypes (void)
 
 static void DT_PutIconToViewDegreeTypesWhenEditing (void)
   {
-   Lay_PutIconToView (ActSeeDegTyp,NULL);
+   Lay_PutContextualIconToView (ActSeeDegTyp,NULL);
   }
 
 /*****************************************************************************/
@@ -345,7 +345,7 @@ static void DT_PutIconToEditDegTypes (void)
 
    if (CentreTabVisible &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
-      Lay_PutIconToEdit (ActEdiDegTyp,NULL);
+      Lay_PutContextualIconToEdit (ActEdiDegTyp,NULL);
   }
 
 /*****************************************************************************/

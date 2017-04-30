@@ -1862,7 +1862,7 @@ static Pho_HowOrderDegrees_t Pho_GetHowOrderDegreesFromForm (void)
 
 static void Pho_PutIconToPrintDegreeStats (void)
   {
-   Lay_PutIconToPrint (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams);
+   Lay_PutContextualIconToPrint (ActPrnPhoDeg,Pho_PutLinkToPrintViewOfDegreeStatsParams);
   }
 
 static void Pho_PutLinkToPrintViewOfDegreeStatsParams (void)

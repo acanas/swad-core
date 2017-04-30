@@ -209,7 +209,7 @@ static void Dpt_GetParamDptOrder (void)
 
 static void Dpt_PutIconToEditDpts (void)
   {
-   Lay_PutIconToEdit (ActEdiDpt,NULL);
+   Lay_PutContextualIconToEdit (ActEdiDpt,NULL);
   }
 
 /*****************************************************************************/

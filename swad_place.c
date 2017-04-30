@@ -230,7 +230,7 @@ static void Plc_GetParamPlcOrder (void)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   Lay_PutIconToEdit (ActEdiPlc,NULL);
+   Lay_PutContextualIconToEdit (ActEdiPlc,NULL);
   }
 
 /*****************************************************************************/
@@ -269,7 +269,7 @@ void Plc_EditPlaces (void)
 
 static void Plc_PutIconToViewPlacesWhenEditing (void)
   {
-   Lay_PutIconToView (ActSeePlc,NULL);
+   Lay_PutContextualIconToView (ActSeePlc,NULL);
   }
 
 /*****************************************************************************/

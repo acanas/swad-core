@@ -1331,7 +1331,7 @@ static void Grp_PutIconsEditingGroupTypes (void)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   Lay_PutIconToView (ActReqSelGrp,NULL);
+   Lay_PutContextualIconToView (ActReqSelGrp,NULL);
   }
 
 static void Grp_PutIconToCreateNewGroupType (void)
@@ -1726,7 +1726,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 
 static void Grp_PutIconToEditGroups (void)
   {
-   Lay_PutIconToEdit (ActReqEdiGrp,NULL);
+   Lay_PutContextualIconToEdit (ActReqEdiGrp,NULL);
   }
 
 /*****************************************************************************/

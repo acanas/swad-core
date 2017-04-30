@@ -130,7 +130,7 @@ void Lnk_SeeLinks (void)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   Lay_PutIconToEdit (ActEdiLnk,NULL);
+   Lay_PutContextualIconToEdit (ActEdiLnk,NULL);
   }
 
 /*****************************************************************************/

@@ -554,7 +554,7 @@ static void Deg_Configuration (bool PrintView)
 static void Deg_PutIconsToPrintAndUpload (void)
   {
    /***** Link to print info about degree *****/
-   Lay_PutIconToPrint (ActPrnDegInf,NULL);
+   Lay_PutContextualIconToPrint (ActPrnDegInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins
@@ -1234,7 +1234,7 @@ static void Deg_PutIconsListDegrees (void)
 
 static void Deg_PutIconToEditDegrees (void)
   {
-   Lay_PutIconToEdit (ActEdiDeg,NULL);
+   Lay_PutContextualIconToEdit (ActEdiDeg,NULL);
   }
 
 /*****************************************************************************/
@@ -1393,7 +1393,7 @@ static void Deg_PutIconsEditingDegrees (void)
 
 static void Deg_PutIconToViewDegrees (void)
   {
-   Lay_PutIconToView (ActSeeDeg,NULL);
+   Lay_PutContextualIconToView (ActSeeDeg,NULL);
   }
 
 /*****************************************************************************/

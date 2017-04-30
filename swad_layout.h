@@ -72,11 +72,12 @@ typedef enum
 
 void Lay_WriteStartOfPage (void);
 
-void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
-void Lay_PutIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToRemove (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToEdit (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToView (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToUnhide (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToHide (Act_Action_t NextAction,void (*FuncParams) ());
+void Lay_PutContextualIconToPrint (Act_Action_t NextAction,void (*FuncParams) ());
 void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             void (*FuncParams) (),
                             const char *Icon,

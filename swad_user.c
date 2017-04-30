@@ -7657,17 +7657,17 @@ static void Usr_PutIconsListTchs (void)
 
 static void Usr_PutIconToPrintGsts (void)
   {
-   Lay_PutIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
+   Lay_PutContextualIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
-   Lay_PutIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
+   Lay_PutContextualIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
-   Lay_PutIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
+   Lay_PutContextualIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
   }
 
 /*****************************************************************************/

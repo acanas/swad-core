@@ -151,7 +151,7 @@ void Plg_ListPlugins (void)
 
 static void Plg_PutIconToEditPlugins (void)
   {
-   Lay_PutIconToEdit (ActEdiPlg,NULL);
+   Lay_PutContextualIconToEdit (ActEdiPlg,NULL);
   }
 
 /*****************************************************************************/

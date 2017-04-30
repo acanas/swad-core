@@ -781,7 +781,6 @@ void Svy_PutHiddenParamSvyOrder (void)
 
 static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
   {
-   extern const char *Txt_Remove;
    extern const char *Txt_Reset;
 
    fprintf (Gbl.F.Out,"<div>");
@@ -789,10 +788,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
-   Lay_PutContextualLink (ActReqRemSvy,NULL,Svy_PutParams,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-		          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemSvy,Svy_PutParams);
 
    /***** Put form to reset survey *****/
    Lay_PutContextualLink (ActReqRstSvy,NULL,Svy_PutParams,
@@ -802,12 +798,12 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to hide/show survey *****/
    if (Visible)
-      Lay_PutIconToHide (ActHidSvy,Svy_PutParams);
+      Lay_PutContextualIconToHide (ActHidSvy,Svy_PutParams);
    else
-      Lay_PutIconToUnhide (ActShoSvy,Svy_PutParams);
+      Lay_PutContextualIconToUnhide (ActShoSvy,Svy_PutParams);
 
    /***** Put form to edit survey *****/
-   Lay_PutIconToEdit (ActEdiOneSvy,Svy_PutParams);
+   Lay_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -3481,12 +3477,7 @@ static void Svy_DrawBarNumUsrs (unsigned NumUsrs,unsigned MaxUsrs)
 
 static void Svy_PutIconToRemoveOneQst (void)
   {
-   extern const char *Txt_Remove;
-
-   Lay_PutContextualLink (ActReqRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-		          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemSvyQst,Svy_PutParamsRemoveOneQst);
   }
 
 /*****************************************************************************/

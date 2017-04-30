@@ -652,7 +652,7 @@ static void Agd_PutIconToCreateNewEvent (void)
 
 static void Agd_PutIconToViewEditMyFullAgenda (void)
   {
-   Lay_PutIconToEdit (ActSeeMyAgd,NULL);
+   Lay_PutContextualIconToEdit (ActSeeMyAgd,NULL);
   }
 
 static void Agd_PutIconToShowQR (void)
@@ -837,26 +837,22 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 
 static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
   {
-   extern const char *Txt_Remove;
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
 
    Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
    /***** Put form to remove event *****/
-   Lay_PutContextualLink (ActReqRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-                          "remove-on64x64.png",
-                          Txt_Remove,NULL,
-                          NULL);
+   Lay_PutContextualIconToRemove (ActReqRemEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to hide/show event *****/
    if (AgdEvent->Hidden)
-      Lay_PutIconToUnhide (ActShoEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+      Lay_PutContextualIconToUnhide (ActShoEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
    else
-      Lay_PutIconToHide (ActHidEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+      Lay_PutContextualIconToHide (ActHidEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to edit event *****/
-   Lay_PutIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
+   Lay_PutContextualIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)
