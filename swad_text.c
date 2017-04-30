@@ -23796,25 +23796,25 @@ const char *Txt_New_country =
 	"Novo pa&iacute;s";
 #endif
 
-const char *Txt_New_course_of_DEGREE_X =	// Warning: it is very important to include %s in the following sentences
+const char *Txt_New_course =
 #if   L==1
-	"Nova assignatura (assignatura, curs, mat&egrave;ria, disciplina...) de %s";
+	"Nova assignatura (assignatura, curs, mat&egrave;ria, disciplina...)";
 #elif L==2
-	"Neue Kurs (Kurs, Thema, Disziplin...) der %s";
+	"Neue Kurs (Kurs, Thema, Disziplin...)";
 #elif L==3
-	"New course (course, subject, discipline...) of %s";
+	"New course (course, subject, discipline...)";
 #elif L==4
-	"Nueva asignatura (asignatura, curso, materia, disciplina...) de %s";
+	"Nueva asignatura (asignatura, curso, materia, disciplina...)";
 #elif L==5
-	"Nouvelle mati&egrave;re (mati&egrave;re, cours, discipline...) de %s";
+	"Nouvelle mati&egrave;re (mati&egrave;re, cours, discipline...)";
 #elif L==6
-	"Nueva asignatura (asignatura, curso, materia, disciplina...) de %s";	// Okoteve traducción
+	"Nueva asignatura (asignatura, curso, materia, disciplina...)";	// Okoteve traducción
 #elif L==7
-	"Nuovo corso (corso, materia...) di %s";
+	"Nuovo corso (corso, materia...)";
 #elif L==8
-	"Nowy kurs %s";
+	"Nowy kurs";
 #elif L==9
-	"Nova disciplina (disciplina, curso...) de %s";
+	"Nova disciplina (disciplina, curso...)";
 #endif
 
 const char *Txt_New_degree =

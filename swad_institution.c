@@ -953,7 +953,7 @@ void Ins_EditInstitutions (void)
   }
 
 /*****************************************************************************/
-/***************** Put contextual icon to view institutions ******************/
+/************* Put contextual icons in edition of institutions ***************/
 /*****************************************************************************/
 
 static void Ins_PutIconToViewInstitutions (void)

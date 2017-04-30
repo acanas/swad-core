@@ -1711,7 +1711,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRecDegLog	*/{ 553,-1,TabUnk,ActSeeDegInf		,    0,    0,0x1E0,    0,    0,    0,    0,Act_CONT_DATA,Act_THIS_WINDOW,Deg_ReceiveLogo		,Deg_ShowConfiguration		,NULL},
    /* ActRemDegLog	*/{1343,-1,TabUnk,ActSeeDegInf		,    0,    0,0x1E0,    0,    0,    0,    0,Act_CONT_DATA,Act_THIS_WINDOW,Deg_RemoveLogo			,Deg_ShowConfiguration		,NULL},
 
-   /* ActEdiCrs		*/{ 555,-1,TabUnk,ActSeeCrs		,    0,    0,0x1FE,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_ReqEditCourses		,NULL},
+   /* ActEdiCrs		*/{ 555,-1,TabUnk,ActSeeCrs		,    0,    0,0x1FE,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_EditCourses		,NULL},
    /* ActReqCrs		*/{1053,-1,TabUnk,ActSeeCrs		,    0,    0,0x1FE,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RecFormReqCrs		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActNewCrs		*/{ 556,-1,TabUnk,ActSeeCrs		,    0,    0,0x1E0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Crs_RecFormNewCrs		,Crs_ContEditAfterChgCrs	,NULL},
    /* ActRemCrs		*/{ 560,-1,TabUnk,ActSeeCrs		,    0,    0,0x1FE,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Crs_RemoveCourse		,NULL},

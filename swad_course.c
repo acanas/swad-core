@@ -83,7 +83,7 @@ static void Crs_PutIconsListCourses (void);
 static void Crs_PutIconToEditCourses (void);
 static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year);
 
-static void Crs_EditCourses (void);
+static void Crs_PutIconToViewCourses (void);
 static void Crs_ListCoursesForEdition (void);
 static void Crs_ListCoursesOfAYearForEdition (unsigned Year);
 static bool Crs_CheckIfICanEdit (struct Course *Crs);
@@ -961,31 +961,6 @@ void Crs_ShowCrssOfCurrentDeg (void)
   }
 
 /*****************************************************************************/
-/************************ Request edition of courses *************************/
-/*****************************************************************************/
-
-void Crs_ReqEditCourses (void)
-  {
-   if (Gbl.CurrentDeg.Deg.DegCod > 0)
-     {
-      /***** Get list of courses in this degree *****/
-      Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
-
-      /***** Get list of degrees in this centre *****/
-      Deg_GetListDegsOfCurrentCtr ();
-
-      /***** Put form to edit courses *****/
-      Crs_EditCourses ();
-
-      /***** Free list of courses in this degree *****/
-      Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
-
-      /***** Free list of degrees in this centre *****/
-      Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
-     }
-  }
-
-/*****************************************************************************/
 /*************** Create a list with courses in current degree ****************/
 /*****************************************************************************/
 
@@ -1343,14 +1318,52 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 /****************** Put forms to edit courses in this degree *****************/
 /*****************************************************************************/
 
-static void Crs_EditCourses (void)
+void Crs_EditCourses (void)
   {
+   extern const char *Hlp_DEGREE_Courses;
+   extern const char *Txt_Courses_of_DEGREE_X;
+
+   /***** Get list of courses in this degree *****/
+   Crs_GetListCoursesInDegree (Crs_ALL_COURSES_EXCEPT_REMOVED);
+
+   /***** Get list of degrees in this centre *****/
+   Deg_GetListDegsOfCurrentCtr ();
+
+   /***** Start frame *****/
+   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Message,Crs_PutIconToViewCourses,
+                        Hlp_DEGREE_Courses);
+
    /***** Put a form to create or request a new course *****/
    Crs_PutFormToCreateCourse ();
 
    /***** Forms to edit current courses *****/
    if (Gbl.CurrentDeg.NumCrss)
       Crs_ListCoursesForEdition ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Free list of courses in this degree *****/
+   Crs_FreeListCoursesInDegree (&Gbl.CurrentDeg.Deg);
+
+   /***** Free list of degrees in this centre *****/
+   Deg_FreeListDegs (&Gbl.CurrentCtr.Ctr.Degs);
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of courses *****************/
+/*****************************************************************************/
+
+static void Crs_PutIconToViewCourses (void)
+  {
+   extern const char *Txt_View;
+
+   /***** Put form to view courses *****/
+   Lay_PutContextualLink (ActSeeCrs,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
   }
 
 /*****************************************************************************/
@@ -1359,14 +1372,10 @@ static void Crs_EditCourses (void)
 
 static void Crs_ListCoursesForEdition (void)
   {
-   extern const char *Hlp_DEGREE_Courses;
-   extern const char *Txt_Courses_of_DEGREE_X;
    unsigned Year;
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,Hlp_DEGREE_Courses,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1377,7 +1386,7 @@ static void Crs_ListCoursesForEdition (void)
    Crs_ListCoursesOfAYearForEdition (0);
 
    /***** End table *****/
-   Lay_EndRoundFrameTable ();
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -1622,8 +1631,7 @@ static Crs_Status_t Crs_GetStatusBitsFromStatusTxt (Crs_StatusTxt_t StatusTxt)
 
 static void Crs_PutFormToCreateCourse (void)
   {
-   extern const char *Hlp_DEGREE_Courses;
-   extern const char *Txt_New_course_of_DEGREE_X;
+   extern const char *Txt_New_course;
    extern const char *Txt_YEAR_OF_DEGREE[1 + Deg_MAX_YEARS_PER_DEGREE];
    extern const char *Txt_Create_course;
    struct Course *Crs;
@@ -1641,9 +1649,7 @@ static void Crs_PutFormToCreateCourse (void)
    Crs = &Gbl.Degs.EditingCrs;
 
    /***** Write heading *****/
-   sprintf (Gbl.Message,Txt_New_course_of_DEGREE_X,
-            Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrameTable (NULL,Gbl.Message,NULL,Hlp_DEGREE_Courses,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_course,NULL,NULL,2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** Disabled icon to remove course *****/
@@ -1973,7 +1979,7 @@ void Crs_RemoveCourse (void)
       /***** Check if this course has users *****/
       if (Crs.NumUsrs)	// Course has users ==> don't remove
          Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
-      else	// Course has no users ==> remove it
+      else		// Course has no users ==> remove it
         {
          /***** Remove course *****/
          Crs_RemoveCourseCompletely (Crs.CrsCod);
@@ -1988,7 +1994,7 @@ void Crs_RemoveCourse (void)
       Lay_ShowAlert (Lay_WARNING,Txt_You_dont_have_permission_to_edit_this_course);
 
    /***** Show the form again *****/
-   Crs_ReqEditCourses ();
+   Crs_EditCourses ();
   }
 
 /*****************************************************************************/
@@ -2832,7 +2838,7 @@ void Crs_ContEditAfterChgCrs (void)
      }
 
    /***** Show the form again *****/
-   Crs_ReqEditCourses ();
+   Crs_EditCourses ();
   }
 
 /*****************************************************************************/
