@@ -209,7 +209,6 @@
 // TODO: Comprobar que, para detectar el número de filas de cabecera y pie automáticamente en los archivos de calificaciones, SWAD mira no sólo que parezcan un ID, sino que coincida con alguno de los DNI de la asignatura (por ejemplo en el caso de los DNI alemanes formados por varias letras)
 
 // TODO: En información de un centro, poner icono que enlace a edición de lugares, y posibilidad de editar lugar del centro en un menú desplegable. Lugar debería ir encima de Acceso directo.
-// TODO: Cuando se está editando instituciones, centros, titulaciones y asignaturas, poner un icono Ver (ojo) en la esquina superior izquierda.
 
 // TODO: Fix bug: An URL like https://openswad.org/es?a gives Internal Server Error
 
@@ -223,13 +222,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.196.3 (2017-04-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.197 (2017-04-30)"
 #define CSS_FILE		"swad16.195.8.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.197:   Apr 30, 2017	Changes in layout of edition of degree types. (218579 lines)
         Version 16.196.3: Apr 30, 2017	Changes in layout of edition of courses. (218540 lines)
         Version 16.196.2: Apr 30, 2017	Changes in layout of edition of degrees. (218537 lines)
         Version 16.196.1: Apr 30, 2017	Changes in layout of edition of centres. (218538 lines)

@@ -6176,6 +6176,27 @@ const char *Txt_Create_another_institution =
 	"Criar uma outra institu&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Create_another_type_of_degree =
+#if   L==1
+	"Crear otro tipo de titulaci&oacute;n";	// Necessita traduccio
+#elif L==2
+	"Erstellen Sie ein anderes Abschlussart";
+#elif L==3
+	"Create another type of degree";
+#elif L==4
+	"Crear otro tipo de titulaci&oacute;n";
+#elif L==5
+	"Cr&eacute;er un autre type d'&eacute;tude";
+#elif L==6
+	"Crear otro tipo de titulaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Crea un altro tipo di laurea";
+#elif L==8
+	"Tworzenie inny typu stopnia";
+#elif L==9
+	"Criar um outro tipo de titula&ccedil;&atilde;o";
+#endif
+
 const char *Txt_Create_assignment =
 #if   L==1
 	"Crear actividad";	// Necessita traduccio
@@ -24718,6 +24739,27 @@ const char *Txt_No_courses =
 	"Brak kurs&oacute;w.";
 #elif L==9
 	"N&atilde;o h&aacute; disciplinas.";
+#endif
+
+const char *Txt_No_types_of_degree =
+#if   L==1
+	"No hay tipos de titulaci&oacute;n.";	// Necessita traduccio
+#elif L==2
+	"No types of degree.";			// Need Übersetzung
+#elif L==3
+	"No types of degree.";
+#elif L==4
+	"No hay tipos de titulaci&oacute;n.";
+#elif L==5
+	"There are no types of degree.";	// Besoin de traduction
+#elif L==6
+	"No hay tipos de titulaci&oacute;n.";	// Okoteve traducción
+#elif L==7
+	"Non ci sono tipi di lauree.";
+#elif L==8
+	"No types of degree.";			// Potrzebujesz tlumaczenie
+#elif L==9
+	"No types of degree.";			// Necessita de tradução
 #endif
 
 const char *Txt_No_degrees =
@@ -46704,27 +46746,6 @@ const char *Txt_There_are_no_record_fields_in_the_course_X =	// Warning: it is v
 	"There are no record fields in the course <strong>%s</strong>.";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"There are no record fields in the course <strong>%s</strong>.";	// Necessita de tradução
-#endif
-
-const char *Txt_There_are_no_types_of_degree =
-#if   L==1
-	"No existen tipos de titulaci&oacute;n.";	// Necessita traduccio
-#elif L==2
-	"There are no types of degree.";		// Need Übersetzung
-#elif L==3
-	"There are no types of degree.";
-#elif L==4
-	"No existen tipos de titulaci&oacute;n.";
-#elif L==5
-	"There are no types of degree.";		// Besoin de traduction
-#elif L==6
-	"No existen tipos de titulaci&oacute;n.";	// Okoteve traducción
-#elif L==7
-	"Non ci sono tipi di lauree.";
-#elif L==8
-	"There are no types of degree.";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"There are no types of degree.";		// Necessita de tradução
 #endif
 
 const char *Txt_There_are_no_types_of_group_in_the_course_X =	// Warning: it is very important to include %s in the following sentences

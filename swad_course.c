@@ -1652,11 +1652,9 @@ static void Crs_PutFormToCreateCourse (void)
    Lay_StartRoundFrameTable (NULL,Txt_New_course,NULL,NULL,2);
    Crs_PutHeadCoursesForEdition ();
 
-   /***** Disabled icon to remove course *****/
+   /***** Column to remove course, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-		      "<td class=\"BM\">");
-   Lay_PutIconRemovalNotAllowed ();
-   fprintf (Gbl.F.Out,"</td>");
+		      "<td class=\"BM\"></td>");
 
    /***** Course code *****/
    fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
@@ -1711,7 +1709,6 @@ static void Crs_PutFormToCreateCourse (void)
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 	              "0"
 	              "</td>");
-
 
    /***** Course requester *****/
    fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"

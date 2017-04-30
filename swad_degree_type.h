@@ -63,7 +63,8 @@ void DT_WriteSelectorDegreeTypes (void);
 void DT_PutIconToViewDegreeTypes (void);
 void DT_SeeDegreeTypesInDegTab (void);
 void DT_SeeDegreeTypesInStaTab (void);
-void DT_ReqEditDegreeTypes (void);
+void DT_EditDegreeTypes (void);
+bool DT_CheckIfICanCreateDegreeTypes (void);
 void DT_PutFormToCreateDegreeType (void);
 
 void DT_GetListDegreeTypes (Sco_Scope_t Scope,DT_Order_t Order);

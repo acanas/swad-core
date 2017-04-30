@@ -62,12 +62,13 @@ extern struct Globals Gbl;
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
 
+static void DT_PutIconToViewDegreeTypesWhenEditing (void);
+
 static void DT_SeeDegreeTypes (Act_Action_t NextAction,Sco_Scope_t Scope,
                                DT_Order_t DefaultOrder);
 static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder);
 
 static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder);
-static void DT_EditDegreeTypes (void);
 static void DT_ListDegreeTypesForSeeing (void);
 static void DT_PutIconsListDegTypes (void);
 static void DT_PutIconToEditDegTypes (void);
@@ -136,6 +137,16 @@ void DT_PutIconToViewDegreeTypes (void)
                           NULL);
   }
 
+static void DT_PutIconToViewDegreeTypesWhenEditing (void)
+  {
+   extern const char *Txt_View;
+
+   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
+  }
+
 /*****************************************************************************/
 /***************************** Show degree types *****************************/
 /*****************************************************************************/
@@ -183,22 +194,6 @@ static DT_Order_t DT_GetParamDegTypOrder (DT_Order_t DefaultOrder)
   }
 
 /*****************************************************************************/
-/********************** Request edition of degree types **********************/
-/*****************************************************************************/
-
-void DT_ReqEditDegreeTypes (void)
-  {
-   /***** Get list of degree types *****/
-   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
-
-   /***** Put form to edit degree types *****/
-   DT_EditDegreeTypes ();
-
-   /***** Free list of degree types *****/
-   DT_FreeListDegreeTypes ();
-  }
-
-/*****************************************************************************/
 /***************************** List degree types *****************************/
 /*****************************************************************************/
 // This function can be called from:
@@ -210,51 +205,69 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    extern const char *Hlp_CENTRE_DegreeTypes;
    extern const char *Hlp_STATS_Figures_types_of_degree;
    extern const char *Txt_Types_of_degree;
-   extern const char *Txt_There_are_no_types_of_degree;
+   extern const char *Txt_No_types_of_degree;
+   extern const char *Txt_Create_another_type_of_degree;
+   extern const char *Txt_Create_type_of_degree;
+
+   /***** Start frame *****/
+   switch (NextAction)
+     {
+      case ActSeeDegTyp:
+	 Lay_StartRoundFrame (NULL,Txt_Types_of_degree,DT_PutIconsListDegTypes,
+			      Hlp_CENTRE_DegreeTypes);
+	 break;
+      case ActSeeUseGbl:
+	 Lay_StartRoundFrame (NULL,Txt_Types_of_degree,DT_PutIconToEditDegTypes,
+		              Hlp_STATS_Figures_types_of_degree);
+	 break;
+      default:	// Bad call
+	 return;
+     }
 
    if (Gbl.Degs.DegTypes.Num)
      {
       /***** Write heading *****/
-      switch (NextAction)
-        {
-	 case ActSeeDegTyp:
-	    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-				      DT_PutIconsListDegTypes,
-				      Hlp_CENTRE_DegreeTypes,
-				      2);
-	    break;
-	 case ActSeeUseGbl:
-	    Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-				      DT_PutIconToEditDegTypes,
-				      Hlp_STATS_Figures_types_of_degree,
-				      2);
-	    break;
-	 default:	// Bad call
-	    return;
-        }
+      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
 
-      /***** End table and frame *****/
-      Lay_EndRoundFrameTable ();
+      /***** End table *****/
+      fprintf (Gbl.F.Out,"</table>");
      }
-   else
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
+   else	// No degree types created
+      Lay_ShowAlert (Lay_INFO,Txt_No_types_of_degree);
+
+   /***** Button to create degree type  *****/
+   if (DT_CheckIfICanCreateDegreeTypes ())
+     {
+      Act_FormStart (ActEdiDegTyp);
+      Lay_PutConfirmButton (Gbl.Degs.DegTypes.Num ? Txt_Create_another_type_of_degree :
+	                                            Txt_Create_type_of_degree);
+      Act_FormEnd ();
+     }
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
 /************************ Put forms to edit degree types *********************/
 /*****************************************************************************/
 
-static void DT_EditDegreeTypes (void)
+void DT_EditDegreeTypes (void)
   {
-   extern const char *Txt_There_are_no_types_of_degree;
+   extern const char *Hlp_CENTRE_DegreeTypes_edit;
+   extern const char *Txt_Types_of_degree;
 
-   if (!Gbl.Degs.DegTypes.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_types_of_degree);
+   /***** Get list of degree types *****/
+   DT_GetListDegreeTypes (Sco_SCOPE_SYS,DT_ORDER_BY_DEGREE_TYPE);
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Types_of_degree,
+                        DT_PutIconToViewDegreeTypesWhenEditing,
+                        Hlp_CENTRE_DegreeTypes_edit);
 
    /***** Put a form to create a new degree type *****/
    DT_PutFormToCreateDegreeType ();
@@ -262,6 +275,12 @@ static void DT_EditDegreeTypes (void)
    /***** Forms to edit current degree types *****/
    if (Gbl.Degs.DegTypes.Num)
       DT_ListDegreeTypesForEdition ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
+   /***** Free list of degree types *****/
+   DT_FreeListDegreeTypes ();
   }
 
 /*****************************************************************************/
@@ -327,11 +346,11 @@ static void DT_PutIconsListDegTypes (void)
 static void DT_PutIconToEditDegTypes (void)
   {
    extern const char *Txt_Edit;
-   bool IsCentreTab = Gbl.CurrentCtr.Ctr.CtrCod > 0 &&
-	              Gbl.CurrentDeg.Deg.DegCod <= 0;
+   bool CentreTabVisible = Gbl.CurrentCtr.Ctr.CtrCod > 0 &&	// Centre selected
+	                   Gbl.CurrentDeg.Deg.DegCod <= 0;	// No degree selected
 
-   if (IsCentreTab &&				// Only editable in centre tab
-       Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)	// Only editable by system admins
+   if (CentreTabVisible &&	// Only editable if centre tab is visible
+       DT_CheckIfICanCreateDegreeTypes ())
       Lay_PutContextualLink (ActEdiDegTyp,NULL,NULL,
 			     "edit64x64.png",
 			     Txt_Edit,NULL,
@@ -344,13 +363,10 @@ static void DT_PutIconToEditDegTypes (void)
 
 static void DT_ListDegreeTypesForEdition (void)
   {
-   extern const char *Hlp_CENTRE_DegreeTypes_edit;
-   extern const char *Txt_Types_of_degree;
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   Lay_StartRoundFrameTable (NULL,Txt_Types_of_degree,
-                             NULL,Hlp_CENTRE_DegreeTypes_edit,2);
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -373,7 +389,7 @@ static void DT_ListDegreeTypesForEdition (void)
 
       /* Degree type code */
       fprintf (Gbl.F.Out,"</td>"
-	                 "<td class=\"DAT CENTER_MIDDLE\">"
+	                 "<td class=\"DAT CODE\">"
 	                 "%ld"
 	                 "</td>",
                Gbl.Degs.DegTypes.Lst[NumDegTyp].DegTypCod);
@@ -399,7 +415,17 @@ static void DT_ListDegreeTypesForEdition (void)
                Gbl.Degs.DegTypes.Lst[NumDegTyp].NumDegs);
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
+  }
+
+/*****************************************************************************/
+/******************** Check if I can create degree types *********************/
+/*****************************************************************************/
+
+bool DT_CheckIfICanCreateDegreeTypes (void)
+  {
+   return (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
 /*****************************************************************************/
@@ -408,34 +434,38 @@ static void DT_ListDegreeTypesForEdition (void)
 
 void DT_PutFormToCreateDegreeType (void)
   {
-   extern const char *Hlp_CENTRE_DegreeTypes_edit;
    extern const char *Txt_New_type_of_degree;
-   extern const char *Txt_Type_of_degree;
    extern const char *Txt_Create_type_of_degree;
 
    /***** Start form *****/
    Act_FormStart (ActNewDegTyp);
 
    /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,
-                             NULL,Hlp_CENTRE_DegreeTypes_edit,2);
+   Lay_StartRoundFrameTable (NULL,Txt_New_type_of_degree,NULL,NULL,2);
 
    /***** Write heading *****/
+   DT_PutHeadDegreeTypesForEdition ();
+
+   /***** Column to remove degree type, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Type_of_degree);
+		      "<td class=\"BM\"></td>");
+
+   /***** Degree type code *****/
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Degree type name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<input type=\"text\" name=\"DegTypName\""
                       " size=\"25\" maxlength=\"%u\" value=\"%s\""
                       " required=\"required\" />"
                      "</td>",
             Deg_MAX_CHARS_DEGREE_TYPE_NAME,Gbl.Degs.EditingDegTyp.DegTypName);
+
+   /***** Number of degrees of this degree type ****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+	              "0"
+	              "</td>"
+	              "</tr>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_type_of_degree);
@@ -711,7 +741,7 @@ void DT_RecFormNewDegreeType (void)
      }
 
    /***** Show the form again *****/
-   DT_ReqEditDegreeTypes ();
+   DT_EditDegreeTypes ();
   }
 
 /*****************************************************************************/
@@ -747,7 +777,7 @@ void DT_RemoveDegreeType (void)
      }
 
    /***** Show the form again *****/
-   DT_ReqEditDegreeTypes ();
+   DT_EditDegreeTypes ();
   }
 
 /*****************************************************************************/
@@ -952,7 +982,7 @@ void DT_RenameDegreeType (void)
    /***** Show the form again *****/
    Str_Copy (DegTyp->DegTypName,NewNameDegTyp,
              Deg_MAX_BYTES_DEGREE_TYPE_NAME);
-   DT_ReqEditDegreeTypes ();
+   DT_EditDegreeTypes ();
   }
 
 /*****************************************************************************/

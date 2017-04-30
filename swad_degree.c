@@ -1177,7 +1177,7 @@ static void Deg_ListDegrees (void)
 
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
-      /***** Start table *****/
+      /***** Write heading *****/
       fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
       Deg_PutHeadDegreesForSeeing ();
 
@@ -1345,7 +1345,7 @@ void Deg_EditDegrees (void)
   {
    extern const char *Hlp_CENTRE_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
-   extern const char *Txt_There_are_no_types_of_degree;
+   extern const char *Txt_No_types_of_degree;
 
    /***** Get list of degrees in the current centre *****/
    Deg_GetListDegsOfCurrentCtr ();
@@ -1371,11 +1371,11 @@ void Deg_EditDegrees (void)
    else	// No degree types
      {
       /***** Warning message *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_There_are_no_types_of_degree);
+      Lay_ShowAlert (Lay_WARNING,Txt_No_types_of_degree);
 
       /***** Form to create the first degree type *****/
-      if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-         DT_PutFormToCreateDegreeType ();
+      if (DT_CheckIfICanCreateDegreeTypes ())
+         DT_EditDegreeTypes ();
      }
 
    /***** End frame *****/

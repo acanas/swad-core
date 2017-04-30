@@ -1674,7 +1674,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgCtrPhoAtt	*/{1159,-1,TabUnk,ActSeeCtrInf		,    0,    0,    0,0x1C0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Ctr_ChangeCtrPhotoAttribution	,NULL},
 
    /* ActSeeDegTyp	*/{1013,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x1FF,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_SeeDegreeTypesInDegTab	,NULL},
-   /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_ReqEditDegreeTypes		,NULL},
+   /* ActEdiDegTyp	*/{ 573,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_EditDegreeTypes		,NULL},
    /* ActNewDegTyp	*/{ 537,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RecFormNewDegreeType	,NULL},
    /* ActRemDegTyp	*/{ 545,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RemoveDegreeType		,NULL},
    /* ActRenDegTyp	*/{ 538,-1,TabUnk,ActSeeDeg		,    0,    0,    0,0x100,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,DT_RenameDegreeType		,NULL},
