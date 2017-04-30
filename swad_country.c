@@ -76,6 +76,9 @@ static void Cty_PutIconToEditCountries (void);
 
 static unsigned Cty_GetNumUsrsWhoClaimToBelongToCty (long CtyCod);
 static void Cty_GetParamCtyOrder (void);
+
+static void Cty_PutIconToViewCountries (void);
+
 static void Cty_GetMapAttribution (long CtyCod,char **MapAttribution);
 static void Cty_FreeMapAttribution (char **MapAttribution);
 static void Cty_ListCountriesForEdition (void);
@@ -940,15 +943,16 @@ static void Cty_GetParamCtyOrder (void)
 
 void Cty_EditCountries (void)
   {
-   extern const char *Txt_No_countries_have_been_created;
+   extern const char *Hlp_SYSTEM_Countries;
+   extern const char *Txt_Countries;
 
    /***** Get list of countries *****/
    Gbl.Ctys.SelectedOrder = Cty_ORDER_BY_COUNTRY;
    Cty_GetListCountries (Cty_GET_EXTRA_DATA);
 
-   if (!Gbl.Ctys.Num)
-      /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_No_countries_have_been_created);
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Countries,Cty_PutIconToViewCountries,
+                        Hlp_SYSTEM_Countries);
 
    /***** Put a form to create a new country *****/
    Cty_PutFormToCreateCountry ();
@@ -957,8 +961,20 @@ void Cty_EditCountries (void)
    if (Gbl.Ctys.Num)
       Cty_ListCountriesForEdition ();
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free list of countries *****/
    Cty_FreeListCountries ();
+  }
+
+/*****************************************************************************/
+/*************** Put contextual icons in edition of countries ****************/
+/*****************************************************************************/
+
+static void Cty_PutIconToViewCountries (void)
+  {
+   Lay_PutIconToView (ActSeeCty,NULL);
   }
 
 /*****************************************************************************/
@@ -1511,16 +1527,13 @@ void Cty_FreeListCountries (void)
 
 static void Cty_ListCountriesForEdition (void)
   {
-   extern const char *Hlp_SYSTEM_Countries;
-   extern const char *Txt_Countries;
    extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    unsigned NumCty;
    struct Country *Cty;
    Txt_Language_t Lan;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Countries,NULL,Hlp_SYSTEM_Countries,2);
-
-   /***** Table head *****/
+   /***** Write heading *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Cty_PutHeadCountriesForEdition ();
 
    /***** Write all the countries *****/
@@ -1618,7 +1631,8 @@ static void Cty_ListCountriesForEdition (void)
         }
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/
@@ -1909,7 +1923,6 @@ void Cty_ChangeCtyMapAttribution (void)
 
 static void Cty_PutFormToCreateCountry (void)
   {
-   extern const char *Hlp_SYSTEM_Countries;
    extern const char *Txt_New_country;
    extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
@@ -1917,18 +1930,19 @@ static void Cty_PutFormToCreateCountry (void)
    struct Country *Cty;
    Txt_Language_t Lan;
 
+   /***** Country data *****/
    Cty = &Gbl.Ctys.EditingCty;
 
    /***** Start form *****/
    Act_FormStart (ActNewCty);
 
-   /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,Hlp_SYSTEM_Countries,2);
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable (NULL,Txt_New_country,NULL,NULL,2);
 
    /***** Write heading *****/
    Cty_PutHeadCountriesForEdition ();
 
-   /***** Firts columns for CtyCod *****/
+   /***** Column to remove country, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td rowspan=\"%u\" class=\"BT\"></td>",
             1 + Txt_NUM_LANGUAGES);

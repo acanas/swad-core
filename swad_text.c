@@ -10074,27 +10074,6 @@ const char *Txt_Edit_my_webs_networks =
 	"Editar as minhas webs / redes";
 #endif
 
-const char *Txt_Edit_office_hours =
-#if   L==1
-	"Editar tutories";
-#elif L==2
-	"Gesch&auml;ftszeiten bearbeiten";
-#elif L==3
-	"Edit office hours";
-#elif L==4
-	"Editar tutor&iacute;as";
-#elif L==5
-	"&Eacute;diter tuteur";
-#elif L==6
-	"Editar tutor&iacute;as";	// Okoteve traducción
-#elif L==7
-	"Editare tutoraggio";
-#elif L==8
-	"Edytuj godzin pracy biura";
-#elif L==9
-	"Editar tutor";
-#endif
-
 const char *Txt_Edit_question =
 #if   L==1
 	"Editar pregunta";
@@ -24697,27 +24676,6 @@ const char *Txt_No_centres =
 	"Brak centra.";
 #elif L==9
 	"N&atilde;o h&aacute; centros.";
-#endif
-
-const char *Txt_No_countries_have_been_created =
-#if   L==1
-	"No se han creado pa&iacute;ses.";	// Necessita traduccio
-#elif L==2
-	"No countries have been created.";	// Need Übersetzung
-#elif L==3
-	"No countries have been created.";
-#elif L==4
-	"No se han creado pa&iacute;ses.";
-#elif L==5
-	"No countries have been created.";	// Besoin de traduction
-#elif L==6
-	"No se han creado pa&iacute;ses.";	// Okoteve traducción
-#elif L==7
-	"No countries have been created.";	// Bisogno di traduzione
-#elif L==8
-	"No countries have been created.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"No countries have been created.";	// Necessita de tradução
 #endif
 
 const char *Txt_No_courses =
