@@ -553,13 +553,8 @@ static void Deg_Configuration (bool PrintView)
 
 static void Deg_PutIconsToPrintAndUpload (void)
   {
-   extern const char *Txt_Print;
-
    /***** Link to print info about degree *****/
-   Lay_PutContextualLink (ActPrnDegInf,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnDegInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
       // Only degree admins, centre admins, institution admins and system admins
@@ -1239,12 +1234,7 @@ static void Deg_PutIconsListDegrees (void)
 
 static void Deg_PutIconToEditDegrees (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiDeg,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiDeg,NULL);
   }
 
 /*****************************************************************************/
@@ -1403,13 +1393,7 @@ static void Deg_PutIconsEditingDegrees (void)
 
 static void Deg_PutIconToViewDegrees (void)
   {
-   extern const char *Txt_View;
-
-   /***** Put form to view degrees *****/
-   Lay_PutContextualLink (ActSeeDeg,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActSeeDeg,NULL);
   }
 
 /*****************************************************************************/

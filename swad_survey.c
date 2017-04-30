@@ -785,7 +785,6 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
    extern const char *Txt_Reset;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
-   extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -816,10 +815,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 		             NULL);
 
    /***** Put form to edit survey *****/
-   Lay_PutContextualLink (ActEdiOneSvy,NULL,Svy_PutParams,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-		          NULL);
+   Lay_PutIconToEdit (ActEdiOneSvy,Svy_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }

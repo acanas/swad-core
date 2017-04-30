@@ -37470,27 +37470,6 @@ const char *Txt_Show_statistic =
 	"Mostrar estat&iacute;stica";
 #endif
 
-const char *Txt_Show_timetable =
-#if   L==1
-	"Veure horari";
-#elif L==2
-	"Zeige Stundenplan";
-#elif L==3
-	"Show timetable";
-#elif L==4
-	"Ver horario";
-#elif L==5
-	"Voir horaire";
-#elif L==6
-	"Ver horario";	// Okoteve traducción
-#elif L==7
-	"Vedi orario";
-#elif L==8
-	"Wiadomo&sacute;ci plan lekcji";
-#elif L==9
-	"Veja hor&aacute;rio";
-#endif
-
 const char *Txt_Shuffle =
 #if   L==1
 	"Barrejar";

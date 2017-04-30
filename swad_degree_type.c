@@ -139,12 +139,7 @@ void DT_PutIconToViewDegreeTypes (void)
 
 static void DT_PutIconToViewDegreeTypesWhenEditing (void)
   {
-   extern const char *Txt_View;
-
-   Lay_PutContextualLink (ActSeeDegTyp,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActSeeDegTyp,NULL);
   }
 
 /*****************************************************************************/
@@ -345,16 +340,12 @@ static void DT_PutIconsListDegTypes (void)
 
 static void DT_PutIconToEditDegTypes (void)
   {
-   extern const char *Txt_Edit;
    bool CentreTabVisible = Gbl.CurrentCtr.Ctr.CtrCod > 0 &&	// Centre selected
 	                   Gbl.CurrentDeg.Deg.DegCod <= 0;	// No degree selected
 
    if (CentreTabVisible &&	// Only editable if centre tab is visible
        DT_CheckIfICanCreateDegreeTypes ())
-      Lay_PutContextualLink (ActEdiDegTyp,NULL,NULL,
-			     "edit64x64.png",
-			     Txt_Edit,NULL,
-			     NULL);
+      Lay_PutIconToEdit (ActEdiDegTyp,NULL);
   }
 
 /*****************************************************************************/

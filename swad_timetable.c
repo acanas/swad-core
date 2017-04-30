@@ -392,29 +392,16 @@ void TT_ShowClassTimeTable (void)
 
 static void TT_PutContextualIcons (void)
   {
-   extern const char *Txt_Edit;
-   extern const char *Txt_Edit_office_hours;
-   extern const char *Txt_Print;
-
    if (Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT)
-      Lay_PutContextualLink (ActEdiCrsTT,NULL,Grp_PutParamWhichGrps,
-			     "edit64x64.png",
-			     Txt_Edit,NULL,
-		             NULL);
+      Lay_PutIconToEdit (ActEdiCrsTT,Grp_PutParamWhichGrps);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours)
-      Lay_PutContextualLink (ActEdiTut,NULL,NULL,
-                             "edit64x64.png",
-			     Txt_Edit_office_hours,NULL,
-		             NULL);
+      Lay_PutIconToEdit (ActEdiTut,NULL);
 
    if (Gbl.TimeTable.ContextualIcons.PutIconPrint)
-      Lay_PutContextualLink (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
-								         ActPrnMyTT,
-			     NULL,Grp_PutParamWhichGrps,
-			     "print64x64.png",
-			     Txt_Print,NULL,
-		             NULL);
+      Lay_PutIconToPrint (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE ? ActPrnCrsTT :
+								      ActPrnMyTT,
+			  Grp_PutParamWhichGrps);
   }
 
 /*****************************************************************************/
@@ -473,13 +460,7 @@ void TT_EditMyTutTimeTable (void)
 
 static void TT_PutIconToViewCrsTT (void)
   {
-   extern const char *Txt_Show_timetable;
-
-   /***** Link (form) to see course timetable *****/
-   Lay_PutContextualLink (ActSeeCrsTT,NULL,NULL,
-                          "eye-on64x64.png",
-                          Txt_Show_timetable,NULL,
-		          NULL);
+   Lay_PutIconToView (ActSeeCrsTT,NULL);
   }
 
 /*****************************************************************************/
@@ -488,13 +469,7 @@ static void TT_PutIconToViewCrsTT (void)
 
 static void TT_PutIconToViewMyTT (void)
   {
-   extern const char *Txt_Show_timetable;
-
-   /***** Link (form) to see my timetable *****/
-   Lay_PutContextualLink (ActSeeMyTT,NULL,NULL,
-                          "eye-on64x64.png",
-                          Txt_Show_timetable,NULL,
-		          NULL);
+   Lay_PutIconToView (ActSeeMyTT,NULL);
   }
 
 /*****************************************************************************/

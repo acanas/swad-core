@@ -170,14 +170,8 @@ static void Ban_WriteListOfBanners (void)
 
 static void Ban_PutFormToEditBanners (void)
   {
-   extern const char *Txt_Edit;
-
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      /***** Link to edit banners *****/
-      Lay_PutContextualLink (ActEdiBan,NULL,NULL,
-                             "edit64x64.png",
-                             Txt_Edit,NULL,
-                             NULL);
+      Lay_PutIconToEdit (ActEdiBan,NULL);
   }
 
 /*****************************************************************************/

@@ -480,12 +480,7 @@ static void Cty_Configuration (bool PrintView)
 
 static void Cty_PutIconToPrint (void)
   {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnCtyInf,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCtyInf,NULL);
   }
 
 /*****************************************************************************/
@@ -772,12 +767,7 @@ static void Cty_PutIconsListCountries (void)
 
 static void Cty_PutIconToEditCountries (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiCty,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiCty,NULL);
   }
 
 /*****************************************************************************/

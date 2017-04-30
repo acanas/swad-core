@@ -672,13 +672,8 @@ static void Ctr_Configuration (bool PrintView)
 
 static void Ctr_PutIconsToPrintAndUpload (void)
   {
-   extern const char *Txt_Print;
-
    /***** Link to print info about centre *****/
-   Lay_PutContextualLink (ActPrnCtrInf,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCtrInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
       // Only centre admins, institution admins and system admins
@@ -824,12 +819,7 @@ static void Ctr_PutIconsListCentres (void)
 
 static void Ctr_PutIconToEditCentres (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiCtr,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiCtr,NULL);
   }
 
 /*****************************************************************************/
@@ -989,13 +979,7 @@ static void Ctr_PutIconsEditingCentres (void)
 
 static void Ctr_PutIconToViewCentres (void)
   {
-   extern const char *Txt_View;
-
-   /***** Put form to view centres *****/
-   Lay_PutContextualLink (ActSeeCtr,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActSeeCtr,NULL);
   }
 
 /*****************************************************************************/

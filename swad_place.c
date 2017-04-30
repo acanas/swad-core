@@ -229,12 +229,7 @@ static void Plc_GetParamPlcOrder (void)
 
 static void Plc_PutIconToEditPlaces (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiPlc,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-		          NULL);
+   Lay_PutIconToEdit (ActEdiPlc,NULL);
   }
 
 /*****************************************************************************/

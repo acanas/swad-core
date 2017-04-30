@@ -545,7 +545,6 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
    extern const char *Txt_Remove;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
-   extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -570,10 +569,7 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
                              NULL);
 
    /***** Put form to edit attendance event *****/
-   Lay_PutContextualLink (ActEdiOneAtt,NULL,Att_PutParams,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiOneAtt,Att_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }
@@ -2968,13 +2964,7 @@ static void Att_GetListSelectedAttCods (char **StrAttCodsSelected)
 
 static void Att_PutIconToPrintMyList (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnLstMyAtt,NULL,Att_PutFormToPrintMyListParams,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnLstMyAtt,Att_PutFormToPrintMyListParams);
   }
 
 static void Att_PutFormToPrintMyListParams (void)
@@ -2991,13 +2981,7 @@ static void Att_PutFormToPrintMyListParams (void)
 
 static void Att_PutIconToPrintStdsList (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnLstStdAtt,NULL,Att_PutParamsToPrintStdsList,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnLstStdAtt,Att_PutParamsToPrintStdsList);
   }
 
 static void Att_PutParamsToPrintStdsList (void)

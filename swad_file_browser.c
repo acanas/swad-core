@@ -3673,27 +3673,18 @@ static void Brw_ShowFileBrowser (void)
 
 static void Brw_PutIconsFileBrowser (void)
   {
-   extern const char *Txt_View;
-   extern const char *Txt_Edit;
-
    /***** Put icon to view / edit file browser *****/
    switch (Gbl.FileBrowser.IconViewEdit)
      {
       case Brw_ICON_NONE:
 	 break;
       case Brw_ICON_VIEW:
-	 Lay_PutContextualLink (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
-				NULL,Brw_PutHiddenParamFullTreeIfSelected,
-				"eye-on64x64.png",
-				Txt_View,NULL,
-				NULL);
+	 Lay_PutIconToView (Brw_ActFromAdmToSee[Gbl.FileBrowser.Type],
+	                    Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
       case Brw_ICON_EDIT:
-	 Lay_PutContextualLink (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
-				NULL,Brw_PutHiddenParamFullTreeIfSelected,
-				"edit64x64.png",
-				Txt_Edit,NULL,
-				NULL);
+         Lay_PutIconToEdit (Brw_ActFromSeeToAdm[Gbl.FileBrowser.Type],
+                            Brw_PutHiddenParamFullTreeIfSelected);
 	 break;
      }
 

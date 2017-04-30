@@ -652,13 +652,7 @@ static void Agd_PutIconToCreateNewEvent (void)
 
 static void Agd_PutIconToViewEditMyFullAgenda (void)
   {
-   extern const char *Txt_Edit;
-
-   /***** Put form to create a new event *****/
-   Lay_PutContextualLink (ActSeeMyAgd,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActSeeMyAgd,NULL);
   }
 
 static void Agd_PutIconToShowQR (void)
@@ -848,7 +842,6 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
    extern const char *Txt_Hide;
    extern const char *Txt_Event_private_click_to_make_it_visible_to_the_users_of_your_courses;
    extern const char *Txt_Event_visible_to_the_users_of_your_courses_click_to_make_it_private;
-   extern const char *Txt_Edit;
 
    Gbl.Agenda.AgdCodToEdit = AgdEvent->AgdCod;	// Used as parameter in contextual links
 
@@ -871,10 +864,7 @@ static void Agd_PutFormsToRemEditOneEvent (struct AgendaEvent *AgdEvent)
                              NULL);
 
    /***** Put form to edit event *****/
-   Lay_PutContextualLink (ActEdiOneEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiOneEvtMyAgd,Agd_PutCurrentParamsMyAgenda);
 
    /***** Put form to make event public/private *****/
    if (AgdEvent->Public)

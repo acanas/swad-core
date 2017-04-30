@@ -1327,7 +1327,6 @@ static bool Tst_CheckIfICanEditTests (void)
 
 static void Tst_PutIconsTests (void)
   {
-   extern const char *Txt_Edit;
    extern const char *Txt_New_question;
    extern const char *Txt_Configure;
 
@@ -1335,10 +1334,7 @@ static void Tst_PutIconsTests (void)
      {
       /***** Put form to edit existing test questions *****/
       if (Gbl.Action.Act != ActEdiTstQst)
-	 Lay_PutContextualLink (ActEdiTstQst,NULL,NULL,
-				"edit64x64.png",
-				Txt_Edit,NULL,
-				NULL);
+         Lay_PutIconToEdit (ActEdiTstQst,NULL);
 
       /***** Put form to create a new test question *****/
       if (Gbl.Action.Act != ActEdiOneTstQst)

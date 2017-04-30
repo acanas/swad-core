@@ -1538,8 +1538,6 @@ static void Exa_PutIconsExamAnnouncement (void)
    extern const char *Txt_Remove;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
-   extern const char *Txt_Edit;
-   extern const char *Txt_Print;
 
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -1570,17 +1568,11 @@ static void Exa_PutIconsExamAnnouncement (void)
         }
 
       /***** Link to edit this exam announcement *****/
-      Lay_PutContextualLink (ActEdiExaAnn,NULL,Exa_PutParamExaCodToEdit,
-                             "edit64x64.png",
-			     Txt_Edit,NULL,
-                             NULL);
+      Lay_PutIconToEdit (ActEdiExaAnn,Exa_PutParamExaCodToEdit);
      }
 
    /***** Link to print view *****/
-   Lay_PutContextualLink (ActPrnExaAnn,NULL,Exa_PutParamExaCodToEdit,
-                          "print64x64.png",
-			  Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnExaAnn,Exa_PutParamExaCodToEdit);
   }
 
 /*****************************************************************************/

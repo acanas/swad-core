@@ -492,12 +492,7 @@ static void Crs_Configuration (bool PrintView)
 
 static void Crs_PutIconToPrint (void)
   {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnCrsInf,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCrsInf,NULL);
   }
 
 /*****************************************************************************/
@@ -1196,12 +1191,7 @@ static void Crs_PutIconsListCourses (void)
 
 static void Crs_PutIconToEditCourses (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiCrs,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiCrs,NULL);
   }
 
 /*****************************************************************************/
@@ -1357,13 +1347,7 @@ void Crs_EditCourses (void)
 
 static void Crs_PutIconToViewCourses (void)
   {
-   extern const char *Txt_View;
-
-   /***** Put form to view courses *****/
-   Lay_PutContextualLink (ActSeeCrs,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActSeeCrs,NULL);
   }
 
 /*****************************************************************************/

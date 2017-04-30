@@ -505,7 +505,6 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
    extern const char *Txt_Remove;
    extern const char *Txt_Show;
    extern const char *Txt_Hide;
-   extern const char *Txt_Edit;
 
    fprintf (Gbl.F.Out,"<div>");
 
@@ -530,10 +529,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
                              NULL);
 
    /***** Put form to edit assignment *****/
-   Lay_PutContextualLink (ActEdiOneAsg,NULL,Asg_PutParams,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiOneAsg,Asg_PutParams);
 
    fprintf (Gbl.F.Out,"</div>");
   }

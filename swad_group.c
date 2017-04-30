@@ -1331,13 +1331,7 @@ static void Grp_PutIconsEditingGroupTypes (void)
 
 static void Grp_PutIconToViewGroups (void)
   {
-   extern const char *Txt_View;
-
-   /***** Put form to create a new type of group *****/
-   Lay_PutContextualLink (ActReqSelGrp,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActReqSelGrp,NULL);
   }
 
 static void Grp_PutIconToCreateNewGroupType (void)
@@ -1732,12 +1726,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 
 static void Grp_PutIconToEditGroups (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActReqEdiGrp,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActReqEdiGrp,NULL);
   }
 
 /*****************************************************************************/

@@ -7657,32 +7657,17 @@ static void Usr_PutIconsListTchs (void)
 
 static void Usr_PutIconToPrintGsts (void)
   {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnGstPho,NULL,Usr_ShowGstsAllDataParams,
-			  "print64x64.png",
-			  Txt_Print,NULL,
-		          NULL);
+   Lay_PutIconToPrint (ActPrnGstPho,Usr_ShowGstsAllDataParams);
   }
 
 static void Usr_PutIconToPrintStds (void)
   {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnStdPho,NULL,Usr_ShowStdsAllDataParams,
-			  "print64x64.png",
-			  Txt_Print,NULL,
-		          NULL);
+   Lay_PutIconToPrint (ActPrnStdPho,Usr_ShowStdsAllDataParams);
   }
 
 static void Usr_PutIconToPrintTchs (void)
   {
-   extern const char *Txt_Print;
-
-   Lay_PutContextualLink (ActPrnTchPho,NULL,Usr_ShowTchsAllDataParams,
-			  "print64x64.png",
-			  Txt_Print,NULL,
-		          NULL);
+   Lay_PutIconToPrint (ActPrnTchPho,Usr_ShowTchsAllDataParams);
   }
 
 /*****************************************************************************/

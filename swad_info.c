@@ -467,13 +467,7 @@ static void Inf_PutButtonToEditInfo (void)
 
 void Inf_PutIconToEditInfo (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],
-                          NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (Inf_ActionsEditInfo[Gbl.CurrentCrs.Info.Type],NULL);
   }
 
 /*****************************************************************************/

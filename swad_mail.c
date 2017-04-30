@@ -177,12 +177,7 @@ static void Mai_GetParamMaiOrder (void)
 
 static void Mai_PutIconToEditMailDomains (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiMai,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiMai,NULL);
   }
 
 /*****************************************************************************/

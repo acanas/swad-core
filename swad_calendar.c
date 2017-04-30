@@ -346,36 +346,20 @@ static void Cal_DrawCalendar (Act_Action_t ActionSeeCalendar,
 
 static void Cal_PutIconToPrintCalendarSys (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalSys,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalSys,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarCty (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCty,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalCty,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarIns (void)
   {
-   extern const char *Txt_Print;
    extern const char *Txt_Holidays;
 
    /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalIns,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalIns,NULL);
 
    /***** View holidays *****/
    if (Gbl.Hlds.Num ||					// There are holidays
@@ -388,33 +372,15 @@ static void Cal_PutIconToPrintCalendarIns (void)
 
 static void Cal_PutIconToPrintCalendarCtr (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCtr,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalCtr,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarDeg (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalDeg,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalDeg,NULL);
   }
 
 static void Cal_PutIconToPrintCalendarCrs (void)
   {
-   extern const char *Txt_Print;
-
-   /***** Print calendar *****/
-   Lay_PutContextualLink (ActPrnCalCrs,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnCalCrs,NULL);
   }

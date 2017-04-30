@@ -211,12 +211,7 @@ static void Hld_GetParamHldOrder (void)
 
 static void Hld_PutIconToEditHlds (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiHld,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiHld,NULL);
   }
 
 /*****************************************************************************/

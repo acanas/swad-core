@@ -1087,6 +1087,40 @@ static void Lay_ShowRightColumn (void)
   }
 
 /*****************************************************************************/
+/**************** Show contextual icons to edit, view, print *****************/
+/*****************************************************************************/
+
+void Lay_PutIconToEdit (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Edit;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "edit64x64.png",
+                          Txt_Edit,NULL,
+                          NULL);
+  }
+
+void Lay_PutIconToView (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_View;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+			  "eye-on64x64.png",
+			  Txt_View,NULL,
+                          NULL);
+  }
+
+void Lay_PutIconToPrint (Act_Action_t NextAction,void (*FuncParams) ())
+  {
+   extern const char *Txt_Print;
+
+   Lay_PutContextualLink (NextAction,NULL,FuncParams,
+                          "print64x64.png",
+                          Txt_Print,NULL,
+                          NULL);
+  }
+
+/*****************************************************************************/
 /**************** Show an icon with a link in contextual menu ****************/
 /*****************************************************************************/
 

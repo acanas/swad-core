@@ -627,13 +627,8 @@ static void Ins_Configuration (bool PrintView)
 
 static void Ins_PutIconsToPrintAndUpload (void)
   {
-   extern const char *Txt_Print;
-
    /***** Link to print info about institution *****/
-   Lay_PutContextualLink (ActPrnInsInf,NULL,NULL,
-                          "print64x64.png",
-                          Txt_Print,NULL,
-                          NULL);
+   Lay_PutIconToPrint (ActPrnInsInf,NULL);
 
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
@@ -743,12 +738,7 @@ static void Ins_PutIconsListInstitutions (void)
 
 static void Ins_PutIconToEditInstitutions (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiIns,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiIns,NULL);
   }
 
 /*****************************************************************************/
@@ -958,13 +948,7 @@ void Ins_EditInstitutions (void)
 
 static void Ins_PutIconToViewInstitutions (void)
   {
-   extern const char *Txt_View;
-
-   /***** Put form to view institutions *****/
-   Lay_PutContextualLink (ActSeeIns,NULL,NULL,
-			  "eye-on64x64.png",
-			  Txt_View,NULL,
-                          NULL);
+   Lay_PutIconToView (ActSeeIns,NULL);
   }
 
 /*****************************************************************************/

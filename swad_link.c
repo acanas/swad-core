@@ -130,12 +130,7 @@ void Lnk_SeeLinks (void)
 
 static void Lnk_PutIconToEditLinks (void)
   {
-   extern const char *Txt_Edit;
-
-   Lay_PutContextualLink (ActEdiLnk,NULL,NULL,
-                          "edit64x64.png",
-                          Txt_Edit,NULL,
-                          NULL);
+   Lay_PutIconToEdit (ActEdiLnk,NULL);
   }
 
 /*****************************************************************************/
