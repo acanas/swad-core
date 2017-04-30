@@ -60,6 +60,7 @@ extern struct Globals Gbl;
 
 static void Plc_GetParamPlcOrder (void);
 static void Plc_PutIconToEditPlaces (void);
+static void Plc_PutIconToViewPlacesWhenEditing (void);
 static void Plc_ListPlacesForEdition (void);
 static void Plc_PutParamPlcCod (long PlcCod);
 
@@ -238,8 +239,15 @@ static void Plc_PutIconToEditPlaces (void)
 
 void Plc_EditPlaces (void)
   {
+   extern const char *Hlp_INSTITUTION_Places_edit;
+   extern const char *Txt_Places;
+
    /***** Get list of places *****/
    Plc_GetListPlaces ();
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Places,Plc_PutIconToViewPlacesWhenEditing,
+                        Hlp_INSTITUTION_Places_edit);
 
    /***** Put a form to create a new place *****/
    Plc_PutFormToCreatePlace ();
@@ -248,8 +256,20 @@ void Plc_EditPlaces (void)
    if (Gbl.Plcs.Num)
       Plc_ListPlacesForEdition ();
 
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+
    /***** Free list of places *****/
    Plc_FreeListPlaces ();
+  }
+
+/*****************************************************************************/
+/**************** Put contextual icons in edition of places *****************/
+/*****************************************************************************/
+
+static void Plc_PutIconToViewPlacesWhenEditing (void)
+  {
+   Lay_PutIconToView (ActSeePlc,NULL);
   }
 
 /*****************************************************************************/
@@ -437,15 +457,11 @@ void Plc_FreeListPlaces (void)
 
 static void Plc_ListPlacesForEdition (void)
   {
-   extern const char *Hlp_INSTITUTION_Places_edit;
-   extern const char *Txt_Places;
    unsigned NumPlc;
    struct Place *Plc;
 
-   Lay_StartRoundFrameTable (NULL,Txt_Places,
-                             NULL,Hlp_INSTITUTION_Places_edit,2);
-
-   /***** Table head *****/
+   /***** Write heading *****/
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
    Plc_PutHeadPlaces ();
 
    /***** Write all the places *****/
@@ -709,37 +725,31 @@ static void Plc_UpdatePlcNameDB (long PlcCod,const char *FieldName,const char *N
 
 static void Plc_PutFormToCreatePlace (void)
   {
-   extern const char *Hlp_INSTITUTION_Places_edit;
    extern const char *Txt_New_place;
-   extern const char *Txt_Short_name;
-   extern const char *Txt_Full_name;
    extern const char *Txt_Create_place;
    struct Place *Plc;
 
+   /***** Place data *****/
    Plc = &Gbl.Plcs.EditingPlc;
 
    /***** Start form *****/
    Act_FormStart (ActNewPlc);
 
-   /***** Start of frame *****/
-   Lay_StartRoundFrameTable (NULL,Txt_New_place,
-                             NULL,Hlp_INSTITUTION_Places_edit,2);
+   /***** Start frame *****/
+   Lay_StartRoundFrameTable (NULL,Txt_New_place,NULL,NULL,2);
 
    /***** Write heading *****/
+   Plc_PutHeadPlaces ();
+
+   /***** Column to remove place, disabled here *****/
    fprintf (Gbl.F.Out,"<tr>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"LEFT_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "</tr>",
-            Txt_Short_name,
-            Txt_Full_name);
+		      "<td class=\"BM\"></td>");
+
+   /***** Place code *****/
+   fprintf (Gbl.F.Out,"<td class=\"CODE\"></td>");
 
    /***** Place short name *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
                       "<input type=\"text\" name=\"ShortName\""
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_SHORT_NAME\""
@@ -753,9 +763,14 @@ static void Plc_PutFormToCreatePlace (void)
                       " maxlength=\"%u\" value=\"%s\""
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
-                      "</td>"
-                      "</tr>",
+                      "</td>",
             Plc_MAX_CHARS_PLACE_FULL_NAME,Plc->FullName);
+
+   /***** Number of centres *****/
+   fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
+		      "0"
+		      "</td>"
+		      "</tr>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_place);
