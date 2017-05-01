@@ -1319,9 +1319,9 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 
    /***** Write author *****/
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\""
-	              " style=\"width:150px;\">"
-                      "<table class=\"CELLS_PAD_2\" style=\"width:150px;\">"
-                      "<tr>");
+	              " style=\"width:150px;\">");
+   Lay_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>");
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
    Msg_WriteMsgAuthor (&UsrDat,"AUTHOR_TXT",Enabled,NULL);
    fprintf (Gbl.F.Out,"</tr>");
@@ -1332,8 +1332,8 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
       For_WriteNumberOfPosts (UsrDat.UsrCod);
       fprintf (Gbl.F.Out,"</tr>");
      }
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Write post content *****/
    fprintf (Gbl.F.Out,"<td class=\"MSG_TXT LEFT_TOP\">");

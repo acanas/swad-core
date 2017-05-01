@@ -2697,9 +2697,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
    /* Unique or multiple choice answers */
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td></td>"
-                      "<td class=\"LEFT_TOP\">"
-                      "<table class=\"CELLS_PAD_2\">");
-
+                      "<td class=\"LEFT_TOP\">");
+   Lay_StartTable (2);
    for (NumAns = 0;
 	NumAns < Svy_MAX_ANSWERS_PER_QUESTION;
 	NumAns++)
@@ -2722,8 +2721,8 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	                 "</td>"
 	                 "</tr>");
      }
-   fprintf (Gbl.F.Out,"</table>"
-	              "</td>"
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** End table *****/
@@ -3355,7 +3354,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
    /***** Write the answers *****/
    if (NumAnswers)
      {
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_5\">");
+      Lay_StartTable (5);
       for (NumAns = 0;
 	   NumAns < NumAnswers;
 	   NumAns++)
@@ -3419,7 +3418,7 @@ static void Svy_WriteAnswersOfAQst (struct Survey *Svy,struct SurveyQuestion *Sv
 	 /* Free memory allocated for the answer */
 	 free ((void *) Answer);
 	}
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
 
    /***** Free structure that stores the query result *****/

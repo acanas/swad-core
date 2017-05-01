@@ -1517,13 +1517,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 /* Course requester */
 	 UsrDat.UsrCod = Crs->RequesterUsrCod;
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-	 fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-			    "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-			    "<tr>");
+	 fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+         Lay_StartTable (2);
+	 fprintf (Gbl.F.Out,"<tr>");
 	 Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
-	 fprintf (Gbl.F.Out,"</tr>"
-			    "</table>"
-			    "</td>");
+	 fprintf (Gbl.F.Out,"</tr>");
+	 Lay_EndTable ();
+	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1695,13 +1695,13 @@ static void Crs_PutFormToCreateCourse (void)
 	              "</td>");
 
    /***** Course requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-		      "<tr>");
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+   Lay_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
-   fprintf (Gbl.F.Out,"</tr>"
-		      "</table>"
-		      "</td>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Course status *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"

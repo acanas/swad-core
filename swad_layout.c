@@ -1552,6 +1552,14 @@ void Lay_EndRoundFrame (void)
 		      "</div>");
   }
 
+void Lay_StartTable (unsigned CellPadding)
+  {
+   fprintf (Gbl.F.Out,"<table");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," class=\"CELLS_PAD_%u\"",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   fprintf (Gbl.F.Out,">");
+  }
+
 void Lay_StartTableCenter (unsigned CellPadding)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER");

@@ -123,6 +123,7 @@ void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton
 void Lay_EndRoundFrameWithButton (Lay_Button_t Button,const char *TxtButton);
 void Lay_EndRoundFrame (void);
 
+void Lay_StartTable (unsigned CellPadding);
 void Lay_StartTableCenter (unsigned CellPadding);
 void Lay_StartTableWide (unsigned CellPadding);
 void Lay_StartTableWideMargin (unsigned CellPadding);

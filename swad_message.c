@@ -2974,8 +2974,8 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    if (Expanded)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td rowspan=\"3\" colspan=\"3\" class=\"LEFT_TOP\">"
-                         "<table class=\"CELLS_PAD_2\">");
+	                 "<td rowspan=\"3\" colspan=\"3\" class=\"LEFT_TOP\">");
+      Lay_StartTable (2);
 
       /***** Write course origin of message *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -2992,9 +2992,10 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 	 // Guests (users without courses) can read messages but not reply them
          Msg_WriteFormToReply (MsgCod,CrsCod,FromThisCrs,Replied,&UsrDat);
       fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>"
-	                 "</td>");
+	                 "</tr>");
+
+      Lay_EndTable ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /***** Write "From:" *****/
       fprintf (Gbl.F.Out,"<td class=\"RIGHT_TOP MSG_TIT\">"

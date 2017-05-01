@@ -817,13 +817,13 @@ static void Deg_ListDegreesForEdition (void)
       /* Degree requester */
       UsrDat.UsrCod = Deg->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-			 "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-			 "<tr>");
+      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+      Lay_StartTable (2);
+      fprintf (Gbl.F.Out,"<tr>");
       Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
-      fprintf (Gbl.F.Out,"</tr>"
-			 "</table>"
-			 "</td>");
+      fprintf (Gbl.F.Out,"</tr>");
+      Lay_EndTable ();
+      fprintf (Gbl.F.Out,"</td>");
 
       /* Degree status */
       StatusTxt = Deg_GetStatusTxtFromStatusBits (Deg->Status);
@@ -1002,13 +1002,13 @@ static void Deg_PutFormToCreateDegree (void)
 	              "</td>");
 
    /***** Degree requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">"
-		      "<table class=\"INPUT_REQUESTER CELLS_PAD_2\">"
-		      "<tr>");
+   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+   Lay_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>");
    Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
-   fprintf (Gbl.F.Out,"</tr>"
-		      "</table>"
-		      "</td>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Degree status *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"

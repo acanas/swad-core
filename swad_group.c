@@ -2250,9 +2250,9 @@ static void Grp_PutFormToCreateGroupType (void)
             Txt_A_student_can_belong_to_several_groups);
 
    /***** Open time *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
-	              "<table class=\"CELLS_PAD_2\">"
-                      "<tr>"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
+   Lay_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
@@ -2275,9 +2275,9 @@ static void Grp_PutFormToCreateGroupType (void)
 				                Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                false);			// Don't submit on change
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-                      "</table>"
-                      "</td>");
+                      "</tr>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Number of groups of this type *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"

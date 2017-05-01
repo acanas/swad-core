@@ -337,18 +337,14 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 	StartEndTime <= Dat_END_TIME;
 	StartEndTime++)
      {
+      /* Date-time */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"RIGHT_MIDDLE\">"
 	                 "<label class=\"%s\">%s:</label>"
 	                 "</td>"
-                         "<td class=\"LEFT_MIDDLE\">"
-                         "<table class=\"CELLS_PAD_2\">"
-                         "<tr>"
-                         "<td class=\"LEFT_TOP\">",
+                         "<td class=\"LEFT_MIDDLE\">",
                The_ClassForm[Gbl.Prefs.Theme],
                Txt_START_END_TIME[StartEndTime]);
-
-      /* Date-time */
       Dat_WriteFormClientLocalDateTimeFromTimeUTC (Id[StartEndTime],
                                                    Id[StartEndTime],
 	                                           TimeUTC[StartEndTime],
@@ -358,9 +354,6 @@ void Dat_PutFormStartEndClientLocalDateTimes (time_t TimeUTC[2],
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   false);		// Don't submit on change
       fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>"
-	                 "</td>"
 	                 "</tr>");
      }
   }
