@@ -1321,16 +1321,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
    fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT LEFT_TOP\""
 	              " style=\"width:150px;\">");
-   Lay_StartTable (2);
-   fprintf (Gbl.F.Out,"<tr>");
-   Msg_WriteMsgAuthor (&UsrDat,NULL,Enabled,NULL);
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndTable ();
+   Msg_WriteMsgAuthor (&UsrDat,Enabled,NULL);
    if (Enabled)
-     {
       /* Write number of posts from this user */
       For_WriteNumberOfPosts (UsrDat.UsrCod);
-     }
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write post content *****/
@@ -3410,11 +3404,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",Style,BgColor);
-	    Lay_StartTable (2);
-	    fprintf (Gbl.F.Out,"<tr>");
-            Msg_WriteMsgAuthor (&UsrDat,NULL,Thr.Enabled[Order],BgColor);
-	    fprintf (Gbl.F.Out,"</tr>");
-	    Lay_EndTable ();
+            Msg_WriteMsgAuthor (&UsrDat,Thr.Enabled[Order],BgColor);
 	    fprintf (Gbl.F.Out,"</td>");
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */

@@ -534,11 +534,7 @@ void Ntf_ShowMyNotifications (void)
 
          /* Write user (from) */
 	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassAuthorBg);
-	 Lay_StartTable (2);
-	 fprintf (Gbl.F.Out,"<tr>");
-	 Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
-	 fprintf (Gbl.F.Out,"</tr>");
-	 Lay_EndTable ();
+	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write location */

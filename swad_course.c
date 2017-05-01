@@ -1518,11 +1518,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 UsrDat.UsrCod = Crs->RequesterUsrCod;
 	 Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
 	 fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
-         Lay_StartTable (2);
-	 fprintf (Gbl.F.Out,"<tr>");
-	 Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
-	 fprintf (Gbl.F.Out,"</tr>");
-	 Lay_EndTable ();
+	 Msg_WriteMsgAuthor (&UsrDat,true,NULL);
 	 fprintf (Gbl.F.Out,"</td>");
 
 	 /* Course status */
@@ -1696,11 +1692,7 @@ static void Crs_PutFormToCreateCourse (void)
 
    /***** Course requester *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
-   Lay_StartTable (2);
-   fprintf (Gbl.F.Out,"<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,NULL,true,NULL);
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndTable ();
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,true,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Course status *****/

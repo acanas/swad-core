@@ -2961,11 +2961,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
             Open ? "MSG_AUT_BG" :
 	           "MSG_AUT_BG_NEW");
-   Lay_StartTable (2);
-   fprintf (Gbl.F.Out,"<tr>");
-   Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
-   fprintf (Gbl.F.Out,"</tr>");
-   Lay_EndTable ();
+   Msg_WriteMsgAuthor (&UsrDat,true,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write subject *****/
@@ -3169,19 +3165,19 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
 /*****************************************************************************/
 // Input: UsrDat must hold user's data
 
-void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
-                         const char *Style,bool Enabled,const char *BgColor)
+void Msg_WriteMsgAuthor (struct UsrData *UsrDat,bool Enabled,const char *BgColor)
   {
    extern const char *Txt_Unknown_or_without_photo;
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    bool WriteAuthor = false;
 
+   /***** Start table *****/
+   Lay_StartTable (2);
+
    /***** Start first column *****/
-   fprintf (Gbl.F.Out,"<td class=\"");
-   if (Style)
-      fprintf (Gbl.F.Out,"%s ",Style);
-   fprintf (Gbl.F.Out,"CENTER_TOP");
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td class=\"CENTER_TOP");
    if (BgColor)
       fprintf (Gbl.F.Out," %s",BgColor);
    fprintf (Gbl.F.Out,"\" style=\"width:30px;\">");
@@ -3201,10 +3197,7 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
-      fprintf (Gbl.F.Out,"<td class=\"");
-      if (Style)
-	 fprintf (Gbl.F.Out,"%s ",Style);
-      fprintf (Gbl.F.Out,"LEFT_TOP");
+      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
       fprintf (Gbl.F.Out,"\">"
@@ -3218,19 +3211,20 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO30x40\" />"
 	                 "</td>"
-                         "<td class=\"",
+                         "<td class=\"LEFT_MIDDLE",
                Gbl.Prefs.IconsURL,
                Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo);
-      if (Style)
-	 fprintf (Gbl.F.Out,"%s ",Style);
-      fprintf (Gbl.F.Out,"LEFT_MIDDLE");
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
       fprintf (Gbl.F.Out,"\">");
      }
 
    /***** End second column *****/
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
+
+   /***** End table *****/
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/
