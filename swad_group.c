@@ -378,13 +378,13 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
       /***** List the groups for each group type *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)
 	    Grp_ListGrpsForMultipleSelection (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Free list of groups types and groups in this course *****/
       Grp_FreeListGrpTypesAndGrps ();
@@ -1196,7 +1196,7 @@ static void Grp_ListGroupTypesForEdition (void)
    char Id[32];
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Grp_WriteHeadingGroupTypes ();
 
    /***** List group types with forms for edition *****/
@@ -1313,7 +1313,7 @@ static void Grp_ListGroupTypesForEdition (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/
@@ -1401,7 +1401,7 @@ static void Grp_ListGroupsForEdition (void)
    struct Group *Grp;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Grp_WriteHeadingGroups ();
 
    /***** List the groups *****/
@@ -1521,7 +1521,7 @@ static void Grp_ListGroupsForEdition (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/
@@ -1681,13 +1681,13 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 	 Act_FormStart (ActChgGrp);
 
       /***** List the groups the user belongs to for change *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
       for (NumGrpTyp = 0;
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
 	    NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** End form *****/
       if (PutFormToChangeGrps)

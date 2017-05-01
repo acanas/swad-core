@@ -438,7 +438,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start table *****/
    if (ShowOnlyThisSvyComplete)
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
 
    /***** Start date/time *****/
    UniqueId++;
@@ -657,7 +657,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    if (ShowOnlyThisSvyComplete)
      {
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -2649,7 +2649,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
       Svy_PutParamQstCod (SvyQst->QstCod);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
 
    /***** Stem *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2727,7 +2727,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
 	              "</tr>");
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Send button *****/
    if (SvyQst->QstCod > 0)	// If the question already has assigned a code

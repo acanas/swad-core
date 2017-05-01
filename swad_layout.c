@@ -1445,27 +1445,19 @@ void Lay_PutRemoveButtonInline (const char *TxtButton)
 void Lay_StartRoundFrameTable (const char *Width,const char *Title,
                                void (*FunctionToDrawContextualIcons) (void),
                                const char *HelpLink,
-                               unsigned CellPadding)
+                               unsigned CellPadding)		// CellPadding must be 0, 1, 2, 5 or 10
   {
    Lay_StartRoundFrame (Width,Title,FunctionToDrawContextualIcons,HelpLink);
-
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
-   fprintf (Gbl.F.Out,"\">");
+   Lay_StartTableWide (CellPadding);
   }
 
 void Lay_StartRoundFrameTableShadow (const char *Width,const char *Title,
                                      void (*FunctionToDrawContextualIcons) (void),
                                      const char *HelpLink,
-                                     unsigned CellPadding)
+                                     unsigned CellPadding)	// CellPadding must be 0, 1, 2, 5 or 10
   {
    Lay_StartRoundFrameShadow (Width,Title,FunctionToDrawContextualIcons,HelpLink);
-
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
-   if (CellPadding)
-      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 4 or 8
-   fprintf (Gbl.F.Out,"\">");
+   Lay_StartTableWide (CellPadding);
   }
 
 void Lay_StartRoundFrame (const char *Width,const char *Title,
@@ -1536,15 +1528,13 @@ static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
 
 void Lay_EndRoundFrameTable (void)
   {
-   fprintf (Gbl.F.Out,"</table>");
-
+   Lay_EndTable ();
    Lay_EndRoundFrame ();
   }
 
 void Lay_EndRoundFrameTableWithButton (Lay_Button_t Button,const char *TxtButton)
   {
-   fprintf (Gbl.F.Out,"</table>");
-
+   Lay_EndTable ();
    Lay_EndRoundFrameWithButton (Button,TxtButton);
   }
 
@@ -1560,6 +1550,19 @@ void Lay_EndRoundFrame (void)
 
    fprintf (Gbl.F.Out,"</div>"
 		      "</div>");
+  }
+
+void Lay_StartTableWide (unsigned CellPadding)
+  {
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   fprintf (Gbl.F.Out,"\">");
+  }
+
+void Lay_EndTable (void)
+  {
+   fprintf (Gbl.F.Out,"</table>");
   }
 
 /*****************************************************************************/

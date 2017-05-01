@@ -108,9 +108,9 @@ void Ind_ReqIndicatorsCourses (void)
                         Hlp_STATS_Indicators);
 
    /***** Form to update indicators *****/
-   /* Start form */
+   /* Start form and table */
    Act_FormStart (ActReqStaCrs);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
 
    /* Scope */
    fprintf (Gbl.F.Out,"<tr>"
@@ -171,8 +171,7 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* End form */
-   fprintf (Gbl.F.Out,"</table>");
+   /* End form and form */
    Act_FormEnd ();
 
    /***** Show the stats of courses *****/

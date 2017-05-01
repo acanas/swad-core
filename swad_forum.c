@@ -1065,7 +1065,7 @@ static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Messag
                                         &PaginationPsts);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
 
       /***** Show posts from this page, the author and the date of last reply *****/
       mysql_data_seek (mysql_res,(my_ulonglong) (PaginationPsts.FirstItemVisible - 1));
@@ -1117,7 +1117,7 @@ static void For_ShowPostsOfAThread (Lay_AlertType_t AlertType,const char *Messag
         }
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Write again links to pages *****/
       if (PaginationPsts.MoreThanOnePage)

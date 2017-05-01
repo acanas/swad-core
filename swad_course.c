@@ -216,7 +216,7 @@ static void Crs_Configuration (bool PrintView)
             Gbl.CurrentCrs.Crs.FullName);
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
 
    /***** Degree *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -480,7 +480,7 @@ static void Crs_Configuration (bool PrintView)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -1359,7 +1359,7 @@ static void Crs_ListCoursesForEdition (void)
    unsigned Year;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Crs_PutHeadCoursesForEdition ();
 
    /***** List the courses *****/
@@ -1370,7 +1370,7 @@ static void Crs_ListCoursesForEdition (void)
    Crs_ListCoursesOfAYearForEdition (0);
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

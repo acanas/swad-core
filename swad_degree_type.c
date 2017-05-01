@@ -357,7 +357,7 @@ static void DT_ListDegreeTypesForEdition (void)
    unsigned NumDegTyp;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    DT_PutHeadDegreeTypesForEdition ();
 
    /***** List degree types with forms for edition *****/
@@ -407,7 +407,7 @@ static void DT_ListDegreeTypesForEdition (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

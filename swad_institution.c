@@ -325,7 +325,7 @@ static void Ins_Configuration (bool PrintView)
       fprintf (Gbl.F.Out,"</div>");
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
 
       /***** Country *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -614,7 +614,7 @@ static void Ins_Configuration (bool PrintView)
 	}
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -1408,7 +1408,7 @@ static void Ins_ListInstitutionsForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Ins_PutHeadInstitutionsForEdition ();
 
    /***** Write all the institutions *****/
@@ -1573,7 +1573,7 @@ static void Ins_ListInstitutionsForEdition (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);

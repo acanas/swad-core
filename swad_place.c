@@ -461,7 +461,7 @@ static void Plc_ListPlacesForEdition (void)
    struct Place *Plc;
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Plc_PutHeadPlaces ();
 
    /***** Write all the places *****/
@@ -523,7 +523,8 @@ static void Plc_ListPlacesForEdition (void)
                Plc->NumCtrs);
      }
 
-   Lay_EndRoundFrameTable ();
+   /***** End table *****/
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

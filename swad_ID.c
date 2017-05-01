@@ -529,10 +529,10 @@ void ID_ShowFormOthIDs (void)
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form with the user's ID *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+         Lay_StartTableWide (2);
          ID_ShowFormChangeUsrID (&Gbl.Usrs.Other.UsrDat,
                                  (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-	 fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          /***** End frame *****/
          Lay_EndRoundFrame ();

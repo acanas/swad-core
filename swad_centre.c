@@ -381,7 +381,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+      Lay_StartTableWide (2);
 
       /***** Institution *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -659,7 +659,7 @@ static void Ctr_Configuration (bool PrintView)
 	}
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
@@ -1413,7 +1413,7 @@ static void Ctr_ListCentresForEdition (void)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** Write heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">");
+   Lay_StartTableWide (2);
    Ctr_PutHeadCentresForEdition ();
 
    /***** Write all the centres *****/
@@ -1606,7 +1606,7 @@ static void Ctr_ListCentresForEdition (void)
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
