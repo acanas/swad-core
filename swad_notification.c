@@ -393,7 +393,7 @@ void Ntf_ShowMyNotifications (void)
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
-                         "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
+                         "<th class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
                          "<th class=\"LEFT_MIDDLE\">"
@@ -533,7 +533,13 @@ void Ntf_ShowMyNotifications (void)
          fprintf (Gbl.F.Out,"</td>");
 
          /* Write user (from) */
-         Msg_WriteMsgAuthor (&UsrDat,ClassAuthorBg,true,NULL);
+	 fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",ClassAuthorBg);
+	 Lay_StartTable (2);
+	 fprintf (Gbl.F.Out,"<tr>");
+	 Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
+	 fprintf (Gbl.F.Out,"</tr>");
+	 Lay_EndTable ();
+	 fprintf (Gbl.F.Out,"</td>");
 
          /* Write location */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
@@ -607,7 +613,7 @@ void Ntf_ShowMyNotifications (void)
                                            false);
             fprintf (Gbl.F.Out,"<tr>"
                                "<td colspan=\"2\"></td>"
-                               "<td colspan=\"5\" class=\"DAT LEFT_TOP\""
+                               "<td colspan=\"4\" class=\"DAT LEFT_TOP\""
                                " style=\"padding-bottom:12px;\">"
                                "%s"
                                "</td>"

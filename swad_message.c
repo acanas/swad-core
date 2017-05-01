@@ -2957,10 +2957,16 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
    /***** Write message author *****/
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,
-	               Open ? "MSG_AUT_BG" :
-	        	      "MSG_AUT_BG_NEW",	// Style
-	               true,NULL);
+
+   fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">",
+            Open ? "MSG_AUT_BG" :
+	           "MSG_AUT_BG_NEW");
+   Lay_StartTable (2);
+   fprintf (Gbl.F.Out,"<tr>");
+   Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>");
 
    /***** Write subject *****/
    Msg_WriteSentOrReceivedMsgSubject (MsgCod,Subject,Open,Expanded);
@@ -2974,7 +2980,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    if (Expanded)
      {
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td rowspan=\"3\" colspan=\"3\" class=\"LEFT_TOP\">");
+	                 "<td rowspan=\"3\" colspan=\"2\" class=\"LEFT_TOP\">");
       Lay_StartTable (2);
 
       /***** Write course origin of message *****/
@@ -3172,7 +3178,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
    bool WriteAuthor = false;
 
    /***** Start first column *****/
-   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",Style);
+   fprintf (Gbl.F.Out,"<td class=\"");
+   if (Style)
+      fprintf (Gbl.F.Out,"%s ",Style);
+   fprintf (Gbl.F.Out,"CENTER_TOP");
    if (BgColor)
       fprintf (Gbl.F.Out," %s",BgColor);
    fprintf (Gbl.F.Out,"\" style=\"width:30px;\">");
@@ -3192,7 +3201,10 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Second column with user name (if author has a web page, put a link to it) *****/
-      fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP",Style);
+      fprintf (Gbl.F.Out,"<td class=\"");
+      if (Style)
+	 fprintf (Gbl.F.Out,"%s ",Style);
+      fprintf (Gbl.F.Out,"LEFT_TOP");
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
       fprintf (Gbl.F.Out,"\">"
@@ -3206,10 +3218,12 @@ void Msg_WriteMsgAuthor (struct UsrData *UsrDat,
 	                 " alt=\"%s\" title=\"%s\""
 	                 " class=\"PHOTO30x40\" />"
 	                 "</td>"
-                         "<td class=\"%s LEFT_MIDDLE",
+                         "<td class=\"",
                Gbl.Prefs.IconsURL,
-               Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo,
-               Style);
+               Txt_Unknown_or_without_photo,Txt_Unknown_or_without_photo);
+      if (Style)
+	 fprintf (Gbl.F.Out,"%s ",Style);
+      fprintf (Gbl.F.Out,"LEFT_MIDDLE");
       if (BgColor)
          fprintf (Gbl.F.Out," %s",BgColor);
       fprintf (Gbl.F.Out,"\">");

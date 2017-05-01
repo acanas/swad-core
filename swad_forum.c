@@ -1318,21 +1318,19 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write author *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP\""
+   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT LEFT_TOP\""
 	              " style=\"width:150px;\">");
    Lay_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-   Msg_WriteMsgAuthor (&UsrDat,"AUTHOR_TXT",Enabled,NULL);
+   Msg_WriteMsgAuthor (&UsrDat,NULL,Enabled,NULL);
    fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
    if (Enabled)
      {
       /* Write number of posts from this user */
-      fprintf (Gbl.F.Out,"<tr>");
       For_WriteNumberOfPosts (UsrDat.UsrCod);
-      fprintf (Gbl.F.Out,"</tr>");
      }
-   Lay_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write post content *****/
@@ -1479,8 +1477,7 @@ static void For_WriteNumberOfPosts (long UsrCod)
    unsigned NumPsts;
 
    /***** Star table cell *****/
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"AUTHOR_TXT CENTER_TOP\""
-	              " style=\"width:150px;\">");
+   fprintf (Gbl.F.Out,"<div class=\"AUTHOR_TXT LEFT_TOP\">");
 
    /***** Get number of posts from database *****/
    if (Gbl.Forum.ForumSelected.Location > 0)
@@ -1502,7 +1499,7 @@ static void For_WriteNumberOfPosts (long UsrCod)
       fprintf (Gbl.F.Out,"[%u %s]",NumPsts,Txt_posts);
 
    /***** End table cell *****/
-   fprintf (Gbl.F.Out,"</td>");
+   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
@@ -2583,7 +2580,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	   Order <= For_LAST_MSG;
 	   Order++)
 	{
-	 fprintf (Gbl.F.Out,"<th colspan=\"3\" class=\"CENTER_MIDDLE\">");
+	 fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
                               For_ID_FORUM_THREADS_SECTION);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
@@ -3412,7 +3409,13 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             /* Write the author of first or last message */
             UsrDat.UsrCod = Thr.UsrCod[Order];
             Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-            Msg_WriteMsgAuthor (&UsrDat,Style,Thr.Enabled[Order],BgColor);
+	    fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">",Style,BgColor);
+	    Lay_StartTable (2);
+	    fprintf (Gbl.F.Out,"<tr>");
+            Msg_WriteMsgAuthor (&UsrDat,NULL,Thr.Enabled[Order],BgColor);
+	    fprintf (Gbl.F.Out,"</tr>");
+	    Lay_EndTable ();
+	    fprintf (Gbl.F.Out,"</td>");
 
             /* Write the date of first or last message (it's in YYYYMMDDHHMMSS format) */
             TimeUTC = Thr.WriteTime[Order];
@@ -3428,7 +3431,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
            }
          else
             for (Column = 1;
-        	 Column <= 3;
+        	 Column <= 2;
         	 Column++)
                fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP %s\">"
         	                  "</td>",

@@ -1571,10 +1571,10 @@ static void Ctr_ListCentresForEdition (void)
       /* Centre requester */
       UsrDat.UsrCod = Ctr->RequesterUsrCod;
       Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat);
-      fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+      fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
       Lay_StartTable (2);
       fprintf (Gbl.F.Out,"<tr>");
-      Msg_WriteMsgAuthor (&UsrDat,"DAT",true,NULL);
+      Msg_WriteMsgAuthor (&UsrDat,NULL,true,NULL);
       fprintf (Gbl.F.Out,"</tr>");
       Lay_EndTable ();
       fprintf (Gbl.F.Out,"</td>");
@@ -2516,10 +2516,10 @@ static void Ctr_PutFormToCreateCentre (void)
 	              "</td>");
 
    /***** Centre requester *****/
-   fprintf (Gbl.F.Out,"<td class=\"INPUT_REQUESTER LEFT_TOP\">");
+   fprintf (Gbl.F.Out,"<td class=\"DAT INPUT_REQUESTER LEFT_TOP\">");
    Lay_StartTable (2);
    fprintf (Gbl.F.Out,"<tr>");
-   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,"DAT",true,NULL);
+   Msg_WriteMsgAuthor (&Gbl.Usrs.Me.UsrDat,NULL,true,NULL);
    fprintf (Gbl.F.Out,"</tr>");
    Lay_EndTable ();
    fprintf (Gbl.F.Out,"</td>");
