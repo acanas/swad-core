@@ -104,8 +104,8 @@ void Hld_SeeHolidays (void)
                            Hlp_INSTITUTION_Holidays);
       if (Gbl.Hlds.Num)
 	 {
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
-                            "<tr>");
+         Lay_StartTableWideMargin (2);
+         fprintf (Gbl.F.Out,"<tr>");
 	 for (Order = Hld_ORDER_BY_PLACE;
 	      Order <= Hld_ORDER_BY_START_DATE;
 	      Order++)
@@ -171,7 +171,7 @@ void Hld_SeeHolidays (void)
 			       "</tr>",
 		     Gbl.Hlds.Lst[NumHld].Name);
 	   }
-	 fprintf (Gbl.F.Out,"</table>");
+	 Lay_EndTable ();
 	}
       else	// No holidays created in the current institution
 	 Lay_ShowAlert (Lay_INFO,Txt_No_holidays);

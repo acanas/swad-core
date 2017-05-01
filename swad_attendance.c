@@ -231,8 +231,8 @@ static void Att_ShowAllAttEvents (void)
    if (Gbl.AttEvents.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
-			 "<tr>");
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
@@ -269,7 +269,7 @@ static void Att_ShowAllAttEvents (void)
 	 Att_ShowOneAttEvent (&Gbl.AttEvents.Lst[NumAttEvent - 1],false);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No events created
       Lay_ShowAlert (Lay_INFO,Txt_No_events);
@@ -1929,8 +1929,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       Grp_PutParamsCodGrps ();
 
       /***** List students' data *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-                         "<tr>"
+      Lay_StartTableWideMargin (2);
+
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th></th>"
                          "<th></th>"
                          "<th></th>");
@@ -1964,7 +1965,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
          Att_WriteRowStdToCallTheRoll (NumStd + 1,&UsrDat,Att);
         }
 
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /* Send button */
       Lay_PutConfirmButton (Txt_Save);
@@ -2627,9 +2628,9 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Grp_PutParamsCodGrps ();
 
 	 /* Write list of students to select some of them */
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+	 Lay_StartTableCenter (0);
 	 Usr_ListUsersToSelect (Rol_STUDENT);
-	 fprintf (Gbl.F.Out,"</table>");
+	 Lay_EndTable ();
 
 	 /* Send button */
 	 Lay_PutConfirmButton (Txt_Show_list);
@@ -3145,9 +3146,10 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
                         	                                    NULL),
                         TypeOfView == Att_PRINT_VIEW ? NULL :
                         	                       Hlp_USERS_Attendance_attendance_list);
-   fprintf (Gbl.F.Out,"<table class=\"%s CELLS_PAD_2\">",
-            PutButtonShowDetails ? "FRAME_TBL_WIDE_MARGIN" :
-        	                   "FRAME_TBL_WIDE");
+   if (PutButtonShowDetails)
+      Lay_StartTableWideMargin (2);
+   else
+      Lay_StartTableWide (2);
 
    /***** Heading row *****/
    Att_WriteTableHeadSeveralAttEvents ();
@@ -3196,7 +3198,7 @@ static void Att_ListStdsAttendanceTable (Att_TypeOfView_t TypeOfView,
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Button to show more details *****/
    if (PutButtonShowDetails)

@@ -1165,10 +1165,10 @@ void Mai_ShowFormOthEmail (void)
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
 
 	 /***** Form with the user's email *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+	 Lay_StartTableCenter (2);
 	 Mai_ShowFormChangeUsrEmail (&Gbl.Usrs.Other.UsrDat,
                                      (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
-	 fprintf (Gbl.F.Out,"</table>");
+	 Lay_EndTable ();
 
          /***** End frame *****/
          Lay_EndRoundFrame ();

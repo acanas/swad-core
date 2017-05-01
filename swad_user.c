@@ -6097,9 +6097,10 @@ void Usr_ListAllDataGsts (void)
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
 
       /***** Start table with list of guests *****/
+      Lay_StartTableWide (0);
+
       /* Start row */
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                         "<tr>");
+      fprintf (Gbl.F.Out,"<tr>");
 
       /* Columns for the data */
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
@@ -6138,7 +6139,7 @@ void Usr_ListAllDataGsts (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs == 0
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
@@ -6243,7 +6244,7 @@ void Usr_ListAllDataStds (void)
 	}
 
       /***** Start table with list of students *****/
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      Lay_StartTableWide (0);
       if (!Gbl.Usrs.ClassPhoto.AllGroups)
         {
          fprintf (Gbl.F.Out,"<tr>"
@@ -6337,7 +6338,7 @@ void Usr_ListAllDataStds (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
@@ -6452,9 +6453,10 @@ void Usr_ListAllDataTchs (void)
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
       /***** Start table with list of teachers *****/
+      Lay_StartTableWide (0);
+
       /* Start row */
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                         "<tr>");
+      fprintf (Gbl.F.Out,"<tr>");
       for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
 	                                           1);
            NumCol < NumColumns;
@@ -6489,7 +6491,7 @@ void Usr_ListAllDataTchs (void)
       Usr_UsrDataDestructor (&UsrDat);
 
       /***** End of table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
@@ -7205,7 +7207,7 @@ void Usr_SeeGuests (void)
 	 Act_FormStart (ActSeeRecSevGst);
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+	 Lay_StartTableWide (0);
 
 	 /* Put a row to select all users */
          Usr_PutCheckboxToSelectAllUsers (Rol__GUEST_);
@@ -7225,7 +7227,7 @@ void Usr_SeeGuests (void)
            }
 
          /* End table */
-         fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          /* Send button */
 	 Lay_PutConfirmButton (Txt_Show_records);
@@ -7371,7 +7373,7 @@ void Usr_SeeStudents (void)
            }
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+         Lay_StartTableWide (0);
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -7393,7 +7395,7 @@ void Usr_SeeStudents (void)
            }
 
          /* End table */
-         fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          if (ICanViewRecords)
            {
@@ -7523,7 +7525,7 @@ void Usr_SeeTeachers (void)
             Act_FormStart (ActSeeRecSevTch);
 
          /* Start table */
-         fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+         Lay_StartTableWide (0);
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
@@ -7545,7 +7547,7 @@ void Usr_SeeTeachers (void)
            }
 
          /* End table */
-         fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          if (ICanViewRecords)
            {
@@ -7787,9 +7789,9 @@ void Usr_SeeGstClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
                                                                         -1L,
 				 -1L,-1L);
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
       Lay_EndRoundFrame ();
      }
    else
@@ -7835,9 +7837,9 @@ void Usr_SeeStdClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
       Lay_EndRoundFrame ();
      }
    else
@@ -7889,9 +7891,9 @@ void Usr_SeeTchClassPhotoPrn (void)
 					                                -1L,
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
       Lay_EndRoundFrame ();
      }
    else

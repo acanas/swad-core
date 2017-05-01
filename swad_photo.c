@@ -837,8 +837,8 @@ static void Pho_UpdatePhoto2 (void)
    unsigned NumPhoto;
 
    /***** Show the three images resulting of the processing *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                      "<tr>");
+   Lay_StartTableWide (0);
+   fprintf (Gbl.F.Out,"<tr>");
    for (NumPhoto = 0;
         NumPhoto < 3;
         NumPhoto++)
@@ -854,8 +854,8 @@ static void Pho_UpdatePhoto2 (void)
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto],
                Pho_PHOTO_REAL_WIDTH,Pho_PHOTO_REAL_HEIGHT,
                Txt_PHOTO_PROCESSING_CAPTIONS[NumPhoto]);
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
 
    /***** Show message *****/
    if (Gbl.AlertType == Lay_ERROR)        // The file with the selected photo does not exist!
@@ -1631,8 +1631,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Lay_StartRoundFrame (NULL,Txt_Degrees,
 			      Pho_PutIconToPrintDegreeStats,
 			      Hlp_STATS_Degrees);
-
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+	 Lay_StartTableCenter (2);
 
 	 /***** Put a selector for the type of average *****/
 	 Pho_PutSelectorForTypeOfAvg ();
@@ -1643,7 +1642,7 @@ void Pho_ShowOrPrintPhotoDegree (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 /***** Put a selector for the order of degrees *****/
 	 Pho_PutSelectorForHowOrderDegrees ();
 
-	 fprintf (Gbl.F.Out,"</table>");
+	 Lay_EndTable ();
 	 break;
       case Pho_DEGREES_PRINT:
 	 /***** Start frame *****/
@@ -2025,7 +2024,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       /***** Form to select type of list used to display degree photos *****/
       if (SeeOrPrint == Pho_DEGREES_SEE)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+      Lay_StartTableCenter (0);
 
       /***** Get and print degrees *****/
       for (NumRow = 0, NumDegsNotEmpty = 0;
@@ -2068,7 +2067,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
       if (TRIsOpen)
 	 fprintf (Gbl.F.Out,"</tr>");
 
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No degrees with students found
       /***** Show warning indicating no students found *****/
@@ -2110,8 +2109,8 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	 Usr_ShowFormsToSelectUsrListType (ActSeePhoDeg);
 
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-			 "<tr>"
+      Lay_StartTableCenter (2);
+      fprintf (Gbl.F.Out,"<tr>"
 			 "<th class=\"RIGHT_TOP\">"
 			 "%s"
 			 "</th>"
@@ -2182,7 +2181,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
 	}
 
       /***** Photos end *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No degrees with students found!
       /***** Show warning indicating no students found *****/

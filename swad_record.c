@@ -1676,9 +1676,9 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
    /***** Header *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP\">"
-	              "<table style=\"width:100%%;\">"
-                      "<tr>"
+	              "<td colspan=\"2\" class=\"LEFT_TOP\">");
+   Lay_StartTableWide (0);
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"LEFT_MIDDLE\" style=\"width:%upx;\">",
             Rec_DEGREE_LOGO_SIZE);
    Log_DrawLogo (Sco_SCOPE_DEG,Gbl.CurrentDeg.Deg.DegCod,
@@ -1687,12 +1687,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                       "<td class=\"REC_HEAD CENTER_MIDDLE\">"
                       "%s<br />%s<br />%s"
                       "</td>"
-                      "</tr>"
-                      "</table>"
-                      "</td>"
                       "</tr>",
             Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentCrs.Crs.FullName,
             UsrDat->FullName);
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>"
+                      "</tr>");
 
    /***** Fields of the record that depends on the course *****/
    for (NumField = 0, Gbl.RowEvenOdd = 0;

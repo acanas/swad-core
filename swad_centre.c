@@ -758,7 +758,7 @@ static void Ctr_ListCentres (void)
    if (Gbl.Ctrs.Num)	// There are centres in the current institution
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
       Ctr_PutHeadCentresForSeeing (true);	// Order selectable
 
       /***** Write all the centres and their nuber of teachers *****/
@@ -768,7 +768,7 @@ static void Ctr_ListCentres (void)
 	 Ctr_ListOneCentreForSeeing (&(Gbl.Ctrs.Lst[NumCtr]),NumCtr + 1);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No centres created in the current institution
       Lay_ShowAlert (Lay_INFO,Txt_No_centres);

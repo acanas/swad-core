@@ -213,8 +213,8 @@ void Con_GetAndShowLastClicks (void)
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get last clicks");
 
    /***** Write list of connected users *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_1\">"
-                      "<tr>"
+   Lay_StartTableCenter (1);
+   fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"LEFT_MIDDLE\""
                       " style=\"width:85px;\">"
                       "%s"				// Click
@@ -331,7 +331,7 @@ void Con_GetAndShowLastClicks (void)
                ClassRow,Deg.ShrtName,
 	       ClassRow,row[8]);
      }
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Free structure that stores the query result *****/
    mysql_free_result (mysql_res);

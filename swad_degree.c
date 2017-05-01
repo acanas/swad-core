@@ -1173,7 +1173,7 @@ static void Deg_ListDegrees (void)
    if (Gbl.CurrentCtr.Ctr.Degs.Num)	// There are degrees in the current centre
      {
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
       Deg_PutHeadDegreesForSeeing ();
 
       /***** List the degrees *****/
@@ -1183,7 +1183,7 @@ static void Deg_ListDegrees (void)
 	 Deg_ListOneDegreeForSeeing (&(Gbl.CurrentCtr.Ctr.Degs.Lst[NumDeg]),NumDeg + 1);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No degrees created in the current centre
       Lay_ShowAlert (Lay_INFO,Txt_No_degrees);

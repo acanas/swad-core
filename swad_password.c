@@ -833,9 +833,9 @@ void Pwd_ShowFormOthPwd (void)
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+	 Lay_StartTableCenter (2);
          Pwd_PutFormToGetNewPasswordTwice ();
-	 fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
 	 /* End form */
 	 Lay_PutConfirmButton (Txt_Change_password);

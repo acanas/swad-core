@@ -150,8 +150,8 @@ static void Asg_ShowAllAssignments (void)
    if (Gbl.Asgs.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
@@ -192,7 +192,7 @@ static void Asg_ShowAllAssignments (void)
 	 Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg - 1]);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No assignments created
       Lay_ShowAlert (Lay_INFO,Txt_No_assignments);

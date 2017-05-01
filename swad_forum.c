@@ -2567,8 +2567,8 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
                                         &PaginationThrs);
 
       /***** Heading row *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-	                 "<tr>"
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>"
 	                 "<th class=\"LEFT_MIDDLE\""
 	                 " style=\"width:18px;\">"
 	                 "</th>"
@@ -2625,7 +2625,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       For_ListForumThrs (ThrCods,ThrCodHighlighted,&PaginationThrs);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Write links to all the pages in the listing of threads *****/
       if (PaginationThrs.MoreThanOnePage)
@@ -3841,9 +3841,9 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
      }
 
    /***** Subject and content *****/
-   // If writing a reply to a message of an existing thread ==> write subject
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+   Lay_StartTableCenter (2);
 
+   // If writing a reply to a message of an existing thread ==> write subject
    /* Subject */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td class=\"RIGHT_MIDDLE\">"
@@ -3875,7 +3875,7 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
 	              "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],Txt_MSG_Content);
 
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Help for text editor *****/
    Lay_HelpPlainEditor ();

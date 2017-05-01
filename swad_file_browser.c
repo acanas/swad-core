@@ -3122,10 +3122,10 @@ void Brw_AskEditWorksCrs (void)
          Brw_PutHiddenParamFullTreeIfSelected ();
 
          /* Put list of users to select some of them */
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER\">");
+         Lay_StartTableCenter (0);
          Usr_ListUsersToSelect (Rol_TEACHER);
          Usr_ListUsersToSelect (Rol_STUDENT);
-         fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          /* Send button */
 	 Lay_PutConfirmButton (Txt_View_homework);

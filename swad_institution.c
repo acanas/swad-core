@@ -681,7 +681,7 @@ static void Ins_ListInstitutions (void)
    if (Gbl.Inss.Num)	// There are institutions in the current country
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
       Ins_PutHeadInstitutionsForSeeing (true);	// Order selectable
 
       /***** Write all the institutions and their nuber of users *****/
@@ -691,7 +691,7 @@ static void Ins_ListInstitutions (void)
 	 Ins_ListOneInstitutionForSeeing (&(Gbl.Inss.Lst[NumIns]),NumIns + 1);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No insrtitutions created in the current country
       Lay_ShowAlert (Lay_INFO,Txt_No_institutions);

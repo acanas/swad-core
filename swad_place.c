@@ -120,8 +120,8 @@ void Plc_SeePlaces (void)
                            ICanEdit ? Plc_PutIconToEditPlaces :
                         	      NULL,
                            Hlp_INSTITUTION_Places);
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Plc_ORDER_BY_PLACE;
 	   Order <= Plc_ORDER_BY_NUM_CTRS;
 	   Order++)
@@ -193,7 +193,8 @@ void Plc_SeePlaces (void)
 	       Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod) -
 	       NumCtrsWithPlc);
 
-      fprintf (Gbl.F.Out,"</table>");
+      /***** End table *****/
+      Lay_EndTable ();
 
       /***** Button to create place *****/
       if (ICanEdit)
@@ -203,7 +204,7 @@ void Plc_SeePlaces (void)
 	 Act_FormEnd ();
 	}
 
-      /***** End table *****/
+      /***** End frame *****/
       Lay_EndRoundFrame ();
 
       /***** Free list of places *****/

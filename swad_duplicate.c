@@ -159,7 +159,7 @@ void Dup_ListDuplicateUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+      Lay_StartTableCenter (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -218,7 +218,7 @@ void Dup_ListDuplicateUsrs (void)
         }
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -291,7 +291,7 @@ static void Dup_ListSimilarUsrs (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">");
+      Lay_StartTableCenter (2);
 
       /***** Heading row with column names *****/
       Gbl.Usrs.Listing.WithPhotos = true;
@@ -358,7 +358,7 @@ static void Dup_ListSimilarUsrs (void)
         }
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);

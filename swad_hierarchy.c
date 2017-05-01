@@ -97,7 +97,7 @@ void Hie_WriteMenuHierarchy (void)
    extern const char *Txt_Course;
 
    /***** Start of table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+   Lay_StartTableCenter (2);
 
    /***** Write a 1st selector
           with all the countries *****/
@@ -172,7 +172,7 @@ void Hie_WriteMenuHierarchy (void)
      }
 
    /***** End of table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

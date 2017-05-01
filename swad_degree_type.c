@@ -222,14 +222,14 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
    if (Gbl.Degs.DegTypes.Num)
      {
       /***** Write heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
       DT_PutHeadDegreeTypesForSeeing (NextAction,SelectedOrder);
 
       /***** List current degree types for seeing *****/
       DT_ListDegreeTypesForSeeing ();
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No degree types created
       Lay_ShowAlert (Lay_INFO,Txt_No_types_of_degree);

@@ -1552,9 +1552,25 @@ void Lay_EndRoundFrame (void)
 		      "</div>");
   }
 
+void Lay_StartTableCenter (unsigned CellPadding)
+  {
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   fprintf (Gbl.F.Out,"\">");
+  }
+
 void Lay_StartTableWide (unsigned CellPadding)
   {
    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE");
+   if (CellPadding)
+      fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
+   fprintf (Gbl.F.Out,"\">");
+  }
+
+void Lay_StartTableWideMargin (unsigned CellPadding)
+  {
+   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN");
    if (CellPadding)
       fprintf (Gbl.F.Out," CELLS_PAD_%u",CellPadding);	// CellPadding must be 0, 1, 2, 5 or 10
    fprintf (Gbl.F.Out,"\">");

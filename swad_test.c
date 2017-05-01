@@ -443,9 +443,9 @@ void Tst_ShowNewTest (void)
             Par_PutHiddenParamUnsigned ("NumQst",Gbl.Test.NumQsts);
 
             /***** List the questions *****/
-	    fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
+            Lay_StartTableWideMargin (10);
             Tst_ShowTestQuestionsWhenSeeing (mysql_res);
-	    fprintf (Gbl.F.Out,"</table>");
+	    Lay_EndTable ();
 
 	    /***** Test result will be saved? *****/
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
@@ -543,9 +543,9 @@ void Tst_AssessTest (void)
 	   }
 
 	 /***** Write answers and solutions *****/
-	 fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
+         Lay_StartTableWideMargin (10);
 	 Tst_ShowTestResultAfterAssess (TstCod,&NumQstsNotBlank,&TotalScore);
-	 fprintf (Gbl.F.Out,"</table>");
+	 Lay_EndTable ();
 
 	 /***** Write total mark of test *****/
 	 if (Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING)
@@ -2721,8 +2721,8 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
                         Tst_PutIconsTests,Hlp_ASSESSMENT_Tests);
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
-	              "<tr>"
+   Lay_StartTableWideMargin (2);
+   fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"2\"></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"
@@ -2965,7 +2965,7 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
      }
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Button to add a new question *****/
    Tst_PutButtonToAddQuestion ();
@@ -6981,8 +6981,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          Grp_PutParamsCodGrps ();
 
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-                            "<tr>"
+         Lay_StartTableCenter (2);
+         fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_TOP\">"
 			    "%s:"
 			    "</td>"
@@ -6999,7 +6999,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          /***** Starting and ending dates in the search *****/
          Dat_PutFormStartEndClientLocalDateTimesWithYesterdayToday (false);
 
-         fprintf (Gbl.F.Out,"</table>");
+         Lay_EndTable ();
 
          /***** Send button *****/
 	 Lay_PutConfirmButton (Txt_View_test_results);
@@ -7664,7 +7664,7 @@ void Tst_ShowOneTestResult (void)
 				 Gbl.CurrentCrs.Crs.CrsCod);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_10\">");
+      Lay_StartTableWideMargin (10);
 
       /***** Header row *****/
       /* Get data of the user who made the test */
@@ -7758,7 +7758,7 @@ void Tst_ShowOneTestResult (void)
 	 Tst_ShowTstTotalMark (TotalScore);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** End frame *****/
       Lay_EndRoundFrame ();

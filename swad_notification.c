@@ -388,8 +388,8 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataConstructor (&UsrDat);
 
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-                         "<tr>"
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"2\" class=\"LEFT_MIDDLE\">"
                          "%s"
                          "</th>"
@@ -622,7 +622,7 @@ void Ntf_ShowMyNotifications (void)
         }
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
@@ -1905,8 +1905,8 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
       Mai_WriteWarningEmailNotifications ();
 
    /***** List of notifications *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-	              "<tr>"
+   Lay_StartTableCenter (2);
+   fprintf (Gbl.F.Out,"<tr>"
 		      "<th></th>"
 		      "<th class=\"CENTER_MIDDLE\">"
 		      "%s"
@@ -1947,7 +1947,7 @@ void Ntf_PutFormChangeNotifSentByEMail (void)
 	                 "</tr>");
      }
 
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Button to save changes *****/
    Lay_PutConfirmButton (Txt_Save_changes);

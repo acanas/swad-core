@@ -1274,8 +1274,8 @@ static void Grp_ListGroupTypesForEdition (void)
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
       Act_FormStartAnchor (ActChgTimGrpTyp,Grp_SECTION_GROUP_TYPES);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
-                         "<tr>"
+      Lay_StartTableCenter (2);
+      fprintf (Gbl.F.Out,"<tr>"
                          "<td class=\"LEFT_MIDDLE\" style=\"width:20px;\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
@@ -1299,8 +1299,8 @@ static void Grp_ListGroupTypesForEdition (void)
 				                   Dat_HMS_DO_NOT_SET,	// Don't set hour, minute and second
 				                   true);		// Submit on change
       fprintf (Gbl.F.Out,"</td>"
-	                 "</tr>"
-	                 "</table>");
+	                 "</tr>");
+      Lay_EndTable ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>");
 

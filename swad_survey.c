@@ -222,8 +222,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
    if (Gbl.Svys.Num)
      {
       /***** Table head *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">"
-			 "<tr>");
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>");
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
 	   Order++)
@@ -263,7 +263,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 	 Svy_ShowOneSurvey (Gbl.Svys.LstSvyCods[NumSvy - 1],SvyQst,false);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No surveys created
       Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
@@ -3171,8 +3171,8 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	}
 
       /***** Write the heading *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-                         "<tr>");
+      Lay_StartTableWideMargin (2);
+      fprintf (Gbl.F.Out,"<tr>");
       if (Svy->Status.ICanEdit)
          fprintf (Gbl.F.Out,"<th colspan=\"2\"></th>");
       fprintf (Gbl.F.Out,"<th class=\"CENTER_TOP\">"
@@ -3255,7 +3255,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
                             "</tr>");
         }
 
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       if (PutFormAnswerSurvey)
 	{

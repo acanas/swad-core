@@ -531,6 +531,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       /* Current element is <test> */
 
       /***** Write heading of list of imported questions *****/
+      Lay_StartTableWideMargin (2);
       TsI_WriteHeadingListImportedQst ();
 
       /***** For each question... *****/
@@ -665,7 +666,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
 	   }
 	}
 
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// TestElem not found
       Lay_ShowAlert (Lay_ERROR,"Root element &lt;test&gt; not found.");
@@ -959,8 +960,7 @@ static void TsI_WriteHeadingListImportedQst (void)
    extern const char *Txt_Question;
 
    /***** Write the heading *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE CELLS_PAD_2\">"
-	              "<tr>"
+   fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
                       "<th class=\"CENTER_TOP\">"
                       "%s"

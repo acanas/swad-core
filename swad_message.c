@@ -274,7 +274,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
      }
 
    /***** Start table *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+   Lay_StartTableCenter (2);
 
    /***** "To:" section (recipients) *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -289,14 +289,14 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    else
      {
       /***** Show potential recipients *****/
-      fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">");
+      Lay_StartTableWide (0);
       if (ShowUsrsInCrs)
 	{
 	 Usr_ListUsersToSelect (Rol_TEACHER);	// All teachers in course
 	 Usr_ListUsersToSelect (Rol_STUDENT);	// All students in selected groups
 	}
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
 
    fprintf (Gbl.F.Out,"</td>"
@@ -306,7 +306,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    Msg_WriteFormSubjectAndContentMsgToUsrs (Content);
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
+   Lay_EndTable ();
 
    /***** Help for text editor and send button *****/
    Lay_HelpPlainEditor ();
@@ -1819,8 +1819,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
                                         &Pagination);
 
       /***** Show received / sent messages in this page *****/
-      fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\""
-	                 " style=\"width:100%%;\">");
+      Lay_StartTableWide (2);
 
       mysql_data_seek (mysql_res,(my_ulonglong) (Pagination.FirstItemVisible - 1));
       for (NumRow = Pagination.FirstItemVisible;
@@ -1835,7 +1834,7 @@ static void Msg_ShowSentOrReceivedMessages (void)
          Msg_ShowASentOrReceivedMessage (NumMsg,MsgCod);
         }
 
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /***** Write again links to pages *****/
       if (Pagination.MoreThanOnePage)
@@ -2627,11 +2626,11 @@ void Msg_ShowFormToFilterMsgs (void)
      };
 
    /***** Table start *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-	              "<tr>");
+   Lay_StartTableCenter (2);
 
    /***** Filter authors/recipients *****/
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"LEFT_MIDDLE\">"
                       "<label class=\"%s\">"
                       "%s:&nbsp;"
                       "<input type=\"search\" name=\"FilterFromTo\""
@@ -2649,14 +2648,14 @@ void Msg_ShowFormToFilterMsgs (void)
                       "<input type=\"search\" name=\"FilterContent\""
                       " size=\"20\" maxlength=\"%u\" value=\"%s\" />"
                       "</label>"
-                      "</td>",
+                      "</td>"
+                      "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_MSG_Content,
             Msg_MAX_CHARS_FILTER_CONTENT,Gbl.Msg.FilterContent);
 
    /***** End table *****/
-   fprintf (Gbl.F.Out,"</tr>"
-                      "</table>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

@@ -591,8 +591,9 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    const char *ClassHighlight = "DAT RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
-   fprintf (Gbl.F.Out,"<table class=\"CELLS_PAD_2\">"
-                      "<tr>");
+   Lay_StartTableCenter (2);
+
+   fprintf (Gbl.F.Out,"<tr>");
    if (PutForm)
       fprintf (Gbl.F.Out,"<th></th>");
    fprintf (Gbl.F.Out,"<th class=\"RIGHT_MIDDLE\">"
@@ -657,11 +658,12 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
                       "<td class=\"DAT_N_LINE_TOP RIGHT_MIDDLE\">"
                       "(%.1f%%)"
                       "</td>"
-                      "</tr>"
-                      "</table>",
+                      "</tr>",
             Txt_Total,
             NumCrss,
             100.0);
+
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

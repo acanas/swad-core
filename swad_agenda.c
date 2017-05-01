@@ -472,7 +472,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
    if (Gbl.Agenda.Num)
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
 
       /***** Table head *****/
       Agd_WriteHeaderListEvents (AgendaType);
@@ -484,7 +484,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
 	 Agd_ShowOneEvent (AgendaType,Gbl.Agenda.LstAgdCods[NumEvent - 1]);
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else
       Lay_ShowAlert (Lay_INFO,Txt_No_events);

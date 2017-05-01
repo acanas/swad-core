@@ -493,8 +493,8 @@ void Sta_AskShowCrsHits (void)
          Par_PutHiddenParamLong ("LastRow",0);
 
          /***** Put list of users to select some of them *****/
-         fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-                            "<tr>"
+         Lay_StartTableCenter (2);
+         fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"RIGHT_TOP %s\">%s:"
 			    "</td>"
 			    "<td colspan=\"2\" class=\"%s LEFT_TOP\">"
@@ -583,8 +583,8 @@ void Sta_AskShowCrsHits (void)
          fprintf (Gbl.F.Out,"</select>)"
                             "</label>"
                             "</td>"
-                            "</tr>"
-                            "</table>");
+                            "</tr>");
+         Lay_EndTable ();
 
 	 /***** Hidden param used to get client time zone *****/
 	 Dat_PutHiddenParBrowserTZDiff ();
@@ -1619,9 +1619,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
 
    /***** Put heading with backward and forward buttons *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">"
-                      "<table class=\"CELLS_PAD_2\" style=\"width:100%%;\">"
-                      "<tr>");
+	              "<td colspan=\"7\" class=\"LEFT_MIDDLE\">");
+   Lay_StartTableWide (2);
+   fprintf (Gbl.F.Out,"<tr>");
 
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
@@ -1647,7 +1647,6 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    fprintf (Gbl.F.Out,"</td>");
    if (FirstRow > 1)
       Act_FormEnd ();
-
 
    /* Write number of current page */
    fprintf (Gbl.F.Out,"<td class=\"DAT_N CENTER_MIDDLE\" style=\"width:60%%;\">"
@@ -1685,9 +1684,9 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    if (LastRow < NumRows)
       Act_FormEnd ();
 
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>"
-	              "</td>"
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
+   fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
    /***** Write heading *****/
@@ -2392,8 +2391,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
    unsigned B;
 
    /***** Write numbers from 0 to Hits.Max *****/
-   fprintf (Gbl.F.Out,"<table style=\"width:100%%;\">"
-                      "<tr>"
+   Lay_StartTableWide (0);
+   fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"%u\" class=\"LOG LEFT_BOTTOM\""
 	              " style=\"width:%upx;\">"
 	              "0"
@@ -2433,8 +2432,8 @@ static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax)
 	                 "</td>",
                R,G,B,Gbl.Prefs.IconsURL);
      }
-   fprintf (Gbl.F.Out,"</tr>"
-	              "</table>");
+   fprintf (Gbl.F.Out,"</tr>");
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/

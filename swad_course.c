@@ -1131,7 +1131,7 @@ static void Crs_ListCourses (void)
    if (Gbl.CurrentDeg.NumCrss)	// There are courses in the current degree
      {
       /***** Start table *****/
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_2\">");
+      Lay_StartTableWideMargin (2);
       Crs_PutHeadCoursesForSeeing ();
 
       /***** List the courses *****/
@@ -1143,7 +1143,7 @@ static void Crs_ListCourses (void)
       Crs_ListCoursesOfAYearForSeeing (0);		// Courses without a year selected
 
       /***** End table *****/
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
      }
    else	// No courses created in the current degree
       Lay_ShowAlert (Lay_INFO,Txt_No_courses);

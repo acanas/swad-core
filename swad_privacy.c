@@ -101,10 +101,9 @@ void Pri_EditMyPrivacy (void)
        Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
       Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
 
-   /***** Start table *****/
-   Lay_StartRoundFrame (NULL,Txt_Privacy,
-                        Pri_PutIconsPrivacy,Hlp_PROFILE_Preferences_privacy);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">");
+   /***** Start frame and table *****/
+   Lay_StartRoundFrameTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,
+                             Hlp_PROFILE_Preferences_privacy,2);
 
    /***** Edit photo visibility *****/
    Pri_PutFormVisibility (Txt_Photo,
@@ -130,9 +129,8 @@ void Pri_EditMyPrivacy (void)
                           Pri_VISIBILITY_SYSTEM,
                           (1 << Pri_VISIBILITY_SYSTEM));
 
-   /***** End table *****/
-   fprintf (Gbl.F.Out,"</table>");
-   Lay_EndRoundFrame ();
+   /***** End table and frame *****/
+   Lay_EndRoundFrameTable ();
   }
 
 /*****************************************************************************/

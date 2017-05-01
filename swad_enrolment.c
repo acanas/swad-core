@@ -822,8 +822,8 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
    extern const char *Txt_List_of_nicks_emails_or_IDs;
 
    /***** Text area for users' IDs *****/
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-                      "<tr>"
+   Lay_StartTableCenter (2);
+   fprintf (Gbl.F.Out,"<tr>"
                       "<td class=\"RIGHT_TOP\">"
                       "<label for=\"UsrsIDs\" class=\"%s\">%s:</label>"
                       "</td>"
@@ -832,10 +832,10 @@ static void Enr_PutAreaToEnterUsrsIDs (void)
                       " cols=\"60\" rows=\"10\">"
                       "</textarea>"
                       "</td>"
-                      "</tr>"
-                      "</table>",
+                      "</tr>",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_List_of_nicks_emails_or_IDs);
+   Lay_EndTable ();
   }
 
 /*****************************************************************************/
@@ -2210,9 +2210,9 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    Lay_StartRoundFrame ("100%",Txt_Enrolment_requests,NULL,Hlp_USERS_Requests);
 
    /***** Selection of scope and roles *****/
-   /* Start form */
+   /* Start form and table */
    Act_FormStart (ActUpdSignUpReq);
-   fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_WIDE_MARGIN CELLS_PAD_5\">");
+   Lay_StartTableWideMargin (2);
 
    /* Scope (whole platform, current centre, current degree or current course) */
    fprintf (Gbl.F.Out,"<tr>"
@@ -2237,10 +2237,10 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                            RolesSelected,
                            false,true);
    fprintf (Gbl.F.Out,"</td>"
-                      "</tr>"
-                      "</table>");
+                      "</tr>");
 
-   /* End form */
+   /* End table and form */
+   Lay_EndTable ();
    Act_FormEnd ();
 
    /***** Build query *****/
@@ -2683,8 +2683,8 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Usr_UsrDataConstructor (&UsrDat);
 
       /* Start table */
-      fprintf (Gbl.F.Out,"<table class=\"FRAME_TBL_CENTER CELLS_PAD_2\">"
-                         "<th></th>"
+      Lay_StartTableCenter (2);
+      fprintf (Gbl.F.Out,"<th></th>"
                          "<th class=\"LEFT_TOP\">"
                          "%s"
                          "</th>"
@@ -2824,7 +2824,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
         }
 
       /* End table */
-      fprintf (Gbl.F.Out,"</table>");
+      Lay_EndTable ();
 
       /* Free memory used for user's data */
       Usr_UsrDataDestructor (&UsrDat);
