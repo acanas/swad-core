@@ -7783,7 +7783,6 @@ void Usr_SeeGstClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CTR ||
 				  Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
@@ -7792,7 +7791,6 @@ void Usr_SeeGstClassPhotoPrn (void)
       Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
       Lay_EndTable ();
-      Lay_EndRoundFrame ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol__GUEST_);
@@ -7825,7 +7823,6 @@ void Usr_SeeStdClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
      {
       /***** Draw the students' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
@@ -7840,7 +7837,6 @@ void Usr_SeeStdClassPhotoPrn (void)
       Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
       Lay_EndTable ();
-      Lay_EndRoundFrame ();
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STUDENT);
@@ -7879,7 +7875,6 @@ void Usr_SeeTchClassPhotoPrn (void)
    if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
-      Lay_StartRoundFrame (NULL,NULL,NULL,NULL);
       Lay_WriteHeaderClassPhoto (true,true,
 				 (Gbl.Scope.Current == Sco_SCOPE_CRS ||
 				  Gbl.Scope.Current == Sco_SCOPE_DEG ||
@@ -7894,7 +7889,6 @@ void Usr_SeeTchClassPhotoPrn (void)
       Lay_StartTableWide (0);
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
       Lay_EndTable ();
-      Lay_EndRoundFrame ();
      }
    else
       /***** Show warning indicating no teachers found *****/

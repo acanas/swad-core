@@ -218,19 +218,19 @@
 
 // TODO: Icon to view en "Fuente de información"
 // TODO: Change layout of contextual icons in assignments, surveys and attendance
-// TODO: Fix problem printing view of students, teachers, etc.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.200 (2017-05-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.200.1 (2017-05-02)"
 #define CSS_FILE		"swad16.195.8.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.200.1: May 02, 2017	Fixed problem printing view of students, teachers, etc. (? lines)
         Version 16.200:   May 02, 2017	Print view of an assignment, suggested by Sandra Daniela Tazzioli Barroso. (218337 lines)
 					1 change necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1637','es','N','Imprimir actividad');
