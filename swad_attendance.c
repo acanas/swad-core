@@ -542,7 +542,7 @@ static void Att_PutFormToListStdsParams (void)
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
   {
-   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 

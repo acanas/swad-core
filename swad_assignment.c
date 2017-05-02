@@ -63,15 +63,16 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_ShowAllAssignments (void);
+static void Asg_PutHeadForSeeing (void);
 static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void);
 static void Asg_PutIconToCreateNewAsg (void);
 static void Asg_PutButtonToCreateNewAsg (void);
 static void Asg_PutFormToSelectWhichGroupsToShow (void);
 static void Asg_ParamsWhichGroupsToShow (void);
-static void Asg_ShowOneAssignment (long AsgCod);
+static void Asg_ShowOneAssignment (long AsgCod,bool PrintView);
 static void Asg_WriteAsgAuthor (struct Assignment *Asg);
-static void Asg_WriteAssignmentFolder (struct Assignment *Asg);
+static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView);
 static void Asg_GetParamAsgOrder (void);
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden);
@@ -114,13 +115,7 @@ static void Asg_ShowAllAssignments (void)
   {
    extern const char *Hlp_ASSESSMENT_Assignments;
    extern const char *Txt_Assignments;
-   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
-   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
-   extern const char *Txt_Assignment;
-   extern const char *Txt_Upload_files_QUESTION;
-   extern const char *Txt_Folder;
    extern const char *Txt_No_assignments;
-   Dat_StartEndTime_t Order;
    struct Pagination Pagination;
    unsigned NumAsg;
 
@@ -151,45 +146,14 @@ static void Asg_ShowAllAssignments (void)
      {
       /***** Table head *****/
       Lay_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>");
-      for (Order = Dat_START_TIME;
-	   Order <= Dat_END_TIME;
-	   Order++)
-	{
-	 fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-	 Act_FormStart (ActSeeAsg);
-	 Grp_PutParamWhichGrps ();
-	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
-	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-	 if (Order == Gbl.Asgs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"<u>");
-	 fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-	 if (Order == Gbl.Asgs.SelectedOrder)
-	    fprintf (Gbl.F.Out,"</u>");
-	 fprintf (Gbl.F.Out,"</a>");
-	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</th>");
-	}
-      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"CENTER_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "<th class=\"LEFT_MIDDLE\">"
-			 "%s"
-			 "</th>"
-			 "</tr>",
-	       Txt_Assignment,
-	       Txt_Upload_files_QUESTION,
-	       Txt_Folder);
+      Asg_PutHeadForSeeing ();
 
       /***** Write all the assignments *****/
       for (NumAsg = Pagination.FirstItemVisible;
 	   NumAsg <= Pagination.LastItemVisible;
 	   NumAsg++)
-	 Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg - 1]);
+	 Asg_ShowOneAssignment (Gbl.Asgs.LstAsgCods[NumAsg - 1],
+	                        false);	// Not print view
 
       /***** End table *****/
       Lay_EndTable ();
@@ -212,6 +176,54 @@ static void Asg_ShowAllAssignments (void)
 
    /***** Free list of assignments *****/
    Asg_FreeListAssignments ();
+  }
+
+/*****************************************************************************/
+/***************** Write header with fields of an assignment *****************/
+/*****************************************************************************/
+
+static void Asg_PutHeadForSeeing (void)
+  {
+   extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
+   extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
+   extern const char *Txt_Assignment;
+   extern const char *Txt_Upload_files_QUESTION;
+   extern const char *Txt_Folder;
+   Dat_StartEndTime_t Order;
+
+   fprintf (Gbl.F.Out,"<tr>");
+   for (Order = Dat_START_TIME;
+	Order <= Dat_END_TIME;
+	Order++)
+     {
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
+      Act_FormStart (ActSeeAsg);
+      Grp_PutParamWhichGrps ();
+      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+      Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+      if (Order == Gbl.Asgs.SelectedOrder)
+	 fprintf (Gbl.F.Out,"<u>");
+      fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
+      if (Order == Gbl.Asgs.SelectedOrder)
+	 fprintf (Gbl.F.Out,"</u>");
+      fprintf (Gbl.F.Out,"</a>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</th>");
+     }
+   fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"CENTER_MIDDLE\">"
+		      "%s"
+		      "</th>"
+		      "<th class=\"LEFT_MIDDLE\">"
+		      "%s"
+		      "</th>"
+		      "</tr>",
+	    Txt_Assignment,
+	    Txt_Upload_files_QUESTION,
+	    Txt_Folder);
   }
 
 /*****************************************************************************/
@@ -288,10 +300,39 @@ static void Asg_ParamsWhichGroupsToShow (void)
   }
 
 /*****************************************************************************/
+/******************** Show print view of one assignment **********************/
+/*****************************************************************************/
+
+void Asg_PrintOneAssignment (void)
+  {
+   long AsgCod;
+
+   /***** Get the code of the assignment *****/
+   AsgCod = Asg_GetParamAsgCod ();
+
+   /***** Start frame *****/
+   Lay_WriteHeaderClassPhoto (true,false,
+			      Gbl.CurrentIns.Ins.InsCod,
+			      Gbl.CurrentDeg.Deg.DegCod,
+			      Gbl.CurrentCrs.Crs.CrsCod);
+
+   /***** Table head *****/
+   Lay_StartTableWideMargin (2);
+   Asg_PutHeadForSeeing ();
+
+   /***** Write assignment *****/
+   Asg_ShowOneAssignment (AsgCod,
+                          true);	// Print view
+
+   /***** End table *****/
+   Lay_EndTable ();
+  }
+
+/*****************************************************************************/
 /*************************** Show one assignment *****************************/
 /*****************************************************************************/
 
-static void Asg_ShowOneAssignment (long AsgCod)
+static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
   {
    extern const char *Txt_Today;
    extern const char *Txt_ASSIGNMENT_TYPES[Asg_NUM_TYPES_SEND_WORK];
@@ -368,7 +409,8 @@ static void Asg_ShowOneAssignment (long AsgCod)
    /* Assignment folder */
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"DAT LEFT_TOP COLOR%u\">",
             Gbl.RowEvenOdd);
-   Asg_WriteAssignmentFolder (&Asg);
+   if (Asg.SendWork == Asg_SEND_WORK)
+      Asg_WriteAssignmentFolder (&Asg,PrintView);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
@@ -381,15 +423,9 @@ static void Asg_ShowOneAssignment (long AsgCod)
    Asg_WriteAsgAuthor (&Asg);
 
    /* Forms to remove/edit this assignment */
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
-         break;
-      default:
-         break;
-     }
+   if (!PrintView)
+      Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
+
    fprintf (Gbl.F.Out,"</td>");
 
    /* Text of the assignment */
@@ -433,45 +469,45 @@ static void Asg_WriteAsgAuthor (struct Assignment *Asg)
 /********************* Write the folder of an assignment *********************/
 /*****************************************************************************/
 
-static void Asg_WriteAssignmentFolder (struct Assignment *Asg)
+static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
   {
    extern const char *Txt_Upload_file_or_create_folder_in_FOLDER;
    extern const char *Txt_Folder;
+   bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
+                        Asg->Open &&				// It's open (inside dates)
+                        Asg->IBelongToCrsOrGrps &&		// I belong to course or groups
+                        Gbl.Usrs.Me.LoggedRole == Rol_STUDENT;	// I am a student
 
-   if (Asg->SendWork == Asg_SEND_WORK)
+   /***** Folder icon *****/
+   if (!PrintView &&	// Not print view
+       ICanSendFiles)	// I can send files to this assignment folder
      {
-      /***** Folder icon *****/
-      if (!Asg->Hidden &&				// It's visible (not hidden)
-	  Asg->Open &&					// It's open (inside dates)
-	  Asg->IBelongToCrsOrGrps &&			// I belong to course or groups
-	  Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
-	 // I can send files to this assignment folder
-        {
-         /* Form to create a new file or folder */
-         Act_FormStart (ActFrmCreAsgUsr);
-         Brw_PutParamsFileBrowser (ActUnk,
-                                   Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
-                                   Asg->Folder,
-                                   Brw_IS_FOLDER,-1L);
-         sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
-                  Asg->Folder);
-         fprintf (Gbl.F.Out,"<input type=\"image\""
-                            " src=\"%s/folder-open-plus16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
-                  Gbl.Title,
-                  Gbl.Title);
-         Act_FormEnd ();
-        }
-      else				// I can't send files to this assignment folder
-         fprintf (Gbl.F.Out,"<img src=\"%s/folder-closed16x16.gif\""
-                            " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
-                  Gbl.Prefs.IconsURL,
-                  Txt_Folder,Txt_Folder);
-
-      /***** Folder name *****/
-      fprintf (Gbl.F.Out,"%s",Asg->Folder);
+      /* Form to create a new file or folder */
+      Act_FormStart (ActFrmCreAsgUsr);
+      Brw_PutParamsFileBrowser (ActUnk,
+				Brw_INTERNAL_NAME_ROOT_FOLDER_ASSIGNMENTS,
+				Asg->Folder,
+				Brw_IS_FOLDER,-1L);
+      sprintf (Gbl.Title,Txt_Upload_file_or_create_folder_in_FOLDER,
+	       Asg->Folder);
+      fprintf (Gbl.F.Out,"<input type=\"image\""
+			 " src=\"%s/folder-open-plus16x16.gif\""
+			 " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />",
+	       Gbl.Prefs.IconsURL,
+	       Gbl.Title,
+	       Gbl.Title);
+      Act_FormEnd ();
      }
+   else				// I can't send files to this assignment folder
+      fprintf (Gbl.F.Out,"<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
+	                 " class=\"ICO20x20\" />",
+	       Gbl.Prefs.IconsURL,
+	       ICanSendFiles ? "folder-open16x16.gif" :
+		               "folder-closed16x16.gif",
+	       Txt_Folder,Txt_Folder);
+
+   /***** Folder name *****/
+   fprintf (Gbl.F.Out,"%s",Asg->Folder);
   }
 
 /*****************************************************************************/
@@ -502,21 +538,33 @@ void Asg_PutHiddenParamAsgOrder (void)
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
   {
-   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
-   /***** Put form to remove assignment *****/
-   Lay_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
+	 /***** Put form to remove assignment *****/
+	 Lay_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
 
-   /***** Put form to hide/show assignment *****/
-   if (Hidden)
-      Lay_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
-   else
-      Lay_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
+	 /***** Put form to hide/show assignment *****/
+	 if (Hidden)
+	    Lay_PutContextualIconToUnhide (ActShoAsg,Asg_PutParams);
+	 else
+	    Lay_PutContextualIconToHide (ActHidAsg,Asg_PutParams);
 
-   /***** Put form to edit assignment *****/
-   Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
+	 /***** Put form to edit assignment *****/
+	 Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
+	 // no break
+      case Rol_STUDENT:
+	 /***** Put form to print assignment *****/
+	 Lay_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
+	 break;
+      default:
+         break;
+     }
 
    fprintf (Gbl.F.Out,"</div>");
   }

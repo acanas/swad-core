@@ -69,6 +69,8 @@ struct Assignment
 /*****************************************************************************/
 
 void Asg_SeeAssignments (void);
+void Asg_PrintOneAssignment (void);
+
 void Asg_PutHiddenParamAsgOrder (void);
 void Asg_RequestCreatOrEditAsg (void);
 void Asg_GetListAssignments (void);

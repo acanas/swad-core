@@ -783,7 +783,7 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
   {
    extern const char *Txt_Reset;
 
-   fprintf (Gbl.F.Out,"<div>");
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
 

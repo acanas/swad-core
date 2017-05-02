@@ -437,6 +437,7 @@ Assessment:
 	312. ActRcvRchTxtAss		Receive and change the rich text of the assessment system
 	313. ActFrmNewAsg		Form to create a new assignment
 	314. ActEdiOneAsg		Edit one assignment
+	NEW. ActPrnOneAsg		Print one assignment
 	315. ActNewAsg			Create new assignment
 	316. ActChgAsg			Modify data of an existing assignment
 	317. ActReqRemAsg		Request the removal of an assignment
@@ -1883,6 +1884,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActFrmNewAsg	*/{ 812,-1,TabUnk,ActSeeAsg		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
    /* ActEdiOneAsg	*/{ 814,-1,TabUnk,ActSeeAsg		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RequestCreatOrEditAsg	,NULL},
+   /* ActPrnOneAsg	*/{1637,-1,TabUnk,ActSeeAsg		,0x1F8,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Asg_PrintOneAssignment		,NULL},
    /* ActNewAsg		*/{ 803,-1,TabUnk,ActSeeAsg		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
    /* ActChgAsg		*/{ 815,-1,TabUnk,ActSeeAsg		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_RecFormAssignment		,NULL},
    /* ActReqRemAsg	*/{ 813,-1,TabUnk,ActSeeAsg		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Asg_ReqRemAssignment		,NULL},
@@ -4621,6 +4623,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActSeeCalDeg,		// #1634
 	ActPrnCalDeg,		// #1635
 	ActChgCalDeg1stDay,	// #1636
+	ActPrnOneAsg,		// #1637
 	};
 
 /*****************************************************************************/
