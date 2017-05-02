@@ -223,7 +223,8 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
      {
       /***** Table head *****/
       Lay_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>");
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Svy_ORDER_BY_START_DATE;
 	   Order <= Svy_ORDER_BY_END_DATE;
 	   Order++)
@@ -440,10 +441,18 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    if (ShowOnlyThisSvyComplete)
       Lay_StartTableWide (2);
 
-   /***** Start date/time *****/
-   UniqueId++;
+   /***** Write first row of data of this assignment *****/
+   /* Forms to remove/edit this assignment */
    fprintf (Gbl.F.Out,"<tr>"
-                      "<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
+            Gbl.RowEvenOdd);
+   if (Svy.Status.ICanEdit)
+      Svy_PutFormsToRemEditOneSvy (Svy.SvyCod,Svy.Status.Visible);
+   fprintf (Gbl.F.Out,"</td>");
+
+   /* Start date/time */
+   UniqueId++;
+   fprintf (Gbl.F.Out,"<td id=\"svy_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
         	                                    "DATE_RED") :
@@ -459,7 +468,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_START_TIME],Txt_Today);
 
-   /***** End date/time *****/
+   /* End date/time */
    fprintf (Gbl.F.Out,"<td id=\"svy_date_end_%u\" class=\"%s LEFT_TOP",
             UniqueId,
             Svy.Status.Visible ? (Svy.Status.Open ? "DATE_GREEN" :
@@ -476,7 +485,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_END_TIME],Txt_Today);
 
-   /***** Survey title *****/
+   /* Survey title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -505,7 +514,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
             Txt_No_of_users,
             Svy.NumUsrs);
 
-   /***** Status of the survey *****/
+   /* Status of the survey */
    fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"LEFT_TOP");
    if (!ShowOnlyThisSvyComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -558,10 +567,6 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /* Author of the survey */
    Svy_WriteAuthor (&Svy);
-
-   /* Forms to remove/edit this survey */
-   if (Svy.Status.ICanEdit)
-      Svy_PutFormsToRemEditOneSvy (Svy.SvyCod,Svy.Status.Visible);
 
    fprintf (Gbl.F.Out,"</td>"
                       "<td class=\"LEFT_TOP");
@@ -783,8 +788,6 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
   {
    extern const char *Txt_Reset;
 
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
    Gbl.Svys.SvyCodToEdit = SvyCod;	// Used as parameters in contextual links
 
    /***** Put form to remove survey *****/
@@ -804,8 +807,6 @@ static void Svy_PutFormsToRemEditOneSvy (long SvyCod,bool Visible)
 
    /***** Put form to edit survey *****/
    Lay_PutContextualIconToEdit (ActEdiOneSvy,Svy_PutParams);
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

@@ -1259,16 +1259,15 @@ void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
 
 void Lay_PutIconWithText (const char *Icon,const char *Alt,const char *Text)
   {
+   /***** Print icon and optional text *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT ICO_HIGHLIGHT\">"
-	              "<img src=\"%s/%s\""
-	              " alt=\"%s\" title=\"%s\""
+	              "<img src=\"%s/%s\" alt=\"%s\" title=\"%s\""
 	              " class=\"ICO20x20\" />",
             Gbl.Prefs.IconsURL,Icon,
             Alt,Text ? Text : Alt);
    if (Text)
       if (Text[0])
-	 fprintf (Gbl.F.Out,"&nbsp;%s",
-		  Text);
+	 fprintf (Gbl.F.Out,"&nbsp;%s",Text);
    fprintf (Gbl.F.Out,"</div>");
   }
 

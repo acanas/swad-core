@@ -191,7 +191,8 @@ static void Asg_PutHeadForSeeing (void)
    extern const char *Txt_Folder;
    Dat_StartEndTime_t Order;
 
-   fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
    for (Order = Dat_START_TIME;
 	Order <= Dat_END_TIME;
 	Order++)
@@ -347,10 +348,17 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Write first row of data of this assignment *****/
+   /* Forms to remove/edit this assignment */
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
+            Gbl.RowEvenOdd);
+   if (!PrintView)
+      Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
+   fprintf (Gbl.F.Out,"</td>");
+
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_start_%u',"
                       "%ld,'<br />','%s',true,true,true);"
@@ -421,10 +429,6 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* Author of the assignment */
    Asg_WriteAsgAuthor (&Asg);
-
-   /* Forms to remove/edit this assignment */
-   if (!PrintView)
-      Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
 
    fprintf (Gbl.F.Out,"</td>");
 
@@ -538,8 +542,6 @@ void Asg_PutHiddenParamAsgOrder (void)
 
 static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
    Gbl.Asgs.AsgCodToEdit = AsgCod;	// Used as parameter in contextual links
 
    switch (Gbl.Usrs.Me.LoggedRole)
@@ -565,8 +567,6 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
       default:
          break;
      }
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

@@ -232,7 +232,8 @@ static void Att_ShowAllAttEvents (void)
      {
       /***** Table head *****/
       Lay_StartTableWideMargin (2);
-      fprintf (Gbl.F.Out,"<tr>");
+   fprintf (Gbl.F.Out,"<tr>"
+	              "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
@@ -364,10 +365,25 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Att_GetDataOfAttEventByCodAndCheckCrs (Att);
    Att_GetNumStdsTotalWhoAreInAttEvent (Att);
 
-   /***** Start date/time *****/
-   UniqueId++;
+   /***** Write first row of data of this attendance event *****/
+   /* Forms to remove/edit this attendance event */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td id=\"att_date_start_%u\" class=\"%s LEFT_BOTTOM",
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
+            Gbl.RowEvenOdd);
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_TEACHER:
+      case Rol_SYS_ADM:
+         Att_PutFormsToRemEditOneAttEvent (Att->AttCod,Att->Hidden);
+	 break;
+      default:
+         break;
+     }
+   fprintf (Gbl.F.Out,"</td>");
+
+   /* Start date/time */
+   UniqueId++;
+   fprintf (Gbl.F.Out,"<td id=\"att_date_start_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -383,8 +399,8 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_START_TIME],Txt_Today);
 
-   /***** End date/time *****/
-   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_BOTTOM",
+   /* End date/time */
+   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
             UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -400,7 +416,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 	              "</td>",
             UniqueId,Att->TimeUTC[Att_END_TIME],Txt_Today);
 
-   /***** Attendance event title *****/
+   /* Attendance event title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
    if (!ShowOnlyThisAttEventComplete)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
@@ -416,7 +432,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>");
 
-   /***** Number of students in this event *****/
+   /* Number of students in this event */
    fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_TOP",
             Att->Hidden ? "ASG_TITLE_LIGHT" :
 	                  "ASG_TITLE");
@@ -436,16 +452,6 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    /* Author of the attendance event */
    Att_WriteAttEventAuthor (Att);
 
-   /* Forms to remove/edit this attendance event */
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_TEACHER:
-      case Rol_SYS_ADM:
-         Att_PutFormsToRemEditOneAttEvent (Att->AttCod,Att->Hidden);
-         break;
-      default:
-         break;
-     }
    fprintf (Gbl.F.Out,"</td>");
 
    /* Text of the attendance event */
@@ -542,8 +548,6 @@ static void Att_PutFormToListStdsParams (void)
 
 static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
   {
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-
    Gbl.AttEvents.AttCodToEdit = AttCod;	// Used as parameters in contextual links
 
    /***** Put form to remove attendance event *****/
@@ -557,8 +561,6 @@ static void Att_PutFormsToRemEditOneAttEvent (long AttCod,bool Hidden)
 
    /***** Put form to edit attendance event *****/
    Lay_PutContextualIconToEdit (ActEdiOneAtt,Att_PutParams);
-
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/
