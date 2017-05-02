@@ -67,11 +67,11 @@ extern struct Globals Gbl;
 
 static const char *Lay_AlertIcons[Lay_NUM_ALERT_TYPES] =
   {
-   "info16x16.gif",
-   "success16x16.gif",
-   "question16x16.gif",
-   "warning16x16.gif",
-   "error16x16.gif",
+   "info64x64.png",
+   "success64x64.png",
+   "question64x64.gif",	// animated
+   "warning64x64.gif",	// animated
+   "error64x64.gif",	// animated
    "copy_on16x16.gif",
   };
 
@@ -1693,7 +1693,7 @@ void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
 
    /***** Write message *****/
    fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\""
-		      " style=\"background-image:url('%s/%s');\">",
+		      " style=\"background-image:url('%s/%s'); background-size:20px 20px;\">",
 	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
    if (Message)
       fprintf (Gbl.F.Out,"%s",Message);

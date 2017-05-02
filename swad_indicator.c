@@ -591,7 +591,7 @@ static void Ind_ShowNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1
    const char *ClassHighlight = "DAT RIGHT_MIDDLE LIGHT_BLUE";
 
    /***** Write number of courses with each number of indicators valid *****/
-   Lay_StartTableCenter (2);
+   Lay_StartTable (2);
 
    fprintf (Gbl.F.Out,"<tr>");
    if (PutForm)
@@ -699,7 +699,6 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    extern const char *Txt_YES;
    extern const char *Txt_NO;
    extern const char *Txt_INFO_SRC_SHORT_TEXT[Inf_NUM_INFO_SOURCES];
-   extern const char *Txt_No_of_indicators;
    extern const char *Txt_Courses;
    MYSQL_ROW row;
    unsigned NumCrs;

@@ -1009,6 +1009,90 @@ const char *Hlp_ASSESSMENT_Tests_test_results =
 	"ASSESSMENT.Tests.en#test-results";
 #endif
 
+const char *Hlp_ASSESSMENT_Surveys =
+#if   L==1
+	"ASSESSMENT.Surveys.es";
+#elif L==2
+	"ASSESSMENT.Surveys.en";
+#elif L==3
+	"ASSESSMENT.Surveys.en";
+#elif L==4
+	"ASSESSMENT.Surveys.es";
+#elif L==5
+	"ASSESSMENT.Surveys.en";
+#elif L==6
+	"ASSESSMENT.Surveys.es";
+#elif L==7
+	"ASSESSMENT.Surveys.en";
+#elif L==8
+	"ASSESSMENT.Surveys.en";
+#elif L==9
+	"ASSESSMENT.Surveys.en";
+#endif
+
+const char *Hlp_ASSESSMENT_Surveys_new_survey =
+#if   L==1
+	"ASSESSMENT.Surveys.es#nueva-encuesta";
+#elif L==2
+	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==3
+	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==4
+	"ASSESSMENT.Surveys.es#nueva-encuesta";
+#elif L==5
+	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==6
+	"ASSESSMENT.Surveys.es#nueva-encuesta";
+#elif L==7
+	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==8
+	"ASSESSMENT.Surveys.en#new-survey";
+#elif L==9
+	"ASSESSMENT.Surveys.en#new-survey";
+#endif
+
+const char *Hlp_ASSESSMENT_Surveys_edit_survey =
+#if   L==1
+	"ASSESSMENT.Surveys.es#editar-encuesta";
+#elif L==2
+	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==3
+	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==4
+	"ASSESSMENT.Surveys.es#editar-encuesta";
+#elif L==5
+	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==6
+	"ASSESSMENT.Surveys.es#editar-encuesta";
+#elif L==7
+	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==8
+	"ASSESSMENT.Surveys.en#edit-survey";
+#elif L==9
+	"ASSESSMENT.Surveys.en#edit-survey";
+#endif
+
+const char *Hlp_ASSESSMENT_Surveys_questions =
+#if   L==1
+	"ASSESSMENT.Surveys.es#preguntas";
+#elif L==2
+	"ASSESSMENT.Surveys.en#questions";
+#elif L==3
+	"ASSESSMENT.Surveys.en#questions";
+#elif L==4
+	"ASSESSMENT.Surveys.es#preguntas";
+#elif L==5
+	"ASSESSMENT.Surveys.en#questions";
+#elif L==6
+	"ASSESSMENT.Surveys.es#preguntas";
+#elif L==7
+	"ASSESSMENT.Surveys.en#questions";
+#elif L==8
+	"ASSESSMENT.Surveys.en#questions";
+#elif L==9
+	"ASSESSMENT.Surveys.en#questions";
+#endif
+
 const char *Hlp_ASSESSMENT_Announcements =
 #if   L==1
 	"ASSESSMENT.Announcements.es";
@@ -2089,90 +2173,6 @@ const char *Hlp_MESSAGES_Email =
 #endif
 
 /***** STATS tab *****/
-
-const char *Hlp_STATS_Surveys =
-#if   L==1
-	"STATS.Surveys.es";
-#elif L==2
-	"STATS.Surveys.en";
-#elif L==3
-	"STATS.Surveys.en";
-#elif L==4
-	"STATS.Surveys.es";
-#elif L==5
-	"STATS.Surveys.en";
-#elif L==6
-	"STATS.Surveys.es";
-#elif L==7
-	"STATS.Surveys.en";
-#elif L==8
-	"STATS.Surveys.en";
-#elif L==9
-	"STATS.Surveys.en";
-#endif
-
-const char *Hlp_STATS_Surveys_new_survey =
-#if   L==1
-	"STATS.Surveys.es#nueva-encuesta";
-#elif L==2
-	"STATS.Surveys.en#new-survey";
-#elif L==3
-	"STATS.Surveys.en#new-survey";
-#elif L==4
-	"STATS.Surveys.es#nueva-encuesta";
-#elif L==5
-	"STATS.Surveys.en#new-survey";
-#elif L==6
-	"STATS.Surveys.es#nueva-encuesta";
-#elif L==7
-	"STATS.Surveys.en#new-survey";
-#elif L==8
-	"STATS.Surveys.en#new-survey";
-#elif L==9
-	"STATS.Surveys.en#new-survey";
-#endif
-
-const char *Hlp_STATS_Surveys_edit_survey =
-#if   L==1
-	"STATS.Surveys.es#editar-encuesta";
-#elif L==2
-	"STATS.Surveys.en#edit-survey";
-#elif L==3
-	"STATS.Surveys.en#edit-survey";
-#elif L==4
-	"STATS.Surveys.es#editar-encuesta";
-#elif L==5
-	"STATS.Surveys.en#edit-survey";
-#elif L==6
-	"STATS.Surveys.es#editar-encuesta";
-#elif L==7
-	"STATS.Surveys.en#edit-survey";
-#elif L==8
-	"STATS.Surveys.en#edit-survey";
-#elif L==9
-	"STATS.Surveys.en#edit-survey";
-#endif
-
-const char *Hlp_STATS_Surveys_questions =
-#if   L==1
-	"STATS.Surveys.es#preguntas";
-#elif L==2
-	"STATS.Surveys.en#questions";
-#elif L==3
-	"STATS.Surveys.en#questions";
-#elif L==4
-	"STATS.Surveys.es#preguntas";
-#elif L==5
-	"STATS.Surveys.en#questions";
-#elif L==6
-	"STATS.Surveys.es#preguntas";
-#elif L==7
-	"STATS.Surveys.en#questions";
-#elif L==8
-	"STATS.Surveys.en#questions";
-#elif L==9
-	"STATS.Surveys.en#questions";
-#endif
 
 const char *Hlp_STATS_Figures =
 #if   L==1

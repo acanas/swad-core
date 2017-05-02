@@ -181,7 +181,7 @@ void Svy_SeeAllSurveys (void)
 
 static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
   {
-   extern const char *Hlp_STATS_Surveys;
+   extern const char *Hlp_ASSESSMENT_Surveys;
    extern const char *Txt_Surveys;
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -213,7 +213,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
 
    /***** Start frame *****/
    Lay_StartRoundFrame ("100%",Txt_Surveys,
-                        Svy_PutIconsListSurveys,Hlp_STATS_Surveys);
+                        Svy_PutIconsListSurveys,Hlp_ASSESSMENT_Surveys);
 
    /***** Select whether show only my groups or all groups *****/
    if (Gbl.CurrentCrs.Grps.NumGrps)
@@ -410,7 +410,7 @@ void Svy_SeeOneSurvey (void)
 static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
                                bool ShowOnlyThisSvyComplete)
   {
-   extern const char *Hlp_STATS_Surveys;
+   extern const char *Hlp_ASSESSMENT_Surveys;
    extern const char *Txt_Survey;
    extern const char *Txt_Today;
    extern const char *Txt_View_survey;
@@ -431,7 +431,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
 
    /***** Start frame *****/
    if (ShowOnlyThisSvyComplete)
-      Lay_StartRoundFrame (NULL,Txt_Survey,NULL,Hlp_STATS_Surveys);
+      Lay_StartRoundFrame (NULL,Txt_Survey,NULL,Hlp_ASSESSMENT_Surveys);
 
    /***** Get data of this survey *****/
    Svy.SvyCod = SvyCod;
@@ -1732,8 +1732,8 @@ static bool Svy_CheckIfSimilarSurveyExists (struct Survey *Svy)
 
 void Svy_RequestCreatOrEditSvy (void)
   {
-   extern const char *Hlp_STATS_Surveys_new_survey;
-   extern const char *Hlp_STATS_Surveys_edit_survey;
+   extern const char *Hlp_ASSESSMENT_Surveys_new_survey;
+   extern const char *Hlp_ASSESSMENT_Surveys_edit_survey;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_New_survey;
    extern const char *Txt_Scope;
@@ -1801,8 +1801,8 @@ void Svy_RequestCreatOrEditSvy (void)
    /***** Start frame *****/
    Lay_StartRoundFrameTable (NULL,ItsANewSurvey ? Txt_New_survey :
 	                                          Txt_Edit_survey,
-	                     NULL,ItsANewSurvey ? Hlp_STATS_Surveys_new_survey :
-	                                          Hlp_STATS_Surveys_edit_survey,
+	                     NULL,ItsANewSurvey ? Hlp_ASSESSMENT_Surveys_new_survey :
+	                                          Hlp_ASSESSMENT_Surveys_edit_survey,
 	                     2);
 
    /***** Scope of the survey *****/
@@ -2564,7 +2564,7 @@ void Svy_RequestEditQuestion (void)
 static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
                                     char Txt[Cns_MAX_BYTES_TEXT + 1])
   {
-   extern const char *Hlp_STATS_Surveys_questions;
+   extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_Question;
    extern const char *Txt_New_question;
@@ -2641,7 +2641,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
      }
    else
       Lay_StartRoundFrame (NULL,Txt_New_question,
-                           NULL,Hlp_STATS_Surveys_questions);
+                           NULL,Hlp_ASSESSMENT_Surveys_questions);
 
    /***** Start form *****/
    Act_FormStart (ActRcvSvyQst);
@@ -3129,7 +3129,7 @@ static unsigned Svy_GetNextQuestionIndexInSvy (long SvyCod)
 
 static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQst)
   {
-   extern const char *Hlp_STATS_Surveys_questions;
+   extern const char *Hlp_ASSESSMENT_Surveys_questions;
    extern const char *Txt_Questions;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Type;
@@ -3159,7 +3159,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
    Lay_StartRoundFrame (NULL,Txt_Questions,
                         Svy->Status.ICanEdit ? Svy_PutIconToAddNewQuestion :
                                                NULL,
-                        Hlp_STATS_Surveys_questions);
+                        Hlp_ASSESSMENT_Surveys_questions);
 
    if (NumQsts)
      {

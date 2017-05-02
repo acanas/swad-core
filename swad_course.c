@@ -467,12 +467,12 @@ static void Crs_Configuration (bool PrintView)
                Indicators.NumIndicators,Txt_of_PART_OF_A_TOTAL,Ind_NUM_INDICATORS);
       Act_LinkFormSubmit (Gbl.Title,"DAT",NULL);
       fprintf (Gbl.F.Out,"%s "
-                         "<img src=\"%s/%s16x16.gif\" alt=\"%s\""
+                         "<img src=\"%s/%s\" alt=\"%s\""
                          " class=\"ICO20x20\" />",
                Gbl.Title,
                Gbl.Prefs.IconsURL,
-               (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green" :
-        	                                                  "warning",
+               (Indicators.NumIndicators == Ind_NUM_INDICATORS) ? "ok_green16x16.gif" :
+        	                                                  "warning64x64.png",
                Gbl.Title);
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</td>"

@@ -19441,7 +19441,7 @@ const char *Txt_MENU_TITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	},
 	{
-	// TabAna **********************************************************************
+	// TabSta **********************************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Xifres"
@@ -21407,7 +21407,7 @@ const char *Txt_MENU_SUBTITLE[Tab_NUM_TABS][Act_MAX_OPTIONS_IN_MENU_PER_TAB] =
 	NULL,	// 11
 	},
 	{
-	// TabAna *****************************************************
+	// TabSta *****************************************************
 	//  0: ActReqUseGbl
 #if   L==1
 	"Grans nombres sobre l'&uacute;s actual de tota la plataforma,"
@@ -40860,26 +40860,47 @@ const char *Txt_TABS_TXT[Tab_NUM_TABS] =
 	 "Mensagens"
 #endif
 	 ,
-	 // TabAna
+	 // TabSta
 #if   L==1
-	 "An&agrave;lisis"
+	 "Estad&iacute;stiques"
+#elif L==2
+	 "Statistik"
+#elif L==3
+	 "Statistics"
+#elif L==4
+	 "Estad&iacute;sticas"
+#elif L==5
+	 "Statistiques"
+#elif L==6
+	 "Papy'aporeko"
+#elif L==7
+	 "Statistiche"
+#elif L==8
+	 "Statystyki"
+#elif L==9
+	 "Estat&iacute;sticas"
+#endif
+/*
+#if   L==1
+	 "Anal&iacute;tiques"
 #elif L==2
 	 "Analytik"
 #elif L==3
 	 "Analytics"
 #elif L==4
-	 "An&aacute;lisis"
+	 "Anal&iacute;ticas"
 #elif L==5
-	 "Analyse"
+	 "Analytiques"
 #elif L==6
 	 "&Ntilde;ehesa'&yuml;ijo"
 #elif L==7
-	 "Analisi"
+	 "Analitiche"
 #elif L==8
 	 "Analizy"
 #elif L==9
-	 "An&aacute;lise"
+	 "An&aacute;lises"
 #endif
+*/
 	 ,
 	 // TabPrf
 #if   L==1
