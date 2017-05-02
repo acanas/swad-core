@@ -31505,27 +31505,6 @@ const char *Txt_Remove_survey =
 	"Remover inqu&eacute;rito";
 #endif
 
-const char *Txt_Remove_this_message =
-#if   L==1
-	"Eliminar aquest missatge";
-#elif L==2
-	"Diese Nachricht entfernen";
-#elif L==3
-	"Remove this message";
-#elif L==4
-	"Eliminar este mensaje";
-#elif L==5
-	"Supprimer ce message";
-#elif L==6
-	"Eliminar este mensaje";	// Okoteve traducción
-#elif L==7
-	"Rimuovere questo messaggio";
-#elif L==8
-	"Usu&nacute; t&eogon; wiadomo&sacute;&cacute;";
-#elif L==9
-	"Remover esta mensagem";
-#endif
-
 const char *Txt_Remove_thread =
 #if   L==1
 	"Eliminar discusi&oacute;n";	// Necessita traduccio
@@ -31587,27 +31566,6 @@ const char *Txt_Remove_the_users_indicated_in_step_1 =
 	"Usu&nacute; u&zdot;ytkownikami, kt&oacute;rzy sa na liscie";
 #elif L==9
 	"Tirar os utilizadores que est&atilde;o na lista";
-#endif
-
-const char *Txt_Remove_these_messages =
-#if   L==1
-	"Eliminar aquests missatges";
-#elif L==2
-	"Diese Nachrichten entfernen";
-#elif L==3
-	"Remove these messages";
-#elif L==4
-	"Eliminar estos mensajes";
-#elif L==5
-	"Supprimer ces messages";
-#elif L==6
-	"Eliminar estos mensajes";	// Okoteve traducción
-#elif L==7
-	"Rimuovere questi messaggi";
-#elif L==8
-	"Usu&nacute; te wiadomo&sacute;ci";
-#elif L==9
-	"Remover estas mensagens";
 #endif
 
 const char *Txt_Remove_type_of_group =

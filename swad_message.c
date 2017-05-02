@@ -93,10 +93,6 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
 static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs);
 
 static void Msg_PutIconsListMsgs (void);
-static void Msg_PutIconToRemoveOneRcvMsg (void);
-static void Msg_PutIconToRemoveSevRcvMsgs (void);
-static void Msg_PutIconToRemoveOneSntMsg (void);
-static void Msg_PutIconToRemoveSevSntMsgs (void);
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (void);
 static void Msg_GetParamOnlyUnreadMsgs (void);
@@ -2411,85 +2407,13 @@ static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs)
 static void Msg_PutIconsListMsgs (void)
   {
    /***** Put icons to remove messages *****/
-   switch (Gbl.Msg.TypeOfMessages)
-     {
-      case Msg_MESSAGES_RECEIVED:
-	 if (Gbl.Msg.NumMsgs == 1)
-	    Msg_PutIconToRemoveOneRcvMsg ();
-	 else if (Gbl.Msg.NumMsgs > 1)
-	    Msg_PutIconToRemoveSevRcvMsgs ();
-	 break;
-      case Msg_MESSAGES_SENT:
-	 if (Gbl.Msg.NumMsgs == 1)
-	    Msg_PutIconToRemoveOneSntMsg ();
-	 else if (Gbl.Msg.NumMsgs > 1)
-	    Msg_PutIconToRemoveSevSntMsgs ();
-	 break;
-     }
+   Lay_PutContextualIconToRemove ((Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
+                                                                                      ActReqDelAllSntMsg,
+                                  Msg_PutHiddenParamsMsgsFilters);
 
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_MESSAGES;
    Sta_PutIconToShowFigure ();
-  }
-
-/*****************************************************************************/
-/***************** Put icon to remove one received message *******************/
-/*****************************************************************************/
-
-static void Msg_PutIconToRemoveOneRcvMsg (void)
-  {
-   extern const char *Txt_Remove_this_message;
-
-   Lay_PutContextualLink (ActReqDelAllRcvMsg,NULL,
-                          Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",
-			  Txt_Remove_this_message,NULL,
-                          NULL);
-  }
-
-/*****************************************************************************/
-/*************** Put icon to remove several received messages ****************/
-/*****************************************************************************/
-
-static void Msg_PutIconToRemoveSevRcvMsgs (void)
-  {
-   extern const char *Txt_Remove_these_messages;
-
-   Lay_PutContextualLink (ActReqDelAllRcvMsg,NULL,
-                          Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",
-			  Txt_Remove_these_messages,NULL,
-                          NULL);
-  }
-
-/*****************************************************************************/
-/******************** Put icon to remove one sent message ********************/
-/*****************************************************************************/
-
-static void Msg_PutIconToRemoveOneSntMsg (void)
-  {
-   extern const char *Txt_Remove_this_message;
-
-   Lay_PutContextualLink (ActReqDelAllSntMsg,NULL,
-                          Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",
-			  Txt_Remove_this_message,NULL,
-                          NULL);
-  }
-
-/*****************************************************************************/
-/***************** Put icon to remove several sent messages ******************/
-/*****************************************************************************/
-
-static void Msg_PutIconToRemoveSevSntMsgs (void)
-  {
-   extern const char *Txt_Remove_these_messages;
-
-   Lay_PutContextualLink (ActReqDelAllSntMsg,NULL,
-                          Msg_PutHiddenParamsMsgsFilters,
-			  "remove-on64x64.png",
-			  Txt_Remove_these_messages,NULL,
-                          NULL);
   }
 
 /*****************************************************************************/
