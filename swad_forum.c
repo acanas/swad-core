@@ -1210,7 +1210,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 
    /***** Put an icon with post status *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s CENTER_TOP\" style=\"width:30px;\">"
+	              "<td class=\"CONTEXT_COL %s\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />"
@@ -1250,7 +1250,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
 
    /***** Form to ban/unban post *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"CENTER_TOP\" style=\"width:22px;\">");
+	              "<td class=\"CONTEXT_COL\">");
    if (ICanModerateForum)
      {
       Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
@@ -2560,15 +2560,9 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
       /***** Heading row *****/
       Lay_StartTableWideMargin (2);
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<th class=\"LEFT_MIDDLE\""
-	                 " style=\"width:18px;\">"
-	                 "</th>"
-                         "<th class=\"LEFT_MIDDLE\""
-                         " style=\"width:22px;\">"
-                         "</th>"
-                         "<th class=\"LEFT_MIDDLE\">"
-                         "%s"
-                         "</th>",
+	                 "<th style=\"width:20px;\"></th>"
+                         "<th class=\"CONTEXT_COL\"></th>"	// Column for contextual icons
+                         "<th class=\"LEFT_MIDDLE\">%s</th>",
                Txt_MSG_Subject);
       for (Order = For_FIRST_MSG;
 	   Order <= For_LAST_MSG;
@@ -3299,7 +3293,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
 
       /***** Show my photo if I have any posts in this thread *****/
       fprintf (Gbl.F.Out,"<tr>"
-	                 "<td class=\"RIGHT_TOP %s\" style=\"width:18px;\">",
+	                 "<td class=\"CENTER_TOP %s\" style=\"width:20px;\">",
                BgColor);
       if (Thr.NumMyPosts)
         {
@@ -3322,7 +3316,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       fprintf (Gbl.F.Out,"</td>");
 
       /***** Put an icon with thread status *****/
-      fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP %s\" style=\"width:30px;\">"
+      fprintf (Gbl.F.Out,"<td class=\"CONTEXT_COL %s\">"
                          "<img src=\"%s/%s16x16.gif\""
                          " alt=\"%s\" title=\"%s\""
 	                 " class=\"ICO20x20\" />",
