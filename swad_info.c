@@ -298,6 +298,7 @@ extern const char *Hlp_ASSESSMENT_System_edit;
 /*****************************************************************************/
 
 static void Inf_PutButtonToEditInfo (void);
+static void Inf_PutIconToViewInfo (void);
 static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_CheckIfIHaveReadInfo (void);
@@ -464,6 +465,11 @@ static void Inf_PutButtonToEditInfo (void)
 /*****************************************************************************/
 /************************ Put icon to edit course info ***********************/
 /*****************************************************************************/
+
+static void Inf_PutIconToViewInfo (void)
+  {
+   Lay_PutContextualIconToView (Inf_ActionsSeeInfo[Gbl.CurrentCrs.Info.Type],NULL);
+  }
 
 void Inf_PutIconToEditInfo (void)
   {
@@ -1068,14 +1074,14 @@ void Inf_FormsToSelSendInfo (void)
    bool MustBeRead;
    const char *HelpEdit[Inf_NUM_INFO_TYPES] =
      {
-      Hlp_COURSE_Information_edit,			// Inf_INTRODUCTION
-      Hlp_COURSE_Guide_edit,			// Inf_TEACHING_GUIDE
-      Hlp_COURSE_Syllabus_edit,			// Inf_LECTURES
-      Hlp_COURSE_Syllabus_edit,			// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography_edit,		// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ_edit,				// Inf_FAQ
-      Hlp_COURSE_Links_edit,			// Inf_LINKS
-      Hlp_ASSESSMENT_System_edit,			// Inf_ASSESSMENT
+      Hlp_COURSE_Information_edit,	// Inf_INTRODUCTION
+      Hlp_COURSE_Guide_edit,		// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Syllabus_edit,		// Inf_LECTURES
+      Hlp_COURSE_Syllabus_edit,		// Inf_PRACTICALS
+      Hlp_COURSE_Bibliography_edit,	// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ_edit,		// Inf_FAQ
+      Hlp_COURSE_Links_edit,		// Inf_LINKS
+      Hlp_ASSESSMENT_System_edit,	// Inf_ASSESSMENT
      };
 
    /***** Set info type *****/
@@ -1104,7 +1110,8 @@ void Inf_FormsToSelSendInfo (void)
    /***** Form to choice between alternatives *****/
    /* Start of table */
    Lay_StartRoundFrameTable (NULL,Txt_Source_of_information,
-                             NULL,HelpEdit[Gbl.CurrentCrs.Info.Type],4);
+                             Inf_PutIconToViewInfo,
+                             HelpEdit[Gbl.CurrentCrs.Info.Type],4);
 
    /* Options */
    for (InfoSrc = (Inf_InfoSrc_t) 0;
@@ -1755,13 +1762,13 @@ static bool Inf_CheckAndShowPlainTxt (void)
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
       Hlp_COURSE_Information_textual_information,	// Inf_INTRODUCTION
-      Hlp_COURSE_Guide,				// Inf_TEACHING_GUIDE
+      Hlp_COURSE_Guide,					// Inf_TEACHING_GUIDE
       Hlp_COURSE_Syllabus,				// Inf_LECTURES
       Hlp_COURSE_Syllabus,				// Inf_PRACTICALS
-      Hlp_COURSE_Bibliography,			// Inf_BIBLIOGRAPHY
-      Hlp_COURSE_FAQ,				// Inf_FAQ
-      Hlp_COURSE_Links,				// Inf_LINKS
-      Hlp_ASSESSMENT_System,			// Inf_ASSESSMENT
+      Hlp_COURSE_Bibliography,				// Inf_BIBLIOGRAPHY
+      Hlp_COURSE_FAQ,					// Inf_FAQ
+      Hlp_COURSE_Links,					// Inf_LINKS
+      Hlp_ASSESSMENT_System,				// Inf_ASSESSMENT
      };
 
    /***** Get info text from database *****/
