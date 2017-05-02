@@ -621,6 +621,7 @@ struct Globals
       char FileNameMail[PATH_MAX + 1];
       FILE *FileMail;
       unsigned CurrentPage;
+      long MsgCod;	// Used as parameter with message to be removed
      } Msg;
    struct
      {

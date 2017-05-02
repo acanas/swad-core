@@ -93,6 +93,7 @@ static void Msg_ConstructQueryToSelectSentOrReceivedMsgs (char Query[Msg_MAX_BYT
 static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs);
 
 static void Msg_PutIconsListMsgs (void);
+static void Msg_PutHiddenParamsOneMsg (void);
 
 static void Msg_ShowFormToShowOnlyUnreadMessages (void);
 static void Msg_GetParamOnlyUnreadMsgs (void);
@@ -141,8 +142,6 @@ static void Msg_WriteFormToReply (long MsgCod,long CrsCod,
                                   const struct UsrData *UsrDat);
 static void Msg_WriteMsgFrom (struct UsrData *UsrDat,bool Deleted);
 static void Msg_WriteMsgTo (long MsgCod);
-
-static void Msg_PutFormToDeleteMessage (long MsgCod);
 
 static void Msg_PutFormToBanSender (struct UsrData *UsrDat);
 static void Msg_PutFormToUnbanSender (struct UsrData *UsrDat);
@@ -1697,22 +1696,22 @@ static void Msg_ShowSentOrReceivedMessages (void)
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
       ActSeeRcvMsg,
-      ActSeeSntMsg
+      ActSeeSntMsg,
      };
    static const Pag_WhatPaginate_t WhatPaginate[Msg_NUM_TYPES_OF_MSGS] =
      {
       Pag_MESSAGES_RECEIVED,
-      Pag_MESSAGES_SENT
+      Pag_MESSAGES_SENT,
      };
    const char *Help[Msg_NUM_TYPES_OF_MSGS] =
      {
       Hlp_MESSAGES_Received,
-      Hlp_MESSAGES_Sent
+      Hlp_MESSAGES_Sent,
      };
    const char *HelpFilter[Msg_NUM_TYPES_OF_MSGS] =
      {
       Hlp_MESSAGES_Received_filter,
-      Hlp_MESSAGES_Sent_filter
+      Hlp_MESSAGES_Sent_filter,
      };
 
    /***** Get the page number *****/
@@ -2406,9 +2405,14 @@ static char *Msg_WriteNumMsgs (unsigned NumUnreadMsgs)
 
 static void Msg_PutIconsListMsgs (void)
   {
-   /***** Put icons to remove messages *****/
-   Lay_PutContextualIconToRemove ((Gbl.Msg.TypeOfMessages == Msg_MESSAGES_RECEIVED) ? ActReqDelAllRcvMsg :
-                                                                                      ActReqDelAllSntMsg,
+   static const Act_Action_t ActionReqDelAllMsg[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      ActReqDelAllRcvMsg,
+      ActReqDelAllSntMsg,
+     };
+
+   /***** Put icon to remove messages *****/
+   Lay_PutContextualIconToRemove (ActionReqDelAllMsg[Gbl.Msg.TypeOfMessages],
                                   Msg_PutHiddenParamsMsgsFilters);
 
    /***** Put icon to show a figure *****/
@@ -2417,7 +2421,19 @@ static void Msg_PutIconsListMsgs (void)
   }
 
 /*****************************************************************************/
-/***** Write a form parameter to specify filter "from"/"to" for messages *****/
+/******* Put hidden parameters to expand, contract or delete a message *******/
+/*****************************************************************************/
+
+static void Msg_PutHiddenParamsOneMsg (void)
+  {
+   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
+			     Gbl.Msg.CurrentPage);
+   Msg_PutHiddenParamMsgCod (Gbl.Msg.MsgCod);
+   Msg_PutHiddenParamsMsgsFilters ();
+  }
+
+/*****************************************************************************/
+/****************** Put hidden parameters with filters ***********************/
 /*****************************************************************************/
 
 void Msg_PutHiddenParamsMsgsFilters (void)
@@ -2814,6 +2830,11 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
    extern const char *Txt_MSG_From;
    extern const char *Txt_MSG_To;
    extern const char *Txt_MSG_Content;
+   static const Act_Action_t ActionDelMsg[Msg_NUM_TYPES_OF_MSGS] =
+     {
+      ActDelRcvMsg,
+      ActDelSntMsg,
+     };
    struct UsrData UsrDat;
    const char *Title = NULL;	// Initialized to avoid warning
    bool FromThisCrs = false;	// Initialized to avoid warning
@@ -2856,7 +2877,7 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
      }
 
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td class=\"%s CENTER_TOP\" style=\"width:20px;\">"
+	              "<td class=\"CONTEXT_COL %s\">"
                       "<img src=\"%s/msg-%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\""
                       " class=\"ICO20x20\" />",
@@ -2873,7 +2894,9 @@ static void Msg_ShowASentOrReceivedMessage (long MsgNum,long MsgCod)
 
    /***** Form to delete message *****/
    fprintf (Gbl.F.Out,"<br />");
-   Msg_PutFormToDeleteMessage (MsgCod);
+   Gbl.Msg.MsgCod = MsgCod;	// Message to be deleted
+   Lay_PutContextualIconToRemove (ActionDelMsg[Gbl.Msg.TypeOfMessages],
+                                  Msg_PutHiddenParamsOneMsg);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write message number *****/
@@ -3061,10 +3084,8 @@ static void Msg_WriteSentOrReceivedMsgSubject (long MsgCod,const char *Subject,b
 	                                                                        ActExpRcvMsg) :
                                                                     (Expanded ? ActConSntMsg :
                                                         	                ActExpSntMsg));
-   Msg_PutHiddenParamsMsgsFilters ();
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                     Gbl.Msg.CurrentPage);
-   Msg_PutHiddenParamMsgCod (MsgCod);
+   Gbl.Msg.MsgCod = MsgCod;	// Message to be contracted/expanded
+   Msg_PutHiddenParamsOneMsg ();
    Act_LinkFormSubmit (Expanded ? Txt_Hide_message :
 	                          Txt_See_message,
                        Open ? "MSG_TIT" :
@@ -3343,7 +3364,7 @@ static void Msg_WriteMsgTo (long MsgCod)
    static const Act_Action_t ActionSee[Msg_NUM_TYPES_OF_MSGS] =
      {
       ActSeeRcvMsg,
-      ActSeeSntMsg
+      ActSeeSntMsg,
      };
 
    /***** Get number of recipients of a message from database *****/
@@ -3462,10 +3483,8 @@ static void Msg_WriteMsgTo (long MsgCod)
          fprintf (Gbl.F.Out,"<tr>"
                             "<td colspan=\"3\" class=\"AUTHOR_TXT LEFT_MIDDLE\">");
          Act_FormStart (ActionSee[Gbl.Msg.TypeOfMessages]);
-         Msg_PutHiddenParamsMsgsFilters ();
-         Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                           Gbl.Msg.CurrentPage);
-         Msg_PutHiddenParamMsgCod (MsgCod);
+         Gbl.Msg.MsgCod = MsgCod;	// Message to be expanded with all recipients visible
+         Msg_PutHiddenParamsOneMsg ();
          Par_PutHiddenParamChar ("SeeAllRcpts",'Y');
          Act_LinkFormSubmit (Txt_View_all_recipients,"AUTHOR_TXT",NULL);
          fprintf (Gbl.F.Out,Txt_and_X_other_recipients,
@@ -3513,27 +3532,6 @@ void Msg_WriteMsgDate (time_t TimeUTC,const char *ClassBackground)
 
    /***** End cell *****/
    fprintf (Gbl.F.Out,"</td>");
-  }
-
-/*****************************************************************************/
-/************* Put a form to delete a received or sent message ***************/
-/*****************************************************************************/
-
-static void Msg_PutFormToDeleteMessage (long MsgCod)
-  {
-   static const Act_Action_t ActionDel[Msg_NUM_TYPES_OF_MSGS] =
-     {
-      ActDelRcvMsg,
-      ActDelSntMsg
-     };
-
-   Act_FormStart (ActionDel[Gbl.Msg.TypeOfMessages]);
-   Pag_PutHiddenParamPagNum (Msg_WhatPaginate[Gbl.Msg.TypeOfMessages],
-	                     Gbl.Msg.CurrentPage);
-   Msg_PutHiddenParamMsgCod (MsgCod);
-   Msg_PutHiddenParamsMsgsFilters ();
-   Lay_PutIconRemove ();
-   Act_FormEnd ();
   }
 
 /*****************************************************************************/
