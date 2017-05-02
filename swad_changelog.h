@@ -220,13 +220,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.201.4 (2017-05-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.201.5 (2017-05-02)"
 #define CSS_FILE		"swad16.201.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.201.5: May 02, 2017	Changes in layout of assignment print view. (218270 lines)
         Version 16.201.4: May 02, 2017	Icon to view course info when editing source of information. (218243 lines)
         Version 16.201.3: May 02, 2017	Code refactoring in forums. (218237 lines)
         Version 16.201.2: May 02, 2017	Code refactoring in messages. (218242 lines)

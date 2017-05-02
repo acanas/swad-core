@@ -63,7 +63,7 @@ extern struct Globals Gbl;
 /*****************************************************************************/
 
 static void Asg_ShowAllAssignments (void);
-static void Asg_PutHeadForSeeing (void);
+static void Asg_PutHeadForSeeing (bool PrintView);
 static bool Asg_CheckIfICanCreateAssignments (void);
 static void Asg_PutIconsListAssignments (void);
 static void Asg_PutIconToCreateNewAsg (void);
@@ -146,7 +146,7 @@ static void Asg_ShowAllAssignments (void)
      {
       /***** Table head *****/
       Lay_StartTableWideMargin (2);
-      Asg_PutHeadForSeeing ();
+      Asg_PutHeadForSeeing (false);	// Not print view
 
       /***** Write all the assignments *****/
       for (NumAsg = Pagination.FirstItemVisible;
@@ -182,7 +182,7 @@ static void Asg_ShowAllAssignments (void)
 /***************** Write header with fields of an assignment *****************/
 /*****************************************************************************/
 
-static void Asg_PutHeadForSeeing (void)
+static void Asg_PutHeadForSeeing (bool PrintView)
   {
    extern const char *Txt_START_END_TIME_HELP[Dat_NUM_START_END_TIME];
    extern const char *Txt_START_END_TIME[Dat_NUM_START_END_TIME];
@@ -198,18 +198,26 @@ static void Asg_PutHeadForSeeing (void)
 	Order++)
      {
       fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">");
-      Act_FormStart (ActSeeAsg);
-      Grp_PutParamWhichGrps ();
-      Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
-      Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
-      Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
-      if (Order == Gbl.Asgs.SelectedOrder)
-	 fprintf (Gbl.F.Out,"<u>");
+
+      if (!PrintView)
+	{
+	 Act_FormStart (ActSeeAsg);
+	 Grp_PutParamWhichGrps ();
+	 Pag_PutHiddenParamPagNum (Pag_ASSIGNMENTS,Gbl.Asgs.CurrentPage);
+	 Par_PutHiddenParamUnsigned ("Order",(unsigned) Order);
+	 Act_LinkFormSubmit (Txt_START_END_TIME_HELP[Order],"TIT_TBL",NULL);
+	 if (Order == Gbl.Asgs.SelectedOrder)
+	    fprintf (Gbl.F.Out,"<u>");
+	}
       fprintf (Gbl.F.Out,"%s",Txt_START_END_TIME[Order]);
-      if (Order == Gbl.Asgs.SelectedOrder)
-	 fprintf (Gbl.F.Out,"</u>");
-      fprintf (Gbl.F.Out,"</a>");
-      Act_FormEnd ();
+      if (!PrintView)
+	{
+	 if (Order == Gbl.Asgs.SelectedOrder)
+	    fprintf (Gbl.F.Out,"</u>");
+	 fprintf (Gbl.F.Out,"</a>");
+	 Act_FormEnd ();
+	}
+
       fprintf (Gbl.F.Out,"</th>");
      }
    fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE\">"
@@ -319,7 +327,7 @@ void Asg_PrintOneAssignment (void)
 
    /***** Table head *****/
    Lay_StartTableWideMargin (2);
-   Asg_PutHeadForSeeing ();
+   Asg_PutHeadForSeeing (true);		// Print view
 
    /***** Write assignment *****/
    Asg_ShowOneAssignment (AsgCod,
@@ -350,62 +358,76 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
-            Gbl.RowEvenOdd);
-   if (!PrintView)
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
+   if (PrintView)
+      fprintf (Gbl.F.Out,"\">");
+   else
+     {
+      fprintf (Gbl.F.Out," COLOR%u\">",Gbl.RowEvenOdd);
       Asg_PutFormsToRemEditOneAsg (Asg.AsgCod,Asg.Hidden);
+     }
    fprintf (Gbl.F.Out,"</td>");
 
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP",
+	    UniqueId,
+            Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
+        	                     "DATE_RED_LIGHT") :
+                         (Asg.Open ? "DATE_GREEN" :
+                                     "DATE_RED"));
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_start_%u',"
                       "%ld,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
+            UniqueId,
+            Asg.TimeUTC[Dat_START_TIME],Txt_Today);
+
+   /* End date/time */
+   UniqueId++;
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP",
 	    UniqueId,
             Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
         	                     "DATE_RED_LIGHT") :
                          (Asg.Open ? "DATE_GREEN" :
-                                     "DATE_RED"),
-            Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Dat_START_TIME],Txt_Today);
-
-   /* End date/time */
-   UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP COLOR%u\">"
+                                     "DATE_RED"));
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_end_%u',"
                       "%ld,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
-	    UniqueId,
-            Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
-        	                     "DATE_RED_LIGHT") :
-                         (Asg.Open ? "DATE_GREEN" :
-                                     "DATE_RED"),
-            Gbl.RowEvenOdd,
-            UniqueId,Asg.TimeUTC[Dat_END_TIME],Txt_Today);
+            UniqueId,
+            Asg.TimeUTC[Dat_END_TIME],Txt_Today);
 
    /* Assignment title */
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
                       "<div class=\"%s\">%s</div>",
-            Gbl.RowEvenOdd,
             Asg.Hidden ? "ASG_TITLE_LIGHT" :
         	         "ASG_TITLE",
             Asg.Title);
    fprintf (Gbl.F.Out,"</td>");
 
    /* Send work? */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP COLOR%u\">"
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP",
+            (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
+        	                              "DAT");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">"
                       "<img src=\"%s/%s16x16.gif\""
                       " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
                       "<br />%s"
                       "</td>",
-            (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
-        	                              "DAT",
-            Gbl.RowEvenOdd,
             Gbl.Prefs.IconsURL,
             (Asg.SendWork == Asg_SEND_WORK) ? "file_on" :
         	                              "file_off",
@@ -415,8 +437,10 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
         	                              Txt_No);
 
    /* Assignment folder */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"DAT LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"DAT LEFT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
    if (Asg.SendWork == Asg_SEND_WORK)
       Asg_WriteAssignmentFolder (&Asg,PrintView);
    fprintf (Gbl.F.Out,"</td>"
@@ -424,8 +448,10 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /***** Write second row of data of this assignment *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
+	              "<td colspan=\"2\" class=\"LEFT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    /* Author of the assignment */
    Asg_WriteAsgAuthor (&Asg);
@@ -437,8 +463,10 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   if (!PrintView)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Asg_GetAndWriteNamesOfGrpsAssociatedToAsg (&Asg);
