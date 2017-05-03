@@ -216,17 +216,26 @@
 
 // TODO: Change numbers of notifications in program and database to match order in tabs
 
+// TODO: Sugerencias de Sandra Daniela Tazzioli Barroso realizadas el 2 de mayo de 2017:
+// 1. Poder ver fechas en formato (día-mes-año).
+// 2. Mejor ayuda sobre cómo pasar de Excel al formato HTML necesario para las calificaciones.
+// 3. Puede ser interesante que un administrador pueda cambiar el DNI de un usuario.
+// 4. Comprobar que las direcciones de correo de cada uno de los estudiantes aparecen en Bcc: (copia oculta) en cualquier gestor de correo.
+// 5. Informar a otros usuarios de que es el cumpleaños de otros usuarios para que los feliciten (habría que añadir una categoría de privacidad nueva para la visibilidad de la fecha de cumpleaños).
+// 6. La información sobre nuevas notificaciones debería aparecer también en pantallas pequeñas (móviles). Tal vez podría aparecer también en el icono de notificaciones de la pestaña MENSAJES.
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.202.1 (2017-05-02)"
+#define Log_PLATFORM_VERSION	"SWAD 16.202.2 (2017-05-03)"
 #define CSS_FILE		"swad16.202.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.202.2: May 03, 2017	Fixed bug in attendance events, reported by Francisco Ocaña Lara. (218306 lines)
         Version 16.202.1: May 02, 2017	Changed help on surveys from STATS to ASSESSMENT. (218296 lines)
         Version 16.202:   May 02, 2017	Changes in layout of alerts. (218295 lines)
 Copy the following icons to icon public directory:
@@ -234,6 +243,7 @@ sudo cp -a icon/info64x64.png /var/www/html/swad/icon/
 sudo cp -a icon/success64x64.png /var/www/html/swad/icon/
 sudo cp -a icon/question64x64.gif /var/www/html/swad/icon/
 sudo cp -a icon/warning64x64.gif /var/www/html/swad/icon/
+sudo cp -a icon/warning64x64.png /var/www/html/swad/icon/
 sudo cp -a icon/error64x64.gif /var/www/html/swad/icon/
 
         Version 16.201.5: May 02, 2017	Changes in layout of assignment print view. (218270 lines)

@@ -600,7 +600,7 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
          HiddenSubQuery[0] = '\0';
          break;
       default:
-         sprintf (HiddenSubQuery,"AND Hidden='N'");
+         sprintf (HiddenSubQuery," AND Hidden='N'");
          break;
      }
    switch (Gbl.AttEvents.SelectedOrder)
@@ -627,7 +627,8 @@ static void Att_GetListAttEvents (Att_OrderTime_t Order)
                      " WHERE crs_grp_usr.UsrCod=%ld"
                      " AND att_grp.GrpCod=crs_grp_usr.GrpCod))"
                      " ORDER BY %s",
-               Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
+               Gbl.CurrentCrs.Crs.CrsCod,HiddenSubQuery,
+               Gbl.Usrs.Me.UsrDat.UsrCod,OrderBySubQuery);
    else	// Gbl.CurrentCrs.Grps.WhichGrps == Grp_ALL_GROUPS
       sprintf (Query,"SELECT AttCod"
                      " FROM att_events"
