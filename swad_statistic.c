@@ -8840,7 +8840,6 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
 static void Sta_GetAndShowNumUsrsPerDateFormat (void)
   {
-   extern const char *Dat_Format_Str[Dat_NUM_OPTIONS_FORMAT];
    extern const char *Hlp_STATS_Figures_calendar;	// TODO: Change!!!!!!!!!!!!!!!!
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Format;
@@ -8948,10 +8947,12 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
    for (Format = (Dat_Format_t) 0;
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
+     {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N LEFT_MIDDLE\">"
-                         "%s"
-			 "</td>"
+			 "<td class=\"DAT_N LEFT_MIDDLE\">");
+      Dat_PutSpanDateFormat (Format);
+      Dat_PutScriptDateFormat (Format);
+      fprintf (Gbl.F.Out,"</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"
 			 "%u"
 			 "</td>"
@@ -8959,11 +8960,11 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 			 "%5.2f%%"
 			 "</td>"
 			 "</tr>",
-	       Dat_Format_Str[Format],
 	       NumUsrs[Format],
 	       NumUsrsTotal ? (float) NumUsrs[Format] * 100.0 /
 			      (float) NumUsrsTotal :
 			      0);
+     }
 
    /***** End table *****/
    Lay_EndRoundFrameTable ();

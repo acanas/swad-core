@@ -46,14 +46,6 @@ extern struct Globals Gbl;
 /***************************** Public constants ******************************/
 /*****************************************************************************/
 
-/***** Date format *****/
-const char *Dat_Format_Str[Dat_NUM_OPTIONS_FORMAT] =
-  {
-   "yyyy-mm-dd",	// Dat_FORMAT_YYYY_MM_DD
-   "dd mmm yyyy",	// Dat_FORMAT_DD_MONTH_YYYY
-   "mmm dd, yyyy",	// Dat_FORMAT_MONTH_DD_YYYY
-  };
-
 /*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
@@ -130,18 +122,12 @@ void Dat_PutIconsToSelectDateFormat (void)
 	       (unsigned) Format);
       if (Format == Gbl.Prefs.DateFormat)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-			 "<span id=\"date_format_%u\"></span>"
-			 "</label>"
-			 "</li>",
-	       Gbl.Form.Id,
-	       (unsigned) Format);
-      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('date_format_%u',%ld,"
-			 "%u,',&nbsp;',null,true,false,false);"
-			 "</script>",
-	       (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
-	       (unsigned) Format);
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
+	       Gbl.Form.Id);
+      Dat_PutSpanDateFormat (Format);
+      Dat_PutScriptDateFormat (Format);
+      fprintf (Gbl.F.Out,"</label>"
+			 "</li>");
      }
 
    /***** End of list and form *****/
@@ -163,6 +149,26 @@ static void Dat_PutIconsDateFormat (void)
    /***** Put icon to show a figure *****/
    Gbl.Stat.FigureType = Sta_DATE_FORMAT;
    Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/******* Put script to write current date-time in a given date format ********/
+/*****************************************************************************/
+
+void Dat_PutSpanDateFormat (Dat_Format_t Format)
+  {
+   fprintf (Gbl.F.Out,"<span id=\"date_format_%u\"></span>",
+	    (unsigned) Format);
+  }
+
+void Dat_PutScriptDateFormat (Dat_Format_t Format)
+  {
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+		      "writeLocalDateHMSFromUTC('date_format_%u',%ld,"
+		      "%u,',&nbsp;',null,true,false,false);"
+		      "</script>",
+	    (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
+	    (unsigned) Format);
   }
 
 /*****************************************************************************/

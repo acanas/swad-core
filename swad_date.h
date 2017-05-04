@@ -114,6 +114,10 @@ typedef enum
 /*****************************************************************************/
 
 void Dat_PutIconsToSelectDateFormat (void);
+
+void Dat_PutSpanDateFormat (Dat_Format_t Format);
+void Dat_PutScriptDateFormat (Dat_Format_t Format);
+
 void Dat_ChangeDateFormat (void);
 Dat_Format_t Dat_GetDateFormatFromStr (const char *Str);
 
