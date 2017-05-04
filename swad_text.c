@@ -7394,6 +7394,27 @@ const char *Txt_Date_of_creation =
 	"Data da cria&ccedil;&atilde;o";
 #endif
 
+const char *Txt_Dates =
+#if   L==1
+	"Dates";
+#elif L==2
+	"Datum";
+#elif L==3
+	"Dates";
+#elif L==4
+	"Fechas";
+#elif L==5
+	"Dates";
+#elif L==6
+	"Arange";
+#elif L==7
+	"Date";
+#elif L==8
+	"Daty";
+#elif L==9
+	"Datas";
+#endif
+
 const char *Txt_Day =
 #if   L==1
 	"D&iacute;a";	// Necessita traduccio

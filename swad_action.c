@@ -41,6 +41,7 @@
 #include "swad_course.h"
 #include "swad_chat.h"
 #include "swad_database.h"
+#include "swad_date.h"
 #include "swad_degree_type.h"
 #include "swad_duplicate.h"
 #include "swad_exam.h"
@@ -1442,6 +1443,7 @@ Profile:
        1231. ActReqChgLan		Ask if change language
        1232. ActChgLan			Change language
        1233. ActChg1stDay		Change first day of the week
+       NEW!. ActChgDatFmt		Change date format
        1234. ActChgCol			Change side columns
        1235. ActHidLftCol		Hide left side column
        1236. ActHidRgtCol		Hide right side column
@@ -2946,6 +2948,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqChgLan	*/{ 992,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_AskChangeLanguage		,NULL},
    /* ActChgLan		*/{ 654,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
    /* ActChg1stDay	*/{1484,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
+   /* ActChgDatFmt	*/{1638,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Dat_ChangeDateFormat		,Pre_EditPrefs			,NULL},
    /* ActChgCol		*/{ 674,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},
    /* ActHidLftCol	*/{ 668,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_HideLeftCol		,Pre_EditPrefs			,NULL},
    /* ActHidRgtCol	*/{ 669,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_HideRightCol		,Pre_EditPrefs			,NULL},
@@ -4624,6 +4627,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPrnCalDeg,		// #1635
 	ActChgCalDeg1stDay,	// #1636
 	ActPrnOneAsg,		// #1637
+	ActChgDatFmt,		// #1638
 	};
 
 /*****************************************************************************/

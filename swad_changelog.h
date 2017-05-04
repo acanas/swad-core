@@ -224,17 +224,23 @@
 // 5. Informar a otros usuarios de que es el cumpleaños de otros usuarios para que los feliciten (habría que añadir una categoría de privacidad nueva para la visibilidad de la fecha de cumpleaños).
 // 6. La información sobre nuevas notificaciones debería aparecer también en pantallas pequeñas (móviles). Tal vez podría aparecer también en el icono de notificaciones de la pestaña MENSAJES.
 
+// TODO: Fix bug: When a centre is associated with a place and it is moved to another institution, what happens with the place?
+// TODO: Check what happens with places when a centre is removed
+
+// TODO: Green lock in documents is not shown when name is shortened (see OpenSWAD -> Creative Commons -> Files -> Documents)
+
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.202.2 (2017-05-03)"
+#define Log_PLATFORM_VERSION	"SWAD 16.203 (2017-05-04)"
 #define CSS_FILE		"swad16.202.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.203:   May 04, 2017	Form in preferences to change date format. Not finished. (218447 lines)
         Version 16.202.2: May 03, 2017	Fixed bug in attendance events, reported by Francisco Ocaña Lara. (218306 lines)
         Version 16.202.1: May 02, 2017	Changed help on surveys from STATS to ASSESSMENT. (218296 lines)
         Version 16.202:   May 02, 2017	Changes in layout of alerts. (218295 lines)

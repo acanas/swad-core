@@ -303,6 +303,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
 
    UsrDat->Prefs.Language       = Txt_LANGUAGE_UNKNOWN;			// Language unknown
    UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
+   UsrDat->Prefs.DateFormat     = Dat_FORMAT_DEFAULT		;	// Default date format
    UsrDat->Prefs.Theme          = The_THEME_DEFAULT;
    UsrDat->Prefs.IconSet        = Ico_ICON_SET_DEFAULT;
    UsrDat->Prefs.Menu           = Mnu_MENU_DEFAULT;

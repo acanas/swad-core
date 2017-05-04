@@ -149,7 +149,7 @@ void Cal_ChangeFirstDayOfWeek (void)
    /***** Get param with icon set *****/
    Gbl.Prefs.FirstDayOfWeek = Cal_GetParamFirstDayOfWeek ();
 
-   /***** Store icon set in database *****/
+   /***** Store icon first day of week database *****/
    if (Gbl.Usrs.Me.Logged)
      {
       sprintf (Query,"UPDATE usr_data SET FirstDayOfWeek=%u"

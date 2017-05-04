@@ -34,6 +34,7 @@
 #include "swad_date.h"
 #include "swad_global.h"
 #include "swad_parameter.h"
+#include "swad_preference.h"
 
 /*****************************************************************************/
 /************** External global variables from others modules ****************/
@@ -75,6 +76,14 @@ const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
    "DATE_BLUE_LIGHT",	// Dat_FUTURE
   };
 
+/***** Date format *****/
+static const char *Dat_Format_Str[Dat_NUM_OPTIONS_FORMAT] =
+  {
+   "yyyy-mm-dd",	// Dat_FORMAT_YYYY_MM_DD
+   "dd mmm yyyy",	// Dat_FORMAT_DD_MONTH_YYYY
+   "mmm dd, yyyy",	// Dat_FORMAT_MONTH_DD_YYYY
+  };
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -82,6 +91,106 @@ const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
 /*****************************************************************************/
 /**************************** Private prototypes *****************************/
 /*****************************************************************************/
+
+static void Dat_PutIconsDateFormat (void);
+static unsigned Dat_GetParamDateFormat (void);
+
+/*****************************************************************************/
+/************** Put icons to select the first day of the week ****************/
+/*****************************************************************************/
+
+void Dat_PutIconsToSelectDateFormat (void)
+  {
+   extern const char *Hlp_PROFILE_Preferences_calendar;
+   extern const char *Txt_Dates;
+   Dat_Format_t Format;
+
+   /***** Start frame *****/
+   Lay_StartRoundFrame (NULL,Txt_Dates,
+                        Dat_PutIconsDateFormat,
+                        Hlp_PROFILE_Preferences_calendar);
+
+   /***** Form with list of options *****/
+   Act_FormStart (ActChgDatFmt);
+
+   fprintf (Gbl.F.Out,"<ul class=\"LIST_LEFT\">");
+   for (Format = (Dat_Format_t) 0;
+	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
+	Format++)
+     {
+      fprintf (Gbl.F.Out,"<li class=\"%s\">"
+			 "<label>"
+			 "<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
+	       (Format == Gbl.Usrs.Me.UsrDat.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
+						                 "DAT",
+	       (unsigned) Format);
+      if (Format == Gbl.Usrs.Me.UsrDat.Prefs.DateFormat)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
+			 "%s"
+			 "</label>"
+			 "</li>",
+	       Gbl.Form.Id,
+	       Dat_Format_Str[Format]);
+     }
+
+   /***** End of list and form *****/
+   fprintf (Gbl.F.Out,"</ul>");
+
+   /***** End form *****/
+   Act_FormEnd ();
+
+   /***** End frame *****/
+   Lay_EndRoundFrame ();
+  }
+
+/*****************************************************************************/
+/************** Put contextual icons in date-format preference ***************/
+/*****************************************************************************/
+
+static void Dat_PutIconsDateFormat (void)
+  {
+   /***** Put icon to show a figure *****/
+   Gbl.Stat.FigureType = Sta_FIRST_DAY_OF_WEEK;	// TODO: Change!!!!!!!!!!!!!!
+   Sta_PutIconToShowFigure ();
+  }
+
+/*****************************************************************************/
+/***************************** Change date format ****************************/
+/*****************************************************************************/
+
+void Dat_ChangeDateFormat (void)
+  {
+   char Query[512];
+
+   /***** Get param with date format *****/
+   Gbl.Prefs.DateFormat = Dat_GetParamDateFormat ();
+
+   /***** Store date format in database *****/
+   if (Gbl.Usrs.Me.Logged)
+     {
+      sprintf (Query,"UPDATE usr_data SET DateFormat=%u"
+	             " WHERE UsrCod=%ld",
+               (unsigned) Gbl.Prefs.DateFormat,
+               Gbl.Usrs.Me.UsrDat.UsrCod);
+      DB_QueryUPDATE (Query,"can not update your preference about date format");
+     }
+
+   /***** Set preferences from current IP *****/
+   Pre_SetPrefsFromIP ();
+  }
+
+/*****************************************************************************/
+/********************** Get parameter with date format ***********************/
+/*****************************************************************************/
+
+static unsigned Dat_GetParamDateFormat (void)
+  {
+   return (unsigned) Par_GetParToUnsignedLong ("DateFormat",
+                                               0,
+                                               Dat_NUM_OPTIONS_FORMAT - 1,
+                                               Dat_FORMAT_DEFAULT);
+  }
 
 /*****************************************************************************/
 /************************** Get current time UTC *****************************/

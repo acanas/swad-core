@@ -33,6 +33,7 @@
 #include "swad_calendar.h"
 #include "swad_config.h"
 #include "swad_database.h"
+#include "swad_date.h"
 #include "swad_global.h"
 #include "swad_layout.h"
 #include "swad_notification.h"
@@ -77,26 +78,33 @@ void Pre_EditPrefs (void)
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    Lay_EndRoundFrame ();
 
-   /***** Icon set, theme *****/
+   /***** First day of week, date format *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<div class=\"FRAME_INLINE\">");
-   Ico_PutIconsToSelectIconSet ();		// 2. Icon set
+   Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
-   Mnu_PutIconsToSelectMenu ();			// 3. Menu
-   fprintf (Gbl.F.Out,"</div>"
-                      "<div class=\"FRAME_INLINE\">");
-   Cal_PutIconsToSelectFirstDayOfWeek ();	// 4. First day of week
+   Dat_PutIconsToSelectDateFormat ();		// 3. Date format
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 
-   /***** Menu, side columns *****/
+   /***** Icon set, menu *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
                       "<div class=\"FRAME_INLINE\">");
-   The_PutIconsToSelectTheme ();		// 5. Theme
+   Ico_PutIconsToSelectIconSet ();		// 4. Icon set
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
-   Pre_PutIconsToSelectSideCols ();		// 6. Side columns
+   Mnu_PutIconsToSelectMenu ();			// 5. Menu
+   fprintf (Gbl.F.Out,"</div>"
+                      "</div>");
+
+   /***** Theme, side columns *****/
+   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+                      "<div class=\"FRAME_INLINE\">");
+   The_PutIconsToSelectTheme ();		// 6. Theme
+   fprintf (Gbl.F.Out,"</div>"
+                      "<div class=\"FRAME_INLINE\">");
+   Pre_PutIconsToSelectSideCols ();		// 7. Side columns
    fprintf (Gbl.F.Out,"</div>"
                       "</div>");
 

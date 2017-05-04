@@ -99,9 +99,22 @@ typedef enum
    Dat_HMS_TO_235959  = 2,
   } Dat_SetHMS;
 
+/***** Date format *****/
+#define Dat_NUM_OPTIONS_FORMAT 3
+typedef enum
+  {
+   Dat_FORMAT_YYYY_MM_DD	= 0,	// ISO 8601, default
+   Dat_FORMAT_DD_MONTH_YYYY	= 1,
+   Dat_FORMAT_MONTH_DD_YYYY	= 2,
+  } Dat_Format_t;
+#define Dat_FORMAT_DEFAULT Dat_FORMAT_YYYY_MM_DD
+
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+void Dat_PutIconsToSelectDateFormat (void);
+void Dat_ChangeDateFormat (void);
 
 void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);
