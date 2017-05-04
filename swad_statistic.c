@@ -8840,7 +8840,7 @@ static void Sta_GetAndShowNumUsrsPerFirstDayOfWeek (void)
 
 static void Sta_GetAndShowNumUsrsPerDateFormat (void)
   {
-   extern const char *Hlp_STATS_Figures_calendar;	// TODO: Change!!!!!!!!!!!!!!!!
+   extern const char *Hlp_STATS_Figures_dates;
    extern const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES];
    extern const char *Txt_Format;
    extern const char *Txt_No_of_users;
@@ -8852,7 +8852,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 
    /***** Start table *****/
    Lay_StartRoundFrameTable (NULL,Txt_STAT_USE_STAT_TYPES[Sta_DATE_FORMAT],
-                             NULL,Hlp_STATS_Figures_calendar,2);	// TODO: Change!!!!!!!!!!!!!!!!
+                             NULL,Hlp_STATS_Figures_dates,2);
 
    /***** Heading row *****/
    fprintf (Gbl.F.Out,"<tr>"

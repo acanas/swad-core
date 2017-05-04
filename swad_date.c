@@ -97,14 +97,13 @@ static unsigned Dat_GetParamDateFormat (void);
 
 void Dat_PutIconsToSelectDateFormat (void)
   {
-   extern const char *Hlp_PROFILE_Preferences_calendar;
+   extern const char *Hlp_PROFILE_Preferences_dates;
    extern const char *Txt_Dates;
    Dat_Format_t Format;
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_Dates,
-                        Dat_PutIconsDateFormat,
-                        Hlp_PROFILE_Preferences_calendar);
+   Lay_StartRoundFrame (NULL,Txt_Dates,Dat_PutIconsDateFormat,
+                        Hlp_PROFILE_Preferences_dates);
 
    /***** Form with list of options *****/
    Act_FormStart (ActChgDatFmt);

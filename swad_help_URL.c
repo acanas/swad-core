@@ -2573,6 +2573,48 @@ const char *Hlp_STATS_Figures_language =
 	"STATS.Figures.en#language";
 #endif
 
+const char *Hlp_STATS_Figures_calendar =
+#if   L==1
+	"STATS.Figures.es#calendario";
+#elif L==2
+	"STATS.Figures.en#calendar";
+#elif L==3
+	"STATS.Figures.en#calendar";
+#elif L==4
+	"STATS.Figures.es#calendario";
+#elif L==5
+	"STATS.Figures.en#calendar";
+#elif L==6
+	"STATS.Figures.es#calendario";
+#elif L==7
+	"STATS.Figures.en#calendar";
+#elif L==8
+	"STATS.Figures.en#calendar";
+#elif L==9
+	"STATS.Figures.en#calendar";
+#endif
+
+const char *Hlp_STATS_Figures_dates =
+#if   L==1
+	"STATS.Figures.es#fechas";
+#elif L==2
+	"STATS.Figures.en#dates";
+#elif L==3
+	"STATS.Figures.en#dates";
+#elif L==4
+	"STATS.Figures.es#fechas";
+#elif L==5
+	"STATS.Figures.en#dates";
+#elif L==6
+	"STATS.Figures.es#fechas";
+#elif L==7
+	"STATS.Figures.en#dates";
+#elif L==8
+	"STATS.Figures.en#dates";
+#elif L==9
+	"STATS.Figures.en#dates";
+#endif
+
 const char *Hlp_STATS_Figures_icons =
 #if   L==1
 	"STATS.Figures.es#iconos";
@@ -2613,27 +2655,6 @@ const char *Hlp_STATS_Figures_menu =
 	"STATS.Figures.en#menu";
 #elif L==9
 	"STATS.Figures.en#menu";
-#endif
-
-const char *Hlp_STATS_Figures_calendar =
-#if   L==1
-	"STATS.Figures.es#calendario";
-#elif L==2
-	"STATS.Figures.en#calendar";
-#elif L==3
-	"STATS.Figures.en#calendar";
-#elif L==4
-	"STATS.Figures.es#calendario";
-#elif L==5
-	"STATS.Figures.en#calendar";
-#elif L==6
-	"STATS.Figures.es#calendario";
-#elif L==7
-	"STATS.Figures.en#calendar";
-#elif L==8
-	"STATS.Figures.en#calendar";
-#elif L==9
-	"STATS.Figures.en#calendar";
 #endif
 
 const char *Hlp_STATS_Figures_theme =
@@ -3203,6 +3224,27 @@ const char *Hlp_PROFILE_Preferences_calendar =
 	"PROFILE.Preferences.en#calendar";
 #elif L==9
 	"PROFILE.Preferences.en#calendar";
+#endif
+
+const char *Hlp_PROFILE_Preferences_dates =
+#if   L==1
+	"PROFILE.Preferences.es#fechas";
+#elif L==2
+	"PROFILE.Preferences.en#dates";
+#elif L==3
+	"PROFILE.Preferences.en#dates";
+#elif L==4
+	"PROFILE.Preferences.es#fechas";
+#elif L==5
+	"PROFILE.Preferences.en#dates";
+#elif L==6
+	"PROFILE.Preferences.es#fechas";
+#elif L==7
+	"PROFILE.Preferences.en#dates";
+#elif L==8
+	"PROFILE.Preferences.en#dates";
+#elif L==9
+	"PROFILE.Preferences.en#dates";
 #endif
 
 const char *Hlp_PROFILE_Preferences_icons =
