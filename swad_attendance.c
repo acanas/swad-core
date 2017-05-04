@@ -393,11 +393,12 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_start_%u',"
-                      "%ld,'<br />','%s',true,true,true);"
+                      "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
+                      "%u,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
-            UniqueId,Att->TimeUTC[Att_START_TIME],Txt_Today);
+            UniqueId,Att->TimeUTC[Att_START_TIME],
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
    fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
@@ -410,11 +411,12 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('att_date_end_%u',"
-                      "%ld,'<br />','%s',false,true,true);"
+                      "writeLocalDateHMSFromUTC('att_date_end_%u',%ld,"
+                      "%u,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
-            UniqueId,Att->TimeUTC[Att_END_TIME],Txt_Today);
+            UniqueId,Att->TimeUTC[Att_END_TIME],
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Attendance event title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
@@ -3078,8 +3080,8 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
                          "<span id=\"att_date_start_%u\"></span>&nbsp;%s"
                          "</label>"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('att_date_start_%u',"
-			 "%ld,',&nbsp;','%s',true,true,true);"
+			 "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
+			 "%u,',&nbsp;','%s',true,true,true);"
 			 "</script>"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE COLOR%u\">"
@@ -3091,7 +3093,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
 	       Gbl.RowEvenOdd,
 	       NumAttEvent,UniqueId,Gbl.AttEvents.Lst[NumAttEvent].Title,
                UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-               Txt_Today,
+               (unsigned) Gbl.Prefs.DateFormat,Txt_Today,
 	       Gbl.RowEvenOdd,
 	       Gbl.AttEvents.Lst[NumAttEvent].NumStdsTotal);
      }
@@ -3487,8 +3489,8 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 			    " alt=\"%s\" title=\"%s\" class=\"ICO20x20\" />"
 	                    "<span id=\"att_date_start_%u\"></span> %s"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('att_date_start_%u',"
-			    "%ld,',&nbsp;','%s',true,true,true);"
+			    "writeLocalDateHMSFromUTC('att_date_start_%u',%ld,"
+			    "%u,',&nbsp;','%s',true,true,true);"
 			    "</script>"
 	                    "</td>"
 			    "</tr>",
@@ -3506,7 +3508,7 @@ static void Att_ListAttEventsForAStd (unsigned NumStd,struct UsrData *UsrDat)
 	          UniqueId,
 	          Gbl.AttEvents.Lst[NumAttEvent].Title,
                   UniqueId,Gbl.AttEvents.Lst[NumAttEvent].TimeUTC[Att_START_TIME],
-                  Txt_Today);
+                  (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
 	 /***** Write comments for this student *****/
 	 if (ShowCommentStd || ShowCommentTch)

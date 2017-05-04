@@ -703,11 +703,12 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
       Act_FormEnd ();
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('not_date_%u',"
-                      "%ld,'<br />','%s',true,false,false);"
+                      "writeLocalDateHMSFromUTC('not_date_%u',%ld,"
+                      "%u,'<br />','%s',true,false,false);"
                       "</script>"
 	              "</div>",
-	    UniqueId,(long) TimeUTC,Txt_Today);
+	    UniqueId,(long) TimeUTC,
+	    (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /***** Write the content of the notice *****/
    if (TypeNoticesListing == Not_LIST_BRIEF_NOTICES)

@@ -1444,6 +1444,7 @@ void Dat_AssignDate (struct Date *DateDst,struct Date *DateSrc)
 void Dat_WriteScriptMonths (void)
   {
    extern const char *Txt_MONTHS_SMALL[12];
+   extern const char *Txt_MONTHS_SMALL_SHORT[12];
    unsigned NumMonth;
 
    fprintf (Gbl.F.Out,"var Months = [");
@@ -1454,6 +1455,17 @@ void Dat_WriteScriptMonths (void)
       if (NumMonth)
 	 fprintf (Gbl.F.Out,",");
       fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL[NumMonth]);
+     }
+   fprintf (Gbl.F.Out,"];\n");
+
+   fprintf (Gbl.F.Out,"var MonthsShort = [");
+   for (NumMonth = 0;
+	NumMonth < 12;
+	NumMonth++)
+     {
+      if (NumMonth)
+	 fprintf (Gbl.F.Out,",");
+      fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_SMALL_SHORT[NumMonth]);
      }
    fprintf (Gbl.F.Out,"];\n");
   }

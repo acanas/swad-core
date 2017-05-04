@@ -1771,12 +1771,13 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       /* Write the date-time (row[3]) */
       fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('log_date_%u',"
-			 "%ld,',&nbsp;','%s',true,false,true);"
+			 "writeLocalDateHMSFromUTC('log_date_%u',%ld,"
+			 "%u,',&nbsp;','%s',true,false,true);"
 			 "</script>"
 			 "</td>",
                UniqueId,Gbl.RowEvenOdd,
-               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),Txt_Today);
+               UniqueId,(long) Dat_GetUNIXTimeFromStr (row[3]),
+               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Write the action */
       if (sscanf (row[4],"%ld",&ActCod) != 1)
@@ -8948,7 +8949,7 @@ static void Sta_GetAndShowNumUsrsPerDateFormat (void)
 	Format <= (Dat_Format_t) (Dat_NUM_OPTIONS_FORMAT - 1);
 	Format++)
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td class=\"DAT_N CENTER_MIDDLE\">"
+			 "<td class=\"DAT_N LEFT_MIDDLE\">"
                          "%s"
 			 "</td>"
 			 "<td class=\"DAT RIGHT_MIDDLE\">"

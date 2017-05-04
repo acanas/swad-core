@@ -680,11 +680,12 @@ static bool Tst_CheckIfNextTstAllowed (void)
       /***** Write warning *****/
       sprintf (Gbl.Message,"%s:<br /><span id=\"date_next_test\"></span>."
                            "<script type=\"text/javascript\">"
-			   "writeLocalDateHMSFromUTC('date_next_test',"
-			   "%ld,',&nbsp;','%s',true,true,true);"
+			   "writeLocalDateHMSFromUTC('date_next_test',%ld,"
+			   "%u,',&nbsp;','%s',true,true,true);"
 			   "</script>",
 	       Txt_You_can_not_take_a_new_test_until,
-	       (long) TimeNextTestUTC,Txt_Today);
+	       (long) TimeNextTestUTC,
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
 
       return false;
@@ -2855,12 +2856,13 @@ static void Tst_ListOneOrMoreQuestionsToEdit (unsigned long NumRows,MYSQL_RES *m
       fprintf (Gbl.F.Out,"<td id=\"tst_date_%u\""
 	                 " class=\"DAT_SMALL CENTER_TOP COLOR%u\">"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('tst_date_%u',"
-                         "%ld,'<br />','%s',true,false,true);"
+                         "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
+                         "%u,'<br />','%s',true,false,true);"
                          "</script>"
                          "</td>",
                UniqueId,Gbl.RowEvenOdd,
-               UniqueId,(long) TimeUTC,Txt_Today);
+               UniqueId,(long) TimeUTC,
+               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Write the question tags */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">",
@@ -7329,12 +7331,13 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
          UniqueId++;
 	 fprintf (Gbl.F.Out,"<td id =\"tst_date_%u\" class=\"%s RIGHT_TOP COLOR%u\">"
 			    "<script type=\"text/javascript\">"
-			    "writeLocalDateHMSFromUTC('tst_date_%u',"
-			    "%ld,',&nbsp;','%s',true,false,true);"
+			    "writeLocalDateHMSFromUTC('tst_date_%u',%ld,"
+			    "%u,',&nbsp;','%s',true,false,true);"
 			    "</script>"
 			    "</td>",
 	          UniqueId,ClassDat,Gbl.RowEvenOdd,
-	          UniqueId,(long) TimeUTC,Txt_Today);
+	          UniqueId,(long) TimeUTC,
+	          (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
          /* Get number of questions (row[3]) */
          if (sscanf (row[3],"%u",&NumQstsInThisTest) != 1)
@@ -7712,12 +7715,13 @@ void Tst_ShowOneTestResult (void)
 			 "</td>"
 			 "<td id=\"test\" class=\"DAT LEFT_TOP\">"
 			 "<script type=\"text/javascript\">"
-			 "writeLocalDateHMSFromUTC('test',"
-			 "%ld,',&nbsp;','%s',true,true,true);"
+			 "writeLocalDateHMSFromUTC('test',%ld,"
+			 "%u,',&nbsp;','%s',true,true,true);"
 			 "</script>"
 			 "</td>"
 			 "</tr>",
-	       Txt_Date,TstTimeUTC,Txt_Today);
+	       Txt_Date,TstTimeUTC,
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
       /* Number of questions */
       fprintf (Gbl.F.Out,"<tr>"

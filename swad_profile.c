@@ -455,10 +455,13 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 		  (UsrFigures.NumDays == 1) ? Txt_day :
 					      Txt_days);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
-                         "writeLocalDateFromUTC('%s',%ld,'%s');"
-                         "</script>",
-               IdFirstClickTime,
-               (long) UsrFigures.FirstClickTimeUTC,Txt_Today);
+			 "writeLocalDateHMSFromUTC('%s',%ld,"
+			 "%u,',&nbsp;','%s',true,false,false);"
+			 "</script>",
+	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
+	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
+
+
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store first click time *****/

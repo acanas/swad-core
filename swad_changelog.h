@@ -233,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.204 (2017-05-04)"
-#define CSS_FILE		"swad16.202.css"
-#define JS_FILE			"swad16.181.js"
+#define Log_PLATFORM_VERSION	"SWAD 16.205 (2017-05-04)"
+#define CSS_FILE		"swad16.205.css"
+#define JS_FILE			"swad16.205.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.205:   May 04, 2017	Dates written depending on user's preferences. (218721 lines)
         Version 16.204:   May 04, 2017	Form in preferences to change date format. (218656 lines)
 					3 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1638','es','N','Cambiar formato de fecha');

@@ -39,7 +39,7 @@ var countClockConnected = 0;
 /****************** Write a date in client local time ************************/
 //id is the id of the HTML element in which date will be written
 //TimeUTC is the date-time to write in UTC UNIX time format
-
+/*
 function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
 	var today = new Date();
 	var todayYea = today.getFullYear();
@@ -66,13 +66,17 @@ function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
 		document.getElementById(id).innerHTML = Yea + '-' + StrMon + '-' + StrDay;
 
 }
-
+*/
 /*************** Write a date-time in client local time **********************/
 // id is the id of the HTML element in which date-time will be written
 // TimeUTC is the date-time to write in UTC UNIX time format
+// DateFormat:
+// 	Dat_FORMAT_YYYY_MM_DD		= 0
+// 	Dat_FORMAT_DD_MONTH_YYYY	= 1
+// 	Dat_FORMAT_MONTH_DD_YYYY	= 2
 // separator is HTML code to write between date and time
 
-function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
+function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 									WriteDateOnSameDay,WriteWeekDay,WriteSeconds) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
@@ -111,16 +115,43 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,Separator,StrToday,
 
 	/* Set date */
 	if (WriteDate) {
-		StrMon = ((Mon < 10) ? '-0' : '-') + Mon;
-		StrDay = ((Day < 10) ? '-0' : '-') + Day;
-
+		switch (DateFormat) {
+			case 0:	// Dat_FORMAT_YYYY_MM_DD
+				StrMon = ((Mon < 10) ? '0' : '') + Mon;
+				break;
+			case 1:	// Dat_FORMAT_DD_MONTH_YYYY
+				StrMon = MonthsShort[Mon - 1];
+				break;
+			case 2:	// Dat_FORMAT_MONTH_DD_YYYY
+				StrMon = MonthsShort[Mon - 1];
+				break;
+			default:
+				StrMon = '';
+				break;
+		}
+		StrDay = ((Day < 10) ? '0' : '') + Day;
+		
 		if (Yea == todayYea &&
 			Mon == todayMon &&
 			Day == todayDay &&	// Today
 			StrToday.length)
 			StrDate = StrToday;
-		else
-			StrDate = Yea.toString() + StrMon + StrDay;
+		else {
+			switch (DateFormat) {
+				case 0:	// Dat_FORMAT_YYYY_MM_DD
+					StrDate = Yea.toString() + '-' + StrMon + '-' + StrDay;
+					break;
+				case 1:	// Dat_FORMAT_DD_MONTH_YYYY
+					StrDate = StrDay + ' ' + StrMon + ' ' + Yea.toString();
+					break;
+				case 2:	// Dat_FORMAT_MONTH_DD_YYYY
+					StrDate = StrMon + ' ' + StrDay + ', ' + Yea.toString();
+					break;
+				default:
+					StrDate = '';
+					break;
+			}
+		}
 		
 		if (WriteWeekDay) {
 			DayOfWeek = d.getDay();
@@ -1096,7 +1127,7 @@ function DrawMonth (id,FirstDayOfWeek,YearToDraw,MonthToDraw,CurrentMonth,Curren
 							'<a href="" class="MONTH" onclick="document.getElementById(\'' + FormId +
 							'\').submit();return false;">';
 	}
-	Gbl_HTMLContent += MONTHS_CAPS[MonthToDraw - 1] + ' ' + YearToDraw;
+	Gbl_HTMLContent += Months[MonthToDraw - 1] + ' ' + YearToDraw;
 	if (DrawingCalendar)
 		Gbl_HTMLContent += '</div>';
 	else

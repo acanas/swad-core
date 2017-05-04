@@ -1215,6 +1215,7 @@ a:hover						/* Default ==> underlined */
 	color:#4D88A1;
 	font-size:9pt;
 	white-space:nowrap;
+	text-transform:uppercase;
 	}
 .DAY_WRK_HEAD
 	{

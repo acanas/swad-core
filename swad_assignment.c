@@ -380,12 +380,12 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_start_%u',"
-                      "%ld,'<br />','%s',true,true,true);"
+                      "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,"
+                      "%u,'<br />','%s',true,true,true);"
                       "</script>"
 	              "</td>",
-            UniqueId,
-            Asg.TimeUTC[Dat_START_TIME],Txt_Today);
+            UniqueId,Asg.TimeUTC[Dat_START_TIME],
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
    UniqueId++;
@@ -399,12 +399,12 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('asg_date_end_%u',"
-                      "%ld,'<br />','%s',false,true,true);"
+                      "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
+                      "%u,'<br />','%s',false,true,true);"
                       "</script>"
 	              "</td>",
-            UniqueId,
-            Asg.TimeUTC[Dat_END_TIME],Txt_Today);
+            UniqueId,Asg.TimeUTC[Dat_END_TIME],
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Assignment title */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");

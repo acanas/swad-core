@@ -751,22 +751,23 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_start_%u',"
-                      "%ld,'<br />','%s',true,true,false);"
+                      "writeLocalDateHMSFromUTC('agd_date_start_%u',%ld,"
+                      "%u,'<br />','%s',true,true,false);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
             AgdEvent.Hidden ? Dat_TimeStatusClassHidden[AgdEvent.TimeStatus] :
         	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
-            UniqueId,AgdEvent.TimeUTC[Agd_START_TIME],Txt_Today);
+            UniqueId,AgdEvent.TimeUTC[Agd_START_TIME],
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
    UniqueId++;
    fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
-                      "writeLocalDateHMSFromUTC('agd_date_end_%u',"
-                      "%ld,'<br />','%s',false,true,false);"
+                      "writeLocalDateHMSFromUTC('agd_date_end_%u',%ld,"
+                      "%u,'<br />','%s',false,true,false);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -774,8 +775,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
         	              Dat_TimeStatusClassVisible[AgdEvent.TimeStatus],
             Gbl.RowEvenOdd,
             UniqueId,AgdEvent.TimeUTC[Agd_END_TIME],
-
-            Txt_Today);
+            (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* Event */
    fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP COLOR%u\">"

@@ -2071,12 +2071,13 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
       fprintf (Gbl.F.Out,"<br />%s: "
                          "<span id=\"open_time_%u\"></span>"
                          "<script type=\"text/javascript\">"
-                         "writeLocalDateHMSFromUTC('open_time_%u',"
-                         "%ld,',&nbsp;','%s',true,true,true);"
+                         "writeLocalDateHMSFromUTC('open_time_%u',%ld,"
+                         "%u,',&nbsp;','%s',true,true,true);"
                          "</script>",
                Txt_Opening_of_groups,
                UniqueId,
-               UniqueId,(long) GrpTyp->OpenTimeUTC,Txt_Today);
+               UniqueId,(long) GrpTyp->OpenTimeUTC,
+               (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
      }
    fprintf (Gbl.F.Out,"</td>"
                       "</tr>");
