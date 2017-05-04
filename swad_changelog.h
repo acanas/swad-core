@@ -233,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.205.1 (2017-05-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.205.2 (2017-05-04)"
 #define CSS_FILE		"swad16.205.css"
 #define JS_FILE			"swad16.205.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.205.2: May 04, 2017	Changes in form to select date format. (218439 lines)
         Version 16.205.1: May 04, 2017	Removed unused code. (218440 lines)
         Version 16.205:   May 04, 2017	Dates written depending on user's preferences. (218721 lines)
         Version 16.204:   May 04, 2017	Form in preferences to change date format. (218656 lines)

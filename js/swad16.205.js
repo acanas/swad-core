@@ -54,6 +54,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	var todayDay = today.getDate();
 	var d = new Date();
 	var WriteDate;
+	var WriteTodayStr;
 	var Yea;
 	var Mon;
 	var Day;
@@ -84,37 +85,28 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 
 	/* Set date */
 	if (WriteDate) {
-		switch (DateFormat) {
-			case 0:	// Dat_FORMAT_YYYY_MM_DD
-				StrMon = ((Mon < 10) ? '0' : '') + Mon;
-				break;
-			case 1:	// Dat_FORMAT_DD_MONTH_YYYY
-				StrMon = MonthsShort[Mon - 1];
-				break;
-			case 2:	// Dat_FORMAT_MONTH_DD_YYYY
-				StrMon = MonthsShort[Mon - 1];
-				break;
-			default:
-				StrMon = '';
-				break;
-		}
-		StrDay = ((Day < 10) ? '0' : '') + Day;
-		
-		if (Yea == todayYea &&
-			Mon == todayMon &&
-			Day == todayDay &&	// Today
-			StrToday.length)
-			StrDate = StrToday;
+        WriteTodayStr = false;
+        if (StrToday != null)
+        	if (StrToday.length &&
+        		Yea == todayYea &&
+        		Mon == todayMon &&
+        		Day == todayDay)	// Today
+        		WriteTodayStr = true;
+        
+        if (WriteTodayStr)
+        	StrDate = StrToday;
 		else {
 			switch (DateFormat) {
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
+					StrMon = ((Mon < 10) ? '0' : '') + Mon;
+					StrDay = ((Day < 10) ? '0' : '') + Day;
 					StrDate = Yea.toString() + '-' + StrMon + '-' + StrDay;
 					break;
 				case 1:	// Dat_FORMAT_DD_MONTH_YYYY
-					StrDate = StrDay + ' ' + StrMon + ' ' + Yea.toString();
+					StrDate = Day.toString() + ' ' + MonthsShort[Mon - 1] + ' ' + Yea.toString();
 					break;
 				case 2:	// Dat_FORMAT_MONTH_DD_YYYY
-					StrDate = StrMon + ' ' + StrDay + ', ' + Yea.toString();
+					StrDate = MonthsShort[Mon - 1] + ' ' + Day.toString() + ', ' + Yea.toString();
 					break;
 				default:
 					StrDate = '';

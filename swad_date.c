@@ -131,11 +131,17 @@ void Dat_PutIconsToSelectDateFormat (void)
       if (Format == Gbl.Prefs.DateFormat)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
-			 "%s"
+			 "<span id=\"date_format_%u\"></span>"
 			 "</label>"
 			 "</li>",
 	       Gbl.Form.Id,
-	       Dat_Format_Str[Format]);
+	       (unsigned) Format);
+      fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+			 "writeLocalDateHMSFromUTC('date_format_%u',%ld,"
+			 "%u,',&nbsp;',null,true,false,false);"
+			 "</script>",
+	       (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
+	       (unsigned) Format);
      }
 
    /***** End of list and form *****/

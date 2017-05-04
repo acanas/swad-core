@@ -460,8 +460,6 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 			 "</script>",
 	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-
-
      }
    else	// First click time is unknown or user never logged
       /***** Button to fetch and store first click time *****/
