@@ -36,37 +36,6 @@ var NumUsrsCon;
 var ListSeconds = [];
 var countClockConnected = 0;
 
-/****************** Write a date in client local time ************************/
-//id is the id of the HTML element in which date will be written
-//TimeUTC is the date-time to write in UTC UNIX time format
-/*
-function writeLocalDateFromUTC (id,TimeUTC,StrToday) {
-	var today = new Date();
-	var todayYea = today.getFullYear();
-	var todayMon = today.getMonth() + 1;
-	var todayDay = today.getDate();
-	var d = new Date();
-	var Yea;
-	var Mon;
-	var Day;
-	var StrMon;
-	var StrDay;
-
-	d.setTime(TimeUTC * 1000);
-	Yea = d.getFullYear();
-	Mon = d.getMonth() + 1;
-	Day = d.getDate();
-	StrMon = ((Mon < 10) ? '0' : '') + Mon;
-	StrDay = ((Day < 10) ? '0' : '') + Day;
-
-	if (Yea == todayYea && Mon == todayMon && Day == todayDay &&	// Today
-		StrToday.length)
-		document.getElementById(id).innerHTML = StrToday;
-	else
-		document.getElementById(id).innerHTML = Yea + '-' + StrMon + '-' + StrDay;
-
-}
-*/
 /*************** Write a date-time in client local time **********************/
 // id is the id of the HTML element in which date-time will be written
 // TimeUTC is the date-time to write in UTC UNIX time format

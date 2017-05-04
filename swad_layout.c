@@ -465,11 +465,9 @@ static void Lay_WriteRedirToMyLangOnViewUsrAgd (void)
 static void Lay_WriteScripts (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern const char *Txt_MONTHS_CAPS[12];
    extern const char *Txt_DAYS_CAPS[7];
    extern const char *Txt_DAYS_SMALL[7];
    extern const char *Txt_Exam_of_X;
-   unsigned Month;
    unsigned DayOfWeek; /* 0, 1, 2, 3, 4, 5, 6 */
    unsigned NumHld;
    unsigned NumExamAnnouncement;	// Number of exam announcement
@@ -508,18 +506,7 @@ static void Lay_WriteScripts (void)
 
       /***** Write script to initialize variables used to draw months *****/
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">\n"
-			 "	var MONTHS_CAPS = [");
-      for (Month = 0;
-	   Month < 12;
-	   Month++)
-	{
-	 if (Month)
-	    fprintf (Gbl.F.Out,",");
-	 fprintf (Gbl.F.Out,"'%s'",Txt_MONTHS_CAPS[Month]);
-	}
-      fprintf (Gbl.F.Out,"];\n");
-
-      fprintf (Gbl.F.Out,"	var DAYS_CAPS = [");
+			 "	var DAYS_CAPS = [");
       for (DayOfWeek = 0;
 	   DayOfWeek < 7;
 	   DayOfWeek++)
