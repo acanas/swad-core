@@ -43,6 +43,18 @@
 extern struct Globals Gbl;
 
 /*****************************************************************************/
+/***************************** Public constants ******************************/
+/*****************************************************************************/
+
+/***** Date format *****/
+const char *Dat_Format_Str[Dat_NUM_OPTIONS_FORMAT] =
+  {
+   "yyyy-mm-dd",	// Dat_FORMAT_YYYY_MM_DD
+   "dd mmm yyyy",	// Dat_FORMAT_DD_MONTH_YYYY
+   "mmm dd, yyyy",	// Dat_FORMAT_MONTH_DD_YYYY
+  };
+
+/*****************************************************************************/
 /**************************** Private constants ******************************/
 /*****************************************************************************/
 
@@ -74,14 +86,6 @@ const char *Dat_TimeStatusClassHidden[Dat_NUM_TIME_STATUS] =
    "DATE_RED_LIGHT",	// Dat_PAST
    "DATE_GREEN_LIGHT",	// Dat_PRESENT
    "DATE_BLUE_LIGHT",	// Dat_FUTURE
-  };
-
-/***** Date format *****/
-static const char *Dat_Format_Str[Dat_NUM_OPTIONS_FORMAT] =
-  {
-   "yyyy-mm-dd",	// Dat_FORMAT_YYYY_MM_DD
-   "dd mmm yyyy",	// Dat_FORMAT_DD_MONTH_YYYY
-   "mmm dd, yyyy",	// Dat_FORMAT_MONTH_DD_YYYY
   };
 
 /*****************************************************************************/
@@ -121,10 +125,10 @@ void Dat_PutIconsToSelectDateFormat (void)
       fprintf (Gbl.F.Out,"<li class=\"%s\">"
 			 "<label>"
 			 "<input type=\"radio\" name=\"DateFormat\" value=\"%u\"",
-	       (Format == Gbl.Usrs.Me.UsrDat.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
-						                 "DAT",
+	       (Format == Gbl.Prefs.DateFormat) ? "DAT_N LIGHT_BLUE" :
+						  "DAT",
 	       (unsigned) Format);
-      if (Format == Gbl.Usrs.Me.UsrDat.Prefs.DateFormat)
+      if (Format == Gbl.Prefs.DateFormat)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />"
 			 "%s"
@@ -151,7 +155,7 @@ void Dat_PutIconsToSelectDateFormat (void)
 static void Dat_PutIconsDateFormat (void)
   {
    /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_FIRST_DAY_OF_WEEK;	// TODO: Change!!!!!!!!!!!!!!
+   Gbl.Stat.FigureType = Sta_DATE_FORMAT;
    Sta_PutIconToShowFigure ();
   }
 
@@ -184,12 +188,27 @@ void Dat_ChangeDateFormat (void)
 /********************** Get parameter with date format ***********************/
 /*****************************************************************************/
 
-static unsigned Dat_GetParamDateFormat (void)
+static Dat_Format_t Dat_GetParamDateFormat (void)
   {
-   return (unsigned) Par_GetParToUnsignedLong ("DateFormat",
-                                               0,
-                                               Dat_NUM_OPTIONS_FORMAT - 1,
-                                               Dat_FORMAT_DEFAULT);
+   return (Dat_Format_t) Par_GetParToUnsignedLong ("DateFormat",
+                                                   0L,
+                                                   (unsigned long) (Dat_NUM_OPTIONS_FORMAT - 1),
+                                                   (unsigned long) Dat_FORMAT_DEFAULT);
+  }
+
+/*****************************************************************************/
+/*********************** Get date format from string *************************/
+/*****************************************************************************/
+
+Dat_Format_t Dat_GetDateFormatFromStr (const char *Str)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (Str,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Dat_NUM_OPTIONS_FORMAT)
+         return (Dat_Format_t) UnsignedNum;
+
+   return Dat_FORMAT_DEFAULT;
   }
 
 /*****************************************************************************/

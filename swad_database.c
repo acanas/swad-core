@@ -95,18 +95,20 @@ mysql> DESCRIBE IP_prefs;
 | UsrCod         | int(11)    | NO   | MUL | -1      |       |
 | LastChange     | datetime   | NO   | MUL | NULL    |       |
 | FirstDayOfWeek | tinyint(4) | NO   |     | 0       |       |
+| DateFormat     | tinyint(4) | NO   |     | 0       |       |
 | Theme          | char(16)   | NO   |     | NULL    |       |
 | IconSet        | char(16)   | NO   |     | NULL    |       |
 | Menu           | tinyint(4) | NO   |     | 0       |       |
 | SideCols       | tinyint(4) | NO   |     | NULL    |       |
 +----------------+------------+------+-----+---------+-------+
-8 rows in set (0.01 sec)
+9 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS IP_prefs ("
 			"IP CHAR(15) NOT NULL,"		// Cns_MAX_BYTES_IP
 			"UsrCod INT NOT NULL DEFAULT -1,"
 			"LastChange DATETIME NOT NULL,"
 			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
+			"DateFormat TINYINT NOT NULL DEFAULT 0,"
 			"Theme CHAR(16) NOT NULL,"	// The_MAX_BYTES_THEME_ID
 			"IconSet CHAR(16) NOT NULL,"	// Ico_MAX_BYTES_ICON_SET_ID
 			"Menu TINYINT NOT NULL DEFAULT 0,"
@@ -2532,6 +2534,7 @@ mysql> DESCRIBE usr_data;
 | IconSet           | char(16)                                         | NO   | MUL |         |                |
 | Language          | char(2)                                          | NO   | MUL |         |                |
 | FirstDayOfWeek    | tinyint(4)                                       | NO   | MUL | 0       |                |
+| DateFormat        | tinyint(4)                                       | NO   | MUL | 0       |                |
 | Photo             | char(43)                                         | NO   |     |         |                |
 | PhotoVisibility   | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
 | ProfileVisibility | enum('unknown','user','course','system','world') | NO   | MUL | unknown |                |
@@ -2554,7 +2557,7 @@ mysql> DESCRIBE usr_data;
 | NotifNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 | EmailNtfEvents    | int(11)                                          | NO   |     | 0       |                |
 +-------------------+--------------------------------------------------+------+-----+---------+----------------+
-32 rows in set (0,00 sec)
+33 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS usr_data ("
 			"UsrCod INT NOT NULL AUTO_INCREMENT,"
@@ -2568,6 +2571,7 @@ mysql> DESCRIBE usr_data;
 			"IconSet CHAR(16) NOT NULL DEFAULT '',"
 			"Language CHAR(2) NOT NULL DEFAULT '',"
 			"FirstDayOfWeek TINYINT NOT NULL DEFAULT 0,"
+			"DateFormat TINYINT NOT NULL DEFAULT 0,"
 			"Photo CHAR(43) NOT NULL DEFAULT '',"					// Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64
 			"PhotoVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
 			"ProfileVisibility ENUM('unknown','user','course','system','world') NOT NULL DEFAULT 'unknown',"
@@ -2595,6 +2599,7 @@ mysql> DESCRIBE usr_data;
 		   "INDEX(IconSet),"
 		   "INDEX(Language),"
 		   "INDEX(FirstDayOfWeek),"
+		   "INDEX(DateFormat),"
 		   "INDEX(PhotoVisibility),"
 		   "INDEX(ProfileVisibility),"
 		   "INDEX(CtyCod),"

@@ -106,7 +106,7 @@ typedef enum
    Dat_FORMAT_YYYY_MM_DD	= 0,	// ISO 8601, default
    Dat_FORMAT_DD_MONTH_YYYY	= 1,
    Dat_FORMAT_MONTH_DD_YYYY	= 2,
-  } Dat_Format_t;
+  } Dat_Format_t;	// Do not change these numbers because they are used in database
 #define Dat_FORMAT_DEFAULT Dat_FORMAT_YYYY_MM_DD
 
 /*****************************************************************************/
@@ -115,6 +115,7 @@ typedef enum
 
 void Dat_PutIconsToSelectDateFormat (void);
 void Dat_ChangeDateFormat (void);
+Dat_Format_t Dat_GetDateFormatFromStr (const char *Str);
 
 void Dat_GetStartExecutionTimeUTC (void);
 void Dat_GetAndConvertCurrentDateTime (void);

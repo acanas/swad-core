@@ -445,10 +445,6 @@ void Enr_GetNotifEnrolment (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 
 void Enr_UpdateUsrData (struct UsrData *UsrDat)
   {
-   extern const char *The_ThemeId[The_NUM_THEMES];
-   extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
-   extern const char *Pri_VisibilityDB[Pri_NUM_OPTIONS_PRIVACY];
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Usr_StringsSexDB[Usr_NUM_SEXS];
    char BirthdayStrDB[Usr_BIRTHDAY_STR_DB_LENGTH + 1];
    char Query[2048];
@@ -465,8 +461,6 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
    sprintf (Query,"UPDATE usr_data"
 		  " SET Password='%s',"
 		  "Surname1='%s',Surname2='%s',FirstName='%s',Sex='%s',"
-		  "Theme='%s',IconSet='%s',Language='%s',FirstDayOfWeek=%u,"
-		  "PhotoVisibility='%s',ProfileVisibility='%s',"
 		  "CtyCod=%ld,"
 		  "LocalAddress='%s',LocalPhone='%s',"
 		  "FamilyAddress='%s',FamilyPhone='%s',"
@@ -476,12 +470,6 @@ void Enr_UpdateUsrData (struct UsrData *UsrDat)
 	    UsrDat->Password,
 	    UsrDat->Surname1,UsrDat->Surname2,UsrDat->FirstName,
 	    Usr_StringsSexDB[UsrDat->Sex],
-	    The_ThemeId[UsrDat->Prefs.Theme],
-	    Ico_IconSetId[UsrDat->Prefs.IconSet],
-	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
-	    UsrDat->Prefs.FirstDayOfWeek,
-            Pri_VisibilityDB[UsrDat->PhotoVisibility],
-            Pri_VisibilityDB[UsrDat->ProfileVisibility],
 	    UsrDat->CtyCod,
 	    UsrDat->LocalAddress,UsrDat->LocalPhone,
 	    UsrDat->FamilyAddress,UsrDat->FamilyPhone,

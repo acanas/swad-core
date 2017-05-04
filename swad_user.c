@@ -449,7 +449,6 @@ void Usr_GetEncryptedUsrCodFromUsrCod (struct UsrData *UsrDat)	// TODO: Remove t
 
 void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
   {
-   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *The_ThemeId[The_NUM_THEMES];
    extern const char *Ico_IconSetId[Ico_NUM_ICON_SETS];
@@ -460,11 +459,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    The_Theme_t Theme;
    Ico_IconSet_t IconSet;
    Txt_Language_t Lan;
-   unsigned UnsignedNum;
 
    /***** Get user's data from database *****/
    sprintf (Query,"SELECT EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-                  "Theme,IconSet,Language,FirstDayOfWeek,Photo,PhotoVisibility,ProfileVisibility,"
+                  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+                  "Photo,PhotoVisibility,ProfileVisibility,"
                   "CtyCod,InsCtyCod,InsCod,DptCod,CtrCod,Office,OfficePhone,"
                   "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,"
                   "DATE_FORMAT(Birthday,'%%Y%%m%%d'),Comments,"
@@ -542,52 +541,49 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
         }
 
    /* Get first day of week */
-   UsrDat->Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
-   if (sscanf (row[9],"%u",&UnsignedNum) == 1)
-      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
-         UsrDat->Prefs.FirstDayOfWeek = UnsignedNum;
+   UsrDat->Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[9]);
+
+   /* Get date format */
+   UsrDat->Prefs.DateFormat = Dat_GetDateFormatFromStr (row[10]);
 
    /* Get rest of data */
-   Str_Copy (UsrDat->Photo,row[10],
+   Str_Copy (UsrDat->Photo,row[11],
              Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64);
-   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[11]);
-   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[12]);
-   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[13]);
-   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[14]);
-   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[15]);
+   UsrDat->PhotoVisibility   = Pri_GetVisibilityFromStr (row[12]);
+   UsrDat->ProfileVisibility = Pri_GetVisibilityFromStr (row[13]);
+   UsrDat->CtyCod    = Str_ConvertStrCodToLongCod (row[14]);
+   UsrDat->InsCtyCod = Str_ConvertStrCodToLongCod (row[15]);
+   UsrDat->InsCod    = Str_ConvertStrCodToLongCod (row[16]);
 
-   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[16]);
-   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[17]);
-   Str_Copy (UsrDat->Tch.Office,row[18],
+   UsrDat->Tch.DptCod = Str_ConvertStrCodToLongCod (row[17]);
+   UsrDat->Tch.CtrCod = Str_ConvertStrCodToLongCod (row[18]);
+   Str_Copy (UsrDat->Tch.Office,row[19],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->Tch.OfficePhone,row[19],
+   Str_Copy (UsrDat->Tch.OfficePhone,row[20],
              Usr_MAX_BYTES_PHONE);
 
-   Str_Copy (UsrDat->LocalAddress,row[20],
+   Str_Copy (UsrDat->LocalAddress,row[21],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->LocalPhone,row[21],
+   Str_Copy (UsrDat->LocalPhone,row[22],
              Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->FamilyAddress,row[22],
+   Str_Copy (UsrDat->FamilyAddress,row[23],
              Usr_MAX_BYTES_ADDRESS);
-   Str_Copy (UsrDat->FamilyPhone,row[23],
+   Str_Copy (UsrDat->FamilyPhone,row[24],
              Usr_MAX_BYTES_PHONE);
-   Str_Copy (UsrDat->OriginPlace,row[24],
+   Str_Copy (UsrDat->OriginPlace,row[25],
              Usr_MAX_BYTES_ADDRESS);
 
-   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[25]);
+   Dat_GetDateFromYYYYMMDD (&(UsrDat->Birthday),row[26]);
 
-   Usr_GetUsrCommentsFromString (row[26] ? row[26] :
+   Usr_GetUsrCommentsFromString (row[27] ? row[27] :
 	                                   "",
 	                         UsrDat);        // Get the comments comunes a todas the courses
 
    /* Get menu */
-   UsrDat->Prefs.Menu = Mnu_MENU_DEFAULT;
-   if (sscanf (row[27],"%u",&UnsignedNum) == 1)
-      if (UnsignedNum < Mnu_NUM_MENUS)
-         UsrDat->Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
+   UsrDat->Prefs.Menu = Mnu_GetMenuFromStr (row[28]);
 
    /* Get if user wants to show side columns */
-   if (sscanf (row[28],"%u",&UsrDat->Prefs.SideCols) == 1)
+   if (sscanf (row[29],"%u",&UsrDat->Prefs.SideCols) == 1)
      {
       if (UsrDat->Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
          UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -596,11 +592,11 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
       UsrDat->Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
 
    /* Get on which events I want to be notified inside the platform */
-   if (sscanf (row[29],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
+   if (sscanf (row[30],"%u",&UsrDat->Prefs.NotifNtfEvents) != 1)
       UsrDat->Prefs.NotifNtfEvents = (unsigned) -1;	// 0xFF..FF
 
    /* Get on which events I want to be notified by email */
-   if (sscanf (row[30],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
+   if (sscanf (row[31],"%u",&UsrDat->Prefs.EmailNtfEvents) != 1)
       UsrDat->Prefs.EmailNtfEvents = 0;
    if (UsrDat->Prefs.EmailNtfEvents >= (1 << Ntf_NUM_NOTIFY_EVENTS))	// Maximum binary value for NotifyEvents is 000...0011...11
       UsrDat->Prefs.EmailNtfEvents = 0;
@@ -2847,6 +2843,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Set preferences from my preferences *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
+   Gbl.Prefs.DateFormat     = Gbl.Usrs.Me.UsrDat.Prefs.DateFormat;
    Gbl.Prefs.Menu           = Gbl.Usrs.Me.UsrDat.Prefs.Menu;
    Gbl.Prefs.SideCols       = Gbl.Usrs.Me.UsrDat.Prefs.SideCols;
 

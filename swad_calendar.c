@@ -183,6 +183,21 @@ static unsigned Cal_GetParamFirstDayOfWeek (void)
   }
 
 /*****************************************************************************/
+/******************** Get first day of week from string **********************/
+/*****************************************************************************/
+
+unsigned Cal_GetFirstDayOfWeekFromStr (const char *Str)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (Str,"%u",&UnsignedNum) == 1)
+      if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
+         return (Dat_Format_t) UnsignedNum;
+
+   return Cal_FIRST_DAY_OF_WEEK_DEFAULT;
+  }
+
+/*****************************************************************************/
 /***************************** Draw current month ****************************/
 /*****************************************************************************/
 

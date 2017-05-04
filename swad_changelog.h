@@ -233,13 +233,19 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.203 (2017-05-04)"
+#define Log_PLATFORM_VERSION	"SWAD 16.204 (2017-05-04)"
 #define CSS_FILE		"swad16.202.css"
 #define JS_FILE			"swad16.181.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.204:   May 04, 2017	Form in preferences to change date format. (218656 lines)
+					3 changes necessary in database:
+INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1638','es','N','Cambiar formato de fecha');
+ALTER TABLE usr_data ADD COLUMN DateFormat TINYINT NOT NULL DEFAULT 0 AFTER FirstDayOfWeek,ADD INDEX (DateFormat);
+ALTER TABLE IP_prefs ADD COLUMN DateFormat TINYINT NOT NULL DEFAULT 0 AFTER FirstDayOfWeek;
+
         Version 16.203:   May 04, 2017	Form in preferences to change date format. Not finished. (218447 lines)
         Version 16.202.2: May 03, 2017	Fixed bug in attendance events, reported by Francisco Ocaña Lara. (218306 lines)
         Version 16.202.1: May 02, 2017	Changed help on surveys from STATS to ASSESSMENT. (218296 lines)

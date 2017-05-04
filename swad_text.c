@@ -13161,6 +13161,27 @@ const char *Txt_Forgotten_password =
 	"Senha esquecida?";
 #endif
 
+const char *Txt_Format =
+#if   L==1
+	"Format";
+#elif L==2
+	"Format";
+#elif L==3
+	"Format";
+#elif L==4
+	"Formato";
+#elif L==5
+	"Format";
+#elif L==6
+	"Formato";		// Okoteve traducción
+#elif L==7
+	"Formato";
+#elif L==8
+	"Format";
+#elif L==9
+	"Formato";
+#endif
+
 const char *Txt_Forum =
 #if   L==1
 	"Foro";		// Necessita traduccio
@@ -39578,6 +39599,46 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	 "Lingua"
 #endif
 	 ,
+#if   L==1				// Sta_FIRST_DAY_OF_WEEK
+	"Calendari"
+#elif L==2
+	"Kalender"
+#elif L==3
+	"Calendar"
+#elif L==4
+	"Calendario"
+#elif L==5
+	"Calendrier"
+#elif L==6
+	"Arapapaha"
+#elif L==7
+	"Calendario"
+#elif L==8
+	"Kalendarz"
+#elif L==9
+	"Calend&aacute;rio"
+#endif
+	 ,
+#if   L==1				// Sta_DATE_FORMAT
+	"Dates"
+#elif L==2
+	"Datum"
+#elif L==3
+	"Dates"
+#elif L==4
+	"Fechas"
+#elif L==5
+	"Dates"
+#elif L==6
+	"Arange"
+#elif L==7
+	"Date"
+#elif L==8
+	"Daty"
+#elif L==9
+	"Datas"
+#endif
+	 ,
 #if   L==1				// Sta_ICON_SETS
 	 "Icones"
 #elif L==2
@@ -39616,26 +39677,6 @@ const char *Txt_STAT_USE_STAT_TYPES[Sta_NUM_FIGURES] =
 	"Menu"
 #elif L==9
 	"Menu"
-#endif
-	 ,
-#if   L==1				// Sta_FIRST_DAY_OF_WEEK
-	"Calendari"
-#elif L==2
-	"Kalender"
-#elif L==3
-	"Calendar"
-#elif L==4
-	"Calendario"
-#elif L==5
-	"Calendrier"
-#elif L==6
-	"Arapapaha"
-#elif L==7
-	"Calendario"
-#elif L==8
-	"Kalendarz"
-#elif L==9
-	"Calend&aacute;rio"
 #endif
 	 ,
 #if   L==1				// Sta_THEMES

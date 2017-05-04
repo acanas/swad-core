@@ -469,3 +469,18 @@ Mnu_Menu_t Mnu_GetParamMenu (void)
 	                            Mnu_NUM_MENUS - 1,
 	                            (unsigned long) Mnu_MENU_DEFAULT);
   }
+
+/*****************************************************************************/
+/*************************** Get menu from string ****************************/
+/*****************************************************************************/
+
+Mnu_Menu_t Mnu_GetMenuFromStr (const char *Str)
+  {
+   unsigned UnsignedNum;
+
+   if (sscanf (Str,"%u",&UnsignedNum) == 1)
+      if (UnsignedNum < Mnu_NUM_MENUS)
+         return (Mnu_Menu_t) UnsignedNum;
+
+   return Mnu_MENU_DEFAULT;
+  }

@@ -135,17 +135,15 @@ static void Pre_PutIconsLanguage (void)
 
 void Pre_GetPrefsFromIP (void)
   {
-   extern const bool Cal_DayIsValidAsFirstDayOfWeek[7];
    char Query[1024];
    unsigned long NumRows;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned UnsignedNum;
 
    if (Gbl.IP[0])
      {
       /***** Get preferences from database *****/
-      sprintf (Query,"SELECT FirstDayOfWeek,Theme,IconSet,Menu,SideCols"
+      sprintf (Query,"SELECT FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols"
 		     " FROM IP_prefs WHERE IP='%s'",
 	       Gbl.IP);
       if ((NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get preferences")))
@@ -157,25 +155,22 @@ void Pre_GetPrefsFromIP (void)
 	 row = mysql_fetch_row (mysql_res);
 
 	 /* Get first day of week (row[0]) */
-	 Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;
-	 if (sscanf (row[0],"%u",&UnsignedNum) == 1)
-	    if (Cal_DayIsValidAsFirstDayOfWeek[UnsignedNum])
-	       Gbl.Prefs.FirstDayOfWeek = UnsignedNum;
+	 Gbl.Prefs.FirstDayOfWeek = Cal_GetFirstDayOfWeekFromStr (row[0]);
 
-	 /* Get theme (row[1]) */
-	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[1]);
+	 /* Get date format (row[1]) */
+	 Gbl.Prefs.DateFormat = Dat_GetDateFormatFromStr (row[1]);
 
-	 /* Get icon set (row[2]) */
-	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[2]);
+	 /* Get theme (row[2]) */
+	 Gbl.Prefs.Theme = The_GetThemeFromStr (row[2]);
 
-	 /* Get menu (row[3]) */
-	 Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;
-	 if (sscanf (row[3],"%u",&UnsignedNum) == 1)
-	    if (UnsignedNum < Mnu_NUM_MENUS)
-	       Gbl.Prefs.Menu = (Mnu_Menu_t) UnsignedNum;
+	 /* Get icon set (row[3]) */
+	 Gbl.Prefs.IconSet = Ico_GetIconSetFromStr (row[3]);
 
-	 /* Get if user wants to show side columns (row[4]) */
-	 if (sscanf (row[4],"%u",&Gbl.Prefs.SideCols) == 1)
+	 /* Get menu (row[4]) */
+	 Gbl.Prefs.Menu = Mnu_GetMenuFromStr (row[4]);
+
+	 /* Get if user wants to show side columns (row[5]) */
+	 if (sscanf (row[5],"%u",&Gbl.Prefs.SideCols) == 1)
 	   {
 	    if (Gbl.Prefs.SideCols > Lay_SHOW_BOTH_COLUMNS)
 	       Gbl.Prefs.SideCols = Cfg_DEFAULT_COLUMNS;
@@ -198,11 +193,14 @@ void Pre_SetPrefsFromIP (void)
 
    /***** Update preferences from current IP in database *****/
    sprintf (Query,"REPLACE INTO IP_prefs"
-	          " (IP,UsrCod,LastChange,FirstDayOfWeek,Theme,IconSet,Menu,SideCols)"
+	          " (IP,UsrCod,LastChange,"
+	          "FirstDayOfWeek,DateFormat,Theme,IconSet,Menu,SideCols)"
                   " VALUES"
-                  " ('%s',%ld,NOW(),%u,'%s','%s',%u,%u)",
+                  " ('%s',%ld,NOW(),"
+                  "%u,%u,'%s','%s',%u,%u)",
             Gbl.IP,Gbl.Usrs.Me.UsrDat.UsrCod,
             Gbl.Prefs.FirstDayOfWeek,
+            (unsigned) Gbl.Prefs.DateFormat,
             The_ThemeId[Gbl.Prefs.Theme],
             Ico_IconSetId[Gbl.Prefs.IconSet],
             (unsigned) Gbl.Prefs.Menu,
@@ -212,9 +210,12 @@ void Pre_SetPrefsFromIP (void)
    /***** If a user is logged, update its preferences in database for all its IP's *****/
    if (Gbl.Usrs.Me.Logged)
      {
-      sprintf (Query,"UPDATE IP_prefs SET FirstDayOfWeek=%u,Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
+      sprintf (Query,"UPDATE IP_prefs"
+	            " SET FirstDayOfWeek=%u,DateFormat=%u,"
+	            "Theme='%s',IconSet='%s',Menu=%u,SideCols=%u"
                      " WHERE UsrCod=%ld",
                Gbl.Prefs.FirstDayOfWeek,
+               (unsigned) Gbl.Prefs.DateFormat,
                The_ThemeId[Gbl.Prefs.Theme],
                Ico_IconSetId[Gbl.Prefs.IconSet],
                (unsigned) Gbl.Prefs.Menu,

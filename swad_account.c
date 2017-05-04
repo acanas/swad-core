@@ -719,13 +719,15 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
    Usr_CreateBirthdayStrDB (UsrDat,BirthdayStrDB);
    sprintf (Query,"INSERT INTO usr_data"
 	          " (EncryptedUsrCod,Password,Surname1,Surname2,FirstName,Sex,"
-		  "Theme,IconSet,Language,FirstDayOfWeek,PhotoVisibility,ProfileVisibility,"
+		  "Theme,IconSet,Language,FirstDayOfWeek,DateFormat,"
+		  "PhotoVisibility,ProfileVisibility,"
 		  "CtyCod,"
 		  "LocalAddress,LocalPhone,FamilyAddress,FamilyPhone,OriginPlace,Birthday,Comments,"
 		  "Menu,SideCols,NotifNtfEvents,EmailNtfEvents)"
 		  " VALUES"
 		  " ('%s','%s','%s','%s','%s','%s',"
-		  "'%s','%s','%s',%u,'%s','%s',"
+		  "'%s','%s','%s',%u,%u,"
+		  "'%s','%s',"
 		  "%ld,"
 		  "'%s','%s','%s','%s','%s',%s,'%s',"
 		  "%u,%u,-1,0)",
@@ -737,6 +739,7 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	    Ico_IconSetId[UsrDat->Prefs.IconSet],
 	    Txt_STR_LANG_ID[UsrDat->Prefs.Language],
 	    Cal_FIRST_DAY_OF_WEEK_DEFAULT,
+	    (unsigned) Dat_FORMAT_DEFAULT,
             Pri_VisibilityDB[UsrDat->PhotoVisibility],
             Pri_VisibilityDB[UsrDat->ProfileVisibility],
 	    UsrDat->CtyCod,
@@ -746,8 +749,8 @@ void Acc_CreateNewUsr (struct UsrData *UsrDat,bool CreatingMyOwnAccount)
 	    BirthdayStrDB,
 	    UsrDat->Comments ? UsrDat->Comments :
 		               "",
-            Mnu_MENU_DEFAULT,
-            Cfg_DEFAULT_COLUMNS);
+            (unsigned) Mnu_MENU_DEFAULT,
+            (unsigned) Cfg_DEFAULT_COLUMNS);
    UsrDat->UsrCod = DB_QueryINSERTandReturnCode (Query,"can not create user");
 
    /* Insert user's IDs as confirmed */

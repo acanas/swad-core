@@ -127,12 +127,12 @@ void Gbl_InitializeGlobals (void)
 
    Gbl.HiddenParamsInsertedIntoDB = false;
 
-   Gbl.Prefs.Language = Txt_Current_CGI_SWAD_Language;
+   Gbl.Prefs.Language       = Txt_Current_CGI_SWAD_Language;
    Gbl.Prefs.FirstDayOfWeek = Cal_FIRST_DAY_OF_WEEK_DEFAULT;	// Default first day of week
-   Gbl.Prefs.DateFormat = Dat_FORMAT_DEFAULT;	// Default date format
-   Gbl.Prefs.Menu = Mnu_MENU_DEFAULT;		// Default menu
-   Gbl.Prefs.Theme = The_THEME_DEFAULT;		// Default theme
-   Gbl.Prefs.IconSet = Ico_ICON_SET_DEFAULT;	// Default icon set
+   Gbl.Prefs.DateFormat     = Dat_FORMAT_DEFAULT;		// Default date format
+   Gbl.Prefs.Menu           = Mnu_MENU_DEFAULT;			// Default menu
+   Gbl.Prefs.Theme          = The_THEME_DEFAULT;		// Default theme
+   Gbl.Prefs.IconSet        = Ico_ICON_SET_DEFAULT;		// Default icon set
    sprintf (Gbl.Prefs.IconsURL,"%s/%s",
             Cfg_URL_SWAD_PUBLIC,Cfg_FOLDER_PUBLIC_ICON);
    sprintf (Gbl.Prefs.PathTheme,"%s/%s/%s",
