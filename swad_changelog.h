@@ -232,13 +232,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.206.1 (2017-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.206.2 (2017-05-05)"
 #define CSS_FILE		"swad16.205.css"
 #define JS_FILE			"swad16.206.1.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.206.2: May 05, 2017	Changes in date and time of connected users. (218527 lines)
         Version 16.206.1: May 05, 2017	Changes in Javascript function to write local date and time. (218524 lines)
         Version 16.206:   May 05, 2017	Date format applied to dates written directly instead of using Javascript. (218514 lines)
         Version 16.205.4: May 05, 2017	Help about date format. (218487 lines)

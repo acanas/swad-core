@@ -80,7 +80,6 @@ void Con_ShowConnectedUsrs (void)
   {
    extern const char *Hlp_USERS_Connected;
    extern const char *Txt_Connected_users;
-   extern const char *Txt_MONTHS_SMALL_SHORT[12];
 
    /***** Link to show last clicks in real time *****/
    if (Gbl.Usrs.Me.Logged)
@@ -96,14 +95,17 @@ void Con_ShowConnectedUsrs (void)
 
    /***** Start frame *****/
    /* Current time */
-   sprintf (Gbl.Title,"%s<br />%s %u, %u:%02u",
-	    Txt_Connected_users,
-	    Txt_MONTHS_SMALL_SHORT[Gbl.Now.Date.Month - 1],
-	    Gbl.Now.Date.Day,
-	    Gbl.Now.Time.Hour,
-	    Gbl.Now.Time.Minute);
+   sprintf (Gbl.Title,"%s<div id=\"connected_current_time\"></div>",
+	    Txt_Connected_users);
    Lay_StartRoundFrame (NULL,Gbl.Title,
 			Con_PutIconToUpdateConnected,Hlp_USERS_Connected);
+   fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
+                      "writeLocalDateHMSFromUTC('connected_current_time',%ld,"
+                      "%u,',&nbsp;',null,false,true,0x7);"
+                      "</script>"
+	              "</td>",
+            (long) Gbl.StartExecutionTimeUTC,
+            (unsigned) Gbl.Prefs.DateFormat);
 
    /***** Number of connected users in the whole platform *****/
    Con_ShowGlobalConnectedUsrs ();
