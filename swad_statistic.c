@@ -1772,7 +1772,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       fprintf (Gbl.F.Out,"<td id=\"log_date_%u\" class=\"LOG CENTER_TOP COLOR%u\">"
 			 "<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('log_date_%u',%ld,"
-			 "%u,',&nbsp;','%s',true,false,true);"
+			 "%u,',&nbsp;','%s',true,false,0x7);"
 			 "</script>"
 			 "</td>",
                UniqueId,Gbl.RowEvenOdd,

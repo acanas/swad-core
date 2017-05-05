@@ -381,7 +381,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,true);"
+                      "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
             UniqueId,Asg.TimeUTC[Dat_START_TIME],
@@ -400,7 +400,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('asg_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,true);"
+                      "%u,'<br />','%s',false,true,0x7);"
                       "</script>"
 	              "</td>",
             UniqueId,Asg.TimeUTC[Dat_END_TIME],

@@ -2072,7 +2072,7 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                          "<span id=\"open_time_%u\"></span>"
                          "<script type=\"text/javascript\">"
                          "writeLocalDateHMSFromUTC('open_time_%u',%ld,"
-                         "%u,',&nbsp;','%s',true,true,true);"
+                         "%u,',&nbsp;','%s',true,true,0x7);"
                          "</script>",
                Txt_Opening_of_groups,
                UniqueId,

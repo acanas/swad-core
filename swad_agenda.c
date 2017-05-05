@@ -752,7 +752,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
 	              "<td id=\"agd_date_start_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('agd_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,false);"
+                      "%u,'<br />','%s',true,true,0x6);"
                       "</script>"
 	              "</td>",
 	    UniqueId,
@@ -767,7 +767,7 @@ static void Agd_ShowOneEvent (Agd_AgendaType_t AgendaType,long AgdCod)
    fprintf (Gbl.F.Out,"<td id=\"agd_date_end_%u\" class=\"%s LEFT_BOTTOM COLOR%u\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('agd_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,false);"
+                      "%u,'<br />','%s',false,true,0x6);"
                       "</script>"
 	              "</td>",
 	    UniqueId,

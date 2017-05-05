@@ -3407,7 +3407,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
             fprintf (Gbl.F.Out,"<td id=\"thr_date_%u\" class=\"%s LEFT_TOP %s\">"
                                "<script type=\"text/javascript\">"
 			       "writeLocalDateHMSFromUTC('thr_date_%u',%ld,"
-			       "%u,'<br />','%s',true,false,false);"
+			       "%u,'<br />','%s',true,false,0x6);"
 			       "</script>"
 			       "</td>",
                      UniqueId,Style,BgColor,

@@ -704,7 +704,7 @@ static void Not_DrawANotice (Not_Listing_t TypeNoticesListing,
      }
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('not_date_%u',%ld,"
-                      "%u,'<br />','%s',true,false,false);"
+                      "%u,'<br />','%s',true,false,0x6);"
                       "</script>"
 	              "</div>",
 	    UniqueId,(long) TimeUTC,

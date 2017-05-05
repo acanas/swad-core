@@ -164,7 +164,7 @@ void Dat_PutScriptDateFormat (Dat_Format_t Format)
   {
    fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 		      "writeLocalDateHMSFromUTC('date_format_%u',%ld,"
-		      "%u,',&nbsp;',null,true,false,false);"
+		      "%u,'',null,true,false,0x0);"
 		      "</script>",
 	    (unsigned) Format,(long) Gbl.StartExecutionTimeUTC,
 	    (unsigned) Format);

@@ -463,7 +463,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('svy_date_start_%u',%ld,"
-                      "%u,'<br />','%s',true,true,true);"
+                      "%u,'<br />','%s',true,true,0x7);"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_START_TIME],
@@ -481,7 +481,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    fprintf (Gbl.F.Out,"\">"
                       "<script type=\"text/javascript\">"
                       "writeLocalDateHMSFromUTC('svy_date_end_%u',%ld,"
-                      "%u,'<br />','%s',false,true,true);"
+                      "%u,'<br />','%s',false,true,0x7);"
                       "</script>"
 	              "</td>",
             UniqueId,Svy.TimeUTC[Svy_END_TIME],

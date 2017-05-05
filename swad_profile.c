@@ -456,7 +456,7 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 					      Txt_days);
       fprintf (Gbl.F.Out,"<script type=\"text/javascript\">"
 			 "writeLocalDateHMSFromUTC('%s',%ld,"
-			 "%u,',&nbsp;','%s',true,false,false);"
+			 "%u,',&nbsp;','%s',true,false,0x6);"
 			 "</script>",
 	       IdFirstClickTime,(long) UsrFigures.FirstClickTimeUTC,
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);

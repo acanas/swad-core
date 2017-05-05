@@ -44,9 +44,10 @@ var countClockConnected = 0;
 // 	Dat_FORMAT_DD_MONTH_YYYY	= 1
 // 	Dat_FORMAT_MONTH_DD_YYYY	= 2
 // separator is HTML code to write between date and time
+// WriteHMS = 3 least significant bits for hour, minute and second
 
 function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
-									WriteDateOnSameDay,WriteWeekDay,WriteSeconds) {
+									WriteDateOnSameDay,WriteWeekDay,WriteHMS) {
 	// HMS: Hour, Minutes, Seconds
 	var today = new Date();
 	var todayYea = today.getFullYear();
@@ -95,7 +96,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
         
         if (WriteTodayStr)
         	StrDate = StrToday;
-		else {
+		else
 			switch (DateFormat) {
 				case 0:	// Dat_FORMAT_YYYY_MM_DD
 					StrMon = ((Mon < 10) ? '0' : '') + Mon;
@@ -112,7 +113,6 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 					StrDate = '';
 					break;
 			}
-		}
 		
 		if (WriteWeekDay) {
 			DayOfWeek = d.getDay();
@@ -124,16 +124,25 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 	else
 		StrDate = '';
 
-	/* Set time */
-	Hou = d.getHours();
-	Min = d.getMinutes();
-	StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
-	StrMin = ((Min < 10) ? ':0' : ':') + Min;
+	/* Set HH:MM:SS */
+	StrHou = '';
+	StrMin = '';
 	StrSec = '';
-	if (WriteSeconds) {
-		Sec = d.getSeconds();
-		if (Sec)
-			StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
+	if (WriteHMS & (1<<2)) {
+		// Bit 2 on => Write hour
+		Hou = d.getHours();
+		StrHou = ((Hou < 10) ?  '0' :  '') + Hou;
+		if (WriteHMS & (1<<1)) {
+			// Bits 2,1 on => Write minutes
+			Min = d.getMinutes();
+			StrMin = ((Min < 10) ? ':0' : ':') + Min;
+			if (WriteHMS & 1) {
+				// Bits 2,1,0 on => Write seconds
+				Sec = d.getSeconds();
+				if (Sec)
+					StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
+			}
+		}
 	}
 
 	/* Write date and time */
