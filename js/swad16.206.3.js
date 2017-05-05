@@ -139,8 +139,7 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 			if (WriteHMS & 1) {
 				// Bits 2,1,0 on => Write seconds
 				Sec = d.getSeconds();
-				if (Sec)
-					StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
+				StrSec = ((Sec < 10) ? ':0' : ':') + Sec;
 			}
 		}
 	}
