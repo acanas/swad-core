@@ -1521,6 +1521,7 @@ a:hover						/* Default ==> underlined */
 .ICO20x20	{width:20px; height:20px; vertical-align:middle;}
 .ICO20x20B	{width:20px; height:20px; vertical-align:middle; display:block;}
 .ICO25x25	{width:25px; height:25px; vertical-align:middle;}
+.ICO25x25B	{width:25px; height:25px; vertical-align:middle; display:block;}
 .ICO40x25B	{width:40px; height:25px; vertical-align:middle;}
 .ICO40x40	{width:40px; height:40px; vertical-align:middle;}
 .ICO40x40B	{width:40px; height:40px; vertical-align:middle; display:block;}
@@ -1554,6 +1555,7 @@ a:hover						/* Default ==> underlined */
 	{
 	display:inline-block;
 	margin:0 8px;
+	vertical-align:top;
 	}
 .FRAME_CONTAINER
 	{

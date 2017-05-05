@@ -86,7 +86,7 @@ void Cal_PutIconsToSelectFirstDayOfWeek (void)
    Lay_StartRoundFrame (NULL,Txt_Calendar,
                         Cal_PutIconsFirstDayOfWeek,
                         Hlp_PROFILE_Preferences_calendar);
-   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO40x40B");
+   Cal_ShowFormToSelFirstDayOfWeek (ActChg1stDay,NULL,"ICO25x25B");
    Lay_EndRoundFrame ();
   }
 

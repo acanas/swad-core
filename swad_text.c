@@ -8420,7 +8420,7 @@ const char *Txt_DEPARTMENTS_ORDER[Dpt_NUM_ORDERS] =
 
 const char *Txt_Description =
 #if   L==1
-	"Descripci&oacute;n";	// Necessita traduccio
+	"Descripci&oacute;";
 #elif L==2
 	"Beschreibung";
 #elif L==3
@@ -8437,6 +8437,27 @@ const char *Txt_Description =
 	"Opis";
 #elif L==9
 	"Descri&ccedil;&atilde;o";
+#endif
+
+const char *Txt_Design =
+#if   L==1
+	"Disseny";
+#elif L==2
+	"Design";
+#elif L==3
+	"Design";
+#elif L==4
+	"Dise&ntilde;o";
+#elif L==5
+	"Design";
+#elif L==6
+	"Ta'&atilde;ngahai";
+#elif L==7
+	"Disegno";
+#elif L==8
+	"Design";
+#elif L==9
+	"Design";
 #endif
 
 const char *Txt_Details =
@@ -16689,6 +16710,27 @@ const char *Txt_Internal_code =
 	"C&oacute;digo interno";
 #endif
 
+const char *Txt_Internationalization =
+#if   L==1
+	"Internacionalitzaci&oacute;";
+#elif L==2
+	"Internationalisierung";
+#elif L==3
+	"Internationalization";
+#elif L==4
+	"Internacionalizaci&oacute;n";
+#elif L==5
+	"Internationalisation";
+#elif L==6
+	"Internacionalizaci&oacute;n";	// Okoteve traducción
+#elif L==7
+	"Internazionalizzazione";
+#elif L==8
+	"Umi&eogon;dzynarodowienie";
+#elif L==9
+	"Internacionaliza&ccedil;&atilde;o";
+#endif
+
 const char *Txt_IP =		// Internet Protocol address
 #if   L==1
 	"IP";
@@ -16775,23 +16817,23 @@ const char *Txt_Its_me =
 
 const char *Txt_Language =
 #if   L==1
-	"Idioma (language)";
+	"Idioma";
 #elif L==2
-	"Sprache (language)";
+	"Sprache";
 #elif L==3
 	"Language";
 #elif L==4
-	"Idioma (language)";
+	"Idioma";
 #elif L==5
-	"Langue (language)";
+	"Langue";
 #elif L==6
-	"&Ntilde;e'&#7869; (language)";
+	"&Ntilde;e'&#7869;";
 #elif L==7
-	"Lingua (language)";
+	"Lingua";
 #elif L==8
-	"J&eogon;zyk (language)";
+	"J&eogon;zyk";
 #elif L==9
-	"Lingua (language)";
+	"Lingua";
 #endif
 
 const char *Txt_Last_clicks =

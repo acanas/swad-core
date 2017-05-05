@@ -72,43 +72,41 @@ static void Pre_UpdateSideColsOnUsrDataTable (void);
 void Pre_EditPrefs (void)
   {
    extern const char *Hlp_PROFILE_Preferences_language;
+   extern const char *Txt_Internationalization;
+   extern const char *Txt_Design;
    extern const char *Txt_Language;
 
-   /***** Language, first day of week *****/
+   /***** Internationalization: language, first day of week, date format *****/
+   Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,NULL);
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Lay_StartRoundFrame (NULL,Txt_Language,
                         Pre_PutIconsLanguage,Hlp_PROFILE_Preferences_language);
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    Lay_EndRoundFrame ();
-
-   /***** First day of week, date format *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
+   fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
    Dat_PutIconsToSelectDateFormat ();		// 3. Date format
-   fprintf (Gbl.F.Out,"</div>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</div>");
+   Lay_EndRoundFrame ();
 
-   /***** Icon set, menu *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"FRAME_INLINE\">");
+   /***** Design: icon set, menu, theme, side columns *****/
+   Lay_StartRoundFrame (NULL,Txt_Design,NULL,NULL);
+   fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Ico_PutIconsToSelectIconSet ();		// 4. Icon set
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
    Mnu_PutIconsToSelectMenu ();			// 5. Menu
    fprintf (Gbl.F.Out,"</div>"
-                      "</div>");
-
-   /***** Theme, side columns *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-                      "<div class=\"FRAME_INLINE\">");
+	              "<div class=\"FRAME_INLINE\">");
    The_PutIconsToSelectTheme ();		// 6. Theme
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
    Pre_PutIconsToSelectSideCols ();		// 7. Side columns
-   fprintf (Gbl.F.Out,"</div>"
-                      "</div>");
+   fprintf (Gbl.F.Out,"</div>");
+   Lay_EndRoundFrame ();
 
    if (Gbl.Usrs.Me.Logged)
      {
