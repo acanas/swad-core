@@ -103,10 +103,10 @@ function writeLocalDateHMSFromUTC (id,TimeUTC,DateFormat,Separator,StrToday,
 					StrDate = Yea.toString() + '-' + StrMon + '-' + StrDay;
 					break;
 				case 1:	// Dat_FORMAT_DD_MONTH_YYYY
-					StrDate = Day.toString() + ' ' + MonthsShort[Mon - 1] + ' ' + Yea.toString();
+					StrDate = Day.toString() + '&nbsp;' + MonthsShort[Mon - 1] + '&nbsp;' + Yea.toString();
 					break;
 				case 2:	// Dat_FORMAT_MONTH_DD_YYYY
-					StrDate = MonthsShort[Mon - 1] + ' ' + Day.toString() + ', ' + Yea.toString();
+					StrDate = MonthsShort[Mon - 1] + '&nbsp;' + Day.toString() + ',&nbsp;' + Yea.toString();
 					break;
 				default:
 					StrDate = '';

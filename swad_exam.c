@@ -1026,7 +1026,9 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
    const char *StyleNormal = "CONV";
    struct Instit Ins;
    char StrExamDate[Cns_MAX_BYTES_DATE + 1];
-   unsigned Year,Hour,Minute;
+   unsigned Year;
+   unsigned Hour;
+   unsigned Minute;
    const char *ClassExaAnnouncement[Exa_NUM_VIEWS][Exa_NUM_STATUS] =
      {
 	{	// Exa_NORMAL_VIEW
@@ -1211,7 +1213,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
      {
       fprintf (Gbl.F.Out,"<td class=\"LEFT_BOTTOM\">");
       Dat_WriteFormDate (Gbl.ExamAnns.ExaDat.ExamDate.Year < Gbl.Now.Date.Year ? Gbl.ExamAnns.ExaDat.ExamDate.Year :
-                                                                                          Gbl.Now.Date.Year,
+                                                                                 Gbl.Now.Date.Year,
                          Gbl.Now.Date.Year + 1,"Exam",
                          &(Gbl.ExamAnns.ExaDat.ExamDate),
                          false,false);
@@ -1596,6 +1598,7 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUM
   {
    extern const char *Txt_hours_ABBREVIATION;
    char CrsNameAndDate[Hie_MAX_BYTES_FULL_NAME + (2 + Cns_MAX_BYTES_DATE + 6) + 1];
+   char StrExamDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Initializations *****/
    Gbl.ExamAnns.ExaDat.ExaCod = ExaCod;
@@ -1613,11 +1616,10 @@ void Exa_GetSummaryAndContentExamAnnouncement (char SummaryStr[Ntf_MAX_BYTES_SUM
 
    /***** Summary *****/
    /* Name of the course and date of exam */
-   sprintf (CrsNameAndDate,"%s, %04u-%02u-%02u %2u:%02u",
+   Dat_ConvDateToDateStr (&Gbl.ExamAnns.ExaDat.ExamDate,StrExamDate);
+   sprintf (CrsNameAndDate,"%s, %s, %2u:%02u",
             Gbl.ExamAnns.ExaDat.CrsFullName,
-            Gbl.ExamAnns.ExaDat.ExamDate.Year,
-            Gbl.ExamAnns.ExaDat.ExamDate.Month,
-            Gbl.ExamAnns.ExaDat.ExamDate.Day,
+            StrExamDate,
             Gbl.ExamAnns.ExaDat.StartTime.Hour,
             Gbl.ExamAnns.ExaDat.StartTime.Minute);
    Str_Copy (SummaryStr,CrsNameAndDate,

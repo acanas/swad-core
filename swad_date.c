@@ -380,15 +380,36 @@ struct tm *Dat_GetLocalTimeFromClock (const time_t *timep)
 /********* Convert a struct with Day, Month and Year to a date string ********/
 /*****************************************************************************/
 
-void Dat_ConvDateToDateStr (struct Date *Date,char *DateStr)
+void Dat_ConvDateToDateStr (struct Date *Date,char StrDate[Cns_MAX_BYTES_DATE + 1])
   {
+   extern const char *Txt_MONTHS_SMALL_SHORT[12];
+
    if (Date->Day   == 0 ||
        Date->Month == 0 ||
        Date->Year  == 0)
-      DateStr[0] = '\0';
+      StrDate[0] = '\0';
    else
-      sprintf (DateStr,"%04u-%02u-%02u",
-               Date->Year,Date->Month,Date->Day);
+      switch (Gbl.Prefs.DateFormat)
+        {
+	 case Dat_FORMAT_YYYY_MM_DD:
+	    sprintf (StrDate,"%04u-%02u-%02u",
+		     Date->Year,
+		     Date->Month,
+		     Date->Day);
+	    break;
+	 case Dat_FORMAT_DD_MONTH_YYYY:
+	    sprintf (StrDate,"%u&nbsp;%s&nbsp;%04u",
+		     Date->Day,
+		     Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
+		     Date->Year);
+	    break;
+	 case Dat_FORMAT_MONTH_DD_YYYY:
+	    sprintf (StrDate,"%s&nbsp;%u,&nbsp;%04u",
+		     Txt_MONTHS_SMALL_SHORT[Date->Month - 1],
+		     Date->Day,
+		     Date->Year);
+	    break;
+        }
   }
 
 /*****************************************************************************/

@@ -88,6 +88,7 @@ void Hld_SeeHolidays (void)
    extern const char *Txt_New_holiday;
    Hld_Order_t Order;
    unsigned NumHld;
+   char StrDate[Cns_MAX_BYTES_DATE + 1];
 
    if (Gbl.CurrentIns.Ins.InsCod > 0)
      {
@@ -145,12 +146,11 @@ void Hld_SeeHolidays (void)
 			       "</td>",
 		     Gbl.Hlds.Lst[NumHld].PlcCod <= 0 ? Txt_All_places :
 							Gbl.Hlds.Lst[NumHld].PlaceFullName);
+	    Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].StartDate,StrDate);
 	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
-			       "&nbsp;%04u-%02u-%02u"
+			       "&nbsp;%s"
 			       "</td>",
-		     Gbl.Hlds.Lst[NumHld].StartDate.Year,
-		     Gbl.Hlds.Lst[NumHld].StartDate.Month,
-		     Gbl.Hlds.Lst[NumHld].StartDate.Day);
+		     StrDate);
 	    fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 			       "&nbsp;");
 	    switch (Gbl.Hlds.Lst[NumHld].HldTyp)
@@ -158,10 +158,8 @@ void Hld_SeeHolidays (void)
 	       case Hld_HOLIDAY:
 		  break;
 	       case Hld_NON_SCHOOL_PERIOD:
-		  fprintf (Gbl.F.Out,"%04u-%02u-%02u",
-			   Gbl.Hlds.Lst[NumHld].EndDate.Year,
-			   Gbl.Hlds.Lst[NumHld].EndDate.Month,
-			   Gbl.Hlds.Lst[NumHld].EndDate.Day);
+	          Dat_ConvDateToDateStr (&Gbl.Hlds.Lst[NumHld].EndDate,StrDate);
+		  fprintf (Gbl.F.Out,"%s",StrDate);
 		  break;
 	      }
 	    fprintf (Gbl.F.Out,"</td>"
@@ -792,7 +790,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    struct Date NewDate;
    struct Date *PtrDate = NULL;			// Initialized to avoid warning
    const char *StrStartOrEndDate = NULL;	// Initialized to avoid warning
-   char StrDate[11];
+   char StrDate[Cns_MAX_BYTES_DATE + 1];
 
    Hld = &Gbl.Hlds.EditingHld;
 
@@ -848,8 +846,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 
    /***** Write message to show the change made *****/
    Gbl.AlertType = Lay_SUCCESS;
-   sprintf (StrDate,"%04u-%02u-%02u",
-            NewDate.Year,NewDate.Month,NewDate.Day);	// Change format depending on location
+   Dat_ConvDateToDateStr (&NewDate,StrDate);
    sprintf (Gbl.Message,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,StrDate);
   }

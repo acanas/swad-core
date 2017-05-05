@@ -217,7 +217,6 @@
 // TODO: Change numbers of notifications in program and database to match order in tabs
 
 // TODO: Sugerencias de Sandra Daniela Tazzioli Barroso realizadas el 2 de mayo de 2017:
-// 1. Poder ver fechas en formato (día-mes-año).
 // 2. Mejor ayuda sobre cómo pasar de Excel al formato HTML necesario para las calificaciones.
 // 3. Puede ser interesante que un administrador pueda cambiar el DNI de un usuario.
 // 4. Comprobar que las direcciones de correo de cada uno de los estudiantes aparecen en Bcc: (copia oculta) en cualquier gestor de correo.
@@ -233,13 +232,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.205.4 (2017-05-05)"
+#define Log_PLATFORM_VERSION	"SWAD 16.206 (2017-05-05)"
 #define CSS_FILE		"swad16.205.css"
-#define JS_FILE			"swad16.205.js"
+#define JS_FILE			"swad16.206.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.206:   May 05, 2017	Date format applied to dates written directly instead of using Javascript. (218514 lines)
         Version 16.205.4: May 05, 2017	Help about date format. (218487 lines)
         Version 16.205.3: May 04, 2017	Changes in statistics about date format. (218447 lines)
         Version 16.205.2: May 04, 2017	Changes in form to select date format. (218439 lines)

@@ -1981,6 +1981,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
    int NumDayWeek;
    struct Sta_Hits Hits;
    MYSQL_ROW row;
+   char StrDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Initialize LastDate *****/
    Dat_AssignDate (&LastDate,&Gbl.DateRange.DateEnd.Date);
@@ -2030,13 +2031,14 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
          NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
          /* Write the date */
+	 Dat_ConvDateToDateStr (&Date,StrDate);
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"%s LEFT_TOP\">"
-                            "%04u-%02u-%02u&nbsp;"
+                            "%s&nbsp;"
                             "</td>",
 	          NumDayWeek == 6 ? "LOG_R" :
 	        	            "LOG",
-	          Date.Year,Date.Month,Date.Day);
+	          StrDate);
 
          /* Write the day of the week */
          fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2045,6 +2047,7 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
                   NumDayWeek == 6 ? "LOG_R" :
                 	            "LOG",
                   Txt_DAYS_SMALL[NumDayWeek]);
+
          /* Draw bar proportional to number of pages generated */
          Sta_DrawBarNumHits (NumDayWeek == 6 ? 'r' :
                                                'c',
@@ -2068,13 +2071,14 @@ static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
       NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
       /* Write the date */
+      Dat_ConvDateToDateStr (&Date,StrDate);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%04u-%02u-%02u&nbsp;"
+	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Year,Date.Month,Date.Day);
+               StrDate);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2126,6 +2130,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    float NumAccPerHour[24];
    float NumAccPerHourZero[24];
    MYSQL_ROW row;
+   char StrDate[Cns_MAX_BYTES_DATE + 1];
 
    /***** Get selected color type *****/
    SelectedColorType = Sta_GetStatColorType ();
@@ -2254,13 +2259,14 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
             NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
             /* Write the date */
+            Dat_ConvDateToDateStr (&Date,StrDate);
             fprintf (Gbl.F.Out,"<tr>"
         	               "<td class=\"%s LEFT_TOP\">"
-        	               "%04u-%02u-%02u&nbsp;"
+        	               "%s&nbsp;"
         	               "</td>",
 	             NumDayWeek == 6 ? "LOG_R" :
 	        	               "LOG",
-	             Date.Year,Date.Month,Date.Day);
+	             StrDate);
 
             /* Write the day of the week */
             fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2304,13 +2310,14 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
       /* Write the date */
+      Dat_ConvDateToDateStr (&Date,StrDate);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%04u-%02u-%02u&nbsp;"
+	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Year,Date.Month,Date.Day);
+               StrDate);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"
@@ -2342,13 +2349,14 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
       NumDayWeek = Dat_GetDayOfWeek (Date.Year,Date.Month,Date.Day);
 
       /* Write the date */
+      Dat_ConvDateToDateStr (&Date,StrDate);
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"%s RIGHT_TOP\">"
-	                 "%04u-%02u-%02u&nbsp;"
+	                 "%s&nbsp;"
 	                 "</td>",
                NumDayWeek == 6 ? "LOG_R" :
         	                 "LOG",
-               Date.Year,Date.Month,Date.Day);
+               StrDate);
 
       /* Write the day of the week */
       fprintf (Gbl.F.Out,"<td class=\"%s LEFT_TOP\">"

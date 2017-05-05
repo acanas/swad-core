@@ -42,8 +42,8 @@
 				//          123456789012345
 #define Cns_MAX_BYTES_IP	Cns_MAX_CHARS_IP	// 15
 
-#define Cns_MAX_CHARS_DATE	(4 + 1 + 2 + 1 + 2)
-#define Cns_MAX_BYTES_DATE	Cns_MAX_CHARS_DATE
+#define Cns_MAX_CHARS_DATE	(16 - 1)	// 15
+#define Cns_MAX_BYTES_DATE	((Cns_MAX_CHARS_DATE + 1) * Str_MAX_BYTES_PER_CHAR - 1)	// 255
 
 #define Cns_MAX_CHARS_EMAIL_ADDRESS	(256 - 1)			// 255
 #define Cns_MAX_BYTES_EMAIL_ADDRESS	Cns_MAX_CHARS_EMAIL_ADDRESS	// 255
