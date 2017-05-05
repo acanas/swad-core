@@ -59,6 +59,8 @@ extern struct Globals Gbl;
 
 static void Pre_PutIconsLanguage (void);
 
+static void Pre_PutParamLanguage (void);
+
 static void Pre_PutIconsToSelectSideCols (void);
 static void Pre_PutIconsSideColumns (void);
 static void Pre_UpdateSideColsOnUsrDataTable (void);
@@ -295,20 +297,26 @@ void Pre_AskChangeLanguage (void)
    Gbl.Prefs.Language = Pre_GetParamLanguage ();	// Change temporarily language to set form action
 
    /***** Request confirmation *****/
-   Lay_ShowAlert (Lay_INFO,
-                  Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
-	                               Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
-
-   /***** Send button *****/
-   Act_FormStart (ActChgLan);
-   Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
-   Lay_PutConfirmButton (Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
-   Act_FormEnd ();
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,
+                            Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
+	                                         Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
+   Lay_ShowAlertAndButton2 (ActChgLan,NULL,Pre_PutParamLanguage,
+                            Lay_CONFIRM_BUTTON,
+                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
 
    Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
 
    /***** Display preferences *****/
    Pre_EditPrefs ();
+  }
+
+/*****************************************************************************/
+/******************************* Change language *****************************/
+/*****************************************************************************/
+
+static void Pre_PutParamLanguage (void)
+  {
+   Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
   }
 
 /*****************************************************************************/
