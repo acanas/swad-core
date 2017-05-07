@@ -232,14 +232,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.207.2 (2017-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.208 (2017-05-07)"
 #define CSS_FILE		"swad16.207.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.207.2: May 05, 2017	Changes un help on preferences. (218621 lines)
+        Version 16.208:   May 07, 2017	New module swad_language for preference on language. (218695 lines)
+        Version 16.207.2: May 07, 2017	Changes un help on preferences. (218621 lines)
         Version 16.207.1: May 05, 2017	Minor changes in layout. (218577 lines)
         Version 16.207:   May 05, 2017	Changes in layout of preferences. (218577 lines)
         Version 16.206.4: May 05, 2017	Changes in question to change language. (218534 lines)

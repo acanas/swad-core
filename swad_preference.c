@@ -35,6 +35,7 @@
 #include "swad_database.h"
 #include "swad_date.h"
 #include "swad_global.h"
+#include "swad_language.h"
 #include "swad_layout.h"
 #include "swad_notification.h"
 #include "swad_menu.h"
@@ -57,10 +58,6 @@ extern struct Globals Gbl;
 /****************************** Private prototypes ***************************/
 /*****************************************************************************/
 
-static void Pre_PutIconsLanguage (void);
-
-static void Pre_PutParamLanguage (void);
-
 static void Pre_PutIconsToSelectSideCols (void);
 static void Pre_PutIconsSideColumns (void);
 static void Pre_UpdateSideColsOnUsrDataTable (void);
@@ -72,26 +69,21 @@ static void Pre_UpdateSideColsOnUsrDataTable (void);
 void Pre_EditPrefs (void)
   {
    extern const char *Hlp_PROFILE_Preferences_internationalization;
-   extern const char *Hlp_PROFILE_Preferences_language;
    extern const char *Hlp_PROFILE_Preferences_design;
    extern const char *Txt_Internationalization;
    extern const char *Txt_Design;
-   extern const char *Txt_Language;
 
    /***** Internationalization: language, first day of week, date format *****/
    Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,
                         Hlp_PROFILE_Preferences_internationalization);
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
-   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage,
-                        Hlp_PROFILE_Preferences_language);
-   Pre_PutSelectorToSelectLanguage ();		// 1. Language
-   Lay_EndRoundFrame ();
+   Lan_PutBoxToSelectLanguage ();		// 1. Language
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
    Cal_PutIconsToSelectFirstDayOfWeek ();	// 2. First day of week
    fprintf (Gbl.F.Out,"</div>"
                       "<div class=\"FRAME_INLINE\">");
-   Dat_PutIconsToSelectDateFormat ();		// 3. Date format
+   Dat_PutBoxToSelectDateFormat ();		// 3. Date format
    fprintf (Gbl.F.Out,"</div>");
    Lay_EndRoundFrame ();
 
@@ -119,17 +111,6 @@ void Pre_EditPrefs (void)
       /***** Automatic email to notify of new events *****/
       Ntf_PutFormChangeNotifSentByEMail ();
      }
-  }
-
-/*****************************************************************************/
-/*************** Put contextual icons in language preference *****************/
-/*****************************************************************************/
-
-static void Pre_PutIconsLanguage (void)
-  {
-   /***** Put icon to show a figure *****/
-   Gbl.Stat.FigureType = Sta_LANGUAGES;
-   Sta_PutIconToShowFigure ();
   }
 
 /*****************************************************************************/
@@ -241,142 +222,6 @@ void Pre_RemoveOldPrefsFromIP (void)
                   " WHERE LastChange<FROM_UNIXTIME(UNIX_TIMESTAMP()-'%lu')",
             Cfg_TIME_TO_DELETE_IP_PREFS);
    DB_QueryDELETE (Query,"can not remove old preferences");
-  }
-
-/*****************************************************************************/
-/************** Put link to change language (edit preferences) ***************/
-/*****************************************************************************/
-
-void Pre_PutLinkToChangeLanguage (void)
-  {
-   Lay_PutContextualLink (ActEdiPrf,NULL,NULL,
-                          "cty64x64.gif",
-                          "Change language","Change language",
-		          NULL);
-  }
-
-/*****************************************************************************/
-/********************* Put a selector to select language *********************/
-/*****************************************************************************/
-// Width == 0 means don't force width of selector
-
-void Pre_PutSelectorToSelectLanguage (void)
-  {
-   extern const char *Txt_STR_LANG_NAME[1 + Txt_NUM_LANGUAGES];
-   Txt_Language_t Lan;
-
-   Act_FormStart (ActReqChgLan);
-   fprintf (Gbl.F.Out,"<select name=\"Lan\""
-	              " style=\"width:112px; margin:0;\""
-	              " onchange=\"document.getElementById('%s').submit();\">",
-            Gbl.Form.Id);
-   for (Lan = (Txt_Language_t) 1;
-	Lan <= Txt_NUM_LANGUAGES;
-	Lan++)
-     {
-      fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Lan);
-      if (Lan == Gbl.Prefs.Language)
-         fprintf (Gbl.F.Out," selected=\"selected\"");
-      fprintf (Gbl.F.Out,">%s</option>",Txt_STR_LANG_NAME[Lan]);
-     }
-   fprintf (Gbl.F.Out,"</select>");
-   Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/********* Ask user if he/she really wants to change the language ************/
-/*****************************************************************************/
-
-void Pre_AskChangeLanguage (void)
-  {
-   extern const char *Txt_Do_you_want_to_change_your_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Do_you_want_to_change_the_language_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   extern const char *Txt_Switch_to_LANGUAGE[1 + Txt_NUM_LANGUAGES];
-   Txt_Language_t CurrentLanguage = Gbl.Prefs.Language;
-
-   /***** Get param language *****/
-   Gbl.Prefs.Language = Pre_GetParamLanguage ();	// Change temporarily language to set form action
-
-   /***** Request confirmation *****/
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,
-                            Gbl.Usrs.Me.Logged ? Txt_Do_you_want_to_change_your_language_to_LANGUAGE[Gbl.Prefs.Language] :
-	                                         Txt_Do_you_want_to_change_the_language_to_LANGUAGE[Gbl.Prefs.Language]);
-   Lay_ShowAlertAndButton2 (ActChgLan,NULL,Pre_PutParamLanguage,
-                            Lay_CONFIRM_BUTTON,
-                            Txt_Switch_to_LANGUAGE[Gbl.Prefs.Language]);
-
-   Gbl.Prefs.Language = CurrentLanguage;		// Restore current language
-
-   /***** Display preferences *****/
-   Pre_EditPrefs ();
-  }
-
-/*****************************************************************************/
-/******************************* Change language *****************************/
-/*****************************************************************************/
-
-static void Pre_PutParamLanguage (void)
-  {
-   Par_PutHiddenParamUnsigned ("Lan",(unsigned) Gbl.Prefs.Language);
-  }
-
-/*****************************************************************************/
-/******************************* Change language *****************************/
-/*****************************************************************************/
-
-void Pre_ChangeLanguage (void)
-  {
-   /***** Get param language *****/
-   Gbl.Prefs.Language = Pre_GetParamLanguage ();
-
-   /***** Store language in database *****/
-   /*
-   sprintf (Gbl.Message,"Txt_STR_LANG_ID[Gbl.Prefs.Language] = %s",Txt_STR_LANG_ID[Gbl.Prefs.Language]);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-   sprintf (Gbl.Message,"Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language] = %s",Txt_STR_LANG_ID[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
-   */
-
-   if (Gbl.Usrs.Me.Logged &&
-       Gbl.Prefs.Language != Gbl.Usrs.Me.UsrDat.Prefs.Language)
-     Pre_UpdateMyLanguageToCurrentLanguage ();
-
-   /***** Set preferences from current IP *****/
-   Pre_SetPrefsFromIP ();
-  }
-
-/*****************************************************************************/
-/**************** Update my language to the current language *****************/
-/*****************************************************************************/
-
-void Pre_UpdateMyLanguageToCurrentLanguage (void)
-  {
-   extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
-   char Query[128];
-
-   /***** Set my language to the current language *****/
-   Gbl.Usrs.Me.UsrDat.Prefs.Language = Gbl.Prefs.Language;
-
-   /***** Update my language in database *****/
-   sprintf (Query,"UPDATE usr_data SET Language='%s' WHERE UsrCod=%ld",
-	    Txt_STR_LANG_ID[Gbl.Prefs.Language],
-	    Gbl.Usrs.Me.UsrDat.UsrCod);
-   DB_QueryUPDATE (Query,"can not update your language");
-  }
-
-/*****************************************************************************/
-/*************************** Get parameter language **************************/
-/*****************************************************************************/
-
-Txt_Language_t Pre_GetParamLanguage (void)
-  {
-   extern const unsigned Txt_Current_CGI_SWAD_Language;
-
-   return (Txt_Language_t)
-	  Par_GetParToUnsignedLong ("Lan",
-                                    1,
-                                    Txt_NUM_LANGUAGES,
-                                    (unsigned long) Txt_Current_CGI_SWAD_Language);
   }
 
 /*****************************************************************************/

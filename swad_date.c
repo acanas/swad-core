@@ -95,7 +95,7 @@ static unsigned Dat_GetParamDateFormat (void);
 /************** Put icons to select the first day of the week ****************/
 /*****************************************************************************/
 
-void Dat_PutIconsToSelectDateFormat (void)
+void Dat_PutBoxToSelectDateFormat (void)
   {
    extern const char *Hlp_PROFILE_Preferences_dates;
    extern const char *Txt_Dates;

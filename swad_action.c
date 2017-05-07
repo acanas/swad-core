@@ -50,6 +50,7 @@
 #include "swad_global.h"
 #include "swad_ID.h"
 #include "swad_indicator.h"
+#include "swad_language.h"
 #include "swad_mail.h"
 #include "swad_mark.h"
 #include "swad_MFU.h"
@@ -2945,8 +2946,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActChgMyNet	*/{1173,-1,TabUnk,ActReqEdiRecCom	,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Net_UpdateMyWebsAndSocialNets	,NULL},
 
    /* ActChgThe		*/{ 841,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,The_ChangeTheme		,Pre_EditPrefs			,NULL},
-   /* ActReqChgLan	*/{ 992,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pre_AskChangeLanguage		,NULL},
-   /* ActChgLan		*/{ 654,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeLanguage		,Pre_EditPrefs			,NULL},
+   /* ActReqChgLan	*/{ 992,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Lan_AskChangeLanguage		,NULL},
+   /* ActChgLan		*/{ 654,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Lan_ChangeLanguage		,Pre_EditPrefs			,NULL},
    /* ActChg1stDay	*/{1484,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Cal_ChangeFirstDayOfWeek	,Pre_EditPrefs			,NULL},
    /* ActChgDatFmt	*/{1638,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Dat_ChangeDateFormat		,Pre_EditPrefs			,NULL},
    /* ActChgCol		*/{ 674,-1,TabUnk,ActEdiPrf		,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,0x1FF,Act_CONT_NORM,Act_THIS_WINDOW,Pre_ChangeSideCols		,Pre_EditPrefs			,NULL},

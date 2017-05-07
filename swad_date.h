@@ -115,7 +115,7 @@ typedef enum
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
 
-void Dat_PutIconsToSelectDateFormat (void);
+void Dat_PutBoxToSelectDateFormat (void);
 
 void Dat_PutSpanDateFormat (Dat_Format_t Format);
 void Dat_PutScriptDateFormat (Dat_Format_t Format);

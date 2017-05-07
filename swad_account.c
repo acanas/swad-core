@@ -36,9 +36,9 @@
 #include "swad_follow.h"
 #include "swad_global.h"
 #include "swad_ID.h"
+#include "swad_language.h"
 #include "swad_notification.h"
 #include "swad_parameter.h"
-#include "swad_preference.h"
 #include "swad_profile.h"
 #include "swad_report.h"
 #include "swad_social.h"
@@ -119,7 +119,7 @@ void Acc_ShowFormMyAccount (void)
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
       Usr_PutLinkToLogin ();
       Pwd_PutLinkToSendNewPasswd ();
-      Pre_PutLinkToChangeLanguage ();
+      Lan_PutLinkToChangeLanguage ();
       fprintf (Gbl.F.Out,"</div>");
 
       /**** Show form to check if I have an account *****/
@@ -185,7 +185,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
    Usr_PutLinkToLogin ();
    Pwd_PutLinkToSendNewPasswd ();
-   Pre_PutLinkToChangeLanguage ();
+   Lan_PutLinkToChangeLanguage ();
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Get new user's ID from form *****/

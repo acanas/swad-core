@@ -40,6 +40,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_hierarchy.h"
+#include "swad_language.h"
 #include "swad_logo.h"
 #include "swad_MFU.h"
 #include "swad_notice.h"
@@ -894,7 +895,7 @@ static void Lay_WritePageTopHeading (void)
    if (Gbl.Usrs.Me.Logged)
       Usr_WriteLoggedUsrHead ();
    else
-      Pre_PutSelectorToSelectLanguage ();
+      Lan_PutSelectorToSelectLanguage ();
 
    fprintf (Gbl.F.Out,"<div id=\"login_box\">");
    if (Gbl.Usrs.Me.Logged)

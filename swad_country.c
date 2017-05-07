@@ -36,7 +36,7 @@
 #include "swad_global.h"
 #include "swad_help.h"
 #include "swad_institution.h"
-#include "swad_parameter.h"
+#include "swad_language.h"
 #include "swad_preference.h"
 #include "swad_QR.h"
 #include "swad_text.h"
@@ -1739,7 +1739,7 @@ void Cty_RenameCountry (void)
    Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /* Get the lenguage */
-   Language = Pre_GetParamLanguage ();
+   Language = Lan_GetParamLanguage ();
 
    /* Get the new name for the country */
    Par_GetParToText ("Name",NewCtyName,Cty_MAX_BYTES_NAME);
@@ -1870,7 +1870,7 @@ void Cty_ChangeCtyWWW (void)
    Cty->CtyCod = Cty_GetAndCheckParamOtherCtyCod ();
 
    /* Get the lenguage */
-   Language = Pre_GetParamLanguage ();
+   Language = Lan_GetParamLanguage ();
 
    /* Get the new WWW for the country */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);

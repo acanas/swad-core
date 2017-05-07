@@ -48,6 +48,7 @@
 #include "swad_help.h"
 #include "swad_hierarchy.h"
 #include "swad_ID.h"
+#include "swad_language.h"
 #include "swad_MFU.h"
 #include "swad_nickname.h"
 #include "swad_notification.h"
@@ -2019,7 +2020,7 @@ void Usr_WriteFormLogin (Act_Action_t NextAction,void (*FuncParams) ())
 
    Acc_PutLinkToCreateAccount ();
    Pwd_PutLinkToSendNewPasswd ();
-   Pre_PutLinkToChangeLanguage ();
+   Lan_PutLinkToChangeLanguage ();
 
    fprintf (Gbl.F.Out,"</div>");
 
@@ -2839,7 +2840,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
 
    /***** Set my language if unknown *****/
    if (Gbl.Usrs.Me.UsrDat.Prefs.Language == Txt_LANGUAGE_UNKNOWN)		// I have not chosen language
-      Pre_UpdateMyLanguageToCurrentLanguage ();	// Update my language in database
+      Lan_UpdateMyLanguageToCurrentLanguage ();	// Update my language in database
 
    /***** Set preferences from my preferences *****/
    Gbl.Prefs.FirstDayOfWeek = Gbl.Usrs.Me.UsrDat.Prefs.FirstDayOfWeek;
