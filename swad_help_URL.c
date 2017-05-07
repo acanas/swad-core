@@ -3184,6 +3184,27 @@ const char *Hlp_PROFILE_Photo =
 	"PROFILE.Photo.en";
 #endif
 
+const char *Hlp_PROFILE_Preferences_internationalization =
+#if   L==1
+	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+#elif L==2
+	"PROFILE.Preferences.en#internationalization";
+#elif L==3
+	"PROFILE.Preferences.en#internationalization";
+#elif L==4
+	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+#elif L==5
+	"PROFILE.Preferences.en#internationalization";
+#elif L==6
+	"PROFILE.Preferences.es#internacionalizaci%C3%B3n";
+#elif L==7
+	"PROFILE.Preferences.en#internationalization";
+#elif L==8
+	"PROFILE.Preferences.en#internationalization";
+#elif L==9
+	"PROFILE.Preferences.en#internationalization";
+#endif
+
 const char *Hlp_PROFILE_Preferences_language =
 #if   L==1
 	"PROFILE.Preferences.es#idioma";
@@ -3245,6 +3266,27 @@ const char *Hlp_PROFILE_Preferences_dates =
 	"PROFILE.Preferences.en#dates";
 #elif L==9
 	"PROFILE.Preferences.en#dates";
+#endif
+
+const char *Hlp_PROFILE_Preferences_design =
+#if   L==1
+	"PROFILE.Preferences.es#dise%C3%B1o";
+#elif L==2
+	"PROFILE.Preferences.en#design";
+#elif L==3
+	"PROFILE.Preferences.en#design";
+#elif L==4
+	"PROFILE.Preferences.es#dise%C3%B1o";
+#elif L==5
+	"PROFILE.Preferences.en#design";
+#elif L==6
+	"PROFILE.Preferences.es#dise%C3%B1o";
+#elif L==7
+	"PROFILE.Preferences.en#design";
+#elif L==8
+	"PROFILE.Preferences.en#design";
+#elif L==9
+	"PROFILE.Preferences.en#design";
 #endif
 
 const char *Hlp_PROFILE_Preferences_icons =

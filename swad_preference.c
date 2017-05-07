@@ -71,16 +71,19 @@ static void Pre_UpdateSideColsOnUsrDataTable (void);
 
 void Pre_EditPrefs (void)
   {
+   extern const char *Hlp_PROFILE_Preferences_internationalization;
    extern const char *Hlp_PROFILE_Preferences_language;
+   extern const char *Hlp_PROFILE_Preferences_design;
    extern const char *Txt_Internationalization;
    extern const char *Txt_Design;
    extern const char *Txt_Language;
 
    /***** Internationalization: language, first day of week, date format *****/
-   Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Internationalization,NULL,
+                        Hlp_PROFILE_Preferences_internationalization);
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
-   Lay_StartRoundFrame (NULL,Txt_Language,
-                        Pre_PutIconsLanguage,Hlp_PROFILE_Preferences_language);
+   Lay_StartRoundFrame (NULL,Txt_Language,Pre_PutIconsLanguage,
+                        Hlp_PROFILE_Preferences_language);
    Pre_PutSelectorToSelectLanguage ();		// 1. Language
    Lay_EndRoundFrame ();
    fprintf (Gbl.F.Out,"</div>"
@@ -93,7 +96,7 @@ void Pre_EditPrefs (void)
    Lay_EndRoundFrame ();
 
    /***** Design: icon set, menu, theme, side columns *****/
-   Lay_StartRoundFrame (NULL,Txt_Design,NULL,NULL);
+   Lay_StartRoundFrame (NULL,Txt_Design,NULL,Hlp_PROFILE_Preferences_design);
    fprintf (Gbl.F.Out,"<div class=\"FRAME_INLINE\">");
    Ico_PutIconsToSelectIconSet ();		// 4. Icon set
    fprintf (Gbl.F.Out,"</div>"

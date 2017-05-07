@@ -383,7 +383,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"att_date_start_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"att_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :
@@ -401,7 +401,7 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
             (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
 
    /* End date/time */
-   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"att_date_end_%u\" class=\"%s LEFT_BOTTOM",
             UniqueId,
             Att->Hidden ? (Att->Open ? "DATE_GREEN_LIGHT" :
         	                       "DATE_RED_LIGHT") :

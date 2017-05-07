@@ -370,7 +370,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* Start date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_start_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
         	                     "DATE_RED_LIGHT") :
@@ -389,7 +389,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
 
    /* End date/time */
    UniqueId++;
-   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_TOP",
+   fprintf (Gbl.F.Out,"<td id=\"asg_date_end_%u\" class=\"%s LEFT_BOTTOM",
 	    UniqueId,
             Asg.Hidden ? (Asg.Open ? "DATE_GREEN_LIGHT" :
         	                     "DATE_RED_LIGHT") :
