@@ -1111,7 +1111,7 @@ static void Rec_ShowRecordOneStdCrs (void)
      {
       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	 Rec_ShowCrsRecord (Rec_CRS_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
+	 Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
       else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
 	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
 	 Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
@@ -1128,13 +1128,13 @@ static void Rec_ShowRecordOneStdCrs (void)
 void Rec_ListRecordsStdsForEdit (void)
   {
    Rec_ListRecordsStds (Rec_SHA_RECORD_LIST,
-                        Rec_CRS_RECORD_LIST);
+                        Rec_CRS_LIST_SEVERAL_RECORDS);
   }
 
 void Rec_ListRecordsStdsForPrint (void)
   {
    Rec_ListRecordsStds (Rec_SHA_RECORD_PRINT,
-                        Rec_CRS_RECORD_PRINT);
+                        Rec_CRS_PRINT_SEVERAL_RECORDS);
   }
 
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
@@ -1610,8 +1610,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
      {
       Hlp_USERS_Students_course_record_card,	// Rec_CRS_MY_RECORD_AS_STUDENT_FORM
       Hlp_USERS_Students_course_record_card,	// Rec_CRS_MY_RECORD_AS_STUDENT_CHECK
-      Hlp_USERS_Students_course_record_card,	// Rec_CRS_RECORD_LIST
-      NULL,					// Rec_CRS_RECORD_PRINT
+      Hlp_USERS_Students_course_record_card,	// Rec_CRS_LIST_ONE_RECORD
+      Hlp_USERS_Students_course_record_card,	// Rec_CRS_LIST_SEVERAL_RECORDS
+      NULL,					// Rec_CRS_PRINT_ONE_RECORD
+      NULL,					// Rec_CRS_PRINT_SEVERAL_RECORDS
+		// Rec_CRS_RECORD_PRINT
      };
    char StrRecordWidth[10 + 1];
    unsigned Col1Width = 210;
@@ -1632,15 +1635,15 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       if (ItsMe)	// It's me
 	 switch (TypeOfView)
 	   {
-	    case Rec_CRS_RECORD_LIST:
-	       // When listing several records,
-	       // only my record in course in allowed
-	       // ==> show form to edit my record as student
+	    case Rec_CRS_LIST_ONE_RECORD:
+	    case Rec_CRS_LIST_SEVERAL_RECORDS:
+	       // When listing records, I can see only my record as student
  	       TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
  	       break;
 	    case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
 	    case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
-	    case Rec_CRS_RECORD_PRINT:
+	    case Rec_CRS_PRINT_ONE_RECORD:
+	    case Rec_CRS_PRINT_SEVERAL_RECORDS:
 	       break;
 	    default:
 	       Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
@@ -1665,13 +1668,20 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	 break;
       case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
          break;
-      case Rec_CRS_RECORD_LIST:
+      case Rec_CRS_LIST_ONE_RECORD:
+         ICanEdit = true;
+	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
+	 // Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);	// TODO: Remove this line
+         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	 break;
+      case Rec_CRS_LIST_SEVERAL_RECORDS:
          ICanEdit = true;
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
 	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 break;
-      case Rec_CRS_RECORD_PRINT:
+      case Rec_CRS_PRINT_ONE_RECORD:
+      case Rec_CRS_PRINT_SEVERAL_RECORDS:
          break;
       default:
          break;
@@ -1715,7 +1725,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       // If the field must be shown...
       if (ShowField)
         {
-         ICanEditThisField = TypeOfView == Rec_CRS_RECORD_LIST ||
+         ICanEditThisField = TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+                             TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS ||
                             (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
                              Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
 
@@ -1728,7 +1739,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                 	             "REC_DAT_SMALL",
                   Gbl.RowEvenOdd,Col1Width,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
-         if (TypeOfView == Rec_CRS_RECORD_LIST)
+         if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+             TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
             fprintf (Gbl.F.Out,"<span class=\"DAT_SMALL\"> (%s)</span>",
                      Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
          fprintf (Gbl.F.Out,"</td>");

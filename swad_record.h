@@ -69,13 +69,15 @@ typedef enum
    Rec_SHA_RECORD_PUBLIC,
   } Rec_SharedRecordViewType_t;
 
-#define Rec_COURSE_NUM_VIEW_TYPES 4
+#define Rec_COURSE_NUM_VIEW_TYPES 6
 typedef enum
   {
    Rec_CRS_MY_RECORD_AS_STUDENT_FORM,
    Rec_CRS_MY_RECORD_AS_STUDENT_CHECK,
-   Rec_CRS_RECORD_LIST,
-   Rec_CRS_RECORD_PRINT,
+   Rec_CRS_LIST_ONE_RECORD,
+   Rec_CRS_LIST_SEVERAL_RECORDS,
+   Rec_CRS_PRINT_ONE_RECORD,
+   Rec_CRS_PRINT_SEVERAL_RECORDS,
   } Rec_CourseRecordViewType_t;
 
 typedef enum {
