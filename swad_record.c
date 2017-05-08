@@ -1216,6 +1216,11 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                fprintf (Gbl.F.Out,"page-break-before:always;");
             fprintf (Gbl.F.Out,"\">");
 
+            /* Show optional alert */
+            if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+	       if (Gbl.Message[0])
+		  Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+
             /* Shared record */
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat);
 
@@ -1224,7 +1229,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 	       if ( Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
 		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&		// I am student in this course...
-		    Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat.UsrCod))	// ...and it's me
+		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,Anchor);
 
             fprintf (Gbl.F.Out,"</section>");
@@ -1559,6 +1564,10 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
 
+   /***** Initialize alert type and message *****/
+   Gbl.AlertType = Lay_INFO;	// No error, no success
+   Gbl.Message[0] = '\0';	// Do not write anything
+
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
    Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat);
@@ -1576,7 +1585,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
 
    /***** Show records again (including the updated one) *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Student_record_card_in_this_course_has_been_updated);
+   Gbl.AlertType = Lay_SUCCESS;
+   sprintf (Gbl.Message,"%s",Txt_Student_record_card_in_this_course_has_been_updated);
    Rec_ListRecordsStdsForEdit ();
 
    /***** Free memory used for some fields *****/

@@ -70,7 +70,7 @@ typedef enum
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
-static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
+static void ID_PutLinkToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
 static void ID_PutButtonToConfirmID (unsigned NumID);
 static void ID_PutParamsConfirmID (void);
 
@@ -399,7 +399,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
 
       if (ICanConfirmUsrID &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
-	 ID_PutButtonToReqConfirmID (UsrDat,NumID);
+	 ID_PutLinkToReqConfirmID (UsrDat,NumID);
      }
   }
 
@@ -448,10 +448,10 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/******* Put a button to request the confirmation of another user's ID *******/
+/******** Put a link to request the confirmation of another user's ID ********/
 /*****************************************************************************/
 
-static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
+static void ID_PutLinkToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
