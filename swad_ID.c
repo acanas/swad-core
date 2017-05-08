@@ -71,7 +71,8 @@ typedef enum
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
 static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
-static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID);
+static void ID_PutButtonToConfirmID (unsigned NumID);
+static void ID_PutParamsConfirmID (void);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
@@ -470,18 +471,30 @@ static void ID_PutButtonToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
 /**************** Put a button to confirm another user's ID ******************/
 /*****************************************************************************/
 
-static void ID_PutButtonToConfirmID (struct UsrData *UsrDat,unsigned NumID)
+static void ID_PutButtonToConfirmID (unsigned NumID)
   {
+   extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
    extern const char *Txt_Confirm_ID;
 
-   Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
-		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
-							       ActCnfID_Oth));	// Guest, visitor or admin
-   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+   Gbl.Usrs.Other.NumIDToConfirm = NumID;
+
+   /***** Ask for confirmation *****/
+   sprintf (Gbl.Title,Txt_Do_you_want_to_confirm_the_ID_X,
+	    Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Title);
+   Lay_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
+		            (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
+							                               ActCnfID_Oth),	// Guest, visitor or admin
+                            NULL,
+                            ID_PutParamsConfirmID,
+                            Lay_CREATE_BUTTON,Txt_Confirm_ID);
+  }
+
+static void ID_PutParamsConfirmID (void)
+  {
+   Usr_PutParamOtherUsrCodEncrypted ();
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
-	    UsrDat->IDs.List[NumID].ID);
-   Lay_PutCreateButton (Txt_Confirm_ID);
-   Act_FormEnd ();
+	    Gbl.Usrs.Other.UsrDat.IDs.List[Gbl.Usrs.Other.NumIDToConfirm].ID);
   }
 
 /*****************************************************************************/
@@ -957,7 +970,6 @@ void ID_ConfirmOtherUsrID (void)
 static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
   {
    extern const char *Txt_ID_X_had_already_been_confirmed;
-   extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
@@ -1004,13 +1016,8 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
 	    switch (ReqConfOrConfID)
 	      {
 	       case ID_REQUEST_CONFIRM_ID:        // Ask if confirm ID
-		  /***** Ask for confirmation *****/
-		  sprintf (Gbl.Message,Txt_Do_you_want_to_confirm_the_ID_X,
-			   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-		  Lay_ShowAlert (Lay_INFO,Gbl.Message);
-
 		  /***** Put button to confirm ID *****/
-		  ID_PutButtonToConfirmID (&Gbl.Usrs.Other.UsrDat,NumIDFound);
+		  ID_PutButtonToConfirmID (NumIDFound);
 		  break;
 	       case ID_CONFIRM_ID:                // Confirm ID
 		  /***** Mark this ID as confirmed *****/

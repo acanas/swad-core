@@ -234,13 +234,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.208.1 (2017-05-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.208.2 (2017-05-08)"
 #define CSS_FILE		"swad16.207.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.208.2: May 08, 2017	Changes in confirmation of user's ID. (218704 lines)
         Version 16.208.1: May 08, 2017	Fixed problem in character encoding in files of marks, reported by Sandra Daniela Tazzioli Barroso. (218696 lines)
         Version 16.208:   May 07, 2017	New module swad_language for preference on language. (218695 lines)
         Version 16.207.2: May 07, 2017	Changes in help on preferences. (218621 lines)

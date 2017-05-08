@@ -1503,7 +1503,7 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
 
 static void Rec_PutParamsShowOfficeHoursOneTch (void)
   {
-   Usr_PutParamUsrCodEncrypted (Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
+   Usr_PutParamOtherUsrCodEncrypted ();
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 

@@ -367,6 +367,7 @@ struct Globals
       struct
 	{
 	 struct UsrData UsrDat;
+	 unsigned NumIDToConfirm;	// Used as hidden parameter to confirm a user's ID
 	} Other;		// Another user, used for example to register in / remove from a course
       struct ListUsrs LstUsrs[Rol_NUM_ROLES];
       struct
