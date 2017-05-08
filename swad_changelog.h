@@ -222,6 +222,8 @@
 // 4. Comprobar que las direcciones de correo de cada uno de los estudiantes aparecen en Bcc: (copia oculta) en cualquier gestor de correo.
 // 5. Informar a otros usuarios de que es el cumpleaños de otros usuarios para que los feliciten (habría que añadir una categoría de privacidad nueva para la visibilidad de la fecha de cumpleaños).
 // 6. La información sobre nuevas notificaciones debería aparecer también en pantallas pequeñas (móviles). Tal vez podría aparecer también en el icono de notificaciones de la pestaña MENSAJES.
+// 8. Estuve confirmando los DNI como indicaste para cargar las notas. En la opcion de la forma lista de los alumnos al ser varios, cada vez que quiero acceder a la ficha de uno de ellos debo bajar al final de la pagina para su vista. Es factible que al señalar algun estudiante y al cliquear con el boton derecho del mouse me permita acceder directamente. De señalar varios se puede insertar una pestaña que diga "siguiente" y no tener que volver a la pestaña estudiantes y hacerlo individualmente a los fines de agilizar la vista. Entiendo que esto se hace en forma periodica pero para tenerlo en cuenta.
+// 9. Antonio hay alumnos que han generado el usuario en forma incompleta entre ellos no cargaron el DNI y no asisten a clase para rectificarlo. Hay forma de mi posicion con profesora o adminsitradora del centro ingresar, completar los datos aun conocer su clave?
 
 // TODO: Fix bug: When a centre is associated with a place and it is moved to another institution, what happens with the place?
 // TODO: Check what happens with places when a centre is removed
@@ -232,15 +234,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.208 (2017-05-07)"
+#define Log_PLATFORM_VERSION	"SWAD 16.208.1 (2017-05-08)"
 #define CSS_FILE		"swad16.207.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.208.1: May 08, 2017	Fixed problem in character encoding in files of marks, reported by Sandra Daniela Tazzioli Barroso. (218696 lines)
         Version 16.208:   May 07, 2017	New module swad_language for preference on language. (218695 lines)
-        Version 16.207.2: May 07, 2017	Changes un help on preferences. (218621 lines)
+        Version 16.207.2: May 07, 2017	Changes in help on preferences. (218621 lines)
         Version 16.207.1: May 05, 2017	Minor changes in layout. (218577 lines)
         Version 16.207:   May 05, 2017	Changes in layout of preferences. (218577 lines)
         Version 16.206.4: May 05, 2017	Changes in question to change language. (218534 lines)
@@ -347,7 +350,7 @@ INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1637','es','N','Impr
         Version 16.191:   Apr 25, 2017	Changes in layout of timetable. (218183 lines)
         Version 16.190:   Apr 25, 2017	Code refactoring in timetable. (218106 lines)
         Version 16.189:   Apr 25, 2017	Changes in timetable. (218027 lines)
-					7 changes necessary in database.
+					7 changes necessary in database:
 ALTER TABLE timetable_crs DROP COLUMN DayOld;
 ALTER TABLE timetable_crs DROP COLUMN HourOld;
 ALTER TABLE timetable_crs DROP COLUMN DurationOld;
@@ -362,7 +365,7 @@ ALTER TABLE timetable_tut DROP COLUMN DurationOld;
         Version 16.187.2: Apr 24, 2017	Changes in timetable. Not finished. (217963 lines)
         Version 16.187.1: Apr 24, 2017	Changes in timetable. Not finished. (217958 lines)
         Version 16.187:   Apr 24, 2017	Changes in timetable. Not finished. (217947 lines)
-					35 changes necessary in database.
+					35 changes necessary in database:
 ALTER TABLE timetable_crs CHANGE COLUMN Day DayOld ENUM('L','M','X','J','V','S','D') NOT NULL;
 ALTER TABLE timetable_crs CHANGE COLUMN Hour HourOld TINYINT NOT NULL;
 ALTER TABLE timetable_crs CHANGE COLUMN Duration DurationOld TINYINT NOT NULL;
@@ -568,11 +571,11 @@ sudo cp -a future64x64.png /var/www/html/swad/icon/
         Version 16.155.31:Mar 13, 2017	Fixed bug in connected users. (217040 lines)
         Version 16.155.30:Mar 13, 2017	Adjusting size of database fields. (217037 lines)
         Version 16.155.29:Mar 13, 2017	Adjusting size of database fields. (217034 lines)
-					1 change necessary in database.
+					1 change necessary in database:
 ALTER TABLE usr_emails CHANGE COLUMN E_mail E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL;
 
         Version 16.155.28:Mar 13, 2017	Adjusting size of database fields. (217035 lines)
-					7 changes necessary in database.
+					7 changes necessary in database:
 ALTER TABLE usr_data CHANGE COLUMN Surname1 Surname1 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
 ALTER TABLE usr_data CHANGE COLUMN Surname2 Surname2 VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
 ALTER TABLE usr_data CHANGE COLUMN FirstName FirstName VARCHAR(511) COLLATE latin1_spanish_ci NOT NULL DEFAULT '';
@@ -582,17 +585,11 @@ ALTER TABLE usr_data CHANGE COLUMN FamilyAddress FamilyAddress VARCHAR(2047) NOT
 ALTER TABLE usr_data CHANGE COLUMN OriginPlace OriginPlace VARCHAR(2047) NOT NULL DEFAULT '';
 
         Version 16.155.27:Mar 13, 2017	Adjusting size of database fields. (217038 lines)
-					4 changes necessary in database.
+					4 changes necessary in database:
 ALTER TABLE tst_answers CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;
 ALTER TABLE tst_questions CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;
 DROP INDEX TagTxt ON tst_tags;
 ALTER TABLE tst_tags CHANGE COLUMN TagTxt TagTxt VARCHAR(2047) NOT NULL;
-
-   DB_CreateTable ("CREATE TABLE IF NOT EXISTS tst_tags ("
-			"TagCod INT NOT NULL AUTO_INCREMENT,"
-			"CrsCod INT NOT NULL DEFAULT -1,"
-			"ChangeTime DATETIME NOT NULL,"
-			"TagTxt VARCHAR(2047) NOT NULL,"	// Tst_MAX_BYTES_TAG
 
         Version 16.155.26:Mar 13, 2017	Adjusting size of database fields. (217009 lines)
 					3 changes necessary in database:
@@ -601,7 +598,7 @@ ALTER TABLE timetable_crs CHANGE COLUMN GroupName GroupName VARCHAR(2047) NOT NU
 ALTER TABLE timetable_tut CHANGE COLUMN Place Place VARCHAR(511) NOT NULL;
 
         Version 16.155.25:Mar 13, 2017	Adjusting size of database fields. (216995 lines)
-					1 change necessary in database.
+					1 change necessary in database:
 ALTER TABLE surveys CHANGE COLUMN Title Title VARCHAR(2047) NOT NULL;
 
         Version 16.155.24:Mar 13, 2017	Adjusting size of database fields. (216988 lines)
@@ -622,7 +619,7 @@ ALTER TABLE places CHANGE COLUMN ShortName ShortName VARCHAR(511) NOT NULL;
 ALTER TABLE places CHANGE COLUMN FullName FullName VARCHAR(2047) NOT NULL;
 
         Version 16.155.21:Mar 13, 2017	Adjusting size of database fields. (216948 lines)
-					1 change necessary in database.
+					1 change necessary in database:
 ALTER TABLE pending_emails CHANGE COLUMN E_mail E_mail VARCHAR(255) COLLATE latin1_general_ci NOT NULL;
 
         Version 16.155.20:Mar 13, 2017	Adjusting size of database fields. (216944 lines)
@@ -666,8 +663,6 @@ ALTER TABLE holidays CHANGE COLUMN Name Name VARCHAR(2047) NOT NULL;
         Version 16.155.11:Mar 11, 2017	Adjusting size of database fields. (216711 lines)
 					1 change necessary in database:
 ALTER TABLE forum_post CHANGE COLUMN ImageTitle ImageTitle VARCHAR(2047) NOT NULL;
-
-			"ImageTitle VARCHAR(2047) NOT NULL,"	// Img_MAX_BYTES_TITLE
 
         Version 16.155.10:Mar 11, 2017	Adjusting size of database fields. (216695 lines)
 					2 changes necessary in database:

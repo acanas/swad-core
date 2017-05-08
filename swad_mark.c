@@ -685,7 +685,11 @@ void Mrk_ShowMyMarks (void)
             Lay_ShowErrorAndExit ("Can not open file with my marks.");
 
          /* Start HTML output */
-         fprintf (Gbl.F.Out,"Content-type: text/html; charset=windows-1252\r\n\r\n"); // Two \r\n aree necessary
+         /*  Do not write charset here.
+             Instead, delegate to the meta directive
+             (example: <meta http-equiv=Content-Type content="text/html; charset=utf-8">)
+             that is typically included in the HTML document header. */
+         fprintf (Gbl.F.Out,"Content-type: text/html\r\n\r\n"); // Two \r\n are necessary
          Gbl.Layout.HTMLStartWritten = true;
 
          /* Copy HTML to output file */
