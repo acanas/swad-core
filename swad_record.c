@@ -2304,15 +2304,6 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 Rec_ShowEmail (UsrDat,ClassForm);
 
 	 /* Show user's IDs */
-	 if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
-	    switch (Gbl.Action.Act)
-	      {
-	       case ActSeeRecSevGst:
-	       case ActSeeRecSevStd:
-	       case ActSeeRecSevTch:
-	          Gbl.Action.Original = Gbl.Action.Act;	// Used to know what action gave rise to other actions
-	          break;
-	      }
 	 Rec_ShowUsrIDs (UsrDat,Anchor,ClassForm);
 
          Lay_EndTable ();
