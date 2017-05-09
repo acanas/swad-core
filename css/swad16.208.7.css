@@ -2084,6 +2084,26 @@ a:hover img.CENTRE_PHOTO_SHOW
 .USR_ID_NC	{color:#A02020}
 
 /******************************* Record card *********************************/
+.REC_USR
+	{
+	display:block;
+	margin:0 0 12px 0;
+	text-align:center;
+	vertical-align:top;
+	}
+.REC_SHA
+	{
+	display:inline-block;
+	margin:0 6px;
+	vertical-align:top;
+	}
+.REC_CRS
+	{
+	display:inline-block;
+	margin:0 6px;
+	vertical-align:top;
+	}
+
 .REC_C1_TOP
 	{
 	box-sizing:border-box;

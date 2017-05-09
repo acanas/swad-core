@@ -1208,24 +1208,24 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                                           Gbl.CurrentCrs.Crs.CrsCod,
                                                           true);
 
-            /* Start records of this student */
-            sprintf (Anchor,"record_%u",NumUsr);
-            fprintf (Gbl.F.Out,"<section id=\"%s\""
-        	               " class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:12px;",
-        	     Anchor);
+            /* Start records of this user */
+	    sprintf (Anchor,"record_%u",NumUsr);
+	    fprintf (Gbl.F.Out,"<section id=\"%s\" class=\"REC_USR\"",
+		     Anchor);
             if (Gbl.Action.Act == ActPrnRecSevStd &&
                 NumUsr != 0 &&
                 (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
-               fprintf (Gbl.F.Out,"page-break-before:always;");
-            fprintf (Gbl.F.Out,"\">");
+               fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
+            fprintf (Gbl.F.Out,">");
 
-            /* Show optional alert */
-            if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-               Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+	    /* Show optional alert */
+	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+	       Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
             /* Shared record */
+            fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat);
+            fprintf (Gbl.F.Out,"</section>");
 
             /* Record of the student in the course */
             if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
@@ -1233,7 +1233,16 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
 		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&		// I am student in this course...
 		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
+		 {
+                  /* Start course record */
+		  fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
+
+                  /* Show course record */
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,Anchor);
+
+		  /* End course record */
+                  fprintf (Gbl.F.Out,"</section>");
+		 }
 
             fprintf (Gbl.F.Out,"</section>");
 
