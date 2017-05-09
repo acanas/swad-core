@@ -68,12 +68,13 @@ extern struct Globals Gbl;
 
 static const char *Lay_AlertIcons[Lay_NUM_ALERT_TYPES] =
   {
-   "info64x64.png",
-   "success64x64.png",
-   "question64x64.gif",	// animated
-   "warning64x64.gif",	// animated
-   "error64x64.gif",	// animated
-   "copy_on16x16.gif",
+   NULL,		// Lay_NONE
+   "info64x64.png",	// Lay_INFO
+   "success64x64.png",	// Lay_SUCCESS
+   "question64x64.gif",	// Lay_QUESTION		animated gif
+   "warning64x64.gif",	// Lay_WARNING		animated gif
+   "error64x64.gif",	// Lay_ERROR		animated gif
+   "copy_on16x16.gif",	// Lay_CLIPBOARD
   };
 
 /*****************************************************************************/
@@ -1665,8 +1666,11 @@ void Lay_ShowErrorAndExit (const char *Message)
 
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
   {
-   Lay_ShowAlertAndButton1 (AlertType,Message);
-   Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+   if (AlertType != Lay_NONE)
+     {
+      Lay_ShowAlertAndButton1 (AlertType,Message);
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+     }
   }
 
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)

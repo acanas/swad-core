@@ -1957,8 +1957,7 @@ static void Ctr_RenameCentre (struct Centre *Ctr,Cns_ShrtOrFullName_t ShrtOrFull
          if (Ctr_CheckIfCtrNameExistsInIns (ParamName,NewCtrName,Ctr->CtrCod,Gbl.CurrentIns.Ins.InsCod))
            {
             Gbl.AlertType = Lay_WARNING;
-            sprintf (Gbl.Message,Txt_The_centre_X_already_exists,
-                     NewCtrName);
+            sprintf (Gbl.Message,Txt_The_centre_X_already_exists,NewCtrName);
            }
          else
            {

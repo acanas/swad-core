@@ -1102,8 +1102,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Show optional alert *****/
-   if (Gbl.Message[0])
-      Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1223,8 +1222,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
             /* Show optional alert */
             if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       if (Gbl.Message[0])
-		  Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+               Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
             /* Shared record */
             Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat);
@@ -1571,8 +1569,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    bool MultipleUsrs;
 
    /***** Initialize alert type and message *****/
-   Gbl.AlertType = Lay_INFO;	// No error, no success
-   Gbl.Message[0] = '\0';	// Do not write anything
+   Gbl.AlertType = Lay_NONE;	// Do not show alert
 
    /***** Get parameter indicating if listing multiple users *****/
    MultipleUsrs = Par_GetParToBool ("MultiUsrs");
@@ -1593,7 +1590,8 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
    Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,"%s",Txt_Student_record_card_in_this_course_has_been_updated);
+   sprintf (Gbl.Message,"%s",
+            Txt_Student_record_card_in_this_course_has_been_updated);
 
    /***** Show one or multiple records *****/
    if (MultipleUsrs)
@@ -1631,8 +1629,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 		// Rec_CRS_RECORD_PRINT
      };
    char StrRecordWidth[10 + 1];
-   unsigned Col1Width = 210;
-   unsigned Col2Width;
    bool ItsMe;
    bool ICanEdit = false;
    unsigned NumField;
@@ -1701,8 +1697,6 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          break;
     }
 
-   Col2Width = Rec_RECORD_WIDTH - 10 * 2 - Col1Width;
-
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
    Lay_StartRoundFrameTable (StrRecordWidth,NULL,
@@ -1746,12 +1740,11 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
-                            "<td class=\"%s RIGHT_TOP COLOR%u\""
-                            " style=\"width:%upx;\">"
+                            "<td class=\"REC_C1_BOT %s RIGHT_TOP COLOR%u\">"
                             "%s:",
                   ICanEditThisField ? The_ClassForm[Gbl.Prefs.Theme] :
                 	             "REC_DAT_SMALL",
-                  Gbl.RowEvenOdd,Col1Width,
+                  Gbl.RowEvenOdd,
                   Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Name);
          if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
              TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
@@ -1770,13 +1763,12 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 
          /***** Write form, text, or nothing depending on
                 the user's role and the visibility of the field *****/
-         fprintf (Gbl.F.Out,"<td class=\"REC_DAT_BOLD LEFT_TOP COLOR%u\""
-                            " style=\"width:%upx;\">",
-                  Gbl.RowEvenOdd,Col2Width);
+         fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP COLOR%u\">",
+                  Gbl.RowEvenOdd);
          if (ICanEditThisField)	// Show with form
            {
             fprintf (Gbl.F.Out,"<textarea name=\"Field%ld\" rows=\"%u\""
-        	               " style=\"width:450px;\">",
+        	               " class=\"REC_C2_BOT_INPUT\">",
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,
                      Gbl.CurrentCrs.Records.LstFields.Lst[NumField].NumLines);
             if (ThisFieldHasText)

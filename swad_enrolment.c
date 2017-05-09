@@ -3564,8 +3564,7 @@ void Enr_CreateNewUsr1 (void)
    ID_GetParamOtherUsrIDPlain ();	// User's ID was already modified and passed as a hidden parameter
 
    /***** Initialize alert type and message *****/
-   Gbl.AlertType = Lay_INFO;	// No error, no success
-   Gbl.Message[0] = '\0';	// Do not write anything
+   Gbl.AlertType = Lay_NONE;	// Do not show alert
 
    if (ID_CheckIfUsrIDIsValid (Gbl.Usrs.Other.UsrDat.IDs.List[0].ID))        // User's ID valid
      {
@@ -3639,9 +3638,8 @@ void Enr_CreateNewUsr2 (void)
      {
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
-	 /***** Show success message *****/
-	 if (Gbl.Message[0])
-            Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+	 /***** Show optional alert *****/
+         Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
 	 /***** Change user's groups *****/
 	 if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -3667,8 +3665,7 @@ void Enr_ModifyUsr1 (void)
    Rol_Role_t NewRole;
 
    /***** Initialize alert type and message *****/
-   Gbl.AlertType = Lay_INFO;	// No error, no success
-   Gbl.Message[0] = '\0';	// Do not write anything
+   Gbl.AlertType = Lay_NONE;	// Do not show alert
 
    /***** Get user from form *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -3709,7 +3706,7 @@ void Enr_ModifyUsr1 (void)
 			/* Modify role */
 			Enr_ModifyRoleInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole);
 
-			/* Show success message */
+			/* Set success message */
 			Gbl.AlertType = Lay_SUCCESS;
 			sprintf (Gbl.Message,Txt_The_role_of_THE_USER_X_in_the_course_Y_has_changed_from_A_to_B,
 				 Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName,
@@ -3723,7 +3720,7 @@ void Enr_ModifyUsr1 (void)
 		     Enr_RegisterUsrInCurrentCrs (&Gbl.Usrs.Other.UsrDat,NewRole,
 						  Enr_SET_ACCEPTED_TO_FALSE);
 
-		     /* Show success message */
+		     /* Set success message */
 	             Gbl.AlertType = Lay_SUCCESS;
 		     sprintf (Gbl.Message,Txt_THE_USER_X_has_been_enroled_in_the_course_Y,
 			      Gbl.Usrs.Other.UsrDat.FullName,Gbl.CurrentCrs.Crs.FullName);
@@ -3796,9 +3793,8 @@ void Enr_ModifyUsr2 (void)
 	 case Enr_REGISTER_MODIFY_ONE_USR_IN_CRS:
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	      {
-               /***** Show success message *****/
-	       if (Gbl.Message[0])
-		  Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+               /***** Show optional alert *****/
+	       Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
 	       /***** Change user's groups *****/
 	       if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?

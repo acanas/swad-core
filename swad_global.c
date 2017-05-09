@@ -117,10 +117,10 @@ void Gbl_InitializeGlobals (void)
    Gbl.F.XML = NULL;
    Gbl.F.Rep = NULL;	// Report
 
-   Gbl.Form.Num = -1;			// Number of form. It's increased by 1 at the begin of each form
-   Gbl.Form.Inside = false;		// Set to true inside a form to avoid nested forms
+   Gbl.Form.Num = -1;		// Number of form. It's increased by 1 at the begin of each form
+   Gbl.Form.Inside = false;	// Set to true inside a form to avoid nested forms
 
-   Gbl.AlertType = Lay_SUCCESS;	// Used to show alert in a posteriori function
+   Gbl.AlertType = Lay_NONE;	// Used to show alert in a posteriori function
 
    Gbl.DB.DatabaseIsOpen = false;
    Gbl.DB.LockedTables = false;

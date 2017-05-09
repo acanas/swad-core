@@ -652,8 +652,7 @@ void Hld_RemoveHoliday1 (void)
 
    /***** Write message to show the change made *****/
    Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,Txt_Holiday_X_removed,
-            Hld.Name);
+   sprintf (Gbl.Message,Txt_Holiday_X_removed,Hld.Name);
 
   }
 
