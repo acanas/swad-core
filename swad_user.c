@@ -5118,6 +5118,10 @@ static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
 
 void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
   {
+   /***** Put a parameter indicating that a list of several users is present *****/
+   Par_PutHiddenParamChar ("MultiUsrs",'Y');
+
+   /***** Put a parameter with the encrypted user codes of several users *****/
    if (Gbl.Session.IsOpen)
       Ses_InsertHiddenParInDB (NextAction,"UsrCodAll",ListUsrCods);
    else
@@ -5140,17 +5144,20 @@ void Usr_GetListsSelectedUsrsCods (void)
    /***** Get selected users *****/
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
-      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",
-                              Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,
-			Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
+      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",Gbl.Usrs.Select.All,
+                              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select.All,
+                        Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
      }
    else
-      Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select.All,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+      Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select.All,
+                             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select.Tch,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers or guests
+   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select.Tch,
+                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers or guests
 
-   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
+   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,
+                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
 /*
 sprintf (Gbl.Message,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
          Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
@@ -5160,7 +5167,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
    if (Gbl.Usrs.Select.Tch[0])
      {
       if (Gbl.Usrs.Select.All[0])
-         if ((Length = strlen (Gbl.Usrs.Select.All)) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+         if ((Length = strlen (Gbl.Usrs.Select.All)) <
+             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
             Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
             Gbl.Usrs.Select.All[Length + 1] = '\0';
@@ -5173,7 +5181,8 @@ Lay_ShowErrorAndExit (Gbl.Message);
    if (Gbl.Usrs.Select.Std[0])
      {
       if (Gbl.Usrs.Select.All[0])
-         if ((Length = strlen (Gbl.Usrs.Select.All)) < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+         if ((Length = strlen (Gbl.Usrs.Select.All)) <
+             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
             Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
             Gbl.Usrs.Select.All[Length + 1] = '\0';

@@ -1086,19 +1086,24 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Asign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
+   /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-   /***** Link to edit record fields *****/
+   /* Link to edit record fields */
    if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
       Rec_PutLinkToEditRecordFields ();
 
-   /***** Link to print view *****/
+   /* Link to print view */
    Act_FormStart (ActPrnRecSevStd);
    Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod);
    Rec_ShowLinkToPrintPreviewOfRecords ();
    Act_FormEnd ();
 
    fprintf (Gbl.F.Out,"</div>");
+
+   /***** Show optional alert *****/
+   if (Gbl.Message[0])
+      Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
 
    /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
@@ -1563,10 +1568,14 @@ void Rec_UpdateAndShowMyCrsRecord (void)
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
+   bool MultipleUsrs;
 
    /***** Initialize alert type and message *****/
    Gbl.AlertType = Lay_INFO;	// No error, no success
    Gbl.Message[0] = '\0';	// Do not write anything
+
+   /***** Get parameter indicating if listing multiple users *****/
+   MultipleUsrs = Par_GetParToBool ("MultiUsrs");
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1583,11 +1592,16 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
-
-   /***** Show records again (including the updated one) *****/
    Gbl.AlertType = Lay_SUCCESS;
    sprintf (Gbl.Message,"%s",Txt_Student_record_card_in_this_course_has_been_updated);
-   Rec_ListRecordsStdsForEdit ();
+
+   /***** Show one or multiple records *****/
+   if (MultipleUsrs)
+      /* Show multiple records again (including the updated one) */
+      Rec_ListRecordsStdsForEdit ();
+   else
+      /* Show only the updated record of this student */
+      Rec_ShowRecordOneStdCrs ();
 
    /***** Free memory used for some fields *****/
    Rec_FreeMemFieldsRecordsCrs ();

@@ -372,10 +372,11 @@ struct Globals
       struct ListUsrs LstUsrs[Rol_NUM_ROLES];
       struct
         {
+	 // bool MultipleUsrs;		// Listing multiple users?
          char *All;
          char *Std;
          char *Tch;
-        } Select;	// Lists of ID of users from a form
+        } Select;			// Lists of ID of users from a form
       char *ListOtherRecipients;	// List of ID or nicks of users written explicitely on a form
       struct
 	{
