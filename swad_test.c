@@ -7551,7 +7551,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
    Act_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
 
    /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />%s",UsrDat->Surname1);
@@ -7691,7 +7691,7 @@ void Tst_ShowOneTestResult (void)
 			 "</td>"
 			 "<td class=\"DAT LEFT_TOP\">",
 	       Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB][Gbl.Usrs.Other.UsrDat.Sex]);
-      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat);
+      ID_WriteUsrIDs (&Gbl.Usrs.Other.UsrDat,NULL);
       fprintf (Gbl.F.Out," %s",
 	       Gbl.Usrs.Other.UsrDat.Surname1);
       if (Gbl.Usrs.Other.UsrDat.Surname2[0])

@@ -3194,7 +3194,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             BgColor);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"</td>");
 
    /***** Write rest of main user's data *****/
@@ -3239,7 +3239,7 @@ static void Usr_WriteRowGstAllData (struct UsrData *UsrDat)
    /****** Write user's ID ******/
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_MIDDLE COLOR%u\">",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of guest's main data *****/
@@ -3343,7 +3343,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
             UsrDat->Accepted ? "DAT_SMALL_N" :
         	               "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main student's data *****/
@@ -3462,7 +3462,7 @@ static void Usr_WriteRowTchAllData (struct UsrData *UsrDat)
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main teacher's data *****/
@@ -3541,7 +3541,7 @@ static void Usr_WriteRowAdmData (unsigned NumUsr,struct UsrData *UsrDat)
             UsrDat->Accepted ? "DAT_SMALL_N" :
                                "DAT_SMALL",
             Gbl.RowEvenOdd);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
    fprintf (Gbl.F.Out,"&nbsp;</td>");
 
    /***** Write rest of main administrator's data *****/

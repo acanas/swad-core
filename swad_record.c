@@ -76,10 +76,14 @@ static void Rec_PutParamFielCod (void);
 static void Rec_GetFieldByCod (long FieldCod,char Name[Rec_MAX_BYTES_NAME_FIELD + 1],
                                unsigned *NumLines,Rec_VisibilityRecordFields_t *Visibility);
 
+static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView);
+
 static void Rec_ShowRecordOneStdCrs (void);
 static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                  Rec_CourseRecordViewType_t CrsTypeOfView);
+
 static void Rec_ShowRecordOneTchCrs (void);
+static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView);
 
 static void Rec_ShowLinkToPrintPreviewOfRecords (void);
 static void Rec_GetParamRecordsPerPage (void);
@@ -105,7 +109,8 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
 static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm);
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm);
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor,
+                            const char *ClassForm);
 static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView,
                           const char *ClassForm);
@@ -977,20 +982,29 @@ void Rec_PutLinkToEditRecordFields (void)
 /*********************** Draw records of several guests **********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsGsts (void)
+void Rec_ListRecordsGstsShow (void)
+  {
+   Gbl.Action.Original = ActSeeRecSevGst;
+   Rec_ListRecordsGsts (Rec_SHA_RECORD_LIST);
+  }
+
+void Rec_ListRecordsGstsPrint (void)
+  {
+   Rec_ListRecordsGsts (Rec_SHA_RECORD_PRINT);
+  }
+
+static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
    unsigned NumUsrs = 0;
    const char *Ptr;
-   Rec_SharedRecordViewType_t TypeOfView = (Gbl.Action.Act == ActSeeRecSevGst) ? Rec_SHA_RECORD_LIST :
-                                                                                 Rec_SHA_RECORD_PRINT;
    struct UsrData UsrDat;
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
-   if (Gbl.Action.Act == ActPrnRecSevGst)
+   if (TypeOfView == Rec_SHA_RECORD_PRINT)
       Rec_GetParamRecordsPerPage ();
 
    /***** Get list of selected users *****/
@@ -1004,7 +1018,7 @@ void Rec_ListRecordsGsts (void)
       return;
      }
 
-   if (Gbl.Action.Act == ActSeeRecSevGst)
+   if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -1040,7 +1054,7 @@ void Rec_ListRecordsGsts (void)
 	 fprintf (Gbl.F.Out,"\">");
 
 	 /* Shared record */
-	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
+	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
 
 	 fprintf (Gbl.F.Out,"</div>");
 
@@ -1049,10 +1063,6 @@ void Rec_ListRecordsGsts (void)
      }
    /***** Free memory used for user's data *****/
    Usr_UsrDataDestructor (&UsrDat);
-
-   /***** Free list of fields of records *****/
-   if (Gbl.Usrs.Listing.RecsUsrs == Rec_RECORD_USERS_STUDENTS)
-      Rec_FreeListFields ();
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
@@ -1102,10 +1112,10 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Show optional alert *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Shared record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
 
    /***** Record of the student in the course *****/
    /* Get list of fields of records in current course */
@@ -1129,13 +1139,14 @@ static void Rec_ShowRecordOneStdCrs (void)
 /******************** Draw records of several students ***********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsStdsForEdit (void)
+void Rec_ListRecordsStdsShow (void)
   {
+   Gbl.Action.Original = ActSeeRecSevStd;
    Rec_ListRecordsStds (Rec_SHA_RECORD_LIST,
                         Rec_CRS_LIST_SEVERAL_RECORDS);
   }
 
-void Rec_ListRecordsStdsForPrint (void)
+void Rec_ListRecordsStdsPrint (void)
   {
    Rec_ListRecordsStds (Rec_SHA_RECORD_PRINT,
                         Rec_CRS_PRINT_SEVERAL_RECORDS);
@@ -1220,11 +1231,11 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+               Lay_ShowPendingAlert ();
 
             /* Shared record */
             fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
-            Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat);
+            Rec_ShowSharedUsrRecord (ShaTypeOfView,&UsrDat,Anchor);
             fprintf (Gbl.F.Out,"</section>");
 
             /* Record of the student in the course */
@@ -1320,7 +1331,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 	              " style=\"margin-bottom:12px;\">");
 
    /* Shared record */
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
 
    /* Office hours */
    if (ShowOfficeHours)
@@ -1339,15 +1350,24 @@ static void Rec_ShowRecordOneTchCrs (void)
 /******************** Draw records of several teachers ***********************/
 /*****************************************************************************/
 
-void Rec_ListRecordsTchs (void)
+void Rec_ListRecordsTchsShow (void)
+  {
+   Gbl.Action.Original = ActSeeRecSevTch;
+   Rec_ListRecordsTchs (Rec_SHA_RECORD_LIST);
+  }
+
+void Rec_ListRecordsTchsPrint (void)
+  {
+   Rec_ListRecordsTchs (Rec_SHA_RECORD_PRINT);
+  }
+
+static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_You_must_select_one_ore_more_teachers;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsrs = 0;
    const char *Ptr;
-   Rec_SharedRecordViewType_t TypeOfView = (Gbl.Action.Act == ActSeeRecSevTch) ? Rec_SHA_RECORD_LIST :
-                                                                           Rec_SHA_RECORD_PRINT;
    struct UsrData UsrDat;
    bool ShowOfficeHours;
    char Width[10 + 2 + 1];
@@ -1425,7 +1445,7 @@ void Rec_ListRecordsTchs (void)
             fprintf (Gbl.F.Out,"\">");
 
             /* Shared record */
-            Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat);
+            Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
 
             /* Office hours */
             if (ShowOfficeHours)
@@ -1575,13 +1595,14 @@ void Rec_UpdateAndShowMyCrsRecord (void)
 void Rec_UpdateAndShowOtherCrsRecord (void)
   {
    extern const char *Txt_Student_record_card_in_this_course_has_been_updated;
-   bool MultipleUsrs;
+   long OriginalActCod;
 
    /***** Initialize alert type and message *****/
    Gbl.AlertType = Lay_NONE;	// Do not show alert
 
-   /***** Get parameter indicating if listing multiple users *****/
-   MultipleUsrs = Par_GetParToBool ("MultiUsrs");
+   /***** Get where we came from *****/
+   OriginalActCod = Par_GetParToLong ("OriginalActCod");
+   Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
 
    /***** Get the user whose record we want to modify *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -1603,12 +1624,17 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
             Txt_Student_record_card_in_this_course_has_been_updated);
 
    /***** Show one or multiple records *****/
-   if (MultipleUsrs)
-      /* Show multiple records again (including the updated one) */
-      Rec_ListRecordsStdsForEdit ();
-   else
-      /* Show only the updated record of this student */
-      Rec_ShowRecordOneStdCrs ();
+   switch (Gbl.Action.Original)
+     {
+      case ActSeeRecSevStd:
+	 /* Show multiple records again (including the updated one) */
+	 Rec_ListRecordsStdsShow ();
+	 break;
+      default:
+	 /* Show only the updated record of one student */
+	 Rec_ShowRecordOneStdCrs ();
+	 break;
+     }
 
    /***** Free memory used for some fields *****/
    Rec_FreeMemFieldsRecordsCrs ();
@@ -1622,6 +1648,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                                struct UsrData *UsrDat,const char *Anchor)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_USERS_Students_course_record_card;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *Txt_You_dont_have_permission_to_perform_this_action;
@@ -1690,12 +1717,15 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       case Rec_CRS_LIST_ONE_RECORD:
          ICanEdit = true;
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
-	 // Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);	// TODO: Remove this line
+         Par_PutHiddenParamLong ("OriginalActCod",
+                                 Act_Actions[ActSeeRecOneStd].ActCod);	// Original action, used to know where we came from
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 break;
       case Rec_CRS_LIST_SEVERAL_RECORDS:
          ICanEdit = true;
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
+         Par_PutHiddenParamLong ("OriginalActCod",
+                                 Act_Actions[ActSeeRecSevStd].ActCod);	// Original action, used to know where we came from
 	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 break;
@@ -1961,7 +1991,7 @@ static void Rec_ShowMyCrsRecordUpdated (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
    /***** Shared record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat,NULL);
 
    /***** Show updated user's record *****/
    Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_CHECK,&Gbl.Usrs.Me.UsrDat,NULL);
@@ -2016,7 +2046,7 @@ void Rec_ShowFormSignUpWithMySharedRecord (void)
 
    /***** Show the form *****/
    Act_FormStart (ActSignUp);
-   Rec_ShowSharedUsrRecord (Rec_SHA_SIGN_UP_FORM,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_SIGN_UP_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
    Lay_PutConfirmButton (Txt_Sign_up);
    Act_FormEnd ();
   }
@@ -2049,7 +2079,7 @@ void Rec_ShowFormMySharedRecord (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** My record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_FORM,&Gbl.Usrs.Me.UsrDat,NULL);
    Rec_WriteLinkToDataProtectionClause ();
   }
 
@@ -2065,7 +2095,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
       Instead it is initialized with the preferred role. */
    UsrDat->RoleInCurrentCrsDB = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
 	                                                          Rol__GUEST_;	// No course selected
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -2080,7 +2110,7 @@ void Rec_ShowMySharedRecordUpd (void)
    Lay_ShowAlert (Lay_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record for checking *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -2097,7 +2127,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
 
    /***** Show user's record *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_USR_CHECK,UsrDat,NULL);
    fprintf (Gbl.F.Out,"</div>");
   }
 
@@ -2107,7 +2137,7 @@ void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat)
 // Show form or only data depending on TypeOfView
 
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
-                              struct UsrData *UsrDat)
+                              struct UsrData *UsrDat,const char *Anchor)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Hlp_USERS_SignUp;
@@ -2265,12 +2295,26 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       fprintf (Gbl.F.Out,"<tr>"
 			 "<td colspan=\"3\">");
 
-      /***** Show email and user's ID *****/
+      /***** Show email and user's IDs *****/
       if (ShowIDRows)
 	{
          Lay_StartTableWide (2);
+
+         /* Show email */
 	 Rec_ShowEmail (UsrDat,ClassForm);
-	 Rec_ShowUsrIDs (UsrDat,ClassForm);
+
+	 /* Show user's IDs */
+	 if (TypeOfView == Rec_SHA_RECORD_LIST)	// Listing several records
+	    switch (Gbl.Action.Act)
+	      {
+	       case ActSeeRecSevGst:
+	       case ActSeeRecSevStd:
+	       case ActSeeRecSevTch:
+	          Gbl.Action.Original = Gbl.Action.Act;	// Used to know what action gave rise to other actions
+	          break;
+	      }
+	 Rec_ShowUsrIDs (UsrDat,Anchor,ClassForm);
+
          Lay_EndTable ();
 	}
 
@@ -2786,7 +2830,8 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 /******************************* Show user's IDs *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm)
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor,
+                            const char *ClassForm)
   {
    extern const char *Txt_ID;
 
@@ -2796,7 +2841,7 @@ static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm)
 		      "</td>"
 		      "<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP\">",
 	    ClassForm,Txt_ID);
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,Anchor);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }

@@ -996,6 +996,7 @@ static void Fol_PutIconToUnfollow (struct UsrData *UsrDat)
 
 void Fol_FollowUsr1 (void)
   {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
    bool CreateNotif;
    bool NotifyByEmail;
@@ -1033,7 +1034,10 @@ void Fol_FollowUsr1 (void)
       Gbl.AlertType = Lay_SUCCESS;
      }
    else
+     {
       Gbl.AlertType = Lay_WARNING;
+      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 void Fol_FollowUsr2 (void)
@@ -1042,11 +1046,14 @@ void Fol_FollowUsr2 (void)
 
    if (Gbl.AlertType == Lay_SUCCESS)
       /***** Show user's profile again *****/
-      Gbl.AlertType = Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat) ? Lay_SUCCESS :
-	                                                             Lay_WARNING;
+      if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
+	{
+	 Gbl.AlertType = Lay_WARNING;
+	 sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	}
 
-   if (Gbl.AlertType == Lay_WARNING)
-      Lay_ShowAlert (Gbl.AlertType,Txt_User_not_found_or_you_do_not_have_permission_);
+   if (Gbl.AlertType != Lay_SUCCESS)
+      Lay_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -1055,6 +1062,7 @@ void Fol_FollowUsr2 (void)
 
 void Fol_UnfollowUsr1 (void)
   {
+   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char Query[256];
 
    /***** Get user to be unfollowed *****/
@@ -1074,13 +1082,14 @@ void Fol_UnfollowUsr1 (void)
       Gbl.AlertType = Lay_SUCCESS;
      }
    else
+     {
       Gbl.AlertType = Lay_WARNING;
+      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+     }
   }
 
 void Fol_UnfollowUsr2 (void)
   {
-   extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
-
    /***** Get user to be unfollowed *****/
    if (Gbl.AlertType == Lay_SUCCESS)
      {
@@ -1092,7 +1101,7 @@ void Fol_UnfollowUsr2 (void)
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
      }
    else
-      Lay_ShowAlert (Gbl.AlertType,Txt_User_not_found_or_you_do_not_have_permission_);
+      Lay_ShowPendingAlert ();
   }
 
 /*****************************************************************************/

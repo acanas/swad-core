@@ -3407,7 +3407,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
-   ID_WriteUsrIDs (UsrDat);
+   ID_WriteUsrIDs (UsrDat,NULL);
 
    /***** Show user's name *****/
    fprintf (Gbl.F.Out,"<br />");

@@ -2385,7 +2385,7 @@ void Crs_ChangeCrsDegInConfig (void)
 void Crs_ContEditAfterChgCrsInConfig (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Crs_ShowIntroduction ();
@@ -2772,7 +2772,7 @@ void Crs_ContEditAfterChgCrs (void)
    bool PutButtonToRequestRegistration;
 
    /***** Write warning / success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    if (Gbl.AlertType == Lay_SUCCESS)
      {

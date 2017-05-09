@@ -9591,27 +9591,6 @@ const char *Txt_Do_you_think_you_are_this_user =
 	"Voc&ecirc; acha que voc&ecirc; &eacute; deste usu&aacute;rio?";
 #endif
 
-const char *Txt_Do_you_want_to_confirm_the_ID_X =	// Warning: it is very important to include %s in the following sentences
-#if   L==1
-	"Voleu confirmar l'ID (DNI/c&egrave;dula) <strong>%s</strong>?";
-#elif L==2
-	"Wollen Sie die ID <strong>%s</strong> zu best&auml;tigen?";
-#elif L==3
-	"Do you want to confirm the ID (identity number/passport) <strong>%s</strong>?";
-#elif L==4
-	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";
-#elif L==5
-	"Voulez-vous confirmer l'ID <strong>%s</strong>?";
-#elif L==6
-	"&iquest;Desea confirmar el ID (DNI/c&eacute;dula) <strong>%s</strong>?";	// Okoteve traducción
-#elif L==7
-	"Vuoi confermare l'ID <strong>%s</strong>?";
-#elif L==8
-	"Czy chcesz potwierdzi&cacute; I <strong>%s</strong>?";
-#elif L==9
-	"Voc&ecirc; quer confirmar o ID <strong>%s</strong>?";
-#endif
-
 const char *Txt_Document =
 #if   L==1
 	"Document";

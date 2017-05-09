@@ -234,13 +234,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.208.7 (2017-05-08)"
+#define Log_PLATFORM_VERSION	"SWAD 16.209 (2017-05-08)"
 #define CSS_FILE		"swad16.208.7.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.209:   May 09, 2017	Confirmation of user's ID is made directly, without confirmation. (218836 lines)
+					1 change necessary in database:
+UPDATE actions SET Obsolete='Y' WHERE ActCod IN ('1565','1566','1567');
+
         Version 16.208.7: May 09, 2017	Changes in layout of student records. (218771 lines)
         Version 16.208.6: May 09, 2017	Changes in alerts.
 					Changes in layout of student records. (218744 lines)

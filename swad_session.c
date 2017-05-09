@@ -53,7 +53,8 @@ extern struct Globals Gbl;
 
 static void Ses_RemoveSessionFromDB (void);
 
-static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t Action,const char *ParamName);
+static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
+                                               const char *ParamName);
 
 /*****************************************************************************/
 /************************** Get number of open sessions **********************/
@@ -344,8 +345,10 @@ bool Ses_GetSessionData (void)
 /******************* Insert hidden parameter in the database *****************/
 /*****************************************************************************/
 
-void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const char *ParamValue)
+void Ses_InsertHiddenParInDB (Act_Action_t NextAction,
+                              const char *ParamName,const char *ParamValue)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    char *Query;
    size_t LengthParamName;
    size_t LengthParamValue;
@@ -358,7 +361,7 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
    /***** For a unique session-action-parameter, don't insert a parameter more than one time *****/
    if (ParamName)
       if ((LengthParamName = strlen (ParamName)))
-	 if (!Ses_CheckIfHiddenParIsAlreadyInDB (Action,ParamName))
+	 if (!Ses_CheckIfHiddenParIsAlreadyInDB (NextAction,ParamName))
 	   {
 	    /***** Allocate space for query *****/
 	    if (ParamValue)
@@ -376,8 +379,9 @@ void Ses_InsertHiddenParInDB (Act_Action_t Action,const char *ParamName,const ch
 	    sprintf (Query,"INSERT INTO hidden_params"
 			   " (SessionId,Action,ParamName,ParamValue)"
 			   " VALUES"
-			   " ('%s',%d,'%s','%s')",
-		     Gbl.Session.Id,(int) Action,
+			   " ('%s',%ld,'%s','%s')",
+		     Gbl.Session.Id,
+		     Act_Actions[NextAction].ActCod,
 		     ParamName,
 		     LengthParamValue ? ParamValue :
 					"");
@@ -426,14 +430,16 @@ void Ses_RemoveHiddenParFromExpiredSessions (void)
 /*****************************************************************************/
 // Return true if the parameter already existed in database
 
-static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t Action,const char *ParamName)
+static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t NextAction,
+                                               const char *ParamName)
   {
-   char Query[512];
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   char Query[512 + Ses_BYTES_SESSION_ID];
 
    /***** Get a hidden parameter from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM hidden_params"
-                  " WHERE SessionId='%s' AND Action=%d AND ParamName='%s'",
-            Gbl.Session.Id,(int) Action,ParamName);
+                  " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
+            Gbl.Session.Id,Act_Actions[NextAction].ActCod,ParamName);
    return (DB_QueryCOUNT (Query,"can not check if a hidden parameter is already in database") != 0);
   }
 
@@ -442,9 +448,12 @@ static bool Ses_CheckIfHiddenParIsAlreadyInDB (Act_Action_t Action,const char *P
 /*****************************************************************************/
 // Return true if the parameter is too big
 
-unsigned Ses_GetHiddenParFromDB (Act_Action_t Action,const char *ParamName,char *ParamValue,size_t MaxBytes)
+unsigned Ses_GetHiddenParFromDB (Act_Action_t NextAction,
+                                 const char *ParamName,char *ParamValue,
+                                 size_t MaxBytes)
   {
-   char Query[512];
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   char Query[512 + Ses_BYTES_SESSION_ID];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned long NumRows;
@@ -457,8 +466,8 @@ unsigned Ses_GetHiddenParFromDB (Act_Action_t Action,const char *ParamName,char 
      {
       /***** Get a hidden parameter from database *****/
       sprintf (Query,"SELECT ParamValue FROM hidden_params"
-                     " WHERE SessionId='%s' AND Action=%d AND ParamName='%s'",
-               Gbl.Session.Id,(int) Action,ParamName);
+                     " WHERE SessionId='%s' AND Action=%ld AND ParamName='%s'",
+               Gbl.Session.Id,Act_Actions[NextAction].ActCod,ParamName);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get a hidden parameter");
 
       /***** Check if the parameter is found in database *****/

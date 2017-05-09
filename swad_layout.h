@@ -131,6 +131,7 @@ void Lay_StartTableWideMargin (unsigned CellPadding);
 void Lay_EndTable (void);
 
 void Lay_ShowErrorAndExit (const char *Message);
+void Lay_ShowPendingAlert (void);
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message);
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message);
 void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,

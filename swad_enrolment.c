@@ -3183,7 +3183,8 @@ static void Enr_ShowFormToEditOtherUsr (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** User's record *****/
-   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,&Gbl.Usrs.Other.UsrDat);
+   Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_EXISTING_USR_FORM,
+                            &Gbl.Usrs.Other.UsrDat,NULL);
   }
 
 /*****************************************************************************/
@@ -3633,13 +3634,13 @@ void Enr_CreateNewUsr1 (void)
 void Enr_CreateNewUsr2 (void)
   {
    if (Gbl.AlertType == Lay_ERROR)	// User's ID not valid
-      Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+      Lay_ShowPendingAlert ();
    else					// User's ID valid
      {
       if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	{
 	 /***** Show optional alert *****/
-         Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+         Lay_ShowPendingAlert ();
 
 	 /***** Change user's groups *****/
 	 if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?
@@ -3786,7 +3787,7 @@ void Enr_ModifyUsr2 (void)
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    if (Gbl.AlertType == Lay_WARNING)
-      Lay_ShowAlert (Gbl.AlertType,Txt_User_not_found_or_you_do_not_have_permission_);
+      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
    else // No error
       switch (Gbl.Usrs.RegRemAction)
 	{
@@ -3794,7 +3795,7 @@ void Enr_ModifyUsr2 (void)
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	      {
                /***** Show optional alert *****/
-	       Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+               Lay_ShowPendingAlert ();
 
 	       /***** Change user's groups *****/
 	       if (Gbl.CurrentCrs.Grps.NumGrps)	// This course has groups?

@@ -54,12 +54,6 @@ extern struct Globals Gbl;
 /******************************* Private types *******************************/
 /*****************************************************************************/
 
-typedef enum
-  {
-   ID_REQUEST_CONFIRM_ID,
-   ID_CONFIRM_ID,
-  } ID_ReqConfOrConfID_t;
-
 /*****************************************************************************/
 /***************************** Private variables *****************************/
 /*****************************************************************************/
@@ -70,17 +64,14 @@ typedef enum
 
 static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned MinDigits);
 
-static void ID_PutLinkToReqConfirmID (struct UsrData *UsrDat,unsigned NumID);
-static void ID_PutButtonToConfirmID (unsigned NumID);
-static void ID_PutParamsConfirmID (void);
+static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
+                                   const char *Anchor);
 
 static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static bool ID_CheckIfConfirmed (long UsrCod,const char *UsrID);
 static void ID_RemoveUsrIDFromDB (long UsrCod,const char *UsrID);
 static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe);
 static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed);
-
-static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID);
 
 /*****************************************************************************/
 /********************** Get list of IDs of a user ****************************/
@@ -368,7 +359,7 @@ static bool ID_CheckIfUsrIDIsValidUsingMinDigits (const char *UsrID,unsigned Min
 /*************************** Write list of user's ID *************************/
 /*****************************************************************************/
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat)
+void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    unsigned NumID;
@@ -399,7 +390,7 @@ void ID_WriteUsrIDs (struct UsrData *UsrDat)
 
       if (ICanConfirmUsrID &&
 	  !UsrDat->IDs.List[NumID].Confirmed)
-	 ID_PutLinkToReqConfirmID (UsrDat,NumID);
+	 ID_PutLinkToConfirmID (UsrDat,NumID,Anchor);
      }
   }
 
@@ -448,53 +439,47 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
   }
 
 /*****************************************************************************/
-/******** Put a link to request the confirmation of another user's ID ********/
+/****************** Put a link to confirm of another user's ID ***************/
 /*****************************************************************************/
 
-static void ID_PutLinkToReqConfirmID (struct UsrData *UsrDat,unsigned NumID)
+static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
+                                   const char *Anchor)
   {
+   extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
 
-   Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqCnfID_Std :
-		  (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqCnfID_Tch :
-							       ActReqCnfID_Oth));	// Guest, visitor or admin
+   /***** Start form *****/
+   Act_FormStartAnchor ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
+		        (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
+							             ActCnfID_Oth),
+                        Anchor);
+   if (Gbl.Action.Original != ActUnk)
+     {
+      Par_PutHiddenParamLong ("OriginalActCod",Act_Actions[Gbl.Action.Original].ActCod);	// Original action, used to know where we came from
+      switch (Gbl.Action.Original)
+	{
+	 case ActSeeRecSevGst:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Oth,Gbl.Usrs.Select.All);
+	    break;
+	 case ActSeeRecSevStd:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Std,Gbl.Usrs.Select.All);
+	    break;
+	 case ActSeeRecSevTch:
+	    Usr_PutHiddenParUsrCodAll (ActCnfID_Tch,Gbl.Usrs.Select.All);
+	    break;
+	}
+     }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
 	    UsrDat->IDs.List[NumID].ID);
+
+   /***** Put link *****/
    Lay_PutIconLink ("ok_on16x16.gif",Txt_Confirm_ID,Txt_Confirm_ID,
                     The_ClassFormBold[Gbl.Prefs.Theme],NULL);
+
+   /***** End form *****/
    Act_FormEnd ();
-  }
-
-/*****************************************************************************/
-/**************** Put a button to confirm another user's ID ******************/
-/*****************************************************************************/
-
-static void ID_PutButtonToConfirmID (unsigned NumID)
-  {
-   extern const char *Txt_Do_you_want_to_confirm_the_ID_X;
-   extern const char *Txt_Confirm_ID;
-
-   Gbl.Usrs.Other.NumIDToConfirm = NumID;
-
-   /***** Ask for confirmation *****/
-   sprintf (Gbl.Title,Txt_Do_you_want_to_confirm_the_ID_X,
-	    Gbl.Usrs.Other.UsrDat.IDs.List[NumID].ID);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Title);
-   Lay_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
-		            (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
-							                               ActCnfID_Oth),	// Guest, visitor or admin
-                            NULL,
-                            ID_PutParamsConfirmID,
-                            Lay_CREATE_BUTTON,Txt_Confirm_ID);
-  }
-
-static void ID_PutParamsConfirmID (void)
-  {
-   Usr_PutParamOtherUsrCodEncrypted ();
-   fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
-	    Gbl.Usrs.Other.UsrDat.IDs.List[Gbl.Usrs.Other.NumIDToConfirm].ID);
   }
 
 /*****************************************************************************/
@@ -539,7 +524,8 @@ void ID_ShowFormOthIDs (void)
          Lay_StartRoundFrame (NULL,Txt_ID,NULL,NULL);
 
 	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+	                          &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Form with the user's ID *****/
          Lay_StartTableWide (2);
@@ -719,7 +705,8 @@ void ID_RemoveOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+                               &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -834,7 +821,8 @@ void ID_NewOtherUsrID (void)
       ID_GetListIDsFromUsrCod (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+                               &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -946,37 +934,27 @@ static void ID_InsertANewUsrIDInDB (long UsrCod,const char *NewID,bool Confirmed
   }
 
 /*****************************************************************************/
-/*************** Request the confirmation of another user's ID ***************/
-/*****************************************************************************/
-
-void ID_RequestConfirmOtherUsrID (void)
-  {
-   ID_ReqConfOrConfOtherUsrID (ID_REQUEST_CONFIRM_ID);
-  }
-
-/*****************************************************************************/
 /************************ Confirm another user's ID **************************/
 /*****************************************************************************/
 
 void ID_ConfirmOtherUsrID (void)
   {
-   ID_ReqConfOrConfOtherUsrID (ID_CONFIRM_ID);
-  }
-
-/*****************************************************************************/
-/********** Request the confirmation or confirm another user's ID ************/
-/*****************************************************************************/
-
-static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
-  {
    extern const char *Txt_ID_X_had_already_been_confirmed;
    extern const char *Txt_The_ID_X_has_been_confirmed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   long OriginalActCod;
    char UsrID[ID_MAX_BYTES_USR_ID + 1];
    bool ICanConfirm;
    bool Found;
    unsigned NumID;
    unsigned NumIDFound = 0;	// Initialized to avoid warning
+
+   /***** Initialize alert type and message *****/
+   Gbl.AlertType = Lay_NONE;	// Do not show alert
+
+   /***** Get where we came from *****/
+   OriginalActCod = Par_GetParToLong ("OriginalActCod");
+   Gbl.Action.Original = Act_GetActionFromActCod (OriginalActCod);
 
    /***** Get other user's code from form and get user's data *****/
    ICanConfirm = false;
@@ -1007,40 +985,59 @@ static void ID_ReqConfOrConfOtherUsrID (ID_ReqConfOrConfID_t ReqConfOrConfID)
 	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
 	   {
 	    /***** ID found and already confirmed *****/
+            Gbl.AlertType = Lay_INFO;
 	    sprintf (Gbl.Message,Txt_ID_X_had_already_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-	    Lay_ShowAlert (Lay_INFO,Gbl.Message);
 	   }
 	 else
 	   {
-	    switch (ReqConfOrConfID)
-	      {
-	       case ID_REQUEST_CONFIRM_ID:        // Ask if confirm ID
-		  /***** Put button to confirm ID *****/
-		  ID_PutButtonToConfirmID (NumIDFound);
-		  break;
-	       case ID_CONFIRM_ID:                // Confirm ID
-		  /***** Mark this ID as confirmed *****/
-		  ID_ConfirmUsrID (&Gbl.Usrs.Other.UsrDat,
-		                   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-		  Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
+	    /***** Mark this ID as confirmed *****/
+	    ID_ConfirmUsrID (&Gbl.Usrs.Other.UsrDat,
+			     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
+	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
-		  /***** Write success message *****/
-		  sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
-			   Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
-		  Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
-		  break;
-	      }
+	    /***** Write success message *****/
+	    Gbl.AlertType = Lay_SUCCESS;
+	    sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
+		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	}
       else	// User's ID not found
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
-
-      /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	{
+	 Gbl.AlertType = Lay_WARNING;
+         sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	}
      }
-   else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+   else	// I can not confirm
+     {
+      Gbl.AlertType = Lay_WARNING;
+      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+     }
+
+   /***** Show one or multiple records *****/
+   switch (Gbl.Action.Original)
+     {
+      case ActSeeRecSevGst:
+	 /* Show multiple records of guests again (including the updated one) */
+	 Rec_ListRecordsGstsShow ();
+	 break;
+      case ActSeeRecSevStd:
+	 /* Show multiple records of students again (including the updated one) */
+	 Rec_ListRecordsStdsShow ();
+	 break;
+      case ActSeeRecSevTch:
+	 /* Show multiple records of teachers again (including the updated one) */
+	 Rec_ListRecordsTchsShow ();
+	 break;
+      default:
+	 /* Show optional alert */
+	 Lay_ShowPendingAlert ();
+
+	 /* Show only the updated record of this user */
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+				  &Gbl.Usrs.Other.UsrDat,NULL);
+	 break;
+     }
   }
 
 /*****************************************************************************/

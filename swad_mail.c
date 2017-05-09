@@ -1162,7 +1162,8 @@ void Mai_ShowFormOthEmail (void)
          Lay_StartRoundFrame (NULL,Txt_Email,NULL,NULL);
 
 	 /***** Show user's record *****/
-	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+	                          &Gbl.Usrs.Other.UsrDat,NULL);
 
 	 /***** Form with the user's email *****/
 	 Lay_StartTableCenter (2);
@@ -1359,7 +1360,8 @@ void Mai_RemoveOtherUsrEmail (void)
       Mai_RemoveEmail (&Gbl.Usrs.Other.UsrDat);
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+                               &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -1438,7 +1440,8 @@ void Mai_NewOtherUsrEmail (void)
 		       (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod));	// It's me?
 
       /***** Show user's record *****/
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,
+                               &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);

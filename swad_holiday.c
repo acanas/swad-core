@@ -659,7 +659,7 @@ void Hld_RemoveHoliday1 (void)
 void Hld_RemoveHoliday2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -709,7 +709,7 @@ void Hld_ChangeHolidayPlace1 (void)
 void Hld_ChangeHolidayPlace2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -753,7 +753,7 @@ void Hld_ChangeHolidayType1 (void)
 void Hld_ChangeHolidayType2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -857,7 +857,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 void Hld_ChangeDate2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -926,7 +926,7 @@ void Hld_RenameHoliday1 (void)
 void Hld_RenameHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -1161,7 +1161,7 @@ void Hld_RecFormNewHoliday1 (void)
 void Hld_RecFormNewHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();

@@ -179,7 +179,8 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail[0] = '\0';
    Usr_UsrDataConstructor (&Gbl.Usrs.Other.UsrDat);
 
-   Gbl.Action.Act = ActUnk;
+   Gbl.Action.Act      = ActUnk;
+   Gbl.Action.Original = ActUnk;	// Used in some actions to know what action gave rise to the current action
    Gbl.Action.UsesAJAX = false;
    Gbl.Action.IsAJAXAutoRefresh = false;
    Gbl.Action.Tab = TabUnk;

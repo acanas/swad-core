@@ -179,7 +179,6 @@ void Con_ShowLastClicks (void)
 void Con_GetAndShowLastClicks (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
-   extern Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD];
    extern const char *Txt_Click;
    extern const char *Txt_ELAPSED_TIME;
    extern const char *Txt_Role;
@@ -269,12 +268,12 @@ void Con_GetAndShowLastClicks (void)
       ActCod = Str_ConvertStrCodToLongCod (row[1]);
 
       /* Use a special color for this row depending on the action */
-      ClassRow = (Act_Actions[Act_FromActCodToAction[ActCod]].BrowserWindow == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
-	         (ActCod == Act_Actions[ActLogIn].ActCod ||
+      ClassRow = (Act_Actions[Act_GetActionFromActCod (ActCod)].BrowserWindow == Act_DOWNLD_FILE) ? "DAT_SMALL_YELLOW LEFT_MIDDLE" :
+	         (ActCod == Act_Actions[ActLogIn   ].ActCod ||
 	          ActCod == Act_Actions[ActLogInNew].ActCod) ? "DAT_SMALL_GREEN" :
-                 (ActCod == Act_Actions[ActLogOut].ActCod   ) ? "DAT_SMALL_RED" :
-                 (ActCod == Act_Actions[ActWebSvc].ActCod   ) ? "DAT_SMALL_BLUE" :
-                                                                "DAT_SMALL_GREY";
+                 (ActCod == Act_Actions[ActLogOut  ].ActCod) ? "DAT_SMALL_RED" :
+                 (ActCod == Act_Actions[ActWebSvc  ].ActCod) ? "DAT_SMALL_BLUE" :
+                                                               "DAT_SMALL_GREY";
 
       /* Compute elapsed time from last access */
       if (sscanf (row[2],"%ld",&TimeDiff) != 1)

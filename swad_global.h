@@ -175,6 +175,7 @@ struct Globals
      {
       Tab_Tab_t Tab;
       Act_Action_t Act;
+      Act_Action_t Original;	// Used in some actions to know what action gave rise to the current action
       bool UsesAJAX;		// Do not generate full HTML page, only the content of a div
       bool IsAJAXAutoRefresh;	// It's an automatic refresh drom time to time
      } Action;
@@ -372,7 +373,6 @@ struct Globals
       struct ListUsrs LstUsrs[Rol_NUM_ROLES];
       struct
         {
-	 // bool MultipleUsrs;		// Listing multiple users?
          char *All;
          char *Std;
          char *Tch;

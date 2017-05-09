@@ -57,7 +57,7 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 32 + 24 + 115 + 72 + 416 + 159 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 32 + 24 + 115 + 72 + 416 + 156 + 172 + 42 + 14 + 97)
 
 #define Act_MAX_ACTION_COD 1638
 
@@ -1096,53 +1096,50 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRcvFrmEnrSevStd	(ActChgNumRowFooGrp + 117)
 #define ActRcvFrmEnrSevTch	(ActChgNumRowFooGrp + 118)
 
-#define ActReqCnfID_Oth		(ActChgNumRowFooGrp + 119)
-#define ActReqCnfID_Std		(ActChgNumRowFooGrp + 120)
-#define ActReqCnfID_Tch		(ActChgNumRowFooGrp + 121)
-#define ActCnfID_Oth		(ActChgNumRowFooGrp + 122)
-#define ActCnfID_Std		(ActChgNumRowFooGrp + 123)
-#define ActCnfID_Tch		(ActChgNumRowFooGrp + 124)
+#define ActCnfID_Oth		(ActChgNumRowFooGrp + 119)
+#define ActCnfID_Std		(ActChgNumRowFooGrp + 120)
+#define ActCnfID_Tch		(ActChgNumRowFooGrp + 121)
 
-#define ActFrmIDsOth		(ActChgNumRowFooGrp + 125)
-#define ActFrmIDsStd		(ActChgNumRowFooGrp + 126)
-#define ActFrmIDsTch		(ActChgNumRowFooGrp + 127)
-#define ActRemID_Oth		(ActChgNumRowFooGrp + 128)
-#define ActRemID_Std		(ActChgNumRowFooGrp + 129)
-#define ActRemID_Tch		(ActChgNumRowFooGrp + 130)
-#define ActNewID_Oth		(ActChgNumRowFooGrp + 131)
-#define ActNewID_Std		(ActChgNumRowFooGrp + 132)
-#define ActNewID_Tch		(ActChgNumRowFooGrp + 133)
-#define ActFrmPwdOth		(ActChgNumRowFooGrp + 134)
-#define ActFrmPwdStd		(ActChgNumRowFooGrp + 135)
-#define ActFrmPwdTch		(ActChgNumRowFooGrp + 136)
-#define ActChgPwdOth		(ActChgNumRowFooGrp + 137)
-#define ActChgPwdStd		(ActChgNumRowFooGrp + 138)
-#define ActChgPwdTch		(ActChgNumRowFooGrp + 139)
-#define ActFrmMaiOth		(ActChgNumRowFooGrp + 140)
-#define ActFrmMaiStd		(ActChgNumRowFooGrp + 141)
-#define ActFrmMaiTch		(ActChgNumRowFooGrp + 142)
-#define ActRemMaiOth		(ActChgNumRowFooGrp + 143)
-#define ActRemMaiStd		(ActChgNumRowFooGrp + 144)
-#define ActRemMaiTch		(ActChgNumRowFooGrp + 145)
-#define ActNewMaiOth		(ActChgNumRowFooGrp + 146)
-#define ActNewMaiStd		(ActChgNumRowFooGrp + 147)
-#define ActNewMaiTch		(ActChgNumRowFooGrp + 148)
+#define ActFrmIDsOth		(ActChgNumRowFooGrp + 122)
+#define ActFrmIDsStd		(ActChgNumRowFooGrp + 123)
+#define ActFrmIDsTch		(ActChgNumRowFooGrp + 124)
+#define ActRemID_Oth		(ActChgNumRowFooGrp + 125)
+#define ActRemID_Std		(ActChgNumRowFooGrp + 126)
+#define ActRemID_Tch		(ActChgNumRowFooGrp + 127)
+#define ActNewID_Oth		(ActChgNumRowFooGrp + 128)
+#define ActNewID_Std		(ActChgNumRowFooGrp + 129)
+#define ActNewID_Tch		(ActChgNumRowFooGrp + 130)
+#define ActFrmPwdOth		(ActChgNumRowFooGrp + 131)
+#define ActFrmPwdStd		(ActChgNumRowFooGrp + 132)
+#define ActFrmPwdTch		(ActChgNumRowFooGrp + 133)
+#define ActChgPwdOth		(ActChgNumRowFooGrp + 134)
+#define ActChgPwdStd		(ActChgNumRowFooGrp + 135)
+#define ActChgPwdTch		(ActChgNumRowFooGrp + 136)
+#define ActFrmMaiOth		(ActChgNumRowFooGrp + 137)
+#define ActFrmMaiStd		(ActChgNumRowFooGrp + 138)
+#define ActFrmMaiTch		(ActChgNumRowFooGrp + 139)
+#define ActRemMaiOth		(ActChgNumRowFooGrp + 140)
+#define ActRemMaiStd		(ActChgNumRowFooGrp + 141)
+#define ActRemMaiTch		(ActChgNumRowFooGrp + 142)
+#define ActNewMaiOth		(ActChgNumRowFooGrp + 143)
+#define ActNewMaiStd		(ActChgNumRowFooGrp + 144)
+#define ActNewMaiTch		(ActChgNumRowFooGrp + 145)
 
-#define ActRemStdCrs		(ActChgNumRowFooGrp + 149)
-#define ActRemTchCrs		(ActChgNumRowFooGrp + 150)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp + 151)
+#define ActRemStdCrs		(ActChgNumRowFooGrp + 146)
+#define ActRemTchCrs		(ActChgNumRowFooGrp + 147)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp + 148)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp + 152)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp + 153)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp + 149)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp + 150)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp + 154)
-#define ActRemOldUsr		(ActChgNumRowFooGrp + 155)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp + 151)
+#define ActRemOldUsr		(ActChgNumRowFooGrp + 152)
 
-#define ActLstDupUsr		(ActChgNumRowFooGrp + 156)
-#define ActLstSimUsr		(ActChgNumRowFooGrp + 157)
-#define ActRemDupUsr		(ActChgNumRowFooGrp + 158)
+#define ActLstDupUsr		(ActChgNumRowFooGrp + 153)
+#define ActLstSimUsr		(ActChgNumRowFooGrp + 154)
+#define ActRemDupUsr		(ActChgNumRowFooGrp + 155)
 
-#define ActLstClk		(ActChgNumRowFooGrp + 159)
+#define ActLstClk		(ActChgNumRowFooGrp + 156)
 
 /*****************************************************************************/
 /******************************** Social tab *********************************/
@@ -1546,6 +1543,8 @@ struct Act_Actions
 /*****************************************************************************/
 /***************************** Public prototypes *****************************/
 /*****************************************************************************/
+
+Act_Action_t Act_GetActionFromActCod (long ActCod);
 
 bool Act_CheckIfIHavePermissionToExecuteAction (Act_Action_t Action);
 const char *Act_GetTitleAction (Act_Action_t Action);

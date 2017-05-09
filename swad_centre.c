@@ -1813,7 +1813,7 @@ void Ctr_ChangeCtrInsInConfig (void)
 void Ctr_ContEditAfterChgCtrInConfig (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Ctr_ShowConfiguration ();
@@ -2160,7 +2160,7 @@ void Ctr_ChangeCtrStatus (void)
 void Ctr_ContEditAfterChgCtr (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    if (Gbl.AlertType == Lay_SUCCESS)
       /***** Put button to go to centre changed *****/

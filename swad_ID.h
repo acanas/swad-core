@@ -69,7 +69,7 @@ void ID_GetParamOtherUsrIDPlain (void);
 bool ID_CheckIfUsrIDIsValid (const char *UsrID);
 bool ID_CheckIfUsrIDSeemsAValidID (const char *UsrID);
 
-void ID_WriteUsrIDs (struct UsrData *UsrDat);
+void ID_WriteUsrIDs (struct UsrData *UsrDat,const char *Anchor);
 bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat);
 
 void ID_PutLinkToChangeUsrIDs (void);
@@ -80,7 +80,6 @@ void ID_RemoveOtherUsrID (void);
 void ID_NewMyUsrID (void);
 void ID_NewOtherUsrID (void);
 
-void ID_RequestConfirmOtherUsrID (void);
 void ID_ConfirmOtherUsrID (void);
 void ID_ConfirmUsrID (const struct UsrData *UsrDat,const char *UsrID);
 

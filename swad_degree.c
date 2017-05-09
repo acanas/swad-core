@@ -2086,7 +2086,7 @@ void Deg_ChangeDegCtrInConfig (void)
 void Deg_ContEditAfterChgDegInConfig (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Deg_ShowConfiguration ();
@@ -2252,7 +2252,7 @@ void Deg_ChangeDegStatus (void)
 void Deg_ContEditAfterChgDeg (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    if (Gbl.AlertType == Lay_SUCCESS)
       /***** Put button to go to degree changed *****/

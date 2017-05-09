@@ -290,7 +290,7 @@ bool Prf_ShowUserProfile (struct UsrData *UsrDat)
 	                                                Gbl.CurrentCrs.Crs.CrsCod,
 	                                                true);
 	}
-      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat);
+      Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_PUBLIC,UsrDat,NULL);
 
       /***** Show details of user's profile *****/
       Prf_ShowDetailsUserProfile (UsrDat);

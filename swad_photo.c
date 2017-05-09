@@ -437,8 +437,7 @@ void Pho_ReqRemoveMyPhoto (void)
 void Pho_RemoveMyPhoto1 (void)
   {
    /***** Remove photo *****/
-   Gbl.AlertType = Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat) ? Lay_SUCCESS :
-	                                                   Lay_WARNING;
+   Pho_RemovePhoto (&Gbl.Usrs.Me.UsrDat);
 
    /***** The link to my photo is not valid now, so build it again before writing the web page *****/
    Gbl.Usrs.Me.MyPhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL);
@@ -446,10 +445,8 @@ void Pho_RemoveMyPhoto1 (void)
 
 void Pho_RemoveMyPhoto2 (void)
   {
-   extern const char *Txt_Photo_removed;
-
-   if (Gbl.AlertType == Lay_SUCCESS)
-      Lay_ShowAlert (Gbl.AlertType,Txt_Photo_removed);
+   /***** Write success / warning message *****/
+   Lay_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -511,7 +508,6 @@ void Pho_ReqRemoveUsrPhoto (void)
 
 void Pho_RemoveUsrPhoto (void)
   {
-   extern const char *Txt_Photo_removed;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
    /***** Get user's code from form *****/
@@ -522,7 +518,7 @@ void Pho_RemoveUsrPhoto (void)
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
-         Lay_ShowAlert (Lay_SUCCESS,Txt_Photo_removed);
+         Lay_ShowPendingAlert ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -801,6 +797,7 @@ void Pho_UpdateUsrPhoto2 (void)
 
 static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
   {
+   extern const char *Txt_Photo_has_been_updated;
    char PathPhotoTmp[PATH_MAX + 1];	// Full name (including path and .jpg) of the temporary file with the selected face
    char PathRelPhoto[PATH_MAX + 1];
 
@@ -825,15 +822,18 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
       Gbl.AlertType = Lay_SUCCESS;
+      sprintf (Gbl.Message,"%s",Txt_Photo_has_been_updated);
      }
    else
+     {
       Gbl.AlertType = Lay_ERROR;
+      sprintf (Gbl.Message,"%s","Error updating photo.");
+     }
   }
 
 static void Pho_UpdatePhoto2 (void)
   {
    extern const char *Txt_PHOTO_PROCESSING_CAPTIONS[3];
-   extern const char *Txt_Photo_has_been_updated;
    unsigned NumPhoto;
 
    /***** Show the three images resulting of the processing *****/
@@ -858,10 +858,7 @@ static void Pho_UpdatePhoto2 (void)
    Lay_EndTable ();
 
    /***** Show message *****/
-   if (Gbl.AlertType == Lay_ERROR)        // The file with the selected photo does not exist!
-      Lay_ShowErrorAndExit ("Selected photo does not exist.");
-
-   Lay_ShowAlert (Gbl.AlertType,Txt_Photo_has_been_updated);
+   Lay_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -1011,6 +1008,7 @@ bool Pho_CheckIfPrivPhotoExists (long UsrCod,char *PathPrivRelPhoto)
 
 bool Pho_RemovePhoto (struct UsrData *UsrDat)
   {
+   extern const char *Txt_Photo_removed;
    char PathPrivRelPhoto[PATH_MAX + 1];
    char PathPublPhoto[PATH_MAX + 1];
    unsigned NumErrors = 0;
@@ -1025,10 +1023,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
                Cfg_PATH_SWAD_PUBLIC,Cfg_FOLDER_PHOTO,UsrDat->Photo);
       if (Fil_CheckIfPathExists (PathPublPhoto))	// Public link exists
          if (unlink (PathPublPhoto))			// Remove public link
-           {
-            Lay_ShowAlert (Lay_ERROR,"Error removing public link to photo.");
             NumErrors++;
-           }
 
       /***** Remove photo *****/
       sprintf (PathPrivRelPhoto,"%s/%s/%02u/%ld.jpg",
@@ -1037,10 +1032,7 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
       if (Fil_CheckIfPathExists (PathPrivRelPhoto))        // Photo exists
         {
          if (unlink (PathPrivRelPhoto))                        // Remove photo
-           {
-            Lay_ShowAlert (Lay_ERROR,"Error removing photo.");
             NumErrors++;
-           }
         }
 
       /***** Remove original photo *****/
@@ -1049,16 +1041,24 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
                (unsigned) (UsrDat->UsrCod % 100),UsrDat->UsrCod);
       if (Fil_CheckIfPathExists (PathPrivRelPhoto))		// Original photo exists
          if (unlink (PathPrivRelPhoto))				// Remove original photo
-           {
-            Lay_ShowAlert (Lay_ERROR,"Error removing the original photo.");
             NumErrors++;
-           }
 
       /***** Clear photo name in user's data *****/
       UsrDat->Photo[0] = '\0';
      }
 
-   return (NumErrors == 0);
+   if (NumErrors)
+     {
+      Gbl.AlertType = Lay_ERROR;
+      sprintf (Gbl.Message,"%s","Error removing photo.");
+      return false;
+     }
+   else
+     {
+      Gbl.AlertType = Lay_SUCCESS;
+      sprintf (Gbl.Message,"%s",Txt_Photo_removed);
+      return true;
+     }
   }
 
 /*****************************************************************************/

@@ -138,12 +138,18 @@ void Rec_ChangeVisibilityField (void);
 void Rec_FreeListFields (void);
 
 void Rec_PutLinkToEditRecordFields (void);
-void Rec_ListRecordsGsts (void);
+
+void Rec_ListRecordsGstsShow (void);
+void Rec_ListRecordsGstsPrint (void);
+
 void Rec_GetUsrAndShowRecordOneStdCrs (void);
-void Rec_ListRecordsStdsForEdit (void);
-void Rec_ListRecordsStdsForPrint (void);
+void Rec_ListRecordsStdsShow (void);
+void Rec_ListRecordsStdsPrint (void);
+
 void Rec_GetUsrAndShowRecordOneTchCrs (void);
-void Rec_ListRecordsTchs (void);
+void Rec_ListRecordsTchsShow (void);
+void Rec_ListRecordsTchsPrint (void);
+
 void Rec_UpdateAndShowMyCrsRecord (void);
 void Rec_UpdateAndShowOtherCrsRecord (void);
 unsigned long Rec_GetFieldFromCrsRecord (long UsrCod,long FieldCod,MYSQL_RES **mysql_res);
@@ -160,7 +166,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
 void Rec_ShowMySharedRecordUpd (void);
 void Rec_ShowSharedRecordUnmodifiable (struct UsrData *UsrDat);
 void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
-                              struct UsrData *UsrDat);
+                              struct UsrData *UsrDat,const char *Anchor);
 
 void Rec_UpdateMyRecord (void);
 Rol_Role_t Rec_GetRoleFromRecordForm (void);

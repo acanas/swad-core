@@ -1922,7 +1922,7 @@ void Ins_ChangeInsCtyInConfig (void)
 void Ins_ContEditAfterChgInsInConfig (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Ins_ShowConfiguration ();
@@ -2088,7 +2088,7 @@ void Ins_ChangeInsStatus (void)
 void Ins_ContEditAfterChgIns (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   Lay_ShowPendingAlert ();
 
    if (Gbl.AlertType == Lay_SUCCESS)
       /***** Put button to go to institution changed *****/

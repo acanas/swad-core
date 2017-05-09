@@ -1661,6 +1661,18 @@ void Lay_ShowErrorAndExit (const char *Message)
   }
 
 /*****************************************************************************/
+/*********************** Show a write-pending alert **************************/
+/*****************************************************************************/
+// Gbl.AlertType must be Lay_NONE or any type of alert
+// If Gbl.AlertType != Lay_NONE ==> Gbl.Message must hold the message
+
+void Lay_ShowPendingAlert (void)
+  {
+   if (Gbl.AlertType != Lay_NONE)
+      Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+  }
+
+/*****************************************************************************/
 /******************** Show an alert message to the user **********************/
 /*****************************************************************************/
 

@@ -1079,9 +1079,6 @@ Users:
 	884. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
 	885. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
 
-	886. ActReqCnfID_Oth		Request the confirmation of another user's ID
-	887. ActReqCnfID_Std		Request the confirmation of another user's ID
-	888. ActReqCnfID_Tch		Request the confirmation of another user's ID
 	889. ActCnfID_Oth		Confirm another user's ID
 	890. ActCnfID_Std		Confirm another user's ID
 	891. ActCnfID_Tch		Confirm another user's ID
@@ -2453,12 +2450,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeRecOneStd	*/{1174,-1,TabUnk,ActLstStd		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneStdCrs,NULL},
    /* ActSeeRecOneTch	*/{1175,-1,TabUnk,ActLstTch		,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,0x1FC,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_GetUsrAndShowRecordOneTchCrs,NULL},
 
-   /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsGsts		,NULL},
-   /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsStdsForEdit	,NULL},
-   /* ActSeeRecSevTch	*/{  22,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsTchs		,NULL},
-   /* ActPrnRecSevGst	*/{1188,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsGsts		,NULL},
-   /* ActPrnRecSevStd	*/{ 111,-1,TabUnk,ActLstStd		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsStdsForPrint	,NULL},
-   /* ActPrnRecSevTch	*/{ 127,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsTchs		,NULL},
+   /* ActSeeRecSevGst	*/{1187,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsGstsShow	,NULL},
+   /* ActSeeRecSevStd	*/{  89,-1,TabUnk,ActLstStd		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsStdsShow	,NULL},
+   /* ActSeeRecSevTch	*/{  22,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ListRecordsTchsShow	,NULL},
+   /* ActPrnRecSevGst	*/{1188,-1,TabUnk,ActLstOth		,0x100,0x100,0x100,0x100,0x100,0x100,0x100,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsGstsPrint	,NULL},
+   /* ActPrnRecSevStd	*/{ 111,-1,TabUnk,ActLstStd		,0x118,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsStdsPrint	,NULL},
+   /* ActPrnRecSevTch	*/{ 127,-1,TabUnk,ActLstTch		,0x1FF,0x1FF,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Rec_ListRecordsTchsPrint	,NULL},
 
    /* ActRcvRecOthUsr	*/{ 300,-1,TabUnk,ActLstStd		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_UpdateAndShowOtherCrsRecord,NULL},
    /* ActEdiRecFie	*/{ 292,-1,TabUnk,ActLstStd		,0x110,0x100,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rec_ReqEditRecordFields	,NULL},
@@ -2554,9 +2551,6 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActRcvFrmEnrSevStd*/{1428,-1,TabUnk,ActLstStd		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminStds	,NULL},
    /* ActRcvFrmEnrSevTch*/{1429,-1,TabUnk,ActLstTch		,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,0x1FE,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminTchs	,NULL},
 
-   /* ActReqCnfID_Oth	*/{1565,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Std	*/{1566,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
-   /* ActReqCnfID_Tch	*/{1567,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_RequestConfirmOtherUsrID	,NULL},
    /* ActCnfID_Oth	*/{1568,-1,TabUnk,ActLstOth		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
    /* ActCnfID_Std	*/{1569,-1,TabUnk,ActLstStd		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
    /* ActCnfID_Tch	*/{1570,-1,TabUnk,ActLstTch		,0x1F0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,0x1E0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
@@ -4555,9 +4549,9 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqDatTchGrp,	// #1562
 	ActChgDatTchGrp,	// #1563
 	ActDowTchGrp,		// #1564
-	ActReqCnfID_Oth,	// #1565
-	ActReqCnfID_Std,	// #1566
-	ActReqCnfID_Tch,	// #1567
+	-1,			// #1565 (obsolete action)
+	-1,			// #1566 (obsolete action)
+	-1,			// #1567 (obsolete action)
 	ActCnfID_Oth,		// #1568
 	ActCnfID_Std,		// #1569
 	ActCnfID_Tch,		// #1570
@@ -4637,6 +4631,18 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 
 static void Act_FormStartInternal (Act_Action_t NextAction,bool PutParameterLocationIfNoSesion,
                                    const char *Id,const char *Anchor,const char *OnSubmit);
+
+/*****************************************************************************/
+/****************** Get action from permanent action code ********************/
+/*****************************************************************************/
+
+Act_Action_t Act_GetActionFromActCod (long ActCod)
+  {
+   if (ActCod >= 0 && ActCod <= Act_MAX_ACTION_COD)
+      return Act_FromActCodToAction[ActCod];
+
+   return ActUnk;
+  }
 
 /*****************************************************************************/
 /************* Check if I have permission to execute an action ***************/
