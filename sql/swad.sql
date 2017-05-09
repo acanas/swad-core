@@ -573,7 +573,7 @@ CREATE TABLE IF NOT EXISTS hidden_params (
 	SessionId CHAR(43) NOT NULL,
 	Action INT NOT NULL,
 	ParamName VARCHAR(255) NOT NULL,
-	ParamValue TEXT NOT NULL,
+	ParamValue LONGTEXT NOT NULL,
 	INDEX(SessionId,Action));
 --
 -- Table holidays: stores the holidays in each institution

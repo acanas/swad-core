@@ -1243,15 +1243,15 @@ mysql> DESCRIBE hidden_params;
 | SessionId  | char(43)     | NO   | MUL | NULL    |       |
 | Action     | int(11)      | NO   |     | NULL    |       |
 | ParamName  | varchar(255) | NO   |     | NULL    |       |
-| ParamValue | text         | NO   |     | NULL    |       |
+| ParamValue | longtext     | NO   |     | NULL    |       |
 +------------+--------------+------+-----+---------+-------+
-4 rows in set (0.00 sec)
+4 rows in set (0,00 sec)
 */
    DB_CreateTable ("CREATE TABLE IF NOT EXISTS hidden_params ("
 			"SessionId CHAR(43) NOT NULL,"	// Ses_BYTES_SESSION_ID
 			"Action INT NOT NULL,"
 			"ParamName VARCHAR(255) NOT NULL,"
-			"ParamValue TEXT NOT NULL,"
+			"ParamValue LONGTEXT NOT NULL,"
 		   "INDEX(SessionId,Action))");
 
    /***** Table holidays *****/
