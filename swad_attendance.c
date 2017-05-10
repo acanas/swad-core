@@ -877,9 +877,9 @@ void Att_AskRemAttEvent (void)
    Pag_PutHiddenParamPagNum (Pag_ATT_EVENTS,Gbl.AttEvents.CurrentPage);
 
    /***** Ask for confirmation of removing *****/
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
             Att.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
    Lay_PutRemoveButton (Txt_Remove_event);
    Act_FormEnd ();
 
@@ -908,8 +908,8 @@ void Att_GetAndRemAttEvent (void)
    Att_RemoveAttEventFromDB (Att.AttCod);
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_removed,Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_removed,Att.Title);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -955,9 +955,9 @@ void Att_HideAttEvent (void)
    DB_QueryUPDATE (Query,"can not hide attendance event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_hidden,
             Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -987,9 +987,9 @@ void Att_ShowAttEvent (void)
    DB_QueryUPDATE (Query,"can not show attendance event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible,
             Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1268,9 +1268,9 @@ void Att_RecFormAttEvent (void)
       if (Att_CheckIfSimilarAttEventExists ("Title",ReceivedAtt.Title,ReceivedAtt.AttCod))
         {
          ReceivedAttEventIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_an_event_with_the_title_X,
+         sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_event_with_the_title_X,
                   ReceivedAtt.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not an attendance event title
@@ -1291,8 +1291,8 @@ void Att_RecFormAttEvent (void)
          Att_CreateAttEvent (&ReceivedAtt,Txt);	// Add new attendance event to database
 
          /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_event_X,ReceivedAtt.Title);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 sprintf (Gbl.Alert.Txt,Txt_Created_new_event_X,ReceivedAtt.Title);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
 	{
@@ -2332,9 +2332,9 @@ void Att_RegisterStudentsInAttEvent (void)
 
       /***** Write final message *****/
       sprintf (Format,"%s: %%u<br />%s: %%u",Txt_Presents,Txt_Absents);
-      sprintf (Gbl.Message,Format,
+      sprintf (Gbl.Alert.Txt,Format,
 	       NumStdsPresent,NumStdsAbsent);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
       /***** Show warning indicating no students found *****/

@@ -100,8 +100,11 @@ struct Globals
       char UniqueId[32 + Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 10 + 1];	// Unique identifier string used in forms
       bool Inside;		// Set to true inside a form to avoid nested forms
      } Form;
-   Lay_AlertType_t AlertType;	// Used in a posteriori function to write success / warning message
-
+   struct
+     {
+      Lay_AlertType_t Type;
+      char Txt[Lay_MAX_BYTES_ALERT + 1];
+     } Alert;			// Used in a posteriori function to write success / warning message
    struct
      {
       size_t ContentLength;
@@ -182,7 +185,6 @@ struct Globals
    time_t StartExecutionTimeUTC;
    struct DateTime Now;
    struct Date Yesterday;
-   char Message[Lay_MAX_BYTES_ALERT + 1];	// String for alerts
    char Title[Lay_MAX_BYTES_TITLE + 1];		// String for the help message in a link
    unsigned RowEvenOdd;	// To alternate row colors in listings
    char *ColorRows[2];

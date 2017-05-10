@@ -1035,8 +1035,8 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
 /*
   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
     {
-     sprintf (Gbl.Message,"Str_ChangeFormat (&quot;%s&quot;)",Str);
-     Lay_ShowAlert (Lay_INFO,Gbl.Message);
+     sprintf (Gbl.Alert.Txt,"Str_ChangeFormat (&quot;%s&quot;)",Str);
+     Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
     }
 */
 
@@ -2693,7 +2693,7 @@ int Str_ReadFileUntilBoundaryStr (FILE *FileSrc,char *StrDst,
 /****** Convert invalid characters in a file name to valid characters ********/
 /*****************************************************************************/
 // Return true if the name of the file o folder is valid
-// If the name is not valid, Gbl.Message will contain feedback text
+// If the name is not valid, Gbl.Alert.Txt will contain feedback text
 // File names with heading and trailing spaces are allowed
 
 bool Str_ConvertFilFolLnkNameToValid (char *FileName)
@@ -2784,13 +2784,13 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-         snprintf (Gbl.Message,Lay_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,Lay_MAX_BYTES_ALERT,
                    Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
                 	                                   Txt_UPLOAD_FILE_X_invalid_name,
 		   FileName);
      }
    else	// FileName is empty
-      sprintf (Gbl.Message,"%s",
+      sprintf (Gbl.Alert.Txt,"%s",
 	       Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_Invalid_name_NO_HTML :
 						       Txt_UPLOAD_FILE_Invalid_name);
 
@@ -2876,9 +2876,9 @@ void Str_Copy (char *Dst,const char *Src,size_t DstSize)
    /***** Check if buffer has enough space for source *****/
    if (LengthSrc > DstSize)
      {
-      sprintf (Gbl.Message,"Trying to copy %lu chars into a %lu-chars buffer.",
+      sprintf (Gbl.Alert.Txt,"Trying to copy %lu chars into a %lu-chars buffer.",
                LengthSrc,DstSize);
-      Lay_ShowErrorAndExit (Gbl.Message);
+      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
    /***** Copy source into destination *****/
@@ -2899,9 +2899,9 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthDst = strlen (Dst);
    if (LengthDst > DstSize)
      {
-      sprintf (Gbl.Message,"%lu-chars buffer has %lu chars!",
+      sprintf (Gbl.Alert.Txt,"%lu-chars buffer has %lu chars!",
                DstSize,LengthDst);
-      Lay_ShowErrorAndExit (Gbl.Message);
+      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
    /***** Check if buffer has enough space for source *****/
@@ -2910,9 +2910,9 @@ void Str_Concat (char *Dst,const char *Src,size_t DstSize)
    LengthSrc = strlen (Src);
    if (FreeSpace < LengthSrc)
      {
-      sprintf (Gbl.Message,"Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
+      sprintf (Gbl.Alert.Txt,"Trying to concatenate %lu chars to a %lu-chars buffer with free space for only %lu chars!",
                LengthSrc,DstSize,FreeSpace);
-      Lay_ShowErrorAndExit (Gbl.Message);
+      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
 
    /***** Concatenate ******/

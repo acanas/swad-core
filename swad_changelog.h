@@ -216,14 +216,13 @@
 
 // TODO: Change numbers of notifications in program and database to match order in tabs
 
-// TODO: Sugerencias de Sandra Daniela Tazzioli Barroso realizadas el 2 de mayo de 2017:
-// 2. Mejor ayuda sobre cómo pasar de Excel al formato HTML necesario para las calificaciones.
-// 3. Puede ser interesante que un administrador pueda cambiar el DNI de un usuario.
-// 4. Comprobar que las direcciones de correo de cada uno de los estudiantes aparecen en Bcc: (copia oculta) en cualquier gestor de correo.
-// 5. Informar a otros usuarios de que es el cumpleaños de otros usuarios para que los feliciten (habría que añadir una categoría de privacidad nueva para la visibilidad de la fecha de cumpleaños).
-// 6. La información sobre nuevas notificaciones debería aparecer también en pantallas pequeñas (móviles). Tal vez podría aparecer también en el icono de notificaciones de la pestaña MENSAJES.
-// 8. Estuve confirmando los DNI como indicaste para cargar las notas. En la opcion de la forma lista de los alumnos al ser varios, cada vez que quiero acceder a la ficha de uno de ellos debo bajar al final de la pagina para su vista. Es factible que al señalar algun estudiante y al cliquear con el boton derecho del mouse me permita acceder directamente. De señalar varios se puede insertar una pestaña que diga "siguiente" y no tener que volver a la pestaña estudiantes y hacerlo individualmente a los fines de agilizar la vista. Entiendo que esto se hace en forma periodica pero para tenerlo en cuenta.
-// 9. Antonio hay alumnos que han generado el usuario en forma incompleta entre ellos no cargaron el DNI y no asisten a clase para rectificarlo. Hay forma de mi posicion con profesora o adminsitradora del centro ingresar, completar los datos aun conocer su clave?
+// TODO: Sugerencias pendientes de Sandra Daniela Tazzioli Barroso realizadas en mayo de 2017:
+// - Mejor ayuda sobre cómo pasar de Excel al formato HTML necesario para las calificaciones.
+// - Puede ser interesante que un administrador pueda cambiar el DNI de un usuario.
+// - Comprobar que las direcciones de correo de cada uno de los estudiantes aparecen en Bcc: (copia oculta) en cualquier gestor de correo.
+// - Informar a otros usuarios de que es el cumpleaños de otros usuarios para que los feliciten (habría que añadir una categoría de privacidad nueva para la visibilidad de la fecha de cumpleaños).
+// - La información sobre nuevas notificaciones debería aparecer también en pantallas pequeñas (móviles). Tal vez podría aparecer también en el icono de notificaciones de la pestaña MENSAJES.
+// - Hay alumnos que han generado el usuario en forma incompleta entre ellos no cargaron el DNI y no asisten a clase para rectificarlo. Hay forma de mi posicion con profesora o adminsitradora del centro ingresar, completar los datos aun conocer su clave?
 
 // TODO: Fix bug: When a centre is associated with a place and it is moved to another institution, what happens with the place?
 // TODO: Check what happens with places when a centre is removed
@@ -234,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.210 (2017-05-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.211 (2017-05-10)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.211:   May 10, 2017	Code refactoring related to alerts. (218879 lines)
         Version 16.210:   May 10, 2017	Changes in layout of records. (218869 lines)
         Version 16.209.4: May 10, 2017	Changes in layout of list of guests' records. (218838 lines)
         Version 16.209.3: May 10, 2017	Changes in layout of list of teachers' records. (218830 lines)

@@ -151,13 +151,13 @@ static void XML_GetElement (struct XMLElement *ParentElem)
          EndTagNameLength = strcspn (Gbl.XMLPtr,">");
          if (ParentElem->TagNameLength != EndTagNameLength)
            {
-            sprintf (Gbl.Message,"XML syntax error. Expect end tag &lt;/%s&gt;.",ParentElem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Message);
+            sprintf (Gbl.Alert.Txt,"XML syntax error. Expect end tag &lt;/%s&gt;.",ParentElem->TagName);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
            }
          if (strncmp (ParentElem->TagName,Gbl.XMLPtr,EndTagNameLength))	// XML tags are case sensitive
            {
-            sprintf (Gbl.Message,"XML syntax error. Expect end tag &lt;/%s&gt;.",ParentElem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Message);
+            sprintf (Gbl.Alert.Txt,"XML syntax error. Expect end tag &lt;/%s&gt;.",ParentElem->TagName);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
            }
 
          // End of parent element found!
@@ -360,9 +360,9 @@ static void XML_GetAttributes (struct XMLElement *Elem)
            }
          else
            {
-            sprintf (Gbl.Message,"XML syntax error after attribute &quot;%s&quot; inside element &quot;%s&quot;.",
+            sprintf (Gbl.Alert.Txt,"XML syntax error after attribute &quot;%s&quot; inside element &quot;%s&quot;.",
                      Attribute->AttributeName,Elem->TagName);
-            Lay_ShowErrorAndExit (Gbl.Message);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
            }
 
          if ((Attribute->Content = malloc (Attribute->ContentLength + 1)) == NULL)

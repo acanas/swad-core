@@ -637,8 +637,8 @@ void Dpt_RemoveDepartment (void)
       DB_QueryDELETE (Query,"can not remove a department");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_Department_X_removed,Dpt.FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_Department_X_removed,Dpt.FullName);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -743,9 +743,9 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewDptName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_department_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_department_X_empty,
                CurrentDptName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -755,9 +755,9 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If degree was in database... *****/
          if (Dpt_CheckIfDepartmentNameExists (ParamName,NewDptName,Dpt->DptCod))
            {
-            sprintf (Gbl.Message,Txt_The_department_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
                      NewDptName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -765,16 +765,16 @@ static void Dpt_RenameDepartment (Cns_ShrtOrFullName_t ShrtOrFullName)
             Dpt_UpdateDegNameDB (Dpt->DptCod,FieldName,NewDptName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Message,Txt_The_department_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Alert.Txt,Txt_The_department_X_has_been_renamed_as_Y,
                      CurrentDptName,NewDptName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_name_of_the_department_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_department_X_has_not_changed,
                   CurrentDptName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -844,14 +844,14 @@ void Dpt_ChangeDptWWW (void)
       DB_QueryUPDATE (Query,"can not update the web of a department");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,
                NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
      {
-      sprintf (Gbl.Message,"%s",Txt_You_can_not_leave_the_web_address_empty);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_leave_the_web_address_empty);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1036,29 +1036,29 @@ void Dpt_RecFormNewDpt (void)
          /***** If name of department was in database... *****/
          if (Dpt_CheckIfDepartmentNameExists ("ShortName",Dpt->ShrtName,-1L))
            {
-            sprintf (Gbl.Message,Txt_The_department_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
                      Dpt->ShrtName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else if (Dpt_CheckIfDepartmentNameExists ("FullName",Dpt->FullName,-1L))
            {
-            sprintf (Gbl.Message,Txt_The_department_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_department_X_already_exists,
                      Dpt->FullName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new department to database
             Dpt_CreateDepartment (Dpt);
         }
       else	// If there is not a web
         {
-         sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_web_address_of_the_new_department);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_web_address_of_the_new_department);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not a department name
      {
-      sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_department);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1086,9 +1086,9 @@ static void Dpt_CreateDepartment (struct Department *Dpt)
    DB_QueryINSERT (Query,"can not create a new department");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_department_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_department_X,
             Dpt->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

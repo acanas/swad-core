@@ -1012,9 +1012,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 			  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
    if (!ICanQueryWholeRange && NumDays > Cfg_DAYS_IN_RECENT_LOG)
      {
-      sprintf (Gbl.Message,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
+      sprintf (Gbl.Alert.Txt,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
 	       Cfg_DAYS_IN_RECENT_LOG);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);	// ...write warning message and show the form again
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);	// ...write warning message and show the form again
       return;
      }
 

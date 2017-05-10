@@ -519,9 +519,9 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 
    /***** Show warning *****/
-   sprintf (Gbl.Message,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
+   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
             NumCrss);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 
    /***** Put form to confirm that I want to see the big list *****/
    Act_FormStart (Gbl.Action.Act);

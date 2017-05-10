@@ -489,10 +489,10 @@ static void Img_ProcessImage (struct Image *Image,
    ReturnCode = WEXITSTATUS(ReturnCode);
    if (ReturnCode != 0)
      {
-      sprintf (Gbl.Message,"Image could not be processed successfully.<br />"
+      sprintf (Gbl.Alert.Txt,"Image could not be processed successfully.<br />"
 			   "Error code returned by the program of processing: %d",
 	       ReturnCode);
-      Lay_ShowErrorAndExit (Gbl.Message);
+      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
   }
 

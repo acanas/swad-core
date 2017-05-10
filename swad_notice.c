@@ -94,9 +94,9 @@ void Not_ShowFormNotice (void)
    extern const char *Txt_Create_notice;
 
    /***** Help message *****/
-   sprintf (Gbl.Message,Txt_The_notice_will_appear_as_a_yellow_note_,
+   sprintf (Gbl.Alert.Txt,Txt_The_notice_will_appear_as_a_yellow_note_,
             Gbl.CurrentCrs.Crs.FullName);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
 
    /***** Start form *****/
    Act_FormStart (ActRcvNot);

@@ -1581,7 +1581,7 @@ void Lay_EndTable (void)
 /******* Write error message, close files, remove lock file, and exit ********/
 /*****************************************************************************/
 
-void Lay_ShowErrorAndExit (const char *Message)
+void Lay_ShowErrorAndExit (const char *Txt)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
 
@@ -1599,8 +1599,8 @@ void Lay_ShowErrorAndExit (const char *Message)
 	 Lay_WriteStartOfPage ();
 
       /***** Write possible error message *****/
-      if (Message)
-         Lay_ShowAlert (Lay_ERROR,Message);
+      if (Txt)
+         Lay_ShowAlert (Lay_ERROR,Txt);
 
       /***** Finish the page, except </body> and </html> *****/
       Lay_WriteEndOfPage ();
@@ -1618,7 +1618,7 @@ void Lay_ShowErrorAndExit (const char *Message)
      {
       /***** Log access *****/
       Gbl.TimeSendInMicroseconds = 0L;
-      Sta_LogAccess (Message);
+      Sta_LogAccess (Txt);
      }
    else
      {
@@ -1635,7 +1635,7 @@ void Lay_ShowErrorAndExit (const char *Message)
 	 Sta_ComputeTimeToSendPage ();
 
 	 /***** Log access *****/
-	 Sta_LogAccess (Message);
+	 Sta_LogAccess (Txt);
 
 	 /***** End the output *****/
 	 if (!Gbl.Layout.HTMLEndWritten)
@@ -1656,36 +1656,44 @@ void Lay_ShowErrorAndExit (const char *Message)
 
    /***** Exit *****/
    if (Gbl.WebService.IsWebService)
-      Svc_Exit (Message);
+      Svc_Exit (Txt);
    exit (0);
   }
 
 /*****************************************************************************/
 /*********************** Show a write-pending alert **************************/
 /*****************************************************************************/
-// Gbl.AlertType must be Lay_NONE or any type of alert
-// If Gbl.AlertType != Lay_NONE ==> Gbl.Message must hold the message
+// Gbl.Alert.Type must be Lay_NONE or any type of alert
+// If Gbl.Alert.Type != Lay_NONE ==> Gbl.Alert.Txt must hold the message
 
 void Lay_ShowPendingAlert (void)
   {
-   if (Gbl.AlertType != Lay_NONE)
-      Lay_ShowAlert (Gbl.AlertType,Gbl.Message);
+   /***** Anything to show? *****/
+   if (Gbl.Alert.Type != Lay_NONE)
+     {
+      /***** Show alert *****/
+      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+      /***** Avoid writing twice the same alert if called more than once *****/
+      Gbl.Alert.Type = Lay_NONE;
+      Gbl.Alert.Txt[0] = '\0';
+     }
   }
 
 /*****************************************************************************/
 /******************** Show an alert message to the user **********************/
 /*****************************************************************************/
 
-void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Message)
+void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Lay_NONE)
      {
-      Lay_ShowAlertAndButton1 (AlertType,Message);
+      Lay_ShowAlertAndButton1 (AlertType,Txt);
       Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
   }
 
-void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
+void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Txt)
   {
    /****** If start of page is not written yet, do it now ******/
    if (!Gbl.Layout.HTMLStartWritten)
@@ -1699,8 +1707,8 @@ void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Message)
    fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\""
 		      " style=\"background-image:url('%s/%s'); background-size:20px 20px;\">",
 	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
-   if (Message)
-      fprintf (Gbl.F.Out,"%s",Message);
+   if (Txt)
+      fprintf (Gbl.F.Out,"%s",Txt);
    fprintf (Gbl.F.Out,"</div>");
   }
 

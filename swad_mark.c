@@ -279,9 +279,9 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       DB_QueryUPDATE (Query,"can not update properties of marks");
 
       /***** Write message of success *****/
-      sprintf (Gbl.Message,Txt_The_number_of_rows_is_now_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_number_of_rows_is_now_X,
                NumRows);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowErrorAndExit ("Wrong number of rows.");
@@ -295,7 +295,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
 /*****************************************************************************/
 // Returns true if the format of the HTML file of marks is correct
 // Returns true if the format of the HTML file of marks is wrong
-// Gbl.Message will contain feedback text
+// Gbl.Alert.Txt will contain feedback text
 
 bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
   {
@@ -323,7 +323,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
          // Only one table is allowed
          if (Str_FindStrInFile (FileAllMarks,"<table",Str_NO_SKIP_HTML_COMMENTS))
            {
-            sprintf (Gbl.Message,"%s",Txt_There_are_more_than_one_table_in_the_file_of_marks);
+            sprintf (Gbl.Alert.Txt,"%s",Txt_There_are_more_than_one_table_in_the_file_of_marks);
             FileIsCorrect = false;
            }
          else
@@ -384,7 +384,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
         }
       else
         {
-         sprintf (Gbl.Message,"%s",Txt_Table_not_found_in_the_file_of_marks);
+         sprintf (Gbl.Alert.Txt,"%s",Txt_Table_not_found_in_the_file_of_marks);
          FileIsCorrect = false;
         }
 
@@ -393,7 +393,7 @@ bool Mrk_CheckFileOfMarks (const char *Path,struct MarksProperties *Marks)
      }
    /*
    if (FileIsCorrect)
-      sprintf (Gbl.Message,Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found,
+      sprintf (Gbl.Alert.Txt,Txt_X_header_rows_Y_student_rows_and_Z_footer_rows_found,
                Marks->Header,NumRowsStds,Marks->Footer);
    */
 
@@ -456,7 +456,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
    /***** Open HTML file with the table of marks *****/
    if (!(FileAllMarks = fopen (PathFileAllMarks,"rb")))
      {  // Can't open the file with the table of marks
-      sprintf (Gbl.Message,"%s","Can not open file of marks.");	// TODO: Need translation!
+      sprintf (Gbl.Alert.Txt,"%s","Can not open file of marks.");	// TODO: Need translation!
       return false;
      }
 
@@ -591,7 +591,7 @@ static bool Mrk_GetUsrMarks (FILE *FileUsrMarks,struct UsrData *UsrDat,
 
    /***** User's ID not found in table *****/
    fclose (FileAllMarks);
-   sprintf (Gbl.Message,Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
+   sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_is_not_found_in_the_file_of_marks,
 	    UsrDat->FullName);
    return false;
   }
@@ -701,7 +701,7 @@ void Mrk_ShowMyMarks (void)
       else	// Problems in table of marks or user's ID not found
         {
          fclose (FileUsrMarks);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
 
       unlink (FileNameUsrMarks);	// File with marks is no longer necessary
@@ -856,23 +856,23 @@ void Mrk_GetNotifMyMarks (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
                      else
                        {
                         fclose (FileUsrMarks);
-                        if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
-                           sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
+                        if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
+                           sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
                        }
                     }
                   else
                     {
-                     sprintf (Gbl.Message,"%s","Can not open file with user's marks!");	// TODO: Need translation!
-                     if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
-                        sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
+                     sprintf (Gbl.Alert.Txt,"%s","Can not open file with user's marks!");	// TODO: Need translation!
+                     if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
+                        sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
                     }
                   unlink (FileNameUsrMarks);	// File with marks is no longer necessary
                  }
                else
                  {
-                  sprintf (Gbl.Message,"%s","User's IDs not found!");	// TODO: Need translation!
-                  if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Message) + 3 + 1)))
-                     sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Message);
+                  sprintf (Gbl.Alert.Txt,"%s","User's IDs not found!");	// TODO: Need translation!
+                  if ((*ContentStr = (char *) malloc (9 + strlen (Gbl.Alert.Txt) + 3 + 1)))
+                     sprintf (*ContentStr,"<![CDATA[%s]]>",Gbl.Alert.Txt);
                  }
               }
            }

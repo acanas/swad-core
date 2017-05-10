@@ -220,7 +220,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
-   char Message[512];        // Don't use Gbl.Message here, because it may be filled with another message and such message would be overwritten
+   char Message[512];        // Don't use Gbl.Alert.Txt here, because it may be filled with another message and such message would be overwritten
 
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
@@ -2112,13 +2112,13 @@ void Usr_WelcomeUsr (void)
                            Gbl.Prefs.PathIconSet,Cfg_ICON_128x128,
                            Txt_Happy_birthday,
                            Txt_Happy_birthday);
-                  sprintf (Gbl.Message,Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
+                  sprintf (Gbl.Alert.Txt,Txt_Welcome_X_and_happy_birthday[Gbl.Usrs.Me.UsrDat.Sex],
                            Gbl.Usrs.Me.UsrDat.FirstName);
                  }
             if (!CongratulateMyBirthday)
-               sprintf (Gbl.Message,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
+               sprintf (Gbl.Alert.Txt,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
                         Gbl.Usrs.Me.UsrDat.FirstName);
-            Lay_ShowAlert (Lay_INFO,Gbl.Message);
+            Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
            }
          else
             Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
@@ -2387,9 +2387,9 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
    if (Wrong)
      {
       /***** String is not a valid user's nickname, email or ID *****/
-      sprintf (Gbl.Message,Txt_The_ID_nickname_or_email_X_is_not_valid,
+      sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
 	       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
 
    return ListUsrCods->NumUsrs;
@@ -2819,9 +2819,9 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
 
    Gbl.Action.Act = ActFrmLogIn;
    Tab_SetCurrentTab ();
-   sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+   sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 	    Gbl.Usrs.Me.UsrIdLogin);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -3017,10 +3017,10 @@ void Usr_ShowFormsLogoutAndRole (void)
    /***** Write message with my new logged role *****/
    if (Gbl.Usrs.Me.RoleHasChanged)
      {
-      sprintf (Gbl.Message,Txt_You_are_now_LOGGED_IN_as_X,
+      sprintf (Gbl.Alert.Txt,Txt_You_are_now_LOGGED_IN_as_X,
 	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Start frame *****/
@@ -5020,8 +5020,8 @@ static void Usr_AllocateUsrsList (Rol_Role_t Role)
 /*
 if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
    {
-    sprintf (Gbl.Message,"Memory used by list = %lu",(long) sizeof (struct UsrInList) * NumUsrs);
-    Lay_ShowAlert (Lay_INFO,Gbl.Message);
+    sprintf (Gbl.Alert.Txt,"Memory used by list = %lu",(long) sizeof (struct UsrInList) * NumUsrs);
+    Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
    }
 */
    if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
@@ -5107,9 +5107,9 @@ static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
   {
    extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
 
-   sprintf (Gbl.Message,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
             NumUsrs);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -5159,9 +5159,9 @@ void Usr_GetListsSelectedUsrsCods (void)
    Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,
                           Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
 /*
-sprintf (Gbl.Message,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
+sprintf (Gbl.Alert.Txt,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
          Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
-Lay_ShowErrorAndExit (Gbl.Message);
+Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 */
    /***** Add teachers to the list with all selected users *****/
    if (Gbl.Usrs.Select.Tch[0])
@@ -5255,9 +5255,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Message,Txt_There_is_no_user_with_nickname_X,
+		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_nickname_X,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5274,9 +5274,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Message,Txt_There_is_no_user_with_email_X,
+		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_email_X,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5302,9 +5302,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		       {// TODO: Consider forbid IDs here
 			if (WriteErrorMsgs)
 			  {
-			   sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+			   sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 				    UsrIDNickOrEmail);
-			   Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+			   Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
 			  }
 			Error = true;
 		       }
@@ -5313,9 +5313,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     if (WriteErrorMsgs)
 		       {
-			sprintf (Gbl.Message,Txt_There_is_no_user_with_ID_nick_or_email_X,
+			sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_ID_nick_or_email_X,
 				 UsrIDNickOrEmail);
-			Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+			Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
 		       }
 		     Error = true;
 		    }
@@ -5324,9 +5324,9 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		 {
 		  if (WriteErrorMsgs)
 		    {
-		     sprintf (Gbl.Message,Txt_The_ID_nickname_or_email_X_is_not_valid,
+		     sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }

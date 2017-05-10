@@ -4109,9 +4109,9 @@ void For_RequestRemoveThread (void)
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_REMOVE_THREAD_SECTION);
    if (Subject[0])
      {
-      sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
+      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
@@ -4167,9 +4167,9 @@ void For_RemoveThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
       	{
-         sprintf (Gbl.Message,Txt_Thread_X_removed,Subject);
+         sprintf (Gbl.Alert.Txt,Txt_Thread_X_removed,Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-	                                            Lay_SUCCESS,Gbl.Message);
+	                                            Lay_SUCCESS,Gbl.Alert.Txt);
       	}
       else
 	 For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4204,9 +4204,9 @@ void For_CutThread (void)
    /***** Show the threads again *****/
    if (Subject[0])
      {
-      sprintf (Gbl.Message,Txt_Thread_X_marked_to_be_moved,Subject);
+      sprintf (Gbl.Alert.Txt,Txt_Thread_X_marked_to_be_moved,Subject);
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						 Lay_SUCCESS,Gbl.Message);
+						 Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4241,10 +4241,10 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         sprintf (Gbl.Message,Txt_The_thread_X_is_already_in_this_forum,
+         sprintf (Gbl.Alert.Txt,Txt_The_thread_X_is_already_in_this_forum,
                   Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Lay_WARNING,Gbl.Message);
+						    Lay_WARNING,Gbl.Alert.Txt);
         }
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
@@ -4261,10 +4261,10 @@ void For_PasteThread (void)
       /***** Show the threads again *****/
       if (Subject[0])
 	{
-         sprintf (Gbl.Message,Txt_Thread_X_moved_to_this_forum,
+         sprintf (Gbl.Alert.Txt,Txt_Thread_X_moved_to_this_forum,
                   Subject);
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,
-						    Lay_SUCCESS,Gbl.Message);
+						    Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
          For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,

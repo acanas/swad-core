@@ -651,8 +651,8 @@ void Hld_RemoveHoliday1 (void)
    DB_QueryDELETE (Query,"can not remove a holiday");
 
    /***** Write message to show the change made *****/
-   Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,Txt_Holiday_X_removed,Hld.Name);
+   Gbl.Alert.Type = Lay_SUCCESS;
+   sprintf (Gbl.Alert.Txt,Txt_Holiday_X_removed,Hld.Name);
 
   }
 
@@ -701,8 +701,8 @@ void Hld_ChangeHolidayPlace1 (void)
              Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    /***** Write message to show the change made *****/
-   Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,Txt_The_place_of_the_holiday_X_has_changed_to_Y,
+   Gbl.Alert.Type = Lay_SUCCESS;
+   sprintf (Gbl.Alert.Txt,Txt_The_place_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,NewPlace.FullName);
   }
 
@@ -745,8 +745,8 @@ void Hld_ChangeHolidayType1 (void)
    DB_QueryUPDATE (Query,"can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
-   Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,Txt_The_type_of_the_holiday_X_has_changed,
+   Gbl.Alert.Type = Lay_SUCCESS;
+   sprintf (Gbl.Alert.Txt,Txt_The_type_of_the_holiday_X_has_changed,
             Hld->Name);
   }
 
@@ -844,9 +844,9 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
-   Gbl.AlertType = Lay_SUCCESS;
+   Gbl.Alert.Type = Lay_SUCCESS;
    Dat_ConvDateToDateStr (&NewDate,StrDate);
-   sprintf (Gbl.Message,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
+   sprintf (Gbl.Alert.Txt,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,StrDate);
   }
 
@@ -892,8 +892,8 @@ void Hld_RenameHoliday1 (void)
    /***** Check if new name is empty *****/
    if (!NewHldName[0])
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
                Hld->Name);
      }
    else
@@ -910,14 +910,14 @@ void Hld_RenameHoliday1 (void)
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
 	 /***** Write message to show the change made *****/
-         Gbl.AlertType = Lay_SUCCESS;
-	 sprintf (Gbl.Message,Txt_The_name_of_the_holiday_X_has_changed_to_Y,
+         Gbl.Alert.Type = Lay_SUCCESS;
+	 sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_holiday_X_has_changed_to_Y,
 		  Hld->Name,NewHldName);
         }
       else	// The same name
         {
-         Gbl.AlertType = Lay_INFO;
-         sprintf (Gbl.Message,Txt_The_name_of_the_holiday_X_has_not_changed,
+         Gbl.Alert.Type = Lay_INFO;
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_holiday_X_has_not_changed,
                  Hld->Name);
         }
      }
@@ -1147,14 +1147,14 @@ void Hld_RecFormNewHoliday1 (void)
       Hld_CreateHoliday (Hld);
 
       /* Success message */
-      Gbl.AlertType = Lay_SUCCESS;
-      sprintf (Gbl.Message,Txt_Created_new_holiday_X,Hld->Name);
+      Gbl.Alert.Type = Lay_SUCCESS;
+      sprintf (Gbl.Alert.Txt,Txt_Created_new_holiday_X,Hld->Name);
      }
    else	// If there is not a holiday name
      {
       /* Error message */
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
      }
   }
 

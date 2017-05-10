@@ -317,8 +317,8 @@ void Nck_RemoveNick (void)
       Nck_RemoveNicknameFromDB (NicknameWithoutArroba);
 
       /***** Show message *****/
-      sprintf (Gbl.Message,Txt_Nickname_X_removed,NicknameWithoutArroba);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_your_current_nickname);
@@ -370,7 +370,7 @@ void Nck_UpdateNick (void)
       if (!strcmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba)) // My nickname match exactly the new nickname
         {
          Error = true;
-         sprintf (Gbl.Message,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
+         sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_matches_the_one_you_had_previously_registered,
                   NewNicknameWithoutArroba);
         }
       else if (strcasecmp (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba)) // My nickname does not match, not even case insensitive, the new nickname
@@ -388,7 +388,7 @@ void Nck_UpdateNick (void)
             if (DB_QueryCOUNT (Query,"can not check if nickname already existed"))        // A nickname of another user is the same that my nickname
               {
                Error = true;
-               sprintf (Gbl.Message,Txt_The_nickname_X_had_been_registered_by_another_user,
+               sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
                         NewNicknameWithoutArroba);
               }
            }
@@ -400,14 +400,14 @@ void Nck_UpdateNick (void)
          Str_Copy (Gbl.Usrs.Me.UsrDat.Nickname,NewNicknameWithoutArroba,
                    Nck_MAX_BYTES_NICKNAME_WITHOUT_ARROBA);
 
-         sprintf (Gbl.Message,Txt_Your_nickname_X_has_been_registered_successfully,
+         sprintf (Gbl.Alert.Txt,Txt_Your_nickname_X_has_been_registered_successfully,
                   NewNicknameWithoutArroba);
         }
      }
    else        // New nickname is not valid
      {
       Error = true;
-      sprintf (Gbl.Message,Txt_The_nickname_entered_X_is_not_valid_,
+      sprintf (Gbl.Alert.Txt,Txt_The_nickname_entered_X_is_not_valid_,
                NewNicknameWithArroba,
                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
@@ -416,7 +416,7 @@ void Nck_UpdateNick (void)
    /***** Show message *****/
    Lay_ShowAlert (Error ? Lay_WARNING :
 	                  Lay_SUCCESS,
-	          Gbl.Message);
+	          Gbl.Alert.Txt);
 
    /***** Show my account again *****/
    Acc_ShowFormChangeMyAccount ();

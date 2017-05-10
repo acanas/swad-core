@@ -576,9 +576,9 @@ void Plc_RemovePlace (void)
       DB_QueryDELETE (Query,"can not remove a place");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_Place_X_removed,
+      sprintf (Gbl.Alert.Txt,Txt_Place_X_removed,
                Plc.FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -651,9 +651,9 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewPlcName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_place_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_place_X_empty,
                CurrentPlcName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -663,9 +663,9 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If place was in database... *****/
          if (Plc_CheckIfPlaceNameExists (ParamName,NewPlcName,Plc->PlcCod))
            {
-            sprintf (Gbl.Message,Txt_The_place_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_place_X_already_exists,
                      NewPlcName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -673,16 +673,16 @@ static void Plc_RenamePlace (Cns_ShrtOrFullName_t ShrtOrFullName)
             Plc_UpdatePlcNameDB (Plc->PlcCod,FieldName,NewPlcName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Message,Txt_The_place_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Alert.Txt,Txt_The_place_X_has_been_renamed_as_Y,
                      CurrentPlcName,NewPlcName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_name_of_the_place_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_place_X_has_not_changed,
                   CurrentPlcName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -837,15 +837,15 @@ void Plc_RecFormNewPlace (void)
       /***** If name of place was in database... *****/
       if (Plc_CheckIfPlaceNameExists ("ShortName",Plc->ShrtName,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_place_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_place_X_already_exists,
                   Plc->ShrtName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else if (Plc_CheckIfPlaceNameExists ("FullName",Plc->FullName,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_place_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_place_X_already_exists,
                   Plc->FullName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new place to database
          Plc_CreatePlace (Plc);
@@ -877,7 +877,7 @@ static void Plc_CreatePlace (struct Place *Plc)
    DB_QueryINSERT (Query,"can not create place");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_place_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_place_X,
             Plc->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }

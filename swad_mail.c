@@ -370,13 +370,13 @@ void Mai_WriteWarningEmailNotifications (void)
    Tab_Tab_t TabMyAccount   = Act_Actions[SuperActionMyAccount  ].Tab;
    Tab_Tab_t TabMailDomains = Act_Actions[SuperActionMailDomains].Tab;
 
-   sprintf (Gbl.Message,Txt_You_can_only_receive_email_notifications_if_,
+   sprintf (Gbl.Alert.Txt,Txt_You_can_only_receive_email_notifications_if_,
 	    Txt_TABS_TXT[TabMyAccount  ],
 	    Txt_MENU_TITLE[TabMyAccount  ][Act_Actions[SuperActionMyAccount  ].IndexInMenu],
             Txt_TABS_TXT[TabMailDomains],
 	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu],
 	    Txt_Domains);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -551,9 +551,9 @@ void Mai_RemoveMailDomain (void)
    DB_QueryDELETE (Query,"can not remove a mail domain");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Email_domain_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Email_domain_X_removed,
             Mai.Domain);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -625,9 +625,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewMaiName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
                CurrentMaiName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -637,9 +637,9 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If mail was in database... *****/
          if (Mai_CheckIfMailDomainNameExists (ParamName,NewMaiName,Mai->MaiCod))
            {
-            sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                      NewMaiName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -647,16 +647,16 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
             Mai_UpdateMailDomainNameDB (Mai->MaiCod,FieldName,NewMaiName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Message,Txt_The_email_domain_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_has_been_renamed_as_Y,
                      CurrentMaiName,NewMaiName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_email_domain_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_has_not_changed,
                   CurrentMaiName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -809,15 +809,15 @@ void Mai_RecFormNewMailDomain (void)
       /***** If name of mail was in database... *****/
       if (Mai_CheckIfMailDomainNameExists ("Domain",Mai->Domain,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                   Mai->Domain);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_email_domain_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                   Mai->Info);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new mail to database
          Mai_CreateMailDomain (Mai);
@@ -849,9 +849,9 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
    DB_QueryINSERT (Query,"can not create mail domain");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_email_domain_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_email_domain_X,
             Mai->Domain);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -1386,8 +1386,8 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
       Mai_RemoveEmailFromDB (UsrDat->UsrCod,Email);
 
       /***** Show message *****/
-      sprintf (Gbl.Message,Txt_Email_X_removed,Email);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_Email_X_removed,Email);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
       /***** Update list of emails *****/
       Mai_GetEmailFromUsrCod (UsrDat);
@@ -1471,18 +1471,18 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	 if (UsrDat->EmailConfirmed &&
 	     !strcmp (UsrDat->Email,NewEmail)) // User's current confirmed email match exactly the new email
 	   {
-	    sprintf (Gbl.Message,Txt_The_email_address_X_matches_one_previously_registered,
+	    sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_matches_one_previously_registered,
 		     NewEmail);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	    Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 	   }
 	 else
 	   {
 	    if (Mai_UpdateEmailInDB (UsrDat,NewEmail))
 	      {
 	       /***** Email updated sucessfully *****/
-	       sprintf (Gbl.Message,Txt_The_email_address_X_has_been_registered_successfully,
+	       sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_has_been_registered_successfully,
 			NewEmail);
-	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
 	       /***** Update list of emails *****/
 	       Mai_GetEmailFromUsrCod (UsrDat);
@@ -1494,17 +1494,17 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	      }
 	    else
 	      {
-	       sprintf (Gbl.Message,Txt_The_email_address_X_had_been_registered_by_another_user,
+	       sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_had_been_registered_by_another_user,
 			NewEmail);
-	       Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	       Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 	      }
 	   }
 	}
       else	// New email is not valid
 	{
-	 sprintf (Gbl.Message,Txt_The_email_address_entered_X_is_not_valid,
+	 sprintf (Gbl.Alert.Txt,Txt_The_email_address_entered_X_is_not_valid,
 		  NewEmail);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 	}
      }
    else
@@ -1641,10 +1641,10 @@ bool Mai_SendMailMsgToConfirmEmail (void)
          Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
          return false;
       default:
-         sprintf (Gbl.Message,"Internal error: an email message has not been sent successfully."
+         sprintf (Gbl.Alert.Txt,"Internal error: an email message has not been sent successfully."
                               " Error code returned by the script: %d",
                   ReturnCode);
-         Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+         Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
          return false;
      }
   }
@@ -1657,9 +1657,9 @@ void Mai_ShowMsgConfirmEmailHasBeenSent (void)
   {
    extern const char *Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address;
 
-   sprintf (Gbl.Message,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
+   sprintf (Gbl.Alert.Txt,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
 	    Gbl.Usrs.Me.UsrDat.Email);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -1753,7 +1753,7 @@ void Mai_ConfirmEmail (void)
 
          /***** Confirm email *****/
          if (Confirmed)
-	    sprintf (Gbl.Message,Txt_Email_X_has_already_been_confirmed_before,
+	    sprintf (Gbl.Alert.Txt,Txt_Email_X_has_already_been_confirmed_before,
 		     Email);
          else
            {
@@ -1763,9 +1763,9 @@ void Mai_ConfirmEmail (void)
 		     UsrCod,Email);
 	    DB_QueryUPDATE (Query,"can not confirm email");
 
-	    sprintf (Gbl.Message,Txt_The_email_X_has_been_confirmed,Email);
+	    sprintf (Gbl.Alert.Txt,Txt_The_email_X_has_been_confirmed,Email);
            }
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_The_email_address_has_not_been_confirmed);

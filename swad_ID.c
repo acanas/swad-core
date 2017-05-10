@@ -747,8 +747,8 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 ID_RemoveUsrIDFromDB (UsrDat->UsrCod,UsrID);
 
 	 /***** Show message *****/
-	 sprintf (Gbl.Message,Txt_ID_X_removed,UsrID);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 sprintf (Gbl.Alert.Txt,Txt_ID_X_removed,UsrID);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
 	 Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_this_ID);
@@ -872,21 +872,21 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    if (ItsMe || UsrDat->IDs.List[NumIDFound].Confirmed)
 	      {
 	       Error = true;
-	       sprintf (Gbl.Message,Txt_The_ID_X_matches_one_of_the_existing,
+	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_matches_one_of_the_existing,
 			NewID);
 	      }
 	    else	// It's not me && !Confirmed
 	      {
 	       /***** Mark this ID as confirmed *****/
 	       ID_ConfirmUsrID (UsrDat,NewID);
-	       sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
+	       sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
 			NewID);
 	      }
 	   }
 	 else if (UsrDat->IDs.Num >= ID_MAX_IDS_PER_USER)
 	   {
 	    Error = true;
-	    sprintf (Gbl.Message,Txt_A_user_can_not_have_more_than_X_IDs,
+	    sprintf (Gbl.Alert.Txt,Txt_A_user_can_not_have_more_than_X_IDs,
 		     ID_MAX_IDS_PER_USER);
 	   }
 	 else	// OK ==> add this new ID to my list of IDs
@@ -896,20 +896,20 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    // It's not me ==> ID confirmed
 	    ID_InsertANewUsrIDInDB (UsrDat->UsrCod,NewID,!ItsMe);
 
-	    sprintf (Gbl.Message,Txt_The_ID_X_has_been_registered_successfully,
+	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_registered_successfully,
 		     NewID);
 	   }
 	}
       else        // New ID is not valid
 	{
 	 Error = true;
-	 sprintf (Gbl.Message,Txt_The_ID_X_is_not_valid,NewID);
+	 sprintf (Gbl.Alert.Txt,Txt_The_ID_X_is_not_valid,NewID);
 	}
 
       /***** Show message *****/
       Lay_ShowAlert (Error ? Lay_WARNING :
 			     Lay_SUCCESS,
-		     Gbl.Message);
+		     Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -951,7 +951,7 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Initialize alert type and message *****/
-   Gbl.AlertType = Lay_NONE;	// Do not show alert
+   Gbl.Alert.Type = Lay_NONE;	// Do not show alert
 
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
@@ -986,8 +986,8 @@ void ID_ConfirmOtherUsrID (void)
 	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
 	   {
 	    /***** ID found and already confirmed *****/
-            Gbl.AlertType = Lay_INFO;
-	    sprintf (Gbl.Message,Txt_ID_X_had_already_been_confirmed,
+            Gbl.Alert.Type = Lay_INFO;
+	    sprintf (Gbl.Alert.Txt,Txt_ID_X_had_already_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	 else
@@ -998,21 +998,21 @@ void ID_ConfirmOtherUsrID (void)
 	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
 	    /***** Write success message *****/
-	    Gbl.AlertType = Lay_SUCCESS;
-	    sprintf (Gbl.Message,Txt_The_ID_X_has_been_confirmed,
+	    Gbl.Alert.Type = Lay_SUCCESS;
+	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	}
       else	// User's ID not found
 	{
-	 Gbl.AlertType = Lay_WARNING;
-         sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 Gbl.Alert.Type = Lay_WARNING;
+         sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
 	}
      }
    else	// I can not confirm
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
 
    /***** Show one or multiple records *****/

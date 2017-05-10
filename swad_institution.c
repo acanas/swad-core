@@ -1716,9 +1716,9 @@ void Ins_RemoveInstitution (void)
       DB_QueryDELETE (Query,"can not remove an institution");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_Institution_X_removed,
+      sprintf (Gbl.Alert.Txt,Txt_Institution_X_removed,
                Ins.FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1796,8 +1796,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
    /***** Check if new name is empty *****/
    if (!NewInsName[0])
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_institution_X_empty,
                CurrentInsName);
      }
    else
@@ -1808,8 +1808,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
          /***** If institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty (ParamName,NewInsName,Ins->InsCod,Gbl.CurrentCty.Cty.CtyCod))
            {
-            Gbl.AlertType = Lay_WARNING;
-            sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+            Gbl.Alert.Type = Lay_WARNING;
+            sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
                      NewInsName);
            }
          else
@@ -1818,8 +1818,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
             Ins_UpdateInsNameDB (Ins->InsCod,FieldName,NewInsName);
 
             /* Create message to show the change made */
-            Gbl.AlertType = Lay_SUCCESS;
-            sprintf (Gbl.Message,Txt_The_institution_X_has_been_renamed_as_Y,
+            Gbl.Alert.Type = Lay_SUCCESS;
+            sprintf (Gbl.Alert.Txt,Txt_The_institution_X_has_been_renamed_as_Y,
                      CurrentInsName,NewInsName);
 
 	    /* Change current institution name in order to display it properly */
@@ -1829,8 +1829,8 @@ static void Ins_RenameInstitution (struct Instit *Ins,Cns_ShrtOrFullName_t ShrtO
         }
       else	// The same name
 	{
-         Gbl.AlertType = Lay_INFO;
-         sprintf (Gbl.Message,Txt_The_name_of_the_institution_X_has_not_changed,
+         Gbl.Alert.Type = Lay_INFO;
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_institution_X_has_not_changed,
                   CurrentInsName);
 	}
      }
@@ -1887,14 +1887,14 @@ void Ins_ChangeInsCtyInConfig (void)
       /***** Check if it already exists an institution with the same name in the new country *****/
       if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.CurrentIns.Ins.ShrtName,-1L,NewCty.CtyCod))
 	{
-         Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+         Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
 		  Gbl.CurrentIns.Ins.ShrtName);
 	}
       else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.CurrentIns.Ins.FullName,-1L,NewCty.CtyCod))
 	{
-         Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+         Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
 		  Gbl.CurrentIns.Ins.FullName);
 	}
       else
@@ -1908,8 +1908,8 @@ void Ins_ChangeInsCtyInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Write message to show the change made *****/
-         Gbl.AlertType = Lay_SUCCESS;
-	 sprintf (Gbl.Message,Txt_The_country_of_the_institution_X_has_changed_to_Y,
+         Gbl.Alert.Type = Lay_SUCCESS;
+	 sprintf (Gbl.Alert.Txt,Txt_The_country_of_the_institution_X_has_changed_to_Y,
 		  Gbl.CurrentIns.Ins.FullName,NewCty.Name[Gbl.Prefs.Language]);
 	}
      }
@@ -1974,8 +1974,8 @@ void Ins_ChangeInsWWW (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
       /***** Put button to go to institution changed *****/
       Ins_PutButtonToGoToIns (Ins);
@@ -2006,8 +2006,8 @@ void Ins_ChangeInsWWWInConfig (void)
                 Cns_MAX_BYTES_WWW);
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
@@ -2070,9 +2070,9 @@ void Ins_ChangeInsStatus (void)
    Ins->Status = Status;
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_status_of_the_institution_X_has_changed,
+   sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_institution_X_has_changed,
             Ins->ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Put button to go to institution changed *****/
    Ins_PutButtonToGoToIns (Ins);
@@ -2090,7 +2090,7 @@ void Ins_ContEditAfterChgIns (void)
    /***** Write success / warning message *****/
    Lay_ShowPendingAlert ();
 
-   if (Gbl.AlertType == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Lay_SUCCESS)
       /***** Put button to go to institution changed *****/
       Ins_PutButtonToGoToIns (&Gbl.Inss.EditingIns);
 
@@ -2351,15 +2351,15 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
          /***** If name of institution was in database... *****/
          if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins->ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
-            sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
                      Ins->ShrtName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins->FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
-            sprintf (Gbl.Message,Txt_The_institution_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
                      Ins->FullName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new institution to database
             Ins_CreateInstitution (Ins,Status);
@@ -2398,9 +2398,9 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
    Ins->InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_institution_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_institution_X,
             Ins->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Put button to go to institution created *****/
    Ins_PutButtonToGoToIns (Ins);

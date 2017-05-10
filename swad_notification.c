@@ -1794,9 +1794,9 @@ void Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (unsigned NumUsrsToBeNotifiedByEMai
   {
    extern const char *Txt_No_of_users_who_will_be_notified_by_email;
 
-   sprintf (Gbl.Message,"%s: %u",
+   sprintf (Gbl.Alert.Txt,"%s: %u",
             Txt_No_of_users_who_will_be_notified_by_email,NumUsrsToBeNotifiedByEMail);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

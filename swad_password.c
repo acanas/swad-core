@@ -180,7 +180,7 @@ void Pwd_ActChgMyPwd1 (void)
       /***** Check if I have written twice the same password *****/
       if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
          // Passwords don't match
-         sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
+         sprintf (Gbl.Alert.Txt,"%s",Txt_You_have_not_written_twice_the_same_new_password);
       else
         {
          Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
@@ -193,13 +193,13 @@ void Pwd_ActChgMyPwd1 (void)
             Ses_UpdateSessionDataInDB ();
             Enr_UpdateUsrData (&Gbl.Usrs.Me.UsrDat);
 
-            sprintf (Gbl.Message,"%s",Txt_Your_password_has_been_changed_successfully);
+            sprintf (Gbl.Alert.Txt,"%s",Txt_Your_password_has_been_changed_successfully);
             Gbl.Usrs.Error = false;
            }
         }
      }
    else
-      sprintf (Gbl.Message,"%s",Txt_You_have_not_entered_your_password_correctly);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_have_not_entered_your_password_correctly);
   }
 
 void Pwd_ActChgMyPwd2 (void)
@@ -207,7 +207,7 @@ void Pwd_ActChgMyPwd2 (void)
    /***** Write error message when updating password *****/
    Lay_ShowAlert (Gbl.Usrs.Error ? Lay_WARNING :
 	                           Lay_INFO,
-	          Gbl.Message);
+	          Gbl.Alert.Txt);
 
    /***** Retry? *****/
    if (Gbl.Usrs.Error)
@@ -359,10 +359,10 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 		  Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
 		  break;
 	       default:
-		  sprintf (Gbl.Message,"Internal error: an email message has not been sent successfully."
+		  sprintf (Gbl.Alert.Txt,"Internal error: an email message has not been sent successfully."
 				       " Error code returned by the script: %d",
 			   ReturnCode);
-		  Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+		  Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
 		  break;
 	      }
 	 else	// I have no email address
@@ -373,9 +373,9 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	{
 	 /***** Help message *****/
 	 // TODO: This message allows to know if a ID exists in database (when no unique). This should be hidden!
-	 sprintf (Gbl.Message,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
+	 sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 		  Gbl.Usrs.Me.UsrIdLogin);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 
 	 Pwd_ShowFormSendNewPwd ();
 	}
@@ -503,7 +503,7 @@ void Pwd_UpdateOtherPwd1 (void)
 
 	 if (strcmp (NewPlainPassword[0],NewPlainPassword[1]))
 	    // Paswords don't match
-	    sprintf (Gbl.Message,"%s",Txt_You_have_not_written_twice_the_same_new_password);
+	    sprintf (Gbl.Alert.Txt,"%s",Txt_You_have_not_written_twice_the_same_new_password);
 	 else
 	   {
 	    Cry_EncryptSHA512Base64 (NewPlainPassword[0],NewEncryptedPassword);
@@ -515,26 +515,26 @@ void Pwd_UpdateOtherPwd1 (void)
 	                 Pwd_BYTES_ENCRYPTED_PASSWORD);
 	       Enr_UpdateUsrData (&Gbl.Usrs.Other.UsrDat);
 
-	       sprintf (Gbl.Message,Txt_The_X_password_has_been_changed_successfully,
+	       sprintf (Gbl.Alert.Txt,Txt_The_X_password_has_been_changed_successfully,
 			Gbl.Usrs.Other.UsrDat.FullName);
 	       Gbl.Usrs.Error = false;
 	      }
 	   }
 	}
       else
-	 sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-     sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+     sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 void Pwd_UpdateOtherPwd2 (void)
   {
    /***** Write message when updating the password *****/
-   if (Gbl.Message[0])
+   if (Gbl.Alert.Txt[0])
       Lay_ShowAlert (Gbl.Usrs.Error ? Lay_WARNING :
 	                              Lay_INFO,
-	             Gbl.Message);
+	             Gbl.Alert.Txt);
 
    if (Gbl.Usrs.Error)
      {
@@ -561,7 +561,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    /***** Check if password is found in user's ID, first name or surnames of anybody *****/
    if (Pwd_CheckIfPasswdIsUsrIDorName (PlainPassword))        // PlainPassword is a user's ID, name or surname
      {
-      sprintf (Gbl.Message,"%s",Txt_The_password_is_too_trivial_);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -569,7 +569,7 @@ bool Pwd_SlowCheckIfPasswordIsGood (const char *PlainPassword,
    if (Pwd_GetNumOtherUsrsWhoUseThisPassword (EncryptedPassword,UsrCod) >
        Pwd_MAX_OTHER_USERS_USING_THE_SAME_PASSWORD)
      {
-      sprintf (Gbl.Message,"%s",Txt_The_password_is_too_trivial_);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_is_too_trivial_);
       return false;
      }
 
@@ -638,7 +638,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check length of password *****/
    if (LengthPassword < Pwd_MIN_BYTES_PLAIN_PASSWORD)	// PlainPassword too short
      {
-      sprintf (Gbl.Message,Txt_The_password_must_be_at_least_X_characters,
+      sprintf (Gbl.Alert.Txt,Txt_The_password_must_be_at_least_X_characters,
                Pwd_MIN_CHARS_PLAIN_PASSWORD);
       return false;
      }
@@ -646,7 +646,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
    /***** Check spaces in password *****/
    if (strchr (PlainPassword,(int) ' ') != NULL)        // PlainPassword with spaces
      {
-      sprintf (Gbl.Message,"%s",Txt_The_password_can_not_contain_spaces);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_contain_spaces);
       return false;
      }
 
@@ -658,7 +658,7 @@ bool Pwd_FastCheckIfPasswordSeemsGood (const char *PlainPassword)
          ItsANumber = false;
    if (ItsANumber)
      {
-      sprintf (Gbl.Message,"%s",Txt_The_password_can_not_consist_only_of_digits);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_The_password_can_not_consist_only_of_digits);
       return false;
      }
 
@@ -717,9 +717,9 @@ void Pwd_ShowFormChgPwd (void)
    /* Help message */
    fprintf (Gbl.F.Out,"<tr>"
 		      "<td colspan=\"2\">");
-   sprintf (Gbl.Message,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
+   sprintf (Gbl.Alert.Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
             Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   Lay_ShowAlert (Lay_INFO,Gbl.Message);
+   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -745,7 +745,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
    extern const char *Txt_Password;
    extern const char *Txt_HELP_password;
 
-   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   sprintf (Gbl.Alert.Txt,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Passwd\" class=\"%s\">%s:</label>"
@@ -759,7 +759,7 @@ void Pwd_PutFormToGetNewPasswordOnce (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
-            Gbl.Message);
+            Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -773,7 +773,7 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
    extern const char *Txt_HELP_password;
    extern const char *Txt_Retype_new_password;
 
-   sprintf (Gbl.Message,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
+   sprintf (Gbl.Alert.Txt,Txt_HELP_password,Pwd_MIN_CHARS_PLAIN_PASSWORD);
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td class=\"RIGHT_MIDDLE\">"
 	              "<label for=\"Paswd1\" class=\"%s\">%s:</label>"
@@ -797,11 +797,11 @@ void Pwd_PutFormToGetNewPasswordTwice (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_New_password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
-            Gbl.Message,
+            Gbl.Alert.Txt,
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Retype_new_password,
             Pwd_MAX_CHARS_PLAIN_PASSWORD,
-            Gbl.Message);
+            Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

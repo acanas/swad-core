@@ -564,14 +564,14 @@ void Tst_AssessTest (void)
          Tst_SetTstStatus (NumTst,Tst_STATUS_ASSESSED);
          break;
       case Tst_STATUS_ASSESSED:
-         sprintf (Gbl.Message,Txt_The_test_X_has_already_been_assessed_previously,
+         sprintf (Gbl.Alert.Txt,Txt_The_test_X_has_already_been_assessed_previously,
                   NumTst);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
          break;
       case Tst_STATUS_ERROR:
-         sprintf (Gbl.Message,Txt_There_was_an_error_in_assessing_the_test_X,
+         sprintf (Gbl.Alert.Txt,Txt_There_was_an_error_in_assessing_the_test_X,
                   NumTst);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
          break;
      }
   }
@@ -678,7 +678,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    if (NumSecondsFromNowToNextAccTst > 0)
      {
       /***** Write warning *****/
-      sprintf (Gbl.Message,"%s:<br /><span id=\"date_next_test\"></span>."
+      sprintf (Gbl.Alert.Txt,"%s:<br /><span id=\"date_next_test\"></span>."
                            "<script type=\"text/javascript\">"
 			   "writeLocalDateHMSFromUTC('date_next_test',%ld,"
 			   "%u,',&nbsp;','%s',true,true,0x7);"
@@ -686,7 +686,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
 	       Txt_You_can_not_take_a_new_test_until,
 	       (long) TimeNextTestUTC,
 	       (unsigned) Gbl.Prefs.DateFormat,Txt_Today);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 
       return false;
      }
@@ -1460,9 +1460,9 @@ void Tst_RenameTag (void)
    /***** Check that the new tag is not empty *****/
    if (!NewTagTxt[0])	// New tag empty
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_tag_X_empty,
                OldTagTxt);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else			// New tag not empty
      {
@@ -1472,9 +1472,9 @@ void Tst_RenameTag (void)
 						// This happens when user press INTRO
 						// without changing anything in the form.
         {
-         sprintf (Gbl.Message,Txt_The_tag_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_tag_X_has_not_changed,
                   NewTagTxt);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
       else					// The old and the new tag
 						// are not exactly the same (case sensitively).
@@ -1556,9 +1556,9 @@ void Tst_RenameTag (void)
 	   }
 
 	 /***** Write message to show the change made *****/
-	 sprintf (Gbl.Message,Txt_The_tag_X_has_been_renamed_as_Y,
+	 sprintf (Gbl.Alert.Txt,Txt_The_tag_X_has_been_renamed_as_Y,
 		  OldTagTxt,NewTagTxt);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
      }
 
@@ -3408,7 +3408,7 @@ static void Tst_WriteChoiceAnsViewTest (unsigned NumQst,long QstCod,bool Shuffle
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Message);
+         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
       /***** Assign index (row[0]). Index is 0,1,2,3... if no shuffle or 1,3,0,2... (example) if shuffle *****/
       // Index is got from databse query
@@ -3518,7 +3518,7 @@ static void Tst_WriteChoiceAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /***** Allocate memory for text in this choice option *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Message);
+         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
       /***** Copy answer text (row[1]) and convert it,
              that is in HTML, to rigorous HTML ******/
@@ -3760,7 +3760,7 @@ static void Tst_WriteTextAnsAssessTest (unsigned NumQst,MYSQL_RES *mysql_res,
 
       /***** Allocate memory for text in this choice answer *****/
       if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-         Lay_ShowErrorAndExit (Gbl.Message);
+         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
       /***** Copy answer text (row[1]) and convert it, that is in HTML, to rigorous HTML ******/
       Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
@@ -4321,9 +4321,9 @@ static bool Tst_GetParamsTst (void)
       if (Gbl.Test.NumQsts < Gbl.Test.Config.Min ||
           Gbl.Test.NumQsts > Gbl.Test.Config.Max)
         {
-         sprintf (Gbl.Message,Txt_The_number_of_questions_must_be_in_the_interval_X,
+         sprintf (Gbl.Alert.Txt,Txt_The_number_of_questions_must_be_in_the_interval_X,
                   Gbl.Test.Config.Min,Gbl.Test.Config.Max);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
          Error = true;
         }
      }
@@ -4970,13 +4970,13 @@ int Tst_AllocateTextChoiceAnswer (unsigned NumOpt)
    if ((Gbl.Test.Answer.Options[NumOpt].Text =
 	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      sprintf (Gbl.Message,"Not enough memory to store answer.");
+      sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
       return 0;
      }
    if ((Gbl.Test.Answer.Options[NumOpt].Feedback =
 	malloc (Tst_MAX_BYTES_ANSWER_OR_FEEDBACK + 1)) == NULL)
      {
-      sprintf (Gbl.Message,"Not enough memory to store feedback.");
+      sprintf (Gbl.Alert.Txt,"Not enough memory to store feedback.");
       return 0;
      }
 
@@ -5166,7 +5166,7 @@ static void Tst_GetQstDataFromDB (char Stem[Cns_MAX_BYTES_TEXT + 1],
 	    if (Gbl.Test.Answer.NumOptions > Tst_MAX_OPTIONS_PER_QUESTION)
 	       Lay_ShowErrorAndExit ("Wrong answer.");
 	    if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-	       Lay_ShowErrorAndExit (Gbl.Message);
+	       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
 	    Str_Copy (Gbl.Test.Answer.Options[NumOpt].Text,row[1],
 	              Tst_MAX_BYTES_ANSWER_OR_FEEDBACK);
@@ -5372,18 +5372,18 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
      {
       case Tst_ANS_INT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Message);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
 	 Par_GetParToText ("AnsInt",Gbl.Test.Answer.Options[0].Text,1 + 10);
 	 break;
       case Tst_ANS_FLOAT:
          if (!Tst_AllocateTextChoiceAnswer (0))
-            Lay_ShowErrorAndExit (Gbl.Message);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 	 Par_GetParToText ("AnsFloatMin",Gbl.Test.Answer.Options[0].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 
          if (!Tst_AllocateTextChoiceAnswer (1))
-            Lay_ShowErrorAndExit (Gbl.Message);
+            Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 	 Par_GetParToText ("AnsFloatMax",Gbl.Test.Answer.Options[1].Text,
 	                   Tst_MAX_BYTES_FLOAT_ANSWER);
 	 break;
@@ -5403,7 +5403,7 @@ static void Tst_GetQstFromForm (char *Stem,char *Feedback)
               NumOpt++)
            {
             if (!Tst_AllocateTextChoiceAnswer (NumOpt))
-               Lay_ShowErrorAndExit (Gbl.Message);
+               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
             /* Get answer */
             sprintf (AnsStr,"AnsStr%u",NumOpt);
@@ -5785,13 +5785,13 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
       row = mysql_fetch_row (mysql_res);
       if ((TagCod = Str_ConvertStrCodToLongCod (row[0])) < 0)
         {
-         sprintf (Gbl.Message,"%s","Wrong code of tag.");
+         sprintf (Gbl.Alert.Txt,"%s","Wrong code of tag.");
          Error = true;
         }
      }
    else if (NumRows > 1)
      {
-      sprintf (Gbl.Message,"%s","Duplicated tag.");
+      sprintf (Gbl.Alert.Txt,"%s","Duplicated tag.");
       Error = true;
      }
 
@@ -5799,7 +5799,7 @@ static long Tst_GetTagCodFromTagTxt (const char *TagTxt)
    DB_FreeMySQLResult (&mysql_res);
 
    if (Error)
-      Lay_ShowErrorAndExit (Gbl.Message);
+      Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
    return TagCod;
   }
@@ -5874,9 +5874,9 @@ void Tst_RequestRemoveQst (void)
 
    /***** Show question and button to remove question *****/
    /* Start alert */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) Gbl.Test.QstCod);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* End alert */
    if (EditingOnlyThisQst)
@@ -5998,11 +5998,11 @@ void Tst_ChangeShuffleQst (void)
    DB_QueryUPDATE (Query,"can not update the shuffle type of a question");
 
    /***** Write message *****/
-   sprintf (Gbl.Message,
+   sprintf (Gbl.Alert.Txt,
             Shuffle ? Txt_The_answers_of_the_question_with_code_X_will_appear_shuffled :
                       Txt_The_answers_of_the_question_with_code_X_will_appear_without_shuffling,
             Gbl.Test.QstCod);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Continue editing questions *****/
    if (EditingOnlyThisQst)

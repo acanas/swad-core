@@ -462,9 +462,9 @@ void Lnk_RemoveLink (void)
    DB_QueryDELETE (Query,"can not remove an institutional link");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Link_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Link_X_removed,
             Lnk.ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Lnk_EditLinks ();
@@ -536,9 +536,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
    /***** Check if new name is empty *****/
    if (!NewLnkName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_link_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_link_X_empty,
                CurrentLnkName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -548,9 +548,9 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
          /***** If link was in database... *****/
          if (Lnk_CheckIfLinkNameExists (ParamName,NewLnkName,Lnk->LnkCod))
            {
-            sprintf (Gbl.Message,Txt_The_link_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                      NewLnkName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -558,16 +558,16 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
             Lnk_UpdateLnkNameDB (Lnk->LnkCod,FieldName,NewLnkName);
 
             /* Write message to show the change made */
-            sprintf (Gbl.Message,Txt_The_link_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Alert.Txt,Txt_The_link_X_has_been_renamed_as_Y,
                      CurrentLnkName,NewLnkName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_name_of_the_link_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_link_X_has_not_changed,
                   CurrentLnkName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -636,9 +636,9 @@ void Lnk_ChangeLinkWWW (void)
       DB_QueryUPDATE (Query,"can not update the web of an institutional link");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_web_address_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,
                NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
@@ -771,15 +771,15 @@ void Lnk_RecFormNewLink (void)
       /***** If name of link was in database... *****/
       if (Lnk_CheckIfLinkNameExists ("ShortName",Lnk->ShrtName,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_link_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                   Lnk->ShrtName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
         {
-         sprintf (Gbl.Message,Txt_The_link_X_already_exists,
+         sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                   Lnk->FullName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else if (!Lnk->WWW[0])
          Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
@@ -814,7 +814,7 @@ static void Lnk_CreateLink (struct Link *Lnk)
    DB_QueryINSERT (Query,"can not create institutional link");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_link_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_link_X,
             Lnk->ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }

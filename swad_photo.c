@@ -475,9 +475,9 @@ void Pho_ReqRemoveUsrPhoto (void)
 	   {
 	    /***** Show question and button to remove user's photo *****/
 	    /* Start alert */
-	    sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_photo_of_X,
+	    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_photo_of_X,
 	             Gbl.Usrs.Other.UsrDat.FullName);
-	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
 	    /* Show current photo */
 	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
@@ -602,8 +602,8 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
                   WrongType = true;
    if (WrongType)
      {
-      sprintf (Gbl.Message,Txt_The_file_is_not_X,"jpg");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,Txt_The_file_is_not_X,"jpg");
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
       return false;
      }
 
@@ -670,10 +670,10 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          NumFacesTotal = NumFacesGreen = NumFacesRed = 0;
          break;
       default:        // Error
-         sprintf (Gbl.Message,"Photo could not be processed successfully.<br />"
+         sprintf (Gbl.Alert.Txt,"Photo could not be processed successfully.<br />"
                               "Error code returned by the program of processing: %d",
                   ReturnCode);
-         Lay_ShowErrorAndExit (Gbl.Message);
+         Lay_ShowErrorAndExit (Gbl.Alert.Txt);
          break;
      }
 
@@ -691,25 +691,25 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
      {
       if (NumFacesRed == 0)
         {
-         sprintf (Gbl.Message,Txt_X_faces_marked_in_green_have_been_detected_,
+         sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_green_have_been_detected_,
                   NumFacesGreen);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
         }
       else if (NumFacesGreen == 0)
         {
-         sprintf (Gbl.Message,Txt_X_faces_marked_in_red_have_been_detected_,
+         sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_red_have_been_detected_,
                   NumFacesRed);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else        // NumFacesGreen > 0
         {
          if (NumFacesGreen == 1)
-            sprintf (Gbl.Message,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
+            sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_1_Z_,
                      NumFacesTotal,NumFacesRed);
          else
-            sprintf (Gbl.Message,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
+            sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
                      NumFacesTotal,NumFacesGreen,NumFacesRed);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
         }
      }
 
@@ -821,13 +821,13 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.AlertType = Lay_SUCCESS;
-      sprintf (Gbl.Message,"%s",Txt_Photo_has_been_updated);
+      Gbl.Alert.Type = Lay_SUCCESS;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_has_been_updated);
      }
    else
      {
-      Gbl.AlertType = Lay_ERROR;
-      sprintf (Gbl.Message,"%s","Error updating photo.");
+      Gbl.Alert.Type = Lay_ERROR;
+      sprintf (Gbl.Alert.Txt,"%s","Error updating photo.");
      }
   }
 
@@ -1049,14 +1049,14 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 
    if (NumErrors)
      {
-      Gbl.AlertType = Lay_ERROR;
-      sprintf (Gbl.Message,"%s","Error removing photo.");
+      Gbl.Alert.Type = Lay_ERROR;
+      sprintf (Gbl.Alert.Txt,"%s","Error removing photo.");
       return false;
      }
    else
      {
-      Gbl.AlertType = Lay_SUCCESS;
-      sprintf (Gbl.Message,"%s",Txt_Photo_removed);
+      Gbl.Alert.Type = Lay_SUCCESS;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_removed);
       return true;
      }
   }

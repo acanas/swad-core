@@ -1320,8 +1320,8 @@ void Crs_EditCourses (void)
    Deg_GetListDegsOfCurrentCtr ();
 
    /***** Start frame *****/
-   sprintf (Gbl.Message,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
-   Lay_StartRoundFrame (NULL,Gbl.Message,Crs_PutIconToViewCourses,
+   sprintf (Gbl.Alert.Txt,Txt_Courses_of_DEGREE_X,Gbl.CurrentDeg.Deg.ShrtName);
+   Lay_StartRoundFrame (NULL,Gbl.Alert.Txt,Crs_PutIconToViewCourses,
                         Hlp_DEGREE_Courses);
 
    /***** Put a form to create or request a new course *****/
@@ -1852,15 +1852,15 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 	 if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShrtName,-1L,
 	                                          Crs->DegCod,Crs->Year))
 	   {
-            Gbl.AlertType = Lay_WARNING;
-	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
+            Gbl.Alert.Type = Lay_WARNING;
+	    sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists,
 	             Crs->ShrtName);
 	   }
 	 else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
 	                                               Crs->DegCod,Crs->Year))
 	   {
-            Gbl.AlertType = Lay_WARNING;
-	    sprintf (Gbl.Message,Txt_The_course_X_already_exists,
+            Gbl.Alert.Type = Lay_WARNING;
+	    sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists,
 		     Crs->FullName);
 	   }
 	 else	// Add new requested course to database
@@ -1868,14 +1868,14 @@ static void Crs_RecFormRequestOrCreateCrs (unsigned Status)
 	}
       else	// If there is not a course name
 	{
-         Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
+         Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_course);
 	}
      }
    else	// Year not valid
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,Crs->Year);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,Txt_The_year_X_is_not_allowed,Crs->Year);
      }
   }
 
@@ -1926,8 +1926,8 @@ static void Crs_CreateCourse (struct Course *Crs,unsigned Status)
    Crs->CrsCod = DB_QueryINSERTandReturnCode (Query,"can not create a new course");
 
    /***** Create success message *****/
-   Gbl.AlertType = Lay_SUCCESS;
-   sprintf (Gbl.Message,Txt_Created_new_course_X,Crs->FullName);
+   Gbl.Alert.Type = Lay_SUCCESS;
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_course_X,Crs->FullName);
   }
 
 /*****************************************************************************/
@@ -1958,9 +1958,9 @@ void Crs_RemoveCourse (void)
          Crs_RemoveCourseCompletely (Crs.CrsCod);
 
          /***** Write message to show the change made *****/
-         sprintf (Gbl.Message,Txt_Course_X_removed,
+         sprintf (Gbl.Alert.Txt,Txt_Course_X_removed,
                   Crs.FullName);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
         }
      }
    else
@@ -2268,11 +2268,11 @@ void Crs_ChangeInsCrsCodInConfig (void)
      {
       Crs_UpdateInstitutionalCrsCod (&Gbl.CurrentCrs.Crs,NewInstitutionalCrsCod);
 
-      sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
+      sprintf (Gbl.Alert.Txt,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
 	       Gbl.CurrentCrs.Crs.ShrtName,NewInstitutionalCrsCod);
      }
    else	// The same institutional code
-      sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
+      sprintf (Gbl.Alert.Txt,Txt_The_institutional_code_of_the_course_X_has_not_changed,
 	       Gbl.CurrentCrs.Crs.ShrtName);
   }
 
@@ -2306,21 +2306,21 @@ void Crs_ChangeInsCrsCod (void)
       if (strcmp (NewInstitutionalCrsCod,Crs->InstitutionalCrsCod))
         {
          Crs_UpdateInstitutionalCrsCod (Crs,NewInstitutionalCrsCod);
-         Gbl.AlertType = Lay_SUCCESS;
-         sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
+         Gbl.Alert.Type = Lay_SUCCESS;
+         sprintf (Gbl.Alert.Txt,Txt_The_institutional_code_of_the_course_X_has_changed_to_Y,
                   Crs->ShrtName,NewInstitutionalCrsCod);
         }
       else	// The same institutional code
 	{
-	 Gbl.AlertType = Lay_INFO;
-         sprintf (Gbl.Message,Txt_The_institutional_code_of_the_course_X_has_not_changed,
+	 Gbl.Alert.Type = Lay_INFO;
+         sprintf (Gbl.Alert.Txt,Txt_The_institutional_code_of_the_course_X_has_not_changed,
                   Crs->ShrtName);
 	}
      }
    else
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
      }
   }
 
@@ -2348,15 +2348,15 @@ void Crs_ChangeCrsDegInConfig (void)
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
                                                NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
 	{
-	 Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+	 Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.ShrtName);
 	}
       else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
                                                     NewDeg.DegCod,Gbl.CurrentCrs.Crs.Year))
 	{
-	 Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
+	 Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_In_the_year_X_of_the_degree_Y_already_existed_a_course_with_the_name_Z,
 		  Txt_YEAR_OF_DEGREE[Gbl.CurrentCrs.Crs.Year],NewDeg.FullName,Gbl.CurrentCrs.Crs.FullName);
 	}
       else	// Update degree in database
@@ -2370,8 +2370,8 @@ void Crs_ChangeCrsDegInConfig (void)
       	 Hie_InitHierarchy ();
 
 	 /***** Create message to show the change made *****/
-	 Gbl.AlertType = Lay_SUCCESS;
-	 sprintf (Gbl.Message,Txt_The_course_X_has_been_moved_to_the_degree_Y,
+	 Gbl.Alert.Type = Lay_SUCCESS;
+	 sprintf (Gbl.Alert.Txt,Txt_The_course_X_has_been_moved_to_the_degree_Y,
 		  Gbl.CurrentCrs.Crs.FullName,
 		  Gbl.CurrentDeg.Deg.FullName);
 	}
@@ -2428,15 +2428,15 @@ void Crs_ChangeCrsYearInConfig (void)
       if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Gbl.CurrentCrs.Crs.ShrtName,-1L,
                                                Gbl.CurrentCrs.Crs.DegCod,NewYear))
 	{
-	 Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+	 Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.ShrtName,Txt_YEAR_OF_DEGREE[NewYear]);
 	}
       else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Gbl.CurrentCrs.Crs.FullName,-1L,
                                                     Gbl.CurrentCrs.Crs.DegCod,NewYear))
 	{
-	 Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+	 Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists_in_year_Y,
 		  Gbl.CurrentCrs.Crs.FullName,Txt_YEAR_OF_DEGREE[NewYear]);
 	}
       else	// Update year in database
@@ -2445,15 +2445,15 @@ void Crs_ChangeCrsYearInConfig (void)
          Crs_UpdateCrsYear (&Gbl.CurrentCrs.Crs,NewYear);
 
 	 /***** Create message to show the change made *****/
-	 Gbl.AlertType = Lay_SUCCESS;
-	 sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
+	 Gbl.Alert.Type = Lay_SUCCESS;
+	 sprintf (Gbl.Alert.Txt,Txt_The_year_of_the_course_X_has_changed,
 		  Gbl.CurrentCrs.Crs.ShrtName);
 	}
      }
    else	// Year not valid
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,Txt_The_year_X_is_not_allowed,NewYear);
      }
   }
 
@@ -2496,15 +2496,15 @@ void Crs_ChangeCrsYear (void)
          if (Crs_CheckIfCrsNameExistsInYearOfDeg ("ShortName",Crs->ShrtName,-1L,
                                                   Crs->DegCod,NewYear))
            {
-	    Gbl.AlertType = Lay_WARNING;
-            sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+	    Gbl.Alert.Type = Lay_WARNING;
+            sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->ShrtName,Txt_YEAR_OF_DEGREE[NewYear]);
            }
          else if (Crs_CheckIfCrsNameExistsInYearOfDeg ("FullName",Crs->FullName,-1L,
                                                        Crs->DegCod,NewYear))
            {
-	    Gbl.AlertType = Lay_WARNING;
-            sprintf (Gbl.Message,Txt_The_course_X_already_exists_in_year_Y,
+	    Gbl.Alert.Type = Lay_WARNING;
+            sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists_in_year_Y,
                      Crs->FullName,Txt_YEAR_OF_DEGREE[NewYear]);
            }
          else	// Update year in database
@@ -2513,21 +2513,21 @@ void Crs_ChangeCrsYear (void)
             Crs_UpdateCrsYear (Crs,NewYear);
 
             /***** Create message to show the change made *****/
-	    Gbl.AlertType = Lay_SUCCESS;
-            sprintf (Gbl.Message,Txt_The_year_of_the_course_X_has_changed,
+	    Gbl.Alert.Type = Lay_SUCCESS;
+            sprintf (Gbl.Alert.Txt,Txt_The_year_of_the_course_X_has_changed,
                      Crs->ShrtName);
            }
         }
       else	// Year not valid
         {
-	 Gbl.AlertType = Lay_WARNING;
-         sprintf (Gbl.Message,Txt_The_year_X_is_not_allowed,NewYear);
+	 Gbl.Alert.Type = Lay_WARNING;
+         sprintf (Gbl.Alert.Txt,Txt_The_year_X_is_not_allowed,NewYear);
         }
      }
    else
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
      }
   }
 
@@ -2641,8 +2641,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
       /***** Check if new name is empty *****/
       if (!NewCrsName[0])
         {
-	 Gbl.AlertType = Lay_WARNING;
-         sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_course_X_empty,
+	 Gbl.Alert.Type = Lay_WARNING;
+         sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_course_X_empty,
                   CurrentCrsName);
         }
       else
@@ -2654,8 +2654,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
             if (Crs_CheckIfCrsNameExistsInYearOfDeg (ParamName,NewCrsName,Crs->CrsCod,
                                                      Crs->DegCod,Crs->Year))
               {
-	       Gbl.AlertType = Lay_WARNING;
-               sprintf (Gbl.Message,Txt_The_course_X_already_exists,
+	       Gbl.Alert.Type = Lay_WARNING;
+               sprintf (Gbl.Alert.Txt,Txt_The_course_X_already_exists,
                         NewCrsName);
               }
             else
@@ -2664,8 +2664,8 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
                Crs_UpdateCrsNameDB (Crs->CrsCod,FieldName,NewCrsName);
 
                /* Create message to show the change made */
-	       Gbl.AlertType = Lay_SUCCESS;
-               sprintf (Gbl.Message,Txt_The_name_of_the_course_X_has_changed_to_Y,
+	       Gbl.Alert.Type = Lay_SUCCESS;
+               sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_course_X_has_changed_to_Y,
                         CurrentCrsName,NewCrsName);
 
                /* Change current course name in order to display it properly */
@@ -2675,16 +2675,16 @@ static void Crs_RenameCourse (struct Course *Crs,Cns_ShrtOrFullName_t ShrtOrFull
            }
          else	// The same name
            {
-	    Gbl.AlertType = Lay_INFO;
-            sprintf (Gbl.Message,Txt_The_name_of_the_course_X_has_not_changed,
+	    Gbl.Alert.Type = Lay_INFO;
+            sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_course_X_has_not_changed,
                      CurrentCrsName);
            }
         }
      }
    else
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_You_dont_have_permission_to_edit_this_course);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_dont_have_permission_to_edit_this_course);
      }
   }
 
@@ -2759,7 +2759,7 @@ void Crs_ChangeCrsStatus (void)
    Crs->Status = Status;
 
    /***** Create message to show the change made *****/
-   sprintf (Gbl.Message,Txt_The_status_of_the_course_X_has_changed,
+   sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_course_X_has_changed,
             Crs->ShrtName);
   }
 
@@ -2774,7 +2774,7 @@ void Crs_ContEditAfterChgCrs (void)
    /***** Write warning / success message *****/
    Lay_ShowPendingAlert ();
 
-   if (Gbl.AlertType == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Lay_SUCCESS)
      {
       fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
 
@@ -3372,11 +3372,11 @@ void Crs_RemoveOldCrss (void)
             SecondsWithoutAccess);
    if ((NumCrss = DB_QuerySELECT (Query,&mysql_res,"can not get old users")))
      {
-      sprintf (Gbl.Message,Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
+      sprintf (Gbl.Alert.Txt,Txt_Eliminating_X_courses_whithout_users_and_with_more_than_Y_months_without_access,
                NumCrss,
                MonthsWithoutAccess,
                Cfg_PLATFORM_SHORT_NAME);
-      Lay_ShowAlert (Lay_INFO,Gbl.Message);
+      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
 
       /***** Remove courses *****/
       for (NumCrs = 0;
@@ -3394,7 +3394,7 @@ void Crs_RemoveOldCrss (void)
      }
 
    /***** Write end message *****/
-   sprintf (Gbl.Message,Txt_X_courses_have_been_eliminated,
+   sprintf (Gbl.Alert.Txt,Txt_X_courses_have_been_eliminated,
             NumCrssRemoved);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }

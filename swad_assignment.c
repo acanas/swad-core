@@ -970,9 +970,9 @@ void Asg_ReqRemAssignment (void)
 
    /***** Show question and button to remove the assignment *****/
    /* Start alert */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_assignment_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* End alert */
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
@@ -1017,9 +1017,9 @@ void Asg_RemoveAssignment (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_ASSIGNMENT,Asg.AsgCod);
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Assignment_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_removed,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1049,9 +1049,9 @@ void Asg_HideAssignment (void)
    DB_QueryUPDATE (Query,"can not hide assignment");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Assignment_X_is_now_hidden,
+   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_hidden,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1081,9 +1081,9 @@ void Asg_ShowAssignment (void)
    DB_QueryUPDATE (Query,"can not show assignment");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Assignment_X_is_now_visible,
+   sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_visible,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1362,9 +1362,9 @@ void Asg_RecFormAssignment (void)
       if (Asg_CheckIfSimilarAssignmentExists ("Title",NewAsg.Title,NewAsg.AsgCod))
         {
          NewAssignmentIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_an_assignment_with_the_title_X,
+         sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_title_X,
                   NewAsg.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
       else	// Title is correct
         {
@@ -1375,15 +1375,15 @@ void Asg_RecFormAssignment (void)
                if (Asg_CheckIfSimilarAssignmentExists ("Folder",NewAsg.Folder,NewAsg.AsgCod))	// If folder of assignment was in database...
                  {
                   NewAssignmentIsCorrect = false;
-                  sprintf (Gbl.Message,Txt_Already_existed_an_assignment_with_the_folder_X,
+                  sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_folder_X,
                            NewAsg.Folder);
-                  Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+                  Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
                  }
               }
             else	// Folder name not valid
               {
                NewAssignmentIsCorrect = false;
-               Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+               Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
               }
            }
          else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK
@@ -1416,8 +1416,8 @@ void Asg_RecFormAssignment (void)
          Asg_CreateAssignment (&NewAsg,Txt);	// Add new assignment to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_assignment_X,NewAsg.Title);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 sprintf (Gbl.Alert.Txt,Txt_Created_new_assignment_X,NewAsg.Title);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
         {

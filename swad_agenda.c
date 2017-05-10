@@ -1299,9 +1299,9 @@ void Agd_AskRemEvent (void)
 
    /***** Show question and button to remove event *****/
    /* Start alert */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_event_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
 	    AgdEvent.Event);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* End alert */
    Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
@@ -1337,8 +1337,8 @@ void Agd_RemoveEvent (void)
    DB_QueryDELETE (Query,"can not remove event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_removed,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_removed,AgdEvent.Event);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1369,8 +1369,8 @@ void Agd_HideEvent (void)
    DB_QueryUPDATE (Query,"can not hide event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_hidden,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_hidden,AgdEvent.Event);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1401,9 +1401,9 @@ void Agd_UnhideEvent (void)
    DB_QueryUPDATE (Query,"can not show event");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_visible,
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible,
             AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1434,8 +1434,8 @@ void Agd_MakeEventPrivate (void)
    DB_QueryUPDATE (Query,"can not make event private");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_private,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_private,AgdEvent.Event);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1466,9 +1466,9 @@ void Agd_MakeEventPublic (void)
    DB_QueryUPDATE (Query,"can not make event public");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Event_X_is_now_visible_to_users_of_your_courses,
+   sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible_to_users_of_your_courses,
             AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1665,8 +1665,8 @@ void Agd_RecFormEvent (void)
          Agd_CreateEvent (&AgdEvent,Txt);	// Add new event to database
 
 	 /***** Write success message *****/
-	 sprintf (Gbl.Message,Txt_Created_new_event_X,AgdEvent.Event);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+	 sprintf (Gbl.Alert.Txt,Txt_Created_new_event_X,AgdEvent.Event);
+	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 	}
       else
         {

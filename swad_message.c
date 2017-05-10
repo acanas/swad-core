@@ -735,8 +735,8 @@ void Msg_RecMsgFromUsr (void)
          if (RecipientHasBannedMe)
            {
             /***** Show an alert indicating that the message has not been sent successfully *****/
-            sprintf (Gbl.Message,Txt_message_not_sent_to_X,UsrDstData.FullName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            sprintf (Gbl.Alert.Txt,Txt_message_not_sent_to_X,UsrDstData.FullName);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -771,10 +771,10 @@ void Msg_RecMsgFromUsr (void)
                                         	                              0));
 
             /***** Show an alert indicating that the message has been sent successfully *****/
-            sprintf (Gbl.Message,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
+            sprintf (Gbl.Alert.Txt,NotifyByEmail ? Txt_message_sent_to_X_notified_by_email :
                                                  Txt_message_sent_to_X_not_notified_by_email,
                      UsrDstData.FullName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
             /***** Increment number of recipients *****/
             if (NotifyByEmail)
@@ -811,9 +811,9 @@ void Msg_RecMsgFromUsr (void)
          Lay_ShowAlert (Lay_SUCCESS,Txt_The_message_has_been_sent_to_1_recipient);
       else
         {
-         sprintf (Gbl.Message,Txt_The_message_has_been_sent_to_X_recipients,
+         sprintf (Gbl.Alert.Txt,Txt_The_message_has_been_sent_to_X_recipients,
                   (unsigned) NumRecipients);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
         }
 
       /***** Show message about number of users to be notified *****/
@@ -826,9 +826,9 @@ void Msg_RecMsgFromUsr (void)
    /***** Show alert about errors on sending message *****/
    if (NumErrors > 1)
      {
-      sprintf (Gbl.Message,Txt_There_have_been_X_errors_in_sending_the_message,
+      sprintf (Gbl.Alert.Txt,Txt_There_have_been_X_errors_in_sending_the_message,
                (unsigned) NumErrors);
-      Lay_ShowAlert (Lay_ERROR,Gbl.Message);
+      Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
      }
   }
 
@@ -856,12 +856,12 @@ void Msg_ReqDelAllRecMsgs (void)
    if (Gbl.Msg.FilterContent[0])
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
-         sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+         sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
                   Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
       else
-         sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+         sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
                   Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
@@ -869,17 +869,17 @@ void Msg_ReqDelAllRecMsgs (void)
    else
      {
       if (Gbl.Msg.ShowOnlyUnreadMsgs)
-         sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
+         sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_the_unread_messages_received_from_USER_X_from_COURSE_Y,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
                   Gbl.Msg.FilterCrsShrtName);
       else
-         sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
+         sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_all_messages_received_from_USER_X_from_COURSE_Y,
                   Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
                 	                    Txt_any_user,
                   Gbl.Msg.FilterCrsShrtName);
      }
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* Show received messages again */
    Gbl.Msg.TypeOfMessages = Msg_MESSAGES_RECEIVED;
@@ -910,16 +910,16 @@ void Msg_ReqDelAllSntMsgs (void)
    /***** Show question and button to remove messages received *****/
    /* Start alert */
    if (Gbl.Msg.FilterContent[0])
-      sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
+      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y_related_to_CONTENT_Z,
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
 					 Txt_any_user,
                Gbl.Msg.FilterCrsShrtName,Gbl.Msg.FilterContent);
    else
-      sprintf (Gbl.Message,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
+      sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_delete_all_messages_sent_to_USER_X_from_COURSE_Y,
 	       Gbl.Msg.FilterFromTo[0] ? Gbl.Msg.FilterFromTo :
 					 Txt_any_user,
                Gbl.Msg.FilterCrsShrtName);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* Show sent messages again */
    Gbl.Msg.TypeOfMessages = Msg_MESSAGES_SENT;
@@ -987,9 +987,9 @@ static void Msg_ShowNumMsgsDeleted (unsigned NumMsgs)
       Lay_ShowAlert (Lay_SUCCESS,Txt_One_message_has_been_deleted);
    else
      {
-      sprintf (Gbl.Message,Txt_X_messages_have_been_deleted,
+      sprintf (Gbl.Alert.Txt,Txt_X_messages_have_been_deleted,
                NumMsgs);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
   }
 
@@ -3640,9 +3640,9 @@ void Msg_BanSenderWhenShowingMsgs (void)
    DB_QueryREPLACE (Query,"can not ban sender");
 
    /***** Show alert with the change made *****/
-   sprintf (Gbl.Message,Txt_From_this_time_you_will_not_receive_messages_from_X,
+   sprintf (Gbl.Alert.Txt,Txt_From_this_time_you_will_not_receive_messages_from_X,
             Gbl.Usrs.Other.UsrDat.FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /**** Show received messages again */
    Msg_ShowRecMsgs ();
@@ -3697,9 +3697,9 @@ static void Msg_UnbanSender (void)
    DB_QueryDELETE (Query,"can not ban sender");
 
    /***** Show alert with the change made *****/
-   sprintf (Gbl.Message,Txt_From_this_time_you_can_receive_messages_from_X,
+   sprintf (Gbl.Alert.Txt,Txt_From_this_time_you_can_receive_messages_from_X,
             Gbl.Usrs.Other.UsrDat.FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

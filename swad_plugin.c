@@ -497,9 +497,9 @@ void Plg_RemovePlugin (void)
    DB_QueryDELETE (Query,"can not remove a plugin");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Plugin_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Plugin_X_removed,
             Plg.Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Plg_EditPlugins ();
@@ -535,9 +535,9 @@ void Plg_RenamePlugin (void)
    /***** Check if new name is empty *****/
    if (!NewPlgName[0])
      {
-      sprintf (Gbl.Message,Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
+      sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_plugin_X_empty,
                Plg->Name);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -547,9 +547,9 @@ void Plg_RenamePlugin (void)
          /***** If plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (NewPlgName,Plg->PlgCod))
            {
-            sprintf (Gbl.Message,Txt_The_plugin_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_plugin_X_already_exists,
                      NewPlgName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -559,16 +559,16 @@ void Plg_RenamePlugin (void)
             DB_QueryUPDATE (Query,"can not update the name of a plugin");
 
             /***** Write message to show the change made *****/
-            sprintf (Gbl.Message,Txt_The_plugin_X_has_been_renamed_as_Y,
+            sprintf (Gbl.Alert.Txt,Txt_The_plugin_X_has_been_renamed_as_Y,
                      Plg->Name,NewPlgName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
-         sprintf (Gbl.Message,Txt_The_name_of_the_plugin_X_has_not_changed,
+         sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_plugin_X_has_not_changed,
                   Plg->Name);
-         Lay_ShowAlert (Lay_INFO,Gbl.Message);
+         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -624,14 +624,14 @@ void Plg_ChangePlgDescription (void)
       DB_QueryUPDATE (Query,"can not update the description of a plugin");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_description_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_description_is_X,
                NewDescription);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
      {
-      sprintf (Gbl.Message,"%s",Txt_You_can_not_leave_the_description_empty);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+      sprintf (Gbl.Alert.Txt,"%s",Txt_You_can_not_leave_the_description_empty);
+      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -671,9 +671,9 @@ void Plg_ChangePlgLogo (void)
       DB_QueryUPDATE (Query,"can not update the logo of a plugin");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_logo_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_logo_is_X,
                NewLogo);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);
@@ -715,9 +715,9 @@ void Plg_ChangePlgAppKey (void)
       DB_QueryUPDATE (Query,"can not update the application key of a plugin");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      sprintf (Gbl.Alert.Txt,Txt_The_new_logo_is_X,	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                NewAppKey);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_logo_empty);	// TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -759,9 +759,9 @@ void Plg_ChangePlgURL (void)
       DB_QueryUPDATE (Query,"can not update the URL of a plugin");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_URL_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_URL_is_X,
                NewURL);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_URL_empty);
@@ -803,9 +803,9 @@ void Plg_ChangePlgIP (void)
       DB_QueryUPDATE (Query,"can not update the IP address of a plugin");
 
       /***** Write message to show the change made *****/
-      sprintf (Gbl.Message,Txt_The_new_IP_address_is_X,
+      sprintf (Gbl.Alert.Txt,Txt_The_new_IP_address_is_X,
                NewIP);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_IP_address_empty);
@@ -1011,9 +1011,9 @@ void Plg_RecFormNewPlg (void)
          /***** If name of plugin was in database... *****/
          if (Plg_CheckIfPluginNameExists (Plg->Name,-1L))
            {
-            sprintf (Gbl.Message,Txt_The_plugin_X_already_exists,
+            sprintf (Gbl.Alert.Txt,Txt_The_plugin_X_already_exists,
                      Plg->Name);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new plugin to database
             Plg_CreatePlugin (Plg);
@@ -1051,9 +1051,9 @@ static void Plg_CreatePlugin (struct Plugin *Plg)
    DB_QueryINSERT (Query,"can not create plugin");
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_plugin_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_plugin_X,
             Plg->Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

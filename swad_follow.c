@@ -1031,12 +1031,12 @@ void Fol_FollowUsr1 (void)
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }
-      Gbl.AlertType = Lay_SUCCESS;
+      Gbl.Alert.Type = Lay_SUCCESS;
      }
    else
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
 
@@ -1044,15 +1044,15 @@ void Fol_FollowUsr2 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (Gbl.AlertType == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Lay_SUCCESS)
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
-	 Gbl.AlertType = Lay_WARNING;
-	 sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+	 Gbl.Alert.Type = Lay_WARNING;
+	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
 	}
 
-   if (Gbl.AlertType != Lay_SUCCESS)
+   if (Gbl.Alert.Type != Lay_SUCCESS)
       Lay_ShowPendingAlert ();
   }
 
@@ -1079,19 +1079,19 @@ void Fol_UnfollowUsr1 (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
         }
-      Gbl.AlertType = Lay_SUCCESS;
+      Gbl.Alert.Type = Lay_SUCCESS;
      }
    else
      {
-      Gbl.AlertType = Lay_WARNING;
-      sprintf (Gbl.Message,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
+      Gbl.Alert.Type = Lay_WARNING;
+      sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
 
 void Fol_UnfollowUsr2 (void)
   {
    /***** Get user to be unfollowed *****/
-   if (Gbl.AlertType == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Lay_SUCCESS)
      {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile

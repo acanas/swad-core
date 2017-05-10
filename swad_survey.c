@@ -1479,9 +1479,9 @@ void Svy_AskRemSurvey (void)
 
    /***** Show question and button to remove survey *****/
    /* Start alert */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_survey_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* End alert */
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
@@ -1542,9 +1542,9 @@ void Svy_RemoveSurvey (void)
    Ntf_MarkNotifAsRemoved (Ntf_EVENT_SURVEY,Svy.SvyCod);
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Survey_X_removed,
+   sprintf (Gbl.Alert.Txt,Txt_Survey_X_removed,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1575,9 +1575,9 @@ void Svy_AskResetSurvey (void)
       Lay_ShowErrorAndExit ("You can not reset this survey.");
 
    /***** Ask for confirmation of reset *****/
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_reset_the_survey_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_reset_the_survey_X,
             Svy.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
 
    /***** Button of confirmation of reset *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
@@ -1634,9 +1634,9 @@ void Svy_ResetSurvey (void)
    DB_QueryUPDATE (Query,"can not reset answers of a survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Survey_X_reset,
+   sprintf (Gbl.Alert.Txt,Txt_Survey_X_reset,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1668,9 +1668,9 @@ void Svy_HideSurvey (void)
    DB_QueryUPDATE (Query,"can not hide survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Survey_X_is_now_hidden,
+   sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_hidden,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1702,9 +1702,9 @@ void Svy_UnhideSurvey (void)
    DB_QueryUPDATE (Query,"can not show survey");
 
    /***** Write message to show the change made *****/
-   sprintf (Gbl.Message,Txt_Survey_X_is_now_visible,
+   sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_visible,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -2141,9 +2141,9 @@ void Svy_RecFormSurvey (void)
       if (Svy_CheckIfSimilarSurveyExists (&NewSvy))
         {
          NewSurveyIsCorrect = false;
-         sprintf (Gbl.Message,Txt_Already_existed_a_survey_with_the_title_X,
+         sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_survey_with_the_title_X,
                   NewSvy.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Message);
+         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not a survey title
@@ -2230,9 +2230,9 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
-   sprintf (Gbl.Message,Txt_Created_new_survey_X,
+   sprintf (Gbl.Alert.Txt,Txt_Created_new_survey_X,
             Svy->Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -2620,7 +2620,7 @@ static void Svy_ShowFormEditOneQst (long SvyCod,struct SurveyQuestion *SvyQst,
             if (NumAnswers > Svy_MAX_ANSWERS_PER_QUESTION)
                Lay_ShowErrorAndExit ("Wrong answer.");
             if (!Svy_AllocateTextChoiceAnswer (SvyQst,NumAns))
-               Lay_ShowErrorAndExit (Gbl.Message);
+               Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 
             Str_Copy (SvyQst->AnsChoice[NumAns].Text,row[2],
                       Svy_MAX_BYTES_ANSWER);
@@ -2860,7 +2860,7 @@ static int Svy_AllocateTextChoiceAnswer (struct SurveyQuestion *SvyQst,unsigned 
    Svy_FreeTextChoiceAnswer (SvyQst,NumAns);
    if ((SvyQst->AnsChoice[NumAns].Text = malloc (Svy_MAX_BYTES_ANSWER + 1)) == NULL)
      {
-      sprintf (Gbl.Message,"Not enough memory to store answer.");
+      sprintf (Gbl.Alert.Txt,"Not enough memory to store answer.");
       return 0;
      }
    SvyQst->AnsChoice[NumAns].Text[0] = '\0';
@@ -3517,9 +3517,9 @@ void Svy_RequestRemoveQst (void)
 
    /***** Show question and button to remove question *****/
    /* Start alert */
-   sprintf (Gbl.Message,Txt_Do_you_really_want_to_remove_the_question_X,
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (SvyQst.QstInd + 1));
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Message);
+   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
    /* End alert */
    Gbl.Svys.SvyCodToEdit    = SvyCod;
@@ -3572,8 +3572,8 @@ void Svy_RemoveQst (void)
    DB_QueryUPDATE (Query,"can not update indexes of questions");
 
    /***** Write message *****/
-   sprintf (Gbl.Message,"%s",Txt_Question_removed);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Message);
+   sprintf (Gbl.Alert.Txt,"%s",Txt_Question_removed);
+   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
