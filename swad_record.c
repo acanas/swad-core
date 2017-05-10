@@ -996,7 +996,7 @@ void Rec_ListRecordsGstsPrint (void)
 static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
   {
    extern const char *Txt_You_must_select_one_ore_more_users;
-   unsigned NumUsrs = 0;
+   unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
 
@@ -1045,20 +1045,23 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       Usr_GetUsrCodFromEncryptedUsrCod (&UsrDat);
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	                    " style=\"margin-bottom:12px;");
+         /* Start container for this user */
+	 fprintf (Gbl.F.Out,"<section class=\"REC_USR\"");
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
-	     NumUsrs != 0 &&
-	     (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
-	    fprintf (Gbl.F.Out,"page-break-before:always;");
-	 fprintf (Gbl.F.Out,"\">");
+	     NumUsr != 0 &&
+	     (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+	    fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
+	 fprintf (Gbl.F.Out,">");
 
 	 /* Shared record */
+	 fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
 	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
+	 fprintf (Gbl.F.Out,"</section>");
 
-	 fprintf (Gbl.F.Out,"</div>");
+         /* End container for this user */
+	 fprintf (Gbl.F.Out,"</section>");
 
-	 NumUsrs++;
+	 NumUsr++;
 	}
      }
    /***** Free memory used for user's data *****/
@@ -1213,13 +1216,13 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
                                          Gbl.CurrentCrs.Crs.CrsCod,
                                          false))
            {
-            /* Check if this student has accepted
+            /* Check if this user has accepted
                his/her inscription in the current course */
             UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
                                                           Gbl.CurrentCrs.Crs.CrsCod,
                                                           true);
 
-            /* Start records of this user */
+            /* Start container for this user */
 	    sprintf (Anchor,"record_%u",NumUsr);
 	    fprintf (Gbl.F.Out,"<section id=\"%s\" class=\"REC_USR\"",
 		     Anchor);
@@ -1245,16 +1248,12 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&		// I am student in this course...
 		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
 		 {
-                  /* Start course record */
 		  fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
-
-                  /* Show course record */
 		  Rec_ShowCrsRecord (CrsTypeOfView,&UsrDat,Anchor);
-
-		  /* End course record */
                   fprintf (Gbl.F.Out,"</section>");
 		 }
 
+            /* End container for this user */
             fprintf (Gbl.F.Out,"</section>");
 
             NumUsr++;
@@ -1366,8 +1365,9 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    extern const char *Hlp_USERS_Teachers_timetable;
    extern const char *Txt_You_must_select_one_ore_more_teachers;
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
-   unsigned NumUsrs = 0;
+   unsigned NumUsr = 0;
    const char *Ptr;
+   char Anchor[32];
    struct UsrData UsrDat;
    bool ShowOfficeHours;
    char Width[10 + 2 + 1];
@@ -1432,34 +1432,43 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
                                          Gbl.CurrentCrs.Crs.CrsCod,
                                          false))
            {
+            /* Check if this user has accepted
+               his/her inscription in the current course */
             UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (UsrDat.UsrCod,
                                                           Gbl.CurrentCrs.Crs.CrsCod,
                                                           true);
 
-            fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-        	               " style=\"margin-bottom:12px;");
+            /* Start container for this user */
+	    sprintf (Anchor,"record_%u",NumUsr);
+	    fprintf (Gbl.F.Out,"<section id=\"%s\" class=\"REC_USR\"",
+		     Anchor);
             if (Gbl.Action.Act == ActPrnRecSevTch &&
-                NumUsrs != 0 &&
-                (NumUsrs % Gbl.Usrs.Listing.RecsPerPag) == 0)
-               fprintf (Gbl.F.Out,"page-break-before:always;");
-            fprintf (Gbl.F.Out,"\">");
+                NumUsr != 0 &&
+                (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
+               fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
+            fprintf (Gbl.F.Out,">");
 
             /* Shared record */
+            fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
             Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
+            fprintf (Gbl.F.Out,"</section>");
 
             /* Office hours */
             if (ShowOfficeHours)
               {
+	       fprintf (Gbl.F.Out,"<section class=\"REC_TT\">");
                Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
 	       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
 	                            NULL,Hlp_USERS_Teachers_timetable);
 	       TT_ShowTimeTable (UsrDat.UsrCod);
 	       Lay_EndRoundFrame ();
+               fprintf (Gbl.F.Out,"</section>");
               }
 
-            fprintf (Gbl.F.Out,"</div>");
+            /* End container for this user */
+            fprintf (Gbl.F.Out,"</section>");
 
-            NumUsrs++;
+            NumUsr++;
            }
      }
    /***** Free memory used for user's data *****/

@@ -2091,13 +2091,7 @@ a:hover img.CENTRE_PHOTO_SHOW
 	text-align:center;
 	vertical-align:top;
 	}
-.REC_SHA
-	{
-	display:inline-block;
-	margin:0 6px;
-	vertical-align:top;
-	}
-.REC_CRS
+.REC_SHA, .REC_CRS, .REC_TT
 	{
 	display:inline-block;
 	margin:0 6px;
