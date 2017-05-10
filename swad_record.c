@@ -109,8 +109,8 @@ static void Rec_ShowCountryInHead (struct UsrData *UsrDat,bool ShowData);
 static void Rec_ShowWebsAndSocialNets (struct UsrData *UsrDat,
                                        Rec_SharedRecordViewType_t TypeOfView);
 static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm);
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor,
-                            const char *ClassForm);
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
+                            const char *Anchor);
 static void Rec_ShowRole (struct UsrData *UsrDat,
                           Rec_SharedRecordViewType_t TypeOfView,
                           const char *ClassForm);
@@ -984,7 +984,7 @@ void Rec_PutLinkToEditRecordFields (void)
 
 void Rec_ListRecordsGstsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevGst;
+   Gbl.Action.Original = ActSeeRecSevGst;	// Used to know where to go when confirming ID
    Rec_ListRecordsGsts (Rec_SHA_RECORD_LIST);
   }
 
@@ -999,6 +999,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    unsigned NumUsr = 0;
    const char *Ptr;
    struct UsrData UsrDat;
+   char Anchor[32];
 
    /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_GUESTS;
@@ -1046,16 +1047,22 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))                // Get from the database the data of the student
 	{
          /* Start container for this user */
-	 fprintf (Gbl.F.Out,"<section class=\"REC_USR\"");
+	 sprintf (Anchor,"record_%u",NumUsr);
+	 fprintf (Gbl.F.Out,"<section id=\"%s\" class=\"REC_USR\"",
+		  Anchor);
 	 if (Gbl.Action.Act == ActPrnRecSevGst &&
 	     NumUsr != 0 &&
 	     (NumUsr % Gbl.Usrs.Listing.RecsPerPag) == 0)
 	    fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
 	 fprintf (Gbl.F.Out,">");
 
+	 /* Show optional alert */
+	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+	    Lay_ShowPendingAlert ();
+
 	 /* Shared record */
 	 fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
-	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
+	 Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,Anchor);
 	 fprintf (Gbl.F.Out,"</section>");
 
          /* End container for this user */
@@ -1096,8 +1103,11 @@ static void Rec_ShowRecordOneStdCrs (void)
                                                                 Gbl.CurrentCrs.Crs.CrsCod,
                                                                 true);
 
-   /***** Asign users listing type depending on current action *****/
+   /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
+
+   /***** Get list of fields of records in current course *****/
+   Rec_GetListRecordFieldsInCurrentCrs ();
 
    /***** Put contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -1114,27 +1124,40 @@ static void Rec_ShowRecordOneStdCrs (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   /***** Show optional alert *****/
+   /***** Show optional alert (result of editing data in course record) *****/
    Lay_ShowPendingAlert ();
 
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"<section class=\"REC_USR\">");
+
    /***** Shared record *****/
+   fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** Record of the student in the course *****/
-   /* Get list of fields of records in current course */
-   Rec_GetListRecordFieldsInCurrentCrs ();
-
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
      {
       if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
+	{
+         fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
 	 Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
+         fprintf (Gbl.F.Out,"</section>");
+	}
       else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
 	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
+	{
+         fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
 	 Rec_ShowCrsRecord (Rec_CRS_MY_RECORD_AS_STUDENT_FORM,&Gbl.Usrs.Other.UsrDat,NULL);
+         fprintf (Gbl.F.Out,"</section>");
+	}
      }
 
-   /* Free list of fields of records */
+   /***** End container for this user *****/
+   fprintf (Gbl.F.Out,"</section>");
+
+   /***** Free list of fields of records *****/
    Rec_FreeListFields ();
   }
 
@@ -1144,7 +1167,8 @@ static void Rec_ShowRecordOneStdCrs (void)
 
 void Rec_ListRecordsStdsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevStd;
+   Gbl.Action.Original = ActSeeRecSevStd;	// Used to know where to go when confirming ID...
+						// ...or changing course record
    Rec_ListRecordsStds (Rec_SHA_RECORD_LIST,
                         Rec_CRS_LIST_SEVERAL_RECORDS);
   }
@@ -1161,10 +1185,10 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    extern const char *Txt_You_must_select_one_ore_more_students;
    unsigned NumUsr = 0;
    const char *Ptr;
-   char Anchor[32];
    struct UsrData UsrDat;
+   char Anchor[32];
 
-   /***** Asign users listing type depending on current action *****/
+   /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_STUDENTS;
 
    /***** Get parameter with number of user records per page (only for printing) *****/
@@ -1304,7 +1328,7 @@ static void Rec_ShowRecordOneTchCrs (void)
                                                                 Gbl.CurrentCrs.Crs.CrsCod,
                                                                 true);
 
-   /***** Asign users listing type depending on current action *****/
+   /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
@@ -1326,23 +1350,28 @@ static void Rec_ShowRecordOneTchCrs (void)
 
    fprintf (Gbl.F.Out,"</div>");
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
-	              " style=\"margin-bottom:12px;\">");
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"<section class=\"REC_USR\">");
 
-   /* Shared record */
+   /***** Shared record *****/
+   fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Other.UsrDat,NULL);
+   fprintf (Gbl.F.Out,"</section>");
 
-   /* Office hours */
+   /***** Office hours *****/
    if (ShowOfficeHours)
      {
+      fprintf (Gbl.F.Out,"<section class=\"REC_TT\">");
       Gbl.TimeTable.Type = TT_TUTORING_TIMETABLE;
       Lay_StartRoundFrame (Width,Txt_TIMETABLE_TYPES[Gbl.TimeTable.Type],
 			   NULL,Hlp_USERS_Teachers_timetable);
       TT_ShowTimeTable (Gbl.Usrs.Other.UsrDat.UsrCod);
       Lay_EndRoundFrame ();
+      fprintf (Gbl.F.Out,"</section>");
      }
 
-   fprintf (Gbl.F.Out,"</div>");
+   /***** Start container for this user *****/
+   fprintf (Gbl.F.Out,"</section>");
   }
 
 /*****************************************************************************/
@@ -1351,7 +1380,7 @@ static void Rec_ShowRecordOneTchCrs (void)
 
 void Rec_ListRecordsTchsShow (void)
   {
-   Gbl.Action.Original = ActSeeRecSevTch;
+   Gbl.Action.Original = ActSeeRecSevTch;	// Used to know where to go when confirming ID
    Rec_ListRecordsTchs (Rec_SHA_RECORD_LIST);
   }
 
@@ -1367,15 +1396,15 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    extern const char *Txt_TIMETABLE_TYPES[TT_NUM_TIMETABLE_TYPES];
    unsigned NumUsr = 0;
    const char *Ptr;
-   char Anchor[32];
    struct UsrData UsrDat;
+   char Anchor[32];
    bool ShowOfficeHours;
    char Width[10 + 2 + 1];
 
    /***** Width for office hours *****/
    sprintf (Width,"%upx",Rec_RECORD_WIDTH);
 
-   /***** Asign users listing type depending on current action *****/
+   /***** Assign users listing type depending on current action *****/
    Gbl.Usrs.Listing.RecsUsrs = Rec_RECORD_USERS_TEACHERS;
 
    /***** Get if I want to see teachers' office hours in teachers' records *****/
@@ -1448,9 +1477,13 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
                fprintf (Gbl.F.Out," style=\"page-break-before:always;\"");
             fprintf (Gbl.F.Out,">");
 
-            /* Shared record */
+	    /* Show optional alert */
+	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
+	       Lay_ShowPendingAlert ();
+
+	    /* Shared record */
             fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
-            Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,NULL);
+            Rec_ShowSharedUsrRecord (TypeOfView,&UsrDat,Anchor);
             fprintf (Gbl.F.Out,"</section>");
 
             /* Office hours */
@@ -2313,7 +2346,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	 Rec_ShowEmail (UsrDat,ClassForm);
 
 	 /* Show user's IDs */
-	 Rec_ShowUsrIDs (UsrDat,Anchor,ClassForm);
+	 Rec_ShowUsrIDs (UsrDat,ClassForm,Anchor);
 
          Lay_EndTable ();
 	}
@@ -2830,8 +2863,8 @@ static void Rec_ShowEmail (struct UsrData *UsrDat,const char *ClassForm)
 /******************************* Show user's IDs *****************************/
 /*****************************************************************************/
 
-static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *Anchor,
-                            const char *ClassForm)
+static void Rec_ShowUsrIDs (struct UsrData *UsrDat,const char *ClassForm,
+                            const char *Anchor)
   {
    extern const char *Txt_ID;
 

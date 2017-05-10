@@ -456,7 +456,8 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
                         Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
-      Par_PutHiddenParamLong ("OriginalActCod",Act_Actions[Gbl.Action.Original].ActCod);	// Original action, used to know where we came from
+      Par_PutHiddenParamLong ("OriginalActCod",
+                              Act_Actions[Gbl.Action.Original].ActCod);	// Original action, used to know where we came from
       switch (Gbl.Action.Original)
 	{
 	 case ActSeeRecSevGst:
