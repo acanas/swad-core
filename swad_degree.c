@@ -1119,7 +1119,7 @@ unsigned Deg_ConvStrToYear (const char *StrYear)
 /*****************************************************************************/
 /***************************** Create a new degree ***************************/
 /*****************************************************************************/
-// Gbl.Degs.EditingDeg must hold the degree
+// Gbl.Degs.EditingDeg must hold the degree beeing edited
 
 static void Deg_CreateDegree (unsigned Status)
   {
@@ -2247,7 +2247,8 @@ void Deg_ChangeDegStatus (void)
 
 void Deg_ContEditAfterChgDeg (void)
   {
-   /***** Put button to go to degree changed *****/
+   /***** Write message to show the change made
+	  and put button to go to degree changed *****/
    Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
@@ -2255,10 +2256,11 @@ void Deg_ContEditAfterChgDeg (void)
   }
 
 /*****************************************************************************/
-/************************ Put button to go to degree *************************/
+/***************** Write message to show the change made  ********************/
+/***************** and put button to go to degree changed ********************/
 /*****************************************************************************/
 // Gbl.Degs.EditingDeg is the degree that is beeing edited
-// Gbl.CurrentDeg.Deg.DegCod is the current degree
+// Gbl.CurrentDeg.Deg is the current degree
 
 void Deg_ShowAlertAndButtonToGoToDeg (void)
   {

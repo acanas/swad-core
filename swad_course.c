@@ -113,8 +113,8 @@ static bool Crs_CheckIfCrsNameExistsInYearOfDeg (const char *FieldName,const cha
                                                  long DegCod,unsigned Year);
 static void Crs_UpdateCrsNameDB (long CrsCod,const char *FieldName,const char *NewCrsName);
 
-static void Crs_PutButtonToGoToCrs (struct Course *Crs);
-static void Crs_PutButtonToRegisterInCrs (struct Course *Crs);
+static void Crs_PutButtonToGoToCrs (void);
+static void Crs_PutButtonToRegisterInCrs (void);
 
 static void Crs_PutLinkToSearchCourses (void);
 static void Sch_PutLinkToSearchCoursesParams (void);
@@ -2763,7 +2763,7 @@ void Crs_ContEditAfterChgCrs (void)
    if (Gbl.Alert.Type == Lay_SUCCESS)
      {
       /***** Put button to go to course changed *****/
-      Crs_PutButtonToGoToCrs (&Gbl.Degs.EditingCrs);
+      Crs_PutButtonToGoToCrs ();
 
       /***** Put button to request my registration in course *****/
       PutButtonToRequestRegistration = false;
@@ -2789,7 +2789,7 @@ void Crs_ContEditAfterChgCrs (void)
 
         }
       if (PutButtonToRequestRegistration)
-	 Crs_PutButtonToRegisterInCrs (&Gbl.Degs.EditingCrs);
+	 Crs_PutButtonToRegisterInCrs ();
      }
 
    /***** End alert *****/
@@ -2802,17 +2802,19 @@ void Crs_ContEditAfterChgCrs (void)
 /*****************************************************************************/
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
+// Gbl.Degs.EditingCrs is the course that is beeing edited
+// Gbl.CurrentCrs.Crs is the current course
 
-static void Crs_PutButtonToGoToCrs (struct Course *Crs)
+static void Crs_PutButtonToGoToCrs (void)
   {
    extern const char *Txt_Go_to_X;
 
-   // If the course is different to the current one...
-   if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+   // If the course being edited is different to the current one...
+   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
      {
       Act_FormStart (ActSeeCrsInf);
-      Crs_PutParamCrsCod (Crs->CrsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Crs->ShrtName);
+      Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
+      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingCrs.ShrtName);
       Lay_PutConfirmButton (Gbl.Title);
       Act_FormEnd ();
      }
@@ -2821,15 +2823,18 @@ static void Crs_PutButtonToGoToCrs (struct Course *Crs)
 /*****************************************************************************/
 /************************ Put button to go to course *************************/
 /*****************************************************************************/
+// Gbl.Degs.EditingCrs is the course that is beeing edited
+// Gbl.CurrentCrs.Crs is the current course
 
-static void Crs_PutButtonToRegisterInCrs (struct Course *Crs)
+static void Crs_PutButtonToRegisterInCrs (void)
   {
    extern const char *Txt_Register_me_in_X;
 
    Act_FormStart (ActReqSignUp);
-   if (Crs->CrsCod != Gbl.CurrentCrs.Crs.CrsCod)	// If the course is different to the current one...
-      Crs_PutParamCrsCod (Crs->CrsCod);
-   sprintf (Gbl.Title,Txt_Register_me_in_X,Crs->ShrtName);
+   // If the course beeing edited is different to the current one...
+   if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
+      Crs_PutParamCrsCod (Gbl.Degs.EditingCrs.CrsCod);
+   sprintf (Gbl.Title,Txt_Register_me_in_X,Gbl.Degs.EditingCrs.ShrtName);
    Lay_PutCreateButton (Gbl.Title);
    Act_FormEnd ();
   }

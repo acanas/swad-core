@@ -107,13 +107,14 @@ static void Ctr_UpdateInsNameDB (long CtrCod,const char *FieldName,const char *N
 
 static void Ctr_UpdateCtrWWWDB (long CtrCod,
                                 const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
-static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr);
+static void Ctr_ShowAlertAndButtonToGoToCtr (void);
+static void Ctr_PutParamGoToCtr (void);
 
 static void Ctr_PutFormToCreateCentre (void);
 static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable);
 static void Ctr_PutHeadCentresForEdition (void);
 static void Ctr_RecFormRequestOrCreateCtr (unsigned Status);
-static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status);
+static void Ctr_CreateCentre (unsigned Status);
 
 /*****************************************************************************/
 /******************* List centres with pending degrees ***********************/
@@ -1840,33 +1841,30 @@ static void Ctr_UpdateCtrInsDB (long CtrCod,long InsCod)
 void Ctr_ChangeCentrePlace (void)
   {
    extern const char *Txt_The_place_of_the_centre_has_changed;
-   struct Centre *Ctr;
    long NewPlcCod;
    char Query[512];
 
-   Ctr = &Gbl.Ctrs.EditingCtr;
-
    /***** Get parameters from form *****/
    /* Get centre code */
-   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with centre code */
    NewPlcCod = Plc_GetParamPlcCod ();
 
    /***** Get data of centre from database *****/
-   Ctr_GetDataOfCentreByCod (Ctr);
+   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update place in table of centres *****/
    sprintf (Query,"UPDATE centres SET PlcCod=%ld WHERE CtrCod=%ld",
-            NewPlcCod,Ctr->CtrCod);
+            NewPlcCod,Gbl.Ctrs.EditingCtr.CtrCod);
    DB_QueryUPDATE (Query,"can not update the place of a centre");
-   Ctr->PlcCod = NewPlcCod;
+   Gbl.Ctrs.EditingCtr.PlcCod = NewPlcCod;
 
-   /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_place_of_the_centre_has_changed);
-
-   /***** Put button to go to centre changed *****/
-   Ctr_PutButtonToGoToCtr (Ctr);
+   /***** Write message to show the change made
+          and put button to go to centre changed *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
+   sprintf (Gbl.Alert.Txt,"%s",Txt_The_place_of_the_centre_has_changed);
+   Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
@@ -2020,36 +2018,31 @@ void Ctr_ChangeCtrWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Centre *Ctr;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
-
-   Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Get parameters from form *****/
    /* Get the code of the centre */
-   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get the new WWW for the centre */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr);
+   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ctr_UpdateCtrWWWDB (Ctr->CtrCod,NewWWW);
-
-      Str_Copy (Ctr->WWW,NewWWW,
+      Ctr_UpdateCtrWWWDB (Gbl.Ctrs.EditingCtr.CtrCod,NewWWW);
+      Str_Copy (Gbl.Ctrs.EditingCtr.WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
-      /***** Write message to show the change made *****/
+      /***** Write message to show the change made
+	     and put button to go to centre changed *****/
+      Gbl.Alert.Type = Lay_SUCCESS;
       sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-      /***** Put button to go to centre changed *****/
-      Ctr_PutButtonToGoToCtr (Ctr);
+      Ctr_ShowAlertAndButtonToGoToCtr ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
@@ -2109,16 +2102,13 @@ static void Ctr_UpdateCtrWWWDB (long CtrCod,
 void Ctr_ChangeCtrStatus (void)
   {
    extern const char *Txt_The_status_of_the_centre_X_has_changed;
-   struct Centre *Ctr;
    char Query[256];
    Ctr_Status_t Status;
    Ctr_StatusTxt_t StatusTxt;
 
-   Ctr = &Gbl.Ctrs.EditingCtr;
-
    /***** Get parameters from form *****/
    /* Get centre code */
-   Ctr->CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
+   Gbl.Ctrs.EditingCtr.CtrCod = Ctr_GetAndCheckParamOtherCtrCod ();
 
    /* Get parameter with status */
    Status = (Ctr_Status_t)
@@ -2132,22 +2122,20 @@ void Ctr_ChangeCtrStatus (void)
    Status = Ctr_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of centre *****/
-   Ctr_GetDataOfCentreByCod (Ctr);
+   Ctr_GetDataOfCentreByCod (&Gbl.Ctrs.EditingCtr);
 
    /***** Update status in table of centres *****/
    sprintf (Query,"UPDATE centres SET Status=%u WHERE CtrCod=%ld",
-            (unsigned) Status,Ctr->CtrCod);
+            (unsigned) Status,Gbl.Ctrs.EditingCtr.CtrCod);
    DB_QueryUPDATE (Query,"can not update the status of a centre");
+   Gbl.Ctrs.EditingCtr.Status = Status;
 
-   Ctr->Status = Status;
-
-   /***** Write message to show the change made *****/
+   /***** Write message to show the change made
+	  and put button to go to centre changed *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_centre_X_has_changed,
-            Ctr->ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-   /***** Put button to go to centre changed *****/
-   Ctr_PutButtonToGoToCtr (Ctr);
+            Gbl.Ctrs.EditingCtr.ShrtName);
+   Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
@@ -2159,36 +2147,44 @@ void Ctr_ChangeCtrStatus (void)
 
 void Ctr_ContEditAfterChgCtr (void)
   {
-   /***** Write success / warning message *****/
-   Lay_ShowPendingAlert ();
-
-   if (Gbl.Alert.Type == Lay_SUCCESS)
-      /***** Put button to go to centre changed *****/
-      Ctr_PutButtonToGoToCtr (&Gbl.Ctrs.EditingCtr);
+   /***** Write message to show the change made
+	  and put button to go to centre changed *****/
+   Ctr_ShowAlertAndButtonToGoToCtr ();
 
    /***** Show the form again *****/
    Ctr_EditCentres ();
   }
 
 /*****************************************************************************/
-/************************ Put button to go to centre *************************/
+/***************** Write message to show the change made  ********************/
+/***************** and put button to go to centre changed ********************/
 /*****************************************************************************/
+// Gbl.Ctrs.EditingCtr is the centre that is beeing edited
+// Gbl.CurrentCtr.Ctr is the current centre
 
-static void Ctr_PutButtonToGoToCtr (struct Centre *Ctr)
+static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    extern const char *Txt_Go_to_X;
 
-   // If the centre is different to the current one...
-   if (Ctr->CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
+   /***** Start alert *****/
+   Lay_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
+
+   // If the centre being edited is different to the current one...
+   if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
      {
-      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
-      Act_FormStart (ActSeeDeg);
-      Ctr_PutParamCtrCod (Ctr->CtrCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ctr->ShrtName);
-      Lay_PutConfirmButtonInline (Gbl.Title);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
+      /***** Put button to go to centre and end alert *****/
+      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Ctrs.EditingCtr.ShrtName);
+      Lay_ShowAlertAndButton2 (ActSeeDeg,NULL,Ctr_PutParamGoToCtr,
+                               Lay_CONFIRM_BUTTON,Gbl.Title);
      }
+   else
+      /***** End alert *****/
+      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+  }
+
+static void Ctr_PutParamGoToCtr (void)
+  {
+   Ctr_PutParamCtrCod (Gbl.Ctrs.EditingCtr.CtrCod);
   }
 
 /*****************************************************************************/
@@ -2418,11 +2414,7 @@ static void Ctr_PutFormToCreateCentre (void)
    extern const char *Txt_New_centre;
    extern const char *Txt_Another_place;
    extern const char *Txt_Create_centre;
-   struct Centre *Ctr;
    unsigned NumPlc;
-
-   /***** Centre data *****/
-   Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
@@ -2454,7 +2446,7 @@ static void Ctr_PutFormToCreateCentre (void)
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
                       "<select name=\"PlcCod\" style=\"width:62px;\">"
                       "<option value=\"0\"");
-   if (Ctr->PlcCod == 0)
+   if (Gbl.Ctrs.EditingCtr.PlcCod == 0)
       fprintf (Gbl.F.Out," selected=\"selected\"");
    fprintf (Gbl.F.Out,">%s</option>",Txt_Another_place);
    for (NumPlc = 0;
@@ -2462,8 +2454,8 @@ static void Ctr_PutFormToCreateCentre (void)
 	NumPlc++)
       fprintf (Gbl.F.Out,"<option value=\"%ld\"%s>%s</option>",
                Gbl.Plcs.Lst[NumPlc].PlcCod,
-               (Gbl.Plcs.Lst[NumPlc].PlcCod == Ctr->PlcCod) ? " selected=\"selected\"" :
-        	                                              "",
+               (Gbl.Plcs.Lst[NumPlc].PlcCod == Gbl.Ctrs.EditingCtr.PlcCod) ? " selected=\"selected\"" :
+        	                                                             "",
                Gbl.Plcs.Lst[NumPlc].ShrtName);
    fprintf (Gbl.F.Out,"</select>"
 	              "</td>");
@@ -2475,7 +2467,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Ctr->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Gbl.Ctrs.EditingCtr.ShrtName);
 
    /***** Centre full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2484,7 +2476,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Ctr->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Gbl.Ctrs.EditingCtr.FullName);
 
    /***** Centre WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2493,7 +2485,7 @@ static void Ctr_PutFormToCreateCentre (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_WWW,Ctr->WWW);
+            Cns_MAX_CHARS_WWW,Gbl.Ctrs.EditingCtr.WWW);
 
    /***** Number of users who claim to belong to this centre *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -2678,46 +2670,44 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
    extern const char *Txt_The_centre_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_centre;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_centre;
-   struct Centre *Ctr;
-
-   Ctr = &Gbl.Ctrs.EditingCtr;
 
    /***** Get parameters from form *****/
    /* Set centre institution */
-   Ctr->InsCod = Gbl.CurrentIns.Ins.InsCod;
+   Gbl.Ctrs.EditingCtr.InsCod = Gbl.CurrentIns.Ins.InsCod;
 
    /* Get place */
-   if ((Ctr->PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
+   if ((Gbl.Ctrs.EditingCtr.PlcCod = Plc_GetParamPlcCod ()) < 0)	// 0 is reserved for "other place"
       Lay_ShowAlert (Lay_ERROR,"Wrong place.");
 
    /* Get centre short name */
-   Par_GetParToText ("ShortName",Ctr->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get centre full name */
-   Par_GetParToText ("FullName",Ctr->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Gbl.Ctrs.EditingCtr.FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get centre WWW */
-   Par_GetParToText ("WWW",Ctr->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Gbl.Ctrs.EditingCtr.WWW,Cns_MAX_BYTES_WWW);
 
-   if (Ctr->ShrtName[0] && Ctr->FullName[0])	// If there's a centre name
+   if (Gbl.Ctrs.EditingCtr.ShrtName[0] &&
+       Gbl.Ctrs.EditingCtr.FullName[0])	// If there's a centre name
      {
-      if (Ctr->WWW[0])
+      if (Gbl.Ctrs.EditingCtr.WWW[0])
         {
          /***** If name of centre was in database... *****/
-         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Ctr->ShrtName,-1L,Gbl.CurrentIns.Ins.InsCod))
+         if (Ctr_CheckIfCtrNameExistsInIns ("ShortName",Gbl.Ctrs.EditingCtr.ShrtName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
             sprintf (Gbl.Alert.Txt,Txt_The_centre_X_already_exists,
-                     Ctr->ShrtName);
+                     Gbl.Ctrs.EditingCtr.ShrtName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
-         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Ctr->FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
+         else if (Ctr_CheckIfCtrNameExistsInIns ("FullName",Gbl.Ctrs.EditingCtr.FullName,-1L,Gbl.CurrentIns.Ins.InsCod))
            {
             sprintf (Gbl.Alert.Txt,Txt_The_centre_X_already_exists,
-                     Ctr->FullName);
+                     Gbl.Ctrs.EditingCtr.FullName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new centre to database
-            Ctr_CreateCentre (Ctr,Status);
+            Ctr_CreateCentre (Status);
         }
       else	// If there is not a web
         {
@@ -2738,8 +2728,9 @@ static void Ctr_RecFormRequestOrCreateCtr (unsigned Status)
 /*****************************************************************************/
 /***************************** Create a new centre ***************************/
 /*****************************************************************************/
+// Gbl.Ctrs.EditingCtr must hold the centre beeing edited
 
-static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
+static void Ctr_CreateCentre (unsigned Status)
   {
    extern const char *Txt_Created_new_centre_X;
    char Query[512 +
@@ -2754,19 +2745,21 @@ static void Ctr_CreateCentre (struct Centre *Ctr,unsigned Status)
                   " VALUES"
                   " (%ld,%ld,%u,%ld,"
                   "'%s','%s','%s','')",
-            Ctr->InsCod,Ctr->PlcCod,
+            Gbl.Ctrs.EditingCtr.InsCod,
+            Gbl.Ctrs.EditingCtr.PlcCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Ctr->ShrtName,Ctr->FullName,Ctr->WWW);
-   Ctr->CtrCod = DB_QueryINSERTandReturnCode (Query,"can not create a new centre");
+            Gbl.Ctrs.EditingCtr.ShrtName,
+            Gbl.Ctrs.EditingCtr.FullName,
+            Gbl.Ctrs.EditingCtr.WWW);
+   Gbl.Ctrs.EditingCtr.CtrCod = DB_QueryINSERTandReturnCode (Query,"can not create a new centre");
 
-   /***** Write success message *****/
+   /***** Write message to show the change made
+	  and put button to go to centre created *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_Created_new_centre_X,
-            Ctr->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-   /***** Put button to go to centre created *****/
-   Ctr_PutButtonToGoToCtr (Ctr);
+            Gbl.Ctrs.EditingCtr.FullName);
+   Ctr_ShowAlertAndButtonToGoToCtr ();
   }
 
 /*****************************************************************************/
