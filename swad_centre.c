@@ -2166,20 +2166,18 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
   {
    extern const char *Txt_Go_to_X;
 
-   /***** Start alert *****/
-   Lay_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
-
    // If the centre being edited is different to the current one...
    if (Gbl.Ctrs.EditingCtr.CtrCod != Gbl.CurrentCtr.Ctr.CtrCod)
      {
-      /***** Put button to go to centre and end alert *****/
+      /***** Alert with button to go to centre *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Ctrs.EditingCtr.ShrtName);
-      Lay_ShowAlertAndButton2 (ActSeeDeg,NULL,Ctr_PutParamGoToCtr,
-                               Lay_CONFIRM_BUTTON,Gbl.Title);
+      Lay_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
+                              ActSeeDeg,NULL,Ctr_PutParamGoToCtr,
+                              Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else
-      /***** End alert *****/
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+      /***** Alert *****/
+      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
   }
 
 static void Ctr_PutParamGoToCtr (void)

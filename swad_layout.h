@@ -133,6 +133,10 @@ void Lay_EndTable (void);
 void Lay_ShowErrorAndExit (const char *Txt);
 void Lay_ShowPendingAlert (void);
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Txt);
+void Lay_ShowAlertAndButton (Lay_AlertType_t AlertType,const char *Txt,
+                             Act_Action_t NextAction,const char *Anchor,
+                             void (*FuncParams) (),
+                             Lay_Button_t Button,const char *TxtButton);
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Txt);
 void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,
                               void (*FuncParams) (),

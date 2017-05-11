@@ -3502,19 +3502,16 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
    Grp_ReqEditGroupsInternal0 ();
 
    /***** Show question and button to remove type of group *****/
-   /* Start alert */
    if (NumGrps == 1)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_1_group_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName);
    else
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemGrpTyp,Grp_SECTION_GROUP_TYPES,
-                            Grp_PutParamRemGrpTyp,
-			    Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemGrpTyp,Grp_SECTION_GROUP_TYPES,
+                           Grp_PutParamRemGrpTyp,
+			   Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
 
    /***** Show the form to edit group types and groups again *****/
    Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
@@ -3555,7 +3552,6 @@ static void Grp_AskConfirmRemGrp (void)
    Grp_ReqEditGroupsInternal1 (Lay_INFO,NULL);
 
    /***** Show question and button to remove group *****/
-   /* Start alert */
    if (NumStds == 0)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X,
                GrpDat.GrpName);
@@ -3565,11 +3561,9 @@ static void Grp_AskConfirmRemGrp (void)
    else
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                GrpDat.GrpName,NumStds);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemGrp,Grp_SECTION_GROUPS,Grp_PutParamRemGrp,
-			    Lay_REMOVE_BUTTON,Txt_Remove_group);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemGrp,Grp_SECTION_GROUPS,Grp_PutParamRemGrp,
+			   Lay_REMOVE_BUTTON,Txt_Remove_group);
 
    /***** Show the form to edit groups again *****/
    Grp_ReqEditGroupsInternal2 (Lay_INFO,NULL);

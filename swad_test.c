@@ -5873,21 +5873,19 @@ void Tst_RequestRemoveQst (void)
 	 Lay_ShowErrorAndExit ("Wrong test parameters.");
 
    /***** Show question and button to remove question *****/
-   /* Start alert */
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) Gbl.Test.QstCod);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
    if (EditingOnlyThisQst)
-      Lay_ShowAlertAndButton2 (ActRemTstQst,NULL,
-			       Tst_PutParamsRemoveOneQst,
-			       Lay_REMOVE_BUTTON,Txt_Remove_question);
+      Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                              ActRemTstQst,NULL,
+			      Tst_PutParamsRemoveOneQst,
+			      Lay_REMOVE_BUTTON,Txt_Remove_question);
    else
      {
-      Lay_ShowAlertAndButton2 (ActRemTstQst,NULL,
-			       Tst_PutParamsRemoveQst,
-			       Lay_REMOVE_BUTTON,Txt_Remove_question);
+      Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                              ActRemTstQst,NULL,
+			      Tst_PutParamsRemoveQst,
+			      Lay_REMOVE_BUTTON,Txt_Remove_question);
       Tst_FreeTagsList ();
      }
 

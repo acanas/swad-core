@@ -94,12 +94,13 @@ static void Ins_UpdateInsNameDB (long InsCod,const char *FieldName,const char *N
 
 static void Ins_UpdateInsCtyDB (long InsCod,long CtyCod);
 static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW + 1]);
-static void Ins_PutButtonToGoToIns (struct Instit *Ins);
+static void Ins_ShowAlertAndButtonToGoToIns (void);
+static void Ins_PutParamGoToIns (void);
 
 static void Ins_PutFormToCreateInstitution (void);
 static void Ins_PutHeadInstitutionsForEdition (void);
 static void Ins_RecFormRequestOrCreateIns (unsigned Status);
-static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status);
+static void Ins_CreateInstitution (unsigned Status);
 
 /*****************************************************************************/
 /***************** List institutions with pending centres ********************/
@@ -1950,35 +1951,31 @@ void Ins_ChangeInsWWW (void)
   {
    extern const char *Txt_The_new_web_address_is_X;
    extern const char *Txt_You_can_not_leave_the_web_address_empty;
-   struct Instit *Ins;
    char NewWWW[Cns_MAX_BYTES_WWW + 1];
-
-   Ins = &Gbl.Inss.EditingIns;
 
    /***** Get parameters from form *****/
    /* Get the code of the institution */
-   Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get the new WWW for the institution */
    Par_GetParToText ("WWW",NewWWW,Cns_MAX_BYTES_WWW);
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Gbl.Inss.EditingIns,Ins_GET_BASIC_DATA);
 
    /***** Check if new WWW is empty *****/
    if (NewWWW[0])
      {
       /***** Update database changing old WWW by new WWW *****/
-      Ins_UpdateInsWWWDB (Ins->InsCod,NewWWW);
-      Str_Copy (Ins->WWW,NewWWW,
+      Ins_UpdateInsWWWDB (Gbl.Inss.EditingIns.InsCod,NewWWW);
+      Str_Copy (Gbl.Inss.EditingIns.WWW,NewWWW,
                 Cns_MAX_BYTES_WWW);
 
-      /***** Write message to show the change made *****/
+      /***** Write message to show the change made
+	     and put button to go to institution changed *****/
+      Gbl.Alert.Type = Lay_SUCCESS;
       sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-      /***** Put button to go to institution changed *****/
-      Ins_PutButtonToGoToIns (Ins);
+      Ins_ShowAlertAndButtonToGoToIns ();
      }
    else
       Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
@@ -2037,16 +2034,13 @@ static void Ins_UpdateInsWWWDB (long InsCod,const char NewWWW[Cns_MAX_BYTES_WWW 
 void Ins_ChangeInsStatus (void)
   {
    extern const char *Txt_The_status_of_the_institution_X_has_changed;
-   struct Instit *Ins;
    char Query[128];
    Ins_Status_t Status;
    Ins_StatusTxt_t StatusTxt;
 
-   Ins = &Gbl.Inss.EditingIns;
-
    /***** Get parameters from form *****/
    /* Get institution code */
-   Ins->InsCod = Ins_GetAndCheckParamOtherInsCod ();
+   Gbl.Inss.EditingIns.InsCod = Ins_GetAndCheckParamOtherInsCod ();
 
    /* Get parameter with status */
    Status = (Ins_Status_t)
@@ -2060,22 +2054,20 @@ void Ins_ChangeInsStatus (void)
    Status = Ins_GetStatusBitsFromStatusTxt (StatusTxt);	// New status
 
    /***** Get data of institution *****/
-   Ins_GetDataOfInstitutionByCod (Ins,Ins_GET_BASIC_DATA);
+   Ins_GetDataOfInstitutionByCod (&Gbl.Inss.EditingIns,Ins_GET_BASIC_DATA);
 
    /***** Update status in table of institutions *****/
    sprintf (Query,"UPDATE institutions SET Status=%u WHERE InsCod=%ld",
-            (unsigned) Status,Ins->InsCod);
+            (unsigned) Status,Gbl.Inss.EditingIns.InsCod);
    DB_QueryUPDATE (Query,"can not update the status of an institution");
+   Gbl.Inss.EditingIns.Status = Status;
 
-   Ins->Status = Status;
-
-   /***** Write message to show the change made *****/
+   /***** Write message to show the change made
+	  and put button to go to institution changed *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_institution_X_has_changed,
-            Ins->ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-   /***** Put button to go to institution changed *****/
-   Ins_PutButtonToGoToIns (Ins);
+            Gbl.Inss.EditingIns.ShrtName);
+   Ins_ShowAlertAndButtonToGoToIns ();
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
@@ -2087,36 +2079,42 @@ void Ins_ChangeInsStatus (void)
 
 void Ins_ContEditAfterChgIns (void)
   {
-   /***** Write success / warning message *****/
-   Lay_ShowPendingAlert ();
-
-   if (Gbl.Alert.Type == Lay_SUCCESS)
-      /***** Put button to go to institution changed *****/
-      Ins_PutButtonToGoToIns (&Gbl.Inss.EditingIns);
+   /***** Write message to show the change made
+	  and put button to go to institution changed *****/
+   Ins_ShowAlertAndButtonToGoToIns ();
 
    /***** Show the form again *****/
    Ins_EditInstitutions ();
   }
 
 /*****************************************************************************/
-/********************* Put button to go to institution ***********************/
+/*************** Write message to show the change made       *****************/
+/*************** and put button to go to institution changed *****************/
 /*****************************************************************************/
+// Gbl.Degs.EditingDeg is the degree that is beeing edited
+// Gbl.CurrentDeg.Deg is the current degree
 
-static void Ins_PutButtonToGoToIns (struct Instit *Ins)
+static void Ins_ShowAlertAndButtonToGoToIns (void)
   {
    extern const char *Txt_Go_to_X;
 
-   // If the institution is different to the current one...
-   if (Ins->InsCod != Gbl.CurrentIns.Ins.InsCod)
+   // If the institution beeing edited is different to the current one...
+   if (Gbl.Inss.EditingIns.InsCod != Gbl.CurrentIns.Ins.InsCod)
      {
-      fprintf (Gbl.F.Out,"<div class=\"BUTTONS_AFTER_ALERT\">");
-      Act_FormStart (ActSeeCtr);
-      Ins_PutParamInsCod (Ins->InsCod);
-      sprintf (Gbl.Title,Txt_Go_to_X,Ins->ShrtName);
-      Lay_PutConfirmButtonInline (Gbl.Title);
-      Act_FormEnd ();
-      fprintf (Gbl.F.Out,"</div>");
+      /***** Alert with button to go to degree *****/
+      sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Inss.EditingIns.ShrtName);
+      Lay_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
+                              ActSeeCtr,NULL,Ins_PutParamGoToIns,
+                              Lay_CONFIRM_BUTTON,Gbl.Title);
      }
+   else
+      /***** Alert *****/
+      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+  }
+
+static void Ins_PutParamGoToIns (void)
+  {
+   Ins_PutParamInsCod (Gbl.Inss.EditingIns.InsCod);
   }
 
 /*****************************************************************************/
@@ -2154,10 +2152,6 @@ static void Ins_PutFormToCreateInstitution (void)
   {
    extern const char *Txt_New_institution;
    extern const char *Txt_Create_institution;
-   struct Instit *Ins;
-
-   /***** Institution data *****/
-   Ins = &Gbl.Inss.EditingIns;
 
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -2192,7 +2186,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_SHORT_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_SHRT_NAME,Ins->ShrtName);
+            Hie_MAX_CHARS_SHRT_NAME,Gbl.Inss.EditingIns.ShrtName);
 
    /***** Institution full name *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2201,7 +2195,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_FULL_NAME\""
                       " required=\"required\" />"
                       "</td>",
-            Hie_MAX_CHARS_FULL_NAME,Ins->FullName);
+            Hie_MAX_CHARS_FULL_NAME,Gbl.Inss.EditingIns.FullName);
 
    /***** Institution WWW *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
@@ -2210,7 +2204,7 @@ static void Ins_PutFormToCreateInstitution (void)
                       " class=\"INPUT_WWW\""
                       " required=\"required\" />"
                       "</td>",
-            Cns_MAX_CHARS_WWW,Ins->WWW);
+            Cns_MAX_CHARS_WWW,Gbl.Inss.EditingIns.WWW);
 
    /***** Number of users who claim to belong to this institution ****/
    fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -2327,42 +2321,40 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
    extern const char *Txt_The_institution_X_already_exists;
    extern const char *Txt_You_must_specify_the_web_address_of_the_new_institution;
    extern const char *Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_institution;
-   struct Instit *Ins;
-
-   Ins = &Gbl.Inss.EditingIns;
 
    /***** Get parameters from form *****/
    /* Set institution country */
-   Ins->CtyCod = Gbl.CurrentCty.Cty.CtyCod;
+   Gbl.Inss.EditingIns.CtyCod = Gbl.CurrentCty.Cty.CtyCod;
 
    /* Get institution short name */
-   Par_GetParToText ("ShortName",Ins->ShrtName,Hie_MAX_BYTES_SHRT_NAME);
+   Par_GetParToText ("ShortName",Gbl.Inss.EditingIns.ShrtName,Hie_MAX_BYTES_SHRT_NAME);
 
    /* Get institution full name */
-   Par_GetParToText ("FullName",Ins->FullName,Hie_MAX_BYTES_FULL_NAME);
+   Par_GetParToText ("FullName",Gbl.Inss.EditingIns.FullName,Hie_MAX_BYTES_FULL_NAME);
 
    /* Get institution WWW */
-   Par_GetParToText ("WWW",Ins->WWW,Cns_MAX_BYTES_WWW);
+   Par_GetParToText ("WWW",Gbl.Inss.EditingIns.WWW,Cns_MAX_BYTES_WWW);
 
-   if (Ins->ShrtName[0] && Ins->FullName[0])	// If there's a institution name
+   if (Gbl.Inss.EditingIns.ShrtName[0] &&
+       Gbl.Inss.EditingIns.FullName[0])	// If there's a institution name
      {
-      if (Ins->WWW[0])
+      if (Gbl.Inss.EditingIns.WWW[0])
         {
          /***** If name of institution was in database... *****/
-         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Ins->ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
+         if (Ins_CheckIfInsNameExistsInCty ("ShortName",Gbl.Inss.EditingIns.ShrtName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
             sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
-                     Ins->ShrtName);
+                     Gbl.Inss.EditingIns.ShrtName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
-         else if (Ins_CheckIfInsNameExistsInCty ("FullName",Ins->FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
+         else if (Ins_CheckIfInsNameExistsInCty ("FullName",Gbl.Inss.EditingIns.FullName,-1L,Gbl.CurrentCty.Cty.CtyCod))
            {
             sprintf (Gbl.Alert.Txt,Txt_The_institution_X_already_exists,
-                     Ins->FullName);
+                     Gbl.Inss.EditingIns.FullName);
             Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
            }
          else	// Add new institution to database
-            Ins_CreateInstitution (Ins,Status);
+            Ins_CreateInstitution (Status);
         }
       else	// If there is not a web
          Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_web_address_of_the_new_institution);
@@ -2377,8 +2369,9 @@ static void Ins_RecFormRequestOrCreateIns (unsigned Status)
 /*****************************************************************************/
 /************************** Create a new institution *************************/
 /*****************************************************************************/
+// Gbl.Inss.EditingIns must hold the institution beeing edited
 
-static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
+static void Ins_CreateInstitution (unsigned Status)
   {
    extern const char *Txt_Created_new_institution_X;
    char Query[512 +
@@ -2391,19 +2384,20 @@ static void Ins_CreateInstitution (struct Instit *Ins,unsigned Status)
 	          " (CtyCod,Status,RequesterUsrCod,ShortName,FullName,WWW)"
                   " VALUES"
                   " (%ld,%u,%ld,'%s','%s','%s')",
-            Ins->CtyCod,
+            Gbl.Inss.EditingIns.CtyCod,
             Status,
             Gbl.Usrs.Me.UsrDat.UsrCod,
-            Ins->ShrtName,Ins->FullName,Ins->WWW);
-   Ins->InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
+            Gbl.Inss.EditingIns.ShrtName,
+            Gbl.Inss.EditingIns.FullName,
+            Gbl.Inss.EditingIns.WWW);
+   Gbl.Inss.EditingIns.InsCod = DB_QueryINSERTandReturnCode (Query,"can not create institution");
 
-   /***** Write success message *****/
+   /***** Write message to show the change made
+	  and put button to go to institution created *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_Created_new_institution_X,
-            Ins->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-   /***** Put button to go to institution created *****/
-   Ins_PutButtonToGoToIns (Ins);
+            Gbl.Inss.EditingIns.FullName);
+   Ins_ShowAlertAndButtonToGoToIns ();
   }
 
 /*****************************************************************************/

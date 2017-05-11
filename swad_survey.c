@@ -1478,15 +1478,12 @@ void Svy_AskRemSurvey (void)
       Lay_ShowErrorAndExit ("You can not remove this survey.");
 
    /***** Show question and button to remove survey *****/
-   /* Start alert */
+   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
-   Lay_ShowAlertAndButton2 (ActRemSvy,NULL,Svy_PutParams,
-			    Lay_REMOVE_BUTTON,Txt_Remove_survey);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemSvy,NULL,Svy_PutParams,
+			   Lay_REMOVE_BUTTON,Txt_Remove_survey);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -3516,16 +3513,13 @@ void Svy_RequestRemoveQst (void)
    SvyQst.QstInd = Svy_GetQstIndFromQstCod (SvyQst.QstCod);
 
    /***** Show question and button to remove question *****/
-   /* Start alert */
-   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
-	    (unsigned long) (SvyQst.QstInd + 1));
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
    Gbl.Svys.SvyCodToEdit    = SvyCod;
    Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
-   Lay_ShowAlertAndButton2 (ActRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
-			    Lay_REMOVE_BUTTON,Txt_Remove_question);
+   sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
+	    (unsigned long) (SvyQst.QstInd + 1));
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
+			   Lay_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);

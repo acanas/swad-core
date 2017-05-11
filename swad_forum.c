@@ -4105,22 +4105,18 @@ void For_RequestRemoveThread (void)
    For_ShowForumList ();
 
    /***** Show question and button to remove the thread *****/
-   /* Start alert */
    fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_REMOVE_THREAD_SECTION);
    if (Subject[0])
-     {
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-     }
    else
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_entire_thread);
-
-   /* End alert */
-   Lay_ShowAlertAndButton2 (For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
-                            For_ID_FORUM_THREADS_SECTION,
-                            For_PutAllHiddenParamsRemThread,
-                            Lay_REMOVE_BUTTON,Txt_Remove_thread);
+      sprintf (Gbl.Alert.Txt,"%s",
+               Txt_Do_you_really_want_to_remove_the_entire_thread);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
+			   For_ID_FORUM_THREADS_SECTION,
+			   For_PutAllHiddenParamsRemThread,
+			   Lay_REMOVE_BUTTON,Txt_Remove_thread);
    fprintf (Gbl.F.Out,"</section>");
 
    /***** Show the threads again *****/

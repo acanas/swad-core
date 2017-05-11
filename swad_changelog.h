@@ -235,13 +235,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.213 (2017-05-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.214 (2017-05-10)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.214:   May 11, 2017	Changes in edition of institutions.
+					Code refactoring related to alerts. (218867 lines)
         Version 16.213:   May 11, 2017	Changes in edition of centres. (218881 lines)
         Version 16.212:   May 11, 2017	Changes in edition of courses and degrees. (218870 lines)
         Version 16.211.2: May 11, 2017	Fixed bug in alerts. (218879 lines)

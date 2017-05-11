@@ -641,7 +641,6 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                       &Gbl.CurrentCrs.Records.Field.Visibility);
 
    /***** Show question and button to remove my photo *****/
-   /* Start alert */
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_field_X_from_the_records_of_X,
             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
    if (NumRecords == 1)
@@ -654,11 +653,9 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
       Str_Concat (Gbl.Alert.Txt,Message_part2,
                   Lay_MAX_BYTES_ALERT);
      }
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemFie,NULL,Rec_PutParamFielCod,
-			    Lay_REMOVE_BUTTON,Txt_Remove_record_field);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemFie,NULL,Rec_PutParamFielCod,
+			   Lay_REMOVE_BUTTON,Txt_Remove_record_field);
 
    /***** List record fields again *****/
    Rec_ReqEditRecordFields ();

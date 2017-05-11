@@ -2266,20 +2266,18 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
   {
    extern const char *Txt_Go_to_X;
 
-   /***** Start alert *****/
-   Lay_ShowAlertAndButton1 (Gbl.Alert.Type,Gbl.Alert.Txt);
-
    // If the degree being edited is different to the current one...
    if (Gbl.Degs.EditingDeg.DegCod != Gbl.CurrentDeg.Deg.DegCod)
      {
-      /***** Put button to go to degree and end alert *****/
+      /***** Alert with button to go to degree *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingDeg.ShrtName);
-      Lay_ShowAlertAndButton2 (ActSeeCrs,NULL,Deg_PutParamGoToDeg,
-                               Lay_CONFIRM_BUTTON,Gbl.Title);
+      Lay_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
+                              ActSeeCrs,NULL,Deg_PutParamGoToDeg,
+                              Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else
-      /***** End alert *****/
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+      /***** Alert *****/
+      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
   }
 
 static void Deg_PutParamGoToDeg (void)

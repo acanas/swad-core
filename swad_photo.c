@@ -417,10 +417,8 @@ void Pho_ReqRemoveMyPhoto (void)
       Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
 
       /* Show current photo */
-      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
 			"PHOTO186x248",Pho_NO_ZOOM,false);
-      fprintf (Gbl.F.Out,"</div>");
 
       /* End alert */
       Lay_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
@@ -480,10 +478,8 @@ void Pho_ReqRemoveUsrPhoto (void)
 	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
 
 	    /* Show current photo */
-	    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
-	    fprintf (Gbl.F.Out,"</div>");
 
 	    /* End alert */
 	    Lay_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :

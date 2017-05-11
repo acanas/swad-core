@@ -1684,10 +1684,17 @@ void Lay_ShowPendingAlert (void)
 void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Txt)
   {
    if (AlertType != Lay_NONE)
-     {
-      Lay_ShowAlertAndButton1 (AlertType,Txt);
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
-     }
+      Lay_ShowAlertAndButton (AlertType,Txt,
+                              ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+  }
+
+void Lay_ShowAlertAndButton (Lay_AlertType_t AlertType,const char *Txt,
+                             Act_Action_t NextAction,const char *Anchor,
+                             void (*FuncParams) (),
+                             Lay_Button_t Button,const char *TxtButton)
+  {
+   Lay_ShowAlertAndButton1 (AlertType,Txt);
+   Lay_ShowAlertAndButton2 (NextAction,Anchor,FuncParams,Button,TxtButton);
   }
 
 void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Txt)

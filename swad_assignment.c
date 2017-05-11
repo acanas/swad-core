@@ -969,15 +969,12 @@ void Asg_ReqRemAssignment (void)
    Asg_GetDataOfAssignmentByCod (&Asg);
 
    /***** Show question and button to remove the assignment *****/
-   /* Start alert */
+   Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
-   Lay_ShowAlertAndButton2 (ActRemAsg,NULL,Asg_PutParams,
-                            Lay_REMOVE_BUTTON,Txt_Remove_assignment);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemAsg,NULL,Asg_PutParams,
+                           Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();

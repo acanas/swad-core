@@ -6184,20 +6184,17 @@ void Brw_AskRemFileFromTree (void)
    if (Brw_CheckIfICanEditFileOrFolder (Gbl.FileBrowser.Level))	// Can I remove this file?
      {
       /***** Show question and button to remove file/link *****/
-      /* Start alert */
       Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.FileType,Gbl.FileBrowser.Level,
                              Gbl.FileBrowser.FileType,
                              Gbl.FileBrowser.FilFolLnkName,FileNameToShow);
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-      /* End alert */
-      Lay_ShowAlertAndButton2 (Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
-                               Brw_PutParamsRemFile,
-                               Lay_REMOVE_BUTTON,
-                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
-        	                                                         Txt_Remove_link);
+      Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                              Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
+                              Brw_PutParamsRemFile,
+                              Lay_REMOVE_BUTTON,
+                              Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
+        	                                                        Txt_Remove_link);
      }
    else
       Lay_ShowErrorAndExit (Txt_You_can_not_remove_this_file_or_link);
@@ -6335,15 +6332,12 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    extern const char *Txt_Remove_folder;
 
    /***** Show question and button to remove not empty folder *****/
-   /* Start alert */
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_folder_X,
             Gbl.FileBrowser.FilFolLnkName);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Lay_ShowAlertAndButton2 (Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,
-			    Brw_PutParamsRemFolder,
-			    Lay_REMOVE_BUTTON,Txt_Remove_folder);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,
+			   Brw_PutParamsRemFolder,
+			   Lay_REMOVE_BUTTON,Txt_Remove_folder);
   }
 
 /*****************************************************************************/

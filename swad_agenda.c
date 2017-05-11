@@ -1298,15 +1298,12 @@ void Agd_AskRemEvent (void)
    Agd_GetDataOfEventByCod (&AgdEvent);
 
    /***** Show question and button to remove event *****/
-   /* Start alert */
+   Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
 	    AgdEvent.Event);
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
-
-   /* End alert */
-   Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
-   Lay_ShowAlertAndButton2 (ActRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
-			    Lay_REMOVE_BUTTON,Txt_Remove_event);
+   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+                           ActRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
+			   Lay_REMOVE_BUTTON,Txt_Remove_event);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
