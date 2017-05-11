@@ -130,7 +130,7 @@ void Deg_ChangeDegWWWInConfig (void);
 void Deg_ChangeDegStatus (void);
 void Deg_ContEditAfterChgDeg (void);
 
-void Deg_PutButtonToGoToDeg (struct Degree *Deg);
+void Deg_ShowAlertAndButtonToGoToDeg (void);
 
 void Deg_RequestLogo (void);
 void Deg_ReceiveLogo (void);

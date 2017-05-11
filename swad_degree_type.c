@@ -998,34 +998,30 @@ static bool DT_CheckIfDegreeTypeNameExists (const char *DegTypName,long DegTypCo
 void DT_ChangeDegreeType (void)
   {
    extern const char *Txt_The_type_of_degree_of_the_degree_X_has_changed;
-   struct Degree *Deg;
    long NewDegTypCod;
    char Query[128];
 
-   Deg = &Gbl.Degs.EditingDeg;
-
    /***** Get parameters from form *****/
    /* Get degree code */
-   Deg->DegCod = Deg_GetAndCheckParamOtherDegCod ();
+   Gbl.Degs.EditingDeg.DegCod = Deg_GetAndCheckParamOtherDegCod ();
 
    /* Get the new degree type */
    NewDegTypCod = DT_GetParamOtherDegTypCod ();
 
    /***** Get data of degree *****/
-   Deg_GetDataOfDegreeByCod (Deg);
+   Deg_GetDataOfDegreeByCod (&Gbl.Degs.EditingDeg);
 
    /***** Update the table of degrees changing old type by new type *****/
    sprintf (Query,"UPDATE degrees SET DegTypCod=%ld WHERE DegCod=%ld",
-	    NewDegTypCod,Deg->DegCod);
+	    NewDegTypCod,Gbl.Degs.EditingDeg.DegCod);
    DB_QueryUPDATE (Query,"can not update the type of a degree");
 
-   /***** Write message to show the change made *****/
+   /***** Write message to show the change made
+          and put button to go to degree changed *****/
+   Gbl.Alert.Type = Lay_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_type_of_degree_of_the_degree_X_has_changed,
-	    Deg->FullName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
-
-   /***** Put button to go to degree changed *****/
-   Deg_PutButtonToGoToDeg (Deg);
+	    Gbl.Degs.EditingDeg.FullName);
+   Deg_ShowAlertAndButtonToGoToDeg ();
 
    /***** Show the form again *****/
    Gbl.Degs.EditingDegTyp.DegTypCod = NewDegTypCod;
