@@ -252,6 +252,9 @@ static void Grp_EditGroupTypes (void)
                         Grp_PutIconsEditingGroupTypes,
                         Hlp_USERS_Groups);
 
+   /***** Put a form to create a new group type *****/
+   Grp_PutFormToCreateGroupType ();
+
    /***** Forms to edit current group types *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.Num)	// Group types found...
       Grp_ListGroupTypesForEdition ();
@@ -261,9 +264,6 @@ static void Grp_EditGroupTypes (void)
                Gbl.CurrentCrs.Crs.ShrtName);
       Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
      }
-
-   /***** Put a form to create a new group type *****/
-   Grp_PutFormToCreateGroupType ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -283,6 +283,9 @@ static void Grp_EditGroups (void)
    Lay_StartRoundFrame (NULL,Txt_Groups,Grp_PutIconsEditingGroups,
                         Hlp_USERS_Groups);
 
+   /***** Put a form to create a new group *****/
+   Grp_PutFormToCreateGroup ();
+
    /***** Forms to edit current groups *****/
    if (Gbl.CurrentCrs.Grps.GrpTypes.NumGrpsTotal)	// If there are groups...
       Grp_ListGroupsForEdition ();
@@ -292,9 +295,6 @@ static void Grp_EditGroups (void)
                Gbl.CurrentCrs.Crs.ShrtName);
       Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
      }
-
-   /***** Put a form to create a new group *****/
-   Grp_PutFormToCreateGroup ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
