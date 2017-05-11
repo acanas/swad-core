@@ -1670,14 +1670,11 @@ void Lay_ShowPendingAlert (void)
   {
    /***** Anything to show? *****/
    if (Gbl.Alert.Type != Lay_NONE)
-     {
       /***** Show alert *****/
       Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
 
-      /***** Avoid writing twice the same alert if called more than once *****/
-      Gbl.Alert.Type = Lay_NONE;
-      Gbl.Alert.Txt[0] = '\0';
-     }
+   // Do not be tempted to restore the value of Gbl.Alert.Type to Lay_NONE here,
+   // since it can still be used after calling this function.
   }
 
 /*****************************************************************************/
