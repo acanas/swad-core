@@ -273,7 +273,7 @@ static void Att_ShowAllAttEvents (void)
       Lay_EndTable ();
      }
    else	// No events created
-      Lay_ShowAlert (Lay_INFO,Txt_No_events);
+      Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Button to create a new attendance event *****/
    if (ICanEdit)
@@ -879,7 +879,7 @@ void Att_AskRemAttEvent (void)
    /***** Ask for confirmation of removing *****/
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
             Att.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
    Lay_PutRemoveButton (Txt_Remove_event);
    Act_FormEnd ();
 
@@ -909,7 +909,7 @@ void Att_GetAndRemAttEvent (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_removed,Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -957,7 +957,7 @@ void Att_HideAttEvent (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_hidden,
             Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -989,7 +989,7 @@ void Att_ShowAttEvent (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible,
             Att.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show attendance events again *****/
    Att_SeeAttEvents ();
@@ -1270,13 +1270,13 @@ void Att_RecFormAttEvent (void)
          ReceivedAttEventIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_event_with_the_title_X,
                   ReceivedAtt.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not an attendance event title
      {
       ReceivedAttEventIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Create a new attendance event or update an existing one *****/
@@ -1292,14 +1292,14 @@ void Att_RecFormAttEvent (void)
 
          /***** Write success message *****/
 	 sprintf (Gbl.Alert.Txt,Txt_Created_new_event_X,ReceivedAtt.Title);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
 	{
          Att_UpdateAttEvent (&ReceivedAtt,Txt);
 
 	 /***** Write success message *****/
-	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
 	}
 
       /* Free memory for list of selected groups */
@@ -2207,7 +2207,7 @@ void Att_RegisterMeAsStdInAttEvent (void)
 	 Att_RemoveUsrFromAttEvent (Att.AttCod,Gbl.Usrs.Me.UsrDat.UsrCod);
 
       /***** Write final message *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_Your_comment_has_been_updated);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_Your_comment_has_been_updated);
      }
 
    /***** Show the attendance event again *****/
@@ -2334,7 +2334,7 @@ void Att_RegisterStudentsInAttEvent (void)
       sprintf (Format,"%s: %%u<br />%s: %%u",Txt_Presents,Txt_Absents);
       sprintf (Gbl.Alert.Txt,Format,
 	       NumStdsPresent,NumStdsAbsent);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else	// Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
       /***** Show warning indicating no students found *****/
@@ -2798,7 +2798,7 @@ static void Usr_ListOrPrintStdsAttendanceCrs (Att_TypeOfView_t TypeOfView)
      }
    else	// No students selected
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_students);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
       Usr_ReqListStdsAttendanceCrs ();		// ...show again the form
      }
 

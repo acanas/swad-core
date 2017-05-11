@@ -66,17 +66,6 @@ extern struct Globals Gbl;
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
-static const char *Lay_AlertIcons[Lay_NUM_ALERT_TYPES] =
-  {
-   NULL,		// Lay_NONE
-   "info64x64.png",	// Lay_INFO
-   "success64x64.png",	// Lay_SUCCESS
-   "question64x64.gif",	// Lay_QUESTION		animated gif
-   "warning64x64.gif",	// Lay_WARNING		animated gif
-   "error64x64.gif",	// Lay_ERROR		animated gif
-   "copy_on16x16.gif",	// Lay_CLIPBOARD
-  };
-
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -105,8 +94,6 @@ static void Lay_WriteTitleAction (void);
 
 static void Lay_ShowLeftColumn (void);
 static void Lay_ShowRightColumn (void);
-
-static void Lay_PutButton (Lay_Button_t Button,const char *TxtButton);
 
 static void Lay_StartRoundFrameInternal (const char *Width,const char *Title,
                                          void (*FunctionToDrawContextualIcons) (void),
@@ -1351,7 +1338,7 @@ void Lay_PutIconRemove (void)
 /********************** Put a button to submit a form ************************/
 /*****************************************************************************/
 
-static void Lay_PutButton (Lay_Button_t Button,const char *TxtButton)
+void Lay_PutButton (Lay_Button_t Button,const char *TxtButton)
   {
    if (TxtButton)
       if (TxtButton[0])
@@ -1600,7 +1587,7 @@ void Lay_ShowErrorAndExit (const char *Txt)
 
       /***** Write possible error message *****/
       if (Txt)
-         Lay_ShowAlert (Lay_ERROR,Txt);
+         Ale_ShowAlert (Ale_ERROR,Txt);
 
       /***** Finish the page, except </body> and </html> *****/
       Lay_WriteEndOfPage ();
@@ -1658,89 +1645,6 @@ void Lay_ShowErrorAndExit (const char *Txt)
    if (Gbl.WebService.IsWebService)
       Svc_Exit (Txt);
    exit (0);
-  }
-
-/*****************************************************************************/
-/*********************** Show a write-pending alert **************************/
-/*****************************************************************************/
-// Gbl.Alert.Type must be Lay_NONE or any type of alert
-// If Gbl.Alert.Type != Lay_NONE ==> Gbl.Alert.Txt must hold the message
-
-void Lay_ShowPendingAlert (void)
-  {
-   /***** Anything to show? *****/
-   if (Gbl.Alert.Type != Lay_NONE)
-      /***** Show alert *****/
-      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
-
-   // Do not be tempted to restore the value of Gbl.Alert.Type to Lay_NONE here,
-   // since it can still be used after calling this function.
-  }
-
-/*****************************************************************************/
-/******************** Show an alert message to the user **********************/
-/*****************************************************************************/
-
-void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Txt)
-  {
-   if (AlertType != Lay_NONE)
-      Lay_ShowAlertAndButton (AlertType,Txt,
-                              ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
-  }
-
-void Lay_ShowAlertAndButton (Lay_AlertType_t AlertType,const char *Txt,
-                             Act_Action_t NextAction,const char *Anchor,
-                             void (*FuncParams) (),
-                             Lay_Button_t Button,const char *TxtButton)
-  {
-   Lay_ShowAlertAndButton1 (AlertType,Txt);
-   Lay_ShowAlertAndButton2 (NextAction,Anchor,FuncParams,Button,TxtButton);
-  }
-
-void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Txt)
-  {
-   /****** If start of page is not written yet, do it now ******/
-   if (!Gbl.Layout.HTMLStartWritten)
-      Lay_WriteStartOfPage ();
-
-   /***** Start box *****/
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
-	              "<div class=\"ALERT\">");
-
-   /***** Write message *****/
-   fprintf (Gbl.F.Out,"<div class=\"ALERT_TXT\""
-		      " style=\"background-image:url('%s/%s'); background-size:20px 20px;\">",
-	    Gbl.Prefs.IconsURL,Lay_AlertIcons[AlertType]);
-   if (Txt)
-      fprintf (Gbl.F.Out,"%s",Txt);
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,
-                              void (*FuncParams) (),
-                              Lay_Button_t Button,const char *TxtButton)
-  {
-   /***** Optional button *****/
-   if (NextAction != ActUnk &&
-       Button != Lay_NO_BUTTON &&
-       TxtButton)
-      if (TxtButton[0])
-	{
-         /* Start form */
-	 Act_FormStartAnchor (NextAction,Anchor);
-	 if (FuncParams)
-	    FuncParams ();
-
-         /* Put button *****/
-	 Lay_PutButton (Button,TxtButton);
-
-         /* End form */
-	 Act_FormEnd ();
-	}
-
-   /***** End box *****/
-   fprintf (Gbl.F.Out,"</div>"
-	              "</div>");
   }
 
 /*****************************************************************************/

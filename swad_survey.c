@@ -267,7 +267,7 @@ static void Svy_ListAllSurveys (struct SurveyQuestion *SvyQst)
       Lay_EndTable ();
      }
    else	// No surveys created
-      Lay_ShowAlert (Lay_INFO,Txt_No_surveys);
+      Ale_ShowAlert (Ale_INFO,Txt_No_surveys);
 
    /***** Button to create a new survey *****/
    if (Svy_CheckIfICanCreateSvy ())
@@ -1481,7 +1481,7 @@ void Svy_AskRemSurvey (void)
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
-   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemSvy,NULL,Svy_PutParams,
 			   Lay_REMOVE_BUTTON,Txt_Remove_survey);
 
@@ -1541,7 +1541,7 @@ void Svy_RemoveSurvey (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Survey_X_removed,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1574,7 +1574,7 @@ void Svy_AskResetSurvey (void)
    /***** Ask for confirmation of reset *****/
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_reset_the_survey_X,
             Svy.Title);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
    /***** Button of confirmation of reset *****/
    Gbl.Svys.SvyCodToEdit = Svy.SvyCod;
@@ -1633,7 +1633,7 @@ void Svy_ResetSurvey (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Survey_X_reset,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1667,7 +1667,7 @@ void Svy_HideSurvey (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_hidden,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -1701,7 +1701,7 @@ void Svy_UnhideSurvey (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Survey_X_is_now_visible,
             Svy.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);
@@ -2140,13 +2140,13 @@ void Svy_RecFormSurvey (void)
          NewSurveyIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_a_survey_with_the_title_X,
                   NewSvy.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
      }
    else	// If there is not a survey title
      {
       NewSurveyIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_survey);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_survey);
      }
 
    /***** Create a new survey or update an existing one *****/
@@ -2229,7 +2229,7 @@ static void Svy_CreateSurvey (struct Survey *Svy,const char *Txt)
    /***** Write success message *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_survey_X,
             Svy->Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -2269,7 +2269,7 @@ static void Svy_UpdateSurvey (struct Survey *Svy,const char *Txt)
       Svy_CreateGrps (Svy->SvyCod);
 
    /***** Write success message *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_survey_has_been_modified);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
   }
 
 /*****************************************************************************/
@@ -2843,7 +2843,7 @@ static unsigned Svy_GetAnswersQst (long QstCod,MYSQL_RES **mysql_res)
 
    /***** Count number of rows of result *****/
    if (NumRows == 0)
-      Lay_ShowAlert (Lay_ERROR,"Error when getting answers of a question.");
+      Ale_ShowAlert (Ale_ERROR,"Error when getting answers of a question.");
 
    return (unsigned) NumRows;
   }
@@ -2954,7 +2954,7 @@ void Svy_ReceiveQst (void)
               {
                if (ThereIsEndOfAnswers)
                  {
-                  Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
+                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_empty_intermediate_answers);
                   Error = true;
                  }
                else
@@ -2966,20 +2966,20 @@ void Svy_ReceiveQst (void)
            {
             if (NumLastAns < 1)
               {
-               Lay_ShowAlert (Lay_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+               Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
                Error = true;
               }
            }
         }
       else	// If first answer is empty
         {
-         Lay_ShowAlert (Lay_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_at_least_the_first_two_answers);
          Error = true;
         }
      }
    else
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_type_the_stem_of_the_question);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_type_the_stem_of_the_question);
       Error = true;
      }
 
@@ -3048,7 +3048,7 @@ void Svy_ReceiveQst (void)
            }
 
       /***** List the questions of this survey, including the new one just inserted into the database *****/
-      Lay_ShowAlert (Lay_SUCCESS,Txt_The_survey_has_been_modified);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_The_survey_has_been_modified);
      }
 
    /***** Free answers *****/
@@ -3266,7 +3266,7 @@ static void Svy_ListSvyQuestions (struct Survey *Svy,struct SurveyQuestion *SvyQ
 	}
      }
    else	// This survey has no questions
-      Lay_ShowAlert (Lay_INFO,Txt_This_survey_has_no_questions);
+      Ale_ShowAlert (Ale_INFO,Txt_This_survey_has_no_questions);
 
    if (Svy->Status.ICanEdit &&	// I can edit
        (!NumQsts ||		// This survey has no questions
@@ -3517,7 +3517,7 @@ void Svy_RequestRemoveQst (void)
    Gbl.Svys.SvyQstCodToEdit = SvyQst.QstCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (SvyQst.QstInd + 1));
-   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
 			   Lay_REMOVE_BUTTON,Txt_Remove_question);
 
@@ -3567,7 +3567,7 @@ void Svy_RemoveQst (void)
 
    /***** Write message *****/
    sprintf (Gbl.Alert.Txt,"%s",Txt_Question_removed);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show current survey *****/
    Svy_ShowOneSurvey (SvyCod,&SvyQst,true);
@@ -3593,12 +3593,12 @@ void Svy_ReceiveSurveyAnswers (void)
 
    /***** Check if I have no answered this survey formerly *****/
    if (Svy.Status.IHaveAnswered)
-      Lay_ShowAlert (Lay_WARNING,Txt_You_already_answered_this_survey_before);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_already_answered_this_survey_before);
    else
      {
       /***** Receive and store user's answers *****/
       Svy_ReceiveAndStoreUserAnswersToASurvey (Svy.SvyCod);
-      Lay_ShowAlert (Lay_INFO,Txt_Thanks_for_answering_the_survey);
+      Ale_ShowAlert (Ale_INFO,Txt_Thanks_for_answering_the_survey);
      }
 
    /***** Show current survey *****/

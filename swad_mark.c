@@ -281,7 +281,7 @@ static void Mrk_ChangeNumRowsHeaderOrFooter (Brw_HeadOrFoot_t HeaderOrFooter)
       /***** Write message of success *****/
       sprintf (Gbl.Alert.Txt,Txt_The_number_of_rows_is_now_X,
                NumRows);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
       Lay_ShowErrorAndExit ("Wrong number of rows.");
@@ -701,7 +701,7 @@ void Mrk_ShowMyMarks (void)
       else	// Problems in table of marks or user's ID not found
         {
          fclose (FileUsrMarks);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
 
       unlink (FileNameUsrMarks);	// File with marks is no longer necessary

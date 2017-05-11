@@ -230,7 +230,7 @@ void Prf_GetUsrDatAndShowUserProfile (void)
    if (!ProfileShown)
      {
       /* Show error message */
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
 
       /* Request a user's profile */
       Prf_RequestUserProfile ();
@@ -338,7 +338,7 @@ void Prf_ChangeProfileVisibility (void)
    DB_QueryUPDATE (Query,"can not update your preference about public profile visibility");
 
    /***** Show alert *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_visibility_of_your_public_profile_has_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_visibility_of_your_public_profile_has_changed);
 
    /***** Show form again *****/
    Pri_EditMyPrivacy ();

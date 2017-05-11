@@ -107,7 +107,7 @@ void Lnk_SeeLinks (void)
    if (Gbl.Links.Num)	// There are links
       Lnk_WriteListOfLinks ();
    else			// No links created
-      Lay_ShowAlert (Lay_INFO,Txt_No_links);
+      Ale_ShowAlert (Ale_INFO,Txt_No_links);
 
    /***** Button to create link *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
@@ -464,7 +464,7 @@ void Lnk_RemoveLink (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Link_X_removed,
             Lnk.ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Lnk_EditLinks ();
@@ -538,7 +538,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_link_X_empty,
                CurrentLnkName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -550,7 +550,7 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                      NewLnkName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -560,14 +560,14 @@ static void Lnk_RenameLink (Cns_ShrtOrFullName_t ShrtOrFullName)
             /* Write message to show the change made */
             sprintf (Gbl.Alert.Txt,Txt_The_link_X_has_been_renamed_as_Y,
                      CurrentLnkName,NewLnkName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
          sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_link_X_has_not_changed,
                   CurrentLnkName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -638,10 +638,10 @@ void Lnk_ChangeLinkWWW (void)
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,
                NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-     Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+     Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Str_Copy (Lnk->WWW,NewWWW,
@@ -773,21 +773,21 @@ void Lnk_RecFormNewLink (void)
         {
          sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                   Lnk->ShrtName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Lnk_CheckIfLinkNameExists ("FullName",Lnk->FullName,-1L))
         {
          sprintf (Gbl.Alert.Txt,Txt_The_link_X_already_exists,
                   Lnk->FullName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (!Lnk->WWW[0])
-         Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_URL_of_the_new_link);
       else	// Add new link to database
          Lnk_CreateLink (Lnk);
      }
    else	// If there is not a link name
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_link);
 
    /***** Show the form again *****/
    Lnk_EditLinks ();
@@ -816,5 +816,5 @@ static void Lnk_CreateLink (struct Link *Lnk)
    /***** Write success message *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_link_X,
             Lnk->ShrtName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }

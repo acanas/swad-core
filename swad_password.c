@@ -205,8 +205,8 @@ void Pwd_ActChgMyPwd1 (void)
 void Pwd_ActChgMyPwd2 (void)
   {
    /***** Write error message when updating password *****/
-   Lay_ShowAlert (Gbl.Usrs.Error ? Lay_WARNING :
-	                           Lay_INFO,
+   Ale_ShowAlert (Gbl.Usrs.Error ? Ale_WARNING :
+	                           Ale_INFO,
 	          Gbl.Alert.Txt);
 
    /***** Retry? *****/
@@ -254,7 +254,7 @@ void Pwd_ShowFormSendNewPwd (void)
    Lay_StartRoundFrame (NULL,Txt_Forgotten_password,NULL,Hlp_PROFILE_Password);
 
    /***** Help text *****/
-   Lay_ShowAlert (Lay_INFO,Txt_If_you_have_forgotten_your_password_);
+   Ale_ShowAlert (Ale_INFO,Txt_If_you_have_forgotten_your_password_);
 
    /***** User's ID/nickname *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -289,7 +289,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
    /***** Check if user's ID or nickname is not empty *****/
    if (!Gbl.Usrs.Me.UsrIdLogin[0])
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_enter_your_nick_email_or_ID);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_enter_your_nick_email_or_ID);
       Pwd_ShowFormSendNewPwd ();
       return;
      }
@@ -353,21 +353,21 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	      {
 	       case 0: // Message sent successfully
 		  Pwd_SetMyPendingPassword (NewRandomPlainPassword);
-		  Lay_ShowAlert (Lay_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+		  Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 		  break;
 	       case 1:
-		  Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
+		  Ale_ShowAlert (Ale_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
 		  break;
 	       default:
 		  sprintf (Gbl.Alert.Txt,"Internal error: an email message has not been sent successfully."
 				       " Error code returned by the script: %d",
 			   ReturnCode);
-		  Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+		  Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 		  break;
 	      }
 	 else	// I have no email address
 	    /***** Help message *****/
-	    Lay_ShowAlert (Lay_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+	    Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
 	}
       else	// ListUsrCods.NumUsrs > 1
 	{
@@ -375,7 +375,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
 	 // TODO: This message allows to know if a ID exists in database (when no unique). This should be hidden!
 	 sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 		  Gbl.Usrs.Me.UsrIdLogin);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 
 	 Pwd_ShowFormSendNewPwd ();
 	}
@@ -385,7 +385,7 @@ void Pwd_ChkIdLoginAndSendNewPwd (void)
      }
    else        // ListUsrCods.NumUsrs == 0 ==> user does not exist
       /***** Help message *****/
-      Lay_ShowAlert (Lay_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
+      Ale_ShowAlert (Ale_INFO,Txt_If_you_have_written_your_ID_nickname_or_email_correctly_);
   }
 
 /*****************************************************************************/
@@ -532,8 +532,8 @@ void Pwd_UpdateOtherPwd2 (void)
   {
    /***** Write message when updating the password *****/
    if (Gbl.Alert.Txt[0])
-      Lay_ShowAlert (Gbl.Usrs.Error ? Lay_WARNING :
-	                              Lay_INFO,
+      Ale_ShowAlert (Gbl.Usrs.Error ? Ale_WARNING :
+	                              Ale_INFO,
 	             Gbl.Alert.Txt);
 
    if (Gbl.Usrs.Error)
@@ -684,11 +684,11 @@ void Pwd_ShowFormChgPwd (void)
 
    /***** Help message *****/
    if (!IHaveAPasswordInDB) // If I don't have a password in database...
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_create_your_password);
    else if (Gbl.Usrs.Me.LoginPlainPassword[0])
      {
       if (!Pwd_FastCheckIfPasswordSeemsGood (Gbl.Usrs.Me.LoginPlainPassword))
-         Lay_ShowAlert (Lay_WARNING,Txt_Your_password_is_not_secure_enough);
+         Ale_ShowAlert (Ale_WARNING,Txt_Your_password_is_not_secure_enough);
      }
 
    /***** Start form *****/
@@ -719,7 +719,7 @@ void Pwd_ShowFormChgPwd (void)
 		      "<td colspan=\"2\">");
    sprintf (Gbl.Alert.Txt,Txt_Your_password_must_be_at_least_X_characters_and_can_not_contain_spaces_,
             Pwd_MIN_CHARS_PLAIN_PASSWORD);
-   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
 
@@ -846,10 +846,10 @@ void Pwd_ShowFormOthPwd (void)
          Lay_EndRoundFrame ();
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -933,7 +933,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    /***** Get if consent has been done *****/
    if (!Par_GetParToBool ("Consent"))
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_have_not_confirmed_the_action);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_confirmed_the_action);
       return false;
      }
 
@@ -947,7 +947,7 @@ bool Pwd_GetConfirmationOnDangerousAction (void)
    /* Compare passwords */
    if (strcmp (Gbl.Usrs.Me.LoginEncryptedPassword,EncryptedPassword))
      {
-      Lay_ShowAlert (Lay_WARNING,Txt_You_have_not_entered_your_password_correctly);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_have_not_entered_your_password_correctly);
       return false;
      }
 

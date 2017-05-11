@@ -190,7 +190,7 @@ void Rec_ReqEditRecordFields (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_There_are_no_record_fields_in_the_course_X,
                Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
    /***** Put a form to create a new record field *****/
@@ -470,13 +470,13 @@ void Rec_ReceiveFormField (void)
         {
          sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_already_exists,
                   Gbl.CurrentCrs.Records.Field.Name);
-         Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
         }
       else	// Add the new field to the database
          Rec_CreateRecordField ();
      }
    else		// If there is not name
-      Lay_ShowAlert (Lay_ERROR,Txt_You_must_specify_the_name_of_the_new_record_field);
+      Ale_ShowAlert (Ale_ERROR,Txt_You_must_specify_the_name_of_the_new_record_field);
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
@@ -574,7 +574,7 @@ void Rec_CreateRecordField (void)
    /***** Write message of success *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_record_field_X,
             Gbl.CurrentCrs.Records.Field.Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -645,15 +645,15 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
             Gbl.CurrentCrs.Records.Field.Name,Gbl.CurrentCrs.Crs.FullName);
    if (NumRecords == 1)
       Str_Concat (Gbl.Alert.Txt,Txt_this_field_is_filled_in_the_record_of_one_student,
-                  Lay_MAX_BYTES_ALERT);
+                  Ale_MAX_BYTES_ALERT);
    else
      {
       sprintf (Message_part2,Txt_this_field_is_filled_in_the_records_of_X_students,
                NumRecords);
       Str_Concat (Gbl.Alert.Txt,Message_part2,
-                  Lay_MAX_BYTES_ALERT);
+                  Ale_MAX_BYTES_ALERT);
      }
-   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemFie,NULL,Rec_PutParamFielCod,
 			   Lay_REMOVE_BUTTON,Txt_Remove_record_field);
 
@@ -689,7 +689,7 @@ void Rec_RemoveFieldFromDB (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Record_field_X_removed,
             Gbl.CurrentCrs.Records.Field.Name);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Rec_ReqEditRecordFields ();
@@ -795,7 +795,7 @@ void Rec_RenameField (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_field_X_empty,
                Gbl.CurrentCrs.Records.Field.Name);
-      Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
      }
    else
      {
@@ -808,7 +808,7 @@ void Rec_RenameField (void)
            {
             sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_already_exists,
                      NewFieldName);
-            Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
            }
          else
            {
@@ -821,14 +821,14 @@ void Rec_RenameField (void)
             /***** Write message to show the change made *****/
             sprintf (Gbl.Alert.Txt,Txt_The_record_field_X_has_been_renamed_as_Y,
                      Gbl.CurrentCrs.Records.Field.Name,NewFieldName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
          sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_field_X_has_not_changed,
                   NewFieldName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -870,7 +870,7 @@ void Rec_ChangeLinesField (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_number_of_editing_lines_in_the_record_field_X_has_not_changed,
                Gbl.CurrentCrs.Records.Field.Name);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else
      {
@@ -883,7 +883,7 @@ void Rec_ChangeLinesField (void)
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_From_now_on_the_number_of_editing_lines_of_the_field_X_is_Y,
 	       Gbl.CurrentCrs.Records.Field.Name,NewNumLines);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -923,7 +923,7 @@ void Rec_ChangeVisibilityField (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_visibility_of_the_record_field_X_has_not_changed,
                Gbl.CurrentCrs.Records.Field.Name);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else
      {
@@ -936,7 +936,7 @@ void Rec_ChangeVisibilityField (void)
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_RECORD_FIELD_VISIBILITY_MSG[NewVisibility],
 	       Gbl.CurrentCrs.Records.Field.Name);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1011,7 +1011,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
       Usr_SeeGuests ();			// ...show again the form
       return;
      }
@@ -1055,7 +1055,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
 	 /* Show optional alert */
 	 if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	    Lay_ShowPendingAlert ();
+	    Ale_ShowPendingAlert ();
 
 	 /* Shared record */
 	 fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
@@ -1122,7 +1122,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Show optional alert (result of editing data in course record) *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Start container for this user *****/
    fprintf (Gbl.F.Out,"<section class=\"REC_USR\">");
@@ -1198,7 +1198,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    /* Check the number of students to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no students selected...
      {						// ...write warning notice
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_students);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_students);
       Usr_SeeStudents ();			// ...show again the form
       return;
      }
@@ -1255,7 +1255,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-               Lay_ShowPendingAlert ();
+               Ale_ShowPendingAlert ();
 
             /* Shared record */
             fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
@@ -1417,7 +1417,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    /* Check the number of teachers to show */
    if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If no teachers selected...
      {						// ...write warning notice
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_teachers);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_teachers);
       Usr_SeeTeachers ();			// ...show again the form
       return;
      }
@@ -1476,7 +1476,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
 	    /* Show optional alert */
 	    if (UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// Selected user
-	       Lay_ShowPendingAlert ();
+	       Ale_ShowPendingAlert ();
 
 	    /* Shared record */
             fprintf (Gbl.F.Out,"<section class=\"REC_SHA\">");
@@ -1637,7 +1637,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
    long OriginalActCod;
 
    /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Lay_NONE;	// Do not show alert
+   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
 
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
@@ -1658,7 +1658,7 @@ void Rec_UpdateAndShowOtherCrsRecord (void)
 
    /***** Update the record *****/
    Rec_UpdateCrsRecord (Gbl.Usrs.Other.UsrDat.UsrCod);
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,"%s",
             Txt_Student_record_card_in_this_course_has_been_updated);
 
@@ -1996,7 +1996,7 @@ void Rec_RemoveFieldsCrsRecordInCrs (long UsrCod,struct Course *Crs,Cns_QuietOrV
      {
       sprintf (Gbl.Alert.Txt,Txt_User_record_card_in_the_course_X_has_been_removed,
                Crs->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
   }
 
@@ -2015,7 +2015,7 @@ void Rec_RemoveFieldsCrsRecordAll (long UsrCod,Cns_QuietOrVerbose_t QuietOrVerbo
 
    /***** Write mensaje *****/
    if (QuietOrVerbose == Cns_VERBOSE)
-      Lay_ShowAlert (Lay_SUCCESS,Txt_User_record_cards_in_all_courses_have_been_removed);
+      Ale_ShowAlert (Ale_SUCCESS,Txt_User_record_cards_in_all_courses_have_been_removed);
   }
 
 /*****************************************************************************/
@@ -2027,7 +2027,7 @@ static void Rec_ShowMyCrsRecordUpdated (void)
    extern const char *Txt_Your_record_card_in_this_course_has_been_updated;
 
    /***** Write mensaje of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_record_card_in_this_course_has_been_updated);
 
    /***** Shared record *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,&Gbl.Usrs.Me.UsrDat,NULL);
@@ -2102,12 +2102,12 @@ void Rec_ShowFormMySharedRecord (void)
 
    /***** If user has no sex, name and surname... *****/
    if (Gbl.Usrs.Me.UsrDat.CtyCod < 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_country_nationality);
    else if (Gbl.Usrs.Me.UsrDat.Sex == Usr_SEX_UNKNOWN)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_sex);
    else if (!Gbl.Usrs.Me.UsrDat.FirstName[0] ||
 	    !Gbl.Usrs.Me.UsrDat.Surname1[0])
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_record_card_including_your_name);
 
    /***** Contextual links *****/
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
@@ -2146,7 +2146,7 @@ void Rec_ShowMySharedRecordUpd (void)
    extern const char *Txt_Your_personal_data_have_been_updated;
 
    /***** Write alert *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Your_personal_data_have_been_updated);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_personal_data_have_been_updated);
 
    /***** Show my record for checking *****/
    Rec_ShowSharedUsrRecord (Rec_SHA_MY_RECORD_CHECK,&Gbl.Usrs.Me.UsrDat,NULL);
@@ -3858,13 +3858,13 @@ void Rec_ShowFormMyInsCtrDpt (void)
 
    /***** If there is no country, institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_select_the_country_of_your_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_institution);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
    else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER)) &&
             (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
              Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0))
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_centre_and_department);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre_and_department);
 
    /***** Start table *****/
    Lay_StartRoundFrameTable ("800px",

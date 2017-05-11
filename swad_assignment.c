@@ -159,7 +159,7 @@ static void Asg_ShowAllAssignments (void)
       Lay_EndTable ();
      }
    else	// No assignments created
-      Lay_ShowAlert (Lay_INFO,Txt_No_assignments);
+      Ale_ShowAlert (Ale_INFO,Txt_No_assignments);
 
    /***** Button to create a new assignment *****/
    if (Asg_CheckIfICanCreateAssignments ())
@@ -972,7 +972,7 @@ void Asg_ReqRemAssignment (void)
    Gbl.Asgs.AsgCodToEdit = Asg.AsgCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
-   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemAsg,NULL,Asg_PutParams,
                            Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 
@@ -1016,7 +1016,7 @@ void Asg_RemoveAssignment (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Assignment_X_removed,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1048,7 +1048,7 @@ void Asg_HideAssignment (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_hidden,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1080,7 +1080,7 @@ void Asg_ShowAssignment (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Assignment_X_is_now_visible,
             Asg.Title);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show assignments again *****/
    Asg_SeeAssignments ();
@@ -1361,7 +1361,7 @@ void Asg_RecFormAssignment (void)
          NewAssignmentIsCorrect = false;
          sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_title_X,
                   NewAsg.Title);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Title is correct
         {
@@ -1374,13 +1374,13 @@ void Asg_RecFormAssignment (void)
                   NewAssignmentIsCorrect = false;
                   sprintf (Gbl.Alert.Txt,Txt_Already_existed_an_assignment_with_the_folder_X,
                            NewAsg.Folder);
-                  Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+                  Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
                  }
               }
             else	// Folder name not valid
               {
                NewAssignmentIsCorrect = false;
-               Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+               Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
               }
            }
          else	// NewAsg.SendWork == Asg_DO_NOT_SEND_WORK
@@ -1390,7 +1390,7 @@ void Asg_RecFormAssignment (void)
                if (Brw_CheckIfExistsFolderAssigmentForAnyUsr (OldAsg.Folder))
                  {
                   NewAssignmentIsCorrect = false;
-                  Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
+                  Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_disable_file_uploading_once_folders_have_been_created);
                  }
               }
            }
@@ -1399,7 +1399,7 @@ void Asg_RecFormAssignment (void)
    else	// If there is not an assignment title
      {
       NewAssignmentIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_assignment);
      }
 
    /***** Create a new assignment or update an existing one *****/
@@ -1414,7 +1414,7 @@ void Asg_RecFormAssignment (void)
 
 	 /***** Write success message *****/
 	 sprintf (Gbl.Alert.Txt,Txt_Created_new_assignment_X,NewAsg.Title);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
         {
@@ -1426,7 +1426,7 @@ void Asg_RecFormAssignment (void)
             Asg_UpdateAssignment (&NewAsg,Txt);
 
 	    /***** Write success message *****/
-	    Lay_ShowAlert (Lay_SUCCESS,Txt_The_assignment_has_been_modified);
+	    Ale_ShowAlert (Ale_SUCCESS,Txt_The_assignment_has_been_modified);
            }
         }
 

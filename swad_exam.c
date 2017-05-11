@@ -292,7 +292,7 @@ void Exa_ReceiveExamAnnouncement2 (void)
    struct SocialPublishing SocPub;
 
    /***** Show message *****/
-   Lay_ShowAlert (Lay_SUCCESS,
+   Ale_ShowAlert (Ale_SUCCESS,
                   Gbl.ExamAnns.NewExamAnnouncement ? Txt_Created_new_announcement_of_exam :
                                                               Txt_The_announcement_of_exam_has_been_successfully_updated);
 
@@ -364,7 +364,7 @@ void Exa_ReqRemoveExamAnnouncement (void)
 
    /***** Show question and button to remove exam announcement *****/
    /* Start alert */
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
+   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_announcement_of_exam);
 
    /* Show announcement */
    Exa_AllocMemExamAnnouncement ();
@@ -373,7 +373,7 @@ void Exa_ReqRemoveExamAnnouncement (void)
    Exa_FreeMemExamAnnouncement ();
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemExaAnn,NULL,Exa_PutParamExaCodToEdit,
+   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,Exa_PutParamExaCodToEdit,
 			    Lay_REMOVE_BUTTON,Txt_Remove);
   }
 
@@ -414,7 +414,7 @@ void Exa_RemoveExamAnnouncement2 (void)
    extern const char *Txt_Announcement_of_exam_removed;
 
    /***** Write message *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_of_exam_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_of_exam_removed);
 
    /***** List again all the remaining exam announcements *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -448,7 +448,7 @@ void Exa_HideExamAnnouncement2 (void)
    extern const char *Txt_The_announcement_of_exam_is_now_hidden;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_announcement_of_exam_is_now_hidden);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_hidden);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -482,7 +482,7 @@ void Exa_UnhideExamAnnouncement2 (void)
    extern const char *Txt_The_announcement_of_exam_is_now_visible;
 
    /***** Write message to show the change made *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_announcement_of_exam_is_now_visible);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_announcement_of_exam_is_now_visible);
 
    /***** Show exam announcements again *****/
    Exa_ListExamAnnouncementsEdit ();
@@ -660,7 +660,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
      {
       sprintf (Gbl.Alert.Txt,Txt_No_announcements_of_exams_of_X,
                Gbl.CurrentCrs.Crs.FullName);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
 
    /***** List the existing exam announcements *****/

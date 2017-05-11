@@ -125,7 +125,7 @@ void Ann_ShowAllAnnouncements (void)
 		        Hlp_MESSAGES_Announcements);
 
    if (!NumAnnouncements)
-      Lay_ShowAlert (Lay_INFO,Txt_No_announcements);
+      Ale_ShowAlert (Ale_INFO,Txt_No_announcements);
 
    /***** Show the announcements *****/
    for (NumAnn = 0;
@@ -493,7 +493,7 @@ void Ann_ReceiveAnnouncement (void)
    Ann_CreateAnnouncement (Roles,Subject,Content);
 
    /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_created);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_created);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();
@@ -578,7 +578,7 @@ void Ann_RemoveAnnouncement (void)
    DB_QueryDELETE (Query,"can not remove announcement");
 
    /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Announcement_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Announcement_removed);
 
    /***** Refresh list of announcements *****/
    Ann_ShowAllAnnouncements ();

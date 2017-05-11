@@ -138,7 +138,7 @@ void TsI_ShowFormImportQstsFromXML (void)
    Lay_StartRoundFrame (NULL,Txt_Import_questions,NULL,Hlp_ASSESSMENT_Tests);
 
    /***** Write help message *****/
-   Lay_ShowAlert (Lay_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
+   Ale_ShowAlert (Ale_INFO,Txt_You_need_an_XML_file_containing_a_list_of_questions);
 
    /***** Write a form to import questions *****/
    Act_FormStart (ActImpTstQst);
@@ -426,7 +426,7 @@ void TsI_ImportQstsFromXML (void)
    if (WrongType)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_file_is_not_X,"xml");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -436,7 +436,7 @@ void TsI_ImportQstsFromXML (void)
          /***** Get questions from XML file and store them in database *****/
          TsI_ReadQuestionsFromXMLFileAndStoreInDB (FileNameXMLTmp);
       else
-         Lay_ShowAlert (Lay_WARNING,"Error copying file.");
+         Ale_ShowAlert (Ale_WARNING,"Error copying file.");
      }
   }
 
@@ -669,7 +669,7 @@ static void TsI_ImportQuestionsFromXMLBuffer (const char *XMLBuffer)
       Lay_EndTable ();
      }
    else	// TestElem not found
-      Lay_ShowAlert (Lay_ERROR,"Root element &lt;test&gt; not found.");
+      Ale_ShowAlert (Ale_ERROR,"Root element &lt;test&gt; not found.");
 
    /***** End table *****/
    Lay_EndRoundFrame ();

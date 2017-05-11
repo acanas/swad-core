@@ -376,7 +376,7 @@ void Mai_WriteWarningEmailNotifications (void)
             Txt_TABS_TXT[TabMailDomains],
 	    Txt_MENU_TITLE[TabMailDomains][Act_Actions[SuperActionMailDomains].IndexInMenu],
 	    Txt_Domains);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -553,7 +553,7 @@ void Mai_RemoveMailDomain (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Email_domain_X_removed,
             Mai.Domain);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -627,7 +627,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_email_domain_X_empty,
                CurrentMaiName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -639,7 +639,7 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
            {
             sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                      NewMaiName);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -649,14 +649,14 @@ static void Mai_RenameMailDomain (Cns_ShrtOrFullName_t ShrtOrFullName)
             /* Write message to show the change made */
             sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_has_been_renamed_as_Y,
                      CurrentMaiName,NewMaiName);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
          sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_has_not_changed,
                   CurrentMaiName);
-         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -811,19 +811,19 @@ void Mai_RecFormNewMailDomain (void)
         {
          sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                   Mai->Domain);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else if (Mai_CheckIfMailDomainNameExists ("Info",Mai->Info,-1L))
         {
          sprintf (Gbl.Alert.Txt,Txt_The_email_domain_X_already_exists,
                   Mai->Info);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new mail to database
          Mai_CreateMailDomain (Mai);
      }
    else	// If there is not a mail name
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_email_domain);
 
    /***** Show the form again *****/
    Mai_EditMailDomains ();
@@ -851,7 +851,7 @@ static void Mai_CreateMailDomain (struct Mail *Mai)
    /***** Write success message *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_email_domain_X,
             Mai->Domain);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -1175,10 +1175,10 @@ void Mai_ShowFormOthEmail (void)
          Lay_EndRoundFrame ();
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1364,7 +1364,7 @@ void Mai_RemoveOtherUsrEmail (void)
                                &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1387,13 +1387,13 @@ static void Mai_RemoveEmail (struct UsrData *UsrDat)
 
       /***** Show message *****/
       sprintf (Gbl.Alert.Txt,Txt_Email_X_removed,Email);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Update list of emails *****/
       Mai_GetEmailFromUsrCod (UsrDat);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1444,7 +1444,7 @@ void Mai_NewOtherUsrEmail (void)
                                &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1473,7 +1473,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	   {
 	    sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_matches_one_previously_registered,
 		     NewEmail);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	   }
 	 else
 	   {
@@ -1482,7 +1482,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	       /***** Email updated sucessfully *****/
 	       sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_has_been_registered_successfully,
 			NewEmail);
-	       Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+	       Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
 	       /***** Update list of emails *****/
 	       Mai_GetEmailFromUsrCod (UsrDat);
@@ -1496,7 +1496,7 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	      {
 	       sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_had_been_registered_by_another_user,
 			NewEmail);
-	       Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	       Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	      }
 	   }
 	}
@@ -1504,11 +1504,11 @@ static void Mai_NewUsrEmail (struct UsrData *UsrDat,bool ItsMe)
 	{
 	 sprintf (Gbl.Alert.Txt,Txt_The_email_address_entered_X_is_not_valid,
 		  NewEmail);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1569,7 +1569,7 @@ void Mai_PutButtonToCheckEmailAddress (void)
    /***** Frame with button to go to account *****/
    Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,
                         NULL,Hlp_PROFILE_Account_email);
-   Lay_ShowAlert (Lay_WARNING,Txt_Please_check_and_confirm_your_email_address);
+   Ale_ShowAlert (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address);
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Check);
 
    /***** End form *****/
@@ -1638,13 +1638,13 @@ bool Mai_SendMailMsgToConfirmEmail (void)
          Gbl.Usrs.Me.ConfirmEmailJustSent = true;
          return true;
       case 1:
-         Lay_ShowAlert (Lay_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
+         Ale_ShowAlert (Ale_WARNING,Txt_There_was_a_problem_sending_an_email_automatically);
          return false;
       default:
          sprintf (Gbl.Alert.Txt,"Internal error: an email message has not been sent successfully."
                               " Error code returned by the script: %d",
                   ReturnCode);
-         Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
          return false;
      }
   }
@@ -1659,7 +1659,7 @@ void Mai_ShowMsgConfirmEmailHasBeenSent (void)
 
    sprintf (Gbl.Alert.Txt,Txt_A_message_has_been_sent_to_email_address_X_to_confirm_that_address,
 	    Gbl.Usrs.Me.UsrDat.Email);
-   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -1765,16 +1765,16 @@ void Mai_ConfirmEmail (void)
 
 	    sprintf (Gbl.Alert.Txt,Txt_The_email_X_has_been_confirmed,Email);
            }
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_email_address_has_not_been_confirmed);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_email_address_has_not_been_confirmed);
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_Failed_email_confirmation_key);
+      Ale_ShowAlert (Ale_WARNING,Txt_Failed_email_confirmation_key);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);

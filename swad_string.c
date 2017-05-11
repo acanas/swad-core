@@ -944,7 +944,7 @@ void Str_SetDecimalPointToUS (void)
   {
    if (!setlocale (LC_NUMERIC,"en_US.utf8"))	// To get/print the floating point as a dot
       if (Gbl.Layout.HTMLStartWritten)
-         Lay_ShowAlert (Lay_ERROR,"Can not set locale to en_US.");
+         Ale_ShowAlert (Ale_ERROR,"Can not set locale to en_US.");
   }
 
 /*****************************************************************************/
@@ -956,7 +956,7 @@ void Str_SetDecimalPointToLocal (void)
    // TODO: this should be internationalized!!!!!!!
    if (!setlocale (LC_NUMERIC,"es_ES.utf8"))	// Return to local system
       if (Gbl.Layout.HTMLStartWritten)
-         Lay_ShowAlert (Lay_ERROR,"Can not set locale to es_ES.");
+         Ale_ShowAlert (Ale_ERROR,"Can not set locale to es_ES.");
   }
 
 /*****************************************************************************/
@@ -2784,7 +2784,7 @@ bool Str_ConvertFilFolLnkNameToValid (char *FileName)
       if (NumAlfanum)
          FileNameIsOK = true;
       else
-         snprintf (Gbl.Alert.Txt,Lay_MAX_BYTES_ALERT,
+         snprintf (Gbl.Alert.Txt,Ale_MAX_BYTES_ALERT,
                    Gbl.FileBrowser.UploadingWithDropzone ? Txt_UPLOAD_FILE_X_invalid_name_NO_HTML :
                 	                                   Txt_UPLOAD_FILE_X_invalid_name,
 		   FileName);

@@ -380,7 +380,7 @@ void Agd_ShowUsrAgenda (void)
 	}
 
    if (Error)
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -422,12 +422,12 @@ void Agd_ShowOtherAgendaAfterLogIn (void)
 	    Lay_EndRoundFrame ();
            }
 	 else
-	    Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	    Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
        }
       else
 	 /* The current language is not my preferred language
 	    ==> change automatically to my language */
-         Lay_ShowAlert (Lay_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
      }
   }
 
@@ -487,7 +487,7 @@ static void Agd_ShowEvents (Agd_AgendaType_t AgendaType)
       Lay_EndTable ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_events);
+      Ale_ShowAlert (Ale_INFO,Txt_No_events);
 
    /***** Write again links to pages *****/
    if (Pagination.MoreThanOnePage)
@@ -1301,7 +1301,7 @@ void Agd_AskRemEvent (void)
    Gbl.Agenda.AgdCodToEdit = AgdEvent.AgdCod;
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
 	    AgdEvent.Event);
-   Lay_ShowAlertAndButton (Lay_QUESTION,Gbl.Alert.Txt,
+   Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
                            ActRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
 			   Lay_REMOVE_BUTTON,Txt_Remove_event);
 
@@ -1335,7 +1335,7 @@ void Agd_RemoveEvent (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_removed,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1367,7 +1367,7 @@ void Agd_HideEvent (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_hidden,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1400,7 +1400,7 @@ void Agd_UnhideEvent (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible,
             AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1432,7 +1432,7 @@ void Agd_MakeEventPrivate (void)
 
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_private,AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1465,7 +1465,7 @@ void Agd_MakeEventPublic (void)
    /***** Write message to show the change made *****/
    sprintf (Gbl.Alert.Txt,Txt_Event_X_is_now_visible_to_users_of_your_courses,
             AgdEvent.Event);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
    /***** Show events again *****/
    Agd_ShowMyAgenda ();
@@ -1644,14 +1644,14 @@ void Agd_RecFormEvent (void)
    if (!AgdEvent.Location[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Check if event is correct *****/
    if (!AgdEvent.Event[0])	// If there is no event
      {
       NewEventIsCorrect = false;
-      Lay_ShowAlert (Lay_WARNING,Txt_You_must_specify_the_title_of_the_event);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_must_specify_the_title_of_the_event);
      }
 
    /***** Create a new event or update an existing one *****/
@@ -1663,14 +1663,14 @@ void Agd_RecFormEvent (void)
 
 	 /***** Write success message *****/
 	 sprintf (Gbl.Alert.Txt,Txt_Created_new_event_X,AgdEvent.Event);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
         {
 	 Agd_UpdateEvent (&AgdEvent,Txt);
 
 	 /***** Write success message *****/
-	 Lay_ShowAlert (Lay_SUCCESS,Txt_The_event_has_been_modified);
+	 Ale_ShowAlert (Ale_SUCCESS,Txt_The_event_has_been_modified);
         }
 
       /* Free memory for list of selected groups */

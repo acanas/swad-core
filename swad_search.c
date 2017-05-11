@@ -644,7 +644,7 @@ static void Sch_SearchInDB (void)
      }
 
    if (NumResults == 0)
-      Lay_ShowAlert (Lay_INFO,Txt_No_results);
+      Ale_ShowAlert (Ale_INFO,Txt_No_results);
   }
 
 /*****************************************************************************/
@@ -840,7 +840,7 @@ static unsigned Sch_SearchUsrsInDB (Rol_Role_t Role)
       // Too short
       if (!WarningMessageWritten)	// To avoid repetitions
 	{
-         Lay_ShowAlert (Lay_WARNING,Txt_The_search_text_must_be_longer);
+         Ale_ShowAlert (Ale_WARNING,Txt_The_search_text_must_be_longer);
          WarningMessageWritten = true;
 	}
 

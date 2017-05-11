@@ -601,7 +601,7 @@ void Sta_AskShowCrsHits (void)
         }
      }
    else	// No teachers nor students found
-      Lay_ShowAlert (Lay_WARNING,Txt_No_teachers_or_students_found);
+      Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -954,7 +954,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	     (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
 	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))
 	   {
-	    Lay_ShowAlert (Lay_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
+	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
 	    Usr_UsrDataDestructor (&UsrDat);
 	    return;
 	   }
@@ -990,7 +990,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 /* Check the number of users whose clicks will be shown */
 	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
 	   {					// ...write warning message and show the form again
-	    Lay_ShowAlert (Lay_WARNING,Txt_You_must_select_one_ore_more_users);
+	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
 	    return;
 	   }
 	 break;
@@ -1014,7 +1014,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_date_range_must_be_less_than_or_equal_to_X_days,
 	       Cfg_DAYS_IN_RECENT_LOG);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);	// ...write warning message and show the form again
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);	// ...write warning message and show the form again
       return;
      }
 
@@ -1428,7 +1428,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Count the number of rows in result *****/
    if (NumRows == 0)
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_accesses_with_the_selected_search_criteria);
    else
      {
       /***** Put the table with the clicks *****/

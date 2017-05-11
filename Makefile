@@ -9,7 +9,7 @@
 #   and used to support university teaching.                                  #
 #                                                                             #
 #   This file is part of SWAD core.                                           #
-#   Copyright (C) 1999-2014 Antonio Cañas Vargas                              #
+#   Copyright (C) 1999-2017 Antonio Cañas Vargas                              #
 #                                                                             #
 #   This program is free software: you can redistribute it and/or modify      #
 #   it under the terms of the GNU Affero General Public License as            #
@@ -26,8 +26,8 @@
 #                                                                             #
 ###############################################################################
 
-OBJS = swad_account.o swad_action.o swad_agenda.o swad_announcement.o \
-       swad_assignment.o swad_attendance.o \
+OBJS = swad_account.o swad_action.o swad_agenda.o swad_alert.o \
+       swad_announcement.o swad_assignment.o swad_attendance.o \
        swad_banner.o \
        swad_calendar.o swad_centre.o swad_chat.o swad_config.o \
        swad_connected.o swad_country.o swad_course.o swad_cryptography.o \

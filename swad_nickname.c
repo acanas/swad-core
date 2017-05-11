@@ -318,10 +318,10 @@ void Nck_RemoveNick (void)
 
       /***** Show message *****/
       sprintf (Gbl.Alert.Txt,Txt_Nickname_X_removed,NicknameWithoutArroba);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_your_current_nickname);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_delete_your_current_nickname);
 
    /***** Show my account again *****/
    Acc_ShowFormChangeMyAccount ();
@@ -414,8 +414,8 @@ void Nck_UpdateNick (void)
      }
 
    /***** Show message *****/
-   Lay_ShowAlert (Error ? Lay_WARNING :
-	                  Lay_SUCCESS,
+   Ale_ShowAlert (Error ? Ale_WARNING :
+	                  Ale_SUCCESS,
 	          Gbl.Alert.Txt);
 
    /***** Show my account again *****/

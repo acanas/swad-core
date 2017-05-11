@@ -172,7 +172,7 @@ void Hld_SeeHolidays (void)
 	 Lay_EndTable ();
 	}
       else	// No holidays created in the current institution
-	 Lay_ShowAlert (Lay_INFO,Txt_No_holidays);
+	 Ale_ShowAlert (Ale_INFO,Txt_No_holidays);
 
       /***** Button to create centre *****/
       if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)	// Institution admin or system admin
@@ -651,7 +651,7 @@ void Hld_RemoveHoliday1 (void)
    DB_QueryDELETE (Query,"can not remove a holiday");
 
    /***** Write message to show the change made *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_Holiday_X_removed,Hld.Name);
 
   }
@@ -659,7 +659,7 @@ void Hld_RemoveHoliday1 (void)
 void Hld_RemoveHoliday2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -701,7 +701,7 @@ void Hld_ChangeHolidayPlace1 (void)
              Plc_MAX_BYTES_PLACE_FULL_NAME);
 
    /***** Write message to show the change made *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_place_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,NewPlace.FullName);
   }
@@ -709,7 +709,7 @@ void Hld_ChangeHolidayPlace1 (void)
 void Hld_ChangeHolidayPlace2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -745,7 +745,7 @@ void Hld_ChangeHolidayType1 (void)
    DB_QueryUPDATE (Query,"can not update the type of a holiday");
 
    /***** Write message to show the change made *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_type_of_the_holiday_X_has_changed,
             Hld->Name);
   }
@@ -753,7 +753,7 @@ void Hld_ChangeHolidayType1 (void)
 void Hld_ChangeHolidayType2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -844,7 +844,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
    Dat_AssignDate (PtrDate,&NewDate);
 
    /***** Write message to show the change made *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    Dat_ConvDateToDateStr (&NewDate,StrDate);
    sprintf (Gbl.Alert.Txt,Txt_The_date_of_the_holiday_X_has_changed_to_Y,
             Hld->Name,StrDate);
@@ -857,7 +857,7 @@ static void Hld_ChangeDate (Hld_StartOrEndDate_t StartOrEndDate)
 void Hld_ChangeDate2 (void)
   {
    /***** Show success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -892,7 +892,7 @@ void Hld_RenameHoliday1 (void)
    /***** Check if new name is empty *****/
    if (!NewHldName[0])
      {
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_holiday_X_empty,
                Hld->Name);
      }
@@ -910,13 +910,13 @@ void Hld_RenameHoliday1 (void)
 		   Hld_MAX_BYTES_HOLIDAY_NAME);
 
 	 /***** Write message to show the change made *****/
-         Gbl.Alert.Type = Lay_SUCCESS;
+         Gbl.Alert.Type = Ale_SUCCESS;
 	 sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_holiday_X_has_changed_to_Y,
 		  Hld->Name,NewHldName);
         }
       else	// The same name
         {
-         Gbl.Alert.Type = Lay_INFO;
+         Gbl.Alert.Type = Ale_INFO;
          sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_holiday_X_has_not_changed,
                  Hld->Name);
         }
@@ -926,7 +926,7 @@ void Hld_RenameHoliday1 (void)
 void Hld_RenameHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();
@@ -1147,13 +1147,13 @@ void Hld_RecFormNewHoliday1 (void)
       Hld_CreateHoliday (Hld);
 
       /* Success message */
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
       sprintf (Gbl.Alert.Txt,Txt_Created_new_holiday_X,Hld->Name);
      }
    else	// If there is not a holiday name
      {
       /* Error message */
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_holiday);
      }
   }
@@ -1161,7 +1161,7 @@ void Hld_RecFormNewHoliday1 (void)
 void Hld_RecFormNewHoliday2 (void)
   {
    /***** Write error/success message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Hld_EditHolidays ();

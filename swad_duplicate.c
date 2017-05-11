@@ -97,13 +97,13 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
          DB_QueryINSERT (Query,"can not report duplicate");
 
          /***** Show feedback message *****/
-         Lay_ShowAlert (Lay_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
+         Ale_ShowAlert (Ale_SUCCESS,Txt_Thank_you_for_reporting_a_possible_duplicate_user);
 	}
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -243,7 +243,7 @@ void Dup_GetUsrCodAndListSimilarUsrs (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Dup_ListSimilarUsrs ();
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 static void Dup_ListSimilarUsrs (void)
@@ -448,7 +448,7 @@ void Dup_RemoveUsrFromListDupUsrs (void)
       Dup_ListDuplicateUsrs ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

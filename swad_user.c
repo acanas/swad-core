@@ -225,12 +225,12 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
      {
       if (Gbl.Usrs.Me.NumAccWithoutPhoto >= Pho_MAX_CLICKS_WITHOUT_PHOTO)
-         Lay_ShowAlert (Lay_WARNING,Txt_You_must_send_your_photo_because_);
+         Ale_ShowAlert (Ale_WARNING,Txt_You_must_send_your_photo_because_);
       else if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
                   Pho_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
-         Lay_ShowAlert (Lay_WARNING,Message);
+         Ale_ShowAlert (Ale_WARNING,Message);
 
 	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
 	 Pho_PutLinkToChangeMyPhoto ();
@@ -1979,7 +1979,7 @@ void Usr_Logout (void)
    extern const char *Txt_The_session_has_been_closed;
 
    /***** Confirmation message *****/
-   Lay_ShowAlert (Lay_INFO,Txt_The_session_has_been_closed);
+   Ale_ShowAlert (Ale_INFO,Txt_The_session_has_been_closed);
 
    /***** Form to log in *****/
    Usr_WriteFormLogin (ActLogIn,NULL);
@@ -2118,10 +2118,10 @@ void Usr_WelcomeUsr (void)
             if (!CongratulateMyBirthday)
                sprintf (Gbl.Alert.Txt,Txt_Welcome_X[Gbl.Usrs.Me.UsrDat.Sex],
                         Gbl.Usrs.Me.UsrDat.FirstName);
-            Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
            }
          else
-            Lay_ShowAlert (Lay_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
+            Ale_ShowAlert (Ale_INFO,Txt_Welcome[Gbl.Usrs.Me.UsrDat.Sex]);
 
          /***** Warning to confirm my email address *****/
          if (Gbl.Usrs.Me.UsrDat.Email[0] &&
@@ -2139,7 +2139,7 @@ void Usr_WelcomeUsr (void)
       else
 	 /* The current language is not my preferred language
 	    ==> change automatically to my language */
-         Lay_ShowAlert (Lay_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
+         Ale_ShowAlert (Ale_INFO,Txt_Switching_to_LANGUAGE[Gbl.Usrs.Me.UsrDat.Prefs.Language]);
      }
   }
 
@@ -2389,7 +2389,7 @@ unsigned Usr_GetParamOtherUsrIDNickOrEMailAndGetUsrCods (struct ListUsrCods *Lis
       /***** String is not a valid user's nickname, email or ID *****/
       sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
 	       Gbl.Usrs.Other.UsrDat.UsrIDNickOrEmail);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    return ListUsrCods->NumUsrs;
@@ -2492,7 +2492,7 @@ void Usr_ChkUsrAndGetUsrData (void)
 	{
 	 Gbl.Action.Act = ActLogOut;
 	 Tab_SetCurrentTab ();
-	 Lay_ShowAlert (Lay_WARNING,Txt_The_session_has_expired_due_to_inactivity);
+	 Ale_ShowAlert (Ale_WARNING,Txt_The_session_has_expired_due_to_inactivity);
 	 FormLogin.PutForm = true;
 	}
      }
@@ -2806,7 +2806,7 @@ static void Usr_ShowAlertUsrDoesNotExistsOrWrongPassword (void)
 
    // Gbl.Action.Act = ActFrmLogIn;
    // Tab_SetCurrentTab ();
-   Lay_ShowAlert (Lay_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_user_does_not_exist_or_password_is_incorrect);
   }
 
 /*****************************************************************************/
@@ -2821,7 +2821,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
    Tab_SetCurrentTab ();
    sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 	    Gbl.Usrs.Me.UsrIdLogin);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -3020,7 +3020,7 @@ void Usr_ShowFormsLogoutAndRole (void)
       sprintf (Gbl.Alert.Txt,Txt_You_are_now_LOGGED_IN_as_X,
 	       Txt_logged[Gbl.Usrs.Me.UsrDat.Sex],
 	       Txt_ROLES_SINGUL_abc[Gbl.Usrs.Me.LoggedRole][Gbl.Usrs.Me.UsrDat.Sex]);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Start frame *****/
@@ -5109,7 +5109,7 @@ static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
 
    sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
             NumUsrs);
-   Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -5257,7 +5257,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_nickname_X,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5276,7 +5276,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_email_X,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -5304,7 +5304,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 			  {
 			   sprintf (Gbl.Alert.Txt,Txt_There_are_more_than_one_user_with_the_ID_X_Please_type_a_nick_or_email,
 				    UsrIDNickOrEmail);
-			   Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+			   Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 			  }
 			Error = true;
 		       }
@@ -5315,7 +5315,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		       {
 			sprintf (Gbl.Alert.Txt,Txt_There_is_no_user_with_ID_nick_or_email_X,
 				 UsrIDNickOrEmail);
-			Lay_ShowAlert (Lay_ERROR,Gbl.Alert.Txt);
+			Ale_ShowAlert (Ale_ERROR,Gbl.Alert.Txt);
 		       }
 		     Error = true;
 		    }
@@ -5326,7 +5326,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 		    {
 		     sprintf (Gbl.Alert.Txt,Txt_The_ID_nickname_or_email_X_is_not_valid,
 			      UsrIDNickOrEmail);
-		     Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+		     Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 		    }
 		  Error = true;
 		 }
@@ -8096,7 +8096,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
 
-   Lay_ShowAlert (Lay_INFO,Txt_No_users_found[Role]);
+   Ale_ShowAlert (Ale_INFO,Txt_No_users_found[Role]);
   }
 
 /*****************************************************************************/
@@ -8491,7 +8491,7 @@ void Usr_PrintUsrQRCode (void)
       Lay_EndRoundFrame ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/

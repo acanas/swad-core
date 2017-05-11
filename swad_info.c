@@ -442,7 +442,7 @@ void Inf_ShowInfo (void)
 			   ICanEdit ? Inf_PutIconToEditInfo :
 				      NULL,
 		           Help[Gbl.CurrentCrs.Info.Type]);
-      Lay_ShowAlert (Lay_INFO,Txt_No_information);
+      Ale_ShowAlert (Ale_INFO,Txt_No_information);
       if (ICanEdit)
 	 Inf_PutButtonToEditInfo ();
       Lay_EndRoundFrame ();
@@ -586,7 +586,7 @@ void Inf_WriteMsgYouMustReadInfo (void)
    Lay_StartRoundFrame (NULL,Txt_Required_reading,NULL,NULL);
 
    /***** Write message *****/
-   Lay_ShowAlert (Lay_WARNING,Txt_You_should_read_the_following_information);
+   Ale_ShowAlert (Ale_WARNING,Txt_You_should_read_the_following_information);
 
    /***** Write every information I must read *****/
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"
@@ -631,7 +631,7 @@ void Inf_ChangeForceReadInfo (void)
    Inf_SetForceReadIntoDB (MustBeRead);
 
    /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,
+   Ale_ShowAlert (Ale_SUCCESS,
                   MustBeRead ? Txt_Students_now_are_required_to_read_this_information :
                                Txt_Students_are_no_longer_obliged_to_read_this_information);
 
@@ -656,7 +656,7 @@ void Inf_ChangeIHaveReadInfo (void)
    Inf_SetIHaveReadIntoDB (IHaveRead);
 
    /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,
+   Ale_ShowAlert (Ale_SUCCESS,
                   IHaveRead ? Txt_You_have_confirmed_that_you_have_read_this_information :
                               Txt_You_have_eliminated_the_confirmation_that_you_have_read_this_information);
 
@@ -2230,11 +2230,11 @@ void Inf_ReceiveURLInfo (void)
       /***** Write message *****/
       sprintf (Gbl.Alert.Txt,Txt_The_URL_X_has_been_updated,
                Gbl.CurrentCrs.Info.URL);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
       URLIsOK = true;
      }
    else
-      Lay_ShowAlert (Lay_ERROR,"Error when saving URL to file.");
+      Ale_ShowAlert (Ale_ERROR,"Error when saving URL to file.");
 
    if (URLIsOK)
      {
@@ -2299,7 +2299,7 @@ void Inf_ReceivePagInfo (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_file_type_is_X_and_should_be_HTML_or_ZIP,
                MIMEType);
-      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
      }
    else
      {
@@ -2315,11 +2315,11 @@ void Inf_ReceivePagInfo (void)
          sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
          if (Fil_EndReceptionOfFile (PathRelFileHTML,Param))
            {
-            Lay_ShowAlert (Lay_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_HTML_file_has_been_received_successfully);
             FileIsOK = true;
            }
          else
-            Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+            Ale_ShowAlert (Ale_WARNING,"Error uploading file.");
         }
       else if (Str_FileIs (SourceFileName,"zip")) // .zip file
         {
@@ -2331,7 +2331,7 @@ void Inf_ReceivePagInfo (void)
 
          if (Fil_EndReceptionOfFile (PathRelFileZIP,Param))
            {
-            Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
+            Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_received_successfully);
 
             /* Uncompress ZIP */
             sprintf (StrUnzip,"unzip -qq -o %s -d %s",
@@ -2342,8 +2342,8 @@ void Inf_ReceivePagInfo (void)
                sprintf (PathRelFileHTML,"%s/index.html",PathRelDirHTML);
                if (Fil_CheckIfPathExists (PathRelFileHTML))
                  {
-                  Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-                  Lay_ShowAlert (Lay_SUCCESS,Txt_Found_an_index_html_file);
+                  Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+                  Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_html_file);
                   FileIsOK = true;
                  }
 	       else
@@ -2351,22 +2351,22 @@ void Inf_ReceivePagInfo (void)
 	          sprintf (PathRelFileHTML,"%s/index.htm",PathRelDirHTML);
 	          if (Fil_CheckIfPathExists (PathRelFileHTML))
                     {
-                     Lay_ShowAlert (Lay_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
-                     Lay_ShowAlert (Lay_SUCCESS,Txt_Found_an_index_htm_file);
+                     Ale_ShowAlert (Ale_SUCCESS,Txt_The_ZIP_file_has_been_unzipped_successfully);
+                     Ale_ShowAlert (Ale_SUCCESS,Txt_Found_an_index_htm_file);
                      FileIsOK = true;
                     }
 	          else
-                     Lay_ShowAlert (Lay_WARNING,Txt_No_file_index_html_index_htm_found_within_the_ZIP_file);
+                     Ale_ShowAlert (Ale_WARNING,Txt_No_file_index_html_index_htm_found_within_the_ZIP_file);
 	         }
 	      }
             else
                Lay_ShowErrorAndExit ("Can not unzip file.");
            }
          else
-            Lay_ShowAlert (Lay_WARNING,"Error uploading file.");
+            Ale_ShowAlert (Ale_WARNING,"Error uploading file.");
         }
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);
+         Ale_ShowAlert (Ale_WARNING,Txt_The_file_type_should_be_HTML_or_ZIP);
      }
 
    if (FileIsOK)
@@ -2395,7 +2395,7 @@ void Inf_EditorCourseInfo (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();
@@ -2409,7 +2409,7 @@ void Inf_EditorTeachingGuide (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();
@@ -2423,7 +2423,7 @@ void Inf_EditorBibliography (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();
@@ -2437,7 +2437,7 @@ void Inf_EditorFAQ (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();
@@ -2451,7 +2451,7 @@ void Inf_EditorLinks (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();
@@ -2465,7 +2465,7 @@ void Inf_EditorAssessment (void)
   {
    extern const char *Txt_The_integrated_editor_is_not_yet_available;
 
-   Lay_ShowAlert (Lay_WARNING,Txt_The_integrated_editor_is_not_yet_available);
+   Ale_ShowAlert (Ale_WARNING,Txt_The_integrated_editor_is_not_yet_available);
 
    /***** Show again the form to select and send course info *****/
    Inf_FormsToSelSendInfo ();

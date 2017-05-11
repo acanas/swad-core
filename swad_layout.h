@@ -33,9 +33,6 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Lay_MAX_BYTES_ALERT (16 * 1024 - 1)	// Max. size for alert message
-// Important: the size of alert message must be enough large to store the longest message.
-
 #define Lay_MAX_BYTES_TITLE (4096 - 1)
 
 #define Lay_HIDE_BOTH_COLUMNS	0						// 00
@@ -46,18 +43,6 @@
 /*****************************************************************************/
 /********************************* Public types ******************************/
 /*****************************************************************************/
-
-#define Lay_NUM_ALERT_TYPES 7
-typedef enum
-  {
-   Lay_NONE      = 0,
-   Lay_INFO      = 1,
-   Lay_SUCCESS   = 2,
-   Lay_QUESTION  = 3,
-   Lay_WARNING   = 4,
-   Lay_ERROR     = 5,
-   Lay_CLIPBOARD = 6,
-  } Lay_AlertType_t;
 
 typedef enum
   {
@@ -98,6 +83,7 @@ void Lay_PutIconRemovalNotAllowed (void);
 void Lay_PutIconBRemovalNotAllowed (void);
 void Lay_PutIconRemove (void);
 
+void Lay_PutButton (Lay_Button_t Button,const char *TxtButton);
 void Lay_PutCreateButton (const char *TxtButton);
 void Lay_PutCreateButtonInline (const char *TxtButton);
 void Lay_PutConfirmButton (const char *TxtButton);
@@ -131,16 +117,6 @@ void Lay_StartTableWideMargin (unsigned CellPadding);
 void Lay_EndTable (void);
 
 void Lay_ShowErrorAndExit (const char *Txt);
-void Lay_ShowPendingAlert (void);
-void Lay_ShowAlert (Lay_AlertType_t AlertType,const char *Txt);
-void Lay_ShowAlertAndButton (Lay_AlertType_t AlertType,const char *Txt,
-                             Act_Action_t NextAction,const char *Anchor,
-                             void (*FuncParams) (),
-                             Lay_Button_t Button,const char *TxtButton);
-void Lay_ShowAlertAndButton1 (Lay_AlertType_t AlertType,const char *Txt);
-void Lay_ShowAlertAndButton2 (Act_Action_t NextAction,const char *Anchor,
-                              void (*FuncParams) (),
-                              Lay_Button_t Button,const char *TxtButton);
 
 void Lay_RefreshNotifsAndConnected (void);
 void Lay_RefreshLastClicks (void);

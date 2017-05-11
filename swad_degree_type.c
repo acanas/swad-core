@@ -232,7 +232,7 @@ static void DT_ListDegreeTypes (Act_Action_t NextAction,DT_Order_t SelectedOrder
       Lay_EndTable ();
      }
    else	// No degree types created
-      Lay_ShowAlert (Lay_INFO,Txt_No_types_of_degree);
+      Ale_ShowAlert (Ale_INFO,Txt_No_types_of_degree);
 
    /***** Button to create degree type  *****/
    if (DT_CheckIfICanCreateDegreeTypes ())
@@ -551,7 +551,7 @@ static void DT_CreateDegreeType (struct DegreeType *DegTyp)
    /***** Write success message *****/
    sprintf (Gbl.Alert.Txt,Txt_Created_new_type_of_degree_X,
             DegTyp->DegTypName);
-   Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -720,7 +720,7 @@ void DT_RecFormNewDegreeType (void)
         {
          sprintf (Gbl.Alert.Txt,Txt_The_type_of_degree_X_already_exists,
                   DegTyp->DegTypName);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else	// Add new degree type to database
          DT_CreateDegreeType (DegTyp);
@@ -728,7 +728,7 @@ void DT_RecFormNewDegreeType (void)
    else	// If there is not a degree type name
      {
       sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_name_of_the_new_type_of_degree);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -755,7 +755,7 @@ void DT_RemoveDegreeType (void)
 
    /***** Check if this degree type has degrees *****/
    if (DegTyp.NumDegs)	// Degree type has degrees => don't remove
-      Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type);
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_type_of_degree_you_must_first_remove_all_degrees_of_that_type);
    else	// Degree type has no degrees => remove it
      {
       /***** Remove degree type *****/
@@ -764,7 +764,7 @@ void DT_RemoveDegreeType (void)
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Type_of_degree_X_removed,
                DegTyp.DegTypName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -934,7 +934,7 @@ void DT_RenameDegreeType (void)
      {
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_type_of_degree_X_empty,
                DegTyp->DegTypName);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
    else
      {
@@ -946,7 +946,7 @@ void DT_RenameDegreeType (void)
            {
             sprintf (Gbl.Alert.Txt,Txt_The_type_of_degree_X_already_exists,
                      NewNameDegTyp);
-            Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
            }
          else
            {
@@ -959,14 +959,14 @@ void DT_RenameDegreeType (void)
             /* Write message to show the change made */
             sprintf (Gbl.Alert.Txt,Txt_The_type_of_degree_X_has_been_renamed_as_Y,
                      DegTyp->DegTypName,NewNameDegTyp);
-            Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+            Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
            }
         }
       else	// The same name
         {
          sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_type_of_degree_X_has_not_changed,
                   NewNameDegTyp);
-         Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
         }
      }
 
@@ -1018,7 +1018,7 @@ void DT_ChangeDegreeType (void)
 
    /***** Write message to show the change made
           and put button to go to degree changed *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_type_of_degree_of_the_degree_X_has_changed,
 	    Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();

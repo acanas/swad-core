@@ -32,6 +32,7 @@
 #include <sys/time.h>		// For tz
 #include <mysql/mysql.h>	// To access MySQL databases
 
+#include "swad_alert.h"
 #include "swad_agenda.h"
 #include "swad_assignment.h"
 #include "swad_attendance.h"
@@ -102,8 +103,8 @@ struct Globals
      } Form;
    struct
      {
-      Lay_AlertType_t Type;
-      char Txt[Lay_MAX_BYTES_ALERT + 1];
+      Ale_AlertType_t Type;
+      char Txt[Ale_MAX_BYTES_ALERT + 1];
      } Alert;			// Used in a posteriori function to write success / warning message
    struct
      {

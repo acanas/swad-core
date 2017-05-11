@@ -538,10 +538,10 @@ void ID_ShowFormOthIDs (void)
          Lay_EndRoundFrame ();
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -710,7 +710,7 @@ void ID_RemoveOtherUsrID (void)
                                &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -748,13 +748,13 @@ static void ID_RemoveUsrID (const struct UsrData *UsrDat,bool ItsMe)
 
 	 /***** Show message *****/
 	 sprintf (Gbl.Alert.Txt,Txt_ID_X_removed,UsrID);
-	 Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_delete_this_ID);
+	 Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_delete_this_ID);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -826,7 +826,7 @@ void ID_NewOtherUsrID (void)
                                &Gbl.Usrs.Other.UsrDat,NULL);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -907,12 +907,12 @@ static void ID_NewUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	}
 
       /***** Show message *****/
-      Lay_ShowAlert (Error ? Lay_WARNING :
-			     Lay_SUCCESS,
+      Ale_ShowAlert (Error ? Ale_WARNING :
+			     Ale_SUCCESS,
 		     Gbl.Alert.Txt);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -951,7 +951,7 @@ void ID_ConfirmOtherUsrID (void)
    unsigned NumIDFound = 0;	// Initialized to avoid warning
 
    /***** Initialize alert type and message *****/
-   Gbl.Alert.Type = Lay_NONE;	// Do not show alert
+   Gbl.Alert.Type = Ale_NONE;	// Do not show alert
 
    /***** Get where we came from *****/
    OriginalActCod = Par_GetParToLong ("OriginalActCod");
@@ -986,7 +986,7 @@ void ID_ConfirmOtherUsrID (void)
 	 if (Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed)
 	   {
 	    /***** ID found and already confirmed *****/
-            Gbl.Alert.Type = Lay_INFO;
+            Gbl.Alert.Type = Ale_INFO;
 	    sprintf (Gbl.Alert.Txt,Txt_ID_X_had_already_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
@@ -998,20 +998,20 @@ void ID_ConfirmOtherUsrID (void)
 	    Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].Confirmed = true;
 
 	    /***** Write success message *****/
-	    Gbl.Alert.Type = Lay_SUCCESS;
+	    Gbl.Alert.Type = Ale_SUCCESS;
 	    sprintf (Gbl.Alert.Txt,Txt_The_ID_X_has_been_confirmed,
 		     Gbl.Usrs.Other.UsrDat.IDs.List[NumIDFound].ID);
 	   }
 	}
       else	// User's ID not found
 	{
-	 Gbl.Alert.Type = Lay_WARNING;
+	 Gbl.Alert.Type = Ale_WARNING;
          sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
 	}
      }
    else	// I can not confirm
      {
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
 
@@ -1032,7 +1032,7 @@ void ID_ConfirmOtherUsrID (void)
 	 break;
       default:
 	 /* Show optional alert */
-	 Lay_ShowPendingAlert ();
+	 Ale_ShowPendingAlert ();
 
 	 /* Show only the updated record of this user */
 	 Rec_ShowSharedUsrRecord (Rec_SHA_RECORD_LIST,

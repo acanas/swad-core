@@ -164,7 +164,7 @@ void Fol_SuggestUsrsToFollowMainZone (void)
       Lay_EndRoundFrameTable ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
+      Ale_ShowAlert (Ale_INFO,Txt_No_user_to_whom_you_can_follow_Try_again_later);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -653,7 +653,7 @@ void Fol_ListFollowing (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else				// If user not specified, view my profile
       Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);
@@ -717,7 +717,7 @@ static void Fol_ListFollowingUsr (struct UsrData *UsrDat)
       DB_FreeMySQLResult (&mysql_res);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -736,7 +736,7 @@ void Fol_ListFollowers (void)
       if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&Gbl.Usrs.Other.UsrDat))
 	 Fol_ListFollowersUsr (&Gbl.Usrs.Other.UsrDat);
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else				// If user not specified, view my profile
       Fol_ListFollowersUsr (&Gbl.Usrs.Me.UsrDat);
@@ -806,7 +806,7 @@ static void Fol_ListFollowersUsr (struct UsrData *UsrDat)
 			      Gbl.Usrs.Me.UsrDat.UsrCod);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1031,11 +1031,11 @@ void Fol_FollowUsr1 (void)
                                               (Ntf_Status_t) (NotifyByEmail ? Ntf_STATUS_BIT_EMAIL :
                                         	                              0));
 	   }
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
      }
    else
      {
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
@@ -1044,16 +1044,16 @@ void Fol_FollowUsr2 (void)
   {
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
 
-   if (Gbl.Alert.Type == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Ale_SUCCESS)
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))
 	{
-	 Gbl.Alert.Type = Lay_WARNING;
+	 Gbl.Alert.Type = Ale_WARNING;
 	 sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
 	}
 
-   if (Gbl.Alert.Type != Lay_SUCCESS)
-      Lay_ShowPendingAlert ();
+   if (Gbl.Alert.Type != Ale_SUCCESS)
+      Ale_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -1079,11 +1079,11 @@ void Fol_UnfollowUsr1 (void)
                   Gbl.Usrs.Other.UsrDat.UsrCod);
 	 DB_QueryREPLACE (Query,"can not unfollow user");
         }
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
      }
    else
      {
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,"%s",Txt_User_not_found_or_you_do_not_have_permission_);
      }
   }
@@ -1091,7 +1091,7 @@ void Fol_UnfollowUsr1 (void)
 void Fol_UnfollowUsr2 (void)
   {
    /***** Get user to be unfollowed *****/
-   if (Gbl.Alert.Type == Lay_SUCCESS)
+   if (Gbl.Alert.Type == Ale_SUCCESS)
      {
       /***** Show user's profile again *****/
       if (!Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat))	// I can not view user's profile
@@ -1101,7 +1101,7 @@ void Fol_UnfollowUsr2 (void)
 	 Fol_ListFollowingUsr (&Gbl.Usrs.Me.UsrDat);		// List users I follow
      }
    else
-      Lay_ShowPendingAlert ();
+      Ale_ShowPendingAlert ();
   }
 
 /*****************************************************************************/

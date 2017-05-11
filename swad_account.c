@@ -244,7 +244,7 @@ void Acc_CheckIfEmptyAccountExists (void)
 	{
 	 sprintf (Gbl.Alert.Txt,Txt_There_is_no_empty_account_associated_with_your_ID_X_,
 		  ID);
-	 Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 	}
 
       /***** Free structure that stores the query result *****/
@@ -256,7 +256,7 @@ void Acc_CheckIfEmptyAccountExists (void)
    else	// ID not valid
      {
       /**** Show again form to check if I have an account *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_enter_your_ID);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_enter_your_ID);
 
       Acc_ShowFormCheckIfIHaveAccount (Txt_Before_creating_a_new_account_check_if_you_have_been_already_registered_with_your_ID);
      }
@@ -465,7 +465,7 @@ void Acc_ShowFormChangeMyAccount (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\">");
-      Lay_ShowAlert (Lay_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
+      Ale_ShowAlert (Ale_WARNING,Txt_Before_going_to_any_other_option_you_must_fill_your_nickname);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -479,7 +479,7 @@ void Acc_ShowFormChangeMyAccount (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\">");
-      Lay_ShowAlert (Lay_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
+      Ale_ShowAlert (Ale_WARNING,IMustFillEmail ? Txt_Please_fill_in_your_email_address :
 	                                          Txt_Please_check_and_confirm_your_email_address);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
@@ -494,7 +494,7 @@ void Acc_ShowFormChangeMyAccount (void)
      {
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td colspan=\"2\">");
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_fill_in_your_ID);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_ID);
       fprintf (Gbl.F.Out,"</td>"
 	                 "</tr>");
      }
@@ -635,7 +635,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 	 Error = true;
 	 sprintf (Gbl.Alert.Txt,Txt_The_nickname_X_had_been_registered_by_another_user,
 		  NewNicknameWithoutArroba);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else        // New nickname is not valid
@@ -645,7 +645,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
                NewNicknameWithArroba,
                Nck_MIN_CHARS_NICKNAME_WITHOUT_ARROBA,
                Nck_MAX_CHARS_NICKNAME_WITHOUT_ARROBA);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Step 2/3: Get new email from form *****/
@@ -663,7 +663,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
 	 Error = true;
 	 sprintf (Gbl.Alert.Txt,Txt_The_email_address_X_had_been_registered_by_another_user,
 		  NewEmail);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else	// New email is not valid
@@ -671,7 +671,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
       Error = true;
       sprintf (Gbl.Alert.Txt,Txt_The_email_address_entered_X_is_not_valid,
                NewEmail);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Step 3/3: Get new password from form *****/
@@ -680,7 +680,7 @@ static bool Acc_GetParamsNewAccount (char NewNicknameWithoutArroba[Nck_MAX_BYTES
    if (!Pwd_SlowCheckIfPasswordIsGood (NewPlainPassword,NewEncryptedPassword,-1L))        // New password is good?
      {
       Error = true;
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);	// Error message is set in Usr_SlowCheckIfPasswordIsGood
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);	// Error message is set in Usr_SlowCheckIfPasswordIsGood
      }
 
    return !Error;
@@ -817,7 +817,7 @@ void Acc_AfterCreationNewAccount (void)
       sprintf (Gbl.Alert.Txt,Txt_Congratulations_You_have_created_your_account_X_Now_Y_will_request_you_,
 	       Gbl.Usrs.Me.UsrDat.Nickname,
 	       Cfg_PLATFORM_SHORT_NAME);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 
       /***** Show form with account data *****/
       Acc_ShowFormChangeMyAccount ();
@@ -844,7 +844,7 @@ void Acc_GetUsrCodAndRemUsrGbl (void)
       Error = true;
 
    if (Error)
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -907,7 +907,7 @@ void Acc_AskIfRemoveMyAccount (void)
 
    /***** Show question and button to remove my user account *****/
    /* Start alert */
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
+   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_your_user_account);
 
    /* Show my record */
    Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Me.UsrDat);
@@ -919,7 +919,7 @@ void Acc_AskIfRemoveMyAccount (void)
    Act_FormEnd ();
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
   }
 
 static void Acc_AskIfRemoveOtherUsrAccount (void)
@@ -932,7 +932,7 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
      {
       /***** Show question and button to remove user account *****/
       /* Start alert */
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_completely_eliminate_the_following_user);
 
       /* Show user's record */
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
@@ -945,10 +945,10 @@ static void Acc_AskIfRemoveOtherUsrAccount (void)
       Act_FormEnd ();
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -1007,7 +1007,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_from_all_his_her_courses,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Remove user as administrator of any degree *****/
@@ -1019,7 +1019,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_THE_USER_X_has_been_removed_as_administrator,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Remove user's clipboard in forums *****/
@@ -1034,7 +1034,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_Briefcase_of_THE_USER_X_has_been_removed,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Remove test results made by user in all courses *****/
@@ -1050,7 +1050,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_Messages_of_THE_USER_X_have_been_deleted,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Remove user from tables of banned users *****/
@@ -1097,7 +1097,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_Photo_of_THE_USER_X_has_been_removed,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Remove user *****/
@@ -1106,7 +1106,7 @@ void Acc_CompletelyEliminateAccount (struct UsrData *UsrDat,
      {
       sprintf (Gbl.Alert.Txt,Txt_Record_card_of_THE_USER_X_has_been_removed,
                UsrDat->FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
   }
 

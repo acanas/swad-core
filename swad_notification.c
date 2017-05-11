@@ -630,7 +630,7 @@ void Ntf_ShowMyNotifications (void)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else
-      Lay_ShowAlert (Lay_INFO,AllNotifications ? Txt_You_have_no_notifications :
+      Ale_ShowAlert (Ale_INFO,AllNotifications ? Txt_You_have_no_notifications :
 	                                         Txt_You_have_no_unread_notifications);
 
    /***** End frame *****/
@@ -1796,7 +1796,7 @@ void Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (unsigned NumUsrsToBeNotifiedByEMai
 
    sprintf (Gbl.Alert.Txt,"%s: %u",
             Txt_No_of_users_who_will_be_notified_by_email,NumUsrsToBeNotifiedByEMail);
-   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/
@@ -2010,7 +2010,7 @@ void Ntf_ChangeNotifyEvents (void)
    DB_QueryUPDATE (Query,"can not update user's preferences");
 
    /***** Show message *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Your_preferences_about_notifications_have_changed);
   }
 
 /*****************************************************************************/

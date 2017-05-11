@@ -96,7 +96,7 @@ void Not_ShowFormNotice (void)
    /***** Help message *****/
    sprintf (Gbl.Alert.Txt,Txt_The_notice_will_appear_as_a_yellow_note_,
             Gbl.CurrentCrs.Crs.FullName);
-   Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
+   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Start form *****/
    Act_FormStart (ActRcvNot);
@@ -142,7 +142,7 @@ void Not_ReceiveNotice (void)
    RSS_UpdateRSSFileForACrs (&Gbl.CurrentCrs.Crs);
 
    /***** Write message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Notice_created);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_created);
 
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
@@ -195,7 +195,7 @@ void Not_ListNoticesAfterRemoval (void)
    extern const char *Txt_Notice_removed;
 
    /***** Message of success *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_Notice_removed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_Notice_removed);
 
    /***** List remaining notices *****/
    Not_ListFullNotices ();
@@ -275,13 +275,13 @@ void Not_RequestRemNotice (void)
 
    /***** Show question and button to remove this notice *****/
    /* Start alert */
-   Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
+   Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_the_following_notice);
 
    /* Show notice */
    Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.NotCod);
 
    /* End alert */
-   Lay_ShowAlertAndButton2 (ActRemNot,NULL,Not_PutParams,
+   Ale_ShowAlertAndButton2 (ActRemNot,NULL,Not_PutParams,
 			    Lay_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/
@@ -394,7 +394,7 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	                	                                           Txt_Notices,
 			      Not_PutIconsListNotices,Hlp_MESSAGES_Notices);
          if (!NumNotices)
-	    Lay_ShowAlert (Lay_INFO,Txt_No_notices);
+	    Ale_ShowAlert (Ale_INFO,Txt_No_notices);
 	}
 
       /***** Show the notices *****/

@@ -217,7 +217,7 @@ void Deg_SeeDegWithPendingCrss (void)
       Lay_EndRoundFrameTable ();
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
+      Ale_ShowAlert (Ale_INFO,Txt_There_are_no_degrees_with_requests_for_courses_to_be_confirmed);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -1144,7 +1144,7 @@ static void Deg_CreateDegree (unsigned Status)
 
    /***** Write message to show the change made
           and put button to go to degree created *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_Created_new_degree_X,
             Gbl.Degs.EditingDeg.FullName);
    Deg_ShowAlertAndButtonToGoToDeg ();
@@ -1184,7 +1184,7 @@ static void Deg_ListDegrees (void)
       Lay_EndTable ();
      }
    else	// No degrees created in the current centre
-      Lay_ShowAlert (Lay_INFO,Txt_No_degrees);
+      Ale_ShowAlert (Ale_INFO,Txt_No_degrees);
 
    /***** Button to create degree *****/
    if (Deg_CheckIfICanCreateDegrees ())
@@ -1359,7 +1359,7 @@ void Deg_EditDegrees (void)
    else	// No degree types
      {
       /***** Warning message *****/
-      Lay_ShowAlert (Lay_WARNING,Txt_No_types_of_degree);
+      Ale_ShowAlert (Ale_WARNING,Txt_No_types_of_degree);
 
       /***** Form to create the first degree type *****/
       if (DT_CheckIfICanCreateDegreeTypes ())
@@ -1540,7 +1540,7 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 
    /* Get degree type */
    if ((Gbl.Degs.EditingDeg.DegTypCod = DT_GetParamOtherDegTypCod ()) <= 0)
-      Lay_ShowAlert (Lay_ERROR,"Wrong type of degree.");
+      Ale_ShowAlert (Ale_ERROR,"Wrong type of degree.");
 
    /* Get degree WWW */
    Par_GetParToText ("WWW",Gbl.Degs.EditingDeg.WWW,Cns_MAX_BYTES_WWW);
@@ -1555,13 +1555,13 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
 	   {
 	    sprintf (Gbl.Alert.Txt,Txt_The_degree_X_already_exists,
 		     Gbl.Degs.EditingDeg.ShrtName);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	   }
 	 else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.Degs.EditingDeg.FullName,-1L,Gbl.Degs.EditingDeg.CtrCod))
 	   {
 	    sprintf (Gbl.Alert.Txt,Txt_The_degree_X_already_exists,
 		     Gbl.Degs.EditingDeg.FullName);
-	    Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	    Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	   }
 	 else	// Add new degree to database
 	    Deg_CreateDegree (Status);
@@ -1569,13 +1569,13 @@ static void Deg_RecFormRequestOrCreateDeg (unsigned Status)
       else	// If there is not a degree logo or web
 	{
 	 sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_web_address_of_the_new_degree);
-	 Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
 	}
      }
    else	// If there is not a degree name
      {
       sprintf (Gbl.Alert.Txt,"%s",Txt_You_must_specify_the_short_name_and_the_full_name_of_the_new_degree);
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1600,7 +1600,7 @@ void Deg_RemoveDegree (void)
 
    /***** Check if this degree has courses *****/
    if (Crs_GetNumCrssInDeg (Deg.DegCod))	// Degree has courses ==> don't remove
-      Lay_ShowAlert (Lay_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
+      Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_degree_you_must_first_remove_all_courses_in_the_degree);
    else	// Degree has no courses ==> remove it
      {
       /***** Remove degree *****/
@@ -1609,7 +1609,7 @@ void Deg_RemoveDegree (void)
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_Degree_X_removed,
                Deg.FullName);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
 
    /***** Show the form again *****/
@@ -1964,7 +1964,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
    /***** Check if new name is empty *****/
    if (!NewDegName[0])
      {
-      Gbl.Alert.Type = Lay_WARNING;
+      Gbl.Alert.Type = Ale_WARNING;
       sprintf (Gbl.Alert.Txt,Txt_You_can_not_leave_the_name_of_the_degree_X_empty,
                CurrentDegName);
      }
@@ -1976,7 +1976,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
          /***** If degree was in database... *****/
          if (Deg_CheckIfDegNameExistsInCtr (ParamName,NewDegName,Deg->DegCod,Deg->CtrCod))
            {
-            Gbl.Alert.Type = Lay_WARNING;
+            Gbl.Alert.Type = Ale_WARNING;
             sprintf (Gbl.Alert.Txt,Txt_The_degree_X_already_exists,NewDegName);
            }
          else
@@ -1985,7 +1985,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
             Deg_UpdateDegNameDB (Deg->DegCod,FieldName,NewDegName);
 
             /* Write message to show the change made */
-            Gbl.Alert.Type = Lay_SUCCESS;
+            Gbl.Alert.Type = Ale_SUCCESS;
             sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_degree_X_has_changed_to_Y,
                      CurrentDegName,NewDegName);
 
@@ -1996,7 +1996,7 @@ static void Deg_RenameDegree (struct Degree *Deg,Cns_ShrtOrFullName_t ShrtOrFull
         }
       else	// The same name
 	{
-         Gbl.Alert.Type = Lay_INFO;
+         Gbl.Alert.Type = Ale_INFO;
          sprintf (Gbl.Alert.Txt,Txt_The_name_of_the_degree_X_has_not_changed,
                   CurrentDegName);
 	}
@@ -2054,13 +2054,13 @@ void Deg_ChangeDegCtrInConfig (void)
       /***** Check if it already exists a degree with the same name in the new centre *****/
       if (Deg_CheckIfDegNameExistsInCtr ("ShortName",Gbl.CurrentDeg.Deg.ShrtName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
-         Gbl.Alert.Type = Lay_WARNING;
+         Gbl.Alert.Type = Ale_WARNING;
 	 sprintf (Gbl.Alert.Txt,Txt_The_degree_X_already_exists,
 		  Gbl.CurrentDeg.Deg.ShrtName);
 	}
       else if (Deg_CheckIfDegNameExistsInCtr ("FullName",Gbl.CurrentDeg.Deg.FullName,Gbl.CurrentDeg.Deg.DegCod,NewCtr.CtrCod))
 	{
-         Gbl.Alert.Type = Lay_WARNING;
+         Gbl.Alert.Type = Ale_WARNING;
 	 sprintf (Gbl.Alert.Txt,Txt_The_degree_X_already_exists,
 		  Gbl.CurrentDeg.Deg.FullName);
 	}
@@ -2075,7 +2075,7 @@ void Deg_ChangeDegCtrInConfig (void)
 	 Hie_InitHierarchy ();
 
 	 /***** Create message to show the change made *****/
-         Gbl.Alert.Type = Lay_SUCCESS;
+         Gbl.Alert.Type = Ale_SUCCESS;
 	 sprintf (Gbl.Alert.Txt,Txt_The_degree_X_has_been_moved_to_the_centre_Y,
 		  Gbl.CurrentDeg.Deg.FullName,
 		  Gbl.CurrentCtr.Ctr.FullName);
@@ -2090,7 +2090,7 @@ void Deg_ChangeDegCtrInConfig (void)
 void Deg_ContEditAfterChgDegInConfig (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
 
    /***** Show the form again *****/
    Deg_ShowConfiguration ();
@@ -2140,12 +2140,12 @@ void Deg_ChangeDegWWW (void)
 
       /***** Write message to show the change made
 	     and put button to go to degree changed *****/
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
       sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
       Deg_ShowAlertAndButtonToGoToDeg ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Deg_EditDegrees ();
@@ -2171,10 +2171,10 @@ void Deg_ChangeDegWWWInConfig (void)
 
       /***** Write message to show the change made *****/
       sprintf (Gbl.Alert.Txt,Txt_The_new_web_address_is_X,NewWWW);
-      Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_You_can_not_leave_the_web_address_empty);
+      Ale_ShowAlert (Ale_WARNING,Txt_You_can_not_leave_the_web_address_empty);
 
    /***** Show the form again *****/
    Deg_ShowConfiguration ();
@@ -2232,7 +2232,7 @@ void Deg_ChangeDegStatus (void)
 
    /***** Write message to show the change made
 	  and put button to go to degree changed *****/
-   Gbl.Alert.Type = Lay_SUCCESS;
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_degree_X_has_changed,
             Gbl.Degs.EditingDeg.ShrtName);
    Deg_ShowAlertAndButtonToGoToDeg ();
@@ -2271,13 +2271,13 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
      {
       /***** Alert with button to go to degree *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingDeg.ShrtName);
-      Lay_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
+      Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
                               ActSeeCrs,NULL,Deg_PutParamGoToDeg,
                               Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else
       /***** Alert *****/
-      Lay_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
+      Ale_ShowAlert (Gbl.Alert.Type,Gbl.Alert.Txt);
   }
 
 static void Deg_PutParamGoToDeg (void)

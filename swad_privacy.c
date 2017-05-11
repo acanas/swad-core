@@ -99,7 +99,7 @@ void Pri_EditMyPrivacy (void)
    /***** If any of my preferences about privacy is unknown *****/
    if (Gbl.Usrs.Me.UsrDat.PhotoVisibility   == Pri_VISIBILITY_UNKNOWN ||
        Gbl.Usrs.Me.UsrDat.ProfileVisibility == Pri_VISIBILITY_UNKNOWN)
-      Lay_ShowAlert (Lay_WARNING,Txt_Please_review_your_privacy_preferences);
+      Ale_ShowAlert (Ale_WARNING,Txt_Please_review_your_privacy_preferences);
 
    /***** Start frame and table *****/
    Lay_StartRoundFrameTable (NULL,Txt_Privacy,Pri_PutIconsPrivacy,

@@ -316,7 +316,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    /***** Show current photo and help message *****/
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,
                      "PHOTO186x248",Pho_NO_ZOOM,false);
-   Lay_ShowAlert (Lay_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
+   Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/
    fprintf (Gbl.F.Out,"<label class=\"%s\">"
@@ -360,10 +360,10 @@ void Pho_SendPhotoUsr (void)
 	    Pho_ReqOtherUsrPhoto ();
 	}
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+         Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else		// User not found
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -396,7 +396,7 @@ void Pho_RecOtherUsrPhotoDetFaces (void)
 	 Pho_ReqOtherUsrPhoto ();	// Request user's photograph again
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -414,18 +414,18 @@ void Pho_ReqRemoveMyPhoto (void)
      {
       /***** Show question and button to remove my photo *****/
       /* Start alert */
-      Lay_ShowAlertAndButton1 (Lay_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
+      Ale_ShowAlertAndButton1 (Ale_QUESTION,Txt_Do_you_really_want_to_remove_your_photo);
 
       /* Show current photo */
       Pho_ShowUsrPhoto (&Gbl.Usrs.Me.UsrDat,Gbl.Usrs.Me.PhotoURL,
 			"PHOTO186x248",Pho_NO_ZOOM,false);
 
       /* End alert */
-      Lay_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
+      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
                                Lay_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
-      Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
+      Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
   }
 
 /*****************************************************************************/
@@ -444,7 +444,7 @@ void Pho_RemoveMyPhoto1 (void)
 void Pho_RemoveMyPhoto2 (void)
   {
    /***** Write success / warning message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -475,27 +475,27 @@ void Pho_ReqRemoveUsrPhoto (void)
 	    /* Start alert */
 	    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_photo_of_X,
 	             Gbl.Usrs.Other.UsrDat.FullName);
-	    Lay_ShowAlertAndButton1 (Lay_QUESTION,Gbl.Alert.Txt);
+	    Ale_ShowAlertAndButton1 (Ale_QUESTION,Gbl.Alert.Txt);
 
 	    /* Show current photo */
 	    Pho_ShowUsrPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL,
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    Lay_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
+	    Ale_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
 			             (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
 										                ActRemOthPho),	// Guest, visitor or admin
 	                             NULL,Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
-	    Lay_ShowAlert (Lay_INFO,Txt_The_photo_no_longer_exists);
+	    Ale_ShowAlert (Ale_INFO,Txt_The_photo_no_longer_exists);
 	}
       else
-	 Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+	 Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -514,10 +514,10 @@ void Pho_RemoveUsrPhoto (void)
      {
       /***** Remove photo *****/
       if (Pho_RemovePhoto (&Gbl.Usrs.Other.UsrDat))
-         Lay_ShowPendingAlert ();
+         Ale_ShowPendingAlert ();
      }
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 /*****************************************************************************/
@@ -599,7 +599,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    if (WrongType)
      {
       sprintf (Gbl.Alert.Txt,Txt_The_file_is_not_X,"jpg");
-      Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+      Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
       return false;
      }
 
@@ -609,7 +609,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
             Cfg_FOLDER_PHOTO_TMP,Gbl.UniqueNameEncrypted);
    if (!Fil_EndReceptionOfFile (FileNamePhotoTmp,Param))
      {
-      Lay_ShowAlert (Lay_WARNING,"Error copying file.");
+      Ale_ShowAlert (Ale_WARNING,"Error copying file.");
       return false;
      }
 
@@ -675,13 +675,13 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
 
    /***** Message to the user about the number of faces detected in the image*****/
    if (NumFacesTotal == 0)
-      Lay_ShowAlert (Lay_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
+      Ale_ShowAlert (Ale_WARNING,Txt_Could_not_detect_any_face_in_front_position_);
    else if (NumFacesTotal == 1)
      {
       if (NumFacesGreen == 1)
-         Lay_ShowAlert (Lay_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
+         Ale_ShowAlert (Ale_SUCCESS,Txt_A_face_marked_in_green_has_been_detected_);
       else
-         Lay_ShowAlert (Lay_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
+         Ale_ShowAlert (Ale_WARNING,Txt_A_face_marked_in_red_has_been_detected_);
      }
    else        // NumFacesTotal > 1
      {
@@ -689,13 +689,13 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
         {
          sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_green_have_been_detected_,
                   NumFacesGreen);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
       else if (NumFacesGreen == 0)
         {
          sprintf (Gbl.Alert.Txt,Txt_X_faces_marked_in_red_have_been_detected_,
                   NumFacesRed);
-         Lay_ShowAlert (Lay_WARNING,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
         }
       else        // NumFacesGreen > 0
         {
@@ -705,7 +705,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
          else
             sprintf (Gbl.Alert.Txt,Txt_X_faces_have_been_detected_in_front_position_Y_Z_,
                      NumFacesTotal,NumFacesGreen,NumFacesRed);
-         Lay_ShowAlert (Lay_SUCCESS,Gbl.Alert.Txt);
+         Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
      }
 
@@ -779,7 +779,7 @@ void Pho_UpdateUsrPhoto1 (void)
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
       Pho_UpdatePhoto1 (&Gbl.Usrs.Other.UsrDat);
    else
-      Lay_ShowAlert (Lay_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
+      Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
   }
 
 void Pho_UpdateUsrPhoto2 (void)
@@ -817,12 +817,12 @@ static void Pho_UpdatePhoto1 (struct UsrData *UsrDat)
       /* Remove the user from the list of users without photo */
       Pho_RemoveUsrFromTableClicksWithoutPhoto (UsrDat->UsrCod);
 
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
       sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_has_been_updated);
      }
    else
      {
-      Gbl.Alert.Type = Lay_ERROR;
+      Gbl.Alert.Type = Ale_ERROR;
       sprintf (Gbl.Alert.Txt,"%s","Error updating photo.");
      }
   }
@@ -854,7 +854,7 @@ static void Pho_UpdatePhoto2 (void)
    Lay_EndTable ();
 
    /***** Show message *****/
-   Lay_ShowPendingAlert ();
+   Ale_ShowPendingAlert ();
   }
 
 /*****************************************************************************/
@@ -1045,13 +1045,13 @@ bool Pho_RemovePhoto (struct UsrData *UsrDat)
 
    if (NumErrors)
      {
-      Gbl.Alert.Type = Lay_ERROR;
+      Gbl.Alert.Type = Ale_ERROR;
       sprintf (Gbl.Alert.Txt,"%s","Error removing photo.");
       return false;
      }
    else
      {
-      Gbl.Alert.Type = Lay_SUCCESS;
+      Gbl.Alert.Type = Ale_SUCCESS;
       sprintf (Gbl.Alert.Txt,"%s",Txt_Photo_removed);
       return true;
      }
@@ -1220,7 +1220,7 @@ void Pho_ChangePhotoVisibility (void)
    DB_QueryUPDATE (Query,"can not update your preference about photo visibility");
 
    /***** Show alert *****/
-   Lay_ShowAlert (Lay_SUCCESS,Txt_The_visibility_of_your_photo_has_changed);
+   Ale_ShowAlert (Ale_SUCCESS,Txt_The_visibility_of_your_photo_has_changed);
 
    /***** Show form again *****/
    Pri_EditMyPrivacy ();
