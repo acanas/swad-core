@@ -235,13 +235,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.215 (2017-05-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.215.1 (2017-05-10)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.215.1: May 12, 2017	Fixed bug in layout of indicators. (218946 lines)
         Version 16.215:   May 11, 2017	New module swad_alert for alerts. (218944 lines)
         Version 16.214:   May 11, 2017	Changes in edition of institutions.
 					Code refactoring related to alerts. (218867 lines)

@@ -171,7 +171,8 @@ void Ind_ReqIndicatorsCourses (void)
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");
 
-   /* End form and form */
+   /* End table and form */
+   Lay_EndTable ();
    Act_FormEnd ();
 
    /***** Show the stats of courses *****/
