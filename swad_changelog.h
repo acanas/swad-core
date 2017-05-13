@@ -124,8 +124,6 @@
 // TODO: Optimize slow query searching messages received
 // TODO: FIX BUG: Searching messages received gives unordered list
 
-// TODO: Put Raúl Hinojosa (iSWAD developer) in a row of marks file of EC (B,C) and publish file
-
 // TODO: In search of users and findUsers banned users should not appear in listing!!!!!
 
 // TODO: Send attached photos via SOAP?
@@ -235,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.215.1 (2017-05-10)"
+#define Log_PLATFORM_VERSION	"SWAD 16.215.2 (2017-05-10)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.215.2: May 13, 2017	Default theme: grey. (218946 lines)
         Version 16.215.1: May 12, 2017	Fixed bug in layout of indicators. (218946 lines)
         Version 16.215:   May 11, 2017	New module swad_alert for alerts. (218944 lines)
         Version 16.214:   May 11, 2017	Changes in edition of institutions.
