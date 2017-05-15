@@ -2745,6 +2745,7 @@ void Crs_ChangeCrsStatus (void)
    Gbl.Degs.EditingCrs.Status = Status;
 
    /***** Create message to show the change made *****/
+   Gbl.Alert.Type = Ale_SUCCESS;
    sprintf (Gbl.Alert.Txt,Txt_The_status_of_the_course_X_has_changed,
             Gbl.Degs.EditingCrs.ShrtName);
   }
