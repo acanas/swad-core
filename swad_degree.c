@@ -524,8 +524,8 @@ static void Deg_Configuration (bool PrintView)
 	                    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfDeg (Rol_TEACHER,Gbl.CurrentDeg.Deg.DegCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfDeg (Rol_TCH,Gbl.CurrentDeg.Deg.DegCod));
 
 	 /***** Number of students *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -537,8 +537,8 @@ static void Deg_Configuration (bool PrintView)
 	                    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,Gbl.CurrentDeg.Deg.DegCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfDeg (Rol_STD,Gbl.CurrentDeg.Deg.DegCod));
 	}
 
       /***** End table *****/
@@ -927,7 +927,7 @@ static void Deg_PutFormToCreateDegree (void)
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_CTR_ADM)
       Act_FormStart (ActNewDeg);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
       Act_FormStart (ActReqDeg);
    else
       Lay_ShowErrorAndExit ("You can not edit degrees.");
@@ -1205,7 +1205,7 @@ static void Deg_ListDegrees (void)
 
 static bool Deg_CheckIfICanCreateDegrees (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1414,7 +1414,7 @@ void Deg_GetListAllDegsWithStds (struct ListDegrees *Degs)
                   " AND courses.CrsCod=crs_usr.CrsCod"
                   " AND crs_usr.Role=%u"
                   " ORDER BY degrees.ShortName",
-            (unsigned) Rol_STUDENT);
+            (unsigned) Rol_STD);
    Degs->Num = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get degrees admin by you");
 
    if (Degs->Num) // Degrees found...

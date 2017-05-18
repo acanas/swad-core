@@ -115,7 +115,7 @@ void Ann_ShowAllAnnouncements (void)
                      " WHERE Status=%u AND (Roles&%u)<>0 "
 		     " ORDER BY AnnCod DESC",
             (unsigned) Ann_ACTIVE_ANNOUNCEMENT,
-            (unsigned) (1 << Rol_UNKNOWN));
+            (unsigned) (1 << Rol_UNK));
    NumAnnouncements = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get announcements");
 
    /***** Start frame *****/
@@ -343,8 +343,8 @@ static void Ann_DrawAnAnnouncement (long AnnCod,Ann_Status_t Status,
       /* Users' roles who can view this announcement */
       fprintf (Gbl.F.Out,"<p class=\"%s\">%s:",
 	       UsersClass[Status],Txt_Users);
-      for (Role = Rol_UNKNOWN, SomeRolesAreSelected = false;
-	   Role <= Rol_TEACHER;
+      for (Role = Rol_UNK, SomeRolesAreSelected = false;
+	   Role <= Rol_TCH;
 	   Role++)
 	 if (Roles & (1 << Role))
 	   {
@@ -425,14 +425,14 @@ void Ann_ShowFormAnnouncement (void)
                       "<td class=\"DAT LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_UNKNOWN |
-                           1 << Rol__GUEST_ |
-                           1 << Rol_STUDENT |
-                           1 << Rol_TEACHER,
-	                   1 << Rol_UNKNOWN |
-                           1 << Rol__GUEST_ |
-                           1 << Rol_STUDENT |
-                           1 << Rol_TEACHER,
+   Rol_WriteSelectorRoles (1 << Rol_UNK |
+                           1 << Rol_GST |
+                           1 << Rol_STD |
+                           1 << Rol_TCH,
+	                   1 << Rol_UNK |
+                           1 << Rol_GST |
+                           1 << Rol_STD |
+                           1 << Rol_TCH,
                            false,false);
    fprintf (Gbl.F.Out,"</td>"
 	              "</tr>");

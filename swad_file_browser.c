@@ -1111,15 +1111,15 @@ static const Act_Action_t Brw_ActRecDatFile[Brw_NUM_TYPES_FILE_BROWSER] =
 
 const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
   {
-	            0,	// Rol_ROLE_UNKNOWN
-	            0,	// Rol_ROLE_GUEST__
-	            0,	// Rol_ROLE_VISITOR
-	32ULL*Brw_GiB,	// Rol_ROLE_STUDENT
-	64ULL*Brw_GiB,	// Rol_ROLE_TEACHER
-	            0,	// Rol_ROLE_DEG_ADM
-	            0,	// Rol_ROLE_CTR_ADM
-	            0,	// Rol_ROLE_INS_ADM
-	            0,	// Rol_ROLE_SYS_ADM
+	            0,	// Rol_UNK
+	            0,	// Rol_GST
+	            0,	// Rol_USR
+	32ULL*Brw_GiB,	// Rol_STD
+	64ULL*Brw_GiB,	// Rol_TCH
+	            0,	// Rol_DEG_ADM
+	            0,	// Rol_CTR_ADM
+	            0,	// Rol_INS_ADM
+	            0,	// Rol_SYS_ADM
   };
 #define Brw_MAX_FILES_BRIEF	5000
 #define Brw_MAX_FOLDS_BRIEF	1000
@@ -2081,7 +2081,7 @@ void Brw_GetParAndInitFileBrowser (void)
       /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT) ?
+         Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_STD) ?
 				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_SHOW_MARKS_GRP :
 								  Brw_SHOW_MARKS_CRS) :
 				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_ADMI_MARKS_GRP :
@@ -3096,10 +3096,10 @@ void Brw_AskEditWorksCrs (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 
    /***** Draw class photos to select users *****/
    Lay_StartRoundFrame (NULL,Txt_Users,
@@ -3123,8 +3123,8 @@ void Brw_AskEditWorksCrs (void)
 
          /* Put list of users to select some of them */
          Lay_StartTableCenter (0);
-         Usr_ListUsersToSelect (Rol_TEACHER);
-         Usr_ListUsersToSelect (Rol_STUDENT);
+         Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_STD);
          Lay_EndTable ();
 
          /* Send button */
@@ -3135,14 +3135,14 @@ void Brw_AskEditWorksCrs (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
 
    /***** Free memory for users' list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
@@ -3402,7 +3402,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
+   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
@@ -3513,7 +3513,7 @@ static void Brw_ShowFileBrowser (void)
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    struct Brw_NumObjects Removed;
-   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
    /***** Set title of file browser *****/
@@ -3971,7 +3971,7 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	 break;
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
-         if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+         if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
             sprintf (Subtitle,"(%s)",
                      Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
 	 else
@@ -5305,7 +5305,7 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
      {
       /***** Put icon to download ZIP of folder *****/
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT &&	// Only ZIP folders if I am student, teacher...
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
 	  !SeeMarks &&					// Do not ZIP folders when seeing marks
 	  !(SeeDocsZone && RowSetAsHidden))		// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
@@ -9022,7 +9022,7 @@ void Brw_ShowFileMetadata (void)
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_TCH)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -9139,7 +9139,7 @@ void Brw_ShowFileMetadata (void)
 	   }
 	 else
 	    /* Unknown publisher */
-	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN]);
+	    fprintf (Gbl.F.Out,"%s",Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
 	 fprintf (Gbl.F.Out,"</td>"
 	                    "</tr>");
 
@@ -9411,7 +9411,7 @@ void Brw_DownloadFile (void)
             break;
 	 case Brw_SHOW_DOCUM_CRS:
 	 case Brw_SHOW_DOCUM_GRP:
-	    if (Gbl.Usrs.Me.LoggedRole < Rol_TEACHER)
+	    if (Gbl.Usrs.Me.LoggedRole < Rol_TCH)
                ICanView = !Brw_CheckIfFileOrFolderIsHidden (&FileMetadata);
 	    break;
 	 default:
@@ -10852,18 +10852,18 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
       return false;
 
    /***** I must be student, teacher, admin or superuser to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_STUDENT)
+   if (Gbl.Usrs.Me.MaxRole < Rol_STD)
       return false;
 
    /***** Set depending on browser, level, logged role... *****/
    switch (Gbl.FileBrowser.Type)
      {
       case Brw_ADMI_TEACH_CRS:
-	 return (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+	 return (Gbl.Usrs.Me.LoggedRole >= Rol_TCH);
       case Brw_ADMI_TEACH_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)
 	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);	// A teacher can edit only if hr/she belongs to group
-         return (Gbl.Usrs.Me.LoggedRole > Rol_TEACHER);
+         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_SHARE_GRP:
          // Check if I am the publisher of the folder
@@ -10883,9 +10883,9 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not edit this assignment
 
-         return ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&	// Students can edit
+         return ((Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// Students can edit
                   Gbl.FileBrowser.Asg.Open) ||			// inside open assignments
-                  Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);	// Teachers can edit
+                  Gbl.Usrs.Me.LoggedRole >= Rol_TCH);	// Teachers can edit
 								// inside open or closed assignments
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
@@ -10903,7 +10903,7 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
       return false;
 
    /***** I must be student, teacher, admin or superuser to edit *****/
-   if (Gbl.Usrs.Me.MaxRole < Rol_STUDENT)
+   if (Gbl.Usrs.Me.MaxRole < Rol_STD)
       return false;
 
    /***** If maximum level is reached, I can not create/paste *****/
@@ -10928,9 +10928,9 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not create anything inside this assignment
 
-         return ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&	// Students can create
+         return ((Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// Students can create
                   Gbl.FileBrowser.Asg.Open) ||			// inside open assignments
-                  Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);	// Teachers can create
+                  Gbl.Usrs.Me.LoggedRole >= Rol_TCH);	// Teachers can create
 								// inside open or closed assignments
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
@@ -10956,7 +10956,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:	// If I am a student, I can modify the file/folder if I am the publisher
+      case Rol_STD:	// If I am a student, I can modify the file/folder if I am the publisher
          /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
          sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
                         " WHERE FileBrowser=%u AND Cod=%ld"
@@ -10979,7 +10979,7 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
          DB_FreeMySQLResult (&mysql_res);
 
          return (Gbl.Usrs.Me.UsrDat.UsrCod == PublisherUsrCod);	// Am I the publisher of subtree?
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
@@ -11172,7 +11172,7 @@ void Brw_GetSummaryAndContentOfFile (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
 	          Txt_Filename,FileMetadata.FilFolLnkName,
 	          Txt_Folder,FileMetadata.PathInTreeUntilFilFolLnk,	// TODO: Fix bug: do not write internal name (for example "comun")
 	          Txt_Uploaded_by,FileHasPublisher ? PublisherUsrDat.FullName :
-	                                             Txt_ROLES_SINGUL_Abc[Rol_UNKNOWN][Usr_SEX_UNKNOWN]);
+	                                             Txt_ROLES_SINGUL_Abc[Rol_UNK][Usr_SEX_UNKNOWN]);
 
 	 /* Free memory used for publisher's data */
 	 if (FileMetadata.PublisherUsrCod > 0)

@@ -48,7 +48,7 @@ struct Survey
    long SvyCod;
    Sco_Scope_t Scope;
    long Cod;		// Country, institution, centre, degree or course code
-   unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_ROLE_STUDENT) | (1 << Rol_ROLE_TEACHER)
+   unsigned Roles;	// Example: if survey can be made by students and teachers, Roles == (1 << Rol_STD) | (1 << Rol_TCH)
    long UsrCod;
    char Title[Svy_MAX_BYTES_SURVEY_TITLE + 1];
    time_t TimeUTC[Svy_NUM_DATES];

@@ -438,8 +438,8 @@ static void Cty_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,Gbl.CurrentCty.Cty.CtyCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_TCH,Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of students in courses of this country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -451,8 +451,8 @@ static void Cty_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_STUDENT,Gbl.CurrentCty.Cty.CtyCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_STD,Gbl.CurrentCty.Cty.CtyCod));
 
 	 /***** Number of users in courses of this country *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -464,9 +464,9 @@ static void Cty_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Gbl.CurrentCty.Cty.CtyCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Gbl.CurrentCty.Cty.CtyCod));
 	}
 
       /***** End table *****/
@@ -567,7 +567,7 @@ void Cty_ListCountries2 (void)
             Ctr_GetNumCtrsInCty (0),
             Deg_GetNumDegsInCty (0),
             Crs_GetNumCrssInCty (0),
-            Usr_GetNumUsrsInCrssOfCty (Rol_TEACHER,0));
+            Usr_GetNumUsrsInCrssOfCty (Rol_TCH,0));
 
    /***** Write users and institutions with unknown country *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -1139,7 +1139,7 @@ void Cty_GetListCountries (Cty_GetExtraData_t GetExtraData)
                Cty->NumCrss = Crs_GetNumCrssInCty (Cty->CtyCod);
 
                /* Get number of users in courses of this country */
-               Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users"
+               Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Cty->CtyCod);	// Here Rol_UNK means "all users"
                break;
            }
         }
@@ -1385,7 +1385,7 @@ bool Cty_GetDataOfCountryByCod (struct Country *Cty,Cty_GetExtraData_t GetExtraD
 	       Cty->NumUsrsWhoClaimToBelongToCty = 0;
 
 	    /* Get number of user in courses of this institution */
-	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNKNOWN,Cty->CtyCod);	// Here Rol_UNKNOWN means "all users"
+	    Cty->NumUsrs = Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Cty->CtyCod);	// Here Rol_UNK means "all users"
 
 	    /* Get number of institutions in this country */
 	    Cty->NumInss = Ins_GetNumInssInCty (Cty->CtyCod);

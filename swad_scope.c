@@ -273,8 +273,8 @@ void Sco_SetScopesForListingStudents (void)
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
-      case Rol_TEACHER:
+      case Rol_STD:
+      case Rol_TCH:
 	 Gbl.Scope.Allowed = 1 << Sco_SCOPE_CRS;
 	 break;
       case Rol_DEG_ADM:

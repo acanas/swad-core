@@ -85,7 +85,7 @@ void Dup_ReportUsrAsPossibleDuplicate (void)
      {
       /* Check if it's allowed to me to report users as possible duplicatedr */
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+      if (!ItsMe && Gbl.Usrs.Me.LoggedRole >= Rol_TCH)
 	{
 	 /***** Insert possible duplicate into database *****/
          sprintf (Query,"REPLACE INTO usr_duplicated"
@@ -225,7 +225,7 @@ void Dup_ListDuplicateUsrs (void)
      }
    else	// There are no users
       /***** Show warning indicating no users found *****/
-      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -328,8 +328,8 @@ static void Dup_ListSimilarUsrs (void)
             Prf_ShowDetailsUserProfile (&UsrDat);
 
 	    /* Write all the courses this user belongs to */
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
 	    fprintf (Gbl.F.Out,"</td>"
 			       "</tr>");
@@ -365,7 +365,7 @@ static void Dup_ListSimilarUsrs (void)
      }
    else	// There are no users
       /***** Show warning indicating no users found *****/
-      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

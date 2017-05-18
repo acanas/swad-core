@@ -549,7 +549,7 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    MYSQL_ROW row;
    unsigned long NumExaAnn;
    unsigned long NumExaAnns;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    /***** Build subquery about status depending on my role *****/
@@ -1536,7 +1536,7 @@ static void Exa_ShowExamAnnouncement (Exa_TypeViewExamAnnouncement_t TypeViewExa
 
 static void Exa_PutIconsExamAnnouncement (void)
   {
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
       /***** Link to remove this exam announcement *****/

@@ -406,13 +406,13 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
 	 /* Check 1: I can see the IDs of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
             return true;
 
 	 /* Check 2: I can see the IDs of confirmed students */
-         if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
+         if (UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// A student
 	     UsrDat->Accepted)					// who accepted registration
             return true;
 
@@ -450,8 +450,8 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    extern const char *Txt_Confirm_ID;
 
    /***** Start form *****/
-   Act_FormStartAnchor ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActCnfID_Std :
-		        (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActCnfID_Tch :
+   Act_FormStartAnchor ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActCnfID_Std :
+		        (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActCnfID_Tch :
 							             ActCnfID_Oth),
                         Anchor);
    if (Gbl.Action.Original != ActUnk)
@@ -498,8 +498,8 @@ void ID_PutLinkToChangeUsrIDs (void)
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmIDsStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmIDsTch :
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmIDsStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmIDsTch :
 	                	                                                        ActFrmIDsOth),	// Guest, visitor or admin
                              NULL,Usr_PutParamOtherUsrCodEncrypted,
 			     "arroba64x64.gif",
@@ -587,8 +587,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       Act_FormStart (ActRemID_Me);
 	    else
 	      {
-	       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemID_Std :
-	                      (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemID_Tch :
+	       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActRemID_Std :
+	                      (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActRemID_Tch :
 	                	                                           ActRemID_Oth));	// Guest, visitor or admin
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
@@ -641,8 +641,8 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActNewIDMe);
       else
 	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewID_Std :
-	                (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewID_Tch :
+	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewID_Std :
+	                (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewID_Tch :
 	                	                                     ActNewID_Oth));	// Guest, visitor or admin
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}

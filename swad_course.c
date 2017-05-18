@@ -177,15 +177,15 @@ static void Crs_Configuration (bool PrintView)
    unsigned Year;
    int NumIndicatorsFromDB;
    struct Ind_IndicatorsCrs Indicators;
-   bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+   bool IsForm = (!PrintView && Gbl.Usrs.Me.LoggedRole >= Rol_TCH);
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
    /***** Messages and links above the frame *****/
    if (!PrintView)
      {
       /* Link to request enrolment in the current course */
-      if (Gbl.Usrs.Me.LoggedRole == Rol__GUEST_ ||
-	  Gbl.Usrs.Me.LoggedRole == Rol_VISITOR)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_GST ||
+	  Gbl.Usrs.Me.LoggedRole == Rol_USR)
 	{
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
          Enr_PutLinkToRequestSignUp ();
@@ -437,7 +437,7 @@ static void Crs_Configuration (bool PrintView)
                          "</td>"
                          "</tr>",
                The_ClassForm[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumTchs);
+               Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumTchs);
 
       /***** Number of students *****/
       fprintf (Gbl.F.Out,"<tr>"
@@ -449,7 +449,7 @@ static void Crs_Configuration (bool PrintView)
                          "</td>"
                          "</tr>",
                The_ClassForm[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
+               Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
 
       /***** Indicators *****/
       NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.CurrentCrs.Crs.CrsCod);
@@ -1167,7 +1167,7 @@ static void Crs_ListCourses (void)
 
 static bool Crs_CheckIfICanCreateCourses (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1619,7 +1619,7 @@ static void Crs_PutFormToCreateCourse (void)
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)
       Act_FormStart (ActNewCrs);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
       Act_FormStart (ActReqCrs);
    else
       Lay_ShowErrorAndExit ("You can not edit courses.");
@@ -2048,10 +2048,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
              Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get number of teachers *****/
-   Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs->CrsCod);
+   Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
 
    /***** Get number of students *****/
-   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs->CrsCod);
+   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
 
    Crs->NumUsrs = Crs->NumStds +
 	          Crs->NumTchs;
@@ -2770,16 +2770,16 @@ void Crs_ContEditAfterChgCrs (void)
       PutButtonToRequestRegistration = false;
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-	 case Rol__GUEST_:	// I do not belong to any course
+	 case Rol_GST:	// I do not belong to any course
 	    PutButtonToRequestRegistration = true;
 	    break;
-	 case Rol_VISITOR:
+	 case Rol_USR:
 	    PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 					                                  Gbl.Degs.EditingCrs.CrsCod,
 					                                  false);
             break;
-	 case Rol_STUDENT:
-	 case Rol_TEACHER:
+	 case Rol_STD:
+	 case Rol_TCH:
 	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
 	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
 									     Gbl.Degs.EditingCrs.CrsCod,
@@ -2960,8 +2960,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    unsigned NumCrs;
 
    /***** Get courses of a user from database *****/
-   if (Role == Rol_UNKNOWN)
-      SubQuery[0] = '\0';	// Role == Rol_UNKNOWN ==> any role
+   if (Role == Rol_UNK)
+      SubQuery[0] = '\0';	// Role == Rol_UNK ==> any role
    else
       sprintf (SubQuery," AND crs_usr.Role=%u",(unsigned) Role);
    sprintf (Query,"SELECT degrees.DegCod,courses.CrsCod,degrees.ShortName,degrees.FullName,"
@@ -2982,7 +2982,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
 
       /* Heading row */
       sprintf (Gbl.Title,Txt_USER_in_COURSE,
-               Role == Rol_UNKNOWN ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNKNOWN ==> any role
+               Role == Rol_UNK ? Txt_User[Usr_SEX_UNKNOWN] : // Role == Rol_UNK ==> any role
         	                     Txt_ROLES_SINGUL_Abc[Role][UsrDat->Sex]);
       fprintf (Gbl.F.Out,"<tr>"
                          "<th colspan=\"7\" class=\"LEFT_MIDDLE\">%s:</th>"
@@ -3154,8 +3154,8 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_TEACHER,CrsCod);
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STUDENT,CrsCod);
+   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
    if (NumTchs + NumStds)
      {
       Style = "DAT_N";
@@ -3254,7 +3254,7 @@ void Crs_UpdateCrsLast (void)
    char Query[256];
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
-       Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT)
+       Gbl.Usrs.Me.LoggedRole >= Rol_STD)
      {
       /***** Update my last access to current course *****/
       sprintf (Query,"REPLACE INTO crs_last"

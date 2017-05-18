@@ -343,7 +343,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
    if (Gbl.CurrentCrs.Grps.NumGrps)
      {
       ICanEdit = !Gbl.Form.Inside &&
-	         (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	         (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
       /***** Start frame *****/
@@ -594,7 +594,7 @@ void Grp_ChangeMyGrps (void)
    // ...is a radio-based form and not a checkbox-based form...
    // ...this check is made only to avoid problems...
    // ...if the student manipulates the form
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
        LstGrpsIWant.NumGrps >= 2)
       MySelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsIWant);
 
@@ -640,7 +640,7 @@ void Grp_ChangeOtherUsrGrps (void)
 
    /***** A student can not be enroled in more than one group
           if the type of group is of single enrolment *****/
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT &&
+   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD &&
        LstGrpsUsrWants.NumGrps >= 2)
       SelectionIsValid = Grp_CheckIfSelectionGrpsIsValid (&LstGrpsUsrWants);
 
@@ -697,7 +697,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,-1L,
 				Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
      {
       /***** Go across the list of groups which I belong to and check if I try to leave a closed group *****/
       for (NumGrpIBelong = 0;
@@ -831,7 +831,7 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    bool RegisterUsrInThisGrp;
    bool ChangesMade = false;
 
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT)
+   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD)
      {
       /***** Lock tables to make the inscription atomic *****/
       DB_Query ("LOCK TABLES crs_grp_types WRITE,crs_grp WRITE,"
@@ -881,7 +881,7 @@ bool Grp_ChangeGrpsOtherUsrAtomically (struct ListCodGrps *LstGrpsUsrWants)
    Grp_FreeListCodGrp (&LstGrpsUsrBelongs);
 
    /***** Unlock tables after changes in my groups *****/
-   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT)
+   if (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD)
      {
       Gbl.DB.LockedTables = false;	// Set to false before the following unlock...
 				     // ...to not retry the unlock if error in unlocking
@@ -1635,7 +1635,7 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 void Grp_ReqRegisterInGrps (void)
   {
    /***** Show list of groups to register/remove me *****/
-   Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
+   Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STD));
   }
 
 /*****************************************************************************/
@@ -1654,7 +1654,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
    bool ICanEdit = !Gbl.Form.Inside &&
-	           (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	           (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
@@ -1810,7 +1810,7 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
       // If user is a student and the enrolment is single
       // and there are more than a group, put a radio item
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+      if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
           !GrpTyp->MultipleEnrolment &&
           GrpTyp->NumGrps > 1)
 	{
@@ -1830,7 +1830,7 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
 
       if (IBelongToThisGroup)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      else if ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT) &&
+      else if ((Gbl.Usrs.Me.LoggedRole == Rol_STD) &&
                ((!Grp->Open) || (Grp->NumStudents >= Grp->MaxStudents)))
          fprintf (Gbl.F.Out," disabled=\"disabled\"");
       fprintf (Gbl.F.Out," /></td>");
@@ -2913,7 +2913,7 @@ unsigned Grp_CountNumStdsInGrp (long GrpCod)
                   " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
                   " AND crs_usr.Role=%u",
-            GrpCod,(unsigned) Rol_STUDENT);
+            GrpCod,(unsigned) Rol_STD);
    return (unsigned) DB_QueryCOUNT (Query,
 	                            "can not get number of students in a group");
   }
@@ -2937,7 +2937,7 @@ static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod)
                   " FROM crs_grp,crs_grp_usr"
                   " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
-            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STUDENT,GrpTypCod);
+            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STD,GrpTypCod);
    DB_QuerySELECT (Query,&mysql_res,"can not get the number of students not belonging to groups of a type");
 
    /***** Get the number of students (row[0]) *****/
@@ -3042,7 +3042,7 @@ unsigned Grp_NumGrpTypesMandatIDontBelong (void)
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod"
                   " AND crs_grp_usr.UsrCod=%ld)",
             Gbl.CurrentCrs.Crs.CrsCod,
-            (unsigned) Rol_STUDENT,
+            (unsigned) Rol_STD,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
    NumGrpTypes = DB_QueryCOUNT (Query,"can not get the number of types of group of mandatory registration to which you don't belong to");
@@ -3075,7 +3075,7 @@ static bool Grp_GetIfGrpIsAvailable (long GrpTypCod)
                   " AND crs_usr.Role=%u"
                   " GROUP BY crs_grp.GrpCod"
                   " HAVING NumStudents<MaxStudents) AS available_grp_types",
-            GrpTypCod,(unsigned) Rol_STUDENT);
+            GrpTypCod,(unsigned) Rol_STD);
    NumGrpTypes = DB_QueryCOUNT (Query,"can not check if a type of group has available groups");
 
    return (NumGrpTypes != 0);

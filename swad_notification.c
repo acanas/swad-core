@@ -1209,7 +1209,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                               " AND Role=%u",	// Notify teachers only
                         Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TEACHER);
+                        (unsigned) Rol_TCH);
                break;
             case Brw_ADMI_DOCUM_GRP:
             case Brw_ADMI_SHARE_GRP:
@@ -1230,7 +1230,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                               " AND crs_usr.Role=%u",	// Notify teachers only
                         Gbl.CurrentCrs.Grps.GrpCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod,
-                        (unsigned) Rol_TEACHER);
+                        (unsigned) Rol_TCH);
                break;
             default:	// This function should not be called in other cases
                return 0;
@@ -1275,7 +1275,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 			   " AND Role=%u",	// Notify teachers only
 		     Gbl.CurrentCrs.Crs.CrsCod,
 		     Gbl.Usrs.Me.UsrDat.UsrCod,
-		     (unsigned) Rol_TEACHER);
+		     (unsigned) Rol_TCH);
 	 else	// Course without teachers
 	    // If this course has no teachers
 	    // and I want to be a teacher (checked before calling this function
@@ -1322,7 +1322,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
 	       sprintf (Query,"SELECT UsrCod FROM crs_usr"
 			      " WHERE CrsCod=%ld AND Role=%u AND UsrCod<>%ld",
 			Gbl.CurrentCrs.Crs.CrsCod,
-			(unsigned) Rol_TEACHER,
+			(unsigned) Rol_TCH,
 			Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
 	    default:

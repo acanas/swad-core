@@ -463,10 +463,10 @@ void Sta_AskShowCrsHits (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
@@ -502,8 +502,8 @@ void Sta_AskShowCrsHits (void)
                             "<table>",
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
-         Usr_ListUsersToSelect (Rol_TEACHER);
-         Usr_ListUsersToSelect (Rol_STUDENT);
+         Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_STD);
          fprintf (Gbl.F.Out,"</table>"
                             "</td>"
                             "</tr>");
@@ -607,8 +607,8 @@ void Sta_AskShowCrsHits (void)
    Lay_EndRoundFrame ();
 
    /***** Free memory used by the lists *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -639,7 +639,7 @@ void Sta_AskShowGblHits (void)
 
    /* Put form to go to test edition and configuration */
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+       (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
         Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
       Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
 			     "stats64x64.gif",
@@ -998,8 +998,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
    /***** Check if range of dates is forbidden for me *****/
    NumDays = Dat_GetNumDaysBetweenDates (&Gbl.DateRange.DateIni.Date,&Gbl.DateRange.DateEnd.Date);
-   ICanQueryWholeRange = (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
-			 (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
+   ICanQueryWholeRange = (Gbl.Usrs.Me.LoggedRole >= Rol_TCH && GlobalOrCourse == Sta_SHOW_COURSE_ACCESSES) ||
+			 (Gbl.Usrs.Me.LoggedRole == Rol_TCH &&  Gbl.Scope.Current == Sco_SCOPE_CRS)  ||
 			 (Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM && (Gbl.Scope.Current == Sco_SCOPE_DEG   ||
 			                                            Gbl.Scope.Current == Sco_SCOPE_CRS)) ||
 			 (Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM && (Gbl.Scope.Current == Sco_SCOPE_CTR   ||
@@ -1215,7 +1215,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   {
 	    case Sta_IDENTIFIED_USRS:
                sprintf (StrRole," AND %s.Role<>%u",
-                        LogTable,(unsigned) Rol_UNKNOWN);
+                        LogTable,(unsigned) Rol_UNK);
 	       break;
 	    case Sta_ALL_USRS:
                switch (Gbl.Stat.CountType)
@@ -1228,7 +1228,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                   case Sta_DISTINCT_USRS:
                   case Sta_CLICKS_PER_USR:
                      sprintf (StrRole," AND %s.Role<>%u",
-                              LogTable,(unsigned) Rol_UNKNOWN);
+                              LogTable,(unsigned) Rol_UNK);
                      break;
                     }
 	       break;
@@ -1246,23 +1246,23 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	       break;
 	    case Sta_TEACHERS:
                sprintf (StrRole," AND %s.Role=%u",
-                        LogTable,(unsigned) Rol_TEACHER);
+                        LogTable,(unsigned) Rol_TCH);
 	       break;
 	    case Sta_STUDENTS:
                sprintf (StrRole," AND %s.Role=%u",
-                        LogTable,(unsigned) Rol_STUDENT);
+                        LogTable,(unsigned) Rol_STD);
 	       break;
 	    case Sta_VISITORS:
                sprintf (StrRole," AND %s.Role=%u",
-                        LogTable,(unsigned) Rol_VISITOR);
+                        LogTable,(unsigned) Rol_USR);
                break;
 	    case Sta_GUESTS:
                sprintf (StrRole," AND %s.Role=%u",
-                        LogTable,(unsigned) Rol__GUEST_);
+                        LogTable,(unsigned) Rol_GST);
                break;
 	    case Sta_UNKNOWN_USRS:
                sprintf (StrRole," AND %s.Role=%u",
-                        LogTable,(unsigned) Rol_UNKNOWN);
+                        LogTable,(unsigned) Rol_UNK);
                break;
 	    case Sta_ME:
                sprintf (StrRole," AND %s.UsrCod=%ld",
@@ -1949,7 +1949,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 	                    " style=\"width:%upx; height:18px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
-		  UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? 'c' :
+		  UsrDat.RoleInCurrentCrsDB == Rol_STD ? 'c' :
 			                                     'v',
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
@@ -4069,13 +4069,13 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_STUDENT);	// Students
-   Usr_GetAndShowNumUsrsInPlatform (Rol_TEACHER);	// Teachers
-   Usr_GetAndShowNumUsrsInPlatform (Rol_UNKNOWN);	// Students and teachers
+   Usr_GetAndShowNumUsrsInPlatform (Rol_STD);	// Students
+   Usr_GetAndShowNumUsrsInPlatform (Rol_TCH);	// Teachers
+   Usr_GetAndShowNumUsrsInPlatform (Rol_UNK);	// Students and teachers
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"4\" style=\"height:10px;\">"
                       "</tr>");
-   Usr_GetAndShowNumUsrsInPlatform (Rol__GUEST_);	// Users not beloging to any course
+   Usr_GetAndShowNumUsrsInPlatform (Rol_GST);	// Users not beloging to any course
 
    Lay_EndRoundFrameTable ();
   }
@@ -4246,8 +4246,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs ("");
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs ("");
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss ("");
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,"");
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,"");
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,"");
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
@@ -4258,8 +4258,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumCtysTotal = 1;
@@ -4269,8 +4269,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCtrs = Cty_GetNumCtysWithCtrs (SubQuery);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumCtysTotal = 1;
@@ -4280,8 +4280,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumCtysTotal = 1;
@@ -4291,8 +4291,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumCtysTotal = 1;
@@ -4302,8 +4302,8 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithCrss = 1;
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -4376,8 +4376,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs ("");
 	 NumInssWithDegs = Ins_GetNumInssWithDegs ("");
 	 NumInssWithCrss = Ins_GetNumInssWithCrss ("");
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,"");
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,"");
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,"");
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
@@ -4387,8 +4387,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumInssTotal = 1;
@@ -4397,8 +4397,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCtrs = Ins_GetNumInssWithCtrs (SubQuery);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumInssTotal = 1;
@@ -4407,8 +4407,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumInssTotal = 1;
@@ -4417,8 +4417,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumInssTotal = 1;
@@ -4427,8 +4427,8 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithCrss = 1;
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STUDENT,SubQuery);
+         NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -4496,8 +4496,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsTotal = Ctr_GetNumCtrsTotal ();
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs ("");
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss ("");
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,"");
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,"");
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,"");
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
@@ -4506,8 +4506,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumCtrsTotal = Ctr_GetNumCtrsInIns (Gbl.CurrentIns.Ins.InsCod);
@@ -4515,8 +4515,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumCtrsTotal = 1;
@@ -4524,8 +4524,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumCtrsTotal = 1;
@@ -4533,8 +4533,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumCtrsTotal = 1;
@@ -4542,8 +4542,8 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithCrss = 1;
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STUDENT,SubQuery);
+         NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -4606,8 +4606,8 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
       case Sco_SCOPE_SYS:
 	 NumDegsTotal = Deg_GetNumDegsTotal ();
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss ("");
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,"");
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,"");
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,"");
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
@@ -4615,40 +4615,40 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumDegsTotal = Deg_GetNumDegsInIns (Gbl.CurrentIns.Ins.InsCod);
          sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumDegsTotal = Deg_GetNumDegsInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
          sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumDegsTotal = 1;
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumDegsTotal = 1;
 	 NumDegsWithCrss = 1;
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TEACHER,SubQuery);
-	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STUDENT,SubQuery);
+         NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -4706,44 +4706,44 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
      {
       case Sco_SCOPE_SYS:
 	 NumCrssTotal = Crs_GetNumCrssTotal ();
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,"");
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,"");
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,"");
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
       case Sco_SCOPE_CTY:
 	 NumCrssTotal = Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod);
          sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
 	 NumCrssTotal = Crs_GetNumCrssInIns (Gbl.CurrentIns.Ins.InsCod);
          sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
 	 NumCrssTotal = Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod);
          sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
 	 NumCrssTotal = Crs_GetNumCrssInDeg (Gbl.CurrentDeg.Deg.DegCod);
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
 	 NumCrssTotal = 1;
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
-         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TEACHER,SubQuery);
-	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STUDENT,SubQuery);
+         NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("Wrong scope.");
@@ -5271,7 +5271,7 @@ static unsigned Sta_GetTotalNumberOfUsersInPlatform (void)
 /*****************************************************************************/
 /******************* Get total number of users in courses ********************/
 /*****************************************************************************/
-// Here Rol_ROLE_UNKNOWN means "students or teachers"
+// Here Rol_UNK means "students or teachers"
 
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
   {
@@ -5281,7 +5281,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
    switch (Scope)
      {
       case Sco_SCOPE_SYS:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
         	           " FROM crs_usr");
          else
@@ -5290,7 +5290,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
                      (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM institutions,centres,degrees,courses,crs_usr"
                            " WHERE institutions.CtyCod=%ld"
@@ -5311,7 +5311,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM centres,degrees,courses,crs_usr"
                            " WHERE centres.InsCod=%ld"
@@ -5330,7 +5330,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM degrees,courses,crs_usr"
                            " WHERE degrees.CtrCod=%ld"
@@ -5347,7 +5347,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
         	           " FROM courses,crs_usr"
                            " WHERE courses.DegCod=%ld"
@@ -5362,7 +5362,7 @@ unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
                      Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         if (Role == Rol_UNKNOWN)	// Any user
+         if (Role == Rol_UNK)	// Any user
             sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
                            " WHERE CrsCod=%ld",
                      Gbl.CurrentCrs.Crs.CrsCod);
@@ -6942,7 +6942,7 @@ static void Sta_GetAndShowSocialActivityStats (void)
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
 
    /***** Get total number of following/followers from database *****/
    for (NoteType = (Soc_NoteType_t) 0;
@@ -7219,7 +7219,7 @@ static void Sta_GetAndShowFollowStats (void)
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
 
    /***** Get total number of following/followers from database *****/
    for (Fol = 0;
@@ -7842,7 +7842,7 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
 
    /***** Get total number of users *****/
    NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
 
    /***** Get total number of users who want to be
           notified by email on some event, from database *****/

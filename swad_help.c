@@ -151,7 +151,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	{
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
 	     !Gbl.CurrentCrs.Crs.NumStds &&				// Current course has no students
-	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER)	// I am a teacher in current course
+	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */
 	    sprintf (Gbl.Title,Txt_Register_students_in_the_course_X,

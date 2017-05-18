@@ -741,7 +741,7 @@ static void Rep_WriteSectionGlobalHits (struct Rep_Report *Report)
    /***** Global (in any course) hits per year *****/
    Report->MaxHitsPerYear = 0;	// MaxHitsPerYear not passed as an argument but computed inside the function
    Rep_ShowMyHitsPerYear (true,-1L,	// Any course
-                          Rol_UNKNOWN,	// Any role
+                          Rol_UNK,	// Any role
                           Report);
 
    /***** End of section *****/
@@ -857,8 +857,8 @@ static void Rep_WriteSectionCurrentCourses (struct Rep_Report *Report)
 	              "<ul>");
 
    /***** Number of courses in which the user is student/teacher *****/
-   for (Role  = Rol_STUDENT;
-	Role <= Rol_TEACHER;
+   for (Role  = Rol_STD;
+	Role <= Rol_TCH;
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteMyCurrentCrss (Role,Report);
@@ -891,8 +891,8 @@ static void Rep_WriteSectionHistoricCourses (struct Rep_Report *Report)
    Rep_GetAndWriteMyHistoricClicsWithoutCrs (Report);
 
    /***** Historic courses in which the user clicked as student/teacher *****/
-   for (Role  = Rol_STUDENT;
-	Role <= Rol_TEACHER;
+   for (Role  = Rol_STD;
+	Role <= Rol_TCH;
 	Role++)
       /* List my courses with this role */
       Rep_GetAndWriteMyHistoricCrss (Role,Report);
@@ -942,13 +942,13 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
 	          " GROUP BY CrsCod,Year,Role"
 		  // ----------------------------------------------------------
 	          ") AS hits_per_crs_year",
-	    (unsigned) Rol_UNKNOWN,
+	    (unsigned) Rol_UNK,
             (long) Report->UsrFigures.FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
 	    (long) Report->UsrFigures.FirstClickTimeUTC,
 	    Gbl.Usrs.Me.UsrDat.UsrCod,
-	    (unsigned) Rol_STUDENT,
-	    (unsigned) Rol_TEACHER);
+	    (unsigned) Rol_STD,
+	    (unsigned) Rol_TCH);
    DB_QuerySELECT (Query,&mysql_res,"can not get last question index");
 
    /***** Get number of users *****/
@@ -992,9 +992,9 @@ static void Rep_GetAndWriteMyCurrentCrss (Rol_Role_t Role,
    if (NumCrss)
      {
       fprintf (Gbl.F.Rep," (%u %s / %u %s):",
-	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TEACHER),
+	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STUDENT),
+	       Usr_GetNumUsrsInCrssOfAUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Role,Rol_STD),
 	       Txt_students_ABBREVIATION);
 
       /***** Get courses of a user from database *****/
@@ -1057,7 +1057,7 @@ static void Rep_GetAndWriteMyHistoricClicsWithoutCrs (struct Rep_Report *Report)
 
    /***** Historic clicks *****/
    Rep_WriteRowCrsData (-1L,
-                        Rol_UNKNOWN,	// Role does not matter
+                        Rol_UNK,	// Role does not matter
 			Report,
 			false);	// Do not write number of users in course
 
@@ -1171,8 +1171,8 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		     Usr_GetNumUsrsInCrs (Rol_TEACHER,Crs.CrsCod),Txt_teachers_ABBREVIATION,
-		     Usr_GetNumUsrsInCrs (Rol_STUDENT,Crs.CrsCod),Txt_students_ABBREVIATION);
+		     Usr_GetNumUsrsInCrs (Rol_TCH,Crs.CrsCod),Txt_teachers_ABBREVIATION,
+		     Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod),Txt_students_ABBREVIATION);
 	}
       else
          fprintf (Gbl.F.Rep,"(%s)",Txt_unknown_removed_course);
@@ -1211,7 +1211,7 @@ static void Rep_ShowMyHitsPerYear (bool AnyCourse,long CrsCod,Rol_Role_t Role,
    else
       sprintf (SubQueryCrs," AND CrsCod=%ld",CrsCod);
 
-   if (Role == Rol_UNKNOWN)	// Here Rol_UNKNOWN means any role
+   if (Role == Rol_UNK)	// Here Rol_UNK means any role
       SubQueryRol[0] = '\0';
    else
       sprintf (SubQueryRol," AND Role=%u",(unsigned) Role);

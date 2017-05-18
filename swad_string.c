@@ -1033,7 +1033,7 @@ void Str_ChangeFormat (Str_ChangeFrom_t ChangeFrom,Str_ChangeTo_t ChangeTo,
    char StrSpecialChar[Str_MAX_BYTES_SPECIAL_CHAR + 1];
 
 /*
-  if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+  if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
     {
      sprintf (Gbl.Alert.Txt,"Str_ChangeFormat (&quot;%s&quot;)",Str);
      Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);

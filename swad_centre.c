@@ -628,8 +628,8 @@ static void Ctr_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_TEACHER,Gbl.CurrentCtr.Ctr.CtrCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_TCH,Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of students in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -641,8 +641,8 @@ static void Ctr_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_STUDENT,Gbl.CurrentCtr.Ctr.CtrCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_STD,Gbl.CurrentCtr.Ctr.CtrCod));
 
 	 /***** Number of users in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -654,9 +654,9 @@ static void Ctr_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Gbl.CurrentCtr.Ctr.CtrCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
 
       /***** End table *****/
@@ -793,7 +793,7 @@ static void Ctr_ListCentres (void)
 
 static bool Ctr_CheckIfICanCreateCentres (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1089,7 +1089,7 @@ void Ctr_GetListCentres (long InsCod)
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
 
 	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users"
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
         }
      }
    else
@@ -1187,7 +1187,7 @@ bool Ctr_GetDataOfCentreByCod (struct Centre *Ctr)
          Ctr->NumCrss = Crs_GetNumCrssInCtr (Ctr->CtrCod);
 
 	 /* Get number of users in courses of this centre */
-	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNKNOWN,Ctr->CtrCod);	// Here Rol_UNKNOWN means "all users"
+	 Ctr->NumUsrs = Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Ctr->CtrCod);	// Here Rol_UNK means "all users"
 
          /* Set return value */
          CtrFound = true;
@@ -2417,7 +2417,7 @@ static void Ctr_PutFormToCreateCentre (void)
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       Act_FormStart (ActNewCtr);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
       Act_FormStart (ActReqCtr);
    else
       Lay_ShowErrorAndExit ("You can not edit centres.");

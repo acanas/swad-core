@@ -312,8 +312,8 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 		      "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
-   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TEACHER);
-   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STUDENT);
+   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
+   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");
   }

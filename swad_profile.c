@@ -386,36 +386,36 @@ void Prf_ShowDetailsUserProfile (const struct UsrData *UsrDat)
 	              "<ul class=\"PRF_FIG_UL DAT_NOBR_N\">");
 
    /***** Number of courses in which the user is teacher *****/
-   NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TEACHER);
+   NumCrssUsrIsTeacher = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_TCH);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/tch64x64.gif');\">"
 		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Rol_TEACHER][UsrDat->Sex],
+	    Txt_ROLES_SINGUL_Abc[Rol_TCH][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsTeacher,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsTeacher)
       fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_TEACHER),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TEACHER,Rol_STUDENT),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_TCH,Rol_STD),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 
    /***** Number of courses in which the user is student *****/
-   NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STUDENT);
+   NumCrssUsrIsStudent = Usr_GetNumCrssOfUsrWithARole (UsrDat->UsrCod,Rol_STD);
    fprintf (Gbl.F.Out,"<li title=\"%s\" class=\"PRF_FIG_LI\""
 	              " style=\"background-image:url('%s/std64x64.gif');\">"
 		      "%u&nbsp;%s",
-	    Txt_ROLES_SINGUL_Abc[Rol_STUDENT][UsrDat->Sex],
+	    Txt_ROLES_SINGUL_Abc[Rol_STD][UsrDat->Sex],
 	    Gbl.Prefs.IconsURL,
 	    NumCrssUsrIsStudent,
 	    Txt_courses_ABBREVIATION);
    if (NumCrssUsrIsStudent)
       fprintf (Gbl.F.Out,"&nbsp;(%u&nbsp;%s/%u&nbsp;%s)",
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_TEACHER),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_TCH),
 	       Txt_teachers_ABBREVIATION,
-	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STUDENT,Rol_STUDENT),
+	       Usr_GetNumUsrsInCrssOfAUsr (UsrDat->UsrCod,Rol_STD,Rol_STD),
 	       Txt_students_ABBREVIATION);
    fprintf (Gbl.F.Out,"</li>");
 

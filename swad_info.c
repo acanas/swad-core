@@ -340,7 +340,7 @@ void Inf_ShowInfo (void)
    extern const char *Txt_No_information;
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool ShowWarningNoInfo = false;
    const char *Help[Inf_NUM_INFO_TYPES] =
@@ -375,7 +375,7 @@ void Inf_ShowInfo (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
+      case Rol_STD:
          /* Put checkbox to force students to read this couse info */
          if (MustBeRead)
            {
@@ -384,7 +384,7 @@ void Inf_ShowInfo (void)
             fprintf (Gbl.F.Out,"</div>");
            }
          break;
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_SYS_ADM:
          /* Put checkbox to force students to read this couse info */
          if (InfoSrc != Inf_INFO_SRC_NONE)
@@ -1008,7 +1008,7 @@ static void Inf_ShowPage (const char *URL)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_View_in_a_new_window;
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
@@ -1757,7 +1757,7 @@ static bool Inf_CheckAndShowPlainTxt (void)
   {
    extern const char *Txt_INFO_TITLE[Inf_NUM_INFO_TYPES];
    char TxtHTML[Cns_MAX_BYTES_LONG_TEXT + 1];
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {
@@ -1841,7 +1841,7 @@ static bool Inf_CheckAndShowRichTxt (void)
    char MathJaxURL[PATH_MAX];
    char Command[512 + PATH_MAX * 3]; // Command to call the program of preprocessing of photos
    int ReturnCode;
-   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    const char *Help[Inf_NUM_INFO_TYPES] =
      {

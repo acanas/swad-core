@@ -5073,7 +5073,7 @@ void Act_AdjustCurrentAction (void)
           or if I'm a teacher and I haven't filled my centre or department,
           the only action possible is to show a form to change my common record *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
+   IAmATeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH));
    if (Gbl.Usrs.Me.UsrDat.InsCod < 0 ||
        (IAmATeacher && (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
                         Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0)))
@@ -5111,7 +5111,7 @@ void Act_AdjustCurrentAction (void)
              the only action possible is show a form to ask for enrolment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.Action.Act != ActLogOut)
 	{
-	 Gbl.Action.Act = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT) ? ActReqAccEnrStd :
+	 Gbl.Action.Act = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD) ? ActReqAccEnrStd :
 	                                                                           ActReqAccEnrTch;
 	 Tab_SetCurrentTab ();
 	 return;
@@ -5120,7 +5120,7 @@ void Act_AdjustCurrentAction (void)
       /***** Depending on the role I am logged... *****/
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_STUDENT:
+         case Rol_STD:
             switch (Gbl.Action.Act)
               {
                case ActLogIn:
@@ -5154,7 +5154,7 @@ void Act_AdjustCurrentAction (void)
                   /* If I have no photo, and current action is not available for unknown users,
                      then update number of clicks without photo */
                   if (!Gbl.Usrs.Me.MyPhotoExists)
-                     if (!(Act_Actions[Gbl.Action.Act].PermissionCrsIfIBelong & (1 << Rol_UNKNOWN)) &&	// If current action is not available for unknown users...
+                     if (!(Act_Actions[Gbl.Action.Act].PermissionCrsIfIBelong & (1 << Rol_UNK)) &&	// If current action is not available for unknown users...
                          Gbl.Action.Act != ActReqMyPho)	// ...and current action is not ActReqMyPho...
                         if ((Gbl.Usrs.Me.NumAccWithoutPhoto = Pho_UpdateMyClicksWithoutPhoto ()) > Pho_MAX_CLICKS_WITHOUT_PHOTO)
 	                  {
@@ -5171,7 +5171,7 @@ void Act_AdjustCurrentAction (void)
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
                Gbl.CurrentCrs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
             break;
-         case Rol_TEACHER:
+         case Rol_TCH:
             if (Gbl.Action.Act == ActReqTst ||
                 Gbl.Action.Act == ActEdiTstQst)
                /***** If current course has tests and pluggable is unknown,

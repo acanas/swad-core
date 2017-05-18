@@ -879,7 +879,7 @@ void Mai_ListEmails (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
 
    /***** Start of the frame used to list the emails *****/
    Lay_StartRoundFrame (NULL,
@@ -889,9 +889,9 @@ void Mai_ListEmails (void)
    /***** Form to select groups *****/
    Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
 
-   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
         {
          /***** Initialize structure with user's data *****/
          Usr_UsrDataConstructor (&UsrDat);
@@ -900,11 +900,11 @@ void Mai_ListEmails (void)
          fprintf (Gbl.F.Out,"<div class=\"DAT_SMALL LEFT_MIDDLE\">");
          for (NumUsr = 0, NumStdsWithEmail = 0, NumAcceptedStdsWithEmail = 0,
               StrAddresses[0] = '\0';
-              NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+              NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
               NumUsr++)
            {
 	    /* Copy user's basic data from list */
-	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
+	    Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 	    /* Get user's email */
             Mai_GetEmailFromUsrCod (&UsrDat);
@@ -945,8 +945,8 @@ void Mai_ListEmails (void)
          fprintf (Gbl.F.Out,Txt_X_students_who_have_email,
                   NumStdsWithEmail,
                   ((float) NumStdsWithEmail /
-                   (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
-                  Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
+                   (float) Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs) * 100.0,
+                  Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs);
          fprintf (Gbl.F.Out,"</div>");
 
          /***** Show a message with the number of students who have accepted and have email ****/
@@ -954,8 +954,8 @@ void Mai_ListEmails (void)
          fprintf (Gbl.F.Out,Txt_X_students_who_have_accepted_and_who_have_email,
                   NumAcceptedStdsWithEmail,
                   ((float) NumAcceptedStdsWithEmail /
-                   (float) Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs) * 100.0,
-                  Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs);
+                   (float) Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs) * 100.0,
+                  Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs);
          fprintf (Gbl.F.Out,"</div>");
 
          /***** Icon to open the client email program *****/
@@ -976,13 +976,13 @@ void Mai_ListEmails (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End of the frame used to list the emails *****/
    Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -1135,8 +1135,8 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
 			     Txt_Change_email,Txt_Change_email,
                              NULL);
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmMaiStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmMaiTch :
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmMaiStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmMaiTch :
 	                	                                                        ActFrmMaiOth),
                              NULL,Usr_PutParamOtherUsrCodEncrypted,
                              "msg64x64.gif",
@@ -1248,8 +1248,8 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActRemMaiMe);
       else
 	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActRemMaiStd :
-			(UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActRemMaiTch :
+	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActRemMaiStd :
+			(UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActRemMaiTch :
 								     ActRemMaiOth));	// Guest, visitor or admin
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
@@ -1284,8 +1284,8 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	    Act_FormStart (ActNewMaiMe);
 	 else
 	   {
-	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewMaiStd :
-			   (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewMaiTch :
+	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewMaiStd :
+			   (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewMaiTch :
 									ActNewMaiOth));	// Guest, visitor or admin
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
@@ -1314,8 +1314,8 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Act_FormStart (ActNewMaiMe);
    else
      {
-      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActNewMaiStd :
-		     (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActNewMaiTch :
+      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewMaiStd :
+		     (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewMaiTch :
 								  ActNewMaiOth));	// Guest, visitor or admin
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
@@ -1835,16 +1835,16 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
    /* Check if I have permission to see another user's email */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
+      case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER &&	// A teacher
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_TCH &&	// A teacher
 	         UsrDat->Accepted);				// who accepted registration
-      case Rol_TEACHER:
+      case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
-         return (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||	// A student
-                 UsrDat->RoleInCurrentCrsDB == Rol_TEACHER) &&	// or a teacher
+         return (UsrDat->RoleInCurrentCrsDB == Rol_STD ||	// A student
+                 UsrDat->RoleInCurrentCrsDB == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_DEG_ADM:
 	 /* If I am an administrator of current degree,

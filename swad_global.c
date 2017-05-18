@@ -159,7 +159,7 @@ void Gbl_InitializeGlobals (void)
    Gbl.Usrs.Me.RoleFromSession              =
    Gbl.Usrs.Me.LoggedRole                   =
    Gbl.Usrs.Me.LoggedRoleBeforeCloseSession =
-   Gbl.Usrs.Me.MaxRole                      = Rol_UNKNOWN;
+   Gbl.Usrs.Me.MaxRole                      = Rol_UNK;
    Gbl.Usrs.Me.RoleHasChanged = false;
    Gbl.Usrs.Me.IBelongToCurrentIns = false;
    Gbl.Usrs.Me.IBelongToCurrentCtr = false;
@@ -478,9 +478,9 @@ void Gbl_Cleanup (void)
    Hld_FreeListHolidays ();
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();
-   Usr_FreeUsrsList (Rol__GUEST_);
-   Usr_FreeUsrsList (Rol_STUDENT);
-   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_GST);
+   Usr_FreeUsrsList (Rol_STD);
+   Usr_FreeUsrsList (Rol_TCH);
    Usr_FreeUsrsList (Rol_DEG_ADM);
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedUsrsCods ();

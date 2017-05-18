@@ -224,9 +224,9 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
 	Txt_degrees,						// Sch_SEARCH_DEGREES
 	Txt_courses,						// Sch_SEARCH_COURSES
 	Txt_users[Usr_SEX_UNKNOWN],				// Sch_SEARCH_USERS
-	Txt_ROLES_PLURAL_abc[Rol_TEACHER][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
-	Txt_ROLES_PLURAL_abc[Rol_STUDENT][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
-        Txt_ROLES_PLURAL_abc[Rol__GUEST_][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
+	Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
+	Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
+        Txt_ROLES_PLURAL_abc[Rol_GST][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
 	Txt_open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
 	Txt_documents_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
 	Txt_my_documents,					// Sch_SEARCH_MY_DOCUMENTS
@@ -595,9 +595,9 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchCentresInDB (RangeQuery);
 	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
-	 NumResults += Sch_SearchUsrsInDB (Rol_TEACHER);
-	 NumResults += Sch_SearchUsrsInDB (Rol_STUDENT);
-	 NumResults += Sch_SearchUsrsInDB (Rol__GUEST_);
+	 NumResults += Sch_SearchUsrsInDB (Rol_TCH);
+	 NumResults += Sch_SearchUsrsInDB (Rol_STD);
+	 NumResults += Sch_SearchUsrsInDB (Rol_GST);
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
 	 NumResults += Sch_SearchDocumentsInMyCoursesInDB (RangeQuery);
 	 NumResults += Sch_SearchMyDocumentsInDB (RangeQuery);
@@ -618,16 +618,16 @@ static void Sch_SearchInDB (void)
 	 NumResults = Sch_SearchCoursesInDB (RangeQuery);
 	 break;
       case Sch_SEARCH_USERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_UNKNOWN);	// Here Rol_UNKNOWN means any user
+	 NumResults = Sch_SearchUsrsInDB (Rol_UNK);	// Here Rol_UNK means any user
 	 break;
       case Sch_SEARCH_TEACHERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_TEACHER);
+	 NumResults = Sch_SearchUsrsInDB (Rol_TCH);
 	 break;
       case Sch_SEARCH_STUDENTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_STUDENT);
+	 NumResults = Sch_SearchUsrsInDB (Rol_STD);
 	 break;
       case Sch_SEARCH_GUESTS:
-	 NumResults = Sch_SearchUsrsInDB (Rol__GUEST_);
+	 NumResults = Sch_SearchUsrsInDB (Rol_GST);
 	 break;
       case Sch_SEARCH_OPEN_DOCUMENTS:
 	 NumResults = Sch_SearchOpenDocumentsInDB (RangeQuery);
@@ -950,7 +950,7 @@ static unsigned Sch_SearchOpenDocumentsInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,
 	                           Txt_open_document,
@@ -1011,7 +1011,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_TEACH_GRP,
 		  (unsigned) Brw_ADMI_SHARE_GRP,
 		  (unsigned) Brw_ADMI_MARKS_GRP);
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 if (mysql_query (&Gbl.mysql,Query))
 	    DB_ExitOnMySQLError ("can not create temporary table");
@@ -1071,7 +1071,7 @@ static unsigned Sch_SearchDocumentsInMyCoursesInDB (const char *RangeQuery)
 		  RangeQuery);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 NumDocs = Brw_ListDocsFound (Query,
 	                              Txt_document_in_my_courses,
@@ -1230,7 +1230,7 @@ static unsigned Sch_SearchMyDocumentsInDB (const char *RangeQuery)
 		  (unsigned) Brw_ADMI_BRIEF_USR);
 
 	 /***** Query database and list documents found *****/
-	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+	 /* if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	    Lay_ShowAlert (Lay_INFO,Query); */
 	 return Brw_ListDocsFound (Query,
 	                           Txt_document_from_me,

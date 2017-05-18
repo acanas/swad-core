@@ -450,7 +450,7 @@ void Net_ShowWebAndSocialNetworksStats (void)
    unsigned NumUsrs;
 
    /***** Get total number of users in platform *****/
-   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNKNOWN);
+   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
 
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)

@@ -340,10 +340,10 @@ void TT_ShowClassTimeTable (void)
 
    Gbl.TimeTable.ContextualIcons.PutIconEditCrsTT = (Gbl.TimeTable.Type == TT_COURSE_TIMETABLE &&
 	                                             !PrintView &&
-                                                     Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER);
+                                                     Gbl.Usrs.Me.LoggedRole >= Rol_TCH);
    Gbl.TimeTable.ContextualIcons.PutIconEditOfficeHours = (Gbl.TimeTable.Type == TT_MY_TIMETABLE &&
 	                                                   !PrintView &&
-                                                           (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TEACHER)));
+                                                           (Gbl.Usrs.Me.AvailableRoles & (1 << Rol_TCH)));
    Gbl.TimeTable.ContextualIcons.PutIconPrint = !PrintView;
 
    /***** Get whether to show only my groups or all groups *****/

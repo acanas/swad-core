@@ -25493,7 +25493,7 @@ const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
 
 const char *Txt_No_users_found[Rol_NUM_ROLES] =
    {
-#if   L==1	// Rol_ROLE_UNKNOWN
+#if   L==1	// Rol_UNK
 	 "No hay usuarios."	// Necessita traduccio
 #elif L==2
 	 "Keine Benutzer gefunden."
@@ -25513,7 +25513,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum utilizador encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_GUEST__
+#if   L==1	// Rol_GST
 	 "No hi ha convidats."
 #elif L==2
 	 "Keine Eingeladen gefunden."
@@ -25533,27 +25533,27 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum convidado encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_VISITOR
-	 "No hay visitantes."	// Necessita traduccio
+#if   L==1	// Rol_USR
+	 "No hay usuarios."	// Necessita traduccio
 #elif L==2
-	 "Keine Besucher gefunden."
+	 "Keine Benutzer gefunden."
 #elif L==3
-	 "No visitors found."
+	 "No users found."
 #elif L==4
-	 "No hay visitantes."
+	 "No hay usuarios."
 #elif L==5
-	 "Aucun visiteur trouv&eacute;."
+	 "Aucun utilisateur trouv&eacute;."
 #elif L==6
-	 "No hay visitantes."	// Okoteve traducción
+	 "No hay usuarios."	// Okoteve traducción
 #elif L==7
-	 "Nessun visitatore trovato."
+	 "Nessun utente trovato."
 #elif L==8
-	 "No visitors found."	// Potrzebujesz tlumaczenie
+	 "No users found."	// Potrzebujesz tlumaczenie
 #elif L==9
-	 "Nenhum visitante encontrado."
+	 "Nenhum utilizador encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_STUDENT
+#if   L==1	// Rol_STD
 	 "No hay estudiantes."	// Necessita traduccio
 #elif L==2
 	 "Keine Studenten gefunden."
@@ -25573,7 +25573,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum estudante encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_TEACHER
+#if   L==1	// Rol_TCH
 	 "No hay profesores."	// Necessita traduccio
 #elif L==2
 	 "Keine Lehrkr&auml;ften gefunden."
@@ -25593,7 +25593,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum professor encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_DEG_ADM
+#if   L==1	// Rol_DEG_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==2
 	 "Keine Administratoren gefunden."
@@ -25613,7 +25613,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_CTR_ADM
+#if   L==1	// Rol_CTR_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==2
 	 "Keine Administratoren gefunden."
@@ -25633,7 +25633,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_INS_ADM
+#if   L==1	// Rol_INS_ADM
 	 "No hay administradores."	// Necessita traduccio
 #elif L==2
 	 "Keine Administratoren gefunden."
@@ -25653,7 +25653,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum administrador encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_ROLE_SYS_ADM
+#if   L==1	// Rol_SYS_ADM
 	 "No hay superusuarios."	// Necessita traduccio
 #elif L==2
 	 "Keine Superuser gefunden."
@@ -32019,7 +32019,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"Desconocido/a"	// Necessita traduccio
 #elif L==2
 	"Unbekannter/e"
@@ -32039,7 +32039,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecido/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_FEMALE
+#if   L==1	// Rol_UNK - Usr_SEX_FEMALE
 	"Desconocida"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -32059,7 +32059,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecida"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_MALE
+#if   L==1	// Rol_UNK - Usr_SEX_MALE
 	"Desconocido"	// Necessita traduccio
 #elif L==2
 	"Unbekannter"
@@ -32079,7 +32079,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecido"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_ALL
+#if   L==1	// Rol_UNK - Usr_SEX_ALL
 	"Desconocido/a"	// Necessita traduccio
 #elif L==2
 	"Unbekannter/e"
@@ -32100,7 +32100,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_GST - Usr_SEX_UNKNOWN
 	"Invitado/a"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32120,7 +32120,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidado/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
+#if   L==1	// Rol_GST - Usr_SEX_FEMALE
 	"Invitada"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32140,7 +32140,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidada"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
+#if   L==1	// Rol_GST - Usr_SEX_MALE
 	"Invitado"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32160,7 +32160,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidado"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
+#if   L==1	// Rol_GST - Usr_SEX_ALL
 	"Invitado/a"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32181,88 +32181,88 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	"Visitant"
+#if   L==1	// Rol_USR - Usr_SEX_UNKNOWN
+	"Usuari/a"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"Visitor"
+	"User"
 #elif L==4
-	"Visitante"
+	"Usuario/a"
 #elif L==5
-	"Visiteur"
+	"Utilisateur/se"
 #elif L==6
-	"Visitante"	// Okoteve traducción
+	"Puruh&atilde;ra"
 #elif L==7
-	"Visitatore"
+	"Utente"
 #elif L==8
-	"Go&sacute;&cacute;"
+	"U&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"Utilizador/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	"Visitant"
+#if   L==1	// Rol_USR - Usr_SEX_FEMALE
+	"Usuaria"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"Visitor"
+	"User"
 #elif L==4
-	"Visitante"
+	"Usuaria"
 #elif L==5
-	"Visiteur"
+	"Utilisateuse"
 #elif L==6
-	"Visitante"	// Okoteve traducción
+	"Puruh&atilde;ra"
 #elif L==7
-	"Visitatore"
+	"Utente"
 #elif L==8
-	"Go&sacute;&cacute;"
+	"U&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"Utilizadora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	"Visitant"
+#if   L==1	// Rol_USR - Usr_SEX_MALE
+	"Usuari"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"Visitor"
+	"User"
 #elif L==4
-	"Visitante"
+	"Usuario"
 #elif L==5
-	"Visiteur"
+	"Utilisateur"
 #elif L==6
-	"Visitante"	// Okoteve traducción
+	"Puruh&atilde;ra"
 #elif L==7
-	"Visitatore"
+	"Utente"
 #elif L==8
-	"Go&sacute;&cacute;"
+	"U&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"Utilizador"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	"Visitant"
+#if   L==1	// Rol_USR - Usr_SEX_ALL
+	"Usuari/a"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"Visitor"
+	"User"
 #elif L==4
-	"Visitante"
+	"Usuario/a"
 #elif L==5
-	"Visiteur"
+	"Utilisateur/se"
 #elif L==6
-	"Visitante"	// Okoteve traducción
+	"Puruh&atilde;ra"
 #elif L==7
-	"Visitatore"
+	"Utente"
 #elif L==8
-	"Go&sacute;&cacute;"
+	"U&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"Utilizador/a"
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_STD - Usr_SEX_UNKNOWN
 	"Estudiant"
 #elif L==2
 	"Student"
@@ -32282,7 +32282,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
+#if   L==1	// Rol_STD - Usr_SEX_FEMALE
 	"Estudiant"
 #elif L==2
 	"Student"
@@ -32302,7 +32302,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
+#if   L==1	// Rol_STD - Usr_SEX_MALE
 	"Estudiant"
 #elif L==2
 	"Student"
@@ -32322,7 +32322,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
+#if   L==1	// Rol_STD - Usr_SEX_ALL
 	"Estudiant"
 #elif L==2
 	"Student"
@@ -32343,7 +32343,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"Professor/a"
 #elif L==2
 	"Lehrkraft"
@@ -32363,7 +32363,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
+#if   L==1	// Rol_TCH - Usr_SEX_FEMALE
 	"Professora"
 #elif L==2
 	"Lehrkraft"
@@ -32383,7 +32383,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
+#if   L==1	// Rol_TCH - Usr_SEX_MALE
 	"Professor"
 #elif L==2
 	"Lehrkraft"
@@ -32403,7 +32403,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
+#if   L==1	// Rol_TCH - Usr_SEX_ALL
 	"Professor/a"
 #elif L==2
 	"Lehrkraft"
@@ -32424,7 +32424,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
 	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -32444,7 +32444,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_FEMALE
 	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -32464,7 +32464,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_MALE
 	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -32484,7 +32484,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_ALL
 	"Admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -32505,7 +32505,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
 	"Admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -32525,7 +32525,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
 	"Admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -32545,7 +32545,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
 	"Admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -32565,7 +32565,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
 	"Admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -32586,7 +32586,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
 	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -32606,7 +32606,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
 	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -32626,7 +32626,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
 	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -32646,7 +32646,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
 	"Admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -32667,7 +32667,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
 	"Superusuari/&agrave;ria"
 #elif L==2
 	"Superuser"
@@ -32687,7 +32687,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizador/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_FEMALE
 	"Superusuaria"	// Necessita traduccio
 #elif L==2
 	"Superuser"
@@ -32707,7 +32707,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizadora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_MALE
 	"Superusuari"
 #elif L==2
 	"Superuser"
@@ -32727,7 +32727,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Superutilizador"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
 	"Superusuari/&agrave;ria"	// Necessita traduccio
 #elif L==2
 	"Superuser"
@@ -32751,7 +32751,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"desconocido/a"		// Necessita traduccio
 #elif L==2
 	"Unbekannter/e"
@@ -32771,7 +32771,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecido/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_FEMALE
+#if   L==1	// Rol_UNK - Usr_SEX_FEMALE
 	"desconocida"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -32791,7 +32791,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecida"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_MALE
+#if   L==1	// Rol_UNK - Usr_SEX_MALE
 	"desconocido"	// Necessita traduccio
 #elif L==2
 	"Unbekannter"
@@ -32811,7 +32811,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecido"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_ALL
+#if   L==1	// Rol_UNK - Usr_SEX_ALL
 	"desconocido/a"		// Necessita traduccio
 #elif L==2
 	"Unbekannter/e"
@@ -32832,7 +32832,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_GST - Usr_SEX_UNKNOWN
 	"invitado/a"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32852,7 +32852,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidado/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
+#if   L==1	// Rol_GST - Usr_SEX_FEMALE
 	"invitada"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32872,7 +32872,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidada"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
+#if   L==1	// Rol_GST - Usr_SEX_MALE
 	"invitado"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32892,7 +32892,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidado"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
+#if   L==1	// Rol_GST - Usr_SEX_ALL
 	"invitado/a"	// Necessita traduccio
 #elif L==2
 	"Gast"
@@ -32913,88 +32913,88 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	"visitant"
+#if   L==1	// Rol_USR - Usr_SEX_UNKNOWN
+	"usuari/a"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"visitor"
+	"user"
 #elif L==4
-	"visitante"
+	"usuario/a"
 #elif L==5
-	"visiteur"
+	"utilisateur/se"
 #elif L==6
-	"visitante"	// Okoteve traducción
+	"puruh&atilde;ra"
 #elif L==7
-	"visitatore"
+	"utente"
 #elif L==8
-	"go&sacute;&cacute;"
+	"u&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"utilizador/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	"visitant"
+#if   L==1	// Rol_USR - Usr_SEX_FEMALE
+	"usuaria"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"visitor"
+	"user"
 #elif L==4
-	"visitante"
+	"usuaria"
 #elif L==5
-	"visiteur"
+	"utilisateuse"
 #elif L==6
-	"visitante"	// Okoteve traducción
+	"puruh&atilde;ra"
 #elif L==7
-	"visitatore"
+	"utente"
 #elif L==8
-	"go&sacute;&cacute;"
+	"u&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"utilizadora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	"visitant"
+#if   L==1	// Rol_USR - Usr_SEX_MALE
+	"usuari"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"visitor"
+	"user"
 #elif L==4
-	"visitante"
+	"usuario"
 #elif L==5
-	"visiteur"
+	"utilisateur"
 #elif L==6
-	"visitante"	// Okoteve traducción
+	"puruh&atilde;ra"
 #elif L==7
-	"visitatore"
+	"utente"
 #elif L==8
-	"go&sacute;&cacute;"
+	"u&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"utilizador"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	"visitant"
+#if   L==1	// Rol_USR - Usr_SEX_ALL
+	"usuari/a"
 #elif L==2
-	"Besucher"
+	"Benutzer"
 #elif L==3
-	"visitor"
+	"user"
 #elif L==4
-	"visitante"
+	"usuario/a"
 #elif L==5
-	"visiteur"
+	"utilisateur/se"
 #elif L==6
-	"visitante"	// Okoteve traducción
+	"puruh&atilde;ra"
 #elif L==7
-	"visitatore"
+	"utente"
 #elif L==8
-	"go&sacute;&cacute;"
+	"u&zdot;ytkownika"
 #elif L==9
-	"Visitante"
+	"utilizador/a"
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_STD - Usr_SEX_UNKNOWN
 	"estudiant"
 #elif L==2
 	"Student"
@@ -33014,7 +33014,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
+#if   L==1	// Rol_STD - Usr_SEX_FEMALE
 	"estudiant"
 #elif L==2
 	"Student"
@@ -33034,7 +33034,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
+#if   L==1	// Rol_STD - Usr_SEX_MALE
 	"estudiant"
 #elif L==2
 	"Student"
@@ -33054,7 +33054,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
+#if   L==1	// Rol_STD - Usr_SEX_ALL
 	"estudiant"
 #elif L==2
 	"Student"
@@ -33075,7 +33075,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"professor/a"
 #elif L==2
 	"Lehrkraft"
@@ -33095,7 +33095,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
+#if   L==1	// Rol_TCH - Usr_SEX_FEMALE
 	"professora"
 #elif L==2
 	"Lehrkraft"
@@ -33115,7 +33115,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
+#if   L==1	// Rol_TCH - Usr_SEX_MALE
 	"professor"
 #elif L==2
 	"Lehrkraft"
@@ -33135,7 +33135,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
+#if   L==1	// Rol_TCH - Usr_SEX_ALL
 	"professor/a"
 #elif L==2
 	"Lehrkraft"
@@ -33156,7 +33156,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -33176,7 +33176,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_FEMALE
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -33196,7 +33196,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_MALE
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -33216,7 +33216,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. titula&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_ALL
 	"admin. titulaci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Studiengang"
@@ -33237,7 +33237,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
 	"admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -33257,7 +33257,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
 	"admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -33277,7 +33277,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
 	"admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -33297,7 +33297,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. centro"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
 	"admin. centro"	// Necessita traduccio
 #elif L==2
 	"Admin. Lehrinstitut"
@@ -33318,7 +33318,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
 	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -33338,7 +33338,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
 	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -33358,7 +33358,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
 	"administrador de instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -33378,7 +33378,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administrador de institu&ccedil;&atilde;o"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
 	"admin. instituci&oacute;n"	// Necessita traduccio
 #elif L==2
 	"Admin. Hochschule"
@@ -33399,7 +33399,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
 	"superusuari/&agrave;ria"
 #elif L==2
 	"Superuser"
@@ -33419,7 +33419,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizador/a"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_FEMALE
 	"superusuaria"		// Necessita traduccio
 #elif L==2
 	"Superuser"
@@ -33439,7 +33439,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizadora"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_MALE
 	"superusuari"
 #elif L==2
 	"Superuser"
@@ -33459,7 +33459,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizador"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
 	"superusuari/&agrave;ria"
 #elif L==2
 	"Superuser"
@@ -33484,7 +33484,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"Desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -33504,7 +33504,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_FEMALE
+#if   L==1	// Rol_UNK - Usr_SEX_FEMALE
 	"Desconocidas"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -33524,7 +33524,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidas"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_MALE
+#if   L==1	// Rol_UNK - Usr_SEX_MALE
 	"Desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -33544,7 +33544,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Desconhecidos"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_ALL
+#if   L==1	// Rol_UNK - Usr_SEX_ALL
 	"Desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -33565,7 +33565,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_GST - Usr_SEX_UNKNOWN
 	"Convidats"
 #elif L==2
 	"Eingeladen"
@@ -33585,7 +33585,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidados"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
+#if   L==1	// Rol_GST - Usr_SEX_FEMALE
 	"Invitadas"	// Necessita traduccio
 #elif L==2
 	"Eingeladen"
@@ -33605,7 +33605,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidadas"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
+#if   L==1	// Rol_GST - Usr_SEX_MALE
 	"Convidats"
 #elif L==2
 	"Eingeladen"
@@ -33625,7 +33625,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Convidados"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
+#if   L==1	// Rol_GST - Usr_SEX_ALL
 	"Convidats"
 #elif L==2
 	"Eingeladen"
@@ -33646,88 +33646,88 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	"Visitants"
+#if   L==1	// Rol_USR - Usr_SEX_UNKNOWN
+	 "Usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"Visitors"
+	 "Users"
 #elif L==4
-	"Visitantes"
+	 "Usuarios"
 #elif L==5
-	"Visiteurs"
+	 "Utilisateurs"
 #elif L==6
-	"Visitantes"	// Okoteve traducción
+	 "Puruh&aacute;ra"
 #elif L==7
-	"Visitatori"
+	 "Utenti"
 #elif L==8
-	"Odwiedzaj&aogon;cy"
+	 "U&zdot;ytkownicy"
 #elif L==9
-	"Visitantes"
+	 "Utilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	"Visitants"
+#if   L==1	// Rol_USR - Usr_SEX_FEMALE
+	 "Usu&agrave;ries"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"Visitors"
+	 "Users"
 #elif L==4
-	"Visitantes"
+	 "Usuarias"
 #elif L==5
-	"Visiteurs"
+	 "Utilisateurs"
 #elif L==6
-	"Visitantes"	// Okoteve traducción
+	 "Puruh&aacute;ra"
 #elif L==7
-	"Visitatori"
+	 "Utenti"
 #elif L==8
-	"Odwiedzaj&aogon;cy"
+	 "U&zdot;ytkownicy"
 #elif L==9
-	"Visitantes"
+	 "Utilizadoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	"Visitants"
+#if   L==1	// Rol_USR - Usr_SEX_MALE
+	 "Usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"Visitors"
+	 "Users"
 #elif L==4
-	"Visitantes"
+	 "Usuarios"
 #elif L==5
-	"Visiteurs"
+	 "Utilisateurs"
 #elif L==6
-	"Visitantes"	// Okoteve traducción
+	 "Puruh&aacute;ra"
 #elif L==7
-	"Visitatori"
+	 "Utenti"
 #elif L==8
-	"Odwiedzaj&aogon;cy"
+	 "U&zdot;ytkownicy"
 #elif L==9
-	"Visitantes"
+	 "Utilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	"Visitants"
+#if   L==1	// Rol_USR - Usr_SEX_ALL
+	 "Usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"Visitors"
+	 "Users"
 #elif L==4
-	"Visitantes"
+	 "Usuarios"
 #elif L==5
-	"Visiteurs"
+	 "Utilisateurs"
 #elif L==6
-	"Visitantes"	// Okoteve traducción
+	 "Puruh&aacute;ra"
 #elif L==7
-	"Visitatori"
+	 "Utenti"
 #elif L==8
-	"Odwiedzaj&aogon;cy"
+	 "U&zdot;ytkownicy"
 #elif L==9
-	"Visitantes"
+	 "Utilizadores"
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_STD - Usr_SEX_UNKNOWN
 	"Estudiants"
 #elif L==2
 	"Studenten"
@@ -33747,7 +33747,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
+#if   L==1	// Rol_STD - Usr_SEX_FEMALE
 	"Estudiants"
 #elif L==2
 	"Studenten"
@@ -33767,7 +33767,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
+#if   L==1	// Rol_STD - Usr_SEX_MALE
 	"Estudiants"
 #elif L==2
 	"Studenten"
@@ -33787,7 +33787,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
+#if   L==1	// Rol_STD - Usr_SEX_ALL
 	"Estudiants"
 #elif L==2
 	"Studenten"
@@ -33808,7 +33808,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"Professors"
 #elif L==2
 	"Lehrkraft"
@@ -33828,7 +33828,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
+#if   L==1	// Rol_TCH - Usr_SEX_FEMALE
 	"Professores"
 #elif L==2
 	"Lehrkraft"
@@ -33848,7 +33848,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
+#if   L==1	// Rol_TCH - Usr_SEX_MALE
 	"Professors"
 #elif L==2
 	"Lehrkraft"
@@ -33868,7 +33868,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
+#if   L==1	// Rol_TCH - Usr_SEX_ALL
 	"Professors"
 #elif L==2
 	"Lehrkraft"
@@ -34216,7 +34216,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
 	"desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -34236,7 +34236,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_FEMALE
+#if   L==1	// Rol_UNK - Usr_SEX_FEMALE
 	"desconocidas"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -34256,7 +34256,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidas"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_MALE
+#if   L==1	// Rol_UNK - Usr_SEX_MALE
 	"desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -34276,7 +34276,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"desconhecidos"
 #endif
 	,
-#if   L==1	// Rol_ROLE_UNKNOWN - Usr_SEX_ALL
+#if   L==1	// Rol_UNK - Usr_SEX_ALL
 	"desconocidos"	// Necessita traduccio
 #elif L==2
 	"Unbekannte"
@@ -34297,7 +34297,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_GST - Usr_SEX_UNKNOWN
 	"convidats"
 #elif L==2
 	"Eingeladen"
@@ -34317,7 +34317,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidados"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_FEMALE
+#if   L==1	// Rol_GST - Usr_SEX_FEMALE
 	"invitadas"	// Necessita traduccio
 #elif L==2
 	"Eingeladen"
@@ -34337,7 +34337,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidadas"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_MALE
+#if   L==1	// Rol_GST - Usr_SEX_MALE
 	"convidats"
 #elif L==2
 	"Eingeladen"
@@ -34357,7 +34357,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"convidados"
 #endif
 	,
-#if   L==1	// Rol_ROLE_GUEST__ - Usr_SEX_ALL
+#if   L==1	// Rol_GST - Usr_SEX_ALL
 	"convidats"
 #elif L==2
 	"Eingeladen"
@@ -34378,88 +34378,88 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_UNKNOWN
-	"visitants"
+#if   L==1	// Rol_USR - Usr_SEX_UNKNOWN
+	 "usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"visitors"
+	 "users"
 #elif L==4
-	"visitantes"
+	 "usuarios"
 #elif L==5
-	"visiteurs"
+	 "utilisateurs"
 #elif L==6
-	"visitantes"	// Okoteve traducción
+	 "puruh&aacute;ra"
 #elif L==7
-	"visitatori"
+	 "utenti"
 #elif L==8
-	"odwiedzaj&aogon;cy"
+	 "u&zdot;ytkownicy"
 #elif L==9
-	"visitantes"
+	 "utilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_FEMALE
-	"visitants"
+#if   L==1	// Rol_USR - Usr_SEX_FEMALE
+	 "usu&agrave;ries"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"visitors"
+	 "users"
 #elif L==4
-	"visitantes"
+	 "usuarias"
 #elif L==5
-	"visiteurs"
+	 "utilisateurs"
 #elif L==6
-	"visitantes"	// Okoteve traducción
+	 "puruh&aacute;ra"
 #elif L==7
-	"visitatori"
+	 "utenti"
 #elif L==8
-	"odwiedzaj&aogon;cy"
+	 "u&zdot;ytkownicy"
 #elif L==9
-	"visitantes"
+	 "utilizadoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_MALE
-	"visitants"
+#if   L==1	// Rol_USR - Usr_SEX_MALE
+	 "usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"visitors"
+	 "users"
 #elif L==4
-	"visitantes"
+	 "usuarios"
 #elif L==5
-	"visiteurs"
+	 "utilisateurs"
 #elif L==6
-	"visitantes"	// Okoteve traducción
+	 "puruh&aacute;ra"
 #elif L==7
-	"visitatori"
+	 "utenti"
 #elif L==8
-	"odwiedzaj&aogon;cy"
+	 "u&zdot;ytkownicy"
 #elif L==9
-	"visitantes"
+	 "utilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_VISITOR - Usr_SEX_ALL
-	"visitants"
+#if   L==1	// Rol_USR - Usr_SEX_ALL
+	 "usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"visitors"
+	 "users"
 #elif L==4
-	"visitantes"
+	 "usuarios"
 #elif L==5
-	"visiteurs"
+	 "utilisateurs"
 #elif L==6
-	"visitantes"	// Okoteve traducción
+	 "puruh&aacute;ra"
 #elif L==7
-	"visitatori"
+	 "utenti"
 #elif L==8
-	"odwiedzaj&aogon;cy"
+	 "u&zdot;ytkownicy"
 #elif L==9
-	"visitantes"
+	 "utilizadores"
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_STD - Usr_SEX_UNKNOWN
 	"estudiants"
 #elif L==2
 	"Studenten"
@@ -34479,7 +34479,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_FEMALE
+#if   L==1	// Rol_STD - Usr_SEX_FEMALE
 	"estudiants"
 #elif L==2
 	"Studenten"
@@ -34499,7 +34499,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_MALE
+#if   L==1	// Rol_STD - Usr_SEX_MALE
 	"estudiants"
 #elif L==2
 	"Studenten"
@@ -34519,7 +34519,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudantes"
 #endif
 	,
-#if   L==1	// Rol_ROLE_STUDENT - Usr_SEX_ALL
+#if   L==1	// Rol_STD - Usr_SEX_ALL
 	"estudiants"
 #elif L==2
 	"Studenten"
@@ -34540,7 +34540,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"professors"
 #elif L==2
 	"Lehrkr&auml;fte"
@@ -34560,7 +34560,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_FEMALE
+#if   L==1	// Rol_TCH - Usr_SEX_FEMALE
 	"professores"
 #elif L==2
 	"Lehrkr&auml;fte"
@@ -34580,7 +34580,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_MALE
+#if   L==1	// Rol_TCH - Usr_SEX_MALE
 	"professors"
 #elif L==2
 	"Lehrkr&auml;fte"
@@ -34600,7 +34600,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_TEACHER - Usr_SEX_ALL
+#if   L==1	// Rol_TCH - Usr_SEX_ALL
 	"professors"
 #elif L==2
 	"Lehrkr&auml;fte"
@@ -34621,7 +34621,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34641,7 +34641,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_FEMALE
 	"administradoras"	// Necessita traduccio
 #elif L==2
 	"Administratoren"
@@ -34661,7 +34661,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_MALE
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34681,7 +34681,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_DEG_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_DEG_ADM - Usr_SEX_ALL
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34702,7 +34702,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34722,7 +34722,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
 	"administradoras"	// Necessita traduccio
 #elif L==2
 	"Administratoren"
@@ -34742,7 +34742,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34762,7 +34762,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_CTR_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34783,7 +34783,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	 {
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34803,7 +34803,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
 	"administradoras"	// Necessita traduccio
 #elif L==2
 	"Administratoren"
@@ -34823,7 +34823,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34843,7 +34843,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"administradores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_INS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
 	"administradors"
 #elif L==2
 	"Administratoren"
@@ -34864,7 +34864,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
 	"superusuaris"
 #elif L==2
 	"Superuser"
@@ -34884,7 +34884,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_FEMALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_FEMALE
 	"superusuarias"		// Necessita traduccio
 #elif L==2
 	"Superuser"
@@ -34904,7 +34904,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizadoras"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_MALE
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_MALE
 	"superusuaris"
 #elif L==2
 	"Superuser"
@@ -34924,7 +34924,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"superutilizadores"
 #endif
 	,
-#if   L==1	// Rol_ROLE_SYS_ADM - Usr_SEX_ALL
+#if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
 	"superusuaris"
 #elif L==2
 	"Superuser"

@@ -172,20 +172,20 @@ typedef enum
 /* Translation from service-web-role to swad-core-role */
 Rol_Role_t Svc_SvcRole_to_RolRole[Svc_NUM_ROLES] =
   {
-   Rol_UNKNOWN,	// Svc_ROLE_UNKNOWN
-   Rol__GUEST_,	// Svc_ROLE__GUEST_
-   Rol_STUDENT,	// Svc_ROLE_STUDENT
-   Rol_TEACHER,	// Svc_ROLE_TEACHER
+   Rol_UNK,	// Svc_ROLE_UNKNOWN
+   Rol_GST,	// Svc_ROLE__GUEST_
+   Rol_STD,	// Svc_ROLE_STUDENT
+   Rol_TCH,	// Svc_ROLE_TEACHER
   };
 
 /* Translation from swad-core-role to service-web-role */
 Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
   {
-   Svc_ROLE_UNKNOWN,	// Rol_UNKNOWN
-   Svc_ROLE__GUEST_,	// Rol__GUEST_
-   Svc_ROLE_UNKNOWN,	// Rol_VISITOR
-   Svc_ROLE_STUDENT,	// Rol_STUDENT
-   Svc_ROLE_TEACHER,	// Rol_TEACHER
+   Svc_ROLE_UNKNOWN,	// Rol_UNK
+   Svc_ROLE__GUEST_,	// Rol_GST
+   Svc_ROLE_UNKNOWN,	// Rol_USR
+   Svc_ROLE_STUDENT,	// Rol_STD
+   Svc_ROLE_TEACHER,	// Rol_TCH
    Svc_ROLE_UNKNOWN,	// Rol_DEG_ADM
    Svc_ROLE_UNKNOWN,	// Rol_CTR_ADM
    Svc_ROLE_UNKNOWN,	// Rol_INS_ADM
@@ -592,13 +592,13 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	 if (row[0])
 	   {
 	    if (sscanf (row[0],"%u",&UsrDat->RoleInCurrentCrsDB) != 1)
-	       UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	       UsrDat->RoleInCurrentCrsDB = Rol_UNK;
 	   }
 	 else	// Impossible
-	    UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	    UsrDat->RoleInCurrentCrsDB = Rol_UNK;
 	}
       else	// User does not belong to course
-	 UsrDat->RoleInCurrentCrsDB = Rol_VISITOR;
+	 UsrDat->RoleInCurrentCrsDB = Rol_USR;
      }
    else
      {
@@ -612,14 +612,14 @@ static bool Svc_GetSomeUsrDataFromUsrCod (struct UsrData *UsrDat,long CrsCod)
 	 if (row[0])
 	   {
 	    if (sscanf (row[0],"%u",&UsrDat->RoleInCurrentCrsDB) != 1)
-	       UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	       UsrDat->RoleInCurrentCrsDB = Rol_UNK;
 	   }
 	 else
 	    // MAX(Role) == NULL if user does not belong to any course
-	    UsrDat->RoleInCurrentCrsDB = Rol__GUEST_;
+	    UsrDat->RoleInCurrentCrsDB = Rol_GST;
 	}
       else	// Impossible
-	 UsrDat->RoleInCurrentCrsDB = Rol__GUEST_;
+	 UsrDat->RoleInCurrentCrsDB = Rol_GST;
      }
 
    /* Free structure that stores the query result */
@@ -974,7 +974,7 @@ int swad__loginBySessionKey (struct soap *soap,
    loginBySessionKeyOut->userSurname2[0]   = '\0';
    loginBySessionKeyOut->userPhoto[0]      = '\0';
    loginBySessionKeyOut->userBirthday[0]   = '\0';
-   loginBySessionKeyOut->userRole          = Rol_UNKNOWN;
+   loginBySessionKeyOut->userRole          = Rol_UNK;
    loginBySessionKeyOut->degreeName[0]     = '\0';
    loginBySessionKeyOut->courseName[0]     = '\0';
 
@@ -1235,7 +1235,7 @@ int swad__getCourses (struct soap *soap,
 
          /* Get role (row[3]) */
          if (sscanf (row[3],"%u",&Role) != 1)	// Role in this course
-            Role = Rol_UNKNOWN;
+            Role = Rol_UNK;
          getCoursesOut->coursesArray.__ptr[NumRow].userRole = Svc_RolRole_to_SvcRole[Role];
 	}
      }
@@ -1308,8 +1308,8 @@ int swad__getCourseInfo (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -1412,8 +1412,8 @@ int swad__getUsers (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 				  "Request forbidden",
 				  "Requester must belong to course");
@@ -1491,8 +1491,8 @@ int swad__findUsers (struct soap *soap,
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)
       /***** Check if I am a student or teacher in the course *****/
-      if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-	  Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+      if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+	  Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
 	 return soap_receiver_fault (Gbl.soap,
 				     "Request forbidden",
 				     "Requester must belong to course");
@@ -1651,8 +1651,8 @@ int swad__getGroupTypes (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -1759,8 +1759,8 @@ int swad__getGroups (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -1885,8 +1885,8 @@ int swad__sendMyGroups (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -2100,7 +2100,7 @@ int swad__getAttendanceEvents (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2304,7 +2304,7 @@ int swad__sendAttendanceEvent (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2425,7 +2425,7 @@ int swad__removeAttendanceEvent (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2521,7 +2521,7 @@ int swad__getAttendanceUsers (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -2543,7 +2543,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 		        " AND crs_grp_usr.UsrCod NOT IN"
 		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
 	       Att.AttCod,
-	       (unsigned) Rol_STUDENT,
+	       (unsigned) Rol_STD,
 	       Att.AttCod);
    else
       // Event for the whole course
@@ -2557,7 +2557,7 @@ int swad__getAttendanceUsers (struct soap *soap,
 		        " AND crs_usr.UsrCod NOT IN"
 		        " (SELECT UsrCod FROM att_usr WHERE AttCod=%ld)",
 	       Att.AttCod,
-	       (unsigned) Rol_STUDENT,
+	       (unsigned) Rol_STD,
 	       Att.AttCod);
    // Query: list of users in attendance list + rest of users (subquery)
    sprintf (Query,"SELECT u.UsrCod,u.Present FROM "
@@ -2709,7 +2709,7 @@ int swad__sendAttendanceUsers (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3449,7 +3449,7 @@ int swad__sendNotice (struct soap *soap,
      return ReturnCode;
 
    /***** Check if I am a teacher *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must be a teacher");
@@ -3515,8 +3515,8 @@ int swad__getTestConfig (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -3646,8 +3646,8 @@ int swad__getTests (struct soap *soap,
 	                        "Course code must be a integer greater than 0");
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4278,8 +4278,8 @@ int swad__getDirectoryTree (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4595,8 +4595,8 @@ int swad__getFile (struct soap *soap,
       return ReturnCode;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");
@@ -4619,7 +4619,7 @@ int swad__getFile (struct soap *soap,
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
 	 // Downloading a file of marks is only allowed for teachers
-	 if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+	 if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
 	    return soap_receiver_fault (Gbl.soap,
 					 "Wrong tree",
 					 "Wrong file zone");
@@ -4737,8 +4737,8 @@ int swad__getMarks (struct soap *soap,
    Gbl.Usrs.Me.LoggedRole = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB;
 
    /***** Check if I am a student or teacher in the course *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STUDENT &&
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TEACHER)
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_STD &&
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB != Rol_TCH)
       return soap_receiver_fault (Gbl.soap,
 	                          "Request forbidden",
 	                          "Requester must belong to course");

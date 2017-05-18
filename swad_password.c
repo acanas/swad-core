@@ -828,8 +828,8 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Start form */
-	 Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActChgPwdStd :
-	                (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActChgPwdTch :
+	 Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActChgPwdStd :
+	                (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActChgPwdTch :
 	                	                                                   ActChgPwdOth));
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
@@ -879,8 +879,8 @@ void Pwd_PutLinkToChangeOtherUsrPassword (void)
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActFrmPwdStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActFrmPwdTch :
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmPwdStd :
+	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmPwdTch :
 	                	                                                        ActFrmPwdOth),
                              NULL,Usr_PutParamOtherUsrCodEncrypted,
                              "key64x64.gif",

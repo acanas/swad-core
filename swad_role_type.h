@@ -36,26 +36,24 @@
    Don't change these numbers!
    They are used for users' permissions and for user's types in database
 
-   Only Rol_ROLE_STUDENT and Rol_ROLE_TEACHER are allowed
+   Only Rol_STD and Rol_TCH are allowed
    as user permanent roles in courses,
    but a user may be logged temporarily as other roles
 */
-// TODO: Teachers/students should be teachers/students only inside their courses
-//       A user with courses (but not logged as admin) should be Rol_VISITOR outside his/her courses
-//	 (Rol_VISITOR should be labeled as "User" instead "Visitor")
 #define Rol_NUM_ROLES 9
 typedef enum
   {
-   Rol_UNKNOWN = 0,	// User not logged in
-   Rol__GUEST_ = 1,	// User not belonging to any course
-   Rol_VISITOR = 2,	// Student or teacher in other courses...
-   	   	   	// ...but not belonging to the current course
-   Rol_STUDENT = 3,	// Student in current course
-   Rol_TEACHER = 4,	// Teacher in current course
-   Rol_DEG_ADM = 5,	// Degree administrator
-   Rol_CTR_ADM = 6,	// Centre administrator
-   Rol_INS_ADM = 7,	// Institution administrator
-   Rol_SYS_ADM = 8,	// System administrator (superuser)
+   Rol_UNK	= 0,	// User not logged in
+   Rol_GST	= 1,	// User not belonging to any course
+   Rol_USR	= 2,	// Student or teacher in some courses...
+   	   	   	// ...but no course selected
+			// ...or not belonging to the current course
+   Rol_STD	= 3,	// Student in the current course
+   Rol_TCH	= 4,	// Teacher in the current course
+   Rol_DEG_ADM	= 5,	// Degree administrator
+   Rol_CTR_ADM	= 6,	// Centre administrator
+   Rol_INS_ADM	= 7,	// Institution administrator
+   Rol_SYS_ADM	= 8,	// System administrator (superuser)
   } Rol_Role_t;
 
 #endif

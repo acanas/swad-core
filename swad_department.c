@@ -180,7 +180,7 @@ void Dpt_SeeDepts (void)
 			 "</tr>",
 	       Txt_Department_unspecified,
 	       Sta_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
-					  Rol_TEACHER) - NumTchsInsWithDpt);
+					  Rol_TCH) - NumTchsInsWithDpt);
 
       /***** End table *****/
       Lay_EndRoundFrameTable ();
@@ -288,8 +288,8 @@ void Dpt_GetListDepartments (long InsCod)
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
 		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       InsCod,(unsigned) Rol_TEACHER,
-	       InsCod,(unsigned) Rol_TEACHER,
+	       InsCod,(unsigned) Rol_TCH,
+	       InsCod,(unsigned) Rol_TCH,
 	       OrderBySubQuery);
    else			// All the departments
       sprintf (Query,"(SELECT departments.DptCod,departments.InsCod,"
@@ -307,8 +307,8 @@ void Dpt_GetListDepartments (long InsCod)
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
 		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       (unsigned) Rol_TEACHER,
-	       (unsigned) Rol_TEACHER,
+	       (unsigned) Rol_TCH,
+	       (unsigned) Rol_TCH,
 	       OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get departments");
 
@@ -405,8 +405,8 @@ void Dpt_GetDataOfDepartmentByCod (struct Department *Dpt)
                      " WHERE DptCod=%ld AND DptCod NOT IN"
                      " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
                      " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))",
-               Dpt->DptCod,(unsigned) Rol_TEACHER,
-               Dpt->DptCod,(unsigned) Rol_TEACHER);
+               Dpt->DptCod,(unsigned) Rol_TCH,
+               Dpt->DptCod,(unsigned) Rol_TCH);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get data of a department");
 
       if (NumRows) // Department found...

@@ -294,7 +294,7 @@ static bool Svy_CheckIfICanCreateSvy (void)
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
          return (Gbl.CurrentCrs.Crs.CrsCod > 0);
       case Rol_DEG_ADM:
          return (Gbl.CurrentDeg.Deg.DegCod > 0);	// Always true
@@ -618,8 +618,8 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
             Svy.Status.Visible ? "ASG_GRP" :
         	                 "ASG_GRP_LIGHT",
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
-			   1 << Rol_TEACHER,
+   Rol_WriteSelectorRoles (1 << Rol_STD |
+			   1 << Rol_TCH,
 			   Svy.Roles,
 			   true,false);
    fprintf (Gbl.F.Out,"</div>");
@@ -977,15 +977,15 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
   {
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_UNKNOWN:	// User not logged in *********************************
+      case Rol_UNK:	// User not logged in *********************************
 	 *ScopesAllowed = 0;
 	 *HiddenAllowed = 0;
          break;
-      case Rol__GUEST_:	// User not belonging to any course *******************
+      case Rol_GST:	// User not belonging to any course *******************
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;
 	 break;
-      case Rol_VISITOR:	// Student or teacher in other courses...
+      case Rol_USR:	// Student or teacher in other courses...
    	   	   	// ...but not belonging to the current course *********
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;
@@ -1004,7 +1004,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      }
 	   }
          break;
-      case Rol_STUDENT:	// Student in current course **************************
+      case Rol_STD:	// Student in current course **************************
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;
 	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
@@ -1026,7 +1026,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      }
 	   }
          break;
-      case Rol_TEACHER:	// Teacher in current course **************************
+      case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;
 	 if (Usr_CheckIfIBelongToCty (Gbl.CurrentCty.Cty.CtyCod))
@@ -1245,7 +1245,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
          Can I edit survey? */
       switch (Gbl.Usrs.Me.LoggedRole)
         {
-         case Rol_STUDENT:
+         case Rol_STD:
             Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
         	                           Svy->Scope == Sco_SCOPE_DEG ||
         	                           Svy->Scope == Sco_SCOPE_CTR ||
@@ -1260,7 +1260,7 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
                                            Svy->Status.IHaveAnswered;
             Svy->Status.ICanEdit         = false;
             break;
-         case Rol_TEACHER:
+         case Rol_TCH:
             Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
         	                           Svy->Scope == Sco_SCOPE_DEG ||
         	                           Svy->Scope == Sco_SCOPE_CTR ||
@@ -1765,7 +1765,7 @@ void Svy_RequestCreatOrEditSvy (void)
       /* Initialize to empty survey */
       Svy.SvyCod = -1L;
       Svy.Scope  = Sco_SCOPE_UNK;
-      Svy.Roles  = (1 << Rol_STUDENT);
+      Svy.Roles  = (1 << Rol_STD);
       Svy.UsrCod = Gbl.Usrs.Me.UsrDat.UsrCod;
       Svy.TimeUTC[Svy_START_TIME] = Gbl.StartExecutionTimeUTC;
       Svy.TimeUTC[Svy_END_TIME  ] = Gbl.StartExecutionTimeUTC + (24 * 60 * 60);	// +24 hours
@@ -1859,8 +1859,8 @@ void Svy_RequestCreatOrEditSvy (void)
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_STUDENT |
-                           1 << Rol_TEACHER,
+   Rol_WriteSelectorRoles (1 << Rol_STD |
+                           1 << Rol_TCH,
                            Svy.Roles,
                            false,false);
    fprintf (Gbl.F.Out,"</td>"
@@ -1897,7 +1897,7 @@ static void Svy_SetDefaultAndAllowedScope (struct Survey *Svy)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:	// Teachers only can edit course surveys
+      case Rol_TCH:	// Teachers only can edit course surveys
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)
 	   {
 	    if (Svy->Scope == Sco_SCOPE_UNK)	// Scope not defined
@@ -2102,7 +2102,7 @@ void Svy_RecFormSurvey (void)
          break;
       case Sco_SCOPE_CRS:
 	 if (Gbl.Usrs.Me.LoggedRole != Rol_SYS_ADM &&
-	     Gbl.Usrs.Me.LoggedRole != Rol_TEACHER)
+	     Gbl.Usrs.Me.LoggedRole != Rol_TCH)
 	    Lay_ShowErrorAndExit ("Wrong survey scope.");
 	 NewSvy.Scope = Sco_SCOPE_CRS;
 	 NewSvy.Cod = Gbl.CurrentCrs.Crs.CrsCod;

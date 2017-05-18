@@ -1110,7 +1110,7 @@ static void Rec_ShowRecordOneStdCrs (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Link to edit record fields */
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)
       Rec_PutLinkToEditRecordFields ();
 
    /* Link to print view */
@@ -1135,14 +1135,14 @@ static void Rec_ShowRecordOneStdCrs (void)
    /***** Record of the student in the course *****/
    if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
      {
-      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
 	{
          fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
 	 Rec_ShowCrsRecord (Rec_CRS_LIST_ONE_RECORD,&Gbl.Usrs.Other.UsrDat,NULL);
          fprintf (Gbl.F.Out,"</section>");
 	}
-      else if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&
+      else if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
 	       Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod)	// It's me
 	{
          fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
@@ -1211,7 +1211,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
       /* Link to edit record fields */
-      if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)
          Rec_PutLinkToEditRecordFields ();
 
       /* Link to print view */
@@ -1264,9 +1264,9 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
             /* Record of the student in the course */
             if (Gbl.CurrentCrs.Records.LstFields.Num)	// There are fields in the record
-	       if ( Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	       if ( Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 		    Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-		   (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT &&		// I am student in this course...
+		   (Gbl.Usrs.Me.LoggedRole == Rol_STD &&		// I am student in this course...
 		    UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod))	// ...and it's me
 		 {
 		  fprintf (Gbl.F.Out,"<section class=\"REC_CRS\">");
@@ -1714,7 +1714,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    bool ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)	// I am a student
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)	// I am a student
      {
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
       if (ItsMe)	// It's me
@@ -1911,7 +1911,7 @@ void Rec_GetFieldsCrsRecordFromForm (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STD ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
         {
          /* Get text of the form */
@@ -1934,7 +1934,7 @@ void Rec_UpdateCrsRecord (long UsrCod)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STD ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
         {
          /***** Check if already exists this field for this user in database *****/
@@ -2047,7 +2047,7 @@ void Rec_AllocMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STD ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
          /* Allocate memory for the texts of the fields */
          if ((Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text = malloc (Cns_MAX_BYTES_TEXT + 1)) == NULL)
@@ -2065,7 +2065,7 @@ void Rec_FreeMemFieldsRecordsCrs (void)
    for (NumField = 0;
 	NumField < Gbl.CurrentCrs.Records.LstFields.Num;
 	NumField++)
-      if (Gbl.Usrs.Me.LoggedRole > Rol_STUDENT ||
+      if (Gbl.Usrs.Me.LoggedRole > Rol_STD ||
           Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
          /* Free memory of the text of the field */
          if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Text)
@@ -2133,7 +2133,7 @@ void Rec_ShowFormOtherNewSharedRecord (struct UsrData *UsrDat,Rol_Role_t Default
       is not the current role in current course.
       Instead it is initialized with the preferred role. */
    UsrDat->RoleInCurrentCrsDB = (Gbl.CurrentCrs.Crs.CrsCod > 0) ? DefaultRole :	// Course selected
-	                                                          Rol__GUEST_;	// No course selected
+	                                                          Rol_GST;	// No course selected
    Rec_ShowSharedUsrRecord (Rec_SHA_OTHER_NEW_USR_FORM,UsrDat,NULL);
   }
 
@@ -2206,11 +2206,11 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
      };
    const char *Rec_RecordListHelp[Rol_NUM_ROLES] =
      {
-      NULL,					// Rol_UNKNOWN
-      Hlp_USERS_Guests,				// Rol__GUEST_
-      NULL,					// Rol_VISITOR
-      Hlp_USERS_Students_shared_record_card,	// Rol_STUDENT
-      Hlp_USERS_Teachers_shared_record_card,	// Rol_TEACHER
+      NULL,					// Rol_UNK
+      Hlp_USERS_Guests,				// Rol_GST
+      NULL,					// Rol_USR
+      Hlp_USERS_Students_shared_record_card,	// Rol_STD
+      Hlp_USERS_Teachers_shared_record_card,	// Rol_TCH
       NULL,					// Rol_DEG_ADM
       NULL,					// Rol_CTR_ADM
       NULL,					// Rol_INS_ADM
@@ -2232,7 +2232,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 
    /***** Initializations *****/
    ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);
-   IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TCH);	// My current role is teacher
    IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
    CountryForm = (TypeOfView == Rec_SHA_MY_RECORD_FORM);
    ShowData = (ItsMe ||
@@ -2244,14 +2244,14 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		      ((TypeOfView == Rec_SHA_RECORD_LIST   ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
 		       (IAmLoggedAsTeacher || IAmLoggedAsSysAdm) &&
-		       UsrDat->RoleInCurrentCrsDB == Rol_STUDENT));
+		       UsrDat->RoleInCurrentCrsDB == Rol_STD));
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);	// Get user's roles if not got
    ShowTeacherRows = (((TypeOfView == Rec_SHA_MY_RECORD_FORM  ||
 		        TypeOfView == Rec_SHA_MY_RECORD_CHECK) &&
-		       (UsrDat->Roles & (1 << Rol_TEACHER))) ||		// He/she (me, really) is a teacher in any course
+		       (UsrDat->Roles & (1 << Rol_TCH))) ||		// He/she (me, really) is a teacher in any course
 		      ((TypeOfView == Rec_SHA_RECORD_LIST ||
 		        TypeOfView == Rec_SHA_RECORD_PRINT) &&
-		       UsrDat->RoleInCurrentCrsDB == Rol_TEACHER));	// He/she is a teacher in the current course
+		       UsrDat->RoleInCurrentCrsDB == Rol_TCH));	// He/she is a teacher in the current course
 
    /* Data form = I can edit fields like surnames and name */
    switch (TypeOfView)
@@ -2361,8 +2361,8 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 	    ID_PutParamOtherUsrIDPlain ();				// New user
 	    break;
          case Rec_SHA_OTHER_EXISTING_USR_FORM:
-	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdStd :
-		           (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdTch :
+	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActUpdStd :
+		           (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActUpdTch :
 		        	                                        ActUpdOth));
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
@@ -2452,7 +2452,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		 {
 		  // Don't show groups if I don't belong to course
 		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STUDENT));
+		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STD));
 		 }
 	       else
 		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);
@@ -2498,8 +2498,8 @@ static void Rec_PutIconsCommands (void)
    extern const char *Txt_Following_unfollow;
    extern const char *Txt_Follow;
    bool ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Record.UsrDat->UsrCod);
-   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT);	// My current role is student
-   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER);	// My current role is teacher
+   bool IAmLoggedAsStudent = (Gbl.Usrs.Me.LoggedRole == Rol_STD);	// My current role is student
+   bool IAmLoggedAsTeacher = (Gbl.Usrs.Me.LoggedRole == Rol_TCH);	// My current role is teacher
    bool IAmLoggedAsSysAdm  = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);	// My current role is superuser
    bool ICanViewUsrProfile;
 
@@ -2557,13 +2557,13 @@ static void Rec_PutIconsCommands (void)
 
       /***** Button to admin user *****/
       if (ItsMe ||
-	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_TEACHER) ||
+	  (Gbl.CurrentCrs.Crs.CrsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_TCH) ||
 	  (Gbl.CurrentDeg.Deg.DegCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_DEG_ADM) ||
 	  (Gbl.CurrentCtr.Ctr.CtrCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_CTR_ADM) ||
 	  (Gbl.CurrentIns.Ins.InsCod > 0 && Gbl.Usrs.Me.LoggedRole == Rol_INS_ADM) ||
 	  Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-	 Lay_PutContextualLink ( Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActReqMdfStd :
-	                        (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActReqMdfTch :
+	 Lay_PutContextualLink ( Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActReqMdfStd :
+	                        (Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActReqMdfTch :
 	                        	                                                ActReqMdfOth),
 				NULL,Rec_PutParamUsrCodEncrypted,
 				"config64x64.gif",
@@ -2571,7 +2571,7 @@ static void Rec_PutIconsCommands (void)
 		                NULL);
 
       if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&	// A course is selected
-	  Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
+	  Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// He/she is a student in the current course
 	  (ItsMe || IAmLoggedAsTeacher || IAmLoggedAsSysAdm))		// I can view
 	{
 	 /***** Button to view user's assignments and works *****/
@@ -2616,7 +2616,7 @@ static void Rec_PutIconsCommands (void)
       /***** Button to print QR code *****/
       if (ItsMe || IAmLoggedAsSysAdm ||
 	  (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// A course is selected
-	   Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// He/she is a student in the current course
+	   Gbl.Record.UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// He/she is a student in the current course
 	   IAmLoggedAsTeacher))						// I am a teacher in the current course
 	 Lay_PutContextualLink (ActPrnUsrQR,NULL,Rec_PutParamUsrCodEncrypted,
 				"qr64x64.gif",
@@ -2911,13 +2911,13 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
       switch (TypeOfView)
 	{
 	 case Rec_SHA_SIGN_UP_FORM:			// I want to apply for enrolment
-	    DefaultRoleInCurrentCrs = ((UsrDat->Roles & (1 << Rol_TEACHER)) ||			// I am teacher in other courses
+	    DefaultRoleInCurrentCrs = ((UsrDat->Roles & (1 << Rol_TCH)) ||			// I am teacher in other courses
 				       UsrDat->UsrCod == Gbl.CurrentCrs.Crs.RequesterUsrCod) ?	// I am the creator of the course
-				      Rol_TEACHER :
-				      Rol_STUDENT;
+				      Rol_TCH :
+				      Rol_STD;
 	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
-	    for (Role = Rol_STUDENT;
-		 Role <= Rol_TEACHER;
+	    for (Role = Rol_STD;
+		 Role <= Rol_TCH;
 		 Role++)
 	      {
 	       fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -2932,21 +2932,21 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    fprintf (Gbl.F.Out,"<select id=\"Role\" name=\"Role\">");
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	      {
-	       if (UsrDat->RoleInCurrentCrsDB < Rol_STUDENT)	// The other user does not belong to current course
+	       if (UsrDat->RoleInCurrentCrsDB < Rol_STD)	// The other user does not belong to current course
 		 {
 		  /* If there is a request of this user, default role is the requested role */
-		  if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_UNKNOWN)
-		     DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_TEACHER)) ? Rol_TEACHER :
-										      Rol_STUDENT;
+		  if ((DefaultRoleInCurrentCrs = Rol_GetRequestedRole (UsrDat->UsrCod)) == Rol_UNK)
+		     DefaultRoleInCurrentCrs = (UsrDat->Roles & (1 << Rol_TCH)) ? Rol_TCH :
+										      Rol_STD;
 		 }
 	       else
 		  DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
 
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
-		  case Rol__GUEST_:
-		  case Rol_VISITOR:
-		  case Rol_STUDENT:
+		  case Rol_GST:
+		  case Rol_USR:
+		  case Rol_STD:
 		     fprintf (Gbl.F.Out,"<option value=\"%u\""
 			                " selected=\"selected\""
 			                " disabled=\"disabled\">"
@@ -2954,13 +2954,13 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 			      (unsigned) Gbl.Usrs.Me.LoggedRole,
 			      Txt_ROLES_SINGUL_Abc[Gbl.Usrs.Me.LoggedRole][UsrDat->Sex]);
 		     break;
-		  case Rol_TEACHER:
+		  case Rol_TCH:
 		  case Rol_DEG_ADM:
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
 		  case Rol_SYS_ADM:
-		     for (Role = Rol_STUDENT;
-			  Role <= Rol_TEACHER;
+		     for (Role = Rol_STD;
+			  Role <= Rol_TCH;
 			  Role++)
 		       {
 			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -2977,9 +2977,9 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	      }
 	    else	// No course selected
 	      {
-	       DefaultRoleInCurrentCrs = (UsrDat->Roles & ((1 << Rol_STUDENT) |
-							   (1 << Rol_TEACHER))) ? Rol_VISITOR :
-										  Rol__GUEST_;
+	       DefaultRoleInCurrentCrs = (UsrDat->Roles & ((1 << Rol_STD) |
+							   (1 << Rol_TCH))) ? Rol_USR :
+										  Rol_GST;
 	       fprintf (Gbl.F.Out,"<option value=\"%u\" selected=\"selected\""
 		                  " disabled=\"disabled\">%s</option>",
 			(unsigned) DefaultRoleInCurrentCrs,
@@ -2992,7 +2992,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
 	       switch (Gbl.Usrs.Me.LoggedRole)
 		 {
-		  case Rol_TEACHER:
+		  case Rol_TCH:
 		  case Rol_DEG_ADM:
 		  case Rol_CTR_ADM:
 		  case Rol_INS_ADM:
@@ -3001,8 +3001,8 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		        is not the current role in current course.
 		        Instead it is initialized with the preferred role. */
 		     DefaultRoleInCurrentCrs = UsrDat->RoleInCurrentCrsDB;
-		     for (Role = Rol_STUDENT;
-			  Role <= Rol_TEACHER;
+		     for (Role = Rol_STD;
+			  Role <= Rol_TCH;
 			  Role++)
 		       {
 			fprintf (Gbl.F.Out,"<option value=\"%u\"",(unsigned) Role);
@@ -3021,7 +3021,7 @@ static void Rec_ShowRole (struct UsrData *UsrDat,
 		  case Rol_SYS_ADM:
 		     fprintf (Gbl.F.Out,"<option value=\"%u\""
 			                " selected=\"selected\">%s</option>",
-			      (unsigned) Rol__GUEST_,Txt_ROLES_SINGUL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN]);
+			      (unsigned) Rol_GST,Txt_ROLES_SINGUL_Abc[Rol_GST][Usr_SEX_UNKNOWN]);
 		     break;
 		  default:	// The rest of users can not register other users
 		     break;
@@ -3676,43 +3676,43 @@ Rol_Role_t Rec_GetRoleFromRecordForm (void)
 	  Par_GetParToUnsignedLong ("Role",
 				    0,
 				    Rol_NUM_ROLES - 1,
-				    (unsigned long) Rol_UNKNOWN);
+				    (unsigned long) Rol_UNK);
 
    /***** Check if I can register a user
           with the received role in current course *****/
    /* Check for other possible errors */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:		// I am logged as student
+      case Rol_STD:		// I am logged as student
          /* A student can only change his/her data, but not his/her role */
-	 if (Role == Rol_STUDENT)
+	 if (Role == Rol_STD)
 	    RoleOK = true;
 	 break;
       /*
-      case Rol_TEACHER:		// I am logged as teacher
+      case Rol_TCH:		// I am logged as teacher
 	 // A teacher can only register another user as teacher
 	 // if the other is already teacher in any course.
 	 // That is, a teacher can not upgrade a student
 	 // (in all other courses) to teacher
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Other.UsrDat);
-	 if ( Role == Rol_STUDENT ||
-	     (Role == Rol_TEACHER &&					// He/she will be a teacher in current course
-	      (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TEACHER))))	// He/she was a teacher in some courses
+	 if ( Role == Rol_STD ||
+	     (Role == Rol_TCH &&					// He/she will be a teacher in current course
+	      (Gbl.Usrs.Other.UsrDat.Roles & (1 << Rol_TCH))))	// He/she was a teacher in some courses
 	    RoleOK = true;
          break;
       */
-      case Rol_TEACHER:		// I am logged as teacher
+      case Rol_TCH:		// I am logged as teacher
       case Rol_DEG_ADM:		// I am logged as degree admin
       case Rol_CTR_ADM:		// I am logged as centre admin
       case Rol_INS_ADM:		// I am logged as institution admin
-	 if (Role == Rol_STUDENT ||
-	     Role == Rol_TEACHER)
+	 if (Role == Rol_STD ||
+	     Role == Rol_TCH)
 	    RoleOK = true;
 	 break;
       case Rol_SYS_ADM:
-	 if ( Role == Rol_STUDENT ||
-	      Role == Rol_TEACHER ||
-	     (Role == Rol__GUEST_ && Gbl.CurrentCrs.Crs.CrsCod <= 0))
+	 if ( Role == Rol_STD ||
+	      Role == Rol_TCH ||
+	     (Role == Rol_GST && Gbl.CurrentCrs.Crs.CrsCod <= 0))
 	    RoleOK = true;
 	 break;
       default:
@@ -3854,14 +3854,14 @@ void Rec_ShowFormMyInsCtrDpt (void)
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
 
    /***** Check if I am a teacher *****/
-   IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER));
+   IAmTeacher = (Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH));
 
    /***** If there is no country, institution, centre or department *****/
    if (Gbl.Usrs.Me.UsrDat.InsCtyCod < 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_select_the_country_of_your_institution);
    else if (Gbl.Usrs.Me.UsrDat.InsCod < 0)
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_institution);
-   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TEACHER)) &&
+   else if ((Gbl.Usrs.Me.UsrDat.Roles & (1 << Rol_TCH)) &&
             (Gbl.Usrs.Me.UsrDat.Tch.CtrCod < 0 ||
              Gbl.Usrs.Me.UsrDat.Tch.DptCod < 0))
       Ale_ShowAlert (Ale_WARNING,Txt_Please_fill_in_your_centre_and_department);

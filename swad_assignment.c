@@ -241,7 +241,7 @@ static void Asg_PutHeadForSeeing (bool PrintView)
 
 static bool Asg_CheckIfICanCreateAssignments (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
@@ -508,7 +508,7 @@ static void Asg_WriteAssignmentFolder (struct Assignment *Asg,bool PrintView)
    bool ICanSendFiles = !Asg->Hidden &&				// It's visible (not hidden)
                         Asg->Open &&				// It's open (inside dates)
                         Asg->IBelongToCrsOrGrps &&		// I belong to course or groups
-                        Gbl.Usrs.Me.LoggedRole == Rol_STUDENT;	// I am a student
+                        Gbl.Usrs.Me.LoggedRole == Rol_STD;	// I am a student
 
    /***** Folder icon *****/
    if (!PrintView &&	// Not print view
@@ -574,7 +574,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Put form to remove assignment *****/
 	 Lay_PutContextualIconToRemove (ActReqRemAsg,Asg_PutParams);
@@ -588,7 +588,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	 /***** Put form to edit assignment *****/
 	 Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
 	 // no break
-      case Rol_STUDENT:
+      case Rol_STD:
 	 /***** Put form to print assignment *****/
 	 Lay_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
 	 break;
@@ -630,7 +630,7 @@ void Asg_GetListAssignments (void)
    /***** Get list of assignments from database *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_SYS_ADM:
          HiddenSubQuery[0] = '\0';
          break;
@@ -1713,8 +1713,8 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_STD ||
+       Gbl.Usrs.Me.LoggedRole == Rol_TCH)
      {
       // Students and teachers can edit assignments depending on groups
       /***** Get if I can edit an assignment from database *****/
@@ -1733,7 +1733,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
       return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
      }
    else
-      return (Gbl.Usrs.Me.LoggedRole > Rol_TEACHER);	// Admins can edit assignments
+      return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);	// Admins can edit assignments
   }
 
 /*****************************************************************************/

@@ -139,9 +139,9 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
    /* Check if I have permission to change user's photo */
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
 	 /* Check 1: I can change the photo of confirmed students */
-         if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT &&	// A student
+         if (UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// A student
 	     UsrDat->Accepted)					// who accepted registration
             return true;
 
@@ -195,8 +195,8 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqStdPho :
-	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqTchPho :
+	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActReqStdPho :
+	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActReqTchPho :
 	                                                                                   ActReqOthPho),	// Guest, visitor or admin
 	                        NULL,Usr_PutParamOtherUsrCodEncrypted,
 	                        "photo64x64.gif",
@@ -234,8 +234,8 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
    /***** Link to request the removal of another user's photo *****/
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActReqRemStdPho :
-			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActReqRemTchPho :
+      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActReqRemStdPho :
+			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActReqRemTchPho :
 											ActReqRemOthPho),	// Guest, visitor or admin
 			     NULL,Usr_PutParamOtherUsrCodEncrypted,
 			     "remove-on64x64.png",
@@ -307,8 +307,8 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
       Act_FormStart (ActDetMyPho);
    else
      {
-      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActDetStdPho :
-	             (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActDetTchPho :
+      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActDetStdPho :
+	             (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActDetTchPho :
 	                                                          ActDetOthPho));	// Guest, visitor or admin
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
@@ -482,8 +482,8 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    Ale_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ? ActRemStdPho :
-			             (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER ? ActRemTchPho :
+	    Ale_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActRemStdPho :
+			             (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActRemTchPho :
 										                ActRemOthPho),	// Guest, visitor or admin
 	                             NULL,Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
@@ -649,8 +649,8 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
               {
                NumFacesGreen++;
                Act_FormStart (ItsMe ? ActUpdMyPho :
-        	                      (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActUpdStdPho :
-        	                      (UsrDat->RoleInCurrentCrsDB == Rol_TEACHER ? ActUpdTchPho :
+        	                      (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActUpdStdPho :
+        	                      (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActUpdTchPho :
         	                	                                           ActUpdOthPho)));	// Guest, visitor or admin
                if (!ItsMe)
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
@@ -1286,7 +1286,7 @@ void Pho_CalcPhotoDegree (void)
 	   TypeOfAverage++)
         {
          /***** Compute average photos of students belonging this degree *****/
-         Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STUDENT,
+         Pho_ComputeAveragePhoto (DegCod,Sex,Rol_STD,
                                   TypeOfAverage,DirAvgPhotosRelPath[TypeOfAverage],
                                   &NumStds,&NumStdsWithPhoto,&PartialTimeToComputeAvgPhotoInMicroseconds);
          TotalTimeToComputeAvgPhotoInMicroseconds += PartialTimeToComputeAvgPhotoInMicroseconds;
@@ -1297,7 +1297,7 @@ void Pho_CalcPhotoDegree (void)
      }
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Show photos *****/
    Pho_ShowOrPrintPhotoDegree (Pho_DEGREES_SEE);
@@ -1330,7 +1330,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
 	          " AND degrees.DegCod NOT IN"
 	          " (SELECT DISTINCT DegCod FROM sta_degrees)"
 	          " LIMIT 1",
-            (unsigned) Rol_STUDENT);
+            (unsigned) Rol_STD);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
    /* If number of rows is 1, then get the degree code */
@@ -1359,7 +1359,7 @@ static long Pho_GetDegWithAvgPhotoLeastRecentlyUpdated (void)
                      " AND crs_usr.Role=%u"
 	             " ORDER BY sta_degrees.TimeAvgPhoto LIMIT 1",
                Cfg_MIN_TIME_TO_RECOMPUTE_AVG_PHOTO,
-               (unsigned) Rol_STUDENT);
+               (unsigned) Rol_STD);
       NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get degrees");
 
       /* If number of rows is 1, then get the degree code */
@@ -2067,7 +2067,7 @@ static void Pho_ShowOrPrintClassPhotoDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrin
      }
    else	// No degrees with students found
       /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
@@ -2181,7 +2181,7 @@ static void Pho_ShowOrPrintListDegrees (Pho_AvgPhotoSeeOrPrint_t SeeOrPrint)
      }
    else	// No degrees with students found!
       /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);

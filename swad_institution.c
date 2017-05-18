@@ -583,8 +583,8 @@ static void Ins_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_TEACHER,Gbl.CurrentIns.Ins.InsCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfIns (Rol_TCH,Gbl.CurrentIns.Ins.InsCod));
 
 	 /***** Number of students in courses of this institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -596,8 +596,8 @@ static void Ins_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_STUDENT,Gbl.CurrentIns.Ins.InsCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfIns (Rol_STD,Gbl.CurrentIns.Ins.InsCod));
 
 	 /***** Number of users in courses of this institution *****/
 	 fprintf (Gbl.F.Out,"<tr>"
@@ -609,9 +609,9 @@ static void Ins_Configuration (bool PrintView)
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Gbl.CurrentIns.Ins.InsCod));
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Gbl.CurrentIns.Ins.InsCod));
 	}
 
       /***** End table *****/
@@ -715,7 +715,7 @@ static void Ins_ListInstitutions (void)
 
 static bool Ins_CheckIfICanCreateInstitutions (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol__GUEST_);
+   return (bool) (Gbl.Usrs.Me.LoggedRole >= Rol_GST);
   }
 
 /*****************************************************************************/
@@ -1079,7 +1079,7 @@ void Ins_GetListInstitutions (long CtyCod,Ins_GetExtraData_t GetExtraData)
                Ins->NumDpts = Dpt_GetNumberOfDepartmentsInInstitution (Ins->InsCod);
 
                /* Get number of users in courses */
-	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
+	       Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
                break;
            }
         }
@@ -1181,7 +1181,7 @@ bool Ins_GetDataOfInstitutionByCod (struct Instit *Ins,
 	    Ins->NumDegs = Deg_GetNumDegsInIns (Ins->InsCod);
 
 	    /* Get number of users in courses of this institution */
-	    Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNKNOWN,Ins->InsCod);	// Here Rol_UNKNOWN means "all users"
+	    Ins->NumUsrs = Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Ins->InsCod);	// Here Rol_UNK means "all users"
 	   }
 
          /* Set return value */
@@ -2156,7 +2156,7 @@ static void Ins_PutFormToCreateInstitution (void)
    /***** Start form *****/
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Act_FormStart (ActNewIns);
-   else if (Gbl.Usrs.Me.MaxRole >= Rol__GUEST_)
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_GST)
       Act_FormStart (ActReqIns);
    else
       Lay_ShowErrorAndExit ("You can not edit institutions.");

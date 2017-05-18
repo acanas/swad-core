@@ -354,7 +354,7 @@ void Con_ShowGlobalConnectedUsrs (void)
    unsigned NumUsrsTotal;
 
    /***** Get number of connected users *****/
-   for (Role  = Rol__GUEST_, NumUsrsTotal = 0;
+   for (Role  = Rol_GST, NumUsrsTotal = 0;
 	Role <= Rol_SYS_ADM;
 	Role++)
      {
@@ -392,7 +392,7 @@ void Con_ShowGlobalConnectedUsrs (void)
 				     Txt_users[Usr_SEX_UNKNOWN]);
 
       /***** Write total number of users with each role *****/
-      for (Role  = Rol__GUEST_, NumUsrsTotal = 0;
+      for (Role  = Rol_GST, NumUsrsTotal = 0;
 	   Role <= Rol_SYS_ADM;
 	   Role++)
 	 Con_ShowGlobalConnectedUsrsRole (Role,NumUsrs[Role]);
@@ -433,10 +433,10 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
       Gbl.Scope.Current = Sco_SCOPE_CRS;
 
       /***** Number of teachers *****/
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TEACHER);
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
 
       /***** Number of students *****/
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STUDENT);
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STD);
      }
   }
 
@@ -467,7 +467,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 		      " style=\"width:390px; margin-top:6px;\">");
 
    /***** Number of connected users who belong to scope *****/
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED_TXT\">%u %s ",
 	    Usrs.NumUsrs,
 	    Txt_from);
@@ -481,10 +481,10 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
    /***** Number of teachers and students *****/
    fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TEACHER);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STUDENT);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
-      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol__GUEST_);
+      Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
    fprintf (Gbl.F.Out,"</table>");
 
    /***** End container *****/
@@ -516,7 +516,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Act_LinkFormSubmitUnique (Txt_Connected_users,"CONNECTED_TXT");
    Str_Copy (CourseName,Gbl.CurrentCrs.Crs.ShrtName,
              Hie_MAX_BYTES_SHRT_NAME);
-   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNKNOWN,&Usrs);
+   Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
    fprintf (Gbl.F.Out,"%u %s %s"
 	              "</a>",
             Usrs.NumUsrs,Txt_from,CourseName);
@@ -527,8 +527,8 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Gbl.Usrs.Connected.NumUsr        = 0;
    Gbl.Usrs.Connected.NumUsrs       = 0;
    Gbl.Usrs.Connected.NumUsrsToList = 0;
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TEACHER);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STUDENT);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
    fprintf (Gbl.F.Out,"</table>");
 
    /***** End container *****/
@@ -685,7 +685,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
    /***** Get number of connected users who belong to current course from database *****/
    switch (Role)
      {
-      case Rol_UNKNOWN:	// Here Rol_ROLE_UNKNOWN means "any role"
+      case Rol_UNK:	// Here Rol_UNK means "any role"
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
@@ -754,15 +754,15 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 	       break;
 	   }
 	 break;
-      case Rol__GUEST_:
+      case Rol_GST:
 	 sprintf (Query,"SELECT COUNT(DISTINCT connected.UsrCod),"
 	                "COUNT(DISTINCT usr_data.Sex),MIN(usr_data.Sex)"
 			" FROM connected,usr_data"
 			" WHERE connected.UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
 			" AND connected.UsrCod=usr_data.UsrCod");
 	 break;
-      case Rol_STUDENT:
-      case Rol_TEACHER:
+      case Rol_STD:
+      case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
@@ -988,7 +988,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    /***** Write full name and link *****/
    fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW %s COLOR%u\">",
 	    Font,Gbl.RowEvenOdd);
-   Act_FormStartUnique ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
+   Act_FormStartUnique ((Role == Rol_STD) ? ActSeeRecOneStd :
 	                                        ActSeeRecOneTch);	// Must be unique because
 									// the list of connected users
 									// is dynamically updated via AJAX
@@ -1044,15 +1044,15 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
    /***** Get connected users who belong to current location from database *****/
    switch (Role)
      {
-      case Rol__GUEST_:
+      case Rol_GST:
 	 sprintf (Query,"SELECT UsrCod,LastCrsCod,"
 			"UNIX_TIMESTAMP()-UNIX_TIMESTAMP(LastTime) AS Dif"
 			" FROM connected"
 			" WHERE UsrCod NOT IN (SELECT UsrCod FROM crs_usr)"
 			" ORDER BY Dif");
 	 break;
-      case Rol_STUDENT:
-      case Rol_TEACHER:
+      case Rol_STD:
+      case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:		// Show connected users in the whole platform
@@ -1182,7 +1182,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
-	       Act_FormStart ((Role == Rol_STUDENT) ? ActSeeRecOneStd :
+	       Act_FormStart ((Role == Rol_STD) ? ActSeeRecOneStd :
 						      ActSeeRecOneTch);
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }

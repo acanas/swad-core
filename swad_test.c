@@ -302,10 +302,10 @@ void Tst_ShowFormAskTst (void)
    /***** Put link to view tests results *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
+      case Rol_STD:
          Tst_PutFormToViewResultsOfUsersTests (ActReqSeeMyTstRes);
          break;
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_SYS_ADM:
          Tst_PutFormToViewResultsOfUsersTests (ActReqSeeUsrTstRes);
 	 break;
@@ -475,7 +475,7 @@ void Tst_ShowNewTest (void)
             Tst_SetTstStatus (NumAccessesTst,Tst_STATUS_SHOWN_BUT_NOT_ASSESSED);
 
             /***** Update date-time of my next allowed access to test *****/
-            if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+            if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
                Tst_UpdateLastAccTst ();
            }
 
@@ -647,7 +647,7 @@ static bool Tst_CheckIfNextTstAllowed (void)
    time_t TimeNextTestUTC = (time_t) 0;
 
    /***** Teachers and superusers are allowed to do all tests they want *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       return true;
 
@@ -934,7 +934,7 @@ static void Tst_ShowTestResultAfterAssess (long TstCod,unsigned *NumQstsNotBlank
 	    (*NumQstsNotBlank)++;
 
 	 /***** Update the number of accesses and the score of this question *****/
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT)
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
 	    Tst_UpdateScoreQst (QstCod,ScoreThisQst,AnswerIsNotBlank);
 	}
       else
@@ -1321,7 +1321,7 @@ void Tst_ShowFormAskEditTsts (void)
 
 static bool Tst_CheckIfICanEditTests (void)
   {
-   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+   return (bool) (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                   Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
   }
 
@@ -6967,10 +6967,10 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_TEACHER,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_STUDENT,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Test_results,
@@ -7000,8 +7000,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
          Lay_StartTable (2);
-         Usr_ListUsersToSelect (Rol_TEACHER);
-         Usr_ListUsersToSelect (Rol_STUDENT);
+         Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_STD);
          Lay_EndTable ();
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
@@ -7019,14 +7019,14 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
         }
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_UNKNOWN);
+      Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
 
    /***** Free memory for users' list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
    Usr_FreeListsSelectedUsrsCods ();
@@ -7298,12 +7298,12 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 
 	 switch (Gbl.Usrs.Me.LoggedRole)
 	   {
-	    case Rol_STUDENT:
+	    case Rol_STD:
 	       ICanViewTest  = ItsMe;
 	       ICanViewScore = ItsMe &&
 		               Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
 	       break;
-	    case Rol_TEACHER:
+	    case Rol_TCH:
 	    case Rol_DEG_ADM:
 	    case Rol_CTR_ADM:
 	    case Rol_INS_ADM:
@@ -7422,11 +7422,11 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
       /***** Write totals for this user *****/
       switch (Gbl.Usrs.Me.LoggedRole)
 	{
-	 case Rol_STUDENT:
+	 case Rol_STD:
 	    ICanViewTotalScore = ItsMe &&
 	                         Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
 	    break;
-	 case Rol_TEACHER:
+	 case Rol_TCH:
 	 case Rol_DEG_ADM:
 	 case Rol_CTR_ADM:
 	 case Rol_INS_ADM:
@@ -7543,7 +7543,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ? ActSeeRecOneStd :
+   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActSeeRecOneStd :
 	                                                      ActSeeRecOneTch);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
@@ -7620,7 +7620,7 @@ void Tst_ShowOneTestResult (void)
    ItsMe = (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
+      case Rol_STD:
 	 ICanViewTest = ItsMe;
 	 if (ItsMe)
 	   {
@@ -7630,7 +7630,7 @@ void Tst_ShowOneTestResult (void)
 	 else
 	    ICanViewScore = false;
 	 break;
-      case Rol_TEACHER:
+      case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:

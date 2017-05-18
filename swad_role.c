@@ -66,7 +66,7 @@ unsigned Rol_GetNumAvailableRoles (void)
    Rol_Role_t Role;
    unsigned NumAvailableRoles = 0;
 
-   for (Role = Rol__GUEST_;
+   for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;
         Role++)
       if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -81,11 +81,11 @@ unsigned Rol_GetNumAvailableRoles (void)
 
 Rol_Role_t Rol_GetMaxRole (unsigned Roles)
   {
-   if (Roles & (1 << Rol_TEACHER))
-      return Rol_TEACHER;
-   if (Roles & (1 << Rol_STUDENT))
-      return Rol_STUDENT;
-   return Rol__GUEST_;
+   if (Roles & (1 << Rol_TCH))
+      return Rol_TCH;
+   if (Roles & (1 << Rol_STD))
+      return Rol_STD;
+   return Rol_GST;
   }
 
 /*****************************************************************************/
@@ -107,9 +107,9 @@ Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod)
            NumMyIns++)
          if (Gbl.Usrs.Me.MyInss.Inss[NumMyIns].InsCod == InsCod)
             return Gbl.Usrs.Me.MyInss.Inss[NumMyIns].MaxRole;
-      return Rol__GUEST_;
+      return Rol_GST;
      }
-   return Rol_UNKNOWN;   // No degree
+   return Rol_UNK;   // No degree
   }
 
 /*****************************************************************************/
@@ -131,9 +131,9 @@ Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod)
            NumMyCtr++)
          if (Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].CtrCod == CtrCod)
             return Gbl.Usrs.Me.MyCtrs.Ctrs[NumMyCtr].MaxRole;
-      return Rol__GUEST_;
+      return Rol_GST;
      }
-   return Rol_UNKNOWN;   // No centre
+   return Rol_UNK;   // No centre
   }
 
 /*****************************************************************************/
@@ -155,9 +155,9 @@ Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod)
            NumMyDeg++)
          if (Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].DegCod == DegCod)
             return Gbl.Usrs.Me.MyDegs.Degs[NumMyDeg].MaxRole;
-      return Rol__GUEST_;
+      return Rol_GST;
      }
-   return Rol_UNKNOWN;   // No degree
+   return Rol_UNK;   // No degree
   }
 
 /*****************************************************************************/
@@ -179,9 +179,9 @@ Rol_Role_t Rol_GetMyRoleInCrs (long CrsCod)
            NumMyCrs++)
          if (Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].CrsCod == CrsCod)
             return Gbl.Usrs.Me.MyCrss.Crss[NumMyCrs].Role;
-      return Rol__GUEST_;
+      return Rol_GST;
      }
-   return Rol_UNKNOWN;   // No course
+   return Rol_UNK;   // No course
   }
 
 /*****************************************************************************/
@@ -208,13 +208,13 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
          Role = Rol_ConvertUnsignedStrToRole (row[0]);
         }
       else                // User does not belong to the course
-         Role = Rol_UNKNOWN;
+         Role = Rol_UNK;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
    else        // No course
-      Role = Rol_UNKNOWN;
+      Role = Rol_UNK;
 
    return Role;
   }
@@ -264,9 +264,9 @@ Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr)
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_UNKNOWN :
+      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_UNK :
                                               (Rol_Role_t) UnsignedNum;
-   return Rol_UNKNOWN;
+   return Rol_UNK;
   }
 
 /*****************************************************************************/
@@ -295,7 +295,7 @@ void Rol_PutFormToChangeMyRole (void)
    fprintf (Gbl.F.Out,"<select name=\"MyRole\" class=\"SEL_ROLE\""
                       " onchange=\"document.getElementById('%s').submit();\">",
             Gbl.Form.Id);
-   for (Role = Rol__GUEST_;
+   for (Role = Rol_GST;
         Role < Rol_NUM_ROLES;
         Role++)
      if (Gbl.Usrs.Me.AvailableRoles & (1 << Role))
@@ -323,8 +323,8 @@ void Rol_ChangeMyRole (void)
 	     Par_GetParToUnsignedLong ("MyRole",
                                        0,
                                        Rol_NUM_ROLES - 1,
-                                       (unsigned long) Rol_UNKNOWN);
-   if (NewRole != Rol_UNKNOWN)
+                                       (unsigned long) Rol_UNK);
+   if (NewRole != Rol_UNK)
      {
       /* Check if new role is allowed for me */
       if (!(Gbl.Usrs.Me.AvailableRoles & (1 << NewRole)))
@@ -357,7 +357,7 @@ void Rol_WriteSelectorRoles (unsigned RolesAllowed,unsigned RolesSelected,
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    Rol_Role_t Role;
 
-   for (Role = Rol_UNKNOWN;
+   for (Role = Rol_UNK;
         Role <= Rol_SYS_ADM;
         Role++)
       if ((RolesAllowed & (1 << Role)))
@@ -420,7 +420,7 @@ unsigned Rol_GetSelectedRoles (void)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UnsignedStr,10);
       Role = Rol_ConvertUnsignedStrToRole (UnsignedStr);
-      if (Role != Rol_UNKNOWN)
+      if (Role != Rol_UNK)
          Roles |= (1 << Role);
      }
 
@@ -436,7 +436,7 @@ Rol_Role_t Rol_GetRequestedRole (long UsrCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Rol_Role_t Role = Rol_UNKNOWN;
+   Rol_Role_t Role = Rol_UNK;
 
    /***** Get requested role from database *****/
    sprintf (Query,"SELECT Role FROM crs_usr_requests"

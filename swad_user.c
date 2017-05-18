@@ -265,7 +265,7 @@ void Usr_ResetUsrDataExceptUsrCodAndIDs (struct UsrData *UsrDat)
    UsrDat->EncryptedUsrCod[0] = '\0';
    UsrDat->Nickname[0] = '\0';
    UsrDat->Password[0] = '\0';
-   UsrDat->RoleInCurrentCrsDB = Rol_UNKNOWN;
+   UsrDat->RoleInCurrentCrsDB = Rol_UNK;
    UsrDat->Roles = -1;	// < 0 ==> not yet got from database
    UsrDat->Accepted = true;
 
@@ -492,10 +492,10 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
    UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
    UsrDat->Roles = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (UsrDat->RoleInCurrentCrsDB == Rol_UNKNOWN)
-      UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_STUDENT)) ?
-	                           Rol__GUEST_ :	// User does not belong to any course
-	                           Rol_VISITOR;		// User belongs to some courses
+   if (UsrDat->RoleInCurrentCrsDB == Rol_UNK)
+      UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_STD)) ?
+	                           Rol_GST :	// User does not belong to any course
+	                           Rol_USR;		// User belongs to some courses
 
    /* Get name */
    Str_Copy (UsrDat->Surname1,row[2],
@@ -817,7 +817,7 @@ bool Usr_ICanChangeOtherUsrData (const struct UsrData *UsrDat)
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_TEACHER:
+      case Rol_TCH:
 	 /* Check 1: I can change data of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
             return true;
@@ -987,14 +987,14 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 
 bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
   {
-   if (UsrDat->RoleInCurrentCrsDB != Rol_STUDENT)	// Not a student in the current course
+   if (UsrDat->RoleInCurrentCrsDB != Rol_STD)	// Not a student in the current course
       return false;
 
    // The user is a student in the current course
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STUDENT:
-      case Rol_TEACHER:
+      case Rol_STD:
+      case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
       default:
@@ -1014,7 +1014,7 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
 
    /***** 2. Fast/slow check: Is he/she a teacher in any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (!(UsrDat->Roles & (1 << Rol_TEACHER)))
+   if (!(UsrDat->Roles & (1 << Rol_TCH)))
       return false;
 
    // He/she is a teacher
@@ -1090,17 +1090,17 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return Cached.UsrSharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
-   IBelongToCurrentCrs   = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STUDENT ||
-	                   Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TEACHER;
-   HeBelongsToCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STUDENT ||
-	                   UsrDat->RoleInCurrentCrsDB == Rol_TEACHER;
+   IBelongToCurrentCrs   = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ||
+	                   Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH;
+   HeBelongsToCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STD ||
+	                   UsrDat->RoleInCurrentCrsDB == Rol_TCH;
    if (IBelongToCurrentCrs && HeBelongsToCurrentCrs)	// Course selected and we both belong to it
       return true;
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (!(UsrDat->Roles & ((1 << Rol_STUDENT) |	// Any of his/her roles is student
-			  (1 << Rol_TEACHER))))	// or teacher?
+   if (!(UsrDat->Roles & ((1 << Rol_STD) |	// Any of his/her roles is student
+			  (1 << Rol_TCH))))	// or teacher?
       return false;
 
    /***** 7. Slow check: Get if user shares any course with me from database *****/
@@ -2884,7 +2884,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
    Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole ((unsigned) Gbl.Usrs.Me.UsrDat.Roles);
-   Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_UNKNOWN) ?	// If no logged role retrieved from session...
+   Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_UNK) ?	// If no logged role retrieved from session...
                             Gbl.Usrs.Me.MaxRole :				// ...set current logged role to maximum role in database
                             Gbl.Usrs.Me.RoleFromSession;			// Get logged role from session
 
@@ -2965,10 +2965,10 @@ static void Usr_SetUsrRoleAndPrefs (void)
      {
       if (Gbl.Usrs.Me.IBelongToCurrentCrs)
          Gbl.Usrs.Me.AvailableRoles = (1 << Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB);
-      else if (Gbl.Usrs.Me.MaxRole >= Rol_STUDENT)
-         Gbl.Usrs.Me.AvailableRoles = (1 << Rol_VISITOR);
+      else if (Gbl.Usrs.Me.MaxRole >= Rol_STD)
+         Gbl.Usrs.Me.AvailableRoles = (1 << Rol_USR);
       else
-         Gbl.Usrs.Me.AvailableRoles = (1 << Rol__GUEST_);
+         Gbl.Usrs.Me.AvailableRoles = (1 << Rol_GST);
      }
    else        // No course selected
       Gbl.Usrs.Me.AvailableRoles = (1 << Gbl.Usrs.Me.MaxRole);
@@ -2984,7 +2984,7 @@ static void Usr_SetUsrRoleAndPrefs (void)
    /***** Check if the role I am logged is now available for me *****/
    if (!(Gbl.Usrs.Me.AvailableRoles & (1 << Gbl.Usrs.Me.LoggedRole)))        // Current type I am logged is not available for me
       /* Set the lowest role available for me */
-      for (Gbl.Usrs.Me.LoggedRole = Rol_UNKNOWN;
+      for (Gbl.Usrs.Me.LoggedRole = Rol_UNK;
            Gbl.Usrs.Me.LoggedRole < Rol_NUM_ROLES;
            Gbl.Usrs.Me.LoggedRole++)
          if (Gbl.Usrs.Me.AvailableRoles & (1 << Gbl.Usrs.Me.LoggedRole))
@@ -3320,7 +3320,7 @@ static void Usr_WriteRowStdAllData (struct UsrData *UsrDat,char *GroupNames)
    MYSQL_ROW row;
    char Text[Cns_MAX_BYTES_TEXT + 1];
    struct Instit Ins;
-   bool ShowData = (Gbl.Usrs.Me.LoggedRole == Rol_TEACHER && UsrDat->Accepted) ||
+   bool ShowData = (Gbl.Usrs.Me.LoggedRole == Rol_TCH && UsrDat->Accepted) ||
                     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM;
 
    /***** Start row *****/
@@ -3682,14 +3682,14 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 /*****************************************************************************/
 /************ Count how many users with a role belong to a centre ************/
 /*****************************************************************************/
-// Here Rol_UNKNOWN means students or teachers
+// Here Rol_UNK means students or teachers
 
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {
    char Query[512];
 
    /***** Get the number of users in courses of a centre from database ******/
-   if (Role == Rol_UNKNOWN)	// Any user
+   if (Role == Rol_UNK)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM degrees,courses,crs_usr"
 		     " WHERE degrees.CtrCod=%ld"
@@ -3712,14 +3712,14 @@ unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
 /*****************************************************************************/
 /********* Count how many users with a role belong to an institution *********/
 /*****************************************************************************/
-// Here Rol_UNKNOWN means students or teachers
+// Here Rol_UNK means students or teachers
 
 unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
   {
    char Query[512];
 
    /***** Get the number of users in courses of an institution from database ******/
-   if (Role == Rol_UNKNOWN)	// Any user
+   if (Role == Rol_UNK)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM centres,degrees,courses,crs_usr"
 		     " WHERE centres.InsCod=%ld"
@@ -3744,14 +3744,14 @@ unsigned Usr_GetNumUsrsInCrssOfIns (Rol_Role_t Role,long InsCod)
 /*****************************************************************************/
 /****** Count how many users with a role belong to courses of a country ******/
 /*****************************************************************************/
-// Here Rol_UNKNOWN means students or teachers
+// Here Rol_UNK means students or teachers
 
 unsigned Usr_GetNumUsrsInCrssOfCty (Rol_Role_t Role,long CtyCod)
   {
    char Query[512];
 
    /***** Get the number of users in courses of a country from database ******/
-   if (Role == Rol_UNKNOWN)	// Any user
+   if (Role == Rol_UNK)	// Any user
       sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 		     " FROM institutions,centres,degrees,courses,crs_usr"
 		     " WHERE institutions.CtyCod=%ld"
@@ -3791,7 +3791,7 @@ long Usr_GetRamdomStdFromCrs (long CrsCod)
    sprintf (Query,"SELECT UsrCod FROM crs_usr"
                   " WHERE CrsCod=%ld AND Role=%u"
                   " ORDER BY RAND(NOW()) LIMIT 1",
-            CrsCod,(unsigned) Rol_STUDENT);
+            CrsCod,(unsigned) Rol_STD);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get a random student from the current course"))
      {
       /***** Get user code *****/
@@ -3822,7 +3822,7 @@ long Usr_GetRamdomStdFromGrp (long GrpCod)
                   " WHERE crs_grp_usr.GrpCod=%ld"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
                   " AND crs_usr.Role=%u ORDER BY RAND(NOW()) LIMIT 1",
-            GrpCod,(unsigned) Rol_STUDENT);
+            GrpCod,(unsigned) Rol_STD);
    if (DB_QuerySELECT (Query,&mysql_res,"can not get a random student from a group"))
      {
       /***** Get user code *****/
@@ -3850,7 +3850,7 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
 	          " FROM usr_data,crs_usr"
                   " WHERE usr_data.InsCod=%ld AND usr_data.DptCod=%ld"
                   " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
-            Gbl.CurrentIns.Ins.InsCod,DptCod,(unsigned) Rol_TEACHER);
+            Gbl.CurrentIns.Ins.InsCod,DptCod,(unsigned) Rol_TCH);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of teachers in a department");
   }
 
@@ -3909,7 +3909,7 @@ unsigned Usr_GetNumberOfTeachersInCentre (long CtrCod)
 	          " FROM usr_data,crs_usr"
                   " WHERE usr_data.CtrCod=%ld"
                   " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
-            CtrCod,(unsigned) Rol_TEACHER);
+            CtrCod,(unsigned) Rol_TCH);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of teachers in a centre");
   }
 
@@ -3958,7 +3958,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    */
 
    /***** If there are no groups selected, don't do anything *****/
-   if (Role == Rol_STUDENT &&
+   if (Role == Rol_STD &&
        (!Gbl.Usrs.ClassPhoto.AllGroups &&
         !Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps))
      {
@@ -3986,7 +3986,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
 
    /***** Select users in selected groups (only for students) *****/
-   if (Role == Rol_STUDENT && !Gbl.Usrs.ClassPhoto.AllGroups)
+   if (Role == Rol_STD && !Gbl.Usrs.ClassPhoto.AllGroups)
      {
       /***** Get list of groups types in current course *****/
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -4097,8 +4097,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 /*********** Get list of users with a given role in a given scope ************/
 /*****************************************************************************/
 // Role can be:
-// - Rol_STUDENT
-// - Rol_TEACHER
+// - Rol_STD
+// - Rol_TCH
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
@@ -4231,7 +4231,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 	 break;
      }
 /*
-   if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Lay_ShowAlert (Lay_INFO,Query);
 */
    /***** Get list of users from database given a query *****/
@@ -4285,7 +4285,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
    // Search is faster (aproximately x2) using a temporary table to store users found in the whole platform
    switch (Role)
      {
-      case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any rol (role does not matter)
+      case Rol_UNK:	// Here Rol_UNK means any rol (role does not matter)
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:
@@ -4365,7 +4365,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       break;
 	   }
          break;
-      case Rol__GUEST_:	// Guests (scope is not used)
+      case Rol_GST:	// Guests (scope is not used)
 	 /* Search users with no courses */
 	 sprintf (Query,"SELECT %s"
 	                " FROM candidate_users,usr_data"
@@ -4374,8 +4374,8 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 		  QueryFields,
 		  OrderQuery);
 	 break;
-      case Rol_STUDENT:
-      case Rol_TEACHER:
+      case Rol_STD:
+      case Rol_TCH:
 	 /*
 	    To achieve maximum speed, it's important to do the things in this order:
 	    1) Search for user's name (UsrQuery) getting candidate users
@@ -4479,7 +4479,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	 break;
      }
 
-   // if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+   // if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
    //   Lay_ShowAlert (Lay_INFO,Query);
 
    /***** Get list of users from database given a query *****/
@@ -4757,7 +4757,7 @@ static void Usr_GetGstsLst (Sco_Scope_t Scope)
      }
 
    /***** Get list of students from database *****/
-   Usr_GetListUsrsFromQuery (Query,Rol__GUEST_,Scope);
+   Usr_GetListUsrsFromQuery (Query,Rol_GST,Scope);
   }
 
 /*****************************************************************************/
@@ -4793,9 +4793,9 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
    row[10]: usr_data.InsCod
    */
 
-   Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs = 0;
+   Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs = 0;
 
-   if (Usr_GetNumUsrsInCrssOfDeg (Rol_STUDENT,DegCod))
+   if (Usr_GetNumUsrsInCrssOfDeg (Rol_STD,DegCod))
      {
       /***** Get the students in a degree from database *****/
       sprintf (Query,"SELECT %s FROM courses,crs_usr,usr_data"
@@ -4804,10 +4804,10 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
                      " AND crs_usr.Role=%u"
                      " AND crs_usr.UsrCod=usr_data.UsrCod",
                QueryFields,
-               DegCod,(unsigned) Rol_STUDENT);
+               DegCod,(unsigned) Rol_STD);
 
       /***** Get list of students from database *****/
-      Usr_GetListUsrsFromQuery (Query,Rol_STUDENT,Sco_SCOPE_DEG);
+      Usr_GetListUsrsFromQuery (Query,Rol_STD,Sco_SCOPE_DEG);
      }
   }
 
@@ -4909,7 +4909,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
                (row[11], row[12] if Scope == Sco_SCOPE_CRS) */
             switch (Role)
               {
-               case Rol_UNKNOWN:	// Here Rol_UNKNOWN means any user
+               case Rol_UNK:	// Here Rol_UNK means any user
 		  switch (Scope)
 		    {
 		     case Sco_SCOPE_UNK:	// Unknown
@@ -4917,7 +4917,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		     case Sco_SCOPE_SYS:	// System
 			// Query result has not a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
+			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			if (Usr_GetNumCrssOfUsr (UsrInList->UsrCod))
 			   UsrInList->Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			else
@@ -4928,7 +4928,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_CTR:	// Centre
 		     case Sco_SCOPE_DEG:	// Degree
 			// Query result has not a column with the acceptation
-			UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
+			UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrNotAccepted (UsrInList->UsrCod) == 0);
 			break;
 		     case Sco_SCOPE_CRS:	// Course
@@ -4938,15 +4938,15 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 			break;
 		    }
         	  break;
-               case Rol__GUEST_:        // Guests have no courses,...
+               case Rol_GST:        // Guests have no courses,...
             	    	    	    	// ...so they have not accepted...
                                         // ...inscription in any course
                case Rol_DEG_ADM:	// Any admin (degree, centre, institution or system)
-	          UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	          UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 	          UsrInList->Accepted = false;
 	          break;
-               case Rol_STUDENT:
-               case Rol_TEACHER:
+               case Rol_STD:
+               case Rol_TCH:
 		  switch (Scope)
 		    {
 		     case Sco_SCOPE_UNK:	// Unknown
@@ -4958,7 +4958,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 		     case Sco_SCOPE_CTR:	// Centre
 		     case Sco_SCOPE_DEG:	// Degree
 			// Query result has not a column with the acceptation
-	                UsrInList->RoleInCurrentCrsDB = Rol_UNKNOWN;
+	                UsrInList->RoleInCurrentCrsDB = Rol_UNK;
 			UsrInList->Accepted = (Usr_GetNumCrssOfUsrWithARoleNotAccepted (UsrInList->UsrCod,Role) == 0);
 			break;
 		     case Sco_SCOPE_CRS:	// Course
@@ -5018,7 +5018,7 @@ void Usr_CopyBasicUsrDataFromList (struct UsrData *UsrDat,const struct UsrInList
 static void Usr_AllocateUsrsList (Rol_Role_t Role)
   {
 /*
-if (Gbl.Usrs.Me.LoggedRole == Rol_ROLE_SYS_ADM)
+if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
    {
     sprintf (Gbl.Alert.Txt,"Memory used by list = %lu",(long) sizeof (struct UsrInList) * NumUsrs);
     Lay_ShowAlert (Lay_INFO,Gbl.Alert.Txt);
@@ -5684,11 +5684,11 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
-   if (Role == Rol_STUDENT)
+   if (Role == Rol_STD)
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 	                 " name=\"SEL_UNSEL_STDS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
-   else	// Role == Rol_TEACHER or Role == Rol__GUEST_
+   else	// Role == Rol_TCH or Role == Rol_GST
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 	                 " name=\"SEL_UNSEL_TCHS\" value=\"\""
 	                 " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
@@ -5748,11 +5748,11 @@ static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsg
 
    /***** Check box *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"");
-   if (UsrDat->RoleInCurrentCrsDB == Rol_STUDENT)
+   if (UsrDat->RoleInCurrentCrsDB == Rol_STD)
       fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\""
 	                 " onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",
 	       UsrDat->EncryptedUsrCod);
-   else	// Role == Rol_TEACHER or Role == Rol__GUEST_
+   else	// Role == Rol_TCH or Role == Rol_GST
       fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\""
 	                 " onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",
 	       UsrDat->EncryptedUsrCod);
@@ -5859,7 +5859,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
-   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Heading row with column names *****/
       Usr_WriteHeaderFieldsUsrDat (PutCheckBoxToSelectUsr);	// Columns for the data
@@ -5869,11 +5869,11 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
 
       /***** List guests' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs;
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs;
            NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr]);
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
@@ -5885,11 +5885,11 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else        // Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs == 0
-      Usr_ShowWarningNoUsersFound (Rol__GUEST_);
+   else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
+      Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
-   Usr_FreeUsrsList (Rol__GUEST_);
+   Usr_FreeUsrsList (Rol_GST);
   }
 
 /*****************************************************************************/
@@ -5907,7 +5907,7 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
    GroupNames = NULL;        // To avoid warning
 
-   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Allocate memory for the string with the list of group names where student belongs to *****/
       if ((GroupNames = (char *) malloc ((Grp_MAX_BYTES_GROUP_NAME + 3) *
@@ -5933,11 +5933,11 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs;
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
            NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr]);
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
@@ -5952,17 +5952,17 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
       /***** Free memory used by the string with the list of group names where student belongs to *****/
       free ((void *) GroupNames);
      }
-   else        // Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
      {
       /***** Show warning indicating no students found *****/
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
       /***** Button to enrol students *****/
       Enr_PutButtonToEnrolStudents ();
      }
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
   }
 
 /*****************************************************************************/
@@ -5979,7 +5979,7 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
    /***** Initialize field names *****/
    Usr_SetUsrDatMainFieldNames ();
 
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
      {
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_MAIN_FIELDS_DATA_USR;
@@ -6012,11 +6012,11 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
 
       /***** List teachers' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs;
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
            NumUsr++, Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd)
         {
 	 /* Copy user's basic data from list */
-         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr]);
+         Usr_CopyBasicUsrDataFromList (&UsrDat,&Gbl.Usrs.LstUsrs[Rol_TCH].Lst[NumUsr]);
 
 	 /* Get list of user's IDs */
          ID_GetListIDsFromUsrCod (&UsrDat);
@@ -6028,17 +6028,17 @@ static void Usr_ListMainDataTchs (bool PutCheckBoxToSelectUsr)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs == 0
      {
       /***** Show warning indicating no teachers found *****/
-      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+      Usr_ShowWarningNoUsersFound (Rol_TCH);
 
       /***** Button to enrol a teacher *****/
       Enr_PutButtonToEnrolOneTeacher ();
      }
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -6099,7 +6099,7 @@ void Usr_ListAllDataGsts (void)
    /****** Get list of guests ******/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Set number of columns *****/
       NumColumnsCommonCard = Usr_NUM_ALL_FIELDS_DATA_GST;
@@ -6128,9 +6128,9 @@ void Usr_ListAllDataGsts (void)
 
       /***** List guests' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol__GUEST_].Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_GST].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
             UsrDat.Accepted = false;	// Guests have no courses,...
@@ -6149,11 +6149,11 @@ void Usr_ListAllDataGsts (void)
       /***** End of table *****/
       Lay_EndTable ();
      }
-   else        // Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs == 0
-      Usr_ShowWarningNoUsersFound (Rol__GUEST_);
+   else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
+      Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
-   Usr_FreeUsrsList (Rol__GUEST_);
+   Usr_FreeUsrsList (Rol_GST);
   }
 
 /*****************************************************************************/
@@ -6225,9 +6225,9 @@ void Usr_ListAllDataStds (void)
      }
 
    /****** Get list of students in current course ******/
-   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
          /***** Get list of record fields in current course *****/
@@ -6329,12 +6329,12 @@ void Usr_ListAllDataStds (void)
 
       /***** List students' data *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STUDENT].Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowStdAllData (&UsrDat,GroupNames);
 
@@ -6352,14 +6352,14 @@ void Usr_ListAllDataStds (void)
       if (Gbl.Scope.Current == Sco_SCOPE_CRS)
          free ((void *) GroupNames);
      }
-   else        // Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs == 0
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+   else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free list of groups types and groups in current course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -6453,9 +6453,9 @@ void Usr_ListAllDataTchs (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
      {
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
@@ -6482,12 +6482,12 @@ void Usr_ListAllDataTchs (void)
 
       /***** List data of teachers *****/
       for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs; )
+           NumUsr < Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs; )
         {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].UsrCod;
+         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TCH].Lst[NumUsr].UsrCod;
          if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
            {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TEACHER].Lst[NumUsr].Accepted;
+            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TCH].Lst[NumUsr].Accepted;
             NumUsr++;
             Usr_WriteRowTchAllData (&UsrDat);
 
@@ -6501,12 +6501,12 @@ void Usr_ListAllDataTchs (void)
       /***** End of table *****/
       Lay_EndTable ();
      }
-   else        // Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs == 0
+   else        // Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
-      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+      Usr_ShowWarningNoUsersFound (Rol_TCH);
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -6542,7 +6542,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
       sprintf (Gbl.Title,"%u %s",
-	       NumUsrs,(Role == Rol_UNKNOWN) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+	       NumUsrs,(Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
 		                                                 Txt_users[Sex]) :
 		                               ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
 		                                                 Txt_ROLES_PLURAL_abc[Role][Sex]));
@@ -6572,7 +6572,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES
 	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false);
 
 	 /* Write all the courses this user belongs to */
-	 if (Role != Rol__GUEST_ &&				// Guests do not belong to any course
+	 if (Role != Rol_GST &&				// Guests do not belong to any course
 	     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)		// Only admins can view the courses
 	   {
 	    fprintf (Gbl.F.Out,"<tr>"
@@ -6581,10 +6581,10 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES
 		     Gbl.RowEvenOdd,
 		     Usr_NUM_MAIN_FIELDS_DATA_USR-2,
 		     Gbl.RowEvenOdd);
-	    if (Role == Rol_UNKNOWN)
+	    if (Role == Rol_UNK)
 	      {
-	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TEACHER);
-  	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STUDENT);
+	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
+  	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 	      }
 	    else
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Role);
@@ -6635,7 +6635,7 @@ void Usr_ListDataAdms (void)
    const char *FieldNames[Usr_NUM_MAIN_FIELDS_DATA_ADM];
 
    /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_TCH)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -7115,8 +7115,8 @@ static void Usr_PutLinkToSeeGuests (void)
    /***** Put form to list guests *****/
    Lay_PutContextualLink (ActLstGst,NULL,NULL,
                           "usrs64x64.gif",
-                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
-                          Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+                          Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+                          Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
 		          NULL);
   }
 
@@ -7159,13 +7159,13 @@ void Usr_SeeGuests (void)
    /***** Get list of guests in current scope *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs,NULL))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,NULL))
      {
       /***** Get list of selected users *****/
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol__GUEST_][Usr_SEX_UNKNOWN],
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
                            Usr_PutIconsListGsts,Hlp_USERS_Guests);
 
       /***** Form to select range of guests *****/
@@ -7188,7 +7188,7 @@ void Usr_SeeGuests (void)
 	    break;
 	}
 
-      if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
@@ -7218,14 +7218,14 @@ void Usr_SeeGuests (void)
 	 Lay_StartTableWide (0);
 
 	 /* Put a row to select all users */
-         Usr_PutCheckboxToSelectAllUsers (Rol__GUEST_);
+         Usr_PutCheckboxToSelectAllUsers (Rol_GST);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
            {
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (Usr_CLASS_PHOTO_SEL_SEE,
-        	                   Rol__GUEST_);
+        	                   Rol_GST);
                break;
             case Usr_LIST_AS_LISTING:
                Usr_ListMainDataGsts (true);
@@ -7244,14 +7244,14 @@ void Usr_SeeGuests (void)
          Act_FormEnd ();
 	}
       else
-	 Usr_ShowWarningNoUsersFound (Rol__GUEST_);
+	 Usr_ShowWarningNoUsersFound (Rol_GST);
 
       /***** End frame *****/
       Lay_EndRoundFrame ();
      }
 
    /***** Free memory for guests list *****/
-   Usr_FreeUsrsList (Rol__GUEST_);
+   Usr_FreeUsrsList (Rol_GST);
   }
 
 /*****************************************************************************/
@@ -7268,11 +7268,11 @@ void Usr_SeeStudents (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_STUDENT)
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_STD)
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)	// I am logged as teacher or admin
+      if (Gbl.Usrs.Me.LoggedRole >= Rol_TCH)	// I am logged as teacher or admin
 	{
 	 /* Put link to go to admin one user */
 	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
@@ -7280,7 +7280,7 @@ void Usr_SeeStudents (void)
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
 	   {
 	    /* Put link to go to admin several users */
-	    Enr_PutLinkToAdminSeveralUsrs (Rol_STUDENT);
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
 
 	    /* Put link to edit record fields */
 	    Rec_PutLinkToEditRecordFields ();
@@ -7302,8 +7302,8 @@ void Usr_SeeStudents (void)
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-	              (Gbl.Usrs.Me.LoggedRole == Rol_STUDENT ||
-                       Gbl.Usrs.Me.LoggedRole == Rol_TEACHER ||
+	              (Gbl.Usrs.Me.LoggedRole == Rol_STD ||
+                       Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
    /***** Get groups to show ******/
@@ -7311,17 +7311,17 @@ void Usr_SeeStudents (void)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STUDENT][Usr_SEX_UNKNOWN],
+   Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
 			Usr_PutIconsListStds,Hlp_USERS_Students);
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
       Grp_ShowFormToSelectSeveralGroups (ActLstStd);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs,NULL))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
      {
       /***** Get list of selected users *****/
       Usr_GetListsSelectedUsrsCods ();
@@ -7345,7 +7345,7 @@ void Usr_SeeStudents (void)
 	    break;
 	}
 
-      if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
@@ -7385,7 +7385,7 @@ void Usr_SeeStudents (void)
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
-            Usr_PutCheckboxToSelectAllUsers (Rol_STUDENT);
+            Usr_PutCheckboxToSelectAllUsers (Rol_STD);
 
          /* Draw the classphoto/list */
          switch (Gbl.Usrs.Me.ListType)
@@ -7393,7 +7393,7 @@ void Usr_SeeStudents (void)
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
         	                                     Usr_CLASS_PHOTO_SEE,
-        	                   Rol_STUDENT);
+        	                   Rol_STD);
                break;
             case Usr_LIST_AS_LISTING:
                Usr_ListMainDataStds (ICanViewRecords);
@@ -7417,7 +7417,7 @@ void Usr_SeeStudents (void)
       else
 	{
 	 /***** Show warning indicating no students found *****/
-	 Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+	 Usr_ShowWarningNoUsersFound (Rol_STD);
 
 	 /***** Button to enrol students *****/
 	 Enr_PutButtonToEnrolStudents ();
@@ -7428,7 +7428,7 @@ void Usr_SeeStudents (void)
    Lay_EndRoundFrame ();
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -7448,7 +7448,7 @@ void Usr_SeeTeachers (void)
    bool ICanViewRecords;
 
    /***** Put contextual links *****/
-   if (Gbl.Usrs.Me.LoggedRole >= Rol_TEACHER)		// I am logged as teacher or admin
+   if (Gbl.Usrs.Me.LoggedRole >= Rol_TCH)		// I am logged as teacher or admin
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -7458,7 +7458,7 @@ void Usr_SeeTeachers (void)
       /* Put link to go to admin several users */
       if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
           Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
-         Enr_PutLinkToAdminSeveralUsrs (Rol_TEACHER);
+         Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -7480,12 +7480,12 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs,NULL))
+   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs,NULL))
      {
       /***** Start frame *****/
-      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TEACHER][Usr_SEX_UNKNOWN],
+      Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
                            Usr_PutIconsListTchs,Hlp_USERS_Teachers);
 
       /***** Form to select scope *****/
@@ -7499,7 +7499,7 @@ void Usr_SeeTeachers (void)
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
 
-      if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+      if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
 	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
@@ -7537,7 +7537,7 @@ void Usr_SeeTeachers (void)
 
 	 /* Put a row to select all users */
          if (ICanViewRecords)
-	    Usr_PutCheckboxToSelectAllUsers (Rol_TEACHER);
+	    Usr_PutCheckboxToSelectAllUsers (Rol_TCH);
 
          /***** Draw the classphoto/list  *****/
          switch (Gbl.Usrs.Me.ListType)
@@ -7545,7 +7545,7 @@ void Usr_SeeTeachers (void)
             case Usr_LIST_AS_CLASS_PHOTO:
                Usr_DrawClassPhoto (ICanViewRecords ? Usr_CLASS_PHOTO_SEL_SEE :
         	                                     Usr_CLASS_PHOTO_SEE,
-        	                   Rol_TEACHER);
+        	                   Rol_TCH);
                break;
             case Usr_LIST_AS_LISTING:
                Usr_ListMainDataTchs (ICanViewRecords);
@@ -7569,7 +7569,7 @@ void Usr_SeeTeachers (void)
       else
 	{
 	 /***** Show warning indicating no teachers found *****/
-	 Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+	 Usr_ShowWarningNoUsersFound (Rol_TCH);
 
 	 /***** Button to enrol a teacher *****/
 	 Enr_PutButtonToEnrolOneTeacher ();
@@ -7580,7 +7580,7 @@ void Usr_SeeTeachers (void)
      }
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -7592,7 +7592,7 @@ static void Usr_PutIconsListGsts (void)
    switch (Gbl.Usrs.Me.ListType)
      {
       case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+	 if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
 	    /***** Put icon to print guests *****/
 	    Usr_PutIconToPrintGsts ();
 	 break;
@@ -7618,7 +7618,7 @@ static void Usr_PutIconsListStds (void)
    switch (Gbl.Usrs.Me.ListType)
      {
       case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+	 if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	    /***** Put icon to print students *****/
 	    Usr_PutIconToPrintStds ();
 	 break;
@@ -7644,7 +7644,7 @@ static void Usr_PutIconsListTchs (void)
    switch (Gbl.Usrs.Me.ListType)
      {
       case Usr_LIST_AS_CLASS_PHOTO:
-	 if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+	 if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
 	    /***** Put icon to print teachers *****/
 	    Usr_PutIconToPrintTchs ();
 	 break;
@@ -7788,7 +7788,7 @@ void Usr_SeeGstClassPhotoPrn (void)
    /***** Get list of guests *****/
    Usr_GetGstsLst (Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol__GUEST_].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
      {
       /***** Draw the guests' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
@@ -7797,14 +7797,14 @@ void Usr_SeeGstClassPhotoPrn (void)
                                                                         -1L,
 				 -1L,-1L);
       Lay_StartTableWide (0);
-      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol__GUEST_);
+      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_GST);
       Lay_EndTable ();
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol__GUEST_);
+      Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
-   Usr_FreeUsrsList (Rol__GUEST_);
+   Usr_FreeUsrsList (Rol_GST);
   }
 
 /*****************************************************************************/
@@ -7826,9 +7826,9 @@ void Usr_SeeStdClassPhotoPrn (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Rol_STUDENT,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol_STUDENT].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
       /***** Draw the students' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
@@ -7843,14 +7843,14 @@ void Usr_SeeStdClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
       Lay_StartTableWide (0);
-      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STUDENT);
+      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_STD);
       Lay_EndTable ();
      }
    else
-      Usr_ShowWarningNoUsersFound (Rol_STUDENT);
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free memory for students list *****/
-   Usr_FreeUsrsList (Rol_STUDENT);
+   Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
    Grp_FreeListCodSelectedGrps ();
@@ -7878,9 +7878,9 @@ void Usr_SeeTchClassPhotoPrn (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Rol_TEACHER,Gbl.Scope.Current);
+   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);
 
-   if (Gbl.Usrs.LstUsrs[Rol_TEACHER].NumUsrs)
+   if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
@@ -7895,15 +7895,15 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
       Lay_StartTableWide (0);
-      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TEACHER);
+      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,Rol_TCH);
       Lay_EndTable ();
      }
    else
       /***** Show warning indicating no teachers found *****/
-      Usr_ShowWarningNoUsersFound (Rol_TEACHER);
+      Usr_ShowWarningNoUsersFound (Rol_TCH);
 
    /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TEACHER);
+   Usr_FreeUsrsList (Rol_TCH);
   }
 
 /*****************************************************************************/
@@ -8090,7 +8090,7 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
 /*****************************************************************************/
 /********************** Show warning "no users found" ************************/
 /*****************************************************************************/
-// Use Rol_ROLE_UNKNOWN type to display "no users found"
+// Use Rol_UNK type to display "no users found"
 
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
@@ -8102,7 +8102,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
 /*****************************************************************************/
 /************************ See stats about the platform ***********************/
 /*****************************************************************************/
-// Here Rol_ROLE_UNKNOWN means "all users"
+// Here Rol_UNK means "all users"
 
 void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
   {
@@ -8111,21 +8111,21 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
    unsigned NumUsrs;
    float NumCrssPerUsr;
    float NumUsrsPerCrs;
-   char *Class = (Role == Rol_UNKNOWN) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
+   char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
 	                                 "DAT RIGHT_BOTTOM";
 
    /***** Get the number of users belonging to any course *****/
-   if (Role == Rol__GUEST_)	// Users not beloging to any course
+   if (Role == Rol_GST)	// Users not beloging to any course
       NumUsrs = Usr_GetNumUsrsNotBelongingToAnyCrs ();
    else
       NumUsrs = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Role);
 
    /***** Get average number of courses per user *****/
-   NumCrssPerUsr = (Role == Rol__GUEST_) ? 0 :
+   NumCrssPerUsr = (Role == Rol_GST) ? 0 :
 	                                   Usr_GetNumCrssPerUsr (Role);
 
    /***** Query the number of users per course *****/
-   NumUsrsPerCrs = (Role == Rol__GUEST_) ? 0 :
+   NumUsrsPerCrs = (Role == Rol_GST) ? 0 :
 	                                   Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
@@ -8143,7 +8143,7 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
                       "%.2f"
                       "</td>"
                       "</tr>",
-            Class,(Role == Rol_UNKNOWN) ? Txt_Total :
+            Class,(Role == Rol_UNK) ? Txt_Total :
         	                          Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Class,NumUsrs,
             Class,NumCrssPerUsr,
@@ -8179,7 +8179,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(CrsCod) AS NumCrss"
 			   " FROM crs_usr"
@@ -8192,7 +8192,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
@@ -8218,7 +8218,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM centres,degrees,courses,crs_usr"
@@ -8242,7 +8242,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM degrees,courses,crs_usr"
@@ -8264,7 +8264,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumCrss) FROM "
 			   "(SELECT COUNT(crs_usr.CrsCod) AS NumCrss"
 			   " FROM courses,crs_usr"
@@ -8316,7 +8316,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
    switch (Gbl.Scope.Current)
      {
       case Sco_SCOPE_SYS:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(UsrCod) AS NumUsrs"
 			   " FROM crs_usr"
@@ -8329,7 +8329,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTY:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM institutions,centres,degrees,courses,crs_usr"
@@ -8355,7 +8355,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_INS:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM centres,degrees,courses,crs_usr"
@@ -8379,7 +8379,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CTR:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM degrees,courses,crs_usr"
@@ -8401,7 +8401,7 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_DEG:
-	 if (Role == Rol_UNKNOWN)	// Any user
+	 if (Role == Rol_UNK)	// Any user
 	    sprintf (Query,"SELECT AVG(NumUsrs) FROM "
 			   "(SELECT COUNT(crs_usr.UsrCod) AS NumUsrs"
 			   " FROM courses,crs_usr"
@@ -8421,8 +8421,8 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         return (float) ( Role == Rol_UNKNOWN ? Gbl.CurrentCrs.Crs.NumUsrs :	// Any user
-                         (Role == Rol_TEACHER ? Gbl.CurrentCrs.Crs.NumTchs :	// Teachers
+         return (float) ( Role == Rol_UNK ? Gbl.CurrentCrs.Crs.NumUsrs :	// Any user
+                         (Role == Rol_TCH ? Gbl.CurrentCrs.Crs.NumTchs :	// Teachers
                                                 Gbl.CurrentCrs.Crs.NumStds));	// Students
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
