@@ -276,6 +276,7 @@ bool Usr_CheckIfIBelongToIns (long InsCod);
 bool Usr_CheckIfIBelongToCtr (long CtrCod);
 bool Usr_CheckIfIBelongToDeg (long DegCod);
 bool Usr_CheckIfIBelongToCrs (long CrsCod);
+bool Usr_CheckIfIBelongToCurrentCrs (void);
 
 unsigned Usr_GetCtysFromUsr (long UsrCod,MYSQL_RES **mysql_res);
 unsigned long Usr_GetInssFromUsr (long UsrCod,long CtyCod,MYSQL_RES **mysql_res);

@@ -489,13 +489,14 @@ void Usr_GetUsrDataFromUsrCod (struct UsrData *UsrDat)
              Pwd_BYTES_ENCRYPTED_PASSWORD);
 
    /* Get roles */
-   UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
+   UsrDat->RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+                                                  UsrDat->UsrCod);
    UsrDat->Roles = -1;	// Force roles to be got from database
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
    if (UsrDat->RoleInCurrentCrsDB == Rol_UNK)
       UsrDat->RoleInCurrentCrsDB = (UsrDat->Roles < (1 << Rol_STD)) ?
-	                           Rol_GST :	// User does not belong to any course
-	                           Rol_USR;		// User belongs to some courses
+	                              Rol_GST :	// User does not belong to any course
+	                              Rol_USR;	// User belongs to some courses
 
    /* Get name */
    Str_Copy (UsrDat->Surname1,row[2],
@@ -1778,6 +1779,25 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
   }
 
 /*****************************************************************************/
+/******************** Check if I belong to current course ********************/
+/*****************************************************************************/
+
+bool Usr_CheckIfIBelongToCurrentCrs (void)
+  {
+   /***** Fast check: Is no course selected *****/
+   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
+      return false;
+
+   /***** Fast check: Is course selected and I am  student or teacher *****/
+   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ||
+       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH)
+      return true;
+
+   /***** Slow check: query database *****/
+   return Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod);
+  }
+
+/*****************************************************************************/
 /**************** Get the countries of a user from database ******************/
 /*****************************************************************************/
 // Returns the number of rows of the result
@@ -2825,7 +2845,7 @@ static void Usr_ShowAlertThereAreMoreThanOneUsr (void)
   }
 
 /*****************************************************************************/
-/**** Check if users exists, if his password is correct, get his data... *****/
+/** Check if users exists, if her/his password is correct, get her/his data **/
 /*****************************************************************************/
 
 static void Usr_SetUsrRoleAndPrefs (void)
@@ -2877,16 +2897,20 @@ static void Usr_SetUsrRoleAndPrefs (void)
       	 Hie_InitHierarchy ();
 
 	 /* Get again my role in this course */
-      	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+      	 Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB = Rol_GetRoleInCrs (Gbl.CurrentCrs.Crs.CrsCod,
+      	                                                           Gbl.Usrs.Me.UsrDat.UsrCod);
       	}
      }
 
+   // In this point Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB is set
+
    /***** Set the user's role I am logged *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);	// Get my roles if not yet got
-   Gbl.Usrs.Me.MaxRole = Rol_GetMaxRole ((unsigned) Gbl.Usrs.Me.UsrDat.Roles);
+   Gbl.Usrs.Me.MaxRole = Rol_GetMaxRoleInCrss ((unsigned) Gbl.Usrs.Me.UsrDat.Roles);
    Gbl.Usrs.Me.LoggedRole = (Gbl.Usrs.Me.RoleFromSession == Rol_UNK) ?	// If no logged role retrieved from session...
-                            Gbl.Usrs.Me.MaxRole :				// ...set current logged role to maximum role in database
-                            Gbl.Usrs.Me.RoleFromSession;			// Get logged role from session
+	                       ((Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_UNK) ? Rol_USR :
+	                                                                             Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB) :
+                               Gbl.Usrs.Me.RoleFromSession;		// Get logged role from session
 
    /***** Construct the path to my directory *****/
    Usr_ConstructPathUsr (Gbl.Usrs.Me.UsrDat.UsrCod,Gbl.Usrs.Me.PathDir);
@@ -2916,16 +2940,13 @@ static void Usr_SetUsrRoleAndPrefs (void)
      }
 
    /***** Check if I belong to current course *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0)
-      Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod);
-   else
-      Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-      Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
-                                                                Gbl.CurrentCrs.Crs.CrsCod,
-                                                                true);
-   else
-      Gbl.Usrs.Me.UsrDat.Accepted = false;
+   Gbl.Usrs.Me.IBelongToCurrentCrs = false;
+   Gbl.Usrs.Me.UsrDat.Accepted = false;
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
+      if ((Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfIBelongToCurrentCrs ()))
+         Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
+                                                                   Gbl.CurrentCrs.Crs.CrsCod,
+                                                                   true);
 
    /***** Check if I belong to current degree *****/
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -2970,8 +2991,11 @@ static void Usr_SetUsrRoleAndPrefs (void)
       else
          Gbl.Usrs.Me.AvailableRoles = (1 << Rol_GST);
      }
-   else        // No course selected
-      Gbl.Usrs.Me.AvailableRoles = (1 << Gbl.Usrs.Me.MaxRole);
+   else if (Gbl.Usrs.Me.MaxRole >= Rol_STD)
+      Gbl.Usrs.Me.AvailableRoles = (1 << Rol_USR);
+   else
+      Gbl.Usrs.Me.AvailableRoles = (1 << Rol_GST);
+
    if (ICanBeInsAdm)
       Gbl.Usrs.Me.AvailableRoles |= (1 << Rol_INS_ADM);
    if (ICanBeCtrAdm)

@@ -1019,7 +1019,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
 		    {
 		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
-		     if (Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod))
+		     if (Usr_CheckIfIBelongToCurrentCrs ())
 			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
 		    }
 		 }
@@ -1041,7 +1041,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		  if (Usr_CheckIfIBelongToDeg (Gbl.CurrentDeg.Deg.DegCod))
 		    {
 		     *ScopesAllowed |= 1 << Sco_SCOPE_DEG;
-		     if (Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod))
+		     if (Usr_CheckIfIBelongToCurrentCrs ())
 		       {
 			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
 			*HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A teacher can view hidden course surveys

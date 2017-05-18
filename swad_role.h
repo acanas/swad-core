@@ -38,7 +38,7 @@
 /*****************************************************************************/
 
 unsigned Rol_GetNumAvailableRoles (void);
-Rol_Role_t Rol_GetMaxRole (unsigned Roles);
+Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles);
 Rol_Role_t Rol_GetMyMaxRoleInIns (long InsCod);
 Rol_Role_t Rol_GetMyMaxRoleInCtr (long CtrCod);
 Rol_Role_t Rol_GetMyMaxRoleInDeg (long DegCod);

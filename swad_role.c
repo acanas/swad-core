@@ -79,13 +79,19 @@ unsigned Rol_GetNumAvailableRoles (void)
 /************ Get maximum role of a user in all his/her courses **************/
 /*****************************************************************************/
 
-Rol_Role_t Rol_GetMaxRole (unsigned Roles)
+Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles)
   {
+   /***** User's role in one of her/his course can be ROL_STD or ROL_TCH *****/
+   /* Check first if user is a teacher in any course */
    if (Roles & (1 << Rol_TCH))
       return Rol_TCH;
+
+   /* Not a teacher. Check then if user is a student in any course */
    if (Roles & (1 << Rol_STD))
       return Rol_STD;
-   return Rol_GST;
+
+   /* Not a teacher or student */
+   return Rol_GST;	// Guest means that this user is not registered in any course
   }
 
 /*****************************************************************************/
@@ -193,7 +199,7 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
    char Query[256];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   Rol_Role_t Role;
+   Rol_Role_t Role = Rol_UNK;	// Default role (if no course selected or user don't belong to it)
 
    if (CrsCod > 0)
      {
@@ -207,14 +213,10 @@ Rol_Role_t Rol_GetRoleInCrs (long CrsCod,long UsrCod)
          row = mysql_fetch_row (mysql_res);
          Role = Rol_ConvertUnsignedStrToRole (row[0]);
         }
-      else                // User does not belong to the course
-         Role = Rol_UNK;
 
       /***** Free structure that stores the query result *****/
       DB_FreeMySQLResult (&mysql_res);
      }
-   else        // No course
-      Role = Rol_UNK;
 
    return Role;
   }
@@ -264,8 +266,9 @@ Rol_Role_t Rol_ConvertUnsignedStrToRole (const char *UnsignedStr)
    unsigned UnsignedNum;
 
    if (sscanf (UnsignedStr,"%u",&UnsignedNum) == 1)
-      return (UnsignedNum >= Rol_NUM_ROLES) ? Rol_UNK :
-                                              (Rol_Role_t) UnsignedNum;
+      if (UnsignedNum < Rol_NUM_ROLES)
+         return (Rol_Role_t) UnsignedNum;
+
    return Rol_UNK;
   }
 

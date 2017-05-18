@@ -233,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.216 (2017-05-18)"
+#define Log_PLATFORM_VERSION	"SWAD 16.217 (2017-05-18)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.217:   May 18, 2017	Role user is the default when no course is selected. (218887 lines)
         Version 16.216:   May 18, 2017	Role visitor is renamed as role user. (218867 lines)
         Version 16.215.4: May 18, 2017	Changed layout of assignments.
 					Removed alert with number of users notified via email. (218868 lines)
