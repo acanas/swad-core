@@ -1787,19 +1787,6 @@ Ntf_NotifyEvent_t Ntf_GetNotifyEventFromDB (const char *Str)
   }
 
 /*****************************************************************************/
-/******** Show an alert with the number of users notified by email ***********/
-/*****************************************************************************/
-
-void Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (unsigned NumUsrsToBeNotifiedByEMail)
-  {
-   extern const char *Txt_No_of_users_who_will_be_notified_by_email;
-
-   sprintf (Gbl.Alert.Txt,"%s: %u",
-            Txt_No_of_users_who_will_be_notified_by_email,NumUsrsToBeNotifiedByEMail);
-   Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
-  }
-
-/*****************************************************************************/
 /************* Get number of events notified and emails sent *****************/
 /*****************************************************************************/
 

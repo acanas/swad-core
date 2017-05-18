@@ -418,7 +418,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    fprintf (Gbl.F.Out,"</td>");
 
    /* Send work? */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"%s CENTER_TOP",
+   fprintf (Gbl.F.Out,"<td class=\"%s CENTER_TOP",
             (Asg.SendWork == Asg_SEND_WORK) ? "DAT_N" :
         	                              "DAT");
    if (!PrintView)
@@ -437,7 +437,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
         	                              Txt_No);
 
    /* Assignment folder */
-   fprintf (Gbl.F.Out,"<td rowspan=\"2\" class=\"DAT LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -463,7 +463,7 @@ static void Asg_ShowOneAssignment (long AsgCod,bool PrintView)
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td class=\"LEFT_TOP");
+   fprintf (Gbl.F.Out,"<td colspan=\"3\" class=\"LEFT_TOP");
    if (!PrintView)
       fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
    fprintf (Gbl.F.Out,"\">");
@@ -1436,7 +1436,6 @@ void Asg_RecFormAssignment (void)
       /***** Notify by email about the new assignment *****/
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ASSIGNMENT,NewAsg.AsgCod)))
 	 Asg_UpdateNumUsrsNotifiedByEMailAboutAssignment (NewAsg.AsgCod,NumUsrsToBeNotifiedByEMail);
-      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
       /***** Show assignments again *****/
       Asg_SeeAssignments ();

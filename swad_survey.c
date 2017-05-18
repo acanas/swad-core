@@ -2168,11 +2168,8 @@ void Svy_RecFormSurvey (void)
 
    /***** Notify by email about the new survey *****/
    if (NewSvy.Scope == Sco_SCOPE_CRS)	// Notify only the surveys for a course, not for a degree or global
-     {
       if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SURVEY,NewSvy.SvyCod)))
          Svy_UpdateNumUsrsNotifiedByEMailAboutSurvey (NewSvy.SvyCod,NumUsrsToBeNotifiedByEMail);
-      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
-     }
 
    /***** Show surveys again *****/
    Svy_ListAllSurveys (&SvyQst);

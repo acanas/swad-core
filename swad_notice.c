@@ -147,7 +147,6 @@ void Not_ReceiveNotice (void)
    /***** Notify by email about the new notice *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_NOTICE,NotCod)))
       Not_UpdateNumUsrsNotifiedByEMailAboutNotice (NotCod,NumUsrsToBeNotifiedByEMail);
-   Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new notice *****/
    Soc_StoreAndPublishSocialNote (Soc_NOTE_NOTICE,NotCod,&SocPub);

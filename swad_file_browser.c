@@ -7437,7 +7437,6 @@ static void Brw_PasteClipboard (void)
    struct Brw_NumObjects Pasted;
    long FirstFilCod = -1L;	// First file code of the first file or link pasted. Important: initialize here to -1L
    struct FileMetadata FileMetadata;
-   unsigned NumUsrsToBeNotifiedByEMail;
 
    Pasted.NumFiles =
    Pasted.NumLinks =
@@ -7579,23 +7578,19 @@ static void Brw_PasteClipboard (void)
 		 {
 		  case Brw_ADMI_DOCUM_CRS:
 		  case Brw_ADMI_DOCUM_GRP:
-		     NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FirstFilCod);
-		     Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FirstFilCod);
 		     break;
 		  case Brw_ADMI_TEACH_CRS:
 		  case Brw_ADMI_TEACH_GRP:
-		     NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FirstFilCod);
-		     Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FirstFilCod);
 		     break;
 		  case Brw_ADMI_SHARE_CRS:
 		  case Brw_ADMI_SHARE_GRP:
-		     NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FirstFilCod);
-		     Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FirstFilCod);
 		     break;
 		  case Brw_ADMI_MARKS_CRS:
 		  case Brw_ADMI_MARKS_GRP:
-		     NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FirstFilCod);
-		     Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+		     Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FirstFilCod);
 		     break;
 		  default:
 		     break;
@@ -8424,7 +8419,6 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
    long FilCod = -1L;	// Code of new file in database
    struct FileMetadata FileMetadata;
    struct MarksProperties Marks;
-   unsigned NumUsrsToBeNotifiedByEMail;
    char FileNameToShow[NAME_MAX + 1];
    bool UploadSucessful = false;
 
@@ -8540,27 +8534,19 @@ static bool Brw_RcvFileInFileBrw (Brw_UploadType_t UploadType)
 				{
 				 case Brw_ADMI_DOCUM_CRS:
 				 case Brw_ADMI_DOCUM_GRP:
-				    NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-                                    if (UploadType == Brw_CLASSIC_UPLOAD)
-				       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
 				    break;
 				 case Brw_ADMI_TEACH_CRS:
 				 case Brw_ADMI_TEACH_GRP:
-				    NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-                                    if (UploadType == Brw_CLASSIC_UPLOAD)
-				       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
 				    break;
 				 case Brw_ADMI_SHARE_CRS:
 				 case Brw_ADMI_SHARE_GRP:
-				    NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-                                    if (UploadType == Brw_CLASSIC_UPLOAD)
-				       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
 				    break;
 				 case Brw_ADMI_MARKS_CRS:
 				 case Brw_ADMI_MARKS_GRP:
-				    NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-                                    if (UploadType == Brw_CLASSIC_UPLOAD)
-				       Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+				    Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
 				    break;
 				 default:
 				    break;
@@ -8605,7 +8591,6 @@ void Brw_RecLinkFileBrowser (void)
    long FilCod = -1L;	// Code of new file in database
    char FileNameToShow[NAME_MAX + 1];
    struct FileMetadata FileMetadata;
-   unsigned NumUsrsToBeNotifiedByEMail;
 
    /***** Get parameters related to file browser *****/
    Brw_GetParAndInitFileBrowser ();
@@ -8718,23 +8703,19 @@ void Brw_RecLinkFileBrowser (void)
 			  {
 			   case Brw_ADMI_DOCUM_CRS:
 			   case Brw_ADMI_DOCUM_GRP:
-			      NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
-			      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_DOCUMENT_FILE,FilCod);
 			      break;
 			   case Brw_ADMI_TEACH_CRS:
 			   case Brw_ADMI_TEACH_GRP:
-			      NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
-			      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_TEACHERS_FILE,FilCod);
 			      break;
 			   case Brw_ADMI_SHARE_CRS:
 			   case Brw_ADMI_SHARE_GRP:
-			      NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
-			      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_SHARED_FILE,FilCod);
 			      break;
 			   case Brw_ADMI_MARKS_CRS:
 			   case Brw_ADMI_MARKS_GRP:
-			      NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
-			      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
+			      Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_MARKS_FILE,FilCod);
 			      break;
 			   default:
 			      break;

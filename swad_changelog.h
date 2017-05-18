@@ -233,13 +233,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.215.3 (2017-05-15)"
+#define Log_PLATFORM_VERSION	"SWAD 16.215.4 (2017-05-18)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.215.4: May 18, 2017	Changed layout of assignments.
+					Removed alert with number of users notified via email. (218868 lines)
         Version 16.215.3: May 15, 2017	Fixed bug in layout of alerts. (218950 lines)
         Version 16.215.2: May 13, 2017	Default theme: grey. (218946 lines)
         Version 16.215.1: May 12, 2017	Fixed bug in layout of indicators. (218946 lines)

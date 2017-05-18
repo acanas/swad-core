@@ -631,7 +631,6 @@ void Msg_RecMsgFromUsr (void)
    extern const char *Txt_message_sent_to_X_notified_by_email;
    extern const char *Txt_message_sent_to_X_not_notified_by_email;
    extern const char *Txt_Error_getting_data_from_a_recipient;
-   extern const char *Txt_Do_not_reload_this_page_because_the_message_will_be_sent_again_;
    extern const char *Txt_The_message_has_not_been_sent_to_any_recipient;
    extern const char *Txt_The_message_has_been_sent_to_1_recipient;
    extern const char *Txt_The_message_has_been_sent_to_X_recipients;
@@ -815,10 +814,6 @@ void Msg_RecMsgFromUsr (void)
                   (unsigned) NumRecipients);
          Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
         }
-
-      /***** Show message about number of users to be notified *****/
-      Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumRecipientsToBeNotifiedByEMail);
-      Ale_ShowAlert (Ale_INFO,Txt_Do_not_reload_this_page_because_the_message_will_be_sent_again_);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_The_message_has_not_been_sent_to_any_recipient);

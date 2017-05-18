@@ -1864,7 +1864,6 @@ void Enr_SignUpInCrs (void)
    MYSQL_ROW row;
    Rol_Role_t RoleFromForm;
    long ReqCod = -1L;
-   unsigned NumUsrsToBeNotifiedByEMail;
 
    /***** Check if I already belong to course *****/
    if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB >= Rol_STUDENT)
@@ -1935,10 +1934,7 @@ void Enr_SignUpInCrs (void)
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
       if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_TEACHER)
-	{
-         NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
-         Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
-	}
+         Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
      }
   }
 

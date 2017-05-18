@@ -299,7 +299,6 @@ void Exa_ReceiveExamAnnouncement2 (void)
    /***** Notify by email about the new exam announcement *****/
    if ((NumUsrsToBeNotifiedByEMail = Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.ExaDat.ExaCod)))
       Exa_UpdateNumUsrsNotifiedByEMailAboutExamAnnouncement (Gbl.ExamAnns.ExaDat.ExaCod,NumUsrsToBeNotifiedByEMail);
-   Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (NumUsrsToBeNotifiedByEMail);
 
    /***** Create a new social note about the new exam announcement *****/
    Soc_StoreAndPublishSocialNote (Soc_NOTE_EXAM_ANNOUNCEMENT,Gbl.ExamAnns.ExaDat.ExaCod,&SocPub);

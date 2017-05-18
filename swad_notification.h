@@ -135,7 +135,6 @@ void Ntf_StoreNotifyEventToOneUser (Ntf_NotifyEvent_t NotifyEvent,
                                     long Cod,Ntf_Status_t Status);
 void Ntf_SendPendingNotifByEMailToAllUsrs (void);
 Ntf_NotifyEvent_t Ntf_GetNotifyEventFromDB (const char *Str);
-void Ntf_ShowAlertNumUsrsToBeNotifiedByEMail (unsigned NumUsrsToBeNotifiedByEMail);
 void Ntf_MarkAllNotifAsSeen (void);
 void Ntf_PutFormChangeNotifSentByEMail (void);
 void Ntf_ChangeNotifyEvents (void);

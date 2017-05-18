@@ -8589,27 +8589,6 @@ const char *Txt_distributed_by =
 	"distribu&iacute;do por";
 #endif
 
-const char *Txt_Do_not_reload_this_page_because_the_message_will_be_sent_again_ =
-#if   L==1
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";	// Necessita traduccio
-#elif L==2
-	"Do not reload this page because the message would be sent again and would arrive repeated.";			// Need Übersetzung
-#elif L==3
-	"Do not reload this page because the message would be sent again and would arrive repeated.";
-#elif L==4
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";
-#elif L==5
-	"Do not reload this page because the message would be sent again and would arrive repeated.";			// Besoin de traduction
-#elif L==6
-	"No recargue esta p&aacute;gina, pues el mensaje se enviar&iacute;a de nuevo y llegar&iacute;a repetido.";	// Okoteve traducción
-#elif L==7
-	"Non ricaricare questa pagina perch&egrave; il messaggio sar&agrave; nuovamente inviato.";
-#elif L==8
-	"Nie przeladuj strone, poniewaz wiadomosc zostanie wyslana ponownie przyjedzie powtarzane.";
-#elif L==9
-	"Do not reload this page because the message would be sent again and would arrive repeated.";			// Necessita de tradução
-#endif
-
 const char *Txt_Do_not_show_again =
 #if   L==1
 	"No mostrar de nou";
@@ -25270,27 +25249,6 @@ const char *Txt_No_of_users =
 	"Liczba uzytkownik&oacute;w";
 #elif L==9
 	"N&ordm; de utilizadores";
-#endif
-
-const char *Txt_No_of_users_who_will_be_notified_by_email =
-#if   L==1
-	"N&ordm; de usuarios que ser&aacute;n notificados por correo";	// Necessita traduccio
-#elif L==2
-	"Anzahl der Benutzer, um benachrichtigt zu werden per E-Mail";
-#elif L==3
-	"No. of users who will be notified by email";
-#elif L==4
-	"N&ordm; de usuarios que ser&aacute;n notificados por correo";
-#elif L==5
-	"Nombre d'utilisateurs qui seront notifi&eacute;s par email";
-#elif L==6
-	"N&ordm; de usuarios que ser&aacute;n notificados por correo";	// Okoteve traducción
-#elif L==7
-	"Numero di utenti che saranno notificati via email";
-#elif L==8
-	"Liczba uzytkownik&oacute;w, kt&oacute;rzy zostana powiadomieni przez email";
-#elif L==9
-	"N&ordm; de utilizadores que ser&atilde;o notificados por email";
 #endif
 
 const char *Txt_No_questions_found_matching_your_search_criteria =
