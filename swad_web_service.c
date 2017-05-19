@@ -175,7 +175,7 @@ Rol_Role_t Svc_SvcRole_to_RolRole[Svc_NUM_ROLES] =
    Rol_UNK,	// Svc_ROLE_UNKNOWN
    Rol_GST,	// Svc_ROLE__GUEST_
    Rol_STD,	// Svc_ROLE_STUDENT
-   Rol_TCH,	// Svc_ROLE_TEACHER
+   Rol_TCH,	// Svc_ROLE_TEACHER	// TODO: Create new web service role for non-editing teachers
   };
 
 /* Translation from swad-core-role to service-web-role */
@@ -185,6 +185,7 @@ Svc_Role_t Svc_RolRole_to_SvcRole[Rol_NUM_ROLES] =
    Svc_ROLE__GUEST_,	// Rol_GST
    Svc_ROLE_UNKNOWN,	// Rol_USR
    Svc_ROLE_STUDENT,	// Rol_STD
+   Svc_ROLE_TEACHER,	// Rol_NED_TCH	// TODO: Create new web service role for non-editing teachers
    Svc_ROLE_TEACHER,	// Rol_TCH
    Svc_ROLE_UNKNOWN,	// Rol_DEG_ADM
    Svc_ROLE_UNKNOWN,	// Rol_CTR_ADM

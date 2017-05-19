@@ -216,20 +216,20 @@ static void Sch_PutFormToSearchWithWhatToSearchAndScope (Act_Action_t Action,Sco
    extern const char *Txt_Search;
    const char *Titles[Sch_NUM_WHAT_TO_SEARCH] =
      {
-	"",							// Sch_SEARCH_UNKNOWN
-	Txt_all,						// Sch_SEARCH_ALL
-	Txt_countries,						// Sch_SEARCH_COUNTRIES
-	Txt_institutions,					// Sch_SEARCH_INSTITS
-	Txt_centres,						// Sch_SEARCH_CENTRES
-	Txt_degrees,						// Sch_SEARCH_DEGREES
-	Txt_courses,						// Sch_SEARCH_COURSES
-	Txt_users[Usr_SEX_UNKNOWN],				// Sch_SEARCH_USERS
+	"",						// Sch_SEARCH_UNKNOWN
+	Txt_all,					// Sch_SEARCH_ALL
+	Txt_countries,					// Sch_SEARCH_COUNTRIES
+	Txt_institutions,				// Sch_SEARCH_INSTITS
+	Txt_centres,					// Sch_SEARCH_CENTRES
+	Txt_degrees,					// Sch_SEARCH_DEGREES
+	Txt_courses,					// Sch_SEARCH_COURSES
+	Txt_users[Usr_SEX_UNKNOWN],			// Sch_SEARCH_USERS
 	Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_UNKNOWN],	// Sch_SEARCH_TEACHERS
 	Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_UNKNOWN],	// Sch_SEARCH_STUDENTS
         Txt_ROLES_PLURAL_abc[Rol_GST][Usr_SEX_UNKNOWN],	// Sch_SEARCH_GUESTS
-	Txt_open_documents,					// Sch_SEARCH_OPEN_DOCUMENTS
-	Txt_documents_in_my_courses,				// Sch_SEARCH_DOCUM_IN_MY_COURSES
-	Txt_my_documents,					// Sch_SEARCH_MY_DOCUMENTS
+	Txt_open_documents,				// Sch_SEARCH_OPEN_DOCUMENTS
+	Txt_documents_in_my_courses,			// Sch_SEARCH_DOCUM_IN_MY_COURSES
+	Txt_my_documents,				// Sch_SEARCH_MY_DOCUMENTS
      };
    Sch_WhatToSearch_t WhatToSearch;
 

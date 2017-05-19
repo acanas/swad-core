@@ -40,20 +40,21 @@
    as user permanent roles in courses,
    but a user may be logged temporarily as other roles
 */
-#define Rol_NUM_ROLES 9
+#define Rol_NUM_ROLES 10
 typedef enum
   {
    Rol_UNK	= 0,	// User not logged in
    Rol_GST	= 1,	// User not belonging to any course
-   Rol_USR	= 2,	// Student or teacher in some courses...
+   Rol_USR	= 2,	// Student, non-editing teacher or teacher in some courses...
    	   	   	// ...but no course selected
 			// ...or not belonging to the current course
    Rol_STD	= 3,	// Student in the current course
-   Rol_TCH	= 4,	// Teacher in the current course
-   Rol_DEG_ADM	= 5,	// Degree administrator
-   Rol_CTR_ADM	= 6,	// Centre administrator
-   Rol_INS_ADM	= 7,	// Institution administrator
-   Rol_SYS_ADM	= 8,	// System administrator (superuser)
+   Rol_NED_TCH	= 4,	// Non-editing teacher in the current course
+   Rol_TCH	= 5,	// Old 4	// Teacher in the current course
+   Rol_DEG_ADM	= 6,	// Old 5	// Degree administrator
+   Rol_CTR_ADM	= 7,	// Old 6	// Centre administrator
+   Rol_INS_ADM	= 8,	// Old 7	// Institution administrator
+   Rol_SYS_ADM	= 9,	// Old 8	// System administrator (superuser)
   } Rol_Role_t;
 
 #endif

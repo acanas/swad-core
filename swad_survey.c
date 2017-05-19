@@ -1026,6 +1026,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      }
 	   }
          break;
+      case Rol_NED_TCH:	// Non-editing teacher in current course **************
       case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;
@@ -1044,7 +1045,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 		     if (Usr_CheckIfIBelongToCurrentCrs ())
 		       {
 			*ScopesAllowed |= 1 << Sco_SCOPE_CRS;
-			*HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A teacher can view hidden course surveys
+			*HiddenAllowed |= 1 << Sco_SCOPE_CRS;	// A non-editing teacher or teacher can view hidden course surveys
 		       }
 		    }
 		 }

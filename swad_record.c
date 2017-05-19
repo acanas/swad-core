@@ -2210,6 +2210,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
       Hlp_USERS_Guests,				// Rol_GST
       NULL,					// Rol_USR
       Hlp_USERS_Students_shared_record_card,	// Rol_STD
+      Hlp_USERS_Teachers_shared_record_card,	// Rol_NED_TCH
       Hlp_USERS_Teachers_shared_record_card,	// Rol_TCH
       NULL,					// Rol_DEG_ADM
       NULL,					// Rol_CTR_ADM

@@ -48,6 +48,20 @@
 /***************************** Private constants *****************************/
 /*****************************************************************************/
 
+static const bool Enr_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
+  {
+   false,	// Rol_UNK
+   false,	// Rol_GST
+   false,	// Rol_USR
+   false,	// Rol_STD
+   false,	// Rol_NED_TCH
+   true,	// Rol_TCH
+   true,	// Rol_DEG_ADM
+   true,	// Rol_CTR_ADM
+   true,	// Rol_INS_ADM
+   true,	// Rol_SYS_ADM
+  };
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -110,7 +124,6 @@ static void Enr_RemoveEnrolmentRequest (long CrsCod,long UsrCod);
 static void Enr_RemoveExpiredEnrolmentRequests (void);
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role);
-static bool Enr_ICanAdminOtherUsrs (void);
 static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role);
 static void Enr_AskIfRegRemMe (Rol_Role_t Role);
 static void Enr_AskIfRegRemAnotherUsr (Rol_Role_t Role);
@@ -2891,8 +2904,8 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
   {
    extern const char *Txt_Administer_me;
    extern const char *Txt_Administer_one_user;
-   const char *TitleText = Enr_ICanAdminOtherUsrs () ? Txt_Administer_one_user :
-                        	                              Txt_Administer_me;
+   const char *TitleText = Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.LoggedRole] ? Txt_Administer_one_user :
+                        	                                            Txt_Administer_me;
 
    Lay_PutContextualLink (NextAction,NULL,NULL,
                           "config64x64.gif",
@@ -2940,36 +2953,10 @@ void Enr_ReqRegRemTch (void)
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
-   if (Enr_ICanAdminOtherUsrs ())
+   if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.LoggedRole])
       Enr_ReqAnotherUsrIDToRegisterRemove (Role);
    else
       Enr_AskIfRegRemMe (Role);
-  }
-
-/*****************************************************************************/
-/*********** Check If I can admin other users (distinct to me) ***************/
-/*****************************************************************************/
-
-static bool Enr_ICanAdminOtherUsrs (void)
-  {
-   switch (Gbl.Usrs.Me.LoggedRole)
-     {
-      case Rol_UNK:
-      case Rol_GST:
-      case Rol_USR:
-      case Rol_STD:
-	 return false;
-      case Rol_TCH:
-	 // A teacher can be logged as teacher outside of his/her courses
-	 // TODO: Teachers/students should be teachers/students only inside their courses
-	 return (Gbl.CurrentCrs.Crs.CrsCod > 0);
-      case Rol_DEG_ADM:
-      case Rol_CTR_ADM:
-      case Rol_INS_ADM:
-      case Rol_SYS_ADM:
-	 return true;
-     }
-   return false;
   }
 
 /*****************************************************************************/

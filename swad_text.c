@@ -25494,7 +25494,7 @@ const char *Txt_No_user_to_whom_you_can_follow_Try_again_later =
 const char *Txt_No_users_found[Rol_NUM_ROLES] =
    {
 #if   L==1	// Rol_UNK
-	 "No hay usuarios."	// Necessita traduccio
+	 "No hi ha usuaris."
 #elif L==2
 	 "Keine Benutzer gefunden."
 #elif L==3
@@ -25534,7 +25534,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_USR
-	 "No hay usuarios."	// Necessita traduccio
+	 "No hi ha usuaris."
 #elif L==2
 	 "Keine Benutzer gefunden."
 #elif L==3
@@ -25548,13 +25548,13 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==7
 	 "Nessun utente trovato."
 #elif L==8
-	 "No users found."	// Potrzebujesz tlumaczenie
+	 "Nie znaleziono uzytkownik&oacute;w."
 #elif L==9
 	 "Nenhum utilizador encontrado."
 #endif
 	 ,
 #if   L==1	// Rol_STD
-	 "No hay estudiantes."	// Necessita traduccio
+	 "No hi ha estudiants."
 #elif L==2
 	 "Keine Studenten gefunden."
 #elif L==3
@@ -25568,13 +25568,33 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #elif L==7
 	 "Non ci sono studenti."
 #elif L==8
-	 "No students found."	// Potrzebujesz tlumaczenie
+	 "Nie znaleziono uczni&oacute;w."
 #elif L==9
 	 "Nenhum estudante encontrado."
 #endif
 	 ,
+#if   L==1	// Rol_NED_TCH
+	 "No hi ha professors."
+#elif L==2
+	 "Keine Lehrkr&auml;ften gefunden."
+#elif L==3
+	 "No teachers found."
+#elif L==4
+	 "No hay profesores."
+#elif L==5
+	 "Aucun enseignant trouv&eacute;."
+#elif L==6
+	 "No hay profesores."	// Okoteve traducción
+#elif L==7
+	 "Non ci sono professori."
+#elif L==8
+	 "Nie znaleziono nauczycieli."
+#elif L==9
+	 "Nenhum professor encontrado."
+#endif
+	 ,
 #if   L==1	// Rol_TCH
-	 "No hay profesores."	// Necessita traduccio
+	 "No hi ha professors."
 #elif L==2
 	 "Keine Lehrkr&auml;ften gefunden."
 #elif L==3
@@ -25594,7 +25614,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_DEG_ADM
-	 "No hay administradores."	// Necessita traduccio
+	 "No hi ha administradors."
 #elif L==2
 	 "Keine Administratoren gefunden."
 #elif L==3
@@ -25614,7 +25634,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_CTR_ADM
-	 "No hay administradores."	// Necessita traduccio
+	 "No hi ha administradors."
 #elif L==2
 	 "Keine Administratoren gefunden."
 #elif L==3
@@ -25634,7 +25654,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_INS_ADM
-	 "No hay administradores."	// Necessita traduccio
+	 "No hi ha administradors."
 #elif L==2
 	 "Keine Administratoren gefunden."
 #elif L==3
@@ -25654,7 +25674,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_SYS_ADM
-	 "No hay superusuarios."	// Necessita traduccio
+	 "No hi ha superusuaris."
 #elif L==2
 	 "Keine Superuser gefunden."
 #elif L==3
@@ -32020,7 +32040,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
-	"Desconocido/a"	// Necessita traduccio
+	"Desconegut/da"
 #elif L==2
 	"Unbekannter/e"
 #elif L==3
@@ -32040,7 +32060,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_FEMALE
-	"Desconocida"	// Necessita traduccio
+	"Desconeguda"
 #elif L==2
 	"Unbekannte"
 #elif L==3
@@ -32060,7 +32080,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_MALE
-	"Desconocido"	// Necessita traduccio
+	"Desconegut"
 #elif L==2
 	"Unbekannter"
 #elif L==3
@@ -32080,7 +32100,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_ALL
-	"Desconocido/a"	// Necessita traduccio
+	"Desconegut/da"
 #elif L==2
 	"Unbekannter/e"
 #elif L==3
@@ -32101,7 +32121,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_GST - Usr_SEX_UNKNOWN
-	"Invitado/a"	// Necessita traduccio
+	"Convidat/da"
 #elif L==2
 	"Gast"
 #elif L==3
@@ -32121,7 +32141,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_GST - Usr_SEX_FEMALE
-	"Invitada"	// Necessita traduccio
+	"Convidada"
 #elif L==2
 	"Gast"
 #elif L==3
@@ -32141,7 +32161,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_GST - Usr_SEX_MALE
-	"Invitado"	// Necessita traduccio
+	"Convidat"
 #elif L==2
 	"Gast"
 #elif L==3
@@ -32161,7 +32181,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_GST - Usr_SEX_ALL
-	"Invitado/a"	// Necessita traduccio
+	"Convidat/da"
 #elif L==2
 	"Gast"
 #elif L==3
@@ -32343,6 +32363,87 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
+#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+	"Professor/a no editor/a"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teacher"
+#elif L==4
+	"Profesor/a no editor/a"
+#elif L==5
+	"Enseignant/e non-&eacute;diteur/trice"
+#elif L==6
+	"Mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
+#elif L==7
+	"Professore/ssa non-editing"
+#elif L==8
+	"Nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	"Professor/a n&atilde;o editor/a"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+	"Professora no editora"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teacher"
+#elif L==4
+	"Profesora no editora"
+#elif L==5
+	"Enseignante non-&eacute;ditrice"
+#elif L==6
+	"Mbo'eh&aacute;ra no editora"	// Okoteve traducción
+#elif L==7
+	"Professoressa non-editing"
+#elif L==8
+	"Nauczycielka nie edytuj&aogon;cy"
+#elif L==9
+	"Professora n&atilde;o editora"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+	"Professor no editor"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teacher"
+#elif L==4
+	"Profesor no editor"
+#elif L==5
+	"Enseignant non-&eacute;diteur"
+#elif L==6
+	"Mbo'eh&aacute;ra no editor"	// Okoteve traducción
+#elif L==7
+	"Professore non-editing"
+#elif L==8
+	"Nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	"Professor n&atilde;o editor"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+	"Professor/a no editor/a"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teacher"
+#elif L==4
+	"Profesor/a no editor/a"
+#elif L==5
+	"Enseignant/e non-&eacute;diteur/trice"
+#elif L==6
+	"Mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
+#elif L==7
+	"Professore/ssa non-editing"
+#elif L==8
+	"Nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"Professor/a n&atilde;o editor/a"
+#endif
+	},
+	{
 #if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"Professor/a"
 #elif L==2
@@ -32425,7 +32526,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_UNKNOWN
-	"Admin. titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;"
 #elif L==2
 	"Admin. Studiengang"
 #elif L==3
@@ -32445,7 +32546,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_FEMALE
-	"Admin. titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;"
 #elif L==2
 	"Admin. Studiengang"
 #elif L==3
@@ -32465,7 +32566,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_MALE
-	"Admin. titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;"
 #elif L==2
 	"Admin. Studiengang"
 #elif L==3
@@ -32485,7 +32586,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_DEG_ADM - Usr_SEX_ALL
-	"Admin. titulaci&oacute;n"	// Necessita traduccio
+	"Admin. titulaci&oacute;"
 #elif L==2
 	"Admin. Studiengang"
 #elif L==3
@@ -32506,7 +32607,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
-	"Admin. centro"	// Necessita traduccio
+	"Admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -32526,7 +32627,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
-	"Admin. centro"	// Necessita traduccio
+	"Admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -32546,7 +32647,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
-	"Admin. centro"	// Necessita traduccio
+	"Admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -32566,7 +32667,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
-	"Admin. centro"	// Necessita traduccio
+	"Admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -32587,7 +32688,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
-	"Admin. instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -32607,7 +32708,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
-	"Admin. instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -32627,7 +32728,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
-	"Admin. instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -32647,7 +32748,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
-	"Admin. instituci&oacute;n"	// Necessita traduccio
+	"Admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -32668,7 +32769,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
-	"Superusuari/&agrave;ria"
+	"Superusuari/a"
 #elif L==2
 	"Superuser"
 #elif L==3
@@ -32728,7 +32829,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
-	"Superusuari/&agrave;ria"	// Necessita traduccio
+	"Superusuari/a"	// Necessita traduccio
 #elif L==2
 	"Superuser"
 #elif L==3
@@ -33074,6 +33175,87 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"estudante"
 #endif
 	 },
+	{
+#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+	"professor/a no editor/a"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teacher"
+#elif L==4
+	"profesor/a no editor/a"
+#elif L==5
+	"enseignant/e non-&eacute;diteur/trice"
+#elif L==6
+	"mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
+#elif L==7
+	"professore/ssa non-editing"
+#elif L==8
+	"nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	"professor/a n&atilde;o editor/a"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+	"professora no editora"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teacher"
+#elif L==4
+	"profesora no editora"
+#elif L==5
+	"enseignante non-&eacute;ditrice"
+#elif L==6
+	"mbo'eh&aacute;ra no editora"	// Okoteve traducción
+#elif L==7
+	"professoressa non-editing"
+#elif L==8
+	"nauczycielka nie edytuj&aogon;cy"
+#elif L==9
+	"professora n&atilde;o editora"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+	"professor no editor"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teacher"
+#elif L==4
+	"profesor no editor"
+#elif L==5
+	"enseignant non-&eacute;diteur"
+#elif L==6
+	"mbo'eh&aacute;ra no editor"	// Okoteve traducción
+#elif L==7
+	"professore non-editing"
+#elif L==8
+	"nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	"professor n&atilde;o editor"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+	"professor/a no editor/a"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teacher"
+#elif L==4
+	"profesor/a no editor/a"
+#elif L==5
+	"enseignant/e non-&eacute;diteur/trice"
+#elif L==6
+	"mbo'eh&aacute;ra no editor/a"	// Okoteve traducción
+#elif L==7
+	"professore/ssa non-editing"
+#elif L==8
+	"nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"professor/a n&atilde;o editor/a"
+#endif
+	},
 	 {
 #if   L==1	// Rol_TCH - Usr_SEX_UNKNOWN
 	"professor/a"
@@ -33238,7 +33420,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	 },
 	 {
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_UNKNOWN
-	"admin. centro"	// Necessita traduccio
+	"admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -33258,7 +33440,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_FEMALE
-	"admin. centro"	// Necessita traduccio
+	"admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -33278,7 +33460,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_MALE
-	"admin. centro"	// Necessita traduccio
+	"admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -33298,7 +33480,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_CTR_ADM - Usr_SEX_ALL
-	"admin. centro"	// Necessita traduccio
+	"admin. centre"
 #elif L==2
 	"Admin. Lehrinstitut"
 #elif L==3
@@ -33319,7 +33501,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	},
 	{
 #if   L==1	// Rol_INS_ADM - Usr_SEX_UNKNOWN
-	"admin. instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -33339,7 +33521,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_FEMALE
-	"admin. instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -33359,27 +33541,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_INS_ADM - Usr_SEX_MALE
-	"administrador de instituci&oacute;n"	// Necessita traduccio
-#elif L==2
-	"Admin. Hochschule"
-#elif L==3
-	"admin. institution"
-#elif L==4
-	"administrador de instituci&oacute;n"
-#elif L==5
-	"administrateur d'&eacute;tablissement"
-#elif L==6
-	"administrador de instituci&oacute;n"	// Okoteve traducción
-#elif L==7
-	"ammin.istituzione"
-#elif L==8
-	"administrator instytucji"
-#elif L==9
-	"administrador de institu&ccedil;&atilde;o"
-#endif
-	,
-#if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
-	"admin. instituci&oacute;n"	// Necessita traduccio
+	"admin. instituci&oacute;"
 #elif L==2
 	"Admin. Hochschule"
 #elif L==3
@@ -33391,16 +33553,36 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==6
 	"admin. instituci&oacute;n"	// Okoteve traducción
 #elif L==7
-	"ammin.istituzione"
+	"ammin. istituzione"
 #elif L==8
-	"administratorzy instytucji"
+	"admin. instytucji"
+#elif L==9
+	"admin. institu&ccedil;&atilde;o"
+#endif
+	,
+#if   L==1	// Rol_INS_ADM - Usr_SEX_ALL
+	"admin. instituci&oacute;"
+#elif L==2
+	"Admin. Hochschule"
+#elif L==3
+	"admin. institution"
+#elif L==4
+	"admin. instituci&oacute;n"
+#elif L==5
+	"admin. &eacute;tablissement"
+#elif L==6
+	"admin. instituci&oacute;n"	// Okoteve traducción
+#elif L==7
+	"ammin. istituzione"
+#elif L==8
+	"admin. instytucji"
 #elif L==9
 	"admin. institu&ccedil;&atilde;o"
 #endif
 	 },
 	 {
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_UNKNOWN
-	"superusuari/&agrave;ria"
+	"superusuari/a"
 #elif L==2
 	"Superuser"
 #elif L==3
@@ -33460,7 +33642,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_SYS_ADM - Usr_SEX_ALL
-	"superusuari/&agrave;ria"
+	"superusuari/a"
 #elif L==2
 	"Superuser"
 #elif L==3
@@ -33485,7 +33667,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
 	{
 #if   L==1	// Rol_UNK - Usr_SEX_UNKNOWN
-	"Desconocidos"	// Necessita traduccio
+	"Desconeguts"
 #elif L==2
 	"Unbekannte"
 #elif L==3
@@ -33505,7 +33687,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_FEMALE
-	"Desconocidas"	// Necessita traduccio
+	"Desconegudes"
 #elif L==2
 	"Unbekannte"
 #elif L==3
@@ -33525,7 +33707,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_MALE
-	"Desconocidos"	// Necessita traduccio
+	"Desconeguts"
 #elif L==2
 	"Unbekannte"
 #elif L==3
@@ -33545,7 +33727,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_UNK - Usr_SEX_ALL
-	"Desconocidos"	// Necessita traduccio
+	"Desconeguts"
 #elif L==2
 	"Unbekannte"
 #elif L==3
@@ -33586,7 +33768,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	,
 #if   L==1	// Rol_GST - Usr_SEX_FEMALE
-	"Invitadas"	// Necessita traduccio
+	"Convidadas"
 #elif L==2
 	"Eingeladen"
 #elif L==3
@@ -33805,6 +33987,87 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Studenci"
 #elif L==9
 	"Estudantes"
+#endif
+	},
+	{
+#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+	"Professors no editors"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teachers"
+#elif L==4
+	"Profesores no editores"
+#elif L==5
+	"Enseignants non-&eacute;diteurs"
+#elif L==6
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"Professori non-editing"
+#elif L==8
+	"Nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"Professores n&atilde;o editores"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+	"Professores no editores"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teachers"
+#elif L==4
+	"Profesoras no editoras"
+#elif L==5
+	"Enseignantes non-&eacute;ditrices"
+#elif L==6
+	"Mbo'eh&aacute;ra no editoras"	// Okoteve traducción
+#elif L==7
+	"Professoresse non-editing"
+#elif L==8
+	"Nauczycielki nie edytuj&aogon;cy"
+#elif L==9
+	"Professoras n&atilde;o editoras"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+	"Professors no editors"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teachers"
+#elif L==4
+	"Profesores no editores"
+#elif L==5
+	"Enseignants non-&eacute;diteurs"
+#elif L==6
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"Professori non-editing"
+#elif L==8
+	"Nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"Professores n&atilde;o editores"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+	"Professors no editors"
+#elif L==2
+	"Nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"Non-editing teachers"
+#elif L==4
+	"Profesores no editores"
+#elif L==5
+	"Enseignants non-&eacute;diteurs"
+#elif L==6
+	"Mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"Professori non-editing"
+#elif L==8
+	"Nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"Professores n&atilde;o editores"
 #endif
 	},
 	{
@@ -34537,6 +34800,87 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"studentci"
 #elif L==9
 	"estudantes"
+#endif
+	},
+	{
+#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+	"professors no editors"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teachers"
+#elif L==4
+	"profesores no editores"
+#elif L==5
+	"enseignants non-&eacute;diteurs"
+#elif L==6
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"professori non-editing"
+#elif L==8
+	"nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"professores n&atilde;o editores"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+	"professores no editores"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teachers"
+#elif L==4
+	"profesoras no editoras"
+#elif L==5
+	"enseignantes non-&eacute;ditrices"
+#elif L==6
+	"mbo'eh&aacute;ra no editoras"	// Okoteve traducción
+#elif L==7
+	"professoresse non-editing"
+#elif L==8
+	"nauczycielki nie edytuj&aogon;cy"
+#elif L==9
+	"professoras n&atilde;o editoras"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+	"professors no editors"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teachers"
+#elif L==4
+	"profesores no editores"
+#elif L==5
+	"enseignants non-&eacute;diteurs"
+#elif L==6
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"professori non-editing"
+#elif L==8
+	"nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"professores n&atilde;o editores"
+#endif
+	,
+#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+	"professors no editors"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teachers"
+#elif L==4
+	"profesores no editores"
+#elif L==5
+	"enseignants non-&eacute;diteurs"
+#elif L==6
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"professori non-editing"
+#elif L==8
+	"nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"professores n&atilde;o editores"
 #endif
 	},
 	{

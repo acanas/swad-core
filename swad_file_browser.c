@@ -1115,6 +1115,7 @@ const unsigned long long Brw_MAX_QUOTA_BRIEF[Rol_NUM_ROLES] =	// MaxRole is used
 	            0,	// Rol_GST
 	            0,	// Rol_USR
 	32ULL*Brw_GiB,	// Rol_STD
+	32ULL*Brw_GiB,	// Rol_NED_TCH
 	64ULL*Brw_GiB,	// Rol_TCH
 	            0,	// Rol_DEG_ADM
 	            0,	// Rol_CTR_ADM
