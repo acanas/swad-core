@@ -101,7 +101,9 @@ static void Att_RemoveAttEventFromCurrentCrs (long AttCod);
 
 static void Att_ListAttOnlyMeAsStudent (struct AttendanceEvent *Att);
 static void Att_ListAttStudents (struct AttendanceEvent *Att);
-static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat,struct AttendanceEvent *Att);
+static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
+                                          struct UsrData *UsrDat,
+                                          struct AttendanceEvent *Att);
 static void Att_PutParamsCodGrps (long AttCod);
 static void Att_GetNumStdsTotalWhoAreInAttEvent (struct AttendanceEvent *Att);
 static unsigned Att_GetNumStdsFromAListWhoAreInAttEvent (long AttCod,long LstSelectedUsrCods[],unsigned NumStdsInList);
@@ -166,6 +168,7 @@ void Att_SeeAttEvents (void)
 	    case Rol_STD:
 	       Att_PutFormToListMyAttendance ();
 	       break;
+	    case Rol_NED_TCH:
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Att_PutFormToListStdsAttendance ();
@@ -232,8 +235,8 @@ static void Att_ShowAllAttEvents (void)
      {
       /***** Table head *****/
       Lay_StartTableWideMargin (2);
-   fprintf (Gbl.F.Out,"<tr>"
-	              "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
+      fprintf (Gbl.F.Out,"<tr>"
+			 "<th class=\"CONTEXT_COL\"></th>");	// Column for contextual icons
       for (Order = Dat_START_TIME;
 	   Order <= Dat_END_TIME;
 	   Order++)
@@ -1822,6 +1825,7 @@ void Att_SeeOneAttEvent (void)
       case Rol_STD:
 	 Att_ListAttOnlyMeAsStudent (&Att);
 	 break;
+      case Rol_NED_TCH:
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Show list of students *****/
@@ -1998,7 +2002,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
 /************ Write a row of a table with the data of a student **************/
 /*****************************************************************************/
 
-static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat,struct AttendanceEvent *Att)
+static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,
+                                          struct UsrData *UsrDat,
+                                          struct AttendanceEvent *Att)
   {
    extern const char *Txt_Present;
    extern const char *Txt_Absent;
@@ -2007,6 +2013,37 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    bool ShowPhoto;
    char CommentStd[Cns_MAX_BYTES_TEXT + 1];
    char CommentTch[Cns_MAX_BYTES_TEXT + 1];
+   bool ICanChangeStdAttendance;
+   bool ICanEditStdComment;
+   bool ICanEditTchComment;
+
+   /***** Set who can edit *****/
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_STD:
+	 // A student can see only her/his attendance
+	 if (UsrDat->UsrCod != Gbl.Usrs.Me.UsrDat.UsrCod)
+	    Lay_ShowErrorAndExit ("Wrong call.");
+	 ICanChangeStdAttendance = false;
+	 ICanEditStdComment = Att->Open;	// Attendance event is open
+	 ICanEditTchComment = false;
+	 break;
+      case Rol_TCH:
+	 ICanChangeStdAttendance = true;
+	 ICanEditStdComment = false;
+	 ICanEditTchComment = true;
+	 break;
+      case Rol_SYS_ADM:
+	 ICanChangeStdAttendance = true;
+	 ICanEditStdComment = false;
+	 ICanEditTchComment = false;
+	 break;
+      default:
+	 ICanChangeStdAttendance = false;
+	 ICanEditStdComment = false;
+	 ICanEditTchComment = false;
+	 break;
+     }
 
    /***** Check if this student is already registered in the current event *****/
    Present = Att_CheckIfUsrIsPresentInAttEventAndGetComments (Att->AttCod,UsrDat->UsrCod,CommentStd,CommentTch);
@@ -2036,7 +2073,7 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
 	    UsrDat->EncryptedUsrCod);
    if (Present)	// This student has attended to the event?
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)	// A student can not change his attendance
+   if (!ICanChangeStdAttendance)
       fprintf (Gbl.F.Out," disabled=\"disabled\"");
    fprintf (Gbl.F.Out," />"
 	              "</td>");
@@ -2084,13 +2121,13 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    /***** Student's comment: write form or text */
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD && Att->Open)	// Show with form
+   if (ICanEditStdComment)	// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentStd%ld\""
 	                 " cols=\"40\" rows=\"3\">"
 	                 "%s"
 	                 "</textarea>",
 	       UsrDat->UsrCod,CommentStd);
-   else								// Show without form
+   else				// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         CommentStd,Cns_MAX_BYTES_TEXT,false);
@@ -2101,13 +2138,13 @@ static void Att_WriteRowStdToCallTheRoll (unsigned NumStd,struct UsrData *UsrDat
    /***** Teacher's comment: write form, text or nothing */
    fprintf (Gbl.F.Out,"<td class=\"DAT_SMALL LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Show with form
+   if (ICanEditTchComment)		// Show with form
       fprintf (Gbl.F.Out,"<textarea name=\"CommentTch%ld\""
 	                 " cols=\"40\" rows=\"3\">"
 	                 "%s"
 	                 "</textarea>",
 	       UsrDat->UsrCod,CommentTch);
-   else	if (Att->CommentTchVisible)			// Show without form
+   else	if (Att->CommentTchVisible)	// Show without form
      {
       Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                         CommentTch,Cns_MAX_BYTES_TEXT,false);

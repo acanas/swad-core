@@ -2475,11 +2475,11 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
    /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
 
-   /* ActReqLstStdAtt	*/{1073,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ReqListStdsAttendanceCrs	,NULL},
+   /* ActReqLstStdAtt	*/{1073,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ReqListStdsAttendanceCrs	,NULL},
    /* ActSeeLstMyAtt	*/{1473,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListMyAttendanceCrs	,NULL},
    /* ActPrnLstMyAtt	*/{1474,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintMyAttendanceCrs	,NULL},
-   /* ActSeeLstStdAtt	*/{1074,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListStdsAttendanceCrs	,NULL},
-   /* ActPrnLstStdAtt	*/{1075,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintStdsAttendanceCrs	,NULL},
+   /* ActSeeLstStdAtt	*/{1074,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListStdsAttendanceCrs	,NULL},
+   /* ActPrnLstStdAtt	*/{1075,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Usr_PrintStdsAttendanceCrs	,NULL},
    /* ActFrmNewAtt	*/{1063,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
    /* ActEdiOneAtt	*/{1064,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RequestCreatOrEditAttEvent	,NULL},
    /* ActNewAtt		*/{1065,-1,TabUnk,ActSeeAtt		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Att_RecFormAttEvent		,NULL},
@@ -5111,9 +5111,20 @@ void Act_AdjustCurrentAction (void)
              the only action possible is show a form to ask for enrolment *****/
       if (!Gbl.Usrs.Me.UsrDat.Accepted && Gbl.Action.Act != ActLogOut)
 	{
-	 Gbl.Action.Act = (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD) ? ActReqAccEnrStd :
-	                                                                           ActReqAccEnrTch;
-	 Tab_SetCurrentTab ();
+	 switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+	   {
+	    case Rol_STD:
+	       Gbl.Action.Act = ActReqAccEnrStd;
+	       Tab_SetCurrentTab ();
+	       break;
+	    case Rol_NED_TCH:
+	    case Rol_TCH:
+	       Gbl.Action.Act = ActReqAccEnrTch;
+	       Tab_SetCurrentTab ();
+	       break;
+	    default:
+	       break;
+	   }
 	 return;
 	}
 
@@ -5170,6 +5181,8 @@ void Act_AdjustCurrentAction (void)
             /***** Check if it is mandatory to read any information about course *****/
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
                Gbl.CurrentCrs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
+            break;
+         case Rol_NED_TCH:
             break;
          case Rol_TCH:
             if (Gbl.Action.Act == ActReqTst ||

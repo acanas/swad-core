@@ -313,6 +313,7 @@ static void Acc_WriteRowEmptyAccount (unsigned NumUsr,const char *ID,struct UsrD
 	    Gbl.RowEvenOdd);
    UsrDat->Sex = Usr_SEX_UNKNOWN;
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_TCH);
+   Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_NED_TCH);
    Crs_GetAndWriteCrssOfAUsr (UsrDat,Rol_STD);
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");

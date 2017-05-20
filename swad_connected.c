@@ -435,6 +435,9 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
       /***** Number of teachers *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
 
+      /***** Number of non-editing teachers *****/
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_NED_TCH);
+
       /***** Number of students *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STD);
      }
@@ -482,6 +485,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    /***** Number of teachers and students *****/
    fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NED_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
@@ -528,6 +532,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Gbl.Usrs.Connected.NumUsrs       = 0;
    Gbl.Usrs.Connected.NumUsrsToList = 0;
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NED_TCH);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
    fprintf (Gbl.F.Out,"</table>");
 
@@ -762,6 +767,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			" AND connected.UsrCod=usr_data.UsrCod");
 	 break;
       case Rol_STD:
+      case Rol_NED_TCH:
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
@@ -988,10 +994,21 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
    /***** Write full name and link *****/
    fprintf (Gbl.F.Out,"<td class=\"CON_USR_NARROW %s COLOR%u\">",
 	    Font,Gbl.RowEvenOdd);
-   Act_FormStartUnique ((Role == Rol_STD) ? ActSeeRecOneStd :
-	                                        ActSeeRecOneTch);	// Must be unique because
-									// the list of connected users
-									// is dynamically updated via AJAX
+   // The form must be unique because
+   // the list of connected users
+   // is dynamically updated via AJAX
+   switch (Role)
+     {
+      case Rol_STD:
+	 Act_FormStartUnique (ActSeeRecOneStd);
+	 break;
+      case Rol_NED_TCH:
+      case Rol_TCH:
+	 Act_FormStartUnique (ActSeeRecOneTch);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role");
+     }
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    fprintf (Gbl.F.Out,"<div class=\"CON_NAME_NARROW\">");	// Limited width
    Act_LinkFormSubmitUnique (Txt_View_record_for_this_course,Font);
@@ -1052,6 +1069,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			" ORDER BY Dif");
 	 break;
       case Rol_STD:
+      case Rol_NED_TCH:
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
@@ -1182,8 +1200,18 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		     Font,Gbl.RowEvenOdd);
 	    if (PutLinkToRecord)
 	      {
-	       Act_FormStart ((Role == Rol_STD) ? ActSeeRecOneStd :
-						      ActSeeRecOneTch);
+	       switch (Role)
+		 {
+		  case Rol_STD:
+		     Act_FormStart (ActSeeRecOneStd);
+		     break;
+		  case Rol_NED_TCH:
+		  case Rol_TCH:
+		     Act_FormStart (ActSeeRecOneTch);
+		     break;
+		  default:
+		     Lay_ShowErrorAndExit ("Wrong role");
+		 }
 	       Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
 	      }
             fprintf (Gbl.F.Out,"<div class=\"CON_NAME_WIDE\">");	// Limited width

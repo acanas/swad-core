@@ -425,13 +425,15 @@ void Ann_ShowFormAnnouncement (void)
                       "<td class=\"DAT LEFT_TOP\">",
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
-   Rol_WriteSelectorRoles (1 << Rol_UNK |
-                           1 << Rol_GST |
-                           1 << Rol_STD |
+   Rol_WriteSelectorRoles (1 << Rol_UNK     |
+                           1 << Rol_GST     |
+                           1 << Rol_STD     |
+                           1 << Rol_NED_TCH |
                            1 << Rol_TCH,
-	                   1 << Rol_UNK |
-                           1 << Rol_GST |
-                           1 << Rol_STD |
+	                   1 << Rol_UNK     |
+                           1 << Rol_GST     |
+                           1 << Rol_STD     |
+                           1 << Rol_NED_TCH |
                            1 << Rol_TCH,
                            false,false);
    fprintf (Gbl.F.Out,"</td>"

@@ -3706,7 +3706,7 @@ unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod)
 /*****************************************************************************/
 /************ Count how many users with a role belong to a centre ************/
 /*****************************************************************************/
-// Here Rol_UNK means students or teachers
+// Here Rol_UNK means any user (students, non-editing teachers or teachers)
 
 unsigned Usr_GetNumUsrsInCrssOfCtr (Rol_Role_t Role,long CtrCod)
   {

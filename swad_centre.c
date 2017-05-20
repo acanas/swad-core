@@ -631,6 +631,19 @@ static void Ctr_Configuration (bool PrintView)
 		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_TCH,Gbl.CurrentCtr.Ctr.CtrCod));
 
+	 /***** Number of non-editing teachers in courses of this centre *****/
+	 fprintf (Gbl.F.Out,"<tr>"
+			    "<td class=\"%s RIGHT_MIDDLE\">"
+			    "%s:"
+			    "</td>"
+			    "<td class=\"DAT LEFT_MIDDLE\">"
+			    "%u"
+			    "</td>"
+			    "</tr>",
+		  The_ClassForm[Gbl.Prefs.Theme],
+		  Txt_ROLES_PLURAL_Abc[Rol_NED_TCH][Usr_SEX_UNKNOWN],
+		  Usr_GetNumUsrsInCrssOfCtr (Rol_NED_TCH,Gbl.CurrentCtr.Ctr.CtrCod));
+
 	 /***** Number of students in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
@@ -647,15 +660,16 @@ static void Ctr_Configuration (bool PrintView)
 	 /***** Number of users in courses of this centre *****/
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s + %s:"
+			    "%s + %s + %s:"
 			    "</td>"
 			    "<td class=\"DAT LEFT_MIDDLE\">"
 			    "%u"
 			    "</td>"
 			    "</tr>",
 		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_TCH    ][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_NED_TCH][Usr_SEX_UNKNOWN],
+		  Txt_ROLES_PLURAL_Abc[Rol_STD    ][Usr_SEX_UNKNOWN],
 		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Gbl.CurrentCtr.Ctr.CtrCod));
 	}
 

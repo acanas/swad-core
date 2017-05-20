@@ -589,6 +589,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	 Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
 	 // no break
       case Rol_STD:
+      case Rol_NED_TCH:
 	 /***** Put form to print assignment *****/
 	 Lay_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
 	 break;
@@ -1713,27 +1714,35 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
   {
    char Query[512];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD ||
-       Gbl.Usrs.Me.LoggedRole == Rol_TCH)
+   switch (Gbl.Usrs.Me.LoggedRole)
      {
-      // Students and teachers can edit assignments depending on groups
-      /***** Get if I can edit an assignment from database *****/
-      sprintf (Query,"SELECT COUNT(*) FROM assignments"
-		     " WHERE AsgCod=%ld"
-		     " AND "
-		     "("
-		     "AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
-		     " OR "
-		     "AsgCod IN"					// Assignment is for specific groups
-		     " (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
-		     " WHERE crs_grp_usr.UsrCod=%ld"
-		     " AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
-		     ")",
-	       AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-      return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
+      case Rol_STD:
+      case Rol_NED_TCH:
+      case Rol_TCH:
+	 // Students and teachers can do assignments depending on groups
+	 /***** Get if I can do an assignment from database *****/
+	 sprintf (Query,"SELECT COUNT(*) FROM assignments"
+			" WHERE AsgCod=%ld"
+			" AND "
+			"("
+			"AsgCod NOT IN (SELECT AsgCod FROM asg_grp)"	// Assignment is for the whole course
+			" OR "
+			"AsgCod IN"					// Assignment is for specific groups
+			" (SELECT asg_grp.AsgCod FROM asg_grp,crs_grp_usr"
+			" WHERE crs_grp_usr.UsrCod=%ld"
+			" AND asg_grp.GrpCod=crs_grp_usr.GrpCod)"
+			")",
+		  AsgCod,Gbl.Usrs.Me.UsrDat.UsrCod);
+	 return (DB_QueryCOUNT (Query,"can not check if I can do an assignment") != 0);
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+	 // Admins can view assignments
+         return true;
+      default:
+         return false;
      }
-   else
-      return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);	// Admins can edit assignments
   }
 
 /*****************************************************************************/

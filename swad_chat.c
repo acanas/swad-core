@@ -140,8 +140,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
             Txt_Chat_rooms);
 
    /***** Link to chat available for all the users *****/
-   IsLastItemInLevel[1] = (Gbl.Usrs.Me.LoggedRole != Rol_STD &&
-                           Gbl.Usrs.Me.LoggedRole != Rol_TCH &&
+   IsLastItemInLevel[1] = (!Gbl.Usrs.Me.IBelongToCurrentCrs &&
                            !Gbl.Usrs.Me.MyDegs.Num);
    sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_SEX_PLURAL_abc[Usr_SEX_ALL]);
    Cht_WriteLinkToChat1 ("GBL_USR",Txt_SEX_PLURAL_Abc[Usr_SEX_ALL],ThisRoomFullName,1,IsLastItemInLevel);
@@ -157,7 +156,8 @@ void Cht_ShowListOfAvailableChatRooms (void)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STD:
-         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
+         sprintf (ThisRoomFullName,"%s (%s)",
+                  Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
@@ -166,8 +166,10 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
+      case Rol_NED_TCH:
       case Rol_TCH:
-         sprintf (ThisRoomFullName,"%s (%s)",Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
+         sprintf (ThisRoomFullName,"%s (%s)",
+                  Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
          Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
@@ -479,7 +481,8 @@ void Cht_OpenChatWindow (void)
 	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_NED_TCH ||
+       Gbl.Usrs.Me.LoggedRole == Rol_TCH)
       if (strcmp (RoomCode,"GBL_TCH"))
         {
          Str_Concat (ListRoomCodes,"|#GBL_TCH",
