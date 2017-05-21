@@ -149,8 +149,8 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
       if (Gbl.Usrs.Me.MyCrss.Num)	// I am enroled in some courses
 	{
-	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&				// Course selected
-	     !Gbl.CurrentCrs.Crs.NumStds &&				// Current course has no students
+	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
+	     !Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD] &&		// Current course has no students
 	     Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH)	// I am a teacher in current course
 	   {
 	    /* Request students enrolment */

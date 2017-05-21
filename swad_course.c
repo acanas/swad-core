@@ -73,6 +73,7 @@ extern struct Globals Gbl;
 
 static void Crs_Configuration (bool PrintView);
 static void Crs_PutIconToPrint (void);
+static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role);
 
 static void Crs_WriteListMyCoursesToSelectOne (void);
 
@@ -170,7 +171,6 @@ static void Crs_Configuration (bool PrintView)
    extern const char *Txt_Shortcut;
    extern const char *Txt_STR_LANG_ID[1 + Txt_NUM_LANGUAGES];
    extern const char *Txt_QR_code;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Indicators;
    extern const char *Txt_of_PART_OF_A_TOTAL;
    unsigned NumDeg;
@@ -427,29 +427,10 @@ static void Crs_Configuration (bool PrintView)
      }
    else
      {
-      /***** Number of teachers *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s RIGHT_MIDDLE\">"
-                         "%s:"
-                         "</td>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "</tr>",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumTchs);
-
-      /***** Number of students *****/
-      fprintf (Gbl.F.Out,"<tr>"
-                         "<td class=\"%s RIGHT_MIDDLE\">"
-                         "%s:"
-                         "</td>"
-                         "<td class=\"DAT LEFT_MIDDLE\">"
-                         "%u"
-                         "</td>"
-                         "</tr>",
-               The_ClassForm[Gbl.Prefs.Theme],
-               Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],Gbl.CurrentCrs.Crs.NumStds);
+      /***** Number of users *****/
+      Crs_ShowNumUsrsInCrs (Rol_TCH);
+      Crs_ShowNumUsrsInCrs (Rol_NED_TCH);
+      Crs_ShowNumUsrsInCrs (Rol_STD);
 
       /***** Indicators *****/
       NumIndicatorsFromDB = Ind_GetNumIndicatorsCrsFromDB (Gbl.CurrentCrs.Crs.CrsCod);
@@ -493,6 +474,28 @@ static void Crs_Configuration (bool PrintView)
 static void Crs_PutIconToPrint (void)
   {
    Lay_PutContextualIconToPrint (ActPrnCrsInf,NULL);
+  }
+
+/*****************************************************************************/
+/**************** Number of users in courses of this country *****************/
+/*****************************************************************************/
+
+static void Crs_ShowNumUsrsInCrs (Rol_Role_t Role)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Gbl.CurrentCrs.Crs.NumUsrs[Role]);
   }
 
 /*****************************************************************************/
@@ -1245,12 +1248,12 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			    "</td>",
 		  BgColor,
 		  Gbl.Prefs.IconsURL,
-		  Crs->NumUsrs ? "ok_green" :
-				 "tr",
-		  Crs->NumUsrs ? Txt_COURSE_With_users :
-				 Txt_COURSE_Without_users,
-		  Crs->NumUsrs ? Txt_COURSE_With_users :
-				 Txt_COURSE_Without_users);
+		  Crs->NumUsrs[Rol_UNK] ? "ok_green" :
+				          "tr",
+		  Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
+				          Txt_COURSE_Without_users,
+		  Crs->NumUsrs[Rol_UNK] ? Txt_COURSE_With_users :
+				          Txt_COURSE_Without_users);
 
 	 /* Institutional code of the course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s CENTER_MIDDLE %s\">"
@@ -1282,13 +1285,13 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 			    "%u"
 			    "</td>",
-		  TxtClassNormal,BgColor,Crs->NumTchs);
+		  TxtClassNormal,BgColor,Crs->NumUsrs[Rol_TCH]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 			    "%u"
 			    "</td>",
-		  TxtClassNormal,BgColor,Crs->NumStds);
+		  TxtClassNormal,BgColor,Crs->NumUsrs[Rol_STD]);
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1404,7 +1407,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 /* Put icon to remove course */
 	 fprintf (Gbl.F.Out,"<tr>"
 			    "<td class=\"BM\">");
-	 if (Crs->NumUsrs ||	// Course has users ==> deletion forbidden
+	 if (Crs->NumUsrs[Rol_UNK] ||	// Course has users ==> deletion forbidden
 	     !ICanEdit)
 	    Lay_PutIconRemovalNotAllowed ();
 	 else	// Crs->NumUsrs == 0 && ICanEdit
@@ -1506,13 +1509,13 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
 			    "</td>",
-		  Crs->NumTchs);
+		  Crs->NumUsrs[Rol_TCH]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
 			    "</td>",
-		  Crs->NumStds);
+		  Crs->NumUsrs[Rol_STD]);
 
 	 /* Course requester */
 	 UsrDat.UsrCod = Crs->RequesterUsrCod;
@@ -1946,9 +1949,9 @@ void Crs_RemoveCourse (void)
    if (Crs_CheckIfICanEdit (&Crs))
      {
       /***** Check if this course has users *****/
-      if (Crs.NumUsrs)	// Course has users ==> don't remove
+      if (Crs.NumUsrs[Rol_UNK])	// Course has users ==> don't remove
          Ale_ShowAlert (Ale_WARNING,Txt_To_remove_a_course_you_must_first_remove_all_users_in_the_course);
-      else		// Course has no users ==> remove it
+      else			// Course has no users ==> remove it
         {
          /***** Remove course *****/
          Crs_RemoveCourseCompletely (Crs.CrsCod);
@@ -1984,9 +1987,9 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    Crs->RequesterUsrCod = -1L;
    Crs->ShrtName[0] = '\0';
    Crs->FullName[0] = '\0';
-   Crs->NumStds = 0;
-   Crs->NumTchs = 0;
-   Crs->NumUsrs = 0;
+   Crs->NumUsrs[Rol_UNK] = 0;
+   Crs->NumUsrs[Rol_STD] = 0;
+   Crs->NumUsrs[Rol_TCH] = 0;
 
    /***** Check if course code is correct *****/
    if (Crs->CrsCod > 0)
@@ -2047,14 +2050,15 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Str_Copy (Crs->FullName,row[7],
              Hie_MAX_BYTES_FULL_NAME);
 
-   /***** Get number of teachers *****/
-   Crs->NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
-
    /***** Get number of students *****/
-   Crs->NumStds = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
+   Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
 
-   Crs->NumUsrs = Crs->NumStds +
-	          Crs->NumTchs;
+   /***** Get number of teachers *****/
+   Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+
+   /***** Compute total of users in course *****/
+   Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
+	                   Crs->NumUsrs[Rol_TCH];
   }
 
 /*****************************************************************************/

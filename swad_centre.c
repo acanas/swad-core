@@ -79,6 +79,7 @@ extern struct Globals Gbl;
 static void Ctr_Configuration (bool PrintView);
 static void Ctr_PutIconsToPrintAndUpload (void);
 static void Ctr_PutIconToChangePhoto (void);
+static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role);
 
 static void Ctr_ListCentres (void);
 static bool Ctr_CheckIfICanCreateCentres (void);
@@ -288,7 +289,6 @@ static void Ctr_Configuration (bool PrintView)
    extern const char *Txt_Degrees;
    extern const char *Txt_Degrees_of_CENTRE_X;
    extern const char *Txt_Courses;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumIns;
    struct Place Plc;
    char PathPhoto[PATH_MAX + 1];
@@ -618,59 +618,11 @@ static void Ctr_Configuration (bool PrintView)
 		  Txt_Courses,
 		  Crs_GetNumCrssInCtr (Gbl.CurrentCtr.Ctr.CtrCod));
 
-	 /***** Number of teachers in courses of this centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_TCH,Gbl.CurrentCtr.Ctr.CtrCod));
-
-	 /***** Number of non-editing teachers in courses of this centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_NED_TCH][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_NED_TCH,Gbl.CurrentCtr.Ctr.CtrCod));
-
-	 /***** Number of students in courses of this centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_STD,Gbl.CurrentCtr.Ctr.CtrCod));
-
 	 /***** Number of users in courses of this centre *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s + %s + %s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH    ][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_NED_TCH][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD    ][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCtr (Rol_UNK,Gbl.CurrentCtr.Ctr.CtrCod));
+	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
+	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_NED_TCH);
+	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_STD);
+	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_UNK);
 	}
 
       /***** End table *****/
@@ -725,6 +677,30 @@ static void Ctr_PutIconToChangePhoto (void)
 			  PhotoExists ? Txt_Change_photo :
 				        Txt_Upload_photo,NULL,
                           NULL);
+  }
+
+/*****************************************************************************/
+/**************** Number of users in courses of this centre ******************/
+/*****************************************************************************/
+
+static void Ctr_ShowNumUsrsInCrssOfCtr (Rol_Role_t Role)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Users_in_courses;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    (Role == Rol_UNK) ? Txt_Users_in_courses :
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+	    Usr_GetNumUsrsInCrssOfCtr (Role,Gbl.CurrentCtr.Ctr.CtrCod));
   }
 
 /*****************************************************************************/

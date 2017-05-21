@@ -8445,9 +8445,9 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         return (float) ( Role == Rol_UNK ? Gbl.CurrentCrs.Crs.NumUsrs :	// Any user
-                         (Role == Rol_TCH ? Gbl.CurrentCrs.Crs.NumTchs :	// Teachers
-                                                Gbl.CurrentCrs.Crs.NumStds));	// Students
+         return (float) ( Role == Rol_UNK ? Gbl.CurrentCrs.Crs.NumUsrs[Rol_UNK] :	// Any user
+                         (Role == Rol_TCH ? Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH] :	// Teachers
+                                            Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD]));	// Students
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
          break;

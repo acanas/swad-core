@@ -1267,7 +1267,7 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
       case Ntf_EVENT_ENROLMENT_TEACHER:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
-	 if (Gbl.CurrentCrs.Crs.NumTchs)
+	 if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH])
 	    // If this course has teachers ==> send notification to teachers
 	    sprintf (Query,"SELECT UsrCod FROM crs_usr"
 			   " WHERE CrsCod=%ld"

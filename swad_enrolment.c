@@ -595,9 +595,9 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_Confirm;
 
    /***** Put contextual links *****/
-   if (Role == Rol_STD &&		// Users to admin: students
-       Gbl.CurrentCrs.Crs.CrsCod > 0 && // Course selected
-       Gbl.CurrentCrs.Crs.NumStds)	// This course has students
+   if (Role == Rol_STD &&			// Users to admin: students
+       Gbl.CurrentCrs.Crs.CrsCod > 0 && 	// Course selected
+       Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// This course has students
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
@@ -1946,7 +1946,8 @@ void Enr_SignUpInCrs (void)
       /***** Notify teachers or admins by email about the new enrolment request *****/
       // If this course has teachers ==> send notification to teachers
       // If this course has no teachers and I want to be a teacher ==> send notification to administrators or superusers
-      if (Gbl.CurrentCrs.Crs.NumTchs || RoleFromForm == Rol_TCH)
+      if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH] ||
+	  RoleFromForm == Rol_TCH)
          Ntf_StoreNotifyEventsToAllUsrs (Ntf_EVENT_ENROLMENT_REQUEST,ReqCod);
      }
   }
@@ -2764,7 +2765,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
             fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_TOP\">"
                                "%u"
                                "</td>",
-                     Crs.NumTchs);
+                     Crs.NumUsrs[Rol_TCH]);
 
             /***** User photo *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_TOP\""

@@ -65,6 +65,7 @@ extern struct Globals Gbl;
 
 static void Cty_Configuration (bool PrintView);
 static void Cty_PutIconToPrint (void);
+static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role);
 
 static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable);
 static void Cty_ListOneCountryForSeeing (struct Country *Cty,unsigned NumCty);
@@ -232,7 +233,6 @@ static void Cty_Configuration (bool PrintView)
    extern const char *Txt_Degrees;
    extern const char *Txt_Courses;
    extern const char *Txt_Users_of_the_country;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    char *MapAttribution = NULL;
    bool PutLink = !PrintView && Gbl.CurrentCty.Cty.WWW[Gbl.Prefs.Language][0];
 
@@ -428,45 +428,11 @@ static void Cty_Configuration (bool PrintView)
 		  Txt_Courses,
 		  Crs_GetNumCrssInCty (Gbl.CurrentCty.Cty.CtyCod));
 
-	 /***** Number of teachers in courses of this country *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_TCH,Gbl.CurrentCty.Cty.CtyCod));
-
-	 /***** Number of students in courses of this country *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_STD,Gbl.CurrentCty.Cty.CtyCod));
-
 	 /***** Number of users in courses of this country *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s + %s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfCty (Rol_UNK,Gbl.CurrentCty.Cty.CtyCod));
+	 Cty_ShowNumUsrsInCrssOfCty (Rol_TCH);
+	 Cty_ShowNumUsrsInCrssOfCty (Rol_NED_TCH);
+	 Cty_ShowNumUsrsInCrssOfCty (Rol_STD);
+	 Cty_ShowNumUsrsInCrssOfCty (Rol_UNK);
 	}
 
       /***** End table *****/
@@ -484,6 +450,30 @@ static void Cty_Configuration (bool PrintView)
 static void Cty_PutIconToPrint (void)
   {
    Lay_PutContextualIconToPrint (ActPrnCtyInf,NULL);
+  }
+
+/*****************************************************************************/
+/**************** Number of users in courses of this country *****************/
+/*****************************************************************************/
+
+static void Cty_ShowNumUsrsInCrssOfCty (Rol_Role_t Role)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Users_in_courses;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    (Role == Rol_UNK) ? Txt_Users_in_courses :
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Usr_GetNumUsrsInCrssOfCty (Role,Gbl.CurrentCty.Cty.CtyCod));
   }
 
 /*****************************************************************************/

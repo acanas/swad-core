@@ -50236,6 +50236,27 @@ const char *Txt_X_users_have_been_removed =	// Warning: it is very important to 
 	"%u users have been removed.";		// Necessita de tradução
 #endif
 
+const char *Txt_Users_in_courses =
+#if   L==1
+	"Usuaris en assignatures";
+#elif L==2
+	"Benutzer in Kursen";
+#elif L==3
+	"Users in courses";
+#elif L==4
+	"Usuarios en asignaturas";
+#elif L==5
+	"Utilisateurs dans mati&egrave;res";
+#elif L==6
+	"Puruh&aacute;ra en asignaturas";	// Okoteve traducción
+#elif L==7
+	"Utenti nei corsi";
+#elif L==8
+	"U&zdot;ytkownicy kurs&oacute;w";
+#elif L==9
+	"Utilizadores em disciplinas";
+#endif
+
 const char *Txt_Users_of_the_centre =
 #if   L==1
 	 "Usuaris del centre";
