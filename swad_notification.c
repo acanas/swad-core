@@ -112,7 +112,7 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STD
-   ActReqAccEnrNEdTch,	// Ntf_EVENT_ENROLMENT_NED_TCH
+   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NED_TCH
    ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TCH
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
 

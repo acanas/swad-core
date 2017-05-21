@@ -2364,7 +2364,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
          case Rec_SHA_OTHER_EXISTING_USR_FORM:
 	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActUpdStd :
 		           (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActUpdTch :
-		        	                                        ActUpdOth));
+		        	                                    ActUpdOth));
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);	// Existing user
 	    break;
          default:

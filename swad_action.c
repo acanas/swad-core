@@ -1011,7 +1011,7 @@ Users:
         822. ActSeeUsrAgd		Show another user's public agenda
 
 	823. ActReqEnrSevStd		Request the enrolment/removing of several students to / from current course
-	NEW. ActReqEnrSevTch		Request the enrolment/removing of several non-editing teachers to / from current course
+	NEW. ActReqEnrSevNET		Request the enrolment/removing of several non-editing teachers to / from current course
 	824. ActReqEnrSevTch		Request the enrolment/removing of several teachers to / from current course
 
 	825. ActReqLstStdAtt		Request listing of attendance of several students to several events
@@ -1037,11 +1037,12 @@ Users:
 	844. ActRejSignUp		Reject the enrolment of a user in a course
 
 	845. ActReqMdfOneOth		Request a user's ID for enrolment/removing
-	846. ActReqMdfOneStd		Request a user's ID for enrolment/removing
-	847. ActReqMdfOneTch		Request a user's ID for enrolment/removing
+	846. ActReqMdfOneStd		Request a student's ID for enrolment/removing
+	847. ActReqMdfOneTch		Request a teacher's ID for enrolment/removing
 	848. ActReqMdfOth		Request enrolment/removing of a user
-	849. ActReqMdfStd		Request enrolment/removing of a user
-	850. ActReqMdfTch		Request enrolment/removing of a user
+	849. ActReqMdfStd		Request enrolment/removing of a student
+	NEW. ActReqMdfNET		Request enrolment/removing of a non-editing teacher
+	850. ActReqMdfTch		Request enrolment/removing of a teacher
 	851. ActReqOthPho		Show form to send the photo of another user
 	852. ActReqStdPho		Show form to send the photo of another user
 	853. ActReqTchPho		Show form to send the photo of another user
@@ -1057,20 +1058,22 @@ Users:
 	863. ActRemOthPho		Remove other user's photo
 	864. ActRemStdPho		Remove student's photo
 	865. ActRemTchPho		Remove teacher's photo
-	866. ActCreOth			Create a new user
-	867. ActCreStd			Create a new user
-	868. ActCreTch			Create a new user
+	866. ActCreOth			Create a new guest
+	867. ActCreStd			Create a new student
+	NEW. ActCreNET			Create a new non.editing teacher
+	868. ActCreTch			Create a new teacher
 	869. ActUpdOth			Update another user's data and groups
-	870. ActUpdStd			Update another user's data and groups
-	871. ActUpdTch			Update another user's data and groups
+	870. ActUpdStd			Update another student's data and groups
+	NEW. ActUpdNET			Update another non-editing teacher's data and groups
+	871. ActUpdTch			Update another teacher's data and groups
 	872. ActReqAccEnrStd		Confirm acceptation / refusion of enrolment as student in current course
-	NEW. ActReqAccEnrNEdTch		Confirm acceptation / refusion of enrolment as non-editing teacher in current course
+	NEW. ActReqAccEnrNET		Confirm acceptation / refusion of enrolment as non-editing teacher in current course
 	873. ActReqAccEnrTch		Confirm acceptation / refusion of enrolment as teacher in current course
 	874. ActAccEnrStd		Accept enrolment as student in current course
-	NEW. ActAccEnrNEdTch		Accept enrolment as non-editing teacher in current course
+	NEW. ActAccEnrNET		Accept enrolment as non-editing teacher in current course
 	875. ActAccEnrTch		Accept enrolment as teacher in current course
 	876. ActRemMe_Std		Reject enrolment as student in current course
-	NEW. ActRemMe_NEdTch		Reject enrolment as non-editing teacher in current course
+	NEW. ActRemMe_NET		Reject enrolment as non-editing teacher in current course
 	877. ActRemMe_Tch		Reject enrolment as teacher in current course
 
 	878. ActNewAdmIns		Register an administrador in this institution
@@ -1116,6 +1119,7 @@ Users:
 	915. ActNewMaiTch		Create a new user's email for another user
 
 	916. ActRemStdCrs		Remove a student from the current course
+	NEW. ActRemNETCrs		Remove a non-editing teacher from the current course
 	917. ActRemTchCrs		Remove a teacher from the current course
 	918. ActRemUsrGbl		Eliminate completely a user from the platform
 	919. ActReqRemAllStdCrs		Request the removal of all the students from the current course
@@ -2509,6 +2513,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActReqMdfOth	*/{1418,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherOth	,NULL},
    /* ActReqMdfStd	*/{1419,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherStd	,NULL},
+   /* ActReqMdfNET	*/{1644,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherTch	,NULL},
    /* ActReqMdfTch	*/{1420,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AskIfRegRemAnotherTch	,NULL},
 
    /* ActReqOthPho	*/{1432,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_SendPhotoUsr		,NULL},
@@ -2532,10 +2537,12 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
 
    /* ActCreOth		*/{1444,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
    /* ActCreStd		*/{1445,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
+   /* ActCreNET		*/{1645,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
    /* ActCreTch		*/{1446,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,Enr_CreateNewUsr1		,Enr_CreateNewUsr2		,NULL},
 
    /* ActUpdOth		*/{1422,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,Enr_ModifyUsr1			,Enr_ModifyUsr2			,NULL},
    /* ActUpdStd		*/{1423,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,Enr_ModifyUsr1			,Enr_ModifyUsr2			,NULL},
+   /* ActUpdNET		*/{1646,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,Enr_ModifyUsr1			,Enr_ModifyUsr2			,NULL},
    /* ActUpdTch		*/{1424,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,Enr_ModifyUsr1			,Enr_ModifyUsr2			,NULL},
 
    /* ActReqAccEnrStd	*/{1456,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
@@ -2593,6 +2600,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewMaiTch	*/{1483,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Mai_NewOtherUsrEmail		,NULL},
 
    /* ActRemStdCrs	*/{1462,-1,TabUnk,ActLstStd		,0x3F8,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
+   /* ActRemNETCrs	*/{1647,-1,TabUnk,ActLstTch		,0x3F0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
    /* ActRemTchCrs	*/{1463,-1,TabUnk,ActLstTch		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemUsrFromCrs		,NULL},
 
    /* ActRemUsrGbl	*/{  62,-1,TabUnk,ActLstOth		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Acc_GetUsrCodAndRemUsrGbl	,NULL},
@@ -4633,11 +4641,15 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgCalDeg1stDay,	// #1636
 	ActPrnOneAsg,		// #1637
 	ActChgDatFmt,		// #1638
-	ActReqAccEnrNEdTch,	// #1639
-	ActAccEnrNEdTch,	// #1640
-	ActRemMe_NEdTch,	// #1641
-	ActReqEnrSevNEdTch,	// #1642
+	ActReqAccEnrNET,	// #1639
+	ActAccEnrNET,		// #1640
+	ActRemMe_NET,		// #1641
+	ActReqEnrSevNET,	// #1642
 	ActRcvFrmEnrSevNET,	// #1643
+	ActReqMdfNET,		// #1644
+	ActCreNET,		// #1645
+	ActUpdNET,		// #1646
+	ActRemNETCrs,		// #1647
 	};
 
 /*****************************************************************************/
@@ -5132,7 +5144,7 @@ void Act_AdjustCurrentAction (void)
 	       Gbl.Action.Act = ActReqAccEnrStd;
 	       break;
 	    case Rol_NET:
-	       Gbl.Action.Act = ActReqAccEnrNEdTch;
+	       Gbl.Action.Act = ActReqAccEnrNET;
 	       break;
 	    case Rol_TCH:
 	       Gbl.Action.Act = ActReqAccEnrTch;

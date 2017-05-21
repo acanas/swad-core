@@ -393,7 +393,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Act_FormStart (ActAccEnrStd);
 	 break;
       case Rol_NET:
-	 Act_FormStart (ActAccEnrNEdTch);
+	 Act_FormStart (ActAccEnrNET);
 	 break;
       case Rol_TCH:
 	 Act_FormStart (ActAccEnrTch);
@@ -411,7 +411,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
 	 Act_FormStart (ActRemMe_Std);
 	 break;
       case Rol_NET:
-	 Act_FormStart (ActRemMe_NEdTch);
+	 Act_FormStart (ActRemMe_NET);
 	 break;
       case Rol_TCH:
 	 Act_FormStart (ActRemMe_Tch);
@@ -1374,10 +1374,14 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    switch (Role)
      {
       case Rol_STD:
+	 if (Gbl.Usrs.Me.LoggedRole < Rol_TCH)		// Can I register/remove students?
+	    // No, I can not
+	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
 	 break;
+      case Rol_NET:
       case Rol_TCH:
-	 if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)        // Can I register/remove teachers?
-	    // No, I can not (TODO: teachers should be able to register/remove existing teachers)
+	 if (Gbl.Usrs.Me.LoggedRole < Rol_DEG_ADM)	// Can I register/remove teachers?
+	    // No, I can not
 	    Lay_ShowErrorAndExit ("You are not allowed to perform this action.");
 	 break;
       default:
@@ -1454,7 +1458,8 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
       LstGrps.NumGrps = 0;	// Initialized to avoid bug reported by Coverity
       Grp_GetLstCodsGrpWanted (&LstGrps);
 
-      /***** A student can't belong to more than one group when the type of group only allows to register in one group *****/
+      /***** A student can't belong to more than one group
+             when the type of group only allows to register in one group *****/
       if (WhatToDo.RegisterUsrs &&
 	  Role == Rol_STD &&
 	  LstGrps.NumGrps >= 2)
@@ -1483,7 +1488,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    if (WhatToDo.RemoveUsrs)
      {
       /***** Get list of users in current course *****/
-      Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Role,Sco_SCOPE_CRS);
 
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	{
@@ -1972,6 +1977,7 @@ void Enr_SignUpInCrs (void)
 
       /* Check if role is correct */
       if (!(RoleFromForm == Rol_STD ||
+	    RoleFromForm == Rol_NET ||
             RoleFromForm == Rol_TCH))
          Lay_ShowErrorAndExit ("Wrong role.");
 
@@ -2122,6 +2128,7 @@ void Enr_AskIfRejectSignUp (void)
         {
          Role = Rol_GetRequestedRole (Gbl.Usrs.Other.UsrDat.UsrCod);
          if (Role == Rol_STD ||
+             Role == Rol_NET ||
              Role == Rol_TCH)
            {
 	    /***** Show question and button to reject user's enrolment request *****/
@@ -2200,13 +2207,15 @@ void Enr_ShowEnrolmentRequests (void)
      {
       case Rol_TCH:
 	 Enr_ShowEnrolmentRequestsGivenRoles ((1 << Rol_STD) |
-			                       (1 << Rol_TCH));
+	                                      (1 << Rol_NET) |
+			                      (1 << Rol_TCH));
 	 break;
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
       case Rol_SYS_ADM:
-	 Enr_ShowEnrolmentRequestsGivenRoles (1 << Rol_TCH);
+	 Enr_ShowEnrolmentRequestsGivenRoles ((1 << Rol_NET) |
+			                      (1 << Rol_TCH));
 	 break;
       default:
 	 Lay_ShowErrorAndExit ("You don't have permission to list requesters.");
@@ -2265,6 +2274,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    bool ShowPhoto = false;
    char PhotoURL[PATH_MAX + 1];
    Rol_Role_t DesiredRole;
+   Act_Action_t NextAction;
 
    /***** Remove expired enrolment requests *****/
    Enr_RemoveExpiredEnrolmentRequests ();
@@ -2306,6 +2316,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                       "<td class=\"DAT LEFT_MIDDLE\">",
             The_ClassForm[Gbl.Prefs.Theme],Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
+                           1 << Rol_NET |
                            1 << Rol_TCH,
                            RolesSelected,
                            false,true);
@@ -2812,6 +2823,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
          if (UsrExists &&
              !UsrBelongsToCrs &&
              (DesiredRole == Rol_STD ||
+              DesiredRole == Rol_NET ||
               DesiredRole == Rol_TCH))
            {
             /***** Number *****/
@@ -2869,8 +2881,23 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
 
             /***** Button to confirm the request *****/
             fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_TOP\">");
-            Act_FormStart (DesiredRole == Rol_STD ? ActReqMdfStd :
-        	                                        ActReqMdfTch);
+            switch (DesiredRole)
+              {
+               case Rol_STD:
+        	  NextAction = ActReqMdfStd;
+        	  break;
+               case Rol_NET:
+        	  NextAction = ActReqMdfNET;
+        	  break;
+               case Rol_TCH:
+        	  NextAction = ActReqMdfTch;
+        	  break;
+               default:
+        	  NextAction = ActUnk;
+        	  Lay_ShowErrorAndExit ("Wrong role.");
+        	  break;
+              }
+            Act_FormStart (NextAction);
             Crs_PutParamCrsCod (Crs.CrsCod);
             Usr_PutParamUsrCodEncrypted (UsrDat.EncryptedUsrCod);
             Lay_PutCreateButtonInline (Txt_Register);
@@ -3007,7 +3034,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 TitleText = Txt_Administer_multiple_students;
 	 break;
       case Rol_NET:
-	 NextAction = ActReqEnrSevNEdTch;
+	 NextAction = ActReqEnrSevNET;
 	 TitleText = Txt_Administer_multiple_teachers;
 	 break;
       case Rol_TCH:
@@ -3060,15 +3087,33 @@ static void Enr_ReqAnotherUsrIDToRegisterRemove (Rol_Role_t Role)
   {
    extern const char *Hlp_USERS_Administration_administer_one_user;
    extern const char *Txt_Administer_one_user;
+   Act_Action_t NextAction;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Administer_one_user,NULL,
                         Hlp_USERS_Administration_administer_one_user);
 
    /***** Write form to request another user's ID *****/
-   Enr_WriteFormToReqAnotherUsrID ( Role == Rol_STD ? ActReqMdfStd :
-	                           (Role == Rol_TCH ? ActReqMdfTch :
-	                        	                  ActReqMdfOth));
+   switch (Role)
+     {
+      case Rol_GST:
+	 NextAction = ActReqMdfOth;
+         break;
+      case Rol_STD:
+	 NextAction = ActReqMdfStd;
+	 break;
+      case Rol_NET:
+	 NextAction = ActReqMdfNET;
+	 break;
+      case Rol_TCH:
+	 NextAction = ActReqMdfTch;
+	 break;
+      default:
+	 NextAction = ActUnk;
+         Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Enr_WriteFormToReqAnotherUsrID (NextAction);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -3401,8 +3446,23 @@ static void Enr_ReqRemOrRemUsrFromCrs (Enr_ReqDelOrDelUsr_t ReqDelOrDelUsr)
       // A teacher can remove a student or himself
       // An administrator can remove anyone
       ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == Gbl.Usrs.Other.UsrDat.UsrCod);
-      ICanRemove = (Gbl.Usrs.Me.LoggedRole == Rol_STD ? ItsMe :
-                                                            (Gbl.Usrs.Me.LoggedRole >= Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB));
+      switch (Gbl.Usrs.Me.LoggedRole)
+        {
+	 case Rol_STD:
+	 case Rol_NET:
+	    ICanRemove = ItsMe;
+	    break;
+	 case Rol_TCH:
+	 case Rol_DEG_ADM:
+	 case Rol_CTR_ADM:
+	 case Rol_INS_ADM:
+	 case Rol_SYS_ADM:
+	    ICanRemove = true;
+	    break;
+	 default:
+	    ICanRemove = false;
+	    break;
+        }
       if (ICanRemove)
 	 switch (ReqDelOrDelUsr)
 	   {
@@ -3693,9 +3753,24 @@ void Enr_CreateNewUsr1 (void)
 	}
 
       /***** Change current action *****/
-      Gbl.Action.Act =  (NewRole == Rol_STD) ? ActCreStd :
-	               ((NewRole == Rol_TCH) ? ActCreTch :
-	                                           ActCreOth);
+      switch (NewRole)
+        {
+	 case Rol_GST:
+	    Gbl.Action.Act = ActCreOth;
+	    break;
+	 case Rol_STD:
+	    Gbl.Action.Act = ActCreStd;
+	    break;
+	 case Rol_NET:
+	    Gbl.Action.Act = ActCreNET;
+	    break;
+	 case Rol_TCH:
+	    Gbl.Action.Act = ActCreTch;
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+        }
       Tab_SetCurrentTab ();
      }
    else        // User's ID not valid
@@ -3804,9 +3879,24 @@ void Enr_ModifyUsr1 (void)
 		    }
 
 		  /***** Change current action *****/
-		  Gbl.Action.Act =  (NewRole == Rol_STD) ? ActUpdStd :
-				   ((NewRole == Rol_TCH) ? ActUpdTch :
-							       ActUpdOth);
+		  switch (NewRole)
+		    {
+		     case Rol_GST:
+			Gbl.Action.Act = ActUpdOth;
+			break;
+		     case Rol_STD:
+			Gbl.Action.Act = ActUpdStd;
+			break;
+		     case Rol_NET:
+			Gbl.Action.Act = ActUpdNET;
+			break;
+		     case Rol_TCH:
+			Gbl.Action.Act = ActUpdTch;
+			break;
+		     default:
+			Lay_ShowErrorAndExit ("Wrong role.");
+			break;
+		    }
 		  Tab_SetCurrentTab ();
 		 }
 	      }
@@ -3947,6 +4037,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_Remove_me_from_this_course;
    extern const char *Txt_Remove_user_from_this_course;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   Act_Action_t NextAction;
 
    if (Usr_CheckIfUsrBelongsToCrs (UsrDat->UsrCod,
                                    Gbl.CurrentCrs.Crs.CrsCod,
@@ -3964,8 +4055,23 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Rec_ShowSharedRecordUnmodifiable (UsrDat);
 
       /* Show form to request confirmation */
-      Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActRemStdCrs :
-	                                                         ActRemTchCrs);
+      switch (UsrDat->RoleInCurrentCrsDB)
+        {
+	 case Rol_STD:
+	    NextAction = ActRemStdCrs;
+	    break;
+	 case Rol_NET:
+	    NextAction = ActRemNETCrs;
+	    break;
+	 case Rol_TCH:
+	    NextAction = ActRemTchCrs;
+	    break;
+	 default:
+	    NextAction = ActUnk;
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+        }
+      Act_FormStart (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Pwd_AskForConfirmationOnDangerousAction ();
       Lay_PutRemoveButton (ItsMe ? Txt_Remove_me_from_this_course :
