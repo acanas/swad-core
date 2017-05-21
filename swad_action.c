@@ -1010,8 +1010,9 @@ Users:
         821. ActLogInUsrAgdLan		Show another user's public agenda after change language
         822. ActSeeUsrAgd		Show another user's public agenda
 
-	823. ActReqEnrSevStd		Request the enrolment/removing of several users to / from current course
-	824. ActReqEnrSevTch		Request the enrolment/removing of several users to / from current course
+	823. ActReqEnrSevStd		Request the enrolment/removing of several students to / from current course
+	NEW. ActReqEnrSevTch		Request the enrolment/removing of several non-editing teachers to / from current course
+	824. ActReqEnrSevTch		Request the enrolment/removing of several teachers to / from current course
 
 	825. ActReqLstStdAtt		Request listing of attendance of several students to several events
 	826. ActSeeLstMyAtt		List my attendance as student to several events
@@ -2476,6 +2477,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
    /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
+   /* ActReqEnrSevNEdTch*/{1642,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminNonEditingTchs	,NULL},
    /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
 
    /* ActReqLstStdAtt	*/{1073,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ReqListStdsAttendanceCrs	,NULL},
@@ -4632,6 +4634,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActReqAccEnrNEdTch,	// #1639
 	ActAccEnrNEdTch,	// #1640
 	ActRemMe_NEdTch,	// #1641
+	ActReqEnrSevNEdTch,	// #1642
 	};
 
 /*****************************************************************************/

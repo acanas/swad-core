@@ -89,6 +89,7 @@ void Enr_FilterUsrDat (struct UsrData *UsrDat);
 void Enr_UpdateInstitutionCentreDepartment (void);
 
 void Enr_ReqAdminStds (void);
+void Enr_ReqAdminNonEditingTchs (void);
 void Enr_ReqAdminTchs (void);
 
 void Enr_PutLinkToRemOldUsrs (void);

@@ -583,6 +583,11 @@ void Enr_ReqAdminStds (void)
    Enr_ReqAdminUsrs (Rol_STD);
   }
 
+void Enr_ReqAdminNonEditingTchs (void)
+  {
+   Enr_ReqAdminUsrs (Rol_NED_TCH);
+  }
+
 void Enr_ReqAdminTchs (void)
   {
    Enr_ReqAdminUsrs (Rol_TCH);
@@ -2969,12 +2974,29 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_Administer_multiple_students;
    extern const char *Txt_Administer_multiple_teachers;
-   const char *TitleText = (Role == Rol_STD) ? Txt_Administer_multiple_students :
-	                	                   Txt_Administer_multiple_teachers;
+   Act_Action_t NextAction;
+   const char *TitleText;
 
-   Lay_PutContextualLink (Role == Rol_STD ? ActReqEnrSevStd :
-	                                        ActReqEnrSevTch,
-	                  NULL,NULL,
+   switch (Role)
+     {
+      case Rol_STD:
+	 NextAction = ActReqEnrSevStd;
+	 TitleText = Txt_Administer_multiple_students;
+	 break;
+      case Rol_NED_TCH:
+	 NextAction = ActReqEnrSevNEdTch;
+	 TitleText = Txt_Administer_multiple_teachers;
+	 break;
+      case Rol_TCH:
+	 NextAction = ActReqEnrSevTch;
+	 TitleText = Txt_Administer_multiple_teachers;
+	 break;
+      default:
+	 NextAction = ActUnk;
+	 TitleText = NULL;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+     }
+   Lay_PutContextualLink (NextAction,NULL,NULL,
 	                  "config64x64.gif",
 	                  TitleText,TitleText,
                           NULL);
