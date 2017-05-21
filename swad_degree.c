@@ -84,6 +84,7 @@ typedef enum
 
 static void Deg_Configuration (bool PrintView);
 static void Deg_PutIconsToPrintAndUpload (void);
+static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role);
 
 static void Deg_ListDegreesForEdition (void);
 static bool Deg_CheckIfICanEditADegree (struct Degree *Deg);
@@ -288,7 +289,6 @@ static void Deg_Configuration (bool PrintView)
    extern const char *Txt_Courses;
    extern const char *Txt_Courses_of_DEGREE_X;
    extern const char *Txt_QR_code;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumCtr;
    bool PutLink = !PrintView && Gbl.CurrentDeg.Deg.WWW[0];
 
@@ -514,31 +514,11 @@ static void Deg_Configuration (bool PrintView)
 	 fprintf (Gbl.F.Out,"</td>"
 			    "</tr>");
 
-	 /***** Number of teachers *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfDeg (Rol_TCH,Gbl.CurrentDeg.Deg.DegCod));
-
-	 /***** Number of students *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-	                    "%s:"
-	                    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-	                    "%u"
-	                    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfDeg (Rol_STD,Gbl.CurrentDeg.Deg.DegCod));
+	 /***** Number of users *****/
+	 Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
+	 Deg_ShowNumUsrsInCrssOfDeg (Rol_NED_TCH);
+	 Deg_ShowNumUsrsInCrssOfDeg (Rol_STD);
+	 Deg_ShowNumUsrsInCrssOfDeg (Rol_UNK);
 	}
 
       /***** End table *****/
@@ -563,6 +543,30 @@ static void Deg_PutIconsToPrintAndUpload (void)
       // have permission to upload logo of the degree
       /***** Link to upload logo of degree *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_DEG);
+  }
+
+/*****************************************************************************/
+/***************** Number of users in courses of this degree *****************/
+/*****************************************************************************/
+
+static void Deg_ShowNumUsrsInCrssOfDeg (Rol_Role_t Role)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Users_in_courses;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    (Role == Rol_UNK) ? Txt_Users_in_courses :
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Usr_GetNumUsrsInCrssOfDeg (Role,Gbl.CurrentDeg.Deg.DegCod));
   }
 
 /*****************************************************************************/

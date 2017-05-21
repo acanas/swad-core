@@ -1285,13 +1285,16 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 			    "%u"
 			    "</td>",
-		  TxtClassNormal,BgColor,Crs->NumUsrs[Rol_TCH]);
+		  TxtClassNormal,BgColor,
+		  Crs->NumUsrs[Rol_TCH] +
+		  Crs->NumUsrs[Rol_NED_TCH]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
 			    "%u"
 			    "</td>",
-		  TxtClassNormal,BgColor,Crs->NumUsrs[Rol_STD]);
+		  TxtClassNormal,BgColor,
+		  Crs->NumUsrs[Rol_STD]);
 
 	 /* Course status */
 	 StatusTxt = Crs_GetStatusTxtFromStatusBits (Crs->Status);
@@ -1509,7 +1512,8 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
 			    "%u"
 			    "</td>",
-		  Crs->NumUsrs[Rol_TCH]);
+		  Crs->NumUsrs[Rol_TCH] +
+		  Crs->NumUsrs[Rol_NED_TCH]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1987,9 +1991,10 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    Crs->RequesterUsrCod = -1L;
    Crs->ShrtName[0] = '\0';
    Crs->FullName[0] = '\0';
-   Crs->NumUsrs[Rol_UNK] = 0;
-   Crs->NumUsrs[Rol_STD] = 0;
-   Crs->NumUsrs[Rol_TCH] = 0;
+   Crs->NumUsrs[Rol_UNK    ] =
+   Crs->NumUsrs[Rol_STD    ] =
+   Crs->NumUsrs[Rol_NED_TCH] =
+   Crs->NumUsrs[Rol_TCH    ] = 0;
 
    /***** Check if course code is correct *****/
    if (Crs->CrsCod > 0)
@@ -2050,15 +2055,13 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
    Str_Copy (Crs->FullName,row[7],
              Hie_MAX_BYTES_FULL_NAME);
 
-   /***** Get number of students *****/
-   Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
-
-   /***** Get number of teachers *****/
-   Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
-
-   /***** Compute total of users in course *****/
-   Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
-	                   Crs->NumUsrs[Rol_TCH];
+   /***** Get number of users *****/
+   Crs->NumUsrs[Rol_STD    ] = Usr_GetNumUsrsInCrs (Rol_STD    ,Crs->CrsCod);
+   Crs->NumUsrs[Rol_NED_TCH] = Usr_GetNumUsrsInCrs (Rol_NED_TCH,Crs->CrsCod);
+   Crs->NumUsrs[Rol_TCH    ] = Usr_GetNumUsrsInCrs (Rol_TCH    ,Crs->CrsCod);
+   Crs->NumUsrs[Rol_UNK    ] = Crs->NumUsrs[Rol_STD    ] +
+	                       Crs->NumUsrs[Rol_NED_TCH] +
+	                       Crs->NumUsrs[Rol_TCH    ];
   }
 
 /*****************************************************************************/
@@ -2783,6 +2786,7 @@ void Crs_ContEditAfterChgCrs (void)
 					                                  false);
             break;
 	 case Rol_STD:
+	 case Rol_NED_TCH:
 	 case Rol_TCH:
 	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
 	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -3158,8 +3162,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
+   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH    ,CrsCod) +
+	     Usr_GetNumUsrsInCrs (Rol_NED_TCH,CrsCod);
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STD    ,CrsCod);
    if (NumTchs + NumStds)
      {
       Style = "DAT_N";
@@ -3255,16 +3260,14 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
 void Crs_UpdateCrsLast (void)
   {
-   char Query[256];
+   char Query[128];
 
    if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
        Gbl.Usrs.Me.LoggedRole >= Rol_STD)
      {
       /***** Update my last access to current course *****/
-      sprintf (Query,"REPLACE INTO crs_last"
-	             " (CrsCod,LastTime)"
-	             " VALUES"
-	             " (%ld,NOW())",
+      sprintf (Query,"REPLACE INTO crs_last (CrsCod,LastTime)"
+	             " VALUES (%ld,NOW())",
 	       Gbl.CurrentCrs.Crs.CrsCod);
       DB_QueryUPDATE (Query,"can not update last access to current course");
      }
