@@ -306,6 +306,9 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
       case Rol_STD:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
 	 break;
+      case Rol_NED_TCH:
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_NED_TCH;
+	 break;
       case Rol_TCH:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_TCH;
 	 break;
@@ -371,6 +374,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
    extern const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    extern const char *Txt_Confirm_my_enrolment;
    extern const char *Txt_Remove_me_from_this_course;
+   Ntf_NotifyEvent_t NotifyEvent;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Enrolment,NULL,
@@ -383,14 +387,38 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Ale_ShowAlert (Ale_INFO,Gbl.Alert.Txt);
 
    /***** Send button to accept register in the current course *****/
-   Act_FormStart (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActAccEnrStd :
-	                                                                 ActAccEnrTch);
+   switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 Act_FormStart (ActAccEnrStd);
+	 break;
+      case Rol_NED_TCH:
+	 Act_FormStart (ActAccEnrNEdTch);
+	 break;
+      case Rol_TCH:
+	 Act_FormStart (ActAccEnrTch);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+     }
    Lay_PutCreateButtonInline (Txt_Confirm_my_enrolment);
    Act_FormEnd ();
 
    /***** Send button to refuse register in the current course *****/
-   Act_FormStart (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActRemMe_Std :
-	                                                                 ActRemMe_Tch);
+   switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 Act_FormStart (ActRemMe_Std);
+	 break;
+      case Rol_NED_TCH:
+	 Act_FormStart (ActRemMe_NEdTch);
+	 break;
+      case Rol_TCH:
+	 Act_FormStart (ActRemMe_Tch);
+	 break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong role.");
+     }
    Lay_PutRemoveButtonInline (Txt_Remove_me_from_this_course);
    Act_FormEnd ();
 
@@ -398,9 +426,23 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_EndRoundFrame ();
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ? Ntf_EVENT_ENROLMENT_STD :
-	                                                                       Ntf_EVENT_ENROLMENT_TCH,
-                        -1L,Gbl.CurrentCrs.Crs.CrsCod,
+   switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
+	 break;
+      case Rol_NED_TCH:
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_NED_TCH;
+	 break;
+      case Rol_TCH:
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_TCH;
+	 break;
+      default:
+	 NotifyEvent = Ntf_EVENT_UNKNOWN;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Ntf_MarkNotifAsSeen (NotifyEvent,-1L,Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
   }
 

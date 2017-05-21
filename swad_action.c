@@ -1066,8 +1066,10 @@ Users:
 	NEW. ActReqAccEnrNEdTch		Confirm acceptation / refusion of enrolment as non-editing teacher in current course
 	873. ActReqAccEnrTch		Confirm acceptation / refusion of enrolment as teacher in current course
 	874. ActAccEnrStd		Accept enrolment as student in current course
+	NEW. ActAccEnrNEdTch		Accept enrolment as non-editing teacher in current course
 	875. ActAccEnrTch		Accept enrolment as teacher in current course
 	876. ActRemMe_Std		Reject enrolment as student in current course
+	NEW. ActRemMe_NEdTch		Reject enrolment as non-editing teacher in current course
 	877. ActRemMe_Tch		Reject enrolment as teacher in current course
 
 	878. ActNewAdmIns		Register an administrador in this institution
@@ -2537,8 +2539,10 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqAccEnrNEdTch*/{1639,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActReqAccEnrTch	*/{1457,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActAccEnrStd	*/{1458,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
+   /* ActAccEnrNEdTch	*/{1640,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActAccEnrTch	*/{1459,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActRemMe_Std	*/{1460,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActRemMe_NEdTch	*/{1641,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
    /* ActRemMe_Tch	*/{1461,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
 
    /* ActNewAdmIns	*/{1337,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToIns		,NULL},
@@ -4626,6 +4630,8 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActPrnOneAsg,		// #1637
 	ActChgDatFmt,		// #1638
 	ActReqAccEnrNEdTch,	// #1639
+	ActAccEnrNEdTch,	// #1640
+	ActRemMe_NEdTch,	// #1641
 	};
 
 /*****************************************************************************/
