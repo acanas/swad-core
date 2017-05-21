@@ -303,8 +303,9 @@ void Soc_ShowTimelineGbl2 (void)
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MARKS_FILE
 
       /* Users tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_STUDENT
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_TEACHER
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_STD
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NED_TCH
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_TCH
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_REQUEST
 
       /* Social tab */

@@ -59,38 +59,39 @@ extern struct Globals Gbl;
 
 const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "unknown",			// Ntf_EVENT_UNKNOWN
+   "unknown",				// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "documentFile",		// Ntf_EVENT_DOCUMENT_FILE
-   "teachersFile",		// Ntf_EVENT_TEACHERS_FILE
-   "sharedFile",		// Ntf_EVENT_SHARED_FILE
+   "documentFile",			// Ntf_EVENT_DOCUMENT_FILE
+   "teachersFile",			// Ntf_EVENT_TEACHERS_FILE
+   "sharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "assignment",		// Ntf_EVENT_ASSIGNMENT
-   "examAnnouncement",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "marksFile",			// Ntf_EVENT_MARKS_FILE
+   "assignment",			// Ntf_EVENT_ASSIGNMENT
+   "examAnnouncement",			// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "marksFile",				// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "enrollmentStudent",		// Ntf_EVENT_ENROLMENT_STUDENT	// TODO: Change to "enrolmentStudent" carefully in future versions
-   "enrollmentTeacher",		// Ntf_EVENT_ENROLMENT_TEACHER	// TODO: Change to "enrolmentTeacher" carefully in future versions
-   "enrollmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST	// TODO: Change to "enrolmentRequest" carefully in future versions
+   "enrollmentStudent",			// Ntf_EVENT_ENROLMENT_STD	// TODO: Change to "enrolmentStudent" carefully in future versions
+   "enrollmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Change to "enrolmentTeacher" carefully in future versions
+   "enrollmentTeacher",			// Ntf_EVENT_ENROLMENT_TCH	// TODO: Change to "enrolmentTeacher" carefully in future versions
+   "enrollmentRequest",			// Ntf_EVENT_ENROLMENT_REQUEST	// TODO: Change to "enrolmentRequest" carefully in future versions
 
    /* Social tab */
-   "timelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
-   "timelineFav",		// Ntf_EVENT_TIMELINE_FAV
-   "timelineShare",		// Ntf_EVENT_TIMELINE_SHARE
-   "timelineMention",		// Ntf_EVENT_TIMELINE_MENTION
-   "follower",			// Ntf_EVENT_FOLLOWER
-   "forumPostCourse",		// Ntf_EVENT_FORUM_POST_COURSE
-   "forumReply",		// Ntf_EVENT_FORUM_REPLY
+   "timelineComment",			// Ntf_EVENT_TIMELINE_COMMENT
+   "timelineFav",			// Ntf_EVENT_TIMELINE_FAV
+   "timelineShare",			// Ntf_EVENT_TIMELINE_SHARE
+   "timelineMention",			// Ntf_EVENT_TIMELINE_MENTION
+   "follower",				// Ntf_EVENT_FOLLOWER
+   "forumPostCourse",			// Ntf_EVENT_FORUM_POST_COURSE
+   "forumReply",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "notice",			// Ntf_EVENT_NOTICE
-   "message",			// Ntf_EVENT_MESSAGE
+   "notice",				// Ntf_EVENT_NOTICE
+   "message",				// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "survey",			// Ntf_EVENT_SURVEY
+   "survey",				// Ntf_EVENT_SURVEY
 
    /* Profile tab */
   };
@@ -110,8 +111,9 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActSeeAdmMrk,	// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STUDENT
-   ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TEACHER
+   ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STD
+   ActReqAccEnrNEdTch,	// Ntf_EVENT_ENROLMENT_NED_TCH
+   ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TCH
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
@@ -140,38 +142,39 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 // Notify me notification events
 static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "NotifyNtfEventUnknown",		// Ntf_EVENT_UNKNOWN
+   "NotifyNtfEventUnknown",			// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "NotifyNtfEventDocumentFile",	// Ntf_EVENT_DOCUMENT_FILE
-   "NotifyNtfEventTeachersFile",	// Ntf_EVENT_TEACHERS_FILE
-   "NotifyNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
+   "NotifyNtfEventDocumentFile",		// Ntf_EVENT_DOCUMENT_FILE
+   "NotifyNtfEventTeachersFile",		// Ntf_EVENT_TEACHERS_FILE
+   "NotifyNtfEventSharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "NotifyNtfEventAssignment",		// Ntf_EVENT_ASSIGNMENT
-   "NotifyNtfEventExamAnnouncement",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "NotifyNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
+   "NotifyNtfEventAssignment",			// Ntf_EVENT_ASSIGNMENT
+   "NotifyNtfEventExamAnnouncement",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "NotifyNtfEventMarksFile",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "NotifyNtfEventEnrolmentStudent",	// Ntf_EVENT_ENROLMENT_STUDENT
-   "NotifyNtfEventEnrolmentTeacher",	// Ntf_EVENT_ENROLMENT_TEACHER
-   "NotifyNtfEventEnrolmentRequest",	// Ntf_EVENT_ENROLMENT_REQUEST
+   "NotifyNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
+   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH
+   "NotifyNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
+   "NotifyNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   "NotifyNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
-   "NotifyNtfEventTimelineFav",		// Ntf_EVENT_TIMELINE_FAV
-   "NotifyNtfEventTimelineShare",	// Ntf_EVENT_TIMELINE_SHARE
-   "NotifyNtfEventTimelineMention",	// Ntf_EVENT_TIMELINE_MENTION
-   "NotifyNtfEventFollower",		// Ntf_EVENT_FOLLOWER
-   "NotifyNtfEventForumPostCourse",	// Ntf_EVENT_FORUM_POST_COURSE
-   "NotifyNtfEventForumReply",		// Ntf_EVENT_FORUM_REPLY
+   "NotifyNtfEventTimelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
+   "NotifyNtfEventTimelineFav",			// Ntf_EVENT_TIMELINE_FAV
+   "NotifyNtfEventTimelineShare",		// Ntf_EVENT_TIMELINE_SHARE
+   "NotifyNtfEventTimelineMention",		// Ntf_EVENT_TIMELINE_MENTION
+   "NotifyNtfEventFollower",			// Ntf_EVENT_FOLLOWER
+   "NotifyNtfEventForumPostCourse",		// Ntf_EVENT_FORUM_POST_COURSE
+   "NotifyNtfEventForumReply",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "NotifyNtfEventNotice",		// Ntf_EVENT_NOTICE
-   "NotifyNtfEventMessage",		// Ntf_EVENT_MESSAGE
+   "NotifyNtfEventNotice",			// Ntf_EVENT_NOTICE
+   "NotifyNtfEventMessage",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "NotifyNtfEventSurvey",		// Ntf_EVENT_SURVEY
+   "NotifyNtfEventSurvey",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
   };
@@ -179,38 +182,39 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 // Email me about notification events
 static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
   {
-   "EmailNtfEventUnknown",		// Ntf_EVENT_UNKNOWN
+   "EmailNtfEventUnknown",			// Ntf_EVENT_UNKNOWN
 
    /* Course tab */
-   "EmailNtfEventDocumentFile",		// Ntf_EVENT_DOCUMENT_FILE
-   "EmailNtfEventTeachersFile",		// Ntf_EVENT_TEACHERS_FILE
-   "EmailNtfEventSharedFile",		// Ntf_EVENT_SHARED_FILE
+   "EmailNtfEventDocumentFile",			// Ntf_EVENT_DOCUMENT_FILE
+   "EmailNtfEventTeachersFile",			// Ntf_EVENT_TEACHERS_FILE
+   "EmailNtfEventSharedFile",			// Ntf_EVENT_SHARED_FILE
 
    /* Assessment tab */
-   "EmailNtfEventAssignment",		// Ntf_EVENT_ASSIGNMENT
-   "EmailNtfEventExamAnnouncement",	// Ntf_EVENT_EXAM_ANNOUNCEMENT
-   "EmailNtfEventMarksFile",		// Ntf_EVENT_MARKS_FILE
+   "EmailNtfEventAssignment",			// Ntf_EVENT_ASSIGNMENT
+   "EmailNtfEventExamAnnouncement",		// Ntf_EVENT_EXAM_ANNOUNCEMENT
+   "EmailNtfEventMarksFile",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "EmailNtfEventEnrolmentStudent",	// Ntf_EVENT_ENROLMENT_STUDENT
-   "EmailNtfEventEnrolmentTeacher",	// Ntf_EVENT_ENROLMENT_TEACHER
-   "EmailNtfEventEnrolmentRequest",	// Ntf_EVENT_ENROLMENT_REQUEST
+   "EmailNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
+   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH
+   "EmailNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
+   "EmailNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
-   "EmailNtfEventTimelineComment",	// Ntf_EVENT_TIMELINE_COMMENT
-   "EmailNtfEventTimelineFav",		// Ntf_EVENT_TIMELINE_FAV
-   "EmailNtfEventTimelineShare",	// Ntf_EVENT_TIMELINE_SHARE
-   "EmailNtfEventTimelineMention",	// Ntf_EVENT_TIMELINE_MENTION
-   "EmailNtfEventSocialFollower",	// Ntf_EVENT_FOLLOWER
-   "EmailNtfEventForumPostCourse",	// Ntf_EVENT_FORUM_POST_COURSE
-   "EmailNtfEventForumReply",		// Ntf_EVENT_FORUM_REPLY
+   "EmailNtfEventTimelineComment",		// Ntf_EVENT_TIMELINE_COMMENT
+   "EmailNtfEventTimelineFav",			// Ntf_EVENT_TIMELINE_FAV
+   "EmailNtfEventTimelineShare",		// Ntf_EVENT_TIMELINE_SHARE
+   "EmailNtfEventTimelineMention",		// Ntf_EVENT_TIMELINE_MENTION
+   "EmailNtfEventSocialFollower",		// Ntf_EVENT_FOLLOWER
+   "EmailNtfEventForumPostCourse",		// Ntf_EVENT_FORUM_POST_COURSE
+   "EmailNtfEventForumReply",			// Ntf_EVENT_FORUM_REPLY
 
    /* Messages tab */
-   "EmailNtfEventNotice",		// Ntf_EVENT_NOTICE
-   "EmailNtfEventMessage",		// Ntf_EVENT_MESSAGE
+   "EmailNtfEventNotice",			// Ntf_EVENT_NOTICE
+   "EmailNtfEventMessage",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "EmailNtfEventSurvey",		// Ntf_EVENT_SURVEY
+   "EmailNtfEventSurvey",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
   };
@@ -231,8 +235,9 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "grades16x16.gif",			// Ntf_EVENT_MARKS_FILE
 
    /* Users tab */
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_STUDENT
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_TEACHER
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_STD
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NED_TCH
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_TCH
    "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLMENT_REQUEST
 
    /* Social tab */
@@ -887,8 +892,9 @@ void Ntf_GetNotifSummaryAndContent (char SummaryStr[Ntf_MAX_BYTES_SUMMARY + 1],
       case Ntf_EVENT_MARKS_FILE:
          Mrk_GetNotifMyMarks (SummaryStr,ContentStr,Cod,UsrCod,GetContent);
          break;
-      case Ntf_EVENT_ENROLMENT_STUDENT:
-      case Ntf_EVENT_ENROLMENT_TEACHER:
+      case Ntf_EVENT_ENROLMENT_STD:
+      case Ntf_EVENT_ENROLMENT_NED_TCH:
+      case Ntf_EVENT_ENROLMENT_TCH:
 	 Enr_GetNotifEnrolment (SummaryStr,CrsCod,UsrCod);
          break;
       case Ntf_EVENT_ENROLMENT_REQUEST:
@@ -1263,8 +1269,9 @@ unsigned Ntf_StoreNotifyEventsToAllUsrs (Ntf_NotifyEvent_t NotifyEvent,long Cod)
                   Gbl.CurrentCrs.Crs.CrsCod,
                   Gbl.Usrs.Me.UsrDat.UsrCod);
          break;
-      case Ntf_EVENT_ENROLMENT_STUDENT:	// This function should not be called in this case
-      case Ntf_EVENT_ENROLMENT_TEACHER:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_STD:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_NED_TCH:	// This function should not be called in this case
+      case Ntf_EVENT_ENROLMENT_TCH:	// This function should not be called in this case
          return 0;
       case Ntf_EVENT_ENROLMENT_REQUEST:
 	 if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH])
@@ -1681,8 +1688,9 @@ static void Ntf_SendPendingNotifByEMailToOneUsr (struct UsrData *ToUsrDat,unsign
 	       case Ntf_EVENT_ASSIGNMENT:
 	       case Ntf_EVENT_EXAM_ANNOUNCEMENT:
 	       case Ntf_EVENT_MARKS_FILE:
-	       case Ntf_EVENT_ENROLMENT_STUDENT:
-	       case Ntf_EVENT_ENROLMENT_TEACHER:
+	       case Ntf_EVENT_ENROLMENT_STD:
+	       case Ntf_EVENT_ENROLMENT_NED_TCH:
+	       case Ntf_EVENT_ENROLMENT_TCH:
 	       case Ntf_EVENT_ENROLMENT_REQUEST:
 	       case Ntf_EVENT_NOTICE:
 	       case Ntf_EVENT_MESSAGE:

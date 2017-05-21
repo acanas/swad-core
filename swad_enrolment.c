@@ -50,11 +50,14 @@
 
 static const bool Enr_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
   {
+   /* Users who can not admin */
    false,	// Rol_UNK
    false,	// Rol_GST
    false,	// Rol_USR
    false,	// Rol_STD
    false,	// Rol_NED_TCH
+
+   /* Users who can admin */
    true,	// Rol_TCH
    true,	// Rol_DEG_ADM
    true,	// Rol_CTR_ADM
@@ -211,6 +214,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    switch (NewRole)
      {
       case Rol_STD:
+      case Rol_NED_TCH:
       case Rol_TCH:
 	 break;
       default:
@@ -249,6 +253,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    switch (NewRole)
      {
       case Rol_STD:
+      case Rol_NED_TCH:
       case Rol_TCH:
 	 break;
       default:
@@ -299,10 +304,10 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    switch (NewRole)
      {
       case Rol_STD:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_STUDENT;
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
 	 break;
       case Rol_TCH:
-	 NotifyEvent = Ntf_EVENT_ENROLMENT_TEACHER;
+	 NotifyEvent = Ntf_EVENT_ENROLMENT_TCH;
 	 break;
       default:
 	 NotifyEvent = Ntf_EVENT_UNKNOWN;
@@ -313,8 +318,8 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
    Enr_RemoveEnrolmentRequest (Gbl.CurrentCrs.Crs.CrsCod,UsrDat->UsrCod);
 
    /***** Remove old enrolment notifications before inserting the new one ******/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STUDENT,-1,UsrDat->UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TEACHER,-1,UsrDat->UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1,UsrDat->UsrCod);
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1,UsrDat->UsrCod);
 
    /***** Create new notification ******/
    CreateNotif = (UsrDat->Prefs.NotifNtfEvents & (1 << NotifyEvent));
@@ -393,8 +398,8 @@ void Enr_ReqAcceptRegisterInCrs (void)
    Lay_EndRoundFrame ();
 
    /***** Mark possible notification as seen *****/
-   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ? Ntf_EVENT_ENROLMENT_STUDENT :
-	                                                                       Ntf_EVENT_ENROLMENT_TEACHER,
+   Ntf_MarkNotifAsSeen (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ? Ntf_EVENT_ENROLMENT_STD :
+	                                                                       Ntf_EVENT_ENROLMENT_TCH,
                         -1L,Gbl.CurrentCrs.Crs.CrsCod,
                         Gbl.Usrs.Me.UsrDat.UsrCod);
   }
@@ -3521,9 +3526,9 @@ void Enr_AcceptRegisterMeInCrs (void)
 
    /***** Mark all notifications about enrolment (as student or as teacher)
           in current course as removed *****/
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STUDENT,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_STD,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
-   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TEACHER,-1L,
+   Ntf_MarkNotifToOneUsrAsRemoved (Ntf_EVENT_ENROLMENT_TCH,-1L,
                                   Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Confirmation message *****/

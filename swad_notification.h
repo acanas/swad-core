@@ -45,11 +45,11 @@
 /******************************** Public types *******************************/
 /*****************************************************************************/
 
-#define Ntf_NUM_NOTIFY_EVENTS	(1 + 19)
+#define Ntf_NUM_NOTIFY_EVENTS	(1 + 20)
 // If the numbers assigned to each event type change,
 // it is necessary to change old numbers to new ones
 // in database tables notif, sta_notif and usr_data
-typedef enum
+typedef enum				// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
   {
    Ntf_EVENT_UNKNOWN		=  0,
 
@@ -57,18 +57,19 @@ typedef enum
 
    /* Assessment tab */
    Ntf_EVENT_ASSIGNMENT		=  4,
-   Ntf_EVENT_SURVEY		= 19,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+   Ntf_EVENT_SURVEY		= 19,
    Ntf_EVENT_EXAM_ANNOUNCEMENT	=  5,
 
    /* Files tab */
-   Ntf_EVENT_DOCUMENT_FILE	=  1,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
-   Ntf_EVENT_TEACHERS_FILE	=  2,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
-   Ntf_EVENT_SHARED_FILE	=  3,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
-   Ntf_EVENT_MARKS_FILE		=  6,	// TODO: Change numbers (also in database)!!!!!!!!!!!!!!
+   Ntf_EVENT_DOCUMENT_FILE	=  1,
+   Ntf_EVENT_TEACHERS_FILE	=  2,
+   Ntf_EVENT_SHARED_FILE	=  3,
+   Ntf_EVENT_MARKS_FILE		=  6,
 
    /* Users tab */
-   Ntf_EVENT_ENROLMENT_STUDENT	=  7,
-   Ntf_EVENT_ENROLMENT_TEACHER	=  8,
+   Ntf_EVENT_ENROLMENT_STD	=  7,
+   Ntf_EVENT_ENROLMENT_NED_TCH	= 20,
+   Ntf_EVENT_ENROLMENT_TCH	=  8,
    Ntf_EVENT_ENROLMENT_REQUEST	=  9,
 
    /* Social tab */

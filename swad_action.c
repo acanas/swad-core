@@ -1063,6 +1063,7 @@ Users:
 	870. ActUpdStd			Update another user's data and groups
 	871. ActUpdTch			Update another user's data and groups
 	872. ActReqAccEnrStd		Confirm acceptation / refusion of enrolment as student in current course
+	NEW. ActReqAccEnrNEdTch		Confirm acceptation / refusion of enrolment as non-editing teacher in current course
 	873. ActReqAccEnrTch		Confirm acceptation / refusion of enrolment as teacher in current course
 	874. ActAccEnrStd		Accept enrolment as student in current course
 	875. ActAccEnrTch		Accept enrolment as teacher in current course
@@ -2533,6 +2534,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActUpdTch		*/{1424,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,Enr_ModifyUsr1			,Enr_ModifyUsr2			,NULL},
 
    /* ActReqAccEnrStd	*/{1456,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
+   /* ActReqAccEnrNEdTch*/{1639,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActReqAccEnrTch	*/{1457,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAcceptRegisterInCrs	,NULL},
    /* ActAccEnrStd	*/{1458,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActAccEnrTch	*/{1459,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
@@ -4623,6 +4625,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActChgCalDeg1stDay,	// #1636
 	ActPrnOneAsg,		// #1637
 	ActChgDatFmt,		// #1638
+	ActReqAccEnrNEdTch,	// #1639
 	};
 
 /*****************************************************************************/
@@ -5115,16 +5118,17 @@ void Act_AdjustCurrentAction (void)
 	   {
 	    case Rol_STD:
 	       Gbl.Action.Act = ActReqAccEnrStd;
-	       Tab_SetCurrentTab ();
 	       break;
 	    case Rol_NED_TCH:
+	       Gbl.Action.Act = ActReqAccEnrNEdTch;
+	       break;
 	    case Rol_TCH:
 	       Gbl.Action.Act = ActReqAccEnrTch;
-	       Tab_SetCurrentTab ();
 	       break;
 	    default:
-	       break;
+	       return;
 	   }
+	 Tab_SetCurrentTab ();
 	 return;
 	}
 
