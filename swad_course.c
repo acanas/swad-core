@@ -429,7 +429,7 @@ static void Crs_Configuration (bool PrintView)
      {
       /***** Number of users *****/
       Crs_ShowNumUsrsInCrs (Rol_TCH);
-      Crs_ShowNumUsrsInCrs (Rol_NED_TCH);
+      Crs_ShowNumUsrsInCrs (Rol_NET);
       Crs_ShowNumUsrsInCrs (Rol_STD);
 
       /***** Indicators *****/
@@ -1287,7 +1287,7 @@ static bool Crs_ListCoursesOfAYearForSeeing (unsigned Year)
 			    "</td>",
 		  TxtClassNormal,BgColor,
 		  Crs->NumUsrs[Rol_TCH] +
-		  Crs->NumUsrs[Rol_NED_TCH]);
+		  Crs->NumUsrs[Rol_NET]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"%s RIGHT_MIDDLE %s\">"
@@ -1513,7 +1513,7 @@ static void Crs_ListCoursesOfAYearForEdition (unsigned Year)
 			    "%u"
 			    "</td>",
 		  Crs->NumUsrs[Rol_TCH] +
-		  Crs->NumUsrs[Rol_NED_TCH]);
+		  Crs->NumUsrs[Rol_NET]);
 
 	 /* Current number of students in this course */
 	 fprintf (Gbl.F.Out,"<td class=\"DAT RIGHT_MIDDLE\">"
@@ -1993,7 +1993,7 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    Crs->FullName[0] = '\0';
    Crs->NumUsrs[Rol_UNK    ] =
    Crs->NumUsrs[Rol_STD    ] =
-   Crs->NumUsrs[Rol_NED_TCH] =
+   Crs->NumUsrs[Rol_NET] =
    Crs->NumUsrs[Rol_TCH    ] = 0;
 
    /***** Check if course code is correct *****/
@@ -2057,10 +2057,10 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
 
    /***** Get number of users *****/
    Crs->NumUsrs[Rol_STD    ] = Usr_GetNumUsrsInCrs (Rol_STD    ,Crs->CrsCod);
-   Crs->NumUsrs[Rol_NED_TCH] = Usr_GetNumUsrsInCrs (Rol_NED_TCH,Crs->CrsCod);
+   Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
    Crs->NumUsrs[Rol_TCH    ] = Usr_GetNumUsrsInCrs (Rol_TCH    ,Crs->CrsCod);
    Crs->NumUsrs[Rol_UNK    ] = Crs->NumUsrs[Rol_STD    ] +
-	                       Crs->NumUsrs[Rol_NED_TCH] +
+	                       Crs->NumUsrs[Rol_NET] +
 	                       Crs->NumUsrs[Rol_TCH    ];
   }
 
@@ -2786,7 +2786,7 @@ void Crs_ContEditAfterChgCrs (void)
 					                                  false);
             break;
 	 case Rol_STD:
-	 case Rol_NED_TCH:
+	 case Rol_NET:
 	 case Rol_TCH:
 	    if (Gbl.Degs.EditingCrs.CrsCod != Gbl.CurrentCrs.Crs.CrsCod)
 	       PutButtonToRequestRegistration = !Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
@@ -3163,7 +3163,7 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
 
    /***** Get number of teachers and students in this course *****/
    NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH    ,CrsCod) +
-	     Usr_GetNumUsrsInCrs (Rol_NED_TCH,CrsCod);
+	     Usr_GetNumUsrsInCrs (Rol_NET,CrsCod);
    NumStds = Usr_GetNumUsrsInCrs (Rol_STD    ,CrsCod);
    if (NumTchs + NumStds)
      {

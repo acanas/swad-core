@@ -1080,8 +1080,9 @@ Users:
 	882. ActNewAdmDeg		Register an administrador in this degree
 	883. ActRemAdmDeg		Remove an administrador of this degree
 
-	884. ActRcvFrmEnrSevStd		Receive a form with IDs of users to be registeres/removed to/from current course
-	885. ActRcvFrmEnrSevTch		Receive a form with IDs of users to be registeres/removed to/from current course
+	884. ActRcvFrmEnrSevStd		Receive a form with IDs of students to be registered/removed to/from current course
+	NEW. ActRcvFrmEnrSevNET		Receive a form with IDs of non-editing teachers to be registered/removed to/from current course
+	885. ActRcvFrmEnrSevTch		Receive a form with IDs of teachers to be registered/removed to/from current course
 
 	889. ActCnfID_Oth		Confirm another user's ID
 	890. ActCnfID_Std		Confirm another user's ID
@@ -2476,9 +2477,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActLogInUsrAgdLan	*/{1616,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowOtherAgendaAfterLogIn	,NULL},
    /* ActSeeUsrAgd	*/{1611,-1,TabUnk,ActLstTch		,0x3F8,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,0x3C4,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Agd_ShowUsrAgenda		,NULL},
 
-   /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
-   /* ActReqEnrSevNEdTch*/{1642,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminNonEditingTchs	,NULL},
-   /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
+   /* ActReqEnrSevStd	*/{1426,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminStds		,NULL},
+   /* ActReqEnrSevNEdTch*/{1642,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminNonEditingTchs	,NULL},
+   /* ActReqEnrSevTch	*/{1427,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqAdminTchs		,NULL},
 
    /* ActReqLstStdAtt	*/{1073,-1,TabUnk,ActSeeAtt		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ReqListStdsAttendanceCrs	,NULL},
    /* ActSeeLstMyAtt	*/{1473,-1,TabUnk,ActSeeAtt		,0x008,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Usr_ListMyAttendanceCrs	,NULL},
@@ -2556,8 +2557,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActNewAdmDeg	*/{ 586,-1,TabUnk,ActLstOth		,0x380,0x380,0x380,0x380,0x380,0x380,0x380,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToDeg		,NULL},
    /* ActRemAdmDeg	*/{ 584,-1,TabUnk,ActLstOth		,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_RemAdmDeg			,NULL},
 
-   /* ActRcvFrmEnrSevStd*/{1428,-1,TabUnk,ActLstStd		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminStds	,NULL},
-   /* ActRcvFrmEnrSevTch*/{1429,-1,TabUnk,ActLstTch		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminTchs	,NULL},
+   /* ActRcvFrmEnrSevStd*/{1428,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminStds	,NULL},
+   /* ActRcvFrmEnrSevNET*/{1643,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminNonEditTchs,NULL},
+   /* ActRcvFrmEnrSevTch*/{1429,-1,TabUnk,ActLstTch		,0x3C0,0x3C0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReceiveFormAdminTchs	,NULL},
 
    /* ActCnfID_Oth	*/{1568,-1,TabUnk,ActLstOth		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
    /* ActCnfID_Std	*/{1569,-1,TabUnk,ActLstStd		,0x3E0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,ID_ConfirmOtherUsrID		,NULL},
@@ -4635,6 +4637,7 @@ Act_Action_t Act_FromActCodToAction[1 + Act_MAX_ACTION_COD] =	// Do not reuse un
 	ActAccEnrNEdTch,	// #1640
 	ActRemMe_NEdTch,	// #1641
 	ActReqEnrSevNEdTch,	// #1642
+	ActRcvFrmEnrSevNET,	// #1643
 	};
 
 /*****************************************************************************/
@@ -5128,7 +5131,7 @@ void Act_AdjustCurrentAction (void)
 	    case Rol_STD:
 	       Gbl.Action.Act = ActReqAccEnrStd;
 	       break;
-	    case Rol_NED_TCH:
+	    case Rol_NET:
 	       Gbl.Action.Act = ActReqAccEnrNEdTch;
 	       break;
 	    case Rol_TCH:
@@ -5195,7 +5198,7 @@ void Act_AdjustCurrentAction (void)
             if (Gbl.Action.Act == ActMnu)	// Do the following check sometimes, for example when the user changes the current tab
                Gbl.CurrentCrs.Info.ShowMsgMustBeRead = Inf_GetIfIMustReadAnyCrsInfoInThisCrs ();
             break;
-         case Rol_NED_TCH:
+         case Rol_NET:
             break;
          case Rol_TCH:
             if (Gbl.Action.Act == ActReqTst ||

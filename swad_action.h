@@ -57,9 +57,9 @@ typedef enum
 
 typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to indicate obsolete action
 
-#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 32 + 24 + 115 + 72 + 416 + 160 + 172 + 42 + 14 + 97)
+#define Act_NUM_ACTIONS	(1 + 9 + 43 + 17 + 47 + 32 + 24 + 115 + 72 + 416 + 161 + 172 + 42 + 14 + 97)
 
-#define Act_MAX_ACTION_COD 1642
+#define Act_MAX_ACTION_COD 1643
 
 #define Act_MAX_OPTIONS_IN_MENU_PER_TAB 12
 
@@ -1098,52 +1098,53 @@ typedef signed int Act_Action_t;	// Must be a signed type, because -1 is used to
 #define ActRemAdmDeg		(ActChgNumRowFooGrp + 120)
 
 #define ActRcvFrmEnrSevStd	(ActChgNumRowFooGrp + 121)
-#define ActRcvFrmEnrSevTch	(ActChgNumRowFooGrp + 122)
+#define ActRcvFrmEnrSevNET	(ActChgNumRowFooGrp + 122)
+#define ActRcvFrmEnrSevTch	(ActChgNumRowFooGrp + 123)
 
-#define ActCnfID_Oth		(ActChgNumRowFooGrp + 123)
-#define ActCnfID_Std		(ActChgNumRowFooGrp + 124)
-#define ActCnfID_Tch		(ActChgNumRowFooGrp + 125)
+#define ActCnfID_Oth		(ActChgNumRowFooGrp + 124)
+#define ActCnfID_Std		(ActChgNumRowFooGrp + 125)
+#define ActCnfID_Tch		(ActChgNumRowFooGrp + 126)
 
-#define ActFrmIDsOth		(ActChgNumRowFooGrp + 126)
-#define ActFrmIDsStd		(ActChgNumRowFooGrp + 127)
-#define ActFrmIDsTch		(ActChgNumRowFooGrp + 128)
-#define ActRemID_Oth		(ActChgNumRowFooGrp + 129)
-#define ActRemID_Std		(ActChgNumRowFooGrp + 130)
-#define ActRemID_Tch		(ActChgNumRowFooGrp + 131)
-#define ActNewID_Oth		(ActChgNumRowFooGrp + 132)
-#define ActNewID_Std		(ActChgNumRowFooGrp + 133)
-#define ActNewID_Tch		(ActChgNumRowFooGrp + 134)
-#define ActFrmPwdOth		(ActChgNumRowFooGrp + 135)
-#define ActFrmPwdStd		(ActChgNumRowFooGrp + 136)
-#define ActFrmPwdTch		(ActChgNumRowFooGrp + 137)
-#define ActChgPwdOth		(ActChgNumRowFooGrp + 138)
-#define ActChgPwdStd		(ActChgNumRowFooGrp + 139)
-#define ActChgPwdTch		(ActChgNumRowFooGrp + 140)
-#define ActFrmMaiOth		(ActChgNumRowFooGrp + 141)
-#define ActFrmMaiStd		(ActChgNumRowFooGrp + 142)
-#define ActFrmMaiTch		(ActChgNumRowFooGrp + 143)
-#define ActRemMaiOth		(ActChgNumRowFooGrp + 144)
-#define ActRemMaiStd		(ActChgNumRowFooGrp + 145)
-#define ActRemMaiTch		(ActChgNumRowFooGrp + 146)
-#define ActNewMaiOth		(ActChgNumRowFooGrp + 147)
-#define ActNewMaiStd		(ActChgNumRowFooGrp + 148)
-#define ActNewMaiTch		(ActChgNumRowFooGrp + 149)
+#define ActFrmIDsOth		(ActChgNumRowFooGrp + 127)
+#define ActFrmIDsStd		(ActChgNumRowFooGrp + 128)
+#define ActFrmIDsTch		(ActChgNumRowFooGrp + 129)
+#define ActRemID_Oth		(ActChgNumRowFooGrp + 130)
+#define ActRemID_Std		(ActChgNumRowFooGrp + 131)
+#define ActRemID_Tch		(ActChgNumRowFooGrp + 132)
+#define ActNewID_Oth		(ActChgNumRowFooGrp + 133)
+#define ActNewID_Std		(ActChgNumRowFooGrp + 134)
+#define ActNewID_Tch		(ActChgNumRowFooGrp + 135)
+#define ActFrmPwdOth		(ActChgNumRowFooGrp + 136)
+#define ActFrmPwdStd		(ActChgNumRowFooGrp + 137)
+#define ActFrmPwdTch		(ActChgNumRowFooGrp + 138)
+#define ActChgPwdOth		(ActChgNumRowFooGrp + 139)
+#define ActChgPwdStd		(ActChgNumRowFooGrp + 140)
+#define ActChgPwdTch		(ActChgNumRowFooGrp + 141)
+#define ActFrmMaiOth		(ActChgNumRowFooGrp + 142)
+#define ActFrmMaiStd		(ActChgNumRowFooGrp + 143)
+#define ActFrmMaiTch		(ActChgNumRowFooGrp + 144)
+#define ActRemMaiOth		(ActChgNumRowFooGrp + 145)
+#define ActRemMaiStd		(ActChgNumRowFooGrp + 146)
+#define ActRemMaiTch		(ActChgNumRowFooGrp + 147)
+#define ActNewMaiOth		(ActChgNumRowFooGrp + 148)
+#define ActNewMaiStd		(ActChgNumRowFooGrp + 149)
+#define ActNewMaiTch		(ActChgNumRowFooGrp + 150)
 
-#define ActRemStdCrs		(ActChgNumRowFooGrp + 150)
-#define ActRemTchCrs		(ActChgNumRowFooGrp + 151)
-#define ActRemUsrGbl		(ActChgNumRowFooGrp + 152)
+#define ActRemStdCrs		(ActChgNumRowFooGrp + 151)
+#define ActRemTchCrs		(ActChgNumRowFooGrp + 152)
+#define ActRemUsrGbl		(ActChgNumRowFooGrp + 153)
 
-#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp + 153)
-#define ActRemAllStdCrs		(ActChgNumRowFooGrp + 154)
+#define ActReqRemAllStdCrs	(ActChgNumRowFooGrp + 154)
+#define ActRemAllStdCrs		(ActChgNumRowFooGrp + 155)
 
-#define ActReqRemOldUsr		(ActChgNumRowFooGrp + 155)
-#define ActRemOldUsr		(ActChgNumRowFooGrp + 156)
+#define ActReqRemOldUsr		(ActChgNumRowFooGrp + 156)
+#define ActRemOldUsr		(ActChgNumRowFooGrp + 157)
 
-#define ActLstDupUsr		(ActChgNumRowFooGrp + 157)
-#define ActLstSimUsr		(ActChgNumRowFooGrp + 158)
-#define ActRemDupUsr		(ActChgNumRowFooGrp + 159)
+#define ActLstDupUsr		(ActChgNumRowFooGrp + 158)
+#define ActLstSimUsr		(ActChgNumRowFooGrp + 159)
+#define ActRemDupUsr		(ActChgNumRowFooGrp + 160)
 
-#define ActLstClk		(ActChgNumRowFooGrp + 160)
+#define ActLstClk		(ActChgNumRowFooGrp + 161)
 
 /*****************************************************************************/
 /******************************** Social tab *********************************/

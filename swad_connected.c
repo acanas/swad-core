@@ -436,7 +436,7 @@ void Con_ComputeConnectedUsrsBelongingToCurrentCrs (void)
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_TCH);
 
       /***** Number of non-editing teachers *****/
-      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_NED_TCH);
+      Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_NET);
 
       /***** Number of students *****/
       Con_ComputeConnectedUsrsWithARoleBelongingToCurrentCrs (Rol_STD);
@@ -485,7 +485,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    /***** Number of teachers and students *****/
    fprintf (Gbl.F.Out,"<table class=\"CONNECTED_LIST\">");
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_TCH);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NED_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_STD);
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
@@ -532,7 +532,7 @@ void Con_ShowConnectedUsrsBelongingToCurrentCrs (void)
    Gbl.Usrs.Connected.NumUsrs       = 0;
    Gbl.Usrs.Connected.NumUsrsToList = 0;
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_TCH);
-   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NED_TCH);
+   Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_NET);
    Con_ShowConnectedUsrsWithARoleBelongingToCurrentCrsOnRightColumn (Rol_STD);
    fprintf (Gbl.F.Out,"</table>");
 
@@ -767,7 +767,7 @@ static void Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_Role_t
 			" AND connected.UsrCod=usr_data.UsrCod");
 	 break;
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
@@ -1002,7 +1002,7 @@ static void Con_WriteRowConnectedUsrOnRightColumn (Rol_Role_t Role)
       case Rol_STD:
 	 Act_FormStartUnique (ActSeeRecOneStd);
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 Act_FormStartUnique (ActSeeRecOneTch);
 	 break;
@@ -1069,7 +1069,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 			" ORDER BY Dif");
 	 break;
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 switch (Gbl.Scope.Current)
 	   {
@@ -1205,7 +1205,7 @@ static void Con_ShowConnectedUsrsCurrentLocationOneByOneOnMainZone (Rol_Role_t R
 		  case Rol_STD:
 		     Act_FormStart (ActSeeRecOneStd);
 		     break;
-		  case Rol_NED_TCH:
+		  case Rol_NET:
 		  case Rol_TCH:
 		     Act_FormStart (ActSeeRecOneTch);
 		     break;

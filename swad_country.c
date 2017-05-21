@@ -430,7 +430,7 @@ static void Cty_Configuration (bool PrintView)
 
 	 /***** Number of users in courses of this country *****/
 	 Cty_ShowNumUsrsInCrssOfCty (Rol_TCH);
-	 Cty_ShowNumUsrsInCrssOfCty (Rol_NED_TCH);
+	 Cty_ShowNumUsrsInCrssOfCty (Rol_NET);
 	 Cty_ShowNumUsrsInCrssOfCty (Rol_STD);
 	 Cty_ShowNumUsrsInCrssOfCty (Rol_UNK);
 	}

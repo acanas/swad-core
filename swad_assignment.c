@@ -589,7 +589,7 @@ static void Asg_PutFormsToRemEditOneAsg (long AsgCod,bool Hidden)
 	 Lay_PutContextualIconToEdit (ActEdiOneAsg,Asg_PutParams);
 	 // no break
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 /***** Put form to print assignment *****/
 	 Lay_PutContextualIconToPrint (ActPrnOneAsg,Asg_PutParams);
 	 break;
@@ -1717,7 +1717,7 @@ static bool Asg_CheckIfIBelongToCrsOrGrpsThisAssignment (long AsgCod)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 // Students and teachers can do assignments depending on groups
 	 /***** Get if I can do an assignment from database *****/

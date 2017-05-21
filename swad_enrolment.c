@@ -214,7 +214,7 @@ void Enr_ModifyRoleInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole)
    switch (NewRole)
      {
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 break;
       default:
@@ -253,7 +253,7 @@ void Enr_RegisterUsrInCurrentCrs (struct UsrData *UsrDat,Rol_Role_t NewRole,
    switch (NewRole)
      {
       case Rol_STD:
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
 	 break;
       default:
@@ -306,7 +306,7 @@ static void Enr_NotifyAfterEnrolment (struct UsrData *UsrDat,Rol_Role_t NewRole)
       case Rol_STD:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_NED_TCH;
 	 break;
       case Rol_TCH:
@@ -392,7 +392,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
       case Rol_STD:
 	 Act_FormStart (ActAccEnrStd);
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 Act_FormStart (ActAccEnrNEdTch);
 	 break;
       case Rol_TCH:
@@ -410,7 +410,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
       case Rol_STD:
 	 Act_FormStart (ActRemMe_Std);
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 Act_FormStart (ActRemMe_NEdTch);
 	 break;
       case Rol_TCH:
@@ -431,7 +431,7 @@ void Enr_ReqAcceptRegisterInCrs (void)
       case Rol_STD:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_STD;
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 NotifyEvent = Ntf_EVENT_ENROLMENT_NED_TCH;
 	 break;
       case Rol_TCH:
@@ -585,7 +585,7 @@ void Enr_ReqAdminStds (void)
 
 void Enr_ReqAdminNonEditingTchs (void)
   {
-   Enr_ReqAdminUsrs (Rol_NED_TCH);
+   Enr_ReqAdminUsrs (Rol_NET);
   }
 
 void Enr_ReqAdminTchs (void)
@@ -600,10 +600,9 @@ static void Enr_ReqAdminUsrs (Rol_Role_t Role)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_GST:
-	 Enr_AskIfRegRemMe (Rol_GST);
-	 break;
       case Rol_STD:
-	 Enr_AskIfRegRemMe (Rol_STD);
+      case Rol_NET:
+	 Enr_AskIfRegRemMe (Role);
 	 break;
       case Rol_TCH:
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&
@@ -636,6 +635,7 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Hlp_USERS_Administration_administer_multiple_users;
    extern const char *The_ClassTitle[The_NUM_THEMES];
    extern const char *Txt_Administer_multiple_students;
+   extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
    extern const char *Txt_Step_1_Provide_a_list_of_users;
    extern const char *Txt_Type_or_paste_a_list_of_IDs_nicks_or_emails_;
@@ -645,6 +645,8 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X_Therefore_;
    extern const char *Txt_Step_4_Confirm_the_enrolment_removing;
    extern const char *Txt_Confirm;
+   Act_Action_t NextAction;
+   const char *Title;
 
    /***** Put contextual links *****/
    if (Role == Rol_STD &&			// Users to admin: students
@@ -660,14 +662,30 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
      }
 
    /***** Form to send students to be enroled / removed *****/
-   Act_FormStart (Role == Rol_STD ? ActRcvFrmEnrSevStd :
-	                                ActRcvFrmEnrSevTch);
+   switch (Role)
+     {
+      case Rol_STD:
+	 NextAction = ActRcvFrmEnrSevStd;
+	 Title = Txt_Administer_multiple_students;
+	 break;
+      case Rol_NET:
+	 NextAction = ActRcvFrmEnrSevNET;
+	 Title = Txt_Administer_multiple_non_editing_teachers;
+	 break;
+      case Rol_TCH:
+	 NextAction = ActRcvFrmEnrSevTch;
+	 Title = Txt_Administer_multiple_teachers;
+	 break;
+      default:
+	 NextAction = ActUnk;
+	 Title = NULL;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Act_FormStart (NextAction);
 
    /***** Start frame *****/
-   Lay_StartRoundFrame (NULL,
-                        Role == Rol_STD ? Txt_Administer_multiple_students :
-	                                      Txt_Administer_multiple_teachers,
-	                NULL,
+   Lay_StartRoundFrame (NULL,Title,NULL,
 	                Hlp_USERS_Administration_administer_multiple_users);
 
    /***** Step 1: List of students to be enroled / removed *****/
@@ -1308,6 +1326,11 @@ static void Enr_PutActionsRegRemSeveralUsrs (void)
 void Enr_ReceiveFormAdminStds (void)
   {
    Enr_ReceiveFormUsrsCrs (Rol_STD);
+  }
+
+void Enr_ReceiveFormAdminNonEditTchs (void)
+  {
+   Enr_ReceiveFormUsrsCrs (Rol_NET);
   }
 
 void Enr_ReceiveFormAdminTchs (void)
@@ -2983,7 +3006,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 NextAction = ActReqEnrSevStd;
 	 TitleText = Txt_Administer_multiple_students;
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
 	 NextAction = ActReqEnrSevNEdTch;
 	 TitleText = Txt_Administer_multiple_teachers;
 	 break;

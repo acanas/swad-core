@@ -168,7 +168,7 @@ void Att_SeeAttEvents (void)
 	    case Rol_STD:
 	       Att_PutFormToListMyAttendance ();
 	       break;
-	    case Rol_NED_TCH:
+	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_SYS_ADM:
 	       Att_PutFormToListStdsAttendance ();
@@ -1825,7 +1825,7 @@ void Att_SeeOneAttEvent (void)
       case Rol_STD:
 	 Att_ListAttOnlyMeAsStudent (&Att);
 	 break;
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 /***** Show list of students *****/

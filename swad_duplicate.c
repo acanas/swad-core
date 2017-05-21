@@ -329,7 +329,7 @@ static void Dup_ListSimilarUsrs (void)
 
 	    /* Write all the courses this user belongs to */
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
-	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NED_TCH);
+	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
 	    Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 
 	    fprintf (Gbl.F.Out,"</td>"

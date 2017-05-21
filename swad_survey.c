@@ -1026,7 +1026,7 @@ static void Svy_SetAllowedAndHiddenScopes (unsigned *ScopesAllowed,
 	      }
 	   }
          break;
-      case Rol_NED_TCH:	// Non-editing teacher in current course **************
+      case Rol_NET:	// Non-editing teacher in current course **************
       case Rol_TCH:	// Teacher in current course **************************
 	 *ScopesAllowed = 1 << Sco_SCOPE_SYS;
 	 *HiddenAllowed = 0;

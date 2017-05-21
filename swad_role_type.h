@@ -49,7 +49,7 @@ typedef enum
    	   	   	// ...but no course selected
 			// ...or not belonging to the current course
    Rol_STD	= 3,	// Student in the current course
-   Rol_NED_TCH	= 4,	// Non-editing teacher in the current course
+   Rol_NET	= 4,	// Non-editing teacher in the current course
    Rol_TCH	= 5,	// Old 4	// Teacher in the current course
    Rol_DEG_ADM	= 6,	// Old 5	// Degree administrator
    Rol_CTR_ADM	= 7,	// Old 6	// Centre administrator

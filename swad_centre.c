@@ -620,7 +620,7 @@ static void Ctr_Configuration (bool PrintView)
 
 	 /***** Number of users in courses of this centre *****/
 	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_TCH);
-	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_NED_TCH);
+	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_NET);
 	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_STD);
 	 Ctr_ShowNumUsrsInCrssOfCtr (Rol_UNK);
 	}

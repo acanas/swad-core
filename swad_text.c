@@ -2058,6 +2058,27 @@ const char *Txt_Administer_multiple_students =
 	"Gerenciar v&aacute;rios estudantes";
 #endif
 
+const char *Txt_Administer_multiple_non_editing_teachers =
+#if   L==1
+	"Administrar diversos professors no editors";
+#elif L==2
+	"Verwalten Sie mehrere nicht bearbeiteter Lehrkr&auml;fte";
+#elif L==3
+	"Administer multiple non-editing teachers";
+#elif L==4
+	"Administrar varios profesores no editores";
+#elif L==5
+	"G&eacute;rer plusieurs enseignants non-&eacute;diteurs";
+#elif L==6
+	"Administrar varios profesores no editores";	// Okoteve traducción
+#elif L==7
+	"Gestire pi&ugrave; professori non-editing";
+#elif L==8
+	"Zarz&aogon;dzaj wielu nauczycieli nie edytuj&aogon;cy";
+#elif L==9
+	"Gerenciar v&aacute;rios professores n&atilde;o editores";
+#endif
+
 const char *Txt_Administer_multiple_teachers =
 #if   L==1
 	"Administrar diversos professors";

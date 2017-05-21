@@ -428,12 +428,12 @@ void Ann_ShowFormAnnouncement (void)
    Rol_WriteSelectorRoles (1 << Rol_UNK     |
                            1 << Rol_GST     |
                            1 << Rol_STD     |
-                           1 << Rol_NED_TCH |
+                           1 << Rol_NET |
                            1 << Rol_TCH,
 	                   1 << Rol_UNK     |
                            1 << Rol_GST     |
                            1 << Rol_STD     |
-                           1 << Rol_NED_TCH |
+                           1 << Rol_NET |
                            1 << Rol_TCH,
                            false,false);
    fprintf (Gbl.F.Out,"</td>"

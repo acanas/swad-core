@@ -166,7 +166,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
 		  ThisRoomFullName,ThisRoomFullName);
 	 Cht_WriteLinkToChat2 ("GBL_STD",ThisRoomFullName);
          break;
-      case Rol_NED_TCH:
+      case Rol_NET:
       case Rol_TCH:
          sprintf (ThisRoomFullName,"%s (%s)",
                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
@@ -481,7 +481,7 @@ void Cht_OpenChatWindow (void)
 	             Cht_MAX_BYTES_ROOM_FULL_NAMES);
         }
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_NED_TCH ||
+   if (Gbl.Usrs.Me.LoggedRole == Rol_NET ||
        Gbl.Usrs.Me.LoggedRole == Rol_TCH)
       if (strcmp (RoomCode,"GBL_TCH"))
         {

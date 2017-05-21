@@ -516,7 +516,7 @@ static void Deg_Configuration (bool PrintView)
 
 	 /***** Number of users *****/
 	 Deg_ShowNumUsrsInCrssOfDeg (Rol_TCH);
-	 Deg_ShowNumUsrsInCrssOfDeg (Rol_NED_TCH);
+	 Deg_ShowNumUsrsInCrssOfDeg (Rol_NET);
 	 Deg_ShowNumUsrsInCrssOfDeg (Rol_STD);
 	 Deg_ShowNumUsrsInCrssOfDeg (Rol_UNK);
 	}
