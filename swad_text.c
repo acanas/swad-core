@@ -25608,23 +25608,23 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 #endif
 	 ,
 #if   L==1	// Rol_NET
-	 "No hi ha professors."
+	 "No hi ha professors no editors."
 #elif L==2
-	 "Keine Lehrkr&auml;ften gefunden."
+	 "Keine nicht bearbeiteter Lehrkr&auml;ften gefunden."
 #elif L==3
-	 "No teachers found."
+	 "No non-editing teachers found."
 #elif L==4
-	 "No hay profesores."
+	 "No hay profesores no editores."
 #elif L==5
-	 "Aucun enseignant trouv&eacute;."
+	 "Aucun enseignant non-&eacute;diteur trouv&eacute;."
 #elif L==6
-	 "No hay profesores."	// Okoteve traducción
+	 "No hay profesores no editores."	// Okoteve traducción
 #elif L==7
-	 "Non ci sono professori."
+	 "Non ci sono professori non-editing."
 #elif L==8
-	 "Nie znaleziono nauczycieli."
+	 "Nie znaleziono nauczycieli nie edytuj&aogon;cy."
 #elif L==9
-	 "Nenhum professor encontrado."
+	 "Nenhum professor n&atilde;o editor encontrado."
 #endif
 	 ,
 #if   L==1	// Rol_TCH

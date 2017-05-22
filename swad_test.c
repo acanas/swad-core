@@ -305,6 +305,7 @@ void Tst_ShowFormAskTst (void)
       case Rol_STD:
          Tst_PutFormToViewResultsOfUsersTests (ActReqSeeMyTstRes);
          break;
+      case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
          Tst_PutFormToViewResultsOfUsersTests (ActReqSeeUsrTstRes);
@@ -6967,10 +6968,12 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+   Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Test_results,
@@ -7001,6 +7004,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                   The_ClassForm[Gbl.Prefs.Theme]);
          Lay_StartTable (2);
          Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          Lay_EndTable ();
          fprintf (Gbl.F.Out,"</td>"
@@ -7026,6 +7030,7 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
@@ -7303,6 +7308,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	       ICanViewScore = ItsMe &&
 		               Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
 	       break;
+	    case Rol_NET:
 	    case Rol_TCH:
 	    case Rol_DEG_ADM:
 	    case Rol_CTR_ADM:
@@ -7426,6 +7432,7 @@ static void Tst_ShowTestResults (struct UsrData *UsrDat)
 	    ICanViewTotalScore = ItsMe &&
 	                         Gbl.Test.Config.FeedbackType != Tst_FEEDBACK_NOTHING;
 	    break;
+	 case Rol_NET:
 	 case Rol_TCH:
 	 case Rol_DEG_ADM:
 	 case Rol_CTR_ADM:
@@ -7524,6 +7531,7 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
   {
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
+   Act_Action_t NextAction;
 
    /***** Show user's photo and name *****/
    fprintf (Gbl.F.Out,"<td ");
@@ -7543,8 +7551,21 @@ static void Tst_ShowDataUsr (struct UsrData *UsrDat,unsigned NumTestResults)
       fprintf (Gbl.F.Out,"rowspan=\"%u\"",NumTestResults + 1);
    fprintf (Gbl.F.Out," class=\"LEFT_TOP COLOR%u\">",
 	    Gbl.RowEvenOdd);
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActSeeRecOneStd :
-	                                                      ActSeeRecOneTch);
+   switch (UsrDat->RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 NextAction = ActSeeRecOneStd;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+	 NextAction = ActSeeRecOneTch;
+	 break;
+      default:
+	 NextAction = ActUnk;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Act_FormStart (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
    Act_LinkFormSubmit (UsrDat->FullName,"AUTHOR_TXT",NULL);
 

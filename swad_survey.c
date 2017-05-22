@@ -619,6 +619,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
         	                 "ASG_GRP_LIGHT",
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
+                           1 << Rol_NET |
 			   1 << Rol_TCH,
 			   Svy.Roles,
 			   true,false);
@@ -1261,6 +1262,17 @@ void Svy_GetDataOfSurveyByCod (struct Survey *Svy)
                                            Svy->Status.IHaveAnswered;
             Svy->Status.ICanEdit         = false;
             break;
+         case Rol_NET:
+            Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
+        	                           Svy->Scope == Sco_SCOPE_DEG ||
+        	                           Svy->Scope == Sco_SCOPE_CTR ||
+        	                           Svy->Scope == Sco_SCOPE_INS ||
+        	                           Svy->Scope == Sco_SCOPE_CTY ||
+        	                           Svy->Scope == Sco_SCOPE_SYS) &&
+        	                           Svy->NumQsts != 0 &&
+                                          !Svy->Status.ICanAnswer;
+            Svy->Status.ICanEdit        = false;
+            break;
          case Rol_TCH:
             Svy->Status.ICanViewResults = (Svy->Scope == Sco_SCOPE_CRS ||
         	                           Svy->Scope == Sco_SCOPE_DEG ||
@@ -1861,6 +1873,7 @@ void Svy_RequestCreatOrEditSvy (void)
             The_ClassForm[Gbl.Prefs.Theme],
             Txt_Users);
    Rol_WriteSelectorRoles (1 << Rol_STD |
+                           1 << Rol_NET |
                            1 << Rol_TCH,
                            Svy.Roles,
                            false,false);
