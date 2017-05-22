@@ -452,6 +452,7 @@ void Gbl_InitializeGlobals (void)
 void Gbl_Cleanup (void)
   {
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
+   Rol_Role_t Role;
 
    if (!Gbl.Action.UsesAJAX &&
        !Gbl.WebService.IsWebService &&
@@ -478,10 +479,12 @@ void Gbl_Cleanup (void)
    Hld_FreeListHolidays ();
    Lnk_FreeListLinks ();
    Plg_FreeListPlugins ();
-   Usr_FreeUsrsList (Rol_GST);
-   Usr_FreeUsrsList (Rol_STD);
-   Usr_FreeUsrsList (Rol_TCH);
-   Usr_FreeUsrsList (Rol_DEG_ADM);
+
+   for (Role = (Rol_Role_t) 0;
+	Role < Rol_NUM_ROLES;
+	Role++)
+      Usr_FreeUsrsList (Role);
+
    Usr_FreeListOtherRecipients ();
    Usr_FreeListsSelectedUsrsCods ();
    Syl_FreeListItemsSyllabus ();

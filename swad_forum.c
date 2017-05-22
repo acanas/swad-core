@@ -3757,7 +3757,7 @@ static void For_RestrictAccess (void)
          break;
       case For_FORUM_INSTIT_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location) >= Rol_TCH);
+                         Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
          break;
       case For_FORUM_CENTRE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
@@ -3765,7 +3765,7 @@ static void For_RestrictAccess (void)
          break;
       case For_FORUM_CENTRE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_TCH);
+                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
          break;
       case For_FORUM_DEGREE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
@@ -3773,7 +3773,7 @@ static void For_RestrictAccess (void)
          break;
       case For_FORUM_DEGREE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_TCH);
+                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
          break;
       case For_FORUM_COURSE_USRS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
@@ -3781,7 +3781,7 @@ static void For_RestrictAccess (void)
          break;
       case For_FORUM_COURSE_TCHS:
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_TCH);
+                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
          break;
       default:
 	 ICanSeeForum = false;

@@ -2082,11 +2082,22 @@ void Brw_GetParAndInitFileBrowser (void)
       /***** Marks *****/
       case ActSeeAdmMrk:	// Access to a marks zone from menu
          /* Set file browser type acording to last group accessed */
-         Gbl.FileBrowser.Type = (Gbl.Usrs.Me.LoggedRole == Rol_STD) ?
-				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_SHOW_MARKS_GRP :
-								  Brw_SHOW_MARKS_CRS) :
-				(Gbl.CurrentCrs.Grps.GrpCod > 0 ? Brw_ADMI_MARKS_GRP :
-								  Brw_ADMI_MARKS_CRS);
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STD:
+	    case Rol_NET:
+	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_SHOW_MARKS_GRP :
+								         Brw_SHOW_MARKS_CRS;
+	       break;
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       Gbl.FileBrowser.Type = (Gbl.CurrentCrs.Grps.GrpCod > 0) ? Brw_ADMI_MARKS_GRP :
+								         Brw_ADMI_MARKS_CRS;
+	       break;
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong role.");
+	       break;
+	   }
          break;
       case ActChgToSeeMrk:	// Access to see a marks zone
          /* Set file browser type acording to last group accessed */
@@ -3097,10 +3108,12 @@ void Brw_AskEditWorksCrs (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+   Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Draw class photos to select users *****/
    Lay_StartRoundFrame (NULL,Txt_Users,
@@ -3125,6 +3138,7 @@ void Brw_AskEditWorksCrs (void)
          /* Put list of users to select some of them */
          Lay_StartTableCenter (0);
          Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          Lay_EndTable ();
 
@@ -3143,6 +3157,7 @@ void Brw_AskEditWorksCrs (void)
 
    /***** Free memory for users' list *****/
    Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory used by list of selected users' codes *****/
@@ -3389,6 +3404,7 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
    extern const char *Txt_View_record_for_this_course;
    bool ShowPhoto;
    char PhotoURL[PATH_MAX + 1];
+   Act_Action_t NextAction;
 
    /***** Show user's photo *****/
    fprintf (Gbl.F.Out,"<td class=\"OWNER_WORKS_PHOTO\">");
@@ -3403,8 +3419,21 @@ static void Brw_ShowDataOwnerAsgWrk (struct UsrData *UsrDat)
 
    fprintf (Gbl.F.Out,"<div class=\"OWNER_WORKS_DATA AUTHOR_TXT\"");
 
-   Act_FormStart (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActSeeRecOneStd :
-	                                                      ActSeeRecOneTch);
+   switch (UsrDat->RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 NextAction = ActSeeRecOneStd;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+	 NextAction = ActSeeRecOneTch;
+	 break;
+      default:
+	 NextAction = ActUnk;
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
+   Act_FormStart (NextAction);
    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 
    /***** Show user's ID *****/
@@ -3972,12 +4001,23 @@ static void Brw_WriteSubtitleOfFileBrowser (void)
 	 break;
       case Brw_SHOW_MARKS_CRS:
       case Brw_SHOW_MARKS_GRP:
-         if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
-            sprintf (Subtitle,"(%s)",
-                     Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
-	 else
-            sprintf (Subtitle,"(%s)",
-                     Txt_the_marks_of_a_student_chosen_at_random_);
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STD:
+	       sprintf (Subtitle,"(%s)",
+			Txt_accessible_only_for_reading_by_you_and_the_teachers_of_the_course);
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       sprintf (Subtitle,"(%s)",
+			Txt_the_marks_of_a_student_chosen_at_random_);
+	       break;
+	    default:
+	       Subtitle[0] = '\0';
+	       Lay_ShowErrorAndExit ("Wrong role.");
+	       break;
+	   }
  	 break;
       case Brw_ADMI_MARKS_CRS:
       case Brw_ADMI_MARKS_GRP:
@@ -5307,8 +5347,8 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
       /***** Put icon to download ZIP of folder *****/
       fprintf (Gbl.F.Out,"<td class=\"BM%u\">",Gbl.RowEvenOdd);
       if (Gbl.Usrs.Me.LoggedRole >= Rol_STD &&	// Only ZIP folders if I am student, teacher...
-	  !SeeMarks &&					// Do not ZIP folders when seeing marks
-	  !(SeeDocsZone && RowSetAsHidden))		// When seeing docs, if folder is not hidden (this could happen for Level == 0)
+	  !SeeMarks &&				// Do not ZIP folders when seeing marks
+	  !(SeeDocsZone && RowSetAsHidden))	// When seeing docs, if folder is not hidden (this could happen for Level == 0)
 	    ZIP_PutButtonToDownloadZIPOfAFolder (PathInTree,FileName);
       fprintf (Gbl.F.Out,"</td>");
      }
@@ -10884,10 +10924,17 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not edit this assignment
 
-         return ((Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// Students can edit
-                  Gbl.FileBrowser.Asg.Open) ||			// inside open assignments
-                  Gbl.Usrs.Me.LoggedRole >= Rol_TCH);	// Teachers can edit
-								// inside open or closed assignments
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STD:			// Students...
+	    case Rol_NET:			// ...and non-editing teachers...
+	       return Gbl.FileBrowser.Asg.Open;	// ...can edit inside open assignments
+	    case Rol_TCH:			// Teachers...
+	       return true;			// ...can edit inside open or closed assignments
+	    default:
+	       break;
+	   }
+	 return false;
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
      }
@@ -10929,10 +10976,17 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 	 if (!Gbl.FileBrowser.Asg.IBelongToCrsOrGrps)	// If I do not belong to course / groups of this assignment
 	    return false; 				// I can not create anything inside this assignment
 
-         return ((Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// Students can create
-                  Gbl.FileBrowser.Asg.Open) ||			// inside open assignments
-                  Gbl.Usrs.Me.LoggedRole >= Rol_TCH);	// Teachers can create
-								// inside open or closed assignments
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STD:			// Students...
+	    case Rol_NET:			// ...and non-editing teachers...
+	       return Gbl.FileBrowser.Asg.Open;	// ...can create inside open assignments
+	    case Rol_TCH:			// Teachers...
+	       return true;			// ...can create inside open or closed assignments
+	    default:
+	       break;
+	   }
+	 return false;
       default:
          return Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type];
      }
@@ -10957,7 +11011,8 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
 
    switch (Gbl.Usrs.Me.LoggedRole)
      {
-      case Rol_STD:	// If I am a student, I can modify the file/folder if I am the publisher
+      case Rol_STD:	// If I am a student or a non-editing teacher...
+      case Rol_NET:	// ...I can modify the file/folder if I am the publisher
          /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
          sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
                         " WHERE FileBrowser=%u AND Cod=%ld"

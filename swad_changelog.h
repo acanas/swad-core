@@ -233,14 +233,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.220.8 (2017-05-21)"
+#define Log_PLATFORM_VERSION	"SWAD 16.220.9 (2017-05-22)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
-        Version 16.220.8: May 21, 2017	Changes related with new role. Not finished. (219663 lines)
+        Version 16.220.9: May 22, 2017	Changes related with new role. Not finished. (219720 lines)
+        Version 16.220.8: May 22, 2017	Changes related with new role. Not finished. (219663 lines)
 					4 changes necessary in database:
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1644','es','N','Confirmar modif. profesor no editor');
 INSERT INTO actions (ActCod,Language,Obsolete,Txt) VALUES ('1645','es','N','Crear usuario como profesor no editor');
