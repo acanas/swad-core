@@ -813,6 +813,7 @@ void Pwd_ShowFormOthPwd (void)
    extern const char *Txt_Password;
    extern const char *Txt_Change_password;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
+   Act_Action_t NextAction;
 
    /***** Get user whose password must be changed *****/
    if (Usr_GetParamOtherUsrCodEncryptedAndGetUsrData ())
@@ -828,9 +829,20 @@ void Pwd_ShowFormOthPwd (void)
 
 	 /***** Form to change password *****/
 	 /* Start form */
-	 Act_FormStart ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActChgPwdStd :
-	                (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActChgPwdTch :
-	                	                                                   ActChgPwdOth));
+	 switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	   {
+	    case Rol_STD:
+	       NextAction = ActChgPwdStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActChgPwdTch;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActChgPwdOth;
+	       break;
+	   }
+	 Act_FormStart (NextAction);
 	 Usr_PutParamOtherUsrCodEncrypted ();
 
 	 /* New password */
@@ -874,18 +886,32 @@ void Pwd_PutLinkToChangeMyPassword (void)
 void Pwd_PutLinkToChangeOtherUsrPassword (void)
   {
    extern const char *Txt_Change_password;
+   Act_Action_t NextAction;
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       Pwd_PutLinkToChangeMyPassword ();
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmPwdStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmPwdTch :
-	                	                                                        ActFrmPwdOth),
-                             NULL,Usr_PutParamOtherUsrCodEncrypted,
+     {
+      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    NextAction = ActFrmPwdStd;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActFrmPwdTch;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActFrmPwdOth;
+	    break;
+	}
+      Lay_PutContextualLink (NextAction,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
                              "key64x64.gif",
                              Txt_Change_password,Txt_Change_password,
                              NULL);
+     }
   }
 
 /*****************************************************************************/

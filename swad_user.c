@@ -946,6 +946,7 @@ unsigned Usr_GetNumCrssOfUsrWithARoleNotAccepted (long UsrCod,Rol_Role_t Role)
 unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
                                      Rol_Role_t OthersRole)
   {
+   char SubQueryRole[64];
    char Query[512];
    unsigned NumUsrs;
    // This query can be made in a unique, but slower, query
@@ -956,22 +957,53 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not remove temporary tables");
 
-   /***** Create temporary table with all user's courses for a role *****/
+   /***** Create temporary table with all user's courses as student/teacher *****/
+   switch (UsrRole)
+     {
+      case Rol_STD:	// Student
+	 sprintf (SubQueryRole,"Role=%u",
+	          (unsigned) Rol_STD);
+	 break;
+      case Rol_NET:	// Non-editing teacher
+      case Rol_TCH:	// or teacher
+	 sprintf (SubQueryRole,"(Role=%u OR Role=%u)",
+	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
+	 break;
+      default:
+	 SubQueryRole[0] = '\0';
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
    sprintf (Query,"CREATE TEMPORARY TABLE IF NOT EXISTS usr_courses_tmp"
 	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
 	          " ENGINE=MEMORY"
 	          " SELECT CrsCod FROM crs_usr"
-	          " WHERE UsrCod=%ld AND Role=%u",
-	    UsrCod,(unsigned) UsrRole);
+	          " WHERE UsrCod=%ld AND %s",
+	    UsrCod,SubQueryRole);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
 
-   /***** Get the number of teachers in a course from database ******/
+   /***** Get the number of students/teachers in a course from database ******/
+   switch (OthersRole)
+     {
+      case Rol_STD:	// Student
+	 sprintf (SubQueryRole,"crs_usr.Role=%u",
+	          (unsigned) Rol_STD);
+	 break;
+      case Rol_NET:	// Non-editing teacher
+      case Rol_TCH:	// or teacher
+	 sprintf (SubQueryRole,"(crs_usr.Role=%u OR crs_usr.Role=%u)",
+	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
+	 break;
+      default:
+	 SubQueryRole[0] = '\0';
+	 Lay_ShowErrorAndExit ("Wrong role.");
+	 break;
+     }
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM crs_usr,usr_courses_tmp"
-                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
-                  " AND crs_usr.Role=%u",
-            (unsigned) OthersRole);
+                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod AND %s",
+            SubQueryRole);
    NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
    /***** Remove temporary table *****/

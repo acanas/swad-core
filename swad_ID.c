@@ -461,7 +461,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
       case Rol_TCH:
 	 NextAction = ActCnfID_Tch;
 	 break;
-      default:	// Guest, visitor or admin
+      default:	// Guest, user or admin
 	 NextAction = ActCnfID_Oth;
 	 break;
      }
@@ -521,7 +521,7 @@ void ID_PutLinkToChangeUsrIDs (void)
 	 case Rol_TCH:
 	    NextAction = ActFrmIDsTch;
 	    break;
-	 default:	// Guest, visitor or admin
+	 default:	// Guest, user or admin
 	    NextAction = ActFrmIDsOth;
 	    break;
 	}
@@ -623,7 +623,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 		  case Rol_TCH:
 		     NextAction = ActRemID_Tch;
 		     break;
-		  default:	// Guest, visitor or admin
+		  default:	// Guest, user or admin
 		     NextAction = ActRemID_Oth;
 		     break;
 		 }
@@ -688,7 +688,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	    case Rol_TCH:
 	       NextAction = ActNewID_Tch;
 	       break;
-	    default:	// Guest, visitor or admin
+	    default:	// Guest, user or admin
 	       NextAction = ActNewID_Oth;
 	       break;
 	   }

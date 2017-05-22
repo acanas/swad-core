@@ -140,9 +140,9 @@ bool Pho_ICanChangeOtherUsrPhoto (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TCH:
-	 /* Check 1: I can change the photo of confirmed students */
+	 /* A teacher can change the photo of confirmed students */
          if (UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// A student
-	     UsrDat->Accepted)					// who accepted registration
+	     UsrDat->Accepted)				// who accepted registration
             return true;
 
          return false;
@@ -185,6 +185,7 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
    bool PhotoExists;
    char PhotoURL[PATH_MAX + 1];
    const char *TitleText;
+   Act_Action_t NextAction;
 
    /***** Link for changing / uploading the photo *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
@@ -195,10 +196,21 @@ void Pho_PutLinkToChangeOtherUsrPhoto (void)
 	 PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
 	 TitleText = PhotoExists ? Txt_Change_photo :
 				   Txt_Upload_photo;
-	 Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActReqStdPho :
-	                        (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActReqTchPho :
-	                                                                                   ActReqOthPho),	// Guest, visitor or admin
-	                        NULL,Usr_PutParamOtherUsrCodEncrypted,
+	 switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	   {
+	    case Rol_STD:
+	       NextAction = ActReqStdPho;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActReqTchPho;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActReqOthPho;
+	       break;
+	   }
+	 Lay_PutContextualLink (NextAction,NULL,
+	                        Usr_PutParamOtherUsrCodEncrypted,
 	                        "photo64x64.gif",
 				TitleText,TitleText,
 				NULL);
@@ -230,17 +242,31 @@ static void Pho_PutIconToRequestRemoveOtherUsrPhoto (void)
    extern const char *Txt_Remove_photo;
    char PhotoURL[PATH_MAX + 1];
    bool PhotoExists;
+   Act_Action_t NextAction;
 
    /***** Link to request the removal of another user's photo *****/
    PhotoExists = Pho_BuildLinkToPhoto (&Gbl.Usrs.Other.UsrDat,PhotoURL);
    if (PhotoExists)
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActReqRemStdPho :
-			     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActReqRemTchPho :
-											ActReqRemOthPho),	// Guest, visitor or admin
-			     NULL,Usr_PutParamOtherUsrCodEncrypted,
+     {
+      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    NextAction = ActReqRemStdPho;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActReqRemTchPho;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActReqRemOthPho;
+	    break;
+	}
+      Lay_PutContextualLink (NextAction,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
 			     "remove-on64x64.png",
 			     Txt_Remove_photo,NULL,
 		             NULL);
+     }
   }
 
 /*****************************************************************************/
@@ -295,6 +321,7 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
    extern const char *Txt_File_with_the_photo;
    extern const char *Txt_Upload_photo;
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
+   Act_Action_t NextAction;
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Photo,
@@ -307,9 +334,20 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
       Act_FormStart (ActDetMyPho);
    else
      {
-      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActDetStdPho :
-	             (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActDetTchPho :
-	                                                          ActDetOthPho));	// Guest, visitor or admin
+      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    NextAction = ActDetStdPho;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActDetTchPho;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActDetOthPho;
+	    break;
+	}
+      Act_FormStart (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
 
@@ -459,6 +497,7 @@ void Pho_ReqRemoveUsrPhoto (void)
    extern const char *Txt_The_photo_no_longer_exists;
    extern const char *Txt_User_not_found_or_you_do_not_have_permission_;
    char PhotoURL[PATH_MAX + 1];
+   Act_Action_t NextAction;
 
    /***** Get user's code from form *****/
    Usr_GetParamOtherUsrCodEncryptedAndGetListIDs ();
@@ -482,10 +521,21 @@ void Pho_ReqRemoveUsrPhoto (void)
 			      "PHOTO186x248",Pho_NO_ZOOM,false);
 
 	    /* End alert */
-	    Ale_ShowAlertAndButton2 ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActRemStdPho :
-			             (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActRemTchPho :
-										                ActRemOthPho),	// Guest, visitor or admin
-	                             NULL,Usr_PutParamOtherUsrCodEncrypted,
+	    switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	      {
+	       case Rol_STD:
+		  NextAction = ActRemStdPho;
+		  break;
+	       case Rol_NET:
+	       case Rol_TCH:
+		  NextAction = ActRemTchPho;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActRemOthPho;
+		  break;
+	      }
+	    Ale_ShowAlertAndButton2 (NextAction,NULL,
+	                             Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
 	   }
 	 else
@@ -560,6 +610,7 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
    unsigned Radius;
    unsigned BackgroundCode;
    char StrFileName[NAME_MAX + 1];
+   Act_Action_t NextAction;
 
    /***** Creates directories if not exist *****/
    sprintf (PathPhotosPriv,"%s/%s",
@@ -648,12 +699,26 @@ static bool Pho_ReceivePhotoAndDetectFaces (bool ItsMe,const struct UsrData *Usr
             if (BackgroundCode == 1)
               {
                NumFacesGreen++;
-               Act_FormStart (ItsMe ? ActUpdMyPho :
-        	                      (UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActUpdStdPho :
-        	                      (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActUpdTchPho :
-        	                	                                           ActUpdOthPho)));	// Guest, visitor or admin
-               if (!ItsMe)
+               if (ItsMe)
+        	  Act_FormStart (ActUpdMyPho);
+               else
+        	 {
+               	  switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+		    {
+		     case Rol_STD:
+			NextAction = ActUpdStdPho;
+			break;
+		     case Rol_NET:
+		     case Rol_TCH:
+			NextAction = ActUpdTchPho;
+			break;
+		     default:	// Guest, user or admin
+			NextAction = ActUpdOthPho;
+			break;
+		    }
+		  Act_FormStart (NextAction);
                   Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+        	 }
                Par_PutHiddenParamString ("FileName",StrFileName);
                Act_FormEnd ();
               }

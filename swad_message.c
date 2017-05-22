@@ -181,8 +181,9 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    bool ShowUsrsInCrs = false;
    bool GetUsrsInCrs;
 
-   Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs =
-   Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs = 0;
+   Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs =
+   Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs =
+   Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs = 0;
 
    /***** Get parameter that indicates if the message is a reply to another message *****/
    if ((Gbl.Msg.Reply.IsReply = Par_GetParToBool ("IsReply")))
@@ -213,10 +214,12 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
       Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-      NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
-		     Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+      Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+      NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +	// Students
+	             Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +	// Non-editing teachers
+		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers
      }
 
    /***** Start frame *****/
@@ -288,6 +291,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (ShowUsrsInCrs)
 	{
 	 Usr_ListUsersToSelect (Rol_TCH);	// All teachers in course
+	 Usr_ListUsersToSelect (Rol_NET);	// All non-editing teachers in course
 	 Usr_ListUsersToSelect (Rol_STD);	// All students in selected groups
 	}
       Msg_WriteFormUsrsIDsOrNicksOtherRecipients ();	// Other users (nicknames)
@@ -325,6 +329,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
    if (GetUsrsInCrs)
      {
       Usr_FreeUsrsList (Rol_TCH);
+      Usr_FreeUsrsList (Rol_NET);
       Usr_FreeUsrsList (Rol_STD);
      }
 

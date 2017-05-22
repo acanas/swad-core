@@ -55,7 +55,7 @@ static const bool Enr_ICanAdminOtherUsrs[Rol_NUM_ROLES] =
    false,	// Rol_GST
    false,	// Rol_USR
    false,	// Rol_STD
-   false,	// Rol_NED_TCH
+   false,	// Rol_NET
 
    /* Users who can admin */
    true,	// Rol_TCH

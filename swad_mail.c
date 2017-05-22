@@ -1127,6 +1127,7 @@ long Mai_GetUsrCodFromEmail (const char Email[Cns_MAX_BYTES_EMAIL_ADDRESS + 1])
 void Mai_PutLinkToChangeOtherUsrEmails (void)
   {
    extern const char *Txt_Change_email;
+   Act_Action_t NextAction;
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
@@ -1135,13 +1136,26 @@ void Mai_PutLinkToChangeOtherUsrEmails (void)
 			     Txt_Change_email,Txt_Change_email,
                              NULL);
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmMaiStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmMaiTch :
-	                	                                                        ActFrmMaiOth),
-                             NULL,Usr_PutParamOtherUsrCodEncrypted,
+     {
+      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+        {
+	 case Rol_STD:
+	    NextAction = ActFrmMaiStd;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActFrmMaiTch;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActFrmMaiOth;
+	    break;
+        }
+      Lay_PutContextualLink (NextAction,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
                              "msg64x64.gif",
                              Txt_Change_email,Txt_Change_email,
                              NULL);
+     }
   }
 
 /*****************************************************************************/
@@ -1203,6 +1217,7 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
    unsigned NumEmails;
    unsigned NumEmail;
    bool Confirmed;
+   Act_Action_t NextAction;
 
    /***** Get my emails *****/
    sprintf (Query,"SELECT E_mail,Confirmed FROM usr_emails"
@@ -1248,9 +1263,20 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActRemMaiMe);
       else
 	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActRemMaiStd :
-			(UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActRemMaiTch :
-								     ActRemMaiOth));	// Guest, visitor or admin
+	 switch (UsrDat->RoleInCurrentCrsDB)
+	   {
+	    case Rol_STD:
+	       NextAction = ActRemMaiStd;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActRemMaiTch;
+	       break;
+	    default:	// Guest, user or admin
+	       NextAction = ActRemMaiOth;
+	       break;
+	   }
+	 Act_FormStart (NextAction);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"Email\" value=\"%s\" />",
@@ -1284,9 +1310,20 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
 	    Act_FormStart (ActNewMaiMe);
 	 else
 	   {
-	    Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewMaiStd :
-			   (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewMaiTch :
-									ActNewMaiOth));	// Guest, visitor or admin
+	    switch (UsrDat->RoleInCurrentCrsDB)
+	      {
+	       case Rol_STD:
+		  NextAction = ActNewMaiStd;
+		  break;
+	       case Rol_NET:
+	       case Rol_TCH:
+		  NextAction = ActNewMaiTch;
+		  break;
+	       default:	// Guest, user or admin
+		  NextAction = ActNewMaiOth;
+		  break;
+	      }
+	    Act_FormStart (NextAction);
 	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	   }
 	 fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"NewEmail\" value=\"%s\" />",
@@ -1314,9 +1351,20 @@ void Mai_ShowFormChangeUsrEmail (const struct UsrData *UsrDat,bool ItsMe)
       Act_FormStart (ActNewMaiMe);
    else
      {
-      Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewMaiStd :
-		     (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewMaiTch :
-								  ActNewMaiOth));	// Guest, visitor or admin
+      switch (UsrDat->RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    NextAction = ActNewMaiStd;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActNewMaiTch;
+	    break;
+	 default:	// Guest, user or admin
+	    NextAction = ActNewMaiOth;
+	    break;
+	}
+      Act_FormStart (NextAction);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
      }
    fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"
@@ -1832,18 +1880,21 @@ bool Mai_ICanSeeOtherUsrEmail (const struct UsrData *UsrDat)
    if (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
       return true;
 
-   /* Check if I have permission to see another user's email */
+   /***** Check if I have permission to see another user's email *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STD:
 	 /* If I am a student in the current course,
 	    I can see the email of confirmed teachers */
-	 return (UsrDat->RoleInCurrentCrsDB == Rol_TCH &&	// A teacher
-	         UsrDat->Accepted);				// who accepted registration
+	 return (UsrDat->RoleInCurrentCrsDB == Rol_NET ||	// A non-editing teacher
+	         UsrDat->RoleInCurrentCrsDB == Rol_TCH) &&	// or a teacher
+	         UsrDat->Accepted;				// who accepted registration
+      case Rol_NET:
       case Rol_TCH:
 	 /* If I am a teacher in the current course,
 	    I can see the email of confirmed students and teachers */
          return (UsrDat->RoleInCurrentCrsDB == Rol_STD ||	// A student
+                 UsrDat->RoleInCurrentCrsDB == Rol_NET ||	// or a non-editing teacher
                  UsrDat->RoleInCurrentCrsDB == Rol_TCH) &&	// or a teacher
 	         UsrDat->Accepted;				// who accepted registration
       case Rol_DEG_ADM:

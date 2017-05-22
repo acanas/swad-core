@@ -25607,7 +25607,7 @@ const char *Txt_No_users_found[Rol_NUM_ROLES] =
 	 "Nenhum estudante encontrado."
 #endif
 	 ,
-#if   L==1	// Rol_NED_TCH
+#if   L==1	// Rol_NET
 	 "No hi ha professors."
 #elif L==2
 	 "Keine Lehrkr&auml;ften gefunden."
@@ -32437,7 +32437,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_NET - Usr_SEX_UNKNOWN
 	"Professor/a no editor/a"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -32457,7 +32457,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor/a n&atilde;o editor/a"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+#if   L==1	// Rol_NET - Usr_SEX_FEMALE
 	"Professora no editora"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -32477,7 +32477,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professora n&atilde;o editora"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+#if   L==1	// Rol_NET - Usr_SEX_MALE
 	"Professor no editor"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -32497,7 +32497,7 @@ const char *Txt_ROLES_SINGUL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professor n&atilde;o editor"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+#if   L==1	// Rol_NET - Usr_SEX_ALL
 	"Professor/a no editor/a"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -33250,7 +33250,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	 },
 	{
-#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_NET - Usr_SEX_UNKNOWN
 	"professor/a no editor/a"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -33270,7 +33270,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor/a n&atilde;o editor/a"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+#if   L==1	// Rol_NET - Usr_SEX_FEMALE
 	"professora no editora"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -33290,7 +33290,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professora n&atilde;o editora"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+#if   L==1	// Rol_NET - Usr_SEX_MALE
 	"professor no editor"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -33310,7 +33310,7 @@ const char *Txt_ROLES_SINGUL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professor n&atilde;o editor"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+#if   L==1	// Rol_NET - Usr_SEX_ALL
 	"professor/a no editor/a"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -34064,7 +34064,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_NET - Usr_SEX_UNKNOWN
 	"Professors no editors"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -34084,7 +34084,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+#if   L==1	// Rol_NET - Usr_SEX_FEMALE
 	"Professores no editores"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -34104,7 +34104,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professoras n&atilde;o editoras"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+#if   L==1	// Rol_NET - Usr_SEX_MALE
 	"Professors no editors"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -34124,7 +34124,7 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"Professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+#if   L==1	// Rol_NET - Usr_SEX_ALL
 	"Professors no editors"
 #elif L==2
 	"Nicht bearbeiteter Lehrkraft"
@@ -34877,7 +34877,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #endif
 	},
 	{
-#if   L==1	// Rol_NED_TCH - Usr_SEX_UNKNOWN
+#if   L==1	// Rol_NET - Usr_SEX_UNKNOWN
 	"professors no editors"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -34897,7 +34897,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_FEMALE
+#if   L==1	// Rol_NET - Usr_SEX_FEMALE
 	"professores no editores"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -34917,7 +34917,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professoras n&atilde;o editoras"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_MALE
+#if   L==1	// Rol_NET - Usr_SEX_MALE
 	"professors no editors"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
@@ -34937,7 +34937,7 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 	"professores n&atilde;o editores"
 #endif
 	,
-#if   L==1	// Rol_NED_TCH - Usr_SEX_ALL
+#if   L==1	// Rol_NET - Usr_SEX_ALL
 	"professors no editors"
 #elif L==2
 	"nicht bearbeiteter Lehrkraft"
