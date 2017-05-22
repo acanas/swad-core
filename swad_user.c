@@ -1029,6 +1029,7 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STD:
+      case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
 	 return true;
@@ -1095,7 +1096,6 @@ bool Usr_CheckIfICanViewUsrAgenda (struct UsrData *UsrDat)
 bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
   {
    char Query[256];
-   bool IBelongToCurrentCrs;
    bool HeBelongsToCurrentCrs;
    static struct
      {
@@ -1125,16 +1125,19 @@ bool Usr_CheckIfUsrSharesAnyOfMyCrs (struct UsrData *UsrDat)
       return Cached.UsrSharesAnyOfMyCrs;
 
    /***** 5. Fast check: Is course selected and we both belong to it? *****/
-   IBelongToCurrentCrs   = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ||
-	                   Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH;
-   HeBelongsToCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STD ||
-	                   UsrDat->RoleInCurrentCrsDB == Rol_TCH;
-   if (IBelongToCurrentCrs && HeBelongsToCurrentCrs)	// Course selected and we both belong to it
-      return true;
+   if (Gbl.Usrs.Me.IBelongToCurrentCrs)
+     {
+      HeBelongsToCurrentCrs = UsrDat->RoleInCurrentCrsDB == Rol_STD ||
+			      UsrDat->RoleInCurrentCrsDB == Rol_NET ||
+			      UsrDat->RoleInCurrentCrsDB == Rol_TCH;
+      if (HeBelongsToCurrentCrs)	// Course selected and we both belong to it
+         return true;
+     }
 
    /***** 6. Fast/slow check: Does he/she belong to any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
    if (!(UsrDat->Roles & ((1 << Rol_STD) |	// Any of his/her roles is student
+	                  (1 << Rol_NET) |	// or non-editing teacher
 			  (1 << Rol_TCH))))	// or teacher?
       return false;
 
@@ -1810,25 +1813,6 @@ bool Usr_CheckIfIBelongToCrs (long CrsCod)
          return true;
 
    return false;
-  }
-
-/*****************************************************************************/
-/******************** Check if I belong to current course ********************/
-/*****************************************************************************/
-
-bool Usr_CheckIfIBelongToCurrentCrs (void)
-  {
-   /***** Fast check: Is no course selected *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod <= 0)
-      return false;
-
-   /***** Fast check: Is course selected and I am  student or teacher *****/
-   if (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ||
-       Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH)
-      return true;
-
-   /***** Slow check: query database *****/
-   return Usr_CheckIfIBelongToCrs (Gbl.CurrentCrs.Crs.CrsCod);
   }
 
 /*****************************************************************************/
@@ -2974,13 +2958,23 @@ static void Usr_SetUsrRoleAndPrefs (void)
      }
 
    /***** Check if I belong to current course *****/
-   Gbl.Usrs.Me.IBelongToCurrentCrs = false;
-   Gbl.Usrs.Me.UsrDat.Accepted = false;
    if (Gbl.CurrentCrs.Crs.CrsCod > 0)	// Course selected
-      if ((Gbl.Usrs.Me.IBelongToCurrentCrs = Usr_CheckIfIBelongToCurrentCrs ()))
+     {
+      Gbl.Usrs.Me.IBelongToCurrentCrs = Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_STD ||
+                                        Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_NET ||
+                                        Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB == Rol_TCH;
+      if (Gbl.Usrs.Me.IBelongToCurrentCrs)
          Gbl.Usrs.Me.UsrDat.Accepted = Usr_CheckIfUsrBelongsToCrs (Gbl.Usrs.Me.UsrDat.UsrCod,
                                                                    Gbl.CurrentCrs.Crs.CrsCod,
                                                                    true);
+      else
+         Gbl.Usrs.Me.UsrDat.Accepted = false;
+     }
+   else					// No course selected
+     {
+      Gbl.Usrs.Me.IBelongToCurrentCrs = false;
+      Gbl.Usrs.Me.UsrDat.Accepted = false;
+     }
 
    /***** Check if I belong to current degree *****/
    if (Gbl.CurrentDeg.Deg.DegCod > 0)
@@ -4155,8 +4149,9 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 /*********** Get list of users with a given role in a given scope ************/
 /*****************************************************************************/
 // Role can be:
-// - Rol_STD
-// - Rol_TCH
+// - Rol_STD	Student
+// - Rol_NET	Non-editing teacher
+// - Rol_TCH	Teacher
 
 void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
   {
@@ -5021,6 +5016,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 	          UsrInList->Accepted = false;
 	          break;
                case Rol_STD:
+               case Rol_NET:
                case Rol_TCH:
 		  switch (Scope)
 		    {
@@ -5759,14 +5755,29 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
-   if (Role == Rol_STD)
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	                 " name=\"SEL_UNSEL_STDS\" value=\"\""
-	                 " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
-   else	// Role == Rol_TCH or Role == Rol_GST
-      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-	                 " name=\"SEL_UNSEL_TCHS\" value=\"\""
-	                 " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
+   switch (Role)
+     {
+      case Rol_STD:
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+			    " name=\"SEL_UNSEL_STDS\" value=\"\""
+			    " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
+	 break;
+      case Rol_NET:
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+			    " name=\"SEL_UNSEL_NETS\" value=\"\""
+			    " onclick=\"togglecheckChildren(this,'UsrCodNET')\" />");
+	 break;
+      case Rol_TCH:
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+			    " name=\"SEL_UNSEL_TCHS\" value=\"\""
+			    " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
+	 break;
+      default:
+	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+			    " name=\"SEL_UNSEL_GSTS\" value=\"\""
+			    " onclick=\"togglecheckChildren(this,'UsrCodGst')\" />");
+	 break;
+     }
    Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
 	              "</label>"
@@ -5823,14 +5834,29 @@ static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsg
 
    /***** Check box *****/
    fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"");
-   if (UsrDat->RoleInCurrentCrsDB == Rol_STD)
-      fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\""
-	                 " onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",
-	       UsrDat->EncryptedUsrCod);
-   else	// Role == Rol_TCH or Role == Rol_GST
-      fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\""
-	                 " onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",
-	       UsrDat->EncryptedUsrCod);
+   switch (UsrDat->RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\""
+			    " onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",
+		  UsrDat->EncryptedUsrCod);
+	 break;
+      case Rol_NET:
+	 fprintf (Gbl.F.Out,"UsrCodNET\" value=\"%s\""
+			    " onclick=\"checkParent(this,'SEL_UNSEL_NETS')\"",
+		  UsrDat->EncryptedUsrCod);
+	 break;
+      case Rol_TCH:
+	 fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\""
+			    " onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",
+		  UsrDat->EncryptedUsrCod);
+	 break;
+      default:
+	 fprintf (Gbl.F.Out,"UsrCodGst\" value=\"%s\""
+			    " onclick=\"checkParent(this,'SEL_UNSEL_GSTS')\"",
+		  UsrDat->EncryptedUsrCod);
+	 break;
+     }
 
    /***** Check box must be checked? *****/
    CheckboxChecked = false;
@@ -6661,6 +6687,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
 	    if (Role == Rol_UNK)
 	      {
 	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_TCH);
+	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_NET);
   	       Crs_GetAndWriteCrssOfAUsr (&UsrDat,Rol_STD);
 	      }
 	    else
@@ -7379,8 +7406,7 @@ void Usr_SeeStudents (void)
    Sco_SetScopesForListingStudents ();
    Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS &&
-	              (Gbl.Usrs.Me.LoggedRole == Rol_STD ||
-                       Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
+	              (Gbl.Usrs.Me.IBelongToCurrentCrs ||
 	               Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM));
 
    /***** Get groups to show ******/
@@ -8498,9 +8524,21 @@ static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
 		     (unsigned) Role);
          break;
       case Sco_SCOPE_CRS:
-         return (float) ( Role == Rol_UNK ? Gbl.CurrentCrs.Crs.NumUsrs[Rol_UNK] :	// Any user
-                         (Role == Rol_TCH ? Gbl.CurrentCrs.Crs.NumUsrs[Rol_TCH] :	// Teachers
-                                            Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD]));	// Students
+	 switch (Role)
+	   {
+	    case Rol_UNK:
+	       return (float) Gbl.CurrentCrs.Crs.NumUsrs[Rol_UNK];	// Any user
+	    case Rol_STD:
+	       return (float) Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD];	// Students
+	    case Rol_NET:
+	       return (float) Gbl.CurrentCrs.Crs.NumUsrs[Rol_UNK];	// Non-editing teachers
+	    case Rol_TCH:
+	       return (float) Gbl.CurrentCrs.Crs.NumUsrs[Rol_UNK];	// Teachers
+	    default:
+	       Lay_ShowErrorAndExit ("Wrong role.");
+	       break;	// Not reached
+	   }
+	 break;
       default:
          Lay_ShowErrorAndExit ("Wrong scope.");
          break;
