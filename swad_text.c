@@ -32008,6 +32008,26 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"professores"
 #endif
+	,	// Sta_NON_EDITING_TEACHERS
+#if   L==1
+	"professors no editors"
+#elif L==2
+	"nicht bearbeiteter Lehrkraft"
+#elif L==3
+	"non-editing teachers"
+#elif L==4
+	"profesores no editores"
+#elif L==5
+	"enseignants non-&eacute;diteurs"
+#elif L==6
+	"mbo'eh&aacute;ra no editores"	// Okoteve traducción
+#elif L==7
+	"professori non-editing"
+#elif L==8
+	"nauczyciele nie edytuj&aogon;cy"
+#elif L==9
+	"professores n&atilde;o editores"
+#endif
 	,	// Sta_STUDENTS
 #if   L==1
 	"estudiants"
@@ -51421,6 +51441,27 @@ const char *Txt_with_new_posts =
 	"with new posts";	// Potrzebujesz tlumaczenie
 #elif L==9
 	"com novas posts";
+#endif
+
+const char *Txt_With_non_editing_teachers =
+#if   L==1
+	"Amb professors no editors";
+#elif L==2
+	"Mit nicht bearbeiteter Lehrkr&auml;ften";
+#elif L==3
+	"With non-editing teachers";
+#elif L==4
+	"Con profesores no editores";
+#elif L==5
+	"Avec enseignants non-&eacute;diteurs";
+#elif L==6
+	"Con profesores no editores";	// Okoteve traducción
+#elif L==7
+	"Con professori non-editing";
+#elif L==8
+	"Z nauczycielami nie edytuj&aogon;cy";
+#elif L==9
+	"Com professores n&atilde;o editores";
 #endif
 
 const char *Txt_With_students =

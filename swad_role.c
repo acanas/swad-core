@@ -86,7 +86,11 @@ Rol_Role_t Rol_GetMaxRoleInCrss (unsigned Roles)
    if (Roles & (1 << Rol_TCH))
       return Rol_TCH;
 
-   /* Not a teacher. Check then if user is a student in any course */
+   /* Not a teacher. Check then if user is a non-editing teacher in any course */
+   if (Roles & (1 << Rol_NET))
+      return Rol_NET;
+
+   /* Not a non-editing teacher or a teacher. Check then if user is a student in any course */
    if (Roles & (1 << Rol_STD))
       return Rol_STD;
 

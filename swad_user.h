@@ -372,7 +372,8 @@ void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
 void Usr_ListUsrsForSelection (Rol_Role_t Role);
 void Usr_ListAllDataTchs (void);
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);
 void Usr_ListDataAdms (void);
 
 void Usr_PutParamsPrefsAboutUsrList (void);

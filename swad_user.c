@@ -961,12 +961,12 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    switch (UsrRole)
      {
       case Rol_STD:	// Student
-	 sprintf (SubQueryRole,"Role=%u",
+	 sprintf (SubQueryRole," AND Role=%u",
 	          (unsigned) Rol_STD);
 	 break;
       case Rol_NET:	// Non-editing teacher
       case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole,"(Role=%u OR Role=%u)",
+	 sprintf (SubQueryRole," AND (Role=%u OR Role=%u)",
 	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
 	 break;
       default:
@@ -978,7 +978,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
 	          " (CrsCod INT NOT NULL,UNIQUE INDEX (CrsCod))"
 	          " ENGINE=MEMORY"
 	          " SELECT CrsCod FROM crs_usr"
-	          " WHERE UsrCod=%ld AND %s",
+	          " WHERE UsrCod=%ld"
+	          "%s",
 	    UsrCod,SubQueryRole);
    if (mysql_query (&Gbl.mysql,Query))
       DB_ExitOnMySQLError ("can not create temporary table");
@@ -987,12 +988,12 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
    switch (OthersRole)
      {
       case Rol_STD:	// Student
-	 sprintf (SubQueryRole,"crs_usr.Role=%u",
+	 sprintf (SubQueryRole," AND crs_usr.Role=%u",
 	          (unsigned) Rol_STD);
 	 break;
       case Rol_NET:	// Non-editing teacher
       case Rol_TCH:	// or teacher
-	 sprintf (SubQueryRole,"(crs_usr.Role=%u OR crs_usr.Role=%u)",
+	 sprintf (SubQueryRole," AND (crs_usr.Role=%u OR crs_usr.Role=%u)",
 	          (unsigned) Rol_NET,(unsigned) Rol_TCH);
 	 break;
       default:
@@ -1002,7 +1003,8 @@ unsigned Usr_GetNumUsrsInCrssOfAUsr (long UsrCod,Rol_Role_t UsrRole,
      }
    sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
 	          " FROM crs_usr,usr_courses_tmp"
-                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod AND %s",
+                  " WHERE crs_usr.CrsCod=usr_courses_tmp.CrsCod"
+                  "%s",
             SubQueryRole);
    NumUsrs = (unsigned) DB_QueryCOUNT (Query,"can not get the number of users");
 
@@ -4300,6 +4302,7 @@ void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
 
 void Usr_SearchListUsrs (Rol_Role_t Role)
   {
+   char SubQueryRole[64];
    char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1];
    const char *QueryFields =
       "DISTINCT usr_data.UsrCod,"
@@ -4430,13 +4433,29 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 		  QueryFields,
 		  OrderQuery);
 	 break;
-      case Rol_STD:
-      case Rol_TCH:
+      case Rol_STD:	// Student
+      case Rol_NET:	// Non-editing teacher
+      case Rol_TCH:	// Teacher
 	 /*
 	    To achieve maximum speed, it's important to do the things in this order:
 	    1) Search for user's name (UsrQuery) getting candidate users
 	    2) Filter the candidate users according to scope
 	 */
+	 switch (Role)
+	   {
+	    case Rol_STD:	// Student
+	       sprintf (SubQueryRole," AND crs_usr.Role=%u",
+			(unsigned) Rol_STD);
+	       break;
+	    case Rol_NET:	// Non-editing teacher
+	    case Rol_TCH:	// or teacher
+	       sprintf (SubQueryRole," AND (crs_usr.Role=%u OR crs_usr.Role=%u)",
+			(unsigned) Rol_NET,(unsigned) Rol_TCH);
+	       break;
+	    default:
+	       SubQueryRole[0] = '\0';
+	       break;
+	   }
 	 switch (Gbl.Scope.Current)
 	   {
 	    case Sco_SCOPE_SYS:
@@ -4444,10 +4463,10 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			OrderQuery);
 	       break;
 	    case Sco_SCOPE_CTY:
@@ -4455,7 +4474,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,centres,institutions,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
@@ -4463,7 +4482,7 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 			      " AND institutions.CtyCod=%ld"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			Gbl.CurrentCty.Cty.CtyCod,
 			OrderQuery);
 	       break;
@@ -4472,14 +4491,14 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,centres,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=centres.CtrCod"
 			      " AND centres.InsCod=%ld"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			Gbl.CurrentIns.Ins.InsCod,
 			OrderQuery);
 	       break;
@@ -4488,13 +4507,13 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,degrees,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=degrees.DegCod"
 			      " AND degrees.CtrCod=%ld"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			Gbl.CurrentCtr.Ctr.CtrCod,
 			OrderQuery);
 	       break;
@@ -4503,12 +4522,12 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s"
 		              " FROM candidate_users,crs_usr,courses,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND crs_usr.CrsCod=courses.CrsCod"
 			      " AND courses.DegCod=%ld"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			Gbl.CurrentDeg.Deg.DegCod,
 			OrderQuery);
 	       break;
@@ -4517,11 +4536,11 @@ void Usr_SearchListUsrs (Rol_Role_t Role)
 	       sprintf (Query,"SELECT %s,crs_usr.Role,crs_usr.Accepted"
 		              " FROM candidate_users,crs_usr,usr_data"
 			      " WHERE candidate_users.UsrCod=crs_usr.UsrCod"
-			      " AND crs_usr.Role=%u"
+			      "%s"
 			      " AND crs_usr.CrsCod=%ld"
 			      " AND %s",
 			QueryFields,
-			(unsigned) Role,
+			SubQueryRole,
 			Gbl.CurrentCrs.Crs.CrsCod,
 			OrderQuery);
 	       break;
@@ -6570,7 +6589,8 @@ void Usr_ListAllDataTchs (void)
 /*****************************************************************************/
 // Returns number of users found
 
-unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY])
+unsigned Usr_ListUsrsFound (Rol_Role_t Role,
+                            const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY])
   {
    extern const char *Txt_user[Usr_NUM_SEXS];
    extern const char *Txt_users[Usr_NUM_SEXS];
@@ -6598,10 +6618,11 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,const char SearchQuery[Sch_MAX_BYTES
       /* Number of users found */
       Sex = Usr_GetSexOfUsrsLst (Role);
       sprintf (Gbl.Title,"%u %s",
-	       NumUsrs,(Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
-		                                                 Txt_users[Sex]) :
-		                               ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
-		                                                 Txt_ROLES_PLURAL_abc[Role][Sex]));
+	       NumUsrs,
+	       (Role == Rol_UNK) ? ((NumUsrs == 1) ? Txt_user[Sex] :
+		                                     Txt_users[Sex]) :
+		                   ((NumUsrs == 1) ? Txt_ROLES_SINGUL_abc[Role][Sex] :
+		                                     Txt_ROLES_PLURAL_abc[Role][Sex]));
       Lay_StartRoundFrameTable (NULL,Gbl.Title,NULL,NULL,2);
 
       /***** Heading row with column names *****/
@@ -8168,7 +8189,7 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
    float NumCrssPerUsr;
    float NumUsrsPerCrs;
    char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
-	                                 "DAT RIGHT_BOTTOM";
+	                             "DAT RIGHT_BOTTOM";
 
    /***** Get the number of users belonging to any course *****/
    if (Role == Rol_GST)	// Users not beloging to any course
@@ -8178,11 +8199,11 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
 
    /***** Get average number of courses per user *****/
    NumCrssPerUsr = (Role == Rol_GST) ? 0 :
-	                                   Usr_GetNumCrssPerUsr (Role);
+	                               Usr_GetNumCrssPerUsr (Role);
 
    /***** Query the number of users per course *****/
    NumUsrsPerCrs = (Role == Rol_GST) ? 0 :
-	                                   Usr_GetNumUsrsPerCrs (Role);
+	                               Usr_GetNumUsrsPerCrs (Role);
 
    /***** Write the total number of users *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -8200,7 +8221,7 @@ void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
                       "</td>"
                       "</tr>",
             Class,(Role == Rol_UNK) ? Txt_Total :
-        	                          Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+        	                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
             Class,NumUsrs,
             Class,NumCrssPerUsr,
             Class,NumUsrsPerCrs);

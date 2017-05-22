@@ -133,10 +133,8 @@ static void Sta_WriteSelectorAction (void);
 static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse);
 static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_WriteLogComments (long LogCod);
-static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
-                                   MYSQL_RES *mysql_res);
-static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
-                                    MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res);
+static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res);
 static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES *mysql_res);
 static Sta_ColorType_t Sta_GetStatColorType (void);
 static void Sta_DrawBarColors (Sta_ColorType_t ColorType,float HitsMax);
@@ -463,10 +461,12 @@ void Sta_AskShowCrsHits (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
    Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs +
-	          Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
+   Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
 
    /***** Start frame *****/
    sprintf (Gbl.Title,Txt_Statistics_of_visits_to_the_course_X,
@@ -503,6 +503,7 @@ void Sta_AskShowCrsHits (void)
                   The_ClassForm[Gbl.Prefs.Theme],Txt_Users,
                   The_ClassForm[Gbl.Prefs.Theme]);
          Usr_ListUsersToSelect (Rol_TCH);
+         Usr_ListUsersToSelect (Rol_NET);
          Usr_ListUsersToSelect (Rol_STD);
          fprintf (Gbl.F.Out,"</table>"
                             "</td>"
@@ -608,6 +609,7 @@ void Sta_AskShowCrsHits (void)
 
    /***** Free memory used by the lists *****/
    Usr_FreeUsrsList (Rol_TCH);
+   Usr_FreeUsrsList (Rol_NET);
    Usr_FreeUsrsList (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
@@ -1248,6 +1250,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_TCH);
 	       break;
+	    case Sta_NON_EDITING_TEACHERS:
+               sprintf (StrRole," AND %s.Role=%u",
+                        LogTable,(unsigned) Rol_NET);
+	       break;
 	    case Sta_STUDENTS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_STD);
@@ -1833,8 +1839,7 @@ static void Sta_WriteLogComments (long LogCod)
 /********* Show a listing of with the number of clicks of each user **********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
-                                   MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Photo;
@@ -1949,8 +1954,8 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 	                    " style=\"width:%upx; height:18px;\" />"
 	                    "&nbsp;",
 		  Gbl.Prefs.IconsURL,
-		  UsrDat.RoleInCurrentCrsDB == Rol_STD ? 'c' :
-			                                     'v',
+		  UsrDat.RoleInCurrentCrsDB == Rol_STD ? 'c' :	// Student
+			                                 'v',	// Non-editing teacher or teacher
 		  BarWidth);
       Str_WriteFloatNum (Gbl.F.Out,Hits.Num);
       fprintf (Gbl.F.Out,"&nbsp;</td>"
@@ -1965,8 +1970,7 @@ static void Sta_ShowNumHitsPerUsr (unsigned long NumRows,
 /********** Show a listing of with the number of clicks in each date *********/
 /*****************************************************************************/
 
-static void Sta_ShowNumHitsPerDays (unsigned long NumRows,
-                                    MYSQL_RES *mysql_res)
+static void Sta_ShowNumHitsPerDays (unsigned long NumRows,MYSQL_RES *mysql_res)
   {
    extern const char *Txt_Date;
    extern const char *Txt_Day;
@@ -4070,8 +4074,9 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
    Usr_GetAndShowNumUsrsInPlatform (Rol_STD);	// Students
+   Usr_GetAndShowNumUsrsInPlatform (Rol_NET);	// Non-editing teachers
    Usr_GetAndShowNumUsrsInPlatform (Rol_TCH);	// Teachers
-   Usr_GetAndShowNumUsrsInPlatform (Rol_UNK);	// Students and teachers
+   Usr_GetAndShowNumUsrsInPlatform (Rol_UNK);	// Students, non-editing teachers and teachers
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"4\" style=\"height:10px;\">"
                       "</tr>");
@@ -4186,10 +4191,14 @@ static void Sta_WriteHeadDegsCrssInSWAD (void)
    extern const char *Txt_With_degrees;
    extern const char *Txt_With_courses;
    extern const char *Txt_With_teachers;
+   extern const char *Txt_With_non_editing_teachers;
    extern const char *Txt_With_students;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th></th>"
+                      "<th class=\"RIGHT_MIDDLE\">"
+                      "%s"
+                      "</th>"
                       "<th class=\"RIGHT_MIDDLE\">"
                       "%s"
                       "</th>"
@@ -4218,6 +4227,7 @@ static void Sta_WriteHeadDegsCrssInSWAD (void)
             Txt_With_degrees,
             Txt_With_courses,
             Txt_With_teachers,
+            Txt_With_non_editing_teachers,
             Txt_With_students);
   }
 
@@ -4235,6 +4245,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
    unsigned NumCtysWithDegs = 0;
    unsigned NumCtysWithCrss = 0;
    unsigned NumCtysWithTchs = 0;
+   unsigned NumCtysWithNETs = 0;
    unsigned NumCtysWithStds = 0;
 
    /***** Get number of countries *****/
@@ -4247,6 +4258,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs ("");
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss ("");
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,"");
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,"");
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
@@ -4259,6 +4271,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
@@ -4270,6 +4283,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
@@ -4281,6 +4295,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
 	 NumCtysWithDegs = Cty_GetNumCtysWithDegs (SubQuery);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
@@ -4292,6 +4307,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtysWithCrss = Cty_GetNumCtysWithCrss (SubQuery);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
@@ -4303,6 +4319,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtysWithTchs = Cty_GetNumCtysWithUsrs (Rol_TCH,SubQuery);
+         NumCtysWithNETs = Cty_GetNumCtysWithUsrs (Rol_NET,SubQuery);
 	 NumCtysWithStds = Cty_GetNumCtysWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
@@ -4339,6 +4356,9 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Countries,
@@ -4350,6 +4370,7 @@ static void Sta_GetAndShowNumCtysInSWAD (void)
             NumCtysWithDegs,
             NumCtysWithCrss,
             NumCtysWithTchs,
+            NumCtysWithNETs,
             NumCtysWithStds);
   }
 
@@ -4366,6 +4387,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
    unsigned NumInssWithDegs = 0;
    unsigned NumInssWithCrss = 0;
    unsigned NumInssWithTchs = 0;
+   unsigned NumInssWithNETs = 0;
    unsigned NumInssWithStds = 0;
 
    /***** Get number of institutions *****/
@@ -4377,6 +4399,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithDegs = Ins_GetNumInssWithDegs ("");
 	 NumInssWithCrss = Ins_GetNumInssWithCrss ("");
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,"");
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,"");
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
@@ -4388,6 +4411,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
@@ -4398,6 +4422,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
@@ -4408,6 +4433,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
 	 NumInssWithDegs = Ins_GetNumInssWithDegs (SubQuery);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
@@ -4418,6 +4444,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumInssWithCrss = Ins_GetNumInssWithCrss (SubQuery);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
@@ -4428,6 +4455,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumInssWithTchs = Ins_GetNumInssWithUsrs (Rol_TCH,SubQuery);
+         NumInssWithNETs = Ins_GetNumInssWithUsrs (Rol_NET,SubQuery);
 	 NumInssWithStds = Ins_GetNumInssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
@@ -4462,6 +4490,9 @@ static void Sta_GetAndShowNumInssInSWAD (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Institutions,
@@ -4472,6 +4503,7 @@ static void Sta_GetAndShowNumInssInSWAD (void)
             NumInssWithDegs,
             NumInssWithCrss,
             NumInssWithTchs,
+            NumInssWithNETs,
             NumInssWithStds);
   }
 
@@ -4487,6 +4519,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
    unsigned NumCtrsWithDegs = 0;
    unsigned NumCtrsWithCrss = 0;
    unsigned NumCtrsWithTchs = 0;
+   unsigned NumCtrsWithNETs = 0;
    unsigned NumCtrsWithStds = 0;
 
    /***** Get number of centres *****/
@@ -4497,6 +4530,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs ("");
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss ("");
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,"");
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,"");
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
@@ -4507,6 +4541,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
@@ -4516,6 +4551,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
@@ -4525,6 +4561,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
 	 NumCtrsWithDegs = Ctr_GetNumCtrsWithDegs (SubQuery);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
@@ -4534,6 +4571,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumCtrsWithCrss = Ctr_GetNumCtrsWithCrss (SubQuery);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
@@ -4543,6 +4581,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCtrsWithTchs = Ctr_GetNumCtrsWithUsrs (Rol_TCH,SubQuery);
+         NumCtrsWithNETs = Ctr_GetNumCtrsWithUsrs (Rol_NET,SubQuery);
 	 NumCtrsWithStds = Ctr_GetNumCtrsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
@@ -4575,6 +4614,9 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Centres,
@@ -4584,6 +4626,7 @@ static void Sta_GetAndShowNumCtrsInSWAD (void)
             NumCtrsWithDegs,
             NumCtrsWithCrss,
             NumCtrsWithTchs,
+            NumCtrsWithNETs,
             NumCtrsWithStds);
   }
 
@@ -4598,6 +4641,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
    unsigned NumDegsTotal = 0;
    unsigned NumDegsWithCrss = 0;
    unsigned NumDegsWithTchs = 0;
+   unsigned NumDegsWithNETs = 0;
    unsigned NumDegsWithStds = 0;
 
    /***** Get number of degrees *****/
@@ -4607,6 +4651,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
 	 NumDegsTotal = Deg_GetNumDegsTotal ();
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss ("");
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,"");
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,"");
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
@@ -4616,6 +4661,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                   Gbl.CurrentCty.Cty.CtyCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
@@ -4624,6 +4670,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                   Gbl.CurrentIns.Ins.InsCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
@@ -4632,6 +4679,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                   Gbl.CurrentCtr.Ctr.CtrCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
@@ -4640,6 +4688,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                   Gbl.CurrentDeg.Deg.DegCod);
 	 NumDegsWithCrss = Deg_GetNumDegsWithCrss (SubQuery);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
@@ -4648,6 +4697,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumDegsWithTchs = Deg_GetNumDegsWithUsrs (Rol_TCH,SubQuery);
+         NumDegsWithNETs = Deg_GetNumDegsWithUsrs (Rol_NET,SubQuery);
 	 NumDegsWithStds = Deg_GetNumDegsWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
@@ -4678,6 +4728,9 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Degrees,
@@ -4686,6 +4739,7 @@ static void Sta_GetAndShowNumDegsInSWAD (void)
             NumDegsTotal,
             NumDegsWithCrss,
             NumDegsWithTchs,
+            NumDegsWithNETs,
             NumDegsWithStds);
   }
 
@@ -4699,6 +4753,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
    char SubQuery[128];
    unsigned NumCrssTotal = 0;
    unsigned NumCrssWithTchs = 0;
+   unsigned NumCrssWithNETs = 0;
    unsigned NumCrssWithStds = 0;
 
    /***** Get number of courses *****/
@@ -4707,6 +4762,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
       case Sco_SCOPE_SYS:
 	 NumCrssTotal = Crs_GetNumCrssTotal ();
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,"");
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,"");
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,"");
          SubQuery[0] = '\0';
          break;
@@ -4715,6 +4771,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          sprintf (SubQuery,"institutions.CtyCod=%ld AND ",
                   Gbl.CurrentCty.Cty.CtyCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_INS:
@@ -4722,6 +4779,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          sprintf (SubQuery,"centres.InsCod=%ld AND ",
                   Gbl.CurrentIns.Ins.InsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
          break;
       case Sco_SCOPE_CTR:
@@ -4729,6 +4787,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          sprintf (SubQuery,"degrees.CtrCod=%ld AND ",
                   Gbl.CurrentCtr.Ctr.CtrCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
       case Sco_SCOPE_DEG:
@@ -4736,6 +4795,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          sprintf (SubQuery,"courses.DegCod=%ld AND ",
                   Gbl.CurrentDeg.Deg.DegCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
      case Sco_SCOPE_CRS:
@@ -4743,6 +4803,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
          sprintf (SubQuery,"crs_usr.CrsCod=%ld AND ",
                   Gbl.CurrentCrs.Crs.CrsCod);
          NumCrssWithTchs = Crs_GetNumCrssWithUsrs (Rol_TCH,SubQuery);
+         NumCrssWithNETs = Crs_GetNumCrssWithUsrs (Rol_NET,SubQuery);
 	 NumCrssWithStds = Crs_GetNumCrssWithUsrs (Rol_STD,SubQuery);
 	 break;
       default:
@@ -4771,6 +4832,9 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
                       "<td class=\"DAT RIGHT_MIDDLE\">"
                       "%u"
                       "</td>"
+                      "<td class=\"DAT RIGHT_MIDDLE\">"
+                      "%u"
+                      "</td>"
                       "</tr>",
             Gbl.Prefs.IconsURL,
             Txt_Courses,
@@ -4778,6 +4842,7 @@ static void Sta_GetAndShowNumCrssInSWAD (void)
             Txt_Courses,
             NumCrssTotal,
             NumCrssWithTchs,
+            NumCrssWithNETs,
             NumCrssWithStds);
   }
 
@@ -5271,7 +5336,7 @@ static unsigned Sta_GetTotalNumberOfUsersInPlatform (void)
 /*****************************************************************************/
 /******************* Get total number of users in courses ********************/
 /*****************************************************************************/
-// Here Rol_UNK means "students or teachers"
+// Here Rol_UNK means "students, non-editing teachers or teachers"
 
 unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
   {

@@ -595,7 +595,7 @@ static void Sch_SearchInDB (void)
 	 NumResults += Sch_SearchCentresInDB (RangeQuery);
 	 NumResults += Sch_SearchDegreesInDB (RangeQuery);
 	 NumResults += Sch_SearchCoursesInDB (RangeQuery);
-	 NumResults += Sch_SearchUsrsInDB (Rol_TCH);
+	 NumResults += Sch_SearchUsrsInDB (Rol_TCH);	// Non-editing teachers and teachers
 	 NumResults += Sch_SearchUsrsInDB (Rol_STD);
 	 NumResults += Sch_SearchUsrsInDB (Rol_GST);
 	 NumResults += Sch_SearchOpenDocumentsInDB (RangeQuery);
@@ -621,7 +621,7 @@ static void Sch_SearchInDB (void)
 	 NumResults = Sch_SearchUsrsInDB (Rol_UNK);	// Here Rol_UNK means any user
 	 break;
       case Sch_SEARCH_TEACHERS:
-	 NumResults = Sch_SearchUsrsInDB (Rol_TCH);
+	 NumResults = Sch_SearchUsrsInDB (Rol_TCH);	// Non-editing teachers and teachers
 	 break;
       case Sch_SEARCH_STUDENTS:
 	 NumResults = Sch_SearchUsrsInDB (Rol_STD);

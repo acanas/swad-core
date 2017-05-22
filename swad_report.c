@@ -927,7 +927,7 @@ static void Rep_GetMaxHitsPerYear (struct Rep_Report *Report)
 	          " GROUP BY Year"
 		  // ----------------------------------------------------------
 	          " UNION "
-		  // Clicks as student or teacher in courses ------------------
+		  // Clicks as student, non-editing teacher or teacher in courses
 	          "SELECT "
 	          "CrsCod,"
 	          "YEAR(CONVERT_TZ(ClickTime,@@session.time_zone,'UTC')) AS Year,"
@@ -1171,8 +1171,11 @@ static void Rep_WriteRowCrsData (long CrsCod,Rol_Role_t Role,
 	 /***** Write number of teachers / students in course *****/
 	 if (WriteNumUsrs)
 	    fprintf (Gbl.F.Rep," (%u %s / %u %s)",
-		     Usr_GetNumUsrsInCrs (Rol_TCH,Crs.CrsCod),Txt_teachers_ABBREVIATION,
-		     Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod),Txt_students_ABBREVIATION);
+		     Usr_GetNumUsrsInCrs (Rol_NET,Crs.CrsCod) +
+		     Usr_GetNumUsrsInCrs (Rol_TCH,Crs.CrsCod),
+		     Txt_teachers_ABBREVIATION,
+		     Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod),
+		     Txt_students_ABBREVIATION);
 	}
       else
          fprintf (Gbl.F.Rep,"(%s)",Txt_unknown_removed_course);

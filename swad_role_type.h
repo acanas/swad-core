@@ -36,7 +36,7 @@
    Don't change these numbers!
    They are used for users' permissions and for user's types in database
 
-   Only Rol_STD and Rol_TCH are allowed
+   Only Rol_STD, Rol_NET and Rol_TCH are allowed
    as user permanent roles in courses,
    but a user may be logged temporarily as other roles
 */
