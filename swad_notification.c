@@ -669,7 +669,8 @@ static void Ntf_WriteFormAllNotifications (bool AllNotifications)
    extern const char *Txt_Show_all_NOTIFICATIONS;
 
    Lay_PutContextualCheckbox (ActSeeNtf,NULL,
-                              "All",AllNotifications,
+                              "All",
+                              AllNotifications,false,
                               Txt_Show_all_notifications,
                               Txt_Show_all_NOTIFICATIONS);
   }

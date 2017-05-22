@@ -4709,7 +4709,8 @@ static void Brw_PutCheckboxFullTree (void)
 
    Lay_PutContextualCheckbox (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
                               Brw_PutParamsFullTree,
-                              "FullTree",Gbl.FileBrowser.FullTree,
+                              "FullTree",
+                              Gbl.FileBrowser.FullTree,false,
                               Txt_Show_all_files,Txt_Show_all_files);
   }
 

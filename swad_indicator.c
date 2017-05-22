@@ -1116,8 +1116,9 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
 		  break;
 	       case Ind_INDICATORS_FULL:
 		  /* Get number of users */
-		  NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
-		  NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);
+		  NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);	// Students
+		  NumTchs = Usr_GetNumUsrsInCrs (Rol_NET,CrsCod) +	// Non-editing teachers
+			    Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod);	// Teachers
 
 		  fprintf (Gbl.F.Out,"<tr>"
 				     "<td class=\"%s LEFT_MIDDLE COLOR%u\">"

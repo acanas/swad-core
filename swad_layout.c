@@ -1169,7 +1169,8 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
 
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 void (*FuncParams) (),
-                                const char *CheckboxName,bool Checked,
+                                const char *CheckboxName,
+                                bool Checked,bool Disabled,
                                 const char *Title,const char *Text)
   {
    extern const char *The_ClassFormBold[The_NUM_THEMES];
@@ -1197,8 +1198,12 @@ void Lay_PutContextualCheckbox (Act_Action_t NextAction,
             CheckboxName);
    if (Checked)
       fprintf (Gbl.F.Out," checked=\"checked\"");
-   fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\" />",
-            Gbl.Form.Id);
+   if (Disabled)
+      fprintf (Gbl.F.Out," disabled=\"disabled\"");
+   else
+      fprintf (Gbl.F.Out," onclick=\"document.getElementById('%s').submit();\"",
+	       Gbl.Form.Id);
+   fprintf (Gbl.F.Out," />");
    if (Text)
       if (Text[0])
 	 fprintf (Gbl.F.Out,"&nbsp;%s",

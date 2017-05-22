@@ -406,6 +406,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
    /***** Check if I have permission to see another user's IDs *****/
    switch (Gbl.Usrs.Me.LoggedRole)
      {
+      case Rol_NET:
       case Rol_TCH:
 	 /* Check 1: I can see the IDs of users who do not exist in database */
          if (UsrDat->UsrCod <= 0)	// User does not exist (when creating a new user)
@@ -413,7 +414,7 @@ bool ID_ICanSeeOtherUsrIDs (const struct UsrData *UsrDat)
 
 	 /* Check 2: I can see the IDs of confirmed students */
          if (UsrDat->RoleInCurrentCrsDB == Rol_STD &&	// A student
-	     UsrDat->Accepted)					// who accepted registration
+	     UsrDat->Accepted)				// who accepted registration
             return true;
 
          /* Check 3: I can see the IDs of users with user's data empty */
@@ -448,12 +449,23 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Confirm_ID;
+   Act_Action_t NextAction;
 
    /***** Start form *****/
-   Act_FormStartAnchor ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActCnfID_Std :
-		        (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActCnfID_Tch :
-							             ActCnfID_Oth),
-                        Anchor);
+   switch (UsrDat->RoleInCurrentCrsDB)
+     {
+      case Rol_STD:
+	 NextAction = ActCnfID_Std;
+	 break;
+      case Rol_NET:
+      case Rol_TCH:
+	 NextAction = ActCnfID_Tch;
+	 break;
+      default:	// Guest, visitor or admin
+	 NextAction = ActCnfID_Oth;
+	 break;
+     }
+   Act_FormStartAnchor (NextAction,Anchor);
    if (Gbl.Action.Original != ActUnk)
      {
       Par_PutHiddenParamLong ("OriginalActCod",
@@ -490,6 +502,7 @@ static void ID_PutLinkToConfirmID (struct UsrData *UsrDat,unsigned NumID,
 void ID_PutLinkToChangeUsrIDs (void)
   {
    extern const char *Txt_Change_IDs;
+   Act_Action_t NextAction;
 
    /***** Link for changing the password *****/
    if (Gbl.Usrs.Other.UsrDat.UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod)	// It's me
@@ -498,13 +511,26 @@ void ID_PutLinkToChangeUsrIDs (void)
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);
    else									// Not me
-      Lay_PutContextualLink ( Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_STD ? ActFrmIDsStd :
-	                     (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB == Rol_TCH ? ActFrmIDsTch :
-	                	                                                        ActFrmIDsOth),	// Guest, visitor or admin
-                             NULL,Usr_PutParamOtherUsrCodEncrypted,
+     {
+      switch (Gbl.Usrs.Other.UsrDat.RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    NextAction = ActFrmIDsStd;
+	    break;
+	 case Rol_NET:
+	 case Rol_TCH:
+	    NextAction = ActFrmIDsTch;
+	    break;
+	 default:	// Guest, visitor or admin
+	    NextAction = ActFrmIDsOth;
+	    break;
+	}
+      Lay_PutContextualLink (NextAction,NULL,
+                             Usr_PutParamOtherUsrCodEncrypted,
 			     "arroba64x64.gif",
 			     Txt_Change_IDs,Txt_Change_IDs,
                              NULL);
+     }
   }
 
 /*****************************************************************************/
@@ -559,6 +585,7 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
    extern const char *Txt_If_there_are_multiple_versions_of_the_ID_;
    extern const char *Txt_The_ID_is_used_in_order_to_facilitate_;
    unsigned NumID;
+   Act_Action_t NextAction;
 
    /***** List existing user's IDs *****/
    for (NumID = 0;
@@ -587,9 +614,20 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	       Act_FormStart (ActRemID_Me);
 	    else
 	      {
-	       Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActRemID_Std :
-	                      (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActRemID_Tch :
-	                	                                           ActRemID_Oth));	// Guest, visitor or admin
+	       switch (UsrDat->RoleInCurrentCrsDB)
+		 {
+		  case Rol_STD:
+		     NextAction = ActRemID_Std;
+		     break;
+		  case Rol_NET:
+		  case Rol_TCH:
+		     NextAction = ActRemID_Tch;
+		     break;
+		  default:	// Guest, visitor or admin
+		     NextAction = ActRemID_Oth;
+		     break;
+		 }
+	       Act_FormStart (NextAction);
 	       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	      }
 	    fprintf (Gbl.F.Out,"<input type=\"hidden\" name=\"UsrID\" value=\"%s\" />",
@@ -641,9 +679,20 @@ void ID_ShowFormChangeUsrID (const struct UsrData *UsrDat,bool ItsMe)
 	 Act_FormStart (ActNewIDMe);
       else
 	{
-	 Act_FormStart ( UsrDat->RoleInCurrentCrsDB == Rol_STD ? ActNewID_Std :
-	                (UsrDat->RoleInCurrentCrsDB == Rol_TCH ? ActNewID_Tch :
-	                	                                     ActNewID_Oth));	// Guest, visitor or admin
+	 switch (UsrDat->RoleInCurrentCrsDB)
+	   {
+	    case Rol_STD:
+	       NextAction = ActNewID_Std;
+	       break;
+	    case Rol_NET:
+	    case Rol_TCH:
+	       NextAction = ActNewID_Tch;
+	       break;
+	    default:	// Guest, visitor or admin
+	       NextAction = ActNewID_Oth;
+	       break;
+	   }
+	 Act_FormStart (NextAction);
 	 Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	}
       fprintf (Gbl.F.Out,"<div class=\"FORM_ACCOUNT\">"

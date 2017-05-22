@@ -153,7 +153,7 @@ void Grp_RemUsrFromAllGrps (struct UsrData *UsrDat,Cns_QuietOrVerbose_t QuietOrV
 void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrSvy_t Grp_AsgOrSvy);
 
 void Grp_ReqRegisterInGrps (void);
-void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents);
+void Grp_ShowLstGrpsToChgMyGrps (void);
 void Grp_ShowLstGrpsToChgOtherUsrsGrps (long UsrCod);
 
 void Grp_GetListGrpTypesInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes);

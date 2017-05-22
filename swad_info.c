@@ -299,7 +299,7 @@ extern const char *Hlp_ASSESSMENT_System_edit;
 
 static void Inf_PutButtonToEditInfo (void);
 static void Inf_PutIconToViewInfo (void);
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead);
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled);
 static void Inf_PutCheckboxConfirmIHaveReadInfo (void);
 static bool Inf_CheckIfIHaveReadInfo (void);
 static bool Inf_GetMustBeReadFromForm (void);
@@ -340,6 +340,7 @@ void Inf_ShowInfo (void)
    extern const char *Txt_No_information;
    Inf_InfoSrc_t InfoSrc;
    bool MustBeRead;
+   bool Disabled;
    bool ICanEdit = (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
    bool ShowWarningNoInfo = false;
@@ -384,13 +385,15 @@ void Inf_ShowInfo (void)
             fprintf (Gbl.F.Out,"</div>");
            }
          break;
+      case Rol_NET:
       case Rol_TCH:
       case Rol_SYS_ADM:
          /* Put checkbox to force students to read this couse info */
          if (InfoSrc != Inf_INFO_SRC_NONE)
            {
             fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead);
+            Disabled = (Gbl.Usrs.Me.LoggedRole == Rol_NET);	// Non-editing teachers can not change the status of checkbox
+            Inf_PutCheckboxForceStdsToReadInfo (MustBeRead,Disabled);
             fprintf (Gbl.F.Out,"</div>");
            }
          break;
@@ -480,13 +483,14 @@ void Inf_PutIconToEditInfo (void)
 /********** Put a form (checkbox) to force students to read info *************/
 /*****************************************************************************/
 
-static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead)
+static void Inf_PutCheckboxForceStdsToReadInfo (bool MustBeRead,bool Disabled)
   {
    extern const char *Txt_Force_students_to_read_this_information;
 
    Lay_PutContextualCheckbox (Inf_ActionsChangeForceReadInfo[Gbl.CurrentCrs.Info.Type],
                               NULL,
-                              "MustBeRead",MustBeRead,
+                              "MustBeRead",
+                              MustBeRead,Disabled,
                               Txt_Force_students_to_read_this_information,
                               Txt_Force_students_to_read_this_information);
   }
@@ -502,7 +506,8 @@ static void Inf_PutCheckboxConfirmIHaveReadInfo (void)
 
    Lay_PutContextualCheckbox (Inf_ActionsIHaveReadInfo[Gbl.CurrentCrs.Info.Type],
                               NULL,
-                              "IHaveRead",IHaveRead,
+                              "IHaveRead",
+                              IHaveRead,false,
                               Txt_I_have_read_this_information,
                               Txt_I_have_read_this_information);
   }

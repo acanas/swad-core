@@ -66,6 +66,7 @@ extern struct Globals Gbl;
 
 static void Ins_Configuration (bool PrintView);
 static void Ins_PutIconsToPrintAndUpload (void);
+static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role);
 
 static void Ins_ListInstitutions (void);
 static bool Ins_CheckIfICanCreateInstitutions (void);
@@ -298,7 +299,6 @@ static void Ins_Configuration (bool PrintView)
    extern const char *Txt_Courses;
    extern const char *Txt_Departments;
    extern const char *Txt_Users_of_the_institution;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
    unsigned NumCty;
    bool PutLink = !PrintView && Gbl.CurrentIns.Ins.WWW[0];
 
@@ -573,45 +573,11 @@ static void Ins_Configuration (bool PrintView)
 		  Txt_Departments,
 		  Dpt_GetNumDepartmentsInInstitution (Gbl.CurrentIns.Ins.InsCod));
 
-	 /***** Number of teachers in courses of this institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_TCH,Gbl.CurrentIns.Ins.InsCod));
-
-	 /***** Number of students in courses of this institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_STD,Gbl.CurrentIns.Ins.InsCod));
-
 	 /***** Number of users in courses of this institution *****/
-	 fprintf (Gbl.F.Out,"<tr>"
-			    "<td class=\"%s RIGHT_MIDDLE\">"
-			    "%s + %s:"
-			    "</td>"
-			    "<td class=\"DAT LEFT_MIDDLE\">"
-			    "%u"
-			    "</td>"
-			    "</tr>",
-		  The_ClassForm[Gbl.Prefs.Theme],
-		  Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
-		  Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
-		  Usr_GetNumUsrsInCrssOfIns (Rol_UNK,Gbl.CurrentIns.Ins.InsCod));
+	 Ins_ShowNumUsrsInCrssOfIns (Rol_TCH);
+	 Ins_ShowNumUsrsInCrssOfIns (Rol_NET);
+	 Ins_ShowNumUsrsInCrssOfIns (Rol_STD);
+	 Ins_ShowNumUsrsInCrssOfIns (Rol_UNK);
 	}
 
       /***** End table *****/
@@ -634,6 +600,30 @@ static void Ins_PutIconsToPrintAndUpload (void)
    if (Gbl.Usrs.Me.LoggedRole >= Rol_INS_ADM)
       /***** Link to upload logo of institution *****/
       Log_PutIconToChangeLogo (Sco_SCOPE_INS);
+  }
+
+/*****************************************************************************/
+/************** Number of users in courses of this institution ***************/
+/*****************************************************************************/
+
+static void Ins_ShowNumUsrsInCrssOfIns (Rol_Role_t Role)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_Users_in_courses;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+
+   fprintf (Gbl.F.Out,"<tr>"
+		      "<td class=\"%s RIGHT_MIDDLE\">"
+		      "%s:"
+		      "</td>"
+		      "<td class=\"DAT LEFT_MIDDLE\">"
+		      "%u"
+		      "</td>"
+		      "</tr>",
+	    The_ClassForm[Gbl.Prefs.Theme],
+	    (Role == Rol_UNK) ? Txt_Users_in_courses :
+		                Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Usr_GetNumUsrsInCrssOfIns (Role,Gbl.CurrentIns.Ins.InsCod));
   }
 
 /*****************************************************************************/

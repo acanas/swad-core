@@ -1562,7 +1562,8 @@ static void Rec_WriteFormShowOfficeHoursOneTch (bool ShowOfficeHours)
    extern const char *Txt_Show_office_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecOneTch,Rec_PutParamsShowOfficeHoursOneTch,
-                              "ShowOfficeHours",ShowOfficeHours,
+                              "ShowOfficeHours",
+                              ShowOfficeHours,false,
                               Txt_Show_office_hours,
                               Txt_Show_office_hours);
   }
@@ -1572,7 +1573,8 @@ static void Rec_WriteFormShowOfficeHoursSeveralTchs (bool ShowOfficeHours)
    extern const char *Txt_Show_office_hours;
 
    Lay_PutContextualCheckbox (ActSeeRecSevTch,Rec_PutParamsShowOfficeHoursSeveralTchs,
-                              "ShowOfficeHours",ShowOfficeHours,
+                              "ShowOfficeHours",
+                              ShowOfficeHours,false,
                               Txt_Show_office_hours,
                               Txt_Show_office_hours);
   }
@@ -2453,7 +2455,7 @@ void Rec_ShowSharedUsrRecord (Rec_SharedRecordViewType_t TypeOfView,
 		 {
 		  // Don't show groups if I don't belong to course
 		  if (Gbl.Usrs.Me.IBelongToCurrentCrs)
-		     Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STD));
+		     Grp_ShowLstGrpsToChgMyGrps ();
 		 }
 	       else
 		  Grp_ShowLstGrpsToChgOtherUsrsGrps (UsrDat->UsrCod);

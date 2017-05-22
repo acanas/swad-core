@@ -71,7 +71,8 @@ void Lay_PutContextualLink (Act_Action_t NextAction,const char *Anchor,
                             const char *OnSubmit);
 void Lay_PutContextualCheckbox (Act_Action_t NextAction,
                                 void (*FuncParams) (),
-                                const char *CheckboxName,bool Checked,
+                                const char *CheckboxName,
+                                bool Checked,bool Disabled,
                                 const char *Title,const char *Text);
 void Lay_PutIconLink (const char *Icon,const char *Title,const char *Text,
                       const char *LinkStyle,const char *OnSubmit);

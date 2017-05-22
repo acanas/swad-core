@@ -1635,14 +1635,14 @@ void Grp_ListGrpsToEditAsgAttOrSvy (struct GroupType *GrpTyp,long Cod,Grp_AsgOrS
 void Grp_ReqRegisterInGrps (void)
   {
    /***** Show list of groups to register/remove me *****/
-   Grp_ShowLstGrpsToChgMyGrps ((Gbl.Usrs.Me.LoggedRole == Rol_STD));
+   Grp_ShowLstGrpsToChgMyGrps ();
   }
 
 /*****************************************************************************/
 /***************** Show list of groups to register/remove me *****************/
 /*****************************************************************************/
 
-void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
+void Grp_ShowLstGrpsToChgMyGrps (void)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *Txt_My_groups;
@@ -1664,7 +1664,7 @@ void Grp_ShowLstGrpsToChgMyGrps (bool ShowWarningsToStudents)
 
       /***** Show warnings to students *****/
       // Students are required to join groups with mandatory enrolment; teachers don't
-      if (ShowWarningsToStudents)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
 	 Grp_ShowWarningToStdsToChangeGrps ();
      }
 
