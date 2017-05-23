@@ -1023,7 +1023,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevGst);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevGst,Gbl.Usrs.Select[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1036,7 +1036,7 @@ static void Rec_ListRecordsGsts (Rec_SharedRecordViewType_t TypeOfView)
 				// ...inscription in any course
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select.All;
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1218,7 +1218,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevStd);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevStd,Gbl.Usrs.Select[Rol_UNK]);
       Rec_ShowLinkToPrintPreviewOfRecords ();
       Act_FormEnd ();
       fprintf (Gbl.F.Out,"</div>");
@@ -1228,7 +1228,7 @@ static void Rec_ListRecordsStds (Rec_SharedRecordViewType_t ShaTypeOfView,
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select.All;
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1435,7 +1435,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
 
       /* Link to print view */
       Act_FormStart (ActPrnRecSevTch);
-      Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActPrnRecSevTch,Gbl.Usrs.Select[Rol_UNK]);
       Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
       Par_PutHiddenParamChar ("ShowOfficeHours",
                               ShowOfficeHours ? 'Y' :
@@ -1450,7 +1450,7 @@ static void Rec_ListRecordsTchs (Rec_SharedRecordViewType_t TypeOfView)
    Usr_UsrDataConstructor (&UsrDat);
 
    /***** List the records *****/
-   Ptr = Gbl.Usrs.Select.All;
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1590,7 +1590,7 @@ static void Rec_PutParamsShowOfficeHoursOneTch (void)
 
 static void Rec_PutParamsShowOfficeHoursSeveralTchs (void)
   {
-   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Select.All);
+   Usr_PutHiddenParUsrCodAll (ActSeeRecSevTch,Gbl.Usrs.Select[Rol_UNK]);
    Par_PutHiddenParamChar ("ParamOfficeHours",'Y');
   }
 
@@ -1770,7 +1770,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
 	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
          Par_PutHiddenParamLong ("OriginalActCod",
                                  Act_Actions[ActSeeRecSevStd].ActCod);	// Original action, used to know where we came from
-	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select.All);
+	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);
          Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
 	 break;
       case Rec_CRS_PRINT_ONE_RECORD:

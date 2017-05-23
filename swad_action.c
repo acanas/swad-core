@@ -1923,9 +1923,9 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActReqSeeMyTstRes	*/{1083,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelDatesToSeeMyTestResults	,NULL},
    /* ActSeeMyTstRes	*/{1084,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowMyTestResults		,NULL},
    /* ActSeeOneTstResMe	*/{1085,-1,TabUnk,ActReqTst		,0x208,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
-   /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
-   /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsTestResults	,NULL},
-   /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
+   /* ActReqSeeUsrTstRes*/{1080,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Tst_SetIniEndDates		,Tst_SelUsrsToSeeUsrsTestResults,NULL},
+   /* ActSeeUsrTstRes	*/{1081,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowUsrsTestResults	,NULL},
+   /* ActSeeOneTstResOth*/{1082,-1,TabUnk,ActReqTst		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Tst_ShowOneTestResult		,NULL},
 
    /* ActSeeOneSvy	*/{ 982,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_SeeOneSurvey		,NULL},
    /* ActAnsSvy		*/{ 983,-1,TabUnk,ActSeeAllSvy		,0x3F8,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,0x3C0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Svy_ReceiveSurveyAnswers	,NULL},

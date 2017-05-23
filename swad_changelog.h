@@ -233,13 +233,16 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.221 (2017-05-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.221.1 (2017-05-23)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.221.1: May 23, 2017	Fixed bugs related with new role.
+					Fixed bug in surveys.
+					Fixed bug in attendance events. (220260 lines)
         Version 16.221:   May 23, 2017	Changes in database related with new role. Not finished. (220253 lines)
 					8 changes necessary in database:
 UPDATE announcements SET Roles = (((Roles & 0xFF0) << 1) | (Roles & 0x00F));

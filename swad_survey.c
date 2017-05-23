@@ -444,8 +444,10 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    /***** Write first row of data of this assignment *****/
    /* Forms to remove/edit this assignment */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
-            Gbl.RowEvenOdd);
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
+   if (!ShowOnlyThisSvyComplete)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
    if (Svy.Status.ICanEdit)
       Svy_PutFormsToRemEditOneSvy (Svy.SvyCod,Svy.Status.Visible);
    fprintf (Gbl.F.Out,"</td>");
@@ -648,7 +650,7 @@ static void Svy_ShowOneSurvey (long SvyCod,struct SurveyQuestion *SvyQst,
    if (ShowOnlyThisSvyComplete)
      {
       fprintf (Gbl.F.Out,"<tr>"
-			 "<td colspan=\"4\">");
+			 "<td colspan=\"5\">");
       Svy_ListSvyQuestions (&Svy,SvyQst);
       fprintf (Gbl.F.Out,"</td>"
 			 "</tr>");

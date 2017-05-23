@@ -2444,7 +2444,7 @@ void Brw_PutParamsFileBrowser (Act_Action_t NextAction,
       if (Brw_GetIfCrsAssigWorksFileBrowser ())
 	{
 	 /***** Users selected *****/
-	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select.All);
+	 Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select[Rol_UNK]);
 	 Usr_PutParamOtherUsrCodEncrypted ();
 	}
      }
@@ -3206,7 +3206,7 @@ static void Brw_ShowFileBrowsersAsgWrkCrs (void)
                                 Brw_PutIconShowFigure,Hlp_FILES_Homework_for_teachers,0);
 
       /***** List the assignments and works of the selected users *****/
-      Ptr = Gbl.Usrs.Select.All;
+      Ptr = Gbl.Usrs.Select[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,
@@ -4719,7 +4719,8 @@ static void Brw_PutParamsFullTree (void)
    if (Brw_GetIfGroupFileBrowser ())
       Grp_PutParamGrpCod (Gbl.CurrentCrs.Grps.GrpCod);
    else if (Brw_GetIfCrsAssigWorksFileBrowser ())
-      Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (Brw_ActSeeAdm[Gbl.FileBrowser.Type],
+                                 Gbl.Usrs.Select[Rol_UNK]);
   }
 
 /*****************************************************************************/

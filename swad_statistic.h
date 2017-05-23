@@ -36,20 +36,20 @@
 #define Sta_NUM_ROLES_STAT	12
 typedef enum
   {
-   Sta_IDENTIFIED_USRS      =  0,
-   Sta_ALL_USRS             =  1,
-   Sta_INS_ADMINS           =  2,
-   Sta_CTR_ADMINS           =  3,
-   Sta_DEG_ADMINS           =  4,
-   Sta_TEACHERS             =  5,
-   Sta_NON_EDITING_TEACHERS =  6,
-   Sta_STUDENTS             =  7,
-   Sta_VISITORS             =  8,
-   Sta_GUESTS               =  9,
-   Sta_UNKNOWN_USRS         = 10,
-   Sta_ME                   = 11,
+   Sta_ROLE_IDENTIFIED_USRS      =  0,
+   Sta_ROLE_ALL_USRS             =  1,
+   Sta_ROLE_INS_ADMINS           =  2,
+   Sta_ROLE_CTR_ADMINS           =  3,
+   Sta_ROLE_DEG_ADMINS           =  4,
+   Sta_ROLE_TEACHERS             =  5,
+   Sta_ROLE_NON_EDITING_TEACHERS =  6,
+   Sta_ROLE_STUDENTS             =  7,
+   Sta_ROLE_USERS                =  8,
+   Sta_ROLE_GUESTS               =  9,
+   Sta_ROLE_UNKNOWN_USRS         = 10,
+   Sta_ROLE_ME                   = 11,
   } Sta_Role_t;
-#define Sta_ROLE_DEFAULT Sta_IDENTIFIED_USRS
+#define Sta_ROLE_DEFAULT Sta_ROLE_IDENTIFIED_USRS
 
 #define Sta_NUM_ACTION_DEFAULT ActAll
 

@@ -720,11 +720,11 @@ void Msg_RecMsgFromUsr (void)
    Image.Quality = Msg_IMAGE_SAVED_QUALITY;
    Img_GetImageFromForm (-1,&Image,NULL);
 
-   /***** Loop over the list Gbl.Usrs.Select.All, that holds the list of the
+   /***** Loop over the list Gbl.Usrs.Select[Rol_UNK], that holds the list of the
 	  recipients, creating a received message for each recipient *****/
    Str_ChangeFormat (Str_FROM_FORM,Str_TO_RIGOROUS_HTML,
                      Content,Cns_MAX_BYTES_LONG_TEXT,false);
-   Ptr = Gbl.Usrs.Select.All;
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    NumRecipients = 0;
    while (*Ptr)
      {

@@ -7132,7 +7132,7 @@ void Tst_ShowUsrsTestResults (void)
       Tst_ShowHeaderTestResults ();
 
       /***** List the assignments and works of the selected users *****/
-      Ptr = Gbl.Usrs.Select.All;
+      Ptr = Gbl.Usrs.Select[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,Gbl.Usrs.Other.UsrDat.EncryptedUsrCod,

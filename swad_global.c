@@ -191,17 +191,14 @@ void Gbl_InitializeGlobals (void)
      {
       Gbl.Usrs.LstUsrs[Role].Lst = NULL;
       Gbl.Usrs.LstUsrs[Role].NumUsrs = 0;
+      Gbl.Usrs.Select[Role] = NULL;
      }
+   Gbl.Usrs.ListOtherRecipients = NULL;
 
    Gbl.ExamAnns.NumExaAnns = 0;
    Gbl.ExamAnns.Lst = NULL;
    Gbl.ExamAnns.HighlightExaCod = -1L;
    Gbl.ExamAnns.HighlightDate[0] = '\0';	// No exam announcements highlighted
-
-   Gbl.Usrs.Select.All =
-   Gbl.Usrs.Select.Std =
-   Gbl.Usrs.Select.Tch =
-   Gbl.Usrs.ListOtherRecipients = NULL;
 
    Gbl.Msg.Subject[0] = '\0';
    Gbl.Msg.ShowOnlyUnreadMsgs = false;

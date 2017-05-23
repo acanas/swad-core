@@ -129,7 +129,7 @@ void ZIP_PutLinkToCreateZIPAsgWrk (void)
 
 static void ZIP_PutLinkToCreateZIPAsgWrkParams (void)
   {
-   Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select.All);
+   Usr_PutHiddenParUsrCodAll (ActAdmAsgWrkCrs,Gbl.Usrs.Select[Rol_UNK]);
    if (Gbl.FileBrowser.FullTree)
       Par_PutHiddenParamChar ("FullTree",'Y');
    Par_PutHiddenParamChar ("CreateZIP",'Y');
@@ -175,7 +175,7 @@ void ZIP_CreateZIPAsgWrk (void)
 
    /* Create temporary directory for each selected user
       inside the directory used for compression */
-   Ptr = Gbl.Usrs.Select.All;
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,

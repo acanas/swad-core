@@ -304,7 +304,6 @@ void Soc_ShowTimelineGbl2 (void)
 
       /* Users tab */
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_STD
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NED_TCH
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_TCH
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_REQUEST
 
@@ -322,9 +321,11 @@ void Soc_ShowTimelineGbl2 (void)
       Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_MESSAGE
 
       /* Statistics tab */
-      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY
 
       /* Profile tab */
+
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+      Soc_TOP_MESSAGE_NONE,		// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
      };
 
    /***** Initialize social note code to -1 ==> no highlighted note *****/

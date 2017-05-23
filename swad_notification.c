@@ -73,7 +73,6 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    "enrollmentStudent",			// Ntf_EVENT_ENROLMENT_STD	// TODO: Change to "enrolmentStudent" carefully in future versions
-   "enrollmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Change to "enrolmentTeacher" carefully in future versions
    "enrollmentTeacher",			// Ntf_EVENT_ENROLMENT_TCH	// TODO: Change to "enrolmentTeacher" carefully in future versions
    "enrollmentRequest",			// Ntf_EVENT_ENROLMENT_REQUEST	// TODO: Change to "enrolmentRequest" carefully in future versions
 
@@ -91,9 +90,11 @@ const char *Ntf_WSNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "message",				// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "survey",				// Ntf_EVENT_SURVEY
 
    /* Profile tab */
+
+   "survey",				// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "enrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
@@ -112,7 +113,6 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    ActReqAccEnrStd,	// Ntf_EVENT_ENROLMENT_STD
-   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NED_TCH
    ActReqAccEnrTch,	// Ntf_EVENT_ENROLMENT_TCH
    ActSeeSignUpReq,	// Ntf_EVENT_ENROLMENT_REQUEST
 
@@ -130,9 +130,11 @@ static const Act_Action_t Ntf_DefaultActions[Ntf_NUM_NOTIFY_EVENTS] =
    ActExpRcvMsg,	// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   ActSeeAllSvy,	// Ntf_EVENT_SURVEY	TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 
    /* Profile tab */
+
+   ActSeeAllSvy,	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   ActReqAccEnrNET,	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/
@@ -156,7 +158,6 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    "NotifyNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
-   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH
    "NotifyNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
    "NotifyNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
 
@@ -174,9 +175,11 @@ static const char *Ntf_ParamNotifMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "NotifyNtfEventMessage",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "NotifyNtfEventSurvey",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
+
+   "NotifyNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "NotifyNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Email me about notification events
@@ -196,7 +199,6 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    "EmailNtfEventEnrolmentStudent",		// Ntf_EVENT_ENROLMENT_STD
-   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH
    "EmailNtfEventEnrolmentTeacher",		// Ntf_EVENT_ENROLMENT_TCH
    "EmailNtfEventEnrolmentRequest",		// Ntf_EVENT_ENROLMENT_REQUEST
 
@@ -214,9 +216,11 @@ static const char *Ntf_ParamEmailMeAboutNotifyEvents[Ntf_NUM_NOTIFY_EVENTS] =
    "EmailNtfEventMessage",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "EmailNtfEventSurvey",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
+
+   "EmailNtfEventSurvey",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "EmailNtfEventEnrolmentNonEditingTeacher",	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 // Icons for notification events
@@ -236,7 +240,6 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
 
    /* Users tab */
    "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_STD
-   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NED_TCH
    "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_TCH
    "enrollmentrequest16x16.gif",	// Ntf_EVENT_ENROLMENT_REQUEST
 
@@ -254,9 +257,11 @@ static const char *Ntf_Icons[Ntf_NUM_NOTIFY_EVENTS] =
    "msg64x64.gif",			// Ntf_EVENT_MESSAGE
 
    /* Statistics tab */
-   "survey16x16.gif",			// Ntf_EVENT_SURVEY
 
    /* Profile tab */
+
+   "survey16x16.gif",			// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
+   "adduser16x16.gif",			// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
   };
 
 /*****************************************************************************/

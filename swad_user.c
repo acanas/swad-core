@@ -159,6 +159,7 @@ static void Usr_AllocateUsrsList (Rol_Role_t Role);
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
 static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs);
 
+static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
 
 static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsType_t ListType);
@@ -5208,57 +5209,91 @@ void Usr_GetListsSelectedUsrsCods (void)
    unsigned Length;
 
    /***** Allocate memory for the lists of users *****/
-   Usr_AllocateListSelectedUsrCodAll ();
-   Usr_AllocateListSelectedUsrCodTch ();
-   Usr_AllocateListSelectedUsrCodStd ();
+   Usr_AllocateListSelectedUsrCod (Rol_UNK);
+   Usr_AllocateListSelectedUsrCod (Rol_GST);
+   Usr_AllocateListSelectedUsrCod (Rol_STD);
+   Usr_AllocateListSelectedUsrCod (Rol_NET);
+   Usr_AllocateListSelectedUsrCod (Rol_TCH);
 
    /***** Get selected users *****/
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
-      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",Gbl.Usrs.Select.All,
+      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",Gbl.Usrs.Select[Rol_UNK],
                               Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select.All,
+      Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select[Rol_UNK],
                         Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
      }
    else
-      Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select.All,
+      Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select[Rol_UNK],
                              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select.Tch,
-                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers or guests
-
-   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select.Std,
+   Par_GetParMultiToText ("UsrCodGst",Gbl.Usrs.Select[Rol_GST],
+                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Guests
+   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select[Rol_STD],
                           Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
+   Par_GetParMultiToText ("UsrCodNET",Gbl.Usrs.Select[Rol_NET],
+                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Non-editing teachers
+   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select[Rol_TCH],
+                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers
+
 /*
 sprintf (Gbl.Alert.Txt,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
-         Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
+         Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
 Lay_ShowErrorAndExit (Gbl.Alert.Txt);
 */
-   /***** Add teachers to the list with all selected users *****/
-   if (Gbl.Usrs.Select.Tch[0])
+   /***** Add guests to the list with all selected users *****/
+   if (Gbl.Usrs.Select[Rol_GST][0])
      {
-      if (Gbl.Usrs.Select.All[0])
-         if ((Length = strlen (Gbl.Usrs.Select.All)) <
+      if (Gbl.Usrs.Select[Rol_UNK][0])
+         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
-            Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select.All[Length + 1] = '\0';
+            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
            }
-      Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Tch,
+      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_GST],
                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
      }
 
    /***** Add students to the list with all selected users *****/
-   if (Gbl.Usrs.Select.Std[0])
+   if (Gbl.Usrs.Select[Rol_STD][0])
      {
-      if (Gbl.Usrs.Select.All[0])
-         if ((Length = strlen (Gbl.Usrs.Select.All)) <
+      if (Gbl.Usrs.Select[Rol_UNK][0])
+         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
            {
-            Gbl.Usrs.Select.All[Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select.All[Length + 1] = '\0';
+            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
            }
-      Str_Concat (Gbl.Usrs.Select.All,Gbl.Usrs.Select.Std,
+      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_STD],
+                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+     }
+
+   /***** Add non-editing teachers to the list with all selected users *****/
+   if (Gbl.Usrs.Select[Rol_NET][0])
+     {
+      if (Gbl.Usrs.Select[Rol_UNK][0])
+         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
+             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+           {
+            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
+           }
+      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_NET],
+                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+     }
+
+   /***** Add teachers to the list with all selected users *****/
+   if (Gbl.Usrs.Select[Rol_TCH][0])
+     {
+      if (Gbl.Usrs.Select[Rol_UNK][0])
+         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
+             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+           {
+            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
+           }
+      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_TCH],
                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
      }
   }
@@ -5284,8 +5319,8 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
    bool Error = false;
 
    /***** Allocate memory for the lists of users's IDs *****/
-   Usr_AllocateListSelectedUsrCodAll ();
-   LengthSelectedUsrsCods = strlen (Gbl.Usrs.Select.All);
+   Usr_AllocateListSelectedUsrCod (Rol_UNK);
+   LengthSelectedUsrsCods = strlen (Gbl.Usrs.Select[Rol_UNK]);
 
    /***** Allocate memory for the lists of recipients written explicetely *****/
    Usr_AllocateListOtherRecipients ();
@@ -5419,7 +5454,7 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                      if (LengthUsrCod < Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         /* Add user */
-                        Str_Copy (Gbl.Usrs.Select.All,
+                        Str_Copy (Gbl.Usrs.Select[Rol_UNK],
                                   UsrDat.EncryptedUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods = LengthUsrCod;
@@ -5431,11 +5466,11 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
                 	 Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
                        {
                         /* Add separator */
-                        Gbl.Usrs.Select.All[LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
+                        Gbl.Usrs.Select[Rol_UNK][LengthSelectedUsrsCods] = Par_SEPARATOR_PARAM_MULTIPLE;
                         LengthSelectedUsrsCods++;
 
                         /* Add user */
-                        Str_Copy (Gbl.Usrs.Select.All + LengthSelectedUsrsCods,
+                        Str_Copy (Gbl.Usrs.Select[Rol_UNK] + LengthSelectedUsrsCods,
                                   UsrDat.EncryptedUsrCod,
                                   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
                         LengthSelectedUsrsCods += LengthUsrCod;
@@ -5458,16 +5493,16 @@ bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs)
 /*****************************************************************************/
 /************** Find if encrypted user's code is yet in list *****************/
 /*****************************************************************************/
-// Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Select.All
+// Returns true if EncryptedUsrCodToFind is in Gbl.Usrs.Select[Rol_UNK]
 
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind)
   {
    const char *Ptr;
    char EncryptedUsrCod[Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 + 1];
 
-   if (Gbl.Usrs.Select.All)
+   if (Gbl.Usrs.Select[Rol_UNK])
      {
-      Ptr = Gbl.Usrs.Select.All;
+      Ptr = Gbl.Usrs.Select[Rol_UNK];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,EncryptedUsrCod,
@@ -5489,8 +5524,8 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
    unsigned NumUsrs = 0;
    struct UsrData UsrDat;
 
-   /***** Loop over the list Gbl.Usrs.Select.All to count the number of users *****/
-   Ptr = Gbl.Usrs.Select.All;
+   /***** Loop over the list Gbl.Usrs.Select[Rol_UNK] to count the number of users *****/
+   Ptr = Gbl.Usrs.Select[Rol_UNK];
    while (*Ptr)
      {
       Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -5503,68 +5538,37 @@ unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void)
   }
 
 /*****************************************************************************/
-/********************* Allocate memory for list of users *********************/
-/*****************************************************************************/
-
-void Usr_AllocateListSelectedUsrCodAll (void)
-  {
-   if (!Gbl.Usrs.Select.All)
-     {
-      if ((Gbl.Usrs.Select.All = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
-      Gbl.Usrs.Select.All[0] = '\0';
-     }
-  }
-
-/*****************************************************************************/
 /****************** Allocate memory for list of students *********************/
 /*****************************************************************************/
+// Role = Rol_UNK here means all users
 
-void Usr_AllocateListSelectedUsrCodStd (void)
+static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role)
   {
-   if (!Gbl.Usrs.Select.Std)
+   if (!Gbl.Usrs.Select[Role])
      {
-      if ((Gbl.Usrs.Select.Std = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
+      if ((Gbl.Usrs.Select[Role] = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
          Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
-      Gbl.Usrs.Select.Std[0] = '\0';
-     }
-  }
-
-/*****************************************************************************/
-/************* Allocate memory for list of teachers or guests ****************/
-/*****************************************************************************/
-
-void Usr_AllocateListSelectedUsrCodTch (void)
-  {
-   if (!Gbl.Usrs.Select.Tch)
-     {
-      if ((Gbl.Usrs.Select.Tch = (char *) malloc (Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS + 1)) == NULL)
-         Lay_ShowErrorAndExit ("Not enough memory to store list of users.");
-      Gbl.Usrs.Select.Tch[0] = '\0';
+      Gbl.Usrs.Select[Role][0] = '\0';
      }
   }
 
 /*****************************************************************************/
 /************ Free memory used by list of selected users' codes **************/
 /*****************************************************************************/
+// Role = Rol_UNK here means all users
 
 void Usr_FreeListsSelectedUsrsCods (void)
   {
-   if (Gbl.Usrs.Select.All)
-     {
-      free ((void *) Gbl.Usrs.Select.All);
-      Gbl.Usrs.Select.All = NULL;
-     }
-   if (Gbl.Usrs.Select.Tch)
-     {
-      free ((void *) Gbl.Usrs.Select.Tch);
-      Gbl.Usrs.Select.Tch = NULL;
-     }
-   if (Gbl.Usrs.Select.Std)
-     {
-      free ((void *) Gbl.Usrs.Select.Std);
-      Gbl.Usrs.Select.Std = NULL;
-     }
+   Rol_Role_t Role;
+
+   for (Role = (Rol_Role_t) 0;
+	Role < Rol_NUM_ROLES;
+	Role++)
+      if (Gbl.Usrs.Select[Role])
+	{
+	 free ((void *) Gbl.Usrs.Select[Role]);
+	 Gbl.Usrs.Select[Role] = NULL;
+	}
   }
 
 /*****************************************************************************/
@@ -5684,7 +5688,7 @@ void Usr_PutExtraParamsUsrList (Act_Action_t NextAction)
          Att_PutParamAttCod (Gbl.AttEvents.AttCod);
          break;
       case ActReqMsgUsr:
-         Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select.All);
+         Usr_PutHiddenParUsrCodAll (NextAction,Gbl.Usrs.Select[Rol_UNK]);
          Msg_PutHiddenParamOtherRecipients ();
          Msg_PutHiddenParamsSubjectAndContent ();
          if (Gbl.Msg.Reply.IsReply)

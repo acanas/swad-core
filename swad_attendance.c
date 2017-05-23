@@ -371,8 +371,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    /***** Write first row of data of this attendance event *****/
    /* Forms to remove/edit this attendance event */
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td rowspan=\"2\" class=\"CONTEXT_COL COLOR%u\">",
-            Gbl.RowEvenOdd);
+	              "<td rowspan=\"2\" class=\"CONTEXT_COL");
+   if (!ShowOnlyThisAttEventComplete)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_TCH:
@@ -451,8 +453,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
 
    /***** Write second row of data of this attendance event *****/
    fprintf (Gbl.F.Out,"<tr>"
-	              "<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
+	              "<td colspan=\"2\" class=\"LEFT_TOP");
+   if (!ShowOnlyThisAttEventComplete)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    /* Author of the attendance event */
    Att_WriteAttEventAuthor (Att);
@@ -464,8 +468,10 @@ static void Att_ShowOneAttEvent (struct AttendanceEvent *Att,bool ShowOnlyThisAt
    Str_ChangeFormat (Str_FROM_HTML,Str_TO_RIGOROUS_HTML,
                      Txt,Cns_MAX_BYTES_TEXT,false);	// Convert from HTML to recpectful HTML
    Str_InsertLinks (Txt,Cns_MAX_BYTES_TEXT,60);	// Insert links
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP COLOR%u\">",
-            Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"LEFT_TOP");
+   if (!ShowOnlyThisAttEventComplete)
+      fprintf (Gbl.F.Out," COLOR%u",Gbl.RowEvenOdd);
+   fprintf (Gbl.F.Out,"\">");
 
    if (Gbl.CurrentCrs.Grps.NumGrps)
       Att_GetAndWriteNamesOfGrpsAssociatedToAttEvent (Att);
@@ -2258,8 +2264,8 @@ void Att_RegisterMeAsStdInAttEvent (void)
 /* Algorithm:
    1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD]
    2. Mark all students in the groups selected setting Remove=true
-   3. Get list of students marked as present by me: Gbl.Usrs.Select.Std
-   4. Loop over the list Gbl.Usrs.Select.Std,
+   3. Get list of students marked as present by me: Gbl.Usrs.Select[Rol_STD]
+   4. Loop over the list Gbl.Usrs.Select[Rol_STD],
       that holds the list of the students marked as present,
       marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false
    5. Delete from att_usr all the students marked as Remove=true
@@ -2301,16 +2307,16 @@ void Att_RegisterStudentsInAttEvent (void)
            NumStd++)
          Gbl.Usrs.LstUsrs[Rol_STD].Lst[NumStd].Remove = true;
 
-      /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select.Std *****/
+      /***** 3. Get list of students marked as present by me: Gbl.Usrs.Select[Rol_STD] *****/
       Usr_GetListsSelectedUsrsCods ();
 
       /***** Initialize structure with user's data *****/
       Usr_UsrDataConstructor (&UsrData);
 
-      /***** 4. Loop over the list Gbl.Usrs.Select.Std,
+      /***** 4. Loop over the list Gbl.Usrs.Select[Rol_STD],
                 that holds the list of the students marked as present,
                 marking the students in Gbl.Usrs.LstUsrs[Rol_STD].Lst as Remove=false *****/
-      Ptr = Gbl.Usrs.Select.Std;
+      Ptr = Gbl.Usrs.Select[Rol_STD];
       while (*Ptr)
 	{
 	 Par_GetNextStrUntilSeparParamMult (&Ptr,UsrData.EncryptedUsrCod,
@@ -2863,8 +2869,8 @@ static void Att_GetListSelectedUsrCods (unsigned NumStdsInList,long **LstSelecte
    /***** Initialize structure with user's data *****/
    Usr_UsrDataConstructor (&UsrDat);
 
-   /***** Loop over the list Gbl.Usrs.Select.All getting users' codes *****/
-   for (NumStd = 0, Ptr = Gbl.Usrs.Select.All;
+   /***** Loop over the list Gbl.Usrs.Select[Rol_UNK] getting users' codes *****/
+   for (NumStd = 0, Ptr = Gbl.Usrs.Select[Rol_UNK];
 	NumStd < NumStdsInList && *Ptr;
 	NumStd++)
      {
@@ -3019,7 +3025,7 @@ static void Att_PutParamsToPrintStdsList (void)
    if (Gbl.AttEvents.ShowDetails)
       Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (ActPrnLstStdAtt,Gbl.Usrs.Select.All);
+   Usr_PutHiddenParUsrCodAll (ActPrnLstStdAtt,Gbl.Usrs.Select[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
   }
@@ -3036,7 +3042,7 @@ static void Att_PutButtonToShowDetails (void)
    Act_FormStart (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowDetails",'Y');
    Grp_PutParamsCodGrps ();
-   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select.All);
+   Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
    if (Gbl.AttEvents.StrAttCodsSelected[0])
       Par_PutHiddenParamString ("AttCods",Gbl.AttEvents.StrAttCodsSelected);
    Lay_PutConfirmButton (Txt_Show_more_details);
@@ -3067,7 +3073,7 @@ static void Att_ListEventsToSelect (Att_TypeOfView_t TypeOfView)
      {
       Act_FormStart (Gbl.Action.Act);
       Grp_PutParamsCodGrps ();
-      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (Gbl.Action.Act,Gbl.Usrs.Select[Rol_UNK]);
      }
 
    /***** Start frame *****/

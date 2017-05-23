@@ -951,8 +951,8 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 Sta_AskShowGblHits ();
 
 	 /***** The following types of query will never give a valid result *****/
-	 if ((Gbl.Stat.Role == Sta_ALL_USRS ||
-	      Gbl.Stat.Role == Sta_UNKNOWN_USRS) &&
+	 if ((Gbl.Stat.Role == Sta_ROLE_ALL_USRS ||
+	      Gbl.Stat.Role == Sta_ROLE_UNKNOWN_USRS) &&
 	     (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
 	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))
 	   {
@@ -1215,11 +1215,11 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
          /* Type of users */
 	 switch (Gbl.Stat.Role)
 	   {
-	    case Sta_IDENTIFIED_USRS:
+	    case Sta_ROLE_IDENTIFIED_USRS:
                sprintf (StrRole," AND %s.Role<>%u",
                         LogTable,(unsigned) Rol_UNK);
 	       break;
-	    case Sta_ALL_USRS:
+	    case Sta_ROLE_ALL_USRS:
                switch (Gbl.Stat.CountType)
                  {
                   case Sta_TOTAL_CLICKS:
@@ -1234,43 +1234,43 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                      break;
                     }
 	       break;
-	    case Sta_INS_ADMINS:
+	    case Sta_ROLE_INS_ADMINS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_INS_ADM);
 	       break;
-	    case Sta_CTR_ADMINS:
+	    case Sta_ROLE_CTR_ADMINS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_CTR_ADM);
 	       break;
-	    case Sta_DEG_ADMINS:
+	    case Sta_ROLE_DEG_ADMINS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_DEG_ADM);
 	       break;
-	    case Sta_TEACHERS:
+	    case Sta_ROLE_TEACHERS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_TCH);
 	       break;
-	    case Sta_NON_EDITING_TEACHERS:
+	    case Sta_ROLE_NON_EDITING_TEACHERS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_NET);
 	       break;
-	    case Sta_STUDENTS:
+	    case Sta_ROLE_STUDENTS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_STD);
 	       break;
-	    case Sta_VISITORS:
+	    case Sta_ROLE_USERS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_USR);
                break;
-	    case Sta_GUESTS:
+	    case Sta_ROLE_GUESTS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_GST);
                break;
-	    case Sta_UNKNOWN_USRS:
+	    case Sta_ROLE_UNKNOWN_USRS:
                sprintf (StrRole," AND %s.Role=%u",
                         LogTable,(unsigned) Rol_UNK);
                break;
-	    case Sta_ME:
+	    case Sta_ROLE_ME:
                sprintf (StrRole," AND %s.UsrCod=%ld",
                         LogTable,Gbl.Usrs.Me.UsrDat.UsrCod);
 	       break;
@@ -1304,7 +1304,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	             Sta_MAX_BYTES_QUERY_ACCESS);
 	 LengthQuery = strlen (Query);
 	 NumUsr = 0;
-	 Ptr = Gbl.Usrs.Select.All;
+	 Ptr = Gbl.Usrs.Select[Rol_UNK];
 	 while (*Ptr)
 	   {
 	    Par_GetNextStrUntilSeparParamMult (&Ptr,UsrDat.EncryptedUsrCod,
@@ -1640,7 +1640,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamLong ("FirstRow",FirstRow - Gbl.Stat.RowsPerPage);
       Par_PutHiddenParamLong ("LastRow" ,FirstRow - 1);
       Par_PutHiddenParamLong ("RowsPage",Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select[Rol_UNK]);
      }
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\" style=\"width:20%%;\">");
    if (FirstRow > 1)
@@ -1675,7 +1675,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
       Par_PutHiddenParamUnsigned ("FirstRow" ,(unsigned) (LastRow + 1));
       Par_PutHiddenParamUnsigned ("LastRow"  ,(unsigned) (LastRow + Gbl.Stat.RowsPerPage));
       Par_PutHiddenParamUnsigned ("RowsPage" ,(unsigned) Gbl.Stat.RowsPerPage);
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select[Rol_UNK]);
      }
    fprintf (Gbl.F.Out,"<td class=\"RIGHT_MIDDLE\" style=\"width:20%%;\">");
    if (LastRow < NumRows)
@@ -2149,7 +2149,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);
    Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
    if (Gbl.Action.Act == ActSeeAccCrs)
-      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select.All);
+      Usr_PutHiddenParUsrCodAll (ActSeeAccCrs,Gbl.Usrs.Select[Rol_UNK]);
    else // Gbl.Action.Act == ActSeeAccGbl
      {
       Par_PutHiddenParamUnsigned ("Role",(unsigned) Gbl.Stat.Role);

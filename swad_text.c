@@ -658,19 +658,6 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Nova inscrição como estudante",
 	},
 	{
-	// Ntf_EVENT_ENROLMENT_NED_TCH
-	"",
-	"Nova inscripció com a professor/a no editor/a",
-	"New Einschreibung als nicht bearbeiteter Lehrkraft",
-	"New enrolment as a non-editing teacher",
-	"Nueva inscripción como profesor/a no editor/a",
-	"Nouvelle inscription en tant qu'enseignant/e non-éditeur/trice",
-	"Nueva inscripción como profesor/a no editor/a",	// Okoteve traducción
-	"Nuova iscrizione come professore/ssa non-editing",
-	"Nowe zapisy jako nauczyciel nie edytujacy",
-	"Nova inscrição como professor/a não editor/a",
-	},
-	{
 	// Ntf_EVENT_ENROLMENT_TCH
 	"",
 	"Nova inscripció com a professor/a",
@@ -814,7 +801,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Nova mensagem",
 	},
 	{
-	// Ntf_EVENT_SURVEY
+	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 	"",
 	"Nova enquesta",
 	"Neuer Umfrage",
@@ -825,6 +812,19 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR_NO_HTML[Ntf_NUM_NOTIFY_EVENTS][1 + Txt_NU
 	"Nuovo sondaggio",
 	"Nowe badania",
 	"Novo inqu&eacute;rito",
+	},
+	{
+	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+	"",
+	"Nova inscripció com a professor/a no editor/a",
+	"New Einschreibung als nicht bearbeiteter Lehrkraft",
+	"New enrolment as a non-editing teacher",
+	"Nueva inscripción como profesor/a no editor/a",
+	"Nouvelle inscription en tant qu'enseignant/e non-éditeur/trice",
+	"Nueva inscripción como profesor/a no editor/a",	// Okoteve traducción
+	"Nuova iscrizione come professore/ssa non-editing",
+	"Nowe zapisy jako nauczyciel nie edytujacy",
+	"Nova inscrição como professor/a não editor/a",
 	},
 };
 
@@ -26465,26 +26465,6 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas inscri&ccedil;&otilde;es como estudante"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH
-	 "Novas inscripci&oacute;s com a professor/a no editor/a"
-#elif L==2
-	 "New Einschreibungen als nicht bearbeiteter Lehrkraft"
-#elif L==3
-	 "New enrolments as a non-editing teacher"
-#elif L==4
-	 "Nuevas inscripciones como profesor/a/a no editor/a"
-#elif L==5
-	 "Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
-#elif L==6
-	 "Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
-#elif L==7
-	 "Nuova iscrizione come professore/ssa non-editing"
-#elif L==8
-	 "Nowe zapisy jako nauczyciel nie edytuj&aogon;cy"
-#elif L==9
-	 "Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
-#endif
-	 ,
 #if   L==1	// Ntf_EVENT_ENROLMENT_TCH
 	 "Novas inscripci&oacute;s com a professor"
 #elif L==2
@@ -26705,7 +26685,7 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Novas mensagens"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SURVEY
+#if   L==1	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 	 "Noves enquestes"
 #elif L==2
 	 "Neue Umfragen"
@@ -26723,6 +26703,26 @@ const char *Txt_NOTIFY_EVENTS_PLURAL[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Nowe badania"
 #elif L==9
 	 "Novos inqu&eacute;ritos"
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+	 "Novas inscripci&oacute;s com a professor/a no editor/a"
+#elif L==2
+	 "New Einschreibungen als nicht bearbeiteter Lehrkraft"
+#elif L==3
+	 "New enrolments as a non-editing teacher"
+#elif L==4
+	 "Nuevas inscripciones como profesor/a/a no editor/a"
+#elif L==5
+	 "Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
+#elif L==6
+	 "Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
+#elif L==7
+	 "Nuova iscrizione come professore/ssa non-editing"
+#elif L==8
+	 "Nowe zapisy jako nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	 "Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
 #endif
 	};
 
@@ -26888,28 +26888,8 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Inscri&ccedil;&atilde;o como estudante"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH
-	 "Novas inscripci&oacute;s com a professor/a no editor/a"
-#elif L==2
-	 "New Einschreibungen als nicht bearbeiteter Lehrkraft"
-#elif L==3
-	 "New enrolments as a non-editing teacher"
-#elif L==4
-	 "Nuevas inscripciones como profesor/a/a no editor/a"
-#elif L==5
-	 "Nouvelles inscriptions en tant qu'enseignant/e non-&eacute;diteur/trice"
-#elif L==6
-	 "Nuevas inscripciones como profesor/a no editor/a"	// Okoteve traducción
-#elif L==7
-	 "Nuova iscrizione come professore/ssa non-editing"
-#elif L==8
-	 "Nowe zapisy jako nauczyciel nie edytuj&aogon;cy"
-#elif L==9
-	 "Novas inscri&ccedil;&otilde;es como professor/a n&atilde;o editor/a"
-#endif
-	 ,
 #if   L==1	// Ntf_EVENT_ENROLMENT_TCH
-	 "Inscripci&oacute; com a professor"
+	 "Inscripci&oacute; com a professor/a"
 #elif L==2
 	 "Einschreibung als Lehrkraft"
 #elif L==3
@@ -26921,11 +26901,11 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 #elif L==6
 	 "Inscripci&oacute;n como profesor/a"	// Okoteve traducción
 #elif L==7
-	 "Iscrizione come professore"
+	 "Iscrizione come professore/ssa"
 #elif L==8
 	 "Zapisy jako nauczyciel"
 #elif L==9
-	 "Inscri&ccedil;&atilde;o como professor"
+	 "Inscri&ccedil;&atilde;o como professor/a"
 #endif
 	 ,
 #if   L==1	// Ntf_EVENT_ENROLMENT_REQUEST
@@ -27128,7 +27108,7 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Mensagem"
 #endif
 	 ,
-#if   L==1	// Ntf_EVENT_SURVEY
+#if   L==1	// Ntf_EVENT_SURVEY		// TODO: Move to assessment tab (also necessary in database) !!!!!!!!!
 	 "Enquesta"
 #elif L==2
 	 "Umfrage"
@@ -27146,6 +27126,26 @@ const char *Txt_NOTIFY_EVENTS_SINGULAR[Ntf_NUM_NOTIFY_EVENTS] =
 	 "Badania"
 #elif L==9
 	 "Inqu&eacute;rito"
+#endif
+	 ,
+#if   L==1	// Ntf_EVENT_ENROLMENT_NED_TCH	// TODO: Move to users tab (also necessary in database) !!!!!!!!!
+	 "Inscripci&oacute; com a professor/a no editor/a"
+#elif L==2
+	 "Einschreibung als nicht bearbeiteter Lehrkraft"
+#elif L==3
+	 "Enrolment as a non-editing teacher"
+#elif L==4
+	 "Inscripci&oacute;n como profesor/a no editor/a"
+#elif L==5
+	 "Inscription en tant qu'enseignant non-&eacute;diteur/trice"
+#elif L==6
+	 "Inscripci&oacute;n como profesor/a no editor/a"	// Okoteve traducción
+#elif L==7
+	 "Iscrizione come professore/ssa non-editing"
+#elif L==8
+	 "Zapisy jako nauczyciel nie edytuj&aogon;cy"
+#elif L==9
+	 "Inscri&ccedil;&atilde;o como professor/a n&atilde;o editor/a"
 #endif
 	};
 
@@ -31888,7 +31888,7 @@ const char *Txt_Role =
 #endif
 
 const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
-   {	// Sta_IDENTIFIED_USRS
+   {	// Sta_ROLE_IDENTIFIED_USRS
 #if   L==1
 	"identificats"
 #elif L==2
@@ -31908,7 +31908,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"identificados"
 #endif
-	,	// Sta_ALL_USRS
+	,	// Sta_ROLE_ALL_USRS
 #if   L==1
 	"identificats o desconeguts"
 #elif L==2
@@ -31928,7 +31928,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"identificados ou desconhecidos"
 #endif
-	,	// Sta_INS_ADMINS
+	,	// Sta_ROLE_INS_ADMINS
 #if   L==1
 	"administradors d'institucions"
 #elif L==2
@@ -31948,7 +31948,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"administradores de institu&ccedil;&otilde;es"
 #endif
-	,	// Sta_CTR_ADMINS
+	,	// Sta_ROLE_CTR_ADMINS
 #if   L==1
 	"administradors de centres"
 #elif L==2
@@ -31968,7 +31968,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"administradores de centros"
 #endif
-	,	// Sta_DEG_ADMINS
+	,	// Sta_ROLE_DEG_ADMINS
 #if   L==1
 	"administradors de titulacions"
 #elif L==2
@@ -31988,7 +31988,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"administradores de graus"
 #endif
-	,	// Sta_TEACHERS
+	,	// Sta_ROLE_TEACHERS
 #if   L==1
 	"professors"
 #elif L==2
@@ -32008,7 +32008,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"professores"
 #endif
-	,	// Sta_NON_EDITING_TEACHERS
+	,	// Sta_ROLE_NON_EDITING_TEACHERS
 #if   L==1
 	"professors no editors"
 #elif L==2
@@ -32028,7 +32028,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"professores n&atilde;o editores"
 #endif
-	,	// Sta_STUDENTS
+	,	// Sta_ROLE_STUDENTS
 #if   L==1
 	"estudiants"
 #elif L==2
@@ -32048,27 +32048,27 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"estudantes"
 #endif
-	,	// Sta_VISITORS
+	,	// Sta_ROLE_USERS
 #if   L==1
-	"visitants"
+	 "usuaris"
 #elif L==2
-	"Besucher"
+	 "Benutzer"
 #elif L==3
-	"visitors"
+	 "users"
 #elif L==4
-	"visitantes"
+	 "usuarios"
 #elif L==5
-	"visiteurs"
+	 "utilisateurs"
 #elif L==6
-	"visitantes"	// Okoteve traducción
+	 "puruh&aacute;ra"
 #elif L==7
-	"visitatori"
+	 "utenti"
 #elif L==8
-	"odwiedzaj&aogon;cy"
+	 "u&zdot;ytkownicy"
 #elif L==9
-	"visitantes"
+	 "utilizadores"
 #endif
-	,	// Sta_GUESTS
+	,	// Sta_ROLE_GUESTS
 #if   L==1
 	"convidats (sense assignatures)"
 #elif L==2
@@ -32088,7 +32088,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"convidados (sem disciplinas)"
 #endif
-	,	// Sta_UNKNOWN_USRS
+	,	// Sta_ROLE_UNKNOWN_USRS
 #if   L==1
 	"desconeguts"
 #elif L==2
@@ -32108,7 +32108,7 @@ const char *Txt_ROLE_STATS[Sta_NUM_ROLES_STAT] =
 #elif L==9
 	"desconhecidos"
 #endif
-	,	// Sta_ME
+	,	// Sta_ROLE_ME
 #if   L==1
 	"jo"
 #elif L==2

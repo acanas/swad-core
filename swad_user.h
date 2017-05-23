@@ -352,9 +352,6 @@ void Usr_GetListsSelectedUsrsCods (void);
 bool Usr_GetListMsgRecipientsWrittenExplicitelyBySender (bool WriteErrorMsgs);
 bool Usr_FindUsrCodInListOfSelectedUsrs (const char *EncryptedUsrCodToFind);
 unsigned Usr_CountNumUsrsInListOfSelectedUsrs (void);
-void Usr_AllocateListSelectedUsrCodAll (void);
-void Usr_AllocateListSelectedUsrCodStd (void);
-void Usr_AllocateListSelectedUsrCodTch (void);
 void Usr_FreeListsSelectedUsrsCods (void);
 void Usr_FreeListOtherRecipients (void);
 
