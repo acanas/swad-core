@@ -1042,6 +1042,9 @@ bool Usr_CheckIfICanViewRecordStd (const struct UsrData *UsrDat)
 /*****************************************************************************/
 /************ Check if I can view the record card of a teacher ***************/
 /*****************************************************************************/
+// Teacher here is intended as:
+// - a non-editing teacher
+// - or a teacher
 
 bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
   {
@@ -1049,12 +1052,13 @@ bool Usr_CheckIfICanViewRecordTch (struct UsrData *UsrDat)
    if (!Gbl.Usrs.Me.Logged)
       return false;
 
-   /***** 2. Fast/slow check: Is he/she a teacher in any course? *****/
+   /***** 2. Fast/slow check: Is he/she a non-editing teacher or a teacher in any course? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (UsrDat);
-   if (!(UsrDat->Roles & (1 << Rol_TCH)))
+   if ((UsrDat->Roles & ((1 << Rol_NET) |
+	                 (1 << Rol_TCH))) == 0)
       return false;
 
-   // He/she is a teacher
+   // He/she is a non-editing teacher or a teacher in any course
 
    /***** 3. Fast check: It's me? *****/
    if (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod)

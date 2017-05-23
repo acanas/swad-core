@@ -1817,7 +1817,14 @@ static void For_PutFormWhichForums (void)
 static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool Highlight;
+   bool ICanSeeTeacherForum;
    struct Forum Forum;
+
+   /***** Can I see teachers's forums? *****/
+   Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
+   ICanSeeTeacherForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Roles & ((1 << Rol_NET) |
+	                                              (1 << Rol_TCH)));
 
    /***** Link to forum global *****/
    Forum.Type = For_FORUM_GLOBAL_USRS;
@@ -1828,7 +1835,7 @@ static void For_WriteLinksToGblForums (bool IsLastItemInLevel[1 + For_FORUM_MAX_
 
    /***** Link to forum of teachers global *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   if (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TCH))
+   if (ICanSeeTeacherForum)
      {
       Forum.Type = For_FORUM_GLOBAL_TCHS;
       Forum.Location = -1L;
@@ -1851,8 +1858,9 @@ static void For_WriteLinksToPlatformForums (bool IsLastForum,
 
    /***** Can I see teachers's forums? *****/
    Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-   ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                  Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TCH));
+   ICanSeeTeacherForum = Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
+	                 (Gbl.Usrs.Me.UsrDat.Roles & ((1 << Rol_NET) |
+	                                              (1 << Rol_TCH)));
 
    /***** Link to forum of users about the platform *****/
    Forum.Type = For_FORUM__SWAD__USRS;
@@ -1881,13 +1889,16 @@ static long For_WriteLinksToInsForums (long InsCod,bool IsLastIns,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool Highlight;
+   Rol_Role_t MaxRoleInIns;
    bool ICanSeeTeacherForum;
    struct Forum Forum;
 
    if (InsCod > 0)
      {
+      MaxRoleInIns = Rol_GetMyMaxRoleInIns (InsCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                     Rol_GetMyMaxRoleInIns (InsCod) >= Rol_TCH);
+	                     MaxRoleInIns == Rol_NET ||
+	                     MaxRoleInIns == Rol_TCH);
 
       /***** Link to the forum of users from this institution *****/
       Forum.Type = For_FORUM_INSTIT_USRS;
@@ -1920,13 +1931,16 @@ static long For_WriteLinksToCtrForums (long CtrCod,bool IsLastCtr,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool Highlight;
+   Rol_Role_t MaxRoleInCtr;
    bool ICanSeeTeacherForum;
    struct Forum Forum;
 
    if (CtrCod > 0)
      {
+      MaxRoleInCtr = Rol_GetMyMaxRoleInCtr (CtrCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                     Rol_GetMyMaxRoleInCtr (CtrCod) >= Rol_TCH);
+	                     MaxRoleInCtr == Rol_NET ||
+	                     MaxRoleInCtr == Rol_TCH);
 
       /***** Link to the forum of users from this centre *****/
       Forum.Type = For_FORUM_CENTRE_USRS;
@@ -1959,13 +1973,16 @@ static long For_WriteLinksToDegForums (long DegCod,bool IsLastDeg,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool Highlight;
+   Rol_Role_t MaxRoleInDeg;
    bool ICanSeeTeacherForum;
    struct Forum Forum;
 
    if (DegCod > 0)
      {
+      MaxRoleInDeg = Rol_GetMyMaxRoleInDeg (DegCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                     Rol_GetMyMaxRoleInDeg (DegCod) >= Rol_TCH);
+	                     MaxRoleInDeg == Rol_NET ||
+	                     MaxRoleInDeg == Rol_TCH);
 
       /***** Link to the forum of users from this degree *****/
       Forum.Type = For_FORUM_DEGREE_USRS;
@@ -1998,13 +2015,16 @@ static long For_WriteLinksToCrsForums (long CrsCod,bool IsLastCrs,
                                        bool IsLastItemInLevel[1 + For_FORUM_MAX_LEVELS])
   {
    bool Highlight;
+   Rol_Role_t MyRoleInCrs;
    bool ICanSeeTeacherForum;
    struct Forum Forum;
 
    if (CrsCod > 0)
      {
+      MyRoleInCrs = Rol_GetMyRoleInCrs (CrsCod);
       ICanSeeTeacherForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-	                     Rol_GetMyRoleInCrs (CrsCod) >= Rol_TCH);
+	                     MyRoleInCrs == Rol_NET ||
+	                     MyRoleInCrs == Rol_TCH);
 
       /***** Link to the forum of users from this course *****/
       Forum.Type = For_FORUM_COURSE_USRS;
@@ -3737,6 +3757,7 @@ static void For_SetForumType (void)
 static void For_RestrictAccess (void)
   {
    extern const char *Txt_You_dont_have_permission_to_access_to_this_forum;
+   Rol_Role_t MaxRole;
    bool ICanSeeForum;
 
    /***** Restrict access *****/
@@ -3749,39 +3770,60 @@ static void For_RestrictAccess (void)
       case For_FORUM_GLOBAL_TCHS:
       case For_FORUM__SWAD__TCHS:
          Rol_GetRolesInAllCrssIfNotYetGot (&Gbl.Usrs.Me.UsrDat);
-         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles >= (1 << Rol_TCH));
+         ICanSeeForum = (Gbl.Usrs.Me.UsrDat.Roles & ((1 << Rol_NET) |
+                                                     (1 << Rol_TCH)));
          break;
       case For_FORUM_INSTIT_USRS:
+	 MaxRole = Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location) >= Rol_STD);
+                         MaxRole == Rol_STD ||
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_INSTIT_TCHS:
+	 MaxRole = Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInIns (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_USRS:
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_STD);
+                         MaxRole >= Rol_STD ||
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_CENTRE_TCHS:
+	 MaxRole = Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInCtr (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_USRS:
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_STD);
+                         MaxRole >= Rol_STD ||
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_DEGREE_TCHS:
+	 MaxRole = Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyMaxRoleInDeg (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_USRS:
+	 MaxRole = Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_STD);
+                         MaxRole >= Rol_STD ||
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       case For_FORUM_COURSE_TCHS:
+	 MaxRole = Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location);
          ICanSeeForum = (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM ||
-                         Rol_GetMyRoleInCrs (Gbl.Forum.ForumSelected.Location) >= Rol_NET);
+                         MaxRole == Rol_NET ||
+                         MaxRole == Rol_TCH);
          break;
       default:
 	 ICanSeeForum = false;
