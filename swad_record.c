@@ -1719,66 +1719,63 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
    bool ICanEditThisField;
    char Text[Cns_MAX_BYTES_TEXT + 1];
 
-   if (Gbl.Usrs.Me.LoggedRole == Rol_STD)	// I am a student
+   switch (Gbl.Usrs.Me.LoggedRole)
      {
-      ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
-      if (ItsMe)	// It's me
-	 switch (TypeOfView)
+      case Rol_STD:	// I am a student
+	 ItsMe = (Gbl.Usrs.Me.UsrDat.UsrCod == UsrDat->UsrCod);	// It's me
+	 if (ItsMe)	// It's me
 	   {
-	    case Rec_CRS_LIST_ONE_RECORD:
-	    case Rec_CRS_LIST_SEVERAL_RECORDS:
-	       // When listing records, I can see only my record as student
- 	       TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
- 	       break;
-	    case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
-	    case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
-	    case Rec_CRS_PRINT_ONE_RECORD:
-	    case Rec_CRS_PRINT_SEVERAL_RECORDS:
-	       break;
-	    default:
-	       Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
-	       break;
-	  }
-      else	// It's not me ==> I am a student trying to do something forbidden
-	 Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
-     }
+	    switch (TypeOfView)
+	      {
+	       case Rec_CRS_LIST_ONE_RECORD:
+	       case Rec_CRS_LIST_SEVERAL_RECORDS:
+		  // When listing records, I can see only my record as student
+		  TypeOfView = Rec_CRS_MY_RECORD_AS_STUDENT_FORM;
+		  break;
+	       case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
+	       case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
+	       case Rec_CRS_PRINT_ONE_RECORD:
+	       case Rec_CRS_PRINT_SEVERAL_RECORDS:
+		  break;
+	       default:
+		  Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
+		  break;
+	      }
 
-   switch (TypeOfView)
-     {
-      case Rec_CRS_MY_RECORD_AS_STUDENT_FORM:
-         for (NumField = 0;
-              NumField < Gbl.CurrentCrs.Records.LstFields.Num;
-              NumField++)
-            if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
-              {
-               ICanEdit = true;
-  	       Act_FormStart (ActRcvRecCrs);
-               break;
-              }
+	    if (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM)
+	       /* Check if I can edit any of the record fields */
+	       for (NumField = 0;
+		    NumField < Gbl.CurrentCrs.Records.LstFields.Num;
+		    NumField++)
+		  if (Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD)
+		    {
+		     ICanEdit = true;
+		     Act_FormStart (ActRcvRecCrs);
+		     break;
+		    }
+	   }
+	 else	// It's not me ==> I am a student trying to do something forbidden
+	    Lay_ShowErrorAndExit (Txt_You_dont_have_permission_to_perform_this_action);
 	 break;
-      case Rec_CRS_MY_RECORD_AS_STUDENT_CHECK:
-         break;
-      case Rec_CRS_LIST_ONE_RECORD:
-         ICanEdit = true;
-	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
-         Par_PutHiddenParamLong ("OriginalActCod",
-                                 Act_Actions[ActSeeRecOneStd].ActCod);	// Original action, used to know where we came from
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      case Rol_NET:
 	 break;
-      case Rec_CRS_LIST_SEVERAL_RECORDS:
-         ICanEdit = true;
-	 Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
-         Par_PutHiddenParamLong ("OriginalActCod",
-                                 Act_Actions[ActSeeRecSevStd].ActCod);	// Original action, used to know where we came from
-	 Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);
-         Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+      case Rol_TCH:
+      case Rol_SYS_ADM:
+	 if (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+	     TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
+	   {
+	    ICanEdit = true;
+	    Act_FormStartAnchor (ActRcvRecOthUsr,Anchor);
+	    Par_PutHiddenParamLong ("OriginalActCod",
+				    Act_Actions[ActSeeRecSevStd].ActCod);	// Original action, used to know where we came from
+	    Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
+	    if (TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS)
+	       Usr_PutHiddenParUsrCodAll (ActRcvRecOthUsr,Gbl.Usrs.Select[Rol_UNK]);
+	   }
 	 break;
-      case Rec_CRS_PRINT_ONE_RECORD:
-      case Rec_CRS_PRINT_SEVERAL_RECORDS:
-         break;
       default:
-         break;
-    }
+	 Lay_ShowErrorAndExit ("Wrong role.");
+     }
 
    /***** Start frame *****/
    sprintf (StrRecordWidth,"%upx",Rec_RECORD_WIDTH);
@@ -1816,10 +1813,22 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
       // If the field must be shown...
       if (ShowField)
         {
-         ICanEditThisField = TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
-                             TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS ||
-                            (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
-                             Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+	 /* Can I edit this field? */
+	 switch (Gbl.Usrs.Me.LoggedRole)
+	   {
+	    case Rol_STD:
+	       ICanEditThisField = (TypeOfView == Rec_CRS_MY_RECORD_AS_STUDENT_FORM &&
+				    Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility == Rec_EDITABLE_FIELD);
+	       break;
+	    case Rol_TCH:
+	    case Rol_SYS_ADM:
+	       ICanEditThisField = (TypeOfView == Rec_CRS_LIST_ONE_RECORD ||
+				    TypeOfView == Rec_CRS_LIST_SEVERAL_RECORDS);
+               break;
+	    default:
+	       ICanEditThisField = false;
+	       break;
+	   }
 
          /* Name of the field */
          fprintf (Gbl.F.Out,"<tr>"
@@ -1835,7 +1844,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                      Txt_RECORD_FIELD_VISIBILITY_RECORD[Gbl.CurrentCrs.Records.LstFields.Lst[NumField].Visibility]);
          fprintf (Gbl.F.Out,"</td>");
 
-         /***** Get the text of the field *****/
+         /* Get the text of the field */
          if (Rec_GetFieldFromCrsRecord (UsrDat->UsrCod,Gbl.CurrentCrs.Records.LstFields.Lst[NumField].FieldCod,&mysql_res))
            {
             ThisFieldHasText = true;
@@ -1844,8 +1853,8 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          else
             ThisFieldHasText = false;
 
-         /***** Write form, text, or nothing depending on
-                the user's role and the visibility of the field *****/
+         /* Write form, text, or nothing depending on
+            the user's role and the visibility of the field */
          fprintf (Gbl.F.Out,"<td class=\"REC_C2_BOT REC_DAT_BOLD LEFT_TOP COLOR%u\">",
                   Gbl.RowEvenOdd);
          if (ICanEditThisField)	// Show with form
@@ -1858,7 +1867,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
                fprintf (Gbl.F.Out,"%s",row[0]);
             fprintf (Gbl.F.Out,"</textarea>");
            }
-         else		// Show without form
+         else			// Show without form
            {
             if (ThisFieldHasText)
               {
@@ -1874,7 +1883,7 @@ static void Rec_ShowCrsRecord (Rec_CourseRecordViewType_t TypeOfView,
          fprintf (Gbl.F.Out,"</td>"
                             "</tr>");
 
-         /***** Free structure that stores the query result *****/
+         /* Free structure that stores the query result */
          DB_FreeMySQLResult (&mysql_res);
         }
      }
