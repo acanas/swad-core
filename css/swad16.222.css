@@ -1498,9 +1498,20 @@ a:hover						/* Default ==> underlined */
 	border-radius:2px;
 	box-shadow: 0 2px 2px 0 rgba(124,121,109,0.14), 0 2px 1px -2px rgba(124,121,109,0.2), 0 1px 5px 0 rgba(124,121,109,0.12);
 	}
+.ALERT_CLOSE
+	{
+	float:right;
+	margin:-8px -8px 8px 8px;
+	opacity:0.3;
+	}
+.ALERT_CLOSE:hover
+	{
+	opacity:1;
+	}
 .ALERT_TXT
 	{
-	padding:8px 8px 8px 40px;
+	box-sizing:border-box;
+	padding:8px 0 8px 40px;
 	background-position:8px 8px;
 	background-size:20px 20px;
 	background-repeat:no-repeat;

@@ -352,8 +352,11 @@ static void Pho_ReqPhoto (const struct UsrData *UsrDat,const char *PhotoURL)
      }
 
    /***** Show current photo and help message *****/
+   fprintf (Gbl.F.Out,"<p>");
    Pho_ShowUsrPhoto (UsrDat,PhotoURL,
                      "PHOTO186x248",Pho_NO_ZOOM,false);
+   fprintf (Gbl.F.Out,"</p>");
+
    Ale_ShowAlert (Ale_INFO,Txt_You_can_send_a_file_with_an_image_in_JPEG_format_);
 
    /***** Form to upload photo *****/

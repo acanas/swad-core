@@ -4886,6 +4886,27 @@ const char *Txt_Clicks_per_day =
 	"Cliques por dia";
 #endif
 
+const char *Txt_Close =
+#if   L==1
+	"Tancar";
+#elif L==2
+	"Schlie&szlig;en";
+#elif L==3
+	"Close";
+#elif L==4
+	"Cerrar";
+#elif L==5
+	"Fermer";
+#elif L==6
+	"S&#7869;";
+#elif L==7
+	"Chiudi";
+#elif L==8
+	"Zamknij";
+#elif L==9
+	"Fechar";
+#endif
+
 const char *Txt_Closed_survey =
 #if   L==1
 	"Enquesta tancada";

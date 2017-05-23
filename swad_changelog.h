@@ -233,13 +233,17 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.221.1 (2017-05-23)"
-#define CSS_FILE		"swad16.209.3.css"
+#define Log_PLATFORM_VERSION	"SWAD 16.222 (2017-05-23)"
+#define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.222:   May 23, 2017	Alerts can be closed. (220313 lines)
+Copy the following icon to icon public directory:
+sudo cp -a icon/close64x64.png /var/www/html/swad/icon/
+
         Version 16.221.1: May 23, 2017	Fixed bugs related with new role.
 					Fixed bug in surveys.
 					Fixed bug in attendance events. (220260 lines)
