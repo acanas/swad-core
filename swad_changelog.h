@@ -233,13 +233,24 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.220.14 (2017-05-23)"
+#define Log_PLATFORM_VERSION	"SWAD 16.221 (2017-05-23)"
 #define CSS_FILE		"swad16.209.3.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.221:   May 23, 2017	Changes in database related with new role. Not finished. (220253 lines)
+					8 changes necessary in database:
+UPDATE announcements SET Roles = (((Roles & 0xFF0) << 1) | (Roles & 0x00F));
+UPDATE connected SET RoleInLastCrs = RoleInLastCrs + (RoleInLastCrs >= 4);
+UPDATE crs_usr SET Role = Role + (Role >= 4);
+UPDATE crs_usr_requests SET Role = Role + (Role >= 4);
+UPDATE sessions SET Role = Role + (Role >= 4);
+UPDATE surveys SET Roles = (((Roles & 0xFF0) << 1) | (Roles & 0x00F));
+UPDATE log_recent SET Role = Role + (Role >= 4);
+UPDATE log_full SET Role = Role + (Role >= 4);
+
         Version 16.220.14:May 23, 2017	Changes related with new role. Not finished. (220243 lines)
         Version 16.220.13:May 22, 2017	Changes related with new role. Not finished. (220190 lines)
         Version 16.220.12:May 22, 2017	Changes related with new role. Not finished. (220155 lines)
