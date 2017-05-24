@@ -233,13 +233,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.222.2 (2017-05-24)"
+#define Log_PLATFORM_VERSION	"SWAD 16.223 (2017-05-24)"
 #define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.223:   May 24, 2017	Changes in lists of users related with new role. (220384 lines)
         Version 16.222.2: May 24, 2017	Fixed bug in course records related with new role. (220369 lines)
         Version 16.222.1: May 23, 2017	Fixed bugs in records and forums related with new role. (220359 lines)
         Version 16.222:   May 23, 2017	Alerts can be closed. (220313 lines)
