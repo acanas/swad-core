@@ -47,6 +47,8 @@
 
 #define Fol_NUM_COLUMNS_FOLLOW 3
 
+#define Fol_FOLLOW_SECTION_ID	"follow_section"
+
 /*****************************************************************************/
 /****************************** Internal types *******************************/
 /*****************************************************************************/
@@ -497,7 +499,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
    bool ItsMe = (UsrDat->UsrCod == Gbl.Usrs.Me.UsrDat.UsrCod);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"follow_section\">");
+   Lay_StartSection (Fol_FOLLOW_SECTION_ID);
 
    /***** Followed users *****/
    fprintf (Gbl.F.Out,"<div id=\"following_side\">"
@@ -571,7 +573,7 @@ void Fol_ShowFollowingAndFollowers (const struct UsrData *UsrDat,
 	              "</div>");
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -593,7 +595,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,"follow_section");
+      Act_FormStartAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? "FOLLOW_NUM_B" :
@@ -619,7 +621,7 @@ static void Fol_ShowNumberOfFollowingOrFollowers (const struct UsrData *UsrDat,
    if (NumUsrs)
      {
       /* Form to list users */
-      Act_FormStartAnchor (Action,"follow_section");
+      Act_FormStartAnchor (Action,Fol_FOLLOW_SECTION_ID);
       Usr_PutParamUsrCodEncrypted (UsrDat->EncryptedUsrCod);
       Act_LinkFormSubmit (Title,
                           (Gbl.Action.Act == Action) ? The_ClassFormBold[Gbl.Prefs.Theme] :

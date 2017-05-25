@@ -2256,7 +2256,7 @@ void Soc_ReceiveSocialPostUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Receive and store social post *****/
    NotCod = Soc_ReceiveSocialPost ();
@@ -2265,7 +2265,7 @@ void Soc_ReceiveSocialPostUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 // Returns the code of the social note just created
@@ -2953,7 +2953,7 @@ void Soc_ReceiveCommentUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Receive comment in a social note *****/
    NotCod = Soc_ReceiveComment ();
@@ -2962,7 +2962,7 @@ void Soc_ReceiveCommentUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_ReceiveComment (void)
@@ -3081,7 +3081,7 @@ void Soc_ShareSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Share social note *****/
    NotCod = Soc_ShareSocialNote ();
@@ -3090,7 +3090,7 @@ void Soc_ShareSocialNoteUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_ShareSocialNote (void)
@@ -3159,7 +3159,7 @@ void Soc_FavSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Mark social note as favourite *****/
    NotCod = Soc_FavSocialNote ();
@@ -3168,7 +3168,7 @@ void Soc_FavSocialNoteUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_FavSocialNote (void)
@@ -3245,7 +3245,7 @@ void Soc_FavSocialCommentUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Mark social comment as favourite *****/
    NotCod = Soc_FavSocialComment ();
@@ -3254,7 +3254,7 @@ void Soc_FavSocialCommentUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_FavSocialComment (void)
@@ -3369,7 +3369,7 @@ void Soc_UnshareSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Unshare a previously shared social note *****/
    NotCod = Soc_UnshareSocialNote ();
@@ -3378,7 +3378,7 @@ void Soc_UnshareSocialNoteUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_UnshareSocialNote (void)
@@ -3457,7 +3457,7 @@ void Soc_UnfavSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Unfav a social note previously marked as favourite *****/
    NotCod = Soc_UnfavSocialNote ();
@@ -3466,7 +3466,7 @@ void Soc_UnfavSocialNoteUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_UnfavSocialNote (void)
@@ -3541,7 +3541,7 @@ void Soc_UnfavSocialCommentUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Unfav a social comment previously marked as favourite *****/
    NotCod = Soc_UnfavSocialComment ();
@@ -3550,7 +3550,7 @@ void Soc_UnfavSocialCommentUsr (void)
    Soc_ShowTimelineUsrHighlightingNot (NotCod);
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static long Soc_UnfavSocialComment (void)
@@ -3624,7 +3624,7 @@ void Soc_RequestRemSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Request the removal of social note *****/
    Soc_RequestRemovalSocialNote ();
@@ -3633,7 +3633,7 @@ void Soc_RequestRemSocialNoteUsr (void)
    Soc_ShowTimelineUsr ();
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static void Soc_RequestRemovalSocialNote (void)
@@ -3712,7 +3712,7 @@ void Soc_RemoveSocialNoteUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Remove a social note *****/
    Soc_RemoveSocialNote ();
@@ -3721,7 +3721,7 @@ void Soc_RemoveSocialNoteUsr (void)
    Soc_ShowTimelineUsr ();
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static void Soc_RemoveSocialNote (void)
@@ -3959,7 +3959,7 @@ void Soc_RequestRemSocialComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Request the removal of comment in social note *****/
    Soc_RequestRemovalSocialComment ();
@@ -3968,7 +3968,7 @@ void Soc_RequestRemSocialComUsr (void)
    Soc_ShowTimelineUsr ();
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static void Soc_RequestRemovalSocialComment (void)
@@ -4053,7 +4053,7 @@ void Soc_RemoveSocialComUsr (void)
    Prf_ShowUserProfile (&Gbl.Usrs.Other.UsrDat);
 
    /***** Start section *****/
-   fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+   Lay_StartSection (Soc_TIMELINE_SECTION_ID);
 
    /***** Remove a social comment *****/
    Soc_RemoveSocialComment ();
@@ -4062,7 +4062,7 @@ void Soc_RemoveSocialComUsr (void)
    Soc_ShowTimelineUsr ();
 
    /***** End section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 static void Soc_RemoveSocialComment (void)

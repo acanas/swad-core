@@ -251,11 +251,11 @@ const Act_Action_t For_ActionsDisPstFor[For_NUM_TYPES_FORUM] =
   };
 
 // Links to go to <section>
-#define For_ID_REMOVE_THREAD_SECTION	"remove_thread"
-#define For_ID_FORUM_THREADS_SECTION	"forum_threads"
-#define For_ID_NEW_THREAD_SECTION	"new_thread"
-#define For_ID_FORUM_POSTS_SECTION	"thread_posts"
-#define For_ID_NEW_POST_SECTION		"new_post"
+#define For_REMOVE_THREAD_SECTION_ID	"remove_thread"
+#define For_FORUM_THREADS_SECTION_ID	"forum_threads"
+#define For_NEW_THREAD_SECTION_ID	"new_thread"
+#define For_FORUM_POSTS_SECTION_ID	"thread_posts"
+#define For_NEW_POST_SECTION_ID		"new_post"
 
 // Forum images will be saved with:
 // - maximum width of For_IMAGE_SAVED_MAX_HEIGHT
@@ -1001,7 +1001,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    ReadTimeUTC = For_GetThrReadTime (Gbl.Forum.ForumSelected.ThrCod);
 
    /***** Show alert after action *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_POSTS_SECTION);
+   Lay_StartSection (For_FORUM_POSTS_SECTION_ID);
    if (Message)
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
@@ -1055,7 +1055,7 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
       PaginationPsts.NumItems = NumPsts;
       PaginationPsts.CurrentPage = (int) Gbl.Forum.CurrentPagePsts;
       Pag_CalculatePagination (&PaginationPsts);
-      PaginationPsts.Anchor = For_ID_FORUM_POSTS_SECTION;
+      PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
       Gbl.Forum.CurrentPagePsts = (unsigned) PaginationPsts.CurrentPage;
 
       /***** Write links to pages *****/
@@ -1130,13 +1130,13 @@ static void For_ShowPostsOfAThread (Ale_AlertType_t AlertType,const char *Messag
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Form to write a new post in the thread *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_POST_SECTION);
+   Lay_StartSection (For_NEW_POST_SECTION_ID);
    For_WriteFormForumPst (true,LastSubject);
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -1148,7 +1148,7 @@ static void For_PutIconNewPost (void)
    extern const char *Txt_New_post;
 
    Lay_PutContextualLink (For_ActionsSeePstFor[Gbl.Forum.ForumSelected.Type],
-                          For_ID_NEW_POST_SECTION,For_PutAllHiddenParamsNewPost,
+                          For_NEW_POST_SECTION_ID,For_PutAllHiddenParamsNewPost,
                           "plus64x64.png",
                           Txt_New_post,NULL,
                           NULL);
@@ -1255,7 +1255,7 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      {
       Act_FormStartAnchor (Enabled ? For_ActionsDisPstFor[Gbl.Forum.ForumSelected.Type] :
 				     For_ActionsEnbPstFor[Gbl.Forum.ForumSelected.Type],
-			   For_ID_FORUM_POSTS_SECTION);
+			   For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                    Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
                                    Gbl.Forum.ForumSet,
@@ -1301,10 +1301,10 @@ static void For_ShowAForumPost (unsigned PstNum,long PstCod,
      {
       if (PstNum == 1)	// First and unique post in thread
 	 Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
-			      For_ID_FORUM_THREADS_SECTION);
+			      For_FORUM_THREADS_SECTION_ID);
       else		// Last of several posts in thread
 	 Act_FormStartAnchor (For_ActionsDelPstFor[Gbl.Forum.ForumSelected.Type],
-			      For_ID_FORUM_POSTS_SECTION);
+			      For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                    Gbl.Forum.CurrentPagePsts,	// Page of posts   = current
                                    Gbl.Forum.ForumSet,
@@ -2097,7 +2097,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
       else
         {
          Act_FormStartAnchor (For_ActionsPasThrFor[Forum->Type],
-                              For_ID_FORUM_THREADS_SECTION);
+                              For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                       1,	// Page of posts   = first
                                       Gbl.Forum.ForumSet,
@@ -2117,7 +2117,7 @@ static void For_WriteLinkToForum (struct Forum *Forum,
 
    /***** Write link to forum *****/
    Act_FormStartAnchor (For_ActionsSeeFor[Forum->Type],
-                        For_ID_FORUM_THREADS_SECTION);
+                        For_FORUM_THREADS_SECTION_ID);
    For_PutAllHiddenParamsForum (1,	// Page of threads = first
                                 1,	// Page of posts   = first
                                 Gbl.Forum.ForumSet,
@@ -2538,7 +2538,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    PaginationThrs.NumItems = NumThrs;
    PaginationThrs.CurrentPage = (int) Gbl.Forum.CurrentPageThrs;
    Pag_CalculatePagination (&PaginationThrs);
-   PaginationThrs.Anchor = For_ID_FORUM_THREADS_SECTION;
+   PaginationThrs.Anchor = For_FORUM_THREADS_SECTION_ID;
    Gbl.Forum.CurrentPageThrs = (unsigned) PaginationThrs.CurrentPage;
 
    /***** Fill the list of threads for current page *****/
@@ -2558,7 +2558,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
    DB_FreeMySQLResult (&mysql_res);
 
    /***** Show alert after action *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_FORUM_THREADS_SECTION);
+   Lay_StartSection (For_FORUM_THREADS_SECTION_ID);
    if (Message)
       if (Message[0])
          Ale_ShowAlert (AlertType,Message);
@@ -2590,7 +2590,7 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
 	{
 	 fprintf (Gbl.F.Out,"<th colspan=\"2\" class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
-                              For_ID_FORUM_THREADS_SECTION);
+                              For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Gbl.Forum.ForumSet,
@@ -2640,13 +2640,13 @@ static void For_ShowForumThreadsHighlightingOneThread (long ThrCodHighlighted,
      }
 
    /***** Put a form to write the first post of a new thread *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_NEW_THREAD_SECTION);
+   Lay_StartSection (For_NEW_THREAD_SECTION_ID);
    For_WriteFormForumPst (false,NULL);
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End frame with threads of this forum ****/
    Lay_EndRoundFrame ();
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -2658,7 +2658,7 @@ static void For_PutIconNewThread (void)
    extern const char *Txt_New_thread;
 
    Lay_PutContextualLink (For_ActionsSeeFor[Gbl.Forum.ForumSelected.Type],
-                          For_ID_NEW_THREAD_SECTION,For_PutAllHiddenParamsNewThread,
+                          For_NEW_THREAD_SECTION_ID,For_PutAllHiddenParamsNewThread,
                           "plus64x64.png",
                           Txt_New_thread,NULL,
                           NULL);
@@ -3355,7 +3355,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
         {
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsReqDelThr[Gbl.Forum.ForumSelected.Type],
-                              For_ID_REMOVE_THREAD_SECTION);
+                              For_REMOVE_THREAD_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Gbl.Forum.ForumSet,
@@ -3372,7 +3372,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
         {
          fprintf (Gbl.F.Out,"<br />");
          Act_FormStartAnchor (For_ActionsCutThrFor[Gbl.Forum.ForumSelected.Type],
-                              For_ID_FORUM_THREADS_SECTION);
+                              For_FORUM_THREADS_SECTION_ID);
 	 For_PutAllHiddenParamsForum (Gbl.Forum.CurrentPageThrs,	// Page of threads = current
                                       1,				// Page of posts   = first
                                       Gbl.Forum.ForumSet,
@@ -3396,7 +3396,7 @@ static void For_ListForumThrs (long ThrCods[Pag_ITEMS_PER_PAGE],
       PaginationPsts.NumItems = Thr.NumPosts;
       PaginationPsts.CurrentPage = 1;	// First page
       Pag_CalculatePagination (&PaginationPsts);
-      PaginationPsts.Anchor = For_ID_FORUM_POSTS_SECTION;
+      PaginationPsts.Anchor = For_FORUM_POSTS_SECTION_ID;
       Pag_WriteLinksToPages (Pag_POSTS_FORUM,
                              Thr.ThrCod,
                              &PaginationPsts,
@@ -3860,13 +3860,13 @@ static void For_WriteFormForumPst (bool IsReply,const char *Subject)
    if (IsReply)	// Form to write a reply to a post of an existing thread
      {
       Act_FormStartAnchor (For_ActionsRecRepFor[Gbl.Forum.ForumSelected.Type],
-                           For_ID_FORUM_POSTS_SECTION);
+                           For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewPost ();
      }
    else		// Form to write the first post of a new thread
      {
       Act_FormStartAnchor (For_ActionsRecThrFor[Gbl.Forum.ForumSelected.Type],
-                           For_ID_FORUM_POSTS_SECTION);
+                           For_FORUM_POSTS_SECTION_ID);
       For_PutAllHiddenParamsNewThread ();
      }
 
@@ -4147,7 +4147,7 @@ void For_RequestRemoveThread (void)
    For_ShowForumList ();
 
    /***** Show question and button to remove the thread *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",For_ID_REMOVE_THREAD_SECTION);
+   Lay_StartSection (For_REMOVE_THREAD_SECTION_ID);
    if (Subject[0])
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_entire_thread_X,
                Subject);
@@ -4156,10 +4156,10 @@ void For_RequestRemoveThread (void)
                Txt_Do_you_really_want_to_remove_the_entire_thread);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
 			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
-			   For_ID_FORUM_THREADS_SECTION,
+			   For_FORUM_THREADS_SECTION_ID,
 			   For_PutAllHiddenParamsRemThread,
 			   Lay_REMOVE_BUTTON,Txt_Remove_thread);
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** Show the threads again *****/
    For_ShowForumThreadsHighlightingOneThread (Gbl.Forum.ForumSelected.ThrCod,

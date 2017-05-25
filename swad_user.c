@@ -7447,10 +7447,10 @@ void Usr_SeeStudents (void)
 
    /***** Form to select groups *****/
    if (Gbl.Scope.Current == Sco_SCOPE_CRS)
-      Grp_ShowFormToSelectSeveralGroups (ActLstStd,"user_list");
+      Grp_ShowFormToSelectSeveralGroups (ActLstStd);
 
    /***** Start section with user list *****/
-   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
      {
@@ -7459,7 +7459,6 @@ void Usr_SeeStudents (void)
 
       if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
 	{
-
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
 
@@ -7534,7 +7533,7 @@ void Usr_SeeStudents (void)
      }
 
    /***** End section with user list *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

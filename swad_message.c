@@ -237,10 +237,10 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       if (GetUsrsInCrs)
 	{
 	 /***** Form to select groups *****/
-	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr,"user_list");
+	 Grp_ShowFormToSelectSeveralGroups (ActReqMsgUsr);
 
 	 /***** Start section with user list *****/
-	 fprintf (Gbl.F.Out,"<section id=\"user_list\">");
+         Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
 	 if (NumUsrsInCrs)
 	   {
@@ -256,7 +256,7 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	   }
 
 	 /***** End section with user list *****/
-	 fprintf (Gbl.F.Out,"</section>");
+         Lay_EndSection ();
         }
 
       /***** Get list of users' IDs or nicknames written explicitely *****/

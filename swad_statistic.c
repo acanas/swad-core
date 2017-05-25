@@ -95,6 +95,9 @@ const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
    1,	// Sta_CLICKS_GBL_PER_COURSE
   };
 
+#define Sta_STAT_FORM_SECTION_ID	"stat_form"
+#define Sta_STAT_RESULTS_SECTION_ID	"stat_results"
+
 /*****************************************************************************/
 /******************************* Private types *******************************/
 /*****************************************************************************/
@@ -474,10 +477,10 @@ void Sta_AskShowCrsHits (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Visits_visits_to_course);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,"user_list");
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
 
    /***** Start section with user list *****/
-   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -490,7 +493,7 @@ void Sta_AskShowCrsHits (void)
 	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
 
 	 /***** Start form *****/
-         Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
+         Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 
          Grp_PutParamsCodGrps ();
          Par_PutHiddenParamLong ("FirstRow",0);
@@ -608,7 +611,7 @@ void Sta_AskShowCrsHits (void)
       Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
 
    /***** End section with user list *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -660,10 +663,10 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start form *****/
-   Act_FormStartAnchor (ActSeeAccGbl,"stat_form");
+   Act_FormStartAnchor (ActSeeAccGbl,Sta_STAT_FORM_SECTION_ID);
 
    /***** Start frame *****/
-   fprintf (Gbl.F.Out,"<section id=\"stat_form\">");
+   Lay_StartSection (Sta_STAT_FORM_SECTION_ID);
    Lay_StartRoundFrameTable (NULL,Txt_Statistics_of_all_visits,NULL,
                              Hlp_STATS_Visits_global_visits,2);
 
@@ -752,7 +755,7 @@ void Sta_AskShowGblHits (void)
 
    /***** End frame with button *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Show_hits);
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End form *****/
    Act_FormEnd ();
@@ -1445,7 +1448,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
      {
       /***** Put the table with the clicks *****/
       /* Write start of table frame */
-      fprintf (Gbl.F.Out,"<section id=\"stat_results\">");
+      Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks,
 	                      NULL,NULL);
@@ -1524,7 +1527,7 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 
       /* End of frame */
       Lay_EndRoundFrame ();
-      fprintf (Gbl.F.Out,"</section>");
+      Lay_EndSection ();
      }
 
    /***** Free structure that stores the query result *****/
@@ -1639,7 +1642,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to previous page (older clicks) */
    if (FirstRow > 1)
      {
-      Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
+      Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
@@ -1674,7 +1677,7 @@ static void Sta_ShowDetailedAccessesList (unsigned long NumRows,MYSQL_RES *mysql
    /* Put link to jump to next page (more recent clicks) */
    if (LastRow < NumRows)
      {
-      Act_FormStartAnchor (ActSeeAccCrs,"stat_results");
+      Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
       Sta_WriteParamsDatesSeeAccesses ();
       Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Sta_CLICKS_CRS_DETAILED_LIST);
       Par_PutHiddenParamUnsigned ("StatAct"  ,(unsigned) Gbl.Stat.NumAction);
@@ -2149,7 +2152,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
-   Act_FormStartAnchor (Gbl.Action.Act,"stat_form");
+   Act_FormStartAnchor (Gbl.Action.Act,Sta_STAT_FORM_SECTION_ID);
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);

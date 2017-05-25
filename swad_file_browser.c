@@ -3120,10 +3120,10 @@ void Brw_AskEditWorksCrs (void)
                         NULL,Hlp_FILES_Homework_for_teachers);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs,"user_list");
+   Grp_ShowFormToSelectSeveralGroups (ActReqAsgWrkCrs);
 
    /***** Start section with user list *****/
-   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
    if (NumTotalUsrs)
      {
@@ -3156,7 +3156,7 @@ void Brw_AskEditWorksCrs (void)
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -3549,6 +3549,7 @@ static void Brw_ShowFileBrowser (void)
    const char *Brw_TitleOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    const char *Brw_HelpOfFileBrowser[Brw_NUM_TYPES_FILE_BROWSER];
    struct Brw_NumObjects Removed;
+   char FileBrowserSectionId[32];
    bool IAmTeacherOrSysAdm = Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
 	                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM;
 
@@ -3676,7 +3677,8 @@ static void Brw_ShowFileBrowser (void)
 
    /***** Start frame *****/
    Gbl.FileBrowser.Id++;
-   fprintf (Gbl.F.Out,"<section id=\"file_browser_%u\">",Gbl.FileBrowser.Id);
+   sprintf (FileBrowserSectionId,"file_browser_%u",Gbl.FileBrowser.Id);
+   Lay_StartSection (FileBrowserSectionId);
    Lay_StartRoundFrame ("100%",Brw_TitleOfFileBrowser[Gbl.FileBrowser.Type],
                         Brw_PutIconsFileBrowser,
                         Brw_HelpOfFileBrowser[Gbl.FileBrowser.Type]);
@@ -3700,7 +3702,7 @@ static void Brw_ShowFileBrowser (void)
 
    /***** End of frame *****/
    Lay_EndRoundFrame ();
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -5628,7 +5630,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
   {
    extern const char *Txt_Expand;
    extern const char *Txt_Contract;
-   char Anchor[32];
+   char FileBrowserId[32];
 
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">"
 	              "<table>"
@@ -5646,8 +5648,8 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
          break;
       case Brw_EXPAND_TREE_PLUS:
          /***** Form to expand folder *****/
-	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
-         Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],Anchor);
+	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
+         Act_FormStartAnchor (Brw_ActExpandFolder[Gbl.FileBrowser.Type],FileBrowserId);
          Brw_PutParamsFileBrowser (Brw_ActExpandFolder[Gbl.FileBrowser.Type],
                                    PathInTree,FileName,
                                    Brw_IS_FOLDER,-1L);
@@ -5659,12 +5661,12 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</section>");
+         Lay_EndSection ();
          break;
       case Brw_EXPAND_TREE_MINUS:
          /***** Form to contract folder *****/
-	 sprintf (Anchor,"file_browser_%u",Gbl.FileBrowser.Id);
-         Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],Anchor);
+	 sprintf (FileBrowserId,"file_browser_%u",Gbl.FileBrowser.Id);
+         Act_FormStartAnchor (Brw_ActContractFolder[Gbl.FileBrowser.Type],FileBrowserId);
          Brw_PutParamsFileBrowser (Brw_ActContractFolder[Gbl.FileBrowser.Type],
                                    PathInTree,FileName,
                                    Brw_IS_FOLDER,-1L);
@@ -5676,7 +5678,7 @@ static void Brw_IndentAndWriteIconExpandContract (unsigned Level,Brw_ExpandTree_
                   Gbl.Title,
                   Gbl.Title);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</section>");
+         Lay_EndSection ();
          break;
      }
 

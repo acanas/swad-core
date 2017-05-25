@@ -40,10 +40,10 @@
 /*************************** Internal constants ******************************/
 /*****************************************************************************/
 
-#define Grp_SECTION_GROUP_TYPES		"grp_types"
-#define Grp_SECTION_NEW_GROUP_TYPE	"new_grp_type"
-#define Grp_SECTION_GROUPS		"grps"
-#define Grp_SECTION_NEW_GROUP		"new_grp"
+#define Grp_GROUP_TYPES_SECTION_ID		"grp_types"
+#define Grp_NEW_GROUP_TYPE_SECTION_ID	"new_grp_type"
+#define Grp_GROUPS_SECTION_ID		"grps"
+#define Grp_NEW_GROUP_SECTION_ID		"new_grp"
 
 /*****************************************************************************/
 /***************************** Internal types ********************************/
@@ -196,7 +196,7 @@ static void Grp_ReqEditGroupsInternal (Ale_AlertType_t AlertTypeGroupTypes,const
 static void Grp_ReqEditGroupsInternal0 (void)
   {
    /***** Start groups types section *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUP_TYPES);
+   Lay_StartSection (Grp_GROUP_TYPES_SECTION_ID);
   }
 
 static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,const char *MessageGroupTypes)
@@ -213,10 +213,10 @@ static void Grp_ReqEditGroupsInternal1 (Ale_AlertType_t AlertTypeGroupTypes,cons
    Grp_EditGroupTypes ();
 
    /***** End groups types section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** Start groups section *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_GROUPS);
+   Lay_StartSection (Grp_GROUPS_SECTION_ID);
   }
 
 static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,const char *MessageGroups)
@@ -231,7 +231,7 @@ static void Grp_ReqEditGroupsInternal2 (Ale_AlertType_t AlertTypeGroups,const ch
       Grp_EditGroups ();
 
    /***** End groups section *****/
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
 
    /***** Free list of groups types and groups in this course *****/
    Grp_FreeListGrpTypesAndGrps ();
@@ -318,7 +318,7 @@ static void Grp_PutIconToCreateNewGroup (void)
    extern const char *Txt_New_group;
 
    /***** Put form to create a new group *****/
-   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP,NULL,
+   Lay_PutContextualLink (ActReqEdiGrp,Grp_NEW_GROUP_SECTION_ID,NULL,
                           "plus64x64.png",
                           Txt_New_group,NULL,
                           NULL);
@@ -328,7 +328,7 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,const char *Anchor)
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassForm[The_NUM_THEMES];
@@ -354,7 +354,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,const char *Anch
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
-      Act_FormStartAnchor (NextAction,Anchor);
+      Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
       Usr_PutParamsPrefsAboutUsrList ();
 
       /***** Put parameters needed depending on the action *****/
@@ -1207,7 +1207,7 @@ static void Grp_ListGroupTypesForEdition (void)
       /* Put icon to remove group type */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"BM\">");
-      Act_FormStartAnchor (ActReqRemGrpTyp,Grp_SECTION_GROUP_TYPES);
+      Act_FormStartAnchor (ActReqRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Lay_PutIconRemove ();
       Act_FormEnd ();
@@ -1215,7 +1215,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Name of group type */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_FormStartAnchor (ActRenGrpTyp,Grp_SECTION_GROUP_TYPES);
+      Act_FormStartAnchor (ActRenGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpTypName\""
 	                 " size=\"12\" maxlength=\"%u\" value=\"%s\""
@@ -1228,7 +1228,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Is it mandatory to register in any group? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStartAnchor (ActChgMdtGrpTyp,Grp_SECTION_GROUP_TYPES);
+      Act_FormStartAnchor (ActChgMdtGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MandatoryEnrolment\""
 	                 " style=\"width:150px;\""
@@ -1250,7 +1250,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Is it possible to register in multiple groups? */
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-      Act_FormStartAnchor (ActChgMulGrpTyp,Grp_SECTION_GROUP_TYPES);
+      Act_FormStartAnchor (ActChgMulGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       fprintf (Gbl.F.Out,"<select name=\"MultipleEnrolment\""
 	                 " style=\"width:150px;\""
@@ -1272,7 +1272,7 @@ static void Grp_ListGroupTypesForEdition (void)
 
       /* Open time */
       fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
-      Act_FormStartAnchor (ActChgTimGrpTyp,Grp_SECTION_GROUP_TYPES);
+      Act_FormStartAnchor (ActChgTimGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
       Grp_PutParamGrpTypCod (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].GrpTypCod);
       Lay_StartTableCenter (2);
       fprintf (Gbl.F.Out,"<tr>"
@@ -1339,7 +1339,7 @@ static void Grp_PutIconToCreateNewGroupType (void)
    extern const char *Txt_New_type_of_group;
 
    /***** Put form to create a new type of group *****/
-   Lay_PutContextualLink (ActReqEdiGrp,Grp_SECTION_NEW_GROUP_TYPE,NULL,
+   Lay_PutContextualLink (ActReqEdiGrp,Grp_NEW_GROUP_TYPE_SECTION_ID,NULL,
                           "plus64x64.png",
                           Txt_New_type_of_group,NULL,
                           NULL);
@@ -1419,7 +1419,7 @@ static void Grp_ListGroupsForEdition (void)
          /* Write icon to remove group */
          fprintf (Gbl.F.Out,"<tr>"
                             "<td class=\"BM\">");
-         Act_FormStartAnchor (ActReqRemGrp,Grp_SECTION_GROUPS);
+         Act_FormStartAnchor (ActReqRemGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          Lay_PutIconRemove ();
          Act_FormEnd ();
@@ -1429,7 +1429,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
          Act_FormStartAnchor (Grp->Open ? ActCloGrp :
                                           ActOpeGrp,
-                              Grp_SECTION_GROUPS);
+                              Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          sprintf (Gbl.Title,
                   Grp->Open ? Txt_Group_X_open_click_to_close_it :
@@ -1450,7 +1450,7 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"<td class=\"BM\">");
          Act_FormStartAnchor (Grp->FileZones ? ActDisFilZonGrp :
                                                ActEnaFilZonGrp,
-                              Grp_SECTION_GROUPS);
+                              Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          sprintf (Gbl.Title,
                   Grp->FileZones ? Txt_File_zones_of_the_group_X_enabled_click_to_disable_them :
@@ -1469,7 +1469,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Group type */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStartAnchor (ActChgGrpTyp,Grp_SECTION_GROUPS);
+         Act_FormStartAnchor (ActChgGrpTyp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<select name=\"GrpTypCod\" style=\"width:150px;\""
                             " onchange=\"document.getElementById('%s').submit();\">",
@@ -1490,7 +1490,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Group name */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStartAnchor (ActRenGrp,Grp_SECTION_GROUPS);
+         Act_FormStartAnchor (ActRenGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"GrpName\""
                             " size=\"40\" maxlength=\"%u\" value=\"%s\""
@@ -1501,7 +1501,7 @@ static void Grp_ListGroupsForEdition (void)
 
          /* Maximum number of students of the group (row[3]) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
-         Act_FormStartAnchor (ActChgMaxStdGrp,Grp_SECTION_GROUPS);
+         Act_FormStartAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
          Grp_PutParamGrpCod (Grp->GrpCod);
          fprintf (Gbl.F.Out,"<input type=\"text\" name=\"MaxStudents\""
                             " size=\"3\" maxlength=\"10\" value=\"");
@@ -2194,8 +2194,8 @@ static void Grp_PutFormToCreateGroupType (void)
    extern const char *Txt_Create_type_of_group;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_NEW_GROUP_TYPE);
-   Act_FormStartAnchor (ActNewGrpTyp,Grp_SECTION_GROUP_TYPES);
+   Lay_StartSection (Grp_NEW_GROUP_TYPE_SECTION_ID);
+   Act_FormStartAnchor (ActNewGrpTyp,Grp_GROUP_TYPES_SECTION_ID);
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_type_of_group,
@@ -2291,7 +2291,7 @@ static void Grp_PutFormToCreateGroupType (void)
 
    /***** End form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -2307,8 +2307,8 @@ static void Grp_PutFormToCreateGroup (void)
    unsigned NumGrpTyp;
 
    /***** Start form *****/
-   fprintf (Gbl.F.Out,"<section id=\"%s\">",Grp_SECTION_NEW_GROUP);
-   Act_FormStartAnchor (ActNewGrp,Grp_SECTION_GROUPS);
+   Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
+   Act_FormStartAnchor (ActNewGrp,Grp_GROUPS_SECTION_ID);
 
    /***** Start of frame *****/
    Lay_StartRoundFrameTable (NULL,Txt_New_group,NULL,NULL,2);
@@ -2380,7 +2380,7 @@ static void Grp_PutFormToCreateGroup (void)
 
    /***** End of form *****/
    Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</section>");
+   Lay_EndSection ();
   }
 
 /*****************************************************************************/
@@ -3509,7 +3509,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGrpTyp,Grp_SECTION_GROUP_TYPES,
+                           ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
                            Grp_PutParamRemGrpTyp,
 			   Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
 
@@ -3562,7 +3562,7 @@ static void Grp_AskConfirmRemGrp (void)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                GrpDat.GrpName,NumStds);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGrp,Grp_SECTION_GROUPS,Grp_PutParamRemGrp,
+                           ActRemGrp,Grp_GROUPS_SECTION_ID,Grp_PutParamRemGrp,
 			   Lay_REMOVE_BUTTON,Txt_Remove_group);
 
    /***** Show the form to edit groups again *****/

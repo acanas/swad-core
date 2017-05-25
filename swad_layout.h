@@ -117,6 +117,9 @@ void Lay_StartTableWide (unsigned CellPadding);
 void Lay_StartTableWideMargin (unsigned CellPadding);
 void Lay_EndTable (void);
 
+void Lay_StartSection (const char *SectionId);
+void Lay_EndSection (void);
+
 void Lay_ShowErrorAndExit (const char *Txt);
 
 void Lay_RefreshNotifsAndConnected (void);

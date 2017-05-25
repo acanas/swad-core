@@ -220,9 +220,9 @@ void Prf_GetUsrDatAndShowUserProfile (void)
 	 if (Gbl.Usrs.Me.Logged)	// Timeline visible only by logged users
 	   {
 	    /* Show timeline */
-	    fprintf (Gbl.F.Out,"<section id=\"timeline\">");
+	    Lay_StartSection (Soc_TIMELINE_SECTION_ID);
    	    Soc_ShowTimelineUsr ();
-	    fprintf (Gbl.F.Out,"</section>");
+	    Lay_EndSection ();
 	   }
 	}
 
