@@ -490,7 +490,7 @@ static void Img_ProcessImage (struct Image *Image,
    if (ReturnCode != 0)
      {
       sprintf (Gbl.Alert.Txt,"Image could not be processed successfully.<br />"
-			   "Error code returned by the program of processing: %d",
+			     "Error code returned by the program of processing: %d",
 	       ReturnCode);
       Lay_ShowErrorAndExit (Gbl.Alert.Txt);
      }
