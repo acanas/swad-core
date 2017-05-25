@@ -8310,11 +8310,10 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
 	 if (Roles & (1 << Role))
 	   {
 	    sprintf (UnsignedStr,"%u",(unsigned) Role);
-	    if (!FirstRole)	// Not the first role
-	      {
-	       Str_Concat (SubQueryRoles,",",Usr_MAX_BYTES_SUBQUERY_ROLES);
+	    if (FirstRole)	// Not the first role
 	       FirstRole = false;
-	      }
+	    else
+	       Str_Concat (SubQueryRoles,",",Usr_MAX_BYTES_SUBQUERY_ROLES);
 	    Str_Concat (SubQueryRoles,UnsignedStr,Usr_MAX_BYTES_SUBQUERY_ROLES);
 	   }
       Str_Concat (SubQueryRoles,")",Usr_MAX_BYTES_SUBQUERY_ROLES);
@@ -8421,6 +8420,7 @@ unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
 	 Lay_ShowErrorAndExit ("Wrong scope.");
 	 break;
      }
+
    return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
   }
 
