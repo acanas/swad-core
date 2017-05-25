@@ -974,7 +974,7 @@ void Asg_ReqRemAssignment (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_assignment_X,
             Asg.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemAsg,NULL,Asg_PutParams,
+                           ActRemAsg,NULL,NULL,Asg_PutParams,
                            Lay_REMOVE_BUTTON,Txt_Remove_assignment);
 
    /***** Show assignments again *****/

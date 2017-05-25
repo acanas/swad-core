@@ -280,7 +280,7 @@ void Not_RequestRemNotice (void)
    Not_GetDataAndShowNotice (Gbl.CurrentCrs.Notices.NotCod);
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActRemNot,NULL,Not_PutParams,
+   Ale_ShowAlertAndButton2 (ActRemNot,NULL,NULL,Not_PutParams,
 			    Lay_REMOVE_BUTTON,Txt_Remove);
 
    /***** Show all notices *****/

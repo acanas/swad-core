@@ -2094,7 +2094,7 @@ static void Ins_ShowAlertAndButtonToGoToIns (void)
       /***** Alert with button to go to degree *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Inss.EditingIns.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
-                              ActSeeCtr,NULL,Ins_PutParamGoToIns,
+                              ActSeeCtr,NULL,NULL,Ins_PutParamGoToIns,
                               Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else

@@ -157,7 +157,7 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
 static void Usr_AllocateUsrsList (Rol_Role_t Role);
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit);
-static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs);
+static void Usr_PutParamsConfirmIWantToSeeBigList (void);
 
 static void Usr_AllocateListSelectedUsrCod (Rol_Role_t Role);
 static void Usr_AllocateListOtherRecipients (void);
@@ -4892,6 +4892,7 @@ void Usr_GetUnorderedStdsCodesInDeg (long DegCod)
 
 static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scope_t Scope)
   {
+   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumUsr;
@@ -4909,7 +4910,9 @@ static void Usr_GetListUsrsFromQuery (const char *Query,Rol_Role_t Role,Sco_Scop
      {
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs > Cfg_MAX_USRS_IN_LIST)
         {
-         Usr_ShowWarningListIsTooBig (Gbl.Usrs.LstUsrs[Role].NumUsrs);
+	 sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+		  Gbl.Usrs.LstUsrs[Role].NumUsrs);
+	 Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
          Abort = true;
         }
       else
@@ -5153,39 +5156,24 @@ bool Usr_GetIfShowBigList (unsigned NumUsrs,const char *OnSubmit)
 
 static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char *OnSubmit)
   {
+   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+   /***** Show alert and button to confirm that I want to see the big list *****/
+   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
+            NumUsrs);
+   Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
+                           Gbl.Action.Act,NULL,OnSubmit,
+                           Usr_PutParamsConfirmIWantToSeeBigList,
+                           Lay_CONFIRM_BUTTON,Txt_Show_anyway);
+  }
 
-   /***** Show warning *****/
-   Usr_ShowWarningListIsTooBig (NumUsrs);
-
-   /***** Put form to confirm that I want to see the big list *****/
-   Act_FormStartOnSubmit (Gbl.Action.Act,OnSubmit);
+static void Usr_PutParamsConfirmIWantToSeeBigList (void)
+  {
    Grp_PutParamsCodGrps ();
    Usr_PutParamsPrefsAboutUsrList ();
    Usr_PutExtraParamsUsrList (Gbl.Action.Act);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
-
-   /***** Send button *****/
-   Lay_PutConfirmButton (Txt_Show_anyway);
-
-   Act_FormEnd ();
-
-   fprintf (Gbl.F.Out,"</div>");
-  }
-
-/*****************************************************************************/
-/************************** Show big list warning ****************************/
-/*****************************************************************************/
-
-static void Usr_ShowWarningListIsTooBig (unsigned NumUsrs)
-  {
-   extern const char *Txt_The_list_of_X_users_is_too_large_to_be_displayed;
-
-   sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
-            NumUsrs);
-   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
   }
 
 /*****************************************************************************/

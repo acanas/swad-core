@@ -4156,7 +4156,7 @@ void For_RequestRemoveThread (void)
                Txt_Do_you_really_want_to_remove_the_entire_thread);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
 			   For_ActionsDelThrFor[Gbl.Forum.ForumSelected.Type],
-			   For_FORUM_THREADS_SECTION_ID,
+			   For_FORUM_THREADS_SECTION_ID,NULL,
 			   For_PutAllHiddenParamsRemThread,
 			   Lay_REMOVE_BUTTON,Txt_Remove_thread);
    Lay_EndSection ();

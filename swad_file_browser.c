@@ -6241,7 +6241,7 @@ void Brw_AskRemFileFromTree (void)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_FILE_OR_LINK_X,
                FileNameToShow);
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,
+                              Brw_ActRemoveFile[Gbl.FileBrowser.Type],NULL,NULL,
                               Brw_PutParamsRemFile,
                               Lay_REMOVE_BUTTON,
                               Gbl.FileBrowser.FileType == Brw_IS_FILE ? Txt_Remove_file :
@@ -6386,7 +6386,7 @@ static void Brw_AskConfirmRemoveFolderNotEmpty (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_folder_X,
             Gbl.FileBrowser.FilFolLnkName);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,
+                           Brw_ActRemoveFolderNotEmpty[Gbl.FileBrowser.Type],NULL,NULL,
 			   Brw_PutParamsRemFolder,
 			   Lay_REMOVE_BUTTON,Txt_Remove_folder);
   }

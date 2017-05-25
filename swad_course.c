@@ -2802,7 +2802,7 @@ void Crs_ContEditAfterChgCrs (void)
      }
 
    /***** End alert *****/
-   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+   Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
 
    /***** Show the form again *****/
    Crs_EditCourses ();

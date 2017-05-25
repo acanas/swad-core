@@ -892,7 +892,7 @@ void Msg_ReqDelAllRecMsgs (void)
    Msg_ShowSentOrReceivedMessages ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,
+   Ale_ShowAlertAndButton2 (ActDelAllRcvMsg,NULL,NULL,
                             Msg_PutHiddenParamsMsgsFilters,
                             Lay_REMOVE_BUTTON,Txt_Delete_messages_received);
   }
@@ -932,7 +932,7 @@ void Msg_ReqDelAllSntMsgs (void)
    Msg_ShowSentOrReceivedMessages ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,
+   Ale_ShowAlertAndButton2 (ActDelAllSntMsg,NULL,NULL,
                             Msg_PutHiddenParamsMsgsFilters,
                             Lay_REMOVE_BUTTON,Txt_Delete_messages_sent);
   }

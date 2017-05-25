@@ -1854,7 +1854,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       Act_FormEnd ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       /***** Show warning indicating no students found *****/
@@ -2143,7 +2143,7 @@ void Enr_AskIfRejectSignUp (void)
             Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	    /* End alert */
-	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,
+	    Ale_ShowAlertAndButton2 (ActRejSignUp,NULL,NULL,
 	                             Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Reject);
            }
@@ -3647,7 +3647,7 @@ static void Enr_ReqAddAdm (Sco_Scope_t Scope,long Cod,const char *InsCtrDegName)
                Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
 	       /* End alert */
-	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,
+	       Ale_ShowAlertAndButton2 (Enr_ActNewAdm[Scope],NULL,NULL,
 	                                Usr_PutParamOtherUsrCodEncrypted,
 	                                Lay_CREATE_BUTTON,Txt_Register_user_IN_A_COURSE_OR_DEGREE);
               }
@@ -4079,7 +4079,7 @@ static void Enr_AskIfRemoveUsrFromCrs (struct UsrData *UsrDat,bool ItsMe)
       Act_FormEnd ();
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,Lay_NO_BUTTON,NULL);
+      Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
    else
       Ale_ShowAlert (Ale_WARNING,Txt_User_not_found_or_you_do_not_have_permission_);
@@ -4179,7 +4179,7 @@ static void Enr_AskIfRemAdm (bool ItsMe,Sco_Scope_t Scope,const char *InsCtrDegN
       Rec_ShowSharedRecordUnmodifiable (&Gbl.Usrs.Other.UsrDat);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,
+      Ale_ShowAlertAndButton2 (Enr_ActRemAdm[Scope],NULL,NULL,
                                Usr_PutParamOtherUsrCodEncrypted,
                                Lay_REMOVE_BUTTON,
                                ItsMe ? Txt_Remove_me_as_an_administrator :

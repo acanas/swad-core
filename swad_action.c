@@ -4776,21 +4776,24 @@ void Act_FormGoToStart (Act_Action_t NextAction)
 
 void Act_FormStart (Act_Action_t NextAction)
   {
-   Act_FormStartAnchor (NextAction,NULL);
+   Act_FormStartAnchorOnSubmit (NextAction,NULL,NULL);
   }
 
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor)
   {
-   Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
-   sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor,NULL);	// Do put now parameter location (if no open session)
+   Act_FormStartAnchorOnSubmit (NextAction,Anchor,NULL);
   }
 
 void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit)
   {
+   Act_FormStartAnchorOnSubmit (NextAction,NULL,OnSubmit);
+  }
+
+void Act_FormStartAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit)
+  {
    Gbl.Form.Num++; // Initialized to -1. The first time it is incremented, it will be equal to 0
    sprintf (Gbl.Form.Id,"form_%d",Gbl.Form.Num);
-   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,NULL,OnSubmit);	// Do put now parameter location (if no open session)
+   Act_FormStartInternal (NextAction,true,Gbl.Form.Id,Anchor,OnSubmit);	// Do put now parameter location (if no open session)
   }
 
 void Act_FormStartUnique (Act_Action_t NextAction)

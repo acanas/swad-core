@@ -462,7 +462,7 @@ void Pho_ReqRemoveMyPhoto (void)
 			"PHOTO186x248",Pho_NO_ZOOM,false);
 
       /* End alert */
-      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,
+      Ale_ShowAlertAndButton2 (ActRemMyPho,NULL,NULL,NULL,
                                Lay_REMOVE_BUTTON,Txt_Remove_photo);
      }
    else
@@ -537,7 +537,7 @@ void Pho_ReqRemoveUsrPhoto (void)
 		  NextAction = ActRemOthPho;
 		  break;
 	      }
-	    Ale_ShowAlertAndButton2 (NextAction,NULL,
+	    Ale_ShowAlertAndButton2 (NextAction,NULL,NULL,
 	                             Usr_PutParamOtherUsrCodEncrypted,
 				     Lay_REMOVE_BUTTON,Txt_Remove_photo);
 	   }

@@ -65,6 +65,7 @@ static void Ind_GetParamNumIndicators (void);
 static unsigned Ind_GetTableOfCourses (MYSQL_RES **mysql_res);
 static bool Ind_GetIfShowBigList (unsigned NumCrss);
 static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss);
+static void Ind_PutParamsConfirmIWantToSeeBigList (void);
 
 static void Ind_GetNumCoursesWithIndicators (unsigned NumCrssWithIndicatorYes[1 + Ind_NUM_INDICATORS],
                                              unsigned NumCrss,MYSQL_RES *mysql_res);
@@ -517,26 +518,23 @@ static void Ind_PutButtonToConfirmIWantToSeeBigList (unsigned NumCrss)
    extern const char *Txt_The_list_of_X_courses_is_too_large_to_be_displayed;
    extern const char *Txt_Show_anyway;
 
-   fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-
-   /***** Show warning *****/
+   /***** Show alert and button to confirm that I want to see the big list *****/
    sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_courses_is_too_large_to_be_displayed,
             NumCrss);
-   Ale_ShowAlert (Ale_WARNING,Gbl.Alert.Txt);
+   Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
+                           Gbl.Action.Act,NULL,NULL,
+                           Ind_PutParamsConfirmIWantToSeeBigList,
+                           Lay_CONFIRM_BUTTON,Txt_Show_anyway);
+  }
 
-   /***** Put form to confirm that I want to see the big list *****/
-   Act_FormStart (Gbl.Action.Act);
+static void Ind_PutParamsConfirmIWantToSeeBigList (void)
+  {
    Sco_PutParamScope ("ScopeInd",Gbl.Scope.Current);
    Par_PutHiddenParamLong ("OthDegTypCod",Gbl.Stat.DegTypCod);
    Par_PutHiddenParamLong ("DptCod",Gbl.Stat.DptCod);
    if (Gbl.Stat.StrIndicatorsSelected[0])
       Par_PutHiddenParamString ("Indicators",Gbl.Stat.StrIndicatorsSelected);
    Par_PutHiddenParamChar ("ShowBigList",'Y');
-
-   /***** Send button *****/
-   Lay_PutConfirmButton (Txt_Show_anyway);
-   Act_FormEnd ();
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 /*****************************************************************************/

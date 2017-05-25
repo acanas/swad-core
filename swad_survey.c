@@ -1497,7 +1497,7 @@ void Svy_AskRemSurvey (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_survey_X,
             Svy.Title);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemSvy,NULL,Svy_PutParams,
+                           ActRemSvy,NULL,NULL,Svy_PutParams,
 			   Lay_REMOVE_BUTTON,Txt_Remove_survey);
 
    /***** Show surveys again *****/
@@ -3531,7 +3531,7 @@ void Svy_RequestRemoveQst (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_question_X,
 	    (unsigned long) (SvyQst.QstInd + 1));
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemSvyQst,NULL,Svy_PutParamsRemoveOneQst,
+                           ActRemSvyQst,NULL,NULL,Svy_PutParamsRemoveOneQst,
 			   Lay_REMOVE_BUTTON,Txt_Remove_question);
 
    /***** Show current survey *****/

@@ -231,19 +231,18 @@
 
 // TODO: Statistics of hits in course accessible by non-editing teachers.
 
-// TODO: "Mostrar de todos modos" button integrated in alert
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.224.1 (2017-05-25)"
+#define Log_PLATFORM_VERSION	"SWAD 16.224.2 (2017-05-25)"
 #define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.224.2: May 25, 2017	Button to show big list of users/courses integrated in alert. (220465 lines)
         Version 16.224.1: May 25, 2017	User lists are shown when changing type of listing. (220463 lines)
         Version 16.224:   May 25, 2017	Code refactoring related to sections. (220459 lines)
         Version 16.223.2: May 25, 2017	User lists are shown when clicking on "Update students". (220435 lines)

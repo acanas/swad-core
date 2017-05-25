@@ -1564,6 +1564,7 @@ char *Act_GetActionTextFromDB (long ActCod,
 void Act_FormGoToStart (Act_Action_t NextAction);
 void Act_FormStart (Act_Action_t NextAction);
 void Act_FormStartOnSubmit (Act_Action_t NextAction,const char *OnSubmit);
+void Act_FormStartAnchorOnSubmit (Act_Action_t NextAction,const char *Anchor,const char *OnSubmit);
 void Act_FormStartUnique (Act_Action_t NextAction);
 void Act_FormStartAnchor (Act_Action_t NextAction,const char *Anchor);
 void Act_FormStartUniqueAnchor (Act_Action_t NextAction,const char *Anchor);

@@ -2276,7 +2276,7 @@ void Deg_ShowAlertAndButtonToGoToDeg (void)
       /***** Alert with button to go to degree *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Degs.EditingDeg.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
-                              ActSeeCrs,NULL,Deg_PutParamGoToDeg,
+                              ActSeeCrs,NULL,NULL,Deg_PutParamGoToDeg,
                               Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else

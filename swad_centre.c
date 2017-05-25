@@ -2162,7 +2162,7 @@ static void Ctr_ShowAlertAndButtonToGoToCtr (void)
       /***** Alert with button to go to centre *****/
       sprintf (Gbl.Title,Txt_Go_to_X,Gbl.Ctrs.EditingCtr.ShrtName);
       Ale_ShowAlertAndButton (Gbl.Alert.Type,Gbl.Alert.Txt,
-                              ActSeeDeg,NULL,Ctr_PutParamGoToCtr,
+                              ActSeeDeg,NULL,NULL,Ctr_PutParamGoToCtr,
                               Lay_CONFIRM_BUTTON,Gbl.Title);
      }
    else

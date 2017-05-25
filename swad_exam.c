@@ -372,7 +372,7 @@ void Exa_ReqRemoveExamAnnouncement (void)
    Exa_FreeMemExamAnnouncement ();
 
    /* End alert */
-   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,Exa_PutParamExaCodToEdit,
+   Ale_ShowAlertAndButton2 (ActRemExaAnn,NULL,NULL,Exa_PutParamExaCodToEdit,
 			    Lay_REMOVE_BUTTON,Txt_Remove);
   }
 

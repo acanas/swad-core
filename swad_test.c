@@ -5878,13 +5878,13 @@ void Tst_RequestRemoveQst (void)
 	    (unsigned long) Gbl.Test.QstCod);
    if (EditingOnlyThisQst)
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              ActRemTstQst,NULL,
+                              ActRemTstQst,NULL,NULL,
 			      Tst_PutParamsRemoveOneQst,
 			      Lay_REMOVE_BUTTON,Txt_Remove_question);
    else
      {
       Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                              ActRemTstQst,NULL,
+                              ActRemTstQst,NULL,NULL,
 			      Tst_PutParamsRemoveQst,
 			      Lay_REMOVE_BUTTON,Txt_Remove_question);
       Tst_FreeTagsList ();

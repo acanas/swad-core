@@ -1302,7 +1302,8 @@ void Agd_AskRemEvent (void)
    sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_event_X,
 	    AgdEvent.Event);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemEvtMyAgd,NULL,Agd_PutCurrentParamsMyAgenda,
+                           ActRemEvtMyAgd,NULL,NULL,
+                           Agd_PutCurrentParamsMyAgenda,
 			   Lay_REMOVE_BUTTON,Txt_Remove_event);
 
    /***** Show events again *****/

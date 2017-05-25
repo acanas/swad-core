@@ -3509,7 +3509,7 @@ static void Grp_AskConfirmRemGrpTypWithGrps (unsigned NumGrps)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_type_of_group_X_Y_groups_,
                Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,NumGrps);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,
+                           ActRemGrpTyp,Grp_GROUP_TYPES_SECTION_ID,NULL,
                            Grp_PutParamRemGrpTyp,
 			   Lay_REMOVE_BUTTON,Txt_Remove_type_of_group);
 
@@ -3562,7 +3562,8 @@ static void Grp_AskConfirmRemGrp (void)
       sprintf (Gbl.Alert.Txt,Txt_Do_you_really_want_to_remove_the_group_X_Y_students_,
                GrpDat.GrpName,NumStds);
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemGrp,Grp_GROUPS_SECTION_ID,Grp_PutParamRemGrp,
+                           ActRemGrp,Grp_GROUPS_SECTION_ID,NULL,
+                           Grp_PutParamRemGrp,
 			   Lay_REMOVE_BUTTON,Txt_Remove_group);
 
    /***** Show the form to edit groups again *****/

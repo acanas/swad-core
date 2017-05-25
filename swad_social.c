@@ -3664,11 +3664,11 @@ static void Soc_RequestRemovalSocialNote (void)
 	 /* End alert */
 	 Gbl.Social.NotCod = SocNot.NotCod;	// Social note to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",
+	    Ale_ShowAlertAndButton2 (ActRemSocPubUsr,"timeline",NULL,
 	                             Soc_PutParamsRemoveSocialNote,
 				     Lay_REMOVE_BUTTON,Txt_Remove);
 	 else
-	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,
+	    Ale_ShowAlertAndButton2 (ActRemSocPubGbl,NULL,NULL,
 	                             Soc_PutParamsRemoveSocialNote,
 				     Lay_REMOVE_BUTTON,Txt_Remove);
 	}
@@ -4002,11 +4002,11 @@ static void Soc_RequestRemovalSocialComment (void)
 	 /* End alert */
 	 Gbl.Social.PubCod = SocCom.PubCod;	// Social publishing to be removed
 	 if (Gbl.Usrs.Other.UsrDat.UsrCod > 0)
-	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",
+	    Ale_ShowAlertAndButton2 (ActRemSocComUsr,"timeline",NULL,
 	                             Soc_PutParamsRemoveSocialCommment,
 				     Lay_REMOVE_BUTTON,Txt_Remove);
 	 else
-	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,
+	    Ale_ShowAlertAndButton2 (ActRemSocComGbl,NULL,NULL,
 	                             Soc_PutParamsRemoveSocialCommment,
 				     Lay_REMOVE_BUTTON,Txt_Remove);
 	}

@@ -655,7 +655,7 @@ void Rec_AskConfirmRemFieldWithRecords (unsigned NumRecords)
                   Ale_MAX_BYTES_ALERT);
      }
    Ale_ShowAlertAndButton (Ale_QUESTION,Gbl.Alert.Txt,
-                           ActRemFie,NULL,Rec_PutParamFielCod,
+                           ActRemFie,NULL,NULL,Rec_PutParamFielCod,
 			   Lay_REMOVE_BUTTON,Txt_Remove_record_field);
 
    /***** List record fields again *****/
