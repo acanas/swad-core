@@ -1928,7 +1928,10 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt);
+   Grp_ShowFormToSelectSeveralGroups (ActSeeOneAtt,"user_list");
+
+   /***** Start section with user list *****/
+   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -1993,6 +1996,9 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STD);
+
+   /***** End section with user list *****/
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -2658,7 +2664,10 @@ void Usr_ReqListStdsAttendanceCrs (void)
 			NULL,Hlp_USERS_Attendance_attendance_list);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt);
+   Grp_ShowFormToSelectSeveralGroups (ActReqLstStdAtt,"user_list");
+
+   /***** Start section with user list *****/
+   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -2692,6 +2701,9 @@ void Usr_ReqListStdsAttendanceCrs (void)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STD);
+
+   /***** End section with user list *****/
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

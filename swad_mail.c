@@ -887,7 +887,10 @@ void Mai_ListEmails (void)
 			NULL,Hlp_MESSAGES_Email);
 
    /***** Form to select groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActMaiStd);
+   Grp_ShowFormToSelectSeveralGroups (ActMaiStd,"user_list");
+
+   /***** Start section with user list *****/
+   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -977,6 +980,9 @@ void Mai_ListEmails (void)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_STD);
+
+   /***** End section with user list *****/
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End of the frame used to list the emails *****/
    Lay_EndRoundFrame ();

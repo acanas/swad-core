@@ -474,7 +474,10 @@ void Sta_AskShowCrsHits (void)
    Lay_StartRoundFrame (NULL,Gbl.Title,NULL,Hlp_STATS_Visits_visits_to_course);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs);
+   Grp_ShowFormToSelectSeveralGroups (ActReqAccCrs,"user_list");
+
+   /***** Start section with user list *****/
+   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
 
    if (NumTotalUsrs)
      {
@@ -603,6 +606,9 @@ void Sta_AskShowCrsHits (void)
      }
    else	// No teachers nor students found
       Ale_ShowAlert (Ale_WARNING,Txt_No_teachers_or_students_found);
+
+   /***** End section with user list *****/
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

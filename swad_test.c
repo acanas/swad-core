@@ -6980,7 +6980,10 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
                         NULL,Hlp_ASSESSMENT_Tests_test_results);
 
    /***** Show form to select the groups *****/
-   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes);
+   Grp_ShowFormToSelectSeveralGroups (ActReqSeeUsrTstRes,"user_list");
+
+   /***** Start section with user list *****/
+   fprintf (Gbl.F.Out,"<section id=\"user_list\">");
 
    if (NumTotalUsrs)
      {
@@ -7024,6 +7027,9 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
      }
    else
       Usr_ShowWarningNoUsersFound (Rol_UNK);
+
+   /***** End section with user list *****/
+   fprintf (Gbl.F.Out,"</section>");
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

@@ -328,15 +328,15 @@ static void Grp_PutIconToCreateNewGroup (void)
 /*************** Show form to select one or several groups *******************/
 /*****************************************************************************/
 
-void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
+void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction,const char *Anchor)
   {
    extern const char *Hlp_USERS_Groups;
    extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_All_groups;
-   extern const char *Txt_Update_students;
    extern const char *Txt_Update_students_according_to_selected_groups;
+   extern const char *Txt_Update_students;
    unsigned NumGrpTyp;
    bool ICanEdit;
 
@@ -354,7 +354,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
 
       /***** Start form to update the students listed
 	     depending on the groups selected *****/
-      Act_FormStart (NextAction);
+      Act_FormStartAnchor (NextAction,Anchor);
       Usr_PutParamsPrefsAboutUsrList ();
 
       /***** Put parameters needed depending on the action *****/
