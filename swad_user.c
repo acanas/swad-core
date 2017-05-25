@@ -172,6 +172,9 @@ static void Usr_PutCheckboxListWithPhotos (void);
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr);
+static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
+                                     const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
+                                     unsigned NumColumns);
 static void Usr_GetAndUpdateUsrListType (void);
 static void Usr_GetUsrListTypeFromForm (void);
 static void Usr_GetMyUsrListTypeFromDB (void);
@@ -6519,10 +6522,8 @@ void Usr_ListAllDataTchs (void)
    extern const char *Txt_Department;
    extern const char *Txt_Office;
    extern const char *Txt_Phone;
+   unsigned NumUsrs;
    unsigned NumColumns;
-   unsigned NumCol;
-   unsigned NumUsr;
-   struct UsrData UsrDat;
    const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH];
 
    /***** Initialize field names *****/
@@ -6554,50 +6555,24 @@ void Usr_ListAllDataTchs (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
+   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                 1 << Rol_NET |
+                                                 1 << Rol_TCH);
 
-   if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
+   if (NumUsrs)
      {
       /***** Initialize number of columns *****/
       NumColumns = Usr_NUM_ALL_FIELDS_DATA_TCH;
 
-      /***** Start table with list of teachers *****/
+      /***** Start table with lists of teachers *****/
       Lay_StartTableWide (0);
 
-      /* Start row */
-      fprintf (Gbl.F.Out,"<tr>");
-      for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
-	                                           1);
-           NumCol < NumColumns;
-           NumCol++)
-         fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
-                            "%s&nbsp;"
-                            "</th>",
-                  FieldNames[NumCol]);
-
-      /* End row */
-      fprintf (Gbl.F.Out,"</tr>");
-
-      /***** Initialize structure with user's data *****/
-      Usr_UsrDataConstructor (&UsrDat);
-
-      /***** List data of teachers *****/
-      for (NumUsr = 0, Gbl.RowEvenOdd = 0;
-           NumUsr < Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs; )
-        {
-         UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Rol_TCH].Lst[NumUsr].UsrCod;
-         if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
-           {
-            UsrDat.Accepted = Gbl.Usrs.LstUsrs[Rol_TCH].Lst[NumUsr].Accepted;
-            NumUsr++;
-            Usr_WriteRowTchAllData (&UsrDat);
-
-            Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
-           }
-        }
-
-      /***** Free memory used for user's data *****/
-      Usr_UsrDataDestructor (&UsrDat);
+      /***** List teachers and non-editing teachers *****/
+      Gbl.RowEvenOdd = 0;
+      Usr_ListRowsAllDataTchs (Rol_TCH,FieldNames,NumColumns);
+      Usr_ListRowsAllDataTchs (Rol_NET,FieldNames,NumColumns);
 
       /***** End of table *****/
       Lay_EndTable ();
@@ -6608,6 +6583,52 @@ void Usr_ListAllDataTchs (void)
 
    /***** Free memory for teachers list *****/
    Usr_FreeUsrsList (Rol_TCH);
+  }
+
+/*****************************************************************************/
+/*********************** List all teachers' data rows ************************/
+/*****************************************************************************/
+
+static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
+                                     const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
+                                     unsigned NumColumns)
+  {
+   unsigned NumCol;
+   struct UsrData UsrDat;
+   unsigned NumUsr;
+
+   /***** Heading row *****/
+   fprintf (Gbl.F.Out,"<tr>");
+   for (NumCol = (Gbl.Usrs.Listing.WithPhotos ? 0 :
+						1);
+	NumCol < NumColumns;
+	NumCol++)
+      fprintf (Gbl.F.Out,"<th class=\"LEFT_MIDDLE LIGHT_BLUE\">"
+			 "%s&nbsp;"
+			 "</th>",
+	       FieldNames[NumCol]);
+   fprintf (Gbl.F.Out,"</tr>");
+
+   /***** Initialize structure with user's data *****/
+   Usr_UsrDataConstructor (&UsrDat);
+
+   /***** List data of teachers *****/
+   for (NumUsr = 0;
+	NumUsr < Gbl.Usrs.LstUsrs[Role].NumUsrs; )
+     {
+      UsrDat.UsrCod = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].UsrCod;
+      if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
+	{
+	 UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
+	 NumUsr++;
+	 Usr_WriteRowTchAllData (&UsrDat);
+
+	 Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
+	}
+     }
+
+   /***** Free memory used for user's data *****/
+   Usr_UsrDataDestructor (&UsrDat);
   }
 
 /*****************************************************************************/
