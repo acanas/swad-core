@@ -40,7 +40,7 @@ struct Department
    char ShrtName[Hie_MAX_BYTES_SHRT_NAME + 1];
    char FullName[Hie_MAX_BYTES_FULL_NAME + 1];
    char WWW[Cns_MAX_BYTES_WWW + 1];
-   unsigned NumTchs;
+   unsigned NumTchs;	// Non-editing teachers and teachers
   };
 
 #define Dpt_NUM_ORDERS 2

@@ -6968,9 +6968,9 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from this course *****/
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_NET);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;

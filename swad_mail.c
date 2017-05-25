@@ -879,7 +879,7 @@ void Mai_ListEmails (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start of the frame used to list the emails *****/
    Lay_StartRoundFrame (NULL,

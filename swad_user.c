@@ -208,10 +208,6 @@ static void Usr_ShowTchsAllDataParams (void);
 static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
                                 Rol_Role_t Role,bool PutCheckBoxToSelectUsr);
 
-static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void);
-static float Usr_GetNumCrssPerUsr (Rol_Role_t Role);
-static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role);
-
 /*****************************************************************************/
 /**** Show alert about number of clicks remaining before sending my photo ****/
 /*****************************************************************************/
@@ -3906,8 +3902,10 @@ unsigned Usr_GetNumTchsCurrentInsInDepartment (long DptCod)
    sprintf (Query,"SELECT COUNT(DISTINCT usr_data.UsrCod)"
 	          " FROM usr_data,crs_usr"
                   " WHERE usr_data.InsCod=%ld AND usr_data.DptCod=%ld"
-                  " AND usr_data.UsrCod=crs_usr.UsrCod AND crs_usr.Role=%u",
-            Gbl.CurrentIns.Ins.InsCod,DptCod,(unsigned) Rol_TCH);
+                  " AND usr_data.UsrCod=crs_usr.UsrCod"
+                  " AND crs_usr.Role IN (%u,%u)",
+            Gbl.CurrentIns.Ins.InsCod,DptCod,
+            (unsigned) Rol_NET,(unsigned) Rol_TCH);
    return (unsigned) DB_QueryCOUNT (Query,"can not get the number of teachers in a department");
   }
 
@@ -4158,7 +4156,7 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 // - Rol_NET	Non-editing teacher
 // - Rol_TCH	Teacher
 
-void Usr_GetListUsrs (Rol_Role_t Role,Sco_Scope_t Scope)
+void Usr_GetListUsrs (Sco_Scope_t Scope,Rol_Role_t Role)
   {
    char Query[Usr_MAX_BYTES_QUERY_GET_LIST_USRS + 1];	// Big query when the course has lot of groups
    const char *QueryFields =
@@ -5163,7 +5161,7 @@ static void Usr_PutButtonToConfirmIWantToSeeBigList (unsigned NumUsrs,const char
    sprintf (Gbl.Alert.Txt,Txt_The_list_of_X_users_is_too_large_to_be_displayed,
             NumUsrs);
    Ale_ShowAlertAndButton (Ale_WARNING,Gbl.Alert.Txt,
-                           Gbl.Action.Act,NULL,OnSubmit,
+                           Gbl.Action.Act,Usr_USER_LIST_SECTION_ID,OnSubmit,
                            Usr_PutParamsConfirmIWantToSeeBigList,
                            Lay_CONFIRM_BUTTON,Txt_Show_anyway);
   }
@@ -6322,7 +6320,7 @@ void Usr_ListAllDataStds (void)
      }
 
    /****** Get list of students in current course ******/
-   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -6556,7 +6554,7 @@ void Usr_ListAllDataTchs (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);
 
    if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
      {
@@ -7270,30 +7268,29 @@ void Usr_SeeGuests (void)
 			Usr_PutIconsListGsts,Hlp_USERS_Guests);
 
    /***** Form to select scope *****/
-   switch (Gbl.Usrs.Me.LoggedRole)
+   if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
      {
-      case Rol_SYS_ADM:
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	 Act_FormStart (ActLstGst);
-	 Usr_PutParamsPrefsAboutUsrList ();
-	 fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
-		  The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
-	 Sco_PutSelectorScope ("ScopeUsr",true);
-	 fprintf (Gbl.F.Out,"</label>");
-	 Act_FormEnd ();
-	 fprintf (Gbl.F.Out,"</div>");
-	 break;
-      default:
-	 break;
+      fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
+      Act_FormStart (ActLstGst);
+      Usr_PutParamsPrefsAboutUsrList ();
+      fprintf (Gbl.F.Out,"<label class=\"%s\">%s:&nbsp;",
+	       The_ClassForm[Gbl.Prefs.Theme],Txt_Scope);
+      Sco_PutSelectorScope ("ScopeUsr",true);
+      fprintf (Gbl.F.Out,"</label>");
+      Act_FormEnd ();
+      fprintf (Gbl.F.Out,"</div>");
      }
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,NULL))
-     {
-      /***** Get list of selected users *****/
-      Usr_GetListsSelectedUsrsCods ();
+   /***** Start section with user list *****/
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
-      if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
-	{
+   if (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs)
+     {
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs,NULL))
+        {
+         /***** Get list of selected users *****/
+         Usr_GetListsSelectedUsrsCods ();
+
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
 
@@ -7344,9 +7341,12 @@ void Usr_SeeGuests (void)
          /* End form */
          Act_FormEnd ();
 	}
-      else
-	 Usr_ShowWarningNoUsersFound (Rol_GST);
      }
+   else
+      Usr_ShowWarningNoUsersFound (Rol_GST);
+
+   /***** End section with user list *****/
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -7411,7 +7411,7 @@ void Usr_SeeStudents (void)
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],
@@ -7445,13 +7445,13 @@ void Usr_SeeStudents (void)
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
 
-   if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
+   if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
-      /***** Get list of selected users *****/
-      Usr_GetListsSelectedUsrsCods ();
+      if (Usr_GetIfShowBigList (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs,NULL))
+        {
+         /***** Get list of selected users *****/
+         Usr_GetListsSelectedUsrsCods ();
 
-      if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
-	{
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
 
@@ -7515,14 +7515,14 @@ void Usr_SeeStudents (void)
 	    Act_FormEnd ();
            }
 	}
-      else
-	{
-	 /***** Show warning indicating no students found *****/
-	 Usr_ShowWarningNoUsersFound (Rol_STD);
+     }
+   else
+     {
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STD);
 
-	 /***** Button to enrol students *****/
-	 Enr_PutButtonToEnrolStudents ();
-	}
+      /***** Button to enrol students *****/
+      Enr_PutButtonToEnrolStudents ();
      }
 
    /***** End section with user list *****/
@@ -7585,10 +7585,11 @@ void Usr_SeeTeachers (void)
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
    /***** Get lists of teachers *****/
-   Usr_GetListUsrs (Rol_NET,Gbl.Scope.Current);	// Non-editing teachers
-   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);	// Teachers
-   NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
-	     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
+   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                 1 << Rol_NET |
+                                                 1 << Rol_TCH);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
@@ -7605,10 +7606,13 @@ void Usr_SeeTeachers (void)
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
 
-   if (Usr_GetIfShowBigList (NumUsrs,NULL))
+   /***** Start section with user list *****/
+   Lay_StartSection (Usr_USER_LIST_SECTION_ID);
+
+   if (NumUsrs)
      {
-      if (NumUsrs)
-	{
+      if (Usr_GetIfShowBigList (NumUsrs,NULL))
+        {
 	 /***** Form to select type of list of users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActLstTch);
 
@@ -7679,15 +7683,18 @@ void Usr_SeeTeachers (void)
 	    Act_FormEnd ();
            }
 	}
-      else
-	{
-	 /***** Show warning indicating no teachers found *****/
-	 Usr_ShowWarningNoUsersFound (Rol_TCH);
-
-	 /***** Button to enrol a teacher *****/
-	 Enr_PutButtonToEnrolOneTeacher ();
-	}
      }
+   else
+     {
+      /***** Show warning indicating no teachers found *****/
+      Usr_ShowWarningNoUsersFound (Rol_TCH);
+
+      /***** Button to enrol a teacher *****/
+      Enr_PutButtonToEnrolOneTeacher ();
+     }
+
+   /***** End section with user list *****/
+   Lay_EndSection ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();
@@ -7941,7 +7948,7 @@ void Usr_SeeStdClassPhotoPrn (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get list of students *****/
-   Usr_GetListUsrs (Rol_STD,Gbl.Scope.Current);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)
      {
@@ -7994,7 +8001,7 @@ void Usr_SeeTchClassPhotoPrn (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Rol_TCH,Gbl.Scope.Current);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);
 
    if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
      {
@@ -8222,61 +8229,206 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   }
 
 /*****************************************************************************/
-/************************ See stats about the platform ***********************/
+/****************** Get total number of users in platform ********************/
 /*****************************************************************************/
-// Here Rol_UNK means "all users"
 
-void Usr_GetAndShowNumUsrsInPlatform (Rol_Role_t Role)
+unsigned Usr_GetTotalNumberOfUsersInPlatform (void)
   {
-   extern const char *Txt_Total;
-   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   unsigned NumUsrs;
-   float NumCrssPerUsr;
-   float NumUsrsPerCrs;
-   char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
-	                             "DAT RIGHT_BOTTOM";
+   char Query[128];
 
-   /***** Get the number of users belonging to any course *****/
-   if (Role == Rol_GST)	// Users not beloging to any course
-      NumUsrs = Usr_GetNumUsrsNotBelongingToAnyCrs ();
-   else
-      NumUsrs = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Role);
+   /***** Get number of users from database *****/
+   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data");
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
+  }
 
-   /***** Get average number of courses per user *****/
-   NumCrssPerUsr = (Role == Rol_GST) ? 0 :
-	                               Usr_GetNumCrssPerUsr (Role);
+/*****************************************************************************/
+/******* Get total number of users of one or several roles in courses ********/
+/*****************************************************************************/
 
-   /***** Query the number of users per course *****/
-   NumUsrsPerCrs = (Role == Rol_GST) ? 0 :
-	                               Usr_GetNumUsrsPerCrs (Role);
+#define Usr_MAX_BYTES_SUBQUERY_ROLES (Rol_NUM_ROLES*(10+1)-1)
 
-   /***** Write the total number of users *****/
-   fprintf (Gbl.F.Out,"<tr>"
-                      "<td class=\"%s\">"
-                      "%s"
-                      "</td>"
-                      "<td class=\"%s\">"
-                      "%u"
-                      "</td>"
-                      "<td class=\"%s\">"
-                      "%.2f"
-                      "</td>"
-                      "<td class=\"%s\">"
-                      "%.2f"
-                      "</td>"
-                      "</tr>",
-            Class,(Role == Rol_UNK) ? Txt_Total :
-        	                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
-            Class,NumUsrs,
-            Class,NumCrssPerUsr,
-            Class,NumUsrsPerCrs);
+unsigned Usr_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,unsigned Roles)
+  {
+   char UnsignedStr[10 + 1];
+   char SubQueryRoles[Usr_MAX_BYTES_SUBQUERY_ROLES + 1];
+   char Query[512 + Usr_MAX_BYTES_SUBQUERY_ROLES + 1];
+   bool AnyUserInCourses;
+   Rol_Role_t Role;
+   Rol_Role_t FirstRoleRequested;
+   bool MoreThanOneRole;
+   bool FirstRole;
+
+   /***** Reset roles that can not belong to courses.
+          Only
+          - students,
+          - non-editing teachers,
+          - teachers
+          can belong to a course *****/
+   Roles &= ((1 << Rol_STD) |
+	     (1 << Rol_NET) |
+	     (1 << Rol_TCH));
+
+   /***** Check if no roles requested *****/
+   if (Roles == 0)
+      return 0;
+
+   /***** Check if any user in courses is requested *****/
+   AnyUserInCourses = (Roles == ((1 << Rol_STD) |
+	                         (1 << Rol_NET) |
+	                         (1 << Rol_TCH)));
+
+   /***** Get first role requested *****/
+   FirstRoleRequested = Rol_UNK;
+   for (Role = Rol_STD;
+        Role <= Rol_TCH;
+        Role++)
+      if (Roles & (1 << Role))
+	{
+	 FirstRoleRequested = Role;
+	 break;
+	}
+
+   /***** Check if more than one role is requested *****/
+   MoreThanOneRole = false;
+   if (FirstRoleRequested != Rol_UNK)
+      for (Role = FirstRoleRequested + 1;
+	   Role <= Rol_TCH;
+	   Role++)
+	 if (Roles & (1 << Role))
+	   {
+	    MoreThanOneRole = true;
+	    break;
+	   }
+
+   /***** Build subquery for roles *****/
+   if (MoreThanOneRole)
+     {
+      Str_Copy (SubQueryRoles," IN (",Usr_MAX_BYTES_SUBQUERY_ROLES);
+      for (Role = Rol_STD, FirstRole = true;
+	   Role <= Rol_TCH;
+	   Role++)
+	 if (Roles & (1 << Role))
+	   {
+	    sprintf (UnsignedStr,"%u",(unsigned) Role);
+	    if (!FirstRole)	// Not the first role
+	      {
+	       Str_Concat (SubQueryRoles,",",Usr_MAX_BYTES_SUBQUERY_ROLES);
+	       FirstRole = false;
+	      }
+	    Str_Concat (SubQueryRoles,UnsignedStr,Usr_MAX_BYTES_SUBQUERY_ROLES);
+	   }
+      Str_Concat (SubQueryRoles,")",Usr_MAX_BYTES_SUBQUERY_ROLES);
+     }
+   else	// Only one role
+      sprintf (SubQueryRoles,"=%u",FirstRoleRequested);
+
+   /***** Get number of users from database *****/
+   switch (Scope)
+     {
+      case Sco_SCOPE_SYS:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+        	           " FROM crs_usr");
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
+        	           " FROM crs_usr WHERE Role%s",
+                     SubQueryRoles);
+         break;
+      case Sco_SCOPE_CTY:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM institutions,centres,degrees,courses,crs_usr"
+                           " WHERE institutions.CtyCod=%ld"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod",
+                     Gbl.CurrentCty.Cty.CtyCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM institutions,centres,degrees,courses,crs_usr"
+                           " WHERE institutions.CtyCod=%ld"
+                           " AND institutions.InsCod=centres.InsCod"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role%s",
+                     Gbl.CurrentCty.Cty.CtyCod,SubQueryRoles);
+         break;
+      case Sco_SCOPE_INS:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM centres,degrees,courses,crs_usr"
+                           " WHERE centres.InsCod=%ld"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod",
+                     Gbl.CurrentIns.Ins.InsCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM centres,degrees,courses,crs_usr"
+                           " WHERE centres.InsCod=%ld"
+                           " AND centres.CtrCod=degrees.CtrCod"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role%s",
+                     Gbl.CurrentIns.Ins.InsCod,SubQueryRoles);
+         break;
+      case Sco_SCOPE_CTR:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM degrees,courses,crs_usr"
+                           " WHERE degrees.CtrCod=%ld"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod",
+                     Gbl.CurrentCtr.Ctr.CtrCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM degrees,courses,crs_usr"
+                           " WHERE degrees.CtrCod=%ld"
+                           " AND degrees.DegCod=courses.DegCod"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role%s",
+                     Gbl.CurrentCtr.Ctr.CtrCod,SubQueryRoles);
+         break;
+      case Sco_SCOPE_DEG:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	           " FROM courses,crs_usr"
+                           " WHERE courses.DegCod=%ld"
+                           " AND courses.CrsCod=crs_usr.CrsCod",
+                     Gbl.CurrentDeg.Deg.DegCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
+        	            " FROM courses,crs_usr"
+                           " WHERE courses.DegCod=%ld"
+                           " AND courses.CrsCod=crs_usr.CrsCod"
+                           " AND crs_usr.Role%s",
+                     Gbl.CurrentDeg.Deg.DegCod,SubQueryRoles);
+         break;
+      case Sco_SCOPE_CRS:
+         if (AnyUserInCourses)	// Any user
+            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
+                           " WHERE CrsCod=%ld",
+                     Gbl.CurrentCrs.Crs.CrsCod);
+         else
+            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
+                           " WHERE CrsCod=%ld"
+                           " AND Role%s",
+                     Gbl.CurrentCrs.Crs.CrsCod,SubQueryRoles);
+         break;
+      default:
+	 Lay_ShowErrorAndExit ("Wrong scope.");
+	 break;
+     }
+   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
   }
 
 /*****************************************************************************/
 /******** Get total number of users who do not belong to any course **********/
 /*****************************************************************************/
 
-static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
+unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
   {
    char Query[256];
 
@@ -8290,7 +8442,7 @@ static unsigned Usr_GetNumUsrsNotBelongingToAnyCrs (void)
 /************ Get average number of courses with users of a role *************/
 /*****************************************************************************/
 
-static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
+float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -8427,7 +8579,7 @@ static float Usr_GetNumCrssPerUsr (Rol_Role_t Role)
 /************ Get average number of courses with users of a type *************/
 /*****************************************************************************/
 
-static float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
+float Usr_GetNumUsrsPerCrs (Rol_Role_t Role)
   {
    char Query[1024];
    MYSQL_RES *mysql_res;

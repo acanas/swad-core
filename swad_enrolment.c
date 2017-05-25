@@ -1488,7 +1488,7 @@ static void Enr_ReceiveFormUsrsCrs (Rol_Role_t Role)
    if (WhatToDo.RemoveUsrs)
      {
       /***** Get list of users in current course *****/
-      Usr_GetListUsrs (Role,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Sco_SCOPE_CRS,Role);
 
       if (Gbl.Usrs.LstUsrs[Role].NumUsrs)
 	{
@@ -1899,7 +1899,7 @@ unsigned Enr_RemAllStdsInCrs (struct Course *Crs)
 
    /***** Get list of students in current course *****/
    Gbl.Usrs.ClassPhoto.AllGroups = true;        // Get all the students of the current course
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
    NumStdsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs;
 
    /***** Remove all the students *****/

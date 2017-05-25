@@ -1922,7 +1922,7 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order list of students in this course *****/
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_Attendance,NULL,Hlp_USERS_Attendance);
@@ -2303,7 +2303,7 @@ void Att_RegisterStudentsInAttEvent (void)
 
    /***** 1. Get list of students in the groups selected: Gbl.Usrs.LstUsrs[Rol_STD] *****/
    /* Get list of students in the groups selected */
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    if (Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs)	// If there are students in the groups selected...
      {
@@ -2657,7 +2657,7 @@ void Usr_ReqListStdsAttendanceCrs (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order lists of users from current course *****/
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_STD][Usr_SEX_UNKNOWN],

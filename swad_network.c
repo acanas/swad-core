@@ -446,11 +446,15 @@ void Net_ShowWebAndSocialNetworksStats (void)
    unsigned NumRow;
    Net_WebsAndSocialNetworks_t Web;
    char NetName[Net_MAX_BYTES_NETWORK_NAME + 1];
-   unsigned NumUsrsTotalInPlatform;
+   unsigned NumUsrsTotal;
    unsigned NumUsrs;
 
-   /***** Get total number of users in platform *****/
-   NumUsrsTotalInPlatform = Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
+   /***** Get total number of users in current scope *****/
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                                                             1 << Rol_STD |
+                                                                                             1 << Rol_NET |
+                                                                                             1 << Rol_TCH);
 
    /***** Get number of users with a web / social network *****/
    switch (Gbl.Scope.Current)
@@ -588,10 +592,8 @@ void Net_ShowWebAndSocialNetworksStats (void)
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  Net_WebsAndSocialNetworksTitle[Web],
 		  NumUsrs,
-		  NumUsrsTotalInPlatform ? 100.0 *
-			                   (float) NumUsrs /
-			                   (float) NumUsrsTotalInPlatform :
-			                   0.0);
+		  NumUsrsTotal ? 100.0 * (float) NumUsrs / (float) NumUsrsTotal :
+			         0.0);
 	}
      }
 

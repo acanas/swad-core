@@ -214,9 +214,9 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
       Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
       /***** Get and order lists of users from this course *****/
-      Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-      Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
-      Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+      Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
+      Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_NET);
+      Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_TCH);
       NumUsrsInCrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +	// Students
 	             Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +	// Non-editing teachers
 		     Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;		// Teachers

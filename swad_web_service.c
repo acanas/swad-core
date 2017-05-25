@@ -1440,7 +1440,7 @@ int swad__getUsers (struct soap *soap,
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
 
    /***** Get list of users *****/
-   Usr_GetListUsrs (Role,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Role);
    Svc_CopyListUsers (Role,getUsersOut);
    Usr_FreeUsrsList (Role);
 

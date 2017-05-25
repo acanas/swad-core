@@ -179,8 +179,10 @@ void Dpt_SeeDepts (void)
 			 "</td>"
 			 "</tr>",
 	       Txt_Department_unspecified,
-	       Sta_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
-					  Rol_TCH) - NumTchsInsWithDpt);
+	       Usr_GetTotalNumberOfUsersInCourses (Sco_SCOPE_INS,
+	                                           1 << Rol_NET |
+	                                           1 << Rol_TCH) -
+	       NumTchsInsWithDpt);
 
       /***** End table *****/
       Lay_EndRoundFrameTable ();
@@ -279,17 +281,17 @@ void Dpt_GetListDepartments (long InsCod)
 		     " WHERE departments.InsCod=%ld"
 		     " AND departments.DptCod=usr_data.DptCod"
 		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role=%u"
+		     " AND crs_usr.Role IN (%u,%u)"
 		     " GROUP BY departments.DptCod)"
 		     " UNION "
 		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM departments"
 		     " WHERE InsCod=%ld AND DptCod NOT IN"
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
+		     " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       InsCod,(unsigned) Rol_TCH,
-	       InsCod,(unsigned) Rol_TCH,
+	       InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
+	       InsCod,(unsigned) Rol_NET,(unsigned) Rol_TCH,
 	       OrderBySubQuery);
    else			// All the departments
       sprintf (Query,"(SELECT departments.DptCod,departments.InsCod,"
@@ -298,17 +300,17 @@ void Dpt_GetListDepartments (long InsCod)
 		     " FROM departments,usr_data,crs_usr"
 		     " WHERE departments.DptCod=usr_data.DptCod"
 		     " AND usr_data.UsrCod=crs_usr.UsrCod"
-		     " AND crs_usr.Role=%u"
+		     " AND crs_usr.Role IN (%u,%u)"
 		     " GROUP BY departments.DptCod)"
 		     " UNION "
 		     "(SELECT DptCod,InsCod,ShortName,FullName,WWW,0 AS NumTchs"
 		     " FROM departments"
 		     " WHERE DptCod NOT IN"
 		     " (SELECT DISTINCT usr_data.DptCod FROM usr_data,crs_usr"
-		     " WHERE crs_usr.Role=%u AND crs_usr.UsrCod=usr_data.UsrCod))"
+		     " WHERE crs_usr.Role IN (%u,%u) AND crs_usr.UsrCod=usr_data.UsrCod))"
 		     " ORDER BY %s",
-	       (unsigned) Rol_TCH,
-	       (unsigned) Rol_TCH,
+	       (unsigned) Rol_NET,(unsigned) Rol_TCH,
+	       (unsigned) Rol_NET,(unsigned) Rol_TCH,
 	       OrderBySubQuery);
    NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get departments");
 
@@ -351,7 +353,7 @@ void Dpt_GetListDepartments (long InsCod)
          Str_Copy (Dpt->WWW,row[4],
                    Cns_MAX_BYTES_WWW);
 
-         /* Get number of teachers in this department (row[5]) */
+         /* Get number of non-editing teachers and teachers in this department (row[5]) */
          if (sscanf (row[5],"%u",&Dpt->NumTchs) != 1)
             Dpt->NumTchs = 0;
         }

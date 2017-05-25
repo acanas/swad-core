@@ -202,9 +202,10 @@ static unsigned Sta_GetInsAndStat (struct Instit *Ins,MYSQL_RES *mysql_res);
 
 static void Sta_GetAndShowDegreeTypesStats (void);
 
-static unsigned Sta_GetTotalNumberOfUsersInPlatform (void);
-
 static void Sta_GetAndShowUsersStats (void);
+static void Sta_GetAndShowNumUsrsInCrss (Rol_Role_t Role);
+static void Sta_GetAndShowNumUsrsNotBelongingToAnyCrs (void);
+
 static void Sta_GetAndShowUsersRanking (void);
 
 static void Sta_GetAndShowFileBrowsersStats (void);
@@ -464,9 +465,9 @@ void Sta_AskShowCrsHits (void)
    Grp_GetParCodsSeveralGrpsToShowUsrs ();
 
    /***** Get and order the lists of users of this course *****/
-   Usr_GetListUsrs (Rol_STD,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_NET,Sco_SCOPE_CRS);
-   Usr_GetListUsrs (Rol_TCH,Sco_SCOPE_CRS);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_STD);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_NET);
+   Usr_GetListUsrs (Sco_SCOPE_CRS,Rol_TCH);
    NumTotalUsrs = Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
 	          Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
@@ -4082,16 +4083,97 @@ static void Sta_GetAndShowUsersStats (void)
             Txt_No_of_users,
             Txt_Average_number_of_courses_to_which_a_user_belongs,
             Txt_Average_number_of_users_belonging_to_a_course);
-   Usr_GetAndShowNumUsrsInPlatform (Rol_STD);	// Students
-   Usr_GetAndShowNumUsrsInPlatform (Rol_NET);	// Non-editing teachers
-   Usr_GetAndShowNumUsrsInPlatform (Rol_TCH);	// Teachers
-   Usr_GetAndShowNumUsrsInPlatform (Rol_UNK);	// Students, non-editing teachers and teachers
+   Sta_GetAndShowNumUsrsInCrss (Rol_STD);		// Students
+   Sta_GetAndShowNumUsrsInCrss (Rol_NET);		// Non-editing teachers
+   Sta_GetAndShowNumUsrsInCrss (Rol_TCH);		// Teachers
+   Sta_GetAndShowNumUsrsInCrss (Rol_UNK);		// Any user in courses
    fprintf (Gbl.F.Out,"<tr>"
                       "<th colspan=\"4\" style=\"height:10px;\">"
                       "</tr>");
-   Usr_GetAndShowNumUsrsInPlatform (Rol_GST);	// Users not beloging to any course
+   Sta_GetAndShowNumUsrsNotBelongingToAnyCrs ();	// Users not beloging to any course
 
    Lay_EndRoundFrameTable ();
+  }
+
+/*****************************************************************************/
+/**************** Get and show number of users in courses ********************/
+/*****************************************************************************/
+// Rol_UNK means any role in courses
+
+static void Sta_GetAndShowNumUsrsInCrss (Rol_Role_t Role)
+  {
+   extern const char *Txt_Total;
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   unsigned NumUsrs;
+   float NumCrssPerUsr;
+   float NumUsrsPerCrs;
+   char *Class = (Role == Rol_UNK) ? "DAT_N_LINE_TOP RIGHT_BOTTOM" :
+	                             "DAT RIGHT_BOTTOM";
+   unsigned Roles = (Role == Rol_UNK) ? ((1 << Rol_STD) |
+	                                 (1 << Rol_NET) |
+	                                 (1 << Rol_TCH)) :
+	                                (1 << Role);
+
+   /***** Get the number of users belonging to any course *****/
+   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+						 Roles);
+
+   /***** Get average number of courses per user *****/
+   NumCrssPerUsr = Usr_GetNumCrssPerUsr (Role);
+
+   /***** Query the number of users per course *****/
+   NumUsrsPerCrs = Usr_GetNumUsrsPerCrs (Role);
+
+   /***** Write the total number of users *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%.2f"
+                      "</td>"
+                      "</tr>",
+            Class,(Role == Rol_UNK) ? Txt_Total :
+        	                      Txt_ROLES_PLURAL_Abc[Role][Usr_SEX_UNKNOWN],
+            Class,NumUsrs,
+            Class,NumCrssPerUsr,
+            Class,NumUsrsPerCrs);
+  }
+
+/*****************************************************************************/
+/**************** Get and show number of users in courses ********************/
+/*****************************************************************************/
+
+static void Sta_GetAndShowNumUsrsNotBelongingToAnyCrs (void)
+  {
+   extern const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
+   char *Class = "DAT RIGHT_BOTTOM";
+
+   /***** Write the total number of users not belonging to any course *****/
+   fprintf (Gbl.F.Out,"<tr>"
+                      "<td class=\"%s\">"
+                      "%s"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%u"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%.2f"
+                      "</td>"
+                      "<td class=\"%s\">"
+                      "%.2f"
+                      "</td>"
+                      "</tr>",
+            Class,Txt_ROLES_PLURAL_Abc[Rol_GST][Usr_SEX_UNKNOWN],
+            Class,Usr_GetNumUsrsNotBelongingToAnyCrs (),
+            Class,0.0,
+            Class,0.0);
   }
 
 /*****************************************************************************/
@@ -5327,130 +5409,6 @@ static void Sta_GetAndShowDegreeTypesStats (void)
   {
    /***** Show statistic about number of degrees in each type of degree *****/
    DT_SeeDegreeTypesInStaTab ();
-  }
-
-/*****************************************************************************/
-/****************** Get total number of users in platform ********************/
-/*****************************************************************************/
-
-static unsigned Sta_GetTotalNumberOfUsersInPlatform (void)
-  {
-   char Query[128];
-
-   /***** Get number of users from database *****/
-   sprintf (Query,"SELECT COUNT(UsrCod) FROM usr_data");
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
-  }
-
-/*****************************************************************************/
-/******************* Get total number of users in courses ********************/
-/*****************************************************************************/
-// Here Rol_UNK means "students, non-editing teachers or teachers"
-
-unsigned Sta_GetTotalNumberOfUsersInCourses (Sco_Scope_t Scope,Rol_Role_t Role)
-  {
-   char Query[512];
-
-   /***** Get number of users from database *****/
-   switch (Scope)
-     {
-      case Sco_SCOPE_SYS:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-        	           " FROM crs_usr");
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod)"
-        	           " FROM crs_usr WHERE Role=%u",
-                     (unsigned) Role);
-         break;
-      case Sco_SCOPE_CTY:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-                     Gbl.CurrentCty.Cty.CtyCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM institutions,centres,degrees,courses,crs_usr"
-                           " WHERE institutions.CtyCod=%ld"
-                           " AND institutions.InsCod=centres.InsCod"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u",
-                     Gbl.CurrentCty.Cty.CtyCod,(unsigned) Role);
-         break;
-      case Sco_SCOPE_INS:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-                     Gbl.CurrentIns.Ins.InsCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM centres,degrees,courses,crs_usr"
-                           " WHERE centres.InsCod=%ld"
-                           " AND centres.CtrCod=degrees.CtrCod"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u",
-                     Gbl.CurrentIns.Ins.InsCod,(unsigned) Role);
-         break;
-      case Sco_SCOPE_CTR:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-                     Gbl.CurrentCtr.Ctr.CtrCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM degrees,courses,crs_usr"
-                           " WHERE degrees.CtrCod=%ld"
-                           " AND degrees.DegCod=courses.DegCod"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u",
-                     Gbl.CurrentCtr.Ctr.CtrCod,(unsigned) Role);
-         break;
-      case Sco_SCOPE_DEG:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	           " FROM courses,crs_usr"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod",
-                     Gbl.CurrentDeg.Deg.DegCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT crs_usr.UsrCod)"
-        	            " FROM courses,crs_usr"
-                           " WHERE courses.DegCod=%ld"
-                           " AND courses.CrsCod=crs_usr.CrsCod"
-                           " AND crs_usr.Role=%u",
-                     Gbl.CurrentDeg.Deg.DegCod,(unsigned) Role);
-         break;
-      case Sco_SCOPE_CRS:
-         if (Role == Rol_UNK)	// Any user
-            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod=%ld",
-                     Gbl.CurrentCrs.Crs.CrsCod);
-         else
-            sprintf (Query,"SELECT COUNT(DISTINCT UsrCod) FROM crs_usr"
-                           " WHERE CrsCod=%ld"
-                           " AND crs_usr.Role=%u",
-                     Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
-         break;
-      default:
-	 Lay_ShowErrorAndExit ("Wrong scope.");
-	 break;
-     }
-   return (unsigned) DB_QueryCOUNT (Query,"can not get number of users");
   }
 
 /*****************************************************************************/
@@ -7015,8 +6973,11 @@ static void Sta_GetAndShowSocialActivityStats (void)
             Txt_No_of_posts_BR_per_user);
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                                                             1 << Rol_STD |
+                                                                                             1 << Rol_NET |
+                                                                                             1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (NoteType = (Soc_NoteType_t) 0;
@@ -7292,8 +7253,11 @@ static void Sta_GetAndShowFollowStats (void)
             Txt_PERCENT_of_users);
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                                                             1 << Rol_STD |
+                                                                                             1 << Rol_NET |
+                                                                                             1 << Rol_TCH);
 
    /***** Get total number of following/followers from database *****/
    for (Fol = 0;
@@ -7915,8 +7879,11 @@ static void Sta_GetAndShowNumUsrsPerNotifyEvent (void)
             Txt_Number_of_BR_emails);
 
    /***** Get total number of users *****/
-   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Sta_GetTotalNumberOfUsersInPlatform () :
-                                                         Sta_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,Rol_UNK);
+   NumUsrsTotal = (Gbl.Scope.Current == Sco_SCOPE_SYS) ? Usr_GetTotalNumberOfUsersInPlatform () :
+                                                         Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                                                             1 << Rol_STD |
+                                                                                             1 << Rol_NET |
+                                                                                             1 << Rol_TCH);
 
    /***** Get total number of users who want to be
           notified by email on some event, from database *****/
