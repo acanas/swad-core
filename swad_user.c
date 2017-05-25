@@ -5617,7 +5617,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_CLASS_PHOTO);
 
    /* Number of columns in the class photo */
-   Act_FormStart (NextAction);
+   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_CLASS_PHOTO);
    Usr_PutParamListWithPhotos ();
@@ -5633,7 +5633,7 @@ void Usr_ShowFormsToSelectUsrListType (Act_Action_t NextAction)
    Usr_FormToSelectUsrListType (NextAction,Usr_LIST_AS_LISTING);
 
    /* See the photos in list? */
-   Act_FormStart (NextAction);
+   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (Usr_LIST_AS_LISTING);
    Usr_PutExtraParamsUsrList (NextAction);
@@ -5653,11 +5653,14 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
    extern const char *The_ClassFormNoWrap[The_NUM_THEMES];
    extern const char *Txt_USR_LIST_TYPES[Usr_NUM_USR_LIST_TYPES];
 
-   Act_FormStart (NextAction);
+   /***** Start form *****/
+   Act_FormStartAnchor (NextAction,Usr_USER_LIST_SECTION_ID);
    Grp_PutParamsCodGrps ();
    Usr_PutParamUsrListType (ListType);
    Usr_PutParamListWithPhotos ();
    Usr_PutExtraParamsUsrList (NextAction);
+
+   /***** Link and image *****/
    Act_LinkFormSubmit (Txt_USR_LIST_TYPES[ListType],
                        The_ClassFormNoWrap[Gbl.Prefs.Theme],
                        NextAction == ActReqMsgUsr ? "CopyMessageToHiddenFields()" :
@@ -5671,6 +5674,8 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType],
             Txt_USR_LIST_TYPES[ListType]);
+
+   /***** End form *****/
    Act_FormEnd ();
   }
 
