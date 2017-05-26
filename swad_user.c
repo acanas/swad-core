@@ -74,21 +74,50 @@ const char *Usr_StringsSexDB[Usr_NUM_SEXS] =
    "all",
    };
 
-/*****************************************************************************/
-/***************************** Private constants *****************************/
-/*****************************************************************************/
-
 const char *Usr_StringsUsrListTypeInDB[Usr_NUM_USR_LIST_TYPES] =
   {
    "",				// Usr_LIST_UNKNOWN
    "classphoto",		// Usr_LIST_AS_CLASS_PHOTO
    "list",			// Usr_LIST_AS_LISTING
   };
-const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
+
+/*****************************************************************************/
+/***************************** Private constants *****************************/
+/*****************************************************************************/
+
+static const char *Usr_IconsClassPhotoOrList[Usr_NUM_USR_LIST_TYPES] =
   {
    "",				// Usr_LIST_UNKNOWN
    "classphoto16x16.gif",	// Usr_LIST_AS_CLASS_PHOTO
    "list64x64.gif",		// Usr_LIST_AS_LISTING
+  };
+
+
+static const char *Usr_NameSelUnsel[Rol_NUM_ROLES] =
+  {
+   NULL,		// Rol_UNK
+   "SEL_UNSEL_GSTS",	// Rol_GST
+   NULL,		// Rol_USR
+   "SEL_UNSEL_STDS",	// Rol_STD
+   "SEL_UNSEL_NETS",	// Rol_NET
+   "SEL_UNSEL_TCHS",	// Rol_TCH
+   NULL,		// Rol_DEG_ADM
+   NULL,		// Rol_CTR_ADM
+   NULL,		// Rol_INS_ADM
+   NULL,		// Rol_SYS_ADM
+  };
+static const char *Usr_ParamUsrCod[Rol_NUM_ROLES] =
+  {
+   "UsrCodAll",	// Rol_UNK (here means all users)
+   "UsrCodGst",	// Rol_GST
+   NULL,		// Rol_USR
+   "UsrCodStd",	// Rol_STD
+   "UsrCodNET",	// Rol_NET
+   "UsrCodTch",	// Rol_TCH
+   NULL,	// Rol_DEG_ADM
+   NULL,	// Rol_CTR_ADM
+   NULL,	// Rol_INS_ADM
+   NULL,	// Rol_SYS_ADM
   };
 
 #define Usr_NUM_MAIN_FIELDS_DATA_ADM	 7
@@ -5185,9 +5214,9 @@ void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
 
    /***** Put a parameter with the encrypted user codes of several users *****/
    if (Gbl.Session.IsOpen)
-      Ses_InsertHiddenParInDB (NextAction,"UsrCodAll",ListUsrCods);
+      Ses_InsertHiddenParInDB (NextAction,Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
    else
-      Par_PutHiddenParamString ("UsrCodAll",ListUsrCods);
+      Par_PutHiddenParamString (Usr_ParamUsrCod[Rol_UNK],ListUsrCods);
   }
 
 /*****************************************************************************/
@@ -5197,95 +5226,47 @@ void Usr_PutHiddenParUsrCodAll (Act_Action_t NextAction,const char *ListUsrCods)
 void Usr_GetListsSelectedUsrsCods (void)
   {
    unsigned Length;
+   Rol_Role_t Role;
 
-   /***** Allocate memory for the lists of users *****/
+   /***** Get possible list of all selected users *****/
    Usr_AllocateListSelectedUsrCod (Rol_UNK);
-   Usr_AllocateListSelectedUsrCod (Rol_GST);
-   Usr_AllocateListSelectedUsrCod (Rol_STD);
-   Usr_AllocateListSelectedUsrCod (Rol_NET);
-   Usr_AllocateListSelectedUsrCod (Rol_TCH);
-
-   /***** Get selected users *****/
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
-      Ses_GetHiddenParFromDB (Gbl.Action.Act,"UsrCodAll",Gbl.Usrs.Select[Rol_UNK],
+      Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
                               Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select[Rol_UNK],
                         Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
      }
    else
-      Par_GetParMultiToText ("UsrCodAll",Gbl.Usrs.Select[Rol_UNK],
+      Par_GetParMultiToText (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
                              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-   Par_GetParMultiToText ("UsrCodGst",Gbl.Usrs.Select[Rol_GST],
-                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Guests
-   Par_GetParMultiToText ("UsrCodStd",Gbl.Usrs.Select[Rol_STD],
-                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Students
-   Par_GetParMultiToText ("UsrCodNET",Gbl.Usrs.Select[Rol_NET],
-                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Non-editing teachers
-   Par_GetParMultiToText ("UsrCodTch",Gbl.Usrs.Select[Rol_TCH],
-                          Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);	// Teachers
+   /***** Get list of selected users for each possible role *****/
+   for (Role = Rol_TCH;		// From the highest possible role of selected users...
+	Role >= Rol_GST;	// ...downto the lowest possible role of selected users
+	Role--)
+      if (Usr_ParamUsrCod[Role])
+	{
+	 /* Get parameter with selected users with this role */
+	 Usr_AllocateListSelectedUsrCod (Role);
+	 Par_GetParMultiToText (Usr_ParamUsrCod[Role],Gbl.Usrs.Select[Role],
+				Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
-/*
-sprintf (Gbl.Alert.Txt,"UsrCodAll = %s / UsrCodTch = %s / UsrCodStd = %s",
-         Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select.Tch,Gbl.Usrs.Select.Std);
-Lay_ShowErrorAndExit (Gbl.Alert.Txt);
-*/
-   /***** Add guests to the list with all selected users *****/
-   if (Gbl.Usrs.Select[Rol_GST][0])
-     {
-      if (Gbl.Usrs.Select[Rol_UNK][0])
-         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
-             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-           {
-            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
-           }
-      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_GST],
-                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-     }
-
-   /***** Add students to the list with all selected users *****/
-   if (Gbl.Usrs.Select[Rol_STD][0])
-     {
-      if (Gbl.Usrs.Select[Rol_UNK][0])
-         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
-             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-           {
-            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
-           }
-      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_STD],
-                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-     }
-
-   /***** Add non-editing teachers to the list with all selected users *****/
-   if (Gbl.Usrs.Select[Rol_NET][0])
-     {
-      if (Gbl.Usrs.Select[Rol_UNK][0])
-         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
-             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-           {
-            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
-           }
-      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_NET],
-                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-     }
-
-   /***** Add teachers to the list with all selected users *****/
-   if (Gbl.Usrs.Select[Rol_TCH][0])
-     {
-      if (Gbl.Usrs.Select[Rol_UNK][0])
-         if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
-             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
-           {
-            Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
-            Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
-           }
-      Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Rol_TCH],
-                  Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
-     }
+	 /* Add selected users with this role
+	    to the list with all selected users */
+	 if (Gbl.Usrs.Select[Role][0])
+	   {
+	    if (Gbl.Usrs.Select[Rol_UNK][0])
+	       if ((Length = strlen (Gbl.Usrs.Select[Rol_UNK])) <
+		   Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS)
+		 {
+		  Gbl.Usrs.Select[Rol_UNK][Length    ] = Par_SEPARATOR_PARAM_MULTIPLE;
+		  Gbl.Usrs.Select[Rol_UNK][Length + 1] = '\0';
+		 }
+	    Str_Concat (Gbl.Usrs.Select[Rol_UNK],Gbl.Usrs.Select[Role],
+			Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+	   }
+	}
   }
 
 /*****************************************************************************/
@@ -5752,29 +5733,15 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
-   switch (Role)
-     {
-      case Rol_STD:
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			    " name=\"SEL_UNSEL_STDS\" value=\"\""
-			    " onclick=\"togglecheckChildren(this,'UsrCodStd')\" />");
-	 break;
-      case Rol_NET:
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			    " name=\"SEL_UNSEL_NETS\" value=\"\""
-			    " onclick=\"togglecheckChildren(this,'UsrCodNET')\" />");
-	 break;
-      case Rol_TCH:
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			    " name=\"SEL_UNSEL_TCHS\" value=\"\""
-			    " onclick=\"togglecheckChildren(this,'UsrCodTch')\" />");
-	 break;
-      default:
-	 fprintf (Gbl.F.Out,"<input type=\"checkbox\""
-			    " name=\"SEL_UNSEL_GSTS\" value=\"\""
-			    " onclick=\"togglecheckChildren(this,'UsrCodGst')\" />");
-	 break;
-     }
+   if (Usr_NameSelUnsel[Role] &&
+       Usr_ParamUsrCod[Role])
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\""
+			 " name=\"%s\" value=\"\""
+			 " onclick=\"togglecheckChildren(this,'%s')\" />",
+	       Usr_NameSelUnsel[Role],
+	       Usr_ParamUsrCod[Role]);
+   else
+      Lay_ShowErrorAndExit ("Wrong role.");
    Sex = Usr_GetSexOfUsrsLst (Role);
    fprintf (Gbl.F.Out,"%s:"
 	              "</label>"
@@ -5829,43 +5796,29 @@ static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsg
   {
    bool CheckboxChecked;
 
-   /***** Check box *****/
-   fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"");
-   switch (UsrDat->RoleInCurrentCrsDB)
+   if (Usr_NameSelUnsel[UsrDat->RoleInCurrentCrsDB] &&
+       Usr_ParamUsrCod[UsrDat->RoleInCurrentCrsDB])
      {
-      case Rol_STD:
-	 fprintf (Gbl.F.Out,"UsrCodStd\" value=\"%s\""
-			    " onclick=\"checkParent(this,'SEL_UNSEL_STDS')\"",
-		  UsrDat->EncryptedUsrCod);
-	 break;
-      case Rol_NET:
-	 fprintf (Gbl.F.Out,"UsrCodNET\" value=\"%s\""
-			    " onclick=\"checkParent(this,'SEL_UNSEL_NETS')\"",
-		  UsrDat->EncryptedUsrCod);
-	 break;
-      case Rol_TCH:
-	 fprintf (Gbl.F.Out,"UsrCodTch\" value=\"%s\""
-			    " onclick=\"checkParent(this,'SEL_UNSEL_TCHS')\"",
-		  UsrDat->EncryptedUsrCod);
-	 break;
-      default:
-	 fprintf (Gbl.F.Out,"UsrCodGst\" value=\"%s\""
-			    " onclick=\"checkParent(this,'SEL_UNSEL_GSTS')\"",
-		  UsrDat->EncryptedUsrCod);
-	 break;
+      /***** Check box must be checked? *****/
+      CheckboxChecked = false;
+      if (UsrIsTheMsgSender)
+	 CheckboxChecked = true;
+      else
+	 /* Check if user is in lists of selected users */
+	 CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (UsrDat->EncryptedUsrCod);
+
+      /***** Check box *****/
+      fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"%s\""
+			 " onclick=\"checkParent(this,'%s')\"",
+	       Usr_ParamUsrCod[UsrDat->RoleInCurrentCrsDB],
+	       UsrDat->EncryptedUsrCod,
+	       Usr_NameSelUnsel[UsrDat->RoleInCurrentCrsDB]);
+      if (CheckboxChecked)
+	 fprintf (Gbl.F.Out," checked=\"checked\"");
+      fprintf (Gbl.F.Out," />");
      }
-
-   /***** Check box must be checked? *****/
-   CheckboxChecked = false;
-   if (UsrIsTheMsgSender)
-      CheckboxChecked = true;
    else
-      /* Check if user is in lists of selected users */
-      CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (UsrDat->EncryptedUsrCod);
-   if (CheckboxChecked)
-      fprintf (Gbl.F.Out," checked=\"checked\"");
-
-   fprintf (Gbl.F.Out," />");
+      Lay_ShowErrorAndExit ("Wrong role.");
   }
 
 /*****************************************************************************/
