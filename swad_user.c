@@ -199,7 +199,6 @@ static void Usr_PutIconToPrintGsts (void);
 static void Usr_PutIconToPrintStds (void);
 static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
-static void Usr_PutLinkToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
 static void Usr_PutLinkToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
@@ -7316,22 +7315,13 @@ void Usr_SeeGuests (void)
 	 Usr_ShowFormsToSelectUsrListType (ActLstGst);
 
          /***** Draw a class photo with guests *****/
-         switch (Gbl.Usrs.Me.ListType)
-           {
-            case Usr_LIST_AS_CLASS_PHOTO:
-	       Lay_WriteHeaderClassPhoto (false,true,
-					  (Gbl.Scope.Current == Sco_SCOPE_CTR ||
-					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-										 -1L,
-					  -1L,
-					  -1L);
-	       break;
-            case Usr_LIST_AS_LISTING:
-               Usr_PutLinkToShowGstsAllData ();
-               break;
-            default:
-               break;
-           }
+         if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
+	    Lay_WriteHeaderClassPhoto (false,true,
+				       (Gbl.Scope.Current == Sco_SCOPE_CTR ||
+					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
+									      -1L,
+				       -1L,
+				       -1L);
 
          /* Start form */
 	 Act_FormStart (ActSeeRecSevGst);
@@ -7834,18 +7824,6 @@ static void Usr_PutIconToShowGstsAllData (void)
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
 		          NULL);
-  }
-
-static void Usr_PutLinkToShowGstsAllData (void)
-  {
-   extern const char *Txt_Show_all_data;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLstGstAll,NULL,Usr_ShowGstsAllDataParams,
-			  "table64x64.gif",
-			  Txt_Show_all_data,Txt_Show_all_data,
-		          NULL);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Usr_PutIconToShowStdsAllData (void)

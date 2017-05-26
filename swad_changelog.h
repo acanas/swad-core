@@ -238,13 +238,14 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.225.2 (2017-05-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.225.3 (2017-05-26)"
 #define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.225.3: May 26, 2017	Removed link to show all data of guests. (220582 lines)
         Version 16.225.2: May 26, 2017	Fixed bug in lists of teachers. (220601 lines)
         Version 16.225.1: May 26, 2017	Fixed bug related with new role. (220580 lines)
         Version 16.225:   May 25, 2017	Changes and bug fixing related with new role. (220580 lines)
