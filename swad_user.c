@@ -200,7 +200,6 @@ static void Usr_PutIconToPrintStds (void);
 static void Usr_PutIconToPrintTchs (void);
 static void Usr_PutIconToShowGstsAllData (void);
 static void Usr_PutIconToShowStdsAllData (void);
-static void Usr_PutLinkToShowStdsAllData (void);
 static void Usr_PutIconToShowTchsAllData (void);
 static void Usr_ShowGstsAllDataParams (void);
 static void Usr_ShowStdsAllDataParams (void);
@@ -7466,27 +7465,18 @@ void Usr_SeeStudents (void)
 	 Usr_ShowFormsToSelectUsrListType (ActLstStd);
 
          /***** Draw a class photo with students of the course *****/
-         switch (Gbl.Usrs.Me.ListType)
-           {
-            case Usr_LIST_AS_CLASS_PHOTO:
-	       Lay_WriteHeaderClassPhoto (false,true,
-					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					   Gbl.Scope.Current == Sco_SCOPE_DEG ||
-					   Gbl.Scope.Current == Sco_SCOPE_CTR ||
-					   Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
-										 -1L,
-					  (Gbl.Scope.Current == Sco_SCOPE_CRS ||
-					   Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
-										 -1L,
-					   Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
-										 -1L);
-	       break;
-            case Usr_LIST_AS_LISTING:
-               Usr_PutLinkToShowStdsAllData ();
-               break;
-            default:
-               break;
-           }
+         if (Gbl.Usrs.Me.ListType == Usr_LIST_AS_CLASS_PHOTO)
+	    Lay_WriteHeaderClassPhoto (false,true,
+				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					Gbl.Scope.Current == Sco_SCOPE_DEG ||
+					Gbl.Scope.Current == Sco_SCOPE_CTR ||
+					Gbl.Scope.Current == Sco_SCOPE_INS) ? Gbl.CurrentIns.Ins.InsCod :
+									      -1L,
+				       (Gbl.Scope.Current == Sco_SCOPE_CRS ||
+					Gbl.Scope.Current == Sco_SCOPE_DEG) ? Gbl.CurrentDeg.Deg.DegCod :
+									      -1L,
+					Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
+									      -1L);
 
          /* Start form */
          if (ICanViewRecords)
@@ -7823,18 +7813,6 @@ static void Usr_PutIconToShowStdsAllData (void)
 			  "table64x64.gif",
 			  Txt_Show_all_data,NULL,
 		          NULL);
-  }
-
-static void Usr_PutLinkToShowStdsAllData (void)
-  {
-   extern const char *Txt_Show_all_data;
-
-   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
-   Lay_PutContextualLink (ActLstStdAll,NULL,Usr_ShowStdsAllDataParams,
-			  "table64x64.gif",
-			  Txt_Show_all_data,Txt_Show_all_data,
-		          NULL);
-   fprintf (Gbl.F.Out,"</div>");
   }
 
 static void Usr_PutIconToShowTchsAllData (void)
