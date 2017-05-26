@@ -6578,8 +6578,9 @@ void Usr_ListAllDataTchs (void)
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TCH);
 
-   /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TCH);
+   /***** Free memory for teachers lists *****/
+   Usr_FreeUsrsList (Rol_TCH);	// Teachers
+   Usr_FreeUsrsList (Rol_NET);	// Non-editing teachers
   }
 
 /*****************************************************************************/
@@ -7939,6 +7940,8 @@ void Usr_SeeStdClassPhotoPrn (void)
 
 void Usr_SeeTchClassPhotoPrn (void)
   {
+   unsigned NumUsrs;
+
    /***** Get and update type of list,
           number of columns in class photo
           and preference about view photos *****/
@@ -7955,9 +7958,13 @@ void Usr_SeeTchClassPhotoPrn (void)
    Sco_GetScope ("ScopeUsr");
 
    /***** Get list of teachers *****/
-   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
+   Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
+   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+                                                 1 << Rol_NET |
+                                                 1 << Rol_TCH);
 
-   if (Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs)
+   if (NumUsrs)
      {
       /***** Draw the teachers' class photo *****/
       Lay_WriteHeaderClassPhoto (true,true,
@@ -7972,16 +7979,22 @@ void Usr_SeeTchClassPhotoPrn (void)
 				  Gbl.Scope.Current == Sco_SCOPE_CRS  ? Gbl.CurrentCrs.Crs.CrsCod :
 					                                -1L);
       Lay_StartTableWide (0);
+
+      /* List teachers and non-editing teachers */
       Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
-                          Rol_TCH,false);
+			  Rol_TCH,false);
+      Usr_DrawClassPhoto (Usr_CLASS_PHOTO_PRN,
+			  Rol_NET,false);
+
       Lay_EndTable ();
      }
    else
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TCH);
 
-   /***** Free memory for teachers list *****/
-   Usr_FreeUsrsList (Rol_TCH);
+   /***** Free memory for teachers lists *****/
+   Usr_FreeUsrsList (Rol_TCH);	// Teachers
+   Usr_FreeUsrsList (Rol_NET);	// Non-editing teachers
   }
 
 /*****************************************************************************/
