@@ -2552,7 +2552,7 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActAccEnrNEdTch	*/{1640,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActAccEnrTch	*/{1459,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AcceptRegisterMeInCrs	,NULL},
    /* ActRemMe_Std	*/{1460,-1,TabUnk,ActLstStd		,0x3C8,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
-   /* ActRemMe_NEdTch	*/{1641,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
+   /* ActRemMe_NET	*/{1641,-1,TabUnk,ActLstTch		,0x3D0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
    /* ActRemMe_Tch	*/{1461,-1,TabUnk,ActLstTch		,0x3E0,    0,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_ReqRemMeFromCrs		,NULL},
 
    /* ActNewAdmIns	*/{1337,-1,TabUnk,ActLstOth		,0x200,0x200,0x200,0x200,0x200,0x200,0x200,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Enr_AddAdmToIns		,NULL},

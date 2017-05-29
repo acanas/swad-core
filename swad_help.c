@@ -102,6 +102,19 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
    extern const char *Txt_Log_in;
    extern const char *Txt_New_on_PLATFORM_Sign_up;
    extern const char *Txt_Create_account;
+   static const Act_Action_t ActionsRemoveMe[Rol_NUM_ROLES] =
+     {
+      ActUnk,		// Rol_UNK
+      ActUnk,		// Rol_GST
+      ActUnk,		// Rol_USR
+      ActRemMe_Std,	// Rol_STD
+      ActRemMe_NET,	// Rol_NET
+      ActRemMe_Tch,	// Rol_TCH
+      ActUnk,		// Rol_DEG_ADM
+      ActUnk,		// Rol_CTR_ADM
+      ActUnk,		// Rol_INS_ADM
+      ActUnk,		// Rol_SYS_ADM
+     };
 
    /***** Alert message *****/
    if (Gbl.Usrs.Me.Logged &&
@@ -127,14 +140,15 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 	    if (Gbl.Action.Act != ActLogIn &&
 		Gbl.Action.Act != ActLogInNew &&
                 Gbl.Action.Act != ActLogInLan)	// I am not just logged
-	      {
-	       /* Request my removing from this course */
-	       sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
-			Gbl.CurrentCrs.Crs.ShrtName);
-	       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
-						    ActReqMdfOneStd,
-						    "BT_REMOVE",Txt_Remove_me);
-	      }
+	       if (ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB] != ActUnk)
+		 {
+		  /* Request my removing from this course */
+		  sprintf (Gbl.Title,Txt_Remove_me_from_the_course_X,
+			   Gbl.CurrentCrs.Crs.ShrtName);
+		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
+						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB],
+						       "BT_REMOVE",Txt_Remove_me);
+		 }
 	   }
 	 else					// I do not belong to this course
 	   {
