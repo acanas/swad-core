@@ -643,14 +643,34 @@ static void Enr_ShowFormRegRemSeveralUsrs (Rol_Role_t Role)
    const char *Title;
 
    /***** Put contextual links *****/
-   if (Role == Rol_STD &&			// Users to admin: students
-       Gbl.CurrentCrs.Crs.CrsCod > 0 && 	// Course selected
-       Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// This course has students
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)	 	// Course selected
      {
       fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-      /* Put link to remove all the students in the current course */
-      Enr_PutLinkToRemAllStdsThisCrs ();
+      switch (Role)
+	{
+	 case Rol_STD:
+            /* Put link to go to admin student */
+            Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+
+            /* Put link to remove all the students in the current course */
+            if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// This course has students
+               Enr_PutLinkToRemAllStdsThisCrs ();
+	    break;
+	 case Rol_NET:
+            /* Put link to go to admin teacher */
+            Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	    break;
+	 case Rol_TCH:
+            /* Put link to go to admin teacher */
+            Enr_PutLinkToAdminOneUsr (ActReqMdfOneTch);
+	    break;
+	 default:
+	    NextAction = ActUnk;
+	    Title = NULL;
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+	}
 
       fprintf (Gbl.F.Out,"</div>");
      }
@@ -3020,6 +3040,7 @@ void Enr_PutLinkToAdminOneUsr (Act_Action_t NextAction)
 void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
   {
    extern const char *Txt_Administer_multiple_students;
+   extern const char *Txt_Administer_multiple_non_editing_teachers;
    extern const char *Txt_Administer_multiple_teachers;
    Act_Action_t NextAction;
    const char *TitleText;
@@ -3032,7 +3053,7 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 	 break;
       case Rol_NET:
 	 NextAction = ActReqEnrSevNET;
-	 TitleText = Txt_Administer_multiple_teachers;
+	 TitleText = Txt_Administer_multiple_non_editing_teachers;
 	 break;
       case Rol_TCH:
 	 NextAction = ActReqEnrSevTch;
@@ -3055,24 +3076,37 @@ void Enr_PutLinkToAdminSeveralUsrs (Rol_Role_t Role)
 
 void Enr_ReqRegRemOth (void)
   {
+   /***** Form to request user to be administered *****/
    Enr_ReqRegRemUsr (Rol_GST);
   }
 
 void Enr_ReqRegRemStd (void)
   {
+   /***** Put contextual links *****/
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
+
+   /* Put link to go to admin several students */
+   Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
+
+   fprintf (Gbl.F.Out,"</div>");
+
+   /***** Form to request user to be administered *****/
    Enr_ReqRegRemUsr (Rol_STD);
   }
 
 void Enr_ReqRegRemTch (void)
   {
+   /***** Form to request user to be administered *****/
    Enr_ReqRegRemUsr (Rol_TCH);
   }
 
 static void Enr_ReqRegRemUsr (Rol_Role_t Role)
   {
    if (Enr_ICanAdminOtherUsrs[Gbl.Usrs.Me.LoggedRole])
+      /***** Form to request the user's ID of another user *****/
       Enr_ReqAnotherUsrIDToRegisterRemove (Role);
    else
+      /***** Form to request if register/remove me *****/
       Enr_AskIfRegRemMe (Role);
   }
 

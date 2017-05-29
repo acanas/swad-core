@@ -7349,22 +7349,17 @@ void Usr_SeeStudents (void)
       case Rol_SYS_ADM:
          fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_STD)
-	    /* Put link to go to admin me */
-	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
-	 else
+	 /* Put link to go to admin student */
+	 Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+
+	 if (Gbl.Usrs.Me.LoggedRole != Rol_STD	&&	// Teacher or admin
+	     Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
 	   {
-	    /* Put link to go to admin one user */
-	    Enr_PutLinkToAdminOneUsr (ActReqMdfOneStd);
+	    /* Put link to go to admin several students */
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
 
-	    if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
-	      {
-	       /* Put link to go to admin several users */
-	       Enr_PutLinkToAdminSeveralUsrs (Rol_STD);
-
-	       /* Put link to edit record fields */
-	       Rec_PutLinkToEditRecordFields ();
-	      }
+	    /* Put link to edit record fields */
+	    Rec_PutLinkToEditRecordFields ();
 	   }
 
          fprintf (Gbl.F.Out,"</div>");
@@ -7525,6 +7520,7 @@ void Usr_SeeTeachers (void)
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
       case Rol_INS_ADM:
+      case Rol_SYS_ADM:
 	 fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
 	 /* Put link to go to admin one user */
@@ -7533,7 +7529,10 @@ void Usr_SeeTeachers (void)
 	 /* Put link to go to admin several users */
 	 if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
 	     Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am logged as admin
+	   {
+	    Enr_PutLinkToAdminSeveralUsrs (Rol_NET);
 	    Enr_PutLinkToAdminSeveralUsrs (Rol_TCH);
+	   }
 
 	 fprintf (Gbl.F.Out,"</div>");
 
