@@ -45,6 +45,7 @@
 #include "swad_notification.h"
 #include "swad_parameter.h"
 #include "swad_QR.h"
+#include "swad_role.h"
 #include "swad_RSS.h"
 #include "swad_tab.h"
 #include "swad_theme.h"
@@ -513,6 +514,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
+   extern const char *Txt_Register_students;
    struct Country Cty;
    struct Instit Ins;
    struct Centre Ctr;
@@ -539,6 +541,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    const char *ClassNormal;
    char ClassHighlight[64];
+   Rol_Role_t MyRoleInCrsDB;
 
    ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
@@ -744,6 +747,25 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		           Crs.FullName,
 		           Crs.FullName);
 		  Act_FormEnd ();
+
+		  /***** Put link to register students *****/
+		  MyRoleInCrsDB = Rol_GetRoleInCrs (Crs.CrsCod,
+		                                    Gbl.Usrs.Me.UsrDat.UsrCod);
+		  if (MyRoleInCrsDB == Rol_TCH)	// I am a teacher in this course
+		    {
+		     Crs.NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod);
+		     if (!Crs.NumUsrs[Rol_STD])	// No students in this course
+		       {
+			Act_FormStart (ActReqEnrSevStd);
+		        Crs_PutParamCrsCod (Crs.CrsCod);
+			fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
+					   "%s"
+					   "</button>",
+				 Txt_Register_students);
+			Act_FormEnd ();
+		       }
+		    }
+
 		  fprintf (Gbl.F.Out,"</li>");
 		 }
 
@@ -1991,10 +2013,10 @@ bool Crs_GetDataOfCourseByCod (struct Course *Crs)
    Crs->RequesterUsrCod = -1L;
    Crs->ShrtName[0] = '\0';
    Crs->FullName[0] = '\0';
-   Crs->NumUsrs[Rol_UNK    ] =
-   Crs->NumUsrs[Rol_STD    ] =
+   Crs->NumUsrs[Rol_UNK] =
+   Crs->NumUsrs[Rol_STD] =
    Crs->NumUsrs[Rol_NET] =
-   Crs->NumUsrs[Rol_TCH    ] = 0;
+   Crs->NumUsrs[Rol_TCH] = 0;
 
    /***** Check if course code is correct *****/
    if (Crs->CrsCod > 0)
@@ -2056,12 +2078,12 @@ static void Crs_GetDataOfCourseFromRow (struct Course *Crs,MYSQL_ROW row)
              Hie_MAX_BYTES_FULL_NAME);
 
    /***** Get number of users *****/
-   Crs->NumUsrs[Rol_STD    ] = Usr_GetNumUsrsInCrs (Rol_STD    ,Crs->CrsCod);
+   Crs->NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs->CrsCod);
    Crs->NumUsrs[Rol_NET] = Usr_GetNumUsrsInCrs (Rol_NET,Crs->CrsCod);
-   Crs->NumUsrs[Rol_TCH    ] = Usr_GetNumUsrsInCrs (Rol_TCH    ,Crs->CrsCod);
-   Crs->NumUsrs[Rol_UNK    ] = Crs->NumUsrs[Rol_STD    ] +
-	                       Crs->NumUsrs[Rol_NET] +
-	                       Crs->NumUsrs[Rol_TCH    ];
+   Crs->NumUsrs[Rol_TCH] = Usr_GetNumUsrsInCrs (Rol_TCH,Crs->CrsCod);
+   Crs->NumUsrs[Rol_UNK] = Crs->NumUsrs[Rol_STD] +
+	                   Crs->NumUsrs[Rol_NET] +
+	                   Crs->NumUsrs[Rol_TCH];
   }
 
 /*****************************************************************************/
@@ -3162,9 +3184,9 @@ static void Crs_WriteRowCrsData (unsigned NumCrs,MYSQL_ROW row,bool WriteColumnA
       Lay_ShowErrorAndExit ("Wrong code of course.");
 
    /***** Get number of teachers and students in this course *****/
-   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH    ,CrsCod) +
+   NumTchs = Usr_GetNumUsrsInCrs (Rol_TCH,CrsCod) +
 	     Usr_GetNumUsrsInCrs (Rol_NET,CrsCod);
-   NumStds = Usr_GetNumUsrsInCrs (Rol_STD    ,CrsCod);
+   NumStds = Usr_GetNumUsrsInCrs (Rol_STD,CrsCod);
    if (NumTchs + NumStds)
      {
       Style = "DAT_N";
