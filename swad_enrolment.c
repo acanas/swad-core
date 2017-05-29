@@ -164,7 +164,7 @@ void Enr_PutButtonToEnrolStudents (void)
        Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// I am logged as teacher
      {
       Act_FormStart (ActReqEnrSevStd);
-      Lay_PutConfirmButton (Txt_Register_students);
+      Lay_PutCreateButton (Txt_Register_students);
       Act_FormEnd ();
      }
   }
@@ -2931,6 +2931,11 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
      }
    else	// There are no requests
       Ale_ShowAlert (Ale_INFO,Txt_No_enrolment_requests);
+
+   /***** Put link to register students *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
+      if (!Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// No students in course
+          Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

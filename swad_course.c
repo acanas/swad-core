@@ -758,7 +758,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		       {
 			Act_FormStart (ActReqEnrSevStd);
 		        Crs_PutParamCrsCod (Crs.CrsCod);
-			fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CONFIRM\">"
+			fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
 					   "%s"
 					   "</button>",
 				 Txt_Register_students);

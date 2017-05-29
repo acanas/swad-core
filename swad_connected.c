@@ -467,7 +467,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
 
    /***** Start container *****/
    fprintf (Gbl.F.Out,"<div class=\"CONNECTED\""
-		      " style=\"width:390px; margin-top:6px;\">");
+		      " style=\"margin-top:6px;\">");
 
    /***** Number of connected users who belong to scope *****/
    Con_GetNumConnectedUsrsWithARoleBelongingCurrentLocation (Rol_UNK,&Usrs);
@@ -490,6 +490,11 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    if (Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM)
       Con_ShowConnectedUsrsWithARoleBelongingToCurrentLocationOnMainZone (Rol_GST);
    fprintf (Gbl.F.Out,"</table>");
+
+   /***** Put link to register students *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
+      if (!Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// No students in course
+          Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

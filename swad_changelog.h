@@ -229,20 +229,20 @@
 
 // TODO: Al listar administradores, debería estar marcado por defecto "Incluir fotos"
 
-// TODO: Add buttons to register students in courses without students
 // TODO: Behaviour of register non-editing teachers in groups should be similar to register students.
 
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.225.11 (2017-05-29)"
+#define Log_PLATFORM_VERSION	"SWAD 16.225.12 (2017-05-29)"
 #define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.225.12:May 29, 2017	Button to register students in connected and requests. (220587 lines)
         Version 16.225.11:May 29, 2017	Button to register students everytime an alert with no students in course is displayed. (220581 lines)
         Version 16.225.10:May 29, 2017	Buttons to register students in listing of teacher's courses. (220561 lines)
         Version 16.225.9: May 29, 2017	Fixed minor bug in user administration. (220540 lines)

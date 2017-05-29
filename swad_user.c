@@ -8162,8 +8162,7 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
 
    if (Role == Rol_STD &&			// No students found
-       Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-       Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// I am logged as teacher
+       Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
      {
       /***** Show alert *****/
       Ale_ShowAlert (Ale_WARNING,Txt_No_users_found[Role]);

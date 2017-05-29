@@ -172,7 +172,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,
-						 "BT_CONFIRM",Txt_Register_students);
+						 "BT_CREATE",Txt_Register_students);
 	   }
 
 	 if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
