@@ -689,9 +689,12 @@ static void Exa_ListExamAnnouncements (Exa_TypeViewExamAnnouncement_t TypeViewEx
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   /***** Button to create a new assignment *****/
+   /***** Button to create a new exam announcement *****/
    if (ICanEdit)
       Exa_PutButtonToCreateNewExamAnnouncement ();
+
+   /***** Put link to register students *****/
+   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

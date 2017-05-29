@@ -70,8 +70,8 @@ typedef enum
 /****************************** Public prototypes ****************************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrolStudents (void);
-void Enr_PutButtonToEnrolOneTeacher (void);
+void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void);
+void Enr_PutButtonInlineToRegisterStds (long CrsCod);
 
 void Enr_PutLinkToRequestSignUp (void);
 

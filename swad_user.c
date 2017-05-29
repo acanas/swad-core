@@ -5941,6 +5941,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
       Usr_UsrDataDestructor (&UsrDat);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
+      /***** Show warning indicating no guests found *****/
       Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
@@ -6193,6 +6194,7 @@ void Usr_ListAllDataGsts (void)
       Lay_EndTable ();
      }
    else        // Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
+      /***** Show warning indicating no guests found *****/
       Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
@@ -6396,6 +6398,7 @@ void Usr_ListAllDataStds (void)
          free ((void *) GroupNames);
      }
    else        // Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free memory for list of selected groups *****/
@@ -6522,7 +6525,7 @@ void Usr_ListAllDataTchs (void)
       /***** End of table *****/
       Lay_EndTable ();
      }
-   else        // Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs == 0
+   else        // NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TCH);
 
@@ -7308,7 +7311,8 @@ void Usr_SeeGuests (void)
          Act_FormEnd ();
 	}
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs == 0
+      /***** Show warning indicating no guests found *****/
       Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** End section with user list *****/
@@ -7482,7 +7486,7 @@ void Usr_SeeStudents (void)
            }
 	}
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
       /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
@@ -7644,14 +7648,9 @@ void Usr_SeeTeachers (void)
            }
 	}
      }
-   else
-     {
+   else	// NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TCH);
-
-      /***** Button to enrol a teacher *****/
-      Enr_PutButtonToEnrolOneTeacher ();
-     }
 
    /***** End section with user list *****/
    Lay_EndSection ();
@@ -7846,7 +7845,8 @@ void Usr_SeeGstClassPhotoPrn (void)
                           Rol_GST,false);
       Lay_EndTable ();
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_GST].NumUsrs
+      /***** Show warning indicating no guests found *****/
       Usr_ShowWarningNoUsersFound (Rol_GST);
 
    /***** Free memory for guests list *****/
@@ -7893,7 +7893,8 @@ void Usr_SeeStdClassPhotoPrn (void)
                           Rol_STD,false);
       Lay_EndTable ();
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** Free memory for students list *****/
@@ -7957,7 +7958,7 @@ void Usr_SeeTchClassPhotoPrn (void)
 
       Lay_EndTable ();
      }
-   else
+   else	// NumUsrs == 0
       /***** Show warning indicating no teachers found *****/
       Usr_ShowWarningNoUsersFound (Rol_TCH);
 
@@ -8160,16 +8161,23 @@ bool Usr_ChkIfUsrCodExists (long UsrCod)
 void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
   {
    extern const char *Txt_No_users_found[Rol_NUM_ROLES];
+   extern const char *Txt_Register_students;
+   extern const char *Txt_Register_teacher;
 
    if (Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
-     {
-      /***** Show alert *****/
-      Ale_ShowAlert (Ale_WARNING,Txt_No_users_found[Role]);
+      /***** Show alert and button to enrol students *****/
+      Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_STD],
+                              ActReqEnrSevStd,NULL,NULL,NULL,
+                              Lay_CREATE_BUTTON,Txt_Register_students);
 
-      /***** Button to enrol students *****/
-      Enr_PutButtonToEnrolStudents ();
-     }
+   else if (Role == Rol_TCH &&				// No teachers found
+            Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
+            Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
+      /***** Show alert and button to enrol students *****/
+      Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_TCH],
+                              ActReqMdfOneTch,NULL,NULL,NULL,
+                              Lay_CREATE_BUTTON,Txt_Register_teacher);
    else
       /***** Show alert *****/
       Ale_ShowAlert (Ale_INFO,Txt_No_users_found[Role]);

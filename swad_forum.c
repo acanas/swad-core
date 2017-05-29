@@ -2181,6 +2181,11 @@ static void For_WriteLinkToForum (struct Forum *Forum,
    /***** End row *****/
    fprintf (Gbl.F.Out,"</a>");
    Act_FormEnd ();
+
+   /***** Put link to register students *****/
+   if (Forum->Type == For_FORUM_COURSE_USRS)
+      Enr_PutButtonInlineToRegisterStds (Forum->Location);
+
    fprintf (Gbl.F.Out,"</li>");
   }
 

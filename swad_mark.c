@@ -635,10 +635,7 @@ void Mrk_ShowMyMarks (void)
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
-           {
             UsrIsOK = false;
-            Usr_ShowWarningNoUsersFound (Rol_STD);
-           }
         }
       else					// Course zone
         {
@@ -648,10 +645,7 @@ void Mrk_ShowMyMarks (void)
             UsrDat = &Gbl.Usrs.Other.UsrDat;
            }
          else
-           {
             UsrIsOK = false;
-            Usr_ShowWarningNoUsersFound (Rol_STD);
-           }
         }
      }
 
@@ -706,6 +700,9 @@ void Mrk_ShowMyMarks (void)
 
       unlink (FileNameUsrMarks);	// File with marks is no longer necessary
      }
+   else
+      /***** Show warning indicating no students found *****/
+      Usr_ShowWarningNoUsersFound (Rol_STD);
   }
 
 /*****************************************************************************/

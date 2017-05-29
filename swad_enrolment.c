@@ -152,39 +152,33 @@ static void Enr_EffectivelyRemAdm (struct UsrData *UsrDat,Sco_Scope_t Scope,
                                    long Cod,const char *InsCtrDegName);
 
 /*****************************************************************************/
-/***************** Show form with button to enrol students *******************/
+/************ Put button to register students *************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrolStudents (void)
+void Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs (void)
   {
-   extern const char *Txt_Register_students;
-
-   /***** Form to enrol several students *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-       Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// I am logged as teacher
-     {
-      Act_FormStart (ActReqEnrSevStd);
-      Lay_PutCreateButton (Txt_Register_students);
-      Act_FormEnd ();
-     }
+   /***** Put link to register students *****/
+   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
+      if (!Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// No students in course
+          Usr_ShowWarningNoUsersFound (Rol_STD);
   }
 
 /*****************************************************************************/
-/**************** Show form with button to enrol teachers ********************/
+/************ Put button to register students *************/
 /*****************************************************************************/
 
-void Enr_PutButtonToEnrolOneTeacher (void)
+void Enr_PutButtonInlineToRegisterStds (long CrsCod)
   {
-   extern const char *Txt_Register_teacher;
+   extern const char *Txt_Register_students;
 
-   /***** Form to enrol several students *****/
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
-       Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
-     {
-      Act_FormStart (ActReqMdfOneTch);
-      Lay_PutConfirmButton (Txt_Register_teacher);
-      Act_FormEnd ();
-     }
+   if (Rol_GetRoleInCrs (CrsCod,Gbl.Usrs.Me.UsrDat.UsrCod) ==  Rol_TCH) // I am a teacher in course
+      if (!Usr_GetNumUsrsInCrs (Rol_STD,CrsCod))			// No students in course
+	{
+	 Act_FormStart (ActReqEnrSevStd);
+	 Crs_PutParamCrsCod (CrsCod);
+	 Lay_PutCreateButtonInline (Txt_Register_students);
+	 Act_FormEnd ();
+	}
   }
 
 /*****************************************************************************/
@@ -1838,7 +1832,7 @@ void Enr_AskRemAllStdsThisCrs (void)
    Lay_StartRoundFrame (NULL,Txt_Remove_all_students,NULL,
                         Hlp_USERS_Administration_remove_all_students);
 
-   if ((NumStds = Usr_GetNumUsrsInCrs (Rol_STD,Gbl.CurrentCrs.Crs.CrsCod)))
+   if (Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])
      {
       /***** Show question and button to remove students *****/
       /* Start alert */
@@ -1856,7 +1850,7 @@ void Enr_AskRemAllStdsThisCrs (void)
       /* End alert */
       Ale_ShowAlertAndButton2 (ActUnk,NULL,NULL,NULL,Lay_NO_BUTTON,NULL);
      }
-   else
+   else	// Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD] == 0
       /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
@@ -1881,7 +1875,7 @@ void Enr_RemAllStdsThisCrs (void)
 		  NumStdsInCrs,Gbl.CurrentCrs.Crs.FullName);
 	 Ale_ShowAlert (Ale_SUCCESS,Gbl.Alert.Txt);
 	}
-      else
+      else	// NumStdsInCrs == 0
 	 /***** Show warning indicating no students found *****/
 	 Usr_ShowWarningNoUsersFound (Rol_STD);
      }
@@ -2933,9 +2927,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
       Ale_ShowAlert (Ale_INFO,Txt_No_enrolment_requests);
 
    /***** Put link to register students *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// No students in course
-          Usr_ShowWarningNoUsersFound (Rol_STD);
+   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End frame *****/
    Lay_EndRoundFrame ();

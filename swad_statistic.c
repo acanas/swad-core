@@ -489,6 +489,9 @@ void Sta_AskShowCrsHits (void)
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
 
+	 /***** Put link to register students *****/
+         Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
 	 /***** Start form *****/
          Act_FormStartAnchor (ActSeeAccCrs,Sta_STAT_RESULTS_SECTION_ID);
 

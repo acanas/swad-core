@@ -7025,7 +7025,8 @@ void Tst_SelUsrsToSeeUsrsTestResults (void)
          Act_FormEnd ();
         }
      }
-   else
+   else	// NumTotalUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/

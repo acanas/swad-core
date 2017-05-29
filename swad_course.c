@@ -514,7 +514,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    extern const char *Txt_My_courses;
    extern const char *Txt_System;
    extern const char *Txt_Go_to_X;
-   extern const char *Txt_Register_students;
    struct Country Cty;
    struct Instit Ins;
    struct Centre Ctr;
@@ -541,7 +540,6 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
    char ActTxt[Act_MAX_BYTES_ACTION_TXT + 1];
    const char *ClassNormal;
    char ClassHighlight[64];
-   Rol_Role_t MyRoleInCrsDB;
 
    ClassNormal = The_ClassForm[Gbl.Prefs.Theme];
    sprintf (ClassHighlight,"%s LIGHT_BLUE",The_ClassFormDark[Gbl.Prefs.Theme]);
@@ -749,22 +747,7 @@ static void Crs_WriteListMyCoursesToSelectOne (void)
 		  Act_FormEnd ();
 
 		  /***** Put link to register students *****/
-		  MyRoleInCrsDB = Rol_GetRoleInCrs (Crs.CrsCod,
-		                                    Gbl.Usrs.Me.UsrDat.UsrCod);
-		  if (MyRoleInCrsDB == Rol_TCH)	// I am a teacher in this course
-		    {
-		     Crs.NumUsrs[Rol_STD] = Usr_GetNumUsrsInCrs (Rol_STD,Crs.CrsCod);
-		     if (!Crs.NumUsrs[Rol_STD])	// No students in this course
-		       {
-			Act_FormStart (ActReqEnrSevStd);
-		        Crs_PutParamCrsCod (Crs.CrsCod);
-			fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE BT_CREATE\">"
-					   "%s"
-					   "</button>",
-				 Txt_Register_students);
-			Act_FormEnd ();
-		       }
-		    }
+		  Enr_PutButtonInlineToRegisterStds (Crs.CrsCod);
 
 		  fprintf (Gbl.F.Out,"</li>");
 		 }

@@ -978,7 +978,8 @@ void Mai_ListEmails (void)
                             "</div>");
         }
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End section with user list *****/

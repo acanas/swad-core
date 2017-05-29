@@ -247,6 +247,9 @@ static void Msg_PutFormMsgUsrs (char Content[Cns_MAX_BYTES_LONG_TEXT + 1])
 	    /***** Form to select type of list used for select several users *****/
 	    Usr_ShowFormsToSelectUsrListType (ActReqMsgUsr);
 
+	    /***** Put link to register students *****/
+	    Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
 	    /***** Check if it's a big list *****/
 	    ShowUsrsInCrs = Usr_GetIfShowBigList (NumUsrsInCrs,"CopyMessageToHiddenFields()");
 

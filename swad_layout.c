@@ -1363,6 +1363,26 @@ void Lay_PutButton (Lay_Button_t Button,const char *TxtButton)
           }
   }
 
+void Lay_PutButtonInline (Lay_Button_t Button,const char *TxtButton)
+  {
+   if (TxtButton)
+      if (TxtButton[0])
+	 switch (Button)
+           {
+	    case Lay_NO_BUTTON:
+	       break;
+	    case Lay_CREATE_BUTTON:
+	       Lay_PutCreateButtonInline (TxtButton);
+	       break;
+	    case Lay_CONFIRM_BUTTON:
+	       Lay_PutConfirmButtonInline (TxtButton);
+	       break;
+	    case Lay_REMOVE_BUTTON:
+ 	       Lay_PutRemoveButtonInline (TxtButton);
+	       break;
+          }
+  }
+
 void Lay_PutCreateButton (const char *TxtButton)
   {
    fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">"

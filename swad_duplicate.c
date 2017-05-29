@@ -223,7 +223,7 @@ void Dup_ListDuplicateUsrs (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else	// There are no users
+   else	// There are no duplicated users
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
@@ -281,7 +281,7 @@ static void Dup_ListSimilarUsrs (void)
 	       Gbl.Usrs.Other.UsrDat.UsrCod);
    NumUsrs = (unsigned) DB_QuerySELECT (Query,&mysql_res,"can not get similar users");
 
-   /***** List possible duplicated users *****/
+   /***** List possible similar users *****/
    if (NumUsrs)
      {
       /***** Initialize field names *****/
@@ -364,7 +364,7 @@ static void Dup_ListSimilarUsrs (void)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else	// There are no users
+   else	// There are no similar users
       /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 

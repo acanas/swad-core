@@ -61,7 +61,7 @@ extern struct Globals Gbl;
 
 static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Act_Action_t Action,
-                                                 const char *ClassButton,
+                                                 Lay_Button_t Button,
                                                  const char *TxtButton);
 
 /*****************************************************************************/
@@ -147,7 +147,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 			   Gbl.CurrentCrs.Crs.ShrtName);
 		  Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						       ActionsRemoveMe[Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB],
-						       "BT_REMOVE",Txt_Remove_me);
+						       Lay_REMOVE_BUTTON,Txt_Remove_me);
 		 }
 	   }
 	 else					// I do not belong to this course
@@ -157,7 +157,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqSignUp,
-						 "BT_CREATE",Txt_Sign_up);
+						 Lay_CREATE_BUTTON,Txt_Sign_up);
 	   }
 	}
 
@@ -172,14 +172,14 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		     Gbl.CurrentCrs.Crs.ShrtName);
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 						 ActReqEnrSevStd,
-						 "BT_CREATE",Txt_Register_students);
+						 Lay_CREATE_BUTTON,Txt_Register_students);
 	   }
 
 	 if (Gbl.Action.Act != ActMyCrs)	// I am not seeing the action to list my courses
 	    /* Request list my courses */
 	    Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Go_to_one_of_my_courses,
 						 ActMyCrs,
-						 "BT_CONFIRM",Txt_My_courses);
+						 Lay_CONFIRM_BUTTON,Txt_My_courses);
 	}
 
       if (Gbl.CurrentDeg.Deg.DegCod > 0)	// Degree selected
@@ -190,7 +190,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Gbl.CurrentDeg.Deg.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCrs,
-				              "BT_CONFIRM",Txt_Courses);
+				              Lay_CONFIRM_BUTTON,Txt_Courses);
 	}
       else if (Gbl.CurrentCtr.Ctr.CtrCod > 0)	// Centre selected
 	{
@@ -200,7 +200,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Gbl.CurrentCtr.Ctr.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeDeg,
-				              "BT_CONFIRM",Txt_Degrees);
+				              Lay_CONFIRM_BUTTON,Txt_Degrees);
 	}
       else if (Gbl.CurrentIns.Ins.InsCod > 0)	// Institution selected
 	{
@@ -210,7 +210,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Gbl.CurrentIns.Ins.ShrtName);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeCtr,
-				              "BT_CONFIRM",Txt_Centres);
+				              Lay_CONFIRM_BUTTON,Txt_Centres);
 	}
       else if (Gbl.CurrentCty.Cty.CtyCod > 0)	// Country selected
 	{
@@ -220,33 +220,33 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 		  Gbl.CurrentCty.Cty.Name[Gbl.Prefs.Language]);
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 				              ActSeeIns,
-				              "BT_CONFIRM",Txt_Institutions);
+				              Lay_CONFIRM_BUTTON,Txt_Institutions);
 	}
       else
 	 /* Select a country */
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.CurrentCty.Cty.CtyCod > 0 ? Txt_Select_another_country :
 						                              Txt_Select_one_country,
 				              ActSeeCty,
-				              "BT_CONFIRM",Txt_Countries);
+				              Lay_CONFIRM_BUTTON,Txt_Countries);
 
       if (!Gbl.Usrs.Me.MyPhotoExists)		// I have no photo
 	 Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Upload_my_picture,
 				              ActReqMyPho,
-				              "BT_CREATE",Txt_Upload_photo);
+				              Lay_CREATE_BUTTON,Txt_Upload_photo);
      }
    else					// I am not logged
      {
       /* Log in */
       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Txt_Log_in,
 					   ActFrmLogIn,
-					   "BT_CONFIRM",Txt_Log_in);
+					   Lay_CONFIRM_BUTTON,Txt_Log_in);
 
       /* Sign up */
       sprintf (Gbl.Title,Txt_New_on_PLATFORM_Sign_up,
                Cfg_PLATFORM_SHORT_NAME);
       Hlp_ShowRowHelpWhatWouldYouLikeToDo (Gbl.Title,
 					   ActFrmMyAcc,
-					   "BT_CREATE",Txt_Create_account);
+					   Lay_CREATE_BUTTON,Txt_Create_account);
      }
 
    /* End table */
@@ -259,7 +259,7 @@ void Hlp_ShowHelpWhatWouldYouLikeToDo (void)
 
 static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
                                                  Act_Action_t Action,
-                                                 const char *ClassButton,
+                                                 Lay_Button_t Button,
                                                  const char *TxtButton)
   {
    /***** Description *****/
@@ -272,10 +272,7 @@ static void Hlp_ShowRowHelpWhatWouldYouLikeToDo (const char *Description,
    /***** Button *****/
    fprintf (Gbl.F.Out,"<td class=\"LEFT_MIDDLE\">");
    Act_FormStart (Action);
-   fprintf (Gbl.F.Out,"<button type=\"submit\" class=\"BT_SUBMIT_INLINE %s\">"
-		      "%s"
-		      "</button>",
-	    ClassButton,TxtButton);
+   Lay_PutButtonInline (Button,TxtButton);
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</td>"
 		      "</tr>");

@@ -492,9 +492,7 @@ static void Con_ShowConnectedUsrsBelongingToLocation (void)
    fprintf (Gbl.F.Out,"</table>");
 
    /***** Put link to register students *****/
-   if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
-      if (!Gbl.CurrentCrs.Crs.NumUsrs[Rol_STD])	// No students in course
-          Usr_ShowWarningNoUsersFound (Rol_STD);
+   Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
 
    /***** End container *****/
    fprintf (Gbl.F.Out,"</div>");

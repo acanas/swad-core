@@ -85,6 +85,7 @@ void Lay_PutIconBRemovalNotAllowed (void);
 void Lay_PutIconRemove (void);
 
 void Lay_PutButton (Lay_Button_t Button,const char *TxtButton);
+void Lay_PutButtonInline (Lay_Button_t Button,const char *TxtButton);
 void Lay_PutCreateButton (const char *TxtButton);
 void Lay_PutCreateButtonInline (const char *TxtButton);
 void Lay_PutConfirmButton (const char *TxtButton);

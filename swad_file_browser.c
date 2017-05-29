@@ -3132,6 +3132,9 @@ void Brw_AskEditWorksCrs (void)
 	 /* Form to select type of list used for select several users */
 	 Usr_ShowFormsToSelectUsrListType (ActReqAsgWrkCrs);
 
+	 /***** Put link to register students *****/
+	 Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
          /* Start form */
          Act_FormStart (ActAdmAsgWrkCrs);
          Grp_PutParamsCodGrps ();
@@ -3152,7 +3155,8 @@ void Brw_AskEditWorksCrs (void)
          Act_FormEnd ();
         }
      }
-   else
+   else	// NumTotalUsrs == 0
+      /***** Show warning indicating no users found *****/
       Usr_ShowWarningNoUsersFound (Rol_UNK);
 
    /***** End section with user list *****/

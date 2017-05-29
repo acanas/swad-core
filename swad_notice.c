@@ -460,6 +460,9 @@ void Not_ShowNotices (Not_Listing_t TypeNoticesListing)
 	    if (Not_CheckIfICanEditNotices ())
 	       Not_PutButtonToAddNewNotice ();
 
+	    /***** Put link to register students *****/
+            Enr_CheckStdsAndPutButtonToRegisterStdsInCurrentCrs ();
+
 	    /***** End frame *****/
 	    Lay_EndRoundFrame ();
 	    break;

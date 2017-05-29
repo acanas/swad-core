@@ -1994,7 +1994,8 @@ static void Att_ListAttStudents (struct AttendanceEvent *Att)
       /***** Free memory used for user's data *****/
       Usr_UsrDataDestructor (&UsrDat);
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End section with user list *****/
@@ -2699,7 +2700,8 @@ void Usr_ReqListStdsAttendanceCrs (void)
 	 Usr_FreeListsSelectedUsrsCods ();
 	}
      }
-   else
+   else	// Gbl.Usrs.LstUsrs[Rol_STD].NumUsrs == 0
+      /***** Show warning indicating no students found *****/
       Usr_ShowWarningNoUsersFound (Rol_STD);
 
    /***** End section with user list *****/
