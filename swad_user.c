@@ -5233,13 +5233,13 @@ void Usr_GetListsSelectedUsrsCods (void)
    if (Gbl.Session.IsOpen)	// If the session is open, get parameter from DB
      {
       Ses_GetHiddenParFromDB (Gbl.Action.Act,Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
-                              Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+			      Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
       Str_ChangeFormat (Str_FROM_FORM,Str_TO_TEXT,Gbl.Usrs.Select[Rol_UNK],
-                        Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
+			Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS,true);
      }
    else
       Par_GetParMultiToText (Usr_ParamUsrCod[Rol_UNK],Gbl.Usrs.Select[Rol_UNK],
-                             Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
+			     Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS);
 
    /***** Get list of selected users for each possible role *****/
    for (Role = Rol_TCH;		// From the highest possible role of selected users...

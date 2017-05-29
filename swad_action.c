@@ -2874,8 +2874,8 @@ struct Act_Actions Act_Actions[Act_NUM_ACTIONS] =
    /* ActPrnPhoDeg	*/{ 448,-1,TabUnk,ActSeePhoDeg		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Pho_PrintPhotoDegree  		,NULL},
    /* ActCalPhoDeg	*/{ 444,-1,TabUnk,ActSeePhoDeg		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Pho_CalcPhotoDegree		,NULL},
    /* ActSeeAccGbl	*/{  79,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeGblAccesses		,NULL},
-   /* ActReqAccCrs	*/{ 594,-1,TabUnk,ActReqAccGbl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
-   /* ActSeeAccCrs	*/{ 119,-1,TabUnk,ActReqAccGbl		,0x220,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeCrsAccesses		,NULL},
+   /* ActReqAccCrs	*/{ 594,-1,TabUnk,ActReqAccGbl		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,Sta_SetIniEndDates		,Sta_AskShowCrsHits		,NULL},
+   /* ActSeeAccCrs	*/{ 119,-1,TabUnk,ActReqAccGbl		,0x230,0x200,    0,    0,    0,    0,    0,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Sta_SeeCrsAccesses		,NULL},
    /* ActSeeAllStaCrs	*/{ 768,-1,TabUnk,ActReqAccGbl		,0x3F8,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,0x3C7,Act_CONT_NORM,Act_BLNK_WINDOW,NULL				,Ind_ShowIndicatorsCourses	,NULL},
 
    /* ActSeeMyUsgRep	*/{1582,-1,TabUnk,ActReqMyUsgRep	,0x3F8,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,0x3C6,Act_CONT_NORM,Act_THIS_WINDOW,NULL				,Rep_ShowMyUsageReport		,NULL},

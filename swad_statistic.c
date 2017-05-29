@@ -95,7 +95,6 @@ const unsigned Sta_CellPadding[Sta_NUM_CLICKS_GROUPED_BY] =
    1,	// Sta_CLICKS_GBL_PER_COURSE
   };
 
-#define Sta_STAT_FORM_SECTION_ID	"stat_form"
 #define Sta_STAT_RESULTS_SECTION_ID	"stat_results"
 
 /*****************************************************************************/
@@ -487,9 +486,6 @@ void Sta_AskShowCrsHits (void)
      {
       if (Usr_GetIfShowBigList (NumTotalUsrs,NULL))
         {
-         /***** Get lists of selected users *****/
-         Usr_GetListsSelectedUsrsCods ();
-
 	 /***** Form to select type of list used for select several users *****/
 	 Usr_ShowFormsToSelectUsrListType (ActReqAccCrs);
 
@@ -603,9 +599,6 @@ void Sta_AskShowCrsHits (void)
 
          /***** End form *****/
          Act_FormEnd ();
-
-         /* Free memory used by list of selected users' codes */
-         Usr_FreeListsSelectedUsrsCods ();
         }
      }
    else	// No teachers nor students found
@@ -650,13 +643,20 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"<div class=\"CONTEXT_MENU\">");
 
    /* Put form to go to test edition and configuration */
-   if (Gbl.CurrentCrs.Crs.CrsCod > 0 &&			// Course selected
-       (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
-        Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM))
-      Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
-			     "stats64x64.gif",
-			     Txt_Visits_to_course,Txt_Visits_to_course,
-		             NULL);
+   if (Gbl.CurrentCrs.Crs.CrsCod > 0)		// Course selected
+      switch (Gbl.Usrs.Me.LoggedRole)
+        {
+	 case Rol_NET:
+	 case Rol_TCH:
+	 case Rol_SYS_ADM:
+	    Lay_PutContextualLink (ActReqAccCrs,NULL,NULL,
+				   "stats64x64.gif",
+				   Txt_Visits_to_course,Txt_Visits_to_course,
+				   NULL);
+	    break;
+	 default:
+	    break;
+        }
 
    /* Link to show last clicks in real time */
    Con_PutLinkToLastClicks ();
@@ -664,10 +664,9 @@ void Sta_AskShowGblHits (void)
    fprintf (Gbl.F.Out,"</div>");
 
    /***** Start form *****/
-   Act_FormStartAnchor (ActSeeAccGbl,Sta_STAT_FORM_SECTION_ID);
+   Act_FormStartAnchor (ActSeeAccGbl,Sta_STAT_RESULTS_SECTION_ID);
 
    /***** Start frame *****/
-   Lay_StartSection (Sta_STAT_FORM_SECTION_ID);
    Lay_StartRoundFrameTable (NULL,Txt_Statistics_of_all_visits,NULL,
                              Hlp_STATS_Visits_global_visits,2);
 
@@ -756,7 +755,6 @@ void Sta_AskShowGblHits (void)
 
    /***** End frame with button *****/
    Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Show_hits);
-   Lay_EndSection ();
 
    /***** End form *****/
    Act_FormEnd ();
@@ -890,9 +888,6 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    unsigned NumDays;
    bool ICanQueryWholeRange;
 
-   /***** Initialize data structure of the user *****/
-   Usr_UsrDataConstructor (&UsrDat);
-
    /***** Get initial and ending dates *****/
    Dat_GetIniEndDatesFromForm ();
 
@@ -960,14 +955,17 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	 /***** Show form again *****/
 	 Sta_AskShowGblHits ();
 
-	 /***** The following types of query will never give a valid result *****/
+	 /***** Start results section *****/
+	 Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
+
+	 /***** Check selection *****/
 	 if ((Gbl.Stat.Role == Sta_ROLE_ALL_USRS ||
 	      Gbl.Stat.Role == Sta_ROLE_UNKNOWN_USRS) &&
 	     (Gbl.Stat.CountType == Sta_DISTINCT_USRS ||
-	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))
+	      Gbl.Stat.CountType == Sta_CLICKS_PER_USR))	// These types of query will never give a valid result
 	   {
+	    /* Write warning message and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_There_is_no_knowing_how_many_users_not_logged_have_accessed);
-	    Usr_UsrDataDestructor (&UsrDat);
 	    return;
 	   }
 	 break;
@@ -993,16 +991,21 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	                                                     Sta_DEF_ROWS_PER_PAGE);
 	   }
 
-	 /***** Show form again *****/
-	 Sta_AskShowCrsHits ();
-
 	 /****** Get lists of selected users ******/
 	 Usr_GetListsSelectedUsrsCods ();
 
-	 /* Check the number of users whose clicks will be shown */
-	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// If there are no users selected...
-	   {					// ...write warning message and show the form again
+	 /***** Show the form again *****/
+	 Sta_AskShowCrsHits ();
+
+	 /***** Start results section *****/
+	 Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
+
+	 /***** Check selection *****/
+	 if (!Usr_CountNumUsrsInListOfSelectedUsrs ())	// Error: there are no users selected
+	   {
+	    /* Write warning message, clean and abort */
 	    Ale_ShowAlert (Ale_WARNING,Txt_You_must_select_one_ore_more_users);
+            Usr_FreeListsSelectedUsrsCods ();
 	    return;
 	   }
 	 break;
@@ -1312,6 +1315,10 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
                   LogTable,Gbl.CurrentCrs.Crs.CrsCod);
 	 Str_Concat (Query,QueryAux,
 	             Sta_MAX_BYTES_QUERY_ACCESS);
+
+	 /***** Initialize data structure of the user *****/
+         Usr_UsrDataConstructor (&UsrDat);
+
 	 LengthQuery = strlen (Query);
 	 NumUsr = 0;
 	 Ptr = Gbl.Usrs.Select[Rol_UNK];
@@ -1336,6 +1343,9 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
 	   }
 	 Str_Concat (Query,")",
 	             Sta_MAX_BYTES_QUERY_ACCESS);
+
+	 /***** Free memory used by the data of the user *****/
+         Usr_UsrDataDestructor (&UsrDat);
 	 break;
      }
 
@@ -1448,8 +1458,6 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    else
      {
       /***** Put the table with the clicks *****/
-      /* Write start of table frame */
-      Lay_StartSection (Sta_STAT_RESULTS_SECTION_ID);
       if (Gbl.Stat.ClicksGroupedBy == Sta_CLICKS_CRS_DETAILED_LIST)
 	 Lay_StartRoundFrame ("95%",Txt_List_of_detailed_clicks,
 	                      NULL,NULL);
@@ -1537,9 +1545,6 @@ static void Sta_ShowHits (Sta_GlobalOrCourseAccesses_t GlobalOrCourse)
    /***** Free memory used by list of selected users' codes *****/
    if (Gbl.Action.Act == ActSeeAccCrs)
       Usr_FreeListsSelectedUsrsCods ();
-
-   /***** Free memory used by the data of the user *****/
-   Usr_UsrDataDestructor (&UsrDat);
 
    /***** Write time zone used in the calculation of these statistics *****/
    switch (Gbl.Stat.ClicksGroupedBy)
@@ -2153,7 +2158,7 @@ static void Sta_ShowDistrAccessesPerDaysAndHour (unsigned long NumRows,MYSQL_RES
    fprintf (Gbl.F.Out,"<tr>"
 	              "<td colspan=\"26\" class=\"CENTER_MIDDLE\">");
 
-   Act_FormStartAnchor (Gbl.Action.Act,Sta_STAT_FORM_SECTION_ID);
+   Act_FormStartAnchor (Gbl.Action.Act,Sta_STAT_RESULTS_SECTION_ID);
    Sta_WriteParamsDatesSeeAccesses ();
    Par_PutHiddenParamUnsigned ("GroupedBy",(unsigned) Gbl.Stat.ClicksGroupedBy);
    Par_PutHiddenParamUnsigned ("CountType",(unsigned) Gbl.Stat.CountType);

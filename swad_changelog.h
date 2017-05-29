@@ -229,19 +229,19 @@
 
 // TODO: Al listar administradores, debería estar marcado por defecto "Incluir fotos"
 
-// TODO: Statistics of hits in course accessible by non-editing teachers.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.225.7 (2017-05-26)"
+#define Log_PLATFORM_VERSION	"SWAD 16.225.8 (2017-05-29)"
 #define CSS_FILE		"swad16.222.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.225.8: May 29, 2017	Statistics of hits in course accessible by non-editing teachers.
+					Changes in error handlong in stats of hits. (220514 lines)
         Version 16.225.7: May 26, 2017	Fix bug in order of users when listing record cards of teachers.
 					Code refactoring in checkboxes to select users. (220509 lines)
         Version 16.225.6: May 26, 2017	Fixed bug printing classphoto of teachers. (220553 lines)
