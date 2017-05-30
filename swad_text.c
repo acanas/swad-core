@@ -17852,23 +17852,23 @@ const char *Txt_Max_levels =
 
 const char *Txt_Max_BR_students =
 #if   L==1
-	"M&agrave;xim<br />d'estud.";
+	"M&agrave;xim<br />d'est.";
 #elif L==2
 	"Max.<br />Stud.";
 #elif L==3
 	"Max.<br />stud.";
 #elif L==4
-	"M&aacute;x.<br />estud.";
+	"M&aacute;x.<br />estu.";
 #elif L==5
 	"Max.<br />&eacute;tud.";
 #elif L==6
-	"M&aacute;x.<br />estud.";	// Okoteve traducción
+	"M&aacute;x.<br />estu.";	// Okoteve traducción
 #elif L==7
 	"Max.<br />stud.";
 #elif L==8
 	"Max.<br />stud.";
 #elif L==9
-	"M&aacute;x.<br />estud.";
+	"M&aacute;x.<br />estu.";
 #endif
 
 const char *Txt_maximum =
@@ -34589,7 +34589,212 @@ const char *Txt_ROLES_PLURAL_Abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9
 	"Superutilizadores"
 #endif
-	 } };
+	 }
+   };
+
+const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES] =
+   {
+#if   L==1	// Rol_UNK
+	"Desc."
+#elif L==2
+	"Unbe."
+#elif L==3
+	"Unkn."
+#elif L==4
+	"Desc."
+#elif L==5
+	"Inco."
+#elif L==6
+	"Desc."	// Okoteve traducción
+#elif L==7
+	"Scon."
+#elif L==8
+	"Niez."
+#elif L==9
+	"Desc."
+#endif
+	,
+#if   L==1	// Rol_GST
+	"Conv."
+#elif L==2
+	"Eing."
+#elif L==3
+	"Gues."
+#elif L==4
+	"Invi."
+#elif L==5
+	"Invi."
+#elif L==6
+	"Invi."	// Okoteve traducción
+#elif L==7
+	"Ospi."
+#elif L==8
+	"Zapr."
+#elif L==9
+	"Conv."
+#endif
+	,
+#if   L==1	// Rol_USR
+	 "Usua."
+#elif L==2
+	 "Benu."
+#elif L==3
+	 "Users"
+#elif L==4
+	 "Usua."
+#elif L==5
+	 "Util."
+#elif L==6
+	 "Puru."
+#elif L==7
+	 "Uten."
+#elif L==8
+	 "U&zdot;yt."
+#elif L==9
+	 "Util."
+#endif
+	,
+#if   L==1	// Rol_STD
+	"Estu."
+#elif L==2
+	"Stud."
+#elif L==3
+	"Stud."
+#elif L==4
+	"Estu."
+#elif L==5
+	"&Eacute;tu."
+#elif L==6
+	"Temi."
+#elif L==7
+	"Stud."
+#elif L==8
+	"Stud."
+#elif L==9
+	"Estu."
+#endif
+	,
+#if   L==1	// Rol_NET
+	"Prof.n.e."
+#elif L==2
+	"N.b.Lehr."
+#elif L==3
+	"N.e.teac."
+#elif L==4
+	"Prof.n.e."
+#elif L==5
+	"Ense.n.&eacute;."
+#elif L==6
+	"Mbo'e.n.e."	// Okoteve traducción
+#elif L==7
+	"Prof.n.e."
+#elif L==8
+	"Nauc.n.e."
+#elif L==9
+	"Prof.n.e."
+#endif
+	,
+#if   L==1	// Rol_TCH
+	"Prof."
+#elif L==2
+	"Lehr."
+#elif L==3
+	"Teac."
+#elif L==4
+	"Prof."
+#elif L==5
+	"Ense."
+#elif L==6
+	"Mbo'e."
+#elif L==7
+	"Prof."
+#elif L==8
+	"Nauc."
+#elif L==9
+	"Prof."
+#endif
+	,
+#if   L==1	// Rol_DEG_ADM
+	"Admi."
+#elif L==2
+	"Admi."
+#elif L==3
+	"Admi."
+#elif L==4
+	"Admi."
+#elif L==5
+	"Admi."
+#elif L==6
+	"&Ntilde;ang."
+#elif L==7
+	"Ammi."
+#elif L==8
+	"Admi."
+#elif L==9
+	"Admi."
+#endif
+	,
+#if   L==1	// Rol_CTR_ADM
+	"Admi."
+#elif L==2
+	"Admi."
+#elif L==3
+	"Admi."
+#elif L==4
+	"Admi."
+#elif L==5
+	"Admi."
+#elif L==6
+	"&Ntilde;ang."
+#elif L==7
+	"Ammi."
+#elif L==8
+	"Admi."
+#elif L==9
+	"Admi."
+#endif
+	,
+#if   L==1	// Rol_INS_ADM
+	"Admi."
+#elif L==2
+	"Admi."
+#elif L==3
+	"Admi."
+#elif L==4
+	"Admi."
+#elif L==5
+	"Admi."
+#elif L==6
+	"&Ntilde;ang."
+#elif L==7
+	"Ammi."
+#elif L==8
+	"Admi."
+#elif L==9
+	"Admi."
+#endif
+	,
+#if   L==1	// Rol_SYS_ADM
+	"Supe."
+#elif L==2
+	"Supe."
+#elif L==3
+	"Supe."
+#elif L==4
+	"Supe."
+#elif L==5
+	"Supe."
+#elif L==6
+	"Supe."	// Okoteve traducción
+#elif L==7
+	"Supe."
+#elif L==8
+	"Supe."
+#elif L==9
+	"Supe."
+#endif
+	};
+
 
 const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
    {
@@ -35402,7 +35607,8 @@ const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS] =
 #elif L==9
 	"superutilizadores"
 #endif
-	 } };
+	 }
+   };
 
 const char *Txt_Rooms_with_users =
 #if   L==1
@@ -40166,27 +40372,6 @@ const char *Txt_Student_comment =
 	"Coment&aacute;rio do estudante";
 #endif
 
-const char *Txt_Students_ABBREVIATION =	// Abbreviation of "Students"
-#if   L==1
-	"Estu.";
-#elif L==2
-	"Stud.";
-#elif L==3
-	"Stud.";
-#elif L==4
-	"Estu.";
-#elif L==5
-	"&Eacute;tu.";
-#elif L==6
-	"Temi.";
-#elif L==7
-	"Stud.";
-#elif L==8
-	"Stud.";	// Potrzebujesz tlumaczenie
-#elif L==9
-	"Estu.";
-#endif
-
 const char *Txt_students_ABBREVIATION =	// Abbreviation of "students"
 #if   L==1
 	"estu.";
@@ -40350,27 +40535,6 @@ const char *Txt_X_students_who_have_accepted_and_who_have_email =	// Warning: it
 #elif L==9
 	"%u estudantes que aceitaram"
 	" e que t&ecirc;m email (%.1f%% dos %u estudantes)";
-#endif
-
-const char *Txt_students_with_no_group =
-#if   L==1
-	"estudiantes en ning&uacute;n grupo";	// Necessita traduccio
-#elif L==2
-	"Studente mit nicht-Gruppe";
-#elif L==3
-	"students with no group";
-#elif L==4
-	"estudiantes en ning&uacute;n grupo";
-#elif L==5
-	"&eacute;tudiants avec aucun groupe";
-#elif L==6
-	"estudiantes en ning&uacute;n grupo";	// Okoteve traducción
-#elif L==7
-	"studenti con nessun gruppo";
-#elif L==8
-	"students with no group";		// Potrzebujesz tlumaczenie
-#elif L==9
-	"estudantes com nenhum grupo";
 #endif
 
 const char *Txt_Surname_1 =
@@ -41483,27 +41647,6 @@ const char *Txt_Take_a_test =
 	"Zr&oacute;b test";
 #elif L==9
 	"Fazer um teste";
-#endif
-
-const char *Txt_Teachers_ABBREVIATION =	// Abbreviation of "Teachers"
-#if   L==1
-	"Prof.";
-#elif L==2
-	"Lehr.";
-#elif L==3
-	"Teac.";
-#elif L==4
-	"Prof.";
-#elif L==5
-	"Ense.";
-#elif L==6
-	"Prof.";	// Okoteve traducción
-#elif L==7
-	"Prof.";
-#elif L==8
-	"Nauc.";
-#elif L==9
-	"Prof.";
 #endif
 
 const char *Txt_teachers_ABBREVIATION =	// Abbreviation of "Teachers"
@@ -50435,6 +50578,27 @@ const char *Txt_Users_of_the_institution =
 	 "Utilizadores da institu&ccedil;&atilde;o";
 #endif
 
+const char *Txt_users_with_no_group =
+#if   L==1
+	"usuaris en cap grup";
+#elif L==2
+	"Benutzer mit nicht-Gruppe";
+#elif L==3
+	"users with no group";
+#elif L==4
+	"usuarios en ning&uacute;n grupo";
+#elif L==5
+	"utilisateurs avec aucun groupe";
+#elif L==6
+	"usuarios en ning&uacute;n grupo";	// Okoteve traducción
+#elif L==7
+	"utenti con nessun gruppo";
+#elif L==8
+	"u&zdot;ytkownik&oacute;w w ka&zdot;dej grupie";
+#elif L==9
+	"utilizadores com nenhum grupo";
+#endif
+
 const char *Txt_usr =		// Abbreviation of user (three characters + dot)
 #if   L==1
 	"usr.";	// Necessita traduccio
@@ -50517,7 +50681,7 @@ const char *Txt_Vacants =
 #elif L==7
 	"Liberi";
 #elif L==8
-	"Vacants";	// Potrzebujesz tlumaczenie
+	"Wolne";
 #elif L==9
 	"Desocupados";
 #endif

@@ -5186,7 +5186,7 @@ void Act_AdjustCurrentAction (void)
                   /* If there are some group types with mandatory enrolment and groups in this course,
 	             and I don't belong to any of those groups,
 	             the the only action possible is show a form to register in groups */
-                  if (Grp_NumGrpTypesMandatIDontBelong ())	// To do: if this query is too slow ==> put it only when login.
+                  if (Grp_NumGrpTypesMandatIDontBelongAsStd ())	// To do: if this query is too slow ==> put it only when login.
                     {
 	             Gbl.Action.Act = ActReqSelGrp;
 	             Tab_SetCurrentTab ();

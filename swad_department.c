@@ -973,7 +973,7 @@ static void Dpt_PutHeadDepartments (void)
    extern const char *Txt_Short_name;
    extern const char *Txt_Full_name;
    extern const char *Txt_WWW;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"CENTER_MIDDLE\">"
@@ -1002,7 +1002,7 @@ static void Dpt_PutHeadDepartments (void)
             Txt_Short_name,
             Txt_Full_name,
             Txt_WWW,
-            Txt_Teachers_ABBREVIATION);
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
   }
 
 /*****************************************************************************/

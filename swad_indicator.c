@@ -677,8 +677,7 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
    extern const char *Txt_Course;
    extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Web_page_of_the_course;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Indicators;
    extern const char *Txt_No_INDEX;
    extern const char *Txt_Syllabus_of_the_course;
@@ -930,8 +929,8 @@ static void Ind_ShowTableOfCoursesWithIndicators (Ind_IndicatorsLayout_t Indicat
                   Txt_Course,
                   Txt_Institutional_BR_code,
                   Txt_Web_page_of_the_course,
-                  Txt_Teachers_ABBREVIATION,
-                  Txt_Students_ABBREVIATION,
+                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+                  Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
                   Txt_Indicators,
 
                   Txt_No_INDEX,

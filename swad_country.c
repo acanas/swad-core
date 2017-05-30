@@ -620,8 +620,7 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Cty_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -671,7 +670,8 @@ static void Cty_PutHeadCountriesForSeeing (bool OrderSelectable)
             Txt_Centres_ABBREVIATION,
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
   }
 
 /*****************************************************************************/

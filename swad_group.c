@@ -104,7 +104,7 @@ static unsigned Grp_CountNumGrpsInThisCrsOfType (long GrpTypCod);
 static void Grp_GetDataOfGroupTypeByCod (struct GroupType *GrpTyp);
 static bool Grp_GetMultipleEnrolmentOfAGroupType (long GrpTypCod);
 static long Grp_GetTypeOfGroupOfAGroup (long GrpCod);
-static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod);
+static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod);
 static long Grp_GetFirstCodGrpStdBelongsTo (long GrpTypCod,long UsrCod);
 static bool Grp_GetIfGrpIsAvailable (long GrpTypCod);
 static void Grp_GetLstCodGrpsUsrBelongs (long CrsCod,long GrpTypCod,long UsrCod,
@@ -136,7 +136,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
   {
    extern const char *Txt_Group;
    extern const char *Txt_Groups;
-   extern const char *Txt_students_with_no_group;
+   extern const char *Txt_users_with_no_group;
    extern const char *Txt_and;
    long GrpCod;
    unsigned NumGrpSel;
@@ -164,7 +164,7 @@ void Grp_WriteNamesOfSelectedGrps (void)
          Grp_GetDataOfGroupTypeByCod (&Gbl.CurrentCrs.Grps.GrpTyp);
          fprintf (Gbl.F.Out,"%s (%s)",
                   Gbl.CurrentCrs.Grps.GrpTyp.GrpTypName,
-                  Txt_students_with_no_group);
+                  Txt_users_with_no_group);
         }
 
       if (Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps >= 2)
@@ -772,7 +772,7 @@ bool Grp_ChangeMyGrpsAtomically (struct ListCodGrps *LstGrpsIWant)
 			if (!((GrpTyp->LstGrps[NumGrpThisType]).Open))
 			   ITryToRegisterInAClosedGroup = true;
 			/* Check if the group is full */
-			else if ((GrpTyp->LstGrps[NumGrpThisType]).NumStudents >=
+			else if ((GrpTyp->LstGrps[NumGrpThisType]).NumUsrs[Rol_STD] >=
 				 (GrpTyp->LstGrps[NumGrpThisType]).MaxStudents)
 			   ITryToRegisterInFullGroup = true;
 		       }
@@ -1412,6 +1412,7 @@ static void Grp_ListGroupsForEdition (void)
    struct GroupType *GrpTyp;
    struct GroupType *GrpTypAux;
    struct Group *Grp;
+   Rol_Role_t Role;
 
    /***** Write heading *****/
    Lay_StartTableWide (2);
@@ -1512,6 +1513,15 @@ static void Grp_ListGroupsForEdition (void)
          Act_FormEnd ();
          fprintf (Gbl.F.Out,"</td>");
 
+         /* Current number of users in this group */
+         for (Role = Rol_TCH;
+              Role >= Rol_STD;
+              Role--)
+	    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+			       "%d"
+			       "</td>",
+		     Grp->NumUsrs[Role]);
+
          /* Maximum number of students of the group (row[3]) */
          fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">");
          Act_FormStartAnchor (ActChgMaxStdGrp,Grp_GROUPS_SECTION_ID);
@@ -1522,14 +1532,8 @@ static void Grp_ListGroupsForEdition (void)
          fprintf (Gbl.F.Out,"\" onchange=\"document.getElementById('%s').submit();\" />",
                   Gbl.Form.Id);
          Act_FormEnd ();
-         fprintf (Gbl.F.Out,"</td>");
-
-         /* Current number of students in this group */
-         fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-                            "%d"
-                            "</td>"
-                            "</tr>",
-                  Grp->NumStudents);
+         fprintf (Gbl.F.Out,"</td>"
+                            "</tr>");
         }
      }
 
@@ -1546,8 +1550,9 @@ static void Grp_WriteHeadingGroups (void)
    extern const char *Txt_Type_BR_of_group;
    extern const char *Txt_Group_name;
    extern const char *Txt_eg_A_B;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Max_BR_students;
-   extern const char *Txt_Students_ABBREVIATION;
+   Rol_Role_t Role;
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1558,18 +1563,21 @@ static void Grp_WriteHeadingGroups (void)
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s<br />(%s)"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
+                      "</th>",
+            Txt_Type_BR_of_group,
+            Txt_Group_name,Txt_eg_A_B);
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>",
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Type_BR_of_group,
-            Txt_Group_name,Txt_eg_A_B,
-            Txt_Max_BR_students,
-            Txt_Students_ABBREVIATION);
+            Txt_Max_BR_students);
   }
 
 /*****************************************************************************/
@@ -1857,7 +1865,7 @@ static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
 	    if (Grp->Open)					// If group is open
 	      {
 	       if (IBelongToThisGroup ||			// I belong to group
-	           Grp->NumStudents < Grp->MaxStudents)		// Group is not full
+	           Grp->NumUsrs[Rol_STD] < Grp->MaxStudents)		// Group is not full
 		  ICanChangeMySelection = true;			// I can register/unregister in this group
 	       else						// I don't belong to group and it's full
 		  fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register in this group
@@ -1990,12 +1998,13 @@ static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod)
 
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
   {
-   extern const char *Txt_students_with_no_group;
+   extern const char *Txt_users_with_no_group;
    unsigned NumGrpThisType;
    unsigned NumGrpSel;
    struct ListCodGrps LstGrpsIBelong;
    bool IBelongToThisGroup;
    struct Group *Grp;
+   Rol_Role_t Role;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -2071,20 +2080,24 @@ static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp)
 	              "</td>");
 
    /* Group name = students with no group */
-   fprintf (Gbl.F.Out,"<td colspan=\"2\" class=\"DAT LEFT_MIDDLE\">"
+   fprintf (Gbl.F.Out,"<td class=\"DAT LEFT_MIDDLE\">"
 	              "<label for=\"Grp%ld\">%s</label>"
 	              "</td>",
-            -(GrpTyp->GrpTypCod),Txt_students_with_no_group);
+            -(GrpTyp->GrpTypCod),Txt_users_with_no_group);
 
    /* Number of students who don't belong to any group of this type */
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-	              "%u"
-	              "</td>",
-            Grp_CountNumStdsInNoGrpsOfType (GrpTyp->GrpTypCod));
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+			 "%u"
+			 "</td>",
+	       Grp_CountNumUsrsInNoGrpsOfType (Role,GrpTyp->GrpTypCod));
 
-   /* Last column */
+   /* Last void columns for max. students and vacants */
    fprintf (Gbl.F.Out,"<td></td>"
-	              "</tr>");
+	              "<td></td>"
+                      "</tr>");
   }
 
 /*****************************************************************************/
@@ -2097,9 +2110,10 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
    extern const char *Txt_Today;
    extern const char *Txt_Group;
    extern const char *Txt_Max_BR_students;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Vacants;
    static unsigned UniqueId = 0;
+   Rol_Role_t Role;
 
    /***** Name of group type *****/
    fprintf (Gbl.F.Out,"<tr>"
@@ -2128,20 +2142,23 @@ static void Grp_WriteGrpHead (struct GroupType *GrpTyp)
                       "<th colspan=\"2\"></th>"
                       "<th class=\"LEFT_MIDDLE\">"
                       "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
-                      "%s"
-                      "</th>"
-                      "<th class=\"CENTER_MIDDLE\">"
+                      "</th>",
+            Txt_Group);
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
+			 "%s"
+			 "</th>",
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Role]);
+   fprintf (Gbl.F.Out,"<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "<th class=\"CENTER_MIDDLE\">"
                       "%s"
                       "</th>"
                       "</tr>",
-            Txt_Group,
             Txt_Max_BR_students,
-            Txt_Students_ABBREVIATION,
             Txt_Vacants);
   }
 
@@ -2154,6 +2171,7 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    extern const char *Txt_Group_X_open;
    extern const char *Txt_Group_X_closed;
    int Vacant;
+   Rol_Role_t Role;
 
    /***** Write icon to show if group is open or closed *****/
    sprintf (Gbl.Title,Grp->Open ? Txt_Group_X_open :
@@ -2184,6 +2202,20 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
 	    Grp->GrpCod,
 	    Grp->GrpName);
 
+   /***** Current number of users in this group *****/
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+     {
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
+      if (Highlight)
+	 fprintf (Gbl.F.Out," LIGHT_BLUE");
+      fprintf (Gbl.F.Out,"\">"
+			 "%d"
+			 "</td>",
+	       Grp->NumUsrs[Role]);
+     }
+
    /***** Max. number of students in this group *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
@@ -2193,25 +2225,14 @@ static void Grp_WriteRowGrp (struct Group *Grp,bool Highlight)
    fprintf (Gbl.F.Out,"&nbsp;"
 	              "</td>");
 
-   /***** Current number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
-   if (Highlight)
-      fprintf (Gbl.F.Out," LIGHT_BLUE");
-   fprintf (Gbl.F.Out,"\">"
-	              "%d"
-	              "</td>",
-	    Grp->NumStudents);
-
    /***** Vacants in this group *****/
    fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE");
    if (Highlight)
       fprintf (Gbl.F.Out," LIGHT_BLUE");
    fprintf (Gbl.F.Out,"\">");
-   if (Grp->MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP)
-      fprintf (Gbl.F.Out,"-");
-   else
+   if (Grp->MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
      {
-      Vacant = (int) Grp->MaxStudents - (int) Grp->NumStudents;
+      Vacant = (int) Grp->MaxStudents - (int) Grp->NumUsrs[Rol_STD];
       fprintf (Gbl.F.Out,"%u",
                Vacant > 0 ? (unsigned) Vacant :
         	                       0);
@@ -2346,6 +2367,7 @@ static void Grp_PutFormToCreateGroup (void)
    extern const char *Txt_File_zones_disabled;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
+   Rol_Role_t Role;
 
    /***** Start form *****/
    Lay_StartSection (Grp_NEW_GROUP_SECTION_ID);
@@ -2402,19 +2424,22 @@ static void Grp_PutFormToCreateGroup (void)
 	              "</td>",
             Grp_MAX_CHARS_GROUP_NAME,Gbl.CurrentCrs.Grps.GrpName);
 
+   /***** Current number of users in this group *****/
+   for (Role = Rol_TCH;
+	Role >= Rol_STD;
+	Role--)
+      fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
+			 "0"
+			 "</td>");
+
    /***** Maximum number of students *****/
    fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE\">"
 	              "<input type=\"text\" name=\"MaxStudents\""
 	              " size=\"3\" maxlength=\"10\" value=\"");
    Grp_WriteMaxStdsGrp (Gbl.CurrentCrs.Grps.MaxStudents);
    fprintf (Gbl.F.Out,"\" />"
-	              "</td>");
-
-   /***** Current number of students in this group *****/
-   fprintf (Gbl.F.Out,"<td class=\"DAT CENTER_MIDDLE\">"
-		      "0"	// It's a new group ==> 0 students
-		      "</td>"
-		      "</tr>");
+	              "</td>"
+	              "</tr>");
 
    /***** Send button and end frame *****/
    Lay_EndRoundFrameTableWithButton (Lay_CREATE_BUTTON,Txt_Create_group);
@@ -2600,6 +2625,7 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
    unsigned long NumRows;
    struct GroupType *GrpTyp;
    struct Group *Grp;
+   Rol_Role_t Role;
 
    /***** First we get the list of group types *****/
    Grp_GetListGrpTypesInThisCrs (WhichGroupTypes);
@@ -2640,9 +2666,14 @@ void Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_WhichGroupTypes_t WhichGroupTypes)
                Str_Copy (Grp->GrpName,row[1],
                          Grp_MAX_BYTES_GROUP_NAME);
 
-               /* Get max number of students of group (row[2]) and number of current students */
+               /* Get max number of students of group (row[2]) */
                Grp->MaxStudents = Grp_ConvertToNumMaxStdsGrp (row[2]);
-               Grp->NumStudents = Grp_CountNumStdsInGrp (Grp->GrpCod);
+
+               /* Get number of current users in group */
+	       for (Role = Rol_TCH;
+		    Role >= Rol_STD;
+		    Role--)
+                  Grp->NumUsrs[Role] = Grp_CountNumUsrsInGrp (Role,Grp->GrpCod);
 
                /* Get whether group is open ('Y') or closed ('N') (row[3]) */
                Grp->Open = (row[3][0] == 'Y');
@@ -2938,10 +2969,10 @@ bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod)
   }
 
 /*****************************************************************************/
-/******************** Count number of students in a group ********************/
+/********************* Count number of users in a group **********************/
 /*****************************************************************************/
 
-unsigned Grp_CountNumStdsInGrp (long GrpCod)
+unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod)
   {
    char Query[512];
 
@@ -2954,23 +2985,23 @@ unsigned Grp_CountNumStdsInGrp (long GrpCod)
                   " AND crs_grp_types.CrsCod=crs_usr.CrsCod"
                   " AND crs_grp_usr.UsrCod=crs_usr.UsrCod"
                   " AND crs_usr.Role=%u",
-            GrpCod,(unsigned) Rol_STD);
+            GrpCod,(unsigned) Role);
    return (unsigned) DB_QueryCOUNT (Query,
-	                            "can not get number of students in a group");
+	                            "can not get number of users in a group");
   }
 
 /*****************************************************************************/
-/** Count # of students of current course not belonging to groups of a type **/
+/*** Count # of users of current course not belonging to groups of a type ****/
 /*****************************************************************************/
 
-static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod)
+static unsigned Grp_CountNumUsrsInNoGrpsOfType (Rol_Role_t Role,long GrpTypCod)
   {
    char Query[512];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
-   unsigned NumStds;
+   unsigned NumUsrs;
 
-   /***** Get number of students not belonging to groups of a type from database ******/
+   /***** Get number of users not belonging to groups of a type ******/
    sprintf (Query,"SELECT COUNT(UsrCod) FROM crs_usr"
                   " WHERE CrsCod=%ld AND Role=%u"
                   " AND UsrCod NOT IN"
@@ -2978,18 +3009,20 @@ static unsigned Grp_CountNumStdsInNoGrpsOfType (long GrpTypCod)
                   " FROM crs_grp,crs_grp_usr"
                   " WHERE crs_grp.GrpTypCod=%ld"
                   " AND crs_grp.GrpCod=crs_grp_usr.GrpCod)",
-            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Rol_STD,GrpTypCod);
-   DB_QuerySELECT (Query,&mysql_res,"can not get the number of students not belonging to groups of a type");
+            Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role,GrpTypCod);
+   DB_QuerySELECT (Query,&mysql_res,"can not get the number of users"
+	                            " not belonging to groups of a type");
 
-   /***** Get the number of students (row[0]) *****/
+   /***** Get the number of users (row[0]) *****/
    row = mysql_fetch_row (mysql_res);
-   if (sscanf (row[0],"%u",&NumStds) != 1)
-      Lay_ShowErrorAndExit ("Error when getting the number of students not belonging to groups of a type.");
+   if (sscanf (row[0],"%u",&NumUsrs) != 1)
+      Lay_ShowErrorAndExit ("Error when getting the number of users"
+	                    " not belonging to groups of a type.");
 
    /***** Free structure that stores the query result *****/
    DB_FreeMySQLResult (&mysql_res);
 
-   return NumStds;
+   return NumUsrs;
   }
 
 /*****************************************************************************/
@@ -3053,12 +3086,13 @@ bool Grp_GetIfIBelongToGrp (long GrpCod)
 /**** and I don't belong to any of these groups as student               *****/
 /*****************************************************************************/
 
-unsigned Grp_NumGrpTypesMandatIDontBelong (void)
+unsigned Grp_NumGrpTypesMandatIDontBelongAsStd (void)
   {
    char Query[4096];
    unsigned NumGrpTypes;
 
-   /***** Get the number of types of groups with mandatory enrolment which I don't belong to, from database *****/
+   /***** Get the number of types of groups with mandatory enrolment
+          which I don't belong to as student, from database *****/
    sprintf (Query,"SELECT COUNT(DISTINCT GrpTypCod) FROM"
                   " (SELECT crs_grp_types.GrpTypCod AS GrpTypCod,"
                   "COUNT(*) AS NumStudents,"
@@ -3086,7 +3120,9 @@ unsigned Grp_NumGrpTypesMandatIDontBelong (void)
             (unsigned) Rol_STD,
             Gbl.CurrentCrs.Crs.CrsCod,
             Gbl.Usrs.Me.UsrDat.UsrCod);
-   NumGrpTypes = DB_QueryCOUNT (Query,"can not get the number of types of group of mandatory registration to which you don't belong to");
+   NumGrpTypes = DB_QueryCOUNT (Query,"can not get the number of types of group"
+	                              " of mandatory registration"
+	                              " to which you don't belong to");
 
    return NumGrpTypes;
   }
@@ -3586,7 +3622,7 @@ static void Grp_AskConfirmRemGrp (void)
    Grp_GetDataOfGroupByCod (&GrpDat);
 
    /***** Count number of students in group *****/
-   NumStds = Grp_CountNumStdsInGrp (Gbl.CurrentCrs.Grps.GrpCod);
+   NumStds = Grp_CountNumUsrsInGrp (Rol_STD,Gbl.CurrentCrs.Grps.GrpCod);
 
    /***** Show the form to edit group types again *****/
    Grp_ReqEditGroupsInternal0 ();
@@ -4149,9 +4185,7 @@ void Grp_ChangeMaxStdsGrp (void)
 
 static void Grp_WriteMaxStdsGrp (unsigned MaxStudents)
   {
-   if (MaxStudents > Grp_MAX_STUDENTS_IN_A_GROUP)
-      fprintf (Gbl.F.Out,"-");
-   else
+   if (MaxStudents <= Grp_MAX_STUDENTS_IN_A_GROUP)
       fprintf (Gbl.F.Out,"%u",MaxStudents);
   }
 

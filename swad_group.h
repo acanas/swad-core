@@ -73,8 +73,8 @@ struct Group
   {
    long GrpCod;					// Code of group
    char GrpName[Grp_MAX_BYTES_GROUP_NAME + 1];	// Name of group
+   unsigned NumUsrs[Rol_NUM_ROLES];		// Number of users in the group
    unsigned MaxStudents;
-   unsigned NumStudents;			// Number of students in the group
    bool Open;					// Group is open?
    bool FileZones;				// Group has file zones?
    bool ShowFileZone;				// Show file zone of this group?
@@ -165,9 +165,9 @@ unsigned long Grp_GetGrpsOfType (long GrpTypCod,MYSQL_RES **mysql_res);
 void Grp_GetDataOfGroupByCod (struct GroupData *GrpDat);
 bool Grp_CheckIfGroupExists (long GrpCod);
 bool Grp_CheckIfGroupBelongsToCourse (long GrpCod,long CrsCod);
-unsigned Grp_CountNumStdsInGrp (long GrpCod);
+unsigned Grp_CountNumUsrsInGrp (Rol_Role_t Role,long GrpCod);
 bool Grp_GetIfIBelongToGrp (long GrpCod);
-unsigned Grp_NumGrpTypesMandatIDontBelong (void);
+unsigned Grp_NumGrpTypesMandatIDontBelongAsStd (void);
 void Grp_GetLstCodGrpsWithFileZonesIBelong (struct ListCodGrps *LstGrps);
 void Grp_GetNamesGrpsStdBelongsTo (long GrpTypCod,long UsrCod,char *GrpNames);
 void Grp_RecFormNewGrpTyp (void);

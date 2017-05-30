@@ -1724,8 +1724,7 @@ static void Crs_PutHeadCoursesForSeeing (void)
    extern const char *Txt_Institutional_BR_code;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
 
    fprintf (Gbl.F.Out,"<tr>"
                       "<th class=\"BM\"></th>"
@@ -1750,8 +1749,8 @@ static void Crs_PutHeadCoursesForSeeing (void)
             Txt_Institutional_BR_code,
             Txt_Year_OF_A_DEGREE,
             Txt_Course,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION);
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
   }
 
 /*****************************************************************************/
@@ -1766,8 +1765,7 @@ static void Crs_PutHeadCoursesForEdition (void)
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Short_name_of_the_course;
    extern const char *Txt_Full_name_of_the_course;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -1804,8 +1802,8 @@ static void Crs_PutHeadCoursesForEdition (void)
             Txt_Year_OF_A_DEGREE,
             Txt_Short_name_of_the_course,
             Txt_Full_name_of_the_course,
-            Txt_Teachers_ABBREVIATION,
-            Txt_Students_ABBREVIATION,
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
             Txt_Requester);
   }
 
@@ -2963,8 +2961,7 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    char SubQuery[32];
    char Query[1024];
    MYSQL_RES *mysql_res;
@@ -3023,8 +3020,8 @@ void Crs_GetAndWriteCrssOfAUsr (const struct UsrData *UsrDat,Rol_Role_t Role)
                Txt_Degree,
                Txt_Year_OF_A_DEGREE,
                Txt_Course,
-               Txt_Teachers_ABBREVIATION,
-               Txt_Students_ABBREVIATION);
+               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
 
       /* Write courses */
       for (NumCrs = 1;
@@ -3058,8 +3055,7 @@ unsigned Crs_ListCrssFound (const char *Query)
    extern const char *Txt_Degree;
    extern const char *Txt_Year_OF_A_DEGREE;
    extern const char *Txt_Course;
-   extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    MYSQL_RES *mysql_res;
    MYSQL_ROW row;
    unsigned NumCrss;
@@ -3100,8 +3096,8 @@ unsigned Crs_ListCrssFound (const char *Query)
 	       Txt_Degree,
 	       Txt_Year_OF_A_DEGREE,
 	       Txt_Course,
-	       Txt_Students_ABBREVIATION,
-	       Txt_Teachers_ABBREVIATION);
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
+	       Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
 
       /* Write courses */
       for (NumCrs = 1;

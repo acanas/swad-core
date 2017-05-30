@@ -104,8 +104,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
    extern const char *Txt_SEX_PLURAL_Abc[Usr_NUM_SEXS];
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    bool IsLastItemInLevel[1 + Cht_CHAT_MAX_LEVELS];
@@ -158,7 +157,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       case Rol_STD:
          sprintf (ThisRoomFullName,"%s (%s)",
                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_STD][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat1 ("GBL_STD",Txt_Students_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+         Cht_WriteLinkToChat1 ("GBL_STD",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
@@ -170,7 +169,7 @@ void Cht_ShowListOfAvailableChatRooms (void)
       case Rol_TCH:
          sprintf (ThisRoomFullName,"%s (%s)",
                   Txt_General,Txt_ROLES_PLURAL_abc[Rol_TCH][Usr_SEX_ALL]);
-         Cht_WriteLinkToChat1 ("GBL_TCH",Txt_Teachers_ABBREVIATION,ThisRoomFullName,1,IsLastItemInLevel);
+         Cht_WriteLinkToChat1 ("GBL_TCH",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],ThisRoomFullName,1,IsLastItemInLevel);
 	 fprintf (Gbl.F.Out,"<img src=\"%s/chat64x64.gif\""
 			    " alt=\"%s\" title=\"%s\""
 			    " class=\"ICO20x20\" />",
@@ -392,8 +391,7 @@ void Cht_OpenChatWindow (void)
    extern const char *Txt_SEX_PLURAL_abc[Usr_NUM_SEXS];
    extern const char *Txt_General;
    extern const char *Txt_ROLES_PLURAL_abc[Rol_NUM_ROLES][Usr_NUM_SEXS];
-   extern const char *Txt_Students_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Degree;
    extern const char *Txt_Course;
    char RoomCode[Cht_MAX_BYTES_ROOM_CODE + 1];
@@ -471,7 +469,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,"|#GBL_STD",
                      Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShrtName,"|%s",Txt_Students_ABBREVIATION);
+         sprintf (RoomShrtName,"|%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
          Str_Concat (ListRoomShrtNames,RoomShrtName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 
@@ -488,7 +486,7 @@ void Cht_OpenChatWindow (void)
          Str_Concat (ListRoomCodes,"|#GBL_TCH",
                      Cht_MAX_BYTES_ROOM_CODES);
 
-         sprintf (RoomShrtName,"|%s",Txt_Teachers_ABBREVIATION);
+         sprintf (RoomShrtName,"|%s",Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH]);
          Str_Concat (ListRoomShrtNames,RoomShrtName,
                      Cht_MAX_BYTES_ROOM_SHRT_NAMES);
 

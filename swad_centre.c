@@ -2518,8 +2518,7 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
    extern const char *Txt_Place;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    Ctr_Order_t Order;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2567,7 +2566,8 @@ static void Ctr_PutHeadCentresForSeeing (bool OrderSelectable)
             Txt_Place,
 	    Txt_Degrees_ABBREVIATION,
 	    Txt_Courses_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
   }
 
 /*****************************************************************************/
@@ -2583,8 +2583,7 @@ static void Ctr_PutHeadCentresForEdition (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Degrees_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2627,7 +2626,8 @@ static void Ctr_PutHeadCentresForEdition (void)
             Txt_WWW,
             Txt_Users,
             Txt_Degrees_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
             Txt_Requester);
   }
 

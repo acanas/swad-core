@@ -1821,7 +1821,7 @@ int swad__getGroups (struct soap *soap,
                                                                                                              (int) MaxStudents;
 
          /* Get number of current students */
-         getGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumStdsInGrp (GrpCod);
+         getGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
          getGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :
@@ -1983,7 +1983,7 @@ int swad__sendMyGroups (struct soap *soap,
                                                                                                                 (int) MaxStudents;
 
          /* Get number of current students */
-         SendMyGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumStdsInGrp (GrpCod);
+         SendMyGroupsOut->groupsArray.__ptr[NumRow].numStudents = (int) Grp_CountNumUsrsInGrp (Rol_STD,GrpCod);
 
          /* Get whether group is open ('Y') or closed ('N') (row[5]) */
          SendMyGroupsOut->groupsArray.__ptr[NumRow].open = (row[5][0] == 'Y') ? 1 :

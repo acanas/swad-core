@@ -2265,7 +2265,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
    extern const char *Txt_Scope;
    extern const char *Txt_Users;
    extern const char *Txt_Course;
-   extern const char *Txt_Teachers_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
    extern const char *Txt_Role;
    extern const char *Txt_Date;
@@ -2802,7 +2802,7 @@ static void Enr_ShowEnrolmentRequestsGivenRoles (unsigned RolesSelected)
                          "<th></th>"
                          "</tr>",
                Txt_Course,
-               Txt_Teachers_ABBREVIATION,
+               Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
                Txt_Requester,
                Txt_Role,
                Txt_Date);

@@ -828,8 +828,7 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
   {
    extern const char *Txt_INSTITUTIONS_HELP_ORDER[2];
    extern const char *Txt_INSTITUTIONS_ORDER[2];
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Centres_ABBREVIATION;
    extern const char *Txt_Degrees_ABBREVIATION;
    extern const char *Txt_Courses_ABBREVIATION;
@@ -885,7 +884,8 @@ static void Ins_PutHeadInstitutionsForSeeing (bool OrderSelectable)
             Txt_Degrees_ABBREVIATION,
             Txt_Courses_ABBREVIATION,
             Txt_Departments_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION);
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD]);
    }
 
 /*****************************************************************************/
@@ -2240,8 +2240,7 @@ static void Ins_PutHeadInstitutionsForEdition (void)
    extern const char *Txt_WWW;
    extern const char *Txt_Users;
    extern const char *Txt_Centres_ABBREVIATION;
-   extern const char *Txt_Teachers_ABBREVIATION;
-   extern const char *Txt_Students_ABBREVIATION;
+   extern const char *Txt_ROLES_PLURAL_BRIEF_Abc[Rol_NUM_ROLES];
    extern const char *Txt_Requester;
 
    fprintf (Gbl.F.Out,"<tr>"
@@ -2280,7 +2279,8 @@ static void Ins_PutHeadInstitutionsForEdition (void)
             Txt_WWW,
             Txt_Users,
             Txt_Centres_ABBREVIATION,
-            Txt_Teachers_ABBREVIATION,Txt_Students_ABBREVIATION,
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_TCH],
+            Txt_ROLES_PLURAL_BRIEF_Abc[Rol_STD],
             Txt_Requester);
   }
 
