@@ -110,7 +110,7 @@ static const char *Usr_ParamUsrCod[Rol_NUM_ROLES] =
   {
    "UsrCodAll",	// Rol_UNK (here means all users)
    "UsrCodGst",	// Rol_GST
-   NULL,		// Rol_USR
+   NULL,	// Rol_USR
    "UsrCodStd",	// Rol_STD
    "UsrCodNET",	// Rol_NET
    "UsrCodTch",	// Rol_TCH
@@ -195,12 +195,15 @@ static void Usr_FormToSelectUsrListType (Act_Action_t NextAction,Usr_ShowUsrsTyp
 
 static Usr_Sex_t Usr_GetSexOfUsrsLst (Rol_Role_t Role);
 
-static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender);
+static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
+                                         const char *EncryptedUsrCod,
+                                         bool UsrIsTheMsgSender);
 static void Usr_PutCheckboxListWithPhotos (void);
 
 static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr);
 static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr);
+static void Usr_ListUsrsForSelection (Rol_Role_t Role);
 static void Usr_ListRowsAllDataTchs (Rol_Role_t Role,
                                      const char *FieldNames[Usr_NUM_ALL_FIELDS_DATA_TCH],
                                      unsigned NumColumns);
@@ -3202,7 +3205,7 @@ static void Usr_InsertMyLastData (void)
 #define Usr_MAX_BYTES_BG_COLOR (16 - 1)
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                              bool PutCheckBoxToSelectUsr)
+                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role)
   {
    extern const char *Txt_Enrolment_confirmed;
    extern const char *Txt_Enrolment_not_confirmed;
@@ -3227,7 +3230,7 @@ void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
    if (PutCheckBoxToSelectUsr)
      {
       fprintf (Gbl.F.Out,"<td class=\"CENTER_MIDDLE %s\">",BgColor);
-      Usr_PutCheckboxToSelectUser (UsrDat,UsrIsTheMsgSender);
+      Usr_PutCheckboxToSelectUser (Role,UsrDat->EncryptedUsrCod,UsrIsTheMsgSender);
       fprintf (Gbl.F.Out,"</td>");
      }
 
@@ -5732,8 +5735,7 @@ void Usr_PutCheckboxToSelectAllUsers (Rol_Role_t Role)
 	              "<th colspan=\"%u\" class=\"LEFT_MIDDLE LIGHT_BLUE\">"
 	              "<label>",
             Usr_GetColumnsForSelectUsrs ());
-   if (Usr_NameSelUnsel[Role] &&
-       Usr_ParamUsrCod[Role])
+   if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
       fprintf (Gbl.F.Out,"<input type=\"checkbox\""
 			 " name=\"%s\" value=\"\""
 			 " onclick=\"togglecheckChildren(this,'%s')\" />",
@@ -5791,27 +5793,27 @@ unsigned Usr_GetColumnsForSelectUsrs (void)
 /******* Put a checkbox, in a classphoto or a list, to select a user *********/
 /*****************************************************************************/
 
-static void Usr_PutCheckboxToSelectUser (struct UsrData *UsrDat,bool UsrIsTheMsgSender)
+static void Usr_PutCheckboxToSelectUser (Rol_Role_t Role,
+                                         const char *EncryptedUsrCod,
+                                         bool UsrIsTheMsgSender)
   {
    bool CheckboxChecked;
 
-   if (Usr_NameSelUnsel[UsrDat->RoleInCurrentCrsDB] &&
-       Usr_ParamUsrCod[UsrDat->RoleInCurrentCrsDB])
+   if (Usr_NameSelUnsel[Role] && Usr_ParamUsrCod[Role])
      {
       /***** Check box must be checked? *****/
-      CheckboxChecked = false;
       if (UsrIsTheMsgSender)
 	 CheckboxChecked = true;
       else
 	 /* Check if user is in lists of selected users */
-	 CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (UsrDat->EncryptedUsrCod);
+	 CheckboxChecked = Usr_FindUsrCodInListOfSelectedUsrs (EncryptedUsrCod);
 
       /***** Check box *****/
       fprintf (Gbl.F.Out,"<input type=\"checkbox\" name=\"%s\" value=\"%s\""
 			 " onclick=\"checkParent(this,'%s')\"",
-	       Usr_ParamUsrCod[UsrDat->RoleInCurrentCrsDB],
-	       UsrDat->EncryptedUsrCod,
-	       Usr_NameSelUnsel[UsrDat->RoleInCurrentCrsDB]);
+	       Usr_ParamUsrCod[Role],
+	       EncryptedUsrCod,
+	       Usr_NameSelUnsel[Role]);
       if (CheckboxChecked)
 	 fprintf (Gbl.F.Out," checked=\"checked\"");
       fprintf (Gbl.F.Out," />");
@@ -5933,7 +5935,7 @@ static void Usr_ListMainDataGsts (bool PutCheckBoxToSelectUsr)
          ID_GetListIDsFromUsrCod (&UsrDat);
 
          /* Show row for this guest */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true);
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,true,Rol_GST);
         }
 
       /***** Free memory used for user's data *****/
@@ -6002,7 +6004,8 @@ static void Usr_ListMainDataStds (bool PutCheckBoxToSelectUsr)
          ID_GetListIDsFromUsrCod (&UsrDat);
 
          /* Show row for this student */
-         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
+         Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
+                                  PutCheckBoxToSelectUsr,Rol_STD);
         }
 
       /***** Free memory used for user's data *****/
@@ -6076,7 +6079,8 @@ static void Usr_ListMainDataTchs (Rol_Role_t Role,bool PutCheckBoxToSelectUsr)
          ID_GetListIDsFromUsrCod (&UsrDat);
 
          /* Show row for this teacher */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,PutCheckBoxToSelectUsr);
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,
+	                          PutCheckBoxToSelectUsr,Role);
         }
 
       /***** Free memory used for user's data *****/
@@ -6414,7 +6418,7 @@ void Usr_ListAllDataStds (void)
 /*************** List users (of current course) for selection ****************/
 /*****************************************************************************/
 
-void Usr_ListUsrsForSelection (Rol_Role_t Role)
+static void Usr_ListUsrsForSelection (Rol_Role_t Role)
   {
    unsigned NumUsr;
    struct UsrData UsrDat;
@@ -6441,7 +6445,7 @@ void Usr_ListUsrsForSelection (Rol_Role_t Role)
 	 if (Usr_ChkUsrCodAndGetAllUsrDataFromUsrCod (&UsrDat))        // If user's data exist...
 	   {
 	    UsrDat.Accepted = Gbl.Usrs.LstUsrs[Role].Lst[NumUsr].Accepted;
-	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true);
+	    Usr_WriteRowUsrMainData (++NumUsr,&UsrDat,true,Role);
 
 	    Gbl.RowEvenOdd = 1 - Gbl.RowEvenOdd;
 	   }
@@ -6641,7 +6645,7 @@ unsigned Usr_ListUsrsFound (Rol_Role_t Role,
          ID_GetListIDsFromUsrCod (&UsrDat);
 
 	 /* Write data of this user */
-	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false);
+	 Usr_WriteRowUsrMainData (NumUsr + 1,&UsrDat,false,Role);
 
 	 /* Write all the courses this user belongs to */
 	 if (Role != Rol_GST &&				// Guests do not belong to any course
@@ -8034,7 +8038,7 @@ static void Usr_DrawClassPhoto (Usr_ClassPhotoType_t ClassPhotoType,
 
 	 /***** Checkbox to select this user *****/
 	 if (PutCheckBoxToSelectUsr)
-	    Usr_PutCheckboxToSelectUser (&UsrDat,UsrIsTheMsgSender);
+	    Usr_PutCheckboxToSelectUser (Role,UsrDat.EncryptedUsrCod,UsrIsTheMsgSender);
 
 	 /***** Show photo *****/
 	 ShowPhoto = Pho_ShowingUsrPhotoIsAllowed (&UsrDat,PhotoURL);

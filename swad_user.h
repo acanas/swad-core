@@ -319,7 +319,7 @@ void Usr_UpdateMyLastData (void);
 void Usr_InsertMyLastCrsTabAndTime (void);
 
 void Usr_WriteRowUsrMainData (unsigned NumUsr,struct UsrData *UsrDat,
-                              bool PutCheckboxToSelectUsr);
+                              bool PutCheckBoxToSelectUsr,Rol_Role_t Role);
 
 unsigned Usr_GetNumUsrsInCrs (Rol_Role_t Role,long CrsCod);
 unsigned Usr_GetNumUsrsInCrssOfDeg (Rol_Role_t Role,long DegCod);
@@ -368,7 +368,6 @@ void Usr_ListUsersToSelect (Rol_Role_t Role);
 
 void Usr_ListAllDataGsts (void);
 void Usr_ListAllDataStds (void);
-void Usr_ListUsrsForSelection (Rol_Role_t Role);
 void Usr_ListAllDataTchs (void);
 unsigned Usr_ListUsrsFound (Rol_Role_t Role,
                             const char SearchQuery[Sch_MAX_BYTES_SEARCH_QUERY]);

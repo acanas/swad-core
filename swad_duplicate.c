@@ -183,7 +183,7 @@ void Dup_ListDuplicateUsrs (void)
                UsrDat.Accepted = false;
 
             /* Write data of this user */
-            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
@@ -315,7 +315,7 @@ static void Dup_ListSimilarUsrs (void)
                UsrDat.Accepted = false;
 
             /* Write data of this user */
-            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false);
+            Usr_WriteRowUsrMainData (NumUsrs - NumUsr,&UsrDat,false,Rol_UNK);
 
 	    fprintf (Gbl.F.Out,"<tr>"
 			       "<td colspan=\"2\" class=\"COLOR%u\"></td>"
