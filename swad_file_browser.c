@@ -7438,9 +7438,6 @@ void Brw_PasteIntoFileBrowser (void)
             break;
         }
 
-      /***** Write the origin of the copy *****/
-      Brw_WriteCurrentClipboard ();
-
       /***** Copy files recursively *****/
       Brw_PasteClipboard ();
 

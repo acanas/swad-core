@@ -90,7 +90,8 @@ static void Grp_WriteHeadingGroups (void);
 static void Grp_PutIconToEditGroups (void);
 
 static void Grp_ShowWarningToStdsToChangeGrps (void);
-static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp);
+static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
+                                   unsigned *NumGrpsThisTypeIBelong);
 static void Grp_ListGrpsToAddOrRemUsrs (struct GroupType *GrpTyp,long UsrCod);
 static void Grp_ListGrpsForMultipleSelection (struct GroupType *GrpTyp);
 static void Grp_WriteGrpHead (struct GroupType *GrpTyp);
@@ -1651,11 +1652,13 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
    extern const char *Txt_No_groups_have_been_created_in_the_course_X;
    extern const char *Txt_Create_group;
    unsigned NumGrpTyp;
+   unsigned NumGrpsThisTypeIBelong;
    unsigned NumGrpsIBelong = 0;
    bool PutFormToChangeGrps = !Gbl.Form.Inside;	// Not inside another form (record card)
    bool ICanEdit = !Gbl.Form.Inside &&
 	           (Gbl.Usrs.Me.LoggedRole == Rol_TCH ||
                     Gbl.Usrs.Me.LoggedRole == Rol_SYS_ADM);
+   bool ICanChangeMySelection = false;
 
    if (Gbl.CurrentCrs.Grps.NumGrps) // This course has groups
      {
@@ -1686,14 +1689,19 @@ void Grp_ShowLstGrpsToChgMyGrps (void)
 	   NumGrpTyp < Gbl.CurrentCrs.Grps.GrpTypes.Num;
 	   NumGrpTyp++)
 	 if (Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp].NumGrps)	 // If there are groups of this type
-	    NumGrpsIBelong += Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp]);
+	   {
+	    ICanChangeMySelection |= Grp_ListGrpsForChange (&Gbl.CurrentCrs.Grps.GrpTypes.LstGrpTypes[NumGrpTyp],
+	                                                    &NumGrpsThisTypeIBelong);
+	    NumGrpsIBelong += NumGrpsThisTypeIBelong;
+	   }
       Lay_EndTable ();
 
       /***** End form *****/
       if (PutFormToChangeGrps)
 	{
-	 Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
-						Txt_Enrol_in_groups);
+	 if (ICanChangeMySelection)
+	    Lay_PutConfirmButton (NumGrpsIBelong ? Txt_Change_my_groups :
+						   Txt_Enrol_in_groups);
 	 Act_FormEnd ();
 	}
      }
@@ -1774,15 +1782,16 @@ static void Grp_ShowWarningToStdsToChangeGrps (void)
 /*****************************************************************************/
 /*************** List the groups of a type to register in ********************/
 /*****************************************************************************/
-// Returns the number of groups of this type I belong to
+// Returns true if I can change my selection
 
-static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
+static bool Grp_ListGrpsForChange (struct GroupType *GrpTyp,
+                                   unsigned *NumGrpsThisTypeIBelong)
   {
    struct ListCodGrps LstGrpsIBelong;
    unsigned NumGrpThisType;
    struct Group *Grp;
    bool IBelongToThisGroup;
-   unsigned NumGrpsIBelong;
+   bool ICanChangeMySelection = false;
 
    /***** Write heading *****/
    Grp_WriteGrpHead (GrpTyp);
@@ -1790,7 +1799,7 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
    /***** Query in the database the group of this type that I belong to *****/
    Grp_GetLstCodGrpsUsrBelongs (Gbl.CurrentCrs.Crs.CrsCod,GrpTyp->GrpTypCod,
 	                        Gbl.Usrs.Me.UsrDat.UsrCod,&LstGrpsIBelong);
-   NumGrpsIBelong = LstGrpsIBelong.NumGrps;
+   *NumGrpsThisTypeIBelong = LstGrpsIBelong.NumGrps;
 
    /***** List the groups *****/
    for (NumGrpThisType = 0;
@@ -1800,20 +1809,18 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
       Grp = &(GrpTyp->LstGrps[NumGrpThisType]);
       IBelongToThisGroup = Grp_CheckIfGrpIsInList (Grp->GrpCod,&LstGrpsIBelong);
 
-      /* Put icon to select the group */
+      /* Put radio item or checkbox to select the group */
       fprintf (Gbl.F.Out,"<tr>"
 	                 "<td class=\"LEFT_MIDDLE");
       if (IBelongToThisGroup)
          fprintf (Gbl.F.Out," LIGHT_BLUE");
       fprintf (Gbl.F.Out,"\">"
 	                 "<input type=\"");
-
-      // If user is a student and the enrolment is single
-      // and there are more than a group, put a radio item
-      if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&
-          !GrpTyp->MultipleEnrolment &&
-          GrpTyp->NumGrps > 1)
+      if (Gbl.Usrs.Me.LoggedRole == Rol_STD &&	// If user is a student
+          !GrpTyp->MultipleEnrolment &&		// ...and the enrolment is single
+          GrpTyp->NumGrps > 1)			// ...and there are more than a group
 	{
+	 /* Put a radio item */
          fprintf (Gbl.F.Out,"radio\" id=\"Grp%ld\" name=\"GrpCod%ld\""
                             " value=\"%ld\"",
                   Grp->GrpCod,GrpTyp->GrpTypCod,
@@ -1822,18 +1829,40 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
             fprintf (Gbl.F.Out," onclick=\"selectUnselectRadio(this,this.form.GrpCod%ld,%u)\"",
                      GrpTyp->GrpTypCod,GrpTyp->NumGrps);
 	}
-      else // Put a checkbox item
+      else
+	 /* Put a checkbox item */
          fprintf (Gbl.F.Out,"checkbox\" id=\"Grp%ld\" name=\"GrpCod%ld\""
                             " value=\"%ld\"",
                   Grp->GrpCod,GrpTyp->GrpTypCod,
                   Grp->GrpCod);
 
       if (IBelongToThisGroup)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      else if ((Gbl.Usrs.Me.LoggedRole == Rol_STD) &&
-               ((!Grp->Open) || (Grp->NumStudents >= Grp->MaxStudents)))
-         fprintf (Gbl.F.Out," disabled=\"disabled\"");
-      fprintf (Gbl.F.Out," /></td>");
+	 fprintf (Gbl.F.Out," checked=\"checked\"");		// Group selected
+
+      switch (Gbl.Usrs.Me.UsrDat.RoleInCurrentCrsDB)
+	{
+	 case Rol_STD:
+	    if (Grp->Open)					// If group is open
+	      {
+	       if (IBelongToThisGroup ||			// I belong to group
+	           Grp->NumStudents < Grp->MaxStudents)		// Group is not full
+		  ICanChangeMySelection = true;			// I can register/unregister in this group
+	       else						// I don't belong to group and it's full
+		  fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register in this group
+	      }
+	    break;
+	 case Rol_NET:
+	    fprintf (Gbl.F.Out," disabled=\"disabled\"");	// I can not register/unregister
+	    break;
+	 case Rol_TCH:
+	    ICanChangeMySelection = true;			// I can not register/unregister
+	    break;
+	 default:
+	    Lay_ShowErrorAndExit ("Wrong role.");
+	    break;
+	}
+      fprintf (Gbl.F.Out," />"
+	                 "</td>");
 
       Grp_WriteRowGrp (Grp,IBelongToThisGroup);
 
@@ -1843,7 +1872,7 @@ static unsigned Grp_ListGrpsForChange (struct GroupType *GrpTyp)
    /***** Free memory with the list of groups a the that belongs the user *****/
    Grp_FreeListCodGrp (&LstGrpsIBelong);
 
-   return NumGrpsIBelong;
+   return ICanChangeMySelection;
   }
 
 /*****************************************************************************/
