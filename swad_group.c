@@ -3072,12 +3072,29 @@ static long Grp_GetFirstCodGrpStdBelongsTo (long GrpTypCod,long UsrCod)
 bool Grp_GetIfIBelongToGrp (long GrpCod)
   {
    char Query[256];
+   static struct
+     {
+      long GrpCod;
+      bool IBelongToGrp;
+     } Cached =
+     {
+      -1L,
+      -1L,
+      false
+     };	// A cache. If this function is called consecutive times
+	// with the same group, only the first time is slow
 
-   /***** Get if I belong to a group from database *****/
+   /***** 1. Fast check: Is already calculated if I belong to group? *****/
+   if (GrpCod == Cached.GrpCod)
+      return Cached.IBelongToGrp;
+
+   /***** 2. Slow check: Get if I belong to a group from database *****/
    sprintf (Query,"SELECT COUNT(*) FROM crs_grp_usr"
                   " WHERE GrpCod=%ld AND UsrCod=%ld",
             GrpCod,Gbl.Usrs.Me.UsrDat.UsrCod);
-   return (DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0);
+   Cached.IBelongToGrp = DB_QueryCOUNT (Query,"can not check if you belong to a group") != 0;
+   Cached.GrpCod = GrpCod;
+   return Cached.IBelongToGrp;
   }
 
 /*****************************************************************************/

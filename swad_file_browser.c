@@ -1607,6 +1607,8 @@ static void Brw_RenameChildrenFilesOrFoldersInDB (const char OldPath[PATH_MAX + 
 static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level);
 static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level);
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void);
+static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void);
+static long Brw_GetPublisherOfSubtree (void);
 
 static void Brw_WriteRowDocData (unsigned *NumDocsNotHidden,MYSQL_ROW row);
 
@@ -5271,14 +5273,14 @@ static bool Brw_WriteRowFileBrowser (unsigned Level,Brw_ExpandTree_t ExpandTree,
 
    /***** Get the name of the file to show *****/
    Brw_GetFileNameToShowDependingOnLevel (Gbl.FileBrowser.Type,Level,
-                          Gbl.FileBrowser.FileType,
-                          FileName,FileNameToShow);
+                                          Gbl.FileBrowser.FileType,
+                                          FileName,FileNameToShow);
 
    /***** Start this row *****/
    fprintf (Gbl.F.Out,"<tr>");
 
    /****** If current action allows file administration... ******/
-   Gbl.FileBrowser.ICanEditFileOrFolder   = false;
+   Gbl.FileBrowser.ICanEditFileOrFolder = false;
    if (Brw_FileBrowserIsEditable[Gbl.FileBrowser.Type] &&
        !Gbl.FileBrowser.ShowOnlyPublicFiles)
      {
@@ -10903,22 +10905,28 @@ static bool Brw_CheckIfICanEditFileOrFolder (unsigned Level)
    if (Level == 0)
       return false;
 
-   /***** I must be student, teacher, admin or superuser to edit *****/
+   /***** I must be student or a superior role to edit *****/
    if (Gbl.Usrs.Me.MaxRole < Rol_STD)
       return false;
 
    /***** Set depending on browser, level, logged role... *****/
    switch (Gbl.FileBrowser.Type)
      {
-      case Brw_ADMI_TEACH_CRS:
-	 return (Gbl.Usrs.Me.LoggedRole >= Rol_TCH);
-      case Brw_ADMI_TEACH_GRP:
-	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)
-	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);	// A teacher can edit only if hr/she belongs to group
+      case Brw_ADMI_DOCUM_CRS:
+         return Gbl.Usrs.Me.LoggedRole >= Rol_TCH;
+      case Brw_ADMI_DOCUM_GRP:
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// A teacher...
+							// ...can edit only if he/she belongs to group
+	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
+	 // An administrator can edit
          return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+      case Brw_ADMI_TEACH_CRS:
+      case Brw_ADMI_TEACH_GRP:
+         // Check if I am the publisher of the file/folder
+         return Brw_CheckIfICanModifyPrivateFileOrFolder ();
       case Brw_ADMI_SHARE_CRS:
       case Brw_ADMI_SHARE_GRP:
-         // Check if I am the publisher of the folder
+         // Check if I am the publisher of the file/folder
          return Brw_CheckIfICanModifySharedFileOrFolder ();
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
@@ -10972,6 +10980,32 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
    /***** Have I permission to create/paste a new file or folder into the folder? *****/
    switch (Gbl.FileBrowser.Type)
      {
+      case Brw_ADMI_DOCUM_CRS:
+         return Gbl.Usrs.Me.LoggedRole >= Rol_TCH;
+      case Brw_ADMI_DOCUM_GRP:
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// A teacher
+							// ...can create/paste only if he/she belongs to group
+	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
+	 // An administrator can create/paste
+         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+      case Brw_ADMI_TEACH_CRS:
+         return Gbl.Usrs.Me.LoggedRole >= Rol_NET;
+      case Brw_ADMI_TEACH_GRP:
+	 if (Gbl.Usrs.Me.LoggedRole == Rol_NET ||	// A non-editing teacher...
+	     Gbl.Usrs.Me.LoggedRole == Rol_TCH)		// ...or a teacher
+							// ...can create/paste only if he/she belongs to group
+	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
+	 // An administrator can create/paste
+         return (Gbl.Usrs.Me.LoggedRole > Rol_TCH);
+      case Brw_ADMI_SHARE_CRS:
+         return Gbl.Usrs.Me.LoggedRole >= Rol_STD;
+      case Brw_ADMI_SHARE_GRP:
+	 if (Gbl.Usrs.Me.LoggedRole >= Rol_STD &&	// A student, non-editing teacher...
+	     Gbl.Usrs.Me.LoggedRole <= Rol_TCH)		// ...or a teacher
+							// ...can create/paste only if he/she belongs to group
+	    return Grp_GetIfIBelongToGrp (Gbl.CurrentCrs.Grps.GrpCod);
+	 // An administrator can create/paste
+         return Gbl.Usrs.Me.LoggedRole >= Rol_STD;
       case Brw_ADMI_ASSIG_USR:
       case Brw_ADMI_ASSIG_CRS:
 	 if (Level == 0)	// If root folder
@@ -11005,47 +11039,19 @@ static bool Brw_CheckIfICanCreateIntoFolder (unsigned Level)
 
 /*****************************************************************************/
 /********** Check if I have permission to modify a file or folder ************/
-/********** in the current common zone                            ************/
+/********** in the current shared or private zone                 ************/
 /*****************************************************************************/
-// Returns true if the current user can remove or rename Gbl.FileBrowser.Priv.FullPathInTree, and false if he have not permission
-// A user can remove or rename a file if he's the publisher
-// A user can remove or rename a folder if he's the unique publisher of all the files and folders in the subtree starting there
+// Returns true if I can remove or rename Gbl.FileBrowser.Priv.FullPathInTree, and false if I have not permission
+// I can remove or rename a file if I am the publisher
+// I can remove or rename a folder if I am the unique publisher of all the files and folders in the subtree starting there
 
 static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
   {
-   long Cod = Brw_GetCodForFiles ();
-   char Query[512 + PATH_MAX * 2];
-   MYSQL_RES *mysql_res;
-   MYSQL_ROW row;
-   unsigned long NumRows;
-   long PublisherUsrCod = -1L;
-
    switch (Gbl.Usrs.Me.LoggedRole)
      {
       case Rol_STD:	// If I am a student or a non-editing teacher...
       case Rol_NET:	// ...I can modify the file/folder if I am the publisher
-         /***** Get all the distinct publishers of files starting by Gbl.FileBrowser.Priv.FullPathInTree from database *****/
-         sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
-                        " WHERE FileBrowser=%u AND Cod=%ld"
-                        " AND (Path='%s' OR Path LIKE '%s/%%')",
-                  (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
-                  Cod,
-                  Gbl.FileBrowser.Priv.FullPathInTree,
-                  Gbl.FileBrowser.Priv.FullPathInTree);
-         NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get publishers of files");
-
-         /***** Check all common files that are equal to Gbl.FileBrowser.Priv.FullPathInTree
-                or that are under the folder Gbl.FileBrowser.Priv.FullPathInTree *****/
-         if (NumRows == 1)	// Get the publisher of the file(s)
-           {
-            row = mysql_fetch_row (mysql_res);
-            PublisherUsrCod = Str_ConvertStrCodToLongCod (row[0]);
-           }
-
-         /***** Free structure that stores the query result *****/
-         DB_FreeMySQLResult (&mysql_res);
-
-         return (Gbl.Usrs.Me.UsrDat.UsrCod == PublisherUsrCod);	// Am I the publisher of subtree?
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
       case Rol_TCH:
       case Rol_DEG_ADM:
       case Rol_CTR_ADM:
@@ -11055,6 +11061,64 @@ static bool Brw_CheckIfICanModifySharedFileOrFolder (void)
       default:
          return false;
      }
+  }
+
+static bool Brw_CheckIfICanModifyPrivateFileOrFolder (void)
+  {
+   switch (Gbl.Usrs.Me.LoggedRole)
+     {
+      case Rol_NET:	// If I am a student or a non-editing teacher...
+			// ...I can modify the file/folder if I am the publisher
+         return (Gbl.Usrs.Me.UsrDat.UsrCod == Brw_GetPublisherOfSubtree ());	// Am I the publisher of subtree?
+      case Rol_TCH:
+      case Rol_DEG_ADM:
+      case Rol_CTR_ADM:
+      case Rol_INS_ADM:
+      case Rol_SYS_ADM:
+         return true;
+      default:
+         return false;
+     }
+  }
+
+/*****************************************************************************/
+/************************ Get the publisher of a subtree *********************/
+/*****************************************************************************/
+
+static long Brw_GetPublisherOfSubtree (void)
+  {
+   char Query[512 + PATH_MAX * 2];
+   MYSQL_RES *mysql_res;
+   MYSQL_ROW row;
+   unsigned long NumRows;
+   long PublisherUsrCod;
+   long Cod = Brw_GetCodForFiles ();
+
+   /***** Get all the distinct publishers of files starting by
+	  Gbl.FileBrowser.Priv.FullPathInTree from database *****/
+   sprintf (Query,"SELECT DISTINCT(PublisherUsrCod) FROM files"
+		  " WHERE FileBrowser=%u AND Cod=%ld"
+		  " AND (Path='%s' OR Path LIKE '%s/%%')",
+	    (unsigned) Brw_FileBrowserForDB_files[Gbl.FileBrowser.Type],
+	    Cod,
+	    Gbl.FileBrowser.Priv.FullPathInTree,
+	    Gbl.FileBrowser.Priv.FullPathInTree);
+   NumRows = DB_QuerySELECT (Query,&mysql_res,"can not get publishers of files");
+
+   /***** Check all common files that are equal to Gbl.FileBrowser.Priv.FullPathInTree
+	  or that are under the folder Gbl.FileBrowser.Priv.FullPathInTree *****/
+   if (NumRows == 1)	// Get the publisher of the file(s)
+     {
+      row = mysql_fetch_row (mysql_res);
+      PublisherUsrCod = Str_ConvertStrCodToLongCod (row[0]);
+     }
+   else
+      PublisherUsrCod = -1L;
+
+   /***** Free structure that stores the query result *****/
+   DB_FreeMySQLResult (&mysql_res);
+
+   return PublisherUsrCod;
   }
 
 /*****************************************************************************/
