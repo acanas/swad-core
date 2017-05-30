@@ -227,19 +227,18 @@
 
 // TODO: Green lock in documents is not shown when name is shortened (see OpenSWAD -> Creative Commons -> Files -> Documents)
 
-// TODO: Al listar administradores, debería estar marcado por defecto "Incluir fotos"
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.228 (2017-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.228.1 (2017-05-30)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.228.1: May 30, 2017	By default, photos are displayed in listing of users. (220722 lines)
         Version 16.228:   May 30, 2017	Non-editing teachers can not change their selection of groups.
 					Removed alert with origin of copy when pasting. (220722 lines)
         Version 16.227.2: May 30, 2017	Button to upload photo integrated in alert. (220694 lines)

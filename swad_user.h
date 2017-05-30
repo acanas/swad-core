@@ -74,7 +74,7 @@
 #define Usr_CLASS_PHOTO_COLS_DEF	10	// Default number of columns in a class photo
 #define Usr_CLASS_PHOTO_COLS_MAX	50	// Maximum number of columns in a class photo
 
-#define Usr_LIST_WITH_PHOTOS_DEF	false
+#define Usr_LIST_WITH_PHOTOS_DEF	true
 
 #define Usr_MAX_BYTES_LIST_ENCRYPTED_USR_CODS	(Cry_BYTES_ENCRYPTED_STR_SHA256_BASE64 * Cfg_MAX_USRS_IN_LIST)
 
