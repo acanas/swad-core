@@ -336,8 +336,8 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
    extern const char *Txt_All_groups;
-   extern const char *Txt_Update_students_according_to_selected_groups;
-   extern const char *Txt_Update_students;
+   extern const char *Txt_Update_users_according_to_selected_groups;
+   extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
    bool ICanEdit;
 
@@ -393,11 +393,11 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       /***** Submit button *****/
       fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\""
 			 " style=\"padding-top:12px;\">");
-      Act_LinkFormSubmitAnimated (Txt_Update_students_according_to_selected_groups,
+      Act_LinkFormSubmitAnimated (Txt_Update_users_according_to_selected_groups,
 				  The_ClassFormBold[Gbl.Prefs.Theme],
 				  "CopyMessageToHiddenFields()");
-      Lay_PutCalculateIconWithText (Txt_Update_students_according_to_selected_groups,
-				    Txt_Update_students);
+      Lay_PutCalculateIconWithText (Txt_Update_users_according_to_selected_groups,
+				    Txt_Update_users);
       fprintf (Gbl.F.Out,"</div>");
 
       /***** End form *****/

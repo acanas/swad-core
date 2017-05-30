@@ -4044,9 +4044,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
    */
 
    /***** If there are no groups selected, don't do anything *****/
-   if (Role == Rol_STD &&
-       (!Gbl.Usrs.ClassPhoto.AllGroups &&
-        !Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps))
+   if (!Gbl.Usrs.ClassPhoto.AllGroups &&
+       !Gbl.CurrentCrs.Grps.LstGrpsSel.NumGrps)
      {
       Query[0] = '\0';
       return;
@@ -4071,8 +4070,8 @@ static void Usr_BuildQueryToGetUsrsLstCrs (Rol_Role_t Role,
 	       QueryFields,
                Gbl.CurrentCrs.Crs.CrsCod,(unsigned) Role);
 
-   /***** Select users in selected groups (only for students) *****/
-   if (Role == Rol_STD && !Gbl.Usrs.ClassPhoto.AllGroups)
+   /***** Select users in selected groups *****/
+   if (!Gbl.Usrs.ClassPhoto.AllGroups)
      {
       /***** Get list of groups types in current course *****/
       Grp_GetListGrpTypesInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -6508,9 +6507,13 @@ void Usr_ListAllDataTchs (void)
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                 1 << Rol_NET |
-                                                 1 << Rol_TCH);
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   else
+      NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+						    1 << Rol_NET |
+						    1 << Rol_TCH);
 
    if (NumUsrs)
      {
@@ -7560,12 +7563,20 @@ void Usr_SeeTeachers (void)
    Sco_GetScope ("ScopeUsr");
    ICanViewRecords = (Gbl.Scope.Current == Sco_SCOPE_CRS);
 
+   /***** Get groups to show ******/
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
    /***** Get lists of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                 1 << Rol_NET |
-                                                 1 << Rol_TCH);
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   else
+      NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+						    1 << Rol_NET |
+						    1 << Rol_TCH);
 
    /***** Start frame *****/
    Lay_StartRoundFrame (NULL,Txt_ROLES_PLURAL_Abc[Rol_TCH][Usr_SEX_UNKNOWN],
@@ -7581,6 +7592,10 @@ void Usr_SeeTeachers (void)
    fprintf (Gbl.F.Out,"</label>");
    Act_FormEnd ();
    fprintf (Gbl.F.Out,"</div>");
+
+   /***** Form to select groups *****/
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      Grp_ShowFormToSelectSeveralGroups (ActLstTch);
 
    /***** Start section with user list *****/
    Lay_StartSection (Usr_USER_LIST_SECTION_ID);
@@ -7663,6 +7678,9 @@ void Usr_SeeTeachers (void)
    /***** Free memory for teachers lists *****/
    Usr_FreeUsrsList (Rol_TCH);	// Teachers
    Usr_FreeUsrsList (Rol_NET);	// Non-editing teachers
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/
@@ -7932,9 +7950,13 @@ void Usr_SeeTchClassPhotoPrn (void)
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
-   NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
-                                                 1 << Rol_NET |
-                                                 1 << Rol_TCH);
+   if (Gbl.Scope.Current == Sco_SCOPE_CRS)
+      NumUsrs = Gbl.Usrs.LstUsrs[Rol_NET].NumUsrs +
+		Gbl.Usrs.LstUsrs[Rol_TCH].NumUsrs;
+   else
+      NumUsrs = Usr_GetTotalNumberOfUsersInCourses (Gbl.Scope.Current,
+						    1 << Rol_NET |
+						    1 << Rol_TCH);
 
    if (NumUsrs)
      {
@@ -8166,14 +8188,16 @@ void Usr_ShowWarningNoUsersFound (Rol_Role_t Role)
    extern const char *Txt_Register_students;
    extern const char *Txt_Register_teacher;
 
-   if (Role == Rol_STD &&			// No students found
+   if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
+       Role == Rol_STD &&			// No students found
        Gbl.Usrs.Me.LoggedRole == Rol_TCH)	// Course selected and I am logged as teacher
       /***** Show alert and button to enrol students *****/
       Ale_ShowAlertAndButton (Ale_WARNING,Txt_No_users_found[Rol_STD],
                               ActReqEnrSevStd,NULL,NULL,NULL,
                               Lay_CREATE_BUTTON,Txt_Register_students);
 
-   else if (Role == Rol_TCH &&				// No teachers found
+   else if (Gbl.Usrs.ClassPhoto.AllGroups &&		// All groups selected
+            Role == Rol_TCH &&				// No teachers found
             Gbl.CurrentCrs.Crs.CrsCod > 0 &&		// Course selected
             Gbl.Usrs.Me.LoggedRole >= Rol_DEG_ADM)	// I am an administrator
       /***** Show alert and button to enrol students *****/

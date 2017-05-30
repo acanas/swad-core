@@ -49517,46 +49517,46 @@ const char *Txt_Update_messages =
 	"Atualizar mensagens";
 #endif
 
-const char *Txt_Update_students =
+const char *Txt_Update_users =
 #if   L==1
-	"Actualitzar estudiants";
+	"Actualitzar usuaris";
 #elif L==2
-	"Update Studenten";
+	"Update Benutzer";
 #elif L==3
-	"Update students";
+	"Update users";
 #elif L==4
-	"Actualizar estudiantes";
+	"Actualizar usuarios";
 #elif L==5
 	"Mise &agrave; jour des &eacute;tudiants";
 #elif L==6
-	"Actualizar estudiantes";	// Okoteve traducción
+	"Actualizar usuarios";	// Okoteve traducción
 #elif L==7
-	"Aggiornamento studenti";
+	"Aggiornamento utenti";
 #elif L==8
-	"Aktualizacja student&oacute;w";
+	"Zaktualizuj u&zdot;ytkownik&oacute;w";
 #elif L==9
-	"Atualizar os estudantes";
+	"Atualizar os utilizadores";
 #endif
 
-const char *Txt_Update_students_according_to_selected_groups =
+const char *Txt_Update_users_according_to_selected_groups =
 #if   L==1
-	"Actualitzar estudiants segons els grups seleccionats";
+	"Actualitzar usuaris segons els grups seleccionats";
 #elif L==2
-	"Update Studenten nach ausgew&auml;hlten Gruppen";
+	"Update Benutzer nach ausgew&auml;hlten Gruppen";
 #elif L==3
-	"Update students according to selected groups";
+	"Update users according to selected groups";
 #elif L==4
-	"Actualizar estudiantes seg&uacute;n los grupos seleccionados";
+	"Actualizar usuarios seg&uacute;n los grupos seleccionados";
 #elif L==5
 	"Mise &agrave; jour des &eacute;tudiants en fonction de groupes s&eacute;lectionnes";
 #elif L==6
-	"Actualizar estudiantes seg&uacute;n los grupos seleccionados";	// Okoteve traducción
+	"Actualizar usuarios seg&uacute;n los grupos seleccionados";	// Okoteve traducción
 #elif L==7
-	"Aggiornamento studenti in base a gruppi selezionati";
+	"Aggiornamento utenti in base a gruppi selezionati";
 #elif L==8
-	"Update students according to selected groups";			// Potrzebujesz tlumaczenie
+	"Zaktualizuj u&zdot;ytkownik&oacute;w wed&lstrok;ug wybranych grup";
 #elif L==9
-	"Atualizar os estudantes de acordo com grupos selecionados";
+	"Atualizar os utilizadores de acordo com grupos selecionados";
 #endif
 
 const char *Txt_UPLOAD_FILE_Invalid_link =
