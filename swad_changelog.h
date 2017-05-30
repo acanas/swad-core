@@ -229,19 +229,19 @@
 
 // TODO: Al listar administradores, debería estar marcado por defecto "Incluir fotos"
 
-// TODO: Behaviour of register non-editing teachers in groups should be similar to register students.
-
 /*****************************************************************************/
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.227.1 (2017-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.227.2 (2017-05-30)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.227.3: May 30, 2017	Behaviour of registering non-editing teachers in groups similar to registering students. (? lines)
+        Version 16.227.2: May 30, 2017	Button to upload photo integrated in alert. (220694 lines)
         Version 16.227.1: May 30, 2017	Button to check email integrated in alert. (220693 lines)
         Version 16.227:   May 30, 2017	Changes in selector or roles in record cards. (220694 lines)
         Version 16.226.1: May 29, 2017	Changes in contextual links related to users enrolment. (220637 lines)

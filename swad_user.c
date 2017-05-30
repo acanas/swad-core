@@ -246,6 +246,7 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
    extern struct Act_Actions Act_Actions[Act_NUM_ACTIONS];
    extern const char *Txt_You_must_send_your_photo_because_;
    extern const char *Txt_You_can_only_perform_X_further_actions_;
+   extern const char *Txt_Upload_photo;
    char Message[512];        // Don't use Gbl.Alert.Txt here, because it may be filled with another message and such message would be overwritten
 
    if (Gbl.Usrs.Me.NumAccWithoutPhoto)
@@ -255,12 +256,10 @@ void Usr_InformAboutNumClicksBeforePhoto (void)
       else if (Act_Actions[Gbl.Action.Act].BrowserWindow == Act_THIS_WINDOW)
         {
          sprintf (Message,Txt_You_can_only_perform_X_further_actions_,
-                  Pho_MAX_CLICKS_WITHOUT_PHOTO-Gbl.Usrs.Me.NumAccWithoutPhoto);
-         Ale_ShowAlert (Ale_WARNING,Message);
-
-	 fprintf (Gbl.F.Out,"<div class=\"CENTER_MIDDLE\">");
-	 Pho_PutLinkToChangeMyPhoto ();
-	 fprintf (Gbl.F.Out,"</div>");
+                  Pho_MAX_CLICKS_WITHOUT_PHOTO - Gbl.Usrs.Me.NumAccWithoutPhoto);
+         Ale_ShowAlertAndButton (Ale_WARNING,Message,
+                                 ActReqMyPho,NULL,NULL,NULL,
+                                 Lay_CONFIRM_BUTTON,Txt_Upload_photo);
         }
      }
   }
