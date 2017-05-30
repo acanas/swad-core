@@ -7947,6 +7947,9 @@ void Usr_SeeTchClassPhotoPrn (void)
    Gbl.Scope.Default = Sco_SCOPE_CRS;
    Sco_GetScope ("ScopeUsr");
 
+   /****** Get groups to show ******/
+   Grp_GetParCodsSeveralGrpsToShowUsrs ();
+
    /***** Get list of teachers *****/
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_NET);	// Non-editing teachers
    Usr_GetListUsrs (Gbl.Scope.Current,Rol_TCH);	// Teachers
@@ -7989,6 +7992,9 @@ void Usr_SeeTchClassPhotoPrn (void)
    /***** Free memory for teachers lists *****/
    Usr_FreeUsrsList (Rol_TCH);	// Teachers
    Usr_FreeUsrsList (Rol_NET);	// Non-editing teachers
+
+   /***** Free memory for list of selected groups *****/
+   Grp_FreeListCodSelectedGrps ();
   }
 
 /*****************************************************************************/

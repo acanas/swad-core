@@ -74,6 +74,8 @@ static void Grp_EditGroups (void);
 static void Grp_PutIconsEditingGroups (void);
 static void Grp_PutIconToCreateNewGroup (void);
 
+static void Grp_PutCheckboxAllGrps (void);
+
 static void Grp_ConstructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_DestructorListGrpAlreadySelec (struct ListGrpsAlreadySelec **AlreadyExistsGroupOfType);
 static void Grp_RemoveUsrFromGroup (long UsrCod,long GrpCod);
@@ -332,10 +334,8 @@ static void Grp_PutIconToCreateNewGroup (void)
 void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
   {
    extern const char *Hlp_USERS_Groups;
-   extern const char *The_ClassForm[The_NUM_THEMES];
    extern const char *The_ClassFormBold[The_NUM_THEMES];
    extern const char *Txt_Groups;
-   extern const char *Txt_All_groups;
    extern const char *Txt_Update_users_according_to_selected_groups;
    extern const char *Txt_Update_users;
    unsigned NumGrpTyp;
@@ -362,18 +362,7 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       Usr_PutExtraParamsUsrList (NextAction);
 
       /***** Select all groups *****/
-      fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
-                         "<label class=\"%s\">"
-			 "<input type=\"checkbox\""
-			 " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
-	       The_ClassForm[Gbl.Prefs.Theme]);
-      if (Gbl.Usrs.ClassPhoto.AllGroups)
-	 fprintf (Gbl.F.Out," checked=\"checked\"");
-      fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
-			 "&nbsp;%s"
-                         "</label>"
-			 "</div>",
-	       Txt_All_groups);
+      Grp_PutCheckboxAllGrps ();
 
       /***** Get list of groups types and groups in this course *****/
       Grp_GetListGrpTypesAndGrpsInThisCrs (Grp_ONLY_GROUP_TYPES_WITH_GROUPS);
@@ -406,6 +395,29 @@ void Grp_ShowFormToSelectSeveralGroups (Act_Action_t NextAction)
       /***** End frame *****/
       Lay_EndRoundFrame ();
      }
+  }
+
+/*****************************************************************************/
+/******************* Put checkbox to select all groups ***********************/
+/*****************************************************************************/
+
+static void Grp_PutCheckboxAllGrps (void)
+  {
+   extern const char *The_ClassForm[The_NUM_THEMES];
+   extern const char *Txt_All_groups;
+
+   fprintf (Gbl.F.Out,"<div class=\"CONTEXT_OPT\">"
+		      "<label class=\"%s\">"
+		      "<input type=\"checkbox\""
+		      " id=\"AllGroups\" name=\"AllGroups\" value=\"Y\"",
+	    The_ClassForm[Gbl.Prefs.Theme]);
+   if (Gbl.Usrs.ClassPhoto.AllGroups)
+      fprintf (Gbl.F.Out," checked=\"checked\"");
+   fprintf (Gbl.F.Out," onclick=\"togglecheckChildren(this,'GrpCods')\" />"
+		      "&nbsp;%s"
+		      "</label>"
+		      "</div>",
+	    Txt_All_groups);
   }
 
 /*****************************************************************************/

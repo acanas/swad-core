@@ -231,13 +231,15 @@
 /****************************** Public constants *****************************/
 /*****************************************************************************/
 
-#define Log_PLATFORM_VERSION	"SWAD 16.229 (2017-05-30)"
+#define Log_PLATFORM_VERSION	"SWAD 16.229.1 (2017-05-30)"
 #define CSS_FILE		"swad16.226.css"
 #define JS_FILE			"swad16.206.3.js"
 
 // Number of lines (includes comments but not blank lines) has been got with the following command:
 // nl swad*.c swad*.h css/swad*.css py/swad*.py js/swad*.js soap/swad*?.h sql/swad*.sql | tail -1
 /*
+        Version 16.229.1: May 30, 2017	Code refactoring in selection of groups.
+					Fixed bug when printing list of teachers. (220762 lines)
         Version 16.229:   May 30, 2017	Selection of groups also for listing of teachers. (220748 lines)
         Version 16.228.2: May 30, 2017	Fixed bug in selection of users. (220726 lines)
         Version 16.228.1: May 30, 2017	By default, photos are displayed in listing of users. (220722 lines)
