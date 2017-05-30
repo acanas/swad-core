@@ -1618,17 +1618,13 @@ void Mai_PutButtonToCheckEmailAddress (void)
    extern const char *Txt_Please_check_and_confirm_your_email_address;
    extern const char *Txt_Check;
 
-   /***** Start form *****/
-   Act_FormStart (ActFrmMyAcc);
-
-   /***** Frame with button to go to account *****/
+   /***** Frame with button to check email address *****/
    Lay_StartRoundFrame (NULL,Txt_Email_unconfirmed,
                         NULL,Hlp_PROFILE_Account_email);
-   Ale_ShowAlert (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address);
-   Lay_EndRoundFrameWithButton (Lay_CONFIRM_BUTTON,Txt_Check);
-
-   /***** End form *****/
-   Act_FormEnd ();
+   Ale_ShowAlertAndButton (Ale_WARNING,Txt_Please_check_and_confirm_your_email_address,
+                           ActFrmMyAcc,NULL,NULL,NULL,
+                           Lay_CONFIRM_BUTTON,Txt_Check);
+   Lay_EndRoundFrame ();
   }
 
 /*****************************************************************************/
